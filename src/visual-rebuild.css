@@ -68,6 +68,12 @@ body {
   color: #f2d386;
   background: radial-gradient(circle at 50% 110%, rgba(214, 163, 72, .16), transparent 56%);
 }
+
+/* Six destinations after Rosie’s Randomizers joined the house. */
+.bottom-nav { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+@media (max-width: 700px) {
+  .bottom-nav button small { font-size: 8px; letter-spacing: -.025em; }
+}
 .bottom-nav button.active::after {
   content: "";
   position: absolute;
