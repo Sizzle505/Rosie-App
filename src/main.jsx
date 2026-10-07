@@ -398,7 +398,8 @@ function App() {
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
   const [history, setHistory] = useState([]);
-  const [soundOn, setSoundOn] = useState(true);\n  const [page, setPage] = useState("fortune");
+  const [soundOn, setSoundOn] = useState(true);
+  const [page, setPage] = useState("fortune");
   const inputRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -523,7 +524,8 @@ function App() {
           </button>
         </header>
 
-        {page === "fortune" ? (\n        <main>
+        {page === "fortune" ? (
+        <main>
           <div className="fortune-console">
             <FortuneMachine consulting={consulting} answer={answer} />
 
@@ -582,7 +584,10 @@ function App() {
               </div>
             </section>
           )}
-        </main>\n        ) : (\n          <CheeseMemoryGame />\n        )}
+        </main>
+        ) : (
+          <CheeseMemoryGame />
+        )}
 
         <nav className="bottom-nav" aria-label="Primary">
           <button className={page === "fortune" ? "active" : ""} onClick={() => setPage("fortune")}><span>✦</span><small>Fortune</small></button>
