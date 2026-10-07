@@ -6130,6 +6130,143 @@ main {
   }
 }
 
+/* Captain - cinematic motion and depth pass -------------------------------- */
+.captain-game-page .yacht-course {
+  isolation:isolate;
+  --course-pace:8s;
+}
+.captain-course-motion {
+  position:absolute;
+  z-index:4;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.course-vignette {
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(2,29,48,.22),transparent 16% 84%,rgba(2,29,48,.22)),
+    linear-gradient(180deg,rgba(255,247,215,.04),transparent 28% 70%,rgba(1,29,47,.17));
+  box-shadow:inset 0 0 60px rgba(1,23,40,.17);
+}
+.course-rush-lines {
+  position:absolute;
+  z-index:1;
+  left:-4%;
+  bottom:-4%;
+  width:108%;
+  height:52%;
+  overflow:visible;
+  opacity:.32;
+}
+.course-rush-lines path {
+  stroke:rgba(241,252,245,.9);
+  stroke-width:5;
+  stroke-dasharray:15 52;
+  animation:courseRush var(--course-pace) linear infinite;
+}
+.course-rush-lines path:nth-child(2) { stroke-width:3.5; opacity:.8; animation-delay:calc(var(--course-pace) * -.36); }
+.course-rush-lines path:nth-child(3) { stroke-width:3; opacity:.58; animation-delay:calc(var(--course-pace) * -.72); }
+@keyframes courseRush { to { stroke-dashoffset:-190; } }
+
+.course-wind {
+  position:absolute;
+  z-index:2;
+  width:200px;
+  height:72px;
+  opacity:0;
+}
+.course-wind i {
+  position:absolute;
+  left:0;
+  display:block;
+  height:1px;
+  border-radius:50%;
+  background:linear-gradient(90deg,transparent,rgba(255,251,225,.72),transparent);
+  box-shadow:0 0 7px rgba(255,245,194,.2);
+}
+.course-wind i:nth-child(1){top:7px;width:112px}.course-wind i:nth-child(2){top:24px;left:28px;width:154px}.course-wind i:nth-child(3){top:48px;left:8px;width:88px}
+.course-wind-a { top:18%; left:-18%; animation:courseWind 10s linear infinite; }
+.course-wind-b { top:34%; left:-34%; transform:scale(.68); animation:courseWind 13s linear infinite -5.5s; }
+.captain-course-motion.is-underway .course-wind { opacity:.46; animation-duration:calc(var(--course-pace) * 4.2); }
+.captain-course-motion.is-boosting .course-wind { opacity:.75; }
+@keyframes courseWind { from{transform:translateX(0)} to{transform:translateX(145vw)} }
+.course-wind-b { animation-name:courseWindSmall; }
+@keyframes courseWindSmall { from{transform:scale(.68) translateX(0)} to{transform:scale(.68) translateX(215vw)} }
+
+.course-flying-spray {
+  position:absolute;
+  z-index:8;
+  left:0;
+  right:0;
+  bottom:0;
+  height:38%;
+  opacity:0;
+}
+.course-flying-spray i {
+  position:absolute;
+  bottom:6%;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#ecfbf4;
+  box-shadow:0 0 9px rgba(221,252,245,.9);
+  opacity:0;
+}
+.course-flying-spray i:nth-child(1){left:17%;--sx:-42px;--sy:-42px}.course-flying-spray i:nth-child(2){left:27%;--sx:32px;--sy:-62px;animation-delay:.1s}.course-flying-spray i:nth-child(3){left:39%;--sx:-20px;--sy:-82px;animation-delay:.2s}.course-flying-spray i:nth-child(4){left:62%;--sx:35px;--sy:-71px;animation-delay:.07s}.course-flying-spray i:nth-child(5){left:76%;--sx:-25px;--sy:-52px;animation-delay:.27s}.course-flying-spray i:nth-child(6){left:88%;--sx:27px;--sy:-38px;animation-delay:.17s}
+.captain-course-motion.is-underway .course-flying-spray { opacity:1; }
+.captain-course-motion.is-underway .course-flying-spray i { animation:courseSpray calc(var(--course-pace) * .72) ease-out infinite; }
+@keyframes courseSpray { 0%{opacity:0;transform:translate(0,0) scale(.4)} 15%{opacity:.8} 100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(1.25)} }
+
+.course-compass-rose {
+  position:absolute;
+  z-index:3;
+  right:16px;
+  bottom:14px;
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,228,159,.36);
+  border-radius:50%;
+  color:rgba(255,234,174,.76);
+  background:radial-gradient(circle,rgba(6,54,76,.32),rgba(2,25,42,.08));
+  box-shadow:0 0 0 4px rgba(4,42,60,.08),inset 0 0 0 3px rgba(255,255,255,.035);
+  backdrop-filter:blur(2px);
+}
+.course-compass-rose::before,.course-compass-rose::after{content:"";position:absolute;left:50%;top:50%;background:rgba(245,218,146,.55);transform:translate(-50%,-50%)}
+.course-compass-rose::before{width:1px;height:34px}.course-compass-rose::after{height:1px;width:34px}
+.course-compass-rose span{position:absolute;top:2px;font-size:6px;font-weight:800;letter-spacing:.1em}.course-compass-rose i{font-style:normal;font-size:17px;text-shadow:0 0 9px rgba(255,225,138,.54)}.course-compass-rose b{position:absolute;bottom:4px;font:700 6px Georgia,serif;letter-spacing:.14em}
+.captain-course-motion.is-underway .course-compass-rose { animation:compassPulse 3.8s ease-in-out infinite; }
+@keyframes compassPulse { 50%{box-shadow:0 0 0 7px rgba(4,42,60,.04),0 0 16px rgba(255,218,127,.12),inset 0 0 0 3px rgba(255,255,255,.035)} }
+
+/* Separate the far painted scene from the rushing water, making the yacht read as moving forward. */
+.captain-game-page .yacht-course.is-underway .riviera-course-art .japan-water-near { animation:waterNearPass var(--course-pace) linear infinite; transform-origin:50% 100%; }
+.captain-game-page .yacht-course.is-underway .riviera-course-art .japan-water-far { animation:waterFarPass calc(var(--course-pace) * 1.7) linear infinite; }
+.captain-game-page .yacht-course.is-underway .riviera-course-art .japan-foam-flecks { animation:foamFlicker calc(var(--course-pace) * .82) linear infinite; }
+.captain-game-page .yacht-course.is-underway .riviera-course-art .japan-near-coast-left { animation:coastFloat 12s ease-in-out infinite alternate; transform-origin:0 60%; }
+.captain-game-page .yacht-course.is-underway .riviera-course-art .japan-near-coast-right { animation:coastFloat 14s ease-in-out infinite alternate-reverse; transform-origin:100% 60%; }
+@keyframes waterNearPass { from{transform:translateY(-7px) scaleY(.99)} to{transform:translateY(18px) scaleY(1.04)} }
+@keyframes waterFarPass { from{transform:translateY(-2px)} to{transform:translateY(8px)} }
+@keyframes foamFlicker { 0%,100%{opacity:.52;transform:translateY(-5px)} 50%{opacity:1;transform:translateY(12px)} }
+@keyframes coastFloat { from{transform:translateX(-2px) translateY(0)} to{transform:translateX(5px) translateY(2px)} }
+
+.captain-game-page .yacht-course.is-boosting::before { opacity:1; filter:brightness(1.4) saturate(1.25); }
+.captain-game-page .yacht-course.is-boosting .course-rush-lines { opacity:.68; }
+.captain-game-page .yacht-course.is-boosting .course-vignette { background:radial-gradient(ellipse at 50% 74%,rgba(255,222,122,.16),transparent 53%),linear-gradient(90deg,rgba(2,29,48,.18),transparent 18% 82%,rgba(2,29,48,.18)); }
+
+@media (max-width:700px) {
+  .course-compass-rose { right:9px; bottom:9px; width:36px; height:36px; }
+  .course-compass-rose::before{height:27px}.course-compass-rose::after{width:27px}.course-compass-rose i{font-size:13px}.course-compass-rose b{font-size:5px;bottom:3px}.course-compass-rose span{font-size:5px}
+  .course-rush-lines { height:42%; opacity:.25; }
+  .captain-course-motion.is-underway .course-wind { opacity:.31; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .captain-course-motion *, .captain-game-page .yacht-course.is-underway .riviera-course-art * { animation:none !important; }
+}
+
 
 /* Captain Rosie likeness correction - photo-referenced illustrated asset */
 .captain-game-page .captain-rosie-illustration {

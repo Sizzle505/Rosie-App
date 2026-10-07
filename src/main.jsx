@@ -1004,6 +1004,28 @@ function CaptainYachtArt({ boost }) {
   );
 }
 
+function CaptainCourseMotion({ phaseKey, underway, boost }) {
+  return (
+    <div
+      className={`captain-course-motion phase-${phaseKey}${underway ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
+      aria-hidden="true"
+    >
+      <div className="course-wind course-wind-a"><i /><i /><i /></div>
+      <div className="course-wind course-wind-b"><i /><i /></div>
+      <div className="course-flying-spray"><i /><i /><i /><i /><i /><i /></div>
+      <svg className="course-rush-lines" viewBox="0 0 1000 760" preserveAspectRatio="none">
+        <g fill="none" strokeLinecap="round">
+          <path d="M-90 755C133 677 305 670 497 760M278 760C480 655 649 652 1070 735" />
+          <path d="M-75 704C161 642 316 649 477 727M545 731C698 651 839 650 1070 704" />
+          <path d="M-30 642C127 606 254 614 396 677M614 677C751 614 883 610 1035 646" />
+        </g>
+      </svg>
+      <div className="course-vignette" />
+      <div className="course-compass-rose"><span>N</span><i>✦</i><b>R</b></div>
+    </div>
+  );
+}
+
 function CaptainRosieGame({ soundOn }) {
   const [running, setRunning] = useState(false);
   const [score, setScore] = useState(0);
@@ -1404,12 +1426,14 @@ function CaptainRosieGame({ soundOn }) {
         </div>
 
         <div
-          className="yacht-course"
+          className={`yacht-course${running ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
+          style={{ "--course-pace": boost ? "1.25s" : running ? "3.1s" : "8s" }}
           aria-label="Three-lane yacht course. Swipe, tap a lane, or use the controls below to steer."
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
         >
           <RivieraCourseArt />
+          <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
           <div className="captain-sky" aria-hidden="true">
             <div className="captain-sky-haze" />
             <div className="captain-sun"><i /></div>
