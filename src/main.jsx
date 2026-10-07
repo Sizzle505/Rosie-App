@@ -433,95 +433,14 @@ function GoldenCheeseIcon({ compact = false }) {
   );
 }
 
-function CaptainRosieIllustration({ className = "", idPrefix = "captainRosie" }) {
-  const furId = idPrefix + "-fur";
-  const creamId = idPrefix + "-cream";
-  const jacketId = idPrefix + "-jacket";
-  const hatId = idPrefix + "-hat";
-  const goldId = idPrefix + "-gold";
-  const shadowId = idPrefix + "-shadow";
-
+function CaptainRosieIllustration({ className = "" }) {
   return (
-    <svg className={"captain-rosie-illustration " + className} viewBox="0 0 260 300" role="img" aria-label="Illustrated Captain Rosie">
-      <defs>
-        <linearGradient id={furId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#efad5a" />
-          <stop offset=".46" stopColor="#d88439" />
-          <stop offset="1" stopColor="#9d4f26" />
-        </linearGradient>
-        <linearGradient id={creamId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff8de" />
-          <stop offset=".62" stopColor="#f5dfb7" />
-          <stop offset="1" stopColor="#dab989" />
-        </linearGradient>
-        <linearGradient id={jacketId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#133e67" />
-          <stop offset=".56" stopColor="#082843" />
-          <stop offset="1" stopColor="#031728" />
-        </linearGradient>
-        <linearGradient id={hatId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fffef7" />
-          <stop offset=".62" stopColor="#efe5cf" />
-          <stop offset="1" stopColor="#cdbb99" />
-        </linearGradient>
-        <linearGradient id={goldId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#fff0b5" />
-          <stop offset=".38" stopColor="#e4b85d" />
-          <stop offset=".72" stopColor="#a76b24" />
-          <stop offset="1" stopColor="#f0cf7f" />
-        </linearGradient>
-        <filter id={shadowId} x="-30%" y="-30%" width="160%" height="170%">
-          <feDropShadow dx="0" dy="7" stdDeviation="5" floodColor="#021523" floodOpacity=".35" />
-        </filter>
-      </defs>
-
-      <g className="captain-rosie-bob" filter={"url(#" + shadowId + ")"}>
-        <path className="captain-scarf-back" d="M191 221c31 7 46 17 55 34-25-2-45-8-64-20Z" fill="#d13f3c" stroke="#79252a" strokeWidth="3" />
-        <path d="M73 218c15-18 37-28 57-28s42 10 57 28l19 62H54Z" fill={"url(#" + jacketId + ")"} stroke="#d8aa54" strokeWidth="4" />
-        <path d="M95 218 130 285l35-67-19-19h-32Z" fill="#f8f0de" />
-        <path d="M110 207h40l-9 21h-22Z" fill="#b92f31" stroke="#702023" strokeWidth="2" />
-        <path d="M79 236c10 5 18 7 29 8m44 0c11-1 19-3 29-8" fill="none" stroke="#ddb35f" strokeWidth="4" strokeLinecap="round" opacity=".85" />
-        <circle cx="83" cy="251" r="5" fill={"url(#" + goldId + ")"} />
-        <circle cx="177" cy="251" r="5" fill={"url(#" + goldId + ")"} />
-
-        <path d="M73 87 49 27c34 8 49 25 61 50Z" fill={"url(#" + furId + ")"} stroke="#71381f" strokeWidth="5" strokeLinejoin="round" />
-        <path d="m66 70-9-31c17 7 27 17 36 34Z" fill="#8c4436" opacity=".9" />
-        <path d="m187 87 24-60c-34 8-49 25-61 50Z" fill={"url(#" + furId + ")"} stroke="#71381f" strokeWidth="5" strokeLinejoin="round" />
-        <path d="m194 70 9-31c-17 7-27 17-36 34Z" fill="#8c4436" opacity=".9" />
-
-        <path d="M57 123c0-53 31-84 73-84s73 31 73 84c0 61-31 101-73 101S57 184 57 123Z" fill={"url(#" + furId + ")"} stroke="#6f381f" strokeWidth="5" />
-        <path d="M62 126c4-18 13-34 27-44 4 25 17 40 41 43-21 4-36 18-45 42-13-10-21-24-23-41Z" fill={"url(#" + creamId + ")"} opacity=".98" />
-        <path d="M198 126c-4-18-13-34-27-44-4 25-17 40-41 43 21 4 36 18 45 42 13-10 21-24 23-41Z" fill={"url(#" + creamId + ")"} opacity=".98" />
-        <path d="M91 151c6-20 20-31 39-31s33 11 39 31c5 18 0 44-12 57-9 10-18 15-27 15s-18-5-27-15c-12-13-17-39-12-57Z" fill={"url(#" + creamId + ")"} />
-
-        <path d="M84 118c10-8 22-9 31-2" fill="none" stroke="#6f351f" strokeWidth="5" strokeLinecap="round" />
-        <path d="M176 118c-10-8-22-9-31-2" fill="none" stroke="#6f351f" strokeWidth="5" strokeLinecap="round" />
-        <ellipse cx="103" cy="132" rx="8.5" ry="10" fill="#251b18" />
-        <ellipse cx="157" cy="132" rx="8.5" ry="10" fill="#251b18" />
-        <circle cx="100" cy="128" r="2.6" fill="#fff9df" />
-        <circle cx="154" cy="128" r="2.6" fill="#fff9df" />
-        <path d="M116 164c8-7 20-7 28 0-2 10-7 15-14 15s-12-5-14-15Z" fill="#251918" />
-        <path d="M130 178v10" stroke="#5f3228" strokeWidth="3" strokeLinecap="round" />
-        <path d="M130 188c-9 0-16 5-20 11m20-11c9 0 16 5 20 11" fill="none" stroke="#6d3b2f" strokeWidth="3" strokeLinecap="round" />
-        <path d="M111 203c13 8 25 8 38 0" fill="none" stroke="#a45c4b" strokeWidth="2.5" strokeLinecap="round" opacity=".75" />
-        <ellipse cx="82" cy="157" rx="12" ry="7" fill="#d36857" opacity=".19" />
-        <ellipse cx="178" cy="157" rx="12" ry="7" fill="#d36857" opacity=".19" />
-
-        <g className="captain-hat">
-          <path d="M72 74c17-18 38-28 58-28s41 10 58 28l-12 26H84Z" fill={"url(#" + hatId + ")"} stroke="#77532b" strokeWidth="4" />
-          <path d="M82 77c31-12 65-12 96 0l-3 17H85Z" fill="#123555" stroke="#7c552b" strokeWidth="3" />
-          <path d="M91 54c4-22 18-34 39-34s35 12 39 34c-26-8-52-8-78 0Z" fill={"url(#" + hatId + ")"} stroke="#77532b" strokeWidth="4" />
-          <path d="M89 96c27 9 55 9 82 0-8 17-74 17-82 0Z" fill="#06233c" stroke="#d0a34e" strokeWidth="3" />
-          <circle cx="130" cy="70" r="14" fill={"url(#" + goldId + ")"} stroke="#704719" strokeWidth="2" />
-          <path d="M130 59v18m-9-8h18m-13 8c-5 4-5 9 4 10 9-1 9-6 4-10" fill="none" stroke="#123554" strokeWidth="2.5" strokeLinecap="round" />
-          <circle cx="130" cy="57" r="3.2" fill="#123554" />
-        </g>
-
-        <path d="M86 217c18 10 32 14 44 14s26-4 44-14" fill="none" stroke="#efcf7c" strokeWidth="4" strokeLinecap="round" />
-        <circle cx="130" cy="235" r="12" fill={"url(#" + goldId + ")"} stroke="#7b501d" strokeWidth="2" />
-        <path d="M125 235c0-5 2-8 5-8s5 3 5 8c0 4-2 7-5 7s-5-3-5-7Z" fill="#123555" />
-      </g>
-    </svg>
+    <img
+      className={"captain-rosie-illustration " + className}
+      src="/captain-rosie-illustrated.webp"
+      alt="Stylized Captain Rosie"
+      draggable="false"
+    />
   );
 }
 
