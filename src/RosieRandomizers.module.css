@@ -335,33 +335,35 @@
 @keyframes dieTumble {
   0% {
     transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    filter: brightness(1) saturate(1);
   }
-  7% {
-    transform: translate3d(-2px,4px,0) rotateX(3deg) rotateY(-4deg) rotateZ(-2deg) scale(1.04,.94);
+  8% {
+    transform: translate3d(-2px,3px,0) rotateX(8deg) rotateY(-8deg) rotateZ(-3deg) scale(1.035,.955);
   }
-  18% {
-    transform: translate3d(-10px,-24px,12px) rotateX(12deg) rotateY(-14deg) rotateZ(-16deg) scale(.98);
+  24% {
+    transform: translate3d(-13px,-27px,22px) rotateX(36deg) rotateY(58deg) rotateZ(-10deg) scale(.97);
+    filter: brightness(1.03) saturate(1.03);
   }
-  37% {
-    transform: translate3d(13px,-56px,28px) rotateX(-18deg) rotateY(20deg) rotateZ(27deg) scale(.95);
+  46% {
+    transform: translate3d(17px,-55px,44px) rotateX(142deg) rotateY(214deg) rotateZ(19deg) scale(.92);
+    filter: brightness(1.07) saturate(1.06);
   }
-  55% {
-    transform: translate3d(-8px,-68px,32px) rotateX(22deg) rotateY(-24deg) rotateZ(-38deg) scale(.93);
+  66% {
+    transform: translate3d(-10px,-31px,25px) rotateX(258deg) rotateY(406deg) rotateZ(-13deg) scale(.96);
+    filter: brightness(1.04) saturate(1.04);
   }
-  72% {
-    transform: translate3d(7px,-34px,15px) rotateX(-13deg) rotateY(17deg) rotateZ(24deg) scale(.98);
+  82% {
+    transform: translate3d(5px,3px,0) rotateX(346deg) rotateY(676deg) rotateZ(6deg) scale(1.045,.935);
   }
-  84% {
-    transform: translate3d(2px,5px,0) rotateX(4deg) rotateY(-5deg) rotateZ(-7deg) scale(1.055,.91);
-  }
-  91% {
-    transform: translate3d(-2px,-11px,4px) rotateX(-3deg) rotateY(4deg) rotateZ(5deg) scale(.99);
+  90% {
+    transform: translate3d(-2px,-10px,6px) rotateX(356deg) rotateY(705deg) rotateZ(-3deg) scale(.99);
   }
   96% {
-    transform: translate3d(1px,2px,0) rotateX(1deg) rotateY(-1deg) rotateZ(-2deg) scale(1.018,.975);
+    transform: translate3d(1px,1px,0) rotateX(360deg) rotateY(718deg) rotateZ(1deg) scale(1.015,.985);
   }
   100% {
-    transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    transform: translate3d(0,0,0) rotateX(360deg) rotateY(720deg) rotateZ(0deg) scale(1);
+    filter: brightness(1) saturate(1);
   }
 }
 
