@@ -349,10 +349,10 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           </div>
 
           <div className="fortune-books" aria-hidden="true">
-            <i><span>OMENS &amp; ODD SNACKS</span></i>
-            <i><span>MOON LORE FOR GOOD GIRLS</span></i>
+            <i><span>OMENS &amp; SNACKS</span></i>
+            <i><span>GOOD GIRL MOON LORE</span></i>
             <i><span>CANINE ARCANA</span></i>
-            <i><span>CHEESE, FATE &amp; SQUIRRELS</span></i>
+            <i><span>CHEESE &amp; DESTINY</span></i>
           </div>
 
           <div
@@ -361,7 +361,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           />
 
           <img
-            className="crystal-ball-shield"
+            className={`crystal-ball-shield ${flipped ? "is-visible" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt=""
             aria-hidden="true"
@@ -2128,11 +2128,11 @@ function App() {
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
       window.navigator.vibrate?.([8, 20, 8]);
-    }, 520);
+    }, 390);
 
     turnEndTimerRef.current = window.setTimeout(() => {
       setTurning(false);
-    }, 1320);
+    }, 960);
   }
 
   function toggleDictation() {
@@ -2293,24 +2293,23 @@ function App() {
 
             <div className="console-caption">
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
-              <button
-                type="button"
-                className="fortune-whistle-button"
-                aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
-                aria-pressed={flipped}
-                title="Whistle for Rosie"
-                onClick={whistleForRosie}
-                disabled={turning}
-              >
-                <b aria-hidden="true">♪</b>
-                <small>WHISTLE FOR ROSIE</small>
-              </button>
             </div>
 
             <form className="question-card" onSubmit={askRosie}>
               <div className="console-rivets" aria-hidden="true"><i /><i /><i /><i /></div>
               <div className="question-heading">
                 <span className="question-kicker">PETITION THE ORACLE</span>
+                <button
+                  type="button"
+                  className="fortune-whistle-button"
+                  aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
+                  aria-pressed={flipped}
+                  title="Whistle for Rosie"
+                  onClick={whistleForRosie}
+                  disabled={turning}
+                >
+                  <span aria-hidden="true">♪</span>
+                </button>
                 <label htmlFor="question">Ask Rosie what you should do…</label>
               </div>
 
