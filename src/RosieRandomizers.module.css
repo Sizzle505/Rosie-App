@@ -225,8 +225,8 @@
 .dieRig {
   position: relative;
   z-index: 4;
-  width: 238px;
-  height: 238px;
+  width: 250px;
+  height: 250px;
   display: grid;
   place-items: center;
   transform-style: preserve-3d;
@@ -247,8 +247,8 @@
 .dieBody {
   position: relative;
   z-index: 2;
-  width: 238px;
-  height: 238px;
+  width: 250px;
+  height: 250px;
   display: grid;
   place-items: center;
   transform-origin: 50% 78%;
@@ -633,7 +633,7 @@
   .coinScene, .diceScene { min-height: 225px; }
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
-  .dieRig, .dieBody { width: 196px; height: 196px; }
+  .dieRig, .dieBody { width: 202px; height: 202px; }
   .decorativeDie { width: 88px; height: 88px; }
   .decorativeDieLeft { left: 14%; }
   .decorativeDieRight { left: 86%; }
