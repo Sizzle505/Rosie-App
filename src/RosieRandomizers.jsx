@@ -83,8 +83,8 @@ function drawRubyPip(ctx, x, y, radius, scaleY = 1, rotation = 0) {
 }
 
 function drawPhysicalDie(canvas, value) {
-  const width = 560;
-  const height = 520;
+  const width = 520;
+  const height = 500;
   canvas.width = width;
   canvas.height = height;
 
@@ -93,44 +93,44 @@ function drawPhysicalDie(canvas, value) {
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
 
-  const front = { x: 95, y: 128, w: 330, h: 330, r: 40 };
+  const front = { x: 70, y: 115, w: 350, h: 350, r: 42 };
 
   ctx.save();
-  ctx.shadowColor = "rgba(67,39,7,.22)";
+  ctx.shadowColor = "rgba(67,39,7,.20)";
   ctx.shadowBlur = 18;
-  ctx.fillStyle = "rgba(67,39,7,.23)";
+  ctx.fillStyle = "rgba(67,39,7,.22)";
   ctx.beginPath();
-  ctx.ellipse(286, 471, 158, 23, 0, 0, Math.PI * 2);
+  ctx.ellipse(270, 447, 165, 23, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
-  const topGradient = ctx.createLinearGradient(125, 78, 486, 128);
-  topGradient.addColorStop(0, "#ead095");
-  topGradient.addColorStop(0.28, "#fff5d5");
-  topGradient.addColorStop(0.7, "#f0dba5");
-  topGradient.addColorStop(1, "#c18b2d");
+  const topGradient = ctx.createLinearGradient(100, 65, 480, 115);
+  topGradient.addColorStop(0, "#e6c884");
+  topGradient.addColorStop(0.28, "#fff3cf");
+  topGradient.addColorStop(0.68, "#f2dda8");
+  topGradient.addColorStop(1, "#bf892b");
   ctx.fillStyle = topGradient;
-  ctx.strokeStyle = "#69400d";
+  ctx.strokeStyle = "#68400d";
   ctx.lineWidth = 6;
   ctx.beginPath();
-  ctx.moveTo(125, 78);
-  ctx.lineTo(486, 78);
-  ctx.lineTo(425, 128);
-  ctx.lineTo(95, 128);
+  ctx.moveTo(100, 65);
+  ctx.lineTo(480, 65);
+  ctx.lineTo(420, 115);
+  ctx.lineTo(70, 115);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
 
-  const sideGradient = ctx.createLinearGradient(425, 128, 486, 408);
-  sideGradient.addColorStop(0, "#e9cb82");
-  sideGradient.addColorStop(0.45, "#d7ad54");
-  sideGradient.addColorStop(1, "#9b671b");
+  const sideGradient = ctx.createLinearGradient(420, 115, 480, 415);
+  sideGradient.addColorStop(0, "#ead084");
+  sideGradient.addColorStop(0.45, "#d5aa50");
+  sideGradient.addColorStop(1, "#966118");
   ctx.fillStyle = sideGradient;
   ctx.beginPath();
-  ctx.moveTo(425, 128);
-  ctx.lineTo(486, 78);
-  ctx.lineTo(486, 408);
-  ctx.lineTo(425, 458);
+  ctx.moveTo(420, 115);
+  ctx.lineTo(480, 65);
+  ctx.lineTo(480, 415);
+  ctx.lineTo(420, 465);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
@@ -138,23 +138,23 @@ function drawPhysicalDie(canvas, value) {
   roundedRectPath(ctx, front.x, front.y, front.w, front.h, front.r);
   const frame = ctx.createLinearGradient(front.x, front.y, front.x + front.w, front.y + front.h);
   frame.addColorStop(0, "#fff0a4");
-  frame.addColorStop(0.19, "#c99531");
-  frame.addColorStop(0.43, "#75470c");
-  frame.addColorStop(0.7, "#f0d173");
-  frame.addColorStop(1, "#996218");
+  frame.addColorStop(0.18, "#c7932e");
+  frame.addColorStop(0.42, "#75460c");
+  frame.addColorStop(0.69, "#efd070");
+  frame.addColorStop(1, "#986117");
   ctx.fillStyle = frame;
   ctx.fill();
-  ctx.strokeStyle = "#5d3709";
+  ctx.strokeStyle = "#5c3709";
   ctx.lineWidth = 5;
   ctx.stroke();
 
-  const inner = { x: 107, y: 140, w: 306, h: 306, r: 32 };
+  const inner = { x: 82, y: 127, w: 326, h: 326, r: 33 };
   roundedRectPath(ctx, inner.x, inner.y, inner.w, inner.h, inner.r);
   const ivory = ctx.createLinearGradient(inner.x, inner.y, inner.x + inner.w, inner.y + inner.h);
   ivory.addColorStop(0, "#fffef9");
-  ivory.addColorStop(0.36, "#fffaf0");
-  ivory.addColorStop(0.78, "#f3e6c6");
-  ivory.addColorStop(1, "#dfc58d");
+  ivory.addColorStop(0.35, "#fffaf0");
+  ivory.addColorStop(0.77, "#f3e6c6");
+  ivory.addColorStop(1, "#dfc58c");
   ctx.fillStyle = ivory;
   ctx.fill();
   ctx.strokeStyle = "#e5c36a";
@@ -169,27 +169,27 @@ function drawPhysicalDie(canvas, value) {
   ctx.save();
   roundedRectPath(ctx, inner.x + 7, inner.y + 7, inner.w - 14, inner.h - 14, inner.r - 6);
   ctx.clip();
-  const sheen = ctx.createLinearGradient(inner.x + 15, inner.y + 10, inner.x + 260, inner.y + 150);
-  sheen.addColorStop(0, "rgba(255,255,255,.68)");
-  sheen.addColorStop(0.42, "rgba(255,255,255,.10)");
+  const sheen = ctx.createLinearGradient(inner.x + 14, inner.y + 8, inner.x + 275, inner.y + 154);
+  sheen.addColorStop(0, "rgba(255,255,255,.70)");
+  sheen.addColorStop(0.42, "rgba(255,255,255,.11)");
   sheen.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = sheen;
   ctx.fillRect(inner.x, inner.y, inner.w, inner.h * 0.56);
   ctx.restore();
 
-  drawRubyPip(ctx, 250, 105, 14, 0.56, -0.02);
-  drawRubyPip(ctx, 338, 104, 14, 0.56, -0.02);
-  drawRubyPip(ctx, 453, 205, 13, 0.72, 0.03);
-  drawRubyPip(ctx, 455, 282, 13, 0.72, 0.03);
-  drawRubyPip(ctx, 457, 359, 13, 0.72, 0.03);
+  drawRubyPip(ctx, 235, 91, 13, 0.56, -0.02);
+  drawRubyPip(ctx, 325, 90, 13, 0.56, -0.02);
+  drawRubyPip(ctx, 450, 190, 13, 0.72, 0.03);
+  drawRubyPip(ctx, 451, 270, 13, 0.72, 0.03);
+  drawRubyPip(ctx, 452, 350, 13, 0.72, 0.03);
 
-  const pipZone = { x: inner.x + 53, y: inner.y + 53, w: inner.w - 106, h: inner.h - 106 };
+  const pipZone = { x: inner.x + 59, y: inner.y + 59, w: inner.w - 118, h: inner.h - 118 };
   DIE_PIPS[value].forEach(([px, py]) => {
     drawRubyPip(
       ctx,
       pipZone.x + pipZone.w * px,
       pipZone.y + pipZone.h * py,
-      19
+      18
     );
   });
 }
