@@ -18,10 +18,20 @@
 
 .fortune-page .crystal-energy {
   width: 34.8% !important;
+  overflow: hidden !important;
+  border-radius: 50% !important;
+  clip-path: circle(48.4% at 50% 50%) !important;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0 47%, rgba(0,0,0,.96) 48%, transparent 49.2%) !important;
+  mask-image: radial-gradient(circle at 50% 50%, #000 0 47%, rgba(0,0,0,.96) 48%, transparent 49.2%) !important;
 }
 
 .fortune-page .fortune-lens {
   width: 31.8% !important;
+  overflow: hidden !important;
+  border-radius: 50% !important;
+  clip-path: circle(49% at 50% 50%) !important;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0 47.5%, rgba(0,0,0,.98) 48.2%, transparent 49.5%) !important;
+  mask-image: radial-gradient(circle at 50% 50%, #000 0 47.5%, rgba(0,0,0,.98) 48.2%, transparent 49.5%) !important;
 }
 
 .fortune-page .fortune-lens.is-consulting {
@@ -147,6 +157,7 @@
 
 /* Individually bound, dark-leather volumes laid over the photographed stack. */
 .fortune-page .fortune-books {
+  display: none !important;
   position: absolute;
   z-index: 8;
   left: 7.8%;
