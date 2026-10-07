@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
+import "./fortune-effects.css";
 
 const RESPONSES = {
   positive: [
@@ -103,7 +104,24 @@ function FortuneLens({ consulting, answer }) {
   );
 }
 
-function FortuneMachine({ consulting, answer }) {
+function CrystalEnergy({ consulting, answer }) {
+  const tone = answer ? `tone-${answer.tone}` : "";
+  return (
+    <div className={`crystal-energy ${consulting ? "is-consulting" : ""} ${tone}`} aria-hidden="true">
+      <span className="energy-halo" />
+      <span className="energy-mist" />
+      <span className="energy-ring energy-ring-a" />
+      <span className="energy-ring energy-ring-b" />
+      <span className="energy-ring energy-ring-c" />
+      <span className="energy-paw-core">🐾</span>
+      <span className="energy-stars">
+        <i /><i /><i /><i /><i /><i /><i /><i />
+      </span>
+    </div>
+  );
+}
+
+function FortuneMachine({ consulting, answer, flipped, flipBurst }) {
   return (
     <section className={`machine ${consulting ? "machine-consulting" : ""}`} aria-label="Madame Rosie fortune teller">
       <div className="booth">
@@ -126,12 +144,30 @@ function FortuneMachine({ consulting, answer }) {
             src="/rosie-fortune-stage.webp"
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
+          <img
+            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${consulting ? "stage-art-consulting" : ""}`}
+            src="/rosie-fortune-stage.webp"
+            alt=""
+            aria-hidden="true"
+            draggable="false"
+          />
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
             <i /><i /><i /><i /><i /><i />
           </div>
+          {flipBurst > 0 && (
+            <div className="flip-magic" aria-hidden="true" key={flipBurst}>
+              <span className="smoke-cloud smoke-cloud-a" />
+              <span className="smoke-cloud smoke-cloud-b" />
+              <span className="smoke-cloud smoke-cloud-c" />
+              <span className="flip-sparkles">
+                <i /><i /><i /><i /><i /><i /><i /><i />
+              </span>
+            </div>
+          )}
         </div>
 
+        <CrystalEnergy consulting={consulting} answer={answer} />
         <FortuneLens consulting={consulting} answer={answer} />
       </div>
     </section>
@@ -145,13 +181,34 @@ function App() {
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
   const [history, setHistory] = useState([]);
-  const [soundOn, setSoundOn] = useState(true);
+  const [flipped, setFlipped] = useState(false);
+  const [flipBurst, setFlipBurst] = useState(0);
+  const [listening, setListening] = useState(false);
+  const [dictationStatus, setDictationStatus] = useState("idle");
   const [consultations, setConsultations] = useState(() => {
     const value = Number(sessionStorage.getItem("rosieConsultations") || 0);
     return Number.isFinite(value) ? value : 0;
   });
   const inputRef = useRef(null);
   const audioRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const flipTimerRef = useRef(null);
+  const dictationTimerRef = useRef(null);
+
+  const speechSupported = useMemo(
+    () => Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
+    []
+  );
+
+  const speechCopy = !speechSupported
+    ? "Speech input is not available on this browser."
+    : listening
+      ? "Listening… ask Rosie your question."
+      : dictationStatus === "captured"
+        ? "Dictation captured. You can edit it before asking Rosie."
+        : dictationStatus === "denied"
+          ? "Microphone access is blocked. You can still type your question."
+          : "Tap the mic to dictate your question.";
 
   const daily = useMemo(() => {
     const seed = dayNumber();
@@ -172,6 +229,64 @@ function App() {
     return () => window.clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const clearLocalTimers = () => {
+      window.clearTimeout(flipTimerRef.current);
+      window.clearTimeout(dictationTimerRef.current);
+    };
+
+    if (!speechSupported) return clearLocalTimers;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.lang = navigator.language || "en-US";
+
+    recognition.onstart = () => {
+      setListening(true);
+      setDictationStatus("listening");
+    };
+
+    recognition.onresult = (event) => {
+      const result = event.results?.[event.resultIndex ?? 0]?.[0]?.transcript?.trim();
+      if (!result) return;
+
+      setQuestion(result);
+      setDictationStatus("captured");
+      window.clearTimeout(dictationTimerRef.current);
+      dictationTimerRef.current = window.setTimeout(() => {
+        setDictationStatus((status) => status === "captured" ? "idle" : status);
+      }, 2800);
+      window.setTimeout(() => inputRef.current?.focus(), 40);
+    };
+
+    recognition.onerror = (event) => {
+      setListening(false);
+      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+        setDictationStatus("denied");
+      } else if (event.error !== "aborted") {
+        setDictationStatus("idle");
+        setToast("Rosie couldn't hear that clearly. Try the mic again.");
+        window.setTimeout(() => setToast(""), 1800);
+      }
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+      setDictationStatus((status) => status === "listening" ? "idle" : status);
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      clearLocalTimers();
+      recognition.abort();
+      recognitionRef.current = null;
+    };
+  }, [speechSupported]);
+
   function chooseFortune() {
     const recent = readRecent();
     let candidates = FORTUNES.filter((item) => !recent.includes(item.id));
@@ -184,7 +299,6 @@ function App() {
   }
 
   function primeAudio() {
-    if (!soundOn) return null;
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     if (!AudioContext) return null;
     if (!audioRef.current) audioRef.current = new AudioContext();
@@ -194,7 +308,7 @@ function App() {
 
   function playRevealChime() {
     const context = audioRef.current;
-    if (!soundOn || !context) return;
+    if (!context) return;
 
     const now = context.currentTime;
     [523.25, 659.25, 783.99].forEach((frequency, index) => {
@@ -210,6 +324,75 @@ function App() {
       oscillator.start(now + index * 0.07);
       oscillator.stop(now + index * 0.07 + 0.45);
     });
+  }
+
+  function playWhistle() {
+    const context = primeAudio();
+    if (!context) return;
+
+    const now = context.currentTime;
+    const master = context.createGain();
+    master.gain.setValueAtTime(0.0001, now);
+    master.gain.exponentialRampToValueAtTime(0.055, now + 0.025);
+    master.gain.setValueAtTime(0.052, now + 0.28);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.58);
+    master.connect(context.destination);
+
+    const lead = context.createOscillator();
+    lead.type = "sine";
+    lead.frequency.setValueAtTime(1420, now);
+    lead.frequency.exponentialRampToValueAtTime(1950, now + 0.19);
+    lead.frequency.exponentialRampToValueAtTime(1610, now + 0.52);
+    lead.connect(master);
+    lead.start(now);
+    lead.stop(now + 0.6);
+
+    const breath = context.createOscillator();
+    const breathGain = context.createGain();
+    breath.type = "triangle";
+    breath.frequency.setValueAtTime(710, now);
+    breath.frequency.linearRampToValueAtTime(820, now + 0.24);
+    breathGain.gain.setValueAtTime(0.0001, now);
+    breathGain.gain.exponentialRampToValueAtTime(0.012, now + 0.035);
+    breathGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.46);
+    breath.connect(breathGain);
+    breathGain.connect(context.destination);
+    breath.start(now + 0.015);
+    breath.stop(now + 0.5);
+  }
+
+  function whistleForRosie() {
+    playWhistle();
+    setFlipBurst((value) => value + 1);
+    window.clearTimeout(flipTimerRef.current);
+    flipTimerRef.current = window.setTimeout(() => {
+      setFlipped((value) => !value);
+      window.navigator.vibrate?.(16);
+    }, 185);
+  }
+
+  function toggleDictation() {
+    const recognition = recognitionRef.current;
+    if (!speechSupported || !recognition) {
+      setToast("Speech input is not available on this browser.");
+      window.setTimeout(() => setToast(""), 1700);
+      return;
+    }
+
+    if (listening) {
+      recognition.stop();
+      return;
+    }
+
+    window.clearTimeout(dictationTimerRef.current);
+    setDictationStatus("listening");
+
+    try {
+      recognition.start();
+    } catch {
+      setListening(false);
+      setDictationStatus("idle");
+    }
   }
 
   function askRosie(event) {
@@ -305,34 +488,27 @@ function App() {
             <strong>ROSIE</strong>
           </div>
           <button
-            className={`round-button sound-button ${soundOn ? "is-on" : ""}`}
-            aria-label={soundOn ? "Mute fortune sounds" : "Enable fortune sounds"}
-            onClick={() => setSoundOn((value) => !value)}
+            className="round-button whistle-button"
+            aria-label="Whistle for Rosie"
+            title="Whistle for Rosie"
+            onClick={whistleForRosie}
           >
-            {soundOn ? "♪" : "×"}
+            ♪
           </button>
         </header>
 
         <main>
           <div className="fortune-console">
-            <FortuneMachine consulting={consulting} answer={answer} />
+            <FortuneMachine
+              consulting={consulting}
+              answer={answer}
+              flipped={flipped}
+              flipBurst={flipBurst}
+            />
 
             <div className="console-caption">
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
             </div>
-
-            <section className="omen-rail" aria-label="Today's omens">
-              <div className="omen-title">
-                <span>✦</span>
-                TODAY'S OMENS
-                <span>✦</span>
-              </div>
-              <div className="omen-grid">
-                <div><small>LUCKY TREAT</small><strong>{daily.treat}</strong></div>
-                <div><small>AUSPICIOUS HOUR</small><strong>{daily.hour}</strong></div>
-                <div><small>AVOID</small><strong>{daily.avoid}</strong></div>
-              </div>
-            </section>
 
             <form className="question-card" onSubmit={askRosie}>
               <div className="console-rivets" aria-hidden="true"><i /><i /><i /><i /></div>
@@ -348,18 +524,41 @@ function App() {
                     ref={inputRef}
                     id="question"
                     value={question}
-                    onChange={(event) => setQuestion(event.target.value)}
+                    onChange={(event) => {
+                      setQuestion(event.target.value);
+                      if (dictationStatus === "captured") setDictationStatus("idle");
+                    }}
                     maxLength={160}
                     autoComplete="off"
                     enterKeyHint="go"
                     placeholder="Should I text them back?"
                   />
+                  <button
+                    className={`mic-button ${listening ? "is-listening" : ""}`}
+                    type="button"
+                    onClick={toggleDictation}
+                    disabled={!speechSupported || consulting}
+                    aria-label={listening ? "Stop listening" : "Dictate your question"}
+                    title={speechSupported ? "Dictate your question" : "Speech input unavailable"}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z" />
+                      <path d="M17.2 10.8a1 1 0 0 1 2 0 7.2 7.2 0 0 1-6.2 7.13V21h2a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h2v-3.07a7.2 7.2 0 0 1-6.2-7.13 1 1 0 1 1 2 0 5.2 5.2 0 0 0 10.4 0Z" />
+                    </svg>
+                  </button>
                 </div>
 
                 <button className="ask-button" type="submit" disabled={consulting}>
                   <span className="button-paw">🐾</span>
                   {consulting ? "CONSULTING…" : "ASK ROSIE"}
                 </button>
+              </div>
+
+              <div
+                className={`speech-status ${listening ? "is-listening" : dictationStatus === "captured" ? "is-captured" : dictationStatus === "denied" ? "is-denied" : !speechSupported ? "is-unsupported" : ""}`}
+                aria-live="polite"
+              >
+                {speechCopy}
               </div>
 
               <div className="quick-row">
@@ -418,6 +617,19 @@ function App() {
               </div>
             </section>
           )}
+
+          <section className="omen-rail bottom-omens" aria-label="Today's omens">
+            <div className="omen-title">
+              <span>✦</span>
+              TODAY'S OMENS
+              <span>✦</span>
+            </div>
+            <div className="omen-grid">
+              <div><small>LUCKY TREAT</small><strong>{daily.treat}</strong></div>
+              <div><small>AUSPICIOUS HOUR</small><strong>{daily.hour}</strong></div>
+              <div><small>AVOID</small><strong>{daily.avoid}</strong></div>
+            </div>
+          </section>
         </main>
 
         <nav className="bottom-nav" aria-label="Primary">
