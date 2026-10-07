@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./RosieRandomizers.module.css";
 
 const DEFAULT_WHEEL = ["Treat Run", "Walk First", "Cheese Course", "Nap Break", "Tiny Adventure", "Dealer's Choice"];
