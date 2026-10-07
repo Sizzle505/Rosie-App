@@ -974,3 +974,361 @@
     animation-duration: 12s !important;
   }
 }
+
+
+/* --- Recording review correction pass: 2026-10-07 --- */
+
+/* Register every magical layer to the actual photographed crystal ball. */
+.crystal-energy {
+  bottom: 14px;
+  width: 150px;
+}
+.fortune-lens {
+  bottom: 13px;
+  width: 150px;
+}
+.fortune-lens.has-answer {
+  width: 150px;
+  padding: 15px 13px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.fortune-lens.has-answer:focus-visible {
+  outline: 1px solid rgba(242,210,141,.72);
+  outline-offset: 3px;
+}
+
+/* Keep the energy visually inside the glass rather than floating over Rosie's chest. */
+.energy-halo {
+  width: 91%;
+  height: 91%;
+}
+.energy-vortex {
+  width: 78%;
+  height: 78%;
+}
+.energy-ring-a {
+  width: 84%;
+  height: 42%;
+  margin-left: -42%;
+  margin-top: -21%;
+}
+.energy-ring-b {
+  width: 73%;
+  height: 54%;
+  margin-left: -36.5%;
+  margin-top: -27%;
+}
+.energy-ring-c {
+  width: 62%;
+  height: 32%;
+  margin-left: -31%;
+  margin-top: -16%;
+}
+.energy-ribbon {
+  width: 76%;
+  height: 41%;
+  margin-left: -38%;
+  margin-top: -20.5%;
+}
+.energy-ribbon-b {
+  width: 58%;
+  height: 66%;
+  margin-left: -29%;
+  margin-top: -33%;
+}
+.energy-stars {
+  inset: 9%;
+}
+
+/* The answer is now entirely contained within the ball. */
+.lens-answer {
+  gap: 4px;
+  width: 100%;
+}
+.answer-sigil {
+  font-size: 16px;
+  margin-bottom: -1px;
+}
+.answer-kicker {
+  font-size: 5.7px;
+  letter-spacing: .18em;
+}
+.lens-answer strong {
+  max-width: 118px;
+  font-size: 10.7px;
+  line-height: 1.08;
+}
+.lens-answer small {
+  margin-top: 1px;
+  font-size: 4.8px;
+  letter-spacing: .13em;
+}
+.answer-spark-field {
+  position: absolute;
+  inset: 4%;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.answer-spark-field i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffe09b;
+  box-shadow: 0 0 7px rgba(248,205,112,.9);
+  opacity: 0;
+  animation: answerSparkOrbit 2.8s ease-in-out infinite;
+  --x: 0px;
+  --y: 0px;
+}
+.answer-spark-field i:nth-child(1) { --x: -47px; --y: -28px; animation-delay: -.2s; }
+.answer-spark-field i:nth-child(2) { --x: -18px; --y: -49px; animation-delay: -.7s; }
+.answer-spark-field i:nth-child(3) { --x: 25px; --y: -46px; animation-delay: -1.1s; }
+.answer-spark-field i:nth-child(4) { --x: 48px; --y: -15px; animation-delay: -1.6s; }
+.answer-spark-field i:nth-child(5) { --x: 43px; --y: 30px; animation-delay: -.45s; }
+.answer-spark-field i:nth-child(6) { --x: 10px; --y: 49px; animation-delay: -1.3s; }
+.answer-spark-field i:nth-child(7) { --x: -33px; --y: 40px; animation-delay: -2s; }
+.answer-spark-field i:nth-child(8) { --x: -50px; --y: 8px; animation-delay: -.95s; }
+@keyframes answerSparkOrbit {
+  0%,100% { opacity: .1; transform: translate(var(--x),var(--y)) scale(.55); }
+  46% { opacity: .92; transform: translate(var(--x),var(--y)) scale(1.35); }
+}
+
+/* Cleaner prophecy arrival: flare -> sigil -> answer, with no text floating on Rosie's body. */
+.fortune-lens.is-manifesting {
+  animation: prophecyMaterialize 1.18s cubic-bezier(.16,.78,.2,1);
+}
+.fortune-lens.is-manifesting .lens-answer {
+  animation: answerFloatIn 1.12s cubic-bezier(.16,.75,.2,1);
+}
+@keyframes prophecyMaterialize {
+  0% { opacity: 0; transform: translateX(-50%) scale(.54); filter: blur(7px); }
+  24% { opacity: .92; transform: translateX(-50%) scale(1.08); filter: blur(1px); }
+  56% { transform: translateX(-50%) scale(.96); filter: blur(0); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+@keyframes answerFloatIn {
+  0%,22% { opacity: 0; transform: translateY(8px) scale(.92); }
+  58% { opacity: .76; }
+  100% { opacity: 1; transform: none; }
+}
+
+/* Tap-to-release: the prophecy collapses into a spray of gold and violet sparks. */
+.fortune-lens.is-dismissing {
+  opacity: 1;
+  animation: answerRelease .72s cubic-bezier(.16,.8,.2,1) forwards;
+}
+.fortune-lens.is-dismissing .lens-answer {
+  animation: answerDissolve .62s ease-in forwards;
+}
+.answer-dismiss-sparkles {
+  position: absolute;
+  inset: -18%;
+  z-index: 8;
+  pointer-events: none;
+}
+.answer-dismiss-sparkles i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #ffe4a1;
+  box-shadow:
+    0 0 8px rgba(255,211,117,.9),
+    0 0 13px rgba(184,104,230,.68);
+  animation: releaseSpark .7s cubic-bezier(.14,.72,.18,1) forwards;
+  --rx: 0px;
+  --ry: -76px;
+}
+.answer-dismiss-sparkles i:nth-child(1) { --rx:-66px; --ry:-54px; }
+.answer-dismiss-sparkles i:nth-child(2) { --rx:-38px; --ry:-78px; animation-delay:.03s; }
+.answer-dismiss-sparkles i:nth-child(3) { --rx:0px; --ry:-88px; animation-delay:.07s; }
+.answer-dismiss-sparkles i:nth-child(4) { --rx:40px; --ry:-76px; animation-delay:.02s; }
+.answer-dismiss-sparkles i:nth-child(5) { --rx:69px; --ry:-47px; animation-delay:.06s; }
+.answer-dismiss-sparkles i:nth-child(6) { --rx:80px; --ry:-4px; animation-delay:.09s; }
+.answer-dismiss-sparkles i:nth-child(7) { --rx:58px; --ry:46px; animation-delay:.04s; }
+.answer-dismiss-sparkles i:nth-child(8) { --rx:18px; --ry:72px; animation-delay:.1s; }
+.answer-dismiss-sparkles i:nth-child(9) { --rx:-24px; --ry:70px; animation-delay:.05s; }
+.answer-dismiss-sparkles i:nth-child(10) { --rx:-61px; --ry:42px; animation-delay:.08s; }
+.answer-dismiss-sparkles i:nth-child(11) { --rx:-78px; --ry:1px; animation-delay:.02s; }
+.answer-dismiss-sparkles i:nth-child(12) { --rx:-50px; --ry:-21px; animation-delay:.11s; }
+@keyframes answerRelease {
+  0% { transform: translateX(-50%) scale(1); filter: blur(0); }
+  35% { transform: translateX(-50%) scale(1.08); }
+  100% { opacity: 0; transform: translateX(-50%) scale(.55); filter: blur(5px); }
+}
+@keyframes answerDissolve {
+  0% { opacity: 1; filter: blur(0); }
+  42% { opacity: .75; transform: scale(1.04); }
+  100% { opacity: 0; filter: blur(5px); transform: scale(.72); }
+}
+@keyframes releaseSpark {
+  0% { opacity: 0; transform: translate(0,0) scale(.25); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--rx),var(--ry)) scale(.85); }
+}
+
+/* A natural-looking magical turn: change only Rosie's head/upper shoulders, not her entire body. */
+.stage-turning .stage-art {
+  filter: saturate(.98) contrast(1.03) brightness(.85);
+  transform: scale(1.018);
+}
+.rosie-turn-layer {
+  z-index: 8;
+  opacity: 0;
+  transform: scale(1.015);
+  transform-origin: 50% 29%;
+  clip-path: polygon(27% 2%,73% 2%,74% 52%,66% 59%,56% 62%,44% 62%,34% 59%,26% 52%);
+  -webkit-mask-image: radial-gradient(ellipse 31% 34% at 50% 30%,
+    #000 0 69%,
+    rgba(0,0,0,.98) 78%,
+    rgba(0,0,0,.6) 90%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 31% 34% at 50% 30%,
+    #000 0 69%,
+    rgba(0,0,0,.98) 78%,
+    rgba(0,0,0,.6) 90%,
+    transparent 100%);
+  transition:
+    opacity .2s ease,
+    transform .4s cubic-bezier(.2,.74,.18,1),
+    filter .3s ease;
+}
+.rosie-turn-layer.is-flipped {
+  opacity: 1;
+  transform: scaleX(-1) scale(1.015) translateX(0);
+}
+.rosie-turn-layer.is-turning {
+  filter: saturate(1.06) brightness(.94);
+}
+
+/* Compact poof around Rosie's head instead of a full-scene purple fog. */
+.smoke-wisp {
+  top: 31%;
+  filter: blur(7px);
+  animation-duration: .62s;
+}
+.smoke-wisp-a {
+  width: 112px; height: 122px; margin: -62px 0 0 -56px;
+  --dx:-15px; --dy:-38px; --rot:-8deg;
+}
+.smoke-wisp-b {
+  width: 94px; height: 106px; margin: -48px 0 0 -22px;
+  --dx:29px; --dy:-45px; --rot:11deg;
+}
+.smoke-wisp-c {
+  width: 88px; height: 98px; margin: -39px 0 0 -69px;
+  --dx:-35px; --dy:-32px; --rot:-12deg;
+}
+.smoke-wisp-d {
+  width: 78px; height: 92px; margin: -68px 0 0 1px;
+  --dx:34px; --dy:-54px; --rot:14deg;
+}
+.smoke-wisp-e {
+  width: 82px; height: 86px; margin: -18px 0 0 -40px;
+  --dx:3px; --dy:-27px; --rot:5deg;
+}
+.flip-flash {
+  top: 29%;
+  width: 100px;
+  height: 128px;
+  margin: -64px 0 0 -50px;
+}
+.flip-sparkles i {
+  top: 31%;
+}
+.flip-sparkles i:nth-child(1) { --tx:-58px; --ty:-49px; }
+.flip-sparkles i:nth-child(2) { --tx:-32px; --ty:-72px; }
+.flip-sparkles i:nth-child(3) { --tx:0px; --ty:-79px; }
+.flip-sparkles i:nth-child(4) { --tx:36px; --ty:-68px; }
+.flip-sparkles i:nth-child(5) { --tx:61px; --ty:-42px; }
+.flip-sparkles i:nth-child(6) { --tx:-63px; --ty:-18px; }
+.flip-sparkles i:nth-child(7) { --tx:66px; --ty:-12px; }
+.flip-sparkles i:nth-child(8) { --tx:-47px; --ty:25px; }
+.flip-sparkles i:nth-child(9) { --tx:45px; --ty:27px; }
+.flip-sparkles i:nth-child(10) { --tx:-18px; --ty:37px; }
+.flip-sparkles i:nth-child(11) { --tx:15px; --ty:39px; }
+.flip-sparkles i:nth-child(12) { --tx:1px; --ty:-91px; }
+
+/* Softer visual feedback matches the friendlier whistle. */
+.whistle-button:active {
+  box-shadow:
+    0 0 18px rgba(230,190,112,.18),
+    0 0 25px rgba(173,106,210,.12),
+    inset 0 0 0 1px rgba(0,0,0,.32);
+}
+
+@media (max-width: 620px) {
+  .crystal-energy {
+    bottom: 2px;
+    width: 132px;
+  }
+  .fortune-lens {
+    bottom: 3px;
+    width: 132px;
+  }
+  .fortune-lens.has-answer {
+    width: 132px;
+    padding: 12px 10px;
+  }
+  .answer-sigil { font-size: 14px; }
+  .answer-kicker { font-size: 5.1px; }
+  .lens-answer strong {
+    max-width: 105px;
+    font-size: 9.7px;
+  }
+  .lens-answer small { font-size: 4.2px; }
+  .consulting-runes {
+    width: 51px;
+    height: 51px;
+    margin-bottom: -7px;
+  }
+  .consulting-runes i { font-size: 9px; }
+  .consulting-runes i:nth-child(1) { transform: translate(-50%,-50%) translateY(-22px); }
+  .consulting-runes i:nth-child(2) { transform: translate(-50%,-50%) translateX(22px); }
+  .consulting-runes i:nth-child(3) { transform: translate(-50%,-50%) translateY(22px); }
+  .consulting-runes i:nth-child(4) { transform: translate(-50%,-50%) translateX(-22px); }
+  .lens-consulting small { font-size: 5.4px; }
+  .lens-consulting em { font-size: 5.8px; }
+
+  .rosie-turn-layer {
+    clip-path: polygon(25% 1%,75% 1%,75% 53%,66% 60%,56% 63%,44% 63%,34% 60%,25% 53%);
+    -webkit-mask-image: radial-gradient(ellipse 33% 35% at 50% 30%,
+      #000 0 69%,
+      rgba(0,0,0,.98) 79%,
+      rgba(0,0,0,.55) 91%,
+      transparent 100%);
+    mask-image: radial-gradient(ellipse 33% 35% at 50% 30%,
+      #000 0 69%,
+      rgba(0,0,0,.98) 79%,
+      rgba(0,0,0,.55) 91%,
+      transparent 100%);
+  }
+}
+
+@media (max-width: 410px) {
+  .crystal-energy {
+    bottom: 1px;
+    width: 126px;
+  }
+  .fortune-lens {
+    bottom: 2px;
+    width: 126px;
+  }
+  .fortune-lens.has-answer {
+    width: 126px;
+    padding: 11px 9px;
+  }
+  .lens-answer strong {
+    max-width: 100px;
+    font-size: 9.3px;
+  }
+}
