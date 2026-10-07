@@ -21,19 +21,22 @@ function randomIndex(length) {
 }
 
 function DiceFace({ value, rolling }) {
-  const column = (value - 1) % 3;
-  const row = value > 3 ? 1 : 0;
+  const dots = {
+    1: [4],
+    2: [0, 8],
+    3: [0, 4, 8],
+    4: [0, 2, 6, 8],
+    5: [0, 2, 4, 6, 8],
+    6: [0, 2, 3, 5, 6, 8]
+  }[value];
+
   return (
     <div className={`${styles.dieMotion} ${rolling ? styles.isRolling : ""}`}>
-      <div
-        className={styles.dieFace}
-        role="img"
-        aria-label={`Die shows ${value}`}
-        style={{
-          "--die-x": `${column * 50}%`,
-          "--die-y": `${row * 100}%`
-        }}
-      />
+      <div className={styles.dieFace} role="img" aria-label={`Die shows ${value}`}>
+        {Array.from({ length: 9 }, (_, index) => (
+          <i key={index} className={dots.includes(index) ? styles.diePip : ""} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -175,16 +178,14 @@ export default function RosieRandomizers() {
           <div className={styles.coinScene}>
             <span className={styles.coinShadow} />
             <div
-              className={`${styles.coin} ${coin === "Tails" ? styles.showTails : ""} ${coinFlip ? styles.coinFlipping : ""}`}
+              className={`${styles.coin} ${coinFlip ? styles.coinFlipping : ""}`}
               style={{ "--coin-start": `${coinTurn.start}deg`, "--coin-end": `${coinTurn.end}deg` }}
               aria-label={`Coin shows ${coin}`}
             >
-              <div className={`${styles.coinFace} ${styles.coinFront}`}>
-                <img src="/randomizers/rosie-coin.webp" alt="Rosie cameo - heads" />
-              </div>
-              <div className={`${styles.coinFace} ${styles.coinBack}`}>
-                <img src="/randomizers/rosie-coin-tail.webp" alt="Rosie tail - tails" />
-              </div>
+              <img
+                src={coin === "Heads" ? "/randomizers/rosie-coin.webp" : "/randomizers/rosie-coin-tail.webp"}
+                alt={coin === "Heads" ? "Rosie cameo - heads" : "Rosie tail - tails"}
+              />
             </div>
           </div>
           <div className={styles.readout} aria-live="polite">
@@ -203,7 +204,8 @@ export default function RosieRandomizers() {
           </div>
           <h2>A roll with standards.</h2>
           <div className={styles.diceScene}>
-            <img className={styles.decorativeDie} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
+            <img className={`${styles.decorativeDie} ${styles.decorativeDieLeft}`} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
+            <img className={`${styles.decorativeDie} ${styles.decorativeDieRight}`} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
             <DiceFace value={dice} rolling={diceRoll} />
           </div>
           <div className={styles.readout} aria-live="polite">
@@ -240,7 +242,7 @@ export default function RosieRandomizers() {
                     key={`${entry}-${index}`}
                     className={styles.wheelLabel}
                     style={{
-                      "--label-angle": `${index * step - 90}deg`
+                      "--label-angle": `${index * step}deg`
                     }}
                   >
                     <b>{entry}</b>
