@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
@@ -45,6 +45,24 @@ const FORTUNES = Object.entries(RESPONSES).flatMap(([tone, values]) =>
   values.map((text, index) => ({ id: `${tone}-${index}`, tone, text }))
 );
 
+const QUICK_QUESTIONS = [
+  "Should I text them back?",
+  "Should I buy it?",
+  "Should I go out tonight?",
+  "Should I trust my instincts?",
+  "Should I take the trip?",
+  "Should I say yes?",
+  "Should I wait?",
+  "Is this a terrible idea?",
+  "Should I order dessert?"
+];
+
+const OMENS = {
+  treat: ["cheddar", "peanut butter", "salmon", "chicken", "sweet potato", "a suspicious crumb"],
+  hour: ["8:08", "11:11", "2:22", "4:28", "6:06", "9:09"],
+  avoid: ["vacuum cleaners", "closed doors", "empty bowls", "wet grass", "squirrels with agendas", "unearned baths"]
+};
+
 function secureIndex(length) {
   const value = new Uint32Array(1);
   crypto.getRandomValues(value);
@@ -57,6 +75,12 @@ function readRecent() {
   } catch {
     return [];
   }
+}
+
+function dayNumber() {
+  const date = new Date();
+  const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return [...key].reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 3), 0);
 }
 
 function FortuneLens({ consulting, answer }) {
@@ -81,7 +105,7 @@ function FortuneLens({ consulting, answer }) {
 
 function FortuneMachine({ consulting, answer }) {
   return (
-    <section className="machine" aria-label="Madame Rosie fortune teller">
+    <section className={`machine ${consulting ? "machine-consulting" : ""}`} aria-label="Madame Rosie fortune teller">
       <div className="booth">
         <div className="cabinet-lights cabinet-lights-left" />
         <div className="cabinet-lights cabinet-lights-right" />
@@ -90,6 +114,8 @@ function FortuneMachine({ consulting, answer }) {
 
         <div className="sign">
           <div className="sign-paw">🐾</div>
+          <span className="sign-glint sign-glint-a" />
+          <span className="sign-glint sign-glint-b" />
           <h1>MADAME ROSIE</h1>
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
@@ -101,6 +127,9 @@ function FortuneMachine({ consulting, answer }) {
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
+          <div className="star-dust" aria-hidden="true">
+            <i /><i /><i /><i /><i /><i />
+          </div>
         </div>
 
         <FortuneLens consulting={consulting} answer={answer} />
@@ -117,8 +146,26 @@ function App() {
   const [toast, setToast] = useState("");
   const [history, setHistory] = useState([]);
   const [soundOn, setSoundOn] = useState(true);
+  const [consultations, setConsultations] = useState(() => {
+    const value = Number(sessionStorage.getItem("rosieConsultations") || 0);
+    return Number.isFinite(value) ? value : 0;
+  });
   const inputRef = useRef(null);
   const audioRef = useRef(null);
+
+  const daily = useMemo(() => {
+    const seed = dayNumber();
+    return {
+      treat: OMENS.treat[seed % OMENS.treat.length],
+      hour: OMENS.hour[(seed * 3 + 1) % OMENS.hour.length],
+      avoid: OMENS.avoid[(seed * 5 + 2) % OMENS.avoid.length]
+    };
+  }, []);
+
+  const quickQuestions = useMemo(() => {
+    const seed = dayNumber();
+    return [0, 1, 2].map((offset) => QUICK_QUESTIONS[(seed + offset * 3) % QUICK_QUESTIONS.length]);
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoaded(true), 950);
@@ -186,6 +233,9 @@ function App() {
         { question: askedQuestion, answer: result.text, tone: result.tone },
         ...items
       ].slice(0, 5));
+      const nextCount = consultations + 1;
+      setConsultations(nextCount);
+      sessionStorage.setItem("rosieConsultations", String(nextCount));
       setConsulting(false);
       playRevealChime();
       window.navigator.vibrate?.([22, 35, 22]);
@@ -215,6 +265,28 @@ function App() {
 
     setToast("Fortune saved to Rosie's vault.");
     window.setTimeout(() => setToast(""), 1700);
+  }
+
+  async function shareFortune() {
+    if (!answer) return;
+    const text = `I asked Madame Rosie: “${question.trim()}”\nRosie said: “${answer.text}”`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Madame Rosie", text });
+        return;
+      }
+      await navigator.clipboard.writeText(text);
+      setToast("Fortune copied to your clipboard.");
+    } catch {
+      setToast("Rosie kept this fortune private.");
+    }
+    window.setTimeout(() => setToast(""), 1700);
+  }
+
+  function choosePrompt(prompt) {
+    setQuestion(prompt);
+    inputRef.current?.focus();
   }
 
   return (
@@ -249,38 +321,84 @@ function App() {
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
             </div>
 
+            <section className="omen-rail" aria-label="Today's omens">
+              <div className="omen-title">
+                <span>✦</span>
+                TODAY'S OMENS
+                <span>✦</span>
+              </div>
+              <div className="omen-grid">
+                <div><small>LUCKY TREAT</small><strong>{daily.treat}</strong></div>
+                <div><small>AUSPICIOUS HOUR</small><strong>{daily.hour}</strong></div>
+                <div><small>AVOID</small><strong>{daily.avoid}</strong></div>
+              </div>
+            </section>
+
             <form className="question-card" onSubmit={askRosie}>
-              <label htmlFor="question">Ask Rosie what you should do…</label>
+              <div className="console-rivets" aria-hidden="true"><i /><i /><i /><i /></div>
+              <div className="question-heading">
+                <span className="question-kicker">PETITION THE ORACLE</span>
+                <label htmlFor="question">Ask Rosie what you should do…</label>
+              </div>
+
               <div className="question-row">
-                <input
-                  ref={inputRef}
-                  id="question"
-                  value={question}
-                  onChange={(event) => setQuestion(event.target.value)}
-                  maxLength={160}
-                  autoComplete="off"
-                  enterKeyHint="go"
-                  placeholder="Should I text them back?"
-                />
+                <div className="input-shell">
+                  <span className="input-star">✦</span>
+                  <input
+                    ref={inputRef}
+                    id="question"
+                    value={question}
+                    onChange={(event) => setQuestion(event.target.value)}
+                    maxLength={160}
+                    autoComplete="off"
+                    enterKeyHint="go"
+                    placeholder="Should I text them back?"
+                  />
+                </div>
+
                 <button className="ask-button" type="submit" disabled={consulting}>
                   <span className="button-paw">🐾</span>
                   {consulting ? "CONSULTING…" : "ASK ROSIE"}
                 </button>
               </div>
-              <p>No question too difficult. No snack too small.</p>
+
+              <div className="quick-row">
+                <span>TRY ONE</span>
+                <div className="quick-prompts">
+                  {quickQuestions.map((prompt) => (
+                    <button type="button" key={prompt} onClick={() => choosePrompt(prompt)}>
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="console-foot">
+                <span>No question too difficult. No snack too small.</span>
+                <strong>{consultations} consultation{consultations === 1 ? "" : "s"} tonight</strong>
+              </div>
             </form>
           </div>
 
-          <section className={`fortune-slip ${answer ? "fortune-slip-visible" : ""}`}>
+          <section className={`fortune-ticket ${answer ? "fortune-ticket-visible" : ""}`} aria-live="polite">
             {answer && (
-              <>
-                <div className="fortune-slip-heading"><span>✦</span> THE PAW HAS SPOKEN <span>✦</span></div>
-                <p className="question-echo">You asked: “{question.trim()}”</p>
+              <div className="ticket-paper">
+                <div className="ticket-tear ticket-tear-left" />
+                <div className="ticket-tear ticket-tear-right" />
+                <div className="ticket-topline">
+                  <span>№ {String(consultations).padStart(3, "0")}</span>
+                  <strong>MADAME ROSIE</strong>
+                  <span>🐾</span>
+                </div>
+                <div className="ticket-question">“{question.trim()}”</div>
+                <div className="ticket-answer">{answer.text}</div>
+                <div className="ticket-stamp">THE PAW HAS SPOKEN</div>
                 <div className="answer-actions">
                   <button onClick={askAnother}>ASK ANOTHER</button>
-                  <button className="secondary" onClick={saveFortune}>SAVE FORTUNE</button>
+                  <button className="secondary" onClick={saveFortune}>SAVE</button>
+                  <button className="secondary" onClick={shareFortune}>SHARE</button>
                 </div>
-              </>
+              </div>
             )}
           </section>
 
