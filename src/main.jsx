@@ -135,7 +135,7 @@ function dayNumber() {
 
 function createWhistleBlobUrl() {
   const sampleRate = 22050;
-  const duration = 0.64;
+  const duration = 0.56;
   const sampleCount = Math.floor(sampleRate * duration);
   const buffer = new ArrayBuffer(44 + sampleCount);
   const view = new DataView(buffer);
@@ -161,7 +161,7 @@ function createWhistleBlobUrl() {
   view.setUint32(40, sampleCount, true);
 
   let phase = 0;
-  let seed = 17431;
+  let seed = 31847;
   const noise = () => {
     seed = (seed * 48271) % 2147483647;
     return (seed / 2147483647) * 2 - 1;
@@ -169,30 +169,34 @@ function createWhistleBlobUrl() {
 
   for (let index = 0; index < sampleCount; index += 1) {
     const time = index / sampleRate;
-    let frequency = 1300;
-    let amplitude = 0;
+    const p = time / duration;
+    let frequency;
 
-    if (time < 0.24) {
-      const progress = time / 0.24;
-      frequency = 1180 + 430 * Math.sin(progress * Math.PI * .72) + 9 * Math.sin(time * 62);
-      amplitude =
-        Math.min(1, time / 0.022) *
-        Math.min(1, (0.24 - time) / 0.055) *
-        0.4;
-    } else if (time > 0.31) {
-      const local = time - 0.31;
-      const progress = local / (duration - 0.31);
-      frequency = 1390 + 570 * Math.sin(progress * Math.PI * .76) + 11 * Math.sin(local * 66);
-      amplitude =
-        Math.min(1, local / 0.022) *
-        Math.min(1, (duration - time) / 0.06) *
-        0.43;
+    if (p < 0.43) {
+      const q = p / 0.43;
+      frequency = 1460 + 560 * Math.sin(q * Math.PI * .52);
+    } else if (p < 0.58) {
+      const q = (p - 0.43) / 0.15;
+      frequency = 2020 - 190 * Math.sin(q * Math.PI * .7);
+    } else if (p < 0.78) {
+      const q = (p - 0.58) / 0.20;
+      frequency = 1840 + 185 * Math.sin(q * Math.PI * .82);
+    } else {
+      const q = (p - 0.78) / 0.22;
+      frequency = 2000 - 135 * q;
     }
 
+    frequency += 10 * Math.sin(time * 58);
     phase += Math.PI * 2 * frequency / sampleRate;
-    const pure = Math.sin(phase) + 0.035 * Math.sin(phase * 2);
-    const airy = noise() * 0.025;
-    const sample = Math.max(-1, Math.min(1, (pure + airy) * amplitude));
+
+    const attack = Math.min(1, time / 0.035);
+    const release = Math.min(1, (duration - time) / 0.075);
+    const middleLift = 0.88 + 0.12 * Math.sin(Math.PI * p);
+    const amplitude = attack * release * middleLift * 0.46;
+    const breath = noise() * 0.022;
+    const tone = Math.sin(phase) + 0.045 * Math.sin(phase * 2);
+
+    const sample = Math.max(-1, Math.min(1, (tone + breath) * amplitude));
     view.setUint8(44 + index, Math.round(128 + sample * 112));
   }
 
@@ -329,12 +333,18 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           </div>
 
           <div className="living-set" aria-hidden="true">
+            <img className="set-piece set-piece-curtain-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
+            <img className="set-piece set-piece-curtain-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-moon" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-lantern-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-lantern-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-rosie-breathe" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <div className="book-accents">
-              <i /><i /><i /><i /><i />
+              <i><span>OMENS</span></i>
+              <i><span>MOON LORE</span></i>
+              <i><span>TREAT LAW</span></i>
+              <i><span>CANINE ARCANA</span></i>
+              <i><span>CHEESE &amp; FATE</span></i>
             </div>
           </div>
 
@@ -345,6 +355,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             aria-hidden="true"
             draggable="false"
           />
+          <span className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
 
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
@@ -361,6 +372,11 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
               <span className="smoke-wisp smoke-wisp-c" />
               <span className="smoke-wisp smoke-wisp-d" />
               <span className="smoke-wisp smoke-wisp-e" />
+              <span className="smoke-wisp smoke-wisp-f" />
+              <span className="smoke-wisp smoke-wisp-g" />
+              <span className="smoke-wisp smoke-wisp-h" />
+              <span className="smoke-wisp smoke-wisp-i" />
+              <span className="smoke-wisp smoke-wisp-j" />
               <span className="flip-flash" />
               <span className="flip-sparkles">
                 <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
@@ -448,6 +464,24 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const whistleUrl = createWhistleBlobUrl();
+    const whistle = new Audio(whistleUrl);
+    whistle.preload = "auto";
+    whistle.volume = 1;
+    whistleAudioRef.current = whistle;
+    whistleUrlRef.current = whistleUrl;
+    whistle.load();
+
+    return () => {
+      whistle.pause();
+      whistleAudioRef.current = null;
+      if (whistleUrlRef.current) URL.revokeObjectURL(whistleUrlRef.current);
+      whistleUrlRef.current = null;
+    };
+  }, []);
+
+
+  useEffect(() => {
     const clearLocalTimers = () => {
       window.clearTimeout(flipTimerRef.current);
       window.clearTimeout(turnEndTimerRef.current);
@@ -502,22 +536,10 @@ function App() {
 
     recognitionRef.current = recognition;
 
-    const whistleUrl = createWhistleBlobUrl();
-    const whistle = new Audio(whistleUrl);
-    whistle.preload = "auto";
-    whistle.volume = 1;
-    whistleAudioRef.current = whistle;
-    whistleUrlRef.current = whistleUrl;
-    whistle.load();
-
     return () => {
       clearLocalTimers();
       recognition.abort();
       recognitionRef.current = null;
-      whistle.pause();
-      whistleAudioRef.current = null;
-      if (whistleUrlRef.current) URL.revokeObjectURL(whistleUrlRef.current);
-      whistleUrlRef.current = null;
     };
   }, [speechSupported]);
 
@@ -540,23 +562,84 @@ function App() {
     return audioRef.current;
   }
 
-  function playRevealChime() {
+  function playOracleRevealCue() {
     const context = audioRef.current;
     if (!context) return;
 
     const now = context.currentTime;
-    [523.25, 659.25, 783.99].forEach((frequency, index) => {
+    const master = context.createGain();
+    master.gain.setValueAtTime(0.72, now);
+    master.connect(context.destination);
+
+    const gongGain = context.createGain();
+    gongGain.gain.setValueAtTime(0.0001, now);
+    gongGain.gain.exponentialRampToValueAtTime(0.11, now + 0.025);
+    gongGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.35);
+    gongGain.connect(master);
+
+    [108, 216, 323.5, 432].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      oscillator.type = index === 0 ? "sine" : "triangle";
+      oscillator.frequency.setValueAtTime(frequency, now);
+      oscillator.detune.setValueAtTime(index * 2.5, now);
+      oscillator.connect(gongGain);
+      oscillator.start(now);
+      oscillator.stop(now + 2.4);
+    });
+
+    const shimmer = context.createGain();
+    shimmer.gain.setValueAtTime(0.0001, now + 0.12);
+    shimmer.gain.exponentialRampToValueAtTime(0.065, now + 0.22);
+    shimmer.gain.exponentialRampToValueAtTime(0.0001, now + 1.75);
+    shimmer.connect(master);
+
+    [659.25, 783.99, 987.77, 1174.66].forEach((frequency, index) => {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
+      const start = now + 0.16 + index * 0.12;
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequency, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.55, start + 0.025);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.68);
+      oscillator.connect(gain);
+      gain.connect(shimmer);
+      oscillator.start(start);
+      oscillator.stop(start + 0.72);
+    });
+
+    const sparkle = context.createOscillator();
+    const sparkleGain = context.createGain();
+    sparkle.type = "sine";
+    sparkle.frequency.setValueAtTime(1760, now + 0.48);
+    sparkle.frequency.exponentialRampToValueAtTime(2640, now + 0.92);
+    sparkleGain.gain.setValueAtTime(0.0001, now + 0.48);
+    sparkleGain.gain.exponentialRampToValueAtTime(0.028, now + 0.54);
+    sparkleGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.28);
+    sparkle.connect(sparkleGain);
+    sparkleGain.connect(master);
+    sparkle.start(now + 0.48);
+    sparkle.stop(now + 1.32);
+  }
+
+  function playReleaseChime() {
+    const context = audioRef.current;
+    if (!context) return;
+
+    const now = context.currentTime;
+    [1174.66, 987.77, 783.99].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const start = now + index * 0.055;
       oscillator.type = "sine";
       oscillator.frequency.value = frequency;
-      gain.gain.setValueAtTime(0.0001, now + index * 0.07);
-      gain.gain.exponentialRampToValueAtTime(0.045, now + index * 0.07 + 0.018);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.07 + 0.42);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.032, start + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.34);
       oscillator.connect(gain);
       gain.connect(context.destination);
-      oscillator.start(now + index * 0.07);
-      oscillator.stop(now + index * 0.07 + 0.45);
+      oscillator.start(start);
+      oscillator.stop(start + 0.37);
     });
   }
 
@@ -571,22 +654,21 @@ function App() {
     const now = context.currentTime;
     const master = context.createGain();
     master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.052, now + 0.024);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
-    master.gain.setValueAtTime(0.0001, now + 0.31);
-    master.gain.exponentialRampToValueAtTime(0.057, now + 0.335);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.64);
+    master.gain.exponentialRampToValueAtTime(0.052, now + 0.035);
+    master.gain.setValueAtTime(0.05, now + 0.38);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.56);
     master.connect(context.destination);
 
     const lead = context.createOscillator();
     lead.type = "sine";
-    lead.frequency.setValueAtTime(1180, now);
-    lead.frequency.linearRampToValueAtTime(1600, now + 0.18);
-    lead.frequency.setValueAtTime(1390, now + 0.31);
-    lead.frequency.linearRampToValueAtTime(1950, now + 0.55);
+    lead.frequency.setValueAtTime(1460, now);
+    lead.frequency.linearRampToValueAtTime(2020, now + 0.24);
+    lead.frequency.linearRampToValueAtTime(1835, now + 0.32);
+    lead.frequency.linearRampToValueAtTime(2010, now + 0.44);
+    lead.frequency.linearRampToValueAtTime(1870, now + 0.56);
     lead.connect(master);
     lead.start(now);
-    lead.stop(now + 0.66);
+    lead.stop(now + 0.58);
   }
 
   async function playWhistle() {
@@ -684,7 +766,7 @@ function App() {
       setConsultations(nextCount);
       sessionStorage.setItem("rosieConsultations", String(nextCount));
 
-      playRevealChime();
+      playOracleRevealCue();
       window.navigator.vibrate?.([20, 42, 18, 52, 24]);
 
       revealFinishTimerRef.current = window.setTimeout(() => {
@@ -698,7 +780,7 @@ function App() {
 
     window.clearTimeout(dismissTimerRef.current);
     setRevealStage("dismissing");
-    playRevealChime();
+    playReleaseChime();
     window.navigator.vibrate?.([9, 22, 9]);
 
     dismissTimerRef.current = window.setTimeout(() => {
