@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
+import Captain2Game from "./captain2.jsx";
 
 const RESPONSES = {
   positive: [
@@ -1572,7 +1573,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["fortune", "cheese", "captain"];
+  const validPages = ["fortune", "cheese", "captain", "captain2"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "fortune";
@@ -2216,15 +2217,17 @@ function App() {
         </main>
         ) : page === "cheese" ? (
           <CheeseMemoryGame />
-        ) : (
+        ) : page === "captain" ? (
           <CaptainRosieGame soundOn={soundOn} />
+        ) : (
+          <Captain2Game soundOn={soundOn} />
         )}
 
         <nav className="bottom-nav" aria-label="Primary">
           <button className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span>✦</span><small>Fortune</small></button>
           <button className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span>♛</span><small>Cheese</small></button>
           <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
-          <button disabled><span>🐾</span><small>Rosie</small></button>
+          <button className={page === "captain2" ? "active" : ""} onClick={() => navigateTo("captain2")}><span>⛩</span><small>Captain 2</small></button>
         </nav>
       </div>
 
