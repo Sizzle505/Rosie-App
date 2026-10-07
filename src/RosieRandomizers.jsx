@@ -91,22 +91,22 @@ function drawSpriteDie(canvas, sprite, value) {
         backgroundDistance = Math.min(backgroundDistance, distance);
       });
 
-      const nx = (x - size / 2) / (size * 0.49);
-      const ny = (y - size / 2) / (size * 0.49);
-      const radius = Math.hypot(nx, ny);
-      const edgeFade = 1 - smoothStep(0.83, 1.02, radius);
+      const nx = Math.abs((x - size / 2) / (size * 0.49));
+      const ny = Math.abs((y - size / 2) / (size * 0.49));
+      const shapeRadius = Math.pow((nx ** 4) + (ny ** 4), 0.25);
+      const edgeFade = 1 - smoothStep(0.88, 1.02, shapeRadius);
       const separation = smoothStep(15, 52, backgroundDistance);
       const materialHint =
         brightness > 184 ||
         chroma > 52 ||
-        (brightness < 82 && radius < 0.86)
+        (brightness < 82 && shapeRadius < 0.9)
           ? 1
           : 0;
 
       let alpha = Math.max(separation, materialHint * 0.92) * edgeFade;
 
-      if (radius < 0.67) alpha = Math.max(alpha, 0.98);
-      if (radius > 1.02) alpha = 0;
+      if (shapeRadius < 0.67) alpha = Math.max(alpha, 0.98);
+      if (shapeRadius > 1.02) alpha = 0;
 
       data[offset + 3] = Math.round(data[offset + 3] * alpha);
     }
