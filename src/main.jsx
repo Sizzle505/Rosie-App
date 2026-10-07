@@ -4,6 +4,7 @@ import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
 import Captain2Game from "./captain2.jsx";
+import RosieCardVault from "./RosieCardVault.jsx";
 
 const RESPONSES = {
   positive: [
@@ -1573,7 +1574,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["fortune", "cheese", "captain", "captain2"];
+  const validPages = ["fortune", "cheese", "captain", "captain2", "vault"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "fortune";
@@ -2046,7 +2047,7 @@ function App() {
         <div className="loading-copy">Consulting the ancient treat ledger…</div>
       </div>
 
-      <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""}`}>
+      <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
         <header className="topbar">
           <button className="round-button" aria-label="Menu">☰</button>
           <div className="brand">
@@ -2219,8 +2220,10 @@ function App() {
           <CheeseMemoryGame />
         ) : page === "captain" ? (
           <CaptainRosieGame soundOn={soundOn} />
-        ) : (
+        ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />
+        ) : (
+          <RosieCardVault onExit={() => navigateTo("fortune")} />
         )}
 
         <nav className="bottom-nav" aria-label="Primary">
@@ -2228,6 +2231,7 @@ function App() {
           <button className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span>♛</span><small>Cheese</small></button>
           <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
           <button className={page === "captain2" ? "active" : ""} onClick={() => navigateTo("captain2")}><span>⛩</span><small>Captain 2</small></button>
+          <button className={page === "vault" ? "active" : ""} onClick={() => navigateTo("vault")}><span>▣</span><small>Vault</small></button>
         </nav>
       </div>
 
