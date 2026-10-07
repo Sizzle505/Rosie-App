@@ -18,6 +18,9 @@ async function readBody(req) {
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  if (!process.env.CARD_UPLOAD_KEY || req.headers["x-card-upload-key"] !== process.env.CARD_UPLOAD_KEY) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
 
   const name = String(req.query?.name || "");
   if (!/^rc-\d{3}\.avif$/.test(name)) return res.status(400).json({ error: "Invalid card name" });
