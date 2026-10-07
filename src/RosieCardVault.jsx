@@ -381,7 +381,7 @@ function RosieCardVaultWall({ onExit }) {
     const path = paths[pathIndex];
     lastGlintCorner.current = pathIndex;
     const startAt = performance.now() + 260;
-    const duration = 3900;
+    const duration = 3500;
 
     const setReflectionPosition = (glint, x, y) => {
       glint.style.setProperty('--glint-x', `${x.toFixed(2)}%`);
@@ -501,14 +501,19 @@ function RosieCardVaultWall({ onExit }) {
     <header className={styles.header}>
       <div className={styles.headerRule} aria-hidden="true"/>
       <div className={styles.headerMark}>
-        <div className={styles.eyebrow}>THE HOUSE OF ROSIE · COLLECTIBLE ARCHIVE</div>
-        <h1 data-vault-title>
-          <span data-vault-layer="base">The Rosie Card Vault</span>
-          <span data-vault-layer="gleam" aria-hidden="true">The Rosie Card Vault</span>
-          <span data-vault-layer="etch" aria-hidden="true">The Rosie Card Vault</span>
-          <span data-vault-layer="beam" aria-hidden="true"/>
-        </h1>
-        <div className={styles.headerMeta}><span>{pool.length} cards</span><i aria-hidden="true"/><span>drag to browse</span><i aria-hidden="true"/><span>select to inspect</span></div>
+        <div className={styles.titleLine}>
+          <svg className={styles.pawTitleIcon} viewBox="0 0 64 64" aria-hidden="true">
+            <ellipse cx="32" cy="40" rx="15" ry="12"/>
+            <ellipse cx="15" cy="25" rx="7" ry="9" transform="rotate(-24 15 25)"/>
+            <ellipse cx="27" cy="18" rx="7" ry="9" transform="rotate(-8 27 18)"/>
+            <ellipse cx="39" cy="18" rx="7" ry="9" transform="rotate(8 39 18)"/>
+            <ellipse cx="51" cy="25" rx="7" ry="9" transform="rotate(24 51 25)"/>
+          </svg>
+          <h1 data-vault-title>
+            <span data-vault-layer="base">Card Vault</span>
+            <span data-vault-layer="gleam" aria-hidden="true">Card Vault</span>
+          </h1>
+        </div>
       </div>
       <div className={styles.headerRule} aria-hidden="true"/>
     </header>
@@ -539,14 +544,13 @@ export default function RosieCardVault({ onExit }) {
   return <>
     <TitleGleamAnimator
       selector={'h1[data-vault-title] [data-vault-layer="gleam"]'}
-      duration={4800}
+      duration={4400}
       delay={2800}
       hold={0.05}
       travelEnd={0.80}
       startPosition="155% 50%"
       endPosition="-55% 50%"
     />
-    <VaultTitleLaserAnimator />
     <RosieCardVaultWall onExit={onExit} />
   </>;
 }
