@@ -4,6 +4,7 @@ import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
 import "./fortune-desktop.css";
+import "./cheese-left-panel.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
