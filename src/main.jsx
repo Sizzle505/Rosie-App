@@ -687,22 +687,13 @@ function CheeseMemoryGame() {
                   aria-label={faceUp ? cheese.name : "Face-down cheese card"}
                 >
                   <span className="cheese-card-inner">
-                    <span className="cheese-card-back cheese-card-back-luxe">
-                      <span className="cheese-back-corner cheese-back-corner-tl" aria-hidden="true" />
-                      <span className="cheese-back-corner cheese-back-corner-tr" aria-hidden="true" />
-                      <span className="cheese-back-corner cheese-back-corner-bl" aria-hidden="true" />
-                      <span className="cheese-back-corner cheese-back-corner-br" aria-hidden="true" />
-                      <span className="cheese-back-ornament cheese-back-ornament-luxe" aria-hidden="true">
-                        <span className="cheese-back-monogram">R</span>
-                        <span className="cheese-back-emblem">
-                          <span className="cheese-back-crown">♛</span>
-                          <span className="cheese-back-wedge"><i /><i /><i /></span>
-                          <span className="cheese-back-bow"><i /><i /><b /></span>
-                        </span>
-                        <span className="cheese-back-paw cheese-back-paw-single">
-                          <i /><i /><i /><i /><b />
-                        </span>
-                      </span>
+                    <span className="cheese-card-back cheese-card-back-approved">
+                      <img
+                        className="cheese-card-back-art"
+                        src="/cheese-card-back-approved.webp"
+                        alt=""
+                        aria-hidden="true"
+                      />
                     </span>
                     <span className="cheese-card-front">
                       <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
