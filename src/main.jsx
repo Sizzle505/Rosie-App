@@ -5,6 +5,7 @@ import "./fortune-effects.css";
 import "./visual-rebuild.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
+import RosieRandomizers from "./RosieRandomizers.jsx";
 
 const RESPONSES = {
   positive: [
@@ -1603,7 +1604,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["fortune", "cheese", "captain", "captain2", "vault"];
+  const validPages = ["fortune", "cheese", "captain", "captain2", "vault", "randomizers"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "fortune";
@@ -2246,8 +2247,10 @@ function App() {
           <CaptainRosieGame soundOn={soundOn} />
         ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />
-        ) : (
+        ) : page === "vault" ? (
           <RosieCardVault onExit={() => navigateTo("fortune")} />
+        ) : (
+          <RosieRandomizers />
         )}
 
         <nav className="bottom-nav" aria-label="Primary">
@@ -2256,6 +2259,7 @@ function App() {
           <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
           <button className={page === "captain2" ? "active" : ""} onClick={() => navigateTo("captain2")}><span>⛩</span><small>Captain 2</small></button>
           <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span aria-hidden="true">▣</span><small>Vault</small></button>
+          <button className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span>♠</span><small>Random</small></button>
         </nav>
       </div>
 
