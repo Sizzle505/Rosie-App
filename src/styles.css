@@ -4833,3 +4833,1251 @@ main {
     animation:none !important;
   }
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   CAPTAIN ROSIE · RIVIERA ILLUSTRATED ART-DIRECTION PASS
+   Final overrides intentionally live at EOF so the premium game
+   treatment wins over the earlier functional prototype rules.
+   ───────────────────────────────────────────────────────────── */
+
+.captain-game-page {
+  --captain-ink:#041a2b;
+  --captain-navy:#062c48;
+  --captain-navy-2:#0b4263;
+  --captain-gold:#e3b75d;
+  --captain-gold-bright:#ffe49a;
+  --captain-ivory:#fff7df;
+  --captain-aqua:#76cfdf;
+  width:min(100%,980px);
+  padding-top:13px;
+}
+
+.captain-game-page .captain-hero {
+  min-height:258px;
+  grid-template-columns:238px minmax(0,1fr) 146px;
+  isolation:isolate;
+  overflow:hidden;
+  border:1px solid rgba(244,208,130,.7);
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 18% 22%,rgba(255,231,162,.16),transparent 25%),
+    radial-gradient(circle at 78% 12%,rgba(122,217,232,.12),transparent 30%),
+    linear-gradient(135deg,#041f37 0%,#073a5b 45%,#062843 72%,#031b30 100%);
+  box-shadow:
+    0 28px 68px rgba(0,0,0,.38),
+    inset 0 0 0 5px rgba(255,255,255,.018),
+    inset 0 1px rgba(255,242,199,.18);
+}
+
+.captain-game-page .captain-hero::before {
+  inset:9px;
+  z-index:4;
+  border:1px solid rgba(247,217,149,.32);
+  border-radius:20px;
+  box-shadow:
+    inset 0 0 0 3px rgba(0,0,0,.1),
+    inset 0 0 28px rgba(255,230,169,.025);
+}
+
+.captain-game-page .captain-hero::after {
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  pointer-events:none;
+  background:
+    repeating-radial-gradient(circle at 18% 50%,transparent 0 24px,rgba(241,205,130,.035) 25px 26px,transparent 27px 51px),
+    linear-gradient(100deg,transparent 0 24%,rgba(255,240,190,.045) 24.3%,transparent 25% 100%);
+  opacity:.9;
+}
+
+.captain-game-page .captain-hero-rigging {
+  z-index:1;
+  opacity:.38;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));
+}
+
+.captain-game-page .captain-portrait {
+  position:relative;
+  z-index:2;
+  min-height:258px;
+  overflow:visible;
+  display:grid;
+  place-items:end center;
+  border-right:1px solid rgba(239,202,123,.35);
+  background:
+    radial-gradient(circle at 50% 48%,rgba(255,230,158,.16) 0 27%,transparent 28%),
+    linear-gradient(90deg,rgba(255,255,255,.018),transparent);
+}
+
+.captain-game-page .captain-portrait::before {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:50%;
+  top:47%;
+  width:190px;
+  height:190px;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(238,199,119,.48);
+  border-radius:50%;
+  background:
+    repeating-conic-gradient(from 0deg,rgba(238,199,119,.32) 0 1deg,transparent 1deg 14deg),
+    radial-gradient(circle,rgba(255,235,176,.06) 0 54%,transparent 55%);
+  box-shadow:
+    0 0 0 7px rgba(2,24,40,.52),
+    0 0 0 8px rgba(238,199,119,.18);
+}
+
+.captain-game-page .captain-portrait::after {
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:19px;
+  right:19px;
+  bottom:19px;
+  height:41px;
+  border:1px solid rgba(235,197,115,.36);
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(4,34,55,.3),rgba(2,22,37,.82));
+  box-shadow:inset 0 1px rgba(255,255,255,.04);
+}
+
+.captain-portrait-medallion {
+  position:absolute;
+  z-index:-1;
+  left:50%;
+  top:48%;
+  width:158px;
+  height:158px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:
+    radial-gradient(circle,rgba(98,190,207,.16),rgba(8,50,76,.16) 56%,transparent 57%);
+}
+
+.captain-portrait-medallion i {
+  position:absolute;
+  inset:50%;
+  width:2px;
+  height:82px;
+  transform-origin:50% 0;
+  background:linear-gradient(#e3b75d,transparent);
+  opacity:.24;
+}
+.captain-portrait-medallion i:nth-child(1){transform:rotate(0deg)}
+.captain-portrait-medallion i:nth-child(2){transform:rotate(120deg)}
+.captain-portrait-medallion i:nth-child(3){transform:rotate(240deg)}
+
+.captain-game-page .captain-rosie-illustration {
+  overflow:visible;
+}
+
+.captain-game-page .hero-captain-illustration {
+  position:absolute;
+  z-index:1;
+  left:50%;
+  bottom:-29px;
+  width:224px;
+  height:278px;
+  transform:translateX(-50%);
+  filter:
+    drop-shadow(0 13px 14px rgba(0,0,0,.32))
+    drop-shadow(0 0 12px rgba(255,225,148,.08));
+}
+
+.captain-game-page .captain-portrait > span {
+  z-index:3;
+  left:50%;
+  bottom:31px;
+  width:max-content;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:#ffe3a0;
+  font-size:6.5px;
+  letter-spacing:.19em;
+  text-shadow:0 2px 4px rgba(0,0,0,.6);
+}
+
+.captain-game-page .captain-title {
+  z-index:3;
+  padding:28px 28px 24px;
+}
+
+.captain-game-page .captain-title-plaque {
+  position:relative;
+  padding:18px 17px 17px;
+  border-left:1px solid rgba(239,200,120,.28);
+  border-right:1px solid rgba(239,200,120,.12);
+  background:
+    linear-gradient(90deg,rgba(255,245,208,.035),transparent 24% 78%,rgba(255,245,208,.02));
+}
+
+.captain-game-page .captain-title-plaque::before,
+.captain-game-page .captain-title-plaque::after {
+  content:"";
+  position:absolute;
+  left:12px;
+  right:12px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#dcb15b 12%,rgba(250,220,146,.3) 50%,#dcb15b 88%,transparent);
+}
+.captain-game-page .captain-title-plaque::before{top:0}
+.captain-game-page .captain-title-plaque::after{bottom:0}
+
+.captain-game-page .captain-kicker {
+  display:block;
+  margin-bottom:8px;
+  color:#a7d2df;
+  font-size:6.5px;
+  font-weight:800;
+  letter-spacing:.22em;
+}
+
+.captain-game-page .captain-marquee {
+  display:grid;
+  grid-template-columns:40px minmax(0,1fr) 42px;
+  align-items:center;
+  gap:10px;
+}
+
+.captain-game-page .marquee-crest {
+  width:36px;
+  height:36px;
+  padding:7px;
+  border:1px solid rgba(239,203,128,.45);
+  border-radius:50%;
+  color:#e7c16f;
+  background:rgba(255,255,255,.025);
+  box-shadow:0 0 0 4px rgba(224,181,91,.05);
+}
+
+.captain-game-page .captain-title h1 {
+  margin:0;
+  color:#ffe6a6;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(38px,5.6vw,61px);
+  font-weight:700;
+  line-height:.88;
+  letter-spacing:-.045em;
+  text-shadow:
+    0 2px 0 #87571f,
+    0 5px 0 rgba(60,35,12,.55),
+    0 13px 24px rgba(0,0,0,.35);
+}
+
+.captain-game-page .captain-title p {
+  margin:7px 0 7px;
+  color:#f8f4e8;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:21px;
+  line-height:1;
+  font-style:italic;
+  letter-spacing:.025em;
+  text-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+
+.captain-game-page .captain-title small {
+  display:block;
+  max-width:470px;
+  color:#b5cbd2;
+  font-size:9px;
+  line-height:1.45;
+}
+
+.captain-game-page .marquee-burgee {
+  width:39px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  clip-path:polygon(0 0,100% 14%,77% 50%,100% 86%,0 100%);
+  color:#ffe09b;
+  background:linear-gradient(135deg,#0e5274,#082d4a);
+  border-left:2px solid #d3a44a;
+  font-family:Georgia,serif;
+  font-size:13px;
+  font-weight:900;
+}
+
+.captain-game-page .captain-best {
+  position:relative;
+  z-index:3;
+  display:grid;
+  place-content:center;
+  align-self:center;
+  min-height:150px;
+  margin:25px 18px 25px 0;
+  padding:13px 10px;
+  border:1px solid rgba(243,207,129,.58);
+  border-radius:70px 70px 18px 18px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 9%,rgba(250,220,146,.13),transparent 40%),
+    linear-gradient(180deg,rgba(5,38,59,.92),rgba(2,20,34,.88));
+  box-shadow:
+    inset 0 0 0 4px rgba(255,255,255,.02),
+    0 14px 27px rgba(0,0,0,.19);
+}
+
+.captain-game-page .captain-best::before {
+  content:"R";
+  width:34px;
+  height:34px;
+  margin:0 auto 7px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(237,201,125,.6);
+  border-radius:50%;
+  color:#f2d28d;
+  background:rgba(255,255,255,.025);
+  font-family:Georgia,serif;
+  font-size:11px;
+  font-weight:900;
+}
+
+.captain-game-page .captain-best span,
+.captain-game-page .captain-best small {
+  color:#94b9c9;
+  font-size:5px;
+  letter-spacing:.18em;
+}
+
+.captain-game-page .captain-best strong {
+  margin:3px 0;
+  color:#ffe09a;
+  font-family:Georgia,serif;
+  font-size:25px;
+  line-height:1;
+}
+
+.captain-game-page .captain-hero-compass {
+  z-index:1;
+  opacity:.28;
+}
+
+/* Route and instrument cluster */
+.captain-game-page .captain-route-strip {
+  margin:11px 4px 8px;
+  gap:11px;
+}
+
+.captain-game-page .route-port {
+  color:#d9c18a;
+  font-size:6px;
+  letter-spacing:.15em;
+}
+
+.captain-game-page .route-port b {
+  border-color:rgba(226,185,103,.5);
+  background:linear-gradient(180deg,#0d4563,#06283f);
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.02);
+}
+
+.captain-game-page .route-line {
+  height:8px;
+  border:1px solid rgba(227,191,111,.26);
+  border-radius:999px;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 8px,transparent 8px 15px),
+    #051f33;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.3);
+}
+
+.captain-game-page .route-progress {
+  border-radius:999px;
+  background:linear-gradient(90deg,#4baec1,#d8b454 72%,#ffe39a);
+  box-shadow:0 0 10px rgba(106,206,218,.27);
+}
+
+.captain-game-page .captain-hud {
+  gap:7px;
+  margin:9px 0 11px;
+}
+
+.captain-game-page .captain-hud > div {
+  position:relative;
+  min-height:63px;
+  overflow:hidden;
+  border:1px solid rgba(227,190,111,.4);
+  border-radius:15px;
+  background:
+    radial-gradient(circle at 50% -15%,rgba(255,235,181,.12),transparent 46%),
+    linear-gradient(180deg,#0b4565,#06273e);
+  box-shadow:
+    inset 0 0 0 3px rgba(255,255,255,.018),
+    inset 0 -10px 22px rgba(0,0,0,.14),
+    0 5px 12px rgba(0,0,0,.08);
+}
+
+.captain-game-page .captain-hud > div::before {
+  left:9px;
+  right:9px;
+  top:7px;
+  height:2px;
+  background:repeating-linear-gradient(90deg,rgba(238,203,132,.4) 0 1px,transparent 1px 7px);
+}
+
+.captain-game-page .captain-hud span {
+  color:#a6c2ce;
+  font-size:5.8px;
+  letter-spacing:.19em;
+}
+
+.captain-game-page .captain-hud strong {
+  margin-top:5px;
+  color:#ffe099;
+  font-family:Georgia,serif;
+  font-size:20px;
+  text-shadow:0 2px 5px rgba(0,0,0,.25);
+}
+
+/* Main framed attraction */
+.captain-game-page .yacht-game-shell {
+  padding:11px;
+  border:1px solid rgba(239,203,127,.54);
+  border-radius:25px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.022),transparent 32%),
+    linear-gradient(180deg,#072d47,#031a2b 92%);
+  box-shadow:
+    0 31px 76px rgba(0,0,0,.4),
+    inset 0 0 0 5px rgba(255,255,255,.014);
+}
+
+.captain-game-page .yacht-game-shell::before {
+  inset:6px;
+  border-color:rgba(240,207,139,.18);
+}
+
+.captain-game-page .yacht-game-sign {
+  min-height:61px;
+  padding:8px 13px;
+  border:1px solid rgba(241,203,126,.4);
+  border-radius:14px;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.028),transparent 25% 76%,rgba(255,255,255,.02)),
+    linear-gradient(180deg,#073550,#041f33);
+  box-shadow:
+    inset 0 0 0 3px rgba(255,255,255,.018),
+    0 5px 12px rgba(0,0,0,.11);
+}
+
+.captain-game-page .captain-seal {
+  border-color:rgba(239,201,119,.56);
+  background:radial-gradient(circle,rgba(255,229,163,.08),rgba(255,255,255,.015));
+  box-shadow:0 0 0 4px rgba(239,201,119,.045);
+}
+
+.captain-game-page .yacht-game-sign strong {
+  color:#f6deb0;
+  font-size:8.5px;
+  letter-spacing:.17em;
+}
+
+.captain-game-page .yacht-game-sign small {
+  color:#b9ced6;
+  font-size:9px;
+}
+
+.captain-game-page .yacht-game-sign > b {
+  color:#e2c47f;
+  background:rgba(255,255,255,.02);
+}
+
+/* Illustrated Riviera course */
+.captain-game-page .yacht-course {
+  --course-sky-top:#56b7d9;
+  --course-sky-mid:#9dd6df;
+  --course-sky-horizon:#f5dfbd;
+  --course-sea-top:#159cc4;
+  --course-sea-mid:#08789f;
+  --course-sea-bottom:#034966;
+  --course-sun:#fff1ad;
+  height:610px;
+  margin-top:9px;
+  overflow:hidden;
+  touch-action:pan-y;
+  border:1px solid rgba(239,211,158,.46);
+  border-radius:19px;
+  background:#0b789d;
+  box-shadow:
+    inset 0 -90px 130px rgba(0,31,53,.2),
+    inset 0 1px rgba(255,255,255,.5),
+    0 10px 28px rgba(0,0,0,.15);
+}
+
+.captain-phase-riviera .yacht-course {
+  --course-sky-top:#3fa8d3;
+  --course-sky-mid:#89cfe0;
+  --course-sky-horizon:#e9dfc7;
+  --course-sea-top:#078ebc;
+  --course-sea-mid:#056d94;
+  --course-sea-bottom:#043f5b;
+  --course-sun:#ffe6a1;
+}
+
+.captain-phase-sunset .yacht-course {
+  --course-sky-top:#5f668f;
+  --course-sky-mid:#d27b79;
+  --course-sky-horizon:#ffd392;
+  --course-sea-top:#2787a0;
+  --course-sea-mid:#0a6685;
+  --course-sea-bottom:#063a55;
+  --course-sun:#ffd178;
+}
+
+.captain-game-page .riviera-course-art {
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  pointer-events:none;
+}
+
+.captain-phase-sunset .riviera-course-art .riviera-sun-glow {
+  opacity:1;
+  transform-origin:775px 112px;
+  transform:scale(1.15);
+}
+.captain-phase-sunset .riviera-course-art .riviera-sun-disc {
+  filter:drop-shadow(0 0 18px rgba(255,192,103,.7));
+}
+.captain-phase-sunset .riviera-course-art .riviera-villas {
+  opacity:.82;
+}
+.captain-phase-sunset .riviera-course-art .riviera-left-coast,
+.captain-phase-sunset .riviera-course-art .riviera-right-coast {
+  filter:saturate(.82) brightness(.9);
+}
+
+.captain-game-page .captain-sky,
+.captain-game-page .riviera-mountains,
+.captain-game-page .captain-horizon,
+.captain-game-page .sun-glint,
+.captain-game-page .water-depth-bands,
+.captain-game-page .wake-lines,
+.captain-game-page .lane-line,
+.captain-game-page .sea-sparkles {
+  display:none;
+}
+
+.captain-game-page .yacht-course::before {
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:39% 0 0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(168deg,rgba(255,255,255,.08) 0 1px,transparent 1px 38px),
+    repeating-linear-gradient(12deg,transparent 0 56px,rgba(255,255,255,.035) 57px 59px);
+  opacity:.7;
+  animation:captainSea 4.5s linear infinite;
+}
+
+.captain-game-page .yacht-course::after {
+  content:"";
+  position:absolute;
+  z-index:3;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.05),transparent 20% 76%,rgba(1,32,50,.18)),
+    radial-gradient(ellipse at 50% 55%,transparent 0 55%,rgba(1,26,43,.13) 100%);
+}
+
+.captain-game-page .riviera-water-highlights {
+  animation:rivieraWaterShimmer 4.8s ease-in-out infinite alternate;
+  transform-origin:50% 70%;
+}
+.captain-game-page .riviera-sparkles {
+  animation:rivieraSparkle 3.2s ease-in-out infinite alternate;
+}
+.captain-game-page .riviera-clouds {
+  animation:rivieraCloudDrift 18s ease-in-out infinite alternate;
+}
+.captain-game-page .riviera-distant-boats {
+  animation:rivieraBoatBob 3.3s ease-in-out infinite alternate;
+}
+
+@keyframes rivieraWaterShimmer {
+  from {transform:translateX(-8px) scaleX(.99);opacity:.72}
+  to {transform:translateX(10px) scaleX(1.02);opacity:1}
+}
+@keyframes rivieraSparkle {
+  from {opacity:.55}
+  to {opacity:1}
+}
+@keyframes rivieraCloudDrift {
+  from {transform:translateX(-5px)}
+  to {transform:translateX(12px)}
+}
+@keyframes rivieraBoatBob {
+  from {transform:translateY(0)}
+  to {transform:translateY(3px)}
+}
+
+.captain-game-page .captain-course-banner {
+  z-index:8;
+  top:13px;
+  border:1px solid rgba(255,231,172,.38);
+  background:
+    linear-gradient(180deg,rgba(5,46,69,.82),rgba(3,28,45,.7));
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.02),
+    0 6px 16px rgba(0,42,63,.16);
+  backdrop-filter:blur(4px);
+}
+
+/* Glamorous ROSIE I game asset */
+.captain-game-page .captain-yacht {
+  z-index:18;
+  bottom:1.8%;
+  width:226px;
+  height:164px;
+  filter:
+    drop-shadow(0 15px 10px rgba(0,36,58,.3))
+    drop-shadow(0 2px 1px rgba(255,255,255,.13));
+  transition:left .2s cubic-bezier(.2,.82,.2,1),transform .2s ease;
+}
+
+.captain-game-page .captain-yacht.lane-0 {
+  transform:translateX(-50%) rotate(-1.8deg);
+}
+.captain-game-page .captain-yacht.lane-1 {
+  transform:translateX(-50%);
+}
+.captain-game-page .captain-yacht.lane-2 {
+  transform:translateX(-50%) rotate(1.8deg);
+}
+
+.captain-game-page .yacht-illustration {
+  inset:0;
+  animation:rosieYachtFloat 2.15s ease-in-out infinite alternate;
+}
+
+.captain-game-page .rosie-yacht-base,
+.captain-game-page .rosie-yacht-overlay {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
+}
+
+.captain-game-page .rosie-yacht-base {z-index:2}
+.captain-game-page .rosie-yacht-overlay {z-index:5}
+
+.captain-game-page .yacht-vector-shadow {
+  position:absolute;
+  z-index:0;
+  left:11%;
+  right:8%;
+  bottom:1%;
+  height:20%;
+  border-radius:50%;
+  background:rgba(0,43,64,.3);
+  filter:blur(7px);
+  transform:scaleX(.92);
+}
+
+.captain-game-page .captain-at-helm {
+  z-index:4;
+  left:31%;
+  top:12%;
+  width:39%;
+  height:45%;
+  overflow:hidden;
+  clip-path:polygon(13% 13%,28% 0,78% 0,91% 16%,100% 100%,0 100%);
+  background:
+    radial-gradient(circle at 50% 45%,rgba(229,241,232,.13),transparent 48%),
+    #0a4564;
+}
+
+.captain-game-page .helm-rosie-art {
+  position:absolute;
+  left:-5%;
+  top:-23%;
+  width:110%;
+  height:148%;
+  filter:drop-shadow(0 4px 3px rgba(0,0,0,.23));
+  animation:captainAtHelm 3s ease-in-out infinite alternate;
+}
+
+.captain-game-page .captain-window-glint {
+  position:absolute;
+  z-index:6;
+  inset:0;
+  background:linear-gradient(120deg,transparent 17%,rgba(255,255,255,.22) 25%,transparent 34% 100%);
+  opacity:.55;
+}
+
+.captain-game-page .captain-scarf-tail {
+  z-index:6;
+  right:24%;
+  top:31%;
+  width:25px;
+  height:8px;
+  border-radius:80% 20% 80% 20%;
+  background:linear-gradient(90deg,#8c252b,#d74843);
+  transform:rotate(-8deg);
+  box-shadow:0 2px 2px rgba(0,0,0,.14);
+  animation:captainScarf 1.7s ease-in-out infinite alternate;
+}
+
+.captain-game-page .yacht-wake-stack {
+  z-index:1;
+  left:15%;
+  right:15%;
+  bottom:-6%;
+  height:32%;
+}
+
+.captain-game-page .yacht-wake-stack i {
+  border-color:rgba(238,253,255,.8);
+  filter:drop-shadow(0 2px 2px rgba(0,71,98,.16));
+}
+
+.captain-game-page .captain-boosting .captain-yacht,
+.captain-boosting .captain-yacht {
+  filter:
+    drop-shadow(0 15px 10px rgba(0,36,58,.3))
+    drop-shadow(0 0 18px rgba(255,218,112,.56));
+}
+
+/* Pickups now feel like designed game objects rather than emoji floating on CSS */
+.captain-game-page .sea-pickup {
+  z-index:15;
+  filter:drop-shadow(0 7px 5px rgba(0,49,70,.24));
+}
+
+.captain-game-page .sea-pickup > span {
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,240,197,.7);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 24%,rgba(255,255,255,.52),transparent 19%),
+    linear-gradient(180deg,rgba(13,85,111,.9),rgba(4,48,72,.94));
+  box-shadow:
+    inset 0 0 0 3px rgba(255,255,255,.04),
+    0 0 0 2px rgba(4,49,72,.22);
+  font-size:23px;
+}
+
+.captain-game-page .sea-pickup-buoy > span {
+  color:#ffe2a2;
+  border-color:#8b2e2d;
+  background:
+    radial-gradient(circle at 35% 22%,rgba(255,255,255,.38),transparent 19%),
+    linear-gradient(180deg,#db584a,#8d282b);
+  font-size:18px;
+  transform:rotate(45deg);
+}
+
+.captain-game-page .sea-pickup-cheese {
+  filter:
+    drop-shadow(0 7px 5px rgba(0,49,70,.25))
+    drop-shadow(0 0 12px rgba(255,211,82,.34));
+}
+
+/* Start / results plaque with illustrated Rosie cameo */
+.captain-game-page .captain-start-panel {
+  z-index:40;
+  width:min(calc(100% - 38px),432px);
+  padding:31px 22px 20px;
+  border:1px solid rgba(250,221,157,.78);
+  border-radius:23px;
+  background:
+    radial-gradient(circle at 50% -12%,rgba(243,204,117,.19),transparent 39%),
+    linear-gradient(180deg,rgba(5,46,70,.97),rgba(3,23,39,.985));
+  box-shadow:
+    0 31px 68px rgba(0,33,53,.58),
+    inset 0 0 0 4px rgba(255,255,255,.025);
+  backdrop-filter:blur(9px);
+}
+
+.captain-game-page .captain-start-panel::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:13px;
+  width:112px;
+  height:112px;
+  transform:translate(-50%,-68%);
+  border:1px solid rgba(241,202,121,.58);
+  border-radius:50%;
+  background:
+    repeating-conic-gradient(rgba(237,199,118,.28) 0 1deg,transparent 1deg 18deg),
+    #062b45;
+  box-shadow:0 0 0 6px rgba(4,30,49,.92);
+}
+
+.captain-game-page .start-panel-rosie {
+  position:relative;
+  z-index:3;
+  width:104px;
+  height:122px;
+  margin:-83px auto 4px;
+  display:block;
+  filter:drop-shadow(0 8px 7px rgba(0,0,0,.3));
+}
+
+.captain-game-page .captain-start-panel > span {
+  position:relative;
+  z-index:3;
+  color:#a8ccda;
+  font-size:6px;
+  letter-spacing:.2em;
+}
+
+.captain-game-page .captain-start-panel > strong {
+  position:relative;
+  z-index:3;
+  margin:6px 0 7px;
+  color:#ffe4a4;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:31px;
+  line-height:1;
+  font-style:italic;
+}
+
+.captain-game-page .captain-start-panel > p {
+  position:relative;
+  z-index:3;
+  color:#c3d5dc;
+  font-size:10px;
+  line-height:1.55;
+}
+
+.captain-game-page .captain-start-panel button {
+  position:relative;
+  z-index:3;
+  height:47px;
+  min-width:176px;
+  border-color:#714617;
+  background:
+    radial-gradient(circle at 35% 10%,rgba(255,255,255,.56),transparent 18%),
+    linear-gradient(180deg,#f8df96,#d19a42 58%,#935a20);
+  color:#0d2c41;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.72),
+    0 6px 15px rgba(0,0,0,.28),
+    0 0 0 3px rgba(230,188,99,.08);
+}
+
+/* Command deck: brass/enamel yacht instrumentation */
+.captain-game-page .captain-command-deck {
+  grid-template-columns:96px minmax(0,1fr) 96px;
+  gap:9px;
+  margin-top:9px;
+}
+
+.captain-game-page .helm-button {
+  min-height:76px;
+  border:1px solid rgba(240,201,121,.58);
+  border-radius:17px;
+  background:
+    radial-gradient(circle at 50% 23%,rgba(255,238,186,.1),transparent 36%),
+    linear-gradient(180deg,#155071,#072b46);
+  color:#ffe4a5;
+  box-shadow:
+    inset 0 0 0 3px rgba(255,255,255,.018),
+    inset 0 -9px 16px rgba(0,0,0,.16),
+    0 5px 12px rgba(0,0,0,.09);
+}
+
+.captain-game-page .helm-button::before {
+  width:51px;
+  height:51px;
+  border-color:rgba(240,202,122,.42);
+  background:
+    repeating-conic-gradient(from 0deg,rgba(239,204,132,.4) 0 3deg,transparent 3deg 44deg);
+  box-shadow:inset 0 0 0 7px rgba(2,29,47,.24);
+}
+
+.captain-game-page .helm-button span {
+  position:relative;
+  z-index:2;
+  color:#ffe49f;
+  font-size:23px;
+}
+
+.captain-game-page .helm-button small {
+  color:#d9be83;
+  font-size:6px;
+  letter-spacing:.18em;
+}
+
+.captain-game-page .boost-control {
+  min-height:76px;
+  border:1px solid rgba(238,199,118,.45);
+  border-radius:17px;
+  background:
+    radial-gradient(circle at 50% 0,rgba(255,229,163,.07),transparent 45%),
+    linear-gradient(180deg,#062f49,#031f33);
+  box-shadow:
+    inset 0 0 0 3px rgba(255,255,255,.015),
+    0 5px 12px rgba(0,0,0,.08);
+}
+
+.captain-game-page .boost-ring {
+  border-color:rgba(234,196,118,.5);
+  box-shadow:
+    inset 0 0 0 4px #05243a,
+    0 0 0 1px rgba(255,229,159,.1);
+}
+
+.captain-game-page .boost-copy strong {
+  color:#e3c47e;
+  letter-spacing:.13em;
+}
+
+.captain-game-page .boost-copy small {
+  color:#88acbb;
+}
+
+.captain-game-page .boost-ready {
+  border-color:rgba(255,218,124,.8);
+  box-shadow:
+    inset 0 0 0 3px rgba(255,255,255,.018),
+    0 0 19px rgba(255,211,103,.14);
+}
+
+.captain-game-page .captain-cargo-key {
+  margin-top:8px;
+  padding:9px;
+  border:1px solid rgba(234,198,123,.28);
+  border-radius:13px;
+  background:
+    linear-gradient(180deg,rgba(5,36,55,.94),rgba(3,23,38,.88));
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.01);
+}
+
+/* Small-screen art direction */
+@media (max-width:700px) {
+  .captain-game-page {
+    padding-top:8px;
+  }
+
+  .captain-game-page .captain-hero {
+    min-height:226px;
+    grid-template-columns:126px minmax(0,1fr);
+    border-radius:21px;
+  }
+
+  .captain-game-page .captain-hero::before {
+    inset:6px;
+    border-radius:15px;
+  }
+
+  .captain-game-page .captain-portrait {
+    min-height:226px;
+  }
+
+  .captain-game-page .captain-portrait::before {
+    width:122px;
+    height:122px;
+  }
+
+  .captain-game-page .captain-portrait::after {
+    left:8px;
+    right:8px;
+    bottom:13px;
+    height:32px;
+  }
+
+  .captain-game-page .hero-captain-illustration {
+    bottom:-17px;
+    width:150px;
+    height:202px;
+  }
+
+  .captain-game-page .captain-portrait > span {
+    bottom:21px;
+    font-size:4.6px;
+    letter-spacing:.12em;
+  }
+
+  .captain-game-page .portrait-paw {
+    width:13px;
+    height:13px;
+  }
+
+  .captain-game-page .captain-title {
+    padding:16px 10px 13px;
+  }
+
+  .captain-game-page .captain-title-plaque {
+    padding:14px 9px 12px;
+  }
+
+  .captain-game-page .captain-kicker {
+    margin-bottom:7px;
+    font-size:4.7px;
+    line-height:1.25;
+    letter-spacing:.13em;
+  }
+
+  .captain-game-page .captain-marquee {
+    grid-template-columns:25px minmax(0,1fr);
+    gap:7px;
+  }
+
+  .captain-game-page .marquee-crest {
+    width:25px;
+    height:25px;
+    padding:5px;
+  }
+
+  .captain-game-page .marquee-burgee {
+    display:none;
+  }
+
+  .captain-game-page .captain-title h1 {
+    font-size:clamp(27px,8.2vw,34px);
+    line-height:.9;
+  }
+
+  .captain-game-page .captain-title p {
+    margin:5px 0 6px;
+    font-size:16px;
+  }
+
+  .captain-game-page .captain-title small {
+    font-size:6.6px;
+    line-height:1.35;
+  }
+
+  .captain-game-page .captain-best {
+    display:none;
+  }
+
+  .captain-game-page .captain-route-strip {
+    margin:8px 1px 6px;
+    gap:6px;
+  }
+
+  .captain-game-page .route-port span {
+    font-size:4.6px;
+  }
+
+  .captain-game-page .captain-hud {
+    gap:4px;
+    margin:6px 0 8px;
+  }
+
+  .captain-game-page .captain-hud > div {
+    min-height:48px;
+    padding:4px 2px;
+    border-radius:10px;
+  }
+
+  .captain-game-page .captain-hud > div::before {
+    left:5px;
+    right:5px;
+    top:5px;
+  }
+
+  .captain-game-page .captain-hud span {
+    font-size:4.35px;
+    letter-spacing:.1em;
+  }
+
+  .captain-game-page .captain-hud strong {
+    margin-top:3px;
+    font-size:13px;
+  }
+
+  .captain-game-page .yacht-game-shell {
+    padding:6px;
+    border-radius:17px;
+  }
+
+  .captain-game-page .yacht-game-sign {
+    min-height:49px;
+    padding:6px 7px;
+    grid-template-columns:30px minmax(0,1fr);
+    border-radius:11px;
+  }
+
+  .captain-game-page .yacht-game-sign > span {
+    width:28px;
+    height:28px;
+  }
+
+  .captain-game-page .yacht-game-sign strong {
+    font-size:6px;
+  }
+
+  .captain-game-page .yacht-game-sign small {
+    margin-top:2px;
+    font-size:6.8px;
+    line-height:1.2;
+  }
+
+  .captain-game-page .yacht-game-sign > b {
+    display:none;
+  }
+
+  .captain-game-page .yacht-course {
+    height:520px;
+    margin-top:6px;
+    border-radius:13px;
+  }
+
+  .captain-game-page .captain-course-banner {
+    top:9px;
+    transform:scale(.9);
+    transform-origin:top center;
+  }
+
+  .captain-game-page .captain-yacht {
+    bottom:2.3%;
+    width:158px;
+    height:118px;
+  }
+
+  .captain-game-page .captain-yacht.lane-0,
+  .captain-game-page .captain-yacht.lane-1,
+  .captain-game-page .captain-yacht.lane-2 {
+    transform:translateX(-50%);
+  }
+
+  .captain-game-page .sea-pickup > span {
+    width:39px;
+    height:39px;
+    font-size:20px;
+  }
+
+  .captain-game-page .captain-start-panel {
+    width:min(calc(100% - 24px),360px);
+    padding:25px 13px 16px;
+  }
+
+  .captain-game-page .captain-start-panel::after {
+    width:90px;
+    height:90px;
+    top:18px;
+  }
+
+  .captain-game-page .start-panel-rosie {
+    width:82px;
+    height:101px;
+    margin:-69px auto 2px;
+  }
+
+  .captain-game-page .captain-start-panel > strong {
+    font-size:24px;
+  }
+
+  .captain-game-page .captain-start-panel > p {
+    font-size:8.4px;
+  }
+
+  .captain-game-page .captain-start-panel button {
+    height:42px;
+    min-width:148px;
+    font-size:9px;
+  }
+
+  .captain-game-page .captain-command-deck {
+    grid-template-columns:66px minmax(0,1fr) 66px;
+    gap:5px;
+    margin-top:6px;
+  }
+
+  .captain-game-page .helm-button,
+  .captain-game-page .boost-control {
+    min-height:64px;
+    border-radius:12px;
+  }
+
+  .captain-game-page .helm-button::before {
+    width:41px;
+    height:41px;
+  }
+
+  .captain-game-page .captain-cargo-key {
+    grid-template-columns:repeat(4,1fr);
+    gap:4px;
+    margin-top:5px;
+    padding:6px;
+  }
+
+  .captain-game-page .mission-meter {
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:390px) {
+  .captain-game-page .captain-hero {
+    min-height:214px;
+    grid-template-columns:116px minmax(0,1fr);
+  }
+
+  .captain-game-page .captain-portrait {
+    min-height:214px;
+  }
+
+  .captain-game-page .hero-captain-illustration {
+    width:141px;
+    height:191px;
+  }
+
+  .captain-game-page .captain-title {
+    padding:13px 7px 10px;
+  }
+
+  .captain-game-page .captain-title-plaque {
+    padding:12px 7px 10px;
+  }
+
+  .captain-game-page .captain-title h1 {
+    font-size:26px;
+  }
+
+  .captain-game-page .captain-title p {
+    font-size:14px;
+  }
+
+  .captain-game-page .captain-title small {
+    font-size:6.1px;
+  }
+
+  .captain-game-page .yacht-course {
+    height:492px;
+  }
+
+  .captain-game-page .captain-yacht {
+    width:149px;
+    height:112px;
+  }
+
+  .captain-game-page .captain-command-deck {
+    grid-template-columns:59px minmax(0,1fr) 59px;
+  }
+
+  .captain-game-page .boost-copy small {
+    font-size:4.8px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .captain-game-page .captain-rosie-bob,
+  .captain-game-page .riviera-water-highlights,
+  .captain-game-page .riviera-sparkles,
+  .captain-game-page .riviera-clouds,
+  .captain-game-page .riviera-distant-boats,
+  .captain-game-page .helm-rosie-art,
+  .captain-game-page .yacht-illustration {
+    animation:none !important;
+  }
+}
