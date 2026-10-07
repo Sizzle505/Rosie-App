@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./RosieRandomizers.module.css";
 
 const DEFAULT_WHEEL = [
@@ -12,85 +12,144 @@ const DEFAULT_WHEEL = [
 
 function randomIndex(length) {
   if (length <= 1) return 0;
+
   if (globalThis.crypto?.getRandomValues) {
+    const range = 0x100000000;
+    const limit = range - (range % length);
     const value = new Uint32Array(1);
-    globalThis.crypto.getRandomValues(value);
+
+    do {
+      globalThis.crypto.getRandomValues(value);
+    } while (value[0] >= limit);
+
     return value[0] % length;
   }
+
   return Math.floor(Math.random() * length);
 }
 
-const DIE_PIPS = {
-  1: [[110, 112]],
-  2: [[88, 90], [132, 134]],
-  3: [[86, 88], [110, 112], [134, 136]],
-  4: [[88, 88], [132, 88], [88, 136], [132, 136]],
-  5: [[88, 88], [132, 88], [110, 112], [88, 136], [132, 136]],
-  6: [[88, 84], [132, 84], [88, 112], [132, 112], [88, 140], [132, 140]]
-};
+function smoothStep(edge0, edge1, value) {
+  const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
+
+function drawSpriteDie(canvas, sprite, value) {
+  const size = 520;
+  const tileSize = 160;
+  const sourceIndex = value - 1;
+  const sourceX = (sourceIndex % 3) * tileSize;
+  const sourceY = Math.floor(sourceIndex / 3) * tileSize;
+
+  canvas.width = size;
+  canvas.height = size;
+
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.clearRect(0, 0, size, size);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.filter = "contrast(1.075) saturate(1.08)";
+  ctx.drawImage(
+    sprite,
+    sourceX,
+    sourceY,
+    tileSize,
+    tileSize,
+    12,
+    12,
+    size - 24,
+    size - 24
+  );
+  ctx.filter = "none";
+
+  const image = ctx.getImageData(0, 0, size, size);
+  const data = image.data;
+  const cornerPoints = [
+    [24, 24],
+    [size - 25, 24],
+    [24, size - 25],
+    [size - 25, size - 25]
+  ];
+  const cornerColors = cornerPoints.map(([x, y]) => {
+    const offset = (y * size + x) * 4;
+    return [data[offset], data[offset + 1], data[offset + 2]];
+  });
+
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const offset = (y * size + x) * 4;
+      const red = data[offset];
+      const green = data[offset + 1];
+      const blue = data[offset + 2];
+      const maxChannel = Math.max(red, green, blue);
+      const minChannel = Math.min(red, green, blue);
+      const chroma = maxChannel - minChannel;
+      const brightness = (red + green + blue) / 3;
+
+      let backgroundDistance = Infinity;
+      cornerColors.forEach(([cr, cg, cb]) => {
+        const distance = Math.hypot(red - cr, green - cg, blue - cb);
+        backgroundDistance = Math.min(backgroundDistance, distance);
+      });
+
+      const nx = Math.abs((x - size / 2) / (size * 0.49));
+      const ny = Math.abs((y - size / 2) / (size * 0.49));
+      const shapeRadius = Math.pow((nx ** 4) + (ny ** 4), 0.25);
+      const edgeFade = 1 - smoothStep(0.88, 1.02, shapeRadius);
+      const separation = smoothStep(15, 52, backgroundDistance);
+      const materialHint =
+        brightness > 184 ||
+        chroma > 52 ||
+        (brightness < 82 && shapeRadius < 0.9)
+          ? 1
+          : 0;
+
+      let alpha = Math.max(separation, materialHint * 0.92) * edgeFade;
+
+      if (shapeRadius < 0.67) alpha = Math.max(alpha, 0.98);
+      if (shapeRadius > 1.02) alpha = 0;
+
+      data[offset + 3] = Math.round(data[offset + 3] * alpha);
+    }
+  }
+
+  ctx.clearRect(0, 0, size, size);
+  ctx.putImageData(image, 0, 0);
+}
 
 function DiceFace({ value, rolling }) {
+  const canvasRef = useRef(null);
+  const [sprite, setSprite] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => {
+      if (active) setSprite(image);
+    };
+    image.src = "/randomizers/rosie-die-sprites-clean.webp";
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (canvasRef.current && sprite) {
+      drawSpriteDie(canvasRef.current, sprite, value);
+    }
+  }, [sprite, value]);
+
   return (
     <div className={`${styles.dieRig} ${rolling ? styles.isRolling : ""}`}>
       <span className={styles.dieLandingShadow} aria-hidden="true" />
       <div className={styles.dieBody}>
-        <svg
-          className={styles.dieSvg}
-          viewBox="0 0 220 220"
+        <canvas
+          ref={canvasRef}
+          className={styles.dieCanvas}
           role="img"
           aria-label={`Die shows ${value}`}
-        >
-          <defs>
-            <linearGradient id="dieGold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#fff1ad" />
-              <stop offset=".24" stopColor="#c6922d" />
-              <stop offset=".52" stopColor="#7e5518" />
-              <stop offset=".74" stopColor="#e6c25e" />
-              <stop offset="1" stopColor="#9a691d" />
-            </linearGradient>
-            <linearGradient id="dieIvory" x1="0" y1="0" x2=".85" y2="1">
-              <stop offset="0" stopColor="#fffef9" />
-              <stop offset=".42" stopColor="#fff8e6" />
-              <stop offset="1" stopColor="#ead6a7" />
-            </linearGradient>
-            <linearGradient id="dieTop" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#fffdf4" />
-              <stop offset="1" stopColor="#e9cf91" />
-            </linearGradient>
-            <linearGradient id="dieSide" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#ead39b" />
-              <stop offset="1" stopColor="#c79d4d" />
-            </linearGradient>
-            <radialGradient id="rubyPip" cx=".35" cy=".28" r=".72">
-              <stop offset="0" stopColor="#ff9eaa" />
-              <stop offset=".18" stopColor="#e53b55" />
-              <stop offset=".52" stopColor="#a50f29" />
-              <stop offset="1" stopColor="#4c020e" />
-            </radialGradient>
-            <filter id="dieSoftShadow" x="-40%" y="-40%" width="180%" height="190%">
-              <feDropShadow dx="0" dy="10" stdDeviation="8" floodColor="#5b3a12" floodOpacity=".26" />
-            </filter>
-          </defs>
-
-          <g filter="url(#dieSoftShadow)">
-            <path d="M57 58 L78 36 Q83 31 91 31 H172 Q184 31 191 40 L198 49 L180 69 Z" fill="url(#dieTop)" stroke="url(#dieGold)" strokeWidth="5" strokeLinejoin="round" />
-            <path d="M57 58 L78 69 V163 Q78 173 69 181 L57 191 Q49 182 49 170 V74 Q49 64 57 58 Z" fill="url(#dieSide)" stroke="url(#dieGold)" strokeWidth="5" strokeLinejoin="round" />
-            <rect x="74" y="54" width="126" height="126" rx="22" fill="url(#dieIvory)" stroke="url(#dieGold)" strokeWidth="6" />
-            <rect x="80" y="60" width="114" height="114" rx="18" fill="none" stroke="#f8dfa0" strokeWidth="2.5" opacity=".9" />
-            <path d="M89 60 C112 48 162 48 185 68" fill="none" stroke="#fff" strokeWidth="4" opacity=".58" strokeLinecap="round" />
-            <circle cx="112" cy="44" r="8.5" fill="url(#rubyPip)" stroke="#8a5c17" strokeWidth="3" />
-            <circle cx="154" cy="43" r="8.5" fill="url(#rubyPip)" stroke="#8a5c17" strokeWidth="3" />
-            <circle cx="60" cy="99" r="7.2" fill="url(#rubyPip)" stroke="#835517" strokeWidth="2.5" />
-            <circle cx="60" cy="135" r="7.2" fill="url(#rubyPip)" stroke="#835517" strokeWidth="2.5" />
-            {DIE_PIPS[value].map(([cx, cy], index) => (
-              <g key={index}>
-                <circle cx={cx} cy={cy} r="12.5" fill="#d8b556" stroke="#7b5017" strokeWidth="2.5" />
-                <circle cx={cx} cy={cy} r="9.2" fill="url(#rubyPip)" />
-                <circle cx={cx - 2.3} cy={cy - 2.8} r="2.5" fill="#fff0f2" opacity=".68" />
-              </g>
-            ))}
-          </g>
-        </svg>
+        />
       </div>
     </div>
   );
@@ -169,14 +228,14 @@ export default function RosieRandomizers() {
   function rollDice() {
     if (diceRoll) return;
     const next = randomIndex(6) + 1;
-    const tumbleFaces = Array.from({ length: 7 }, () => randomIndex(6) + 1);
+    const tumbleFaces = Array.from({ length: 8 }, () => randomIndex(6) + 1);
     setDiceResult("Rolling across the ivory…");
     setDiceRoll(true);
     window.navigator.vibrate?.(12);
     tumbleFaces.forEach((face, index) => {
-      window.setTimeout(() => setDice(face), 100 + index * 105);
+      window.setTimeout(() => setDice(face), 95 + index * 112);
     });
-    window.setTimeout(() => setDice(next), 985);
+    window.setTimeout(() => setDice(next), 1040);
     window.setTimeout(() => {
       setDiceResult(`${next}. Rosie calls it clean.`);
       setDiceRoll(false);
