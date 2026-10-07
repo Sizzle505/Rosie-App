@@ -832,8 +832,10 @@ function App() {
             </section>
           )}
         </main>
-        ) : (
+        ) : page === "cheese" ? (
           <CheeseMemoryGame />
+        ) : (
+          <CaptainRosieGame />
         )}
 
         <nav className="bottom-nav" aria-label="Primary">
