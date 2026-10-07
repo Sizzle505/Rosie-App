@@ -506,15 +506,67 @@ function formatGameTime(seconds) {
   return minutes + ":" + String(remaining).padStart(2, "0");
 }
 
-const ROSIE_MOOD_ART = {
-  watching: "/rosie-mood-watching.webp",
-  focused: "/rosie-mood-focused.webp",
-  pleased: "/rosie-mood-pleased.webp",
-  proud: "/rosie-mood-proud.webp",
-  amused: "/rosie-mood-amused.webp",
-  embarrassed: "/rosie-mood-embarrassed.webp",
-  distraught: "/rosie-mood-distraught.webp",
-  elated: "/rosie-mood-elated.webp"
+const ROSIE_REACTIONS = {
+  watching: {
+    position: "0% 0%",
+    label: "WATCHING",
+    alt: "Doctor Rosie watching attentively",
+    icon: "◌"
+  },
+  intrigued: {
+    position: "25% 0%",
+    label: "INTRIGUED",
+    alt: "Doctor Rosie looking intrigued",
+    icon: "?"
+  },
+  pleased: {
+    position: "50% 0%",
+    label: "PLEASED",
+    alt: "Doctor Rosie looking pleased",
+    icon: "✦"
+  },
+  concerned: {
+    position: "75% 0%",
+    label: "CONCERNED",
+    alt: "Doctor Rosie looking concerned",
+    icon: "!"
+  },
+  triumphant: {
+    position: "100% 0%",
+    label: "TRIUMPHANT",
+    alt: "Doctor Rosie celebrating triumphantly",
+    icon: "✦"
+  },
+  amused: {
+    position: "0% 100%",
+    label: "AMUSED",
+    alt: "Doctor Rosie looking knowingly amused",
+    icon: "♡"
+  },
+  focused: {
+    position: "25% 100%",
+    label: "FOCUSED",
+    alt: "Doctor Rosie thinking carefully",
+    icon: "⌕"
+  },
+  unimpressed: {
+    position: "50% 100%",
+    label: "UNIMPRESSED",
+    alt: "Doctor Rosie looking deeply unimpressed",
+    icon: "!"
+  },
+  proud: {
+    position: "75% 100%",
+    label: "PROUD",
+    alt: "Doctor Rosie looking proud",
+    icon: "✦"
+  },
+  elated: {
+    position: "100% 100%",
+    label: "ELATED",
+    alt: "Doctor Rosie delighted by the result",
+    icon: "✦"
+  }
 };
 
 function CheeseMemoryGame() {
@@ -525,14 +577,14 @@ function CheeseMemoryGame() {
   const [elapsed, setElapsed] = useState(0);
   const [started, setStarted] = useState(false);
   const [locked, setLocked] = useState(false);
-  const [message, setMessage] = useState("Rosie is testing your palate memory. Do try not to embarrass yourself.");
+  const [message, setMessage] = useState("Rosie is ready. Show her what you remember.");
   const [rosieMood, setRosieMood] = useState("watching");
   const [matchStreak, setMatchStreak] = useState(0);
   const [misses, setMisses] = useState(0);
-  const [inspections, setInspections] = useState(0);
   const pendingFlipRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
+  const currentReaction = ROSIE_REACTIONS[rosieMood];
 
   useEffect(() => {
     if (!started || complete) return undefined;
@@ -554,9 +606,8 @@ function CheeseMemoryGame() {
     setLocked(false);
     setMatchStreak(0);
     setMisses(0);
-    setInspections(0);
     setRosieMood("watching");
-    setMessage("A fresh examination board. Doctor Rosie is ready when you are.");
+    setMessage("A fresh board. Doctor Rosie is ready when you are.");
   }
 
   function chooseCard(index) {
@@ -564,24 +615,8 @@ function CheeseMemoryGame() {
     if (!started) setStarted(true);
 
     if (openCards.length === 0) {
+      // The current reaction remains in place until this pair is resolved.
       setOpenCards([index]);
-      const nextInspection = inspections + 1;
-      setInspections(nextInspection);
-      // A first pick is a continuation of the examination, not a reset to neutral.
-      // Alternating reactions makes Rosie feel like she is following the player.
-      if (rosieMood === "watching") {
-        setRosieMood("focused");
-        setMessage("Rosie has the loupe out. Choose its companion.");
-      } else if (rosieMood === "distraught" || rosieMood === "embarrassed") {
-        setRosieMood("focused");
-        setMessage("A second opinion, then. Rosie is watching closely.");
-      } else if (nextInspection % 3 === 0) {
-        setRosieMood("amused");
-        setMessage("Interesting. Continue, if you dare.");
-      } else {
-        setRosieMood("focused");
-        setMessage("Rosie is considering the evidence.");
-      }
       return;
     }
 
@@ -600,16 +635,27 @@ function CheeseMemoryGame() {
         setOpenCards([]);
         setLocked(false);
         const nextStreak = matchStreak + 1;
+        const finishing = matched.length + 1 === CHEESES.length;
         setMatchStreak(nextStreak);
         setMisses(0);
-        setRosieMood(matched.length + 1 === CHEESES.length ? "elated" : nextStreak >= 3 ? "proud" : "pleased");
-        setMessage(matched.length + 1 === CHEESES.length
-          ? "You pass. Rosie is genuinely impressed."
-          : nextStreak >= 3
-            ? "A remarkable run. Rosie is almost visibly proud."
-            : nextStreak > 1
-              ? "Another correct pairing. Your palate may yet be salvageable."
-            : "Correct. Your palate may yet be salvageable.");
+
+        if (finishing) {
+          setRosieMood("elated");
+          setMessage("Examination passed. Rosie is ecstatic and pretending this was never in doubt.");
+        } else if (nextStreak >= 3) {
+          setRosieMood("triumphant");
+          setMessage("Three straight. Rosie is now taking partial credit for your education.");
+        } else if (nextStreak === 2) {
+          setRosieMood("proud");
+          setMessage("Two in a row. The examiner is becoming inconveniently proud of you.");
+        } else if (misses > 0) {
+          setRosieMood("amused");
+          setMessage("Redemption. Rosie will graciously overlook the earlier lapse.");
+        } else {
+          setRosieMood("pleased");
+          setMessage("Correct. Rosie gives a very small, very serious nod.");
+        }
+
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
     } else {
@@ -617,12 +663,27 @@ function CheeseMemoryGame() {
         setOpenCards([]);
         setLocked(false);
         const nextMisses = misses + 1;
+        const brokenStreak = matchStreak;
+        const completedMove = moves + 1;
         setMisses(nextMisses);
         setMatchStreak(0);
-        setRosieMood(nextMisses > 1 ? "distraught" : "embarrassed");
-        setMessage(nextMisses > 1
-          ? "Unconvincing. Doctor Rosie expected better."
-          : "Oh, dear. Rosie saw that.");
+
+        if (nextMisses >= 3) {
+          setRosieMood("unimpressed");
+          setMessage("Again? Rosie has entered it into the permanent record.");
+        } else if (nextMisses === 2) {
+          setRosieMood("concerned");
+          setMessage("Two misses running. Doctor Rosie is beginning to worry about the thesis.");
+        } else if (brokenStreak >= 2) {
+          setRosieMood("amused");
+          setMessage("And there goes the streak. Rosie is trying not to enjoy this.");
+        } else if (completedMove >= 5) {
+          setRosieMood("focused");
+          setMessage("Not a pair. Rosie is revisiting the evidence.");
+        } else {
+          setRosieMood("intrigued");
+          setMessage("Not a match. Rosie files that away for later.");
+        }
       }, 850);
     }
   }
@@ -711,14 +772,19 @@ function CheeseMemoryGame() {
         <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
           <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
             <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
-            <div className="rosie-reaction-portrait">
-              <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={"Doctor Rosie looking " + rosieMood} />
+            <div className="rosie-reaction-portrait" role="img" aria-label={currentReaction.alt}>
+              <span
+                key={rosieMood}
+                className="rosie-reaction-sprite"
+                style={{ backgroundPosition: currentReaction.position }}
+                aria-hidden="true"
+              />
             </div>
             <div className="reaction-copy">
-              <span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span>
+              <span>DOCTOR ROSIE'S FIELD NOTES · {currentReaction.label}</span>
               <strong>{message}</strong>
             </div>
-            <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
+            <i aria-hidden="true">{currentReaction.icon}</i>
           </div>
           <button type="button" className="cheese-reset-button cheese-reset-mobile" onClick={resetGame}>
             <span aria-hidden="true">↻</span>
