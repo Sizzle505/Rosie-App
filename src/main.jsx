@@ -109,15 +109,12 @@ function FortuneMachine({ consulting, answer }) {
         </div>
 
         <div className="stage">
-          <span className="moon">☾</span>
-          <span className="star star-a">✦</span>
-          <span className="star star-b">✧</span>
-          <span className="star star-c">✦</span>
-          <div className="book-stack" aria-hidden="true">
-            <span>TREATS</span><span>WALKS</span><span>BELLY RUBS</span>
-          </div>
-          <div className="treat-bowl" aria-hidden="true">● ● ●</div>
-          <RosiePortrait consulting={consulting} tone={answer?.tone} />
+          <img
+            className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
+            src="/rosie-fortune-stage.webp"
+            alt="Rosie dressed as a jeweled fortune teller behind her crystal ball"
+          />
+          <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
         </div>
 
         <CrystalBall consulting={consulting} answer={answer} />
