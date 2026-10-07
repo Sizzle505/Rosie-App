@@ -134,8 +134,8 @@ function dayNumber() {
 
 
 function createWhistleBlobUrl() {
-  const sampleRate = 22050;
-  const duration = 0.56;
+  const sampleRate = 24000;
+  const duration = 0.49;
   const sampleCount = Math.floor(sampleRate * duration);
   const buffer = new ArrayBuffer(44 + sampleCount);
   const view = new DataView(buffer);
@@ -170,31 +170,32 @@ function createWhistleBlobUrl() {
   for (let index = 0; index < sampleCount; index += 1) {
     const time = index / sampleRate;
     const p = time / duration;
-    let frequency;
 
-    if (p < 0.43) {
-      const q = p / 0.43;
-      frequency = 1460 + 560 * Math.sin(q * Math.PI * .52);
-    } else if (p < 0.58) {
-      const q = (p - 0.43) / 0.15;
-      frequency = 2020 - 190 * Math.sin(q * Math.PI * .7);
-    } else if (p < 0.78) {
-      const q = (p - 0.58) / 0.20;
-      frequency = 1840 + 185 * Math.sin(q * Math.PI * .82);
+    // A compact two-gesture recall whistle: buoyant rise, tiny dip, bright lifted finish.
+    let frequency;
+    if (p < 0.42) {
+      const q = p / 0.42;
+      frequency = 1575 + 545 * Math.sin(q * Math.PI * 0.54);
+    } else if (p < 0.60) {
+      const q = (p - 0.42) / 0.18;
+      frequency = 2120 - 245 * Math.sin(q * Math.PI * 0.78);
     } else {
-      const q = (p - 0.78) / 0.22;
-      frequency = 2000 - 135 * q;
+      const q = (p - 0.60) / 0.40;
+      frequency = 1885 + 355 * Math.sin(q * Math.PI * 0.58);
     }
 
-    frequency += 10 * Math.sin(time * 58);
+    frequency += 8 * Math.sin(time * 66);
     phase += Math.PI * 2 * frequency / sampleRate;
 
-    const attack = Math.min(1, time / 0.035);
-    const release = Math.min(1, (duration - time) / 0.075);
-    const middleLift = 0.88 + 0.12 * Math.sin(Math.PI * p);
-    const amplitude = attack * release * middleLift * 0.46;
-    const breath = noise() * 0.022;
-    const tone = Math.sin(phase) + 0.045 * Math.sin(phase * 2);
+    const attack = Math.min(1, time / 0.024);
+    const release = Math.min(1, (duration - time) / 0.058);
+    const smile = 0.9 + 0.1 * Math.sin(Math.PI * p);
+    const amplitude = attack * release * smile * 0.43;
+    const breath = noise() * 0.012;
+    const tone =
+      Math.sin(phase) +
+      0.06 * Math.sin(phase * 2) +
+      0.018 * Math.sin(phase * 3);
 
     const sample = Math.max(-1, Math.min(1, (tone + breath) * amplitude));
     view.setUint8(44 + index, Math.round(128 + sample * 112));
@@ -333,19 +334,17 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           </div>
 
           <div className="living-set" aria-hidden="true">
-            <img className="set-piece set-piece-curtain-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-            <img className="set-piece set-piece-curtain-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-moon" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-lantern-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-lantern-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-            <img className="set-piece set-piece-rosie-breathe" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-            <div className="book-accents">
-              <i><span>OMENS</span></i>
-              <i><span>MOON LORE</span></i>
-              <i><span>TREAT LAW</span></i>
-              <i><span>CANINE ARCANA</span></i>
-              <i><span>CHEESE &amp; FATE</span></i>
-            </div>
+          </div>
+
+          <div className="book-accents" aria-hidden="true">
+            <i><span>OMENS</span></i>
+            <i><span>MOON LORE</span></i>
+            <i><span>TREAT LAW</span></i>
+            <i><span>GOOD GIRL</span></i>
+            <i><span>BIG ANSWERS</span></i>
           </div>
 
           <img
@@ -433,15 +432,13 @@ function App() {
     []
   );
 
-  const speechCopy = !speechSupported
-    ? "Speech input is not available on this browser."
-    : listening
-      ? "Listening… ask Rosie your question."
-      : dictationStatus === "captured"
-        ? "Dictation captured. You can edit it before asking Rosie."
-        : dictationStatus === "denied"
-          ? "Microphone access is blocked. You can still type your question."
-          : "Tap the mic to dictate your question.";
+  const speechCopy = listening
+    ? "Listening… ask Rosie your question."
+    : dictationStatus === "captured"
+      ? "Dictation captured. You can edit it before asking Rosie."
+      : dictationStatus === "denied"
+        ? "Microphone access is blocked. You can still type your question."
+        : "";
 
   const daily = useMemo(() => {
     const seed = dayNumber();
@@ -654,21 +651,21 @@ function App() {
     const now = context.currentTime;
     const master = context.createGain();
     master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.052, now + 0.035);
-    master.gain.setValueAtTime(0.05, now + 0.38);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.56);
+    master.gain.exponentialRampToValueAtTime(0.048, now + 0.024);
+    master.gain.setValueAtTime(0.046, now + 0.36);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.49);
     master.connect(context.destination);
 
     const lead = context.createOscillator();
     lead.type = "sine";
-    lead.frequency.setValueAtTime(1460, now);
-    lead.frequency.linearRampToValueAtTime(2020, now + 0.24);
-    lead.frequency.linearRampToValueAtTime(1835, now + 0.32);
-    lead.frequency.linearRampToValueAtTime(2010, now + 0.44);
-    lead.frequency.linearRampToValueAtTime(1870, now + 0.56);
+    lead.frequency.setValueAtTime(1575, now);
+    lead.frequency.linearRampToValueAtTime(2120, now + 0.205);
+    lead.frequency.linearRampToValueAtTime(1885, now + 0.292);
+    lead.frequency.linearRampToValueAtTime(2240, now + 0.455);
+    lead.frequency.linearRampToValueAtTime(2180, now + 0.49);
     lead.connect(master);
     lead.start(now);
-    lead.stop(now + 0.58);
+    lead.stop(now + 0.5);
   }
 
   async function playWhistle() {
@@ -700,14 +697,15 @@ function App() {
     window.clearTimeout(flipTimerRef.current);
     window.clearTimeout(turnEndTimerRef.current);
 
+    // The visual swap happens only once the smoke is fully opaque.
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
       window.navigator.vibrate?.([8, 20, 8]);
-    }, 255);
+    }, 430);
 
     turnEndTimerRef.current = window.setTimeout(() => {
       setTurning(false);
-    }, 820);
+    }, 1080);
   }
 
   function toggleDictation() {
@@ -928,18 +926,16 @@ function App() {
                 </button>
               </div>
 
-              <div
-                className={`speech-status ${listening ? "is-listening" : dictationStatus === "captured" ? "is-captured" : dictationStatus === "denied" ? "is-denied" : !speechSupported ? "is-unsupported" : ""}`}
-                aria-live="polite"
-              >
-                {speechCopy}
-              </div>
+              {speechCopy && (
+                <div
+                  className={`speech-status ${listening ? "is-listening" : dictationStatus === "captured" ? "is-captured" : "is-denied"}`}
+                  aria-live="polite"
+                >
+                  {speechCopy}
+                </div>
+              )}
 
               <div className="quick-row">
-                <div className="quick-label">
-                  <span>TRY ONE</span>
-                  <button type="button" className="shuffle-prompts" onClick={reshufflePrompts} aria-label="Show different sample questions" title="Different questions">↻</button>
-                </div>
                 <div className="quick-prompts">
                   {quickQuestions.map((prompt) => (
                     <button type="button" key={prompt} onClick={() => choosePrompt(prompt)}>
@@ -947,6 +943,12 @@ function App() {
                     </button>
                   ))}
                 </div>
+              </div>
+              <div className="shuffle-row">
+                <button type="button" className="shuffle-prompts" onClick={reshufflePrompts} aria-label="Show different sample questions" title="Different questions">
+                  <span aria-hidden="true">↻</span>
+                  Different questions
+                </button>
               </div>
 
               <div className="console-foot">
