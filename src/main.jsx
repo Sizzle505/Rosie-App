@@ -380,6 +380,264 @@ function CheeseMemoryGame() {
   );
 }
 
+
+const CAPTAIN_PICKUPS = [
+  { kind: "ball", icon: "🎾", label: "Tennis ball", points: 10 },
+  { kind: "treat", icon: "🦴", label: "Captain's treat", points: 20 },
+  { kind: "buoy", icon: "⛔", label: "Buoy", points: 0 }
+];
+
+function CaptainRosieGame() {
+  const [running, setRunning] = useState(false);
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(45);
+  const [lane, setLane] = useState(1);
+  const [items, setItems] = useState([]);
+  const [message, setMessage] = useState("Captain Rosie is ready. Collect the good stuff and keep her yacht off the buoys.");
+  const [best, setBest] = useState(() => {
+    const value = Number(localStorage.getItem("captainRosieBest") || 0);
+    return Number.isFinite(value) ? value : 0;
+  });
+  const laneRef = useRef(1);
+  const spawnClockRef = useRef(0);
+  const itemIdRef = useRef(0);
+  const finishedRef = useRef(false);
+
+  function moveCaptain(direction) {
+    if (!running) return;
+    setLane((current) => {
+      const next = Math.max(0, Math.min(2, current + direction));
+      laneRef.current = next;
+      return next;
+    });
+  }
+
+  function finishGame(reason) {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    setRunning(false);
+    setMessage(reason);
+  }
+
+  function startGame() {
+    finishedRef.current = false;
+    spawnClockRef.current = 0;
+    laneRef.current = 1;
+    setLane(1);
+    setItems([]);
+    setScore(0);
+    setLives(3);
+    setTimeLeft(45);
+    setMessage("Full speed ahead. Tennis balls are 10 points, treats are 20. Red buoys cost a life.");
+    setRunning(true);
+  }
+
+  useEffect(() => {
+    if (!running) return undefined;
+    const timer = window.setInterval(() => {
+      setTimeLeft((current) => {
+        if (current <= 1) {
+          finishGame("Time. Captain Rosie has returned to port with her haul.");
+          return 0;
+        }
+        return current - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [running]);
+
+  useEffect(() => {
+    if (!running) return undefined;
+
+    const tick = window.setInterval(() => {
+      let scoreDelta = 0;
+      let lifeLoss = 0;
+      let lastHit = "";
+
+      setItems((current) => {
+        spawnClockRef.current += 70;
+        const next = current.map((item) => ({ ...item, y: item.y + item.speed }));
+
+        if (spawnClockRef.current >= 630) {
+          spawnClockRef.current = 0;
+          const roll = secureIndex(100);
+          const template = roll < 58 ? CAPTAIN_PICKUPS[0] : roll < 84 ? CAPTAIN_PICKUPS[1] : CAPTAIN_PICKUPS[2];
+          next.push({
+            ...template,
+            id: itemIdRef.current += 1,
+            lane: secureIndex(3),
+            y: -12,
+            speed: 2.0 + secureIndex(11) / 10
+          });
+        }
+
+        return next.filter((item) => {
+          const inCatchZone = item.y >= 77 && item.y <= 91;
+          if (inCatchZone && item.lane === laneRef.current) {
+            if (item.kind === "buoy") {
+              lifeLoss += 1;
+              lastHit = "buoy";
+            } else {
+              scoreDelta += item.points;
+              lastHit = item.kind;
+            }
+            return false;
+          }
+          return item.y < 108;
+        });
+      });
+
+      if (scoreDelta) {
+        setScore((current) => current + scoreDelta);
+        setMessage(lastHit === "treat" ? "Excellent seamanship. Premium snack recovered." : "Tennis ball aboard. Captain Rosie approves.");
+        window.navigator.vibrate?.(18);
+      }
+
+      if (lifeLoss) {
+        setLives((current) => {
+          const next = Math.max(0, current - lifeLoss);
+          if (next === 0) {
+            finishGame("Abandon speed. Too many buoys - Captain Rosie is taking the yacht back to port.");
+          } else {
+            setMessage("BUOY! Rosie is filing a stern maritime complaint.");
+            window.navigator.vibrate?.([45, 35, 45]);
+          }
+          return next;
+        });
+      }
+    }, 70);
+
+    return () => window.clearInterval(tick);
+  }, [running]);
+
+  useEffect(() => {
+    function onKeyDown(event) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        moveCaptain(-1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        moveCaptain(1);
+      }
+      if ((event.key === " " || event.key === "Enter") && !running) {
+        event.preventDefault();
+        startGame();
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [running]);
+
+  useEffect(() => {
+    if (running || (timeLeft > 0 && lives > 0)) return;
+    setBest((current) => {
+      const next = Math.max(current, score);
+      localStorage.setItem("captainRosieBest", String(next));
+      return next;
+    });
+  }, [running, timeLeft, lives, score]);
+
+  const missionProgress = Math.min(100, Math.round(score / 3));
+
+  return (
+    <main className="captain-game-page">
+      <section className="captain-hero">
+        <div className="captain-portrait">
+          <img src="/captain-rosie.webp" alt="Rosie wearing her captain's hat on a yacht deck" />
+          <span>CAPTAIN ON DECK</span>
+        </div>
+        <div className="captain-title">
+          <span className="captain-kicker">THE HOUSE OF ROSIE · MARITIME DIVISION</span>
+          <h1>CAPTAIN ROSIE</h1>
+          <p>Yacht Dash</p>
+          <small>Steer Rosie's yacht through the Riviera. Collect tennis balls and treats. Avoid the buoys.</small>
+        </div>
+        <div className="captain-best">
+          <span>HIGH SCORE</span>
+          <strong>{Math.max(best, score)}</strong>
+          <small>CAPTAIN'S LOG</small>
+        </div>
+      </section>
+
+      <section className="captain-hud" aria-label="Yacht game status">
+        <div><span>SCORE</span><strong>{score}</strong></div>
+        <div><span>TIME</span><strong>{timeLeft}s</strong></div>
+        <div><span>HULL</span><strong className="captain-lives">{Array.from({ length: 3 }, (_, index) => index < lives ? "●" : "○").join(" ")}</strong></div>
+        <div><span>MISSION</span><strong>{missionProgress}%</strong></div>
+      </section>
+
+      <section className="yacht-game-shell">
+        <div className="yacht-game-sign">
+          <span>⚓</span>
+          <div>
+            <strong>THE CAPTAIN'S COURSE</strong>
+            <small>{message}</small>
+          </div>
+          <b>ROSIE I</b>
+        </div>
+
+        <div className="yacht-course" aria-label="Three-lane yacht course">
+          <div className="sun-glint" aria-hidden="true" />
+          <div className="coast coast-left" aria-hidden="true" />
+          <div className="coast coast-right" aria-hidden="true" />
+          <div className="wake-lines" aria-hidden="true" />
+          <div className="lane-line lane-line-a" aria-hidden="true" />
+          <div className="lane-line lane-line-b" aria-hidden="true" />
+
+          {items.map((item) => (
+            <div
+              className={"sea-pickup sea-pickup-" + item.kind}
+              key={item.id}
+              style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
+              aria-label={item.label}
+            >
+              <span>{item.icon}</span>
+            </div>
+          ))}
+
+          <div className={"captain-yacht lane-" + lane}>
+            <div className="yacht-flag">R</div>
+            <div className="yacht-rail" />
+            <div className="captain-rosie-badge">
+              <img src="/captain-rosie.webp" alt="" aria-hidden="true" />
+            </div>
+            <div className="yacht-cabin">⚓</div>
+            <div className="yacht-hull"><span>ROSIE I</span></div>
+            <div className="yacht-wake" />
+          </div>
+
+          {!running && (
+            <div className="captain-start-panel">
+              <img src="/captain-rosie.webp" alt="" aria-hidden="true" />
+              <span>{timeLeft === 0 || lives === 0 ? "VOYAGE COMPLETE" : "CAPTAIN ROSIE AWAITS YOUR ORDERS"}</span>
+              <strong>{timeLeft === 0 || lives === 0 ? score + " points logged" : "Take the Helm"}</strong>
+              <p>Use the arrows below or your keyboard. Move between three lanes and intercept the good cargo.</p>
+              <button type="button" onClick={startGame}>{timeLeft === 0 || lives === 0 ? "SAIL AGAIN" : "START VOYAGE"}</button>
+            </div>
+          )}
+        </div>
+
+        <div className="captain-controls">
+          <button type="button" onClick={() => moveCaptain(-1)} disabled={!running} aria-label="Steer left">
+            <span>◀</span><small>PORT</small>
+          </button>
+          <div className="captain-course-key">
+            <span><b>🎾</b> +10</span>
+            <span><b>🦴</b> +20</span>
+            <span><b>⛔</b> -1 hull</span>
+          </div>
+          <button type="button" onClick={() => moveCaptain(1)} disabled={!running} aria-label="Steer right">
+            <span>▶</span><small>STARBOARD</small>
+          </button>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
 function App() {
   const [loaded, setLoaded] = useState(false);
   const [question, setQuestion] = useState("");
@@ -581,7 +839,7 @@ function App() {
         <nav className="bottom-nav" aria-label="Primary">
           <button className={page === "fortune" ? "active" : ""} onClick={() => setPage("fortune")}><span>✦</span><small>Fortune</small></button>
           <button className={page === "cheese" ? "active" : ""} onClick={() => setPage("cheese")}><span>♛</span><small>Cheese</small></button>
-          <button disabled><span>▧</span><small>Gallery</small></button>
+          <button className={page === "captain" ? "active" : ""} onClick={() => setPage("captain")}><span>⚓</span><small>Captain</small></button>
           <button disabled><span>🐾</span><small>Rosie</small></button>
         </nav>
       </div>
