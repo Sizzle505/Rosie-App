@@ -335,7 +335,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
               revealed only under the whistle's smoke, then pivots in place. */}
           <img
             className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            src="/rosie-turn-head.svg"
+            src="/rosie-fortune-turn-side.webp"
             alt=""
             aria-hidden="true"
           />
