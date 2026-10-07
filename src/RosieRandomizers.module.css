@@ -80,10 +80,10 @@
 .hostPortrait {
   position: absolute;
   z-index: 2;
-  right: 80px;
+  right: 48px;
   bottom: -12px;
-  width: 248px;
-  height: 238px;
+  width: 260px;
+  height: 248px;
   pointer-events: none;
 }
 .hostPortrait::before {
@@ -101,12 +101,13 @@
 .heroSignet {
   position: absolute;
   z-index: 4;
-  right: 24px;
-  top: 20px;
-  width: 58px;
-  height: 58px;
+  right: 286px;
+  top: 50%;
+  width: 112px;
+  height: 112px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 9px rgba(0,0,0,.6));
+  transform: translateY(-48%);
+  filter: drop-shadow(0 9px 16px rgba(0,0,0,.58));
 }
 
 .ivoryRow {
@@ -176,22 +177,16 @@
   width: 210px;
   height: 210px;
   transform-style: preserve-3d;
-  transform: rotateY(0deg);
   transition: transform .35s ease;
   filter: drop-shadow(0 16px 16px rgba(61, 39, 10, .25));
 }
-.coin.showTails { transform: rotateY(180deg); }
-.coinFlipping { animation: coinFlight .92s cubic-bezier(.2,.72,.14,1) both; }
-.coinFace {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.coin > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
-.coinFace img { width: 100%; height: 100%; object-fit: contain; }
-.coinBack { transform: rotateY(180deg); }
+.coinFlipping { animation: coinFlight .92s cubic-bezier(.2,.72,.14,1) both; }
 @keyframes coinFlight {
   0% { transform: rotateY(var(--coin-start)) translateY(0) scale(1); }
   43% { transform: rotateY(calc(var(--coin-start) + 540deg)) translateY(-34px) scale(1.055); }
@@ -208,31 +203,64 @@
 }
 .decorativeDie {
   position: absolute;
-  left: calc(50% + 43px);
-  top: 52%;
-  width: 128px;
-  height: 128px;
+  z-index: 1;
+  top: 54%;
+  width: 142px;
+  height: 142px;
   object-fit: contain;
-  transform: translate(-50%, -50%) rotate(12deg);
-  opacity: .27;
-  filter: saturate(.72) drop-shadow(0 10px 11px rgba(46,31,14,.14));
+  opacity: .72;
+  filter: saturate(.92) drop-shadow(0 14px 12px rgba(46,31,14,.2));
+}
+.decorativeDieLeft {
+  left: 29%;
+  transform: translate(-50%, -50%) rotate(-17deg) scale(.92);
+}
+.decorativeDieRight {
+  left: 71%;
+  transform: translate(-50%, -50%) rotate(17deg) scale(.92);
 }
 .dieMotion {
   position: relative;
-  z-index: 2;
-  width: 180px;
-  height: 180px;
-  filter: drop-shadow(0 18px 14px rgba(58, 38, 11, .24));
+  z-index: 3;
+  width: 178px;
+  height: 178px;
+  filter: drop-shadow(0 18px 16px rgba(58, 38, 11, .27));
   transform-origin: 50% 58%;
 }
 .dieFace {
   width: 100%;
   height: 100%;
-  border-radius: 31px;
-  background-image: url("/randomizers/rosie-die-sprites-clean.webp");
-  background-repeat: no-repeat;
-  background-size: 300% 200%;
-  background-position: var(--die-x) var(--die-y);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 27px;
+  border: 5px solid #bb8a2d;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255,255,255,.95), transparent 28%),
+    linear-gradient(145deg, #fffdf4 0%, #f3e5c5 58%, #dfc78c 100%);
+  box-shadow:
+    inset 0 0 0 3px #f8d978,
+    inset 0 -12px 24px rgba(104,65,17,.13),
+    0 0 0 2px rgba(113,73,20,.23);
+}
+.dieFace i {
+  width: 31px;
+  height: 31px;
+  place-self: center;
+  border-radius: 50%;
+  background: transparent;
+}
+.dieFace .diePip {
+  background:
+    radial-gradient(circle at 35% 28%, #ff7988 0 12%, #b6132e 34%, #72071a 70%, #35030c 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.5),
+    inset 0 -4px 6px rgba(42,0,6,.45),
+    0 0 0 3px #d1a13c,
+    0 0 0 5px #7b5418,
+    0 4px 7px rgba(71,28,7,.23);
 }
 .isRolling { animation: dieTumble .9s cubic-bezier(.18,.68,.14,1) both; }
 @keyframes dieTumble {
@@ -334,27 +362,46 @@
 .wheel {
   position: relative;
   z-index: 4;
-  width: 330px;
-  height: 330px;
-  border: 10px solid #b28b3c;
+  width: 338px;
+  height: 338px;
+  border: 12px solid #b88a32;
   border-radius: 50%;
   transform: rotate(var(--rotation));
   transition: transform 2.25s cubic-bezier(.12,.67,.08,1);
   box-shadow:
-    0 0 0 2px #f0d58b,
-    0 0 0 8px #51350f,
-    0 0 0 10px #d7b866,
-    inset 0 0 0 7px rgba(5,6,8,.58),
-    inset 0 0 38px rgba(0,0,0,.62),
-    0 22px 28px rgba(0,0,0,.58);
+    0 0 0 2px #f8e4a6,
+    0 0 0 7px #5c3a0d,
+    0 0 0 11px #d9b55d,
+    0 0 0 15px #2a1a08,
+    inset 0 0 0 8px rgba(5,6,8,.58),
+    inset 0 0 46px rgba(0,0,0,.72),
+    0 24px 30px rgba(0,0,0,.64);
+}
+.wheel::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: 1;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from 0deg, #f6dc8a 0deg 2deg, #754b14 2deg 4deg, transparent 4deg 15deg);
+  -webkit-mask: radial-gradient(circle, transparent 70%, #000 71% 75%, transparent 76%);
+  mask: radial-gradient(circle, transparent 70%, #000 71% 75%, transparent 76%);
+  pointer-events: none;
 }
 .wheel::after {
   content: "";
   position: absolute;
-  inset: 22px;
-  border: 1px solid rgba(241,220,154,.54);
+  inset: 24px;
+  z-index: 2;
+  border: 2px solid rgba(246,218,145,.68);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 3px rgba(0,0,0,.28);
+  background:
+    radial-gradient(circle at 34% 25%, rgba(255,255,255,.10), transparent 30%),
+    radial-gradient(circle at 50% 50%, transparent 54%, rgba(0,0,0,.21) 73%, rgba(0,0,0,.43) 100%);
+  box-shadow:
+    inset 0 0 0 4px rgba(0,0,0,.28),
+    inset 0 0 28px rgba(0,0,0,.36);
   pointer-events: none;
 }
 .wheelLabel {
@@ -362,41 +409,43 @@
   z-index: 5;
   left: 50%;
   top: 50%;
-  width: 44%;
-  height: 24px;
+  width: 126px;
+  min-height: 34px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   box-sizing: border-box;
-  padding-right: 15px;
-  transform-origin: 0 50%;
-  transform: rotate(var(--label-angle)) translateY(-50%);
-  color: #fff3d7;
-  text-shadow: 0 2px 3px rgba(0,0,0,.82);
-  font: 800 10px/1 Arial, sans-serif;
-  letter-spacing: .03em;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--label-angle))
+    translateY(-112px);
+  color: #fff7df;
+  text-shadow: 0 2px 4px rgba(0,0,0,.92);
+  font: 800 10px/1.08 Arial, sans-serif;
+  letter-spacing: .045em;
   pointer-events: none;
 }
 .wheelLabel b {
   display: block;
-  max-width: 118px;
+  max-width: 116px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transform: rotate(90deg);
+  text-align: center;
+  transform: rotate(calc(-1 * var(--label-angle)));
 }
 .wheelHub {
   position: absolute;
   z-index: 7;
   left: 50%; top: 50%;
-  width: 103px; height: 103px;
+  width: 110px; height: 110px;
   transform: translate(-50%,-50%) rotate(calc(-1 * var(--rotation)));
   transition: transform 2.25s cubic-bezier(.12,.67,.08,1);
   border-radius: 50%;
   background: #090a0c;
   box-shadow: 0 0 0 3px #d6b35e, 0 0 0 7px #4d310e, 0 7px 14px rgba(0,0,0,.55);
 }
-.wheelHub img { width: 100%; height: 100%; object-fit: contain; }
+.wheelHub img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); }
 .wheelBase {
   position: absolute;
   z-index: 1;
@@ -490,8 +539,8 @@
 
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr 220px; padding: 25px 28px; }
-  .hostPortrait { right: 54px; width: 205px; height: 208px; }
-  .heroSignet { right: 18px; width: 48px; height: 48px; }
+  .hostPortrait { right: 28px; width: 218px; height: 218px; }
+  .heroSignet { right: 226px; width: 88px; height: 88px; }
   .wheelSalon { grid-template-columns: 1fr; }
   .wheelEditor { width: min(520px, 100%); justify-self: center; box-sizing: border-box; }
 }
@@ -505,25 +554,29 @@
   .hero h1 { margin-top: 8px; font-size: clamp(34px, 10vw, 46px); line-height: .94; }
   .hero p { max-width: 240px; font-size: 11px; }
   .houseRule { max-width: 230px; margin-top: 12px; padding-top: 8px; font-size: 6px; line-height: 1.5; letter-spacing: .1em; }
-  .hostPortrait { right: -17px; bottom: -9px; width: 160px; height: 172px; }
+  .hostPortrait { right: -9px; bottom: -9px; width: 154px; height: 168px; }
   .hostPortrait::before { inset: 31px 17px 18px; }
-  .heroSignet { right: 8px; top: 9px; width: 38px; height: 38px; }
+  .heroSignet { right: 126px; top: 50%; width: 64px; height: 64px; transform: translateY(-50%); }
   .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
   .ivoryCard { min-height: 430px; padding: 18px 17px 20px; border-radius: 19px; }
   .ivoryCard h2 { font-size: 22px; }
   .coinScene, .diceScene { min-height: 225px; }
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
-  .dieMotion { width: 158px; height: 158px; }
-  .decorativeDie { width: 106px; height: 106px; left: calc(50% + 38px); }
+  .dieMotion { width: 148px; height: 148px; }
+  .dieFace { padding: 22px; border-radius: 27px; }
+  .dieFace i { width: 25px; height: 25px; }
+  .decorativeDie { width: 112px; height: 112px; }
+  .decorativeDieLeft { left: 28%; }
+  .decorativeDieRight { left: 72%; }
   .wheelSalon { gap: 10px; margin-top: 9px; padding: 14px 9px; border-radius: 20px; }
   .wheelStage { padding: 9px 0 5px; }
   .wheelHeading h2 { font-size: 25px; }
   .wheelWrap { width: 320px; height: 320px; margin-top: 8px; transform: scale(.92); }
-  .wheel { width: 278px; height: 278px; }
-  .wheelHub { width: 88px; height: 88px; }
-  .wheelLabel { width: 43%; padding-right: 10px; font-size: 8px; }
-  .wheelLabel b { max-width: 91px; }
+  .wheel { width: 282px; height: 282px; }
+  .wheelHub { width: 90px; height: 90px; }
+  .wheelLabel { width: 104px; min-height: 28px; font-size: 8px; transform: translate(-50%, -50%) rotate(var(--label-angle)) translateY(-93px); }
+  .wheelLabel b { max-width: 96px; }
   .wheelEditor { padding: 17px; border-radius: 16px; }
   .editorHead img { width: 40px; height: 40px; }
   .editorHead h3 { font-size: 20px; }
