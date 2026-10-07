@@ -224,8 +224,8 @@
 .dieRig {
   position: relative;
   z-index: 4;
-  width: 214px;
-  height: 214px;
+  width: 224px;
+  height: 224px;
   display: grid;
   place-items: center;
   transform-style: preserve-3d;
