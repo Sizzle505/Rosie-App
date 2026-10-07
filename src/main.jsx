@@ -628,35 +628,56 @@ function CheeseMemoryGame() {
 
   return (
     <main className="cheese-game-page">
-      <section className="cheese-exam-header" aria-labelledby="cheese-exam-title">
-        <div className="cheese-exam-portrait">
-          <img
-            src="/rosie-doctor-cheese-hero.webp"
-            alt="Rosie, Doctor of Cheese, administering the practical exam"
-          />
-          <span>EXAMINER</span>
-        </div>
+      <section className="cheese-desktop-layout">
+        <aside className="cheese-left-rail">
+          <section className="cheese-exam-header" aria-labelledby="cheese-exam-title">
+            <div className="cheese-exam-portrait">
+              <img
+                src="/rosie-doctor-cheese-hero.webp"
+                alt="Rosie, Doctor of Cheese, administering the practical exam"
+              />
+              <span>EXAMINER</span>
+            </div>
 
-        <div className="cheese-exam-title">
-          <div className="cheese-eyebrow">THE PRACTICAL EXAM</div>
-          <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
-          <p>A memory game for serious cheese scholars.</p>
+            <div className="cheese-exam-title">
+              <div className="cheese-eyebrow">THE PRACTICAL EXAM</div>
+              <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
+              <p>A memory game for serious cheese scholars.</p>
 
-          <div className="cheese-header-status" aria-label="Current exam status">
-            <div><span>PAIRS FOUND</span><strong>{matched.length}/{CHEESES.length}</strong></div>
-            <div><span>MOVES</span><strong>{moves}</strong></div>
-            <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
-          </div>
-        </div>
+              <div className="cheese-header-status" aria-label="Current exam status">
+                <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
+                <div><span>MOVES</span><strong>{moves}</strong></div>
+                <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+              </div>
+            </div>
 
-        <div className="cheese-header-seal" aria-hidden="true">
-          <span className="seal-paw">🐾</span>
-          <strong>Che.D.</strong>
-          <small>BOARD EXAM</small>
-        </div>
-      </section>
+            <div className="cheese-header-seal" aria-hidden="true">
+              <span className="seal-paw">🐾</span>
+              <strong>Che.D.</strong>
+              <small>BOARD EXAM</small>
+            </div>
+          </section>
 
-      <section className="cheese-play-layout">
+          <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
+            <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
+              <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
+              <div className="rosie-reaction-portrait">
+                <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={"Doctor Rosie looking " + rosieMood} />
+              </div>
+              <div className="reaction-copy">
+                <span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span>
+                <strong>{message}</strong>
+              </div>
+              <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
+            </div>
+
+            <button type="button" className="cheese-reset-button" onClick={resetGame}>
+              <span aria-hidden="true">↻</span>
+              NEW BOARD
+            </button>
+          </aside>
+        </aside>
+
         <section className="cheese-game-frame" aria-label="Cheese matching board">
           <div className="cheese-game-heading">
             <div>
@@ -682,11 +703,11 @@ function CheeseMemoryGame() {
                     <span className="cheese-card-back">
                       <span className="cheese-back-ornament" aria-hidden="true">
                         <span className="cheese-back-seal">
-                          <span className="cheese-back-paw"><i /><i /><i /><i /><b /></span>
+                          <img className="cheese-back-cameo" src="/rosie-doctor-cheese-hero.webp" alt="" />
                           <span className="cheese-back-wedge"><i /><i /><i /></span>
                         </span>
-                        <strong>ROSIE'S</strong>
-                        <small>CHEESE EXAM</small>
+                        <span className="cheese-back-ribbon">ROSIE'S BOARD</span>
+                        <small>CHEESE PRACTICAL</small>
                       </span>
                     </span>
                     <span className="cheese-card-front">
@@ -701,25 +722,6 @@ function CheeseMemoryGame() {
             })}
           </div>
         </section>
-
-        <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
-          <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
-            <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
-            <div className="rosie-reaction-portrait">
-              <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={"Doctor Rosie looking " + rosieMood} />
-            </div>
-            <div className="reaction-copy">
-              <span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span>
-              <strong>{message}</strong>
-            </div>
-            <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
-          </div>
-
-          <button type="button" className="cheese-reset-button" onClick={resetGame}>
-            <span aria-hidden="true">↻</span>
-            NEW BOARD
-          </button>
-        </aside>
       </section>
 
       {complete && (
