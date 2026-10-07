@@ -1506,3 +1506,161 @@ body {
     transition: none;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Final iPhone recovery pass - reserve the viewport for the actual games.   */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  :root {
+    --rosie-nav-height: 58px;
+    --rosie-nav-gap: 7px;
+  }
+
+  .bottom-nav {
+    bottom: max(4px, env(safe-area-inset-bottom));
+    width: calc(100% - 14px);
+    min-height: var(--rosie-nav-height);
+    border-radius: 17px;
+  }
+
+  .bottom-nav button { min-height: var(--rosie-nav-height); }
+  .bottom-nav button span { font-size: 16px; }
+  .bottom-nav button small { margin-top: 3px; font-size: 9px; }
+
+  /* Captain is a single playable screen: header, HUD, course, command deck,
+     then the separately fixed navigation. */
+  .captain-game-page {
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(100dvh - var(--rosie-nav-height) - var(--rosie-nav-gap) - env(safe-area-inset-bottom));
+    min-height: 0;
+    padding: max(5px, env(safe-area-inset-top)) 7px 3px;
+    display: grid;
+    grid-template-rows: 72px 39px minmax(0, 1fr);
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .captain-game-page .captain-hero {
+    min-height: 72px;
+    grid-template-columns: 76px minmax(0, 1fr);
+    border-radius: 14px;
+  }
+
+  .captain-game-page .captain-portrait { min-height: 72px; }
+  .captain-game-page .captain-portrait-medallion { display: none; }
+  .captain-game-page .hero-captain-illustration {
+    left: 50%;
+    bottom: 1px;
+    width: 93%;
+    height: 88%;
+    object-fit: contain;
+    object-position: 50% 51%;
+  }
+
+  .captain-game-page .captain-portrait span {
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    min-height: 15px;
+    padding: 2px 2px;
+    border-radius: 5px;
+    font-size: 4.5px;
+    line-height: 1;
+    letter-spacing: .03em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .captain-game-page .portrait-paw { display: none; }
+
+  .captain-game-page .captain-title { padding: 5px; }
+  .captain-game-page .captain-title-plaque { padding: 4px 7px; border-radius: 9px; }
+  .captain-game-page .captain-kicker { font-size: 4.3px; line-height: 1; }
+  .captain-game-page .captain-marquee { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 2px; }
+  .captain-game-page .marquee-crest,
+  .captain-game-page .marquee-burgee,
+  .captain-game-page .captain-title small,
+  .captain-game-page .captain-route-strip { display: none; }
+  .captain-game-page .captain-title h1 { font-size: 23px; line-height: .88; white-space: nowrap; }
+  .captain-game-page .captain-title p { margin-top: 3px; font-size: 11px; }
+
+  .captain-game-page .captain-hud {
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0;
+    gap: 4px;
+  }
+  .captain-game-page .captain-hud > div {
+    min-height: 39px;
+    padding: 4px;
+    border-radius: 9px;
+  }
+  .captain-game-page .captain-hud > div:nth-child(n+4) { display: none; }
+  .captain-game-page .captain-hud span { font-size: 5px; }
+  .captain-game-page .captain-hud strong { margin-top: 1px; font-size: 14px; }
+
+  .captain-game-page .yacht-game-shell {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) 58px;
+    border-radius: 14px;
+  }
+  .captain-game-page .yacht-game-sign,
+  .captain-game-page .captain-cargo-key { display: none; }
+  .captain-game-page .yacht-course { height: auto; min-height: 0; }
+  .captain-game-page .captain-course-banner { top: 7px; min-width: 128px; padding: 4px 8px; }
+  .captain-game-page .captain-course-banner span { font-size: 4px; }
+  .captain-game-page .captain-course-banner strong { font-size: 8px; }
+  .captain-game-page .captain-yacht { width: 164px; height: 114px; bottom: 9px; }
+  .captain-game-page .sea-pickup,
+  .captain-game-page .sea-pickup-ball,
+  .captain-game-page .sea-pickup-treat,
+  .captain-game-page .sea-pickup-buoy { width: 34px; height: 34px; }
+  .captain-game-page .sea-pickup .pickup-art { width: 27px; height: 27px; }
+  .captain-game-page .captain-command-deck {
+    grid-template-columns: 62px minmax(0, 1fr) 62px;
+    gap: 5px;
+    padding: 5px;
+  }
+  .captain-game-page .helm-button,
+  .captain-game-page .boost-control { min-height: 48px; border-radius: 10px; }
+  .captain-game-page .helm-button span { font-size: 17px; }
+  .captain-game-page .helm-button small,
+  .captain-game-page .boost-copy small { font-size: 5px; }
+  .captain-game-page .boost-copy strong { font-size: 6px; }
+  .captain-game-page .boost-ring { width: 33px; height: 33px; }
+  .captain-game-page .captain-start-panel {
+    bottom: 8px;
+    width: min(215px, calc(100% - 20px));
+    padding: 7px 9px 8px;
+    border-radius: 12px;
+  }
+  .captain-game-page .captain-start-panel > span { font-size: 4.8px; }
+  .captain-game-page .captain-start-panel > strong { font-size: 17px; }
+  .captain-game-page .captain-start-panel > p { display: none; }
+  .captain-game-page .captain-start-panel button { height: 31px; min-width: 112px; margin-top: 5px; font-size: 7px; }
+
+  /* The isolated turn layer contains only Rosie's masked portrait.  The scene
+     stays beneath it and remains pixel-stable through both states. */
+  .machine .rosie-turn-layer {
+    display: block;
+    position: absolute;
+    z-index: 16;
+    left: 50%;
+    top: 4%;
+    width: 100%;
+    height: 82%;
+    object-fit: contain;
+    object-position: 50% 0;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: 50% 42%;
+    transition: opacity .12s linear, transform .44s cubic-bezier(.2,.75,.2,1);
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.16));
+  }
+  .machine .rosie-turn-layer.is-flipped { opacity: 1; transform: translateX(-50%) scaleX(-1); }
+  .machine .rosie-turn-layer.is-turning { animation: rosiePivot .78s ease-in-out both; }
+  @keyframes rosiePivot {
+    0%,100% { filter: drop-shadow(0 2px 2px rgba(0,0,0,.16)); }
+    46% { opacity: .36; filter: brightness(1.22) saturate(1.25) drop-shadow(0 0 15px rgba(215,147,255,.8)); }
+  }
+}
