@@ -1860,7 +1860,7 @@ main {
 .captain-title p {
   margin:5px 0 8px;
   color:#fff;
-  font-size:21px;
+  font-size:22px;
   font-style:italic;
 }
 .captain-title small {
@@ -6927,7 +6927,7 @@ main {
 
   .captain-game-page .captain-kicker {
     margin-bottom:6px;
-    font-size:4.25px;
+    font-size:4.6px;
     letter-spacing:.11em;
   }
 
@@ -6949,7 +6949,7 @@ main {
   }
 
   .captain-game-page .captain-title h1 {
-    font-size:clamp(22px,7.05vw,28px);
+    font-size:clamp(23px,7.2vw,29px);
     line-height:.94;
     letter-spacing:-.035em;
     white-space:nowrap;
@@ -6962,7 +6962,7 @@ main {
 
   .captain-game-page .captain-title small {
     max-width:none;
-    font-size:6.05px;
+    font-size:6.5px;
     line-height:1.42;
   }
 
@@ -7069,12 +7069,12 @@ main {
 
 @media (max-width:390px) {
   .captain-game-page .captain-hero {
-    min-height:186px;
+    min-height:198px;
     grid-template-columns:35% minmax(0,65%);
   }
 
   .captain-game-page .captain-portrait {
-    min-height:186px;
+    min-height:198px;
   }
 
   .captain-game-page .captain-title {
@@ -7086,7 +7086,7 @@ main {
   }
 
   .captain-game-page .captain-kicker {
-    font-size:3.9px;
+    font-size:4.4px;
   }
 
   .captain-game-page .captain-title h1 {
@@ -7094,11 +7094,11 @@ main {
   }
 
   .captain-game-page .captain-title p {
-    font-size:13px;
+    font-size:13.5px;
   }
 
   .captain-game-page .captain-title small {
-    font-size:5.55px;
+    font-size:6.2px;
   }
 
   .captain-game-page .yacht-course {
