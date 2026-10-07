@@ -180,6 +180,49 @@ body {
   pointer-events: none;
 }
 
+/* The fallback whistle effect is a localized conjuring cloud - it should never
+   wipe the whole cabinet or imply that the painted set itself is moving. */
+.machine .flip-magic::before {
+  top: 18% !important;
+  width: 66% !important;
+  height: 54% !important;
+}
+.machine .flip-magic::after {
+  top: 50% !important;
+  width: 72% !important;
+  height: 30% !important;
+}
+.machine .turn-veil {
+  top: 44% !important;
+  width: 64% !important;
+  height: 62% !important;
+}
+.machine .turn-lower-smoke {
+  top: 55% !important;
+  width: 78% !important;
+  height: 38% !important;
+}
+.machine .turn-ball-haze {
+  top: 72% !important;
+  width: 84% !important;
+  height: 25% !important;
+}
+.machine .foreground-plume-a {
+  top: 47% !important;
+  width: 66% !important;
+  height: 37% !important;
+}
+.machine .foreground-plume-b {
+  top: 61% !important;
+  width: 76% !important;
+  height: 32% !important;
+}
+.machine .foreground-plume-c {
+  top: 73% !important;
+  width: 70% !important;
+  height: 21% !important;
+}
+
 .console-caption {
   margin: 12px 0 8px;
 }
