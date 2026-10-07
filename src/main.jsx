@@ -519,6 +519,113 @@ const ROSIE_REACTIONS = {
   elated: { image: "/rosie-reaction-elated.webp", label: "ELATED", alt: "Doctor Rosie delighted by the result", icon: "✦" }
 };
 
+
+function BarkbridgeSeal({ className = "" }) {
+  return (
+    <img
+      className={className}
+      src="/barkbridge-seal.svg"
+      alt=""
+      aria-hidden="true"
+    />
+  );
+}
+
+function GraduateRosie() {
+  return (
+    <div className="graduate-rosie-card" aria-label="Doctor Rosie celebrating graduation">
+      <div className="graduate-rosie-frame">
+        {/* This is Rosie's actual repository photo - never substitute a generic Shiba illustration here. */}
+        <img
+          className="graduate-rosie-photo"
+          src="/rosie-doctor-cheese.webp"
+          alt="Rosie the Shiba, Doctor of Cheese"
+        />
+        <span className="graduate-cap" aria-hidden="true">
+          <i className="graduate-cap-board" />
+          <i className="graduate-cap-band" />
+          <i className="graduate-cap-tassel" />
+        </span>
+        <span className="graduate-cheer" aria-hidden="true">✦</span>
+      </div>
+      <span>FACULTY EXAMINER</span>
+      <strong>Doctor Rosie</strong>
+      <small>Che.D. · University of Barkbridge</small>
+    </div>
+  );
+}
+
+function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
+  const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
+  const confetti = Array.from({ length: 34 }, (_, index) => {
+    const left = (index * 37 + 11) % 98;
+    const delay = ((index * 17) % 16) / 100;
+    const drift = ((index % 7) - 3) * 11;
+    const turn = 160 + ((index * 53) % 420);
+    return (
+      <i
+        key={index}
+        style={{
+          "--confetti-left": left + "%",
+          "--confetti-delay": delay + "s",
+          "--confetti-drift": drift + "px",
+          "--confetti-turn": turn + "deg"
+        }}
+      />
+    );
+  });
+
+  return (
+    <section className="barkbridge-graduation" aria-live="polite">
+      <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
+      <div className="graduation-kicker">
+        <BarkbridgeSeal className="graduation-kicker-seal" />
+        <div>
+          <span>UNIVERSITY OF BARKBRIDGE</span>
+          <small>FACULTY OF GASTRONOMIC SCIENCES</small>
+        </div>
+      </div>
+
+      <div className="graduation-stage">
+        <article className="barkbridge-diploma" aria-label="University of Barkbridge completion diploma">
+          <div className="diploma-inner-border">
+            <BarkbridgeSeal className="diploma-seal" />
+            <h1>UNIVERSITY OF BARKBRIDGE</h1>
+            <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
+            <p className="diploma-intro">Upon recommendation of Doctor Rosie<br />hereby recognizes successful completion of</p>
+            <strong className="diploma-exam-name">ROSIE'S CHEESE BOARD EXAM</strong>
+            <p className="diploma-confers">and confers the</p>
+            <h3>CERTIFICATE OF CHEESE BOARD PROFICIENCY</h3>
+            <p className="diploma-distinction">with distinction in<br /><b>Curd Recognition &amp; Regional Recall</b></p>
+
+            <div className="diploma-stats" aria-label="Exam performance">
+              <div><span>MOVES</span><strong>{moves}</strong></div>
+              <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+              <div><span>MATCH EFFICIENCY</span><strong>{efficiency}%</strong></div>
+            </div>
+
+            <div className="diploma-signatures">
+              <div>
+                <span>Doctor Rosie</span>
+                <small>Examiner</small>
+              </div>
+              <div className="diploma-wax-seal" aria-hidden="true"><b>R</b><i>🐾</i></div>
+              <div>
+                <span>Dean Brie de Bloom</span>
+                <small>Dean</small>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <GraduateRosie />
+      </div>
+
+      <button type="button" className="barkbridge-replay" onClick={onReplay}>EXAMINE AGAIN</button>
+    </section>
+  );
+}
+
 function CheeseMemoryGame() {
   const [deck, setDeck] = useState(() => shuffleCheeseDeck());
   const [openCards, setOpenCards] = useState([]);
@@ -527,11 +634,15 @@ function CheeseMemoryGame() {
   const [elapsed, setElapsed] = useState(0);
   const [started, setStarted] = useState(false);
   const [locked, setLocked] = useState(false);
-  const [message, setMessage] = useState("Rosie is ready. Show her what you remember.");
+  const [message, setMessage] = useState("Doctor Rosie is ready. Show her what you remember.");
   const [rosieMood, setRosieMood] = useState("watching");
-  const [matchStreak, setMatchStreak] = useState(0);
-  const [misses, setMisses] = useState(0);
+  const [totalMisses, setTotalMisses] = useState(0);
+  const [consecutiveMisses, setConsecutiveMisses] = useState(0);
+  const [previousResolvedResult, setPreviousResolvedResult] = useState(null);
+  const [reactionHistory, setReactionHistory] = useState(["watching"]);
+  const [ceremonyVisible, setCeremonyVisible] = useState(false);
   const pendingFlipRef = useRef(null);
+  const graduationTimerRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
@@ -542,11 +653,60 @@ function CheeseMemoryGame() {
     return () => window.clearInterval(timer);
   }, [started, complete]);
 
-  useEffect(() => () => window.clearTimeout(pendingFlipRef.current), []);
+  useEffect(() => () => {
+    window.clearTimeout(pendingFlipRef.current);
+    window.clearTimeout(graduationTimerRef.current);
+  }, []);
+
+  function recentlyUsed(reaction) {
+    return reactionHistory.slice(-2).includes(reaction);
+  }
+
+  function hasUsed(reaction) {
+    return reactionHistory.includes(reaction);
+  }
+
+  function leastRecentlyUsed(candidates) {
+    const unique = [...new Set(candidates)];
+    const last = reactionHistory[reactionHistory.length - 1];
+    const pool = unique.length > 1 ? unique.filter((item) => item !== last) : unique;
+    const ranked = (pool.length ? pool : unique).map((item) => ({
+      item,
+      index: reactionHistory.lastIndexOf(item)
+    }));
+    ranked.sort((a, b) => a.index - b.index);
+    return ranked[0]?.item || unique[0] || "watching";
+  }
+
+  function applyReaction(reaction, copy) {
+    setRosieMood(reaction);
+    setMessage(copy);
+    setReactionHistory((history) => {
+      if (history[history.length - 1] === reaction) return history;
+      return [...history, reaction].slice(-24);
+    });
+  }
+
+  function reactionCopy(reaction) {
+    return {
+      watching: "Doctor Rosie is ready. Show her what you remember.",
+      intrigued: "Not a match. Rosie files that away for later.",
+      concerned: "Another miss. The examiner is beginning to question the methodology.",
+      focused: "Rosie is reviewing the evidence very carefully.",
+      unimpressed: "This is now being entered into the permanent academic record.",
+      pleased: "Correct. Rosie gives one small, serious nod.",
+      amused: "A recovery. Rosie will graciously overlook the earlier lapse.",
+      proud: "Now we're getting somewhere. The faculty is taking notice.",
+      triumphant: "Excellent. Rosie believes the examination is essentially decided.",
+      elated: "Examination passed. Doctor Rosie is absolutely delighted."
+    }[reaction];
+  }
 
   function resetGame() {
     window.clearTimeout(pendingFlipRef.current);
+    window.clearTimeout(graduationTimerRef.current);
     pendingFlipRef.current = null;
+    graduationTimerRef.current = null;
     setDeck(shuffleCheeseDeck());
     setOpenCards([]);
     setMatched([]);
@@ -554,10 +714,38 @@ function CheeseMemoryGame() {
     setElapsed(0);
     setStarted(false);
     setLocked(false);
-    setMatchStreak(0);
-    setMisses(0);
+    setTotalMisses(0);
+    setConsecutiveMisses(0);
+    setPreviousResolvedResult(null);
+    setReactionHistory(["watching"]);
+    setCeremonyVisible(false);
     setRosieMood("watching");
-    setMessage("A fresh board. Doctor Rosie is ready when you are.");
+    setMessage("Doctor Rosie is ready. Show her what you remember.");
+  }
+
+  function chooseMatchReaction(progress, finishing) {
+    if (finishing) return "elated";
+    if (progress >= 0.70 && !hasUsed("triumphant")) return "triumphant";
+    if (progress >= 0.40 && !hasUsed("proud")) return "proud";
+    if (previousResolvedResult === "miss" && hasUsed("pleased") && !recentlyUsed("amused")) return "amused";
+    if (!hasUsed("pleased")) return "pleased";
+
+    const candidates = ["pleased", "amused"];
+    if (progress >= 0.35) candidates.push("proud");
+    if (progress >= 0.65) candidates.push("triumphant");
+    return leastRecentlyUsed(candidates);
+  }
+
+  function chooseMissReaction(nextTotalMisses, nextConsecutiveMisses, completedMove) {
+    const progress = matched.length / CHEESES.length;
+    if (nextTotalMisses === 1) return "intrigued";
+    if (nextConsecutiveMisses === 2) return "concerned";
+    if (nextTotalMisses >= 3 && completedMove <= 6 && !recentlyUsed("focused")) return "focused";
+    if (nextTotalMisses >= 5 && progress < 0.75 && !recentlyUsed("unimpressed")) return "unimpressed";
+
+    const candidates = ["intrigued", "concerned", "focused"];
+    if (nextTotalMisses >= 4 && progress < 0.85) candidates.push("unimpressed");
+    return leastRecentlyUsed(candidates);
   }
 
   function chooseCard(index) {
@@ -565,7 +753,7 @@ function CheeseMemoryGame() {
     if (!started) setStarted(true);
 
     if (openCards.length === 0) {
-      // Preserve the last resolved reaction while the player chooses the second card.
+      // First-card flips never change Rosie's resolved reaction.
       setOpenCards([index]);
       return;
     }
@@ -581,60 +769,47 @@ function CheeseMemoryGame() {
 
     if (first.id === second.id) {
       pendingFlipRef.current = window.setTimeout(() => {
+        const nextPairsFound = matched.length + 1;
+        const progress = nextPairsFound / CHEESES.length;
+        const finishing = nextPairsFound === CHEESES.length;
+        const nextReaction = chooseMatchReaction(progress, finishing);
+
         setMatched((items) => [...items, first.id]);
         setOpenCards([]);
         setLocked(false);
-        const nextStreak = matchStreak + 1;
-        const finishing = matched.length + 1 === CHEESES.length;
-        setMatchStreak(nextStreak);
-        setMisses(0);
+        setConsecutiveMisses(0);
+        setPreviousResolvedResult("match");
+        applyReaction(nextReaction, reactionCopy(nextReaction));
+        window.navigator.vibrate?.([18, 26, 18]);
 
         if (finishing) {
-          setRosieMood("elated");
-          setMessage("Examination passed. Rosie is ecstatic and pretending this was never in doubt.");
-        } else if (nextStreak >= 3) {
-          setRosieMood("triumphant");
-          setMessage("Three straight. Rosie is now taking partial credit for your education.");
-        } else if (nextStreak === 2) {
-          setRosieMood("proud");
-          setMessage("Two in a row. The examiner is becoming inconveniently proud of you.");
-        } else if (misses > 0) {
-          setRosieMood("amused");
-          setMessage("Redemption. Rosie will graciously overlook the earlier lapse.");
-        } else {
-          setRosieMood("pleased");
-          setMessage("Correct. Rosie gives a very small, very serious nod.");
+          window.clearTimeout(graduationTimerRef.current);
+          graduationTimerRef.current = window.setTimeout(() => setCeremonyVisible(true), 780);
         }
-        window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
     } else {
       pendingFlipRef.current = window.setTimeout(() => {
+        const nextTotalMisses = totalMisses + 1;
+        const nextConsecutiveMisses = consecutiveMisses + 1;
+        const completedMove = moves + 1;
+        const nextReaction = chooseMissReaction(nextTotalMisses, nextConsecutiveMisses, completedMove);
+
         setOpenCards([]);
         setLocked(false);
-        const nextMisses = misses + 1;
-        const brokenStreak = matchStreak;
-        const completedMove = moves + 1;
-        setMisses(nextMisses);
-        setMatchStreak(0);
-
-        if (nextMisses >= 3) {
-          setRosieMood("unimpressed");
-          setMessage("Again? Rosie has entered it into the permanent record.");
-        } else if (nextMisses === 2) {
-          setRosieMood("concerned");
-          setMessage("Two misses running. Doctor Rosie is beginning to worry about the thesis.");
-        } else if (brokenStreak >= 2) {
-          setRosieMood("amused");
-          setMessage("And there goes the streak. Rosie is trying not to enjoy this.");
-        } else if (completedMove >= 5) {
-          setRosieMood("focused");
-          setMessage("Not a pair. Rosie is revisiting the evidence.");
-        } else {
-          setRosieMood("intrigued");
-          setMessage("Not a match. Rosie files that away for later.");
-        }
+        setTotalMisses(nextTotalMisses);
+        setConsecutiveMisses(nextConsecutiveMisses);
+        setPreviousResolvedResult("miss");
+        applyReaction(nextReaction, reactionCopy(nextReaction));
       }, 850);
     }
+  }
+
+  if (ceremonyVisible) {
+    return (
+      <main className="cheese-game-page cheese-graduation-page">
+        <BarkbridgeGraduation moves={moves} elapsed={elapsed} onReplay={resetGame} />
+      </main>
+    );
   }
 
   return (
@@ -642,30 +817,32 @@ function CheeseMemoryGame() {
       <section className="cheese-desktop-layout">
         <aside className="cheese-left-rail">
           <section className="cheese-exam-header" aria-labelledby="cheese-exam-title">
+            <div className="barkbridge-ident">
+              <BarkbridgeSeal className="barkbridge-ident-seal" />
+              <div>
+                <strong>UNIVERSITY OF BARKBRIDGE</strong>
+                <small>FACULTY OF GASTRONOMIC SCIENCES</small>
+              </div>
+            </div>
+
             <div className="cheese-exam-portrait">
               <img
                 src="/rosie-doctor-cheese-hero.webp"
-                alt="Rosie, Doctor of Cheese, administering the practical exam"
+                alt="Doctor Rosie administering the practical examination"
               />
-              <span>EXAMINER</span>
+              <span>DOCTOR ROSIE · EXAMINER</span>
             </div>
 
             <div className="cheese-exam-title">
-              <div className="cheese-eyebrow">THE PRACTICAL EXAM</div>
+              <div className="cheese-eyebrow">PRACTICAL BOARD EXAMINATION</div>
               <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
-              <p>A memory game for serious cheese scholars.</p>
+              <p>A memory examination for serious cheese scholars.</p>
 
               <div className="cheese-header-status" aria-label="Current exam status">
                 <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
                 <div><span>MOVES</span><strong>{moves}</strong></div>
                 <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
               </div>
-            </div>
-
-            <div className="cheese-header-seal" aria-hidden="true">
-              <span className="seal-paw">🐾</span>
-              <strong>Che.D.</strong>
-              <small>BOARD EXAM</small>
             </div>
 
             <button type="button" className="cheese-reset-button cheese-reset-left" onClick={resetGame}>
@@ -681,7 +858,7 @@ function CheeseMemoryGame() {
               <span>BOARD ONE · PRACTICAL MEMORY</span>
               <h2>Pair the Fromage</h2>
             </div>
-            <p>Eight cheeses. Sixteen cards. Rosie is watching every move.</p>
+            <p>Eight cheeses. Sixteen cards. Doctor Rosie is recording the results.</p>
           </div>
 
           <div className="cheese-grid">
@@ -740,17 +917,6 @@ function CheeseMemoryGame() {
           </button>
         </aside>
       </section>
-
-      {complete && (
-        <section className="cheese-victory" aria-live="polite">
-          <div className="victory-sparkles" aria-hidden="true"><b>✦</b><b>✦</b><b>✦</b></div>
-          <img className="victory-rosie" src="/rosie-mood-proud.webp" alt="A proud Doctor Rosie holding a gold paw medal" />
-          <span>THE GOLDEN PAW HONOURS</span>
-          <h2>Rosie awards you a most distinguished pass.</h2>
-          <p>{moves} moves · {formatGameTime(elapsed)} · All {CHEESES.length} cheeses correctly identified.</p>
-          <button type="button" onClick={resetGame}>DEFEND THE DISSERTATION AGAIN</button>
-        </section>
-      )}
     </main>
   );
 }

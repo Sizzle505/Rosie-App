@@ -3915,3 +3915,860 @@ body {
 .mood-unimpressed .rosie-reaction-portrait img { object-position: 50% 50% !important; }
 .mood-proud .rosie-reaction-portrait img { object-position: 50% 50% !important; }
 .mood-elated .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+
+
+/* === UNIVERSITY OF BARKBRIDGE · CHEESE GRADUATION FINAL === */
+.barkbridge-ident {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 11px;
+  border: 1px solid rgba(169, 119, 43, .34);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 231, .94), rgba(239, 219, 174, .91)),
+    repeating-linear-gradient(0deg, rgba(92, 57, 27, .025) 0 1px, transparent 1px 4px);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, .35),
+    0 7px 18px rgba(25, 9, 14, .16);
+}
+
+.barkbridge-ident-seal {
+  width: 58px;
+  height: 58px;
+  display: block;
+  filter: drop-shadow(0 3px 4px rgba(67, 37, 17, .18));
+}
+
+.barkbridge-ident strong {
+  display: block;
+  color: #3f2a20;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.06;
+  letter-spacing: .055em;
+}
+
+.barkbridge-ident small {
+  display: block;
+  margin-top: 4px;
+  color: #7d572e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 8px;
+  line-height: 1.25;
+  letter-spacing: .12em;
+}
+
+.cheese-left-rail .cheese-exam-header {
+  gap: 10px !important;
+  padding: 12px !important;
+  border-color: rgba(201, 157, 79, .35) !important;
+  background:
+    radial-gradient(circle at 30% 0%, rgba(247, 218, 151, .12), transparent 36%),
+    linear-gradient(180deg, #221118 0%, #130a0f 100%) !important;
+}
+
+.cheese-left-rail .cheese-exam-portrait {
+  border: 1px solid rgba(219, 177, 101, .42);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #10080c;
+  box-shadow: inset 0 0 0 3px rgba(255, 226, 166, .035);
+}
+
+.cheese-left-rail .cheese-exam-portrait span {
+  background: linear-gradient(90deg, rgba(89, 36, 55, .97), rgba(119, 50, 72, .97));
+  color: #f4dca1;
+  letter-spacing: .11em;
+}
+
+.cheese-left-rail .cheese-exam-title h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: .01em;
+}
+
+.cheese-left-rail .cheese-eyebrow {
+  color: #d5a959;
+  letter-spacing: .11em;
+}
+
+.cheese-graduation-page {
+  min-height: calc(100vh - 76px);
+  overflow-x: hidden;
+}
+
+.barkbridge-graduation {
+  position: relative;
+  width: min(1380px, calc(100% - 26px));
+  min-height: calc(100vh - 104px);
+  margin: 14px auto 90px;
+  padding: 26px clamp(16px, 2.4vw, 34px) 34px;
+  overflow: hidden;
+  border: 1px solid rgba(204, 158, 78, .42);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(173, 56, 92, .18), transparent 42%),
+    radial-gradient(circle at 20% 30%, rgba(239, 197, 118, .09), transparent 28%),
+    linear-gradient(160deg, #160b11 0%, #241019 52%, #0d080b 100%);
+  box-shadow:
+    0 20px 56px rgba(0, 0, 0, .38),
+    inset 0 0 0 1px rgba(255, 240, 199, .04);
+  isolation: isolate;
+}
+
+.graduation-kicker {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.graduation-kicker-seal {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 4px 7px rgba(0, 0, 0, .22));
+}
+
+.graduation-kicker span,
+.graduation-kicker small {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.graduation-kicker span {
+  color: #f4d99c;
+  font-size: clamp(17px, 2vw, 27px);
+  line-height: 1;
+  letter-spacing: .08em;
+}
+
+.graduation-kicker small {
+  margin-top: 5px;
+  color: rgba(244, 217, 156, .72);
+  font-size: clamp(8px, .85vw, 11px);
+  letter-spacing: .16em;
+}
+
+.graduation-stage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 780px) minmax(250px, 330px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(20px, 3vw, 44px);
+}
+
+.barkbridge-diploma {
+  position: relative;
+  width: 100%;
+  min-height: 510px;
+  padding: 18px;
+  color: #35261e;
+  border: 8px solid #f5ecd6;
+  background:
+    radial-gradient(circle at 48% 18%, rgba(255, 255, 255, .72), transparent 20%),
+    repeating-linear-gradient(0deg, rgba(97, 63, 31, .018) 0 1px, transparent 1px 4px),
+    linear-gradient(145deg, #fffaf0 0%, #f5e5c1 47%, #ebd19e 100%);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, .34),
+    0 0 0 1px rgba(150, 102, 36, .55),
+    inset 0 0 32px rgba(128, 82, 27, .08);
+  transform: rotate(-.18deg);
+}
+
+.diploma-inner-border {
+  position: relative;
+  min-height: 474px;
+  padding: 24px 30px 20px;
+  border: 3px double #9d6a2c;
+  box-shadow:
+    inset 0 0 0 4px #ead098,
+    inset 0 0 0 6px #8a5b2a,
+    inset 0 0 0 10px rgba(244, 222, 173, .78);
+  text-align: center;
+}
+
+.diploma-inner-border::before,
+.diploma-inner-border::after {
+  content: "❧";
+  position: absolute;
+  top: 12px;
+  color: #9f6e31;
+  font-family: Georgia, serif;
+  font-size: 24px;
+  opacity: .72;
+}
+.diploma-inner-border::before { left: 15px; }
+.diploma-inner-border::after { right: 15px; transform: scaleX(-1); }
+
+.diploma-seal {
+  width: 62px;
+  height: 62px;
+  display: block;
+  margin: -10px auto 2px;
+}
+
+.barkbridge-diploma h1,
+.barkbridge-diploma h2,
+.barkbridge-diploma h3,
+.barkbridge-diploma p,
+.barkbridge-diploma strong {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.barkbridge-diploma h1 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 2.35vw, 34px);
+  line-height: 1;
+  letter-spacing: .055em;
+}
+
+.barkbridge-diploma h2 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  color: #6d4927;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(11px, 1.2vw, 15px);
+  letter-spacing: .13em;
+}
+
+.diploma-intro,
+.diploma-confers,
+.diploma-distinction {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(12px, 1.15vw, 15px);
+  line-height: 1.38;
+}
+
+.diploma-intro { margin: 8px 0 7px; font-style: italic; }
+.diploma-confers { margin: 8px 0 3px; font-style: italic; }
+.diploma-distinction { margin: 8px 0 12px; }
+
+.diploma-exam-name {
+  display: block;
+  width: fit-content;
+  margin-top: 7px;
+  margin-bottom: 4px;
+  color: #492d20;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.02;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.barkbridge-diploma h3 {
+  width: 92%;
+  margin-top: 2px;
+  margin-bottom: 7px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(15px, 1.7vw, 22px);
+  line-height: 1.12;
+  letter-spacing: .035em;
+}
+
+.diploma-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  width: min(520px, 91%);
+  margin: 16px auto 18px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(121, 79, 34, .4);
+  border-bottom: 1px solid rgba(121, 79, 34, .4);
+}
+
+.diploma-stats div {
+  min-width: 0;
+  padding: 0 6px;
+}
+
+.diploma-stats div + div {
+  border-left: 1px solid rgba(121, 79, 34, .26);
+}
+
+.diploma-stats span,
+.diploma-stats strong {
+  display: block;
+}
+
+.diploma-stats span {
+  color: #7b5630;
+  font-family: Georgia, serif;
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+.diploma-stats strong {
+  margin-top: 2px;
+  font-family: Georgia, serif;
+  font-size: 18px;
+}
+
+.diploma-signatures {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: end;
+  gap: 8px;
+  width: 88%;
+  margin: 2px auto 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.diploma-signatures > div:not(.diploma-wax-seal) {
+  padding-top: 8px;
+  border-top: 1px solid rgba(80, 49, 28, .55);
+}
+
+.diploma-signatures span,
+.diploma-signatures small {
+  display: block;
+}
+
+.diploma-signatures span {
+  font-size: clamp(12px, 1.3vw, 17px);
+  font-style: italic;
+}
+
+.diploma-signatures small {
+  margin-top: 3px;
+  color: #6f4b2b;
+  font-size: 9px;
+  letter-spacing: .06em;
+}
+
+.diploma-wax-seal {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  margin: -4px auto -4px;
+  display: grid;
+  place-items: center;
+  border-radius: 47% 53% 51% 49% / 53% 44% 56% 47%;
+  color: rgba(255, 218, 183, .72);
+  background:
+    radial-gradient(circle at 35% 28%, #c9453f, #8f171f 58%, #580d15 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(68, 5, 12, .26),
+    inset 0 0 0 5px rgba(255, 146, 123, .12),
+    0 5px 10px rgba(75, 16, 17, .3);
+}
+
+.diploma-wax-seal b {
+  font-family: Georgia, serif;
+  font-size: 25px;
+  line-height: 1;
+}
+.diploma-wax-seal i {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.graduate-rosie-card {
+  align-self: center;
+  width: min(330px, 100%);
+  padding: 10px 10px 14px;
+  border: 1px solid rgba(236, 199, 125, .42);
+  border-radius: 16px;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgba(42, 20, 28, .96), rgba(20, 10, 15, .97));
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, .34),
+    inset 0 0 0 1px rgba(255, 231, 176, .04);
+}
+
+.graduate-rosie-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: .86;
+  overflow: hidden;
+  border-radius: 11px;
+  border: 1px solid rgba(244, 213, 146, .4);
+  background: #12090d;
+}
+
+.graduate-rosie-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 50%;
+  transform: scale(1.03);
+}
+
+.graduate-cap {
+  position: absolute;
+  left: 50%;
+  top: 5%;
+  width: 42%;
+  height: 23%;
+  transform: translateX(-50%) rotate(-3deg);
+  filter: drop-shadow(0 5px 7px rgba(0, 0, 0, .45));
+  pointer-events: none;
+}
+
+.graduate-cap-board {
+  position: absolute;
+  left: 8%;
+  top: 4%;
+  width: 84%;
+  height: 47%;
+  background: linear-gradient(145deg, #211c21, #070608 70%);
+  clip-path: polygon(50% 0, 100% 35%, 50% 72%, 0 35%);
+  box-shadow: inset 0 0 0 1px rgba(240, 211, 143, .18);
+}
+
+.graduate-cap-band {
+  position: absolute;
+  left: 33%;
+  top: 41%;
+  width: 34%;
+  height: 38%;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(180deg, #111015, #050507);
+  box-shadow: inset 0 0 0 1px rgba(240, 211, 143, .12);
+}
+
+.graduate-cap-tassel {
+  position: absolute;
+  left: 77%;
+  top: 27%;
+  width: 2px;
+  height: 49%;
+  background: #d4a64a;
+  transform: rotate(8deg);
+  transform-origin: top center;
+}
+
+.graduate-cap-tassel::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  bottom: -8px;
+  width: 9px;
+  height: 12px;
+  border-radius: 2px 2px 6px 6px;
+  background: linear-gradient(90deg, #a87324, #f0cf75, #a87324);
+}
+
+.graduate-rosie-card > span,
+.graduate-rosie-card > strong,
+.graduate-rosie-card > small {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+}
+.graduate-rosie-card > span {
+  margin-top: 12px;
+  color: #c99a4a;
+  font-size: 9px;
+  letter-spacing: .14em;
+}
+.graduate-rosie-card > strong {
+  margin-top: 3px;
+  color: #fae7b9;
+  font-size: 23px;
+  font-weight: 500;
+}
+.graduate-rosie-card > small {
+  margin-top: 4px;
+  color: rgba(250, 231, 185, .6);
+  font-size: 10px;
+  letter-spacing: .05em;
+}
+
+.barkbridge-replay {
+  position: relative;
+  z-index: 3;
+  display: block;
+  margin: 24px auto 0;
+  min-width: 210px;
+  padding: 12px 22px;
+  border: 1px solid #d6aa58;
+  border-radius: 999px;
+  color: #24131a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+  letter-spacing: .09em;
+  background: linear-gradient(180deg, #f4dda3, #c9953c);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, .25),
+    inset 0 1px rgba(255, 255, 255, .55);
+  cursor: pointer;
+}
+
+.barkbridge-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.barkbridge-confetti i {
+  --piece: #d1a349;
+  position: absolute;
+  left: var(--confetti-left);
+  top: -18px;
+  width: 8px;
+  height: 14px;
+  border-radius: 1px;
+  background: var(--piece);
+  opacity: 0;
+  transform: translate3d(0, -16px, 0) rotate(0);
+  animation: barkbridgeConfetti 1.55s cubic-bezier(.16,.66,.3,1) var(--confetti-delay) both;
+}
+
+.barkbridge-confetti i:nth-child(4n + 1) { --piece: #f1d58b; width: 6px; height: 12px; }
+.barkbridge-confetti i:nth-child(4n + 2) { --piece: #8f2846; width: 9px; height: 9px; border-radius: 50%; }
+.barkbridge-confetti i:nth-child(4n + 3) { --piece: #f5edda; width: 5px; height: 13px; }
+.barkbridge-confetti i:nth-child(4n) { --piece: #2b2025; width: 7px; height: 11px; }
+
+@keyframes barkbridgeConfetti {
+  0% { opacity: 0; transform: translate3d(0, -18px, 0) rotate(0); }
+  10% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--confetti-drift), 720px, 0) rotate(var(--confetti-turn));
+  }
+}
+
+.barkbridge-diploma,
+.graduate-rosie-card {
+  animation: barkbridgeCeremonyIn .48s ease-out both;
+}
+.graduate-rosie-card { animation-delay: .08s; }
+
+@keyframes barkbridgeCeremonyIn {
+  from { opacity: 0; transform: translateY(12px) scale(.988); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 900px) {
+  .barkbridge-ident {
+    grid-template-columns: 48px minmax(0, 1fr);
+    padding: 8px 9px;
+  }
+  .barkbridge-ident-seal {
+    width: 48px;
+    height: 48px;
+  }
+
+  .barkbridge-graduation {
+    width: calc(100% - 14px);
+    margin: 7px auto 82px;
+    padding: 18px 8px 24px;
+    border-radius: 13px;
+  }
+
+  .graduation-kicker {
+    gap: 8px;
+    margin: 0 8px 15px;
+    justify-content: flex-start;
+  }
+
+  .graduation-kicker-seal {
+    width: 45px;
+    height: 45px;
+    flex: 0 0 auto;
+  }
+
+  .graduation-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .barkbridge-diploma {
+    width: 100%;
+    min-height: 0;
+    padding: 8px;
+    border-width: 5px;
+    transform: none;
+  }
+
+  .diploma-inner-border {
+    min-height: 0;
+    padding: 18px 11px 14px;
+    box-shadow:
+      inset 0 0 0 2px #ead098,
+      inset 0 0 0 4px #8a5b2a,
+      inset 0 0 0 6px rgba(244, 222, 173, .72);
+  }
+
+  .diploma-seal {
+    width: 48px;
+    height: 48px;
+  }
+
+  .diploma-intro,
+  .diploma-confers,
+  .diploma-distinction {
+    font-size: 11px;
+  }
+
+  .diploma-exam-name {
+    font-size: clamp(21px, 7.4vw, 31px);
+  }
+
+  .barkbridge-diploma h3 {
+    width: 96%;
+    font-size: 14px;
+  }
+
+  .diploma-stats {
+    width: 96%;
+    margin: 12px auto 14px;
+  }
+
+  .diploma-stats span {
+    font-size: 6.7px;
+    letter-spacing: .08em;
+  }
+
+  .diploma-stats strong {
+    font-size: 15px;
+  }
+
+  .diploma-signatures {
+    width: 96%;
+    grid-template-columns: 1fr 58px 1fr;
+  }
+
+  .diploma-wax-seal {
+    width: 52px;
+    height: 52px;
+  }
+
+  .graduate-rosie-card {
+    width: min(270px, 82vw);
+  }
+
+  .graduate-rosie-frame {
+    aspect-ratio: .96;
+  }
+
+  .graduate-cap {
+    top: 3%;
+    width: 40%;
+  }
+
+  .barkbridge-replay {
+    margin-top: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barkbridge-confetti { display: none; }
+  .barkbridge-diploma,
+  .graduate-rosie-card,
+  .cheese-examiner-rail .rosie-reaction-portrait img {
+    animation: none !important;
+  }
+}
+
+
+/* === GRADUATION ROSIE IDENTITY + MOBILE COMPOSITION FIX === */
+.graduate-rosie-frame {
+  aspect-ratio: .96 !important;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(237,197,116,.13), transparent 38%),
+    #12090d !important;
+}
+
+.graduate-rosie-frame .graduate-rosie-photo {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: 5% 50% !important;
+  transform: scale(1.38) translateX(5%) !important;
+  transform-origin: 30% 50% !important;
+  filter: saturate(1.04) contrast(1.03) !important;
+}
+
+.graduate-cap {
+  left: 33% !important;
+  top: 8% !important;
+  width: 35% !important;
+  height: 22% !important;
+  transform: translateX(-50%) rotate(-5deg) !important;
+}
+
+.graduate-cheer {
+  position: absolute;
+  right: 9%;
+  top: 10%;
+  z-index: 4;
+  color: #f5d980;
+  font-size: 24px;
+  line-height: 1;
+  text-shadow: 0 0 13px rgba(245,217,128,.75);
+  animation: graduateCheer 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes graduateCheer {
+  from { opacity: .55; transform: scale(.82) rotate(-8deg); }
+  to { opacity: 1; transform: scale(1.08) rotate(8deg); }
+}
+
+@media (max-width: 900px) {
+  .barkbridge-graduation {
+    padding-top: 12px !important;
+  }
+
+  .graduation-kicker {
+    margin-bottom: 10px !important;
+  }
+
+  .graduation-kicker-seal {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .graduation-kicker span {
+    font-size: 17px !important;
+    letter-spacing: .055em !important;
+  }
+
+  .graduation-kicker small {
+    margin-top: 2px !important;
+    font-size: 7px !important;
+    letter-spacing: .12em !important;
+  }
+
+  .barkbridge-diploma {
+    padding: 6px !important;
+    border-width: 4px !important;
+  }
+
+  .diploma-inner-border {
+    padding: 12px 9px 10px !important;
+  }
+
+  .diploma-inner-border::before,
+  .diploma-inner-border::after {
+    top: 7px !important;
+    font-size: 16px !important;
+  }
+
+  .diploma-seal {
+    width: 38px !important;
+    height: 38px !important;
+    margin-top: -4px !important;
+  }
+
+  .barkbridge-diploma h1 {
+    margin-bottom: 3px !important;
+    font-size: 26px !important;
+  }
+
+  .barkbridge-diploma h2 {
+    margin-bottom: 8px !important;
+    font-size: 9px !important;
+  }
+
+  .diploma-intro,
+  .diploma-confers,
+  .diploma-distinction {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+  }
+
+  .diploma-intro { margin: 5px 0 4px !important; }
+  .diploma-confers { margin: 5px 0 2px !important; }
+  .diploma-distinction { margin: 4px 0 7px !important; }
+
+  .diploma-exam-name {
+    margin-top: 4px !important;
+    margin-bottom: 2px !important;
+    font-size: 26px !important;
+    line-height: .98 !important;
+  }
+
+  .barkbridge-diploma h3 {
+    margin-bottom: 4px !important;
+    font-size: 12px !important;
+    line-height: 1.04 !important;
+  }
+
+  .diploma-stats {
+    margin: 8px auto 9px !important;
+    padding: 5px 0 !important;
+  }
+
+  .diploma-stats span { font-size: 6px !important; }
+  .diploma-stats strong { margin-top: 1px !important; font-size: 13px !important; }
+
+  .diploma-signatures {
+    grid-template-columns: 1fr 46px 1fr !important;
+  }
+
+  .diploma-signatures > div:not(.diploma-wax-seal) {
+    padding-top: 5px !important;
+  }
+
+  .diploma-signatures span {
+    font-size: 10px !important;
+  }
+
+  .diploma-signatures small {
+    margin-top: 1px !important;
+    font-size: 7px !important;
+  }
+
+  .diploma-wax-seal {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .diploma-wax-seal b { font-size: 20px !important; }
+  .diploma-wax-seal i { right: 4px !important; bottom: 4px !important; font-size: 8px !important; }
+
+  .graduate-rosie-card {
+    width: min(238px, 70vw) !important;
+    padding: 7px 7px 10px !important;
+  }
+
+  .graduate-rosie-card > span { margin-top: 7px !important; font-size: 7px !important; }
+  .graduate-rosie-card > strong { margin-top: 1px !important; font-size: 19px !important; }
+  .graduate-rosie-card > small { margin-top: 2px !important; font-size: 8px !important; }
+
+  .graduate-cap {
+    left: 32% !important;
+    top: 7% !important;
+    width: 34% !important;
+  }
+
+  .graduate-cheer {
+    right: 7%;
+    top: 8%;
+    font-size: 20px;
+  }
+
+  .barkbridge-replay {
+    margin-top: 12px !important;
+    min-width: 186px !important;
+    padding: 10px 18px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .graduate-cheer { animation: none !important; }
+}
