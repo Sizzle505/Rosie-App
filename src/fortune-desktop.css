@@ -391,7 +391,7 @@
   background: #fff0a8;
   clip-path: polygon(50% 0, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0 50%, 39% 35%);
   filter: drop-shadow(0 0 4px #fffbdc) drop-shadow(0 0 10px #edaa35) drop-shadow(0 0 18px #d37917);
-  animation: goldSparkFlight 1.55s cubic-bezier(.08, .68, .16, 1) both;
+  animation: goldSparkFlight 2.25s cubic-bezier(.08, .68, .16, 1) both;
 }
 
 .fortune-page .turn-gold-sparks i:nth-child(1) { --spark-x: -205px; --spark-y: -155px; animation-delay: .03s; }
@@ -414,7 +414,7 @@
 @keyframes goldSparkFlight {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(.15) rotate(0); }
   10% { opacity: 1; }
-  88% { opacity: 1; }
+  78% { opacity: 1; }
   100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(1.2) rotate(180deg); }
 }
 
