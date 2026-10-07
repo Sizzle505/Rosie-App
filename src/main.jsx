@@ -220,7 +220,7 @@ function CheeseMemoryGame() {
   const [elapsed, setElapsed] = useState(0);
   const [started, setStarted] = useState(false);
   const [locked, setLocked] = useState(false);
-  const [message, setMessage] = useState("Match every pair to earn Rosie's highest cheese honors.");
+  const [message, setMessage] = useState("Rosie is testing your palate memory. Do try not to embarrass yourself.");
   const pendingFlipRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
@@ -243,7 +243,7 @@ function CheeseMemoryGame() {
     setElapsed(0);
     setStarted(false);
     setLocked(false);
-    setMessage("You are Rosie. Trust the beret, trust the nose, match the cheese.");
+    setMessage("A fresh examination board. Doctor Rosie is ready when you are.");
   }
 
   function chooseCard(index) {
@@ -252,7 +252,7 @@ function CheeseMemoryGame() {
 
     if (openCards.length === 0) {
       setOpenCards([index]);
-      setMessage("Good sniff. Rosie has the scent - now find its matching fromage.");
+      setMessage("Hmm. Rosie is watching. Find its matching fromage.");
       return;
     }
 
@@ -270,14 +270,14 @@ function CheeseMemoryGame() {
         setMatched((items) => [...items, first.id]);
         setOpenCards([]);
         setLocked(false);
-        setMessage(first.name + " identified. Doctor Rosie remains academically unstoppable.");
+        setMessage(first.name + " identified. Acceptable. Rosie approves.");
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
     } else {
       pendingFlipRef.current = window.setTimeout(() => {
         setOpenCards([]);
         setLocked(false);
-        setMessage("Not a match. Rosie is classifying that as a control sample.");
+        setMessage("Unconvincing. Rosie expected better. Try again.");
       }, 850);
     }
   }
@@ -287,24 +287,20 @@ function CheeseMemoryGame() {
       <section className="cheese-hero">
         <div className="cheese-hero-photo">
           <img
-            src="/rosie-doctor-cheese.webp"
-            alt="Rosie wearing her red beret and striped French outfit beside her Doctor of Cheese diploma"
+            src="/rosie-doctor-cheese-hero.webp"
+            alt="Rosie, Doctor of Cheese, presiding over a candlelit cheese examination"
           />
-          <div className="player-identity">
-            <span>YOU ARE PLAYING AS</span>
-            <strong>ROSIE · DOCTOR OF CHEESE</strong>
-          </div>
         </div>
 
         <div className="cheese-hero-copy">
           <div className="cheese-eyebrow">UNIVERSITY OF BARKBRIDGE · FACULTY OF GASTRONOMIC SCIENCES</div>
           <h1>ROSIE'S CHEESE BOARD EXAM</h1>
-          <p>Put on the beret. Deploy the doctoral nose. Match all eight cheeses before Rosie's academic reputation melts.</p>
+          <p>A memory test for true cheese aficionados. Match every pair and prove yourself worthy.</p>
           <div className="doctor-ribbon">
-            <img src="/rosie-doctor-cheese.webp" alt="" aria-hidden="true" />
+            <img src="/rosie-doctor-cheese-hero.webp" alt="" aria-hidden="true" />
             <div>
               <strong>ROSIE THE SHIBA, Che.D.</strong>
-              <small>Beret on · Credentials verified · Cheese authority absolute</small>
+              <small>Doctor Rosie is administering the exam</small>
             </div>
             <span className="doctor-seal">🐾</span>
           </div>
@@ -320,7 +316,7 @@ function CheeseMemoryGame() {
 
       <section className="cheese-game-frame">
         <div className="rosie-player-status" aria-live="polite">
-          <img src="/rosie-doctor-cheese.webp" alt="Beret Rosie" />
+          <img src="/rosie-doctor-cheese-hero.webp" alt="Doctor Rosie" />
           <div>
             <span>DR. ROSIE'S FIELD NOTES</span>
             <strong>{message}</strong>
@@ -333,7 +329,7 @@ function CheeseMemoryGame() {
             <span>THE PRACTICAL EXAM</span>
             <h2>Pair the Fromage</h2>
           </div>
-          <p>Eight cheeses. Sixteen cards. One extremely qualified Shiba.</p>
+          <p>Eight cheeses. Sixteen cards. Rosie will decide whether you pass.</p>
         </div>
 
         <div className="cheese-grid">
@@ -369,9 +365,9 @@ function CheeseMemoryGame() {
 
       {complete && (
         <section className="cheese-victory" aria-live="polite">
-          <img className="victory-rosie" src="/rosie-doctor-cheese.webp" alt="Rosie, Doctor of Cheese" />
+          <img className="victory-rosie" src="/rosie-doctor-cheese-hero.webp" alt="Rosie, Doctor of Cheese" />
           <span>BOARD EXAM PASSED</span>
-          <h2>Doctor Rosie has conquered the cheese board.</h2>
+          <h2>You pass. Doctor Rosie is pleased.</h2>
           <p>{moves} moves · {formatGameTime(elapsed)} · All {CHEESES.length} cheeses correctly identified.</p>
           <button type="button" onClick={resetGame}>DEFEND THE DISSERTATION AGAIN</button>
         </section>
