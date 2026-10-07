@@ -249,7 +249,7 @@ function SilverBackKey() {
 }
 
 function CardImage({ card, enlarged = false }) {
-  const offset = (Number(card.spriteIndex || 0) / 3) * 100;
+  const offset = Number(card.spriteIndex || 0) * 100;
   return <div
     role="img"
     aria-label={card.alt || `${card.name} collectible card`}
@@ -257,7 +257,7 @@ function CardImage({ card, enlarged = false }) {
     style={{
       backgroundImage: `url("${card.image}")`,
       backgroundRepeat: 'no-repeat',
-      backgroundSize: '400% 100%',
+      backgroundSize: '200% 100%',
       backgroundPosition: `${offset}% 0`
     }}
   />;
