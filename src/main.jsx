@@ -1541,7 +1541,12 @@ function CaptainRosieGame({ soundOn }) {
 
 function App() {
   const [loaded, setLoaded] = useState(false);
-  const [page, setPage] = useState("fortune");
+  const validPages = ["fortune", "cheese", "captain"];
+  const pageFromLocation = () => {
+    const requested = window.location.hash.replace("#", "").toLowerCase();
+    return validPages.includes(requested) ? requested : "fortune";
+  };
+  const [page, setPage] = useState(pageFromLocation);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
   const [consulting, setConsulting] = useState(false);
@@ -1593,6 +1598,24 @@ function App() {
   }, []);
 
   const [quickQuestions, setQuickQuestions] = useState(() => samplePrompts(4));
+
+  // The three games are directly linkable and browser navigation stays in sync.
+  // This also avoids a stale Captain tab after a reload or shared URL.
+  useEffect(() => {
+    const onHashChange = () => setPage(pageFromLocation());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  function navigateTo(nextPage) {
+    if (!validPages.includes(nextPage)) return;
+    if (window.location.hash !== `#${nextPage}`) {
+      window.location.hash = nextPage;
+    } else {
+      setPage(nextPage);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   function reshufflePrompts() {
     setQuickQuestions(samplePrompts(4));
@@ -2167,9 +2190,9 @@ function App() {
         )}
 
         <nav className="bottom-nav" aria-label="Primary">
-          <button className={page === "fortune" ? "active" : ""} onClick={() => setPage("fortune")}><span>✦</span><small>Fortune</small></button>
-          <button className={page === "cheese" ? "active" : ""} onClick={() => setPage("cheese")}><span>♛</span><small>Cheese</small></button>
-          <button className={page === "captain" ? "active" : ""} onClick={() => setPage("captain")}><span>⚓</span><small>Captain</small></button>
+          <button className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span>✦</span><small>Fortune</small></button>
+          <button className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span>♛</span><small>Cheese</small></button>
+          <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
           <button disabled><span>🐾</span><small>Rosie</small></button>
         </nav>
       </div>

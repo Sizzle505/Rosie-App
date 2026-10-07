@@ -6209,7 +6209,7 @@ main {
   }
 }
 
-+/* Dedicated Cheese game mode ------------------------------------------------ */
+/* Dedicated Cheese game mode ------------------------------------------------ */
 .rosie-reaction {
   min-height: 270px;
   grid-template-columns: minmax(150px, .76fr) minmax(0, 1fr) 35px;
@@ -6292,6 +6292,105 @@ main {
   .cheese-grid { gap:4px; }
   .rosie-reaction { grid-template-columns:124px minmax(0,1fr) 21px; }
   .cheese-scorebar > button { padding:0 7px; font-size:6px; }
+}
+
+/* Overnight usability and art-direction corrections ----------------------- */
+/* iOS must not infer a text-size zoom from tiny game UI. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.bottom-nav { z-index: 90; }
+
+/* Make the exam cards feel like a matched set of tiny gilded specimen cards. */
+.cheese-card {
+  isolation: isolate;
+  transform: translateZ(0);
+}
+.cheese-card-back {
+  background:
+    radial-gradient(ellipse at 50% 41%, rgba(251,218,131,.20) 0 12%, transparent 13% 38%),
+    radial-gradient(circle at 50% 50%, transparent 0 42%, rgba(248,208,124,.15) 43% 44%, transparent 45%),
+    repeating-linear-gradient(135deg, rgba(255,230,161,.055) 0 1px, transparent 1px 7px),
+    linear-gradient(145deg,#6b1737 0%,#340b23 56%,#160a13 100%);
+}
+.cheese-card-back img {
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.84;
+  mix-blend-mode:screen;
+  filter:saturate(.9) contrast(1.08);
+}
+.cheese-card-back::after { border-style: solid; opacity:.72; }
+.cheese-card-back::before {
+  box-shadow: inset 0 0 0 2px rgba(247,213,137,.08), 0 0 22px rgba(214,155,54,.09);
+}
+.cheese-card-back { --seal: "R"; }
+.cheese-card-back::marker { content:""; }
+.cheese-card-back > * { pointer-events:none; }
+.cheese-card-back::selection { background:transparent; }
+.cheese-card-back::after { content:"✦  ROSIE'S EXAM  ✦"; display:grid; place-items:center; color:rgba(255,235,179,.88); font-family:Georgia,serif; font-size:clamp(7px,1.1vw,11px); letter-spacing:.15em; text-shadow:0 1px 4px #25000d; }
+.cheese-card-front {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255,255,255,.85), transparent 19%),
+    linear-gradient(155deg,#fff3cf 0%,#e9ce98 62%,#c28e50 100%);
+}
+.cheese-card-front strong { text-shadow:0 1px rgba(255,255,255,.68); }
+.cheese-card.is-matched { animation: cheesePairLands .48s cubic-bezier(.18,.8,.25,1); }
+@keyframes cheesePairLands { 0%{filter:brightness(1);transform:scale(1)} 42%{filter:brightness(1.28);transform:scale(1.045)} 100%{filter:brightness(1);transform:scale(1)} }
+
+/* A real celebratory certificate rather than a passive status banner. */
+.cheese-victory {
+  border-color:#e6bd64;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(255,229,143,.22), transparent 25%),
+    radial-gradient(circle at 17% 40%, rgba(235,193,105,.28), transparent 27%),
+    linear-gradient(132deg,#69213c,#2a0e21 58%,#160b13);
+  box-shadow:0 20px 48px rgba(0,0,0,.35), inset 0 0 0 4px rgba(255,224,144,.035);
+}
+.cheese-victory h2 { color:#ffebae; text-shadow:0 2px 10px rgba(0,0,0,.28); }
+.cheese-victory > span { color:#f0c76c; }
+.victory-rosie { box-shadow:0 0 0 4px rgba(255,224,136,.13), 0 10px 18px rgba(0,0,0,.3); }
+
+/* Fortune suggestions become a quiet inlaid prompt rail - never white pills. */
+.quick-row { position:relative; padding:11px 0 4px; }
+.quick-row::before { content:"TRY AN ODDLY SPECIFIC QUESTION"; display:block; margin:0 0 7px 2px; color:#a98762; font-size:7px; letter-spacing:.16em; }
+.quick-prompts { display:flex; flex-wrap:wrap; gap:6px; }
+.quick-prompts button {
+  min-height:27px;
+  padding:6px 9px;
+  border:1px solid rgba(202,155,83,.25);
+  border-radius:8px;
+  background:linear-gradient(145deg,rgba(104,38,74,.38),rgba(27,12,25,.7));
+  color:#ddc3a0;
+  font-size:9px;
+  font-style:italic;
+  line-height:1.15;
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+  transition:transform .18s ease, border-color .18s ease, color .18s ease;
+}
+.quick-prompts button:hover { transform:translateY(-1px); border-color:rgba(237,194,111,.55); color:#ffe0a5; }
+
+/* The course gets a true parallax-like forward drift while Rosie stays readable. */
+.captain-game-page .riviera-course-art { transform-origin:50% 38%; animation: courseBreath 7s ease-in-out infinite alternate; }
+@keyframes courseBreath { from { transform:scale(1.008) translateY(0); } to { transform:scale(1.035) translateY(8px); } }
+.captain-game-page .yacht-course::before { animation: captainSea 2.8s linear infinite; opacity:.9; }
+.captain-game-page .yacht-wake-stack i { animation-duration:.48s; }
+.captain-game-page .captain-yacht { will-change:left,transform; }
+.captain-game-page .captain-at-helm { box-shadow:0 4px 9px rgba(0,0,0,.3), inset 0 1px rgba(255,255,255,.22); }
+.captain-game-page .helm-rosie-art { object-position:50% 9%; }
+
+@media (max-width:620px) {
+  /* Cards remain fully in frame on every current iPhone width. */
+  .cheese-game-page { overflow-x:clip; }
+  .cheese-game-frame { width:100%; }
+  .cheese-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .cheese-card { min-width:0; aspect-ratio:.82; }
+  .cheese-card-back::after { font-size:10px; }
+  .quick-row { padding-top:9px; }
+  .quick-prompts { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+  .quick-prompts button { min-height:33px; padding:6px 8px; font-size:8px; text-align:left; }
 }
 
 
