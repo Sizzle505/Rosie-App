@@ -83,9 +83,9 @@ function drawCasinoDie(canvas, value) {
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
 
-  const front = { x: 142, y: 188, w: 330, h: 330, r: 54 };
-  const depthX = 64;
-  const depthY = -58;
+  const front = { x: 70, y: 170, w: 420, h: 420, r: 68 };
+  const depthX = 80;
+  const depthY = -70;
 
   ctx.save();
   ctx.shadowColor = "rgba(74,42,7,.24)";
@@ -93,7 +93,7 @@ function drawCasinoDie(canvas, value) {
   ctx.shadowOffsetY = 23;
   ctx.fillStyle = "rgba(85,50,10,.22)";
   ctx.beginPath();
-  ctx.ellipse(323, 536, 188, 34, 0, 0, Math.PI * 2);
+  ctx.ellipse(322, 592, 222, 38, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
@@ -160,13 +160,13 @@ function drawCasinoDie(canvas, value) {
   ctx.quadraticCurveTo(front.x + 170, front.y + 12, front.x + 281, front.y + 62);
   ctx.stroke();
 
-  drawRubyPip(ctx, 274, 151, 16);
-  drawRubyPip(ctx, 365, 151, 16);
-  drawRubyPip(ctx, 505, 273, 15);
-  drawRubyPip(ctx, 517, 354, 15);
-  drawRubyPip(ctx, 526, 433, 15);
+  drawRubyPip(ctx, 257, 127, 17);
+  drawRubyPip(ctx, 374, 127, 17);
+  drawRubyPip(ctx, 528, 278, 16);
+  drawRubyPip(ctx, 542, 379, 16);
+  drawRubyPip(ctx, 552, 480, 16);
 
-  const inner = { x: 187, y: 231, w: 238, h: 238 };
+  const inner = { x: 127, y: 227, w: 306, h: 306 };
   DIE_PIPS[value].forEach(([px, py]) => {
     drawRubyPip(ctx, inner.x + inner.w * px, inner.y + inner.h * py, 20);
   });
