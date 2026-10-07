@@ -3165,3 +3165,584 @@ body {
     font-size: 3.4px;
   }
 }
+
+
+/* === CHEESE THREE-COLUMN SQUARE BOARD PASS · 2026-10-07 === */
+
+/* Desktop: identity rail, square 4x4 board, and a dedicated examiner portrait. */
+@media (min-width: 1180px) {
+  .cheese-game-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 10px 12px calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .cheese-desktop-layout {
+    --cheese-center: min(52vw, calc(100dvh - 150px));
+    width: 100%;
+    display: grid;
+    grid-template-columns: clamp(230px, 15.5vw, 265px) var(--cheese-center) minmax(280px, 1fr);
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .cheese-left-rail {
+    position: sticky;
+    top: 10px;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    display: block;
+  }
+
+  .cheese-exam-header {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 9px;
+    border-radius: 18px;
+  }
+
+  .cheese-exam-header::before {
+    inset: 5px;
+    border-radius: 13px;
+  }
+
+  .cheese-exam-portrait {
+    width: 100%;
+    height: clamp(150px, 19dvh, 202px);
+    flex: 0 0 auto;
+    border-radius: 12px;
+  }
+
+  .cheese-exam-title {
+    padding: 0 5px;
+  }
+
+  .cheese-exam-title .cheese-eyebrow {
+    margin-bottom: 5px;
+    font-size: 6px;
+  }
+
+  .cheese-exam-title h1 {
+    max-width: 250px;
+    font-size: clamp(22px, 1.85vw, 29px);
+    line-height: .98;
+  }
+
+  .cheese-exam-title > p {
+    margin: 6px 0 9px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .cheese-header-status {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 4px;
+  }
+
+  .cheese-header-status > div {
+    min-height: 38px;
+    padding: 5px 4px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    text-align: center;
+  }
+
+  .cheese-header-status span {
+    font-size: 5px;
+    letter-spacing: .09em;
+  }
+
+  .cheese-header-status strong {
+    font-size: 15px;
+  }
+
+  .cheese-header-seal {
+    right: 12px;
+    top: 142px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .cheese-reset-left {
+    margin-top: auto;
+    width: 100%;
+    min-height: 40px;
+    flex: 0 0 auto;
+  }
+
+  .cheese-reset-mobile {
+    display: none;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: 0;
+    align-self: start;
+    padding: 11px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 19px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-game-heading {
+    flex: 0 0 42px;
+    min-height: 42px;
+    margin: 0 3px 9px;
+    padding: 0 4px 7px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-game-heading h2 {
+    font-size: 19px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-grid {
+    width: 100%;
+    aspect-ratio: 1;
+    flex: 0 0 auto;
+    min-height: 0;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    grid-template-rows: repeat(4, minmax(0,1fr));
+    gap: 7px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-card {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: 1;
+    border-radius: 12px;
+  }
+
+  .cheese-examiner-rail {
+    position: sticky;
+    top: 10px;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    display: block;
+  }
+
+  .cheese-examiner-rail .rosie-reaction {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 9px;
+    border-radius: 18px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    flex: 1 1 auto;
+    border-radius: 13px 13px 9px 9px;
+  }
+
+  .cheese-examiner-rail .reaction-copy {
+    width: 100%;
+    flex: 0 0 auto;
+    align-self: stretch;
+    padding: 13px 7px 8px;
+    border-top: 1px solid rgba(232,193,111,.14);
+  }
+
+  .cheese-examiner-rail .rosie-reaction .reaction-copy span {
+    font-size: 6.2px;
+    line-height: 1.25;
+    letter-spacing: .11em;
+  }
+
+  .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    margin-top: 6px;
+    max-width: none;
+    font-size: clamp(14px, 1.18vw, 18px);
+    line-height: 1.18;
+  }
+
+  .cheese-examiner-rail .rosie-reaction > i {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    font-size: 11px;
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Medium desktop / tablet-landscape: keep the board square and place the
+   examiner below, rather than distorting the cards. */
+@media (min-width: 901px) and (max-width: 1179px) {
+  .cheese-desktop-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0,1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  .cheese-left-rail {
+    position: sticky;
+    top: 10px;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .cheese-exam-header {
+    height: auto;
+  }
+
+  .cheese-reset-left {
+    margin-top: 6px;
+    width: 100%;
+  }
+
+  .cheese-reset-mobile {
+    display: none;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-grid {
+    width: 100%;
+    aspect-ratio: 1;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-template-rows: repeat(4,minmax(0,1fr));
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-card {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+  }
+
+  .cheese-examiner-rail {
+    grid-column: 1 / -1;
+    position: static;
+    min-height: 0;
+  }
+
+  .cheese-examiner-rail .rosie-reaction {
+    min-height: 210px;
+    display: grid;
+    grid-template-columns: 230px minmax(0,1fr) 28px;
+    align-items: stretch;
+  }
+
+  .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 230px;
+    height: 190px;
+  }
+}
+
+/* New reverse: a complete square composition instead of a tiny center badge. */
+.cheese-card-back {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255,231,169,.11), transparent 24%),
+    radial-gradient(circle at 12% 10%, rgba(255,240,200,.07), transparent 15%),
+    radial-gradient(circle at 88% 90%, rgba(255,240,200,.055), transparent 17%),
+    repeating-linear-gradient(45deg, rgba(255,235,184,.018) 0 1px, transparent 1px 7px),
+    linear-gradient(145deg, #812949 0%, #5f1836 43%, #3b1025 74%, #210a16 100%);
+}
+
+.cheese-card-back::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  z-index: 1;
+  border: 1px solid rgba(248,218,151,.67);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 0 0 3px rgba(255,233,181,.045),
+    inset 0 0 0 5px rgba(73,20,39,.26),
+    inset 0 0 30px rgba(255,210,116,.025);
+}
+
+.cheese-card-back::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 1;
+  border: 1px solid rgba(247,214,143,.17);
+  border-radius: 7px;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 35%, rgba(247,214,143,.06) 35.5% 36%, transparent 36.5%),
+    conic-gradient(from 0deg at 50% 50%,
+      transparent 0 11%, rgba(255,228,162,.035) 11% 12%, transparent 12% 24%,
+      rgba(255,228,162,.035) 24% 25%, transparent 25% 37%,
+      rgba(255,228,162,.035) 37% 38%, transparent 38% 49%,
+      rgba(255,228,162,.035) 49% 50%, transparent 50% 100%);
+}
+
+.cheese-back-corner {
+  position: absolute;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+
+.cheese-back-corner::before,
+.cheese-back-corner::after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(90deg, #bc8840, #f4d58e, #a96f31);
+  opacity: .78;
+}
+
+.cheese-back-corner::before {
+  width: 19px;
+  height: 1px;
+}
+
+.cheese-back-corner::after {
+  width: 1px;
+  height: 19px;
+}
+
+.cheese-back-corner-tl { left: 12px; top: 12px; }
+.cheese-back-corner-tr { right: 12px; top: 12px; transform: rotate(90deg); }
+.cheese-back-corner-br { right: 12px; bottom: 12px; transform: rotate(180deg); }
+.cheese-back-corner-bl { left: 12px; bottom: 12px; transform: rotate(270deg); }
+
+.cheese-back-ornament {
+  position: relative;
+  z-index: 3;
+  width: 74%;
+  height: 78%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.cheese-back-seal {
+  position: relative;
+  width: min(58%, 126px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: visible;
+  border: 1px solid rgba(255,227,160,.76);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 25%, rgba(255,242,201,.12), transparent 25%),
+    radial-gradient(circle at 50% 58%, rgba(118,41,65,.74), rgba(43,12,27,.96) 68%);
+  box-shadow:
+    inset 0 0 0 5px rgba(241,199,115,.065),
+    0 0 0 1px rgba(74,24,39,.72),
+    0 8px 21px rgba(24,4,13,.38);
+}
+
+.cheese-back-seal::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(249,219,153,.34);
+  border-radius: 50%;
+}
+
+.cheese-back-seal::after {
+  content: "✦";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #efc96f;
+  font-family: Georgia, serif;
+  font-size: 12px;
+  text-shadow: 0 2px 6px rgba(29,5,14,.65);
+}
+
+.cheese-back-paw {
+  position: relative;
+  width: 48px;
+  height: 44px;
+  transform: translate(-7px,-2px) scale(1.18);
+}
+
+.cheese-back-paw i,
+.cheese-back-paw b {
+  background: linear-gradient(180deg, #ffe9ad 0%, #e1ad58 52%, #b8722e 100%);
+  box-shadow: 0 1px 2px rgba(34,7,17,.42), inset 0 1px rgba(255,247,219,.35);
+}
+
+.cheese-back-wedge {
+  z-index: 4;
+  right: 2px;
+  bottom: 5px;
+  width: 36px;
+  height: 27px;
+  border: 1px solid rgba(93,48,30,.24);
+  background: linear-gradient(145deg, #fff0b5 0%, #e6b45e 66%, #bc7a2e 100%);
+  filter: drop-shadow(0 2px 3px rgba(30,5,15,.42));
+}
+
+.cheese-back-ornament > strong {
+  margin-top: 2px;
+  color: #f8e4af;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(11px, 1.08vw, 16px);
+  line-height: 1;
+  letter-spacing: .2em;
+  font-weight: 500;
+  text-shadow: 0 2px 6px rgba(35,4,17,.5);
+}
+
+.cheese-back-ribbon {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 5px 8px 4px;
+  color: #431728;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(7px, .72vw, 10px);
+  line-height: 1;
+  letter-spacing: .16em;
+  text-align: center;
+  background: linear-gradient(90deg,
+    transparent 0 3%,
+    #c58f3e 8%,
+    #f7dfa0 23%,
+    #e8c36f 50%,
+    #f7dfa0 77%,
+    #c58f3e 92%,
+    transparent 97%);
+  clip-path: polygon(0 20%, 7% 20%, 7% 0, 93% 0, 93% 20%, 100% 20%, 95% 50%, 100% 80%, 93% 80%, 93% 100%, 7% 100%, 7% 80%, 0 80%, 5% 50%);
+  text-shadow: 0 1px rgba(255,255,255,.25);
+}
+
+.cheese-back-ornament > small {
+  color: rgba(249,220,155,.73);
+  font-size: clamp(4.5px, .45vw, 6px);
+  line-height: 1;
+  letter-spacing: .22em;
+  font-weight: 800;
+}
+
+/* Keep every expression centered in its dedicated examiner window. */
+.mood-watching .rosie-reaction-portrait img { object-position: 50% 24%; transform: scale(1.02); }
+.mood-focused .rosie-reaction-portrait img { object-position: 50% 23%; transform: scale(1.025); }
+.mood-pleased .rosie-reaction-portrait img { object-position: 50% 22%; transform: scale(1.02); }
+.mood-proud .rosie-reaction-portrait img { object-position: 50% 21%; transform: scale(1.02); }
+.mood-amused .rosie-reaction-portrait img { object-position: 50% 24%; transform: scale(1.02); }
+.mood-embarrassed .rosie-reaction-portrait img { object-position: 50% 24%; transform: scale(1.025); }
+.mood-distraught .rosie-reaction-portrait img { object-position: 50% 26%; transform: scale(1.025); }
+.mood-elated .rosie-reaction-portrait img { object-position: 50% 21%; transform: scale(1.02); }
+
+@media (max-width: 900px) {
+  .cheese-reset-left {
+    display: none;
+  }
+
+  .cheese-reset-mobile {
+    display: inline-flex;
+    min-height: 34px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-grid {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-card {
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .cheese-back-corner {
+    width: 14px;
+    height: 14px;
+  }
+
+  .cheese-back-corner::before { width: 10px; }
+  .cheese-back-corner::after { height: 10px; }
+  .cheese-back-corner-tl { left: 7px; top: 7px; }
+  .cheese-back-corner-tr { right: 7px; top: 7px; }
+  .cheese-back-corner-br { right: 7px; bottom: 7px; }
+  .cheese-back-corner-bl { left: 7px; bottom: 7px; }
+
+  .cheese-card-back::before {
+    inset: 3px;
+    border-radius: 6px;
+  }
+
+  .cheese-card-back::after {
+    inset: 7px;
+    border-radius: 5px;
+  }
+
+  .cheese-back-ornament {
+    width: 80%;
+    height: 82%;
+    gap: 2px;
+  }
+
+  .cheese-back-seal {
+    width: min(51%, 46px);
+  }
+
+  .cheese-back-seal::before {
+    inset: 4px;
+  }
+
+  .cheese-back-seal::after {
+    top: -8px;
+    font-size: 7px;
+  }
+
+  .cheese-back-paw {
+    width: 27px;
+    height: 25px;
+    transform: translate(-4px,-1px) scale(.62);
+  }
+
+  .cheese-back-wedge {
+    right: -1px;
+    bottom: 1px;
+    width: 18px;
+    height: 14px;
+  }
+
+  .cheese-back-ornament > strong {
+    font-size: 6px;
+    letter-spacing: .14em;
+  }
+
+  .cheese-back-ribbon {
+    padding: 2px 4px;
+    font-size: 4.7px;
+    letter-spacing: .09em;
+  }
+
+  .cheese-back-ornament > small {
+    font-size: 3px;
+    letter-spacing: .08em;
+  }
+}
