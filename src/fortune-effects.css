@@ -2934,3 +2934,258 @@
     font-size: 8px;
   }
 }
+
+
+/* === TURN MASK CORRECTION: ISOLATED PORTRAIT + LOWER SMOKE === */
+
+/*
+  This layer is now a transparent, pre-isolated Rosie portrait asset.
+  The stage/background never participates in the flip.
+*/
+.rosie-turn-layer {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 47% !important;
+  clip-path: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  opacity: 1 !important;
+  transform-origin: 50% 36% !important;
+  filter: saturate(1.02) contrast(1.03) brightness(.91) !important;
+}
+.rosie-turn-layer.is-turning,
+.rosie-turn-layer.is-flipped.is-turning {
+  filter: saturate(1.08) contrast(1.04) brightness(.92) !important;
+}
+@keyframes fortuneRosieBreathe {
+  0%,100% { transform: scale(1.015) translateY(0); }
+  50% { transform: scale(1.018) translateY(-.9px); }
+}
+@keyframes fortuneRosieBreatheFlipped {
+  0%,100% { transform: scaleX(-1) scale(1.015) translateY(0); }
+  50% { transform: scaleX(-1) scale(1.018) translateY(-.9px); }
+}
+
+/*
+  The swap is hidden by a full magical column, not just a face puff.
+  It reaches from above the turban to the top third of the crystal ball.
+*/
+.flip-magic::before,
+.flip-magic::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%);
+}
+.flip-magic::before {
+  z-index: 29;
+  top: 13%;
+  width: 73%;
+  height: 67%;
+  border-radius: 47% 53% 44% 56%;
+  background:
+    radial-gradient(ellipse at 50% 30%,
+      rgba(114,54,151,.9) 0 17%,
+      rgba(94,39,129,.82) 30%,
+      rgba(70,29,101,.65) 46%,
+      rgba(48,19,73,.34) 64%,
+      transparent 82%),
+    radial-gradient(ellipse at 44% 68%,
+      rgba(164,91,194,.63) 0 13%,
+      rgba(106,49,139,.52) 32%,
+      rgba(67,27,91,.28) 58%,
+      transparent 78%);
+  filter: blur(11px);
+  mix-blend-mode: screen;
+  animation: lowerTurnColumn 1.08s cubic-bezier(.13,.68,.14,1) forwards;
+}
+.flip-magic::after {
+  z-index: 30;
+  top: 48%;
+  width: 88%;
+  height: 37%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      rgba(182,105,211,.58) 0 16%,
+      rgba(122,57,158,.48) 34%,
+      rgba(82,34,111,.3) 55%,
+      rgba(49,18,70,.13) 72%,
+      transparent 88%);
+  box-shadow:
+    0 0 38px rgba(180,103,219,.22),
+    0 -18px 48px rgba(132,67,172,.16);
+  filter: blur(13px);
+  mix-blend-mode: screen;
+  animation: lowerTurnBank 1.12s cubic-bezier(.15,.7,.16,1) forwards;
+}
+@keyframes lowerTurnColumn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(34px) scale(.45,.4);
+  }
+  18% {
+    opacity: .78;
+    transform: translateX(-50%) translateY(8px) scale(.88,.8);
+  }
+  31% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1.02,.98);
+  }
+  63% {
+    opacity: .94;
+    transform: translateX(-50%) translateY(-5px) scale(1.08,1.08);
+  }
+  80% {
+    opacity: .55;
+    transform: translateX(-50%) translateY(-22px) scale(1.17,1.19);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-56px) scale(1.3,1.36);
+  }
+}
+@keyframes lowerTurnBank {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px) scale(.5,.42);
+  }
+  24% {
+    opacity: .72;
+    transform: translateX(-50%) translateY(4px) scale(.9,.82);
+  }
+  36% {
+    opacity: .94;
+    transform: translateX(-50%) translateY(0) scale(1.06,.96);
+  }
+  67% {
+    opacity: .82;
+    transform: translateX(-50%) translateY(-4px) scale(1.13,1.07);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-31px) scale(1.28,1.3);
+  }
+}
+
+/* Main veil is taller and lower; full opacity spans the 430ms portrait swap. */
+.turn-veil {
+  top: 39% !important;
+  width: 72% !important;
+  height: 72% !important;
+  z-index: 32 !important;
+  background:
+    radial-gradient(ellipse at 50% 39%,
+      rgba(46,15,67,1) 0 27%,
+      rgba(87,34,119,1) 40%,
+      rgba(128,55,158,.985) 51%,
+      rgba(103,42,136,.91) 63%,
+      rgba(72,27,100,.67) 74%,
+      rgba(48,18,70,.34) 85%,
+      transparent 97%) !important;
+  box-shadow:
+    0 0 48px rgba(210,134,246,.58),
+    0 0 94px rgba(93,37,126,.38),
+    inset 0 0 44px rgba(247,218,255,.12) !important;
+  animation: fortuneTurnCoverDeep 1.1s cubic-bezier(.14,.68,.14,1) forwards !important;
+}
+@keyframes fortuneTurnCoverDeep {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-41%) scale(.22,.17);
+  }
+  16% {
+    opacity: .96;
+    transform: translate(-50%,-47%) scale(.88,.82);
+  }
+  28% {
+    opacity: 1;
+    transform: translate(-50%,-49%) scale(1.07,1.01);
+  }
+  64% {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.13,1.1);
+  }
+  78% {
+    opacity: .72;
+    transform: translate(-50%,-56%) scale(1.22,1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-72%) scale(1.4,1.5);
+  }
+}
+
+/* Existing wisps now fill the neck/robe area rather than clustering at eye level. */
+.smoke-wisp {
+  z-index: 33 !important;
+  top: 43% !important;
+  filter: blur(12px) !important;
+}
+.smoke-wisp-a { margin-top: -128px !important; }
+.smoke-wisp-b { margin-top: -116px !important; }
+.smoke-wisp-c { margin-top: -58px !important; }
+.smoke-wisp-d { margin-top: -137px !important; }
+.smoke-wisp-e { margin-top: 12px !important; width: 178px !important; height: 160px !important; }
+.smoke-wisp-h { margin-top: 7px !important; width: 195px !important; height: 145px !important; }
+.smoke-wisp-i { margin-top: 11px !important; width: 190px !important; height: 148px !important; }
+.smoke-wisp-j { margin-top: -45px !important; height: 190px !important; }
+
+.turn-orbit { z-index: 34 !important; }
+.flip-flash {
+  z-index: 35 !important;
+  top: 39% !important;
+  height: 285px !important;
+  margin-top: -142px !important;
+}
+.flip-sparkles {
+  z-index: 36 !important;
+}
+.flip-sparkles i {
+  top: 43% !important;
+}
+
+@media (max-width: 620px) {
+  .rosie-turn-layer {
+    object-position: center 47% !important;
+    clip-path: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    transform-origin: 50% 36% !important;
+  }
+  @keyframes fortuneRosieBreathe {
+    0%,100% { transform: scale(1.01) translateY(0); }
+    50% { transform: scale(1.013) translateY(-.8px); }
+  }
+  @keyframes fortuneRosieBreatheFlipped {
+    0%,100% { transform: scaleX(-1) scale(1.01) translateY(0); }
+    50% { transform: scaleX(-1) scale(1.013) translateY(-.8px); }
+  }
+
+  .flip-magic::before {
+    top: 10%;
+    width: 90%;
+    height: 72%;
+  }
+  .flip-magic::after {
+    top: 47%;
+    width: 108%;
+    height: 41%;
+  }
+  .turn-veil {
+    top: 40% !important;
+    width: 91% !important;
+    height: 76% !important;
+  }
+  .smoke-wisp {
+    top: 44% !important;
+  }
+  .flip-flash {
+    top: 40% !important;
+    height: 300px !important;
+  }
+}
