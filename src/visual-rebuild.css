@@ -3746,3 +3746,10 @@ body {
     letter-spacing: .08em;
   }
 }
+
+
+/* Preserve all six destinations after Rosie's Randomizers joins the reworked shell. */
+.bottom-nav { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+@media (max-width: 700px) {
+  .bottom-nav button small { font-size: 8px; letter-spacing: -.025em; }
+}
