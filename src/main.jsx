@@ -687,21 +687,21 @@ function CheeseMemoryGame() {
                   aria-label={faceUp ? cheese.name : "Face-down cheese card"}
                 >
                   <span className="cheese-card-inner">
-                    <span className="cheese-card-back">
+                    <span className="cheese-card-back cheese-card-back-luxe">
                       <span className="cheese-back-corner cheese-back-corner-tl" aria-hidden="true" />
                       <span className="cheese-back-corner cheese-back-corner-tr" aria-hidden="true" />
                       <span className="cheese-back-corner cheese-back-corner-bl" aria-hidden="true" />
                       <span className="cheese-back-corner cheese-back-corner-br" aria-hidden="true" />
-                      <span className="cheese-back-ornament" aria-hidden="true">
-                        <span className="cheese-back-seal">
-                          <span className="cheese-back-paw">
-                            <i /><i /><i /><i /><b />
-                          </span>
+                      <span className="cheese-back-ornament cheese-back-ornament-luxe" aria-hidden="true">
+                        <span className="cheese-back-monogram">R</span>
+                        <span className="cheese-back-emblem">
+                          <span className="cheese-back-crown">♛</span>
                           <span className="cheese-back-wedge"><i /><i /><i /></span>
+                          <span className="cheese-back-bow"><i /><i /><b /></span>
                         </span>
-                        <strong>ROSIE'S</strong>
-                        <span className="cheese-back-ribbon">CHEESE BOARD</span>
-                        <small>THE PRACTICAL EXAM</small>
+                        <span className="cheese-back-paw cheese-back-paw-single">
+                          <i /><i /><i /><i /><b />
+                        </span>
                       </span>
                     </span>
                     <span className="cheese-card-front">
