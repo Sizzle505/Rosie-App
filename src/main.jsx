@@ -384,7 +384,7 @@ function CheeseMemoryGame() {
 const CAPTAIN_PICKUPS = [
   { kind: "ball", icon: "🎾", label: "Tennis ball", points: 10, turbo: 12 },
   { kind: "treat", icon: "🦴", label: "Captain's treat", points: 20, turbo: 18 },
-  { kind: "medal", icon: "✦", label: "Golden captain's star", points: 40, turbo: 30 },
+  { kind: "cheese", icon: "", label: "Golden Cheese", points: 40, turbo: 30 },
   { kind: "buoy", icon: "◆", label: "Navigation buoy", points: 0, turbo: 0 }
 ];
 
@@ -414,6 +414,102 @@ function captainRank(score) {
   return { title: "Junior Deckhand", mark: "D", copy: "Rosie has scheduled remedial yacht time." };
 }
 
+function RosiePawCrest({ className = "" }) {
+  return (
+    <svg className={"rosie-paw-crest " + className} viewBox="0 0 44 44" aria-hidden="true">
+      <circle cx="10" cy="13" r="5" />
+      <circle cx="22" cy="8.5" r="5" />
+      <circle cx="34" cy="13" r="5" />
+      <path d="M9.5 29.5C9.5 21.8 15.1 17 22 17s12.5 4.8 12.5 12.5c0 5.6-4.4 8-12.5 8s-12.5-2.4-12.5-8Z" />
+    </svg>
+  );
+}
+
+function GoldenCheeseIcon({ compact = false }) {
+  return (
+    <span className={"golden-cheese-icon" + (compact ? " is-compact" : "")} aria-hidden="true">
+      <span className="golden-cheese-wedge"><i /><i /><i /></span>
+    </span>
+  );
+}
+
+function CaptainYachtArt({ boost }) {
+  return (
+    <div className="yacht-illustration" aria-label="Captain Rosie commanding the ROSIE I">
+      <div className="yacht-vector-shadow" aria-hidden="true" />
+      <svg className="rosie-yacht-base" viewBox="0 0 240 180" aria-hidden="true">
+        <defs>
+          <linearGradient id="captainHullIvory" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fffdf3" />
+            <stop offset=".56" stopColor="#f2e4c9" />
+            <stop offset="1" stopColor="#cdb38b" />
+          </linearGradient>
+          <linearGradient id="captainHullNavy" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#174f73" />
+            <stop offset=".5" stopColor="#0a3556" />
+            <stop offset="1" stopColor="#041e35" />
+          </linearGradient>
+          <linearGradient id="captainTeak" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#a56b35" />
+            <stop offset=".45" stopColor="#e2bd82" />
+            <stop offset="1" stopColor="#9b602f" />
+          </linearGradient>
+        </defs>
+        <ellipse cx="120" cy="156" rx="93" ry="13" fill="rgba(0,34,52,.2)" />
+        <path d="M18 105C35 99 53 96 72 94h100c23 1 41 5 52 12l-18 39c-27 12-59 18-91 18-31 0-58-6-82-18L18 105Z" fill="url(#captainHullIvory)" stroke="#b67d31" strokeWidth="2" />
+        <path d="M29 124c46 7 137 7 183-1l-8 22c-28 11-58 16-90 16-30 0-57-5-81-16l-4-21Z" fill="url(#captainHullNavy)" />
+        <path d="M33 120c45 5 128 5 176-1" fill="none" stroke="#d7aa54" strokeWidth="3" opacity=".9" />
+        <path d="M48 96c23-10 48-15 73-15 27 0 51 5 72 15l-9 14H58L48 96Z" fill="url(#captainTeak)" stroke="#8d582d" strokeWidth="1.5" />
+        <path d="M68 92 78 54c2-8 8-14 16-18h55c9 3 15 10 18 19l8 37H68Z" fill="#f8edd8" stroke="#b98539" strokeWidth="2" />
+        <path d="M83 56h69" stroke="#d4ad66" strokeWidth="2" />
+        <rect x="49" y="132" width="17" height="7" rx="3.5" fill="#8ac1d5" stroke="#e8d4a3" />
+        <rect x="76" y="136" width="15" height="6" rx="3" fill="#8ac1d5" stroke="#e8d4a3" />
+        <rect x="150" y="136" width="15" height="6" rx="3" fill="#8ac1d5" stroke="#e8d4a3" />
+        <rect x="176" y="131" width="16" height="7" rx="3.5" fill="#8ac1d5" stroke="#e8d4a3" />
+        <path d="M108 147h27" stroke="#f0cf83" strokeWidth="1.5" opacity=".75" />
+      </svg>
+
+      <div className="captain-at-helm" aria-hidden="true">
+        <img src="/captain-rosie.webp" alt="" />
+        <span className="captain-window-glint" />
+      </div>
+
+      <svg className="rosie-yacht-overlay" viewBox="0 0 240 180" aria-hidden="true">
+        <defs>
+          <linearGradient id="captainGlassOverlay" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#dff8ff" stopOpacity=".43" />
+            <stop offset=".52" stopColor="#45a6ca" stopOpacity=".15" />
+            <stop offset="1" stopColor="#0b4f70" stopOpacity=".42" />
+          </linearGradient>
+        </defs>
+        <path d="M83 57 96 39h52l13 18 8 33H75l8-33Z" fill="url(#captainGlassOverlay)" stroke="#d5ad61" strokeWidth="2" />
+        <path d="M122 39v51M83 57h78" fill="none" stroke="#d6b36f" strokeWidth="2" opacity=".88" />
+        <path d="M61 91v-12m116 12v-12M55 79h128" fill="none" stroke="#e7c980" strokeWidth="2" strokeLinecap="round" />
+        <path d="M72 78v13m30-13v13m36-13v13m30-13v13" stroke="#e7c980" strokeWidth="1.4" opacity=".85" />
+        <circle cx="122" cy="79" r="11" fill="none" stroke="#d8a94b" strokeWidth="2" opacity=".95" />
+        <circle cx="122" cy="79" r="2.4" fill="#e2bd68" />
+        <path d="m122 68 0 22m-10-17 20 12m-20 0 20-12" stroke="#d8a94b" strokeWidth="1.4" />
+        <path d="M175 58v-42" stroke="#d7b56e" strokeWidth="2.2" />
+        <path d="M177 18c16 1 27 5 37 11-11 5-23 8-37 8V18Z" fill="#0b385b" stroke="#d1a64f" strokeWidth="1.5" />
+        <text x="188" y="31" textAnchor="middle" fontSize="9" fontWeight="800" fill="#f5d889">R</text>
+        <text x="120" y="151" textAnchor="middle" fontSize="8.5" fontWeight="800" letterSpacing="2.2" fill="#f5d889">ROSIE I</text>
+        <g className="yacht-paw-mark" fill="#c7943f">
+          <circle cx="116" cy="111" r="2.3" />
+          <circle cx="122" cy="108.5" r="2.3" />
+          <circle cx="128" cy="111" r="2.3" />
+          <path d="M116.5 118c0-4 2.6-6.4 5.5-6.4s5.5 2.4 5.5 6.4c0 2.7-2.3 4-5.5 4s-5.5-1.3-5.5-4Z" />
+        </g>
+        <path d="M34 108c34-7 139-7 173 0" fill="none" stroke="rgba(255,255,255,.72)" strokeWidth="1.4" />
+        <path d="M36 112c25 3 142 3 169 0" fill="none" stroke="#c79743" strokeWidth="1.2" opacity=".9" />
+      </svg>
+
+      <span className="captain-scarf-tail" aria-hidden="true" />
+      <div className="yacht-wake-stack" aria-hidden="true"><i /><i /><i /></div>
+      {boost && <div className="golden-wake" aria-hidden="true" />}
+    </div>
+  );
+}
+
 function CaptainRosieGame({ soundOn }) {
   const [running, setRunning] = useState(false);
   const [score, setScore] = useState(0);
@@ -431,7 +527,7 @@ function CaptainRosieGame({ soundOn }) {
   const [combo, setCombo] = useState(1);
   const [turbo, setTurbo] = useState(0);
   const [boost, setBoost] = useState(false);
-  const [medals, setMedals] = useState(0);
+  const [cheeses, setCheeses] = useState(0);
   const [eventPulse, setEventPulse] = useState(0);
   const [eventKind, setEventKind] = useState("ball");
   const [phaseNotice, setPhaseNotice] = useState("");
@@ -471,7 +567,7 @@ function CaptainRosieGame({ soundOn }) {
     const map = {
       ball: [660, 880],
       treat: [523, 784, 1046],
-      medal: [659, 988, 1318],
+      cheese: [659, 988, 1318],
       buoy: [164, 123],
       boost: [440, 660, 880, 1174],
       finish: [392, 523, 659, 784]
@@ -543,10 +639,10 @@ function CaptainRosieGame({ soundOn }) {
     setCombo(1);
     setTurbo(0);
     setBoost(false);
-    setMedals(0);
+    setCheeses(0);
     setEnded(false);
     setPhaseNotice("GOLDEN HARBOR");
-    setMessage("Lines cast off. Tennis balls are 10, treats are 20, captain's stars are 40. Keep clear of the red buoys.");
+    setMessage("Lines cast off. Tennis balls are 10, treats are 20, Golden Cheese is 40. Keep clear of the red buoys.");
     setRunning(true);
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }
@@ -606,7 +702,7 @@ function CaptainRosieGame({ soundOn }) {
     const next = CAPTAIN_PHASES[phaseKey];
     setPhaseNotice(next.name.toUpperCase());
     setMessage(next.copy);
-    captainTone(phaseKey === "sunset" ? "medal" : "ball");
+    captainTone(phaseKey === "sunset" ? "cheese" : "ball");
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }, [phaseKey, running]);
 
@@ -617,7 +713,7 @@ function CaptainRosieGame({ soundOn }) {
       let scoreDelta = 0;
       let turboDelta = 0;
       let lifeLoss = 0;
-      let medalGain = 0;
+      let cheeseGain = 0;
       let lastHit = "";
       let missedGood = false;
 
@@ -661,7 +757,7 @@ function CaptainRosieGame({ soundOn }) {
               scoreDelta += item.points * multiplier;
               turboDelta += item.turbo;
               lastHit = item.kind;
-              if (item.kind === "medal") medalGain += 1;
+              if (item.kind === "cheese") cheeseGain += 1;
             }
             return false;
           }
@@ -686,9 +782,9 @@ function CaptainRosieGame({ soundOn }) {
         setCombo(comboRef.current);
         setBestStreak((current) => Math.max(current, streakRef.current));
         setTurbo((current) => Math.min(100, current + turboDelta));
-        if (medalGain) setMedals((current) => current + medalGain);
-        const phrase = lastHit === "medal"
-          ? "Captain's star recovered. The Admiralty is taking notes."
+        if (cheeseGain) setCheeses((current) => current + cheeseGain);
+        const phrase = lastHit === "cheese"
+          ? "Golden Cheese aboard. Rosie has inventoried it as priceless cargo."
           : lastHit === "treat"
             ? "Premium provisions aboard. Rosie considers this excellent leadership."
             : comboRef.current > 1
@@ -697,7 +793,7 @@ function CaptainRosieGame({ soundOn }) {
         setMessage(phrase);
         pulse(lastHit);
         captainTone(lastHit);
-        window.navigator.vibrate?.(lastHit === "medal" ? [18, 24, 28] : 15);
+        window.navigator.vibrate?.(lastHit === "cheese" ? [18, 24, 28] : 15);
       }
 
       if (lifeLoss) {
@@ -756,23 +852,32 @@ function CaptainRosieGame({ soundOn }) {
   return (
     <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "")}>
       <section className="captain-hero">
-        <div className="captain-hero-compass" aria-hidden="true">
-          <span>N</span><i>✦</i>
-        </div>
+        <div className="captain-hero-rigging" aria-hidden="true"><i /><i /><i /><i /></div>
         <div className="captain-portrait">
           <img src="/captain-rosie.webp" alt="Rosie wearing her captain's hat on a yacht deck" />
-          <span>CAPTAIN ON DECK</span>
+          <span><RosiePawCrest className="portrait-paw" /> CAPTAIN ON DECK</span>
         </div>
         <div className="captain-title">
-          <span className="captain-kicker">THE HOUSE OF ROSIE · MARITIME DIVISION</span>
-          <h1>CAPTAIN ROSIE</h1>
-          <p>Yacht Dash</p>
-          <small>Command the ROSIE I through a glittering Riviera run - collect prized cargo, build a flawless streak and bring the captain home in style.</small>
+          <div className="captain-title-plaque">
+            <span className="captain-kicker">THE HOUSE OF ROSIE · RIVIERA YACHT CLUB</span>
+            <div className="captain-marquee">
+              <RosiePawCrest className="marquee-crest" />
+              <div>
+                <h1>CAPTAIN ROSIE</h1>
+                <p>Yacht Dash</p>
+              </div>
+              <span className="marquee-burgee">R</span>
+            </div>
+            <small>Command the ROSIE I through a glittering Riviera run - collect prized cargo, secure the Golden Cheese and bring the captain home in style.</small>
+          </div>
         </div>
         <div className="captain-best">
           <span>CAPTAIN'S RECORD</span>
           <strong>{Math.max(best, score)}</strong>
           <small>BEST VOYAGE</small>
+        </div>
+        <div className="captain-hero-compass" aria-hidden="true">
+          <span>N</span><i>◇</i>
         </div>
       </section>
 
@@ -782,7 +887,7 @@ function CaptainRosieGame({ soundOn }) {
           <div className="route-progress" style={{ width: routeProgress + "%" }} />
           <i className="route-yacht" style={{ left: routeProgress + "%" }}>◆</i>
         </div>
-        <div className="route-port route-destination"><b>✦</b><span>SUNSET COVE</span></div>
+        <div className="route-port route-destination"><b><RosiePawCrest className="route-paw-crest" /></b><span>SUNSET COVE</span></div>
       </section>
 
       <section className="captain-hud" aria-label="Yacht game status">
@@ -795,7 +900,7 @@ function CaptainRosieGame({ soundOn }) {
 
       <section className="yacht-game-shell">
         <div className="yacht-game-sign">
-          <span className="captain-seal">⚓</span>
+          <span className="captain-seal"><RosiePawCrest className="game-sign-paw" /></span>
           <div>
             <strong>{phase.eyebrow} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
@@ -810,19 +915,26 @@ function CaptainRosieGame({ soundOn }) {
           onPointerUp={onCoursePointerUp}
         >
           <div className="captain-sky" aria-hidden="true">
-            <div className="captain-sun" />
-            <div className="captain-cloud cloud-one" />
-            <div className="captain-cloud cloud-two" />
-            <div className="captain-gulls">⌁　⌁</div>
+            <div className="captain-sky-haze" />
+            <div className="captain-sun"><i /></div>
+            <div className="captain-cloud cloud-one"><i /><i /><i /></div>
+            <div className="captain-cloud cloud-two"><i /><i /><i /></div>
+            <div className="captain-cloud cloud-three"><i /><i /><i /></div>
+            <div className="captain-gulls"><i /><i /><i /></div>
           </div>
+          <div className="riviera-mountains mountains-far" aria-hidden="true" />
+          <div className="riviera-mountains mountains-near" aria-hidden="true" />
           <div className="captain-horizon" aria-hidden="true">
+            <div className="riviera-cliff cliff-left"><i /><i /><i /><i /></div>
+            <div className="riviera-cliff cliff-right"><i /><i /><i /></div>
             <div className="horizon-villas villas-left" />
             <div className="horizon-villas villas-right" />
             <div className="captain-lighthouse"><i /><b /></div>
-            <div className="distant-sail sail-one">◢</div>
-            <div className="distant-sail sail-two">◢</div>
+            <div className="distant-yacht distant-yacht-one"><i /><b /></div>
+            <div className="distant-yacht distant-yacht-two"><i /><b /></div>
           </div>
           <div className="sun-glint" aria-hidden="true" />
+          <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
           <div className="wake-lines" aria-hidden="true" />
           <div className="lane-line lane-line-a" aria-hidden="true" />
           <div className="lane-line lane-line-b" aria-hidden="true" />
@@ -844,8 +956,8 @@ function CaptainRosieGame({ soundOn }) {
               style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
               aria-label={item.label}
             >
-              <span>{item.icon}</span>
-              {item.kind === "medal" && <small>CAPTAIN</small>}
+              {item.kind === "cheese" ? <GoldenCheeseIcon /> : <span>{item.icon}</span>}
+              {item.kind === "cheese" && <small>GOLDEN</small>}
             </div>
           ))}
 
@@ -856,17 +968,7 @@ function CaptainRosieGame({ soundOn }) {
           )}
 
           <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "")}>
-            <div className="yacht-flag">R</div>
-            <div className="yacht-mast" />
-            <div className="yacht-rail" />
-            <div className="captain-rosie-badge">
-              <img src="/captain-rosie.webp" alt="" aria-hidden="true" />
-            </div>
-            <div className="yacht-cabin"><span>⚓</span><i /><i /></div>
-            <div className="yacht-deck" />
-            <div className="yacht-hull"><span>ROSIE I</span><b>🐾</b></div>
-            <div className="yacht-wake" />
-            {boost && <div className="golden-wake" />}
+            <CaptainYachtArt boost={boost} />
           </div>
 
           {!running && (
@@ -881,7 +983,7 @@ function CaptainRosieGame({ soundOn }) {
                   <div className="voyage-stats">
                     <span><b>{score}</b> score</span>
                     <span><b>{bestStreak}</b> best streak</span>
-                    <span><b>{medals}</b> stars</span>
+                    <span><b>{cheeses}</b> Golden Cheese</span>
                   </div>
                   <button type="button" onClick={startGame}>SAIL AGAIN</button>
                 </>
@@ -892,7 +994,7 @@ function CaptainRosieGame({ soundOn }) {
                   <p>Swipe or tap across three lanes. Build streaks to raise your multiplier. Fill the brass gauge and unleash Full Steam for double points.</p>
                   <div className="start-mission">
                     <span><b>650</b> Admiral target</span>
-                    <span><b>✦</b> Rare captain stars</span>
+                    <span><b className="mini-cheese-count"><GoldenCheeseIcon compact /></b> Golden Cheese</span>
                     <span><b>3</b> Hull integrity</span>
                   </div>
                   <button type="button" onClick={startGame}>CAST OFF</button>
@@ -931,7 +1033,7 @@ function CaptainRosieGame({ soundOn }) {
         <div className="captain-cargo-key">
           <span><b className="cargo-ball">🎾</b><i>+10</i>Tennis</span>
           <span><b className="cargo-treat">🦴</b><i>+20</i>Treat</span>
-          <span><b className="cargo-medal">✦</b><i>+40</i>Star</span>
+          <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese</span>
           <span><b className="cargo-buoy">◆</b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to Admiral target</em></span>
         </div>
