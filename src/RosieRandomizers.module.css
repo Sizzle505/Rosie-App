@@ -617,26 +617,69 @@
 
 @media (max-width: 680px) {
   .page { padding: 10px 8px 96px; }
-  .hero { min-height: 178px; padding: 21px 17px; border-radius: 19px; }
-  .heroCopy { max-width: 72%; }
-  .kicker { font-size: 7px; gap: 6px; letter-spacing: .14em; }
-  .kicker span { width: 13px; }
-  .hero h1 { margin-top: 8px; font-size: clamp(34px, 10vw, 46px); line-height: .94; }
-  .hero p { max-width: 240px; font-size: 11px; }
-  .houseRule { max-width: 230px; margin-top: 12px; padding-top: 8px; font-size: 6px; line-height: 1.5; letter-spacing: .1em; }
-  .hostPortrait { right: -9px; bottom: -9px; width: 154px; height: 168px; }
-  .hostPortrait::before { inset: 31px 17px 18px; }
-  .heroSignet { right: 145px; top: 44px; width: 90px; height: auto; transform: none; filter: none; }
+  .hero {
+    min-height: 216px;
+    padding: 20px 15px;
+    border-radius: 19px;
+    align-items: stretch;
+  }
+  .heroCopy {
+    max-width: 54%;
+    align-self: center;
+  }
+  .kicker {
+    font-size: 6px;
+    gap: 5px;
+    letter-spacing: .12em;
+    white-space: nowrap;
+  }
+  .kicker span { width: 10px; }
+  .hero h1 {
+    margin-top: 8px;
+    font-size: clamp(32px, 8.7vw, 38px);
+    line-height: .91;
+    letter-spacing: -.045em;
+  }
+  .hero p {
+    max-width: 180px;
+    margin-top: 9px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+  .houseRule {
+    max-width: 190px;
+    margin-top: 11px;
+    padding-top: 8px;
+    font-size: 5.5px;
+    line-height: 1.45;
+    letter-spacing: .085em;
+  }
+  .hostPortrait {
+    right: -8px;
+    bottom: -7px;
+    width: 152px;
+    height: 174px;
+  }
+  .hostPortrait::before { inset: 32px 14px 17px; }
+  .heroSignet {
+    right: 112px;
+    top: 56px;
+    width: 78px;
+    height: auto;
+    transform: none;
+    filter: none;
+  }
   .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
   .ivoryCard { min-height: 430px; padding: 18px 17px 20px; border-radius: 19px; }
   .ivoryCard h2 { font-size: 22px; }
-  .coinScene, .diceScene { min-height: 225px; }
+  .coinScene { min-height: 225px; }
+  .diceScene { min-height: 205px; }
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
-  .dieRig, .dieBody { width: 202px; height: 202px; }
-  .decorativeDie { width: 88px; height: 88px; }
-  .decorativeDieLeft { left: 14%; }
-  .decorativeDieRight { left: 86%; }
+  .dieRig, .dieBody { width: 174px; height: 174px; }
+  .decorativeDie { width: 78px; height: 78px; }
+  .decorativeDieLeft { left: 17%; }
+  .decorativeDieRight { left: 83%; }
   .wheelSalon { gap: 10px; margin-top: 9px; padding: 14px 9px; border-radius: 20px; }
   .wheelStage { padding: 9px 0 5px; }
   .wheelHeading h2 { font-size: 25px; }
