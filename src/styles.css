@@ -987,3 +987,680 @@ main {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   ROSIE'S CHEESE BOARD EXAM
+   ───────────────────────────────────────────────────────────── */
+.cheese-game-page {
+  width: min(100%, 1080px);
+  padding-top: 18px;
+}
+
+.cheese-hero {
+  position: relative;
+  min-height: 252px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr);
+  gap: 20px;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 30px;
+  border: 1px solid rgba(221, 181, 105, .38);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 75% 20%, rgba(210, 166, 83, .15), transparent 28%),
+    linear-gradient(135deg, #2b0f1b 0%, #160c14 54%, #0c090b 100%);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.34),
+    inset 0 0 0 1px rgba(255,255,255,.02);
+}
+.cheese-hero::before {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  border: 1px solid rgba(222,181,103,.16);
+  border-radius: 17px;
+  pointer-events: none;
+}
+.cheese-hero::after {
+  content: "✦  ✦  ✦";
+  position: absolute;
+  right: 34px;
+  bottom: 18px;
+  color: rgba(224,184,105,.16);
+  font-size: 18px;
+  letter-spacing: .55em;
+}
+
+.cheese-hero-copy {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+}
+.cheese-eyebrow {
+  color: #b89663;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .19em;
+}
+.cheese-hero h1 {
+  max-width: 710px;
+  margin: 10px 0 9px;
+  color: #f3d991;
+  font-size: clamp(34px, 5.2vw, 58px);
+  line-height: .94;
+  letter-spacing: -.025em;
+  text-shadow: 0 3px 0 #5d371a, 0 11px 24px rgba(0,0,0,.38);
+}
+.cheese-hero-copy > p {
+  max-width: 660px;
+  margin: 0;
+  color: #cdbfb3;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.doctor-ribbon {
+  width: fit-content;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 15px 8px 8px;
+  border: 1px solid rgba(223,184,102,.25);
+  border-radius: 999px;
+  background: rgba(7,5,7,.32);
+}
+.doctor-ribbon strong,
+.doctor-ribbon small {
+  display: block;
+}
+.doctor-ribbon strong {
+  color: #f4dfac;
+  font-size: 10px;
+  letter-spacing: .13em;
+}
+.doctor-ribbon small {
+  margin-top: 2px;
+  color: #8e7c71;
+  font-size: 9px;
+}
+.doctor-seal {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #bc8b40;
+  border-radius: 50%;
+  background: linear-gradient(145deg,#e0b866,#7e4c20);
+  font-size: 16px;
+  box-shadow: inset 0 1px rgba(255,255,255,.45), 0 4px 12px rgba(0,0,0,.24);
+}
+
+.cheese-diploma-card {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  min-height: 185px;
+  padding: 30px 24px 24px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: #3c2517;
+  transform: rotate(1.2deg);
+  border: 8px double #9e6d2f;
+  outline: 1px solid #e7c784;
+  outline-offset: -13px;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255,255,255,.8), transparent 35%),
+    linear-gradient(150deg,#f8e8bd,#d9b77c);
+  box-shadow: 0 18px 34px rgba(0,0,0,.35);
+}
+.cheese-diploma-card::before,
+.cheese-diploma-card::after {
+  content: "❦";
+  position: absolute;
+  color: #986728;
+  font-size: 20px;
+}
+.cheese-diploma-card::before { left: 15px; top: 13px; }
+.cheese-diploma-card::after { right: 15px; bottom: 13px; transform: rotate(180deg); }
+.cheese-diploma-card span {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+.cheese-diploma-card strong {
+  margin-top: 7px;
+  font-size: 28px;
+  font-style: italic;
+  line-height: 1;
+}
+.cheese-diploma-card em {
+  margin-top: 6px;
+  color: #805826;
+  font-size: 12px;
+  font-weight: 700;
+}
+.diploma-rule {
+  width: 70%;
+  height: 1px;
+  margin: 0 auto 10px;
+  background: #9c7135;
+}
+.wax-seal {
+  position: absolute;
+  left: 50%;
+  bottom: -23px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%) rotate(-7deg);
+  border: 2px solid #72231f;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #b54a37, #721d1a 72%);
+  color: #e9ad83;
+  font-size: 19px;
+  font-weight: 700;
+  box-shadow: 0 5px 13px rgba(0,0,0,.34);
+}
+
+.cheese-scorebar {
+  margin: 18px 0 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) auto;
+  gap: 8px;
+}
+.cheese-scorebar > div,
+.cheese-scorebar > button {
+  min-height: 59px;
+  border: 1px solid rgba(215,177,103,.22);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0, rgba(129,62,94,.12), transparent 60%),
+    rgba(24,14,21,.92);
+}
+.cheese-scorebar > div {
+  padding: 10px 14px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+.cheese-scorebar span {
+  color: #7f706a;
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+.cheese-scorebar strong {
+  margin-top: 3px;
+  color: #f0d497;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.cheese-scorebar button {
+  padding: 0 22px;
+  color: #ddbf83;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.cheese-scorebar button:hover {
+  border-color: rgba(229,194,124,.45);
+  background: rgba(63,31,46,.72);
+}
+.cheese-scorebar button:active { transform: translateY(1px); }
+
+.cheese-game-frame {
+  padding: 24px;
+  border: 1px solid rgba(220,180,103,.25);
+  border-radius: 24px;
+  background:
+    linear-gradient(rgba(14,9,12,.89),rgba(14,9,12,.89)),
+    repeating-linear-gradient(90deg, #2b1a14 0 3px, #23140f 3px 6px);
+  box-shadow:
+    0 24px 65px rgba(0,0,0,.3),
+    inset 0 0 0 5px rgba(93,56,33,.13);
+}
+
+.cheese-game-heading {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 28px;
+}
+.cheese-game-heading > div > span {
+  color: #8c7767;
+  font-size: 8px;
+  letter-spacing: .18em;
+}
+.cheese-game-heading h2 {
+  margin: 2px 0 0;
+  color: #edd59d;
+  font-size: 27px;
+  font-style: italic;
+  font-weight: 500;
+}
+.cheese-game-heading p {
+  max-width: 460px;
+  margin: 0;
+  color: #958780;
+  text-align: right;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.cheese-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  perspective: 1200px;
+}
+
+.cheese-card {
+  position: relative;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: none;
+  aspect-ratio: .78;
+  perspective: 900px;
+}
+.cheese-card-inner {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.2,.78,.25,1), filter .25s ease;
+}
+.cheese-card.is-flipped .cheese-card-inner {
+  transform: rotateY(180deg);
+}
+.cheese-card:not(.is-flipped):hover .cheese-card-inner {
+  transform: translateY(-4px) rotateX(2deg);
+  filter: brightness(1.09);
+}
+.cheese-card-back,
+.cheese-card-front {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: grid;
+  place-content: center;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  border: 1px solid #bf8e45;
+  box-shadow:
+    0 9px 18px rgba(0,0,0,.28),
+    inset 0 0 0 4px rgba(248,217,155,.08);
+}
+.cheese-card-back {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(235,190,101,.1), transparent 30%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.018) 0 1px, transparent 1px 8px),
+    linear-gradient(145deg,#5e1230,#2f0b1f 62%,#190a13);
+  color: #e4c687;
+  text-align: center;
+}
+.cheese-card-back::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(230,196,128,.28);
+  border-radius: 11px;
+}
+.cheese-card-back::after {
+  content: "";
+  position: absolute;
+  inset: 15px;
+  border: 1px dashed rgba(225,187,113,.2);
+  border-radius: 50% 50% 15px 15px;
+}
+.card-seal {
+  position: relative;
+  z-index: 2;
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-content: center;
+  border: 1px solid #d6aa5c;
+  border-radius: 50%;
+  background: rgba(15,7,12,.38);
+  box-shadow: 0 0 0 5px rgba(208,163,82,.06);
+}
+.card-seal b {
+  font-size: 15px;
+  font-style: italic;
+}
+.card-seal i {
+  margin-top: 2px;
+  font-size: 19px;
+  font-style: normal;
+  filter: sepia(1) saturate(.5);
+}
+.cheese-card-back small {
+  position: relative;
+  z-index: 2;
+  color: #c7a86f;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .16em;
+}
+.card-corner {
+  position: absolute;
+  z-index: 2;
+  color: #b88643;
+  font-size: 11px;
+}
+.card-corner.top { left: 14px; top: 13px; }
+.card-corner.bottom { right: 14px; bottom: 13px; transform: rotate(180deg); }
+
+.cheese-card-front {
+  padding: 11px 10px 14px;
+  transform: rotateY(180deg);
+  grid-template-rows: 1fr auto auto;
+  place-content: stretch;
+  background:
+    radial-gradient(circle at 50% 9%, rgba(255,255,255,.82), transparent 32%),
+    linear-gradient(180deg,#f7e9c7 0%,#dec18c 100%);
+  color: #4b2d19;
+}
+.cheese-card-front::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(119,73,31,.24);
+  border-radius: 11px;
+  pointer-events: none;
+}
+.cheese-art {
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+.cheese-art svg {
+  width: 100%;
+  height: 100%;
+  max-height: 140px;
+  overflow: visible;
+  filter: drop-shadow(0 6px 5px rgba(79,48,22,.14));
+}
+.cheese-card-front strong {
+  position: relative;
+  z-index: 2;
+  display: block;
+  color: #4d2d18;
+  text-align: center;
+  font-size: clamp(14px, 2vw, 22px);
+  font-style: italic;
+  line-height: 1;
+}
+.cheese-card-front > small {
+  position: relative;
+  z-index: 2;
+  display: block;
+  min-height: 23px;
+  margin-top: 6px;
+  color: #86694c;
+  text-align: center;
+  font-size: 8px;
+  line-height: 1.25;
+  letter-spacing: .02em;
+}
+.cheese-card.is-matched .cheese-card-front {
+  border-color: #e2bc6b;
+  box-shadow:
+    0 0 0 2px rgba(226,188,107,.13),
+    0 0 27px rgba(220,174,88,.22),
+    inset 0 0 0 4px rgba(255,245,210,.25);
+}
+.cheese-card.is-matched .cheese-card-front::after {
+  content: "MATCHED";
+  position: absolute;
+  top: 10px;
+  right: 9px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: #6c4020;
+  color: #f5dda8;
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+
+/* Individual cheese illustration palette */
+.cheese-shadow { fill: rgba(89,58,31,.18); }
+.cheese-rind { fill: #d9c59f; }
+.cheese-cream { fill: #fff5d9; }
+.cheese-edge { fill: #bfa783; }
+.swiss-body { fill: #efc83d; }
+.swiss-hole { fill: #c99a25; }
+.cheddar-top { fill: #f09522; }
+.cheddar-side { fill: #c86414; }
+.cheddar-face { fill: #de7916; }
+.cheddar-score { stroke: #a65013; stroke-width: 3; stroke-linecap: round; opacity: .5; }
+.blue-body { fill: #eee0ad; }
+.blue-vein { fill: none; stroke: #60758e; stroke-width: 6; stroke-linecap: round; opacity: .85; }
+.blue-vein.thin { stroke-width: 4; }
+.gouda-wax { fill: #e0492e; }
+.gouda-side { fill: #b62d24; }
+.gouda-shine { fill: none; stroke: rgba(255,210,173,.65); stroke-width: 4; stroke-linecap: round; }
+.parm-body { fill: #edce7c; }
+.parm-rind { fill: #9c6d2e; }
+.parm-speck { fill: #9f763d; opacity: .7; }
+.basil-leaf { fill: #79935d; }
+.mozz-ball { fill: #fff9df; stroke: #dfd5b5; stroke-width: 2; }
+.mozz-ball.front { fill: #f5efd3; }
+.mozz-highlight { fill: rgba(255,255,255,.74); }
+.goat-log { fill: #f4f0db; stroke: #d2c8a8; stroke-width: 2; }
+.goat-end { fill: #fffbed; stroke: #d8cfb3; stroke-width: 2; }
+.goat-end.shade { fill: #ded4b8; }
+.goat-ridge { fill: none; stroke: #d2c6a5; stroke-width: 3; stroke-linecap: round; }
+
+.cheese-victory {
+  position: relative;
+  margin-top: 14px;
+  padding: 28px 22px 25px;
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid #b88944;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 0, rgba(235,193,105,.2), transparent 43%),
+    linear-gradient(145deg,#4f1730,#210d1c 60%,#110a0f);
+  box-shadow: 0 22px 52px rgba(0,0,0,.3);
+  animation: cheeseVictoryIn .55s cubic-bezier(.2,.8,.2,1);
+}
+.cheese-victory::before,
+.cheese-victory::after {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  color: rgba(226,185,99,.23);
+  font-size: 54px;
+}
+.cheese-victory::before { left: 8%; transform: rotate(-12deg); }
+.cheese-victory::after { right: 8%; transform: rotate(12deg); }
+@keyframes cheeseVictoryIn {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+.victory-medallion {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 9px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #e3bc69;
+  border-radius: 50%;
+  background: linear-gradient(145deg,#e3b65c,#704219);
+  font-size: 23px;
+  box-shadow: 0 0 24px rgba(220,174,85,.2);
+}
+.cheese-victory > span {
+  color: #c19c5d;
+  font-size: 8px;
+  letter-spacing: .22em;
+}
+.cheese-victory h2 {
+  margin: 6px 0 5px;
+  color: #f5dfaa;
+  font-size: 27px;
+  font-style: italic;
+}
+.cheese-victory p {
+  margin: 0;
+  color: #9f8f85;
+  font-size: 12px;
+}
+.cheese-victory button {
+  margin-top: 17px;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px solid #c0924c;
+  border-radius: 999px;
+  background: linear-gradient(#e3bd6c,#9e662c);
+  color: #2b180d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+@media (max-width: 820px) {
+  .cheese-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 25px;
+  }
+  .cheese-diploma-card {
+    width: min(100%, 420px);
+    min-height: 160px;
+    justify-self: center;
+  }
+  .cheese-grid { gap: 10px; }
+  .cheese-card-front strong { font-size: 16px; }
+}
+
+@media (max-width: 620px) {
+  .cheese-game-page { padding-top: 8px; }
+
+  .cheese-hero {
+    padding: 20px 17px 26px;
+    border-radius: 18px;
+    gap: 17px;
+  }
+  .cheese-eyebrow {
+    font-size: 6.8px;
+    line-height: 1.45;
+  }
+  .cheese-hero h1 {
+    margin-top: 8px;
+    font-size: clamp(31px, 10vw, 43px);
+  }
+  .cheese-hero-copy > p {
+    font-size: 12px;
+  }
+  .doctor-ribbon {
+    margin-top: 15px;
+  }
+  .cheese-diploma-card {
+    min-height: 137px;
+    padding: 23px 18px 18px;
+    border-width: 6px;
+  }
+  .cheese-diploma-card strong { font-size: 24px; }
+
+  .cheese-scorebar {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 12px;
+  }
+  .cheese-scorebar > div { min-height: 53px; }
+  .cheese-scorebar > button {
+    grid-column: 1 / -1;
+    min-height: 42px;
+  }
+
+  .cheese-game-frame {
+    padding: 14px 10px 12px;
+    border-radius: 18px;
+  }
+  .cheese-game-heading {
+    margin: 0 4px 13px;
+    display: block;
+  }
+  .cheese-game-heading h2 {
+    font-size: 23px;
+  }
+  .cheese-game-heading p {
+    margin-top: 5px;
+    text-align: left;
+    font-size: 10px;
+  }
+
+  .cheese-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+  }
+  .cheese-card {
+    border-radius: 10px;
+  }
+  .cheese-card-back,
+  .cheese-card-front {
+    border-radius: 10px;
+  }
+  .cheese-card-back::before { inset: 5px; border-radius: 7px; }
+  .cheese-card-back::after { inset: 9px; }
+  .card-seal {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 5px;
+  }
+  .card-seal b { font-size: 9px; }
+  .card-seal i { font-size: 11px; }
+  .cheese-card-back small {
+    font-size: 5.2px;
+    letter-spacing: .1em;
+  }
+  .card-corner { display: none; }
+
+  .cheese-card-front {
+    padding: 5px 4px 7px;
+  }
+  .cheese-card-front::before { inset: 4px; border-radius: 7px; }
+  .cheese-art svg { max-height: 76px; }
+  .cheese-card-front strong {
+    font-size: clamp(9px, 3vw, 13px);
+  }
+  .cheese-card-front > small {
+    min-height: 16px;
+    margin-top: 3px;
+    font-size: 5.3px;
+  }
+  .cheese-card.is-matched .cheese-card-front::after {
+    top: 5px;
+    right: 4px;
+    padding: 2px 4px;
+    font-size: 4px;
+  }
+
+  .cheese-victory {
+    padding: 23px 16px 21px;
+  }
+  .cheese-victory h2 { font-size: 22px; }
+}
+
+@media (max-width: 390px) {
+  .cheese-grid { gap: 5px; }
+  .cheese-game-frame { padding-left: 7px; padding-right: 7px; }
+  .card-seal {
+    width: 40px;
+    height: 40px;
+  }
+  .cheese-art svg { max-height: 68px; }
+}
