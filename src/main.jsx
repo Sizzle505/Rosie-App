@@ -331,6 +331,15 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
 
+          {/* A Rosie-only portrait layer.  The stage image never moves; the layer is
+              revealed only under the whistle's smoke, then pivots in place. */}
+          <img
+            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            src="/rosie-turn-head.svg"
+            alt=""
+            aria-hidden="true"
+          />
+
           <div className="lantern-life" aria-hidden="true">
             <span className="lantern-glow lantern-glow-left"><i /></span>
             <span className="lantern-glow lantern-glow-right"><i /></span>
