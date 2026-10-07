@@ -7588,3 +7588,19 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .captain-game-page .sea-pickup-buoy { background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.25),transparent 19%),rgba(106,32,37,.62); }
 .captain-game-page .sea-pickup-buoy .pickup-art { transform:rotate(2deg); }
 @media (max-width:700px) { .captain-game-page .sea-pickup .pickup-art { width:40px; height:40px; } .captain-game-page .sea-pickup-ball,.captain-game-page .sea-pickup-treat,.captain-game-page .sea-pickup-buoy { width:47px; height:47px; } }
+
+
+/* Rosie Card Vault integration -------------------------------------------- */
+.bottom-nav { grid-template-columns: repeat(5, 1fr); }
+
+.app-shell.is-vault-page {
+  min-height: 100vh;
+  padding-bottom: 0;
+  background: #050505;
+}
+
+.is-vault-page .topbar { display: none; }
+
+@media (max-width: 620px) {
+  .bottom-nav button small { font-size: 8.25px; letter-spacing: -.015em; }
+}
