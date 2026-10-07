@@ -1,0 +1,3940 @@
+/* Fortune page atmosphere and interaction layer */
+
+/* WHISTLE */
+.whistle-button {
+  position: relative;
+  overflow: visible;
+  color: #f4d48d;
+  box-shadow:
+    0 0 18px rgba(202,150,77,.12),
+    inset 0 0 0 1px rgba(0,0,0,.32);
+}
+.whistle-button::before,
+.whistle-button::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+.whistle-button::after {
+  inset: 5px;
+  border: 1px solid rgba(241,207,133,.14);
+}
+.whistle-button::before {
+  inset: -6px;
+  border: 1px solid rgba(189,118,216,0);
+  transform: scale(.7);
+}
+.whistle-button:active {
+  transform: scale(.94);
+  color: #fff0b8;
+  box-shadow:
+    0 0 25px rgba(178,112,206,.28),
+    inset 0 0 0 1px rgba(0,0,0,.32);
+}
+.whistle-button:active::before {
+  animation: whistleWave .58s ease-out;
+}
+@keyframes whistleWave {
+  0% { opacity: 0; transform: scale(.65); border-color: rgba(230,190,113,.65); }
+  35% { opacity: .85; }
+  100% { opacity: 0; transform: scale(1.42); border-color: rgba(181,111,215,.1); }
+}
+
+/* GENTLE BOOTH LIFE */
+.curtain {
+  transform-origin: 50% 2%;
+  will-change: transform;
+}
+.curtain-left {
+  animation: curtainSwayLeft 7.5s ease-in-out infinite;
+}
+.curtain-right {
+  animation: curtainSwayRight 8.2s ease-in-out infinite -.9s;
+}
+@keyframes curtainSwayLeft {
+  0%, 100% { transform: translateX(0) skewX(0deg); }
+  35% { transform: translateX(1.4px) skewX(.8deg); }
+  68% { transform: translateX(-1px) skewX(-.55deg); }
+}
+@keyframes curtainSwayRight {
+  0%, 100% { transform: scaleX(-1) translateX(0) skewX(0deg); }
+  38% { transform: scaleX(-1) translateX(1.3px) skewX(.75deg); }
+  72% { transform: scaleX(-1) translateX(-1px) skewX(-.5deg); }
+}
+
+.lantern-life {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.lantern-glow {
+  position: absolute;
+  top: 15%;
+  width: 64px;
+  height: 105px;
+  transform-origin: 50% -14px;
+  opacity: .9;
+  animation: lanternSway 5.9s ease-in-out infinite;
+}
+.lantern-glow-left { left: 8.5%; }
+.lantern-glow-right {
+  right: 8.5%;
+  animation-duration: 6.6s;
+  animation-delay: -2.8s;
+  animation-direction: reverse;
+}
+.lantern-glow i {
+  position: absolute;
+  left: 50%;
+  top: 27%;
+  width: 36px;
+  height: 54px;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse,
+      rgba(255,238,170,.4) 0 13%,
+      rgba(246,184,80,.19) 35%,
+      rgba(194,98,39,.08) 56%,
+      transparent 75%);
+  filter: blur(4px);
+  mix-blend-mode: screen;
+  animation: lanternFlicker 2.35s ease-in-out infinite;
+}
+.lantern-glow-right i { animation-delay: -1.15s; }
+@keyframes lanternSway {
+  0%, 100% { transform: rotate(-1deg) translateY(0); }
+  50% { transform: rotate(1.3deg) translateY(1px); }
+}
+@keyframes lanternFlicker {
+  0%, 100% { opacity: .58; transform: translate(-50%,-50%) scale(.96); }
+  22% { opacity: .84; }
+  49% { opacity: .67; transform: translate(-50%,-50%) scale(1.05); }
+  72% { opacity: .92; }
+}
+
+.cabinet-lights {
+  animation: bulbs 2.8s ease-in-out infinite alternate, bulbBreath 6.2s ease-in-out infinite;
+}
+@keyframes bulbBreath {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(.7px); }
+}
+
+/* CRYSTAL BALL - continuous moving energy, no opaque replacement ball */
+.crystal-energy {
+  --energy-purple: rgba(185,112,235,.72);
+  --energy-violet: rgba(118,61,184,.6);
+  --energy-gold: rgba(246,202,106,.58);
+  position: absolute;
+  z-index: 17;
+  left: 50%;
+  bottom: 57px;
+  width: 202px;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: .98;
+  filter: drop-shadow(0 0 18px rgba(145,77,193,.28));
+  isolation: isolate;
+}
+.crystal-energy.tone-positive {
+  --energy-purple: rgba(178,115,220,.65);
+  --energy-gold: rgba(255,215,112,.78);
+}
+.crystal-energy.tone-negative {
+  --energy-purple: rgba(199,79,146,.62);
+  --energy-violet: rgba(105,42,134,.58);
+  --energy-gold: rgba(224,157,88,.44);
+}
+
+.energy-halo,
+.energy-vortex,
+.energy-ring,
+.energy-ribbon,
+.energy-paw-core,
+.energy-mist,
+.energy-flare {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.energy-halo {
+  width: 86%;
+  height: 86%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.14), transparent 12%),
+    radial-gradient(circle at 58% 64%, rgba(199,137,244,.08), transparent 23%),
+    radial-gradient(circle, rgba(151,87,203,.08) 0 39%, rgba(126,66,179,.13) 57%, transparent 73%);
+  box-shadow:
+    0 0 42px rgba(171,102,218,.24),
+    inset 0 0 34px rgba(240,207,255,.07);
+  animation: crystalBreathe 4.4s ease-in-out infinite;
+}
+.energy-vortex {
+  width: 72%;
+  height: 72%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 20deg,
+      transparent 0 8%,
+      rgba(210,153,249,.03) 12%,
+      rgba(180,102,232,.18) 19%,
+      transparent 30% 44%,
+      rgba(246,200,103,.14) 52%,
+      rgba(193,123,235,.07) 61%,
+      transparent 72% 100%);
+  filter: blur(3px);
+  mix-blend-mode: screen;
+  animation: vortexSpin 8.8s linear infinite;
+}
+.energy-ribbon {
+  width: 70%;
+  height: 38%;
+  margin-left: -35%;
+  margin-top: -19%;
+  border-radius: 50%;
+  border-top: 2px solid rgba(227,176,255,.28);
+  border-right: 1px solid rgba(247,208,117,.32);
+  border-bottom: 1px solid transparent;
+  filter: blur(.15px) drop-shadow(0 0 7px rgba(176,102,225,.3));
+  opacity: .48;
+  animation: ribbonOrbit 5.6s linear infinite;
+}
+.energy-ribbon-b {
+  width: 54%;
+  height: 62%;
+  margin-left: -27%;
+  margin-top: -31%;
+  border-top-color: rgba(246,202,108,.27);
+  border-right-color: rgba(200,135,240,.3);
+  opacity: .35;
+  animation-duration: 7.2s;
+  animation-direction: reverse;
+}
+.energy-ring {
+  width: 77%;
+  height: 39%;
+  margin-left: -38.5%;
+  margin-top: -19.5%;
+  border: 1px solid var(--energy-purple);
+  border-left-color: rgba(239,207,255,.15);
+  border-right-color: var(--energy-gold);
+  border-radius: 50%;
+  opacity: .44;
+  filter: drop-shadow(0 0 6px rgba(155,90,207,.38));
+  transform-origin: 50% 50%;
+}
+.energy-ring-a { animation: crystalOrbitA 7.3s linear infinite; }
+.energy-ring-b {
+  width: 68%;
+  height: 50%;
+  margin-left: -34%;
+  margin-top: -25%;
+  opacity: .34;
+  transform: rotate(58deg);
+  animation: crystalOrbitB 9.4s linear infinite reverse;
+}
+.energy-ring-c {
+  width: 57%;
+  height: 29%;
+  margin-left: -28.5%;
+  margin-top: -14.5%;
+  border-color: rgba(241,194,96,.44);
+  opacity: .3;
+  transform: rotate(-48deg);
+  animation: crystalOrbitC 6.2s linear infinite;
+}
+.energy-mist {
+  width: 67%;
+  height: 67%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 40deg,
+      transparent 0 11%,
+      rgba(198,126,238,.12) 18%,
+      transparent 30% 48%,
+      rgba(238,193,102,.1) 58%,
+      transparent 70% 100%);
+  filter: blur(5px);
+  animation: crystalMist 10.2s linear infinite;
+}
+.energy-paw-core {
+  z-index: 3;
+  transform: translate(-50%,-50%) scale(.82);
+  color: rgba(249,220,158,.38);
+  font-size: 28px;
+  line-height: 1;
+  text-shadow:
+    0 0 9px rgba(247,209,131,.45),
+    0 0 21px rgba(166,94,216,.58);
+  filter: sepia(.35) saturate(.9);
+  animation: pawCore 3.6s ease-in-out infinite;
+}
+.energy-stars {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  animation: starFieldDrift 10.6s linear infinite;
+}
+.energy-stars i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f8db94;
+  box-shadow: 0 0 7px rgba(248,206,115,.82);
+  animation: energyTwinkle 3.1s ease-in-out infinite;
+}
+.energy-stars i:nth-child(1) { left: 20%; top: 24%; animation-delay: -.4s; }
+.energy-stars i:nth-child(2) { left: 68%; top: 16%; animation-delay: -1.7s; }
+.energy-stars i:nth-child(3) { left: 80%; top: 47%; animation-delay: -2.6s; }
+.energy-stars i:nth-child(4) { left: 59%; top: 74%; animation-delay: -.9s; }
+.energy-stars i:nth-child(5) { left: 27%; top: 70%; animation-delay: -2.7s; }
+.energy-stars i:nth-child(6) { left: 12%; top: 48%; animation-delay: -2s; }
+.energy-stars i:nth-child(7) { left: 46%; top: 30%; animation-delay: -1.2s; }
+.energy-stars i:nth-child(8) { left: 51%; top: 62%; animation-delay: -2.4s; }
+.energy-flare {
+  width: 78%;
+  height: 78%;
+  transform: translate(-50%,-50%) scale(.65);
+  border-radius: 50%;
+  opacity: 0;
+  background:
+    radial-gradient(circle,
+      rgba(255,248,221,.72) 0 6%,
+      rgba(234,194,255,.25) 18%,
+      rgba(175,106,222,.09) 40%,
+      transparent 68%);
+  mix-blend-mode: screen;
+}
+
+.crystal-energy.is-consulting {
+  filter: drop-shadow(0 0 28px rgba(184,114,229,.48));
+  animation: consultingEnergy .82s ease-in-out infinite alternate;
+}
+.crystal-energy.is-consulting .energy-ring { opacity: .64; animation-duration: 2.4s; }
+.crystal-energy.is-consulting .energy-ring-b { animation-duration: 3s; }
+.crystal-energy.is-consulting .energy-ring-c { animation-duration: 2s; }
+.crystal-energy.is-consulting .energy-vortex { animation-duration: 3.9s; opacity: 1; }
+.crystal-energy.is-consulting .energy-paw-core { color: rgba(253,225,165,.62); }
+
+.crystal-energy.is-manifesting {
+  filter: drop-shadow(0 0 42px rgba(208,139,249,.7));
+  animation: manifestationPulse .62s ease-in-out 2;
+}
+.crystal-energy.is-manifesting .energy-vortex { animation-duration: 1.35s; }
+.crystal-energy.is-manifesting .energy-ring { opacity: .82; animation-duration: 1.1s; }
+.crystal-energy.is-manifesting .energy-ring-b { animation-duration: 1.45s; }
+.crystal-energy.is-manifesting .energy-ring-c { animation-duration: .95s; }
+.crystal-energy.is-manifesting .energy-ribbon { opacity: .78; animation-duration: 1.25s; }
+.crystal-energy.is-manifesting .energy-flare { animation: crystalFlash 1.25s ease-out forwards; }
+
+@keyframes crystalBreathe {
+  0%, 100% { opacity: .62; transform: translate(-50%,-50%) scale(.95); }
+  50% { opacity: 1; transform: translate(-50%,-50%) scale(1.045); }
+}
+@keyframes vortexSpin {
+  to { transform: translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes ribbonOrbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes crystalOrbitA { to { transform: rotate(360deg); } }
+@keyframes crystalOrbitB {
+  from { transform: rotate(58deg); }
+  to { transform: rotate(418deg); }
+}
+@keyframes crystalOrbitC {
+  from { transform: rotate(-48deg); }
+  to { transform: rotate(312deg); }
+}
+@keyframes crystalMist { to { transform: translate(-50%,-50%) rotate(360deg); } }
+@keyframes pawCore {
+  0%, 100% { opacity: .36; transform: translate(-50%,-50%) scale(.76); }
+  50% { opacity: .76; transform: translate(-50%,-50%) scale(.94); }
+}
+@keyframes starFieldDrift { to { transform: rotate(-360deg); } }
+@keyframes energyTwinkle {
+  0%, 100% { opacity: .12; transform: scale(.45); }
+  48% { opacity: 1; transform: scale(1.55); }
+}
+@keyframes consultingEnergy { to { transform: translateX(-50%) scale(1.05); } }
+@keyframes manifestationPulse {
+  50% { transform: translateX(-50%) scale(1.085); }
+}
+@keyframes crystalFlash {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.45); }
+  18% { opacity: .9; }
+  52% { opacity: .36; transform: translate(-50%,-50%) scale(1.25); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.45); }
+}
+
+/* TURNING ROSIE - broad feathered body region, hidden by an asymmetric magical plume */
+.stage-turning .stage-art {
+  filter: saturate(.88) contrast(1.02) brightness(.68) blur(.45px);
+  transform: scale(1.025);
+}
+.rosie-turn-backdrop {
+  position: absolute;
+  z-index: 4;
+  left: 18%;
+  right: 18%;
+  top: 4%;
+  bottom: 24%;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 45% 45% 38% 38%;
+  background:
+    radial-gradient(ellipse at 50% 36%,
+      rgba(18,8,17,.82) 0 48%,
+      rgba(33,12,29,.66) 63%,
+      rgba(20,8,18,.2) 82%,
+      transparent 100%);
+  filter: blur(2px);
+  transition: opacity .18s ease;
+}
+.rosie-turn-backdrop.is-flipped { opacity: .9; }
+
+.rosie-turn-layer {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 47%;
+  opacity: 0;
+  pointer-events: none;
+  transform: perspective(900px) rotateY(0deg) scale(1.015);
+  transform-origin: 50% 39%;
+  filter: saturate(1.02) contrast(1.03) brightness(.91);
+  clip-path: polygon(20% 0,80% 0,81% 66%,72% 76%,61% 80%,39% 80%,28% 76%,19% 66%);
+  -webkit-mask-image: radial-gradient(ellipse 40% 48% at 50% 39%,
+    #000 0 70%,
+    rgba(0,0,0,.98) 80%,
+    rgba(0,0,0,.62) 90%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 40% 48% at 50% 39%,
+    #000 0 70%,
+    rgba(0,0,0,.98) 80%,
+    rgba(0,0,0,.62) 90%,
+    transparent 100%);
+  transition:
+    opacity .22s ease,
+    transform .58s cubic-bezier(.2,.78,.18,1),
+    filter .42s ease;
+  will-change: transform, opacity;
+}
+.rosie-turn-layer.is-flipped {
+  opacity: 1;
+  transform: perspective(900px) rotateY(180deg) scale(1.025);
+}
+.rosie-turn-layer.is-turning {
+  filter: saturate(1.14) contrast(1.04) brightness(.84);
+}
+.rosie-turn-layer.stage-art-consulting {
+  filter: saturate(1.08) contrast(1.05) brightness(.76);
+}
+.rosie-turn-layer.is-flipped.stage-art-consulting {
+  transform: perspective(900px) rotateY(180deg) scale(1.04);
+}
+
+.flip-magic {
+  position: absolute;
+  z-index: 16;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.smoke-wisp {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  border-radius: 48% 52% 58% 42%;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse at 45% 48%,
+      rgba(206,129,242,.7) 0 15%,
+      rgba(123,57,157,.57) 34%,
+      rgba(65,24,91,.22) 58%,
+      transparent 76%);
+  filter: blur(9px);
+  mix-blend-mode: screen;
+  animation: smokePlume .9s cubic-bezier(.12,.72,.16,1) forwards;
+  --sx: 1;
+  --sy: 1;
+  --dx: 0px;
+  --dy: -80px;
+  --rot: 0deg;
+}
+.smoke-wisp-a {
+  width: 170px; height: 230px; margin: -128px 0 0 -88px;
+  --dx: -16px; --dy: -78px; --rot: -9deg;
+}
+.smoke-wisp-b {
+  width: 145px; height: 190px; margin: -102px 0 0 -42px;
+  --dx: 38px; --dy: -92px; --rot: 14deg;
+  animation-delay: .04s;
+}
+.smoke-wisp-c {
+  width: 130px; height: 165px; margin: -72px 0 0 -103px;
+  --dx: -58px; --dy: -62px; --rot: -18deg;
+  animation-delay: .08s;
+}
+.smoke-wisp-d {
+  width: 112px; height: 145px; margin: -135px 0 0 8px;
+  --dx: 52px; --dy: -110px; --rot: 22deg;
+  animation-delay: .1s;
+}
+.smoke-wisp-e {
+  width: 118px; height: 138px; margin: -30px 0 0 -58px;
+  --dx: 4px; --dy: -48px; --rot: 6deg;
+  animation-delay: .06s;
+}
+.flip-flash {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 135px;
+  height: 230px;
+  margin: -115px 0 0 -67px;
+  border-radius: 50%;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse,
+      rgba(255,235,179,.58) 0 7%,
+      rgba(221,167,251,.2) 24%,
+      transparent 65%);
+  mix-blend-mode: screen;
+  animation: flipFlash .72s ease-out forwards;
+}
+.flip-sparkles {
+  position: absolute;
+  inset: 0;
+}
+.flip-sparkles i {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 5px;
+  height: 5px;
+  margin: -2px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #f7d98f;
+  box-shadow:
+    0 0 7px #f8cf71,
+    0 0 13px rgba(166,88,218,.82);
+  animation: sparkleBurst .82s cubic-bezier(.1,.7,.2,1) forwards;
+  --tx: 0px;
+  --ty: -80px;
+}
+.flip-sparkles i:nth-child(1) { --tx: -92px; --ty: -88px; }
+.flip-sparkles i:nth-child(2) { --tx: -52px; --ty: -132px; animation-delay: .03s; }
+.flip-sparkles i:nth-child(3) { --tx: -12px; --ty: -145px; animation-delay: .07s; }
+.flip-sparkles i:nth-child(4) { --tx: 43px; --ty: -124px; animation-delay: .02s; }
+.flip-sparkles i:nth-child(5) { --tx: 91px; --ty: -83px; animation-delay: .08s; }
+.flip-sparkles i:nth-child(6) { --tx: -105px; --ty: -35px; animation-delay: .09s; }
+.flip-sparkles i:nth-child(7) { --tx: 104px; --ty: -24px; animation-delay: .05s; }
+.flip-sparkles i:nth-child(8) { --tx: -80px; --ty: 32px; animation-delay: .01s; }
+.flip-sparkles i:nth-child(9) { --tx: 75px; --ty: 40px; animation-delay: .11s; }
+.flip-sparkles i:nth-child(10) { --tx: -30px; --ty: 54px; animation-delay: .04s; }
+.flip-sparkles i:nth-child(11) { --tx: 18px; --ty: 58px; animation-delay: .12s; }
+.flip-sparkles i:nth-child(12) { --tx: 0px; --ty: -170px; animation-delay: .06s; }
+
+@keyframes smokePlume {
+  0% { opacity: 0; transform: translate(0,22px) scale(.35) rotate(0deg); }
+  20% { opacity: .88; }
+  54% { opacity: .72; }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx),var(--dy)) scale(1.5,1.72) rotate(var(--rot));
+  }
+}
+@keyframes flipFlash {
+  0% { opacity: 0; transform: scale(.5); }
+  28% { opacity: .75; }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+@keyframes sparkleBurst {
+  0% { opacity: 0; transform: translate(0,0) scale(.3) rotate(0); }
+  19% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--tx),var(--ty)) scale(.85) rotate(170deg); }
+}
+
+/* MYSTICAL ANSWER DELIVERY */
+.machine-manifesting {
+  box-shadow:
+    0 28px 90px rgba(0,0,0,.62),
+    0 0 0 6px rgba(203,164,93,.035),
+    0 0 54px rgba(154,89,203,.28),
+    inset 0 0 25px rgba(255,227,163,.27);
+  animation: cabinetAwaken 1.35s ease-in-out;
+}
+.stage-manifesting .stage-art {
+  filter: saturate(1.15) contrast(1.08) brightness(.72);
+  transform: scale(1.035);
+}
+.stage-manifesting .star-dust i {
+  animation-duration: .9s;
+  opacity: .9;
+}
+@keyframes cabinetAwaken {
+  0% { filter: brightness(1); }
+  30% { filter: brightness(1.08); }
+  100% { filter: brightness(1); }
+}
+
+.fortune-lens {
+  z-index: 18;
+}
+.fortune-lens.is-consulting,
+.fortune-lens.has-answer {
+  opacity: 1;
+}
+.fortune-lens.is-consulting {
+  background:
+    radial-gradient(circle,
+      rgba(46,22,66,.04) 0 48%,
+      rgba(98,59,121,.08) 64%,
+      transparent 74%);
+  box-shadow: 0 0 42px rgba(180,115,224,.26);
+}
+.lens-consulting {
+  gap: 6px;
+}
+.lens-consulting em {
+  color: rgba(225,203,222,.64);
+  font-size: 8px;
+  font-style: italic;
+  letter-spacing: .015em;
+}
+.consulting-runes {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  margin-bottom: -8px;
+  animation: runeOrbit 3.8s linear infinite;
+}
+.consulting-runes i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: #e6c678;
+  font-size: 11px;
+  font-style: normal;
+  text-shadow: 0 0 8px rgba(199,136,235,.78);
+}
+.consulting-runes i:nth-child(1) { transform: translate(-50%,-50%) translateY(-30px); }
+.consulting-runes i:nth-child(2) { transform: translate(-50%,-50%) translateX(30px); }
+.consulting-runes i:nth-child(3) { transform: translate(-50%,-50%) translateY(30px); }
+.consulting-runes i:nth-child(4) { transform: translate(-50%,-50%) translateX(-30px); }
+@keyframes runeOrbit { to { transform: rotate(360deg); } }
+
+.fortune-lens.has-answer {
+  width: 176px;
+  padding: 25px 18px;
+  border: 0;
+  overflow: visible;
+  background:
+    radial-gradient(circle,
+      rgba(18,8,29,.64) 0 34%,
+      rgba(42,19,56,.43) 52%,
+      rgba(92,48,108,.12) 70%,
+      transparent 83%);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.fortune-lens.has-answer::before {
+  inset: -4px;
+  border: 1px solid rgba(231,192,255,.12);
+  background:
+    conic-gradient(from 0deg,
+      transparent,
+      rgba(231,191,255,.12),
+      transparent 26%,
+      rgba(238,198,108,.13),
+      transparent 53%,
+      rgba(211,158,242,.12),
+      transparent 78%);
+  animation: answerAuraSpin 9s linear infinite;
+}
+.fortune-lens.is-manifesting {
+  animation: lensManifest 1.35s cubic-bezier(.16,.78,.2,1);
+}
+.fortune-lens.is-manifesting::after {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,231,171,.62);
+  opacity: 0;
+  box-shadow:
+    0 0 18px rgba(246,203,110,.48),
+    inset 0 0 18px rgba(210,151,246,.2);
+  animation: prophecyRing 1.25s ease-out forwards;
+}
+@keyframes answerAuraSpin { to { transform: rotate(360deg); } }
+@keyframes lensManifest {
+  0% { transform: translateX(-50%) scale(.72); filter: blur(2px); }
+  34% { transform: translateX(-50%) scale(1.08); filter: blur(0); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+@keyframes prophecyRing {
+  0% { opacity: 0; transform: scale(.45); }
+  22% { opacity: .92; }
+  100% { opacity: 0; transform: scale(1.42); }
+}
+
+.lens-answer {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  gap: 5px;
+  place-items: center;
+  text-align: center;
+  animation: none;
+}
+.answer-sigil {
+  display: block;
+  color: #f2d690;
+  font-size: 22px;
+  line-height: 1;
+  opacity: 0;
+  text-shadow:
+    0 0 10px rgba(246,203,108,.68),
+    0 0 20px rgba(181,109,229,.65);
+  animation: sigilArrive .85s .1s ease-out forwards;
+}
+.answer-kicker {
+  color: #e5c984;
+  font-size: 6.5px;
+  letter-spacing: .24em;
+  opacity: 0;
+  animation: mysticTextIn .6s .35s ease-out forwards;
+}
+.lens-answer strong {
+  max-width: 138px;
+  margin: 0 auto;
+  color: #fff6e9;
+  font-size: 12px;
+  line-height: 1.12;
+  text-wrap: balance;
+  text-shadow:
+    0 2px 9px rgba(0,0,0,.98),
+    0 0 13px rgba(75,31,96,.85),
+    0 0 22px rgba(209,156,238,.26);
+  opacity: 0;
+  transform: scale(.86);
+  filter: blur(4px);
+  animation: prophecyText 1s .58s cubic-bezier(.15,.78,.19,1) forwards;
+}
+.lens-answer small {
+  color: rgba(230,204,151,.58);
+  font-size: 5.5px;
+  letter-spacing: .17em;
+  opacity: 0;
+  animation: mysticTextIn .6s 1.02s ease-out forwards;
+}
+@keyframes sigilArrive {
+  0% { opacity: 0; transform: rotate(-40deg) scale(.25); }
+  55% { opacity: 1; transform: rotate(8deg) scale(1.22); }
+  100% { opacity: .92; transform: rotate(0) scale(1); }
+}
+@keyframes mysticTextIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes prophecyText {
+  0% { opacity: 0; transform: scale(.82); filter: blur(5px); }
+  46% { opacity: .68; }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* SPEECH INPUT */
+.input-shell input { padding-right: 59px; }
+.mic-button {
+  position: absolute;
+  z-index: 4;
+  right: 6px;
+  top: 50%;
+  width: 39px;
+  height: 39px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(220,177,101,.23);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(255,255,255,.055), transparent 46%),
+    rgba(72,37,55,.34);
+  color: #c89b50;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.24);
+  transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.mic-button svg { width: 19px; height: 19px; fill: currentColor; }
+.mic-button:hover:not(:disabled) { color: #e8c778; border-color: rgba(226,185,110,.42); }
+.mic-button:active:not(:disabled) { transform: translateY(-50%) scale(.93); }
+.mic-button.is-listening {
+  color: #f4c5ec;
+  border-color: rgba(234,139,216,.68);
+  background: rgba(105,43,91,.62);
+  box-shadow:
+    0 0 0 4px rgba(196,80,167,.12),
+    0 0 19px rgba(221,104,193,.34),
+    inset 0 0 0 1px rgba(255,255,255,.04);
+  animation: micPulse 1.08s ease-in-out infinite;
+}
+.mic-button:disabled {
+  color: #66585d;
+  border-color: rgba(255,255,255,.07);
+  background: rgba(255,255,255,.018);
+  opacity: .72;
+}
+@keyframes micPulse {
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(196,80,167,.06),
+      0 0 25px rgba(221,104,193,.45),
+      inset 0 0 0 1px rgba(255,255,255,.05);
+  }
+}
+.speech-status {
+  min-height: 18px;
+  margin-top: 7px;
+  padding-left: 2px;
+  color: #796c67;
+  font-size: 9px;
+  letter-spacing: .015em;
+  text-align: left;
+  transition: color .2s ease;
+}
+.speech-status.is-listening { color: #dda6d5; }
+.speech-status.is-captured { color: #bda579; }
+.speech-status.is-unsupported,
+.speech-status.is-denied { color: #806b70; }
+
+/* BOTTOM OMENS */
+.bottom-omens {
+  width: min(100%,670px);
+  margin: 15px auto 8px;
+}
+.bottom-omens .omen-title { margin-bottom: 9px; }
+.bottom-omens::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: -9px;
+  height: 1px;
+  background: linear-gradient(90deg,transparent,rgba(209,160,84,.22),transparent);
+}
+
+/* ORACLE CONSOLE COHESION */
+.question-card {
+  border-color: #a9783d;
+  background:
+    radial-gradient(circle at 50% -17%, rgba(131,61,93,.31), transparent 43%),
+    radial-gradient(circle at 8% 100%, rgba(89,48,111,.08), transparent 31%),
+    linear-gradient(180deg,#2b151f 0%,#160d13 70%,#0b080a 100%);
+}
+.input-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 3px;
+  border-radius: 10px;
+  border: 1px solid rgba(245,211,147,.025);
+  pointer-events: none;
+}
+
+@media (max-width: 620px) {
+  .crystal-energy {
+    bottom: 43px;
+    width: 166px;
+  }
+  .energy-paw-core { font-size: 23px; }
+
+  .lantern-glow {
+    top: 14%;
+    width: 48px;
+    height: 88px;
+  }
+  .lantern-glow-left { left: 7.5%; }
+  .lantern-glow-right { right: 7.5%; }
+
+  .rosie-turn-backdrop {
+    left: 16%;
+    right: 16%;
+    top: 3%;
+    bottom: 22%;
+  }
+  .rosie-turn-layer {
+    object-position: center 47%;
+    transform: perspective(800px) rotateY(0deg) scale(1.01);
+    clip-path: polygon(17% 0,83% 0,82% 67%,73% 77%,61% 81%,39% 81%,27% 77%,18% 67%);
+    -webkit-mask-image: radial-gradient(ellipse 42% 49% at 50% 39%,
+      #000 0 70%,
+      rgba(0,0,0,.98) 80%,
+      rgba(0,0,0,.58) 91%,
+      transparent 100%);
+    mask-image: radial-gradient(ellipse 42% 49% at 50% 39%,
+      #000 0 70%,
+      rgba(0,0,0,.98) 80%,
+      rgba(0,0,0,.58) 91%,
+      transparent 100%);
+  }
+  .rosie-turn-layer.is-flipped {
+    transform: perspective(800px) rotateY(180deg) scale(1.02);
+  }
+  .rosie-turn-layer.is-flipped.stage-art-consulting {
+    transform: perspective(800px) rotateY(180deg) scale(1.035);
+  }
+
+  .smoke-wisp-a { width: 140px; height: 195px; margin: -110px 0 0 -72px; }
+  .smoke-wisp-b { width: 120px; height: 164px; margin: -86px 0 0 -35px; }
+  .smoke-wisp-c { width: 108px; height: 144px; margin: -58px 0 0 -86px; }
+  .smoke-wisp-d { width: 92px; height: 122px; margin: -112px 0 0 4px; }
+  .smoke-wisp-e { width: 98px; height: 118px; margin: -25px 0 0 -48px; }
+
+  .fortune-lens.has-answer {
+    width: 148px;
+    padding: 21px 14px;
+  }
+  .answer-sigil { font-size: 19px; }
+  .answer-kicker { font-size: 5.7px; }
+  .lens-answer strong {
+    max-width: 118px;
+    font-size: 10.7px;
+  }
+  .lens-answer small { font-size: 5px; }
+  .lens-consulting em { font-size: 7px; }
+  .consulting-runes { width: 60px; height: 60px; }
+  .consulting-runes i:nth-child(1) { transform: translate(-50%,-50%) translateY(-26px); }
+  .consulting-runes i:nth-child(2) { transform: translate(-50%,-50%) translateX(26px); }
+  .consulting-runes i:nth-child(3) { transform: translate(-50%,-50%) translateY(26px); }
+  .consulting-runes i:nth-child(4) { transform: translate(-50%,-50%) translateX(-26px); }
+
+  .input-shell input { padding-right: 56px; }
+  .mic-button {
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+  }
+  .mic-button svg { width: 18px; height: 18px; }
+  .speech-status {
+    min-height: 17px;
+    margin-top: 5px;
+    text-align: center;
+    font-size: 8.5px;
+  }
+  .bottom-omens { margin: 13px auto 5px; }
+}
+
+@media (max-width: 410px) {
+  .crystal-energy {
+    bottom: 40px;
+    width: 156px;
+  }
+  .energy-paw-core { font-size: 21px; }
+  .fortune-lens.has-answer {
+    width: 140px;
+    padding: 19px 12px;
+  }
+  .lens-answer strong {
+    max-width: 111px;
+    font-size: 10.2px;
+  }
+  .mic-button {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain,
+  .lantern-glow,
+  .lantern-glow i,
+  .energy-vortex,
+  .energy-ribbon,
+  .energy-ring,
+  .energy-mist,
+  .energy-stars,
+  .energy-paw-core {
+    animation-duration: 12s !important;
+  }
+}
+
+
+/* --- Recording review correction pass: 2026-10-07 --- */
+
+/* Register every magical layer to the actual photographed crystal ball. */
+.crystal-energy {
+  bottom: 14px;
+  width: 150px;
+}
+.fortune-lens {
+  bottom: 13px;
+  width: 150px;
+}
+.fortune-lens.has-answer {
+  width: 150px;
+  padding: 15px 13px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.fortune-lens.has-answer:focus-visible {
+  outline: 1px solid rgba(242,210,141,.72);
+  outline-offset: 3px;
+}
+
+/* Keep the energy visually inside the glass rather than floating over Rosie's chest. */
+.energy-halo {
+  width: 91%;
+  height: 91%;
+}
+.energy-vortex {
+  width: 78%;
+  height: 78%;
+}
+.energy-ring-a {
+  width: 84%;
+  height: 42%;
+  margin-left: -42%;
+  margin-top: -21%;
+}
+.energy-ring-b {
+  width: 73%;
+  height: 54%;
+  margin-left: -36.5%;
+  margin-top: -27%;
+}
+.energy-ring-c {
+  width: 62%;
+  height: 32%;
+  margin-left: -31%;
+  margin-top: -16%;
+}
+.energy-ribbon {
+  width: 76%;
+  height: 41%;
+  margin-left: -38%;
+  margin-top: -20.5%;
+}
+.energy-ribbon-b {
+  width: 58%;
+  height: 66%;
+  margin-left: -29%;
+  margin-top: -33%;
+}
+.energy-stars {
+  inset: 9%;
+}
+
+/* The answer is now entirely contained within the ball. */
+.lens-answer {
+  gap: 4px;
+  width: 100%;
+}
+.answer-sigil {
+  font-size: 16px;
+  margin-bottom: -1px;
+}
+.answer-kicker {
+  font-size: 5.7px;
+  letter-spacing: .18em;
+}
+.lens-answer strong {
+  max-width: 118px;
+  font-size: 10.7px;
+  line-height: 1.08;
+}
+.lens-answer small {
+  margin-top: 1px;
+  font-size: 4.8px;
+  letter-spacing: .13em;
+}
+.answer-spark-field {
+  position: absolute;
+  inset: 4%;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.answer-spark-field i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffe09b;
+  box-shadow: 0 0 7px rgba(248,205,112,.9);
+  opacity: 0;
+  animation: answerSparkOrbit 2.8s ease-in-out infinite;
+  --x: 0px;
+  --y: 0px;
+}
+.answer-spark-field i:nth-child(1) { --x: -47px; --y: -28px; animation-delay: -.2s; }
+.answer-spark-field i:nth-child(2) { --x: -18px; --y: -49px; animation-delay: -.7s; }
+.answer-spark-field i:nth-child(3) { --x: 25px; --y: -46px; animation-delay: -1.1s; }
+.answer-spark-field i:nth-child(4) { --x: 48px; --y: -15px; animation-delay: -1.6s; }
+.answer-spark-field i:nth-child(5) { --x: 43px; --y: 30px; animation-delay: -.45s; }
+.answer-spark-field i:nth-child(6) { --x: 10px; --y: 49px; animation-delay: -1.3s; }
+.answer-spark-field i:nth-child(7) { --x: -33px; --y: 40px; animation-delay: -2s; }
+.answer-spark-field i:nth-child(8) { --x: -50px; --y: 8px; animation-delay: -.95s; }
+@keyframes answerSparkOrbit {
+  0%,100% { opacity: .1; transform: translate(var(--x),var(--y)) scale(.55); }
+  46% { opacity: .92; transform: translate(var(--x),var(--y)) scale(1.35); }
+}
+
+/* Cleaner prophecy arrival: flare -> sigil -> answer, with no text floating on Rosie's body. */
+.fortune-lens.is-manifesting {
+  animation: prophecyMaterialize 1.18s cubic-bezier(.16,.78,.2,1);
+}
+.fortune-lens.is-manifesting .lens-answer {
+  animation: answerFloatIn 1.12s cubic-bezier(.16,.75,.2,1);
+}
+@keyframes prophecyMaterialize {
+  0% { opacity: 0; transform: translateX(-50%) scale(.54); filter: blur(7px); }
+  24% { opacity: .92; transform: translateX(-50%) scale(1.08); filter: blur(1px); }
+  56% { transform: translateX(-50%) scale(.96); filter: blur(0); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+@keyframes answerFloatIn {
+  0%,22% { opacity: 0; transform: translateY(8px) scale(.92); }
+  58% { opacity: .76; }
+  100% { opacity: 1; transform: none; }
+}
+
+/* Tap-to-release: the prophecy collapses into a spray of gold and violet sparks. */
+.fortune-lens.is-dismissing {
+  opacity: 1;
+  animation: answerRelease .72s cubic-bezier(.16,.8,.2,1) forwards;
+}
+.fortune-lens.is-dismissing .lens-answer {
+  animation: answerDissolve .62s ease-in forwards;
+}
+.answer-dismiss-sparkles {
+  position: absolute;
+  inset: -18%;
+  z-index: 8;
+  pointer-events: none;
+}
+.answer-dismiss-sparkles i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #ffe4a1;
+  box-shadow:
+    0 0 8px rgba(255,211,117,.9),
+    0 0 13px rgba(184,104,230,.68);
+  animation: releaseSpark .7s cubic-bezier(.14,.72,.18,1) forwards;
+  --rx: 0px;
+  --ry: -76px;
+}
+.answer-dismiss-sparkles i:nth-child(1) { --rx:-66px; --ry:-54px; }
+.answer-dismiss-sparkles i:nth-child(2) { --rx:-38px; --ry:-78px; animation-delay:.03s; }
+.answer-dismiss-sparkles i:nth-child(3) { --rx:0px; --ry:-88px; animation-delay:.07s; }
+.answer-dismiss-sparkles i:nth-child(4) { --rx:40px; --ry:-76px; animation-delay:.02s; }
+.answer-dismiss-sparkles i:nth-child(5) { --rx:69px; --ry:-47px; animation-delay:.06s; }
+.answer-dismiss-sparkles i:nth-child(6) { --rx:80px; --ry:-4px; animation-delay:.09s; }
+.answer-dismiss-sparkles i:nth-child(7) { --rx:58px; --ry:46px; animation-delay:.04s; }
+.answer-dismiss-sparkles i:nth-child(8) { --rx:18px; --ry:72px; animation-delay:.1s; }
+.answer-dismiss-sparkles i:nth-child(9) { --rx:-24px; --ry:70px; animation-delay:.05s; }
+.answer-dismiss-sparkles i:nth-child(10) { --rx:-61px; --ry:42px; animation-delay:.08s; }
+.answer-dismiss-sparkles i:nth-child(11) { --rx:-78px; --ry:1px; animation-delay:.02s; }
+.answer-dismiss-sparkles i:nth-child(12) { --rx:-50px; --ry:-21px; animation-delay:.11s; }
+@keyframes answerRelease {
+  0% { transform: translateX(-50%) scale(1); filter: blur(0); }
+  35% { transform: translateX(-50%) scale(1.08); }
+  100% { opacity: 0; transform: translateX(-50%) scale(.55); filter: blur(5px); }
+}
+@keyframes answerDissolve {
+  0% { opacity: 1; filter: blur(0); }
+  42% { opacity: .75; transform: scale(1.04); }
+  100% { opacity: 0; filter: blur(5px); transform: scale(.72); }
+}
+@keyframes releaseSpark {
+  0% { opacity: 0; transform: translate(0,0) scale(.25); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--rx),var(--ry)) scale(.85); }
+}
+
+/* A natural-looking magical turn: change only Rosie's head/upper shoulders, not her entire body. */
+.stage-turning .stage-art {
+  filter: saturate(.98) contrast(1.03) brightness(.85);
+  transform: scale(1.018);
+}
+.rosie-turn-layer {
+  z-index: 8;
+  opacity: 0;
+  transform: scale(1.015);
+  transform-origin: 50% 29%;
+  clip-path: polygon(27% 2%,73% 2%,74% 52%,66% 59%,56% 62%,44% 62%,34% 59%,26% 52%);
+  -webkit-mask-image: radial-gradient(ellipse 31% 34% at 50% 30%,
+    #000 0 69%,
+    rgba(0,0,0,.98) 78%,
+    rgba(0,0,0,.6) 90%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 31% 34% at 50% 30%,
+    #000 0 69%,
+    rgba(0,0,0,.98) 78%,
+    rgba(0,0,0,.6) 90%,
+    transparent 100%);
+  transition:
+    opacity .2s ease,
+    transform .4s cubic-bezier(.2,.74,.18,1),
+    filter .3s ease;
+}
+.rosie-turn-layer.is-flipped {
+  opacity: 1;
+  transform: scaleX(-1) scale(1.015) translateX(0);
+}
+.rosie-turn-layer.is-turning {
+  filter: saturate(1.06) brightness(.94);
+}
+
+/* Compact poof around Rosie's head instead of a full-scene purple fog. */
+.smoke-wisp {
+  top: 31%;
+  filter: blur(7px);
+  animation-duration: .62s;
+}
+.smoke-wisp-a {
+  width: 112px; height: 122px; margin: -62px 0 0 -56px;
+  --dx:-15px; --dy:-38px; --rot:-8deg;
+}
+.smoke-wisp-b {
+  width: 94px; height: 106px; margin: -48px 0 0 -22px;
+  --dx:29px; --dy:-45px; --rot:11deg;
+}
+.smoke-wisp-c {
+  width: 88px; height: 98px; margin: -39px 0 0 -69px;
+  --dx:-35px; --dy:-32px; --rot:-12deg;
+}
+.smoke-wisp-d {
+  width: 78px; height: 92px; margin: -68px 0 0 1px;
+  --dx:34px; --dy:-54px; --rot:14deg;
+}
+.smoke-wisp-e {
+  width: 82px; height: 86px; margin: -18px 0 0 -40px;
+  --dx:3px; --dy:-27px; --rot:5deg;
+}
+.flip-flash {
+  top: 29%;
+  width: 100px;
+  height: 128px;
+  margin: -64px 0 0 -50px;
+}
+.flip-sparkles i {
+  top: 31%;
+}
+.flip-sparkles i:nth-child(1) { --tx:-58px; --ty:-49px; }
+.flip-sparkles i:nth-child(2) { --tx:-32px; --ty:-72px; }
+.flip-sparkles i:nth-child(3) { --tx:0px; --ty:-79px; }
+.flip-sparkles i:nth-child(4) { --tx:36px; --ty:-68px; }
+.flip-sparkles i:nth-child(5) { --tx:61px; --ty:-42px; }
+.flip-sparkles i:nth-child(6) { --tx:-63px; --ty:-18px; }
+.flip-sparkles i:nth-child(7) { --tx:66px; --ty:-12px; }
+.flip-sparkles i:nth-child(8) { --tx:-47px; --ty:25px; }
+.flip-sparkles i:nth-child(9) { --tx:45px; --ty:27px; }
+.flip-sparkles i:nth-child(10) { --tx:-18px; --ty:37px; }
+.flip-sparkles i:nth-child(11) { --tx:15px; --ty:39px; }
+.flip-sparkles i:nth-child(12) { --tx:1px; --ty:-91px; }
+
+/* Softer visual feedback matches the friendlier whistle. */
+.whistle-button:active {
+  box-shadow:
+    0 0 18px rgba(230,190,112,.18),
+    0 0 25px rgba(173,106,210,.12),
+    inset 0 0 0 1px rgba(0,0,0,.32);
+}
+
+@media (max-width: 620px) {
+  .crystal-energy {
+    bottom: 2px;
+    width: 132px;
+  }
+  .fortune-lens {
+    bottom: 3px;
+    width: 132px;
+  }
+  .fortune-lens.has-answer {
+    width: 132px;
+    padding: 12px 10px;
+  }
+  .answer-sigil { font-size: 14px; }
+  .answer-kicker { font-size: 5.1px; }
+  .lens-answer strong {
+    max-width: 105px;
+    font-size: 9.7px;
+  }
+  .lens-answer small { font-size: 4.2px; }
+  .consulting-runes {
+    width: 51px;
+    height: 51px;
+    margin-bottom: -7px;
+  }
+  .consulting-runes i { font-size: 9px; }
+  .consulting-runes i:nth-child(1) { transform: translate(-50%,-50%) translateY(-22px); }
+  .consulting-runes i:nth-child(2) { transform: translate(-50%,-50%) translateX(22px); }
+  .consulting-runes i:nth-child(3) { transform: translate(-50%,-50%) translateY(22px); }
+  .consulting-runes i:nth-child(4) { transform: translate(-50%,-50%) translateX(-22px); }
+  .lens-consulting small { font-size: 5.4px; }
+  .lens-consulting em { font-size: 5.8px; }
+
+  .rosie-turn-layer {
+    clip-path: polygon(25% 1%,75% 1%,75% 53%,66% 60%,56% 63%,44% 63%,34% 60%,25% 53%);
+    -webkit-mask-image: radial-gradient(ellipse 33% 35% at 50% 30%,
+      #000 0 69%,
+      rgba(0,0,0,.98) 79%,
+      rgba(0,0,0,.55) 91%,
+      transparent 100%);
+    mask-image: radial-gradient(ellipse 33% 35% at 50% 30%,
+      #000 0 69%,
+      rgba(0,0,0,.98) 79%,
+      rgba(0,0,0,.55) 91%,
+      transparent 100%);
+  }
+}
+
+@media (max-width: 410px) {
+  .crystal-energy {
+    bottom: 1px;
+    width: 126px;
+  }
+  .fortune-lens {
+    bottom: 2px;
+    width: 126px;
+  }
+  .fortune-lens.has-answer {
+    width: 126px;
+    padding: 11px 9px;
+  }
+  .lens-answer strong {
+    max-width: 100px;
+    font-size: 9.3px;
+  }
+}
+
+
+/* --- Believability + ambient-life pass --- */
+
+/* The prophecy must actually be tappable; the base stylesheet intentionally disables lens pointer events. */
+.fortune-lens.has-answer {
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fortune-lens.is-dismissing {
+  pointer-events: none !important;
+}
+
+/* The actual turn is hidden at its midpoint, not merely decorated with translucent smoke. */
+.turn-veil {
+  position: absolute;
+  z-index: 19;
+  left: 50%;
+  top: 30%;
+  width: 44%;
+  height: 43%;
+  transform: translate(-50%,-50%) scale(.5);
+  border-radius: 48% 52% 54% 46%;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 46%,
+      rgba(84,35,104,.98) 0 24%,
+      rgba(111,50,139,.96) 36%,
+      rgba(128,61,158,.84) 49%,
+      rgba(78,31,101,.58) 63%,
+      rgba(54,20,72,.22) 76%,
+      transparent 91%);
+  box-shadow:
+    0 0 26px rgba(184,105,224,.36),
+    inset 0 0 28px rgba(246,214,255,.08);
+  filter: blur(3.5px);
+  animation: turnVeilCover .82s cubic-bezier(.16,.72,.18,1) forwards;
+}
+@keyframes turnVeilCover {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-43%) scale(.36,.26);
+  }
+  20% {
+    opacity: .96;
+    transform: translate(-50%,-50%) scale(.94,.9);
+  }
+  36% {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.08,1.04);
+  }
+  51% {
+    opacity: .98;
+    transform: translate(-50%,-52%) scale(1.14,1.12);
+  }
+  72% {
+    opacity: .55;
+    transform: translate(-50%,-59%) scale(1.2,1.28);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-70%) scale(1.28,1.48);
+  }
+}
+.turn-orbit {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 29%;
+  width: 40%;
+  height: 18%;
+  margin-left: -20%;
+  margin-top: -9%;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  border: 1px solid rgba(246,205,116,.56);
+  border-left-color: rgba(211,151,242,.18);
+  border-bottom-color: rgba(178,104,221,.34);
+  filter: drop-shadow(0 0 5px rgba(230,182,112,.45));
+  animation: turnOrbitA .76s ease-out forwards;
+}
+.turn-orbit-b {
+  width: 31%;
+  height: 25%;
+  margin-left: -15.5%;
+  margin-top: -12.5%;
+  transform: rotate(64deg);
+  border-color: rgba(202,138,239,.46);
+  border-right-color: rgba(250,214,132,.58);
+  animation: turnOrbitB .78s ease-out forwards;
+}
+@keyframes turnOrbitA {
+  0% { opacity: 0; transform: scale(.5) rotate(-35deg); }
+  22% { opacity: .86; }
+  100% { opacity: 0; transform: scale(1.32) rotate(220deg); }
+}
+@keyframes turnOrbitB {
+  0% { opacity: 0; transform: scale(.52) rotate(64deg); }
+  25% { opacity: .7; }
+  100% { opacity: 0; transform: scale(1.24) rotate(-176deg); }
+}
+
+/* Keep the smaller smoke wisps as the edge of the veil instead of the veil itself. */
+.smoke-wisp {
+  z-index: 18;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse at 45% 48%,
+      rgba(210,139,242,.58) 0 14%,
+      rgba(120,58,153,.48) 34%,
+      rgba(64,26,88,.18) 59%,
+      transparent 77%);
+}
+.flip-flash { z-index: 21; }
+.flip-sparkles { z-index: 22; }
+
+/* After the cover clears, the mirrored head/shoulders have a softer feather so the neckline does not snap. */
+.rosie-turn-layer {
+  clip-path: polygon(23% 0,77% 0,78% 58%,70% 67%,60% 72%,40% 72%,30% 67%,22% 58%);
+  -webkit-mask-image: radial-gradient(ellipse 35% 39% at 50% 31%,
+    #000 0 66%,
+    rgba(0,0,0,.98) 76%,
+    rgba(0,0,0,.72) 87%,
+    rgba(0,0,0,.28) 95%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 35% 39% at 50% 31%,
+    #000 0 66%,
+    rgba(0,0,0,.98) 76%,
+    rgba(0,0,0,.72) 87%,
+    rgba(0,0,0,.28) 95%,
+    transparent 100%);
+}
+
+/* Ambient booth life from the flattened master art: tiny movement only, heavily feathered. */
+.living-set {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.set-piece {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 47%;
+  pointer-events: none;
+  will-change: transform;
+}
+.set-piece-moon {
+  z-index: 2;
+  transform-origin: 59% 18%;
+  -webkit-mask-image: radial-gradient(circle 7.8% at 59% 18%, #000 0 68%, rgba(0,0,0,.75) 79%, transparent 100%);
+  mask-image: radial-gradient(circle 7.8% at 59% 18%, #000 0 68%, rgba(0,0,0,.75) 79%, transparent 100%);
+  animation: moonSway 8.8s ease-in-out infinite;
+}
+.set-piece-lantern-left {
+  z-index: 3;
+  transform-origin: 22% 15%;
+  -webkit-mask-image: radial-gradient(ellipse 9% 17% at 22% 27%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 9% 17% at 22% 27%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  animation: lanternPictureSway 6.4s ease-in-out infinite -.8s;
+}
+.set-piece-lantern-right {
+  z-index: 3;
+  transform-origin: 79% 16%;
+  -webkit-mask-image: radial-gradient(ellipse 9% 17% at 79% 28%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 9% 17% at 79% 28%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  animation: lanternPictureSwayRight 7s ease-in-out infinite -2.1s;
+}
+.set-piece-rosie-breathe {
+  z-index: 1;
+  transform-origin: 50% 52%;
+  -webkit-mask-image: radial-gradient(ellipse 28% 37% at 50% 47%, #000 0 62%, rgba(0,0,0,.66) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 28% 37% at 50% 47%, #000 0 62%, rgba(0,0,0,.66) 80%, transparent 100%);
+  animation: rosieBreathe 5.8s ease-in-out infinite;
+}
+@keyframes moonSway {
+  0%,100% { transform: translate(0,0) rotate(-.22deg); }
+  35% { transform: translate(.7px,1px) rotate(.34deg); }
+  68% { transform: translate(-.6px,.35px) rotate(-.1deg); }
+}
+@keyframes lanternPictureSway {
+  0%,100% { transform: rotate(-.48deg) translateY(0); }
+  50% { transform: rotate(.62deg) translateY(.55px); }
+}
+@keyframes lanternPictureSwayRight {
+  0%,100% { transform: rotate(.45deg) translateY(.2px); }
+  50% { transform: rotate(-.58deg) translateY(.7px); }
+}
+@keyframes rosieBreathe {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-.85px) scale(1.0025); }
+}
+
+/* Give the existing book stack individual spines without stealing attention from Rosie. */
+.book-accents {
+  position: absolute;
+  z-index: 5;
+  left: 3.8%;
+  top: 57%;
+  width: 23%;
+  height: 31%;
+  pointer-events: none;
+  opacity: .58;
+}
+.book-accents i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 14%;
+  border-radius: 2px 5px 5px 2px;
+  border: 1px solid rgba(213,171,94,.2);
+  border-left-color: rgba(243,207,132,.42);
+  background:
+    linear-gradient(90deg, rgba(244,207,132,.1), transparent 13% 84%, rgba(238,194,109,.07)),
+    rgba(71,27,39,.08);
+  box-shadow:
+    inset 0 1px rgba(255,231,178,.045),
+    0 1px rgba(0,0,0,.18);
+}
+.book-accents i::before {
+  content: "✦";
+  position: absolute;
+  left: 7%;
+  top: 50%;
+  transform: translateY(-52%);
+  color: rgba(229,191,117,.38);
+  font-size: 5px;
+}
+.book-accents i:nth-child(1) { top: 0; width: 92%; background-color: rgba(84,39,71,.1); }
+.book-accents i:nth-child(2) { top: 18%; left: 4%; width: 94%; background-color: rgba(52,50,76,.1); }
+.book-accents i:nth-child(3) { top: 36%; width: 97%; background-color: rgba(91,50,31,.09); }
+.book-accents i:nth-child(4) { top: 54%; left: 3%; width: 91%; background-color: rgba(46,65,57,.08); }
+.book-accents i:nth-child(5) { top: 72%; width: 100%; background-color: rgba(80,36,47,.1); }
+
+/* Random prompt controls: quiet refresh affordance, more options without visual weight. */
+.quick-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+.quick-label > span {
+  color: #77665e;
+  font-size: 6.5px;
+  letter-spacing: .17em;
+  white-space: nowrap;
+}
+.shuffle-prompts {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(207,165,92,.16);
+  border-radius: 50%;
+  background: rgba(205,154,77,.035);
+  color: #907a68;
+  font-size: 12px;
+  line-height: 1;
+}
+.shuffle-prompts:active {
+  transform: rotate(20deg) scale(.94);
+}
+.quick-row > span {
+  display: none;
+}
+
+/* The answer-release animation has to stay above the ball until the final spark is gone. */
+.fortune-lens.is-dismissing {
+  z-index: 23;
+}
+.answer-dismiss-sparkles {
+  pointer-events: none;
+}
+
+/* Phone tuning for the flattened stage coordinates. */
+@media (max-width: 620px) {
+  .turn-veil {
+    top: 29.5%;
+    width: 47%;
+    height: 45%;
+  }
+  .turn-orbit {
+    top: 29%;
+    width: 43%;
+  }
+  .set-piece-moon {
+    transform-origin: 59% 18%;
+  }
+  .book-accents {
+    left: 3.5%;
+    top: 57%;
+    width: 23.5%;
+  }
+}
+
+
+/* --- Reference-whistle + ceremonial reveal + set-life correction --- */
+
+/* Make the physical set breathe: these are masked pieces of the original stage art. */
+.set-piece-curtain-left {
+  z-index: 1;
+  transform-origin: 17% 10%;
+  -webkit-mask-image: linear-gradient(90deg,
+    #000 0 19%,
+    rgba(0,0,0,.94) 23%,
+    rgba(0,0,0,.55) 29%,
+    transparent 36%);
+  mask-image: linear-gradient(90deg,
+    #000 0 19%,
+    rgba(0,0,0,.94) 23%,
+    rgba(0,0,0,.55) 29%,
+    transparent 36%);
+  animation: pictureCurtainLeft 7.6s ease-in-out infinite;
+}
+.set-piece-curtain-right {
+  z-index: 1;
+  transform-origin: 83% 10%;
+  -webkit-mask-image: linear-gradient(270deg,
+    #000 0 19%,
+    rgba(0,0,0,.94) 23%,
+    rgba(0,0,0,.55) 29%,
+    transparent 36%);
+  mask-image: linear-gradient(270deg,
+    #000 0 19%,
+    rgba(0,0,0,.94) 23%,
+    rgba(0,0,0,.55) 29%,
+    transparent 36%);
+  animation: pictureCurtainRight 8.3s ease-in-out infinite -1.8s;
+}
+@keyframes pictureCurtainLeft {
+  0%,100% { transform: translateX(0) rotate(-.22deg) skewX(0deg); }
+  42% { transform: translateX(1.5px) rotate(.7deg) skewX(.35deg); }
+  72% { transform: translateX(-.7px) rotate(-.42deg) skewX(-.2deg); }
+}
+@keyframes pictureCurtainRight {
+  0%,100% { transform: translateX(0) rotate(.2deg) skewX(0deg); }
+  44% { transform: translateX(-1.45px) rotate(-.72deg) skewX(-.3deg); }
+  75% { transform: translateX(.7px) rotate(.4deg) skewX(.2deg); }
+}
+
+/* Move the masked objects at their real coordinates in the art. */
+.set-piece-moon {
+  z-index: 2;
+  transform-origin: 61% 18%;
+  -webkit-mask-image: radial-gradient(circle 8.8% at 61% 18%, #000 0 68%, rgba(0,0,0,.83) 78%, rgba(0,0,0,.3) 91%, transparent 100%);
+  mask-image: radial-gradient(circle 8.8% at 61% 18%, #000 0 68%, rgba(0,0,0,.83) 78%, rgba(0,0,0,.3) 91%, transparent 100%);
+  animation: moonSwayVisible 8.1s ease-in-out infinite;
+}
+.set-piece-lantern-left {
+  z-index: 3;
+  transform-origin: 31% 15%;
+  -webkit-mask-image: radial-gradient(ellipse 7.7% 17% at 31% 29%, #000 0 68%, rgba(0,0,0,.82) 81%, rgba(0,0,0,.24) 94%, transparent 100%);
+  mask-image: radial-gradient(ellipse 7.7% 17% at 31% 29%, #000 0 68%, rgba(0,0,0,.82) 81%, rgba(0,0,0,.24) 94%, transparent 100%);
+  animation: lanternSwayVisibleLeft 6.1s ease-in-out infinite -.9s;
+}
+.set-piece-lantern-right {
+  z-index: 3;
+  transform-origin: 73% 15%;
+  -webkit-mask-image: radial-gradient(ellipse 8% 17.5% at 73% 29%, #000 0 68%, rgba(0,0,0,.82) 81%, rgba(0,0,0,.24) 94%, transparent 100%);
+  mask-image: radial-gradient(ellipse 8% 17.5% at 73% 29%, #000 0 68%, rgba(0,0,0,.82) 81%, rgba(0,0,0,.24) 94%, transparent 100%);
+  animation: lanternSwayVisibleRight 6.8s ease-in-out infinite -2.2s;
+}
+.set-piece-rosie-breathe {
+  z-index: 4;
+  opacity: .98;
+  transform-origin: 50% 48%;
+  -webkit-mask-image: radial-gradient(ellipse 30% 39% at 50% 48%, #000 0 62%, rgba(0,0,0,.78) 78%, rgba(0,0,0,.25) 94%, transparent 100%);
+  mask-image: radial-gradient(ellipse 30% 39% at 50% 48%, #000 0 62%, rgba(0,0,0,.78) 78%, rgba(0,0,0,.25) 94%, transparent 100%);
+  animation: rosieBreathingVisible 5.25s ease-in-out infinite;
+}
+@keyframes moonSwayVisible {
+  0%,100% { transform: translate(0,0) rotate(-.45deg); }
+  50% { transform: translate(1.25px,1.35px) rotate(.75deg); }
+}
+@keyframes lanternSwayVisibleLeft {
+  0%,100% { transform: rotate(-.85deg) translateY(0); }
+  50% { transform: rotate(1.05deg) translateY(.9px); }
+}
+@keyframes lanternSwayVisibleRight {
+  0%,100% { transform: rotate(.8deg) translateY(.15px); }
+  50% { transform: rotate(-1.1deg) translateY(.95px); }
+}
+@keyframes rosieBreathingVisible {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-1.35px) scale(1.004); }
+}
+
+/* Also let the structural curtains participate; the duplicate-art masks above sell the fabric movement. */
+.curtain-left {
+  animation: curtainSwayLeft 6.9s ease-in-out infinite;
+}
+.curtain-right {
+  animation: curtainSwayRight 7.4s ease-in-out infinite -1.1s;
+}
+@keyframes curtainSwayLeft {
+  0%,100% { transform: translateX(0) skewX(0deg); }
+  50% { transform: translateX(2px) skewX(1.1deg); }
+}
+@keyframes curtainSwayRight {
+  0%,100% { transform: scaleX(-1) translateX(0) skewX(0deg); }
+  50% { transform: scaleX(-1) translateX(2px) skewX(1.1deg); }
+}
+
+/* Distinct, harmonious book spines: jewel tones + different typographic personalities. */
+.book-accents {
+  opacity: .86;
+  left: 3.6%;
+  top: 56.5%;
+  width: 23.5%;
+  height: 31.5%;
+}
+.book-accents i {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  overflow: hidden;
+  border-color: rgba(224,185,112,.34);
+  border-left-color: rgba(249,216,143,.58);
+  box-shadow:
+    inset 0 1px rgba(255,236,194,.07),
+    inset 0 -1px rgba(0,0,0,.24),
+    0 1px 2px rgba(0,0,0,.22);
+}
+.book-accents i::before {
+  left: 5%;
+  font-size: 4.5px;
+  color: rgba(248,211,135,.6);
+}
+.book-accents i span {
+  position: relative;
+  z-index: 2;
+  display: block;
+  max-width: 79%;
+  margin-left: 18%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  text-shadow: 0 1px 2px rgba(0,0,0,.78);
+}
+.book-accents i:nth-child(1) {
+  top: 0;
+  width: 91%;
+  background:
+    linear-gradient(90deg, rgba(251,220,151,.1), transparent 15% 84%, rgba(255,220,142,.08)),
+    rgba(99,35,57,.65);
+}
+.book-accents i:nth-child(1) span {
+  color: #e9c57e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 5px;
+  font-style: italic;
+  letter-spacing: .08em;
+}
+.book-accents i:nth-child(2) {
+  top: 18%;
+  left: 4%;
+  width: 94%;
+  background:
+    linear-gradient(90deg, rgba(235,213,159,.08), transparent 16% 84%, rgba(237,200,125,.08)),
+    rgba(37,58,75,.68);
+}
+.book-accents i:nth-child(2) span {
+  color: #d8c995;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 4.7px;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+.book-accents i:nth-child(3) {
+  top: 36%;
+  width: 97%;
+  background:
+    linear-gradient(90deg, rgba(252,218,151,.09), transparent 15% 84%, rgba(245,198,119,.08)),
+    rgba(95,55,25,.67);
+}
+.book-accents i:nth-child(3) span {
+  color: #f0cf8f;
+  font-family: "Courier New", monospace;
+  font-size: 4.8px;
+  font-weight: 700;
+  letter-spacing: .07em;
+}
+.book-accents i:nth-child(4) {
+  top: 54%;
+  left: 3%;
+  width: 91%;
+  background:
+    linear-gradient(90deg, rgba(230,213,164,.08), transparent 16% 84%, rgba(238,196,115,.07)),
+    rgba(43,70,58,.66);
+}
+.book-accents i:nth-child(4) span {
+  color: #d6c990;
+  font-family: Palatino, "Book Antiqua", Georgia, serif;
+  font-size: 4.3px;
+  font-variant: small-caps;
+  letter-spacing: .06em;
+}
+.book-accents i:nth-child(5) {
+  top: 72%;
+  width: 100%;
+  background:
+    linear-gradient(90deg, rgba(249,219,154,.08), transparent 16% 84%, rgba(241,197,120,.07)),
+    rgba(71,39,81,.68);
+}
+.book-accents i:nth-child(5) span {
+  color: #e5c691;
+  font-family: Garamond, Georgia, serif;
+  font-size: 4.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+/* Turn concealment: cover more of Rosie, linger opaque through the swap, then dissipate upward. */
+.turn-veil {
+  top: 35%;
+  width: 67%;
+  height: 62%;
+  z-index: 24;
+  background:
+    radial-gradient(ellipse at 50% 45%,
+      rgba(59,22,78,.99) 0 27%,
+      rgba(95,41,123,.99) 38%,
+      rgba(125,57,157,.96) 51%,
+      rgba(102,43,133,.82) 63%,
+      rgba(67,24,91,.58) 75%,
+      rgba(49,17,68,.25) 86%,
+      transparent 96%);
+  box-shadow:
+    0 0 38px rgba(194,116,234,.48),
+    0 0 70px rgba(89,37,119,.28),
+    inset 0 0 38px rgba(240,203,255,.08);
+  filter: blur(5px);
+  animation: turnVeilHeavy .96s cubic-bezier(.14,.68,.14,1) forwards;
+}
+@keyframes turnVeilHeavy {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-40%) scale(.28,.2);
+  }
+  16% {
+    opacity: .98;
+    transform: translate(-50%,-48%) scale(.94,.88);
+  }
+  27% {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.08,1.04);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-50%,-51%) scale(1.12,1.08);
+  }
+  72% {
+    opacity: .78;
+    transform: translate(-50%,-56%) scale(1.2,1.24);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-72%) scale(1.38,1.54);
+  }
+}
+.turn-orbit {
+  z-index: 26;
+}
+.smoke-wisp {
+  z-index: 25;
+  top: 38%;
+  filter: blur(10px);
+  mix-blend-mode: screen;
+  animation-duration: .92s;
+}
+.smoke-wisp-a { width: 185px; height: 210px; margin: -115px 0 0 -92px; --dx:-48px; --dy:-92px; --rot:-13deg; }
+.smoke-wisp-b { width: 165px; height: 194px; margin: -100px 0 0 -31px; --dx:58px; --dy:-99px; --rot:16deg; }
+.smoke-wisp-c { width: 148px; height: 166px; margin: -66px 0 0 -118px; --dx:-76px; --dy:-62px; --rot:-20deg; }
+.smoke-wisp-d { width: 140px; height: 176px; margin: -128px 0 0 9px; --dx:75px; --dy:-111px; --rot:22deg; }
+.smoke-wisp-e { width: 150px; height: 148px; margin: -28px 0 0 -76px; --dx:0px; --dy:-49px; --rot:5deg; }
+.smoke-wisp-f { width: 122px; height: 162px; margin: -140px 0 0 -90px; --dx:-62px; --dy:-126px; --rot:-25deg; animation-delay:.03s; }
+.smoke-wisp-g { width: 130px; height: 160px; margin: -143px 0 0 -8px; --dx:50px; --dy:-128px; --rot:26deg; animation-delay:.06s; }
+.smoke-wisp-h { width: 172px; height: 126px; margin: -25px 0 0 -112px; --dx:-88px; --dy:-22px; --rot:-8deg; animation-delay:.05s; }
+.smoke-wisp-i { width: 170px; height: 128px; margin: -23px 0 0 -53px; --dx:87px; --dy:-18px; --rot:11deg; animation-delay:.08s; }
+.smoke-wisp-j { width: 128px; height: 150px; margin: -91px 0 0 -64px; --dx:5px; --dy:-118px; --rot:2deg; animation-delay:.02s; }
+
+.flip-flash {
+  z-index: 27;
+  top: 34%;
+  width: 160px;
+  height: 230px;
+  margin: -115px 0 0 -80px;
+}
+.flip-sparkles {
+  z-index: 28;
+}
+.flip-sparkles i {
+  top: 36%;
+}
+
+/* Broader mirrored region reduces the visible neck/body discontinuity while still ending above the ball. */
+.rosie-turn-layer {
+  z-index: 9;
+  clip-path: polygon(18% 0,82% 0,82% 69%,72% 77%,61% 81%,39% 81%,28% 77%,18% 69%);
+  -webkit-mask-image: radial-gradient(ellipse 42% 47% at 50% 36%,
+    #000 0 69%,
+    rgba(0,0,0,.99) 79%,
+    rgba(0,0,0,.76) 88%,
+    rgba(0,0,0,.32) 96%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 42% 47% at 50% 36%,
+    #000 0 69%,
+    rgba(0,0,0,.99) 79%,
+    rgba(0,0,0,.76) 88%,
+    rgba(0,0,0,.32) 96%,
+    transparent 100%);
+}
+.turn-seam-haze {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: 47%;
+  width: 56%;
+  height: 38%;
+  transform: translate(-50%,-50%);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 18% 55%, rgba(112,52,139,.22), transparent 31%),
+    radial-gradient(ellipse at 82% 55%, rgba(112,52,139,.22), transparent 31%),
+    radial-gradient(ellipse at 50% 83%, rgba(67,29,83,.28), transparent 39%);
+  filter: blur(8px);
+  transition: opacity .35s ease;
+}
+.turn-seam-haze.is-flipped {
+  opacity: .76;
+  animation: seamHazeBreathe 5s ease-in-out infinite;
+}
+@keyframes seamHazeBreathe {
+  50% { opacity: .58; filter: blur(9px); }
+}
+
+/* Answer apparition: stronger luminous text and a ceremonial glow pulse. */
+.fortune-lens.has-answer {
+  filter: drop-shadow(0 0 10px rgba(198,127,235,.4));
+}
+.fortune-lens.has-answer::before {
+  box-shadow:
+    0 0 22px rgba(227,177,255,.3),
+    inset 0 0 18px rgba(244,212,145,.08);
+}
+.lens-answer {
+  filter: drop-shadow(0 0 7px rgba(194,119,231,.25));
+}
+.lens-answer strong {
+  color: #fff9ea;
+  text-shadow:
+    0 1px 7px rgba(0,0,0,.96),
+    0 0 6px rgba(255,246,206,.92),
+    0 0 13px rgba(249,208,115,.6),
+    0 0 24px rgba(198,124,235,.72),
+    0 0 38px rgba(130,67,176,.46);
+  animation:
+    prophecyText 1s .58s cubic-bezier(.15,.78,.19,1) forwards,
+    answerLivingGlow 2.8s 1.55s ease-in-out infinite;
+}
+.answer-sigil {
+  text-shadow:
+    0 0 8px rgba(255,236,176,.95),
+    0 0 18px rgba(246,203,108,.8),
+    0 0 30px rgba(190,116,235,.78);
+}
+.answer-kicker {
+  text-shadow: 0 0 10px rgba(233,194,253,.5);
+}
+@keyframes answerLivingGlow {
+  0%,100% {
+    text-shadow:
+      0 1px 7px rgba(0,0,0,.96),
+      0 0 6px rgba(255,246,206,.82),
+      0 0 12px rgba(249,208,115,.52),
+      0 0 22px rgba(198,124,235,.6),
+      0 0 34px rgba(130,67,176,.38);
+  }
+  50% {
+    text-shadow:
+      0 1px 7px rgba(0,0,0,.96),
+      0 0 8px rgba(255,250,222,1),
+      0 0 18px rgba(255,218,126,.76),
+      0 0 31px rgba(210,141,248,.88),
+      0 0 46px rgba(139,73,188,.56);
+  }
+}
+.crystal-energy.tone-positive.has-answer,
+.crystal-energy.tone-uncertain.has-answer,
+.crystal-energy.tone-negative.has-answer {
+  filter: drop-shadow(0 0 28px rgba(184,114,229,.48));
+}
+
+/* Phone coordinate tuning for the same art. */
+@media (max-width: 620px) {
+  .book-accents {
+    left: 3.4%;
+    top: 56.5%;
+    width: 24%;
+  }
+  .book-accents i span {
+    font-size: 4.2px !important;
+  }
+  .set-piece-moon {
+    transform-origin: 61% 18%;
+  }
+  .set-piece-lantern-left {
+    transform-origin: 31% 15%;
+  }
+  .set-piece-lantern-right {
+    transform-origin: 73% 15%;
+  }
+  .turn-veil {
+    top: 35%;
+    width: 71%;
+    height: 64%;
+  }
+  .turn-seam-haze {
+    top: 47%;
+    width: 59%;
+  }
+}
+
+
+/* === FORTUNE FIX PASS: STATIC SET / ROSIE-ONLY TURN === */
+
+/*
+  The flattened stage is the authority. Nothing broad is mirrored or moved.
+  Only three tightly masked practicals (moon + two lanterns) and Rosie's
+  isolated portrait layer animate over it.
+*/
+.stage-turning .stage-art {
+  transform: scale(1.015) !important;
+  filter: saturate(1.02) contrast(1.03) brightness(.9) !important;
+}
+
+/* Structural curtain overlays move; no duplicate curtain artwork is used. */
+.curtain {
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+.curtain-left {
+  animation: fortuneCurtainLeft 7.2s ease-in-out infinite !important;
+}
+.curtain-right {
+  animation: fortuneCurtainRight 8.05s ease-in-out infinite -1.45s !important;
+}
+@keyframes fortuneCurtainLeft {
+  0%,100% { transform: translateX(0) skewX(0deg); }
+  34% { transform: translateX(2.8px) skewX(1.25deg); }
+  68% { transform: translateX(-1.8px) skewX(-.8deg); }
+}
+@keyframes fortuneCurtainRight {
+  0%,100% { transform: scaleX(-1) translateX(0) skewX(0deg); }
+  39% { transform: scaleX(-1) translateX(2.6px) skewX(1.18deg); }
+  73% { transform: scaleX(-1) translateX(-1.7px) skewX(-.72deg); }
+}
+
+/* Keep the duplicate-art practicals extremely small and aligned to the master. */
+.living-set {
+  z-index: 7;
+}
+.set-piece {
+  object-fit: cover;
+  object-position: center 47%;
+  filter: saturate(1.02) contrast(1.03) brightness(.9);
+}
+.set-piece-moon {
+  z-index: 2;
+  transform-origin: 33.4% 15.7%;
+  -webkit-mask-image: radial-gradient(circle 6.2% at 33.4% 15.7%,
+    #000 0 72%,
+    rgba(0,0,0,.88) 82%,
+    rgba(0,0,0,.38) 93%,
+    transparent 100%);
+  mask-image: radial-gradient(circle 6.2% at 33.4% 15.7%,
+    #000 0 72%,
+    rgba(0,0,0,.88) 82%,
+    rgba(0,0,0,.38) 93%,
+    transparent 100%);
+  animation: fortuneMoonFloat 7.7s ease-in-out infinite !important;
+}
+.set-piece-lantern-left {
+  z-index: 3;
+  transform-origin: 24.4% 16.3%;
+  -webkit-mask-image: radial-gradient(ellipse 6.8% 18.3% at 24.4% 30.0%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 6.8% 18.3% at 24.4% 30.0%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  animation: fortuneLanternLeft 6.15s ease-in-out infinite -.7s !important;
+}
+.set-piece-lantern-right {
+  z-index: 3;
+  transform-origin: 83.8% 17.0%;
+  -webkit-mask-image: radial-gradient(ellipse 6.9% 18.5% at 83.8% 32.1%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 6.9% 18.5% at 83.8% 32.1%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  animation: fortuneLanternRight 6.85s ease-in-out infinite -2.15s !important;
+}
+@keyframes fortuneMoonFloat {
+  0%,100% { transform: scale(1.015) translate(0,0) rotate(-.35deg); }
+  45% { transform: scale(1.015) translate(1.8px,1.4px) rotate(.72deg); }
+  72% { transform: scale(1.015) translate(-.8px,.45px) rotate(-.18deg); }
+}
+@keyframes fortuneLanternLeft {
+  0%,100% { transform: scale(1.015) rotate(-1.05deg) translateY(0); }
+  50% { transform: scale(1.015) rotate(1.35deg) translateY(1.1px); }
+}
+@keyframes fortuneLanternRight {
+  0%,100% { transform: scale(1.015) rotate(.95deg) translateY(.1px); }
+  50% { transform: scale(1.015) rotate(-1.25deg) translateY(1.15px); }
+}
+
+/* The painted lanterns stay put; moving light sells the pendulum without a second broad scene. */
+.lantern-glow {
+  top: 14.2%;
+  opacity: .96;
+  animation: fortuneLanternGlowLeft 6.15s ease-in-out infinite -.7s !important;
+}
+.lantern-glow-left {
+  left: 24.4%;
+  margin-left: -32px;
+}
+.lantern-glow-right {
+  left: 83.8%;
+  right: auto;
+  margin-left: -32px;
+  animation-name: fortuneLanternGlowRight !important;
+  animation-duration: 6.85s !important;
+  animation-delay: -2.15s !important;
+  animation-direction: normal !important;
+}
+@keyframes fortuneLanternGlowLeft {
+  0%,100% { transform: rotate(-1.3deg) translateY(0); }
+  50% { transform: rotate(1.65deg) translateY(1.2px); }
+}
+@keyframes fortuneLanternGlowRight {
+  0%,100% { transform: rotate(1.2deg) translateY(.1px); }
+  50% { transform: rotate(-1.55deg) translateY(1.25px); }
+}
+
+/*
+  Rosie-only portrait layer. It is always present over the identical pixels below,
+  so idle breathing affects Rosie rather than the set. The mirrored state swaps
+  instantly under smoke rather than rotating a slab of the scene in 3-D.
+*/
+.rosie-turn-layer {
+  z-index: 9 !important;
+  opacity: 1 !important;
+  transform-origin: 50% 35% !important;
+  transition: filter .18s ease !important;
+  clip-path: polygon(
+    25% 53%,
+    29% 39%,
+    34% 25%,
+    40% 9%,
+    47% 2%,
+    55% 3%,
+    63% 8%,
+    72% 23%,
+    78% 40%,
+    78% 52%,
+    70% 61%,
+    60% 66%,
+    40% 66%,
+    30% 61%
+  ) !important;
+  -webkit-mask-image: radial-gradient(ellipse 31% 35% at 51% 34%,
+    #000 0 70%,
+    rgba(0,0,0,.98) 79%,
+    rgba(0,0,0,.78) 87%,
+    rgba(0,0,0,.34) 95%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 31% 35% at 51% 34%,
+    #000 0 70%,
+    rgba(0,0,0,.98) 79%,
+    rgba(0,0,0,.78) 87%,
+    rgba(0,0,0,.34) 95%,
+    transparent 100%) !important;
+  animation: fortuneRosieBreathe 5.3s ease-in-out infinite !important;
+  will-change: transform;
+}
+.rosie-turn-layer.is-flipped {
+  opacity: 1 !important;
+  animation: fortuneRosieBreatheFlipped 5.3s ease-in-out infinite !important;
+}
+.rosie-turn-layer.is-turning,
+.rosie-turn-layer.is-flipped.is-turning {
+  filter: saturate(1.08) contrast(1.035) brightness(.9) !important;
+}
+@keyframes fortuneRosieBreathe {
+  0%,100% { transform: scale(1.015) translateY(0); }
+  50% { transform: scale(1.018) translateY(-1px); }
+}
+@keyframes fortuneRosieBreatheFlipped {
+  0%,100% { transform: scaleX(-1) scale(1.015) translateY(0); }
+  50% { transform: scaleX(-1) scale(1.018) translateY(-1px); }
+}
+.turn-seam-haze {
+  display: none !important;
+}
+
+/* Smoke is the edit point: dense before, during, and just after the 430ms swap. */
+.turn-veil {
+  left: 50%;
+  top: 36%;
+  width: 64%;
+  height: 59%;
+  z-index: 30 !important;
+  filter: blur(6px);
+  background:
+    radial-gradient(ellipse at 50% 45%,
+      rgba(50,18,70,1) 0 31%,
+      rgba(92,38,122,.995) 43%,
+      rgba(133,61,165,.97) 55%,
+      rgba(99,39,131,.86) 67%,
+      rgba(65,23,88,.55) 79%,
+      rgba(45,16,62,.2) 90%,
+      transparent 98%);
+  box-shadow:
+    0 0 42px rgba(208,132,244,.54),
+    0 0 82px rgba(89,36,120,.34),
+    inset 0 0 38px rgba(249,218,255,.12);
+  animation: fortuneTurnCover 1.06s cubic-bezier(.14,.68,.14,1) forwards !important;
+}
+@keyframes fortuneTurnCover {
+  0% { opacity: 0; transform: translate(-50%,-44%) scale(.24,.18); }
+  17% { opacity: .96; transform: translate(-50%,-49%) scale(.9,.86); }
+  29% { opacity: 1; transform: translate(-50%,-50%) scale(1.08,1.03); }
+  61% { opacity: 1; transform: translate(-50%,-52%) scale(1.13,1.1); }
+  76% { opacity: .72; transform: translate(-50%,-58%) scale(1.22,1.28); }
+  100% { opacity: 0; transform: translate(-50%,-76%) scale(1.42,1.58); }
+}
+.smoke-wisp {
+  z-index: 31 !important;
+  top: 38% !important;
+  animation-duration: 1.04s !important;
+}
+.turn-orbit { z-index: 32 !important; }
+.flip-flash {
+  z-index: 33 !important;
+  top: 35% !important;
+}
+.flip-sparkles { z-index: 34 !important; }
+
+/* Book labels are now individually registered to the actual painted spines. */
+.book-accents {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  width: auto;
+  height: auto;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  pointer-events: none;
+}
+.book-accents i {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 8.1%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(231,192,122,.38);
+  border-left-color: rgba(255,220,147,.72);
+  border-radius: 2px 7px 7px 2px;
+  box-shadow:
+    inset 0 1px rgba(255,241,207,.12),
+    inset 0 -2px rgba(0,0,0,.32),
+    0 1px 2px rgba(0,0,0,.26);
+}
+.book-accents i::before {
+  content: "✦";
+  position: absolute;
+  left: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(248,214,141,.72);
+  font-size: 5px;
+}
+.book-accents i span {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-left: 18%;
+  max-width: 77%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,.92);
+}
+.book-accents i:nth-child(1) {
+  left: 2.4%;
+  top: 65.7%;
+  width: 20.6%;
+  background:
+    linear-gradient(90deg, rgba(255,226,160,.11), transparent 18% 82%, rgba(255,220,145,.08)),
+    rgba(94,28,52,.88);
+}
+.book-accents i:nth-child(1) span {
+  color: #f0cf8d;
+  font: italic 700 6px/1 Georgia, "Times New Roman", serif;
+  letter-spacing: .09em;
+}
+.book-accents i:nth-child(2) {
+  left: 0;
+  top: 74.0%;
+  width: 24.5%;
+  background:
+    linear-gradient(90deg, rgba(234,220,169,.1), transparent 18% 82%, rgba(239,199,121,.08)),
+    rgba(28,68,72,.9);
+}
+.book-accents i:nth-child(2) span {
+  color: #ded49f;
+  font: 700 5.7px/1 "Trebuchet MS", Arial, sans-serif;
+  letter-spacing: .14em;
+}
+.book-accents i:nth-child(3) {
+  left: 0;
+  top: 82.5%;
+  width: 26.3%;
+  background:
+    linear-gradient(90deg, rgba(252,220,156,.1), transparent 17% 83%, rgba(245,201,125,.08)),
+    rgba(117,47,27,.9);
+}
+.book-accents i:nth-child(3) span {
+  color: #f0d397;
+  font: 700 5.8px/1 "Courier New", monospace;
+  letter-spacing: .07em;
+}
+.book-accents i:nth-child(4) {
+  left: 0;
+  top: 91.2%;
+  width: 27.2%;
+  background:
+    linear-gradient(90deg, rgba(232,218,168,.1), transparent 18% 82%, rgba(240,199,119,.08)),
+    rgba(43,72,57,.9);
+}
+.book-accents i:nth-child(4) span {
+  color: #ddd19a;
+  font: 700 5.5px/1 Palatino, "Book Antiqua", Georgia, serif;
+  font-variant: small-caps;
+  letter-spacing: .07em;
+}
+.book-accents i:nth-child(5) {
+  display: none;
+}
+
+/* Prompt chips first, refresh affordance beneath them. No empty helper-line reservation. */
+.quick-row {
+  display: block !important;
+  margin-top: 11px;
+  padding-top: 10px;
+}
+.quick-prompts {
+  width: 100%;
+}
+.shuffle-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 7px;
+}
+.shuffle-prompts {
+  width: auto !important;
+  height: 25px !important;
+  padding: 0 9px !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px !important;
+  color: #9a887c !important;
+  font-size: 8.5px !important;
+  letter-spacing: .045em;
+}
+.shuffle-prompts span {
+  font-size: 12px;
+  line-height: 1;
+}
+.speech-status {
+  min-height: 0 !important;
+  margin-top: 6px;
+}
+
+/* Make the apparition luminous without moving any layout boxes. */
+.fortune-lens.has-answer {
+  filter:
+    drop-shadow(0 0 12px rgba(205,137,244,.5))
+    drop-shadow(0 0 24px rgba(246,206,117,.14)) !important;
+}
+.lens-answer strong {
+  text-shadow:
+    0 1px 7px rgba(0,0,0,.98),
+    0 0 7px rgba(255,249,220,.98),
+    0 0 15px rgba(251,213,119,.72),
+    0 0 28px rgba(205,132,244,.84),
+    0 0 44px rgba(128,63,180,.52) !important;
+}
+
+/* Mobile uses horizontal source cropping instead of desktop's vertical crop. */
+@media (max-width: 620px) {
+  .stage-turning .stage-art {
+    transform: scale(1.01) !important;
+  }
+
+  .set-piece-moon {
+    transform-origin: 30.0% 21.0%;
+    -webkit-mask-image: radial-gradient(circle 7.1% at 30.0% 21.0%, #000 0 72%, rgba(0,0,0,.88) 83%, rgba(0,0,0,.34) 94%, transparent 100%);
+    mask-image: radial-gradient(circle 7.1% at 30.0% 21.0%, #000 0 72%, rgba(0,0,0,.88) 83%, rgba(0,0,0,.34) 94%, transparent 100%);
+  }
+  .set-piece-lantern-left {
+    transform-origin: 19.5% 17%;
+    -webkit-mask-image: radial-gradient(ellipse 8.1% 15.7% at 19.5% 32.9%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+    mask-image: radial-gradient(ellipse 8.1% 15.7% at 19.5% 32.9%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+  }
+  .set-piece-lantern-right {
+    transform-origin: 90.6% 18%;
+    -webkit-mask-image: radial-gradient(ellipse 8.2% 15.9% at 90.6% 34.7%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+    mask-image: radial-gradient(ellipse 8.2% 15.9% at 90.6% 34.7%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+  }
+  @keyframes fortuneMoonFloat {
+    0%,100% { transform: scale(1.01) translate(0,0) rotate(-.35deg); }
+    45% { transform: scale(1.01) translate(1.5px,1.5px) rotate(.72deg); }
+    72% { transform: scale(1.01) translate(-.7px,.45px) rotate(-.18deg); }
+  }
+  @keyframes fortuneLanternLeft {
+    0%,100% { transform: scale(1.01) rotate(-1.05deg) translateY(0); }
+    50% { transform: scale(1.01) rotate(1.35deg) translateY(1px); }
+  }
+  @keyframes fortuneLanternRight {
+    0%,100% { transform: scale(1.01) rotate(.95deg) translateY(.1px); }
+    50% { transform: scale(1.01) rotate(-1.25deg) translateY(1px); }
+  }
+
+  .lantern-glow {
+    top: 17.5%;
+    width: 48px;
+    height: 88px;
+  }
+  .lantern-glow-left {
+    left: 19.5%;
+    margin-left: -24px;
+  }
+  .lantern-glow-right {
+    left: 90.6%;
+    margin-left: -24px;
+  }
+
+  .rosie-turn-layer {
+    clip-path: polygon(
+      20% 55%,
+      24% 40%,
+      30% 24%,
+      38% 8%,
+      47% 1%,
+      55% 2%,
+      65% 8%,
+      76% 23%,
+      82% 40%,
+      81% 54%,
+      72% 63%,
+      61% 68%,
+      39% 68%,
+      28% 63%
+    ) !important;
+    -webkit-mask-image: radial-gradient(ellipse 36% 36% at 51% 35%, #000 0 70%, rgba(0,0,0,.98) 79%, rgba(0,0,0,.76) 88%, rgba(0,0,0,.32) 95%, transparent 100%) !important;
+    mask-image: radial-gradient(ellipse 36% 36% at 51% 35%, #000 0 70%, rgba(0,0,0,.98) 79%, rgba(0,0,0,.76) 88%, rgba(0,0,0,.32) 95%, transparent 100%) !important;
+  }
+  @keyframes fortuneRosieBreathe {
+    0%,100% { transform: scale(1.01) translateY(0); }
+    50% { transform: scale(1.013) translateY(-.85px); }
+  }
+  @keyframes fortuneRosieBreatheFlipped {
+    0%,100% { transform: scaleX(-1) scale(1.01) translateY(0); }
+    50% { transform: scaleX(-1) scale(1.013) translateY(-.85px); }
+  }
+
+  .turn-veil {
+    top: 36%;
+    width: 76%;
+    height: 61%;
+  }
+
+  .book-accents i {
+    height: 6.9%;
+  }
+  .book-accents i:nth-child(1) {
+    left: -6.4%;
+    top: 62.7%;
+    width: 24.0%;
+  }
+  .book-accents i:nth-child(2) {
+    left: -9.3%;
+    top: 69.5%;
+    width: 28.7%;
+  }
+  .book-accents i:nth-child(3) {
+    left: -9.3%;
+    top: 76.5%;
+    width: 31.0%;
+  }
+  .book-accents i:nth-child(4) {
+    left: -9.3%;
+    top: 83.7%;
+    width: 32.3%;
+  }
+  .book-accents i:nth-child(5) {
+    display: flex;
+    left: -9.3%;
+    top: 90.8%;
+    width: 32.8%;
+    background:
+      linear-gradient(90deg, rgba(247,221,159,.1), transparent 18% 82%, rgba(242,199,122,.08)),
+      rgba(65,41,88,.9);
+  }
+  .book-accents i:nth-child(5) span {
+    color: #ead09a;
+    font: 700 5.3px/1 Garamond, Georgia, serif;
+    letter-spacing: .05em;
+  }
+
+  .book-accents i span {
+    font-size: 5.2px !important;
+  }
+
+  .shuffle-row {
+    justify-content: center;
+  }
+}
+
+
+/* === FORTUNE POLISH: PROMPTS + ORACLE CARD === */
+
+/* The master painting already contains properly registered book titles. */
+.book-accents {
+  display: none !important;
+}
+
+/* Refresh now lives on the same baseline as the question counter. */
+.shuffle-row {
+  display: none !important;
+}
+.console-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(220,178,106,.09);
+  font-style: normal;
+}
+.footer-shuffle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #9c887a;
+  font-size: 8.5px;
+  letter-spacing: .045em;
+  line-height: 1;
+  cursor: pointer;
+}
+.footer-shuffle span {
+  display: inline-grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border: 1px solid rgba(205,160,85,.18);
+  border-radius: 50%;
+  color: #bd995c;
+  font-size: 11px;
+  transition: transform .2s ease, border-color .2s ease, color .2s ease;
+}
+.footer-shuffle:hover {
+  color: #d3b16f;
+}
+.footer-shuffle:hover span {
+  border-color: rgba(215,174,104,.42);
+  color: #edc979;
+  transform: rotate(18deg);
+}
+.console-foot strong {
+  color: #8f744f;
+  font-size: 8.5px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: .025em;
+  white-space: nowrap;
+}
+
+/* Recast the former parchment receipt as a jewel-box oracle card. */
+.fortune-ticket {
+  width: min(100%, 670px);
+}
+.fortune-ticket-visible {
+  max-height: 420px;
+  margin-top: 13px;
+}
+.ticket-paper {
+  position: relative;
+  isolation: isolate;
+  margin: 0 10px 9px;
+  padding: 18px 18px 16px;
+  overflow: hidden;
+  border: 1px solid rgba(222,180,95,.72);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% -12%, rgba(144,70,126,.32), transparent 41%),
+    radial-gradient(circle at 50% 112%, rgba(111,66,147,.24), transparent 42%),
+    linear-gradient(180deg, #25101d 0%, #140d16 58%, #09080c 100%);
+  color: #f1dfb1;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,236,183,.08),
+    inset 0 0 0 5px rgba(94,55,35,.25),
+    inset 0 0 42px rgba(144,67,128,.14),
+    0 18px 42px rgba(0,0,0,.38),
+    0 0 24px rgba(142,83,174,.08);
+  animation: oracleCardIn .72s cubic-bezier(.14,.84,.2,1);
+}
+.ticket-paper::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 7px;
+  border: 1px solid rgba(220,179,97,.27);
+  border-radius: 12px;
+  background:
+    linear-gradient(90deg, transparent 0 8%, rgba(243,212,146,.025) 8% 8.5%, transparent 8.5% 91.5%, rgba(243,212,146,.025) 91.5% 92%, transparent 92%),
+    radial-gradient(circle at 50% 32%, rgba(193,123,220,.065), transparent 33%);
+  pointer-events: none;
+}
+.ticket-paper::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 15%;
+  right: 15%;
+  top: 53px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224,181,100,.48), transparent);
+  box-shadow: 0 122px 0 rgba(224,181,100,.18);
+  pointer-events: none;
+}
+@keyframes oracleCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(.975);
+    filter: blur(3px);
+  }
+  70% {
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ticket-tear {
+  display: none !important;
+}
+.ticket-corner {
+  position: absolute;
+  z-index: 2;
+  color: rgba(226,184,99,.54);
+  font-size: 8px;
+  text-shadow: 0 0 8px rgba(231,180,91,.32);
+  pointer-events: none;
+}
+.ticket-corner-tl { top: 11px; left: 12px; }
+.ticket-corner-tr { top: 11px; right: 12px; }
+.ticket-corner-bl { bottom: 12px; left: 12px; }
+.ticket-corner-br { bottom: 12px; right: 12px; }
+
+.ticket-topline {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  color: #8f7a73;
+  font-size: 6.5px;
+  letter-spacing: .14em;
+}
+.ticket-topline strong {
+  color: #e4be6d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .17em;
+  text-shadow: 0 0 12px rgba(218,168,81,.22);
+}
+.ticket-topline span:last-child {
+  text-align: right;
+  filter: none;
+}
+.ticket-oracle-mark {
+  width: fit-content;
+  margin: 13px auto 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a477b6;
+}
+.ticket-oracle-mark span {
+  color: #d6ae62;
+  font-size: 8px;
+  text-shadow: 0 0 8px rgba(218,170,80,.4);
+}
+.ticket-oracle-mark b {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(226,183,96,.62);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(121,62,132,.5), rgba(39,18,37,.82) 68%),
+    #160d15;
+  box-shadow:
+    inset 0 0 0 2px rgba(236,199,123,.07),
+    0 0 18px rgba(169,99,202,.16);
+  font-size: 13px;
+  font-weight: 400;
+}
+.ticket-question {
+  max-width: 90%;
+  margin: 5px auto 8px;
+  color: #a99692;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.ticket-answer {
+  max-width: 94%;
+  margin: 0 auto;
+  color: #fff1c8;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.12;
+  text-wrap: balance;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.8),
+    0 0 13px rgba(240,196,104,.18),
+    0 0 24px rgba(172,99,204,.12);
+}
+.ticket-stamp {
+  width: fit-content;
+  margin: 12px auto 14px;
+  padding: 5px 10px 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(190,141,73,.32);
+  border-radius: 999px;
+  background: rgba(196,142,69,.045);
+  color: rgba(211,174,108,.74);
+  font-size: 6.5px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  transform: none;
+}
+.ticket-stamp span {
+  font-size: 9px;
+  filter: sepia(1) saturate(.7);
+}
+.ticket-paper .answer-actions {
+  position: relative;
+  z-index: 2;
+  gap: 7px;
+}
+.ticket-paper .answer-actions button {
+  height: 36px;
+  padding: 0 15px;
+  border: 1px solid rgba(219,177,96,.48);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% -35%, rgba(255,244,197,.4), transparent 55%),
+    linear-gradient(180deg, #c69a4a, #7b4b21);
+  color: #1d100d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .075em;
+  box-shadow:
+    inset 0 1px rgba(255,244,196,.34),
+    0 4px 12px rgba(0,0,0,.24);
+}
+.ticket-paper .answer-actions button.secondary {
+  border-color: rgba(199,159,88,.28);
+  background:
+    linear-gradient(180deg, rgba(71,37,56,.72), rgba(24,15,25,.82));
+  color: #cdbb9f;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.03),
+    0 3px 10px rgba(0,0,0,.18);
+}
+.ticket-paper .answer-actions button:hover {
+  filter: brightness(1.08);
+}
+.ticket-paper .answer-actions button.secondary:hover {
+  color: #efcf8e;
+  border-color: rgba(220,179,99,.48);
+}
+
+@media (max-width: 620px) {
+  .console-foot {
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+  .footer-shuffle {
+    font-size: 8px;
+  }
+  .footer-shuffle span {
+    width: 16px;
+    height: 16px;
+  }
+  .console-foot strong {
+    font-size: 7.5px;
+  }
+
+  .fortune-ticket-visible {
+    max-height: 390px;
+  }
+  .ticket-paper {
+    margin: 0 6px 8px;
+    padding: 15px 12px 14px;
+    border-radius: 15px;
+  }
+  .ticket-paper::before {
+    inset: 6px;
+    border-radius: 10px;
+  }
+  .ticket-paper::after {
+    top: 46px;
+    box-shadow: 0 111px 0 rgba(224,181,100,.17);
+  }
+  .ticket-topline {
+    font-size: 5.7px;
+    letter-spacing: .1em;
+  }
+  .ticket-topline strong {
+    font-size: 8px;
+    letter-spacing: .14em;
+  }
+  .ticket-oracle-mark {
+    margin-top: 11px;
+    margin-bottom: 7px;
+  }
+  .ticket-oracle-mark b {
+    width: 27px;
+    height: 27px;
+    font-size: 12px;
+  }
+  .ticket-question {
+    font-size: 10px;
+  }
+  .ticket-answer {
+    font-size: 18px;
+  }
+  .ticket-stamp {
+    margin: 10px auto 12px;
+  }
+  .ticket-paper .answer-actions button {
+    height: 34px;
+    padding: 0 13px;
+    font-size: 8px;
+  }
+}
+
+
+/* === TURN MASK CORRECTION: ISOLATED PORTRAIT + LOWER SMOKE === */
+
+/*
+  This layer is now a transparent, pre-isolated Rosie portrait asset.
+  The stage/background never participates in the flip.
+*/
+.rosie-turn-layer {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 47% !important;
+  clip-path: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  opacity: 1 !important;
+  transform-origin: 50% 36% !important;
+  filter: saturate(1.02) contrast(1.03) brightness(.91) !important;
+}
+.rosie-turn-layer.is-turning,
+.rosie-turn-layer.is-flipped.is-turning {
+  filter: saturate(1.08) contrast(1.04) brightness(.92) !important;
+}
+@keyframes fortuneRosieBreathe {
+  0%,100% { transform: scale(1.015) translateY(0); }
+  50% { transform: scale(1.018) translateY(-.9px); }
+}
+@keyframes fortuneRosieBreatheFlipped {
+  0%,100% { transform: scaleX(-1) scale(1.015) translateY(0); }
+  50% { transform: scaleX(-1) scale(1.018) translateY(-.9px); }
+}
+
+/*
+  The swap is hidden by a full magical column, not just a face puff.
+  It reaches from above the turban to the top third of the crystal ball.
+*/
+.flip-magic::before,
+.flip-magic::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%);
+}
+.flip-magic::before {
+  z-index: 29;
+  top: 13%;
+  width: 73%;
+  height: 67%;
+  border-radius: 47% 53% 44% 56%;
+  background:
+    radial-gradient(ellipse at 50% 30%,
+      rgba(114,54,151,.9) 0 17%,
+      rgba(94,39,129,.82) 30%,
+      rgba(70,29,101,.65) 46%,
+      rgba(48,19,73,.34) 64%,
+      transparent 82%),
+    radial-gradient(ellipse at 44% 68%,
+      rgba(164,91,194,.63) 0 13%,
+      rgba(106,49,139,.52) 32%,
+      rgba(67,27,91,.28) 58%,
+      transparent 78%);
+  filter: blur(11px);
+  mix-blend-mode: screen;
+  animation: lowerTurnColumn 1.08s cubic-bezier(.13,.68,.14,1) forwards;
+}
+.flip-magic::after {
+  z-index: 30;
+  top: 48%;
+  width: 88%;
+  height: 37%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      rgba(182,105,211,.58) 0 16%,
+      rgba(122,57,158,.48) 34%,
+      rgba(82,34,111,.3) 55%,
+      rgba(49,18,70,.13) 72%,
+      transparent 88%);
+  box-shadow:
+    0 0 38px rgba(180,103,219,.22),
+    0 -18px 48px rgba(132,67,172,.16);
+  filter: blur(13px);
+  mix-blend-mode: screen;
+  animation: lowerTurnBank 1.12s cubic-bezier(.15,.7,.16,1) forwards;
+}
+@keyframes lowerTurnColumn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(34px) scale(.45,.4);
+  }
+  18% {
+    opacity: .78;
+    transform: translateX(-50%) translateY(8px) scale(.88,.8);
+  }
+  31% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1.02,.98);
+  }
+  63% {
+    opacity: .94;
+    transform: translateX(-50%) translateY(-5px) scale(1.08,1.08);
+  }
+  80% {
+    opacity: .55;
+    transform: translateX(-50%) translateY(-22px) scale(1.17,1.19);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-56px) scale(1.3,1.36);
+  }
+}
+@keyframes lowerTurnBank {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px) scale(.5,.42);
+  }
+  24% {
+    opacity: .72;
+    transform: translateX(-50%) translateY(4px) scale(.9,.82);
+  }
+  36% {
+    opacity: .94;
+    transform: translateX(-50%) translateY(0) scale(1.06,.96);
+  }
+  67% {
+    opacity: .82;
+    transform: translateX(-50%) translateY(-4px) scale(1.13,1.07);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-31px) scale(1.28,1.3);
+  }
+}
+
+/* Main veil is taller and lower; full opacity spans the 430ms portrait swap. */
+.turn-veil {
+  top: 39% !important;
+  width: 72% !important;
+  height: 72% !important;
+  z-index: 32 !important;
+  background:
+    radial-gradient(ellipse at 50% 39%,
+      rgba(46,15,67,1) 0 27%,
+      rgba(87,34,119,1) 40%,
+      rgba(128,55,158,.985) 51%,
+      rgba(103,42,136,.91) 63%,
+      rgba(72,27,100,.67) 74%,
+      rgba(48,18,70,.34) 85%,
+      transparent 97%) !important;
+  box-shadow:
+    0 0 48px rgba(210,134,246,.58),
+    0 0 94px rgba(93,37,126,.38),
+    inset 0 0 44px rgba(247,218,255,.12) !important;
+  animation: fortuneTurnCoverDeep 1.1s cubic-bezier(.14,.68,.14,1) forwards !important;
+}
+@keyframes fortuneTurnCoverDeep {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-41%) scale(.22,.17);
+  }
+  16% {
+    opacity: .96;
+    transform: translate(-50%,-47%) scale(.88,.82);
+  }
+  28% {
+    opacity: 1;
+    transform: translate(-50%,-49%) scale(1.07,1.01);
+  }
+  64% {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.13,1.1);
+  }
+  78% {
+    opacity: .72;
+    transform: translate(-50%,-56%) scale(1.22,1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-72%) scale(1.4,1.5);
+  }
+}
+
+/* Existing wisps now fill the neck/robe area rather than clustering at eye level. */
+.smoke-wisp {
+  z-index: 33 !important;
+  top: 43% !important;
+  filter: blur(12px) !important;
+}
+.smoke-wisp-a { margin-top: -128px !important; }
+.smoke-wisp-b { margin-top: -116px !important; }
+.smoke-wisp-c { margin-top: -58px !important; }
+.smoke-wisp-d { margin-top: -137px !important; }
+.smoke-wisp-e { margin-top: 12px !important; width: 178px !important; height: 160px !important; }
+.smoke-wisp-h { margin-top: 7px !important; width: 195px !important; height: 145px !important; }
+.smoke-wisp-i { margin-top: 11px !important; width: 190px !important; height: 148px !important; }
+.smoke-wisp-j { margin-top: -45px !important; height: 190px !important; }
+
+.turn-orbit { z-index: 34 !important; }
+.flip-flash {
+  z-index: 35 !important;
+  top: 39% !important;
+  height: 285px !important;
+  margin-top: -142px !important;
+}
+.flip-sparkles {
+  z-index: 36 !important;
+}
+.flip-sparkles i {
+  top: 43% !important;
+}
+
+@media (max-width: 620px) {
+  .rosie-turn-layer {
+    object-position: center 47% !important;
+    clip-path: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    transform-origin: 50% 36% !important;
+  }
+  @keyframes fortuneRosieBreathe {
+    0%,100% { transform: scale(1.01) translateY(0); }
+    50% { transform: scale(1.013) translateY(-.8px); }
+  }
+  @keyframes fortuneRosieBreatheFlipped {
+    0%,100% { transform: scaleX(-1) scale(1.01) translateY(0); }
+    50% { transform: scaleX(-1) scale(1.013) translateY(-.8px); }
+  }
+
+  .flip-magic::before {
+    top: 10%;
+    width: 90%;
+    height: 72%;
+  }
+  .flip-magic::after {
+    top: 47%;
+    width: 108%;
+    height: 41%;
+  }
+  .turn-veil {
+    top: 40% !important;
+    width: 91% !important;
+    height: 76% !important;
+  }
+  .smoke-wisp {
+    top: 44% !important;
+  }
+  .flip-flash {
+    top: 40% !important;
+    height: 300px !important;
+  }
+}
+
+
+/* === TURN BACKFILL: ERASE ORIGINAL HEAD UNDER FLIPPED PORTRAIT === */
+
+/*
+  The base painting necessarily contains the original head. When the isolated
+  portrait is mirrored, this dark celestial backfill sits between the base art
+  and the portrait so the old head cannot show through. It never moves.
+*/
+.turn-seam-haze {
+  display: block !important;
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 50% !important;
+  top: 36% !important;
+  width: 64% !important;
+  height: 57% !important;
+  transform: translate(-50%,-50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  border-radius: 48% 52% 46% 54% !important;
+  clip-path: ellipse(48% 47% at 50% 48%);
+  -webkit-mask-image: radial-gradient(ellipse 50% 48% at 50% 48%,
+    #000 0 76%,
+    rgba(0,0,0,.98) 82%,
+    rgba(0,0,0,.72) 90%,
+    rgba(0,0,0,.25) 96%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 50% 48% at 50% 48%,
+    #000 0 76%,
+    rgba(0,0,0,.98) 82%,
+    rgba(0,0,0,.72) 90%,
+    rgba(0,0,0,.25) 96%,
+    transparent 100%) !important;
+  background:
+    radial-gradient(circle at 16% 22%, rgba(242,193,87,.82) 0 1px, transparent 2.2px),
+    radial-gradient(circle at 81% 18%, rgba(249,204,101,.78) 0 1.2px, transparent 2.4px),
+    radial-gradient(circle at 72% 43%, rgba(243,194,94,.68) 0 .9px, transparent 2px),
+    radial-gradient(circle at 28% 49%, rgba(236,186,84,.6) 0 .8px, transparent 1.9px),
+    radial-gradient(circle at 58% 15%, rgba(247,210,120,.62) 0 .8px, transparent 1.8px),
+    radial-gradient(circle at 46% 66%, rgba(219,165,80,.48) 0 .8px, transparent 1.8px),
+    radial-gradient(ellipse at 48% 42%, rgba(25,29,61,.96), rgba(8,17,39,.99) 58%, rgba(5,12,29,1) 100%),
+    linear-gradient(90deg, #071126, #111b38 48%, #081126) !important;
+  box-shadow:
+    inset 16px 0 28px rgba(19,22,52,.22),
+    inset -16px 0 28px rgba(9,12,32,.28),
+    0 0 24px rgba(8,12,30,.35) !important;
+  filter: none !important;
+  transition: opacity .02s linear !important;
+}
+.turn-seam-haze.is-flipped {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+/* Keep the isolated portrait definitively above the backfill. */
+.rosie-turn-layer {
+  z-index: 9 !important;
+}
+
+@media (max-width: 620px) {
+  .turn-seam-haze {
+    top: 36.5% !important;
+    width: 79% !important;
+    height: 58% !important;
+    clip-path: ellipse(47% 47% at 50% 48%);
+  }
+}
+
+
+/* === BACKFILL GEOMETRY TIGHTENING === */
+
+/* Cover only the original head/turban footprint - never the chest or crystal ball. */
+.turn-seam-haze {
+  top: 32.5% !important;
+  width: 61% !important;
+  height: 42% !important;
+  border-radius: 46% 54% 50% 50% !important;
+  clip-path: ellipse(47% 48% at 50% 47%) !important;
+  -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 75%,
+    rgba(0,0,0,.97) 83%,
+    rgba(0,0,0,.66) 91%,
+    rgba(0,0,0,.2) 97%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 75%,
+    rgba(0,0,0,.97) 83%,
+    rgba(0,0,0,.66) 91%,
+    rgba(0,0,0,.2) 97%,
+    transparent 100%) !important;
+}
+@media (max-width: 620px) {
+  .turn-seam-haze {
+    top: 33.5% !important;
+    width: 72% !important;
+    height: 43% !important;
+    clip-path: ellipse(47% 48% at 50% 47%) !important;
+  }
+}
+
+
+/* === BACKFILL BLEND REFINEMENT === */
+
+/* Match the almost-black blue cloth behind Rosie and keep the repair tucked under the portrait. */
+.turn-seam-haze {
+  width: 57% !important;
+  height: 40% !important;
+  top: 32% !important;
+  background:
+    radial-gradient(circle at 17% 22%, rgba(227,178,78,.58) 0 .8px, transparent 1.8px),
+    radial-gradient(circle at 80% 18%, rgba(236,190,92,.52) 0 .9px, transparent 2px),
+    radial-gradient(circle at 73% 44%, rgba(223,172,80,.42) 0 .7px, transparent 1.7px),
+    radial-gradient(circle at 30% 48%, rgba(218,163,72,.34) 0 .7px, transparent 1.6px),
+    linear-gradient(90deg,
+      rgba(4,9,22,.995) 0%,
+      rgba(8,17,35,.995) 22%,
+      rgba(11,22,45,.995) 39%,
+      rgba(5,12,28,.998) 55%,
+      rgba(9,18,38,.996) 73%,
+      rgba(4,9,22,.998) 100%) !important;
+  box-shadow:
+    inset 10px 0 24px rgba(4,8,20,.26),
+    inset -10px 0 24px rgba(3,7,18,.3) !important;
+  filter: blur(1.2px) !important;
+}
+.rosie-turn-layer.is-flipped {
+  animation: fortuneRosieBreatheFlippedCover 5.3s ease-in-out infinite !important;
+}
+@keyframes fortuneRosieBreatheFlippedCover {
+  0%,100% { transform: scaleX(-1) scale(1.025) translateY(0); }
+  50% { transform: scaleX(-1) scale(1.028) translateY(-.9px); }
+}
+
+@media (max-width: 620px) {
+  .turn-seam-haze {
+    width: 64% !important;
+    height: 40% !important;
+    top: 33% !important;
+  }
+  .rosie-turn-layer.is-flipped {
+    animation: fortuneRosieBreatheFlippedCoverMobile 5.3s ease-in-out infinite !important;
+  }
+  @keyframes fortuneRosieBreatheFlippedCoverMobile {
+    0%,100% { transform: scaleX(-1) scale(1.022) translateY(0); }
+    50% { transform: scaleX(-1) scale(1.025) translateY(-.8px); }
+  }
+}
+
+
+/* === TURN COMPOSITING FINALIZATION === */
+
+/* One backfill only. It sits below the isolated portrait and never moves. */
+.turn-seam-haze {
+  display: none !important;
+}
+.rosie-turn-backdrop {
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 50% !important;
+  top: 32% !important;
+  width: 57% !important;
+  height: 40% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%,-50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  border-radius: 48% !important;
+  clip-path: ellipse(47% 48% at 50% 47%) !important;
+  -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 74%,
+    rgba(0,0,0,.98) 82%,
+    rgba(0,0,0,.65) 91%,
+    rgba(0,0,0,.18) 97%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 74%,
+    rgba(0,0,0,.98) 82%,
+    rgba(0,0,0,.65) 91%,
+    rgba(0,0,0,.18) 97%,
+    transparent 100%) !important;
+  background:
+    radial-gradient(circle at 18% 21%, rgba(226,177,78,.5) 0 .8px, transparent 1.8px),
+    radial-gradient(circle at 79% 18%, rgba(237,190,92,.46) 0 .9px, transparent 1.9px),
+    radial-gradient(circle at 73% 45%, rgba(221,169,79,.34) 0 .7px, transparent 1.7px),
+    linear-gradient(90deg,
+      rgba(3,8,20,.998) 0%,
+      rgba(7,15,32,.998) 23%,
+      rgba(10,20,41,.997) 40%,
+      rgba(4,11,26,.999) 56%,
+      rgba(8,17,35,.998) 74%,
+      rgba(3,8,20,.999) 100%) !important;
+  box-shadow:
+    inset 8px 0 20px rgba(2,6,16,.24),
+    inset -8px 0 20px rgba(2,6,16,.28) !important;
+  filter: blur(1px) !important;
+  transition: opacity .02s linear !important;
+}
+.rosie-turn-backdrop.is-flipped {
+  opacity: 1 !important;
+}
+
+/* The isolated portrait now includes the collar so the turned head remains attached. */
+.rosie-turn-layer {
+  z-index: 9 !important;
+}
+
+/* Dedicated lower smoke added in JSX: it reaches through the collar and over the upper ball. */
+.turn-lower-smoke,
+.turn-ball-haze {
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+.turn-lower-smoke {
+  z-index: 33;
+  top: 37%;
+  width: 92%;
+  height: 51%;
+  transform: translateX(-50%);
+  border-radius: 48%;
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      rgba(174,99,208,.72) 0 14%,
+      rgba(122,57,160,.62) 31%,
+      rgba(82,34,113,.4) 51%,
+      rgba(47,18,70,.18) 70%,
+      transparent 87%);
+  filter: blur(12px);
+  animation: turnLowerSmoke 1.25s cubic-bezier(.14,.7,.16,1) forwards;
+}
+.turn-ball-haze {
+  z-index: 34;
+  top: 58%;
+  width: 108%;
+  height: 28%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 45%,
+      rgba(202,127,230,.48) 0 13%,
+      rgba(140,71,177,.42) 31%,
+      rgba(86,39,118,.25) 52%,
+      transparent 80%);
+  filter: blur(14px);
+  animation: turnBallHaze 1.3s ease-out forwards;
+}
+@keyframes turnLowerSmoke {
+  0% { opacity: 0; transform: translateX(-50%) translateY(28px) scale(.5,.4); }
+  18% { opacity: .72; transform: translateX(-50%) translateY(8px) scale(.9,.78); }
+  32% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.04,.98); }
+  64% { opacity: .92; transform: translateX(-50%) translateY(-5px) scale(1.12,1.1); }
+  82% { opacity: .5; transform: translateX(-50%) translateY(-24px) scale(1.2,1.22); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-58px) scale(1.34,1.42); }
+}
+@keyframes turnBallHaze {
+  0% { opacity: 0; transform: translateX(-50%) translateY(18px) scale(.5,.45); }
+  24% { opacity: .58; transform: translateX(-50%) translateY(5px) scale(.92,.82); }
+  40% { opacity: .86; transform: translateX(-50%) translateY(0) scale(1.08,.96); }
+  68% { opacity: .72; transform: translateX(-50%) translateY(-5px) scale(1.15,1.06); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-34px) scale(1.28,1.25); }
+}
+
+/* Foreground smoke crosses in front of the ball/lens, fully hiding the neck seam at swap. */
+.turn-foreground-smoke {
+  position: absolute;
+  z-index: 29;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.foreground-plume {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  opacity: 0;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse,
+      rgba(190,111,219,.58) 0 15%,
+      rgba(128,59,164,.48) 35%,
+      rgba(76,31,104,.25) 57%,
+      transparent 80%);
+  filter: blur(12px);
+  animation: foregroundTurnPlume 1.24s cubic-bezier(.13,.72,.16,1) forwards;
+}
+.foreground-plume-a {
+  width: 235px;
+  height: 210px;
+  margin: -76px 0 0 -150px;
+  --fx: -48px;
+  --fy: -76px;
+  --fr: -12deg;
+}
+.foreground-plume-b {
+  width: 250px;
+  height: 220px;
+  margin: -68px 0 0 -91px;
+  --fx: 54px;
+  --fy: -82px;
+  --fr: 14deg;
+  animation-delay: .035s;
+}
+.foreground-plume-c {
+  width: 225px;
+  height: 190px;
+  margin: -15px 0 0 -113px;
+  --fx: 4px;
+  --fy: -61px;
+  --fr: 2deg;
+  animation-delay: .07s;
+}
+@keyframes foregroundTurnPlume {
+  0% {
+    opacity: 0;
+    transform: translate(0,34px) scale(.45) rotate(0);
+  }
+  20% {
+    opacity: .62;
+    transform: translate(0,8px) scale(.88) rotate(0);
+  }
+  36% {
+    opacity: .9;
+    transform: translate(0,0) scale(1.05) rotate(0);
+  }
+  67% {
+    opacity: .68;
+    transform: translate(calc(var(--fx) * .35),calc(var(--fy) * .35)) scale(1.16) rotate(calc(var(--fr) * .4));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--fx),var(--fy)) scale(1.35) rotate(var(--fr));
+  }
+}
+.foreground-glitter {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 48%;
+  width: 52%;
+  height: 38%;
+  transform: translateX(-50%);
+}
+.foreground-glitter i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #ffe7a1;
+  box-shadow:
+    0 0 6px rgba(255,225,143,.95),
+    0 0 12px rgba(198,124,235,.72);
+  animation: foregroundGlitter 1.12s ease-out forwards;
+}
+.foreground-glitter i:nth-child(1) { left: 8%; top: 58%; animation-delay:.08s; }
+.foreground-glitter i:nth-child(2) { left: 22%; top: 78%; animation-delay:.16s; }
+.foreground-glitter i:nth-child(3) { left: 36%; top: 48%; animation-delay:.11s; }
+.foreground-glitter i:nth-child(4) { left: 51%; top: 82%; animation-delay:.2s; }
+.foreground-glitter i:nth-child(5) { left: 65%; top: 54%; animation-delay:.13s; }
+.foreground-glitter i:nth-child(6) { left: 78%; top: 72%; animation-delay:.18s; }
+.foreground-glitter i:nth-child(7) { left: 90%; top: 46%; animation-delay:.1s; }
+.foreground-glitter i:nth-child(8) { left: 56%; top: 35%; animation-delay:.15s; }
+@keyframes foregroundGlitter {
+  0% { opacity: 0; transform: translateY(18px) scale(.4); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-68px) scale(1.25); }
+}
+
+@media (max-width: 620px) {
+  .rosie-turn-backdrop {
+    top: 33% !important;
+    width: 64% !important;
+    height: 40% !important;
+  }
+  .turn-lower-smoke {
+    top: 38%;
+    width: 110%;
+    height: 53%;
+  }
+  .turn-ball-haze {
+    top: 59%;
+    width: 126%;
+    height: 30%;
+  }
+  .foreground-plume {
+    top: 53%;
+  }
+  .foreground-plume-a { width: 200px; height: 195px; margin-left: -128px; }
+  .foreground-plume-b { width: 212px; height: 205px; margin-left: -77px; }
+  .foreground-plume-c { width: 195px; height: 178px; margin-left: -98px; }
+  .foreground-glitter {
+    top: 49%;
+    width: 60%;
+    height: 40%;
+  }
+}
+
+
+/* === TURN CORRECTION: IN-PLACE PIVOT + FULL LOWER COVER === */
+
+/*
+  The isolated head asset is not centered in the square source. Mirroring the
+  whole replaced element around 50% moved Rosie's head across the stage and
+  exposed the original head underneath. Pivot around Rosie's actual head center
+  instead so the portrait turns in place.
+*/
+.rosie-turn-backdrop {
+  display: none !important;
+}
+
+.rosie-turn-layer {
+  z-index: 10 !important;
+  opacity: 0 !important;
+  transform-origin: 61.5% 35.5% !important;
+  animation: none !important;
+  transition: opacity .02s linear, filter .16s ease !important;
+}
+
+.rosie-turn-layer.is-flipped {
+  opacity: 1 !important;
+  transform-origin: 61.5% 35.5% !important;
+  animation: fortuneRosieTurnedInPlace 5.3s ease-in-out infinite !important;
+}
+
+@keyframes fortuneRosieTurnedInPlace {
+  0%,100% {
+    transform: scaleX(-1) scale(1.018) translateY(0);
+  }
+  50% {
+    transform: scaleX(-1) scale(1.021) translateY(-.9px);
+  }
+}
+
+/*
+  This opaque celestial repair sits exactly under the flipped portrait and
+  fully erases the original baked-in head. It is centered on Rosie's source
+  position, not on the stage midpoint.
+*/
+.turn-seam-haze {
+  display: block !important;
+  z-index: 9 !important;
+  left: 61.5% !important;
+  top: 34.5% !important;
+  width: 70% !important;
+  height: 49% !important;
+  transform: translate(-50%,-50%) !important;
+  border-radius: 48% 52% 49% 51% !important;
+  clip-path: ellipse(48.5% 48% at 50% 48%) !important;
+  -webkit-mask-image: radial-gradient(ellipse 50% 49% at 50% 48%,
+    #000 0 78%,
+    rgba(0,0,0,.995) 84%,
+    rgba(0,0,0,.88) 90%,
+    rgba(0,0,0,.4) 96%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 50% 49% at 50% 48%,
+    #000 0 78%,
+    rgba(0,0,0,.995) 84%,
+    rgba(0,0,0,.88) 90%,
+    rgba(0,0,0,.4) 96%,
+    transparent 100%) !important;
+  background:
+    radial-gradient(circle at 13% 22%, rgba(232,181,79,.58) 0 .8px, transparent 1.9px),
+    radial-gradient(circle at 83% 19%, rgba(239,194,96,.55) 0 .9px, transparent 2px),
+    radial-gradient(circle at 71% 42%, rgba(223,174,82,.42) 0 .8px, transparent 1.8px),
+    radial-gradient(circle at 31% 46%, rgba(215,164,74,.35) 0 .7px, transparent 1.7px),
+    radial-gradient(circle at 52% 17%, rgba(238,195,103,.38) 0 .7px, transparent 1.7px),
+    radial-gradient(ellipse at 49% 87%, rgba(75,22,50,.92) 0 9%, rgba(34,15,39,.88) 28%, transparent 58%),
+    linear-gradient(90deg,
+      rgba(4,9,22,.999) 0%,
+      rgba(8,17,36,.999) 21%,
+      rgba(10,21,44,.999) 39%,
+      rgba(5,12,29,.999) 57%,
+      rgba(9,18,39,.999) 75%,
+      rgba(4,9,22,.999) 100%) !important;
+  box-shadow:
+    inset 18px 0 30px rgba(2,7,18,.3),
+    inset -18px 0 30px rgba(2,7,18,.34),
+    0 0 28px rgba(3,8,20,.3) !important;
+  filter: blur(.75px) !important;
+  transition: opacity .015s linear !important;
+}
+
+.turn-seam-haze.is-flipped {
+  opacity: 1 !important;
+}
+
+/* The swap veil stays fully opaque through the 520ms substitution. */
+.turn-veil {
+  top: 43% !important;
+  width: 88% !important;
+  height: 86% !important;
+  animation: fortuneTurnCoverFull 1.32s cubic-bezier(.14,.68,.14,1) forwards !important;
+}
+
+@keyframes fortuneTurnCoverFull {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-42%) scale(.2,.16);
+  }
+  14% {
+    opacity: .97;
+    transform: translate(-50%,-47%) scale(.84,.78);
+  }
+  26% {
+    opacity: 1;
+    transform: translate(-50%,-49%) scale(1.04,.98);
+  }
+  66% {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.13,1.13);
+  }
+  82% {
+    opacity: .68;
+    transform: translate(-50%,-57%) scale(1.26,1.32);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-78%) scale(1.48,1.68);
+  }
+}
+
+/* Additional lower smoke inside the stage reaches through the robe/ball seam. */
+.turn-lower-smoke,
+.turn-ball-haze {
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 50%;
+}
+
+.turn-lower-smoke {
+  z-index: 33;
+  top: 56%;
+  width: 96%;
+  height: 50%;
+  transform: translate(-50%,-50%);
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      rgba(83,31,116,.97) 0 18%,
+      rgba(117,48,149,.91) 32%,
+      rgba(91,35,126,.74) 49%,
+      rgba(60,21,88,.48) 66%,
+      rgba(39,14,61,.2) 81%,
+      transparent 96%);
+  filter: blur(12px);
+  animation: fortuneLowerSmoke 1.28s cubic-bezier(.14,.7,.15,1) forwards;
+}
+
+.turn-ball-haze {
+  z-index: 34;
+  top: 72%;
+  width: 110%;
+  height: 34%;
+  transform: translate(-50%,-50%);
+  background:
+    radial-gradient(ellipse at 50% 45%,
+      rgba(145,76,178,.72) 0 16%,
+      rgba(105,46,143,.61) 34%,
+      rgba(72,28,105,.42) 55%,
+      rgba(42,15,67,.18) 76%,
+      transparent 94%);
+  box-shadow:
+    0 -20px 54px rgba(155,82,193,.22),
+    0 0 45px rgba(96,42,136,.2);
+  filter: blur(14px);
+  animation: fortuneBallHaze 1.3s cubic-bezier(.15,.7,.16,1) forwards;
+}
+
+@keyframes fortuneLowerSmoke {
+  0% { opacity: 0; transform: translate(-50%,-42%) scale(.42,.34); }
+  20% { opacity: .82; transform: translate(-50%,-48%) scale(.88,.8); }
+  35% { opacity: 1; transform: translate(-50%,-50%) scale(1.04,.98); }
+  68% { opacity: .92; transform: translate(-50%,-52%) scale(1.14,1.08); }
+  100% { opacity: 0; transform: translate(-50%,-70%) scale(1.35,1.44); }
+}
+
+@keyframes fortuneBallHaze {
+  0% { opacity: 0; transform: translate(-50%,-38%) scale(.5,.38); }
+  24% { opacity: .72; transform: translate(-50%,-47%) scale(.9,.82); }
+  39% { opacity: .94; transform: translate(-50%,-50%) scale(1.05,.96); }
+  72% { opacity: .76; transform: translate(-50%,-52%) scale(1.14,1.08); }
+  100% { opacity: 0; transform: translate(-50%,-66%) scale(1.3,1.34); }
+}
+
+/*
+  Foreground smoke is deliberately outside .stage so it can pass over the
+  crystal-ball overlays too. This is what hides the lower half of the edit.
+*/
+.turn-foreground-smoke {
+  position: absolute;
+  z-index: 41;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.foreground-plume {
+  position: absolute;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  filter: blur(16px);
+}
+
+.foreground-plume-a {
+  top: 48%;
+  width: 70%;
+  height: 48%;
+  background:
+    radial-gradient(ellipse at 50% 47%,
+      rgba(75,25,106,.94) 0 22%,
+      rgba(113,48,145,.86) 40%,
+      rgba(78,29,111,.56) 61%,
+      rgba(45,16,71,.18) 80%,
+      transparent 96%);
+  animation: fortuneForegroundA 1.31s cubic-bezier(.13,.7,.15,1) forwards;
+}
+
+.foreground-plume-b {
+  top: 62%;
+  width: 84%;
+  height: 39%;
+  background:
+    radial-gradient(ellipse at 50% 48%,
+      rgba(116,51,149,.8) 0 19%,
+      rgba(82,31,117,.66) 42%,
+      rgba(50,18,76,.3) 67%,
+      transparent 91%);
+  animation: fortuneForegroundB 1.33s cubic-bezier(.15,.7,.16,1) forwards;
+}
+
+.foreground-plume-c {
+  top: 74%;
+  width: 76%;
+  height: 24%;
+  background:
+    radial-gradient(ellipse at 50% 50%,
+      rgba(157,88,188,.6) 0 13%,
+      rgba(101,44,137,.47) 36%,
+      rgba(58,21,86,.22) 65%,
+      transparent 90%);
+  animation: fortuneForegroundC 1.35s cubic-bezier(.15,.72,.16,1) forwards;
+}
+
+@keyframes fortuneForegroundA {
+  0% { opacity: 0; transform: translate(-50%,-42%) scale(.38,.32); }
+  18% { opacity: .9; transform: translate(-50%,-48%) scale(.86,.8); }
+  32%,66% { opacity: 1; transform: translate(-50%,-50%) scale(1.05,1.02); }
+  100% { opacity: 0; transform: translate(-50%,-74%) scale(1.34,1.48); }
+}
+@keyframes fortuneForegroundB {
+  0% { opacity: 0; transform: translate(-50%,-34%) scale(.42,.3); }
+  22% { opacity: .78; transform: translate(-50%,-46%) scale(.88,.76); }
+  37%,68% { opacity: .94; transform: translate(-50%,-50%) scale(1.06,.98); }
+  100% { opacity: 0; transform: translate(-50%,-70%) scale(1.3,1.32); }
+}
+@keyframes fortuneForegroundC {
+  0% { opacity: 0; transform: translate(-50%,-28%) scale(.45,.25); }
+  26% { opacity: .62; transform: translate(-50%,-45%) scale(.9,.72); }
+  43%,70% { opacity: .8; transform: translate(-50%,-50%) scale(1.08,.94); }
+  100% { opacity: 0; transform: translate(-50%,-66%) scale(1.26,1.22); }
+}
+
+.foreground-glitter {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+}
+.foreground-glitter i {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f5d98c;
+  box-shadow: 0 0 9px rgba(246,209,124,.9);
+  opacity: 0;
+  animation: fortuneForegroundGlitter 1.25s ease-out forwards;
+}
+.foreground-glitter i:nth-child(1) { --x:-128px; --y:-95px; animation-delay:.08s; }
+.foreground-glitter i:nth-child(2) { --x:112px; --y:-76px; animation-delay:.12s; }
+.foreground-glitter i:nth-child(3) { --x:-92px; --y:-18px; animation-delay:.17s; }
+.foreground-glitter i:nth-child(4) { --x:118px; --y:4px; animation-delay:.2s; }
+.foreground-glitter i:nth-child(5) { --x:-72px; --y:58px; animation-delay:.25s; }
+.foreground-glitter i:nth-child(6) { --x:86px; --y:72px; animation-delay:.29s; }
+.foreground-glitter i:nth-child(7) { --x:-26px; --y:94px; animation-delay:.34s; }
+.foreground-glitter i:nth-child(8) { --x:38px; --y:-118px; animation-delay:.15s; }
+@keyframes fortuneForegroundGlitter {
+  0% { opacity: 0; transform: translate(-50%,-50%) scale(.35); }
+  24% { opacity: 1; }
+  78% { opacity: .82; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2); }
+}
+
+@media (max-width: 620px) {
+  .rosie-turn-layer,
+  .rosie-turn-layer.is-flipped {
+    transform-origin: 62% 35.5% !important;
+  }
+
+  .turn-seam-haze {
+    left: 62% !important;
+    top: 35% !important;
+    width: 78% !important;
+    height: 50% !important;
+  }
+
+  .turn-veil {
+    top: 45% !important;
+    width: 104% !important;
+    height: 90% !important;
+  }
+
+  .turn-lower-smoke {
+    top: 58%;
+    width: 112%;
+    height: 52%;
+  }
+
+  .turn-ball-haze {
+    top: 75%;
+    width: 124%;
+    height: 36%;
+  }
+
+  .foreground-plume-a {
+    top: 49%;
+    width: 88%;
+    height: 47%;
+  }
+  .foreground-plume-b {
+    top: 64%;
+    width: 104%;
+    height: 40%;
+  }
+  .foreground-plume-c {
+    top: 76%;
+    width: 94%;
+    height: 25%;
+  }
+}
