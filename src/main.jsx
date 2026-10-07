@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
+import "./fortune-desktop.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -221,6 +222,11 @@ function FortuneLens({
   const dismissing = revealStage === "dismissing";
   const showAnswer = Boolean(answer && !answerDismissed);
   const interactive = showAnswer && revealStage === "revealed";
+  const verdict = answer?.tone === "positive"
+    ? "THE PATH OPENS"
+    : answer?.tone === "negative"
+      ? "THE PAW SAYS NO"
+      : "THE SIGNS ARE VEILED";
 
   const state = [
     consulting ? "is-consulting" : "",
@@ -267,8 +273,8 @@ function FortuneLens({
           </span>
           <span className="answer-sigil" aria-hidden="true">✦</span>
           <span className="answer-kicker">ROSIE HAS SEEN IT</span>
-          <strong>{answer.text}</strong>
-
+          <strong>{verdict}</strong>
+          <small>Your fortune has been delivered.</small>
         </div>
       )}
 
@@ -286,7 +292,7 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
   const manifesting = revealStage === "manifesting";
   return (
     <div
-      className={`crystal-energy ${consulting ? "is-consulting" : ""} ${manifesting ? "is-manifesting" : ""} ${tone}`}
+      className={`crystal-energy ${consulting ? "is-consulting" : ""} ${manifesting ? "is-manifesting" : ""} ${answer ? "has-answer" : ""} ${tone}`}
       aria-hidden="true"
     >
       <span className="energy-halo" />
@@ -343,6 +349,15 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             aria-hidden="true"
           />
 
+          <div className="stage-twinkles" aria-hidden="true">
+            <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+          </div>
+
+          <div
+            className={`rosie-turn-backplate ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            aria-hidden="true"
+          />
+
           <div className="lantern-life" aria-hidden="true">
             <span className="lantern-glow lantern-glow-left"><i /></span>
             <span className="lantern-glow lantern-glow-right"><i /></span>
@@ -379,27 +394,27 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
               </span>
             </div>
           )}
+
+          <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
+          <FortuneLens
+            consulting={consulting}
+            answer={answer}
+            revealStage={revealStage}
+            answerDismissed={answerDismissed}
+            onDismiss={onDismissAnswer}
+          />
+
+          {flipBurst > 0 && turning && (
+            <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
+              <span className="foreground-plume foreground-plume-a" />
+              <span className="foreground-plume foreground-plume-b" />
+              <span className="foreground-plume foreground-plume-c" />
+              <span className="foreground-glitter">
+                <i /><i /><i /><i /><i /><i /><i /><i />
+              </span>
+            </div>
+          )}
         </div>
-
-        <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
-        <FortuneLens
-          consulting={consulting}
-          answer={answer}
-          revealStage={revealStage}
-          answerDismissed={answerDismissed}
-          onDismiss={onDismissAnswer}
-        />
-
-        {flipBurst > 0 && turning && (
-          <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
-            <span className="foreground-plume foreground-plume-a" />
-            <span className="foreground-plume foreground-plume-b" />
-            <span className="foreground-plume foreground-plume-c" />
-            <span className="foreground-glitter">
-              <i /><i /><i /><i /><i /><i /><i /><i />
-            </span>
-          </div>
-        )}
       </div>
     </section>
   );
@@ -2251,7 +2266,7 @@ function App() {
       <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
 
         {page === "fortune" ? (
-        <main>
+        <main className="fortune-page">
           <div className="fortune-console">
             <FortuneMachine
               consulting={consulting}
@@ -2269,9 +2284,11 @@ function App() {
               <button
                 type="button"
                 className="fortune-whistle-button"
-                aria-label="Whistle for Rosie"
+                aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
+                aria-pressed={flipped}
                 title="Whistle for Rosie"
                 onClick={whistleForRosie}
+                disabled={turning}
               >
                 <b aria-hidden="true">♪</b>
                 <small>WHISTLE FOR ROSIE</small>
@@ -2351,7 +2368,15 @@ function App() {
           </div>
 
           <section className={`fortune-ticket ${answer && (revealStage === "revealed" || revealStage === "dismissing") ? "fortune-ticket-visible" : ""}`} aria-live="polite">
-            {answer && (
+            {(!answer || revealStage === "manifesting") && (
+              <div className={`fortune-waiting-card ${consulting || revealStage === "manifesting" ? "is-awake" : ""}`}>
+                <span aria-hidden="true">✦</span>
+                <small>THE PRIVATE CONSULTATION</small>
+                <strong>{consulting || revealStage === "manifesting" ? "The signs are gathering." : "Rosie will place her answer here."}</strong>
+                <p>Ask one excellent question. The crystal ball will stir, and Madame Rosie will deliver her ruling.</p>
+              </div>
+            )}
+            {answer && revealStage !== "manifesting" && (
               <div className="ticket-paper">
                 <span className="ticket-corner ticket-corner-tl" aria-hidden="true">✦</span>
                 <span className="ticket-corner ticket-corner-tr" aria-hidden="true">✦</span>
