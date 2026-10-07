@@ -87,7 +87,7 @@ function dayNumber() {
 
 function createWhistleBlobUrl() {
   const sampleRate = 22050;
-  const duration = 0.72;
+  const duration = 0.86;
   const sampleCount = Math.floor(sampleRate * duration);
   const buffer = new ArrayBuffer(44 + sampleCount);
   const view = new DataView(buffer);
@@ -113,57 +113,106 @@ function createWhistleBlobUrl() {
   view.setUint32(40, sampleCount, true);
 
   let phase = 0;
+  let seed = 17431;
+  const noise = () => {
+    seed = (seed * 48271) % 2147483647;
+    return (seed / 2147483647) * 2 - 1;
+  };
+
   for (let index = 0; index < sampleCount; index += 1) {
     const time = index / sampleRate;
-    let frequency = 1900;
+    let frequency = 1120;
     let amplitude = 0;
 
-    if (time < 0.31) {
-      const progress = time / 0.31;
-      frequency = 1550 + 1120 * Math.pow(progress, 0.72) + 34 * Math.sin(Math.PI * 10 * time);
-      amplitude = Math.min(1, time / 0.016) * Math.min(1, (0.31 - time) / 0.038) * 0.82;
-    } else if (time > 0.37) {
-      const local = time - 0.37;
-      const progress = local / (duration - 0.37);
-      frequency = 2680 - 820 * progress + 30 * Math.sin(Math.PI * 10 * local);
-      amplitude = Math.min(1, local / 0.016) * Math.min(1, (duration - time) / 0.055) * 0.78;
+    if (time < 0.34) {
+      const progress = time / 0.34;
+      frequency = 980 + 390 * Math.sin(progress * Math.PI * .72);
+      amplitude =
+        Math.min(1, time / 0.028) *
+        Math.min(1, (0.34 - time) / 0.07) *
+        0.52;
+    } else if (time > 0.44) {
+      const local = time - 0.44;
+      const progress = local / (duration - 0.44);
+      frequency = 1110 + 470 * Math.sin(progress * Math.PI * .75);
+      amplitude =
+        Math.min(1, local / 0.03) *
+        Math.min(1, (duration - time) / 0.075) *
+        0.48;
     }
 
     phase += Math.PI * 2 * frequency / sampleRate;
-    const tone = Math.sin(phase) + 0.14 * Math.sin(phase * 2);
-    const sample = Math.max(-1, Math.min(1, tone * amplitude));
-    view.setUint8(44 + index, Math.round(128 + sample * 118));
+    const pure = Math.sin(phase) + 0.055 * Math.sin(phase * 2);
+    const airy = noise() * 0.045;
+    const sample = Math.max(-1, Math.min(1, (pure + airy) * amplitude));
+    view.setUint8(44 + index, Math.round(128 + sample * 112));
   }
 
   return URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }));
 }
 
-function FortuneLens({ consulting, answer, revealStage }) {
+function FortuneLens({
+  consulting,
+  answer,
+  revealStage,
+  answerDismissed,
+  onDismiss
+}) {
   const manifesting = revealStage === "manifesting";
+  const dismissing = revealStage === "dismissing";
+  const showAnswer = Boolean(answer && !answerDismissed);
+  const interactive = showAnswer && revealStage === "revealed";
+
   const state = [
     consulting ? "is-consulting" : "",
     manifesting ? "is-manifesting" : "",
-    answer ? `has-answer tone-${answer.tone}` : ""
+    dismissing ? "is-dismissing" : "",
+    showAnswer ? `has-answer tone-${answer.tone}` : ""
   ].filter(Boolean).join(" ");
 
+  function handleKeyDown(event) {
+    if (!interactive) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onDismiss?.();
+    }
+  }
+
   return (
-    <div className={`fortune-lens ${state}`} aria-live="polite">
+    <div
+      className={`fortune-lens ${state}`}
+      aria-live="polite"
+      role={interactive ? "button" : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-label={interactive ? "Dismiss Rosie's answer with magic" : undefined}
+      onClick={interactive ? onDismiss : undefined}
+      onKeyDown={handleKeyDown}
+    >
       {consulting && (
         <div className="lens-consulting">
           <div className="consulting-runes" aria-hidden="true">
             <i>✦</i><i>☾</i><i>◆</i><i>✧</i>
           </div>
-          <small>THE CRYSTAL IS LISTENING</small>
-          <em>Rosie is reading the signs…</em>
+          <small>ROSIE IS LISTENING</small>
+          <em>The signs are gathering…</em>
         </div>
       )}
 
-      {answer && (
+      {showAnswer && (
         <div className="lens-answer" key={answer.id}>
+          <span className="answer-spark-field" aria-hidden="true">
+            <i /><i /><i /><i /><i /><i /><i /><i />
+          </span>
           <span className="answer-sigil" aria-hidden="true">✦</span>
-          <span className="answer-kicker">THE VEIL PARTS</span>
+          <span className="answer-kicker">ROSIE HAS SEEN IT</span>
           <strong>{answer.text}</strong>
-          <small>THE PAW HAS SPOKEN</small>
+          <small>{dismissing ? "RETURNING TO THE STARS…" : "TAP TO RELEASE ✦"}</small>
+        </div>
+      )}
+
+      {dismissing && (
+        <div className="answer-dismiss-sparkles" aria-hidden="true">
+          <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
         </div>
       )}
     </div>
@@ -195,7 +244,7 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
   );
 }
 
-function FortuneMachine({ consulting, answer, revealStage, flipped, turning, flipBurst }) {
+function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst }) {
   const manifesting = revealStage === "manifesting";
   return (
     <section
@@ -228,9 +277,8 @@ function FortuneMachine({ consulting, answer, revealStage, flipped, turning, fli
             <span className="lantern-glow lantern-glow-right"><i /></span>
           </div>
 
-          <span className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
           <img
-            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""} ${consulting ? "stage-art-consulting" : ""}`}
+            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt=""
             aria-hidden="true"
@@ -258,7 +306,13 @@ function FortuneMachine({ consulting, answer, revealStage, flipped, turning, fli
         </div>
 
         <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
-        <FortuneLens consulting={consulting} answer={answer} revealStage={revealStage} />
+        <FortuneLens
+          consulting={consulting}
+          answer={answer}
+          revealStage={revealStage}
+          answerDismissed={answerDismissed}
+          onDismiss={onDismissAnswer}
+        />
       </div>
     </section>
   );
@@ -275,6 +329,7 @@ function App() {
   const [turning, setTurning] = useState(false);
   const [flipBurst, setFlipBurst] = useState(0);
   const [revealStage, setRevealStage] = useState("idle");
+  const [answerDismissed, setAnswerDismissed] = useState(false);
   const [listening, setListening] = useState(false);
   const [dictationStatus, setDictationStatus] = useState("idle");
   const [consultations, setConsultations] = useState(() => {
@@ -290,6 +345,7 @@ function App() {
   const turnEndTimerRef = useRef(null);
   const revealTimerRef = useRef(null);
   const revealFinishTimerRef = useRef(null);
+  const dismissTimerRef = useRef(null);
   const dictationTimerRef = useRef(null);
 
   const speechSupported = useMemo(
@@ -332,6 +388,7 @@ function App() {
       window.clearTimeout(turnEndTimerRef.current);
       window.clearTimeout(revealTimerRef.current);
       window.clearTimeout(revealFinishTimerRef.current);
+      window.clearTimeout(dismissTimerRef.current);
       window.clearTimeout(dictationTimerRef.current);
     };
 
@@ -449,31 +506,23 @@ function App() {
     const now = context.currentTime;
     const master = context.createGain();
     master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.16, now + 0.018);
-    master.gain.setValueAtTime(0.14, now + 0.34);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.78);
+    master.gain.exponentialRampToValueAtTime(0.065, now + 0.03);
+    master.gain.setValueAtTime(0.055, now + 0.26);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.36);
+    master.gain.setValueAtTime(0.0001, now + 0.43);
+    master.gain.exponentialRampToValueAtTime(0.06, now + 0.47);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.82);
     master.connect(context.destination);
 
     const lead = context.createOscillator();
     lead.type = "sine";
-    lead.frequency.setValueAtTime(1680, now);
-    lead.frequency.exponentialRampToValueAtTime(2720, now + 0.29);
-    lead.frequency.exponentialRampToValueAtTime(1930, now + 0.72);
+    lead.frequency.setValueAtTime(980, now);
+    lead.frequency.linearRampToValueAtTime(1370, now + 0.25);
+    lead.frequency.setValueAtTime(1110, now + 0.43);
+    lead.frequency.linearRampToValueAtTime(1570, now + 0.72);
     lead.connect(master);
     lead.start(now);
-    lead.stop(now + 0.8);
-
-    const harmonicGain = context.createGain();
-    harmonicGain.gain.value = 0.16;
-    const harmonic = context.createOscillator();
-    harmonic.type = "sine";
-    harmonic.frequency.setValueAtTime(3360, now);
-    harmonic.frequency.exponentialRampToValueAtTime(5200, now + 0.29);
-    harmonic.frequency.exponentialRampToValueAtTime(3860, now + 0.72);
-    harmonic.connect(harmonicGain);
-    harmonicGain.connect(master);
-    harmonic.start(now);
-    harmonic.stop(now + 0.8);
+    lead.stop(now + 0.84);
   }
 
   async function playWhistle() {
@@ -507,12 +556,12 @@ function App() {
 
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
-      window.navigator.vibrate?.([12, 28, 14]);
-    }, 310);
+      window.navigator.vibrate?.([10, 24, 10]);
+    }, 285);
 
     turnEndTimerRef.current = window.setTimeout(() => {
       setTurning(false);
-    }, 920);
+    }, 700);
   }
 
   function toggleDictation() {
@@ -550,6 +599,7 @@ function App() {
     window.clearTimeout(revealTimerRef.current);
     window.clearTimeout(revealFinishTimerRef.current);
     setAnswer(null);
+    setAnswerDismissed(false);
     setRevealStage("consulting");
     setConsulting(true);
 
@@ -579,11 +629,26 @@ function App() {
     }, delay);
   }
 
+  function dismissAnswer() {
+    if (!answer || answerDismissed || revealStage !== "revealed") return;
+
+    window.clearTimeout(dismissTimerRef.current);
+    setRevealStage("dismissing");
+    playRevealChime();
+    window.navigator.vibrate?.([9, 22, 9]);
+
+    dismissTimerRef.current = window.setTimeout(() => {
+      setAnswerDismissed(true);
+      setRevealStage("revealed");
+    }, 720);
+  }
+
   function askAnother() {
     window.clearTimeout(revealTimerRef.current);
     window.clearTimeout(revealFinishTimerRef.current);
     setQuestion("");
     setAnswer(null);
+    setAnswerDismissed(false);
     setConsulting(false);
     setRevealStage("idle");
     window.setTimeout(() => inputRef.current?.focus(), 50);
@@ -661,6 +726,8 @@ function App() {
               consulting={consulting}
               answer={answer}
               revealStage={revealStage}
+              answerDismissed={answerDismissed}
+              onDismissAnswer={dismissAnswer}
               flipped={flipped}
               turning={turning}
               flipBurst={flipBurst}
@@ -739,7 +806,7 @@ function App() {
             </form>
           </div>
 
-          <section className={`fortune-ticket ${answer && revealStage === "revealed" ? "fortune-ticket-visible" : ""}`} aria-live="polite">
+          <section className={`fortune-ticket ${answer && (revealStage === "revealed" || revealStage === "dismissing") ? "fortune-ticket-visible" : ""}`} aria-live="polite">
             {answer && (
               <div className="ticket-paper">
                 <div className="ticket-tear ticket-tear-left" />
