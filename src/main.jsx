@@ -222,11 +222,6 @@ function FortuneLens({
   const dismissing = revealStage === "dismissing";
   const showAnswer = Boolean(answer && !answerDismissed);
   const interactive = showAnswer && revealStage === "revealed";
-  const verdict = answer?.tone === "positive"
-    ? "THE PATH OPENS"
-    : answer?.tone === "negative"
-      ? "THE PAW SAYS NO"
-      : "THE SIGNS ARE VEILED";
 
   const state = [
     consulting ? "is-consulting" : "",
@@ -272,9 +267,9 @@ function FortuneLens({
             <i /><i /><i /><i /><i /><i /><i /><i />
           </span>
           <span className="answer-sigil" aria-hidden="true">✦</span>
-          <span className="answer-kicker">ROSIE HAS SEEN IT</span>
-          <strong>{verdict}</strong>
-          <small>Your fortune has been delivered.</small>
+          <span className="answer-kicker">THE PAW HAS SPOKEN</span>
+          <strong>{answer.text}</strong>
+          <small>Madame Rosie’s ruling is final.</small>
         </div>
       )}
 
@@ -353,8 +348,22 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
           </div>
 
+          <div className="fortune-books" aria-hidden="true">
+            <i><span>OMENS &amp; ODD SNACKS</span></i>
+            <i><span>MOON LORE FOR GOOD GIRLS</span></i>
+            <i><span>CANINE ARCANA</span></i>
+            <i><span>CHEESE, FATE &amp; SQUIRRELS</span></i>
+          </div>
+
           <div
             className={`rosie-turn-backplate ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            aria-hidden="true"
+          />
+
+          <img
+            className="crystal-ball-shield"
+            src="/rosie-fortune-stage.webp"
+            alt=""
             aria-hidden="true"
           />
 
@@ -391,6 +400,9 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
               <span className="flip-flash" />
               <span className="flip-sparkles">
                 <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+              </span>
+              <span className="turn-gold-sparks">
+                <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
               </span>
             </div>
           )}
