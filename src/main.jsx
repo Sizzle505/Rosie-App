@@ -341,6 +341,10 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <img className="set-piece set-piece-lantern-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
           </div>
 
+          <span
+            className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            aria-hidden="true"
+          />
           <img
             className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
             src="/rosie-turn-head.svg"
@@ -358,6 +362,8 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           {flipBurst > 0 && (
             <div className="flip-magic" aria-hidden="true" key={flipBurst}>
               <span className="turn-veil" />
+              <span className="turn-lower-smoke" />
+              <span className="turn-ball-haze" />
               <span className="turn-orbit turn-orbit-a" />
               <span className="turn-orbit turn-orbit-b" />
               <span className="smoke-wisp smoke-wisp-a" />
@@ -386,6 +392,17 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           answerDismissed={answerDismissed}
           onDismiss={onDismissAnswer}
         />
+
+        {flipBurst > 0 && turning && (
+          <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
+            <span className="foreground-plume foreground-plume-a" />
+            <span className="foreground-plume foreground-plume-b" />
+            <span className="foreground-plume foreground-plume-c" />
+            <span className="foreground-glitter">
+              <i /><i /><i /><i /><i /><i /><i /><i />
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -695,11 +712,11 @@ function App() {
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
       window.navigator.vibrate?.([8, 20, 8]);
-    }, 430);
+    }, 520);
 
     turnEndTimerRef.current = window.setTimeout(() => {
       setTurning(false);
-    }, 1080);
+    }, 1320);
   }
 
   function toggleDictation() {
