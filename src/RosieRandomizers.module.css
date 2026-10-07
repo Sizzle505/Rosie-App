@@ -101,13 +101,14 @@
 .heroSignet {
   position: absolute;
   z-index: 4;
-  right: 322px;
-  top: 50%;
+  right: 316px;
+  top: 24px;
   width: 166px;
-  height: 166px;
+  height: auto;
   object-fit: contain;
-  transform: translateY(-50%);
-  filter: drop-shadow(0 12px 20px rgba(0,0,0,.64));
+  image-rendering: auto;
+  transform: none;
+  filter: none;
 }
 
 .ivoryRow {
@@ -234,8 +235,8 @@
   position: absolute;
   z-index: 0;
   left: 50%;
-  bottom: 15px;
-  width: 142px;
+  bottom: 13px;
+  width: 148px;
   height: 28px;
   transform: translateX(-50%) scale(1);
   border-radius: 50%;
@@ -246,76 +247,22 @@
 .dieBody {
   position: relative;
   z-index: 2;
-  width: 172px;
-  height: 172px;
-  box-sizing: border-box;
-  border-radius: 31px;
-  background:
-    linear-gradient(135deg, #fff1ad 0%, #d9ad49 16%, #815417 39%, #f0d079 63%, #93621b 100%);
-  box-shadow:
-    0 18px 20px rgba(70,43,10,.24),
-    0 3px 5px rgba(70,43,10,.18),
-    inset 0 1px 0 rgba(255,255,255,.72);
-  transform-origin: 50% 78%;
+  width: 224px;
+  height: 224px;
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 76%;
   transform-style: preserve-3d;
-  will-change: transform;
-  isolation: isolate;
+  will-change: transform, filter;
+  backface-visibility: hidden;
 }
-.dieBody::before {
-  content: "";
-  position: absolute;
-  inset: 7px;
-  z-index: 0;
-  border: 1px solid rgba(255,244,194,.96);
-  border-radius: 25px;
-  background:
-    radial-gradient(circle at 27% 18%, rgba(255,255,255,.98) 0 5%, rgba(255,255,255,.42) 17%, transparent 35%),
-    linear-gradient(145deg, #fffefa 0%, #fff8e8 52%, #ead5a6 100%);
-  box-shadow:
-    0 0 0 2px rgba(99,61,11,.20),
-    inset 6px 7px 11px rgba(255,255,255,.76),
-    inset -10px -12px 17px rgba(113,70,12,.13);
-}
-.dieBody::after {
-  content: "";
-  position: absolute;
-  inset: 12px;
-  z-index: 1;
-  border: 2px solid rgba(255,231,157,.54);
-  border-radius: 21px;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.78),
-    inset 0 -1px 0 rgba(104,65,13,.13);
-  pointer-events: none;
-}
-.diePip {
-  position: absolute;
-  z-index: 3;
-  left: var(--pip-x);
-  top: var(--pip-y);
-  width: 25px;
-  height: 25px;
-  box-sizing: border-box;
-  transform: translate(-50%, -50%);
-  border: 3px solid #b98b32;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 29%, #ffe6e9 0 5%, #f98698 8%, #c71839 30%, #8d071f 61%, #43010c 100%);
-  box-shadow:
-    0 1px 0 rgba(255,239,184,.9),
-    0 3px 5px rgba(72,25,10,.22),
-    inset 0 2px 4px rgba(255,255,255,.42),
-    inset 0 -4px 7px rgba(48,0,8,.42);
-}
-.diePip::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 4px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255,244,246,.72);
+.dieCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  backface-visibility: hidden;
+  filter: drop-shadow(0 15px 12px rgba(62,38,10,.24));
 }
 .isRolling .dieBody {
   animation: dieTumble 1.26s cubic-bezier(.17,.75,.18,1) both;
@@ -665,7 +612,7 @@
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr 220px; padding: 25px 28px; }
   .hostPortrait { right: 28px; width: 218px; height: 218px; }
-  .heroSignet { right: 242px; width: 124px; height: 124px; }
+  .heroSignet { right: 236px; top: 44px; width: 125px; height: auto; transform: none; filter: none; }
   .wheelSalon { grid-template-columns: 1fr; }
   .wheelEditor { width: min(520px, 100%); justify-self: center; box-sizing: border-box; }
 }
@@ -681,18 +628,14 @@
   .houseRule { max-width: 230px; margin-top: 12px; padding-top: 8px; font-size: 6px; line-height: 1.5; letter-spacing: .1em; }
   .hostPortrait { right: -9px; bottom: -9px; width: 154px; height: 168px; }
   .hostPortrait::before { inset: 31px 17px 18px; }
-  .heroSignet { right: 123px; top: 50%; width: 90px; height: 90px; transform: translateY(-50%); }
+  .heroSignet { right: 145px; top: 44px; width: 90px; height: auto; transform: none; filter: none; }
   .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
   .ivoryCard { min-height: 430px; padding: 18px 17px 20px; border-radius: 19px; }
   .ivoryCard h2 { font-size: 22px; }
   .coinScene, .diceScene { min-height: 225px; }
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
-  .dieRig { width: 178px; height: 178px; }
-  .dieBody { width: 152px; height: 152px; border-radius: 27px; }
-  .dieBody::before { border-radius: 22px; }
-  .dieBody::after { border-radius: 19px; }
-  .diePip { width: 22px; height: 22px; border-width: 2.5px; }
+  .dieRig, .dieBody { width: 186px; height: 186px; }
   .decorativeDie { width: 92px; height: 92px; }
   .decorativeDieLeft { left: 14%; }
   .decorativeDieRight { left: 86%; }
