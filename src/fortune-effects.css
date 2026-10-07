@@ -3257,3 +3257,35 @@
     clip-path: ellipse(47% 47% at 50% 48%);
   }
 }
+
+
+/* === BACKFILL GEOMETRY TIGHTENING === */
+
+/* Cover only the original head/turban footprint - never the chest or crystal ball. */
+.turn-seam-haze {
+  top: 32.5% !important;
+  width: 61% !important;
+  height: 42% !important;
+  border-radius: 46% 54% 50% 50% !important;
+  clip-path: ellipse(47% 48% at 50% 47%) !important;
+  -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 75%,
+    rgba(0,0,0,.97) 83%,
+    rgba(0,0,0,.66) 91%,
+    rgba(0,0,0,.2) 97%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 75%,
+    rgba(0,0,0,.97) 83%,
+    rgba(0,0,0,.66) 91%,
+    rgba(0,0,0,.2) 97%,
+    transparent 100%) !important;
+}
+@media (max-width: 620px) {
+  .turn-seam-haze {
+    top: 33.5% !important;
+    width: 72% !important;
+    height: 43% !important;
+    clip-path: ellipse(47% 48% at 50% 47%) !important;
+  }
+}
