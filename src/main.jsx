@@ -111,14 +111,62 @@ function FortuneMachine({ consulting, answer }) {
 
 
 const CHEESES = [
-  { id: "brie", name: "Brie", note: "Soft-ripened royalty" },
-  { id: "swiss", name: "Swiss", note: "The hole truth" },
-  { id: "cheddar", name: "Cheddar", note: "Sharp and distinguished" },
-  { id: "blue", name: "Blue", note: "Veined with greatness" },
-  { id: "gouda", name: "Gouda", note: "Wheel of good decisions" },
-  { id: "parmesan", name: "Parmesan", note: "Aged with authority" },
-  { id: "mozzarella", name: "Mozzarella", note: "Fresh little clouds" },
-  { id: "goat", name: "Goat Cheese", note: "Tangy academic excellence" }
+  {
+    id: "brie",
+    name: "Brie",
+    note: "Soft-ripened royalty",
+    image: "https://upload.wikimedia.org/wikipedia/commons/a/a7/Brie_de_Meaux.jpg",
+    objectPosition: "50% 52%"
+  },
+  {
+    id: "swiss",
+    name: "Swiss",
+    note: "The hole truth",
+    image: "https://upload.wikimedia.org/wikipedia/commons/e/ec/NCI_swiss_cheese.jpg",
+    objectPosition: "50% 50%"
+  },
+  {
+    id: "cheddar",
+    name: "Cheddar",
+    note: "Sharp and distinguished",
+    image: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Montgomerys_cheddar_cheese.jpg",
+    objectPosition: "52% 52%"
+  },
+  {
+    id: "blue",
+    name: "Blue",
+    note: "Veined with greatness",
+    image: "https://upload.wikimedia.org/wikipedia/commons/1/1d/Shropshire_blue_cheese.jpg",
+    objectPosition: "50% 50%"
+  },
+  {
+    id: "gouda",
+    name: "Gouda",
+    note: "Wheel of good decisions",
+    image: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Aged_Gouda_cheese.jpg",
+    objectPosition: "55% 48%"
+  },
+  {
+    id: "parmesan",
+    name: "Parmesan",
+    note: "Aged with authority",
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/96/Parmigiano_Reggiano_cheese.jpg",
+    objectPosition: "54% 48%"
+  },
+  {
+    id: "mozzarella",
+    name: "Mozzarella",
+    note: "Fresh little clouds",
+    image: "https://upload.wikimedia.org/wikipedia/commons/5/50/Mozzarella_cheese.jpg",
+    objectPosition: "48% 50%"
+  },
+  {
+    id: "goat",
+    name: "Goat Cheese",
+    note: "Tangy academic excellence",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Goat_cheese_from_Belgium_2025-02-20_01.jpg/960px-Goat_cheese_from_Belgium_2025-02-20_01.jpg",
+    objectPosition: "50% 50%"
+  }
 ];
 
 function shuffleCheeseDeck() {
@@ -134,105 +182,27 @@ function shuffleCheeseDeck() {
   return deck;
 }
 
-function CheeseArt({ id }) {
-  const common = { viewBox: "0 0 160 120", role: "img", "aria-hidden": true };
+function CheesePhoto({ cheese }) {
+  const [failed, setFailed] = useState(false);
 
-  if (id === "brie") {
+  if (failed) {
     return (
-      <svg {...common}>
-        <ellipse cx="80" cy="91" rx="55" ry="13" className="cheese-shadow" />
-        <path d="M34 70 L78 42 L132 60 L89 91 Z" className="cheese-rind" />
-        <path d="M42 68 L80 48 L122 62 L86 84 Z" className="cheese-cream" />
-        <path d="M34 70 L42 68 L86 84 L89 91 Z" className="cheese-edge" />
-      </svg>
-    );
-  }
-
-  if (id === "swiss") {
-    return (
-      <svg {...common}>
-        <ellipse cx="80" cy="94" rx="57" ry="12" className="cheese-shadow" />
-        <path d="M31 79 L67 34 L132 58 L94 96 Z" className="swiss-body" />
-        <ellipse cx="71" cy="58" rx="9" ry="7" className="swiss-hole" />
-        <ellipse cx="103" cy="65" rx="7" ry="6" className="swiss-hole" />
-        <ellipse cx="84" cy="82" rx="8" ry="6" className="swiss-hole" />
-        <ellipse cx="115" cy="82" rx="5" ry="4" className="swiss-hole" />
-      </svg>
-    );
-  }
-
-  if (id === "cheddar") {
-    return (
-      <svg {...common}>
-        <ellipse cx="80" cy="94" rx="58" ry="12" className="cheese-shadow" />
-        <path d="M39 50 L101 37 L129 56 L65 70 Z" className="cheddar-top" />
-        <path d="M39 50 L65 70 L65 96 L39 78 Z" className="cheddar-side" />
-        <path d="M65 70 L129 56 L129 81 L65 96 Z" className="cheddar-face" />
-        <path d="M78 72 L111 65" className="cheddar-score" />
-      </svg>
-    );
-  }
-
-  if (id === "blue") {
-    return (
-      <svg {...common}>
-        <ellipse cx="79" cy="95" rx="58" ry="12" className="cheese-shadow" />
-        <path d="M31 82 L67 34 L132 60 L94 98 Z" className="blue-body" />
-        <path d="M53 62 C66 53, 73 69, 83 58 S105 54, 116 66" className="blue-vein" />
-        <path d="M51 79 C65 72, 70 86, 85 76 S108 73, 119 84" className="blue-vein" />
-        <path d="M69 44 C80 50, 77 62, 91 66" className="blue-vein thin" />
-      </svg>
-    );
-  }
-
-  if (id === "gouda") {
-    return (
-      <svg {...common}>
-        <ellipse cx="80" cy="94" rx="53" ry="12" className="cheese-shadow" />
-        <ellipse cx="80" cy="60" rx="49" ry="31" className="gouda-wax" />
-        <rect x="31" y="60" width="98" height="24" className="gouda-side" />
-        <ellipse cx="80" cy="84" rx="49" ry="22" className="gouda-side" />
-        <path d="M54 54 C69 47, 91 47, 106 54" className="gouda-shine" />
-      </svg>
-    );
-  }
-
-  if (id === "parmesan") {
-    return (
-      <svg {...common}>
-        <ellipse cx="80" cy="95" rx="58" ry="12" className="cheese-shadow" />
-        <path d="M29 82 L76 34 L132 60 L91 98 Z" className="parm-body" />
-        <path d="M29 82 L76 34 L84 39 L38 88 Z" className="parm-rind" />
-        <circle cx="83" cy="61" r="2" className="parm-speck" />
-        <circle cx="102" cy="68" r="2.5" className="parm-speck" />
-        <circle cx="73" cy="78" r="1.8" className="parm-speck" />
-        <circle cx="95" cy="86" r="1.6" className="parm-speck" />
-      </svg>
-    );
-  }
-
-  if (id === "mozzarella") {
-    return (
-      <svg {...common}>
-        <ellipse cx="81" cy="97" rx="55" ry="11" className="cheese-shadow" />
-        <path d="M30 86 C44 70, 48 60, 58 48 C51 69, 51 83, 45 94 Z" className="basil-leaf" />
-        <path d="M129 86 C116 71, 111 59, 101 49 C108 70, 110 83, 116 94 Z" className="basil-leaf" />
-        <circle cx="60" cy="75" r="24" className="mozz-ball" />
-        <circle cx="99" cy="71" r="27" className="mozz-ball" />
-        <circle cx="82" cy="88" r="21" className="mozz-ball front" />
-        <circle cx="91" cy="62" r="6" className="mozz-highlight" />
-      </svg>
+      <span className="cheese-photo-fallback" role="img" aria-label={cheese.name}>
+        🧀
+      </span>
     );
   }
 
   return (
-    <svg {...common}>
-      <ellipse cx="80" cy="96" rx="57" ry="11" className="cheese-shadow" />
-      <rect x="42" y="48" width="77" height="42" rx="20" className="goat-log" />
-      <ellipse cx="43" cy="69" rx="20" ry="21" className="goat-end" />
-      <ellipse cx="117" cy="69" rx="20" ry="21" className="goat-end shade" />
-      <path d="M51 54 C67 48, 92 48, 108 54" className="goat-ridge" />
-    </svg>
+    <img
+      src={cheese.image}
+      alt={cheese.name}
+      loading="eager"
+      decoding="async"
+      referrerPolicy="no-referrer"
+      style={{ objectPosition: cheese.objectPosition }}
+      onError={() => setFailed(true)}
+    />
   );
 }
 
@@ -273,7 +243,7 @@ function CheeseMemoryGame() {
     setElapsed(0);
     setStarted(false);
     setLocked(false);
-    setMessage("Match every pair to earn Rosie's highest cheese honors.");
+    setMessage("You are Rosie. Trust the beret, trust the nose, match the cheese.");
   }
 
   function chooseCard(index) {
@@ -282,7 +252,7 @@ function CheeseMemoryGame() {
 
     if (openCards.length === 0) {
       setOpenCards([index]);
-      setMessage("Excellent selection. Now find its scholarly twin.");
+      setMessage("Good sniff. Rosie has the scent - now find its matching fromage.");
       return;
     }
 
@@ -300,14 +270,14 @@ function CheeseMemoryGame() {
         setMatched((items) => [...items, first.id]);
         setOpenCards([]);
         setLocked(false);
-        setMessage(first.name + " mastered. Doctor Rosie approves.");
+        setMessage(first.name + " identified. Doctor Rosie remains academically unstoppable.");
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
     } else {
       pendingFlipRef.current = window.setTimeout(() => {
         setOpenCards([]);
         setLocked(false);
-        setMessage("Not a match. Recalibrating the fromage cortex.");
+        setMessage("Not a match. Rosie is classifying that as a control sample.");
       }, 850);
     }
   }
@@ -315,24 +285,29 @@ function CheeseMemoryGame() {
   return (
     <main className="cheese-game-page">
       <section className="cheese-hero">
+        <div className="cheese-hero-photo">
+          <img
+            src="/rosie-doctor-cheese.webp"
+            alt="Rosie wearing her red beret and striped French outfit beside her Doctor of Cheese diploma"
+          />
+          <div className="player-identity">
+            <span>YOU ARE PLAYING AS</span>
+            <strong>ROSIE · DOCTOR OF CHEESE</strong>
+          </div>
+        </div>
+
         <div className="cheese-hero-copy">
           <div className="cheese-eyebrow">UNIVERSITY OF BARKBRIDGE · FACULTY OF GASTRONOMIC SCIENCES</div>
           <h1>ROSIE'S CHEESE BOARD EXAM</h1>
-          <p>You are Rosie the Shiba, Doctor of Cheese (Che.D.). Match every pair before your academic reputation melts.</p>
+          <p>Put on the beret. Deploy the doctoral nose. Match all eight cheeses before Rosie's academic reputation melts.</p>
           <div className="doctor-ribbon">
-            <span className="doctor-seal">🐾</span>
+            <img src="/rosie-doctor-cheese.webp" alt="" aria-hidden="true" />
             <div>
-              <strong>ROSIE THE SHIBA</strong>
-              <small>Doctor of Cheese · Board Candidate</small>
+              <strong>ROSIE THE SHIBA, Che.D.</strong>
+              <small>Beret on · Credentials verified · Cheese authority absolute</small>
             </div>
+            <span className="doctor-seal">🐾</span>
           </div>
-        </div>
-        <div className="cheese-diploma-card" aria-hidden="true">
-          <div className="diploma-rule" />
-          <span>UNIVERSITY OF BARKBRIDGE</span>
-          <strong>Doctor of Cheese</strong>
-          <em>Che.D.</em>
-          <div className="wax-seal">R</div>
         </div>
       </section>
 
@@ -344,12 +319,21 @@ function CheeseMemoryGame() {
       </section>
 
       <section className="cheese-game-frame">
+        <div className="rosie-player-status" aria-live="polite">
+          <img src="/rosie-doctor-cheese.webp" alt="Beret Rosie" />
+          <div>
+            <span>DR. ROSIE'S FIELD NOTES</span>
+            <strong>{message}</strong>
+          </div>
+          <b>Che.D.</b>
+        </div>
+
         <div className="cheese-game-heading">
           <div>
             <span>THE PRACTICAL EXAM</span>
             <h2>Pair the Fromage</h2>
           </div>
-          <p>{message}</p>
+          <p>Eight cheeses. Sixteen cards. One extremely qualified Shiba.</p>
         </div>
 
         <div className="cheese-grid">
@@ -372,7 +356,7 @@ function CheeseMemoryGame() {
                     <small>ROSIE'S<br />CHEESE BOARD</small>
                   </span>
                   <span className="cheese-card-front">
-                    <span className="cheese-art"><CheeseArt id={cheese.id} /></span>
+                    <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
                     <strong>{cheese.name}</strong>
                     <small>{cheese.note}</small>
                   </span>
@@ -385,7 +369,7 @@ function CheeseMemoryGame() {
 
       {complete && (
         <section className="cheese-victory" aria-live="polite">
-          <div className="victory-medallion">🐾</div>
+          <img className="victory-rosie" src="/rosie-doctor-cheese.webp" alt="Rosie, Doctor of Cheese" />
           <span>BOARD EXAM PASSED</span>
           <h2>Doctor Rosie has conquered the cheese board.</h2>
           <p>{moves} moves · {formatGameTime(elapsed)} · All {CHEESES.length} cheeses correctly identified.</p>
