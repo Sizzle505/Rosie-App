@@ -21,7 +21,7 @@
 }
 
 .fortune-page .fortune-lens {
-  width: 30.5% !important;
+  width: 33.5% !important;
 }
 
 .fortune-page .fortune-lens.is-consulting {
@@ -36,10 +36,11 @@
 }
 
 .fortune-page .lens-answer strong {
-  max-width: 13ch;
-  font-size: clamp(12px, 1.4vw, 17px) !important;
-  letter-spacing: .06em;
-  line-height: 1.08 !important;
+  max-width: 17ch;
+  font-size: clamp(13px, 1.48vw, 18px) !important;
+  letter-spacing: .045em;
+  line-height: 1.06 !important;
+  text-wrap: balance;
 }
 
 .fortune-page .lens-answer small {
@@ -47,6 +48,43 @@
   font-size: 6px !important;
   line-height: 1.25;
   letter-spacing: .08em;
+}
+
+.fortune-page .lens-answer {
+  width: 88% !important;
+  gap: 5px !important;
+}
+
+.fortune-page .lens-answer .answer-kicker {
+  color: #f1ce82 !important;
+  font-size: 6.5px !important;
+  letter-spacing: .2em !important;
+}
+
+.fortune-page .fortune-lens.is-manifesting {
+  box-shadow:
+    0 0 22px rgba(255, 222, 146, .42),
+    0 0 72px rgba(183, 112, 236, .78),
+    inset 0 0 34px rgba(255, 246, 215, .2) !important;
+}
+
+.fortune-page .fortune-lens.is-manifesting .lens-answer {
+  animation: oraclePronouncement 1.5s cubic-bezier(.16, .82, .18, 1) both !important;
+}
+
+.fortune-page .fortune-lens.has-answer::before {
+  animation: oracleHalo 3.4s ease-in-out infinite alternate !important;
+}
+
+@keyframes oraclePronouncement {
+  0% { opacity: 0; transform: translateY(13px) scale(.78); filter: blur(8px); }
+  38% { opacity: .74; filter: blur(2px); }
+  70% { transform: translateY(-1px) scale(1.035); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes oracleHalo {
+  to { opacity: .92; transform: rotate(7deg) scale(1.035); }
 }
 
 /* Twinkles are deliberately confined to the visible night-sky pockets. */
@@ -85,6 +123,98 @@
   0%, 100% { opacity: .12; transform: scale(.45) rotate(0); }
   45% { opacity: .95; transform: scale(1.8) rotate(45deg); }
   58% { opacity: .36; transform: scale(.9) rotate(80deg); }
+}
+
+/* Individually bound, dark-leather volumes laid over the photographed stack. */
+.fortune-page .fortune-books {
+  position: absolute;
+  z-index: 8;
+  left: 5.8%;
+  top: 67.7%;
+  width: 31.5%;
+  height: 22%;
+  pointer-events: none;
+  transform: rotate(-1deg);
+  filter: drop-shadow(0 8px 8px rgba(0, 0, 0, .48));
+}
+
+.fortune-page .fortune-books i {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22%;
+  border: 1px solid rgba(222, 178, 88, .58);
+  border-radius: 3px 5px 5px 3px;
+  color: #e2bb6d;
+  font-style: normal;
+  text-align: center;
+  text-shadow: 0 1px #23100a, 0 0 5px rgba(255, 205, 107, .2);
+  box-shadow:
+    inset 5px 0 rgba(255, 222, 145, .045),
+    inset -6px 0 rgba(0, 0, 0, .22),
+    inset 0 1px rgba(255, 236, 181, .1),
+    0 3px 5px rgba(0, 0, 0, .36);
+}
+
+.fortune-page .fortune-books i::before,
+.fortune-page .fortune-books i::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  width: 2px;
+  border: solid rgba(230, 184, 90, .42);
+  border-width: 0 1px;
+}
+
+.fortune-page .fortune-books i::before { left: 7px; }
+.fortune-page .fortune-books i::after { right: 7px; }
+
+.fortune-page .fortune-books span {
+  display: block;
+  max-width: calc(100% - 25px);
+  overflow: hidden;
+  font-size: clamp(5px, .62vw, 8px);
+  line-height: 1;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+
+.fortune-page .fortune-books i:nth-child(1) {
+  top: 0;
+  width: 94%;
+  background: linear-gradient(90deg, #331419, #5a2226 48%, #281015);
+  font-family: Georgia, "Times New Roman", serif;
+  font-variant: small-caps;
+}
+
+.fortune-page .fortune-books i:nth-child(2) {
+  top: 25%;
+  left: 3%;
+  width: 97%;
+  background: linear-gradient(90deg, #111b27, #24374b 52%, #101720);
+  font-family: Palatino, "Book Antiqua", serif;
+  font-style: italic;
+}
+
+.fortune-page .fortune-books i:nth-child(3) {
+  top: 50%;
+  left: -2%;
+  width: 90%;
+  background: linear-gradient(90deg, #14241c, #294432 52%, #101b16);
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+}
+
+.fortune-page .fortune-books i:nth-child(4) {
+  top: 75%;
+  left: 5%;
+  width: 92%;
+  background: linear-gradient(90deg, #251426, #49233f 54%, #1b101d);
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-variant: small-caps;
 }
 
 /* The whistle reveals the supplied transparent turned portrait in place. */
@@ -150,6 +280,90 @@
 @keyframes turnedRosieBreathe {
   0%, 100% { transform: translateX(-50%) scale(1); }
   50% { transform: translateX(-50%) translateY(-1px) scale(1.006); }
+}
+
+/* Repaint the exact physical ball above the turned portrait, like foreground scenery. */
+.fortune-page .crystal-ball-shield {
+  position: absolute;
+  z-index: 15;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  object-fit: cover;
+  object-position: 50% 50%;
+  pointer-events: none;
+  clip-path: circle(18.15% at 50% 77.2%);
+}
+
+/* The stage moves by less than a pixel: enough to read as breath, not camera motion. */
+@keyframes fortunePortraitBreath {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-.45px) scale(1.0015); }
+}
+
+/* Denser purple smoke, with a separate shower of warm metallic sparks. */
+.fortune-page .flip-magic .smoke-wisp {
+  opacity: .92 !important;
+  filter: blur(7px) saturate(1.3) drop-shadow(0 0 14px rgba(150, 74, 204, .65)) !important;
+}
+
+.fortune-page .flip-magic .turn-veil,
+.fortune-page .flip-magic .turn-lower-smoke,
+.fortune-page .flip-magic .turn-ball-haze {
+  filter: saturate(1.22) contrast(1.06) !important;
+}
+
+.fortune-page .flip-magic .flip-sparkles i,
+.fortune-page .turn-foreground-smoke .foreground-glitter i {
+  background: #ffe197 !important;
+  box-shadow: 0 0 7px #fff0bd, 0 0 16px rgba(235, 164, 61, .92) !important;
+}
+
+.fortune-page .turn-gold-sparks {
+  position: absolute;
+  z-index: 48;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fortune-page .turn-gold-sparks i {
+  --spark-x: 0px;
+  --spark-y: -120px;
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  width: 6px;
+  aspect-ratio: 1;
+  opacity: 0;
+  background: #ffe7a3;
+  clip-path: polygon(50% 0, 61% 37%, 100% 50%, 61% 63%, 50% 100%, 39% 63%, 0 50%, 39% 37%);
+  filter: drop-shadow(0 0 3px #fff4c6) drop-shadow(0 0 7px #e4a53e);
+  animation: goldSparkFlight 1.26s cubic-bezier(.12, .68, .2, 1) both;
+}
+
+.fortune-page .turn-gold-sparks i:nth-child(1) { --spark-x: -205px; --spark-y: -155px; animation-delay: .03s; }
+.fortune-page .turn-gold-sparks i:nth-child(2) { --spark-x: -158px; --spark-y: -230px; animation-delay: .11s; }
+.fortune-page .turn-gold-sparks i:nth-child(3) { --spark-x: -92px; --spark-y: -175px; animation-delay: .22s; }
+.fortune-page .turn-gold-sparks i:nth-child(4) { --spark-x: -38px; --spark-y: -250px; animation-delay: .07s; }
+.fortune-page .turn-gold-sparks i:nth-child(5) { --spark-x: 42px; --spark-y: -238px; animation-delay: .19s; }
+.fortune-page .turn-gold-sparks i:nth-child(6) { --spark-x: 102px; --spark-y: -182px; animation-delay: .04s; }
+.fortune-page .turn-gold-sparks i:nth-child(7) { --spark-x: 165px; --spark-y: -222px; animation-delay: .27s; }
+.fortune-page .turn-gold-sparks i:nth-child(8) { --spark-x: 208px; --spark-y: -138px; animation-delay: .13s; }
+.fortune-page .turn-gold-sparks i:nth-child(9) { --spark-x: -218px; --spark-y: -48px; animation-delay: .25s; }
+.fortune-page .turn-gold-sparks i:nth-child(10) { --spark-x: -145px; --spark-y: 22px; animation-delay: .16s; }
+.fortune-page .turn-gold-sparks i:nth-child(11) { --spark-x: -64px; --spark-y: 72px; animation-delay: .32s; }
+.fortune-page .turn-gold-sparks i:nth-child(12) { --spark-x: 48px; --spark-y: 78px; animation-delay: .2s; }
+.fortune-page .turn-gold-sparks i:nth-child(13) { --spark-x: 136px; --spark-y: 28px; animation-delay: .08s; }
+.fortune-page .turn-gold-sparks i:nth-child(14) { --spark-x: 220px; --spark-y: -34px; animation-delay: .3s; }
+.fortune-page .turn-gold-sparks i:nth-child(15) { --spark-x: -176px; --spark-y: -102px; animation-delay: .36s; }
+.fortune-page .turn-gold-sparks i:nth-child(16) { --spark-x: 172px; --spark-y: -94px; animation-delay: .4s; }
+
+@keyframes goldSparkFlight {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.15) rotate(0); }
+  16% { opacity: 1; }
+  72% { opacity: .94; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(1.2) rotate(180deg); }
 }
 
 .fortune-page .turn-foreground-smoke {
@@ -394,7 +608,20 @@
     height: 100% !important;
     object-fit: cover !important;
     object-position: 50% 50% !important;
-    transform: none !important;
+    transform: none;
+  }
+
+  .fortune-page .machine .stage-art {
+    animation: fortunePortraitBreath 6.2s ease-in-out infinite;
+    transform-origin: 50% 47%;
+  }
+
+  .fortune-page .crystal-ball-shield {
+    display: block;
+  }
+
+  .fortune-page .ticket-paper {
+    animation: oracleTicketArrival 1.05s cubic-bezier(.14, .78, .2, 1) both;
   }
 
   .fortune-page .console-caption {
@@ -446,6 +673,12 @@
   }
 }
 
+@keyframes oracleTicketArrival {
+  0% { opacity: 0; transform: translateY(18px) scale(.965); filter: blur(4px); }
+  60% { opacity: 1; transform: translateY(-2px) scale(1.006); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
 @media (max-width: 979px) {
   .fortune-waiting-card {
     display: none;
@@ -459,7 +692,7 @@
   }
 
   .fortune-page .crystal-energy { width: 47% !important; }
-  .fortune-page .fortune-lens { width: 40.5% !important; }
+  .fortune-page .fortune-lens { width: 44% !important; }
 
   .fortune-page .machine .rosie-turn-backplate {
     top: 3%;
@@ -485,7 +718,12 @@
 @media (prefers-reduced-motion: reduce) {
   .fortune-page .stage-twinkles i,
   .fortune-page .fortune-lens.is-consulting,
+  .fortune-page .fortune-lens.is-manifesting .lens-answer,
+  .fortune-page .fortune-lens.has-answer::before,
+  .fortune-page .machine .stage-art,
   .fortune-page .machine .rosie-turn-layer.is-flipped,
+  .fortune-page .turn-gold-sparks i,
+  .fortune-page .ticket-paper,
   .fortune-waiting-card.is-awake > span {
     animation: none !important;
   }
