@@ -656,26 +656,12 @@ function CheeseMemoryGame() {
               <strong>Che.D.</strong>
               <small>BOARD EXAM</small>
             </div>
-          </section>
 
-          <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
-            <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
-              <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
-              <div className="rosie-reaction-portrait">
-                <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={"Doctor Rosie looking " + rosieMood} />
-              </div>
-              <div className="reaction-copy">
-                <span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span>
-                <strong>{message}</strong>
-              </div>
-              <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
-            </div>
-
-            <button type="button" className="cheese-reset-button" onClick={resetGame}>
+            <button type="button" className="cheese-reset-button cheese-reset-left" onClick={resetGame}>
               <span aria-hidden="true">↻</span>
               NEW BOARD
             </button>
-          </aside>
+          </section>
         </aside>
 
         <section className="cheese-game-frame" aria-label="Cheese matching board">
@@ -701,13 +687,20 @@ function CheeseMemoryGame() {
                 >
                   <span className="cheese-card-inner">
                     <span className="cheese-card-back">
+                      <span className="cheese-back-corner cheese-back-corner-tl" aria-hidden="true" />
+                      <span className="cheese-back-corner cheese-back-corner-tr" aria-hidden="true" />
+                      <span className="cheese-back-corner cheese-back-corner-bl" aria-hidden="true" />
+                      <span className="cheese-back-corner cheese-back-corner-br" aria-hidden="true" />
                       <span className="cheese-back-ornament" aria-hidden="true">
                         <span className="cheese-back-seal">
-                          <img className="cheese-back-cameo" src="/rosie-doctor-cheese-hero.webp" alt="" />
+                          <span className="cheese-back-paw">
+                            <i /><i /><i /><i /><b />
+                          </span>
                           <span className="cheese-back-wedge"><i /><i /><i /></span>
                         </span>
-                        <span className="cheese-back-ribbon">ROSIE'S BOARD</span>
-                        <small>CHEESE PRACTICAL</small>
+                        <strong>ROSIE'S</strong>
+                        <span className="cheese-back-ribbon">CHEESE BOARD</span>
+                        <small>THE PRACTICAL EXAM</small>
                       </span>
                     </span>
                     <span className="cheese-card-front">
@@ -722,6 +715,20 @@ function CheeseMemoryGame() {
             })}
           </div>
         </section>
+
+        <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
+          <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
+            <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
+            <div className="rosie-reaction-portrait">
+              <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={"Doctor Rosie looking " + rosieMood} />
+            </div>
+            <div className="reaction-copy">
+              <span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span>
+              <strong>{message}</strong>
+            </div>
+            <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
+          </div>
+        </aside>
       </section>
 
       {complete && (
