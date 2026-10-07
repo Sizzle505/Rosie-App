@@ -21,76 +21,34 @@ function randomIndex(length) {
 }
 
 const DIE_PIPS = {
-  1: [[110, 112]],
-  2: [[88, 90], [132, 134]],
-  3: [[86, 88], [110, 112], [134, 136]],
-  4: [[88, 88], [132, 88], [88, 136], [132, 136]],
-  5: [[88, 88], [132, 88], [110, 112], [88, 136], [132, 136]],
-  6: [[88, 84], [132, 84], [88, 112], [132, 112], [88, 140], [132, 140]]
+  1: [[50, 50]],
+  2: [[32, 32], [68, 68]],
+  3: [[32, 32], [50, 50], [68, 68]],
+  4: [[32, 32], [68, 32], [32, 68], [68, 68]],
+  5: [[32, 32], [68, 32], [50, 50], [32, 68], [68, 68]],
+  6: [[32, 27], [68, 27], [32, 50], [68, 50], [32, 73], [68, 73]]
 };
 
 function DiceFace({ value, rolling }) {
   return (
     <div className={`${styles.dieRig} ${rolling ? styles.isRolling : ""}`}>
       <span className={styles.dieLandingShadow} aria-hidden="true" />
-      <div className={styles.dieBody}>
-        <svg
-          className={styles.dieSvg}
-          viewBox="0 0 220 220"
-          role="img"
-          aria-label={`Die shows ${value}`}
-        >
-          <defs>
-            <linearGradient id="dieGold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#fff1ad" />
-              <stop offset=".24" stopColor="#c6922d" />
-              <stop offset=".52" stopColor="#7e5518" />
-              <stop offset=".74" stopColor="#e6c25e" />
-              <stop offset="1" stopColor="#9a691d" />
-            </linearGradient>
-            <linearGradient id="dieIvory" x1="0" y1="0" x2=".85" y2="1">
-              <stop offset="0" stopColor="#fffef9" />
-              <stop offset=".42" stopColor="#fff8e6" />
-              <stop offset="1" stopColor="#ead6a7" />
-            </linearGradient>
-            <linearGradient id="dieTop" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#fffdf4" />
-              <stop offset="1" stopColor="#e9cf91" />
-            </linearGradient>
-            <linearGradient id="dieSide" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#ead39b" />
-              <stop offset="1" stopColor="#c79d4d" />
-            </linearGradient>
-            <radialGradient id="rubyPip" cx=".35" cy=".28" r=".72">
-              <stop offset="0" stopColor="#ff9eaa" />
-              <stop offset=".18" stopColor="#e53b55" />
-              <stop offset=".52" stopColor="#a50f29" />
-              <stop offset="1" stopColor="#4c020e" />
-            </radialGradient>
-            <filter id="dieSoftShadow" x="-40%" y="-40%" width="180%" height="190%">
-              <feDropShadow dx="0" dy="10" stdDeviation="8" floodColor="#5b3a12" floodOpacity=".26" />
-            </filter>
-          </defs>
-
-          <g filter="url(#dieSoftShadow)">
-            <path d="M57 58 L78 36 Q83 31 91 31 H172 Q184 31 191 40 L198 49 L180 69 Z" fill="url(#dieTop)" stroke="url(#dieGold)" strokeWidth="5" strokeLinejoin="round" />
-            <path d="M57 58 L78 69 V163 Q78 173 69 181 L57 191 Q49 182 49 170 V74 Q49 64 57 58 Z" fill="url(#dieSide)" stroke="url(#dieGold)" strokeWidth="5" strokeLinejoin="round" />
-            <rect x="74" y="54" width="126" height="126" rx="22" fill="url(#dieIvory)" stroke="url(#dieGold)" strokeWidth="6" />
-            <rect x="80" y="60" width="114" height="114" rx="18" fill="none" stroke="#f8dfa0" strokeWidth="2.5" opacity=".9" />
-            <path d="M89 60 C112 48 162 48 185 68" fill="none" stroke="#fff" strokeWidth="4" opacity=".58" strokeLinecap="round" />
-            <circle cx="112" cy="44" r="8.5" fill="url(#rubyPip)" stroke="#8a5c17" strokeWidth="3" />
-            <circle cx="154" cy="43" r="8.5" fill="url(#rubyPip)" stroke="#8a5c17" strokeWidth="3" />
-            <circle cx="60" cy="99" r="7.2" fill="url(#rubyPip)" stroke="#835517" strokeWidth="2.5" />
-            <circle cx="60" cy="135" r="7.2" fill="url(#rubyPip)" stroke="#835517" strokeWidth="2.5" />
-            {DIE_PIPS[value].map(([cx, cy], index) => (
-              <g key={index}>
-                <circle cx={cx} cy={cy} r="12.5" fill="#d8b556" stroke="#7b5017" strokeWidth="2.5" />
-                <circle cx={cx} cy={cy} r="9.2" fill="url(#rubyPip)" />
-                <circle cx={cx - 2.3} cy={cy - 2.8} r="2.5" fill="#fff0f2" opacity=".68" />
-              </g>
-            ))}
-          </g>
-        </svg>
+      <div
+        className={styles.dieBody}
+        role="img"
+        aria-label={`Die shows ${value}`}
+      >
+        {DIE_PIPS[value].map(([x, y], index) => (
+          <span
+            className={styles.diePip}
+            key={index}
+            style={{
+              "--pip-x": `${x}%`,
+              "--pip-y": `${y}%`
+            }}
+            aria-hidden="true"
+          />
+        ))}
       </div>
     </div>
   );
@@ -169,14 +127,14 @@ export default function RosieRandomizers() {
   function rollDice() {
     if (diceRoll) return;
     const next = randomIndex(6) + 1;
-    const tumbleFaces = Array.from({ length: 7 }, () => randomIndex(6) + 1);
+    const tumbleFaces = Array.from({ length: 8 }, () => randomIndex(6) + 1);
     setDiceResult("Rolling across the ivory…");
     setDiceRoll(true);
     window.navigator.vibrate?.(12);
     tumbleFaces.forEach((face, index) => {
-      window.setTimeout(() => setDice(face), 100 + index * 105);
+      window.setTimeout(() => setDice(face), 95 + index * 112);
     });
-    window.setTimeout(() => setDice(next), 985);
+    window.setTimeout(() => setDice(next), 1040);
     window.setTimeout(() => {
       setDiceResult(`${next}. Rosie calls it clean.`);
       setDiceRoll(false);
