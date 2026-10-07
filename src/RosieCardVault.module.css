@@ -1,5 +1,8 @@
 .page {
+  width: 100vw;
+  max-width: none;
   min-height: 100vh;
+  margin: 0;
   color: #202428;
   padding: 0 6px 112px;
   overflow-x: hidden;
@@ -234,7 +237,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
   gap: 4px;
   width: 100%;
   max-width: none;
