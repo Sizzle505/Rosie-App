@@ -1,0 +1,410 @@
+/* Fortune page: registered stage effects and a desktop-first consultation desk. */
+
+.fortune-page {
+  --oracle-gold: #e5bd6d;
+  --oracle-cream: #f4e8d5;
+  --oracle-wine: #32111f;
+  --oracle-ink: #100a10;
+}
+
+/* Every animated ball layer shares the stage as its containing block. */
+.fortune-page .crystal-energy,
+.fortune-page .fortune-lens {
+  left: 50% !important;
+  top: 77.2% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.fortune-page .crystal-energy {
+  width: 35.5% !important;
+}
+
+.fortune-page .fortune-lens {
+  width: 30.5% !important;
+}
+
+.fortune-page .fortune-lens.is-consulting {
+  animation: registeredLensPulse .92s ease-in-out infinite alternate !important;
+}
+
+@keyframes registeredLensPulse {
+  to {
+    transform: translate(-50%, -50%) scale(1.045);
+    box-shadow: 0 0 70px rgba(211, 161, 246, .62);
+  }
+}
+
+.fortune-page .lens-answer strong {
+  max-width: 13ch;
+  font-size: clamp(12px, 1.4vw, 17px) !important;
+  letter-spacing: .06em;
+  line-height: 1.08 !important;
+}
+
+.fortune-page .lens-answer small {
+  color: rgba(245, 222, 174, .72) !important;
+  font-size: 6px !important;
+  line-height: 1.25;
+  letter-spacing: .08em;
+}
+
+/* Twinkles are deliberately confined to the visible night-sky pockets. */
+.fortune-page .stage-twinkles {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fortune-page .stage-twinkles i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffe7a0;
+  opacity: .18;
+  box-shadow: 0 0 5px #ffd77a, 0 0 13px rgba(205, 139, 255, .65);
+  animation: fortuneSkyTwinkle 2.8s ease-in-out infinite;
+}
+
+.fortune-page .stage-twinkles i:nth-child(1) { left: 22%; top: 17%; animation-delay: -.3s; }
+.fortune-page .stage-twinkles i:nth-child(2) { left: 31%; top: 27%; animation-delay: -1.8s; }
+.fortune-page .stage-twinkles i:nth-child(3) { left: 18%; top: 39%; animation-delay: -2.4s; }
+.fortune-page .stage-twinkles i:nth-child(4) { left: 77%; top: 18%; animation-delay: -.9s; }
+.fortune-page .stage-twinkles i:nth-child(5) { left: 84%; top: 31%; animation-delay: -2.1s; }
+.fortune-page .stage-twinkles i:nth-child(6) { left: 75%; top: 43%; animation-delay: -1.3s; }
+.fortune-page .stage-twinkles i:nth-child(7) { left: 12%; top: 57%; animation-delay: -2.7s; }
+.fortune-page .stage-twinkles i:nth-child(8) { left: 88%; top: 58%; animation-delay: -.55s; }
+.fortune-page .stage-twinkles i:nth-child(9) { left: 27%; top: 10%; animation-delay: -1.05s; }
+.fortune-page .stage-twinkles i:nth-child(10) { left: 70%; top: 9%; animation-delay: -2.25s; }
+.fortune-page .stage-twinkles i:nth-child(11) { left: 9%; top: 29%; animation-delay: -1.55s; }
+.fortune-page .stage-twinkles i:nth-child(12) { left: 91%; top: 39%; animation-delay: -.15s; }
+
+@keyframes fortuneSkyTwinkle {
+  0%, 100% { opacity: .12; transform: scale(.45) rotate(0); }
+  45% { opacity: .95; transform: scale(1.8) rotate(45deg); }
+  58% { opacity: .36; transform: scale(.9) rotate(80deg); }
+}
+
+/* The whistle reveals the supplied transparent turned portrait in place. */
+.fortune-page .machine .rosie-turn-backplate {
+  position: absolute;
+  z-index: 9;
+  left: 50%;
+  top: 5%;
+  width: 66%;
+  height: 68%;
+  transform: translateX(-50%) scale(.94);
+  border-radius: 46% 46% 39% 39%;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 24% 24%, rgba(238, 190, 87, .34) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 31%, rgba(235, 188, 89, .3) 0 1px, transparent 2px),
+    radial-gradient(circle at 62% 13%, rgba(198, 133, 235, .28) 0 1px, transparent 2px),
+    radial-gradient(ellipse at 50% 42%, rgba(9, 18, 38, .99) 0 57%, rgba(17, 12, 31, .92) 72%, transparent 96%);
+  filter: blur(.35px);
+  transition: opacity .16s ease, transform .62s cubic-bezier(.18,.78,.2,1);
+}
+
+.fortune-page .machine .rosie-turn-backplate.is-flipped {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.fortune-page .machine .rosie-turn-layer {
+  display: block !important;
+  position: absolute !important;
+  z-index: 11 !important;
+  inset: auto !important;
+  left: 50% !important;
+  top: 4.5% !important;
+  width: 66% !important;
+  height: 70% !important;
+  object-fit: contain !important;
+  object-position: 50% 0 !important;
+  opacity: 0 !important;
+  pointer-events: none;
+  transform: translateX(-50%) scale(.92) rotate(-1.5deg) !important;
+  transform-origin: 50% 46% !important;
+  filter: saturate(1.04) contrast(1.03) brightness(.94) drop-shadow(0 13px 20px rgba(0,0,0,.42)) !important;
+  transition: opacity .16s ease, transform .62s cubic-bezier(.18,.78,.2,1), filter .3s ease !important;
+  animation: none !important;
+}
+
+.fortune-page .machine .rosie-turn-layer.is-flipped {
+  opacity: 1 !important;
+  transform: translateX(-50%) scale(1) rotate(0) !important;
+  animation: turnedRosieBreathe 5.2s 1.3s ease-in-out infinite !important;
+}
+
+.fortune-page .machine .rosie-turn-layer.is-turning {
+  filter: saturate(1.1) contrast(1.04) brightness(.98) drop-shadow(0 13px 24px rgba(0,0,0,.48)) !important;
+}
+
+@keyframes turnedRosieBreathe {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) translateY(-1px) scale(1.006); }
+}
+
+.fortune-page .turn-foreground-smoke {
+  z-index: 42;
+}
+
+/* All question controls use the same dark jewel-box language - no white bubbles. */
+.fortune-page .question-card {
+  border-color: rgba(226, 183, 96, .56) !important;
+  background:
+    radial-gradient(circle at 84% -12%, rgba(188, 119, 200, .13), transparent 34%),
+    linear-gradient(155deg, rgba(50, 18, 34, .98), rgba(22, 12, 23, .99) 58%, rgba(12, 9, 14, .99)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 237, 194, .05),
+    inset 0 0 38px rgba(110, 52, 93, .12),
+    0 20px 46px rgba(0,0,0,.36) !important;
+}
+
+.fortune-page .question-card::before,
+.fortune-page .question-card::after {
+  color: rgba(225, 181, 94, .65);
+}
+
+.fortune-page .question-heading label {
+  color: var(--oracle-cream) !important;
+  font-size: clamp(20px, 2vw, 27px);
+  line-height: 1.08;
+}
+
+.fortune-page .input-shell {
+  min-height: 54px;
+  border: 1px solid rgba(229, 187, 103, .42) !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(117, 54, 94, .16), transparent 40%),
+    linear-gradient(180deg, rgba(18, 12, 19, .98), rgba(11, 9, 13, .99)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.025), 0 8px 22px rgba(0,0,0,.22) !important;
+}
+
+.fortune-page .input-shell input {
+  color: #f5ead9 !important;
+  caret-color: var(--oracle-gold) !important;
+}
+
+.fortune-page .input-shell input::placeholder {
+  color: #8e777a !important;
+}
+
+.fortune-page .quick-prompts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.fortune-page .quick-prompts button {
+  min-height: 44px;
+  padding: 9px 11px !important;
+  text-align: left;
+  line-height: 1.25;
+  border: 1px solid rgba(217, 174, 97, .16) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(180deg, rgba(73, 35, 55, .42), rgba(27, 16, 27, .52)) !important;
+  color: #cdbcb0 !important;
+}
+
+.fortune-page .quick-prompts button:hover {
+  border-color: rgba(229, 187, 101, .46) !important;
+  background: linear-gradient(180deg, rgba(91, 42, 66, .58), rgba(34, 19, 32, .62)) !important;
+  color: #f3d9a2 !important;
+}
+
+.fortune-page .fortune-whistle-button:disabled {
+  cursor: wait;
+  opacity: .72;
+}
+
+.fortune-waiting-card {
+  position: relative;
+  min-height: 196px;
+  padding: 28px 30px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(220, 177, 95, .3);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(135, 74, 157, .16), transparent 40%),
+    linear-gradient(180deg, rgba(34, 17, 31, .96), rgba(13, 10, 15, .98));
+  text-align: center;
+  box-shadow: inset 0 0 0 5px rgba(236, 201, 135, .02), 0 17px 38px rgba(0,0,0,.27);
+}
+
+.fortune-waiting-card > span {
+  color: #e7c273;
+  font-size: 18px;
+  text-shadow: 0 0 18px rgba(213, 149, 236, .42);
+}
+
+.fortune-waiting-card small {
+  margin-top: 11px;
+  color: #b38d55;
+  font-size: 7px;
+  letter-spacing: .2em;
+}
+
+.fortune-waiting-card strong {
+  margin-top: 8px;
+  color: #f3e5d1;
+  font-size: 20px;
+  line-height: 1.1;
+}
+
+.fortune-waiting-card p {
+  max-width: 36ch;
+  margin: 10px 0 0;
+  color: #9e8986;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.fortune-waiting-card.is-awake > span {
+  animation: waitingStar 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes waitingStar {
+  to { transform: scale(1.22) rotate(45deg); color: #f7dfa0; text-shadow: 0 0 28px rgba(202, 132, 239, .75); }
+}
+
+@media (min-width: 980px) {
+  .app-shell > .fortune-page {
+    width: min(100%, 1260px);
+    padding: 24px 24px 48px;
+    display: grid;
+    grid-template-columns: minmax(590px, 1.34fr) minmax(360px, .76fr);
+    grid-template-rows: auto auto auto;
+    column-gap: 24px;
+    row-gap: 14px;
+    align-items: start;
+  }
+
+  .fortune-page .fortune-console {
+    display: contents;
+  }
+
+  .fortune-page .machine {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 100%;
+  }
+
+  .fortune-page .machine .booth {
+    height: min(720px, calc(100vh - 138px));
+    min-height: 630px;
+  }
+
+  .fortune-page .machine .stage {
+    top: 89px;
+    left: 18px;
+    right: 18px;
+    bottom: 15px;
+  }
+
+  .fortune-page .machine .stage-art,
+  .fortune-page .machine .stage-art-consulting,
+  .fortune-page .machine .stage-turning .stage-art {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: 50% 50% !important;
+    transform: none !important;
+  }
+
+  .fortune-page .console-caption {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0;
+  }
+
+  .fortune-page .question-card {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    padding: 23px 22px 19px;
+    border-radius: 20px;
+  }
+
+  .fortune-page .question-row {
+    grid-template-columns: 1fr;
+  }
+
+  .fortune-page .ask-button {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .fortune-page .fortune-ticket {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    max-height: none;
+    margin: 0;
+    opacity: 1;
+    transform: none;
+    overflow: visible;
+  }
+
+  .fortune-page .fortune-ticket-visible {
+    margin-top: 0;
+  }
+
+  .fortune-page .ticket-paper {
+    margin: 0;
+  }
+
+  .fortune-page .session-history,
+  .fortune-page .bottom-omens {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 979px) {
+  .fortune-waiting-card {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .fortune-page .crystal-energy,
+  .fortune-page .fortune-lens {
+    top: 76.8% !important;
+  }
+
+  .fortune-page .crystal-energy { width: 47% !important; }
+  .fortune-page .fortune-lens { width: 40.5% !important; }
+
+  .fortune-page .machine .rosie-turn-backplate {
+    top: 6%;
+    width: 82%;
+    height: 66%;
+  }
+
+  .fortune-page .machine .rosie-turn-layer {
+    top: 5% !important;
+    width: 82% !important;
+    height: 69% !important;
+  }
+
+  .fortune-page .quick-prompts {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fortune-page .stage-twinkles i,
+  .fortune-page .fortune-lens.is-consulting,
+  .fortune-page .machine .rosie-turn-layer.is-flipped,
+  .fortune-waiting-card.is-awake > span {
+    animation: none !important;
+  }
+}
