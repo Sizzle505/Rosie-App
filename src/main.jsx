@@ -135,7 +135,7 @@ function dayNumber() {
 
 function createWhistleBlobUrl() {
   const sampleRate = 22050;
-  const duration = 0.86;
+  const duration = 0.64;
   const sampleCount = Math.floor(sampleRate * duration);
   const buffer = new ArrayBuffer(44 + sampleCount);
   const view = new DataView(buffer);
@@ -169,29 +169,29 @@ function createWhistleBlobUrl() {
 
   for (let index = 0; index < sampleCount; index += 1) {
     const time = index / sampleRate;
-    let frequency = 1120;
+    let frequency = 1300;
     let amplitude = 0;
 
-    if (time < 0.34) {
-      const progress = time / 0.34;
-      frequency = 980 + 390 * Math.sin(progress * Math.PI * .72);
+    if (time < 0.24) {
+      const progress = time / 0.24;
+      frequency = 1180 + 430 * Math.sin(progress * Math.PI * .72) + 9 * Math.sin(time * 62);
       amplitude =
-        Math.min(1, time / 0.028) *
-        Math.min(1, (0.34 - time) / 0.07) *
-        0.52;
-    } else if (time > 0.44) {
-      const local = time - 0.44;
-      const progress = local / (duration - 0.44);
-      frequency = 1110 + 470 * Math.sin(progress * Math.PI * .75);
+        Math.min(1, time / 0.022) *
+        Math.min(1, (0.24 - time) / 0.055) *
+        0.4;
+    } else if (time > 0.31) {
+      const local = time - 0.31;
+      const progress = local / (duration - 0.31);
+      frequency = 1390 + 570 * Math.sin(progress * Math.PI * .76) + 11 * Math.sin(local * 66);
       amplitude =
-        Math.min(1, local / 0.03) *
-        Math.min(1, (duration - time) / 0.075) *
-        0.48;
+        Math.min(1, local / 0.022) *
+        Math.min(1, (duration - time) / 0.06) *
+        0.43;
     }
 
     phase += Math.PI * 2 * frequency / sampleRate;
-    const pure = Math.sin(phase) + 0.055 * Math.sin(phase * 2);
-    const airy = noise() * 0.045;
+    const pure = Math.sin(phase) + 0.035 * Math.sin(phase * 2);
+    const airy = noise() * 0.025;
     const sample = Math.max(-1, Math.min(1, (pure + airy) * amplitude));
     view.setUint8(44 + index, Math.round(128 + sample * 112));
   }
@@ -234,7 +234,9 @@ function FortuneLens({
       tabIndex={interactive ? 0 : undefined}
       aria-label={interactive ? "Dismiss Rosie's answer with magic" : undefined}
       onPointerUp={interactive ? onDismiss : undefined}
-      onClick={interactive ? onDismiss : undefined}
+      onClick={interactive ? (event) => {
+        if (event.detail === 0) onDismiss?.();
+      } : undefined}
       onKeyDown={handleKeyDown}
     >
       {consulting && (
@@ -569,23 +571,22 @@ function App() {
     const now = context.currentTime;
     const master = context.createGain();
     master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.065, now + 0.03);
-    master.gain.setValueAtTime(0.055, now + 0.26);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.36);
-    master.gain.setValueAtTime(0.0001, now + 0.43);
-    master.gain.exponentialRampToValueAtTime(0.06, now + 0.47);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.82);
+    master.gain.exponentialRampToValueAtTime(0.052, now + 0.024);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+    master.gain.setValueAtTime(0.0001, now + 0.31);
+    master.gain.exponentialRampToValueAtTime(0.057, now + 0.335);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.64);
     master.connect(context.destination);
 
     const lead = context.createOscillator();
     lead.type = "sine";
-    lead.frequency.setValueAtTime(980, now);
-    lead.frequency.linearRampToValueAtTime(1370, now + 0.25);
-    lead.frequency.setValueAtTime(1110, now + 0.43);
-    lead.frequency.linearRampToValueAtTime(1570, now + 0.72);
+    lead.frequency.setValueAtTime(1180, now);
+    lead.frequency.linearRampToValueAtTime(1600, now + 0.18);
+    lead.frequency.setValueAtTime(1390, now + 0.31);
+    lead.frequency.linearRampToValueAtTime(1950, now + 0.55);
     lead.connect(master);
     lead.start(now);
-    lead.stop(now + 0.84);
+    lead.stop(now + 0.66);
   }
 
   async function playWhistle() {
