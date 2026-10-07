@@ -3822,12 +3822,14 @@ body {
 }
 .cheese-examiner-rail .rosie-reaction-portrait img,
 .mood-watching .rosie-reaction-portrait img,
-.mood-focused .rosie-reaction-portrait img,
+.mood-intrigued .rosie-reaction-portrait img,
 .mood-pleased .rosie-reaction-portrait img,
-.mood-proud .rosie-reaction-portrait img,
+.mood-concerned .rosie-reaction-portrait img,
+.mood-triumphant .rosie-reaction-portrait img,
 .mood-amused .rosie-reaction-portrait img,
-.mood-embarrassed .rosie-reaction-portrait img,
-.mood-distraught .rosie-reaction-portrait img,
+.mood-focused .rosie-reaction-portrait img,
+.mood-unimpressed .rosie-reaction-portrait img,
+.mood-proud .rosie-reaction-portrait img,
 .mood-elated .rosie-reaction-portrait img {
   width: 100% !important;
   height: 100% !important;
@@ -3889,3 +3891,27 @@ body {
     transform: scale(1.045) !important;
   }
 }
+
+
+/* === CHEESE DIRECT REACTION IMAGES · 2026-10-07 ===
+   Ten standalone paintings replace the abandoned sprite. Keep every portrait
+   centered and let only a resolved pair swap the keyed <img>. */
+.cheese-examiner-rail .rosie-reaction-portrait img {
+  animation: rosieReactionImageArrives .28s ease-out both;
+}
+
+@keyframes rosieReactionImageArrives {
+  from { opacity: .38; }
+  to { opacity: 1; }
+}
+
+.mood-watching .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-intrigued .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-pleased .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-concerned .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-triumphant .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-amused .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-focused .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-unimpressed .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-proud .rosie-reaction-portrait img { object-position: 50% 50% !important; }
+.mood-elated .rosie-reaction-portrait img { object-position: 50% 50% !important; }
