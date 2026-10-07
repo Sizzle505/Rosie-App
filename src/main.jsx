@@ -47,55 +47,57 @@ const FORTUNES = Object.entries(RESPONSES).flatMap(([tone, values]) =>
 );
 
 const QUICK_QUESTIONS = [
-  "Should I text them back?",
-  "Should I buy it?",
-  "Should I go out tonight?",
-  "Should I trust my instincts?",
-  "Should I take the trip?",
-  "Should I say yes?",
-  "Should I wait?",
-  "Is this a terrible idea?",
-  "Should I order dessert?",
-  "Is this outfit too powerful?",
-  "Should I cancel my plans and become mysterious?",
-  "Would one more coffee improve this situation?",
-  "Should I pretend I never saw that email?",
-  "Is today a good day for an unnecessary little treat?",
-  "Should I take the scenic route?",
-  "Am I overthinking this or merely thinking correctly?",
   "Should I buy the fancy cheese?",
-  "Should I leave the group chat on read?",
-  "Would a nap solve this?",
-  "Should I dramatically reinvent myself before dinner?",
-  "Is this person worthy of my excellent attention?",
-  "Should I trust the suspiciously good deal?",
-  "Do I deserve a tiny reward for existing today?",
-  "Should I wear the impractical shoes?",
-  "Is this a sign, or am I just bored?",
-  "Should I send the risky text?",
-  "Would Rosie approve of this purchase?",
+  "Should I cancel my plans and become a blanket burrito?",
+  "Would a tiny treat improve morale?",
+  "Should I send the text or stare nobly into the distance?",
+  "Is today a good day to wear the dramatic coat?",
+  "Would Rosie consider this a snack emergency?",
+  "Should I choose the option with better snacks?",
+  "Am I being mysterious or just avoiding my inbox?",
+  "Would a walk fix my entire personality?",
+  "Should I order fries for the table and mostly eat them myself?",
+  "Is one more little treat technically self-care?",
+  "Should I trust a plan conceived after 10 p.m.?",
+  "Would a ceremonial cheese plate improve negotiations?",
+  "Should I dramatically leave five minutes early?",
+  "Is the universe telling me to take a nap?",
+  "Would Rosie approve of this level of nonsense?",
+  "Should I take the scenic route if snacks are involved?",
+  "Is this person worthy of sharing my best cheese?",
+  "Should I pretend I didn't hear the vacuum?",
+  "Would a tiny adventure be good for morale?",
+  "Should I make the responsible choice or the charming one?",
+  "Am I overthinking this, or is my eyebrow correctly raised?",
+  "Should I bring a snack just in case there is no snack?",
+  "Should I buy it because it has a tiny bow?",
+  "Is this meeting worth putting on real pants for?",
+  "Should I leave before everyone starts saying 'one more drink'?",
+  "Would adding champagne make this a plan?",
+  "Should I trust someone who dislikes dogs?",
+  "Is this a sign or just excellent lighting?",
+  "Should I send the risky text with impeccable punctuation?",
+  "Do I deserve a reward for answering two emails?",
+  "Should I spend the afternoon being unavailable and exquisite?",
+  "Would Rosie choose cozy or chaos?",
+  "Should I wear the impractical shoes if they complete the vision?",
   "Should I make an entrance?",
-  "Do I need a plan, or just confidence?",
-  "Should I order the thing with truffle?",
-  "Is this hill worth dying on?",
-  "Should I let future me deal with it?",
-  "Would adding champagne improve the plan?",
-  "Should I book it before I become sensible?",
-  "Am I being discerning or delightfully difficult?",
-  "Should I take the last cookie?",
-  "Is this meeting actually necessary?",
-  "Should I trust someone who says 'circle back' too often?",
-  "Should I ignore the sensible option?",
-  "Would this be funnier if I said yes?",
-  "Should I become unavailable for the rest of the afternoon?",
-  "Is this worth putting on real pants for?",
-  "Should I choose chaos, but tasteful chaos?",
-  "Would the universe prefer I order fries?",
-  "Should I make this somebody else's problem?",
-  "Is my first instinct brilliant or merely dramatic?",
-  "Should I RSVP 'maybe' and preserve the mystique?",
-  "Would buying flowers for no reason improve the day?"
-];
+  "Would one more coffee make me wiser or merely faster?",
+  "Should I take the last cookie and deny everything?",
+  "Should I solve this now or delegate it to Future Me?",
+  "Is my first instinct brilliant or theatrically wrong?",
+  "Should I order dessert before anyone can object?",
+  "Would a nap count as strategic planning?",
+  "Should I buy flowers because Tuesday looked lonely?",
+  "Do I need a plan, or just suspiciously good confidence?",
+  "Should I say yes and let Future Me discover the details?",
+  "Would this decision be improved by wearing sunglasses?",
+  "Should I forgive them if they arrive with cheese?",
+  "Is it too early to declare victory and lie in the sun?",
+  "Should I pursue this squirrel of an idea?",
+  "Would Rosie classify this as elegant mischief?",
+  "Should I reward myself for showing tremendous restraint so far?"
+]
 
 const OMENS = {
   treat: ["cheddar", "peanut butter", "salmon", "chicken", "sweet potato", "a suspicious crumb"],
@@ -262,7 +264,7 @@ function FortuneLens({
           <span className="answer-sigil" aria-hidden="true">✦</span>
           <span className="answer-kicker">ROSIE HAS SEEN IT</span>
           <strong>{answer.text}</strong>
-          <small>{dismissing ? "RETURNING TO THE STARS…" : "TAP TO RELEASE ✦"}</small>
+
         </div>
       )}
 
@@ -337,14 +339,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <img className="set-piece set-piece-moon" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-lantern-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
             <img className="set-piece set-piece-lantern-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-          </div>
-
-          <div className="book-accents" aria-hidden="true">
-            <i><span>OMENS</span></i>
-            <i><span>MOON LORE</span></i>
-            <i><span>TREAT LAW</span></i>
-            <i><span>GOOD GIRL</span></i>
-            <i><span>BIG ANSWERS</span></i>
           </div>
 
           <img
@@ -944,16 +938,12 @@ function App() {
                   ))}
                 </div>
               </div>
-              <div className="shuffle-row">
-                <button type="button" className="shuffle-prompts" onClick={reshufflePrompts} aria-label="Show different sample questions" title="Different questions">
+              <div className="console-foot">
+                <button type="button" className="footer-shuffle" onClick={reshufflePrompts} aria-label="Show different sample questions" title="Different questions">
                   <span aria-hidden="true">↻</span>
                   Different questions
                 </button>
-              </div>
-
-              <div className="console-foot">
-                <span>No question too difficult. No snack too small.</span>
-                <strong>{consultations} consultation{consultations === 1 ? "" : "s"} tonight</strong>
+                <strong>{consultations} question{consultations === 1 ? "" : "s"} asked tonight</strong>
               </div>
             </form>
           </div>
@@ -961,16 +951,26 @@ function App() {
           <section className={`fortune-ticket ${answer && (revealStage === "revealed" || revealStage === "dismissing") ? "fortune-ticket-visible" : ""}`} aria-live="polite">
             {answer && (
               <div className="ticket-paper">
-                <div className="ticket-tear ticket-tear-left" />
-                <div className="ticket-tear ticket-tear-right" />
+                <span className="ticket-corner ticket-corner-tl" aria-hidden="true">✦</span>
+                <span className="ticket-corner ticket-corner-tr" aria-hidden="true">✦</span>
+                <span className="ticket-corner ticket-corner-bl" aria-hidden="true">✦</span>
+                <span className="ticket-corner ticket-corner-br" aria-hidden="true">✦</span>
+
                 <div className="ticket-topline">
-                  <span>№ {String(consultations).padStart(3, "0")}</span>
+                  <span>FORTUNE № {String(consultations).padStart(3, "0")}</span>
                   <strong>MADAME ROSIE</strong>
-                  <span>🐾</span>
+                  <span>PRIVATE ORACLE</span>
                 </div>
+
+                <div className="ticket-oracle-mark" aria-hidden="true">
+                  <span>✦</span><b>🐾</b><span>✦</span>
+                </div>
+
                 <div className="ticket-question">“{question.trim()}”</div>
                 <div className="ticket-answer">{answer.text}</div>
-                <div className="ticket-stamp">THE PAW HAS SPOKEN</div>
+
+                <div className="ticket-stamp"><span aria-hidden="true">🐾</span> THE PAW HAS SPOKEN</div>
+
                 <div className="answer-actions">
                   <button onClick={askAnother}>ASK ANOTHER</button>
                   <button className="secondary" onClick={saveFortune}>SAVE</button>
