@@ -1332,3 +1332,306 @@
     font-size: 9.3px;
   }
 }
+
+
+/* --- Believability + ambient-life pass --- */
+
+/* The prophecy must actually be tappable; the base stylesheet intentionally disables lens pointer events. */
+.fortune-lens.has-answer {
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fortune-lens.is-dismissing {
+  pointer-events: none !important;
+}
+
+/* The actual turn is hidden at its midpoint, not merely decorated with translucent smoke. */
+.turn-veil {
+  position: absolute;
+  z-index: 19;
+  left: 50%;
+  top: 30%;
+  width: 44%;
+  height: 43%;
+  transform: translate(-50%,-50%) scale(.5);
+  border-radius: 48% 52% 54% 46%;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 46%,
+      rgba(84,35,104,.98) 0 24%,
+      rgba(111,50,139,.96) 36%,
+      rgba(128,61,158,.84) 49%,
+      rgba(78,31,101,.58) 63%,
+      rgba(54,20,72,.22) 76%,
+      transparent 91%);
+  box-shadow:
+    0 0 26px rgba(184,105,224,.36),
+    inset 0 0 28px rgba(246,214,255,.08);
+  filter: blur(3.5px);
+  animation: turnVeilCover .82s cubic-bezier(.16,.72,.18,1) forwards;
+}
+@keyframes turnVeilCover {
+  0% {
+    opacity: 0;
+    transform: translate(-50%,-43%) scale(.36,.26);
+  }
+  20% {
+    opacity: .96;
+    transform: translate(-50%,-50%) scale(.94,.9);
+  }
+  36% {
+    opacity: 1;
+    transform: translate(-50%,-50%) scale(1.08,1.04);
+  }
+  51% {
+    opacity: .98;
+    transform: translate(-50%,-52%) scale(1.14,1.12);
+  }
+  72% {
+    opacity: .55;
+    transform: translate(-50%,-59%) scale(1.2,1.28);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%,-70%) scale(1.28,1.48);
+  }
+}
+.turn-orbit {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 29%;
+  width: 40%;
+  height: 18%;
+  margin-left: -20%;
+  margin-top: -9%;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  border: 1px solid rgba(246,205,116,.56);
+  border-left-color: rgba(211,151,242,.18);
+  border-bottom-color: rgba(178,104,221,.34);
+  filter: drop-shadow(0 0 5px rgba(230,182,112,.45));
+  animation: turnOrbitA .76s ease-out forwards;
+}
+.turn-orbit-b {
+  width: 31%;
+  height: 25%;
+  margin-left: -15.5%;
+  margin-top: -12.5%;
+  transform: rotate(64deg);
+  border-color: rgba(202,138,239,.46);
+  border-right-color: rgba(250,214,132,.58);
+  animation: turnOrbitB .78s ease-out forwards;
+}
+@keyframes turnOrbitA {
+  0% { opacity: 0; transform: scale(.5) rotate(-35deg); }
+  22% { opacity: .86; }
+  100% { opacity: 0; transform: scale(1.32) rotate(220deg); }
+}
+@keyframes turnOrbitB {
+  0% { opacity: 0; transform: scale(.52) rotate(64deg); }
+  25% { opacity: .7; }
+  100% { opacity: 0; transform: scale(1.24) rotate(-176deg); }
+}
+
+/* Keep the smaller smoke wisps as the edge of the veil instead of the veil itself. */
+.smoke-wisp {
+  z-index: 18;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse at 45% 48%,
+      rgba(210,139,242,.58) 0 14%,
+      rgba(120,58,153,.48) 34%,
+      rgba(64,26,88,.18) 59%,
+      transparent 77%);
+}
+.flip-flash { z-index: 21; }
+.flip-sparkles { z-index: 22; }
+
+/* After the cover clears, the mirrored head/shoulders have a softer feather so the neckline does not snap. */
+.rosie-turn-layer {
+  clip-path: polygon(23% 0,77% 0,78% 58%,70% 67%,60% 72%,40% 72%,30% 67%,22% 58%);
+  -webkit-mask-image: radial-gradient(ellipse 35% 39% at 50% 31%,
+    #000 0 66%,
+    rgba(0,0,0,.98) 76%,
+    rgba(0,0,0,.72) 87%,
+    rgba(0,0,0,.28) 95%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 35% 39% at 50% 31%,
+    #000 0 66%,
+    rgba(0,0,0,.98) 76%,
+    rgba(0,0,0,.72) 87%,
+    rgba(0,0,0,.28) 95%,
+    transparent 100%);
+}
+
+/* Ambient booth life from the flattened master art: tiny movement only, heavily feathered. */
+.living-set {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.set-piece {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 47%;
+  pointer-events: none;
+  will-change: transform;
+}
+.set-piece-moon {
+  z-index: 2;
+  transform-origin: 59% 18%;
+  -webkit-mask-image: radial-gradient(circle 7.8% at 59% 18%, #000 0 68%, rgba(0,0,0,.75) 79%, transparent 100%);
+  mask-image: radial-gradient(circle 7.8% at 59% 18%, #000 0 68%, rgba(0,0,0,.75) 79%, transparent 100%);
+  animation: moonSway 8.8s ease-in-out infinite;
+}
+.set-piece-lantern-left {
+  z-index: 3;
+  transform-origin: 22% 15%;
+  -webkit-mask-image: radial-gradient(ellipse 9% 17% at 22% 27%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 9% 17% at 22% 27%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  animation: lanternPictureSway 6.4s ease-in-out infinite -.8s;
+}
+.set-piece-lantern-right {
+  z-index: 3;
+  transform-origin: 79% 16%;
+  -webkit-mask-image: radial-gradient(ellipse 9% 17% at 79% 28%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 9% 17% at 79% 28%, #000 0 66%, rgba(0,0,0,.78) 80%, transparent 100%);
+  animation: lanternPictureSwayRight 7s ease-in-out infinite -2.1s;
+}
+.set-piece-rosie-breathe {
+  z-index: 1;
+  transform-origin: 50% 52%;
+  -webkit-mask-image: radial-gradient(ellipse 28% 37% at 50% 47%, #000 0 62%, rgba(0,0,0,.66) 80%, transparent 100%);
+  mask-image: radial-gradient(ellipse 28% 37% at 50% 47%, #000 0 62%, rgba(0,0,0,.66) 80%, transparent 100%);
+  animation: rosieBreathe 5.8s ease-in-out infinite;
+}
+@keyframes moonSway {
+  0%,100% { transform: translate(0,0) rotate(-.22deg); }
+  35% { transform: translate(.7px,1px) rotate(.34deg); }
+  68% { transform: translate(-.6px,.35px) rotate(-.1deg); }
+}
+@keyframes lanternPictureSway {
+  0%,100% { transform: rotate(-.48deg) translateY(0); }
+  50% { transform: rotate(.62deg) translateY(.55px); }
+}
+@keyframes lanternPictureSwayRight {
+  0%,100% { transform: rotate(.45deg) translateY(.2px); }
+  50% { transform: rotate(-.58deg) translateY(.7px); }
+}
+@keyframes rosieBreathe {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-.85px) scale(1.0025); }
+}
+
+/* Give the existing book stack individual spines without stealing attention from Rosie. */
+.book-accents {
+  position: absolute;
+  z-index: 5;
+  left: 3.8%;
+  top: 57%;
+  width: 23%;
+  height: 31%;
+  pointer-events: none;
+  opacity: .58;
+}
+.book-accents i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 14%;
+  border-radius: 2px 5px 5px 2px;
+  border: 1px solid rgba(213,171,94,.2);
+  border-left-color: rgba(243,207,132,.42);
+  background:
+    linear-gradient(90deg, rgba(244,207,132,.1), transparent 13% 84%, rgba(238,194,109,.07)),
+    rgba(71,27,39,.08);
+  box-shadow:
+    inset 0 1px rgba(255,231,178,.045),
+    0 1px rgba(0,0,0,.18);
+}
+.book-accents i::before {
+  content: "✦";
+  position: absolute;
+  left: 7%;
+  top: 50%;
+  transform: translateY(-52%);
+  color: rgba(229,191,117,.38);
+  font-size: 5px;
+}
+.book-accents i:nth-child(1) { top: 0; width: 92%; background-color: rgba(84,39,71,.1); }
+.book-accents i:nth-child(2) { top: 18%; left: 4%; width: 94%; background-color: rgba(52,50,76,.1); }
+.book-accents i:nth-child(3) { top: 36%; width: 97%; background-color: rgba(91,50,31,.09); }
+.book-accents i:nth-child(4) { top: 54%; left: 3%; width: 91%; background-color: rgba(46,65,57,.08); }
+.book-accents i:nth-child(5) { top: 72%; width: 100%; background-color: rgba(80,36,47,.1); }
+
+/* Random prompt controls: quiet refresh affordance, more options without visual weight. */
+.quick-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+.quick-label > span {
+  color: #77665e;
+  font-size: 6.5px;
+  letter-spacing: .17em;
+  white-space: nowrap;
+}
+.shuffle-prompts {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(207,165,92,.16);
+  border-radius: 50%;
+  background: rgba(205,154,77,.035);
+  color: #907a68;
+  font-size: 12px;
+  line-height: 1;
+}
+.shuffle-prompts:active {
+  transform: rotate(20deg) scale(.94);
+}
+.quick-row > span {
+  display: none;
+}
+
+/* The answer-release animation has to stay above the ball until the final spark is gone. */
+.fortune-lens.is-dismissing {
+  z-index: 23;
+}
+.answer-dismiss-sparkles {
+  pointer-events: none;
+}
+
+/* Phone tuning for the flattened stage coordinates. */
+@media (max-width: 620px) {
+  .turn-veil {
+    top: 29.5%;
+    width: 47%;
+    height: 45%;
+  }
+  .turn-orbit {
+    top: 29%;
+    width: 43%;
+  }
+  .set-piece-moon {
+    transform-origin: 59% 18%;
+  }
+  .book-accents {
+    left: 3.5%;
+    top: 57%;
+    width: 23.5%;
+  }
+}
