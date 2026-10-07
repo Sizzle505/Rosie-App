@@ -1577,7 +1577,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
-  const [soundOn, setSoundOn] = useState(true);
+  const [soundOn] = useState(true);
   const validPages = ["fortune", "cheese", "captain"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
@@ -2059,12 +2059,12 @@ function App() {
             <strong>ROSIE</strong>
           </div>
           <button
-            className={`round-button whistle-button ${soundOn ? "is-on" : ""}`}
-            aria-label={soundOn ? "Mute Captain sounds" : "Enable Captain sounds"}
-            title={soundOn ? "Captain sounds on" : "Captain sounds muted"}
-            onClick={() => setSoundOn((value) => !value)}
+            className="round-button whistle-button"
+            aria-label="Whistle for Rosie"
+            title="Whistle for Rosie"
+            onClick={whistleForRosie}
           >
-            {soundOn ? "♪" : "♩"}
+            ♪
           </button>
         </header>
 
