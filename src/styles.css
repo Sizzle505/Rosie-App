@@ -6081,3 +6081,82 @@ main {
     animation:none !important;
   }
 }
+
+
+/* Captain Rosie likeness correction - photo-referenced illustrated asset */
+.captain-game-page .captain-rosie-illustration {
+  display:block;
+  object-fit:cover;
+  object-position:50% 18%;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.captain-game-page .hero-captain-illustration {
+  left:50%;
+  bottom:-18px;
+  width:218px;
+  height:252px;
+  transform:translateX(-50%);
+  object-fit:cover;
+  object-position:50% 14%;
+  border-radius:48% 48% 34% 34%;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 0 66%,rgba(0,0,0,.96) 74%,transparent 94%);
+  mask-image:radial-gradient(ellipse at 50% 45%,#000 0 66%,rgba(0,0,0,.96) 74%,transparent 94%);
+  filter:
+    drop-shadow(0 14px 13px rgba(0,0,0,.34))
+    drop-shadow(0 0 10px rgba(255,224,148,.13));
+}
+
+.captain-game-page .captain-at-helm {
+  background:
+    radial-gradient(circle at 50% 42%,rgba(222,242,238,.12),transparent 50%),
+    #052d47;
+}
+
+.captain-game-page .helm-rosie-art {
+  left:-3%;
+  top:-9%;
+  width:106%;
+  height:132%;
+  object-fit:cover;
+  object-position:50% 9%;
+  border-radius:36% 36% 8% 8%;
+  filter:
+    saturate(1.06)
+    contrast(1.03)
+    drop-shadow(0 4px 3px rgba(0,0,0,.23));
+  animation:captainAtHelm 3s ease-in-out infinite alternate;
+}
+
+.captain-game-page .start-panel-rosie {
+  width:100px;
+  height:116px;
+  object-fit:cover;
+  object-position:50% 10%;
+  border-radius:50%;
+  -webkit-mask-image:radial-gradient(circle at 50% 42%,#000 0 70%,transparent 99%);
+  mask-image:radial-gradient(circle at 50% 42%,#000 0 70%,transparent 99%);
+  filter:drop-shadow(0 8px 7px rgba(0,0,0,.32));
+}
+
+@media (max-width:700px) {
+  .captain-game-page .hero-captain-illustration {
+    bottom:-10px;
+    width:146px;
+    height:176px;
+  }
+
+  .captain-game-page .start-panel-rosie {
+    width:80px;
+    height:94px;
+    margin:-64px auto 3px;
+  }
+}
+
+@media (max-width:390px) {
+  .captain-game-page .hero-captain-illustration {
+    width:137px;
+    height:166px;
+  }
+}
