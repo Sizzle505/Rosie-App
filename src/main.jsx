@@ -336,24 +336,8 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <span className="lantern-glow lantern-glow-right"><i /></span>
           </div>
 
-          <div className="living-set" aria-hidden="true">
-            <img className="set-piece set-piece-moon" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-            <img className="set-piece set-piece-lantern-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-            <img className="set-piece set-piece-lantern-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
-          </div>
-
-          <span
-            className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            aria-hidden="true"
-          />
-          <img
-            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            src="/rosie-turn-head.svg"
-            alt=""
-            aria-hidden="true"
-            draggable="false"
-          />
-          <span className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
+          {/* The stage is deliberately one immutable painting. The whistle effect is
+              additive magic only - no mirrored/cropped duplicate of Rosie or the set. */}
 
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
