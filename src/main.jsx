@@ -221,6 +221,7 @@ function CheeseMemoryGame() {
   const [started, setStarted] = useState(false);
   const [locked, setLocked] = useState(false);
   const [message, setMessage] = useState("Rosie is testing your palate memory. Do try not to embarrass yourself.");
+  const [rosieMood, setRosieMood] = useState("watching");
   const pendingFlipRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
@@ -243,6 +244,7 @@ function CheeseMemoryGame() {
     setElapsed(0);
     setStarted(false);
     setLocked(false);
+    setRosieMood("watching");
     setMessage("A fresh examination board. Doctor Rosie is ready when you are.");
   }
 
@@ -252,6 +254,7 @@ function CheeseMemoryGame() {
 
     if (openCards.length === 0) {
       setOpenCards([index]);
+      setRosieMood("amused");
       setMessage("Hmm. Rosie is watching. Find its matching fromage.");
       return;
     }
@@ -270,6 +273,7 @@ function CheeseMemoryGame() {
         setMatched((items) => [...items, first.id]);
         setOpenCards([]);
         setLocked(false);
+        setRosieMood(matched.length + 1 === CHEESES.length ? "elated" : "pleased");
         setMessage(first.name + " identified. Acceptable. Rosie approves.");
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
@@ -277,6 +281,7 @@ function CheeseMemoryGame() {
       pendingFlipRef.current = window.setTimeout(() => {
         setOpenCards([]);
         setLocked(false);
+        setRosieMood(moves > 5 ? "distraught" : "embarrassed");
         setMessage("Unconvincing. Rosie expected better. Try again.");
       }, 850);
     }
@@ -307,23 +312,7 @@ function CheeseMemoryGame() {
         </div>
       </section>
 
-      <section className="cheese-scorebar" aria-label="Game score">
-        <div><span>MOVES</span><strong>{moves}</strong></div>
-        <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
-        <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
-        <button type="button" onClick={resetGame}>NEW BOARD</button>
-      </section>
-
       <section className="cheese-game-frame">
-        <div className="rosie-player-status" aria-live="polite">
-          <img src="/rosie-doctor-cheese-hero.webp" alt="Doctor Rosie" />
-          <div>
-            <span>DR. ROSIE'S FIELD NOTES</span>
-            <strong>{message}</strong>
-          </div>
-          <b>Che.D.</b>
-        </div>
-
         <div className="cheese-game-heading">
           <div>
             <span>THE PRACTICAL EXAM</span>
@@ -346,10 +335,11 @@ function CheeseMemoryGame() {
               >
                 <span className="cheese-card-inner">
                   <span className="cheese-card-back">
-                    <span className="card-corner top">✦</span>
-                    <span className="card-corner bottom">✦</span>
-                    <span className="card-seal"><b>Che.D.</b><i>🐾</i></span>
-                    <small>ROSIE'S<br />CHEESE BOARD</small>
+                    <span className="card-ribbon">EXAMINATION DECK</span>
+                    <span className="card-moon">☾</span>
+                    <span className="card-rosette"><i>🐾</i><b>Che.D.</b></span>
+                    <span className="card-cheese-mark">🧀</span>
+                    <small>ROSIE'S<br />FROMAGE SOCIETY</small>
                   </span>
                   <span className="cheese-card-front">
                     <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
@@ -361,6 +351,20 @@ function CheeseMemoryGame() {
             );
           })}
         </div>
+      </section>
+
+      <section className="cheese-bottom-console">
+        <div className={`rosie-reaction mood-${rosieMood}`} aria-live="polite">
+          <div className="rosie-reaction-portrait"><img src="/rosie-doctor-cheese-hero.webp" alt="Doctor Rosie watching the examination" /></div>
+          <div><span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span><strong>{message}</strong></div>
+          <i aria-hidden="true">{rosieMood === "elated" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✓" : "◌"}</i>
+        </div>
+        <section className="cheese-scorebar" aria-label="Game score">
+          <div><span>MOVES</span><strong>{moves}</strong></div>
+          <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+          <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
+          <button type="button" onClick={resetGame}>NEW BOARD</button>
+        </section>
       </section>
 
       {complete && (
