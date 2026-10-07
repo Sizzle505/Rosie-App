@@ -776,6 +776,16 @@ function GoldenCheeseIcon({ compact = false }) {
   );
 }
 
+function CaptainPickupIcon({ kind }) {
+  if (kind === "ball") {
+    return <svg className="pickup-art pickup-art-ball" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" /><path d="M12 22c11 1 18 8 19 20M52 42c-11-1-18-8-19-20" /><path d="M24 12c-1 11-8 18-20 19M40 52c1-11 8-18 20-19" /></svg>;
+  }
+  if (kind === "treat") {
+    return <svg className="pickup-art pickup-art-treat" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 23a10 10 0 1 1-7-13 10 10 0 0 1 13 7l17 17a10 10 0 1 1 7 13 10 10 0 0 1-13 7L18 37a10 10 0 1 1 0-14Z" /></svg>;
+  }
+  return <svg className="pickup-art pickup-art-buoy" viewBox="0 0 64 64" aria-hidden="true"><path d="M27 8h10l3 9-3 5 8 27H19l8-27-3-5Z" /><path d="M19 38h26M22 48h20" /><path d="M24 56h16" /></svg>;
+}
+
 function CaptainRosieIllustration({ className = "" }) {
   return (
     <img
@@ -1476,7 +1486,7 @@ function CaptainRosieGame({ soundOn }) {
               style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
               aria-label={item.label}
             >
-              {item.kind === "cheese" ? <GoldenCheeseIcon /> : <span>{item.icon}</span>}
+              {item.kind === "cheese" ? <GoldenCheeseIcon /> : <CaptainPickupIcon kind={item.kind} />}
               {item.kind === "cheese" && <small>GOLDEN</small>}
             </div>
           ))}
@@ -1565,6 +1575,9 @@ function CaptainRosieGame({ soundOn }) {
 
 function App() {
   const [loaded, setLoaded] = useState(false);
+  // Captain's audio uses this shared setting. It must exist before the Captain
+  // component mounts - an undefined value previously made that tab crash.
+  const [soundOn, setSoundOn] = useState(true);
   const validPages = ["fortune", "cheese", "captain"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
@@ -2046,12 +2059,12 @@ function App() {
             <strong>ROSIE</strong>
           </div>
           <button
-            className="round-button whistle-button"
-            aria-label="Whistle for Rosie"
-            title="Whistle for Rosie"
-            onClick={whistleForRosie}
+            className={`round-button whistle-button ${soundOn ? "is-on" : ""}`}
+            aria-label={soundOn ? "Mute Captain sounds" : "Enable Captain sounds"}
+            title={soundOn ? "Captain sounds on" : "Captain sounds muted"}
+            onClick={() => setSoundOn((value) => !value)}
           >
-            ♪
+            {soundOn ? "♪" : "♩"}
           </button>
         </header>
 

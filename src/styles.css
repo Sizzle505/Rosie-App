@@ -6130,6 +6130,49 @@ main {
   }
 }
 
+/* Bespoke collectable objects - no stock emoji in the Captain course. */
+.captain-game-page .sea-pickup .pickup-art {
+  position:relative;
+  z-index:2;
+  width:48px;
+  height:48px;
+  overflow:visible;
+  filter:drop-shadow(0 3px 2px rgba(0,27,42,.28));
+}
+.captain-game-page .pickup-art-ball circle {
+  fill:#d2dd58;
+  stroke:#f5f4b8;
+  stroke-width:3;
+}
+.captain-game-page .pickup-art-ball path { fill:none; stroke:#789633; stroke-width:3; stroke-linecap:round; }
+.captain-game-page .pickup-art-treat path {
+  fill:#dcaa6b;
+  stroke:#ffe4b6;
+  stroke-width:3;
+  stroke-linejoin:round;
+}
+.captain-game-page .pickup-art-buoy path:first-child { fill:#c94f43; stroke:#fff1d5; stroke-width:3; stroke-linejoin:round; }
+.captain-game-page .pickup-art-buoy path:not(:first-child) { fill:none; stroke:#7d2b2e; stroke-width:3.5; stroke-linecap:round; }
+.captain-game-page .sea-pickup-ball,
+.captain-game-page .sea-pickup-treat,
+.captain-game-page .sea-pickup-buoy {
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,246,211,.32);
+  border-radius:50%;
+  background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.26),transparent 19%),rgba(4,68,91,.45);
+  box-shadow:inset 0 0 0 4px rgba(255,255,255,.035),0 7px 13px rgba(0,47,68,.22);
+}
+.captain-game-page .sea-pickup-buoy { background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.25),transparent 19%),rgba(106,32,37,.62); }
+.captain-game-page .sea-pickup-buoy .pickup-art { transform:rotate(2deg); }
+.captain-game-page .sea-pickup:hover .pickup-art { transform:scale(1.06); }
+@media (max-width:700px) {
+  .captain-game-page .sea-pickup .pickup-art { width:40px; height:40px; }
+  .captain-game-page .sea-pickup-ball,.captain-game-page .sea-pickup-treat,.captain-game-page .sea-pickup-buoy { width:47px; height:47px; }
+}
+
 /* Captain - cinematic motion and depth pass -------------------------------- */
 .captain-game-page .yacht-course {
   isolation:isolate;
@@ -7498,3 +7541,50 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     animation:none !important;
   }
 }
+
+/* Mobile emergency layout corrections: preserve the artwork without collisions. */
+@media (max-width:620px) {
+  .machine .sign { top:13px; width:84%; padding:9px 12px 8px; border-radius:17px; }
+  .machine .sign h1 { font-size:clamp(26px,7.7vw,34px); line-height:.94; letter-spacing:.01em; }
+  .machine .sign p { margin-top:4px; font-size:6.4px; letter-spacing:.13em; }
+  .machine .sign-paw { top:-13px; width:27px; height:27px; font-size:12px; }
+  /* The source art contains a second baked-in placard. Crop it out below the live marquee. */
+  .machine .stage { top:92px; left:18px; right:18px; bottom:15px; }
+  .machine .stage-art { top:-47px; height:calc(100% + 47px); object-position:center 52%; transform:none; }
+  .machine .stage-art-consulting { transform:none; }
+  .machine .curtain { top:87px; }
+  .machine .cabinet-lights { top:106px; }
+  .machine .fortune-lens { bottom:39px; }
+
+  .cheese-game-page .rosie-reaction { height:132px; grid-template-columns:104px minmax(0,1fr) 20px; gap:7px; padding:6px 7px 6px 6px; }
+  .cheese-game-page .rosie-reaction-portrait { border-radius:9px; }
+  .cheese-game-page .rosie-reaction span { font-size:5.2px; line-height:1.1; }
+  .cheese-game-page .rosie-reaction strong { margin-top:4px; font-size:12px; line-height:1.12; }
+  .cheese-game-page .reaction-copy { overflow:hidden; }
+}
+
+/* The turn is an in-place portrait swap under a fully opaque magical veil. */
+.stage-turning .stage-art { transform:none !important; }
+.rosie-turn-layer,
+.rosie-turn-layer.is-flipped {
+  animation:none !important;
+  transition:opacity .01s linear !important;
+  transform:scaleX(-1) scale(1.018) !important;
+  transform-origin:61.5% 35.5% !important;
+}
+.rosie-turn-layer:not(.is-flipped) { opacity:0 !important; }
+.rosie-turn-layer.is-flipped { opacity:1 !important; }
+.turn-seam-haze,
+.turn-seam-haze.is-flipped { transition:opacity .01s linear !important; }
+
+/* Keep these bespoke pick-up silhouettes above all earlier Captain rules. */
+.captain-game-page .sea-pickup .pickup-art { position:relative; z-index:2; width:48px; height:48px; overflow:visible; filter:drop-shadow(0 3px 2px rgba(0,27,42,.28)); }
+.captain-game-page .pickup-art-ball circle { fill:#d2dd58; stroke:#f5f4b8; stroke-width:3; }
+.captain-game-page .pickup-art-ball path { fill:none; stroke:#789633; stroke-width:3; stroke-linecap:round; }
+.captain-game-page .pickup-art-treat path { fill:#dcaa6b; stroke:#ffe4b6; stroke-width:3; stroke-linejoin:round; }
+.captain-game-page .pickup-art-buoy path:first-child { fill:#c94f43; stroke:#fff1d5; stroke-width:3; stroke-linejoin:round; }
+.captain-game-page .pickup-art-buoy path:not(:first-child) { fill:none; stroke:#7d2b2e; stroke-width:3.5; stroke-linecap:round; }
+.captain-game-page .sea-pickup-ball,.captain-game-page .sea-pickup-treat,.captain-game-page .sea-pickup-buoy { width:56px; height:56px; display:grid; place-items:center; border:1px solid rgba(255,246,211,.32); border-radius:50%; background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.26),transparent 19%),rgba(4,68,91,.45); box-shadow:inset 0 0 0 4px rgba(255,255,255,.035),0 7px 13px rgba(0,47,68,.22); }
+.captain-game-page .sea-pickup-buoy { background:radial-gradient(circle at 32% 25%,rgba(255,255,255,.25),transparent 19%),rgba(106,32,37,.62); }
+.captain-game-page .sea-pickup-buoy .pickup-art { transform:rotate(2deg); }
+@media (max-width:700px) { .captain-game-page .sea-pickup .pickup-art { width:40px; height:40px; } .captain-game-page .sea-pickup-ball,.captain-game-page .sea-pickup-treat,.captain-game-page .sea-pickup-buoy { width:47px; height:47px; } }
