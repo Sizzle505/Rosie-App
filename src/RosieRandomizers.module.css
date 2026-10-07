@@ -177,25 +177,14 @@
   width: 210px;
   height: 210px;
   transform-style: preserve-3d;
-  transform: rotateY(0deg);
   filter: drop-shadow(0 16px 16px rgba(61, 39, 10, .25));
 }
-.showTails { transform: rotateY(180deg); }
-.coinFace {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.coinFace img {
+.coin > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
 }
-.coinBack { transform: rotateY(180deg); }
 .coinFlipping { animation: coinFlight .92s cubic-bezier(.2,.72,.14,1) both; }
 @keyframes coinFlight {
   0% { transform: rotateY(var(--coin-start)) translateY(0) scale(1); }
@@ -255,12 +244,37 @@
 .dieFace {
   width: 100%;
   height: 100%;
-  border-radius: 26px;
-  background-image: url("/randomizers/rosie-die-sprites-clean.webp");
-  background-repeat: no-repeat;
-  background-size: 300% 200%;
-  background-position: 50% 100%;
-  box-shadow: 0 1px 0 rgba(255,255,255,.44);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 27px;
+  border: 5px solid #bb8a2d;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255,255,255,.95), transparent 28%),
+    linear-gradient(145deg, #fffdf4 0%, #f3e5c5 58%, #dfc78c 100%);
+  box-shadow:
+    inset 0 0 0 3px #f8d978,
+    inset 0 -12px 24px rgba(104,65,17,.13),
+    0 0 0 2px rgba(113,73,20,.23);
+}
+.dieFace i {
+  width: 31px;
+  height: 31px;
+  place-self: center;
+  border-radius: 50%;
+  background: transparent;
+}
+.dieFace .diePip {
+  background:
+    radial-gradient(circle at 35% 28%, #ff7988 0 12%, #b6132e 34%, #72071a 70%, #35030c 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.5),
+    inset 0 -4px 6px rgba(42,0,6,.45),
+    0 0 0 3px #d1a13c,
+    0 0 0 5px #7b5418,
+    0 4px 7px rgba(71,28,7,.23);
 }
 .isRolling { animation: dieTumble 1.08s cubic-bezier(.18,.72,.15,1) both; }
 .isRolling .dieFace { animation: dieGlint .21s ease-in-out infinite alternate; }
@@ -571,7 +585,8 @@
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
   .dieMotion { width: 156px; height: 156px; }
-  .dieFace { border-radius: 23px; }
+  .dieFace { padding: 22px; border-radius: 27px; }
+  .dieFace i { width: 25px; height: 25px; }
   .decorativeDie { width: 104px; height: 104px; }
   .decorativeDieLeft { left: 20%; }
   .decorativeDieRight { left: 80%; }
