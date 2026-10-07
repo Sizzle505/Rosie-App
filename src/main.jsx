@@ -343,7 +343,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
 
           <img
             className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            src="/rosie-fortune-stage.webp"
+            src="/rosie-turn-head.svg"
             alt=""
             aria-hidden="true"
             draggable="false"
