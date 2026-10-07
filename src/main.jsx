@@ -511,7 +511,9 @@ function formatGameTime(seconds) {
 
 const ROSIE_MOOD_ART = {
   watching: "/rosie-mood-watching.webp",
+  focused: "/rosie-mood-focused.webp",
   pleased: "/rosie-mood-pleased.webp",
+  proud: "/rosie-mood-proud.webp",
   amused: "/rosie-mood-amused.webp",
   embarrassed: "/rosie-mood-embarrassed.webp",
   distraught: "/rosie-mood-distraught.webp",
@@ -530,6 +532,7 @@ function CheeseMemoryGame() {
   const [rosieMood, setRosieMood] = useState("watching");
   const [matchStreak, setMatchStreak] = useState(0);
   const [misses, setMisses] = useState(0);
+  const [inspections, setInspections] = useState(0);
   const pendingFlipRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
@@ -554,6 +557,7 @@ function CheeseMemoryGame() {
     setLocked(false);
     setMatchStreak(0);
     setMisses(0);
+    setInspections(0);
     setRosieMood("watching");
     setMessage("A fresh examination board. Doctor Rosie is ready when you are.");
   }
@@ -564,8 +568,23 @@ function CheeseMemoryGame() {
 
     if (openCards.length === 0) {
       setOpenCards([index]);
-      setRosieMood("amused");
-      setMessage("Interesting. Continue, if you dare.");
+      const nextInspection = inspections + 1;
+      setInspections(nextInspection);
+      // A first pick is a continuation of the examination, not a reset to neutral.
+      // Alternating reactions makes Rosie feel like she is following the player.
+      if (rosieMood === "watching") {
+        setRosieMood("focused");
+        setMessage("Rosie has the loupe out. Choose its companion.");
+      } else if (rosieMood === "distraught" || rosieMood === "embarrassed") {
+        setRosieMood("focused");
+        setMessage("A second opinion, then. Rosie is watching closely.");
+      } else if (nextInspection % 3 === 0) {
+        setRosieMood("amused");
+        setMessage("Interesting. Continue, if you dare.");
+      } else {
+        setRosieMood("focused");
+        setMessage("Rosie is considering the evidence.");
+      }
       return;
     }
 
@@ -586,11 +605,13 @@ function CheeseMemoryGame() {
         const nextStreak = matchStreak + 1;
         setMatchStreak(nextStreak);
         setMisses(0);
-        setRosieMood(matched.length + 1 === CHEESES.length ? "elated" : "pleased");
+        setRosieMood(matched.length + 1 === CHEESES.length ? "elated" : nextStreak >= 3 ? "proud" : "pleased");
         setMessage(matched.length + 1 === CHEESES.length
           ? "You pass. Rosie is genuinely impressed."
-          : nextStreak > 1
-            ? "Another correct pairing. Your palate may yet be salvageable."
+          : nextStreak >= 3
+            ? "A remarkable run. Rosie is almost visibly proud."
+            : nextStreak > 1
+              ? "Another correct pairing. Your palate may yet be salvageable."
             : "Correct. Your palate may yet be salvageable.");
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
@@ -661,6 +682,7 @@ function CheeseMemoryGame() {
                   </span>
                   <span className="cheese-card-front">
                     <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
+                    <span className="cheese-card-ribbon" aria-hidden="true">FROMAGE {String((index % 8) + 1).padStart(2, "0")}</span>
                     <strong>{cheese.name}</strong>
                     <small>{cheese.note}</small>
                   </span>
@@ -678,7 +700,7 @@ function CheeseMemoryGame() {
             <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={`Doctor Rosie looking ${rosieMood}`} />
           </div>
           <div className="reaction-copy"><span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span><strong>{message}</strong></div>
-          <i aria-hidden="true">{rosieMood === "elated" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : "◌"}</i>
+          <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
         </div>
         <section className="cheese-scorebar" aria-label="Game score">
           <div><span>MOVES</span><strong>{moves}</strong></div>
@@ -690,9 +712,10 @@ function CheeseMemoryGame() {
 
       {complete && (
         <section className="cheese-victory" aria-live="polite">
-          <img className="victory-rosie" src="/rosie-doctor-cheese-hero.webp" alt="Rosie, Doctor of Cheese" />
-          <span>BOARD EXAM PASSED</span>
-          <h2>You pass. Doctor Rosie is pleased.</h2>
+          <div className="victory-sparkles" aria-hidden="true"><b>✦</b><b>✦</b><b>✦</b></div>
+          <img className="victory-rosie" src="/rosie-mood-proud.webp" alt="A proud Doctor Rosie holding a gold paw medal" />
+          <span>THE GOLDEN PAW HONOURS</span>
+          <h2>Rosie awards you a most distinguished pass.</h2>
           <p>{moves} moves · {formatGameTime(elapsed)} · All {CHEESES.length} cheeses correctly identified.</p>
           <button type="button" onClick={resetGame}>DEFEND THE DISSERTATION AGAIN</button>
         </section>
@@ -766,149 +789,139 @@ function CaptainRosieIllustration({ className = "" }) {
 
 function RivieraCourseArt() {
   return (
-    <svg className="riviera-course-art" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
+    <svg className="riviera-course-art japanese-course-art" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
       <defs>
-        <linearGradient id="courseSkyGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--course-sky-top)" />
-          <stop offset=".64" stopColor="var(--course-sky-mid)" />
-          <stop offset="1" stopColor="var(--course-sky-horizon)" />
+        <linearGradient id="jpSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--jp-sky-top)" />
+          <stop offset=".58" stopColor="var(--jp-sky-mid)" />
+          <stop offset="1" stopColor="var(--jp-sky-horizon)" />
         </linearGradient>
-        <linearGradient id="courseSeaGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--course-sea-top)" />
-          <stop offset=".42" stopColor="var(--course-sea-mid)" />
-          <stop offset="1" stopColor="var(--course-sea-bottom)" />
+        <linearGradient id="jpSea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--jp-sea-top)" />
+          <stop offset=".47" stopColor="var(--jp-sea-mid)" />
+          <stop offset="1" stopColor="var(--jp-sea-bottom)" />
         </linearGradient>
-        <linearGradient id="courseCliffGradient" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#d6b578" />
-          <stop offset=".44" stopColor="#9d7748" />
-          <stop offset="1" stopColor="#63492f" />
+        <linearGradient id="jpCliff" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="var(--jp-cliff-lit)" />
+          <stop offset=".52" stopColor="var(--jp-cliff-mid)" />
+          <stop offset="1" stopColor="var(--jp-cliff-dark)" />
         </linearGradient>
-        <linearGradient id="courseVillaGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff5d9" />
-          <stop offset="1" stopColor="#d9b77e" />
+        <linearGradient id="jpPine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--jp-pine-lit)" />
+          <stop offset="1" stopColor="var(--jp-pine-dark)" />
         </linearGradient>
-        <linearGradient id="courseGreenGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#77935c" />
-          <stop offset="1" stopColor="#315241" />
-        </linearGradient>
-        <radialGradient id="courseSunGlow">
-          <stop offset="0" stopColor="#fff8c9" stopOpacity=".92" />
-          <stop offset=".34" stopColor="#ffe39a" stopOpacity=".46" />
-          <stop offset="1" stopColor="#ffe39a" stopOpacity="0" />
+        <radialGradient id="jpSunGlow">
+          <stop offset="0" stopColor="var(--jp-sun-glow)" stopOpacity=".9" />
+          <stop offset=".36" stopColor="var(--jp-sun-glow)" stopOpacity=".34" />
+          <stop offset="1" stopColor="var(--jp-sun-glow)" stopOpacity="0" />
         </radialGradient>
-        <pattern id="courseWaterPattern" width="160" height="70" patternUnits="userSpaceOnUse">
-          <path d="M-20 34c35-15 70-15 105 0s70 15 105 0" fill="none" stroke="#dffcff" strokeOpacity=".14" strokeWidth="4" />
-          <path d="M25 58c26-10 52-10 78 0s52 10 78 0" fill="none" stroke="#ffffff" strokeOpacity=".07" strokeWidth="2" />
-        </pattern>
-        <filter id="courseSoftCloud" x="-30%" y="-50%" width="160%" height="200%">
-          <feGaussianBlur stdDeviation="5" />
-        </filter>
+        <linearGradient id="jpGoldReflection" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--jp-reflection)" stopOpacity=".35" />
+          <stop offset="1" stopColor="var(--jp-reflection)" stopOpacity="0" />
+        </linearGradient>
       </defs>
 
-      <rect width="1000" height="330" fill="url(#courseSkyGradient)" />
-      <circle className="riviera-sun-glow" cx="775" cy="112" r="118" fill="url(#courseSunGlow)" />
-      <circle className="riviera-sun-disc" cx="775" cy="112" r="34" fill="var(--course-sun)" />
-
-      <g className="riviera-clouds" fill="#fff8e9" opacity=".64" filter="url(#courseSoftCloud)">
-        <path d="M95 98c30-30 70-21 80 8 27-17 63 2 58 31H52c2-25 21-40 43-39Z" />
-        <path d="M563 74c20-23 52-18 61 5 22-13 49 2 47 25H526c2-19 17-31 37-30Z" opacity=".52" />
-        <path d="M810 190c23-21 55-15 64 7 21-11 46 4 43 26H770c2-19 18-31 40-33Z" opacity=".4" />
+      <rect width="1000" height="330" fill="url(#jpSky)" />
+      <g className="japan-sun">
+        <circle cx="782" cy="116" r="128" fill="url(#jpSunGlow)" />
+        <circle className="japan-sun-disc" cx="782" cy="116" r="34" fill="var(--jp-sun)" />
       </g>
 
-      <path d="M0 248c84-69 154-74 235-32 54-57 123-63 196-24 65-52 142-48 213 2 77-62 173-52 263 30 34-20 65-24 93-18v124H0Z" fill="#65868a" opacity=".4" />
-      <path d="M0 279c95-62 189-58 282-4 79-59 172-61 278-6 86-45 174-44 264 2 66-33 125-35 176-9v68H0Z" fill="#6f8e82" opacity=".45" />
-
-      <rect y="300" width="1000" height="460" fill="url(#courseSeaGradient)" />
-      <rect y="300" width="1000" height="460" fill="url(#courseWaterPattern)" opacity=".72" />
-      <path d="M0 304c210 13 359 13 503 0 164-15 325-14 497 2" fill="none" stroke="#fff4d5" strokeOpacity=".62" strokeWidth="5" />
-      <path d="M610 315c72 30 123 78 156 143" fill="none" stroke="#fff8cd" strokeOpacity=".11" strokeWidth="34" strokeLinecap="round" />
-      <path d="M618 314c72 35 117 82 148 140" fill="none" stroke="#fffbe5" strokeOpacity=".2" strokeWidth="8" strokeLinecap="round" />
-
-      <g className="riviera-left-coast">
-        <path d="M0 259c82 0 135 24 183 74 28 29 61 52 112 69-16 34-33 67-59 92-80-16-152-32-236-28Z" fill="url(#courseCliffGradient)" />
-        <path d="M0 244c79-5 144 21 199 75 16 15 35 29 58 41-56-15-111-15-169-1-27-22-57-37-88-43Z" fill="url(#courseGreenGradient)" />
-        <path d="M0 397c72-13 136-7 197 14 22 8 43 18 64 30-28 17-54 36-76 57-75-20-130-24-185-14Z" fill="#705239" opacity=".62" />
+      <g className="japan-clouds" fill="none" stroke="var(--jp-cloud)" strokeLinecap="round">
+        <path d="M52 107c45-23 92-23 142 0 29 13 64 13 105 0" strokeWidth="12" strokeOpacity=".22" />
+        <path d="M82 92c30-17 64-18 102-2 17 7 35 9 55 6" strokeWidth="5" strokeOpacity=".46" />
+        <path d="M544 82c30-18 61-19 93-3 29 15 63 16 101 4" strokeWidth="8" strokeOpacity=".26" />
+        <path d="M706 194c42-20 83-18 122 6 25 15 55 17 91 6" strokeWidth="6" strokeOpacity=".28" />
+        <path d="M368 150c18-10 40-11 66-2 19 7 40 7 62 0" strokeWidth="4" strokeOpacity=".2" />
       </g>
 
-      <g className="riviera-right-coast">
-        <path d="M1000 246c-86 3-151 33-201 86-35 36-67 57-112 72 17 34 35 67 62 96 89-28 169-38 251-32Z" fill="url(#courseCliffGradient)" />
-        <path d="M1000 232c-92 3-161 31-218 87-20 20-41 34-65 46 64-18 124-17 179 0 31-24 65-40 104-48Z" fill="url(#courseGreenGradient)" />
-        <path d="M1000 392c-84-12-156-1-219 29-17 8-33 17-48 28 32 16 60 35 84 57 68-23 127-31 183-23Z" fill="#71533a" opacity=".62" />
+      <g className="japan-far-mountains">
+        <path d="M-30 296C70 244 135 236 207 259c52-62 112-90 180-68 39-55 87-75 143-56 58 20 95 69 145 87 76-55 154-49 224 17 54-21 98-20 131-2v91H-30Z" fill="var(--jp-mountain-far)" opacity=".5" />
+        <path d="M-20 312c83-48 157-54 225-18 69-39 137-43 205-9 52-47 112-53 181-16 76-40 153-35 230 15 68-31 131-27 199 12v39H-20Z" fill="var(--jp-mountain-far-2)" opacity=".55" />
       </g>
 
-      <g className="riviera-villas" stroke="#8d6c44" strokeWidth="3">
-        <g transform="translate(72 225)">
-          <rect x="0" y="22" width="82" height="52" rx="3" fill="url(#courseVillaGradient)" />
-          <path d="M-7 24 41 0l48 24Z" fill="#b96648" />
-          <rect x="13" y="37" width="13" height="19" fill="#46788b" />
-          <rect x="55" y="37" width="13" height="19" fill="#46788b" />
-          <path d="M36 74V44h13v30" fill="#70523a" />
+      <g className="japan-mid-mountains">
+        <path d="M-25 321c84-42 157-48 220-17 49-33 94-40 137-22 48 20 71 61 111 75H-25Z" fill="var(--jp-mountain-mid)" opacity=".88" />
+        <path d="M1000 311c-92-37-166-36-223 4-35-26-72-30-111-12-43 20-72 57-110 72h444Z" fill="var(--jp-mountain-mid-2)" opacity=".9" />
+        <path d="M302 318c52-28 95-31 131-10 38-26 81-29 129-8 27 12 53 31 77 57H247c18-18 36-31 55-39Z" fill="var(--jp-mountain-mid-soft)" opacity=".5" />
+      </g>
+
+      <path className="japan-horizon-mist" d="M0 304c176-18 331-10 465 8 158 21 335 17 535-14v58H0Z" fill="var(--jp-haze)" opacity=".54" />
+
+      <rect y="315" width="1000" height="445" fill="url(#jpSea)" />
+      <path d="M0 319c165 8 321 4 467-10 178-17 356-15 533 6" fill="none" stroke="var(--jp-horizon-line)" strokeWidth="4" strokeOpacity=".62" />
+
+      <g className="japan-sun-reflection" opacity=".75">
+        <path d="M716 316c38 67 62 145 72 235 6 60 4 125-8 196H639c44-97 62-186 55-267-5-58 2-113 22-164Z" fill="url(#jpGoldReflection)" />
+        <path d="M708 354c31 12 58 13 83 3M691 418c39 15 76 16 110 2M673 501c50 17 96 16 137-3M651 594c62 18 117 17 165-5" fill="none" stroke="var(--jp-reflection)" strokeWidth="8" strokeLinecap="round" strokeOpacity=".18" />
+      </g>
+
+      <g className="japan-near-coast japan-near-coast-left">
+        <path d="M0 314c88 8 150 35 205 84 38 34 78 58 132 75-21 51-50 93-91 128-85-18-168-29-246-20Z" fill="url(#jpCliff)" />
+        <path d="M0 306c81 4 150 29 213 76 27 20 52 34 76 43-63-11-119-6-170 17-41-25-81-40-119-45Z" fill="url(#jpPine)" />
+        <path d="M0 485c73-7 142 4 207 34 28 13 54 30 77 49-37 35-71 69-102 103-68-19-129-26-182-20Z" fill="var(--jp-rock-shadow)" opacity=".72" />
+        <g className="japan-pines" stroke="var(--jp-pine-trunk)" strokeWidth="6" strokeLinecap="round">
+          <path d="M86 383c4-46 13-81 28-107m-28 107c-26-24-47-32-64-25m65 22c21-31 46-45 74-42m-67 18c-4-30-1-55 11-75" fill="none" />
+          <path d="M180 407c3-36 11-65 24-88m-22 86c-20-17-37-23-52-18m52 17c18-23 37-34 59-31" fill="none" strokeWidth="5" />
         </g>
-        <g transform="translate(177 256) scale(.78)">
-          <rect x="0" y="18" width="72" height="47" rx="3" fill="url(#courseVillaGradient)" />
-          <path d="M-5 20 36 1l41 19Z" fill="#ca7754" />
-          <rect x="10" y="32" width="12" height="16" fill="#487f91" />
-          <rect x="50" y="32" width="12" height="16" fill="#487f91" />
-        </g>
-        <g transform="translate(832 235)">
-          <rect x="0" y="20" width="92" height="58" rx="3" fill="url(#courseVillaGradient)" />
-          <path d="M-7 22 46 0l53 22Z" fill="#b65c45" />
-          <rect x="14" y="38" width="15" height="20" fill="#477b8d" />
-          <rect x="63" y="38" width="15" height="20" fill="#477b8d" />
-          <path d="M40 78V43h15v35" fill="#6e5138" />
-        </g>
-        <g transform="translate(745 267) scale(.7)">
-          <rect x="0" y="16" width="70" height="44" rx="3" fill="url(#courseVillaGradient)" />
-          <path d="M-4 18 35 0l39 18Z" fill="#ce7755" />
-          <rect x="10" y="31" width="11" height="14" fill="#47798d" />
-          <rect x="49" y="31" width="11" height="14" fill="#47798d" />
+        <g className="japan-coast-house" transform="translate(39 352)">
+          <path d="M0 36h83v46H0Z" fill="var(--jp-house)" stroke="var(--jp-house-line)" strokeWidth="2" />
+          <path d="M-9 38 42 6l51 32Z" fill="var(--jp-roof)" stroke="var(--jp-house-line)" strokeWidth="2" />
+          <path d="M17 50h17v17H17Zm50 0h-17v17h17Z" fill="var(--jp-window)" opacity=".75" />
         </g>
       </g>
 
-      <g className="riviera-palms" stroke="#345445" strokeWidth="5" strokeLinecap="round">
-        <path d="M222 304c0-27 3-48 11-68" />
-        <path d="M233 236c-18-9-29-11-41-6m41 6c14-13 28-18 44-16m-44 16c0-17-5-29-15-39" fill="none" />
-        <path d="M793 308c1-27-2-49-9-69" />
-        <path d="M784 239c18-10 31-12 43-7m-43 7c-14-13-30-18-46-15m46 15c1-17 6-30 16-40" fill="none" />
+      <g className="japan-near-coast japan-near-coast-right">
+        <path d="M1000 305c-91 7-163 37-220 91-36 34-77 60-132 78 23 55 55 99 98 133 87-24 172-32 254-23Z" fill="url(#jpCliff)" />
+        <path d="M1000 295c-88 5-160 32-220 80-25 20-50 34-77 44 63-12 122-6 177 18 40-25 80-40 120-45Z" fill="url(#jpPine)" />
+        <path d="M1000 480c-80-8-152 5-217 38-25 13-48 29-70 49 39 36 75 70 107 102 68-18 128-24 180-18Z" fill="var(--jp-rock-shadow)" opacity=".72" />
+        <g className="japan-pines" stroke="var(--jp-pine-trunk)" strokeWidth="6" strokeLinecap="round">
+          <path d="M913 378c-4-45-12-80-26-105m26 105c25-22 46-30 63-24m-64 21c-22-30-47-44-75-41m68 18c4-29 1-54-11-74" fill="none" />
+          <path d="M823 405c-2-35-10-63-22-86m21 84c19-16 36-22 50-17m-49 16c-18-23-37-33-58-30" fill="none" strokeWidth="5" />
+        </g>
+        <g className="japan-lighthouse" transform="translate(885 309)">
+          <path d="M20 101 29 26h28l10 75Z" fill="var(--jp-lighthouse)" stroke="var(--jp-house-line)" strokeWidth="2" />
+          <path d="M26 67h36" stroke="var(--jp-roof)" strokeWidth="10" />
+          <rect x="25" y="15" width="37" height="17" rx="3" fill="var(--jp-lighthouse-top)" stroke="var(--jp-house-line)" strokeWidth="2" />
+          <path d="M20 16 44 1l24 15Z" fill="var(--jp-roof)" />
+          <circle cx="44" cy="23" r="5.5" fill="var(--jp-sun)" />
+        </g>
       </g>
 
-      <g className="riviera-lighthouse" transform="translate(912 190)">
-        <path d="M7 92 20 17h30l13 75Z" fill="#f2e8cf" stroke="#7d684b" strokeWidth="3" />
-        <path d="M14 53h43" stroke="#bd4f43" strokeWidth="11" />
-        <rect x="14" y="5" width="42" height="20" rx="3" fill="#263f55" stroke="#755729" strokeWidth="3" />
-        <path d="M9 6 35-10 61 6Z" fill="#b65a45" stroke="#70442d" strokeWidth="3" />
-        <circle cx="35" cy="15" r="7" fill="#ffeaa1" />
+      <g className="japan-water-far" fill="none" stroke="var(--jp-wave-far)" strokeLinecap="round">
+        <path d="M42 354c53-20 108-20 164 0s111 20 166 0 110-20 166 0 111 20 166 0 111-20 167 0 94 18 129 5" strokeWidth="4" strokeOpacity=".2" />
+        <path d="M5 401c48-17 97-17 148 0s101 17 151 0 99-17 150 0 101 17 152 0 101-17 151 0 101 17 152 0 94 17 141 2" strokeWidth="3" strokeOpacity=".16" />
+        <path d="M-18 449c52-17 105-17 158 0s106 17 159 0 105-17 158 0 106 17 159 0 105-17 158 0 107 17 161 0 97-17 143-4" strokeWidth="3" strokeOpacity=".15" />
+        <path d="M13 497c41-14 83-14 126 0s86 14 129 0 86-14 129 0 86 14 129 0 86-14 129 0 86 14 129 0 87-14 130 0 79 13 106 5" strokeWidth="3" strokeOpacity=".14" />
       </g>
 
-      <g className="riviera-distant-boats" fill="#f7f0dd" stroke="#40677a" strokeWidth="2">
-        <path d="M353 321h66l-11 17h-43Z" />
-        <path d="M379 320v-34l28 31h-28Z" fill="#fff6db" />
-        <path d="M638 337h49l-8 13h-33Z" opacity=".72" />
-        <path d="M658 336v-24l19 22h-19Z" fill="#fff6db" opacity=".72" />
+      <g className="japan-current-channels" fill="none" stroke="var(--jp-current)" strokeLinecap="round">
+        <path d="M468 326C445 423 405 553 339 760" strokeWidth="18" strokeOpacity=".05" />
+        <path d="M532 326C555 423 595 553 661 760" strokeWidth="18" strokeOpacity=".05" />
+        <path d="M468 326C445 423 405 553 339 760" strokeWidth="2.5" strokeOpacity=".16" strokeDasharray="8 30" />
+        <path d="M532 326C555 423 595 553 661 760" strokeWidth="2.5" strokeOpacity=".16" strokeDasharray="8 30" />
       </g>
 
-      <g className="riviera-lane-guides" fill="none" stroke="#e4fbff" strokeLinecap="round">
-        <path d="M474 326C445 448 398 590 329 748" strokeOpacity=".2" strokeWidth="5" strokeDasharray="4 26" />
-        <path d="M526 326C555 448 602 590 671 748" strokeOpacity=".2" strokeWidth="5" strokeDasharray="4 26" />
+      <g className="japan-water-near" fill="none" stroke="var(--jp-wave-near)" strokeLinecap="round">
+        <path d="M-40 523c68-28 136-28 205 0s137 28 205 0 137-28 205 0 137 28 205 0 137-28 205 0 104 24 155 9" strokeWidth="8" strokeOpacity=".14" />
+        <path d="M18 584c54-24 109-24 165 0s111 24 166 0 110-24 166 0 111 24 166 0 111-24 166 0 105 22 153 7" strokeWidth="6" strokeOpacity=".2" />
+        <path d="M-32 648c66-29 132-29 199 0s133 29 199 0 133-29 200 0 133 29 199 0 133-29 199 0 101 23 136 12" strokeWidth="9" strokeOpacity=".18" />
+        <path d="M8 716c55-26 111-26 168 0s113 26 169 0 113-26 169 0 113 26 169 0 113-26 169 0 104 22 148 6" strokeWidth="7" strokeOpacity=".24" />
+        <path d="M-28 782c67-30 134-30 201 0s134 30 201 0 134-30 201 0 134 30 201 0 134-30 201 0 99 23 123 15" strokeWidth="10" strokeOpacity=".2" />
       </g>
 
-      <g className="riviera-water-highlights" fill="none" stroke="#efffff" strokeLinecap="round">
-        <path d="M105 392c61-13 118-13 171 0" strokeOpacity=".19" strokeWidth="5" />
-        <path d="M712 430c59-16 111-16 157-1" strokeOpacity=".17" strokeWidth="5" />
-        <path d="M243 530c78-17 147-16 207 2" strokeOpacity=".13" strokeWidth="6" />
-        <path d="M540 605c74-18 144-17 210 2" strokeOpacity=".14" strokeWidth="7" />
-        <path d="M66 676c64-14 122-12 176 4" strokeOpacity=".1" strokeWidth="7" />
+      <g className="japan-foam-flecks" fill="none" stroke="var(--jp-foam)" strokeLinecap="round">
+        <path d="M100 535c24-11 49-11 74 0M771 555c27-12 54-12 82 0M259 610c32-14 64-14 96 0M586 665c38-16 77-16 115 0M79 711c27-12 54-12 82 0M780 735c32-14 64-14 96 0" strokeWidth="5" strokeOpacity=".56" />
+        <path d="M162 570c8-4 16-4 24 0m453 28c10-5 20-5 30 0M406 698c12-5 24-5 36 0" strokeWidth="3" strokeOpacity=".42" />
       </g>
 
-      <g className="riviera-sparkles" fill="#fffbed">
-        <circle cx="170" cy="357" r="3" opacity=".55" />
-        <circle cx="302" cy="444" r="2.5" opacity=".46" />
-        <circle cx="558" cy="380" r="3" opacity=".56" />
-        <circle cx="690" cy="512" r="3.5" opacity=".43" />
-        <circle cx="838" cy="588" r="2.6" opacity=".46" />
-        <circle cx="427" cy="652" r="3" opacity=".4" />
-        <path d="m598 470 4 9 9 4-9 4-4 9-4-9-9-4 9-4Z" opacity=".42" />
-        <path d="m252 610 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" opacity=".34" />
+      <g className="japan-sparkles" fill="var(--jp-sparkle)">
+        <circle cx="123" cy="458" r="2.5" opacity=".5" />
+        <circle cx="305" cy="548" r="2" opacity=".42" />
+        <circle cx="693" cy="468" r="3" opacity=".48" />
+        <circle cx="837" cy="627" r="2.5" opacity=".44" />
+        <path d="m526 539 4 9 9 4-9 4-4 9-4-9-9-4 9-4Z" opacity=".38" />
+        <path d="m220 676 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" opacity=".34" />
       </g>
     </svg>
   );
@@ -918,89 +931,70 @@ function CaptainYachtArt({ boost }) {
   return (
     <div className="yacht-illustration" aria-label="Captain Rosie commanding the ROSIE I">
       <div className="yacht-vector-shadow" aria-hidden="true" />
-      <svg className="rosie-yacht-base" viewBox="0 0 320 220" aria-hidden="true">
-        <defs>
-          <linearGradient id="captainHullIvory" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#fffef6" />
-            <stop offset=".42" stopColor="#f6ecd9" />
-            <stop offset=".72" stopColor="#dcc6a2" />
-            <stop offset="1" stopColor="#ad8e64" />
-          </linearGradient>
-          <linearGradient id="captainHullNavy" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#175479" />
-            <stop offset=".45" stopColor="#0a3659" />
-            <stop offset="1" stopColor="#031c33" />
-          </linearGradient>
-          <linearGradient id="captainTeak" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#8f522d" />
-            <stop offset=".25" stopColor="#d5a469" />
-            <stop offset=".55" stopColor="#f0ce97" />
-            <stop offset=".78" stopColor="#ba7841" />
-            <stop offset="1" stopColor="#754126" />
-          </linearGradient>
-          <linearGradient id="captainBrass" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#fff0a9" />
-            <stop offset=".36" stopColor="#d6a64d" />
-            <stop offset=".7" stopColor="#83501d" />
-            <stop offset="1" stopColor="#edc871" />
-          </linearGradient>
-        </defs>
-
-        <ellipse cx="160" cy="190" rx="128" ry="19" fill="rgba(0,35,56,.22)" />
-        <path d="M22 128c32-11 68-16 110-17h134c16 0 28 6 38 17l-27 52c-33 19-76 28-128 28-48 0-87-9-118-27Z" fill="url(#captainHullIvory)" stroke="#9a6828" strokeWidth="3" />
-        <path d="M36 153c58 12 166 11 249-5l-12 31c-36 18-77 26-124 26-45 0-83-8-113-24Z" fill="url(#captainHullNavy)" />
-        <path d="M39 148c73 9 166 8 248-5" fill="none" stroke="url(#captainBrass)" strokeWidth="5" />
-        <path d="M61 116c41-15 83-21 126-19 33 1 61 7 84 18l-12 17H75Z" fill="url(#captainTeak)" stroke="#6e4328" strokeWidth="3" />
-        <path d="M89 109 102 57c4-13 14-22 29-27h80c15 5 25 15 29 29l11 50Z" fill="#f7eedb" stroke="#a87532" strokeWidth="3" />
-        <path d="M111 56h111" stroke="#d7ad61" strokeWidth="3" />
-        <path d="M80 117h184" stroke="#fff9e9" strokeWidth="3" opacity=".8" />
-        <path d="M56 172c49 12 148 13 210-1" fill="none" stroke="#a9d4df" strokeWidth="3" opacity=".7" />
-
-        <g fill="#76b6cb" stroke="#e2ca92" strokeWidth="2">
-          <rect x="61" y="163" width="25" height="10" rx="5" />
-          <rect x="99" y="171" width="20" height="8" rx="4" />
-          <rect x="200" y="171" width="20" height="8" rx="4" />
-          <rect x="237" y="162" width="24" height="10" rx="5" />
-        </g>
-
-        <g stroke="url(#captainBrass)" strokeWidth="3" fill="none" strokeLinecap="round">
-          <path d="M78 110V90m172 20V90M72 91h185" />
-          <path d="M92 91v20m38-20v20m54-20v20m43-20v20" opacity=".82" />
-        </g>
-
-        <path d="M251 80V23" stroke="#b98737" strokeWidth="4" />
-        <path d="M254 27c21 2 37 7 52 17-15 8-32 11-52 11Z" fill="#0b3556" stroke="#d5aa52" strokeWidth="2" />
-        <text x="270" y="46" fontSize="13" fontWeight="900" fill="#f7d984">R</text>
-
-        <text x="160" y="192" textAnchor="middle" fontSize="12" fontWeight="900" letterSpacing="4" fill="#f5d584">ROSIE I</text>
-        <g fill="#d1a44d">
-          <circle cx="151" cy="145" r="3" />
-          <circle cx="160" cy="141" r="3" />
-          <circle cx="169" cy="145" r="3" />
-          <path d="M152 156c0-6 3.7-10 8-10s8 4 8 10c0 4-3.1 6-8 6s-8-2-8-6Z" />
-        </g>
-      </svg>
-
       <div className="captain-at-helm" aria-hidden="true">
-        <CaptainRosieIllustration className="helm-rosie-art" idPrefix="helmRosie" />
+        <CaptainRosieIllustration className="helm-rosie-art" />
         <span className="captain-window-glint" />
       </div>
 
-      <svg className="rosie-yacht-overlay" viewBox="0 0 320 220" aria-hidden="true">
+      <svg className="rosie-yacht-base" viewBox="0 0 320 210" aria-hidden="true">
         <defs>
-          <linearGradient id="captainGlassOverlay" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#f1fdff" stopOpacity=".5" />
-            <stop offset=".43" stopColor="#8ad1e6" stopOpacity=".16" />
-            <stop offset="1" stopColor="#0a5375" stopOpacity=".42" />
+          <linearGradient id="captainHullIvory" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fffdf4" />
+            <stop offset=".56" stopColor="#f0dfc0" />
+            <stop offset="1" stopColor="#b89969" />
+          </linearGradient>
+          <linearGradient id="captainHullNavy" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#173f61" />
+            <stop offset=".48" stopColor="#0b2946" />
+            <stop offset="1" stopColor="#04172b" />
+          </linearGradient>
+          <linearGradient id="captainTeak" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#8f552e" />
+            <stop offset=".3" stopColor="#d7aa70" />
+            <stop offset=".57" stopColor="#f2d39f" />
+            <stop offset=".82" stopColor="#b8753d" />
+            <stop offset="1" stopColor="#744126" />
+          </linearGradient>
+          <linearGradient id="captainBrass" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#fff0ad" />
+            <stop offset=".34" stopColor="#e0b65b" />
+            <stop offset=".72" stopColor="#8f5d23" />
+            <stop offset="1" stopColor="#f1ce78" />
           </linearGradient>
         </defs>
-        <path d="M104 57 124 34h86l21 25 10 48H91Z" fill="url(#captainGlassOverlay)" stroke="#d9b35f" strokeWidth="3" />
-        <path d="M167 35v72M104 58h127" fill="none" stroke="#d9b35f" strokeWidth="3" opacity=".9" />
-        <circle cx="166" cy="94" r="16" fill="rgba(5,39,60,.2)" stroke="#d3a64c" strokeWidth="3" />
-        <circle cx="166" cy="94" r="3.5" fill="#e3b85f" />
-        <path d="M166 78v32m-14-24 28 16m-28 0 28-16" stroke="#d3a64c" strokeWidth="2" />
-        <path d="M112 63c25-11 43-13 53-13" fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity=".22" />
-        <path d="M47 132c59-14 167-14 239-4" fill="none" stroke="rgba(255,255,255,.72)" strokeWidth="2" />
+
+        <path d="M26 124c38-16 82-23 134-23s96 7 134 23l-29 58c-30 17-65 25-105 25s-75-8-105-25Z" fill="url(#captainHullIvory)" stroke="#956322" strokeWidth="3" />
+        <path d="M44 153c72 17 160 17 232 0l-14 30c-31 15-65 22-102 22-38 0-72-7-103-22Z" fill="url(#captainHullNavy)" />
+        <path d="M47 149c72 12 154 12 226 0" fill="none" stroke="url(#captainBrass)" strokeWidth="5" />
+        <path d="M68 116c52-16 113-18 184-5l14 12c-72 9-143 9-213 0Z" fill="url(#captainTeak)" stroke="#744426" strokeWidth="2.5" />
+        <path d="M92 108 110 58c5-14 15-22 31-25h39c16 3 26 11 31 25l18 50Z" fill="#f7efde" stroke="#b38136" strokeWidth="3" />
+        <path d="M102 102h116" stroke="#dfbd71" strokeWidth="3" />
+        <path d="M74 120c57-7 115-8 173-1" fill="none" stroke="#fffdf4" strokeWidth="2.5" opacity=".8" />
+
+        <path d="M257 88V31" stroke="#bd8d3c" strokeWidth="3" />
+        <path d="M259 34c18 2 34 7 49 16-13 8-30 11-49 11Z" fill="#12385a" stroke="#e0b65b" strokeWidth="2" />
+        <text x="274" y="52" fontSize="12" fontWeight="900" fill="#f7d98a">R</text>
+
+        <text x="160" y="190" textAnchor="middle" fontSize="12" fontWeight="900" letterSpacing="4" fill="#f3d47f">ROSIE I</text>
+        <g fill="#d7aa51">
+          <circle cx="151" cy="137" r="2.8" />
+          <circle cx="160" cy="133" r="2.8" />
+          <circle cx="169" cy="137" r="2.8" />
+          <path d="M152 147c0-5.5 3.6-9 8-9s8 3.5 8 9c0 3.8-3 5.8-8 5.8s-8-2-8-5.8Z" />
+        </g>
+      </svg>
+
+      <svg className="rosie-yacht-overlay" viewBox="0 0 320 210" aria-hidden="true">
+        <defs>
+          <linearGradient id="captainGlassOverlay" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#effcff" stopOpacity=".46" />
+            <stop offset=".45" stopColor="#95d8e7" stopOpacity=".13" />
+            <stop offset="1" stopColor="#0a5476" stopOpacity=".35" />
+          </linearGradient>
+        </defs>
+        <path d="M111 58h98l22 52H90Z" fill="url(#captainGlassOverlay)" stroke="#dbb25d" strokeWidth="3" />
+        <path d="M160 58v51M109 59 91 108m120-49 20 49" fill="none" stroke="#dbb25d" strokeWidth="2.5" opacity=".9" />
+        <path d="M117 67c20-8 35-10 44-10" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity=".23" />
       </svg>
 
       <span className="captain-scarf-tail" aria-hidden="true" />
@@ -1017,7 +1011,7 @@ function CaptainRosieGame({ soundOn }) {
   const [timeLeft, setTimeLeft] = useState(45);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
-  const [message, setMessage] = useState("Captain Rosie is on the bridge. The Riviera is clear and the treats are somewhere ahead.");
+  const [message, setMessage] = useState("Captain Rosie is on the bridge. The coastal passage is clear and the treats are somewhere ahead.");
   const [best, setBest] = useState(() => {
     const value = Number(localStorage.getItem("captainRosieBest") || 0);
     return Number.isFinite(value) ? value : 0;
@@ -1369,7 +1363,7 @@ function CaptainRosieGame({ soundOn }) {
               </div>
               <span className="marquee-burgee">R</span>
             </div>
-            <small>Command the ROSIE I through a glittering Riviera run - collect prized cargo, secure the Golden Cheese and bring the captain home in style.</small>
+            <small>Command the ROSIE I through a luminous coastal passage - collect prized cargo, secure the Golden Cheese and bring the captain home in style.</small>
           </div>
         </div>
         <div className="captain-best">
