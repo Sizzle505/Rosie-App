@@ -101,13 +101,13 @@
 .heroSignet {
   position: absolute;
   z-index: 4;
-  right: 336px;
+  right: 322px;
   top: 50%;
-  width: 128px;
-  height: 128px;
+  width: 166px;
+  height: 166px;
   object-fit: contain;
   transform: translateY(-50%);
-  filter: drop-shadow(0 11px 19px rgba(0,0,0,.62));
+  filter: drop-shadow(0 12px 20px rgba(0,0,0,.64));
 }
 
 .ivoryRow {
@@ -207,18 +207,18 @@
   position: absolute;
   z-index: 1;
   top: 54%;
-  width: 132px;
-  height: 132px;
+  width: 128px;
+  height: 128px;
   object-fit: contain;
-  opacity: .68;
-  filter: saturate(.94) drop-shadow(0 14px 12px rgba(46,31,14,.18));
+  opacity: .72;
+  filter: saturate(.96) drop-shadow(0 14px 12px rgba(46,31,14,.19));
 }
 .decorativeDieLeft {
-  left: 17%;
+  left: 15%;
   transform: translate(-50%, -50%) rotate(-17deg) scale(.94);
 }
 .decorativeDieRight {
-  left: 83%;
+  left: 85%;
   transform: translate(-50%, -50%) rotate(17deg) scale(.94);
 }
 .dieRig {
@@ -234,76 +234,134 @@
   position: absolute;
   z-index: 0;
   left: 50%;
-  bottom: 12px;
-  width: 128px;
-  height: 25px;
+  bottom: 15px;
+  width: 142px;
+  height: 28px;
   transform: translateX(-50%) scale(1);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(80,48,11,.28), rgba(80,48,11,0) 72%);
-  filter: blur(4px);
-  opacity: .72;
+  background: radial-gradient(ellipse, rgba(73,45,12,.31), rgba(73,45,12,0) 72%);
+  filter: blur(5px);
+  opacity: .76;
 }
 .dieBody {
   position: relative;
   z-index: 2;
-  width: 214px;
-  height: 214px;
+  width: 172px;
+  height: 172px;
+  box-sizing: border-box;
+  border-radius: 31px;
+  background:
+    linear-gradient(135deg, #fff1ad 0%, #d9ad49 16%, #815417 39%, #f0d079 63%, #93621b 100%);
+  box-shadow:
+    0 18px 20px rgba(70,43,10,.24),
+    0 3px 5px rgba(70,43,10,.18),
+    inset 0 1px 0 rgba(255,255,255,.72);
+  transform-origin: 50% 78%;
   transform-style: preserve-3d;
-  transform-origin: 50% 72%;
-  will-change: transform, filter;
+  will-change: transform;
+  isolation: isolate;
 }
-.dieSvg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  display: block;
+.dieBody::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  z-index: 0;
+  border: 1px solid rgba(255,244,194,.96);
+  border-radius: 25px;
+  background:
+    radial-gradient(circle at 27% 18%, rgba(255,255,255,.98) 0 5%, rgba(255,255,255,.42) 17%, transparent 35%),
+    linear-gradient(145deg, #fffefa 0%, #fff8e8 52%, #ead5a6 100%);
+  box-shadow:
+    0 0 0 2px rgba(99,61,11,.20),
+    inset 6px 7px 11px rgba(255,255,255,.76),
+    inset -10px -12px 17px rgba(113,70,12,.13);
+}
+.dieBody::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 1;
+  border: 2px solid rgba(255,231,157,.54);
+  border-radius: 21px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.78),
+    inset 0 -1px 0 rgba(104,65,13,.13);
+  pointer-events: none;
+}
+.diePip {
+  position: absolute;
+  z-index: 3;
+  left: var(--pip-x);
+  top: var(--pip-y);
+  width: 25px;
+  height: 25px;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  border: 3px solid #b98b32;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 29%, #ffe6e9 0 5%, #f98698 8%, #c71839 30%, #8d071f 61%, #43010c 100%);
+  box-shadow:
+    0 1px 0 rgba(255,239,184,.9),
+    0 3px 5px rgba(72,25,10,.22),
+    inset 0 2px 4px rgba(255,255,255,.42),
+    inset 0 -4px 7px rgba(48,0,8,.42);
+}
+.diePip::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,244,246,.72);
 }
 .isRolling .dieBody {
-  animation: dieTumble 1.26s cubic-bezier(.16,.72,.12,1) both;
+  animation: dieTumble 1.26s cubic-bezier(.17,.75,.18,1) both;
 }
 .isRolling .dieLandingShadow {
   animation: dieShadow 1.26s ease-out both;
 }
 @keyframes dieShadow {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: .7; filter: blur(4px); }
-  24% { transform: translateX(-50%) scale(.74); opacity: .36; filter: blur(6px); }
-  49% { transform: translateX(-50%) scale(.52); opacity: .2; filter: blur(8px); }
-  72% { transform: translateX(-50%) scale(.78); opacity: .42; filter: blur(5px); }
-  86% { transform: translateX(-50%) scale(1.08); opacity: .78; filter: blur(3px); }
-  94% { transform: translateX(-50%) scale(.91); opacity: .56; filter: blur(4px); }
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: .76; filter: blur(5px); }
+  18% { transform: translateX(-50%) scale(.82); opacity: .48; filter: blur(6px); }
+  45%, 58% { transform: translateX(-50%) scale(.54); opacity: .23; filter: blur(9px); }
+  72% { transform: translateX(-50%) scale(.75); opacity: .42; filter: blur(6px); }
+  84% { transform: translateX(-50%) scale(1.11); opacity: .83; filter: blur(4px); }
+  91% { transform: translateX(-50%) scale(.86); opacity: .54; filter: blur(5px); }
+  96% { transform: translateX(-50%) scale(1.03); opacity: .72; filter: blur(4px); }
 }
 @keyframes dieTumble {
   0% {
-    transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1,1);
-    filter: brightness(1) saturate(1);
+    transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
   }
-  9% {
-    transform: translate3d(-3px,4px,0) rotateX(5deg) rotateY(-6deg) rotateZ(-3deg) scale(1.045,.94);
+  7% {
+    transform: translate3d(-2px,4px,0) rotateX(3deg) rotateY(-4deg) rotateZ(-2deg) scale(1.04,.94);
   }
-  25% {
-    transform: translate3d(-18px,-30px,24px) rotateX(44deg) rotateY(-62deg) rotateZ(-22deg) scale(.95);
-    filter: brightness(1.04) saturate(1.04);
+  18% {
+    transform: translate3d(-10px,-24px,12px) rotateX(12deg) rotateY(-14deg) rotateZ(-16deg) scale(.98);
   }
-  47% {
-    transform: translate3d(19px,-58px,42px) rotateX(136deg) rotateY(188deg) rotateZ(42deg) scale(.91);
-    filter: brightness(1.08) saturate(1.07) blur(.18px);
+  37% {
+    transform: translate3d(13px,-56px,28px) rotateX(-18deg) rotateY(20deg) rotateZ(27deg) scale(.95);
   }
-  66% {
-    transform: translate3d(-13px,-29px,22px) rotateX(238deg) rotateY(326deg) rotateZ(-31deg) scale(.97);
-    filter: brightness(1.04) saturate(1.03);
+  55% {
+    transform: translate3d(-8px,-68px,32px) rotateX(22deg) rotateY(-24deg) rotateZ(-38deg) scale(.93);
   }
-  81% {
-    transform: translate3d(6px,4px,0) rotateX(348deg) rotateY(514deg) rotateZ(12deg) scale(1.05,.92);
+  72% {
+    transform: translate3d(7px,-34px,15px) rotateX(-13deg) rotateY(17deg) rotateZ(24deg) scale(.98);
   }
-  88% {
-    transform: translate3d(-3px,-13px,5px) rotateX(358deg) rotateY(535deg) rotateZ(-5deg) scale(.985);
+  84% {
+    transform: translate3d(2px,5px,0) rotateX(4deg) rotateY(-5deg) rotateZ(-7deg) scale(1.055,.91);
   }
-  95% {
-    transform: translate3d(1px,2px,0) rotateX(360deg) rotateY(540deg) rotateZ(2deg) scale(1.02,.97);
+  91% {
+    transform: translate3d(-2px,-11px,4px) rotateX(-3deg) rotateY(4deg) rotateZ(5deg) scale(.99);
+  }
+  96% {
+    transform: translate3d(1px,2px,0) rotateX(1deg) rotateY(-1deg) rotateZ(-2deg) scale(1.018,.975);
   }
   100% {
-    transform: translate3d(0,0,0) rotateX(360deg) rotateY(540deg) rotateZ(0deg) scale(1);
-    filter: brightness(1) saturate(1);
+    transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
   }
 }
 
@@ -605,7 +663,7 @@
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr 220px; padding: 25px 28px; }
   .hostPortrait { right: 28px; width: 218px; height: 218px; }
-  .heroSignet { right: 252px; width: 96px; height: 96px; }
+  .heroSignet { right: 242px; width: 124px; height: 124px; }
   .wheelSalon { grid-template-columns: 1fr; }
   .wheelEditor { width: min(520px, 100%); justify-self: center; box-sizing: border-box; }
 }
@@ -621,17 +679,21 @@
   .houseRule { max-width: 230px; margin-top: 12px; padding-top: 8px; font-size: 6px; line-height: 1.5; letter-spacing: .1em; }
   .hostPortrait { right: -9px; bottom: -9px; width: 154px; height: 168px; }
   .hostPortrait::before { inset: 31px 17px 18px; }
-  .heroSignet { right: 132px; top: 50%; width: 70px; height: 70px; transform: translateY(-50%); }
+  .heroSignet { right: 123px; top: 50%; width: 90px; height: 90px; transform: translateY(-50%); }
   .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
   .ivoryCard { min-height: 430px; padding: 18px 17px 20px; border-radius: 19px; }
   .ivoryCard h2 { font-size: 22px; }
   .coinScene, .diceScene { min-height: 225px; }
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
-  .dieRig, .dieBody { width: 178px; height: 178px; }
-  .decorativeDie { width: 98px; height: 98px; }
-  .decorativeDieLeft { left: 20%; }
-  .decorativeDieRight { left: 80%; }
+  .dieRig { width: 178px; height: 178px; }
+  .dieBody { width: 152px; height: 152px; border-radius: 27px; }
+  .dieBody::before { border-radius: 22px; }
+  .dieBody::after { border-radius: 19px; }
+  .diePip { width: 22px; height: 22px; border-width: 2.5px; }
+  .decorativeDie { width: 92px; height: 92px; }
+  .decorativeDieLeft { left: 14%; }
+  .decorativeDieRight { left: 86%; }
   .wheelSalon { gap: 10px; margin-top: 9px; padding: 14px 9px; border-radius: 20px; }
   .wheelStage { padding: 9px 0 5px; }
   .wheelHeading h2 { font-size: 25px; }
@@ -649,6 +711,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .coinFlipping, .isRolling { animation-duration: .01ms; }
+  .coinFlipping, .isRolling .dieBody, .isRolling .dieLandingShadow { animation-duration: .01ms; }
   .wheel, .wheelHub { transition-duration: .01ms; }
 }
