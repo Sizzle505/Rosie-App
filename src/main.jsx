@@ -628,82 +628,98 @@ function CheeseMemoryGame() {
 
   return (
     <main className="cheese-game-page">
-      <section className="cheese-hero">
-        <div className="cheese-hero-photo">
+      <section className="cheese-exam-header" aria-labelledby="cheese-exam-title">
+        <div className="cheese-exam-portrait">
           <img
             src="/rosie-doctor-cheese-hero.webp"
-            alt="Rosie, Doctor of Cheese, presiding over a candlelit cheese examination"
+            alt="Rosie, Doctor of Cheese, administering the practical exam"
           />
+          <span>EXAMINER</span>
         </div>
 
-        <div className="cheese-hero-copy">
-          <div className="cheese-eyebrow">UNIVERSITY OF BARKBRIDGE · FACULTY OF GASTRONOMIC SCIENCES</div>
-          <h1>ROSIE'S CHEESE BOARD EXAM</h1>
-          <p>A memory test for true cheese aficionados. Match every pair and prove yourself worthy.</p>
-          <div className="doctor-ribbon">
-            <img src="/rosie-doctor-cheese-hero.webp" alt="" aria-hidden="true" />
+        <div className="cheese-exam-title">
+          <div className="cheese-eyebrow">THE PRACTICAL EXAM</div>
+          <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
+          <p>A memory game for serious cheese scholars.</p>
+
+          <div className="cheese-header-status" aria-label="Current exam status">
+            <div><span>PAIRS FOUND</span><strong>{matched.length}/{CHEESES.length}</strong></div>
+            <div><span>MOVES</span><strong>{moves}</strong></div>
+            <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+          </div>
+        </div>
+
+        <div className="cheese-header-seal" aria-hidden="true">
+          <span className="seal-paw">🐾</span>
+          <strong>Che.D.</strong>
+          <small>BOARD EXAM</small>
+        </div>
+      </section>
+
+      <section className="cheese-play-layout">
+        <section className="cheese-game-frame" aria-label="Cheese matching board">
+          <div className="cheese-game-heading">
             <div>
-              <strong>ROSIE THE SHIBA, Che.D.</strong>
-              <small>Doctor Rosie is administering the exam</small>
+              <span>BOARD ONE · PRACTICAL MEMORY</span>
+              <h2>Pair the Fromage</h2>
             </div>
-            <span className="doctor-seal">🐾</span>
+            <p>Eight cheeses. Sixteen cards. Rosie is watching every move.</p>
           </div>
-        </div>
-      </section>
 
-      <section className="cheese-game-frame">
-        <div className="cheese-game-heading">
-          <div>
-            <span>THE PRACTICAL EXAM</span>
-            <h2>Pair the Fromage</h2>
-          </div>
-          <p>Eight cheeses. Sixteen cards. Rosie will decide whether you pass.</p>
-        </div>
-
-        <div className="cheese-grid">
-          {deck.map((cheese, index) => {
-            const faceUp = openCards.includes(index) || matched.includes(cheese.id);
-            const isMatched = matched.includes(cheese.id);
-            return (
-              <button
-                type="button"
-                className={"cheese-card" + (faceUp ? " is-flipped" : "") + (isMatched ? " is-matched" : "")}
-                key={cheese.cardId}
-                onClick={() => chooseCard(index)}
-                aria-label={faceUp ? cheese.name : "Face-down cheese card"}
-              >
-                <span className="cheese-card-inner">
-                  <span className="cheese-card-back">
-                    <img src="/cheese-exam-card-back.webp" alt="" draggable="false" />
+          <div className="cheese-grid">
+            {deck.map((cheese, index) => {
+              const faceUp = openCards.includes(index) || matched.includes(cheese.id);
+              const isMatched = matched.includes(cheese.id);
+              return (
+                <button
+                  type="button"
+                  className={"cheese-card" + (faceUp ? " is-flipped" : "") + (isMatched ? " is-matched" : "")}
+                  key={cheese.cardId}
+                  onClick={() => chooseCard(index)}
+                  aria-label={faceUp ? cheese.name : "Face-down cheese card"}
+                >
+                  <span className="cheese-card-inner">
+                    <span className="cheese-card-back">
+                      <span className="cheese-back-ornament" aria-hidden="true">
+                        <span className="cheese-back-seal">
+                          <span className="cheese-back-paw"><i /><i /><i /><i /><b /></span>
+                          <span className="cheese-back-wedge"><i /><i /><i /></span>
+                        </span>
+                        <strong>ROSIE'S</strong>
+                        <small>CHEESE EXAM</small>
+                      </span>
+                    </span>
+                    <span className="cheese-card-front">
+                      <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
+                      <span className="cheese-card-ribbon" aria-hidden="true">FROMAGE {String((index % 8) + 1).padStart(2, "0")}</span>
+                      <strong>{cheese.name}</strong>
+                      <small>{cheese.note}</small>
+                    </span>
                   </span>
-                  <span className="cheese-card-front">
-                    <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
-                    <span className="cheese-card-ribbon" aria-hidden="true">FROMAGE {String((index % 8) + 1).padStart(2, "0")}</span>
-                    <strong>{cheese.name}</strong>
-                    <small>{cheese.note}</small>
-                  </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="cheese-bottom-console">
-        <div className={`rosie-reaction mood-${rosieMood}`} aria-live="polite">
-          <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
-          <div className="rosie-reaction-portrait">
-            <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={`Doctor Rosie looking ${rosieMood}`} />
+                </button>
+              );
+            })}
           </div>
-          <div className="reaction-copy"><span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span><strong>{message}</strong></div>
-          <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
-        </div>
-        <section className="cheese-scorebar" aria-label="Game score">
-          <div><span>MOVES</span><strong>{moves}</strong></div>
-          <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
-          <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
-          <button type="button" onClick={resetGame}>NEW BOARD</button>
         </section>
+
+        <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
+          <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
+            <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
+            <div className="rosie-reaction-portrait">
+              <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={"Doctor Rosie looking " + rosieMood} />
+            </div>
+            <div className="reaction-copy">
+              <span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span>
+              <strong>{message}</strong>
+            </div>
+            <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
+          </div>
+
+          <button type="button" className="cheese-reset-button" onClick={resetGame}>
+            <span aria-hidden="true">↻</span>
+            NEW BOARD
+          </button>
+        </aside>
       </section>
 
       {complete && (
@@ -2048,21 +2064,6 @@ function App() {
       </div>
 
       <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
-        <header className="topbar">
-          <button className="round-button" aria-label="Menu">☰</button>
-          <div className="brand">
-            <small>THE HOUSE OF</small>
-            <strong>ROSIE</strong>
-          </div>
-          <button
-            className="round-button whistle-button"
-            aria-label="Whistle for Rosie"
-            title="Whistle for Rosie"
-            onClick={whistleForRosie}
-          >
-            ♪
-          </button>
-        </header>
 
         {page === "fortune" ? (
         <main>
@@ -2080,6 +2081,16 @@ function App() {
 
             <div className="console-caption">
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
+              <button
+                type="button"
+                className="fortune-whistle-button"
+                aria-label="Whistle for Rosie"
+                title="Whistle for Rosie"
+                onClick={whistleForRosie}
+              >
+                <b aria-hidden="true">♪</b>
+                <small>WHISTLE FOR ROSIE</small>
+              </button>
             </div>
 
             <form className="question-card" onSubmit={askRosie}>
