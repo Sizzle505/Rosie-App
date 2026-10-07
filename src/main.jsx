@@ -2231,7 +2231,7 @@ function App() {
           <button className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span>♛</span><small>Cheese</small></button>
           <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
           <button className={page === "captain2" ? "active" : ""} onClick={() => navigateTo("captain2")}><span>⛩</span><small>Captain 2</small></button>
-          <button className={page === "vault" ? "active" : ""} onClick={() => navigateTo("vault")}><span>▣</span><small>Vault</small></button>
+          <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span aria-hidden="true">▣</span><small>Vault</small></button>
         </nav>
       </div>
 
