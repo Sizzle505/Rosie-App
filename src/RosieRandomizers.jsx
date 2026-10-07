@@ -28,117 +28,183 @@ function randomIndex(length) {
   return Math.floor(Math.random() * length);
 }
 
-function smoothStep(edge0, edge1, value) {
-  const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
-  return t * t * (3 - 2 * t);
+const DIE_PIPS = {
+  1: [[0.5, 0.5]],
+  2: [[0.28, 0.28], [0.72, 0.72]],
+  3: [[0.27, 0.27], [0.5, 0.5], [0.73, 0.73]],
+  4: [[0.28, 0.28], [0.72, 0.28], [0.28, 0.72], [0.72, 0.72]],
+  5: [[0.27, 0.27], [0.73, 0.27], [0.5, 0.5], [0.27, 0.73], [0.73, 0.73]],
+  6: [[0.28, 0.22], [0.72, 0.22], [0.28, 0.5], [0.72, 0.5], [0.28, 0.78], [0.72, 0.78]]
+};
+
+function roundedRectPath(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + width, y, x + width, y + height, r);
+  ctx.arcTo(x + width, y + height, x, y + height, r);
+  ctx.arcTo(x, y + height, x, y, r);
+  ctx.arcTo(x, y, x + width, y, r);
+  ctx.closePath();
 }
 
-function drawSpriteDie(canvas, sprite, value) {
-  const size = 520;
-  const tileSize = 160;
-  const sourceIndex = value - 1;
-  const sourceX = (sourceIndex % 3) * tileSize;
-  const sourceY = Math.floor(sourceIndex / 3) * tileSize;
+function drawRubyPip(ctx, x, y, radius, scaleY = 1, rotation = 0) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  ctx.scale(1, scaleY);
 
-  canvas.width = size;
-  canvas.height = size;
+  const rim = ctx.createRadialGradient(-radius * 0.26, -radius * 0.3, radius * 0.18, 0, 0, radius * 1.35);
+  rim.addColorStop(0, "#fff1aa");
+  rim.addColorStop(0.48, "#d4a73d");
+  rim.addColorStop(1, "#6d430d");
+  ctx.fillStyle = rim;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius * 1.32, 0, Math.PI * 2);
+  ctx.fill();
 
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  ctx.clearRect(0, 0, size, size);
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
-  ctx.filter = "contrast(1.075) saturate(1.08)";
-  ctx.drawImage(
-    sprite,
-    sourceX,
-    sourceY,
-    tileSize,
-    tileSize,
-    12,
-    12,
-    size - 24,
-    size - 24
-  );
-  ctx.filter = "none";
+  const ruby = ctx.createRadialGradient(-radius * 0.28, -radius * 0.34, radius * 0.08, 0, 0, radius);
+  ruby.addColorStop(0, "#ffd9df");
+  ruby.addColorStop(0.13, "#ff8d9b");
+  ruby.addColorStop(0.34, "#d52542");
+  ruby.addColorStop(0.68, "#8e071d");
+  ruby.addColorStop(1, "#3c020b");
+  ctx.fillStyle = ruby;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, Math.PI * 2);
+  ctx.fill();
 
-  const image = ctx.getImageData(0, 0, size, size);
-  const data = image.data;
-  const cornerPoints = [
-    [24, 24],
-    [size - 25, 24],
-    [24, size - 25],
-    [size - 25, size - 25]
-  ];
-  const cornerColors = cornerPoints.map(([x, y]) => {
-    const offset = (y * size + x) * 4;
-    return [data[offset], data[offset + 1], data[offset + 2]];
+  ctx.fillStyle = "rgba(255,248,244,.78)";
+  ctx.beginPath();
+  ctx.ellipse(-radius * 0.29, -radius * 0.34, radius * 0.16, radius * 0.1, -0.35, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawPhysicalDie(canvas, value) {
+  const width = 640;
+  const height = 600;
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, width, height);
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+
+  const front = { x: 166, y: 154, w: 400, h: 400, r: 64 };
+  const backX = -74;
+  const backY = -66;
+
+  ctx.save();
+  ctx.shadowColor = "rgba(74,43,8,.22)";
+  ctx.shadowBlur = 21;
+  ctx.fillStyle = "rgba(75,44,9,.24)";
+  ctx.beginPath();
+  ctx.ellipse(344, 562, 176, 25, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  const topGradient = ctx.createLinearGradient(front.x + backX, front.y + backY, front.x + front.w, front.y);
+  topGradient.addColorStop(0, "#f4dfaa");
+  topGradient.addColorStop(0.42, "#fff8df");
+  topGradient.addColorStop(0.74, "#e0bd66");
+  topGradient.addColorStop(1, "#9b6a20");
+  ctx.fillStyle = topGradient;
+  ctx.strokeStyle = "#6b430e";
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(front.x + 54, front.y);
+  ctx.lineTo(front.x + front.w - 52, front.y);
+  ctx.lineTo(front.x + front.w - 52 + backX, front.y + backY);
+  ctx.lineTo(front.x + 54 + backX, front.y + backY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  const leftGradient = ctx.createLinearGradient(front.x + backX, front.y, front.x, front.y + front.h);
+  leftGradient.addColorStop(0, "#d6ad53");
+  leftGradient.addColorStop(0.36, "#f1db9a");
+  leftGradient.addColorStop(0.72, "#b47c28");
+  leftGradient.addColorStop(1, "#74450d");
+  ctx.fillStyle = leftGradient;
+  ctx.beginPath();
+  ctx.moveTo(front.x, front.y + 54);
+  ctx.lineTo(front.x, front.y + front.h - 54);
+  ctx.lineTo(front.x + backX, front.y + front.h - 54 + backY);
+  ctx.lineTo(front.x + backX, front.y + 54 + backY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  roundedRectPath(ctx, front.x - 5, front.y - 5, front.w + 10, front.h + 10, front.r + 7);
+  const bevel = ctx.createLinearGradient(front.x, front.y, front.x + front.w, front.y + front.h);
+  bevel.addColorStop(0, "#fff0a9");
+  bevel.addColorStop(0.18, "#c89531");
+  bevel.addColorStop(0.42, "#75470d");
+  bevel.addColorStop(0.67, "#f1d477");
+  bevel.addColorStop(1, "#99631a");
+  ctx.fillStyle = bevel;
+  ctx.fill();
+  ctx.strokeStyle = "#5c370b";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+
+  const inner = { x: front.x + 13, y: front.y + 13, w: front.w - 26, h: front.h - 26, r: front.r - 12 };
+  roundedRectPath(ctx, inner.x, inner.y, inner.w, inner.h, inner.r);
+  const ivory = ctx.createLinearGradient(inner.x, inner.y, inner.x + inner.w, inner.y + inner.h);
+  ivory.addColorStop(0, "#fffefa");
+  ivory.addColorStop(0.34, "#fffaf0");
+  ivory.addColorStop(0.76, "#f4e8cb");
+  ivory.addColorStop(1, "#e2c992");
+  ctx.fillStyle = ivory;
+  ctx.fill();
+  ctx.strokeStyle = "#e8c86f";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+
+  roundedRectPath(ctx, inner.x + 12, inner.y + 12, inner.w - 24, inner.h - 24, inner.r - 9);
+  ctx.strokeStyle = "rgba(255,247,211,.92)";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  ctx.save();
+  roundedRectPath(ctx, inner.x + 7, inner.y + 7, inner.w - 14, inner.h - 14, inner.r - 6);
+  ctx.clip();
+  const shine = ctx.createLinearGradient(inner.x + 20, inner.y + 12, inner.x + inner.w - 35, inner.y + 190);
+  shine.addColorStop(0, "rgba(255,255,255,.72)");
+  shine.addColorStop(0.4, "rgba(255,255,255,.14)");
+  shine.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = shine;
+  ctx.fillRect(inner.x, inner.y, inner.w, inner.h * 0.6);
+  ctx.restore();
+
+  drawRubyPip(ctx, 275, 118, 17, 0.56, -0.06);
+  drawRubyPip(ctx, 394, 112, 17, 0.56, -0.06);
+  drawRubyPip(ctx, 126, 256, 16, 0.7, -0.12);
+  drawRubyPip(ctx, 120, 358, 16, 0.7, -0.12);
+  drawRubyPip(ctx, 114, 459, 16, 0.7, -0.12);
+
+  const pipZone = { x: inner.x + 53, y: inner.y + 53, w: inner.w - 106, h: inner.h - 106 };
+  DIE_PIPS[value].forEach(([px, py]) => {
+    drawRubyPip(
+      ctx,
+      pipZone.x + pipZone.w * px,
+      pipZone.y + pipZone.h * py,
+      22
+    );
   });
-
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      const offset = (y * size + x) * 4;
-      const red = data[offset];
-      const green = data[offset + 1];
-      const blue = data[offset + 2];
-      const maxChannel = Math.max(red, green, blue);
-      const minChannel = Math.min(red, green, blue);
-      const chroma = maxChannel - minChannel;
-      const brightness = (red + green + blue) / 3;
-
-      let backgroundDistance = Infinity;
-      cornerColors.forEach(([cr, cg, cb]) => {
-        const distance = Math.hypot(red - cr, green - cg, blue - cb);
-        backgroundDistance = Math.min(backgroundDistance, distance);
-      });
-
-      const nx = Math.abs((x - size / 2) / (size * 0.49));
-      const ny = Math.abs((y - size / 2) / (size * 0.49));
-      const shapeRadius = Math.pow((nx ** 4) + (ny ** 4), 0.25);
-      const edgeFade = 1 - smoothStep(0.88, 1.02, shapeRadius);
-      const separation = smoothStep(15, 52, backgroundDistance);
-      const materialHint =
-        brightness > 184 ||
-        chroma > 52 ||
-        (brightness < 82 && shapeRadius < 0.9)
-          ? 1
-          : 0;
-
-      let alpha = Math.max(separation, materialHint * 0.92) * edgeFade;
-
-      if (shapeRadius < 0.67) alpha = Math.max(alpha, 0.98);
-      if (shapeRadius > 1.02) alpha = 0;
-
-      data[offset + 3] = Math.round(data[offset + 3] * alpha);
-    }
-  }
-
-  ctx.clearRect(0, 0, size, size);
-  ctx.putImageData(image, 0, 0);
 }
 
 function DiceFace({ value, rolling }) {
   const canvasRef = useRef(null);
-  const [sprite, setSprite] = useState(null);
 
   useEffect(() => {
-    let active = true;
-    const image = new Image();
-    image.decoding = "async";
-    image.onload = () => {
-      if (active) setSprite(image);
-    };
-    image.src = "/randomizers/rosie-die-sprites-clean.webp";
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (canvasRef.current && sprite) {
-      drawSpriteDie(canvasRef.current, sprite, value);
+    if (canvasRef.current) {
+      drawPhysicalDie(canvasRef.current, value);
     }
-  }, [sprite, value]);
+  }, [value]);
 
   return (
     <div className={`${styles.dieRig} ${rolling ? styles.isRolling : ""}`}>
