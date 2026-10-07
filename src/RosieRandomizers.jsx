@@ -20,24 +20,23 @@ function randomIndex(length) {
   return Math.floor(Math.random() * length);
 }
 
-const DIE_POSITIONS = {
-  1: "0% 0%",
-  2: "50% 0%",
-  3: "100% 0%",
-  4: "0% 100%",
-  5: "50% 100%",
-  6: "100% 100%"
-};
-
 function DiceFace({ value, rolling }) {
+  const dots = {
+    1: [4],
+    2: [0, 8],
+    3: [0, 4, 8],
+    4: [0, 2, 6, 8],
+    5: [0, 2, 4, 6, 8],
+    6: [0, 2, 3, 5, 6, 8]
+  }[value];
+
   return (
     <div className={`${styles.dieMotion} ${rolling ? styles.isRolling : ""}`}>
-      <div
-        className={styles.dieFace}
-        style={{ backgroundPosition: DIE_POSITIONS[value] }}
-        role="img"
-        aria-label={`Die shows ${value}`}
-      />
+      <div className={styles.dieFace} role="img" aria-label={`Die shows ${value}`}>
+        {Array.from({ length: 9 }, (_, index) => (
+          <i key={index} className={dots.includes(index) ? styles.diePip : ""} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -183,16 +182,14 @@ export default function RosieRandomizers() {
           <div className={styles.coinScene}>
             <span className={styles.coinShadow} />
             <div
-              className={`${styles.coin} ${coin === "Tails" ? styles.showTails : ""} ${coinFlip ? styles.coinFlipping : ""}`}
+              className={`${styles.coin} ${coinFlip ? styles.coinFlipping : ""}`}
               style={{ "--coin-start": `${coinTurn.start}deg`, "--coin-end": `${coinTurn.end}deg` }}
               aria-label={`Coin shows ${coin}`}
             >
-              <span className={`${styles.coinFace} ${styles.coinFront}`} aria-hidden="true">
-                <img src="/randomizers/rosie-coin.webp" alt="" />
-              </span>
-              <span className={`${styles.coinFace} ${styles.coinBack}`} aria-hidden="true">
-                <img src="/randomizers/rosie-coin-tail.webp" alt="" />
-              </span>
+              <img
+                src={coin === "Heads" ? "/randomizers/rosie-coin.webp" : "/randomizers/rosie-coin-tail.webp"}
+                alt={coin === "Heads" ? "Rosie cameo - heads" : "Rosie tail - tails"}
+              />
             </div>
           </div>
           <div className={styles.readout} aria-live="polite">
