@@ -251,6 +251,7 @@ function CheeseMemoryGame() {
   const [started, setStarted] = useState(false);
   const [locked, setLocked] = useState(false);
   const [message, setMessage] = useState("Match every pair to earn Rosie's highest cheese honors.");
+  const pendingFlipRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
 
@@ -260,7 +261,11 @@ function CheeseMemoryGame() {
     return () => window.clearInterval(timer);
   }, [started, complete]);
 
+  useEffect(() => () => window.clearTimeout(pendingFlipRef.current), []);
+
   function resetGame() {
+    window.clearTimeout(pendingFlipRef.current);
+    pendingFlipRef.current = null;
     setDeck(shuffleCheeseDeck());
     setOpenCards([]);
     setMatched([]);
@@ -291,7 +296,7 @@ function CheeseMemoryGame() {
     const second = deck[index];
 
     if (first.id === second.id) {
-      window.setTimeout(() => {
+      pendingFlipRef.current = window.setTimeout(() => {
         setMatched((items) => [...items, first.id]);
         setOpenCards([]);
         setLocked(false);
@@ -299,7 +304,7 @@ function CheeseMemoryGame() {
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
     } else {
-      window.setTimeout(() => {
+      pendingFlipRef.current = window.setTimeout(() => {
         setOpenCards([]);
         setLocked(false);
         setMessage("Not a match. Recalibrating the fromage cortex.");
