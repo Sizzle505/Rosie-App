@@ -1664,3 +1664,941 @@ body {
     46% { opacity: .36; filter: brightness(1.22) saturate(1.25) drop-shadow(0 0 15px rgba(215,147,255,.8)); }
   }
 }
+
+
+/* === CHEESE PAGE + GLOBAL SHELL REWORK · 2026-10-07 === */
+
+/* The old House of Rosie bar is intentionally gone. Every page now begins
+   with its own authored experience while the bottom navigation remains global. */
+.app-shell {
+  padding-top: 0;
+}
+
+/* Fortune owns the whistle now, rather than borrowing it from the shell. */
+.fortune-console .console-caption {
+  min-height: 39px;
+  padding: 4px 7px 4px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.fortune-whistle-button {
+  flex: 0 0 auto;
+  min-height: 29px;
+  padding: 4px 10px 4px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(231, 193, 111, .31);
+  border-radius: 999px;
+  color: #ead095;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255,245,202,.12), transparent 36%),
+    linear-gradient(180deg, rgba(77,44,58,.56), rgba(24,14,21,.88));
+  box-shadow: inset 0 1px rgba(255,255,255,.045), 0 5px 14px rgba(0,0,0,.2);
+  cursor: pointer;
+}
+
+.fortune-whistle-button b {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(235,201,126,.27);
+  border-radius: 50%;
+  color: #ffe7a7;
+  font-size: 12px;
+  line-height: 1;
+  background: rgba(16,9,14,.45);
+}
+
+.fortune-whistle-button small {
+  color: #cbaa70;
+  font-size: 6.5px;
+  line-height: 1;
+  letter-spacing: .13em;
+  font-weight: 800;
+}
+
+.fortune-whistle-button:hover {
+  border-color: rgba(245,211,139,.52);
+  filter: brightness(1.08);
+}
+
+/* Compact premium exam header. */
+.cheese-game-page {
+  width: min(100%, 1340px);
+  margin: 0 auto;
+  padding: 16px 18px 38px;
+  color: #f5eadb;
+}
+
+.cheese-exam-header {
+  position: relative;
+  min-height: 148px;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 112px;
+  align-items: stretch;
+  gap: 17px;
+  overflow: hidden;
+  padding: 11px 14px 11px 11px;
+  border: 1px solid rgba(229,190,111,.38);
+  border-radius: 21px;
+  background:
+    radial-gradient(circle at 78% -10%, rgba(230,182,90,.13), transparent 31%),
+    linear-gradient(122deg, #4b142d 0%, #28101f 42%, #130c13 75%, #0c090c 100%);
+  box-shadow:
+    0 20px 48px rgba(0,0,0,.34),
+    inset 0 0 0 1px rgba(255,244,211,.025);
+}
+
+.cheese-exam-header::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  pointer-events: none;
+  border: 1px solid rgba(238,199,121,.12);
+  border-radius: 15px;
+}
+
+.cheese-exam-header::after {
+  content: "";
+  position: absolute;
+  left: 163px;
+  right: 125px;
+  bottom: 9px;
+  height: 1px;
+  opacity: .55;
+  background: linear-gradient(90deg, rgba(238,198,116,.54), transparent);
+}
+
+.cheese-exam-portrait {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(238,205,143,.42);
+  border-radius: 14px;
+  background: #130b10;
+  box-shadow: 0 10px 26px rgba(0,0,0,.31), inset 0 0 0 3px rgba(255,229,174,.025);
+}
+
+.cheese-exam-portrait img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 34%;
+  filter: saturate(1.02) contrast(1.02);
+}
+
+.cheese-exam-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(17,8,13,.78) 100%);
+  pointer-events: none;
+}
+
+.cheese-exam-portrait > span {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 7px;
+  transform: translateX(-50%);
+  color: #efd595;
+  font-size: 6px;
+  letter-spacing: .19em;
+  font-weight: 900;
+  text-shadow: 0 2px 5px rgba(0,0,0,.7);
+}
+
+.cheese-exam-title {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  align-self: center;
+  padding: 2px 0 0;
+}
+
+.cheese-exam-title .cheese-eyebrow {
+  margin: 0 0 6px;
+  color: #d7af67;
+  font-size: 7px;
+  line-height: 1.1;
+  letter-spacing: .22em;
+  font-weight: 800;
+}
+
+.cheese-exam-title h1 {
+  margin: 0;
+  color: #fff1cd;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(28px, 3.1vw, 43px);
+  line-height: .98;
+  letter-spacing: -.025em;
+  text-shadow: 0 2px 16px rgba(0,0,0,.36);
+}
+
+.cheese-exam-title > p {
+  margin: 7px 0 10px;
+  color: #cbb9ae;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  line-height: 1.3;
+  font-style: italic;
+}
+
+.cheese-header-status {
+  width: min(100%, 560px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(92px, 1fr));
+  gap: 6px;
+}
+
+.cheese-header-status > div {
+  min-height: 37px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(223,181,104,.16);
+  border-radius: 10px;
+  background: rgba(12,8,11,.35);
+}
+
+.cheese-header-status span {
+  color: #88776f;
+  font-size: 6px;
+  letter-spacing: .13em;
+  font-weight: 800;
+}
+
+.cheese-header-status strong {
+  color: #f1d58f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.cheese-header-seal {
+  position: relative;
+  z-index: 2;
+  width: 94px;
+  height: 94px;
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  border: 1px solid rgba(238,201,126,.42);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(119,48,71,.54), rgba(35,15,24,.82) 64%, rgba(12,8,10,.9));
+  box-shadow:
+    inset 0 0 0 5px rgba(230,188,105,.06),
+    0 12px 28px rgba(0,0,0,.27);
+}
+
+.cheese-header-seal::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px dashed rgba(238,202,130,.28);
+  border-radius: 50%;
+}
+
+.cheese-header-seal .seal-paw {
+  display: block;
+  color: #f1d48b;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.cheese-header-seal strong {
+  margin-top: 3px;
+  color: #f8e8bd;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+}
+
+.cheese-header-seal small {
+  margin-top: 2px;
+  color: #a58c69;
+  font-size: 5px;
+  letter-spacing: .15em;
+}
+
+/* Board + active examiner are one composition on desktop. */
+.cheese-play-layout {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  align-items: start;
+  gap: 16px;
+}
+
+.cheese-play-layout .cheese-game-frame {
+  width: 100%;
+  margin: 0;
+  padding: 15px 16px 17px;
+  border-radius: 20px;
+  background:
+    linear-gradient(rgba(14,9,12,.94), rgba(14,9,12,.94)),
+    repeating-linear-gradient(90deg, #2b1815 0 3px, #21120f 3px 6px);
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.31),
+    inset 0 0 0 4px rgba(97,58,36,.11);
+}
+
+.cheese-play-layout .cheese-game-frame::after {
+  inset: 6px;
+  border-radius: 15px;
+}
+
+.cheese-play-layout .cheese-game-heading {
+  position: relative;
+  z-index: 2;
+  min-height: 48px;
+  margin: 0 3px 12px;
+  padding: 0 4px 9px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid rgba(225,184,105,.13);
+}
+
+.cheese-play-layout .cheese-game-heading span {
+  color: #b89459;
+  font-size: 6px;
+  letter-spacing: .17em;
+}
+
+.cheese-play-layout .cheese-game-heading h2 {
+  margin: 3px 0 0;
+  color: #f3dfb4;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.cheese-play-layout .cheese-game-heading p {
+  max-width: 300px;
+  margin: 0 0 2px;
+  color: #776c68;
+  font-size: 8px;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.cheese-play-layout .cheese-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.cheese-play-layout .cheese-card {
+  min-width: 0;
+  aspect-ratio: .79;
+  border-radius: 13px;
+}
+
+.cheese-play-layout .cheese-card-back,
+.cheese-play-layout .cheese-card-front {
+  border-radius: 13px;
+}
+
+/* Lighter, charming, authored card back: plum leather, cream pinlines,
+   a paw-and-cheese seal, and restrained sparkle. */
+.cheese-card-back {
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255,239,192,.11), transparent 18%),
+    radial-gradient(circle at 84% 82%, rgba(234,188,103,.08), transparent 23%),
+    linear-gradient(145deg, #7b2845 0%, #54162f 43%, #351021 72%, #210b17 100%);
+  color: #f3d996;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,241,198,.06),
+    inset 0 0 28px rgba(25,4,15,.28);
+}
+
+.cheese-card-back::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(244,211,143,.48);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 0 0 3px rgba(255,229,169,.035),
+    0 0 18px rgba(220,165,72,.055);
+}
+
+.cheese-card-back::after {
+  content: "✦";
+  position: absolute;
+  inset: 12px;
+  display: grid;
+  place-items: start end;
+  padding: 2px 3px;
+  border: 1px solid rgba(244,211,143,.14);
+  border-radius: 7px;
+  color: rgba(255,224,151,.55);
+  font-size: 8px;
+  text-shadow:
+    calc(-100% + 8px) calc(100% - 8px) currentColor;
+  opacity: 1;
+}
+
+.cheese-back-ornament {
+  position: relative;
+  z-index: 3;
+  width: 78%;
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.cheese-back-seal {
+  position: relative;
+  width: min(72%, 92px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,225,159,.5);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 33%, rgba(255,238,191,.11), transparent 28%),
+    linear-gradient(145deg, rgba(103,30,55,.96), rgba(39,10,24,.95));
+  box-shadow:
+    inset 0 0 0 5px rgba(242,203,128,.055),
+    0 7px 18px rgba(24,5,14,.3);
+}
+
+.cheese-back-seal::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px dashed rgba(247,213,143,.31);
+  border-radius: 50%;
+}
+
+.cheese-back-paw {
+  position: relative;
+  width: 42px;
+  height: 39px;
+  transform: translate(-3px, -2px) scale(.92);
+}
+
+.cheese-back-paw i,
+.cheese-back-paw b {
+  position: absolute;
+  display: block;
+  background: linear-gradient(180deg, #ffe6a5, #c9903e);
+  box-shadow: 0 1px 2px rgba(35,8,18,.38);
+}
+
+.cheese-back-paw i {
+  width: 8px;
+  height: 11px;
+  border-radius: 55% 55% 48% 48%;
+}
+
+.cheese-back-paw i:nth-child(1) { left: 2px; top: 8px; transform: rotate(-25deg); }
+.cheese-back-paw i:nth-child(2) { left: 12px; top: 1px; transform: rotate(-9deg); }
+.cheese-back-paw i:nth-child(3) { right: 12px; top: 1px; transform: rotate(9deg); }
+.cheese-back-paw i:nth-child(4) { right: 2px; top: 8px; transform: rotate(25deg); }
+
+.cheese-back-paw b {
+  left: 10px;
+  bottom: 0;
+  width: 23px;
+  height: 20px;
+  border-radius: 52% 52% 43% 43% / 62% 62% 38% 38%;
+  transform: rotate(0deg);
+}
+
+.cheese-back-wedge {
+  position: absolute;
+  right: 4px;
+  bottom: 6px;
+  width: 31px;
+  height: 24px;
+  clip-path: polygon(0 25%, 100% 0, 88% 100%, 0 82%);
+  background: linear-gradient(145deg, #ffe6a1, #d59b45);
+  filter: drop-shadow(0 2px 3px rgba(28,5,15,.42));
+  transform: rotate(-8deg);
+}
+
+.cheese-back-wedge i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(116,58,45,.55);
+  box-shadow: inset 0 1px 1px rgba(70,25,25,.3);
+}
+
+.cheese-back-wedge i:nth-child(1) { left: 8px; top: 8px; }
+.cheese-back-wedge i:nth-child(2) { right: 7px; top: 5px; width: 4px; height: 4px; }
+.cheese-back-wedge i:nth-child(3) { right: 10px; bottom: 4px; width: 6px; height: 6px; }
+
+.cheese-back-ornament > strong {
+  color: #f7dfaa;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(9px, .95vw, 13px);
+  line-height: 1;
+  letter-spacing: .15em;
+  font-weight: 500;
+  text-shadow: 0 2px 5px rgba(35,4,17,.45);
+}
+
+.cheese-back-ornament > small {
+  color: rgba(239,201,129,.64);
+  font-size: clamp(4.5px, .47vw, 6px);
+  letter-spacing: .2em;
+  font-weight: 800;
+}
+
+.cheese-examiner-rail {
+  position: sticky;
+  top: 15px;
+  display: grid;
+  gap: 9px;
+}
+
+.cheese-examiner-rail .rosie-reaction {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 19px;
+}
+
+.cheese-examiner-rail .rosie-reaction-portrait {
+  width: 100%;
+  height: clamp(310px, 29vw, 410px);
+  flex: 0 0 auto;
+  border-radius: 13px;
+}
+
+.cheese-examiner-rail .rosie-reaction-portrait img {
+  object-position: 72% 28%;
+  transform: scale(1.025);
+}
+
+.cheese-examiner-rail .reaction-copy {
+  width: 100%;
+  padding: 2px 4px 5px;
+}
+
+.cheese-examiner-rail .rosie-reaction .reaction-copy span {
+  font-size: 7px;
+  line-height: 1.3;
+  letter-spacing: .13em;
+}
+
+.cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+  max-width: none;
+  margin-top: 7px;
+  font-size: clamp(15px, 1.4vw, 19px);
+  line-height: 1.22;
+}
+
+.cheese-examiner-rail .rosie-reaction > i {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  margin: 0;
+  backdrop-filter: blur(6px);
+}
+
+.cheese-reset-button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid rgba(228,187,106,.28);
+  border-radius: 13px;
+  color: #d7b66f;
+  background:
+    radial-gradient(circle at 50% 0, rgba(167,87,120,.11), transparent 58%),
+    linear-gradient(180deg, rgba(38,20,29,.94), rgba(20,12,17,.97));
+  font-size: 7px;
+  letter-spacing: .18em;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: inset 0 1px rgba(255,255,255,.035), 0 9px 22px rgba(0,0,0,.2);
+}
+
+.cheese-reset-button span {
+  color: #f0d68d;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.cheese-reset-button:hover {
+  border-color: rgba(239,203,130,.47);
+  color: #efd693;
+}
+
+@media (max-width: 980px) {
+  .cheese-play-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cheese-examiner-rail {
+    position: static;
+  }
+
+  .cheese-examiner-rail .rosie-reaction {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr) 28px;
+    align-items: stretch;
+    min-height: 176px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction-portrait {
+    height: 156px;
+  }
+
+  .cheese-examiner-rail .reaction-copy {
+    align-self: center;
+    padding: 0;
+  }
+
+  .cheese-examiner-rail .rosie-reaction > i {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 700px) {
+  .fortune-console .console-caption {
+    min-height: 34px;
+    padding: 3px 5px 3px 8px;
+    gap: 5px;
+  }
+
+  .fortune-console .console-caption > span {
+    min-width: 0;
+    font-size: 5.6px;
+    letter-spacing: .08em;
+  }
+
+  .fortune-whistle-button {
+    min-height: 27px;
+    padding: 3px 8px 3px 5px;
+    gap: 5px;
+  }
+
+  .fortune-whistle-button b {
+    width: 19px;
+    height: 19px;
+    font-size: 11px;
+  }
+
+  .fortune-whistle-button small {
+    font-size: 5px;
+    letter-spacing: .09em;
+  }
+
+  .cheese-game-page {
+    width: 100%;
+    min-height: calc(100dvh - var(--rosie-nav-height) - var(--rosie-nav-gap));
+    margin: 0;
+    padding: max(7px, env(safe-area-inset-top)) 7px calc(var(--rosie-nav-height) + 9px + env(safe-area-inset-bottom));
+    display: block;
+    overflow-x: clip;
+  }
+
+  .cheese-exam-header {
+    min-height: 0;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 8px;
+    padding: 7px;
+    border-radius: 15px;
+  }
+
+  .cheese-exam-header::before {
+    inset: 4px;
+    border-radius: 11px;
+  }
+
+  .cheese-exam-header::after {
+    display: none;
+  }
+
+  .cheese-exam-portrait {
+    width: 72px;
+    height: 82px;
+    grid-row: 1;
+    border-radius: 10px;
+  }
+
+  .cheese-exam-portrait > span {
+    bottom: 4px;
+    font-size: 4.7px;
+    letter-spacing: .13em;
+  }
+
+  .cheese-exam-title {
+    align-self: center;
+    padding: 1px 2px 0 0;
+  }
+
+  .cheese-exam-title .cheese-eyebrow {
+    margin-bottom: 4px;
+    font-size: 5.7px;
+    letter-spacing: .15em;
+  }
+
+  .cheese-exam-title h1 {
+    max-width: 280px;
+    font-size: clamp(17px, 5.2vw, 21px);
+    line-height: 1.01;
+    letter-spacing: -.018em;
+  }
+
+  .cheese-exam-title > p {
+    margin: 4px 0 0;
+    font-size: 9px;
+    line-height: 1.2;
+  }
+
+  .cheese-header-status {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: -1px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .cheese-header-status > div {
+    min-height: 29px;
+    padding: 4px 6px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px;
+    border-radius: 8px;
+  }
+
+  .cheese-header-status span {
+    font-size: 4.8px;
+    letter-spacing: .08em;
+  }
+
+  .cheese-header-status strong {
+    font-size: 12px;
+  }
+
+  .cheese-header-seal {
+    display: none;
+  }
+
+  .cheese-play-layout {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cheese-play-layout .cheese-game-frame {
+    order: 1;
+    width: 100%;
+    margin: 0;
+    padding: 5px;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.31), inset 0 0 0 3px rgba(93,56,33,.11);
+  }
+
+  .cheese-play-layout .cheese-game-frame::after {
+    inset: 4px;
+    border-radius: 10px;
+  }
+
+  .cheese-play-layout .cheese-game-heading {
+    display: none;
+  }
+
+  .cheese-play-layout .cheese-grid {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 5px;
+  }
+
+  .cheese-play-layout .cheese-card {
+    aspect-ratio: .82;
+    border-radius: 8px;
+  }
+
+  .cheese-play-layout .cheese-card-back,
+  .cheese-play-layout .cheese-card-front {
+    border-radius: 8px;
+  }
+
+  .cheese-card-back::before {
+    inset: 3px;
+    border-radius: 6px;
+  }
+
+  .cheese-card-back::after {
+    inset: 7px;
+    padding: 1px;
+    border-radius: 5px;
+    font-size: 5px;
+  }
+
+  .cheese-back-ornament {
+    width: 82%;
+    gap: 3px;
+  }
+
+  .cheese-back-seal {
+    width: min(64%, 48px);
+    box-shadow: inset 0 0 0 3px rgba(242,203,128,.05), 0 4px 10px rgba(24,5,14,.28);
+  }
+
+  .cheese-back-seal::before {
+    inset: 4px;
+  }
+
+  .cheese-back-paw {
+    width: 27px;
+    height: 25px;
+    transform: translate(-2px,-1px) scale(.62);
+  }
+
+  .cheese-back-wedge {
+    right: -1px;
+    bottom: 1px;
+    width: 19px;
+    height: 15px;
+  }
+
+  .cheese-back-wedge i {
+    transform: scale(.7);
+  }
+
+  .cheese-back-ornament > strong {
+    font-size: 6.4px;
+    letter-spacing: .12em;
+  }
+
+  .cheese-back-ornament > small {
+    font-size: 3.7px;
+    letter-spacing: .12em;
+  }
+
+  .cheese-examiner-rail {
+    order: 2;
+    position: static;
+    display: grid;
+    gap: 5px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction {
+    min-height: 0;
+    height: 116px;
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr) 21px;
+    gap: 7px;
+    align-items: stretch;
+    padding: 6px;
+    border-radius: 13px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 100%;
+    height: 104px;
+    border-radius: 9px;
+  }
+
+  .cheese-examiner-rail .reaction-copy {
+    align-self: center;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .cheese-examiner-rail .rosie-reaction .reaction-copy span {
+    font-size: 5.1px;
+    line-height: 1.15;
+    letter-spacing: .085em;
+  }
+
+  .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    margin-top: 4px;
+    font-size: clamp(11px, 3.1vw, 13px);
+    line-height: 1.13;
+  }
+
+  .cheese-examiner-rail .rosie-reaction > i {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    font-size: 9px;
+  }
+
+  .cheese-reset-button {
+    min-height: 34px;
+    border-radius: 10px;
+    font-size: 6px;
+    letter-spacing: .14em;
+  }
+
+  .cheese-reset-button span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 390px) {
+  .cheese-game-page {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .cheese-exam-header {
+    grid-template-columns: 68px minmax(0,1fr);
+    gap: 7px;
+    padding: 6px;
+  }
+
+  .cheese-exam-portrait {
+    width: 68px;
+    height: 78px;
+  }
+
+  .cheese-exam-title h1 {
+    font-size: 17px;
+  }
+
+  .cheese-exam-title > p {
+    font-size: 8.5px;
+  }
+
+  .cheese-header-status > div {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .cheese-play-layout .cheese-grid {
+    gap: 4px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: 98px minmax(0,1fr) 20px;
+  }
+}
