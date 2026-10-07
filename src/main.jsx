@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
@@ -51,33 +51,50 @@ function secureIndex(length) {
   return value[0] % length;
 }
 
-function RosiePortrait({ consulting }) {
+function readRecent() {
+  try { return JSON.parse(sessionStorage.getItem("rosieRecent") || "[]"); }
+  catch { return []; }
+}
+
+function RosiePortrait({ consulting, tone }) {
   return (
-    <div className={`rosie-portrait ${consulting ? "is-consulting" : ""}`} aria-label="Stylized portrait of Rosie">
+    <div className={`rosie-portrait ${consulting ? "is-consulting" : ""} ${tone ? `tone-${tone}` : ""}`} aria-label="Stylized portrait of Rosie">
       <div className="ear ear-left" />
       <div className="ear ear-right" />
-      <div className="turban">
-        <span className="turban-gem" />
-      </div>
+      <div className="turban"><span className="turban-gem" /></div>
       <div className="head">
         <span className="brow brow-left" />
         <span className="brow brow-right" />
         <span className="eye eye-left" />
         <span className="eye eye-right" />
-        <div className="muzzle">
-          <span className="nose" />
-          <span className="smile" />
-        </div>
+        <div className="muzzle"><span className="nose" /><span className="smile" /></div>
       </div>
-      <div className="robe">
-        <span className="robe-stars">✦ · ✧ · ✦</span>
-      </div>
+      <div className="robe"><span className="robe-stars">✦ · ✧ · ✦</span></div>
       <div className="paw-hand">🐾</div>
     </div>
   );
 }
 
-function FortuneMachine({ consulting }) {
+function CrystalBall({ consulting, answer }) {
+  return (
+    <>
+      <div className={`crystal-ball ${consulting ? "is-active" : ""} ${answer ? `has-answer tone-${answer.tone}` : ""}`}>
+        {!answer && <span className="ball-paw">🐾</span>}
+        {answer && (
+          <div className="ball-answer" key={answer.id}>
+            <span className="ball-answer-label">ROSIE SAYS</span>
+            <strong>{answer.text}</strong>
+          </div>
+        )}
+        <span className="mist mist-a" />
+        <span className="mist mist-b" />
+      </div>
+      <div className="ball-base"><span>🐾</span></div>
+    </>
+  );
+}
+
+function FortuneMachine({ consulting, answer }) {
   return (
     <section className="machine" aria-label="Madame Rosie fortune teller">
       <div className="booth">
@@ -95,15 +112,15 @@ function FortuneMachine({ consulting }) {
           <span className="moon">☾</span>
           <span className="star star-a">✦</span>
           <span className="star star-b">✧</span>
-          <RosiePortrait consulting={consulting} />
+          <span className="star star-c">✦</span>
+          <div className="book-stack" aria-hidden="true">
+            <span>TREATS</span><span>WALKS</span><span>BELLY RUBS</span>
+          </div>
+          <div className="treat-bowl" aria-hidden="true">● ● ●</div>
+          <RosiePortrait consulting={consulting} tone={answer?.tone} />
         </div>
 
-        <div className={`crystal-ball ${consulting ? "is-active" : ""}`}>
-          <span className="ball-paw">🐾</span>
-          <span className="mist mist-a" />
-          <span className="mist mist-b" />
-        </div>
-        <div className="ball-base"><span>🐾</span></div>
+        <CrystalBall consulting={consulting} answer={answer} />
       </div>
     </section>
   );
@@ -115,21 +132,16 @@ function App() {
   const [answer, setAnswer] = useState(null);
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
-
-  const recent = useMemo(() => {
-    try {
-      return JSON.parse(sessionStorage.getItem("rosieRecent") || "[]");
-    } catch {
-      return [];
-    }
-  }, [answer]);
+  const [history, setHistory] = useState([]);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setLoaded(true), 1150);
+    const timer = window.setTimeout(() => setLoaded(true), 1050);
     return () => window.clearTimeout(timer);
   }, []);
 
   function chooseFortune() {
+    const recent = readRecent();
     let candidates = FORTUNES.filter((item) => !recent.includes(item.id));
     if (candidates.length < 10) candidates = FORTUNES;
     const selection = candidates[secureIndex(candidates.length)];
@@ -140,31 +152,39 @@ function App() {
 
   function askRosie(event) {
     event.preventDefault();
-    if (!question.trim() || consulting) return;
+    if (!question.trim() || consulting) {
+      inputRef.current?.focus();
+      return;
+    }
+
     setAnswer(null);
     setConsulting(true);
     const result = chooseFortune();
-    const delay = 1350 + secureIndex(450);
+    const askedQuestion = question.trim();
+    const delay = 1450 + secureIndex(650);
+
     window.setTimeout(() => {
       setAnswer(result);
+      setHistory((items) => [{ question: askedQuestion, answer: result.text, tone: result.tone }, ...items].slice(0, 5));
       setConsulting(false);
-      window.navigator.vibrate?.(25);
+      window.navigator.vibrate?.([22, 35, 22]);
     }, delay);
   }
 
   function askAnother() {
     setQuestion("");
     setAnswer(null);
-    document.querySelector("#question")?.focus();
+    window.setTimeout(() => inputRef.current?.focus(), 50);
   }
 
   function saveFortune() {
     if (!answer) return;
-    const saved = JSON.parse(localStorage.getItem("rosieSavedFortunes") || "[]");
-    saved.unshift({ question, answer: answer.text, tone: answer.tone, savedAt: new Date().toISOString() });
+    let saved = [];
+    try { saved = JSON.parse(localStorage.getItem("rosieSavedFortunes") || "[]"); } catch {}
+    saved.unshift({ question: question.trim(), answer: answer.text, tone: answer.tone, savedAt: new Date().toISOString() });
     localStorage.setItem("rosieSavedFortunes", JSON.stringify(saved.slice(0, 50)));
     setToast("Fortune saved to Rosie's vault.");
-    window.setTimeout(() => setToast(""), 1800);
+    window.setTimeout(() => setToast(""), 1700);
   }
 
   return (
@@ -178,15 +198,12 @@ function App() {
       <div className={`app-shell ${loaded ? "app-shell-visible" : ""}`}>
         <header className="topbar">
           <button className="round-button" aria-label="Menu">☰</button>
-          <div className="brand">
-            <small>THE HOUSE OF</small>
-            <strong>ROSIE</strong>
-          </div>
+          <div className="brand"><small>THE HOUSE OF</small><strong>ROSIE</strong></div>
           <button className="round-button" aria-label="Rosie profile">🐾</button>
         </header>
 
         <main>
-          <FortuneMachine consulting={consulting} />
+          <FortuneMachine consulting={consulting} answer={answer} />
 
           <section className="intro">
             <p className="eyebrow">FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</p>
@@ -198,6 +215,7 @@ function App() {
             <label htmlFor="question">WHAT TROUBLES YOU?</label>
             <div className="question-row">
               <input
+                ref={inputRef}
                 id="question"
                 value={question}
                 onChange={(event) => setQuestion(event.target.value)}
@@ -212,11 +230,11 @@ function App() {
             <p>No question too difficult. No snack too small.</p>
           </form>
 
-          <section className={`answer-card ${answer ? "answer-card-visible" : ""}`} aria-live="polite">
+          <section className={`fortune-slip ${answer ? "fortune-slip-visible" : ""}`} aria-live="polite">
             {answer && (
               <>
-                <small>THE PAW HAS SPOKEN</small>
-                <blockquote>“{answer.text}”</blockquote>
+                <div className="fortune-slip-heading"><span>✦</span> THE PAW HAS SPOKEN <span>✦</span></div>
+                <p className="question-echo">“{question.trim()}”</p>
                 <div className="answer-actions">
                   <button onClick={askAnother}>ASK ANOTHER</button>
                   <button className="secondary" onClick={saveFortune}>SAVE FORTUNE</button>
@@ -224,6 +242,20 @@ function App() {
               </>
             )}
           </section>
+
+          {history.length > 1 && (
+            <section className="session-history">
+              <div className="history-title">TONIGHT'S CONSULTATIONS</div>
+              <div className="history-list">
+                {history.slice(1).map((item, index) => (
+                  <div className="history-item" key={`${item.question}-${index}`}>
+                    <span className={`history-dot tone-${item.tone}`} />
+                    <div><strong>{item.question}</strong><small>{item.answer}</small></div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </main>
 
         <nav className="bottom-nav" aria-label="Primary">
