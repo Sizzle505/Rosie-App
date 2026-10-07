@@ -55,7 +55,46 @@ const QUICK_QUESTIONS = [
   "Should I say yes?",
   "Should I wait?",
   "Is this a terrible idea?",
-  "Should I order dessert?"
+  "Should I order dessert?",
+  "Is this outfit too powerful?",
+  "Should I cancel my plans and become mysterious?",
+  "Would one more coffee improve this situation?",
+  "Should I pretend I never saw that email?",
+  "Is today a good day for an unnecessary little treat?",
+  "Should I take the scenic route?",
+  "Am I overthinking this or merely thinking correctly?",
+  "Should I buy the fancy cheese?",
+  "Should I leave the group chat on read?",
+  "Would a nap solve this?",
+  "Should I dramatically reinvent myself before dinner?",
+  "Is this person worthy of my excellent attention?",
+  "Should I trust the suspiciously good deal?",
+  "Do I deserve a tiny reward for existing today?",
+  "Should I wear the impractical shoes?",
+  "Is this a sign, or am I just bored?",
+  "Should I send the risky text?",
+  "Would Rosie approve of this purchase?",
+  "Should I make an entrance?",
+  "Do I need a plan, or just confidence?",
+  "Should I order the thing with truffle?",
+  "Is this hill worth dying on?",
+  "Should I let future me deal with it?",
+  "Would adding champagne improve the plan?",
+  "Should I book it before I become sensible?",
+  "Am I being discerning or delightfully difficult?",
+  "Should I take the last cookie?",
+  "Is this meeting actually necessary?",
+  "Should I trust someone who says 'circle back' too often?",
+  "Should I ignore the sensible option?",
+  "Would this be funnier if I said yes?",
+  "Should I become unavailable for the rest of the afternoon?",
+  "Is this worth putting on real pants for?",
+  "Should I choose chaos, but tasteful chaos?",
+  "Would the universe prefer I order fries?",
+  "Should I make this somebody else's problem?",
+  "Is my first instinct brilliant or merely dramatic?",
+  "Should I RSVP 'maybe' and preserve the mystique?",
+  "Would buying flowers for no reason improve the day?"
 ];
 
 const OMENS = {
@@ -68,6 +107,15 @@ function secureIndex(length) {
   const value = new Uint32Array(1);
   crypto.getRandomValues(value);
   return value[0] % length;
+}
+
+function samplePrompts(count = 4) {
+  const pool = [...QUICK_QUESTIONS];
+  const chosen = [];
+  while (pool.length && chosen.length < count) {
+    chosen.push(pool.splice(secureIndex(pool.length), 1)[0]);
+  }
+  return chosen;
 }
 
 function readRecent() {
@@ -185,6 +233,7 @@ function FortuneLens({
       role={interactive ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
       aria-label={interactive ? "Dismiss Rosie's answer with magic" : undefined}
+      onPointerUp={interactive ? onDismiss : undefined}
       onClick={interactive ? onDismiss : undefined}
       onKeyDown={handleKeyDown}
     >
@@ -277,6 +326,16 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <span className="lantern-glow lantern-glow-right"><i /></span>
           </div>
 
+          <div className="living-set" aria-hidden="true">
+            <img className="set-piece set-piece-moon" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
+            <img className="set-piece set-piece-lantern-left" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
+            <img className="set-piece set-piece-lantern-right" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
+            <img className="set-piece set-piece-rosie-breathe" src="/rosie-fortune-stage.webp" alt="" draggable="false" />
+            <div className="book-accents">
+              <i /><i /><i /><i /><i />
+            </div>
+          </div>
+
           <img
             className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
             src="/rosie-fortune-stage.webp"
@@ -292,6 +351,9 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
 
           {flipBurst > 0 && (
             <div className="flip-magic" aria-hidden="true" key={flipBurst}>
+              <span className="turn-veil" />
+              <span className="turn-orbit turn-orbit-a" />
+              <span className="turn-orbit turn-orbit-b" />
               <span className="smoke-wisp smoke-wisp-a" />
               <span className="smoke-wisp smoke-wisp-b" />
               <span className="smoke-wisp smoke-wisp-c" />
@@ -372,10 +434,11 @@ function App() {
     };
   }, []);
 
-  const quickQuestions = useMemo(() => {
-    const seed = dayNumber();
-    return [0, 1, 2].map((offset) => QUICK_QUESTIONS[(seed + offset * 3) % QUICK_QUESTIONS.length]);
-  }, []);
+  const [quickQuestions, setQuickQuestions] = useState(() => samplePrompts(4));
+
+  function reshufflePrompts() {
+    setQuickQuestions(samplePrompts(4));
+  }
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoaded(true), 950);
@@ -556,12 +619,12 @@ function App() {
 
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
-      window.navigator.vibrate?.([10, 24, 10]);
-    }, 285);
+      window.navigator.vibrate?.([8, 20, 8]);
+    }, 255);
 
     turnEndTimerRef.current = window.setTimeout(() => {
       setTurning(false);
-    }, 700);
+    }, 820);
   }
 
   function toggleDictation() {
@@ -651,6 +714,7 @@ function App() {
     setAnswerDismissed(false);
     setConsulting(false);
     setRevealStage("idle");
+    reshufflePrompts();
     window.setTimeout(() => inputRef.current?.focus(), 50);
   }
 
@@ -789,7 +853,10 @@ function App() {
               </div>
 
               <div className="quick-row">
-                <span>TRY ONE</span>
+                <div className="quick-label">
+                  <span>TRY ONE</span>
+                  <button type="button" className="shuffle-prompts" onClick={reshufflePrompts} aria-label="Show different sample questions" title="Different questions">↻</button>
+                </div>
                 <div className="quick-prompts">
                   {quickQuestions.map((prompt) => (
                     <button type="button" key={prompt} onClick={() => choosePrompt(prompt)}>
