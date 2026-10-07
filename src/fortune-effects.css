@@ -1,0 +1,537 @@
+/* Fortune page interaction polish - whistle, crystal energy, speech input, bottom omens */
+
+/* The top-right control is now an active whistle rather than a mute toggle. */
+.whistle-button {
+  position: relative;
+  overflow: visible;
+  color: #f0cf85;
+  box-shadow:
+    0 0 17px rgba(202, 150, 77, .1),
+    inset 0 0 0 1px rgba(0,0,0,.32);
+}
+.whistle-button::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 207, 133, .12);
+  pointer-events: none;
+}
+.whistle-button:active {
+  transform: scale(.94);
+  box-shadow:
+    0 0 22px rgba(178, 112, 206, .22),
+    inset 0 0 0 1px rgba(0,0,0,.32);
+}
+
+/* Always-on, transparent magic layered over the physical crystal ball artwork. */
+.crystal-energy {
+  --energy-purple: rgba(175, 105, 226, .58);
+  --energy-violet: rgba(111, 57, 170, .48);
+  --energy-gold: rgba(237, 195, 106, .43);
+  position: absolute;
+  z-index: 17;
+  left: 50%;
+  bottom: 57px;
+  width: 202px;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: .92;
+  filter: drop-shadow(0 0 16px rgba(137, 75, 185, .2));
+}
+.crystal-energy.tone-positive {
+  --energy-purple: rgba(175, 116, 214, .52);
+  --energy-gold: rgba(247, 205, 105, .62);
+}
+.crystal-energy.tone-negative {
+  --energy-purple: rgba(183, 74, 134, .5);
+  --energy-violet: rgba(98, 41, 122, .48);
+  --energy-gold: rgba(216, 155, 92, .34);
+}
+.energy-halo,
+.energy-ring,
+.energy-paw-core,
+.energy-mist {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.energy-halo {
+  width: 83%;
+  height: 83%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 30%, rgba(255,255,255,.11), transparent 14%),
+    radial-gradient(circle, rgba(147, 86, 196, .08) 0 42%, rgba(125, 67, 170, .13) 58%, transparent 72%);
+  box-shadow:
+    0 0 38px rgba(163, 96, 208, .18),
+    inset 0 0 28px rgba(236, 203, 255, .06);
+  animation: crystalBreathe 5.2s ease-in-out infinite;
+}
+.energy-ring {
+  width: 76%;
+  height: 39%;
+  margin-left: -38%;
+  margin-top: -19.5%;
+  border: 1px solid var(--energy-purple);
+  border-left-color: rgba(239, 207, 255, .16);
+  border-right-color: var(--energy-gold);
+  border-radius: 50%;
+  opacity: .38;
+  filter: drop-shadow(0 0 6px rgba(155, 90, 207, .34));
+  transform-origin: 50% 50%;
+}
+.energy-ring-a {
+  animation: crystalOrbitA 8s linear infinite;
+}
+.energy-ring-b {
+  width: 67%;
+  height: 49%;
+  margin-left: -33.5%;
+  margin-top: -24.5%;
+  opacity: .28;
+  transform: rotate(58deg);
+  animation: crystalOrbitB 10.5s linear infinite reverse;
+}
+.energy-ring-c {
+  width: 56%;
+  height: 29%;
+  margin-left: -28%;
+  margin-top: -14.5%;
+  border-color: rgba(239, 195, 101, .36);
+  opacity: .24;
+  transform: rotate(-48deg);
+  animation: crystalOrbitC 6.8s linear infinite;
+}
+.energy-mist {
+  width: 64%;
+  height: 64%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 40deg,
+      transparent 0 15%,
+      rgba(181, 118, 224, .09) 23%,
+      transparent 34% 52%,
+      rgba(230, 188, 103, .075) 61%,
+      transparent 72% 100%);
+  filter: blur(5px);
+  animation: crystalMist 11s linear infinite;
+}
+.energy-paw-core {
+  z-index: 3;
+  transform: translate(-50%, -50%) scale(.82);
+  color: rgba(245, 216, 157, .32);
+  font-size: 28px;
+  line-height: 1;
+  text-shadow:
+    0 0 9px rgba(242, 206, 135, .36),
+    0 0 20px rgba(160, 95, 211, .5);
+  filter: sepia(.45) saturate(.8);
+  animation: pawCore 4.1s ease-in-out infinite;
+}
+.energy-stars {
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  animation: starFieldDrift 12s linear infinite;
+}
+.energy-stars i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f6d68f;
+  box-shadow: 0 0 6px rgba(245, 203, 112, .72);
+  animation: energyTwinkle 3.8s ease-in-out infinite;
+}
+.energy-stars i:nth-child(1) { left: 20%; top: 24%; animation-delay: -.4s; }
+.energy-stars i:nth-child(2) { left: 68%; top: 16%; animation-delay: -1.7s; }
+.energy-stars i:nth-child(3) { left: 80%; top: 47%; animation-delay: -2.6s; }
+.energy-stars i:nth-child(4) { left: 59%; top: 74%; animation-delay: -.9s; }
+.energy-stars i:nth-child(5) { left: 27%; top: 70%; animation-delay: -3.2s; }
+.energy-stars i:nth-child(6) { left: 12%; top: 48%; animation-delay: -2s; }
+.energy-stars i:nth-child(7) { left: 46%; top: 30%; animation-delay: -1.2s; }
+.energy-stars i:nth-child(8) { left: 51%; top: 62%; animation-delay: -2.9s; }
+
+.crystal-energy.is-consulting {
+  opacity: 1;
+  filter: drop-shadow(0 0 25px rgba(180, 113, 225, .43));
+  animation: consultingEnergy .88s ease-in-out infinite alternate;
+}
+.crystal-energy.is-consulting .energy-ring {
+  opacity: .62;
+  animation-duration: 2.6s;
+}
+.crystal-energy.is-consulting .energy-ring-b { animation-duration: 3.2s; }
+.crystal-energy.is-consulting .energy-ring-c { animation-duration: 2.15s; }
+.crystal-energy.is-consulting .energy-paw-core {
+  color: rgba(252, 223, 160, .58);
+}
+
+@keyframes crystalBreathe {
+  0%, 100% { opacity: .55; transform: translate(-50%, -50%) scale(.94); }
+  50% { opacity: .92; transform: translate(-50%, -50%) scale(1.035); }
+}
+@keyframes crystalOrbitA {
+  to { transform: rotate(360deg); }
+}
+@keyframes crystalOrbitB {
+  from { transform: rotate(58deg); }
+  to { transform: rotate(418deg); }
+}
+@keyframes crystalOrbitC {
+  from { transform: rotate(-48deg); }
+  to { transform: rotate(312deg); }
+}
+@keyframes crystalMist {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes pawCore {
+  0%, 100% { opacity: .34; transform: translate(-50%, -50%) scale(.76); }
+  50% { opacity: .66; transform: translate(-50%, -50%) scale(.9); }
+}
+@keyframes starFieldDrift {
+  to { transform: rotate(-360deg); }
+}
+@keyframes energyTwinkle {
+  0%, 100% { opacity: .12; transform: scale(.45); }
+  48% { opacity: .9; transform: scale(1.45); }
+}
+@keyframes consultingEnergy {
+  to { transform: translateX(-50%) scale(1.045); }
+}
+
+/* Only a feathered central Rosie region is mirrored; the cabinet and crystal ball stay put. */
+.rosie-turn-layer {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 47%;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.015);
+  transform-origin: 50% 42%;
+  filter: saturate(1.02) contrast(1.03) brightness(.9);
+  clip-path: polygon(23% 0, 77% 0, 75% 63%, 67% 71%, 58% 74%, 42% 74%, 33% 71%, 25% 63%);
+  -webkit-mask-image: radial-gradient(ellipse 47% 58% at 50% 37%, #000 0 69%, rgba(0,0,0,.94) 76%, transparent 94%);
+  mask-image: radial-gradient(ellipse 47% 58% at 50% 37%, #000 0 69%, rgba(0,0,0,.94) 76%, transparent 94%);
+  transition:
+    opacity .17s ease,
+    transform .42s cubic-bezier(.18,.8,.24,1),
+    filter .35s ease;
+}
+.rosie-turn-layer.is-flipped {
+  opacity: 1;
+  transform: scaleX(-1) scale(1.015);
+}
+.rosie-turn-layer.stage-art-consulting {
+  filter: saturate(1.08) contrast(1.05) brightness(.75);
+}
+.rosie-turn-layer.is-flipped.stage-art-consulting {
+  transform: scaleX(-1) scale(1.035);
+}
+
+/* Smoke and sparkles conceal the transition and turn it into an intentional magical beat. */
+.flip-magic {
+  position: absolute;
+  z-index: 16;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.smoke-cloud {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 112px;
+  height: 112px;
+  margin: -56px 0 0 -56px;
+  border-radius: 50%;
+  opacity: 0;
+  background:
+    radial-gradient(circle,
+      rgba(184, 101, 223, .7) 0 16%,
+      rgba(102, 45, 133, .62) 29%,
+      rgba(63, 23, 87, .26) 52%,
+      transparent 72%);
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  animation: smokePoof .68s cubic-bezier(.15,.72,.2,1) forwards;
+}
+.smoke-cloud-b {
+  width: 92px;
+  height: 92px;
+  margin: -35px 0 0 -18px;
+  animation-delay: .04s;
+}
+.smoke-cloud-c {
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -68px;
+  animation-delay: .08s;
+}
+.flip-sparkles {
+  position: absolute;
+  inset: 0;
+}
+.flip-sparkles i {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 5px;
+  height: 5px;
+  margin: -2px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #f5d68b;
+  box-shadow:
+    0 0 7px #f6ce73,
+    0 0 12px rgba(159, 84, 213, .75);
+  animation: sparkleBurst .72s cubic-bezier(.1,.7,.2,1) forwards;
+  --tx: 0px;
+  --ty: -80px;
+}
+.flip-sparkles i:nth-child(1) { --tx: -76px; --ty: -64px; }
+.flip-sparkles i:nth-child(2) { --tx: -48px; --ty: -94px; animation-delay: .03s; }
+.flip-sparkles i:nth-child(3) { --tx: 2px; --ty: -105px; animation-delay: .07s; }
+.flip-sparkles i:nth-child(4) { --tx: 54px; --ty: -84px; animation-delay: .02s; }
+.flip-sparkles i:nth-child(5) { --tx: 78px; --ty: -42px; animation-delay: .08s; }
+.flip-sparkles i:nth-child(6) { --tx: -82px; --ty: -25px; animation-delay: .09s; }
+.flip-sparkles i:nth-child(7) { --tx: 65px; --ty: 9px; animation-delay: .05s; }
+.flip-sparkles i:nth-child(8) { --tx: -54px; --ty: 13px; animation-delay: .01s; }
+
+@keyframes smokePoof {
+  0% { opacity: 0; transform: scale(.22) rotate(-7deg); }
+  28% { opacity: .9; }
+  64% { opacity: .58; }
+  100% { opacity: 0; transform: scale(2.05) rotate(15deg); }
+}
+@keyframes sparkleBurst {
+  0% { opacity: 0; transform: translate(0,0) scale(.3); }
+  23% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(.9); }
+}
+
+/* Integrated dictation control. */
+.input-shell input {
+  padding-right: 59px;
+}
+.mic-button {
+  position: absolute;
+  z-index: 4;
+  right: 6px;
+  top: 50%;
+  width: 39px;
+  height: 39px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(220, 177, 101, .23);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(255,255,255,.055), transparent 46%),
+    rgba(72, 37, 55, .34);
+  color: #c89b50;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.24);
+  transition:
+    color .2s ease,
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+.mic-button svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+.mic-button:hover:not(:disabled) {
+  color: #e8c778;
+  border-color: rgba(226, 185, 110, .42);
+}
+.mic-button:active:not(:disabled) {
+  transform: translateY(-50%) scale(.93);
+}
+.mic-button.is-listening {
+  color: #f4c5ec;
+  border-color: rgba(234, 139, 216, .68);
+  background: rgba(105, 43, 91, .62);
+  box-shadow:
+    0 0 0 4px rgba(196, 80, 167, .12),
+    0 0 19px rgba(221, 104, 193, .34),
+    inset 0 0 0 1px rgba(255,255,255,.04);
+  animation: micPulse 1.08s ease-in-out infinite;
+}
+.mic-button:disabled {
+  color: #66585d;
+  border-color: rgba(255,255,255,.07);
+  background: rgba(255,255,255,.018);
+  opacity: .72;
+}
+@keyframes micPulse {
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(196, 80, 167, .06),
+      0 0 25px rgba(221, 104, 193, .45),
+      inset 0 0 0 1px rgba(255,255,255,.05);
+  }
+}
+
+.speech-status {
+  min-height: 18px;
+  margin-top: 7px;
+  padding-left: 2px;
+  color: #796c67;
+  font-size: 9px;
+  letter-spacing: .015em;
+  text-align: left;
+  transition: color .2s ease;
+}
+.speech-status.is-listening {
+  color: #dda6d5;
+}
+.speech-status.is-captured {
+  color: #bda579;
+}
+.speech-status.is-unsupported,
+.speech-status.is-denied {
+  color: #806b70;
+}
+
+/* Omens now belong at the end of the consultation flow rather than interrupting it. */
+.bottom-omens {
+  width: min(100%, 670px);
+  margin: 15px auto 8px;
+}
+.bottom-omens .omen-title {
+  margin-bottom: 9px;
+}
+.bottom-omens::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: -9px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(209, 160, 84, .22), transparent);
+}
+
+/* Keep the answer readable while allowing the animated underlying ball to remain visible. */
+.fortune-lens {
+  z-index: 18;
+}
+.fortune-lens.is-consulting {
+  background:
+    radial-gradient(circle,
+      rgba(46, 22, 66, .08) 0 48%,
+      rgba(98, 59, 121, .12) 64%,
+      transparent 72%);
+}
+.fortune-lens.has-answer {
+  background:
+    radial-gradient(circle,
+      rgba(20, 10, 29, .58) 0%,
+      rgba(38, 19, 51, .4) 48%,
+      rgba(77, 41, 91, .13) 66%,
+      transparent 81%);
+}
+
+/* Slightly richer oracle-console integration. */
+.question-card {
+  border-color: #a9783d;
+  background:
+    radial-gradient(circle at 50% -17%, rgba(131, 61, 93, .31), transparent 43%),
+    radial-gradient(circle at 8% 100%, rgba(89, 48, 111, .08), transparent 31%),
+    linear-gradient(180deg, #2b151f 0%, #160d13 70%, #0b080a 100%);
+}
+.input-shell::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 3px;
+  border-radius: 10px;
+  border: 1px solid rgba(245, 211, 147, .025);
+  pointer-events: none;
+}
+
+@media (max-width: 620px) {
+  .crystal-energy {
+    bottom: 43px;
+    width: 166px;
+  }
+  .energy-paw-core {
+    font-size: 23px;
+  }
+  .rosie-turn-layer {
+    object-position: center 47%;
+    transform: scale(1.01);
+  }
+  .rosie-turn-layer.is-flipped {
+    transform: scaleX(-1) scale(1.01);
+  }
+  .rosie-turn-layer.is-flipped.stage-art-consulting {
+    transform: scaleX(-1) scale(1.027);
+  }
+  .smoke-cloud {
+    top: 37%;
+    width: 92px;
+    height: 92px;
+    margin: -46px 0 0 -46px;
+  }
+  .smoke-cloud-b {
+    width: 76px;
+    height: 76px;
+    margin: -29px 0 0 -14px;
+  }
+  .smoke-cloud-c {
+    width: 70px;
+    height: 70px;
+    margin: -35px 0 0 -56px;
+  }
+  .flip-sparkles i {
+    top: 37%;
+  }
+  .input-shell input {
+    padding-right: 56px;
+  }
+  .mic-button {
+    right: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+  }
+  .mic-button svg {
+    width: 18px;
+    height: 18px;
+  }
+  .speech-status {
+    min-height: 17px;
+    margin-top: 5px;
+    text-align: center;
+    font-size: 8.5px;
+  }
+  .bottom-omens {
+    margin: 13px auto 5px;
+  }
+}
+
+@media (max-width: 410px) {
+  .crystal-energy {
+    bottom: 40px;
+    width: 156px;
+  }
+  .energy-paw-core {
+    font-size: 21px;
+  }
+  .mic-button {
+    width: 35px;
+    height: 35px;
+  }
+}
