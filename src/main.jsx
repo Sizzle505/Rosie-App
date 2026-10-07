@@ -84,32 +84,51 @@ function dayNumber() {
   return [...key].reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 3), 0);
 }
 
-function FortuneLens({ consulting, answer }) {
-  const state = answer ? `has-answer tone-${answer.tone}` : consulting ? "is-consulting" : "";
+function FortuneLens({ consulting, answer, revealStage }) {
+  const manifesting = revealStage === "manifesting";
+  const state = [
+    consulting ? "is-consulting" : "",
+    manifesting ? "is-manifesting" : "",
+    answer ? `has-answer tone-${answer.tone}` : ""
+  ].filter(Boolean).join(" ");
+
   return (
     <div className={`fortune-lens ${state}`} aria-live="polite">
       {consulting && (
         <div className="lens-consulting">
-          <span className="lens-orbit">✦</span>
-          <small>CONSULTING THE TREATS…</small>
+          <div className="consulting-runes" aria-hidden="true">
+            <i>✦</i><i>☾</i><i>◆</i><i>✧</i>
+          </div>
+          <small>THE CRYSTAL IS LISTENING</small>
+          <em>Rosie is reading the signs…</em>
         </div>
       )}
+
       {answer && (
         <div className="lens-answer" key={answer.id}>
-          <span>ROSIE SAYS</span>
+          <span className="answer-sigil" aria-hidden="true">✦</span>
+          <span className="answer-kicker">THE VEIL PARTS</span>
           <strong>{answer.text}</strong>
+          <small>THE PAW HAS SPOKEN</small>
         </div>
       )}
     </div>
   );
 }
 
-function CrystalEnergy({ consulting, answer }) {
+function CrystalEnergy({ consulting, answer, revealStage }) {
   const tone = answer ? `tone-${answer.tone}` : "";
+  const manifesting = revealStage === "manifesting";
   return (
-    <div className={`crystal-energy ${consulting ? "is-consulting" : ""} ${tone}`} aria-hidden="true">
+    <div
+      className={`crystal-energy ${consulting ? "is-consulting" : ""} ${manifesting ? "is-manifesting" : ""} ${tone}`}
+      aria-hidden="true"
+    >
       <span className="energy-halo" />
+      <span className="energy-vortex" />
       <span className="energy-mist" />
+      <span className="energy-ribbon energy-ribbon-a" />
+      <span className="energy-ribbon energy-ribbon-b" />
       <span className="energy-ring energy-ring-a" />
       <span className="energy-ring energy-ring-b" />
       <span className="energy-ring energy-ring-c" />
@@ -117,13 +136,18 @@ function CrystalEnergy({ consulting, answer }) {
       <span className="energy-stars">
         <i /><i /><i /><i /><i /><i /><i /><i />
       </span>
+      <span className="energy-flare" />
     </div>
   );
 }
 
-function FortuneMachine({ consulting, answer, flipped, flipBurst }) {
+function FortuneMachine({ consulting, answer, revealStage, flipped, turning, flipBurst }) {
+  const manifesting = revealStage === "manifesting";
   return (
-    <section className={`machine ${consulting ? "machine-consulting" : ""}`} aria-label="Madame Rosie fortune teller">
+    <section
+      className={`machine ${consulting ? "machine-consulting" : ""} ${manifesting ? "machine-manifesting" : ""}`}
+      aria-label="Madame Rosie fortune teller"
+    >
       <div className="booth">
         <div className="cabinet-lights cabinet-lights-left" />
         <div className="cabinet-lights cabinet-lights-right" />
@@ -138,37 +162,49 @@ function FortuneMachine({ consulting, answer, flipped, flipBurst }) {
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div className="stage">
+        <div className={`stage ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
           <img
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
+
+          <div className="lantern-life" aria-hidden="true">
+            <span className="lantern-glow lantern-glow-left"><i /></span>
+            <span className="lantern-glow lantern-glow-right"><i /></span>
+          </div>
+
+          <span className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
           <img
-            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${consulting ? "stage-art-consulting" : ""}`}
+            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""} ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt=""
             aria-hidden="true"
             draggable="false"
           />
+
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
             <i /><i /><i /><i /><i /><i />
           </div>
+
           {flipBurst > 0 && (
             <div className="flip-magic" aria-hidden="true" key={flipBurst}>
-              <span className="smoke-cloud smoke-cloud-a" />
-              <span className="smoke-cloud smoke-cloud-b" />
-              <span className="smoke-cloud smoke-cloud-c" />
+              <span className="smoke-wisp smoke-wisp-a" />
+              <span className="smoke-wisp smoke-wisp-b" />
+              <span className="smoke-wisp smoke-wisp-c" />
+              <span className="smoke-wisp smoke-wisp-d" />
+              <span className="smoke-wisp smoke-wisp-e" />
+              <span className="flip-flash" />
               <span className="flip-sparkles">
-                <i /><i /><i /><i /><i /><i /><i /><i />
+                <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
               </span>
             </div>
           )}
         </div>
 
-        <CrystalEnergy consulting={consulting} answer={answer} />
-        <FortuneLens consulting={consulting} answer={answer} />
+        <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
+        <FortuneLens consulting={consulting} answer={answer} revealStage={revealStage} />
       </div>
     </section>
   );
@@ -182,7 +218,9 @@ function App() {
   const [toast, setToast] = useState("");
   const [history, setHistory] = useState([]);
   const [flipped, setFlipped] = useState(false);
+  const [turning, setTurning] = useState(false);
   const [flipBurst, setFlipBurst] = useState(0);
+  const [revealStage, setRevealStage] = useState("idle");
   const [listening, setListening] = useState(false);
   const [dictationStatus, setDictationStatus] = useState("idle");
   const [consultations, setConsultations] = useState(() => {
@@ -191,8 +229,12 @@ function App() {
   });
   const inputRef = useRef(null);
   const audioRef = useRef(null);
+  const whistleAudioRef = useRef(null);
   const recognitionRef = useRef(null);
   const flipTimerRef = useRef(null);
+  const turnEndTimerRef = useRef(null);
+  const revealTimerRef = useRef(null);
+  const revealFinishTimerRef = useRef(null);
   const dictationTimerRef = useRef(null);
 
   const speechSupported = useMemo(
@@ -232,6 +274,9 @@ function App() {
   useEffect(() => {
     const clearLocalTimers = () => {
       window.clearTimeout(flipTimerRef.current);
+      window.clearTimeout(turnEndTimerRef.current);
+      window.clearTimeout(revealTimerRef.current);
+      window.clearTimeout(revealFinishTimerRef.current);
       window.clearTimeout(dictationTimerRef.current);
     };
 
@@ -280,10 +325,18 @@ function App() {
 
     recognitionRef.current = recognition;
 
+    const whistle = new Audio("/rosie-whistle.wav");
+    whistle.preload = "auto";
+    whistle.volume = 1;
+    whistleAudioRef.current = whistle;
+    whistle.load();
+
     return () => {
       clearLocalTimers();
       recognition.abort();
       recognitionRef.current = null;
+      whistle.pause();
+      whistleAudioRef.current = null;
     };
   }, [speechSupported]);
 
@@ -326,49 +379,75 @@ function App() {
     });
   }
 
-  function playWhistle() {
+  async function synthWhistleFallback() {
     const context = primeAudio();
     if (!context) return;
+
+    try {
+      await context.resume?.();
+    } catch {}
 
     const now = context.currentTime;
     const master = context.createGain();
     master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.055, now + 0.025);
-    master.gain.setValueAtTime(0.052, now + 0.28);
-    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.58);
+    master.gain.exponentialRampToValueAtTime(0.16, now + 0.018);
+    master.gain.setValueAtTime(0.14, now + 0.34);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 0.78);
     master.connect(context.destination);
 
     const lead = context.createOscillator();
     lead.type = "sine";
-    lead.frequency.setValueAtTime(1420, now);
-    lead.frequency.exponentialRampToValueAtTime(1950, now + 0.19);
-    lead.frequency.exponentialRampToValueAtTime(1610, now + 0.52);
+    lead.frequency.setValueAtTime(1680, now);
+    lead.frequency.exponentialRampToValueAtTime(2720, now + 0.29);
+    lead.frequency.exponentialRampToValueAtTime(1930, now + 0.72);
     lead.connect(master);
     lead.start(now);
-    lead.stop(now + 0.6);
+    lead.stop(now + 0.8);
 
-    const breath = context.createOscillator();
-    const breathGain = context.createGain();
-    breath.type = "triangle";
-    breath.frequency.setValueAtTime(710, now);
-    breath.frequency.linearRampToValueAtTime(820, now + 0.24);
-    breathGain.gain.setValueAtTime(0.0001, now);
-    breathGain.gain.exponentialRampToValueAtTime(0.012, now + 0.035);
-    breathGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.46);
-    breath.connect(breathGain);
-    breathGain.connect(context.destination);
-    breath.start(now + 0.015);
-    breath.stop(now + 0.5);
+    const harmonicGain = context.createGain();
+    harmonicGain.gain.value = 0.16;
+    const harmonic = context.createOscillator();
+    harmonic.type = "sine";
+    harmonic.frequency.setValueAtTime(3360, now);
+    harmonic.frequency.exponentialRampToValueAtTime(5200, now + 0.29);
+    harmonic.frequency.exponentialRampToValueAtTime(3860, now + 0.72);
+    harmonic.connect(harmonicGain);
+    harmonicGain.connect(master);
+    harmonic.start(now);
+    harmonic.stop(now + 0.8);
+  }
+
+  async function playWhistle() {
+    const audio = whistleAudioRef.current || new Audio("/rosie-whistle.wav");
+    whistleAudioRef.current = audio;
+    audio.volume = 1;
+
+    try {
+      audio.pause();
+      audio.currentTime = 0;
+      await audio.play();
+      return;
+    } catch {
+      await synthWhistleFallback();
+    }
   }
 
   function whistleForRosie() {
-    playWhistle();
+    void playWhistle();
+    setTurning(true);
     setFlipBurst((value) => value + 1);
+
     window.clearTimeout(flipTimerRef.current);
+    window.clearTimeout(turnEndTimerRef.current);
+
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
-      window.navigator.vibrate?.(16);
-    }, 185);
+      window.navigator.vibrate?.([12, 28, 14]);
+    }, 310);
+
+    turnEndTimerRef.current = window.setTimeout(() => {
+      setTurning(false);
+    }, 920);
   }
 
   function toggleDictation() {
@@ -403,31 +482,45 @@ function App() {
     }
 
     primeAudio();
+    window.clearTimeout(revealTimerRef.current);
+    window.clearTimeout(revealFinishTimerRef.current);
     setAnswer(null);
+    setRevealStage("consulting");
     setConsulting(true);
 
     const result = chooseFortune();
     const askedQuestion = question.trim();
-    const delay = 1450 + secureIndex(650);
+    const delay = 1350 + secureIndex(650);
 
-    window.setTimeout(() => {
+    revealTimerRef.current = window.setTimeout(() => {
       setAnswer(result);
+      setConsulting(false);
+      setRevealStage("manifesting");
       setHistory((items) => [
         { question: askedQuestion, answer: result.text, tone: result.tone },
         ...items
       ].slice(0, 5));
+
       const nextCount = consultations + 1;
       setConsultations(nextCount);
       sessionStorage.setItem("rosieConsultations", String(nextCount));
-      setConsulting(false);
+
       playRevealChime();
-      window.navigator.vibrate?.([22, 35, 22]);
+      window.navigator.vibrate?.([20, 42, 18, 52, 24]);
+
+      revealFinishTimerRef.current = window.setTimeout(() => {
+        setRevealStage("revealed");
+      }, 1450);
     }, delay);
   }
 
   function askAnother() {
+    window.clearTimeout(revealTimerRef.current);
+    window.clearTimeout(revealFinishTimerRef.current);
     setQuestion("");
     setAnswer(null);
+    setConsulting(false);
+    setRevealStage("idle");
     window.setTimeout(() => inputRef.current?.focus(), 50);
   }
 
@@ -502,7 +595,9 @@ function App() {
             <FortuneMachine
               consulting={consulting}
               answer={answer}
+              revealStage={revealStage}
               flipped={flipped}
+              turning={turning}
               flipBurst={flipBurst}
             />
 
@@ -548,9 +643,9 @@ function App() {
                   </button>
                 </div>
 
-                <button className="ask-button" type="submit" disabled={consulting}>
+                <button className="ask-button" type="submit" disabled={consulting || revealStage === "manifesting"}>
                   <span className="button-paw">🐾</span>
-                  {consulting ? "CONSULTING…" : "ASK ROSIE"}
+                  {revealStage === "manifesting" ? "RECEIVING…" : consulting ? "CONSULTING…" : "ASK ROSIE"}
                 </button>
               </div>
 
@@ -579,7 +674,7 @@ function App() {
             </form>
           </div>
 
-          <section className={`fortune-ticket ${answer ? "fortune-ticket-visible" : ""}`} aria-live="polite">
+          <section className={`fortune-ticket ${answer && revealStage === "revealed" ? "fortune-ticket-visible" : ""}`} aria-live="polite">
             {answer && (
               <div className="ticket-paper">
                 <div className="ticket-tear ticket-tear-left" />
