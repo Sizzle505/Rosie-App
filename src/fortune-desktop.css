@@ -11,17 +11,17 @@
 .fortune-page .crystal-energy,
 .fortune-page .fortune-lens {
   left: 50% !important;
-  top: 77.2% !important;
+  top: 75.25% !important;
   bottom: auto !important;
   transform: translate(-50%, -50%) !important;
 }
 
 .fortune-page .crystal-energy {
-  width: 35.5% !important;
+  width: 34.8% !important;
 }
 
 .fortune-page .fortune-lens {
-  width: 33.5% !important;
+  width: 31.8% !important;
 }
 
 .fortune-page .fortune-lens.is-consulting {
@@ -69,7 +69,15 @@
 }
 
 .fortune-page .fortune-lens.is-manifesting .lens-answer {
-  animation: oraclePronouncement 1.5s cubic-bezier(.16, .82, .18, 1) both !important;
+  animation: oraclePronouncement 1.08s cubic-bezier(.12, .82, .16, 1) both !important;
+}
+
+.fortune-page .fortune-lens.is-manifesting .answer-sigil {
+  animation: oracleSigilArrival .9s cubic-bezier(.12, .78, .16, 1) both !important;
+}
+
+.fortune-page .fortune-lens.is-manifesting .lens-answer strong {
+  animation: oracleWordsArrival 1.05s .12s cubic-bezier(.12, .82, .16, 1) both;
 }
 
 .fortune-page .fortune-lens.has-answer::before {
@@ -77,10 +85,22 @@
 }
 
 @keyframes oraclePronouncement {
-  0% { opacity: 0; transform: translateY(13px) scale(.78); filter: blur(8px); }
-  38% { opacity: .74; filter: blur(2px); }
-  70% { transform: translateY(-1px) scale(1.035); }
+  0% { opacity: 0; transform: translateY(18px) scale(.56); filter: blur(14px); }
+  34% { opacity: .92; filter: blur(3px); }
+  62% { transform: translateY(-2px) scale(1.075); }
   100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes oracleSigilArrival {
+  0% { opacity: 0; transform: scale(4.8) rotate(-95deg); filter: blur(8px); }
+  48% { opacity: 1; transform: scale(1.35) rotate(14deg); filter: blur(0); text-shadow: 0 0 28px #fff2b7, 0 0 55px #b75fe4; }
+  100% { opacity: 1; transform: scale(1) rotate(0); filter: blur(0); }
+}
+
+@keyframes oracleWordsArrival {
+  0% { opacity: 0; transform: scale(.72); letter-spacing: .18em; text-shadow: 0 0 30px rgba(255, 233, 166, .95); }
+  58% { opacity: 1; transform: scale(1.08); letter-spacing: .055em; text-shadow: 0 0 22px rgba(255, 225, 146, .9), 0 0 45px rgba(171, 92, 218, .75); }
+  100% { opacity: 1; transform: scale(1); letter-spacing: .045em; text-shadow: 0 1px 2px #160914, 0 0 12px rgba(255, 220, 133, .5); }
 }
 
 @keyframes oracleHalo {
@@ -129,13 +149,13 @@
 .fortune-page .fortune-books {
   position: absolute;
   z-index: 8;
-  left: 5.8%;
-  top: 67.7%;
-  width: 31.5%;
-  height: 22%;
+  left: 9.4%;
+  top: 67.2%;
+  width: 28.2%;
+  height: 21.2%;
   pointer-events: none;
-  transform: rotate(-1deg);
-  filter: drop-shadow(0 8px 8px rgba(0, 0, 0, .48));
+  transform: rotate(-.35deg);
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .34));
 }
 
 .fortune-page .fortune-books i {
@@ -144,29 +164,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 22%;
-  border: 1px solid rgba(222, 178, 88, .58);
-  border-radius: 3px 5px 5px 3px;
+  height: 21%;
+  border: solid rgba(216, 169, 76, .38);
+  border-width: 1px 0;
+  border-radius: 2px 5px 5px 2px;
   color: #e2bb6d;
   font-style: normal;
   text-align: center;
   text-shadow: 0 1px #23100a, 0 0 5px rgba(255, 205, 107, .2);
-  box-shadow:
-    inset 5px 0 rgba(255, 222, 145, .045),
-    inset -6px 0 rgba(0, 0, 0, .22),
-    inset 0 1px rgba(255, 236, 181, .1),
-    0 3px 5px rgba(0, 0, 0, .36);
+  box-shadow: inset 0 1px rgba(255, 232, 171, .06), inset 0 -2px rgba(0, 0, 0, .28);
 }
 
 .fortune-page .fortune-books i::before,
 .fortune-page .fortune-books i::after {
   content: "";
   position: absolute;
-  top: 3px;
-  bottom: 3px;
-  width: 2px;
-  border: solid rgba(230, 184, 90, .42);
-  border-width: 0 1px;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: rgba(224, 178, 87, .42);
 }
 
 .fortune-page .fortune-books i::before { left: 7px; }
@@ -174,9 +190,9 @@
 
 .fortune-page .fortune-books span {
   display: block;
-  max-width: calc(100% - 25px);
+  max-width: calc(100% - 30px);
   overflow: hidden;
-  font-size: clamp(5px, .62vw, 8px);
+  font-size: clamp(5px, .56vw, 7px);
   line-height: 1;
   letter-spacing: .08em;
   white-space: nowrap;
@@ -184,8 +200,8 @@
 
 .fortune-page .fortune-books i:nth-child(1) {
   top: 0;
-  width: 94%;
-  background: linear-gradient(90deg, #331419, #5a2226 48%, #281015);
+  width: 91%;
+  background: linear-gradient(90deg, rgba(40,12,17,.96), rgba(88,31,35,.94) 48%, rgba(30,10,14,.96));
   font-family: Georgia, "Times New Roman", serif;
   font-variant: small-caps;
 }
@@ -193,8 +209,8 @@
 .fortune-page .fortune-books i:nth-child(2) {
   top: 25%;
   left: 3%;
-  width: 97%;
-  background: linear-gradient(90deg, #111b27, #24374b 52%, #101720);
+  width: 96%;
+  background: linear-gradient(90deg, rgba(10,18,28,.96), rgba(29,49,68,.94) 52%, rgba(8,15,23,.96));
   font-family: Palatino, "Book Antiqua", serif;
   font-style: italic;
 }
@@ -202,8 +218,8 @@
 .fortune-page .fortune-books i:nth-child(3) {
   top: 50%;
   left: -2%;
-  width: 90%;
-  background: linear-gradient(90deg, #14241c, #294432 52%, #101b16);
+  width: 88%;
+  background: linear-gradient(90deg, rgba(12,29,21,.96), rgba(31,62,43,.94) 52%, rgba(9,23,16,.96));
   font-family: "Courier New", monospace;
   font-weight: 700;
 }
@@ -211,8 +227,8 @@
 .fortune-page .fortune-books i:nth-child(4) {
   top: 75%;
   left: 5%;
-  width: 92%;
-  background: linear-gradient(90deg, #251426, #49233f 54%, #1b101d);
+  width: 94%;
+  background: linear-gradient(90deg, rgba(31,14,31,.96), rgba(68,29,57,.94) 54%, rgba(23,10,24,.96));
   font-family: "Trebuchet MS", Arial, sans-serif;
   font-variant: small-caps;
 }
@@ -290,10 +306,16 @@
   width: 100%;
   height: 100%;
   display: none;
+  opacity: 0;
   object-fit: cover;
   object-position: 50% 50%;
   pointer-events: none;
-  clip-path: circle(18.15% at 50% 77.2%);
+  clip-path: ellipse(17.65% 21.2% at 50% 75.25%);
+  transition: opacity .12s linear;
+}
+
+.fortune-page .crystal-ball-shield.is-visible {
+  opacity: 1;
 }
 
 /* The stage moves by less than a pixel: enough to read as breath, not camera motion. */
@@ -304,8 +326,21 @@
 
 /* Denser purple smoke, with a separate shower of warm metallic sparks. */
 .fortune-page .flip-magic .smoke-wisp {
-  opacity: .92 !important;
-  filter: blur(7px) saturate(1.3) drop-shadow(0 0 14px rgba(150, 74, 204, .65)) !important;
+  filter: blur(7px) saturate(1.25) drop-shadow(0 0 12px rgba(150, 74, 204, .58)) !important;
+  animation-duration: .78s !important;
+}
+
+.fortune-page .flip-magic::before,
+.fortune-page .flip-magic::after,
+.fortune-page .flip-magic .turn-veil,
+.fortune-page .flip-magic .turn-lower-smoke,
+.fortune-page .flip-magic .turn-ball-haze {
+  animation-duration: .82s !important;
+}
+
+.fortune-page .turn-foreground-smoke .foreground-plume,
+.fortune-page .turn-foreground-smoke .foreground-glitter i {
+  animation-duration: .86s !important;
 }
 
 .fortune-page .flip-magic .turn-veil,
@@ -333,13 +368,13 @@
   position: absolute;
   left: 50%;
   top: 54%;
-  width: 6px;
+  width: 8px;
   aspect-ratio: 1;
   opacity: 0;
-  background: #ffe7a3;
-  clip-path: polygon(50% 0, 61% 37%, 100% 50%, 61% 63%, 50% 100%, 39% 63%, 0 50%, 39% 37%);
-  filter: drop-shadow(0 0 3px #fff4c6) drop-shadow(0 0 7px #e4a53e);
-  animation: goldSparkFlight 1.26s cubic-bezier(.12, .68, .2, 1) both;
+  background: #fff0a8;
+  clip-path: polygon(50% 0, 61% 35%, 100% 50%, 61% 65%, 50% 100%, 39% 65%, 0 50%, 39% 35%);
+  filter: drop-shadow(0 0 4px #fffbdc) drop-shadow(0 0 10px #edaa35) drop-shadow(0 0 18px #d37917);
+  animation: goldSparkFlight .94s cubic-bezier(.08, .68, .16, 1) both;
 }
 
 .fortune-page .turn-gold-sparks i:nth-child(1) { --spark-x: -205px; --spark-y: -155px; animation-delay: .03s; }
@@ -361,8 +396,8 @@
 
 @keyframes goldSparkFlight {
   0% { opacity: 0; transform: translate(-50%, -50%) scale(.15) rotate(0); }
-  16% { opacity: 1; }
-  72% { opacity: .94; }
+  10% { opacity: 1; }
+  68% { opacity: 1; }
   100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(1.2) rotate(180deg); }
 }
 
@@ -444,6 +479,48 @@
 .fortune-page .fortune-whistle-button:disabled {
   cursor: wait;
   opacity: .72;
+}
+
+.fortune-page .question-heading {
+  display: grid;
+  grid-template-columns: 1fr 42px;
+  align-items: center;
+  column-gap: 12px;
+}
+
+.fortune-page .question-heading label {
+  grid-column: 1 / -1;
+}
+
+.fortune-page .question-heading .fortune-whistle-button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(231, 188, 101, .5);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #68384f, #2a1422 62%, #130b12);
+  color: #f3ce7c;
+  box-shadow: inset 0 1px rgba(255,255,255,.08), 0 0 0 3px rgba(224,174,83,.05), 0 8px 18px rgba(0,0,0,.3);
+}
+
+.fortune-page .question-heading .fortune-whistle-button span {
+  font-family: Georgia, serif;
+  font-size: 23px;
+  line-height: 1;
+  transform: translateY(-1px);
+  text-shadow: 0 0 10px rgba(255, 217, 129, .62);
+}
+
+.fortune-page .question-heading .fortune-whistle-button:hover {
+  color: #fff1b4;
+  border-color: rgba(247, 210, 133, .82);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px rgba(255,255,255,.1), 0 0 18px rgba(222,155,73,.25), 0 9px 20px rgba(0,0,0,.34);
 }
 
 .fortune-page .bottom-omens {
@@ -609,11 +686,6 @@
     object-fit: cover !important;
     object-position: 50% 50% !important;
     transform: none;
-  }
-
-  .fortune-page .machine .stage-art {
-    animation: fortunePortraitBreath 6.2s ease-in-out infinite;
-    transform-origin: 50% 47%;
   }
 
   .fortune-page .crystal-ball-shield {
