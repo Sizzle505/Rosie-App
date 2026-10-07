@@ -533,25 +533,15 @@ function BarkbridgeSeal({ className = "" }) {
 
 function GraduateRosie() {
   return (
-    <div className="graduate-rosie-card" aria-label="Doctor Rosie celebrating graduation">
-      <div className="graduate-rosie-frame">
-        {/* This is Rosie's actual repository photo - never substitute a generic Shiba illustration here. */}
-        <img
-          className="graduate-rosie-photo"
-          src="/rosie-doctor-cheese.webp"
-          alt="Rosie the Shiba, Doctor of Cheese"
-        />
-        <span className="graduate-cap" aria-hidden="true">
-          <i className="graduate-cap-board" />
-          <i className="graduate-cap-band" />
-          <i className="graduate-cap-tassel" />
-        </span>
-        <span className="graduate-cheer" aria-hidden="true">✦</span>
-      </div>
-      <span>FACULTY EXAMINER</span>
-      <strong>Doctor Rosie</strong>
-      <small>Che.D. · University of Barkbridge</small>
-    </div>
+    <figure className="graduate-rosie" aria-label="Doctor Rosie celebrating graduation">
+      <img
+        src="/rosie-barkbridge-graduate.webp"
+        alt="Rosie celebrating in her graduation cap"
+      />
+      <figcaption>DOCTOR ROSIE, Che.D.</figcaption>
+      <span className="graduate-spark graduate-spark-one" aria-hidden="true">✦</span>
+      <span className="graduate-spark graduate-spark-two" aria-hidden="true">✧</span>
+    </figure>
   );
 }
 
@@ -578,14 +568,6 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   return (
     <section className="barkbridge-graduation" aria-live="polite">
       <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
-      <div className="graduation-kicker">
-        <BarkbridgeSeal className="graduation-kicker-seal" />
-        <div>
-          <span>UNIVERSITY OF BARKBRIDGE</span>
-          <small>FACULTY OF GASTRONOMIC SCIENCES</small>
-        </div>
-      </div>
-
       <div className="graduation-stage">
         <article className="barkbridge-diploma" aria-label="University of Barkbridge completion diploma">
           <div className="diploma-inner-border">
@@ -621,7 +603,9 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
         <GraduateRosie />
       </div>
 
-      <button type="button" className="barkbridge-replay" onClick={onReplay}>EXAMINE AGAIN</button>
+      <button type="button" className="barkbridge-replay" onClick={onReplay}>
+        <span aria-hidden="true">↻</span> EXAMINE AGAIN
+      </button>
     </section>
   );
 }
