@@ -2602,3 +2602,382 @@ body {
     grid-template-columns: 98px minmax(0,1fr) 20px;
   }
 }
+
+
+/* === CHEESE DESKTOP BOARD-FIRST PASS · 2026-10-07 === */
+
+@media (min-width: 901px) {
+  .cheese-game-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 10px 12px calc(78px + env(safe-area-inset-bottom));
+  }
+
+  .cheese-desktop-layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: clamp(255px, 18.5vw, 310px) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+
+  .cheese-left-rail {
+    position: sticky;
+    top: 10px;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .cheese-exam-header {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 9px;
+    border-radius: 18px;
+  }
+
+  .cheese-exam-header::before {
+    inset: 5px;
+    border-radius: 13px;
+  }
+
+  .cheese-exam-header::after {
+    display: none;
+  }
+
+  .cheese-exam-portrait {
+    width: 100%;
+    height: clamp(142px, 16.5vh, 172px);
+    flex: 0 0 auto;
+    border-radius: 12px;
+  }
+
+  .cheese-exam-portrait img {
+    object-position: 50% 31%;
+  }
+
+  .cheese-exam-title {
+    padding: 0 5px 2px;
+  }
+
+  .cheese-exam-title .cheese-eyebrow {
+    margin-bottom: 5px;
+    font-size: 6px;
+    letter-spacing: .18em;
+  }
+
+  .cheese-exam-title h1 {
+    max-width: 270px;
+    font-size: clamp(23px, 2vw, 31px);
+    line-height: .96;
+  }
+
+  .cheese-exam-title > p {
+    margin: 6px 0 8px;
+    font-size: 10px;
+  }
+
+  .cheese-header-status {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 4px;
+  }
+
+  .cheese-header-status > div {
+    min-height: 34px;
+    padding: 5px 6px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    text-align: center;
+  }
+
+  .cheese-header-status span {
+    font-size: 5px;
+    letter-spacing: .1em;
+  }
+
+  .cheese-header-status strong {
+    font-size: 14px;
+  }
+
+  .cheese-header-seal {
+    position: absolute;
+    right: 13px;
+    top: 132px;
+    width: 54px;
+    height: 54px;
+    opacity: .94;
+  }
+
+  .cheese-header-seal::before {
+    inset: 5px;
+  }
+
+  .cheese-header-seal .seal-paw { font-size: 13px; }
+  .cheese-header-seal strong { font-size: 8px; margin-top: 1px; }
+  .cheese-header-seal small { display: none; }
+
+  .cheese-desktop-layout > .cheese-game-frame {
+    width: 100%;
+    height: calc(100dvh - 94px);
+    min-height: 720px;
+    max-height: 930px;
+    margin: 0;
+    padding: 11px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 19px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame::after {
+    inset: 5px;
+    border-radius: 14px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-game-heading {
+    flex: 0 0 42px;
+    min-height: 42px;
+    margin: 0 3px 9px;
+    padding: 0 4px 7px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-game-heading h2 {
+    font-size: 19px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    grid-template-rows: repeat(4, minmax(0,1fr));
+    gap: 7px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-card {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: auto;
+    border-radius: 11px;
+  }
+
+  .cheese-desktop-layout > .cheese-game-frame .cheese-card-back,
+  .cheese-desktop-layout > .cheese-game-frame .cheese-card-front {
+    border-radius: 11px;
+  }
+
+  .cheese-examiner-rail {
+    position: static;
+    display: grid;
+    gap: 7px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 92px minmax(0,1fr) 22px;
+    gap: 8px;
+    align-items: stretch;
+    padding: 7px;
+    border-radius: 15px;
+  }
+
+  .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 92px;
+    height: 116px;
+    border-radius: 10px;
+  }
+
+  .cheese-examiner-rail .reaction-copy {
+    align-self: center;
+    padding: 0;
+  }
+
+  .cheese-examiner-rail .rosie-reaction .reaction-copy span {
+    font-size: 5px;
+    line-height: 1.15;
+    letter-spacing: .08em;
+  }
+
+  .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    margin-top: 4px;
+    font-size: clamp(11px, .95vw, 13px);
+    line-height: 1.14;
+  }
+
+  .cheese-examiner-rail .rosie-reaction > i {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    font-size: 9px;
+  }
+
+  .cheese-reset-button {
+    min-height: 34px;
+    border-radius: 10px;
+    font-size: 5.7px;
+  }
+}
+
+/* Purpose-built reverse, replacing the earlier placeholder-like ornamental face. */
+.cheese-card-back {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,239,197,.10), transparent 29%),
+    radial-gradient(circle at 14% 12%, rgba(255,230,165,.08), transparent 15%),
+    radial-gradient(circle at 86% 88%, rgba(255,230,165,.06), transparent 18%),
+    linear-gradient(145deg, #74243f 0%, #53142e 44%, #351020 71%, #210a16 100%);
+}
+
+.cheese-card-back::before {
+  inset: 5px;
+  border: 1px solid rgba(247,217,151,.58);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 0 3px rgba(252,228,170,.04),
+    inset 0 0 28px rgba(255,210,122,.025);
+}
+
+.cheese-card-back::after {
+  content: "✦";
+  inset: 10px;
+  padding: 2px 3px;
+  border: 1px solid rgba(247,217,151,.15);
+  border-radius: 6px;
+  color: rgba(255,227,164,.62);
+  font-size: 7px;
+  box-shadow:
+    inset 12px 12px 0 -11px rgba(247,217,151,.18),
+    inset -12px 12px 0 -11px rgba(247,217,151,.18),
+    inset 12px -12px 0 -11px rgba(247,217,151,.18),
+    inset -12px -12px 0 -11px rgba(247,217,151,.18);
+}
+
+.cheese-back-ornament {
+  width: min(76%, 150px);
+  gap: 5px;
+}
+
+.cheese-back-seal {
+  position: relative;
+  width: min(70%, 96px);
+  aspect-ratio: 1;
+  padding: 5px;
+  overflow: visible;
+  border: 1px solid rgba(255,227,161,.72);
+  border-radius: 50%;
+  background:
+    linear-gradient(145deg, rgba(255,236,190,.12), rgba(112,42,65,.14)),
+    #32101f;
+  box-shadow:
+    inset 0 0 0 4px rgba(247,211,138,.065),
+    0 6px 18px rgba(24,4,13,.36);
+}
+
+.cheese-back-seal::before {
+  inset: 6px;
+  z-index: 3;
+  border: 1px solid rgba(255,233,180,.28);
+}
+
+.cheese-back-cameo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 31%;
+  border-radius: 50%;
+  filter: sepia(.07) saturate(.88) contrast(1.04) brightness(.88);
+}
+
+.cheese-back-seal::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: 2;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 18%, rgba(255,247,217,.16), transparent 24%),
+    linear-gradient(180deg, transparent 50%, rgba(40,7,22,.36));
+  pointer-events: none;
+}
+
+.cheese-back-wedge {
+  z-index: 4;
+  right: -5px;
+  bottom: 4px;
+  width: 30px;
+  height: 22px;
+  border: 1px solid rgba(96,52,33,.24);
+  background: linear-gradient(145deg, #ffe8aa, #e4b45d 63%, #bd7e31);
+}
+
+.cheese-back-ribbon {
+  position: relative;
+  z-index: 3;
+  min-width: 112%;
+  margin-top: -1px;
+  padding: 4px 7px 3px;
+  color: #3b1723;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(6.5px, .7vw, 9px);
+  line-height: 1;
+  letter-spacing: .12em;
+  text-align: center;
+  background: linear-gradient(90deg, transparent 0 3%, #d5a85a 8%, #f4dc9b 50%, #d1a153 92%, transparent 97%);
+  text-shadow: 0 1px rgba(255,255,255,.25);
+  clip-path: polygon(0 20%, 8% 20%, 8% 0, 92% 0, 92% 20%, 100% 20%, 94% 50%, 100% 80%, 92% 80%, 92% 100%, 8% 100%, 8% 80%, 0 80%, 6% 50%);
+}
+
+.cheese-back-ornament > small {
+  color: rgba(249,218,151,.68);
+  font-size: clamp(4px, .42vw, 5.5px);
+  letter-spacing: .18em;
+}
+
+/* Each reaction asset has a slightly different painted crop. Normalize them
+   individually so Rosie's face stays in the examiner window. */
+.rosie-reaction-portrait img {
+  transform: scale(1.03);
+}
+.mood-watching .rosie-reaction-portrait img { object-position: 70% 24%; transform: scale(1.03); }
+.mood-focused .rosie-reaction-portrait img { object-position: 68% 22%; transform: scale(1.04); }
+.mood-pleased .rosie-reaction-portrait img { object-position: 70% 21%; transform: scale(1.035); }
+.mood-proud .rosie-reaction-portrait img { object-position: 69% 20%; transform: scale(1.03); }
+.mood-amused .rosie-reaction-portrait img { object-position: 68% 24%; transform: scale(1.035); }
+.mood-embarrassed .rosie-reaction-portrait img { object-position: 70% 25%; transform: scale(1.04); }
+.mood-distraught .rosie-reaction-portrait img { object-position: 69% 27%; transform: scale(1.045); }
+.mood-elated .rosie-reaction-portrait img { object-position: 70% 20%; transform: scale(1.035); }
+
+@media (max-width: 900px) {
+  .cheese-desktop-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cheese-left-rail {
+    display: contents;
+  }
+
+  .cheese-exam-header { order: 1; }
+  .cheese-desktop-layout > .cheese-game-frame { order: 2; }
+  .cheese-examiner-rail { order: 3; }
+
+  .cheese-card-back::before { inset: 3px; }
+  .cheese-card-back::after { inset: 7px; }
+  .cheese-back-ornament { width: 78%; gap: 2px; }
+  .cheese-back-seal { width: min(58%, 48px); padding: 3px; }
+  .cheese-back-seal::before { inset: 3px; }
+  .cheese-back-wedge { width: 18px; height: 13px; right: -4px; bottom: 1px; }
+  .cheese-back-ribbon { min-width: 120%; padding: 2px 4px; font-size: 5px; }
+  .cheese-back-ornament > small { font-size: 3.4px; letter-spacing: .1em; }
+}
