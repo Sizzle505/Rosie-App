@@ -202,31 +202,31 @@
   width: 100%;
   display: grid;
   place-items: center;
-  perspective: 1050px;
+  perspective: 1100px;
 }
 .decorativeDie {
   position: absolute;
   z-index: 1;
   top: 54%;
-  width: 128px;
-  height: 128px;
+  width: 124px;
+  height: 124px;
   object-fit: contain;
-  opacity: .72;
-  filter: saturate(.96) drop-shadow(0 14px 12px rgba(46,31,14,.19));
+  opacity: .74;
+  filter: saturate(.98) drop-shadow(0 12px 10px rgba(46,31,14,.16));
 }
 .decorativeDieLeft {
-  left: 15%;
+  left: 14%;
   transform: translate(-50%, -50%) rotate(-17deg) scale(.94);
 }
 .decorativeDieRight {
-  left: 85%;
+  left: 86%;
   transform: translate(-50%, -50%) rotate(17deg) scale(.94);
 }
 .dieRig {
   position: relative;
   z-index: 4;
-  width: 224px;
-  height: 224px;
+  width: 238px;
+  height: 238px;
   display: grid;
   place-items: center;
   transform-style: preserve-3d;
@@ -235,23 +235,23 @@
   position: absolute;
   z-index: 0;
   left: 50%;
-  bottom: 13px;
-  width: 148px;
-  height: 28px;
+  bottom: 21px;
+  width: 142px;
+  height: 23px;
   transform: translateX(-50%) scale(1);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(73,45,12,.31), rgba(73,45,12,0) 72%);
+  background: radial-gradient(ellipse, rgba(73,45,12,.28), rgba(73,45,12,0) 72%);
   filter: blur(5px);
-  opacity: .76;
+  opacity: .68;
 }
 .dieBody {
   position: relative;
   z-index: 2;
-  width: 224px;
-  height: 224px;
+  width: 238px;
+  height: 238px;
   display: grid;
   place-items: center;
-  transform-origin: 50% 76%;
+  transform-origin: 50% 78%;
   transform-style: preserve-3d;
   will-change: transform, filter;
   backface-visibility: hidden;
@@ -262,54 +262,52 @@
   display: block;
   object-fit: contain;
   backface-visibility: hidden;
-  filter: drop-shadow(0 15px 12px rgba(62,38,10,.24));
+  filter: drop-shadow(0 10px 8px rgba(62,38,10,.18));
 }
 .isRolling .dieBody {
-  animation: dieTumble 1.26s cubic-bezier(.17,.75,.18,1) both;
+  animation: dieTumble 1.28s cubic-bezier(.17,.76,.18,1) both;
 }
 .isRolling .dieLandingShadow {
-  animation: dieShadow 1.26s ease-out both;
+  animation: dieShadow 1.28s ease-out both;
 }
 @keyframes dieShadow {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: .76; filter: blur(5px); }
-  18% { transform: translateX(-50%) scale(.82); opacity: .48; filter: blur(6px); }
-  45%, 58% { transform: translateX(-50%) scale(.54); opacity: .23; filter: blur(9px); }
-  72% { transform: translateX(-50%) scale(.75); opacity: .42; filter: blur(6px); }
-  84% { transform: translateX(-50%) scale(1.11); opacity: .83; filter: blur(4px); }
-  91% { transform: translateX(-50%) scale(.86); opacity: .54; filter: blur(5px); }
-  96% { transform: translateX(-50%) scale(1.03); opacity: .72; filter: blur(4px); }
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: .68; filter: blur(5px); }
+  18% { transform: translateX(-50%) scale(.8); opacity: .42; filter: blur(6px); }
+  44%, 58% { transform: translateX(-50%) scale(.53); opacity: .19; filter: blur(8px); }
+  74% { transform: translateX(-50%) scale(.76); opacity: .4; filter: blur(6px); }
+  85% { transform: translateX(-50%) scale(1.1); opacity: .75; filter: blur(4px); }
+  93% { transform: translateX(-50%) scale(.9); opacity: .5; filter: blur(5px); }
 }
 @keyframes dieTumble {
   0% {
     transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
     filter: brightness(1) saturate(1);
   }
-  8% {
-    transform: translate3d(-2px,3px,0) rotateX(8deg) rotateY(-8deg) rotateZ(-3deg) scale(1.035,.955);
+  10% {
+    transform: translate3d(-3px,2px,0) rotateX(6deg) rotateY(-8deg) rotateZ(-3deg) scale(1.035,.96);
   }
-  24% {
-    transform: translate3d(-13px,-27px,22px) rotateX(36deg) rotateY(58deg) rotateZ(-10deg) scale(.97);
-    filter: brightness(1.03) saturate(1.03);
+  25% {
+    transform: translate3d(-14px,-28px,20px) rotateX(18deg) rotateY(-24deg) rotateZ(-13deg) scale(.98);
   }
-  46% {
-    transform: translate3d(17px,-55px,44px) rotateX(142deg) rotateY(214deg) rotateZ(19deg) scale(.92);
-    filter: brightness(1.07) saturate(1.06);
+  47% {
+    transform: translate3d(16px,-57px,42px) rotateX(-22deg) rotateY(27deg) rotateZ(31deg) scale(.93);
+    filter: brightness(1.06) saturate(1.04);
   }
   66% {
-    transform: translate3d(-10px,-31px,25px) rotateX(258deg) rotateY(406deg) rotateZ(-13deg) scale(.96);
-    filter: brightness(1.04) saturate(1.04);
+    transform: translate3d(-11px,-32px,24px) rotateX(25deg) rotateY(20deg) rotateZ(-24deg) scale(.97);
+    filter: brightness(1.03) saturate(1.03);
   }
   82% {
-    transform: translate3d(5px,3px,0) rotateX(346deg) rotateY(676deg) rotateZ(6deg) scale(1.045,.935);
+    transform: translate3d(5px,3px,0) rotateX(-10deg) rotateY(-16deg) rotateZ(9deg) scale(1.04,.94);
   }
   90% {
-    transform: translate3d(-2px,-10px,6px) rotateX(356deg) rotateY(705deg) rotateZ(-3deg) scale(.99);
+    transform: translate3d(-2px,-10px,5px) rotateX(7deg) rotateY(9deg) rotateZ(-4deg) scale(.99);
   }
   96% {
-    transform: translate3d(1px,1px,0) rotateX(360deg) rotateY(718deg) rotateZ(1deg) scale(1.015,.985);
+    transform: translate3d(1px,1px,0) rotateX(-2deg) rotateY(-3deg) rotateZ(1deg) scale(1.015,.985);
   }
   100% {
-    transform: translate3d(0,0,0) rotateX(360deg) rotateY(720deg) rotateZ(0deg) scale(1);
+    transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
     filter: brightness(1) saturate(1);
   }
 }
@@ -635,8 +633,8 @@
   .coinScene, .diceScene { min-height: 225px; }
   .coin { width: 178px; height: 178px; }
   .coinShadow { width: 158px; bottom: 24px; }
-  .dieRig, .dieBody { width: 186px; height: 186px; }
-  .decorativeDie { width: 92px; height: 92px; }
+  .dieRig, .dieBody { width: 196px; height: 196px; }
+  .decorativeDie { width: 88px; height: 88px; }
   .decorativeDieLeft { left: 14%; }
   .decorativeDieRight { left: 86%; }
   .wheelSalon { gap: 10px; margin-top: 9px; padding: 14px 9px; border-radius: 20px; }
