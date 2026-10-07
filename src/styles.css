@@ -2289,3 +2289,1397 @@ main {
   .captain-controls {grid-template-columns:66px minmax(0,1fr) 66px;}
   .captain-course-key span {font-size:6.5px;}
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CAPTAIN ROSIE · YACHT DASH · ART DIRECTION PASS II
+   Riviera lacquer, brass instruments, living sea, cinematic course
+   ═══════════════════════════════════════════════════════════════ */
+
+.captain-game-page {
+  --navy-ink:#061c2d;
+  --navy:#0a3553;
+  --navy-light:#165a82;
+  --sea:#0879ad;
+  --sea-light:#4db8df;
+  --brass:#c88b31;
+  --brass-light:#f4d98f;
+  --ivory:#fbf1dd;
+  --coral:#c95245;
+  --mint:#9ac9b3;
+  --sun:#f7c765;
+  width:min(100%,1040px);
+  padding-top:13px;
+}
+
+.captain-game-page .captain-hero {
+  min-height:208px;
+  grid-template-columns:205px minmax(0,1fr) 156px;
+  border:1px solid rgba(246,211,137,.62);
+  border-radius:27px;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,.045),transparent 32%),
+    radial-gradient(circle at 72% 4%,rgba(255,229,155,.22),transparent 30%),
+    linear-gradient(135deg,#061c30 0%,#0a3e61 50%,#08253d 100%);
+  box-shadow:
+    0 28px 75px rgba(0,0,0,.42),
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    inset 0 -45px 70px rgba(0,15,30,.2);
+}
+.captain-game-page .captain-hero::before {
+  inset:8px;
+  border:1px solid rgba(249,222,160,.19);
+  border-radius:20px;
+}
+.captain-game-page .captain-hero::after {
+  content:"";
+  position:absolute;
+  left:205px;
+  right:155px;
+  bottom:0;
+  height:3px;
+  background:linear-gradient(90deg,transparent,#efca75,transparent);
+  opacity:.45;
+}
+.captain-hero-compass {
+  position:absolute;
+  z-index:7;
+  top:15px;
+  right:164px;
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(242,208,137,.36);
+  border-radius:50%;
+  color:#e7c57d;
+  background:
+    radial-gradient(circle,rgba(248,220,161,.08) 0 34%,transparent 35%),
+    conic-gradient(from 45deg,transparent 0 12%,rgba(243,210,139,.18) 12% 13%,transparent 13% 25%,rgba(243,210,139,.18) 25% 26%,transparent 26% 100%);
+  opacity:.74;
+}
+.captain-hero-compass::before,
+.captain-hero-compass::after {
+  content:"";
+  position:absolute;
+  background:rgba(242,210,143,.25);
+}
+.captain-hero-compass::before {width:1px;height:42px;}
+.captain-hero-compass::after {width:42px;height:1px;}
+.captain-hero-compass span {
+  position:absolute;
+  top:3px;
+  font-size:6px;
+  letter-spacing:.08em;
+}
+.captain-hero-compass i {
+  font-size:19px;
+  font-style:normal;
+  text-shadow:0 0 12px rgba(247,214,140,.5);
+}
+.captain-game-page .captain-portrait {
+  min-height:208px;
+  border-right:1px solid rgba(244,211,139,.27);
+}
+.captain-game-page .captain-portrait img {
+  min-height:208px;
+  object-position:50% 37%;
+  transform:scale(1.025);
+  filter:saturate(1.06) contrast(1.05) brightness(.98);
+}
+.captain-game-page .captain-portrait::before {
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:
+    radial-gradient(circle at 48% 35%,transparent 0 23%,rgba(5,27,43,.03) 40%,rgba(5,27,43,.42) 100%);
+  pointer-events:none;
+}
+.captain-game-page .captain-portrait::after {
+  z-index:1;
+  background:
+    linear-gradient(180deg,transparent 48%,rgba(4,25,41,.9)),
+    linear-gradient(90deg,transparent 74%,rgba(7,33,50,.45));
+}
+.captain-game-page .captain-portrait > span {
+  left:16px;
+  bottom:14px;
+  padding:5px 8px;
+  border:1px solid rgba(243,207,128,.38);
+  border-radius:999px;
+  background:rgba(3,25,41,.62);
+  color:#f7dda0;
+  font-size:6px;
+  backdrop-filter:blur(7px);
+}
+.captain-game-page .captain-title {padding:31px 34px 28px;}
+.captain-game-page .captain-kicker {
+  color:#b7d2df;
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.24em;
+}
+.captain-game-page .captain-title h1 {
+  margin:9px 0 1px;
+  color:#f9df9e;
+  font-size:clamp(38px,5.6vw,64px);
+  line-height:.9;
+  letter-spacing:-.045em;
+  text-shadow:
+    0 1px #fff5ca,
+    0 3px 0 #7b4f1d,
+    0 9px 24px rgba(0,0,0,.34);
+}
+.captain-game-page .captain-title p {
+  margin:4px 0 10px;
+  color:#fff8e9;
+  font-size:23px;
+  font-weight:400;
+  letter-spacing:.015em;
+}
+.captain-game-page .captain-title small {
+  max-width:520px;
+  color:#bed0d9;
+  font-size:11px;
+  line-height:1.55;
+}
+.captain-game-page .captain-best {
+  margin:29px 19px 29px 0;
+  border:1px solid rgba(243,207,129,.5);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 15%,rgba(245,212,142,.09),transparent 46%),
+    rgba(3,24,40,.7);
+  box-shadow:
+    inset 0 0 0 4px rgba(255,255,255,.025),
+    0 11px 28px rgba(0,0,0,.18);
+}
+.captain-game-page .captain-best::before {
+  content:"⚓";
+  width:28px;
+  height:28px;
+  margin:0 auto 6px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(237,201,125,.38);
+  border-radius:50%;
+  color:#eacb89;
+  font-size:12px;
+}
+.captain-game-page .captain-best strong {
+  color:#ffe29b;
+  font-size:31px;
+  line-height:1;
+}
+.captain-game-page .captain-best span,
+.captain-game-page .captain-best small {
+  font-size:6px;
+  letter-spacing:.2em;
+}
+
+.captain-route-strip {
+  margin:11px 3px 8px;
+  display:grid;
+  grid-template-columns:auto minmax(90px,1fr) auto;
+  align-items:center;
+  gap:10px;
+}
+.route-port {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#a9bcc5;
+  white-space:nowrap;
+}
+.route-port b {
+  width:24px;
+  height:24px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(234,198,122,.28);
+  border-radius:50%;
+  color:#e5c47f;
+  font-size:9px;
+  background:rgba(8,38,57,.7);
+}
+.route-port span {
+  font-size:6px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+.route-line {
+  position:relative;
+  height:9px;
+  border:1px solid rgba(227,194,123,.2);
+  border-radius:99px;
+  background:rgba(6,29,44,.9);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.2);
+}
+.route-line::after {
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:99px;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 1px,transparent 1px 30px);
+}
+.route-progress {
+  position:absolute;
+  z-index:2;
+  top:1px;
+  bottom:1px;
+  left:1px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#2d9bc3,#edd080);
+  box-shadow:0 0 10px rgba(85,190,222,.2);
+  transition:width .7s linear;
+}
+.route-yacht {
+  position:absolute;
+  z-index:3;
+  top:50%;
+  margin-left:-5px;
+  transform:translateY(-50%) rotate(45deg);
+  color:#fff1bf;
+  font-size:8px;
+  font-style:normal;
+  text-shadow:0 0 8px rgba(255,225,147,.8);
+  transition:left .7s linear;
+}
+.route-destination b {color:#f0ce7e;}
+
+.captain-game-page .captain-hud {
+  grid-template-columns:repeat(5,1fr);
+  margin:8px 0 10px;
+  gap:6px;
+}
+.captain-game-page .captain-hud > div {
+  min-height:54px;
+  border:1px solid rgba(226,191,112,.24);
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 50% 0,rgba(255,255,255,.04),transparent 50%),
+    linear-gradient(180deg,rgba(10,52,77,.9),rgba(6,29,47,.96));
+}
+.captain-game-page .captain-hud span {
+  color:#88a9ba;
+  font-size:6px;
+  letter-spacing:.18em;
+}
+.captain-game-page .captain-hud strong {
+  color:#f3d58e;
+  font-size:18px;
+}
+.combo-cell {
+  transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.combo-cell.is-hot {
+  border-color:rgba(246,206,112,.65) !important;
+  background:
+    radial-gradient(circle at 50% 5%,rgba(245,204,105,.17),transparent 52%),
+    linear-gradient(180deg,rgba(15,63,83,.95),rgba(7,32,49,.98)) !important;
+  box-shadow:inset 0 0 18px rgba(241,197,96,.07),0 0 17px rgba(241,197,96,.08);
+}
+.combo-cell.is-hot strong {color:#ffe48d !important;}
+
+.captain-game-page .yacht-game-shell {
+  position:relative;
+  padding:11px;
+  border:1px solid rgba(235,202,133,.46);
+  border-radius:24px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.018),transparent 32%),
+    linear-gradient(180deg,#082f49,#041c2e 90%);
+  box-shadow:
+    0 29px 72px rgba(0,0,0,.4),
+    inset 0 0 0 5px rgba(255,255,255,.015);
+}
+.captain-game-page .yacht-game-shell::before,
+.captain-game-page .yacht-game-shell::after {
+  content:"";
+  position:absolute;
+  z-index:5;
+  pointer-events:none;
+}
+.captain-game-page .yacht-game-shell::before {
+  inset:6px;
+  border:1px solid rgba(238,204,133,.12);
+  border-radius:18px;
+}
+.captain-game-page .yacht-game-shell::after {
+  left:35px;
+  right:35px;
+  top:6px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,230,173,.35),transparent);
+}
+.captain-game-page .yacht-game-sign {
+  position:relative;
+  z-index:7;
+  min-height:59px;
+  padding:8px 13px;
+  grid-template-columns:38px minmax(0,1fr) auto;
+  border:1px solid rgba(241,203,126,.3);
+  border-radius:14px;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(255,231,167,.05),transparent 24%),
+    rgba(4,24,39,.9);
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.018);
+}
+.captain-seal {
+  width:34px !important;
+  height:34px !important;
+  border:1px solid #bd8733 !important;
+  background:
+    radial-gradient(circle at 34% 24%,rgba(255,255,255,.25),transparent 18%),
+    linear-gradient(145deg,#edc46d,#83531f);
+  color:#102c40 !important;
+  box-shadow:inset 0 0 0 2px rgba(79,42,12,.18),0 3px 8px rgba(0,0,0,.24);
+}
+.captain-game-page .yacht-game-sign strong {
+  color:#f2d7a2;
+  font-size:8px;
+  letter-spacing:.17em;
+}
+.captain-game-page .yacht-game-sign small {
+  color:#adc0ca;
+  font-size:9px;
+}
+.captain-game-page .yacht-game-sign > b {
+  padding:6px 9px;
+  border:1px solid rgba(224,187,111,.25);
+  border-radius:999px;
+  color:#d8b875;
+  background:rgba(255,255,255,.015);
+}
+
+.captain-game-page .yacht-course {
+  height:555px;
+  margin-top:9px;
+  touch-action:pan-y;
+  border:1px solid rgba(229,202,150,.3);
+  border-radius:18px;
+  background:
+    linear-gradient(180deg,#68bfe0 0 19%,#168bbb 35%,#076891 66%,#064f74 100%);
+  box-shadow:
+    inset 0 -50px 80px rgba(0,44,72,.18),
+    inset 0 1px rgba(255,255,255,.3);
+}
+.captain-game-page .yacht-course::before {
+  z-index:1;
+  background:
+    repeating-linear-gradient(167deg,rgba(255,255,255,.12) 0 2px,transparent 2px 42px),
+    repeating-linear-gradient(13deg,transparent 0 62px,rgba(255,255,255,.055) 63px 65px);
+  animation-duration:4.2s;
+}
+.captain-game-page .yacht-course::after {
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:26% 0 0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 0 7%,rgba(255,255,255,.07) 7.2% 7.5%,transparent 7.7% 100%),
+    radial-gradient(ellipse at 50% 100%,transparent 0 55%,rgba(255,255,255,.06) 56%,transparent 57%);
+  opacity:.75;
+}
+.captain-sky {
+  position:absolute;
+  z-index:0;
+  left:0;
+  right:0;
+  top:0;
+  height:25%;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg,#72c6e4 0%,#a7d9ea 70%,rgba(213,234,232,.78) 100%);
+  transition:background 1.1s ease;
+}
+.captain-phase-riviera .captain-sky {
+  background:linear-gradient(180deg,#4daed7,#8fd0e5 72%,#d6e7de);
+}
+.captain-phase-sunset .captain-sky {
+  background:
+    radial-gradient(circle at 73% 54%,rgba(255,220,130,.44),transparent 19%),
+    linear-gradient(180deg,#596fa3 0%,#e39a7c 54%,#ffd390 100%);
+}
+.captain-sun {
+  position:absolute;
+  right:11%;
+  top:18%;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 35%,#fff7c4,#f6ca68 65%,#e2a749);
+  box-shadow:0 0 37px rgba(255,225,142,.55);
+  transition:transform 1s ease,background 1s ease;
+}
+.captain-phase-sunset .captain-sun {
+  transform:translateY(29px) scale(1.15);
+  background:radial-gradient(circle,#fff3ae,#f2a65f 68%,#df754a);
+  box-shadow:0 0 46px rgba(255,166,87,.5);
+}
+.captain-cloud {
+  position:absolute;
+  width:98px;
+  height:24px;
+  border-radius:50px;
+  background:rgba(255,255,255,.46);
+  filter:blur(.2px);
+  box-shadow:
+    22px -9px 0 -1px rgba(255,255,255,.4),
+    49px -3px 0 -5px rgba(255,255,255,.3);
+  animation:captainCloud 17s linear infinite;
+}
+.cloud-one {left:-100px;top:24%;}
+.cloud-two {left:-80px;top:61%;transform:scale(.62);opacity:.58;animation-duration:24s;animation-delay:-7s;}
+@keyframes captainCloud {to{left:110%;}}
+.captain-gulls {
+  position:absolute;
+  left:27%;
+  top:28%;
+  color:rgba(32,75,91,.48);
+  font-size:18px;
+  letter-spacing:.25em;
+  transform:rotate(-5deg);
+}
+.captain-horizon {
+  position:absolute;
+  z-index:3;
+  left:0;
+  right:0;
+  top:17%;
+  height:14%;
+  pointer-events:none;
+}
+.horizon-villas {
+  position:absolute;
+  bottom:0;
+  width:34%;
+  height:76%;
+  opacity:.9;
+  filter:drop-shadow(0 4px 2px rgba(0,65,85,.13));
+}
+.villas-left {
+  left:-2%;
+  background:
+    linear-gradient(90deg,transparent 0 2%,#f5e4c4 2% 12%,transparent 12% 14%,#e8c186 14% 26%,transparent 26% 29%,#f1dbc0 29% 39%,transparent 39% 42%,#c98764 42% 51%,transparent 51%),
+    linear-gradient(168deg,transparent 0 45%,#597c58 46% 68%,#315b50 69% 100%);
+  clip-path:polygon(0 35%,12% 29%,23% 45%,34% 25%,49% 40%,61% 20%,77% 43%,100% 57%,100% 100%,0 100%);
+}
+.villas-right {
+  right:-2%;
+  transform:scaleX(-1);
+  background:
+    linear-gradient(90deg,transparent 0 4%,#ecd3ad 4% 16%,transparent 16% 20%,#f5e4c4 20% 33%,transparent 33% 37%,#d99a76 37% 47%,transparent 47% 52%,#f0d2a0 52% 61%,transparent 61%),
+    linear-gradient(168deg,transparent 0 44%,#5c815a 45% 68%,#315b50 69% 100%);
+  clip-path:polygon(0 35%,12% 29%,23% 45%,34% 25%,49% 40%,61% 20%,77% 43%,100% 57%,100% 100%,0 100%);
+}
+.captain-lighthouse {
+  position:absolute;
+  left:9.5%;
+  bottom:2px;
+  width:18px;
+  height:72px;
+  transform:scale(.76);
+  transform-origin:bottom;
+}
+.captain-lighthouse::before {
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:4px;
+  width:10px;
+  height:54px;
+  background:repeating-linear-gradient(180deg,#f4dfc7 0 12px,#b75143 12px 23px);
+  clip-path:polygon(22% 0,78% 0,100% 100%,0 100%);
+  box-shadow:0 2px 4px rgba(0,0,0,.16);
+}
+.captain-lighthouse i {
+  position:absolute;
+  z-index:2;
+  left:1px;
+  top:10px;
+  width:16px;
+  height:8px;
+  border-radius:3px;
+  background:#2d4552;
+  box-shadow:0 -4px 0 -1px #c35d48;
+}
+.captain-lighthouse b {
+  position:absolute;
+  left:-23px;
+  top:10px;
+  width:65px;
+  height:12px;
+  background:linear-gradient(90deg,transparent,rgba(255,236,163,.4),transparent);
+  clip-path:polygon(50% 37%,100% 0,100% 100%,50% 63%);
+  animation:lighthouseBeam 4s ease-in-out infinite alternate;
+  transform-origin:50% 50%;
+}
+@keyframes lighthouseBeam {to{transform:rotate(16deg);opacity:.35;}}
+.distant-sail {
+  position:absolute;
+  bottom:1px;
+  color:#f6eee1;
+  font-size:27px;
+  line-height:1;
+  opacity:.82;
+  filter:drop-shadow(0 4px 2px rgba(0,58,87,.2));
+}
+.sail-one {left:68%;}
+.sail-two {left:78%;transform:scale(.58);opacity:.65;bottom:5px;}
+
+.captain-game-page .sun-glint {
+  z-index:4;
+  top:17%;
+  width:270px;
+  height:450px;
+  background:linear-gradient(180deg,rgba(255,247,203,.4),rgba(255,255,255,.09) 72%,transparent);
+  opacity:.4;
+}
+.captain-game-page .wake-lines {z-index:3;bottom:-4%;height:67%;opacity:.52;}
+.captain-game-page .lane-line {
+  z-index:4;
+  top:30%;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.2) 0 12px,transparent 12px 39px);
+  opacity:.35;
+}
+.sea-sparkles {
+  position:absolute;
+  z-index:4;
+  inset:29% 0 0;
+  pointer-events:none;
+}
+.sea-sparkles i {
+  position:absolute;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#fff9dc;
+  box-shadow:0 0 7px rgba(255,248,205,.72);
+  animation:seaSpark 2.4s ease-in-out infinite;
+}
+.sea-sparkles i:nth-child(1){left:11%;top:13%;animation-delay:-.4s}
+.sea-sparkles i:nth-child(2){left:22%;top:46%;animation-delay:-1.2s}
+.sea-sparkles i:nth-child(3){left:36%;top:24%;animation-delay:-2s}
+.sea-sparkles i:nth-child(4){left:47%;top:62%;animation-delay:-.8s}
+.sea-sparkles i:nth-child(5){left:58%;top:34%;animation-delay:-1.6s}
+.sea-sparkles i:nth-child(6){left:71%;top:12%;animation-delay:-.1s}
+.sea-sparkles i:nth-child(7){left:84%;top:52%;animation-delay:-1s}
+.sea-sparkles i:nth-child(8){left:91%;top:27%;animation-delay:-2.2s}
+@keyframes seaSpark {
+  0%,100%{opacity:.12;transform:scale(.7)}
+  50%{opacity:.95;transform:scale(1.8)}
+}
+.captain-course-banner {
+  position:absolute;
+  z-index:5;
+  top:31%;
+  left:50%;
+  transform:translateX(-50%);
+  min-width:155px;
+  padding:4px 12px 5px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:999px;
+  background:rgba(3,66,94,.24);
+  color:rgba(247,243,220,.76);
+  backdrop-filter:blur(3px);
+  opacity:.86;
+}
+.captain-course-banner span,
+.captain-course-banner strong {display:block;}
+.captain-course-banner span {font-size:5px;letter-spacing:.18em;}
+.captain-course-banner strong {margin-top:1px;font-size:9px;font-style:italic;font-weight:500;}
+.captain-phase-notice {
+  position:absolute;
+  z-index:30;
+  left:50%;
+  top:45%;
+  transform:translate(-50%,-50%);
+  padding:9px 18px;
+  border-top:1px solid rgba(255,237,188,.62);
+  border-bottom:1px solid rgba(255,237,188,.62);
+  color:#fff1bd;
+  background:linear-gradient(90deg,transparent,rgba(5,48,69,.75),transparent);
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-shadow:0 2px 7px rgba(0,0,0,.45);
+  animation:phaseNotice 1.5s ease both;
+  white-space:nowrap;
+}
+@keyframes phaseNotice {
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.82);filter:blur(5px)}
+  18%,72%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:none}
+  100%{opacity:0;transform:translate(-50%,-54%) scale(1.04)}
+}
+
+.captain-game-page .sea-pickup {
+  z-index:10;
+  width:48px;
+  height:48px;
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:
+    0 8px 13px rgba(0,43,66,.26),
+    inset 0 0 14px rgba(255,255,255,.12);
+  animation:pickupBob .8s ease-in-out infinite alternate;
+}
+@keyframes pickupBob {to{margin-top:-4px;transform:translateY(-50%) rotate(3deg)}}
+.captain-game-page .sea-pickup span {
+  font-size:31px;
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.16));
+}
+.captain-game-page .sea-pickup-ball {
+  background:radial-gradient(circle,#d8ef69,#93ba27 72%,#617c14);
+}
+.captain-game-page .sea-pickup-treat {
+  background:radial-gradient(circle,#f4d49b,#b77943 72%,#794722);
+}
+.captain-game-page .sea-pickup-medal {
+  width:51px;
+  height:51px;
+  border:2px solid #ffe4a2;
+  background:
+    radial-gradient(circle at 35% 28%,#fff0ac 0 12%,#e5ad41 13% 58%,#8b551d 59% 100%);
+  color:#102e46;
+  box-shadow:
+    0 0 18px rgba(255,220,121,.42),
+    inset 0 0 0 4px rgba(255,246,197,.22);
+}
+.captain-game-page .sea-pickup-medal span {
+  color:#fff0a6;
+  font-size:23px;
+  text-shadow:0 1px #6f4316,0 0 9px rgba(255,241,184,.78);
+}
+.captain-game-page .sea-pickup-medal small {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:4px;
+  color:#583914;
+  text-align:center;
+  font-size:4px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.captain-game-page .sea-pickup-buoy {
+  width:46px;
+  height:46px;
+  border:2px solid #ffe7cf;
+  background:
+    repeating-linear-gradient(135deg,#d75547 0 8px,#f3dfc7 8px 15px);
+  box-shadow:0 7px 15px rgba(92,34,26,.25);
+}
+.captain-game-page .sea-pickup-buoy span {
+  color:#8c342d;
+  font-size:18px;
+  text-shadow:none;
+}
+
+.captain-burst {
+  position:absolute;
+  z-index:18;
+  left:50%;
+  bottom:22%;
+  width:120px;
+  height:90px;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.captain-burst i {
+  position:absolute;
+  left:50%;
+  top:50%;
+  color:#ffefa8;
+  font-style:normal;
+  font-size:17px;
+  text-shadow:0 0 8px currentColor;
+  animation:captainBurst .65s ease-out both;
+}
+.captain-burst i:nth-child(1){--bx:-47px;--by:-29px}
+.captain-burst i:nth-child(2){--bx:-23px;--by:-48px}
+.captain-burst i:nth-child(3){--bx:4px;--by:-42px}
+.captain-burst i:nth-child(4){--bx:38px;--by:-27px}
+.captain-burst i:nth-child(5){--bx:-38px;--by:6px}
+.captain-burst i:nth-child(6){--bx:37px;--by:7px}
+.burst-buoy i {color:#ffb09a;}
+.burst-boost i {color:#fff0a1;font-size:22px;}
+@keyframes captainBurst {
+  from{opacity:1;transform:translate(-50%,-50%) scale(.3)}
+  to{opacity:0;transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1.3)}
+}
+
+.captain-game-page .captain-yacht {
+  z-index:16;
+  bottom:3.5%;
+  width:136px;
+  height:135px;
+  filter:drop-shadow(0 10px 9px rgba(0,45,70,.24));
+  transition:left .2s cubic-bezier(.2,.82,.2,1),transform .2s ease;
+}
+.captain-game-page .captain-yacht.lane-0 {transform:translateX(-50%) rotate(-2.5deg);}
+.captain-game-page .captain-yacht.lane-1 {transform:translateX(-50%);}
+.captain-game-page .captain-yacht.lane-2 {transform:translateX(-50%) rotate(2.5deg);}
+.yacht-mast {
+  position:absolute;
+  z-index:2;
+  left:91px;
+  bottom:82px;
+  width:2px;
+  height:43px;
+  background:linear-gradient(#efcf89,#9d6b28);
+}
+.captain-game-page .yacht-flag {
+  left:91px;
+  bottom:105px;
+  width:30px;
+  height:21px;
+  padding-top:3px;
+  background:linear-gradient(135deg,#143f63,#082b48);
+  border-top:1px solid rgba(248,216,148,.5);
+  color:#f6d88d;
+}
+.captain-game-page .yacht-flag::before {display:none;}
+.captain-game-page .yacht-rail {
+  left:19px;
+  right:19px;
+  bottom:78px;
+  height:17px;
+  border-color:rgba(244,214,153,.86);
+}
+.captain-game-page .yacht-rail::before,
+.captain-game-page .yacht-rail::after {
+  content:"";
+  position:absolute;
+  top:-1px;
+  bottom:0;
+  width:1px;
+  background:rgba(244,214,153,.8);
+}
+.captain-game-page .yacht-rail::before {left:28%;}
+.captain-game-page .yacht-rail::after {right:28%;}
+.captain-game-page .captain-rosie-badge {
+  left:43px;
+  bottom:71px;
+  width:50px;
+  height:50px;
+  border:2px solid #f1c76f;
+  box-shadow:
+    0 6px 12px rgba(0,0,0,.24),
+    0 0 0 3px rgba(9,44,66,.55);
+}
+.captain-game-page .captain-rosie-badge img {
+  transform:scale(1.16);
+  object-position:53% 34%;
+}
+.captain-game-page .yacht-cabin {
+  left:35px;
+  bottom:55px;
+  width:67px;
+  height:34px;
+  border:1px solid #c99035;
+  background:linear-gradient(180deg,#fff6e8,#e9d8bb);
+  color:#0e3959;
+}
+.captain-game-page .yacht-cabin span {font-size:11px;}
+.captain-game-page .yacht-cabin i {
+  position:absolute;
+  top:8px;
+  width:12px;
+  height:7px;
+  border-radius:2px;
+  background:linear-gradient(180deg,#6bb0c9,#164e6e);
+  box-shadow:inset 0 1px rgba(255,255,255,.5);
+}
+.captain-game-page .yacht-cabin i:nth-of-type(1){left:8px}
+.captain-game-page .yacht-cabin i:nth-of-type(2){right:8px}
+.yacht-deck {
+  position:absolute;
+  z-index:2;
+  left:18px;
+  right:18px;
+  bottom:43px;
+  height:23px;
+  border-radius:50% 50% 13px 13px;
+  background:
+    repeating-linear-gradient(90deg,#d4a76f 0 2px,#ead2a7 2px 5px);
+  border:1px solid #a66f32;
+  box-shadow:0 2px 4px rgba(0,0,0,.14);
+}
+.captain-game-page .yacht-hull {
+  left:8px;
+  right:8px;
+  bottom:13px;
+  height:49px;
+  border:1px solid #ca9237;
+  border-radius:10px 10px 48px 48px;
+  background:
+    linear-gradient(180deg,#fff9e9 0 36%,#e7d4b4 37% 43%,#154d73 44% 72%,#082b49 73% 100%);
+  box-shadow:
+    0 12px 17px rgba(0,33,55,.33),
+    inset 0 1px rgba(255,255,255,.8);
+}
+.captain-game-page .yacht-hull span {
+  bottom:8px;
+  color:#f5d88f;
+  font-size:7px;
+}
+.captain-game-page .yacht-hull b {
+  position:absolute;
+  left:50%;
+  top:5px;
+  transform:translateX(-50%);
+  color:#9a692a;
+  font-size:8px;
+}
+.captain-game-page .yacht-wake {
+  left:18px;
+  right:18px;
+  bottom:-23px;
+  height:42px;
+  background:
+    radial-gradient(ellipse,rgba(255,255,255,.78),rgba(255,255,255,.18) 49%,transparent 72%);
+}
+.golden-wake {
+  position:absolute;
+  z-index:-1;
+  left:-12px;
+  right:-12px;
+  bottom:-31px;
+  height:83px;
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at 50% 0,rgba(255,231,137,.72),rgba(255,211,92,.24) 38%,transparent 72%);
+  filter:blur(3px);
+  animation:goldWake .5s ease-in-out infinite alternate;
+}
+@keyframes goldWake {to{transform:scaleX(1.25);opacity:.72}}
+.captain-boosting .yacht-course {
+  box-shadow:
+    inset 0 -50px 80px rgba(0,44,72,.18),
+    inset 0 1px rgba(255,255,255,.3),
+    inset 0 0 60px rgba(245,203,102,.08);
+}
+.captain-boosting .captain-yacht {
+  filter:drop-shadow(0 10px 9px rgba(0,45,70,.24)) drop-shadow(0 0 13px rgba(255,216,108,.46));
+}
+
+.captain-game-page .captain-start-panel {
+  z-index:40;
+  width:min(calc(100% - 38px),420px);
+  padding:22px 22px 20px;
+  border:1px solid rgba(248,219,155,.68);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 50% -5%,rgba(236,199,114,.12),transparent 35%),
+    linear-gradient(180deg,rgba(5,42,66,.96),rgba(3,24,40,.98));
+  box-shadow:
+    0 27px 65px rgba(0,33,53,.52),
+    inset 0 0 0 4px rgba(255,255,255,.025);
+}
+.captain-game-page .captain-start-panel::before {
+  content:"";
+  position:absolute;
+  inset:7px;
+  border:1px solid rgba(242,211,146,.12);
+  border-radius:15px;
+  pointer-events:none;
+}
+.captain-game-page .captain-start-panel img {
+  position:relative;
+  z-index:2;
+  width:88px;
+  height:88px;
+  margin:-69px auto 11px;
+  border:2px solid #f0ca77;
+  object-position:53% 34%;
+  box-shadow:
+    0 8px 19px rgba(0,0,0,.34),
+    0 0 0 5px rgba(5,39,60,.88),
+    0 0 0 6px rgba(239,203,125,.26);
+}
+.captain-game-page .captain-start-panel > span {
+  color:#9fc3d4;
+  font-size:6px;
+  letter-spacing:.2em;
+}
+.captain-game-page .captain-start-panel > strong {
+  margin:6px 0 7px;
+  color:#ffe2a0;
+  font-size:30px;
+  line-height:1;
+}
+.captain-game-page .captain-start-panel > p {
+  max-width:345px;
+  color:#bed0d8;
+  font-size:10px;
+  line-height:1.55;
+}
+.start-mission,
+.voyage-stats {
+  margin:13px auto 0;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.start-mission span,
+.voyage-stats span {
+  padding:6px 8px;
+  border:1px solid rgba(234,199,126,.2);
+  border-radius:8px;
+  background:rgba(255,255,255,.025);
+  color:#a8bec9;
+  font-size:7px;
+}
+.start-mission b,
+.voyage-stats b {
+  margin-right:3px;
+  color:#f4d68f;
+}
+.captain-game-page .captain-start-panel button {
+  height:46px;
+  min-width:172px;
+  margin-top:15px;
+  border:1px solid #754817;
+  background:
+    radial-gradient(circle at 35% 10%,rgba(255,255,255,.48),transparent 20%),
+    linear-gradient(180deg,#f5d783,#ce9238 58%,#92591f);
+  color:#102f45;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.62),
+    0 5px 14px rgba(0,0,0,.26);
+}
+.captain-results-panel {
+  padding-top:18px !important;
+}
+.captain-results-panel img {
+  width:73px !important;
+  height:73px !important;
+  margin-top:-56px !important;
+}
+.voyage-grade {
+  width:52px;
+  height:52px;
+  margin:8px auto 2px;
+  display:grid;
+  place-items:center;
+  border:2px solid #e4b755;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 25%,#fff1ab 0 11%,#d59a31 12% 64%,#7d4d1e 65%);
+  color:#12344d;
+  font-size:26px;
+  font-weight:800;
+  box-shadow:0 0 0 4px rgba(238,197,105,.12),0 6px 16px rgba(0,0,0,.22);
+}
+
+.captain-command-deck {
+  position:relative;
+  z-index:7;
+  margin-top:9px;
+  display:grid;
+  grid-template-columns:94px minmax(0,1fr) 94px;
+  gap:8px;
+}
+.helm-button {
+  min-height:68px;
+  display:grid;
+  place-content:center;
+  gap:3px;
+  border:1px solid rgba(235,198,120,.42);
+  border-radius:15px;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(255,255,255,.08),transparent 50%),
+    linear-gradient(180deg,#174a6e,#092d49);
+  color:#f5daa0;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.015);
+}
+.helm-button:not(:disabled):active {
+  transform:translateY(1px);
+  background:linear-gradient(180deg,#1b587f,#0b3552);
+}
+.helm-button:disabled {opacity:.42;}
+.helm-button span {font-size:23px;line-height:1;}
+.helm-button small {font-size:6px;letter-spacing:.17em;}
+.boost-control {
+  min-height:68px;
+  padding:7px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  border:1px solid rgba(233,196,117,.25);
+  border-radius:15px;
+  background:
+    radial-gradient(circle at 50% 0,rgba(255,255,255,.035),transparent 48%),
+    rgba(4,29,46,.9);
+  color:#a8bec9;
+  transition:.25s ease;
+}
+.boost-control:disabled {cursor:default;}
+.boost-ring {
+  --boost:0%;
+  position:relative;
+  flex:0 0 auto;
+  width:49px;
+  height:49px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at center,#072b45 0 61%,transparent 62%),
+    conic-gradient(#e0ad49 var(--boost),rgba(255,255,255,.09) var(--boost));
+  box-shadow:inset 0 0 0 1px rgba(245,213,145,.16);
+}
+.boost-ring::after {
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px solid rgba(238,204,133,.18);
+  border-radius:50%;
+}
+.boost-ring b {
+  position:relative;
+  z-index:2;
+  color:#e7cc92;
+  font-size:12px;
+  font-variant-numeric:tabular-nums;
+}
+.boost-copy {
+  min-width:0;
+  text-align:left;
+}
+.boost-copy strong,
+.boost-copy small {display:block;}
+.boost-copy strong {
+  color:#d7c093;
+  font-size:8px;
+  letter-spacing:.12em;
+}
+.boost-copy small {
+  margin-top:3px;
+  color:#718e9d;
+  font-size:6px;
+  letter-spacing:.08em;
+}
+.boost-ready {
+  cursor:pointer !important;
+  border-color:rgba(244,205,112,.64);
+  background:
+    radial-gradient(circle at 50% -10%,rgba(249,209,111,.17),transparent 55%),
+    linear-gradient(180deg,#123e58,#092b43);
+  box-shadow:0 0 21px rgba(241,199,99,.11),inset 0 0 17px rgba(241,199,99,.05);
+  animation:boostReady 1s ease-in-out infinite alternate;
+}
+.boost-ready .boost-ring {
+  box-shadow:0 0 15px rgba(242,202,107,.42),inset 0 0 0 1px rgba(245,213,145,.28);
+}
+.boost-ready .boost-ring b,
+.boost-ready .boost-copy strong {color:#ffe59f;}
+@keyframes boostReady {to{border-color:rgba(255,225,150,.86)}}
+.boost-active {
+  border-color:#e5b759;
+  background:linear-gradient(180deg,rgba(121,86,28,.4),rgba(31,47,48,.96));
+}
+.boost-active .boost-ring {
+  background:
+    radial-gradient(circle at center,#6f4a18 0 61%,transparent 62%),
+    conic-gradient(#ffe29a 100%,#ffe29a 100%);
+  box-shadow:0 0 19px rgba(255,220,127,.48);
+}
+.boost-active .boost-ring b {color:#fff2b7;}
+
+.captain-cargo-key {
+  position:relative;
+  z-index:7;
+  margin-top:7px;
+  padding:8px 9px;
+  display:grid;
+  grid-template-columns:repeat(4,auto) minmax(120px,1fr);
+  gap:6px;
+  align-items:center;
+  border:1px solid rgba(232,197,122,.16);
+  border-radius:12px;
+  background:rgba(3,25,40,.7);
+}
+.captain-cargo-key > span:not(.mission-meter) {
+  min-width:0;
+  display:grid;
+  grid-template-columns:25px auto;
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:5px;
+  color:#8ca7b4;
+  font-size:6px;
+  line-height:1.1;
+}
+.captain-cargo-key > span > b {
+  grid-row:1 / 3;
+  width:25px;
+  height:25px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  font-size:13px;
+  font-style:normal;
+}
+.captain-cargo-key > span > i {
+  color:#e5c67f;
+  font-size:7px;
+  font-style:normal;
+  font-weight:700;
+}
+.cargo-ball {background:#aeca38;}
+.cargo-treat {background:#ac7548;}
+.cargo-medal {background:#cb9135;color:#ffe69a;}
+.cargo-buoy {background:#d25a4e;color:#fff3df;}
+.mission-meter {
+  position:relative;
+  min-width:0;
+  height:25px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(229,193,116,.18);
+  border-radius:999px;
+  background:#05263c;
+}
+.mission-meter > i {
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  background:linear-gradient(90deg,#147ca8,#d0a347);
+  opacity:.55;
+  transition:width .25s ease;
+}
+.mission-meter em {
+  position:relative;
+  z-index:2;
+  color:#aec0c7;
+  font-size:6px;
+  font-style:normal;
+  letter-spacing:.08em;
+}
+
+.captain-phase-sunset .yacht-course {
+  background:linear-gradient(180deg,#b67883 0 17%,#d18d70 18% 26%,#147e9f 30%,#075f82 62%,#074766 100%);
+}
+.captain-phase-sunset .captain-course-banner {
+  background:rgba(74,51,76,.25);
+}
+.captain-phase-sunset .sea-sparkles i {
+  background:#ffd895;
+  box-shadow:0 0 7px rgba(255,197,123,.7);
+}
+.captain-boosting .sea-sparkles i {
+  animation-duration:.85s;
+}
+
+@media (max-width: 760px) {
+  .captain-game-page .captain-hero {
+    grid-template-columns:160px minmax(0,1fr) 130px;
+  }
+  .captain-game-page .captain-title {padding:25px 24px;}
+  .captain-hero-compass {right:137px;}
+  .captain-game-page .captain-title h1 {font-size:clamp(36px,6.2vw,51px);}
+  .captain-game-page .captain-cargo-key {
+    grid-template-columns:repeat(4,1fr);
+  }
+  .mission-meter {grid-column:1 / -1;}
+}
+
+@media (max-width: 620px) {
+  .captain-game-page {
+    padding-top:7px;
+  }
+  .captain-game-page .captain-hero {
+    min-height:164px;
+    grid-template-columns:122px minmax(0,1fr);
+    border-radius:18px;
+  }
+  .captain-game-page .captain-hero::after,
+  .captain-hero-compass,
+  .captain-game-page .captain-best {display:none;}
+  .captain-game-page .captain-portrait,
+  .captain-game-page .captain-portrait img {min-height:164px;}
+  .captain-game-page .captain-portrait > span {
+    left:8px;
+    bottom:8px;
+    padding:4px 6px;
+    font-size:5px;
+  }
+  .captain-game-page .captain-title {padding:15px 13px 14px;}
+  .captain-game-page .captain-kicker {font-size:5px;letter-spacing:.16em;}
+  .captain-game-page .captain-title h1 {
+    margin-top:6px;
+    font-size:clamp(28px,8vw,37px);
+    line-height:.91;
+  }
+  .captain-game-page .captain-title p {
+    margin:3px 0 6px;
+    font-size:16px;
+  }
+  .captain-game-page .captain-title small {
+    font-size:7.5px;
+    line-height:1.4;
+  }
+  .captain-route-strip {
+    margin:8px 1px 6px;
+    gap:6px;
+  }
+  .route-port span {display:none;}
+  .route-port b {width:21px;height:21px;font-size:8px;}
+  .route-line {height:8px;}
+  .captain-game-page .captain-hud {
+    grid-template-columns:repeat(5,1fr);
+    gap:4px;
+    margin:6px 0 8px;
+  }
+  .captain-game-page .captain-hud > div {
+    min-height:43px;
+    padding:4px 2px;
+    border-radius:9px;
+  }
+  .captain-game-page .captain-hud span {font-size:4.8px;letter-spacing:.1em;}
+  .captain-game-page .captain-hud strong {font-size:13px;}
+  .captain-game-page .captain-lives {font-size:9px !important;}
+  .captain-game-page .yacht-game-shell {
+    padding:6px;
+    border-radius:16px;
+  }
+  .captain-game-page .yacht-game-sign {
+    min-height:48px;
+    padding:6px 7px;
+    grid-template-columns:30px minmax(0,1fr);
+    border-radius:11px;
+  }
+  .captain-seal {width:28px !important;height:28px !important;font-size:10px !important;}
+  .captain-game-page .yacht-game-sign strong {font-size:6px;}
+  .captain-game-page .yacht-game-sign small {
+    margin-top:2px;
+    font-size:7px;
+    line-height:1.2;
+  }
+  .captain-game-page .yacht-game-sign > b {display:none;}
+  .captain-game-page .yacht-course {
+    height:485px;
+    margin-top:6px;
+    border-radius:12px;
+  }
+  .captain-sky {height:25%;}
+  .captain-sun {width:43px;height:43px;}
+  .captain-horizon {top:17%;height:13%;}
+  .captain-lighthouse {transform:scale(.6);bottom:-4px;}
+  .distant-sail {font-size:21px;}
+  .captain-course-banner {
+    top:30%;
+    min-width:130px;
+    padding:3px 9px;
+  }
+  .captain-course-banner span {font-size:4.5px;}
+  .captain-course-banner strong {font-size:7px;}
+  .captain-phase-notice {font-size:11px;padding:7px 12px;}
+  .captain-game-page .sea-pickup {
+    width:41px;
+    height:41px;
+  }
+  .captain-game-page .sea-pickup span {font-size:26px;}
+  .captain-game-page .sea-pickup-medal {width:43px;height:43px;}
+  .captain-game-page .sea-pickup-medal span {font-size:19px;}
+  .captain-game-page .sea-pickup-buoy {width:40px;height:40px;}
+  .captain-game-page .captain-yacht {
+    width:112px;
+    height:112px;
+  }
+  .captain-game-page .yacht-hull {
+    left:6px;
+    right:6px;
+    bottom:13px;
+    height:41px;
+  }
+  .yacht-deck {left:15px;right:15px;bottom:39px;height:19px;}
+  .captain-game-page .yacht-cabin {left:29px;bottom:49px;width:55px;height:29px;}
+  .captain-game-page .yacht-cabin i {width:10px;height:6px;top:7px;}
+  .captain-game-page .yacht-rail {left:15px;right:15px;bottom:69px;height:14px;}
+  .captain-game-page .captain-rosie-badge {left:36px;bottom:63px;width:42px;height:42px;}
+  .yacht-mast {left:76px;bottom:74px;height:37px;}
+  .captain-game-page .yacht-flag {left:76px;bottom:94px;width:26px;height:18px;}
+  .captain-game-page .captain-start-panel {
+    width:min(calc(100% - 26px),360px);
+    padding:18px 13px 16px;
+  }
+  .captain-game-page .captain-start-panel img {
+    width:68px;
+    height:68px;
+    margin-top:-52px;
+  }
+  .captain-game-page .captain-start-panel > strong {font-size:23px;}
+  .captain-game-page .captain-start-panel > p {font-size:8.5px;}
+  .start-mission,.voyage-stats {gap:4px;margin-top:10px;}
+  .start-mission span,.voyage-stats span {font-size:6px;padding:5px 6px;}
+  .captain-game-page .captain-start-panel button {height:41px;min-width:145px;font-size:9px;}
+  .voyage-grade {width:44px;height:44px;font-size:21px;}
+  .captain-command-deck {
+    grid-template-columns:65px minmax(0,1fr) 65px;
+    gap:5px;
+    margin-top:6px;
+  }
+  .helm-button {min-height:59px;border-radius:11px;}
+  .helm-button span {font-size:20px;}
+  .boost-control {
+    min-height:59px;
+    padding:5px 8px;
+    gap:7px;
+    border-radius:11px;
+  }
+  .boost-ring {width:42px;height:42px;}
+  .boost-ring b {font-size:10px;}
+  .boost-copy strong {font-size:6.5px;}
+  .boost-copy small {font-size:5px;}
+  .captain-game-page .captain-cargo-key {
+    grid-template-columns:repeat(4,1fr);
+    gap:4px;
+    margin-top:5px;
+    padding:6px;
+  }
+  .captain-cargo-key > span:not(.mission-meter) {
+    grid-template-columns:21px auto;
+    column-gap:3px;
+    font-size:5px;
+  }
+  .captain-cargo-key > span > b {
+    width:21px;
+    height:21px;
+    font-size:11px;
+  }
+  .captain-cargo-key > span > i {font-size:6px;}
+  .mission-meter {grid-column:1 / -1;height:21px;}
+  .mission-meter em {font-size:5.5px;}
+}
+
+@media (max-width: 390px) {
+  .captain-game-page .captain-hero {grid-template-columns:108px minmax(0,1fr);}
+  .captain-game-page .captain-title {padding-left:10px;padding-right:8px;}
+  .captain-game-page .captain-title h1 {font-size:29px;}
+  .captain-game-page .captain-title small {font-size:7px;}
+  .captain-game-page .yacht-course {height:450px;}
+  .captain-command-deck {grid-template-columns:59px minmax(0,1fr) 59px;}
+  .boost-copy small {display:none;}
+  .captain-cargo-key > span:not(.mission-meter) {font-size:4.8px;}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .captain-cloud,
+  .captain-lighthouse b,
+  .sea-sparkles i,
+  .captain-game-page .sea-pickup,
+  .captain-game-page .yacht-wake,
+  .golden-wake,
+  .boost-ready {
+    animation:none !important;
+  }
+}
