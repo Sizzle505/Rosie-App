@@ -703,10 +703,10 @@ main {
   left: 50%;
   bottom: max(8px, env(safe-area-inset-bottom));
   transform: translateX(-50%);
-  width: min(calc(100% - 18px), 590px);
+  width: min(calc(100% - 18px), 660px);
   height: 63px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   overflow: hidden;
   border: 1px solid rgba(203,164,93,.24);
   border-radius: 19px;
