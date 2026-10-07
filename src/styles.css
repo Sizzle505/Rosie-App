@@ -987,3 +987,186 @@ main {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* Refinement pass: preserve the crystal ball artwork instead of covering it */
+.fortune-lens.has-answer {
+  width: 156px;
+  padding: 25px 20px;
+  border: 0;
+  overflow: visible;
+  background:
+    radial-gradient(circle,
+      rgba(22, 12, 34, .68) 0%,
+      rgba(35, 18, 52, .5) 45%,
+      rgba(48, 24, 67, .18) 66%,
+      transparent 79%);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.fortune-lens.has-answer::before {
+  inset: 5px;
+  border: 0;
+  background:
+    radial-gradient(circle at 27% 21%, rgba(255,255,255,.24) 0 1px, transparent 2px),
+    radial-gradient(circle at 75% 29%, rgba(241,211,148,.35) 0 1px, transparent 2px),
+    radial-gradient(circle at 66% 77%, rgba(255,255,255,.18) 0 1px, transparent 2px);
+}
+.fortune-lens.tone-positive,
+.fortune-lens.tone-uncertain,
+.fortune-lens.tone-negative {
+  box-shadow: none;
+}
+.fortune-lens.tone-positive {
+  background: radial-gradient(circle, rgba(32,20,30,.69) 0%, rgba(74,48,45,.35) 48%, rgba(193,150,71,.09) 67%, transparent 80%);
+}
+.fortune-lens.tone-uncertain {
+  background: radial-gradient(circle, rgba(24,13,38,.7) 0%, rgba(57,35,78,.38) 48%, rgba(143,99,184,.1) 67%, transparent 80%);
+}
+.fortune-lens.tone-negative {
+  background: radial-gradient(circle, rgba(32,13,28,.7) 0%, rgba(73,29,49,.38) 48%, rgba(135,54,79,.09) 67%, transparent 80%);
+}
+.lens-answer {
+  gap: 6px;
+}
+.lens-answer span {
+  color: rgba(245, 216, 155, .86);
+  font-size: 6.5px;
+  letter-spacing: .22em;
+}
+.lens-answer strong {
+  max-width: 125px;
+  margin: 0 auto;
+  color: #fff4e5;
+  font-size: 12px;
+  line-height: 1.12;
+  text-wrap: balance;
+  text-shadow:
+    0 2px 8px rgba(0,0,0,.98),
+    0 0 16px rgba(53,24,70,.7);
+}
+
+.console-caption {
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+
+.question-card {
+  background:
+    radial-gradient(circle at 50% -26%, rgba(255,255,255,.67), transparent 48%),
+    linear-gradient(180deg, #f1e3c8, #e7d1aa);
+}
+.question-card label {
+  letter-spacing: -.012em;
+}
+.ask-button {
+  text-shadow: 0 1px rgba(255,255,255,.22);
+}
+
+@media (max-width: 620px) {
+  .topbar {
+    height: 52px;
+  }
+
+  main {
+    padding-top: 5px;
+  }
+
+  .booth {
+    height: clamp(408px, 53dvh, 458px);
+  }
+
+  .sign {
+    top: 10px;
+    width: 86%;
+    padding: 9px 12px 8px;
+  }
+
+  .sign h1 {
+    font-size: clamp(27px, 7.7vw, 37px);
+    letter-spacing: .02em;
+  }
+
+  .sign p {
+    margin-top: 4px;
+    font-size: 6.5px;
+  }
+
+  .stage {
+    top: 75px;
+    bottom: 13px;
+  }
+
+  .curtain {
+    top: 69px;
+  }
+
+  .cabinet-lights {
+    top: 91px;
+    bottom: 21px;
+  }
+
+  .fortune-lens {
+    bottom: 47px;
+  }
+
+  .fortune-lens.has-answer {
+    width: 140px;
+    padding: 22px 18px;
+  }
+
+  .lens-answer strong {
+    max-width: 112px;
+    font-size: 11px;
+  }
+
+  .console-caption {
+    padding: 8px 5px 6px;
+  }
+
+  .question-card {
+    padding: 12px 11px 10px;
+  }
+
+  .question-card label {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .question-row input {
+    height: 44px;
+  }
+
+  .ask-button {
+    height: 44px;
+  }
+
+  .question-card > p {
+    margin-top: 7px;
+    font-size: 10.5px;
+  }
+}
+
+@media (max-width: 410px) {
+  .booth {
+    height: clamp(390px, 52dvh, 430px);
+  }
+
+  .sign h1 {
+    font-size: 27px;
+  }
+
+  .stage {
+    top: 72px;
+  }
+
+  .fortune-lens.has-answer {
+    width: 132px;
+    padding: 20px 16px;
+  }
+
+  .lens-answer strong {
+    max-width: 106px;
+    font-size: 10.5px;
+  }
+}
