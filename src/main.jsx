@@ -213,7 +213,7 @@ function formatGameTime(seconds) {
 }
 
 const ROSIE_MOOD_ART = {
-  watching: "/rosie-mood-pleased.webp",
+  watching: "/rosie-mood-watching.webp",
   pleased: "/rosie-mood-pleased.webp",
   amused: "/rosie-mood-amused.webp",
   embarrassed: "/rosie-mood-embarrassed.webp",
@@ -231,6 +231,8 @@ function CheeseMemoryGame() {
   const [locked, setLocked] = useState(false);
   const [message, setMessage] = useState("Rosie is testing your palate memory. Do try not to embarrass yourself.");
   const [rosieMood, setRosieMood] = useState("watching");
+  const [matchStreak, setMatchStreak] = useState(0);
+  const [misses, setMisses] = useState(0);
   const pendingFlipRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
@@ -253,6 +255,8 @@ function CheeseMemoryGame() {
     setElapsed(0);
     setStarted(false);
     setLocked(false);
+    setMatchStreak(0);
+    setMisses(0);
     setRosieMood("watching");
     setMessage("A fresh examination board. Doctor Rosie is ready when you are.");
   }
@@ -264,7 +268,7 @@ function CheeseMemoryGame() {
     if (openCards.length === 0) {
       setOpenCards([index]);
       setRosieMood("amused");
-      setMessage("Hmm. Rosie is watching. Find its matching fromage.");
+      setMessage("Interesting. Continue, if you dare.");
       return;
     }
 
@@ -282,16 +286,28 @@ function CheeseMemoryGame() {
         setMatched((items) => [...items, first.id]);
         setOpenCards([]);
         setLocked(false);
+        const nextStreak = matchStreak + 1;
+        setMatchStreak(nextStreak);
+        setMisses(0);
         setRosieMood(matched.length + 1 === CHEESES.length ? "elated" : "pleased");
-        setMessage(first.name + " identified. Acceptable. Rosie approves.");
+        setMessage(matched.length + 1 === CHEESES.length
+          ? "You pass. Rosie is genuinely impressed."
+          : nextStreak > 1
+            ? "Another correct pairing. Your palate may yet be salvageable."
+            : "Correct. Your palate may yet be salvageable.");
         window.navigator.vibrate?.([18, 26, 18]);
       }, 430);
     } else {
       pendingFlipRef.current = window.setTimeout(() => {
         setOpenCards([]);
         setLocked(false);
-        setRosieMood(moves > 5 ? "distraught" : "embarrassed");
-        setMessage("Unconvincing. Rosie expected better. Try again.");
+        const nextMisses = misses + 1;
+        setMisses(nextMisses);
+        setMatchStreak(0);
+        setRosieMood(nextMisses > 1 ? "distraught" : "embarrassed");
+        setMessage(nextMisses > 1
+          ? "Unconvincing. Doctor Rosie expected better."
+          : "Oh, dear. Rosie saw that.");
       }, 850);
     }
   }
@@ -360,9 +376,12 @@ function CheeseMemoryGame() {
 
       <section className="cheese-bottom-console">
         <div className={`rosie-reaction mood-${rosieMood}`} aria-live="polite">
-          <div className="rosie-reaction-portrait"><img src={ROSIE_MOOD_ART[rosieMood]} alt={`Doctor Rosie looking ${rosieMood}`} /></div>
-          <div><span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span><strong>{message}</strong></div>
-          <i aria-hidden="true">{rosieMood === "elated" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✓" : "◌"}</i>
+          <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
+          <div className="rosie-reaction-portrait">
+            <img key={rosieMood} src={ROSIE_MOOD_ART[rosieMood]} alt={`Doctor Rosie looking ${rosieMood}`} />
+          </div>
+          <div className="reaction-copy"><span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span><strong>{message}</strong></div>
+          <i aria-hidden="true">{rosieMood === "elated" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : "◌"}</i>
         </div>
         <section className="cheese-scorebar" aria-label="Game score">
           <div><span>MOVES</span><strong>{moves}</strong></div>
@@ -502,7 +521,7 @@ function App() {
         <div className="loading-copy">Consulting the ancient treat ledger…</div>
       </div>
 
-      <div className={`app-shell ${loaded ? "app-shell-visible" : ""}`}>
+      <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""}`}>
         <header className="topbar">
           <button className="round-button" aria-label="Menu">☰</button>
           <div className="brand">

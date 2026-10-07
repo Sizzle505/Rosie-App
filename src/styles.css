@@ -1812,3 +1812,86 @@ main {
   .cheese-hero-photo,
   .cheese-hero-photo > img { height: 174px; }
 }
+
+/* Dedicated Cheese game mode ------------------------------------------------ */
+.rosie-reaction {
+  min-height: 270px;
+  grid-template-columns: minmax(150px, .76fr) minmax(0, 1fr) 35px;
+  gap: 18px;
+  padding: 13px 18px 13px 13px;
+  isolation: isolate;
+}
+.rosie-reaction-portrait {
+  width: 100%;
+  height: 242px;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.36), 0 0 0 3px rgba(199,151,69,.11);
+}
+.rosie-reaction-portrait img {
+  object-fit: cover;
+  object-position: center;
+  animation: rosieMoodArrives .48s cubic-bezier(.18,.8,.25,1);
+}
+@keyframes rosieMoodArrives {
+  from { opacity: 0; transform: scale(.94) translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.reaction-copy { position: relative; z-index: 2; align-self: center; }
+.rosie-reaction span { font-size: 8px; }
+.rosie-reaction strong { max-width: 430px; margin-top: 8px; font-size: clamp(15px, 2.1vw, 20px); line-height: 1.18; }
+.rosie-reaction > i { align-self: start; margin-top: 7px; }
+.reaction-effects { position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.reaction-effects b { position:absolute; width:6px; height:6px; border-radius:50%; opacity:0; }
+.mood-pleased .reaction-effects b,
+.mood-elated .reaction-effects b { background:#f5d17a; box-shadow:0 0 12px #edbd56; animation: gildedGlint 1.7s ease-in-out infinite; }
+.mood-pleased .reaction-effects b:nth-child(1),.mood-elated .reaction-effects b:nth-child(1){left:10%;top:22%}
+.mood-pleased .reaction-effects b:nth-child(2),.mood-elated .reaction-effects b:nth-child(2){left:26%;top:68%;animation-delay:.28s}
+.mood-pleased .reaction-effects b:nth-child(3),.mood-elated .reaction-effects b:nth-child(3){left:64%;top:18%;animation-delay:.53s}
+.mood-pleased .reaction-effects b:nth-child(4),.mood-elated .reaction-effects b:nth-child(4){left:84%;top:64%;animation-delay:.77s}
+.mood-pleased .reaction-effects b:nth-child(5),.mood-elated .reaction-effects b:nth-child(5){left:54%;top:78%;animation-delay:1s}
+@keyframes gildedGlint { 0%,100%{opacity:0;transform:scale(.3)} 42%{opacity:.82;transform:scale(1.8)} 65%{opacity:.18;transform:scale(2.5)} }
+.mood-embarrassed::before { content:""; position:absolute; inset:0; z-index:0; background:radial-gradient(circle at 31% 53%,rgba(210,75,93,.24),transparent 24%); pointer-events:none; }
+.mood-distraught::before { content:""; position:absolute; inset:0; z-index:0; background:radial-gradient(circle at 50% 40%,rgba(98,16,43,.38),transparent 60%),linear-gradient(90deg,rgba(62,8,30,.18),transparent 25%,transparent 75%,rgba(62,8,30,.18)); pointer-events:none; }
+.mood-elated::after { border-color:rgba(253,218,128,.33); }
+
+@media (max-width: 620px) {
+  .app-shell.is-cheese-page { min-height:100dvh; padding-bottom:72px; }
+  .is-cheese-page .topbar { display:none; }
+  .is-cheese-page .bottom-nav { opacity:.82; box-shadow:0 8px 22px rgba(0,0,0,.38); }
+  .cheese-game-page {
+    width:100%; min-height:calc(100dvh - 72px); margin:0; padding: max(6px, env(safe-area-inset-top)) 8px 5px;
+    display:flex; flex-direction:column; gap:7px;
+  }
+  .cheese-game-page .cheese-hero { display:none; }
+  .cheese-game-frame { order:1; margin:0; padding:5px; border-radius:15px; box-shadow:0 11px 31px rgba(0,0,0,.33), inset 0 0 0 3px rgba(93,56,33,.13); }
+  .cheese-game-frame::after { inset:4px; border-radius:11px; }
+  .cheese-game-heading { display:none; }
+  .cheese-grid { gap:5px; }
+  .cheese-card { aspect-ratio:.92; border-radius:8px; }
+  .cheese-card-back,.cheese-card-front { border-radius:8px; }
+  .cheese-card-back::before { inset:3px; border-radius:6px; border-color:rgba(248,206,118,.55); }
+  .cheese-card-back::after { inset:8px; border-radius:47% 47% 18% 18%; }
+  .cheese-card-front { padding:4px 4px 5px; }
+  .cheese-art { margin:1px 1px 4px; }
+  .cheese-card-front strong { font-size:clamp(8px,2.75vw,12px); }
+  .cheese-bottom-console { order:2; margin:0; display:flex; flex-direction:column; gap:6px; }
+  .rosie-reaction { min-height:0; height:clamp(165px, 27dvh, 235px); grid-template-columns:minmax(132px, .76fr) minmax(0,1fr) 25px; gap:9px; padding:7px 9px 7px 7px; border-radius:15px; }
+  .rosie-reaction-portrait { height:100%; min-height:0; border-radius:11px; }
+  .rosie-reaction span { font-size:5.8px; letter-spacing:.1em; }
+  .rosie-reaction strong { margin-top:5px; font-size:clamp(12px,3.4vw,15px); line-height:1.17; }
+  .rosie-reaction > i { width:22px; height:22px; margin-top:3px; font-size:11px; }
+  .cheese-scorebar { margin:0; gap:5px; grid-template-columns:repeat(3,1fr) auto; }
+  .cheese-scorebar > div,.cheese-scorebar > button { min-height:38px; border-radius:9px; }
+  .cheese-scorebar > div { padding:4px 7px; }
+  .cheese-scorebar span { font-size:5.5px; }
+  .cheese-scorebar strong { margin-top:0; font-size:14px; }
+  .cheese-scorebar > button { grid-column:auto; padding:0 10px; font-size:6.6px; }
+  .cheese-victory { order:3; margin:0; }
+}
+
+@media (max-width: 360px) {
+  .cheese-game-page { padding-left:5px; padding-right:5px; gap:5px; }
+  .cheese-grid { gap:4px; }
+  .rosie-reaction { grid-template-columns:124px minmax(0,1fr) 21px; }
+  .cheese-scorebar > button { padding:0 7px; font-size:6px; }
+}
