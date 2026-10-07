@@ -52,45 +52,30 @@ function secureIndex(length) {
 }
 
 function readRecent() {
-  try { return JSON.parse(sessionStorage.getItem("rosieRecent") || "[]"); }
-  catch { return []; }
+  try {
+    return JSON.parse(sessionStorage.getItem("rosieRecent") || "[]");
+  } catch {
+    return [];
+  }
 }
 
-function RosiePortrait({ consulting, tone }) {
+function FortuneLens({ consulting, answer }) {
+  const state = answer ? `has-answer tone-${answer.tone}` : consulting ? "is-consulting" : "";
   return (
-    <div className={`rosie-portrait ${consulting ? "is-consulting" : ""} ${tone ? `tone-${tone}` : ""}`} aria-label="Stylized portrait of Rosie">
-      <div className="ear ear-left" />
-      <div className="ear ear-right" />
-      <div className="turban"><span className="turban-gem" /></div>
-      <div className="head">
-        <span className="brow brow-left" />
-        <span className="brow brow-right" />
-        <span className="eye eye-left" />
-        <span className="eye eye-right" />
-        <div className="muzzle"><span className="nose" /><span className="smile" /></div>
-      </div>
-      <div className="robe"><span className="robe-stars">✦ · ✧ · ✦</span></div>
-      <div className="paw-hand">🐾</div>
+    <div className={`fortune-lens ${state}`} aria-live="polite">
+      {consulting && (
+        <div className="lens-consulting">
+          <span className="lens-orbit">✦</span>
+          <small>CONSULTING THE TREATS…</small>
+        </div>
+      )}
+      {answer && (
+        <div className="lens-answer" key={answer.id}>
+          <span>ROSIE SAYS</span>
+          <strong>{answer.text}</strong>
+        </div>
+      )}
     </div>
-  );
-}
-
-function CrystalBall({ consulting, answer }) {
-  return (
-    <>
-      <div className={`crystal-ball ${consulting ? "is-active" : ""} ${answer ? `has-answer tone-${answer.tone}` : ""}`}>
-        {!answer && <span className="ball-paw">🐾</span>}
-        {answer && (
-          <div className="ball-answer" key={answer.id}>
-            <span className="ball-answer-label">ROSIE SAYS</span>
-            <strong>{answer.text}</strong>
-          </div>
-        )}
-        <span className="mist mist-a" />
-        <span className="mist mist-b" />
-      </div>
-      <div className="ball-base"><span>🐾</span></div>
-    </>
   );
 }
 
@@ -102,6 +87,7 @@ function FortuneMachine({ consulting, answer }) {
         <div className="cabinet-lights cabinet-lights-right" />
         <div className="curtain curtain-left" />
         <div className="curtain curtain-right" />
+
         <div className="sign">
           <div className="sign-paw">🐾</div>
           <h1>MADAME ROSIE</h1>
@@ -112,12 +98,12 @@ function FortuneMachine({ consulting, answer }) {
           <img
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
-            alt="Rosie dressed as a jeweled fortune teller behind her crystal ball"
+            alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
         </div>
 
-        <CrystalBall consulting={consulting} answer={answer} />
+        <FortuneLens consulting={consulting} answer={answer} />
       </div>
     </section>
   );
@@ -130,10 +116,12 @@ function App() {
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
   const [history, setHistory] = useState([]);
+  const [soundOn, setSoundOn] = useState(true);
   const inputRef = useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setLoaded(true), 1050);
+    const timer = window.setTimeout(() => setLoaded(true), 950);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -141,10 +129,40 @@ function App() {
     const recent = readRecent();
     let candidates = FORTUNES.filter((item) => !recent.includes(item.id));
     if (candidates.length < 10) candidates = FORTUNES;
+
     const selection = candidates[secureIndex(candidates.length)];
     const next = [...recent.filter((id) => id !== selection.id), selection.id].slice(-5);
     sessionStorage.setItem("rosieRecent", JSON.stringify(next));
     return selection;
+  }
+
+  function primeAudio() {
+    if (!soundOn) return null;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return null;
+    if (!audioRef.current) audioRef.current = new AudioContext();
+    audioRef.current.resume?.();
+    return audioRef.current;
+  }
+
+  function playRevealChime() {
+    const context = audioRef.current;
+    if (!soundOn || !context) return;
+
+    const now = context.currentTime;
+    [523.25, 659.25, 783.99].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0.0001, now + index * 0.07);
+      gain.gain.exponentialRampToValueAtTime(0.045, now + index * 0.07 + 0.018);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.07 + 0.42);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(now + index * 0.07);
+      oscillator.stop(now + index * 0.07 + 0.45);
+    });
   }
 
   function askRosie(event) {
@@ -154,16 +172,22 @@ function App() {
       return;
     }
 
+    primeAudio();
     setAnswer(null);
     setConsulting(true);
+
     const result = chooseFortune();
     const askedQuestion = question.trim();
     const delay = 1450 + secureIndex(650);
 
     window.setTimeout(() => {
       setAnswer(result);
-      setHistory((items) => [{ question: askedQuestion, answer: result.text, tone: result.tone }, ...items].slice(0, 5));
+      setHistory((items) => [
+        { question: askedQuestion, answer: result.text, tone: result.tone },
+        ...items
+      ].slice(0, 5));
       setConsulting(false);
+      playRevealChime();
       window.navigator.vibrate?.([22, 35, 22]);
     }, delay);
   }
@@ -177,9 +201,18 @@ function App() {
   function saveFortune() {
     if (!answer) return;
     let saved = [];
-    try { saved = JSON.parse(localStorage.getItem("rosieSavedFortunes") || "[]"); } catch {}
-    saved.unshift({ question: question.trim(), answer: answer.text, tone: answer.tone, savedAt: new Date().toISOString() });
+    try {
+      saved = JSON.parse(localStorage.getItem("rosieSavedFortunes") || "[]");
+    } catch {}
+
+    saved.unshift({
+      question: question.trim(),
+      answer: answer.text,
+      tone: answer.tone,
+      savedAt: new Date().toISOString()
+    });
     localStorage.setItem("rosieSavedFortunes", JSON.stringify(saved.slice(0, 50)));
+
     setToast("Fortune saved to Rosie's vault.");
     window.setTimeout(() => setToast(""), 1700);
   }
@@ -195,43 +228,54 @@ function App() {
       <div className={`app-shell ${loaded ? "app-shell-visible" : ""}`}>
         <header className="topbar">
           <button className="round-button" aria-label="Menu">☰</button>
-          <div className="brand"><small>THE HOUSE OF</small><strong>ROSIE</strong></div>
-          <button className="round-button" aria-label="Rosie profile">🐾</button>
+          <div className="brand">
+            <small>THE HOUSE OF</small>
+            <strong>ROSIE</strong>
+          </div>
+          <button
+            className={`round-button sound-button ${soundOn ? "is-on" : ""}`}
+            aria-label={soundOn ? "Mute fortune sounds" : "Enable fortune sounds"}
+            onClick={() => setSoundOn((value) => !value)}
+          >
+            {soundOn ? "♪" : "×"}
+          </button>
         </header>
 
         <main>
-          <FortuneMachine consulting={consulting} answer={answer} />
+          <div className="fortune-console">
+            <FortuneMachine consulting={consulting} answer={answer} />
 
-          <section className="intro">
-            <p className="eyebrow">FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</p>
-            <h2>Ask Madame Rosie</h2>
-            <p>Ask your question. Rosie will consult the ball, the universe, and possibly the kitchen.</p>
-          </section>
-
-          <form className="question-card" onSubmit={askRosie}>
-            <label htmlFor="question">WHAT TROUBLES YOU?</label>
-            <div className="question-row">
-              <input
-                ref={inputRef}
-                id="question"
-                value={question}
-                onChange={(event) => setQuestion(event.target.value)}
-                maxLength={160}
-                autoComplete="off"
-                placeholder="Should I text them back?"
-              />
-              <button className="ask-button" type="submit" disabled={consulting}>
-                {consulting ? "CONSULTING…" : "ASK ROSIE"}
-              </button>
+            <div className="console-caption">
+              <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
             </div>
-            <p>No question too difficult. No snack too small.</p>
-          </form>
 
-          <section className={`fortune-slip ${answer ? "fortune-slip-visible" : ""}`} aria-live="polite">
+            <form className="question-card" onSubmit={askRosie}>
+              <label htmlFor="question">Ask Rosie what you should do…</label>
+              <div className="question-row">
+                <input
+                  ref={inputRef}
+                  id="question"
+                  value={question}
+                  onChange={(event) => setQuestion(event.target.value)}
+                  maxLength={160}
+                  autoComplete="off"
+                  enterKeyHint="go"
+                  placeholder="Should I text them back?"
+                />
+                <button className="ask-button" type="submit" disabled={consulting}>
+                  <span className="button-paw">🐾</span>
+                  {consulting ? "CONSULTING…" : "ASK ROSIE"}
+                </button>
+              </div>
+              <p>No question too difficult. No snack too small.</p>
+            </form>
+          </div>
+
+          <section className={`fortune-slip ${answer ? "fortune-slip-visible" : ""}`}>
             {answer && (
               <>
                 <div className="fortune-slip-heading"><span>✦</span> THE PAW HAS SPOKEN <span>✦</span></div>
-                <p className="question-echo">“{question.trim()}”</p>
+                <p className="question-echo">You asked: “{question.trim()}”</p>
                 <div className="answer-actions">
                   <button onClick={askAnother}>ASK ANOTHER</button>
                   <button className="secondary" onClick={saveFortune}>SAVE FORTUNE</button>
@@ -242,12 +286,15 @@ function App() {
 
           {history.length > 1 && (
             <section className="session-history">
-              <div className="history-title">TONIGHT'S CONSULTATIONS</div>
+              <div className="history-title">RECENT FORTUNES</div>
               <div className="history-list">
                 {history.slice(1).map((item, index) => (
                   <div className="history-item" key={`${item.question}-${index}`}>
                     <span className={`history-dot tone-${item.tone}`} />
-                    <div><strong>{item.question}</strong><small>{item.answer}</small></div>
+                    <div>
+                      <strong>{item.question}</strong>
+                      <small>{item.answer}</small>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -258,7 +305,7 @@ function App() {
         <nav className="bottom-nav" aria-label="Primary">
           <button className="active"><span>✦</span><small>Fortune</small></button>
           <button disabled><span>♛</span><small>Cards</small></button>
-          <button disabled><span>✧</span><small>Gallery</small></button>
+          <button disabled><span>▧</span><small>Gallery</small></button>
           <button disabled><span>🐾</span><small>Rosie</small></button>
         </nav>
       </div>
