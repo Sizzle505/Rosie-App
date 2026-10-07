@@ -248,14 +248,18 @@ function SilverBackKey() {
   </svg>;
 }
 
-function CardImage({ card, eager = false, enlarged = false }) {
-  return <img
-    src={card.image}
-    alt={card.alt || `${card.name} collectible card`}
-    loading={eager ? 'eager' : 'lazy'}
-    decoding="async"
-    draggable={false}
+function CardImage({ card, enlarged = false }) {
+  const offset = (Number(card.spriteIndex || 0) / 3) * 100;
+  return <div
+    role="img"
+    aria-label={card.alt || `${card.name} collectible card`}
     className={enlarged ? styles.enlargedImage : styles.cardImage}
+    style={{
+      backgroundImage: `url("${card.image}")`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: '400% 100%',
+      backgroundPosition: `${offset}% 0`
+    }}
   />;
 }
 
@@ -514,7 +518,7 @@ function RosieCardVaultWall({ onExit }) {
     </header>
 
     <section className={styles.wall} aria-label="Randomized Rosie card wall" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
-      {cards.map((card, index) => <button type="button" className={styles.tile} key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card} eager={index < 24}/></button>)}
+      {cards.map((card, index) => <button type="button" className={styles.tile} key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card}/></button>)}
     </section>
     <div ref={sentinel} className={styles.sentinel} aria-hidden="true"/>
 
@@ -523,7 +527,7 @@ function RosieCardVaultWall({ onExit }) {
         <button type="button" className={styles.closeButton} aria-label="Close card detail" onClick={() => setSelectedCard(null)}>×</button>
         <div ref={revealHaloRef} className={`${styles.selectionHalo} ${revealStyles.revealHalo}`} aria-hidden="true"/>
         <div ref={revealCardRef} className={`${styles.expandedCard} ${revealStyles.revealCard}`} onClick={() => setSelectedCard(null)} onPointerMove={handleSelectedPointerMove} onPointerLeave={resetSelectedPointer}>
-          <CardImage card={selectedCard} eager enlarged/>
+          <CardImage card={selectedCard} enlarged/>
           <div className={revealStyles.selectionSheen} aria-hidden="true"/>
           <div ref={glintRef} className={revealStyles.selectionGlint} aria-hidden="true"/>
         </div>
