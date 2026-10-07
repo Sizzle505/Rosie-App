@@ -2065,3 +2065,524 @@
     width: 59%;
   }
 }
+
+
+/* === FORTUNE FIX PASS: STATIC SET / ROSIE-ONLY TURN === */
+
+/*
+  The flattened stage is the authority. Nothing broad is mirrored or moved.
+  Only three tightly masked practicals (moon + two lanterns) and Rosie's
+  isolated portrait layer animate over it.
+*/
+.stage-turning .stage-art {
+  transform: scale(1.015) !important;
+  filter: saturate(1.02) contrast(1.03) brightness(.9) !important;
+}
+
+/* Structural curtain overlays move; no duplicate curtain artwork is used. */
+.curtain {
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+.curtain-left {
+  animation: fortuneCurtainLeft 7.2s ease-in-out infinite !important;
+}
+.curtain-right {
+  animation: fortuneCurtainRight 8.05s ease-in-out infinite -1.45s !important;
+}
+@keyframes fortuneCurtainLeft {
+  0%,100% { transform: translateX(0) skewX(0deg); }
+  34% { transform: translateX(2.8px) skewX(1.25deg); }
+  68% { transform: translateX(-1.8px) skewX(-.8deg); }
+}
+@keyframes fortuneCurtainRight {
+  0%,100% { transform: scaleX(-1) translateX(0) skewX(0deg); }
+  39% { transform: scaleX(-1) translateX(2.6px) skewX(1.18deg); }
+  73% { transform: scaleX(-1) translateX(-1.7px) skewX(-.72deg); }
+}
+
+/* Keep the duplicate-art practicals extremely small and aligned to the master. */
+.living-set {
+  z-index: 7;
+}
+.set-piece {
+  object-fit: cover;
+  object-position: center 47%;
+  filter: saturate(1.02) contrast(1.03) brightness(.9);
+}
+.set-piece-moon {
+  z-index: 2;
+  transform-origin: 33.4% 15.7%;
+  -webkit-mask-image: radial-gradient(circle 6.2% at 33.4% 15.7%,
+    #000 0 72%,
+    rgba(0,0,0,.88) 82%,
+    rgba(0,0,0,.38) 93%,
+    transparent 100%);
+  mask-image: radial-gradient(circle 6.2% at 33.4% 15.7%,
+    #000 0 72%,
+    rgba(0,0,0,.88) 82%,
+    rgba(0,0,0,.38) 93%,
+    transparent 100%);
+  animation: fortuneMoonFloat 7.7s ease-in-out infinite !important;
+}
+.set-piece-lantern-left {
+  z-index: 3;
+  transform-origin: 24.4% 16.3%;
+  -webkit-mask-image: radial-gradient(ellipse 6.8% 18.3% at 24.4% 30.0%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 6.8% 18.3% at 24.4% 30.0%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  animation: fortuneLanternLeft 6.15s ease-in-out infinite -.7s !important;
+}
+.set-piece-lantern-right {
+  z-index: 3;
+  transform-origin: 83.8% 17.0%;
+  -webkit-mask-image: radial-gradient(ellipse 6.9% 18.5% at 83.8% 32.1%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  mask-image: radial-gradient(ellipse 6.9% 18.5% at 83.8% 32.1%,
+    #000 0 70%,
+    rgba(0,0,0,.9) 81%,
+    rgba(0,0,0,.38) 94%,
+    transparent 100%);
+  animation: fortuneLanternRight 6.85s ease-in-out infinite -2.15s !important;
+}
+@keyframes fortuneMoonFloat {
+  0%,100% { transform: scale(1.015) translate(0,0) rotate(-.35deg); }
+  45% { transform: scale(1.015) translate(1.8px,1.4px) rotate(.72deg); }
+  72% { transform: scale(1.015) translate(-.8px,.45px) rotate(-.18deg); }
+}
+@keyframes fortuneLanternLeft {
+  0%,100% { transform: scale(1.015) rotate(-1.05deg) translateY(0); }
+  50% { transform: scale(1.015) rotate(1.35deg) translateY(1.1px); }
+}
+@keyframes fortuneLanternRight {
+  0%,100% { transform: scale(1.015) rotate(.95deg) translateY(.1px); }
+  50% { transform: scale(1.015) rotate(-1.25deg) translateY(1.15px); }
+}
+
+/* The painted lanterns stay put; moving light sells the pendulum without a second broad scene. */
+.lantern-glow {
+  top: 14.2%;
+  opacity: .96;
+  animation: fortuneLanternGlowLeft 6.15s ease-in-out infinite -.7s !important;
+}
+.lantern-glow-left {
+  left: 24.4%;
+  margin-left: -32px;
+}
+.lantern-glow-right {
+  left: 83.8%;
+  right: auto;
+  margin-left: -32px;
+  animation-name: fortuneLanternGlowRight !important;
+  animation-duration: 6.85s !important;
+  animation-delay: -2.15s !important;
+  animation-direction: normal !important;
+}
+@keyframes fortuneLanternGlowLeft {
+  0%,100% { transform: rotate(-1.3deg) translateY(0); }
+  50% { transform: rotate(1.65deg) translateY(1.2px); }
+}
+@keyframes fortuneLanternGlowRight {
+  0%,100% { transform: rotate(1.2deg) translateY(.1px); }
+  50% { transform: rotate(-1.55deg) translateY(1.25px); }
+}
+
+/*
+  Rosie-only portrait layer. It is always present over the identical pixels below,
+  so idle breathing affects Rosie rather than the set. The mirrored state swaps
+  instantly under smoke rather than rotating a slab of the scene in 3-D.
+*/
+.rosie-turn-layer {
+  z-index: 9 !important;
+  opacity: 1 !important;
+  transform-origin: 50% 35% !important;
+  transition: filter .18s ease !important;
+  clip-path: polygon(
+    25% 53%,
+    29% 39%,
+    34% 25%,
+    40% 9%,
+    47% 2%,
+    55% 3%,
+    63% 8%,
+    72% 23%,
+    78% 40%,
+    78% 52%,
+    70% 61%,
+    60% 66%,
+    40% 66%,
+    30% 61%
+  ) !important;
+  -webkit-mask-image: radial-gradient(ellipse 31% 35% at 51% 34%,
+    #000 0 70%,
+    rgba(0,0,0,.98) 79%,
+    rgba(0,0,0,.78) 87%,
+    rgba(0,0,0,.34) 95%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 31% 35% at 51% 34%,
+    #000 0 70%,
+    rgba(0,0,0,.98) 79%,
+    rgba(0,0,0,.78) 87%,
+    rgba(0,0,0,.34) 95%,
+    transparent 100%) !important;
+  animation: fortuneRosieBreathe 5.3s ease-in-out infinite !important;
+  will-change: transform;
+}
+.rosie-turn-layer.is-flipped {
+  opacity: 1 !important;
+  animation: fortuneRosieBreatheFlipped 5.3s ease-in-out infinite !important;
+}
+.rosie-turn-layer.is-turning,
+.rosie-turn-layer.is-flipped.is-turning {
+  filter: saturate(1.08) contrast(1.035) brightness(.9) !important;
+}
+@keyframes fortuneRosieBreathe {
+  0%,100% { transform: scale(1.015) translateY(0); }
+  50% { transform: scale(1.018) translateY(-1px); }
+}
+@keyframes fortuneRosieBreatheFlipped {
+  0%,100% { transform: scaleX(-1) scale(1.015) translateY(0); }
+  50% { transform: scaleX(-1) scale(1.018) translateY(-1px); }
+}
+.turn-seam-haze {
+  display: none !important;
+}
+
+/* Smoke is the edit point: dense before, during, and just after the 430ms swap. */
+.turn-veil {
+  left: 50%;
+  top: 36%;
+  width: 64%;
+  height: 59%;
+  z-index: 30 !important;
+  filter: blur(6px);
+  background:
+    radial-gradient(ellipse at 50% 45%,
+      rgba(50,18,70,1) 0 31%,
+      rgba(92,38,122,.995) 43%,
+      rgba(133,61,165,.97) 55%,
+      rgba(99,39,131,.86) 67%,
+      rgba(65,23,88,.55) 79%,
+      rgba(45,16,62,.2) 90%,
+      transparent 98%);
+  box-shadow:
+    0 0 42px rgba(208,132,244,.54),
+    0 0 82px rgba(89,36,120,.34),
+    inset 0 0 38px rgba(249,218,255,.12);
+  animation: fortuneTurnCover 1.06s cubic-bezier(.14,.68,.14,1) forwards !important;
+}
+@keyframes fortuneTurnCover {
+  0% { opacity: 0; transform: translate(-50%,-44%) scale(.24,.18); }
+  17% { opacity: .96; transform: translate(-50%,-49%) scale(.9,.86); }
+  29% { opacity: 1; transform: translate(-50%,-50%) scale(1.08,1.03); }
+  61% { opacity: 1; transform: translate(-50%,-52%) scale(1.13,1.1); }
+  76% { opacity: .72; transform: translate(-50%,-58%) scale(1.22,1.28); }
+  100% { opacity: 0; transform: translate(-50%,-76%) scale(1.42,1.58); }
+}
+.smoke-wisp {
+  z-index: 31 !important;
+  top: 38% !important;
+  animation-duration: 1.04s !important;
+}
+.turn-orbit { z-index: 32 !important; }
+.flip-flash {
+  z-index: 33 !important;
+  top: 35% !important;
+}
+.flip-sparkles { z-index: 34 !important; }
+
+/* Book labels are now individually registered to the actual painted spines. */
+.book-accents {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  width: auto;
+  height: auto;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  pointer-events: none;
+}
+.book-accents i {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 8.1%;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(231,192,122,.38);
+  border-left-color: rgba(255,220,147,.72);
+  border-radius: 2px 7px 7px 2px;
+  box-shadow:
+    inset 0 1px rgba(255,241,207,.12),
+    inset 0 -2px rgba(0,0,0,.32),
+    0 1px 2px rgba(0,0,0,.26);
+}
+.book-accents i::before {
+  content: "✦";
+  position: absolute;
+  left: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(248,214,141,.72);
+  font-size: 5px;
+}
+.book-accents i span {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-left: 18%;
+  max-width: 77%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,.92);
+}
+.book-accents i:nth-child(1) {
+  left: 2.4%;
+  top: 65.7%;
+  width: 20.6%;
+  background:
+    linear-gradient(90deg, rgba(255,226,160,.11), transparent 18% 82%, rgba(255,220,145,.08)),
+    rgba(94,28,52,.88);
+}
+.book-accents i:nth-child(1) span {
+  color: #f0cf8d;
+  font: italic 700 6px/1 Georgia, "Times New Roman", serif;
+  letter-spacing: .09em;
+}
+.book-accents i:nth-child(2) {
+  left: 0;
+  top: 74.0%;
+  width: 24.5%;
+  background:
+    linear-gradient(90deg, rgba(234,220,169,.1), transparent 18% 82%, rgba(239,199,121,.08)),
+    rgba(28,68,72,.9);
+}
+.book-accents i:nth-child(2) span {
+  color: #ded49f;
+  font: 700 5.7px/1 "Trebuchet MS", Arial, sans-serif;
+  letter-spacing: .14em;
+}
+.book-accents i:nth-child(3) {
+  left: 0;
+  top: 82.5%;
+  width: 26.3%;
+  background:
+    linear-gradient(90deg, rgba(252,220,156,.1), transparent 17% 83%, rgba(245,201,125,.08)),
+    rgba(117,47,27,.9);
+}
+.book-accents i:nth-child(3) span {
+  color: #f0d397;
+  font: 700 5.8px/1 "Courier New", monospace;
+  letter-spacing: .07em;
+}
+.book-accents i:nth-child(4) {
+  left: 0;
+  top: 91.2%;
+  width: 27.2%;
+  background:
+    linear-gradient(90deg, rgba(232,218,168,.1), transparent 18% 82%, rgba(240,199,119,.08)),
+    rgba(43,72,57,.9);
+}
+.book-accents i:nth-child(4) span {
+  color: #ddd19a;
+  font: 700 5.5px/1 Palatino, "Book Antiqua", Georgia, serif;
+  font-variant: small-caps;
+  letter-spacing: .07em;
+}
+.book-accents i:nth-child(5) {
+  display: none;
+}
+
+/* Prompt chips first, refresh affordance beneath them. No empty helper-line reservation. */
+.quick-row {
+  display: block !important;
+  margin-top: 11px;
+  padding-top: 10px;
+}
+.quick-prompts {
+  width: 100%;
+}
+.shuffle-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 7px;
+}
+.shuffle-prompts {
+  width: auto !important;
+  height: 25px !important;
+  padding: 0 9px !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px !important;
+  color: #9a887c !important;
+  font-size: 8.5px !important;
+  letter-spacing: .045em;
+}
+.shuffle-prompts span {
+  font-size: 12px;
+  line-height: 1;
+}
+.speech-status {
+  min-height: 0 !important;
+  margin-top: 6px;
+}
+
+/* Make the apparition luminous without moving any layout boxes. */
+.fortune-lens.has-answer {
+  filter:
+    drop-shadow(0 0 12px rgba(205,137,244,.5))
+    drop-shadow(0 0 24px rgba(246,206,117,.14)) !important;
+}
+.lens-answer strong {
+  text-shadow:
+    0 1px 7px rgba(0,0,0,.98),
+    0 0 7px rgba(255,249,220,.98),
+    0 0 15px rgba(251,213,119,.72),
+    0 0 28px rgba(205,132,244,.84),
+    0 0 44px rgba(128,63,180,.52) !important;
+}
+
+/* Mobile uses horizontal source cropping instead of desktop's vertical crop. */
+@media (max-width: 620px) {
+  .stage-turning .stage-art {
+    transform: scale(1.01) !important;
+  }
+
+  .set-piece-moon {
+    transform-origin: 30.0% 21.0%;
+    -webkit-mask-image: radial-gradient(circle 7.1% at 30.0% 21.0%, #000 0 72%, rgba(0,0,0,.88) 83%, rgba(0,0,0,.34) 94%, transparent 100%);
+    mask-image: radial-gradient(circle 7.1% at 30.0% 21.0%, #000 0 72%, rgba(0,0,0,.88) 83%, rgba(0,0,0,.34) 94%, transparent 100%);
+  }
+  .set-piece-lantern-left {
+    transform-origin: 19.5% 17%;
+    -webkit-mask-image: radial-gradient(ellipse 8.1% 15.7% at 19.5% 32.9%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+    mask-image: radial-gradient(ellipse 8.1% 15.7% at 19.5% 32.9%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+  }
+  .set-piece-lantern-right {
+    transform-origin: 90.6% 18%;
+    -webkit-mask-image: radial-gradient(ellipse 8.2% 15.9% at 90.6% 34.7%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+    mask-image: radial-gradient(ellipse 8.2% 15.9% at 90.6% 34.7%, #000 0 70%, rgba(0,0,0,.9) 82%, rgba(0,0,0,.35) 94%, transparent 100%);
+  }
+  @keyframes fortuneMoonFloat {
+    0%,100% { transform: scale(1.01) translate(0,0) rotate(-.35deg); }
+    45% { transform: scale(1.01) translate(1.5px,1.5px) rotate(.72deg); }
+    72% { transform: scale(1.01) translate(-.7px,.45px) rotate(-.18deg); }
+  }
+  @keyframes fortuneLanternLeft {
+    0%,100% { transform: scale(1.01) rotate(-1.05deg) translateY(0); }
+    50% { transform: scale(1.01) rotate(1.35deg) translateY(1px); }
+  }
+  @keyframes fortuneLanternRight {
+    0%,100% { transform: scale(1.01) rotate(.95deg) translateY(.1px); }
+    50% { transform: scale(1.01) rotate(-1.25deg) translateY(1px); }
+  }
+
+  .lantern-glow {
+    top: 17.5%;
+    width: 48px;
+    height: 88px;
+  }
+  .lantern-glow-left {
+    left: 19.5%;
+    margin-left: -24px;
+  }
+  .lantern-glow-right {
+    left: 90.6%;
+    margin-left: -24px;
+  }
+
+  .rosie-turn-layer {
+    clip-path: polygon(
+      20% 55%,
+      24% 40%,
+      30% 24%,
+      38% 8%,
+      47% 1%,
+      55% 2%,
+      65% 8%,
+      76% 23%,
+      82% 40%,
+      81% 54%,
+      72% 63%,
+      61% 68%,
+      39% 68%,
+      28% 63%
+    ) !important;
+    -webkit-mask-image: radial-gradient(ellipse 36% 36% at 51% 35%, #000 0 70%, rgba(0,0,0,.98) 79%, rgba(0,0,0,.76) 88%, rgba(0,0,0,.32) 95%, transparent 100%) !important;
+    mask-image: radial-gradient(ellipse 36% 36% at 51% 35%, #000 0 70%, rgba(0,0,0,.98) 79%, rgba(0,0,0,.76) 88%, rgba(0,0,0,.32) 95%, transparent 100%) !important;
+  }
+  @keyframes fortuneRosieBreathe {
+    0%,100% { transform: scale(1.01) translateY(0); }
+    50% { transform: scale(1.013) translateY(-.85px); }
+  }
+  @keyframes fortuneRosieBreatheFlipped {
+    0%,100% { transform: scaleX(-1) scale(1.01) translateY(0); }
+    50% { transform: scaleX(-1) scale(1.013) translateY(-.85px); }
+  }
+
+  .turn-veil {
+    top: 36%;
+    width: 76%;
+    height: 61%;
+  }
+
+  .book-accents i {
+    height: 6.9%;
+  }
+  .book-accents i:nth-child(1) {
+    left: -6.4%;
+    top: 62.7%;
+    width: 24.0%;
+  }
+  .book-accents i:nth-child(2) {
+    left: -9.3%;
+    top: 69.5%;
+    width: 28.7%;
+  }
+  .book-accents i:nth-child(3) {
+    left: -9.3%;
+    top: 76.5%;
+    width: 31.0%;
+  }
+  .book-accents i:nth-child(4) {
+    left: -9.3%;
+    top: 83.7%;
+    width: 32.3%;
+  }
+  .book-accents i:nth-child(5) {
+    display: flex;
+    left: -9.3%;
+    top: 90.8%;
+    width: 32.8%;
+    background:
+      linear-gradient(90deg, rgba(247,221,159,.1), transparent 18% 82%, rgba(242,199,122,.08)),
+      rgba(65,41,88,.9);
+  }
+  .book-accents i:nth-child(5) span {
+    color: #ead09a;
+    font: 700 5.3px/1 Garamond, Georgia, serif;
+    letter-spacing: .05em;
+  }
+
+  .book-accents i span {
+    font-size: 5.2px !important;
+  }
+
+  .shuffle-row {
+    justify-content: center;
+  }
+}
