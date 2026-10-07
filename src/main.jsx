@@ -728,6 +728,10 @@ function CheeseMemoryGame() {
             </div>
             <i aria-hidden="true">{rosieMood === "elated" || rosieMood === "proud" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✦" : rosieMood === "embarrassed" ? "♡" : rosieMood === "focused" ? "⌕" : "◌"}</i>
           </div>
+          <button type="button" className="cheese-reset-button cheese-reset-mobile" onClick={resetGame}>
+            <span aria-hidden="true">↻</span>
+            NEW BOARD
+          </button>
         </aside>
       </section>
 
