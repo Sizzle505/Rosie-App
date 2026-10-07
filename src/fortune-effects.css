@@ -3289,3 +3289,51 @@
     clip-path: ellipse(47% 48% at 50% 47%) !important;
   }
 }
+
+
+/* === BACKFILL BLEND REFINEMENT === */
+
+/* Match the almost-black blue cloth behind Rosie and keep the repair tucked under the portrait. */
+.turn-seam-haze {
+  width: 57% !important;
+  height: 40% !important;
+  top: 32% !important;
+  background:
+    radial-gradient(circle at 17% 22%, rgba(227,178,78,.58) 0 .8px, transparent 1.8px),
+    radial-gradient(circle at 80% 18%, rgba(236,190,92,.52) 0 .9px, transparent 2px),
+    radial-gradient(circle at 73% 44%, rgba(223,172,80,.42) 0 .7px, transparent 1.7px),
+    radial-gradient(circle at 30% 48%, rgba(218,163,72,.34) 0 .7px, transparent 1.6px),
+    linear-gradient(90deg,
+      rgba(4,9,22,.995) 0%,
+      rgba(8,17,35,.995) 22%,
+      rgba(11,22,45,.995) 39%,
+      rgba(5,12,28,.998) 55%,
+      rgba(9,18,38,.996) 73%,
+      rgba(4,9,22,.998) 100%) !important;
+  box-shadow:
+    inset 10px 0 24px rgba(4,8,20,.26),
+    inset -10px 0 24px rgba(3,7,18,.3) !important;
+  filter: blur(1.2px) !important;
+}
+.rosie-turn-layer.is-flipped {
+  animation: fortuneRosieBreatheFlippedCover 5.3s ease-in-out infinite !important;
+}
+@keyframes fortuneRosieBreatheFlippedCover {
+  0%,100% { transform: scaleX(-1) scale(1.025) translateY(0); }
+  50% { transform: scaleX(-1) scale(1.028) translateY(-.9px); }
+}
+
+@media (max-width: 620px) {
+  .turn-seam-haze {
+    width: 64% !important;
+    height: 40% !important;
+    top: 33% !important;
+  }
+  .rosie-turn-layer.is-flipped {
+    animation: fortuneRosieBreatheFlippedCoverMobile 5.3s ease-in-out infinite !important;
+  }
+  @keyframes fortuneRosieBreatheFlippedCoverMobile {
+    0%,100% { transform: scaleX(-1) scale(1.022) translateY(0); }
+    50% { transform: scaleX(-1) scale(1.025) translateY(-.8px); }
+  }
+}
