@@ -433,74 +433,335 @@ function GoldenCheeseIcon({ compact = false }) {
   );
 }
 
+function CaptainRosieIllustration({ className = "", idPrefix = "captainRosie" }) {
+  const furId = idPrefix + "-fur";
+  const creamId = idPrefix + "-cream";
+  const jacketId = idPrefix + "-jacket";
+  const hatId = idPrefix + "-hat";
+  const goldId = idPrefix + "-gold";
+  const shadowId = idPrefix + "-shadow";
+
+  return (
+    <svg className={"captain-rosie-illustration " + className} viewBox="0 0 260 300" role="img" aria-label="Illustrated Captain Rosie">
+      <defs>
+        <linearGradient id={furId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#efad5a" />
+          <stop offset=".46" stopColor="#d88439" />
+          <stop offset="1" stopColor="#9d4f26" />
+        </linearGradient>
+        <linearGradient id={creamId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff8de" />
+          <stop offset=".62" stopColor="#f5dfb7" />
+          <stop offset="1" stopColor="#dab989" />
+        </linearGradient>
+        <linearGradient id={jacketId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#133e67" />
+          <stop offset=".56" stopColor="#082843" />
+          <stop offset="1" stopColor="#031728" />
+        </linearGradient>
+        <linearGradient id={hatId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fffef7" />
+          <stop offset=".62" stopColor="#efe5cf" />
+          <stop offset="1" stopColor="#cdbb99" />
+        </linearGradient>
+        <linearGradient id={goldId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#fff0b5" />
+          <stop offset=".38" stopColor="#e4b85d" />
+          <stop offset=".72" stopColor="#a76b24" />
+          <stop offset="1" stopColor="#f0cf7f" />
+        </linearGradient>
+        <filter id={shadowId} x="-30%" y="-30%" width="160%" height="170%">
+          <feDropShadow dx="0" dy="7" stdDeviation="5" floodColor="#021523" floodOpacity=".35" />
+        </filter>
+      </defs>
+
+      <g className="captain-rosie-bob" filter={"url(#" + shadowId + ")"}>
+        <path className="captain-scarf-back" d="M191 221c31 7 46 17 55 34-25-2-45-8-64-20Z" fill="#d13f3c" stroke="#79252a" strokeWidth="3" />
+        <path d="M73 218c15-18 37-28 57-28s42 10 57 28l19 62H54Z" fill={"url(#" + jacketId + ")"} stroke="#d8aa54" strokeWidth="4" />
+        <path d="M95 218 130 285l35-67-19-19h-32Z" fill="#f8f0de" />
+        <path d="M110 207h40l-9 21h-22Z" fill="#b92f31" stroke="#702023" strokeWidth="2" />
+        <path d="M79 236c10 5 18 7 29 8m44 0c11-1 19-3 29-8" fill="none" stroke="#ddb35f" strokeWidth="4" strokeLinecap="round" opacity=".85" />
+        <circle cx="83" cy="251" r="5" fill={"url(#" + goldId + ")"} />
+        <circle cx="177" cy="251" r="5" fill={"url(#" + goldId + ")"} />
+
+        <path d="M73 87 49 27c34 8 49 25 61 50Z" fill={"url(#" + furId + ")"} stroke="#71381f" strokeWidth="5" strokeLinejoin="round" />
+        <path d="m66 70-9-31c17 7 27 17 36 34Z" fill="#8c4436" opacity=".9" />
+        <path d="m187 87 24-60c-34 8-49 25-61 50Z" fill={"url(#" + furId + ")"} stroke="#71381f" strokeWidth="5" strokeLinejoin="round" />
+        <path d="m194 70 9-31c-17 7-27 17-36 34Z" fill="#8c4436" opacity=".9" />
+
+        <path d="M57 123c0-53 31-84 73-84s73 31 73 84c0 61-31 101-73 101S57 184 57 123Z" fill={"url(#" + furId + ")"} stroke="#6f381f" strokeWidth="5" />
+        <path d="M62 126c4-18 13-34 27-44 4 25 17 40 41 43-21 4-36 18-45 42-13-10-21-24-23-41Z" fill={"url(#" + creamId + ")"} opacity=".98" />
+        <path d="M198 126c-4-18-13-34-27-44-4 25-17 40-41 43 21 4 36 18 45 42 13-10 21-24 23-41Z" fill={"url(#" + creamId + ")"} opacity=".98" />
+        <path d="M91 151c6-20 20-31 39-31s33 11 39 31c5 18 0 44-12 57-9 10-18 15-27 15s-18-5-27-15c-12-13-17-39-12-57Z" fill={"url(#" + creamId + ")"} />
+
+        <path d="M84 118c10-8 22-9 31-2" fill="none" stroke="#6f351f" strokeWidth="5" strokeLinecap="round" />
+        <path d="M176 118c-10-8-22-9-31-2" fill="none" stroke="#6f351f" strokeWidth="5" strokeLinecap="round" />
+        <ellipse cx="103" cy="132" rx="8.5" ry="10" fill="#251b18" />
+        <ellipse cx="157" cy="132" rx="8.5" ry="10" fill="#251b18" />
+        <circle cx="100" cy="128" r="2.6" fill="#fff9df" />
+        <circle cx="154" cy="128" r="2.6" fill="#fff9df" />
+        <path d="M116 164c8-7 20-7 28 0-2 10-7 15-14 15s-12-5-14-15Z" fill="#251918" />
+        <path d="M130 178v10" stroke="#5f3228" strokeWidth="3" strokeLinecap="round" />
+        <path d="M130 188c-9 0-16 5-20 11m20-11c9 0 16 5 20 11" fill="none" stroke="#6d3b2f" strokeWidth="3" strokeLinecap="round" />
+        <path d="M111 203c13 8 25 8 38 0" fill="none" stroke="#a45c4b" strokeWidth="2.5" strokeLinecap="round" opacity=".75" />
+        <ellipse cx="82" cy="157" rx="12" ry="7" fill="#d36857" opacity=".19" />
+        <ellipse cx="178" cy="157" rx="12" ry="7" fill="#d36857" opacity=".19" />
+
+        <g className="captain-hat">
+          <path d="M72 74c17-18 38-28 58-28s41 10 58 28l-12 26H84Z" fill={"url(#" + hatId + ")"} stroke="#77532b" strokeWidth="4" />
+          <path d="M82 77c31-12 65-12 96 0l-3 17H85Z" fill="#123555" stroke="#7c552b" strokeWidth="3" />
+          <path d="M91 54c4-22 18-34 39-34s35 12 39 34c-26-8-52-8-78 0Z" fill={"url(#" + hatId + ")"} stroke="#77532b" strokeWidth="4" />
+          <path d="M89 96c27 9 55 9 82 0-8 17-74 17-82 0Z" fill="#06233c" stroke="#d0a34e" strokeWidth="3" />
+          <circle cx="130" cy="70" r="14" fill={"url(#" + goldId + ")"} stroke="#704719" strokeWidth="2" />
+          <path d="M130 59v18m-9-8h18m-13 8c-5 4-5 9 4 10 9-1 9-6 4-10" fill="none" stroke="#123554" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="130" cy="57" r="3.2" fill="#123554" />
+        </g>
+
+        <path d="M86 217c18 10 32 14 44 14s26-4 44-14" fill="none" stroke="#efcf7c" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="130" cy="235" r="12" fill={"url(#" + goldId + ")"} stroke="#7b501d" strokeWidth="2" />
+        <path d="M125 235c0-5 2-8 5-8s5 3 5 8c0 4-2 7-5 7s-5-3-5-7Z" fill="#123555" />
+      </g>
+    </svg>
+  );
+}
+
+function RivieraCourseArt() {
+  return (
+    <svg className="riviera-course-art" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="courseSkyGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--course-sky-top)" />
+          <stop offset=".64" stopColor="var(--course-sky-mid)" />
+          <stop offset="1" stopColor="var(--course-sky-horizon)" />
+        </linearGradient>
+        <linearGradient id="courseSeaGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--course-sea-top)" />
+          <stop offset=".42" stopColor="var(--course-sea-mid)" />
+          <stop offset="1" stopColor="var(--course-sea-bottom)" />
+        </linearGradient>
+        <linearGradient id="courseCliffGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#d6b578" />
+          <stop offset=".44" stopColor="#9d7748" />
+          <stop offset="1" stopColor="#63492f" />
+        </linearGradient>
+        <linearGradient id="courseVillaGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff5d9" />
+          <stop offset="1" stopColor="#d9b77e" />
+        </linearGradient>
+        <linearGradient id="courseGreenGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#77935c" />
+          <stop offset="1" stopColor="#315241" />
+        </linearGradient>
+        <radialGradient id="courseSunGlow">
+          <stop offset="0" stopColor="#fff8c9" stopOpacity=".92" />
+          <stop offset=".34" stopColor="#ffe39a" stopOpacity=".46" />
+          <stop offset="1" stopColor="#ffe39a" stopOpacity="0" />
+        </radialGradient>
+        <pattern id="courseWaterPattern" width="160" height="70" patternUnits="userSpaceOnUse">
+          <path d="M-20 34c35-15 70-15 105 0s70 15 105 0" fill="none" stroke="#dffcff" strokeOpacity=".14" strokeWidth="4" />
+          <path d="M25 58c26-10 52-10 78 0s52 10 78 0" fill="none" stroke="#ffffff" strokeOpacity=".07" strokeWidth="2" />
+        </pattern>
+        <filter id="courseSoftCloud" x="-30%" y="-50%" width="160%" height="200%">
+          <feGaussianBlur stdDeviation="5" />
+        </filter>
+      </defs>
+
+      <rect width="1000" height="330" fill="url(#courseSkyGradient)" />
+      <circle className="riviera-sun-glow" cx="775" cy="112" r="118" fill="url(#courseSunGlow)" />
+      <circle className="riviera-sun-disc" cx="775" cy="112" r="34" fill="var(--course-sun)" />
+
+      <g className="riviera-clouds" fill="#fff8e9" opacity=".64" filter="url(#courseSoftCloud)">
+        <path d="M95 98c30-30 70-21 80 8 27-17 63 2 58 31H52c2-25 21-40 43-39Z" />
+        <path d="M563 74c20-23 52-18 61 5 22-13 49 2 47 25H526c2-19 17-31 37-30Z" opacity=".52" />
+        <path d="M810 190c23-21 55-15 64 7 21-11 46 4 43 26H770c2-19 18-31 40-33Z" opacity=".4" />
+      </g>
+
+      <path d="M0 248c84-69 154-74 235-32 54-57 123-63 196-24 65-52 142-48 213 2 77-62 173-52 263 30 34-20 65-24 93-18v124H0Z" fill="#65868a" opacity=".4" />
+      <path d="M0 279c95-62 189-58 282-4 79-59 172-61 278-6 86-45 174-44 264 2 66-33 125-35 176-9v68H0Z" fill="#6f8e82" opacity=".45" />
+
+      <rect y="300" width="1000" height="460" fill="url(#courseSeaGradient)" />
+      <rect y="300" width="1000" height="460" fill="url(#courseWaterPattern)" opacity=".72" />
+      <path d="M0 304c210 13 359 13 503 0 164-15 325-14 497 2" fill="none" stroke="#fff4d5" strokeOpacity=".62" strokeWidth="5" />
+      <path d="M610 315c72 30 123 78 156 143" fill="none" stroke="#fff8cd" strokeOpacity=".11" strokeWidth="34" strokeLinecap="round" />
+      <path d="M618 314c72 35 117 82 148 140" fill="none" stroke="#fffbe5" strokeOpacity=".2" strokeWidth="8" strokeLinecap="round" />
+
+      <g className="riviera-left-coast">
+        <path d="M0 259c82 0 135 24 183 74 28 29 61 52 112 69-16 34-33 67-59 92-80-16-152-32-236-28Z" fill="url(#courseCliffGradient)" />
+        <path d="M0 244c79-5 144 21 199 75 16 15 35 29 58 41-56-15-111-15-169-1-27-22-57-37-88-43Z" fill="url(#courseGreenGradient)" />
+        <path d="M0 397c72-13 136-7 197 14 22 8 43 18 64 30-28 17-54 36-76 57-75-20-130-24-185-14Z" fill="#705239" opacity=".62" />
+      </g>
+
+      <g className="riviera-right-coast">
+        <path d="M1000 246c-86 3-151 33-201 86-35 36-67 57-112 72 17 34 35 67 62 96 89-28 169-38 251-32Z" fill="url(#courseCliffGradient)" />
+        <path d="M1000 232c-92 3-161 31-218 87-20 20-41 34-65 46 64-18 124-17 179 0 31-24 65-40 104-48Z" fill="url(#courseGreenGradient)" />
+        <path d="M1000 392c-84-12-156-1-219 29-17 8-33 17-48 28 32 16 60 35 84 57 68-23 127-31 183-23Z" fill="#71533a" opacity=".62" />
+      </g>
+
+      <g className="riviera-villas" stroke="#8d6c44" strokeWidth="3">
+        <g transform="translate(72 225)">
+          <rect x="0" y="22" width="82" height="52" rx="3" fill="url(#courseVillaGradient)" />
+          <path d="M-7 24 41 0l48 24Z" fill="#b96648" />
+          <rect x="13" y="37" width="13" height="19" fill="#46788b" />
+          <rect x="55" y="37" width="13" height="19" fill="#46788b" />
+          <path d="M36 74V44h13v30" fill="#70523a" />
+        </g>
+        <g transform="translate(177 256) scale(.78)">
+          <rect x="0" y="18" width="72" height="47" rx="3" fill="url(#courseVillaGradient)" />
+          <path d="M-5 20 36 1l41 19Z" fill="#ca7754" />
+          <rect x="10" y="32" width="12" height="16" fill="#487f91" />
+          <rect x="50" y="32" width="12" height="16" fill="#487f91" />
+        </g>
+        <g transform="translate(832 235)">
+          <rect x="0" y="20" width="92" height="58" rx="3" fill="url(#courseVillaGradient)" />
+          <path d="M-7 22 46 0l53 22Z" fill="#b65c45" />
+          <rect x="14" y="38" width="15" height="20" fill="#477b8d" />
+          <rect x="63" y="38" width="15" height="20" fill="#477b8d" />
+          <path d="M40 78V43h15v35" fill="#6e5138" />
+        </g>
+        <g transform="translate(745 267) scale(.7)">
+          <rect x="0" y="16" width="70" height="44" rx="3" fill="url(#courseVillaGradient)" />
+          <path d="M-4 18 35 0l39 18Z" fill="#ce7755" />
+          <rect x="10" y="31" width="11" height="14" fill="#47798d" />
+          <rect x="49" y="31" width="11" height="14" fill="#47798d" />
+        </g>
+      </g>
+
+      <g className="riviera-palms" stroke="#345445" strokeWidth="5" strokeLinecap="round">
+        <path d="M222 304c0-27 3-48 11-68" />
+        <path d="M233 236c-18-9-29-11-41-6m41 6c14-13 28-18 44-16m-44 16c0-17-5-29-15-39" fill="none" />
+        <path d="M793 308c1-27-2-49-9-69" />
+        <path d="M784 239c18-10 31-12 43-7m-43 7c-14-13-30-18-46-15m46 15c1-17 6-30 16-40" fill="none" />
+      </g>
+
+      <g className="riviera-lighthouse" transform="translate(912 190)">
+        <path d="M7 92 20 17h30l13 75Z" fill="#f2e8cf" stroke="#7d684b" strokeWidth="3" />
+        <path d="M14 53h43" stroke="#bd4f43" strokeWidth="11" />
+        <rect x="14" y="5" width="42" height="20" rx="3" fill="#263f55" stroke="#755729" strokeWidth="3" />
+        <path d="M9 6 35-10 61 6Z" fill="#b65a45" stroke="#70442d" strokeWidth="3" />
+        <circle cx="35" cy="15" r="7" fill="#ffeaa1" />
+      </g>
+
+      <g className="riviera-distant-boats" fill="#f7f0dd" stroke="#40677a" strokeWidth="2">
+        <path d="M353 321h66l-11 17h-43Z" />
+        <path d="M379 320v-34l28 31h-28Z" fill="#fff6db" />
+        <path d="M638 337h49l-8 13h-33Z" opacity=".72" />
+        <path d="M658 336v-24l19 22h-19Z" fill="#fff6db" opacity=".72" />
+      </g>
+
+      <g className="riviera-lane-guides" fill="none" stroke="#e4fbff" strokeLinecap="round">
+        <path d="M474 326C445 448 398 590 329 748" strokeOpacity=".2" strokeWidth="5" strokeDasharray="4 26" />
+        <path d="M526 326C555 448 602 590 671 748" strokeOpacity=".2" strokeWidth="5" strokeDasharray="4 26" />
+      </g>
+
+      <g className="riviera-water-highlights" fill="none" stroke="#efffff" strokeLinecap="round">
+        <path d="M105 392c61-13 118-13 171 0" strokeOpacity=".19" strokeWidth="5" />
+        <path d="M712 430c59-16 111-16 157-1" strokeOpacity=".17" strokeWidth="5" />
+        <path d="M243 530c78-17 147-16 207 2" strokeOpacity=".13" strokeWidth="6" />
+        <path d="M540 605c74-18 144-17 210 2" strokeOpacity=".14" strokeWidth="7" />
+        <path d="M66 676c64-14 122-12 176 4" strokeOpacity=".1" strokeWidth="7" />
+      </g>
+
+      <g className="riviera-sparkles" fill="#fffbed">
+        <circle cx="170" cy="357" r="3" opacity=".55" />
+        <circle cx="302" cy="444" r="2.5" opacity=".46" />
+        <circle cx="558" cy="380" r="3" opacity=".56" />
+        <circle cx="690" cy="512" r="3.5" opacity=".43" />
+        <circle cx="838" cy="588" r="2.6" opacity=".46" />
+        <circle cx="427" cy="652" r="3" opacity=".4" />
+        <path d="m598 470 4 9 9 4-9 4-4 9-4-9-9-4 9-4Z" opacity=".42" />
+        <path d="m252 610 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" opacity=".34" />
+      </g>
+    </svg>
+  );
+}
+
 function CaptainYachtArt({ boost }) {
   return (
     <div className="yacht-illustration" aria-label="Captain Rosie commanding the ROSIE I">
       <div className="yacht-vector-shadow" aria-hidden="true" />
-      <svg className="rosie-yacht-base" viewBox="0 0 240 180" aria-hidden="true">
+      <svg className="rosie-yacht-base" viewBox="0 0 320 220" aria-hidden="true">
         <defs>
           <linearGradient id="captainHullIvory" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#fffdf3" />
-            <stop offset=".56" stopColor="#f2e4c9" />
-            <stop offset="1" stopColor="#cdb38b" />
+            <stop offset="0" stopColor="#fffef6" />
+            <stop offset=".42" stopColor="#f6ecd9" />
+            <stop offset=".72" stopColor="#dcc6a2" />
+            <stop offset="1" stopColor="#ad8e64" />
           </linearGradient>
           <linearGradient id="captainHullNavy" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#174f73" />
-            <stop offset=".5" stopColor="#0a3556" />
-            <stop offset="1" stopColor="#041e35" />
+            <stop offset="0" stopColor="#175479" />
+            <stop offset=".45" stopColor="#0a3659" />
+            <stop offset="1" stopColor="#031c33" />
           </linearGradient>
           <linearGradient id="captainTeak" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#a56b35" />
-            <stop offset=".45" stopColor="#e2bd82" />
-            <stop offset="1" stopColor="#9b602f" />
+            <stop offset="0" stopColor="#8f522d" />
+            <stop offset=".25" stopColor="#d5a469" />
+            <stop offset=".55" stopColor="#f0ce97" />
+            <stop offset=".78" stopColor="#ba7841" />
+            <stop offset="1" stopColor="#754126" />
+          </linearGradient>
+          <linearGradient id="captainBrass" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#fff0a9" />
+            <stop offset=".36" stopColor="#d6a64d" />
+            <stop offset=".7" stopColor="#83501d" />
+            <stop offset="1" stopColor="#edc871" />
           </linearGradient>
         </defs>
-        <ellipse cx="120" cy="156" rx="93" ry="13" fill="rgba(0,34,52,.2)" />
-        <path d="M18 105C35 99 53 96 72 94h100c23 1 41 5 52 12l-18 39c-27 12-59 18-91 18-31 0-58-6-82-18L18 105Z" fill="url(#captainHullIvory)" stroke="#b67d31" strokeWidth="2" />
-        <path d="M29 124c46 7 137 7 183-1l-8 22c-28 11-58 16-90 16-30 0-57-5-81-16l-4-21Z" fill="url(#captainHullNavy)" />
-        <path d="M33 120c45 5 128 5 176-1" fill="none" stroke="#d7aa54" strokeWidth="3" opacity=".9" />
-        <path d="M48 96c23-10 48-15 73-15 27 0 51 5 72 15l-9 14H58L48 96Z" fill="url(#captainTeak)" stroke="#8d582d" strokeWidth="1.5" />
-        <path d="M68 92 78 54c2-8 8-14 16-18h55c9 3 15 10 18 19l8 37H68Z" fill="#f8edd8" stroke="#b98539" strokeWidth="2" />
-        <path d="M83 56h69" stroke="#d4ad66" strokeWidth="2" />
-        <rect x="49" y="132" width="17" height="7" rx="3.5" fill="#8ac1d5" stroke="#e8d4a3" />
-        <rect x="76" y="136" width="15" height="6" rx="3" fill="#8ac1d5" stroke="#e8d4a3" />
-        <rect x="150" y="136" width="15" height="6" rx="3" fill="#8ac1d5" stroke="#e8d4a3" />
-        <rect x="176" y="131" width="16" height="7" rx="3.5" fill="#8ac1d5" stroke="#e8d4a3" />
-        <path d="M108 147h27" stroke="#f0cf83" strokeWidth="1.5" opacity=".75" />
+
+        <ellipse cx="160" cy="190" rx="128" ry="19" fill="rgba(0,35,56,.22)" />
+        <path d="M22 128c32-11 68-16 110-17h134c16 0 28 6 38 17l-27 52c-33 19-76 28-128 28-48 0-87-9-118-27Z" fill="url(#captainHullIvory)" stroke="#9a6828" strokeWidth="3" />
+        <path d="M36 153c58 12 166 11 249-5l-12 31c-36 18-77 26-124 26-45 0-83-8-113-24Z" fill="url(#captainHullNavy)" />
+        <path d="M39 148c73 9 166 8 248-5" fill="none" stroke="url(#captainBrass)" strokeWidth="5" />
+        <path d="M61 116c41-15 83-21 126-19 33 1 61 7 84 18l-12 17H75Z" fill="url(#captainTeak)" stroke="#6e4328" strokeWidth="3" />
+        <path d="M89 109 102 57c4-13 14-22 29-27h80c15 5 25 15 29 29l11 50Z" fill="#f7eedb" stroke="#a87532" strokeWidth="3" />
+        <path d="M111 56h111" stroke="#d7ad61" strokeWidth="3" />
+        <path d="M80 117h184" stroke="#fff9e9" strokeWidth="3" opacity=".8" />
+        <path d="M56 172c49 12 148 13 210-1" fill="none" stroke="#a9d4df" strokeWidth="3" opacity=".7" />
+
+        <g fill="#76b6cb" stroke="#e2ca92" strokeWidth="2">
+          <rect x="61" y="163" width="25" height="10" rx="5" />
+          <rect x="99" y="171" width="20" height="8" rx="4" />
+          <rect x="200" y="171" width="20" height="8" rx="4" />
+          <rect x="237" y="162" width="24" height="10" rx="5" />
+        </g>
+
+        <g stroke="url(#captainBrass)" strokeWidth="3" fill="none" strokeLinecap="round">
+          <path d="M78 110V90m172 20V90M72 91h185" />
+          <path d="M92 91v20m38-20v20m54-20v20m43-20v20" opacity=".82" />
+        </g>
+
+        <path d="M251 80V23" stroke="#b98737" strokeWidth="4" />
+        <path d="M254 27c21 2 37 7 52 17-15 8-32 11-52 11Z" fill="#0b3556" stroke="#d5aa52" strokeWidth="2" />
+        <text x="270" y="46" fontSize="13" fontWeight="900" fill="#f7d984">R</text>
+
+        <text x="160" y="192" textAnchor="middle" fontSize="12" fontWeight="900" letterSpacing="4" fill="#f5d584">ROSIE I</text>
+        <g fill="#d1a44d">
+          <circle cx="151" cy="145" r="3" />
+          <circle cx="160" cy="141" r="3" />
+          <circle cx="169" cy="145" r="3" />
+          <path d="M152 156c0-6 3.7-10 8-10s8 4 8 10c0 4-3.1 6-8 6s-8-2-8-6Z" />
+        </g>
       </svg>
 
       <div className="captain-at-helm" aria-hidden="true">
-        <img src="/captain-rosie.webp" alt="" />
+        <CaptainRosieIllustration className="helm-rosie-art" idPrefix="helmRosie" />
         <span className="captain-window-glint" />
       </div>
 
-      <svg className="rosie-yacht-overlay" viewBox="0 0 240 180" aria-hidden="true">
+      <svg className="rosie-yacht-overlay" viewBox="0 0 320 220" aria-hidden="true">
         <defs>
           <linearGradient id="captainGlassOverlay" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#dff8ff" stopOpacity=".43" />
-            <stop offset=".52" stopColor="#45a6ca" stopOpacity=".15" />
-            <stop offset="1" stopColor="#0b4f70" stopOpacity=".42" />
+            <stop offset="0" stopColor="#f1fdff" stopOpacity=".5" />
+            <stop offset=".43" stopColor="#8ad1e6" stopOpacity=".16" />
+            <stop offset="1" stopColor="#0a5375" stopOpacity=".42" />
           </linearGradient>
         </defs>
-        <path d="M83 57 96 39h52l13 18 8 33H75l8-33Z" fill="url(#captainGlassOverlay)" stroke="#d5ad61" strokeWidth="2" />
-        <path d="M122 39v51M83 57h78" fill="none" stroke="#d6b36f" strokeWidth="2" opacity=".88" />
-        <path d="M61 91v-12m116 12v-12M55 79h128" fill="none" stroke="#e7c980" strokeWidth="2" strokeLinecap="round" />
-        <path d="M72 78v13m30-13v13m36-13v13m30-13v13" stroke="#e7c980" strokeWidth="1.4" opacity=".85" />
-        <circle cx="122" cy="79" r="11" fill="none" stroke="#d8a94b" strokeWidth="2" opacity=".95" />
-        <circle cx="122" cy="79" r="2.4" fill="#e2bd68" />
-        <path d="m122 68 0 22m-10-17 20 12m-20 0 20-12" stroke="#d8a94b" strokeWidth="1.4" />
-        <path d="M175 58v-42" stroke="#d7b56e" strokeWidth="2.2" />
-        <path d="M177 18c16 1 27 5 37 11-11 5-23 8-37 8V18Z" fill="#0b385b" stroke="#d1a64f" strokeWidth="1.5" />
-        <text x="188" y="31" textAnchor="middle" fontSize="9" fontWeight="800" fill="#f5d889">R</text>
-        <text x="120" y="151" textAnchor="middle" fontSize="8.5" fontWeight="800" letterSpacing="2.2" fill="#f5d889">ROSIE I</text>
-        <g className="yacht-paw-mark" fill="#c7943f">
-          <circle cx="116" cy="111" r="2.3" />
-          <circle cx="122" cy="108.5" r="2.3" />
-          <circle cx="128" cy="111" r="2.3" />
-          <path d="M116.5 118c0-4 2.6-6.4 5.5-6.4s5.5 2.4 5.5 6.4c0 2.7-2.3 4-5.5 4s-5.5-1.3-5.5-4Z" />
-        </g>
-        <path d="M34 108c34-7 139-7 173 0" fill="none" stroke="rgba(255,255,255,.72)" strokeWidth="1.4" />
-        <path d="M36 112c25 3 142 3 169 0" fill="none" stroke="#c79743" strokeWidth="1.2" opacity=".9" />
+        <path d="M104 57 124 34h86l21 25 10 48H91Z" fill="url(#captainGlassOverlay)" stroke="#d9b35f" strokeWidth="3" />
+        <path d="M167 35v72M104 58h127" fill="none" stroke="#d9b35f" strokeWidth="3" opacity=".9" />
+        <circle cx="166" cy="94" r="16" fill="rgba(5,39,60,.2)" stroke="#d3a64c" strokeWidth="3" />
+        <circle cx="166" cy="94" r="3.5" fill="#e3b85f" />
+        <path d="M166 78v32m-14-24 28 16m-28 0 28-16" stroke="#d3a64c" strokeWidth="2" />
+        <path d="M112 63c25-11 43-13 53-13" fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity=".22" />
+        <path d="M47 132c59-14 167-14 239-4" fill="none" stroke="rgba(255,255,255,.72)" strokeWidth="2" />
       </svg>
 
       <span className="captain-scarf-tail" aria-hidden="true" />
@@ -854,7 +1115,8 @@ function CaptainRosieGame({ soundOn }) {
       <section className="captain-hero">
         <div className="captain-hero-rigging" aria-hidden="true"><i /><i /><i /><i /></div>
         <div className="captain-portrait">
-          <img src="/captain-rosie.webp" alt="Rosie wearing her captain's hat on a yacht deck" />
+          <div className="captain-portrait-medallion" aria-hidden="true"><i /><i /><i /></div>
+          <CaptainRosieIllustration className="hero-captain-illustration" idPrefix="heroRosie" />
           <span><RosiePawCrest className="portrait-paw" /> CAPTAIN ON DECK</span>
         </div>
         <div className="captain-title">
@@ -914,6 +1176,7 @@ function CaptainRosieGame({ soundOn }) {
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
         >
+          <RivieraCourseArt />
           <div className="captain-sky" aria-hidden="true">
             <div className="captain-sky-haze" />
             <div className="captain-sun"><i /></div>
@@ -973,7 +1236,7 @@ function CaptainRosieGame({ soundOn }) {
 
           {!running && (
             <div className={"captain-start-panel" + (ended ? " captain-results-panel" : "")}>
-              <img src="/captain-rosie.webp" alt="" aria-hidden="true" />
+              <CaptainRosieIllustration className="start-panel-rosie" idPrefix="startRosie" />
               {ended ? (
                 <>
                   <span>CAPTAIN'S LOG · VOYAGE COMPLETE</span>
