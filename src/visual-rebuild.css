@@ -4835,8 +4835,8 @@ body {
   position: absolute;
   z-index: 3;
   right: max(-4px, calc((100% - 850px) / 2));
-  bottom: -18px;
-  width: clamp(190px, 25vw, 285px);
+  bottom: -48px;
+  width: clamp(180px, 22vw, 250px);
   margin: 0;
   text-align: center;
   filter: drop-shadow(0 20px 18px rgba(0, 0, 0, .42));
@@ -4935,8 +4935,8 @@ body {
   .diploma-wax-seal b { font-size: 17px !important; }
   .graduate-rosie {
     right: -4px;
-    bottom: -20px;
-    width: min(46vw, 205px);
+    bottom: -28px;
+    width: min(43vw, 190px);
   }
   .graduate-rosie figcaption { bottom: 8%; font-size: 6px; padding: 4px 6px; }
   .graduate-spark-one { left: 0; font-size: 22px; }
