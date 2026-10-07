@@ -212,6 +212,15 @@ function formatGameTime(seconds) {
   return minutes + ":" + String(remaining).padStart(2, "0");
 }
 
+const ROSIE_MOOD_ART = {
+  watching: "/rosie-mood-pleased.webp",
+  pleased: "/rosie-mood-pleased.webp",
+  amused: "/rosie-mood-amused.webp",
+  embarrassed: "/rosie-mood-embarrassed.webp",
+  distraught: "/rosie-mood-distraught.webp",
+  elated: "/rosie-mood-elated.webp"
+};
+
 function CheeseMemoryGame() {
   const [deck, setDeck] = useState(() => shuffleCheeseDeck());
   const [openCards, setOpenCards] = useState([]);
@@ -335,11 +344,7 @@ function CheeseMemoryGame() {
               >
                 <span className="cheese-card-inner">
                   <span className="cheese-card-back">
-                    <span className="card-ribbon">EXAMINATION DECK</span>
-                    <span className="card-moon">☾</span>
-                    <span className="card-rosette"><i>🐾</i><b>Che.D.</b></span>
-                    <span className="card-cheese-mark">🧀</span>
-                    <small>ROSIE'S<br />FROMAGE SOCIETY</small>
+                    <img src="/cheese-exam-card-back.webp" alt="" draggable="false" />
                   </span>
                   <span className="cheese-card-front">
                     <span className="cheese-art"><CheesePhoto cheese={cheese} /></span>
@@ -355,7 +360,7 @@ function CheeseMemoryGame() {
 
       <section className="cheese-bottom-console">
         <div className={`rosie-reaction mood-${rosieMood}`} aria-live="polite">
-          <div className="rosie-reaction-portrait"><img src="/rosie-doctor-cheese-hero.webp" alt="Doctor Rosie watching the examination" /></div>
+          <div className="rosie-reaction-portrait"><img src={ROSIE_MOOD_ART[rosieMood]} alt={`Doctor Rosie looking ${rosieMood}`} /></div>
           <div><span>DOCTOR ROSIE'S FIELD NOTES · {rosieMood.toUpperCase()}</span><strong>{message}</strong></div>
           <i aria-hidden="true">{rosieMood === "elated" ? "✦" : rosieMood === "distraught" ? "!" : rosieMood === "pleased" ? "✓" : "◌"}</i>
         </div>
