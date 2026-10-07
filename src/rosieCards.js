@@ -222,6 +222,97 @@ const rosieCards = [
     "set": "Adventures",
     "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-043.avif",
     "alt": "Trail Mistress collectible Rosie card"
+  },
+  {
+    "id": "rc-044",
+    "name": "Investor Rosie",
+    "set": "Professions",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-044-DQbSq9ccDFTFoAH72dRg9ZpD2Ykb7f.avif",
+    "alt": "Investor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-045",
+    "name": "Architect Rosie",
+    "set": "Professions",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-045-70wQr4WshFnGF2fjZMXYrtpLkNTFYp.avif",
+    "alt": "Architect Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-046",
+    "name": "Jetski Rosie",
+    "set": "Adventures",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-046-68SVWwZUZqUjoPCjDd0hA4SB0hxBpj.avif",
+    "alt": "Jetski Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-047",
+    "name": "Alpine Rosie",
+    "set": "Adventures",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-047-WuUJMf3outgoNwAIxjTmvfQmn5eHSF.avif",
+    "alt": "Alpine Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-048",
+    "name": "Drone Pilot Rosie",
+    "set": "Professions",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-048-FxMJp0JW8gsLDszclOH59AN8376bUn.avif",
+    "alt": "Drone Pilot Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-049",
+    "name": "Boxer Rosie",
+    "set": "Athletics",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-049-8qbFtnOevxcKfff5uPOsXrpMRgeivc.avif",
+    "alt": "Boxer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-050",
+    "name": "Climber Rosie",
+    "set": "Adventures",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-050-qe0Ds7WEpeQ1Zm4AfHf4CwsVj3e9Wj.avif",
+    "alt": "Climber Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-051",
+    "name": "Food Critic Rosie",
+    "set": "Professions",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-051-QeCrUVRBtxPpOEZHLHgWvzC59IG1KC.avif",
+    "alt": "Food Critic Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-052",
+    "name": "Ice Cream Truck Rosie",
+    "set": "Professions",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-052-6Hpzo9wEsAkkjrd4wXl9SvrokkeOL6.avif",
+    "alt": "Ice Cream Truck Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-053",
+    "name": "Commando Rosie",
+    "set": "Adventures",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-053-SWWT8hyVQ0tUHTZNXpPlGwvLuPK3dE.avif",
+    "alt": "Commando Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-054",
+    "name": "Donor Rosie",
+    "set": "Society",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-054-oNHQt4avqYAoOTY45xqKRvXBM1N5ft.avif",
+    "alt": "Donor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-055",
+    "name": "Archaeologist Rosie",
+    "set": "Professions",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-055-2NdsKT1QMVarKRXJmZoSWayTDtOy5Q.avif",
+    "alt": "Archaeologist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-056",
+    "name": "Tennis Rosie",
+    "set": "Athletics",
+    "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-056-e7131TNJkzQetH7NASn5M1XyrE911y.avif",
+    "alt": "Tennis Rosie collectible Rosie card"
   }
 ];
 
