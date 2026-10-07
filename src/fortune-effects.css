@@ -3337,3 +3337,256 @@
     50% { transform: scaleX(-1) scale(1.025) translateY(-.8px); }
   }
 }
+
+
+/* === TURN COMPOSITING FINALIZATION === */
+
+/* One backfill only. It sits below the isolated portrait and never moves. */
+.turn-seam-haze {
+  display: none !important;
+}
+.rosie-turn-backdrop {
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 50% !important;
+  top: 32% !important;
+  width: 57% !important;
+  height: 40% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%,-50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  border-radius: 48% !important;
+  clip-path: ellipse(47% 48% at 50% 47%) !important;
+  -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 74%,
+    rgba(0,0,0,.98) 82%,
+    rgba(0,0,0,.65) 91%,
+    rgba(0,0,0,.18) 97%,
+    transparent 100%) !important;
+  mask-image: radial-gradient(ellipse 49% 49% at 50% 47%,
+    #000 0 74%,
+    rgba(0,0,0,.98) 82%,
+    rgba(0,0,0,.65) 91%,
+    rgba(0,0,0,.18) 97%,
+    transparent 100%) !important;
+  background:
+    radial-gradient(circle at 18% 21%, rgba(226,177,78,.5) 0 .8px, transparent 1.8px),
+    radial-gradient(circle at 79% 18%, rgba(237,190,92,.46) 0 .9px, transparent 1.9px),
+    radial-gradient(circle at 73% 45%, rgba(221,169,79,.34) 0 .7px, transparent 1.7px),
+    linear-gradient(90deg,
+      rgba(3,8,20,.998) 0%,
+      rgba(7,15,32,.998) 23%,
+      rgba(10,20,41,.997) 40%,
+      rgba(4,11,26,.999) 56%,
+      rgba(8,17,35,.998) 74%,
+      rgba(3,8,20,.999) 100%) !important;
+  box-shadow:
+    inset 8px 0 20px rgba(2,6,16,.24),
+    inset -8px 0 20px rgba(2,6,16,.28) !important;
+  filter: blur(1px) !important;
+  transition: opacity .02s linear !important;
+}
+.rosie-turn-backdrop.is-flipped {
+  opacity: 1 !important;
+}
+
+/* The isolated portrait now includes the collar so the turned head remains attached. */
+.rosie-turn-layer {
+  z-index: 9 !important;
+}
+
+/* Dedicated lower smoke added in JSX: it reaches through the collar and over the upper ball. */
+.turn-lower-smoke,
+.turn-ball-haze {
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+.turn-lower-smoke {
+  z-index: 33;
+  top: 37%;
+  width: 92%;
+  height: 51%;
+  transform: translateX(-50%);
+  border-radius: 48%;
+  background:
+    radial-gradient(ellipse at 50% 42%,
+      rgba(174,99,208,.72) 0 14%,
+      rgba(122,57,160,.62) 31%,
+      rgba(82,34,113,.4) 51%,
+      rgba(47,18,70,.18) 70%,
+      transparent 87%);
+  filter: blur(12px);
+  animation: turnLowerSmoke 1.25s cubic-bezier(.14,.7,.16,1) forwards;
+}
+.turn-ball-haze {
+  z-index: 34;
+  top: 58%;
+  width: 108%;
+  height: 28%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 45%,
+      rgba(202,127,230,.48) 0 13%,
+      rgba(140,71,177,.42) 31%,
+      rgba(86,39,118,.25) 52%,
+      transparent 80%);
+  filter: blur(14px);
+  animation: turnBallHaze 1.3s ease-out forwards;
+}
+@keyframes turnLowerSmoke {
+  0% { opacity: 0; transform: translateX(-50%) translateY(28px) scale(.5,.4); }
+  18% { opacity: .72; transform: translateX(-50%) translateY(8px) scale(.9,.78); }
+  32% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.04,.98); }
+  64% { opacity: .92; transform: translateX(-50%) translateY(-5px) scale(1.12,1.1); }
+  82% { opacity: .5; transform: translateX(-50%) translateY(-24px) scale(1.2,1.22); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-58px) scale(1.34,1.42); }
+}
+@keyframes turnBallHaze {
+  0% { opacity: 0; transform: translateX(-50%) translateY(18px) scale(.5,.45); }
+  24% { opacity: .58; transform: translateX(-50%) translateY(5px) scale(.92,.82); }
+  40% { opacity: .86; transform: translateX(-50%) translateY(0) scale(1.08,.96); }
+  68% { opacity: .72; transform: translateX(-50%) translateY(-5px) scale(1.15,1.06); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-34px) scale(1.28,1.25); }
+}
+
+/* Foreground smoke crosses in front of the ball/lens, fully hiding the neck seam at swap. */
+.turn-foreground-smoke {
+  position: absolute;
+  z-index: 29;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.foreground-plume {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  opacity: 0;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse,
+      rgba(190,111,219,.58) 0 15%,
+      rgba(128,59,164,.48) 35%,
+      rgba(76,31,104,.25) 57%,
+      transparent 80%);
+  filter: blur(12px);
+  animation: foregroundTurnPlume 1.24s cubic-bezier(.13,.72,.16,1) forwards;
+}
+.foreground-plume-a {
+  width: 235px;
+  height: 210px;
+  margin: -76px 0 0 -150px;
+  --fx: -48px;
+  --fy: -76px;
+  --fr: -12deg;
+}
+.foreground-plume-b {
+  width: 250px;
+  height: 220px;
+  margin: -68px 0 0 -91px;
+  --fx: 54px;
+  --fy: -82px;
+  --fr: 14deg;
+  animation-delay: .035s;
+}
+.foreground-plume-c {
+  width: 225px;
+  height: 190px;
+  margin: -15px 0 0 -113px;
+  --fx: 4px;
+  --fy: -61px;
+  --fr: 2deg;
+  animation-delay: .07s;
+}
+@keyframes foregroundTurnPlume {
+  0% {
+    opacity: 0;
+    transform: translate(0,34px) scale(.45) rotate(0);
+  }
+  20% {
+    opacity: .62;
+    transform: translate(0,8px) scale(.88) rotate(0);
+  }
+  36% {
+    opacity: .9;
+    transform: translate(0,0) scale(1.05) rotate(0);
+  }
+  67% {
+    opacity: .68;
+    transform: translate(calc(var(--fx) * .35),calc(var(--fy) * .35)) scale(1.16) rotate(calc(var(--fr) * .4));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--fx),var(--fy)) scale(1.35) rotate(var(--fr));
+  }
+}
+.foreground-glitter {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 48%;
+  width: 52%;
+  height: 38%;
+  transform: translateX(-50%);
+}
+.foreground-glitter i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #ffe7a1;
+  box-shadow:
+    0 0 6px rgba(255,225,143,.95),
+    0 0 12px rgba(198,124,235,.72);
+  animation: foregroundGlitter 1.12s ease-out forwards;
+}
+.foreground-glitter i:nth-child(1) { left: 8%; top: 58%; animation-delay:.08s; }
+.foreground-glitter i:nth-child(2) { left: 22%; top: 78%; animation-delay:.16s; }
+.foreground-glitter i:nth-child(3) { left: 36%; top: 48%; animation-delay:.11s; }
+.foreground-glitter i:nth-child(4) { left: 51%; top: 82%; animation-delay:.2s; }
+.foreground-glitter i:nth-child(5) { left: 65%; top: 54%; animation-delay:.13s; }
+.foreground-glitter i:nth-child(6) { left: 78%; top: 72%; animation-delay:.18s; }
+.foreground-glitter i:nth-child(7) { left: 90%; top: 46%; animation-delay:.1s; }
+.foreground-glitter i:nth-child(8) { left: 56%; top: 35%; animation-delay:.15s; }
+@keyframes foregroundGlitter {
+  0% { opacity: 0; transform: translateY(18px) scale(.4); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-68px) scale(1.25); }
+}
+
+@media (max-width: 620px) {
+  .rosie-turn-backdrop {
+    top: 33% !important;
+    width: 64% !important;
+    height: 40% !important;
+  }
+  .turn-lower-smoke {
+    top: 38%;
+    width: 110%;
+    height: 53%;
+  }
+  .turn-ball-haze {
+    top: 59%;
+    width: 126%;
+    height: 30%;
+  }
+  .foreground-plume {
+    top: 53%;
+  }
+  .foreground-plume-a { width: 200px; height: 195px; margin-left: -128px; }
+  .foreground-plume-b { width: 212px; height: 205px; margin-left: -77px; }
+  .foreground-plume-c { width: 195px; height: 178px; margin-left: -98px; }
+  .foreground-glitter {
+    top: 49%;
+    width: 60%;
+    height: 40%;
+  }
+}
