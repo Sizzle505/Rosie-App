@@ -535,13 +535,18 @@ function GraduateRosie() {
   return (
     <div className="graduate-rosie-card" aria-label="Doctor Rosie celebrating graduation">
       <div className="graduate-rosie-frame">
-        {/* Keep Rosie's established appearance exactly: use the canonical elated Rosie artwork. */}
-        <img src="/rosie-reaction-elated.webp" alt="Doctor Rosie celebrating the successful examination" />
+        {/* This is Rosie's actual repository photo - never substitute a generic Shiba illustration here. */}
+        <img
+          className="graduate-rosie-photo"
+          src="/rosie-doctor-cheese.webp"
+          alt="Rosie the Shiba, Doctor of Cheese"
+        />
         <span className="graduate-cap" aria-hidden="true">
           <i className="graduate-cap-board" />
           <i className="graduate-cap-band" />
           <i className="graduate-cap-tassel" />
         </span>
+        <span className="graduate-cheer" aria-hidden="true">✦</span>
       </div>
       <span>FACULTY EXAMINER</span>
       <strong>Doctor Rosie</strong>
