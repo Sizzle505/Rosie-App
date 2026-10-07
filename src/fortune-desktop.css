@@ -131,6 +131,8 @@
   transform: translateX(-50%) scale(.92) rotate(-1.5deg) !important;
   transform-origin: 50% 46% !important;
   filter: saturate(1.04) contrast(1.03) brightness(.94) drop-shadow(0 13px 20px rgba(0,0,0,.42)) !important;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0 78%, rgba(0,0,0,.94) 86%, rgba(0,0,0,.46) 94%, transparent 100%) !important;
+  mask-image: linear-gradient(to bottom, #000 0 78%, rgba(0,0,0,.94) 86%, rgba(0,0,0,.46) 94%, transparent 100%) !important;
   transition: opacity .16s ease, transform .62s cubic-bezier(.18,.78,.2,1), filter .3s ease !important;
   animation: none !important;
 }
