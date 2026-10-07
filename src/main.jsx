@@ -84,6 +84,60 @@ function dayNumber() {
   return [...key].reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 3), 0);
 }
 
+
+function createWhistleBlobUrl() {
+  const sampleRate = 22050;
+  const duration = 0.72;
+  const sampleCount = Math.floor(sampleRate * duration);
+  const buffer = new ArrayBuffer(44 + sampleCount);
+  const view = new DataView(buffer);
+
+  const writeString = (offset, value) => {
+    for (let index = 0; index < value.length; index += 1) {
+      view.setUint8(offset + index, value.charCodeAt(index));
+    }
+  };
+
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + sampleCount, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate, true);
+  view.setUint16(32, 1, true);
+  view.setUint16(34, 8, true);
+  writeString(36, "data");
+  view.setUint32(40, sampleCount, true);
+
+  let phase = 0;
+  for (let index = 0; index < sampleCount; index += 1) {
+    const time = index / sampleRate;
+    let frequency = 1900;
+    let amplitude = 0;
+
+    if (time < 0.31) {
+      const progress = time / 0.31;
+      frequency = 1550 + 1120 * Math.pow(progress, 0.72) + 34 * Math.sin(Math.PI * 10 * time);
+      amplitude = Math.min(1, time / 0.016) * Math.min(1, (0.31 - time) / 0.038) * 0.82;
+    } else if (time > 0.37) {
+      const local = time - 0.37;
+      const progress = local / (duration - 0.37);
+      frequency = 2680 - 820 * progress + 30 * Math.sin(Math.PI * 10 * local);
+      amplitude = Math.min(1, local / 0.016) * Math.min(1, (duration - time) / 0.055) * 0.78;
+    }
+
+    phase += Math.PI * 2 * frequency / sampleRate;
+    const tone = Math.sin(phase) + 0.14 * Math.sin(phase * 2);
+    const sample = Math.max(-1, Math.min(1, tone * amplitude));
+    view.setUint8(44 + index, Math.round(128 + sample * 118));
+  }
+
+  return URL.createObjectURL(new Blob([buffer], { type: "audio/wav" }));
+}
+
 function FortuneLens({ consulting, answer, revealStage }) {
   const manifesting = revealStage === "manifesting";
   const state = [
@@ -230,6 +284,7 @@ function App() {
   const inputRef = useRef(null);
   const audioRef = useRef(null);
   const whistleAudioRef = useRef(null);
+  const whistleUrlRef = useRef(null);
   const recognitionRef = useRef(null);
   const flipTimerRef = useRef(null);
   const turnEndTimerRef = useRef(null);
@@ -325,10 +380,12 @@ function App() {
 
     recognitionRef.current = recognition;
 
-    const whistle = new Audio("/rosie-whistle.wav");
+    const whistleUrl = createWhistleBlobUrl();
+    const whistle = new Audio(whistleUrl);
     whistle.preload = "auto";
     whistle.volume = 1;
     whistleAudioRef.current = whistle;
+    whistleUrlRef.current = whistleUrl;
     whistle.load();
 
     return () => {
@@ -337,6 +394,8 @@ function App() {
       recognitionRef.current = null;
       whistle.pause();
       whistleAudioRef.current = null;
+      if (whistleUrlRef.current) URL.revokeObjectURL(whistleUrlRef.current);
+      whistleUrlRef.current = null;
     };
   }, [speechSupported]);
 
@@ -418,8 +477,14 @@ function App() {
   }
 
   async function playWhistle() {
-    const audio = whistleAudioRef.current || new Audio("/rosie-whistle.wav");
-    whistleAudioRef.current = audio;
+    let audio = whistleAudioRef.current;
+    if (!audio) {
+      const whistleUrl = createWhistleBlobUrl();
+      whistleUrlRef.current = whistleUrl;
+      audio = new Audio(whistleUrl);
+      audio.preload = "auto";
+      whistleAudioRef.current = audio;
+    }
     audio.volume = 1;
 
     try {
