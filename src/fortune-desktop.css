@@ -1173,3 +1173,39 @@
 .fortune-page .crystal-chamber .fortune-lens.is-manifesting {
   box-shadow: inset 0 0 28px rgba(243,206,136,.18) !important;
 }
+
+/* Turn repair: fully occlude the source portrait's head, rather than allowing
+   its ears and muzzle to show through the old feathered oval. The turned
+   transparent portrait sits one layer above this matched night-sky repaint. */
+.fortune-page .machine .turn-seam-haze {
+  display: block !important;
+  z-index: 10 !important;
+  top: 4.3% !important;
+  left: 34.5% !important;
+  width: 57.5% !important;
+  height: 62% !important;
+  transform: none !important;
+  border-radius: 17% 13% 15% 12% !important;
+  background:
+    radial-gradient(circle at 31% 20%, rgba(210, 160, 79, .15) 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 41%, rgba(237, 188, 105, .18) 0 1px, transparent 2px),
+    radial-gradient(circle at 68% 12%, rgba(188, 162, 215, .14) 0 1px, transparent 2px),
+    linear-gradient(110deg, #141727 0%, #0e1428 38%, #0c152c 78%, #131322 100%) !important;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%) !important;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%) !important;
+  filter: none !important;
+}
+.fortune-page .machine .turn-seam-haze.is-flipped {
+  opacity: 1 !important;
+}
+/* The portrait and its repaint must stay registered on mobile too. */
+@media (max-width: 620px) {
+  .fortune-page .machine .turn-seam-haze {
+    left: 28% !important;
+    width: 65% !important;
+    top: 4% !important;
+    height: 63% !important;
+  }
+}
