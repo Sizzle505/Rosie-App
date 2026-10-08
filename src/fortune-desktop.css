@@ -828,3 +828,303 @@
     animation: none !important;
   }
 }
+
+
+/* Fortune glass registration and central conjuration - 2026-10-07.
+   The single chamber tracks the rendered stage image, including object-fit cropping. */
+.fortune-page .crystal-chamber {
+  position: absolute;
+  z-index: 20;
+  left: var(--oracle-ball-x, 50%);
+  top: var(--oracle-ball-y, 75.4%);
+  width: var(--oracle-ball-w, 40%);
+  height: var(--oracle-ball-h, 32.4%);
+  box-sizing: border-box;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+}
+.fortune-page .crystal-chamber > .crystal-energy,
+.fortune-page .crystal-chamber > .fortune-lens {
+  position: absolute !important;
+  inset: 0 !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  transform: none !important;
+  border-radius: 50% !important;
+  clip-path: ellipse(49.6% 49.2% at 50% 50%) !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+.fortune-page .crystal-chamber > .crystal-energy {
+  filter: none !important;
+  opacity: .82;
+  mix-blend-mode: screen;
+}
+.fortune-page .crystal-chamber > .fortune-lens {
+  padding: clamp(9px, 1.65vw, 17px) !important;
+  overflow: hidden !important;
+}
+.fortune-page .crystal-chamber > .fortune-lens.is-consulting {
+  animation: oracleGlassPulse 1.5s ease-in-out infinite alternate !important;
+}
+@keyframes oracleGlassPulse {
+  to { opacity: .94; filter: brightness(1.22); }
+}
+.fortune-page .crystal-chamber > .fortune-lens.has-answer {
+  display: grid !important;
+  place-items: center !important;
+  background:
+    radial-gradient(ellipse at 50% 49%, rgba(16, 7, 36, .91) 0 29%, rgba(36, 15, 61, .72) 58%, rgba(66, 30, 94, .17) 78%, transparent 98%) !important;
+  border: 0 !important;
+  box-shadow: inset 0 0 34px rgba(198, 130, 231, .2) !important;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.fortune-page .crystal-ball-shield {
+  clip-path: ellipse(calc(var(--oracle-ball-w, 40%) * .498) calc(var(--oracle-ball-h, 32.4%) * .498) at var(--oracle-ball-x, 50%) var(--oracle-ball-y, 75.4%));
+}
+.fortune-page .crystal-chamber .lens-answer {
+  width: 96% !important;
+  max-width: 100%;
+  position: relative;
+  isolation: isolate;
+  place-self: center;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(2px, .45vw, 5px) !important;
+  margin: auto;
+  opacity: 1;
+  transform-origin: center center;
+  transform: none;
+  filter: none;
+  animation: none !important;
+}
+.fortune-page .crystal-chamber .lens-answer strong {
+  max-width: 19ch !important;
+  font-size: clamp(11px, 1.3vw, 17px) !important;
+  line-height: 1.13 !important;
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none !important;
+  text-shadow: 0 1px 2px #13091e, 0 0 11px rgba(255, 225, 168, .7), 0 0 28px rgba(183, 115, 241, .55);
+}
+.fortune-page .crystal-chamber .lens-answer .answer-sigil,
+.fortune-page .crystal-chamber .lens-answer .answer-kicker,
+.fortune-page .crystal-chamber .lens-answer small {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none !important;
+}
+.fortune-page .crystal-chamber .lens-answer .answer-sigil { font-size: clamp(16px, 2vw, 25px) !important; }
+.fortune-page .crystal-chamber .lens-answer .answer-kicker { font-size: clamp(5px, .61vw, 8px) !important; }
+.fortune-page .crystal-chamber .lens-answer small { font-size: clamp(5px, .56vw, 7px) !important; }
+/* A bloom condenses at the optical center - the prophecy never rises from below. */
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting {
+  animation: oracleGlassGather 1.15s ease-out both !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer {
+  animation: oracleWordsConjure 1.22s cubic-bezier(.15,.68,.2,1) both !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer strong {
+  animation: oracleLetterFocus 1.18s .13s ease-out both !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .answer-sigil {
+  animation: oracleRuneCondense 1.15s ease-out both !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .answer-kicker,
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer small {
+  animation: oracleGlyphReveal 1.18s .16s ease-out both !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -24%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(ellipse, rgba(255,242,200,.76), rgba(209,141,251,.36) 19%, rgba(121,72,205,.12) 46%, transparent 69%);
+  animation: oracleCenterFlash 1.17s ease-out both;
+}
+@keyframes oracleGlassGather {
+  0% { opacity: 0; filter: brightness(2.4) blur(9px); }
+  29% { opacity: 1; filter: brightness(1.8) blur(2px); }
+  75% { filter: brightness(1.18) blur(0); }
+  100% { opacity: 1; filter: brightness(1) blur(0); }
+}
+@keyframes oracleWordsConjure {
+  0%, 11% { opacity: 0; transform: scale(.67); filter: blur(16px); }
+  38% { opacity: .64; transform: scale(.93); filter: blur(5px); }
+  66% { opacity: 1; transform: scale(1.045); filter: blur(.6px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes oracleLetterFocus {
+  0%, 19% { opacity: 0; transform: scale(.85); filter: blur(10px); letter-spacing: .14em; }
+  51% { opacity: .82; filter: blur(2.4px); letter-spacing: .065em; }
+  76% { opacity: 1; transform: scale(1.05); filter: blur(0); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); letter-spacing: .045em; }
+}
+@keyframes oracleRuneCondense {
+  0% { opacity: 0; transform: scale(3.1) rotate(-84deg); filter: blur(10px); }
+  48% { opacity: 1; transform: scale(1.22) rotate(8deg); filter: blur(1px); }
+  100% { opacity: 1; transform: scale(1) rotate(0); filter: blur(0); }
+}
+@keyframes oracleGlyphReveal {
+  0%, 36% { opacity: 0; filter: blur(5px); transform: scale(.91); }
+  75% { opacity: .9; filter: blur(.6px); }
+  100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+@keyframes oracleCenterFlash {
+  0%, 8% { opacity: 0; transform: scale(.09); filter: blur(14px); }
+  32% { opacity: .94; transform: scale(.45); filter: blur(5px); }
+  61% { opacity: .52; transform: scale(.98); filter: blur(2px); }
+  100% { opacity: 0; transform: scale(1.45); filter: blur(0); }
+}
+
+/* Place the musical whistle in the actual top-right corner of the petition panel. */
+.fortune-page .question-heading {
+  display: block !important;
+  position: relative;
+  min-height: 66px;
+  padding-right: 42px;
+}
+.fortune-page .question-heading label {
+  display: block;
+  margin-top: 8px;
+}
+.fortune-page .question-heading .fortune-whistle-button {
+  position: absolute !important;
+  display: grid !important;
+  place-items: center;
+  top: -11px !important;
+  right: -10px !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+
+/* Dispersed lilac smoke that hides the turn and then separates into wisps. */
+.fortune-page .flip-magic .turn-veil {
+  animation-duration: .97s !important;
+  filter: blur(11px) saturate(1.08) !important;
+}
+.fortune-page .turn-foreground-smoke .foreground-plume {
+  margin: 0 !important;
+  left: var(--plume-left, 50%) !important;
+  top: var(--plume-top, 50%) !important;
+  width: var(--plume-width, 67%) !important;
+  height: var(--plume-height, 38%) !important;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(194, 119, 225, .56) 0 12%, rgba(136, 65, 173, .51) 29%, rgba(89, 35, 125, .36) 49%, rgba(66, 26, 92, .15) 69%, transparent 90%) !important;
+  mix-blend-mode: screen;
+  filter: blur(19px) saturate(1.2) !important;
+  transform-origin: center;
+  animation: fortuneSmokeFeather .97s cubic-bezier(.18,.64,.18,1) both !important;
+}
+.fortune-page .foreground-plume-a { --plume-left: 40%; --plume-top: 43%; --plume-width: 70%; --plume-height: 48%; --plume-x: -64px; --plume-y: -65px; }
+.fortune-page .foreground-plume-b { --plume-left: 61%; --plume-top: 51%; --plume-width: 74%; --plume-height: 45%; --plume-x: 85px; --plume-y: -94px; }
+.fortune-page .foreground-plume-c { --plume-left: 50%; --plume-top: 68%; --plume-width: 75%; --plume-height: 30%; --plume-x: 0px; --plume-y: 15px; }
+.fortune-page .foreground-plume-d { --plume-left: 26%; --plume-top: 58%; --plume-width: 54%; --plume-height: 31%; --plume-x: -98px; --plume-y: -26px; }
+.fortune-page .foreground-plume-e { --plume-left: 76%; --plume-top: 62%; --plume-width: 52%; --plume-height: 29%; --plume-x: 92px; --plume-y: -32px; }
+@keyframes fortuneSmokeFeather {
+  0% { opacity: 0; transform: translate(-50%, -40%) scale(.45, .52); }
+  19% { opacity: .66; transform: translate(-50%, -48%) scale(.85, .87); }
+  41% { opacity: .81; transform: translate(-50%, -50%) scale(1.02, 1.01); }
+  66% { opacity: .56; transform: translate(calc(-50% + var(--plume-x) * .38), calc(-50% + var(--plume-y) * .42)) scale(1.22, 1.22); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--plume-x)), calc(-50% + var(--plume-y) - 58px)) scale(1.56, 1.66); }
+}
+.fortune-page .flip-magic .smoke-wisp {
+  animation-duration: .96s !important;
+  filter: blur(13px) saturate(1.15) !important;
+}
+.fortune-page .flip-magic .turn-lower-smoke,
+.fortune-page .flip-magic .turn-ball-haze {
+  animation-duration: .91s !important;
+  filter: blur(17px) !important;
+}
+
+/* Independent gold starburst above both layers of purple smoke. */
+.fortune-page .turn-gold-sparks {
+  position: absolute;
+  z-index: 54 !important;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  --spark-spread: 1;
+}
+.fortune-page .turn-gold-sparks i {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 7px;
+  height: 7px;
+  aspect-ratio: 1;
+  opacity: 0;
+  background: radial-gradient(circle, #fffdf0 0 19%, #fff1b2 31%, #edb944 68%, #ca8321 100%) !important;
+  clip-path: polygon(50% 0, 61% 36%, 100% 50%, 61% 64%, 50% 100%, 39% 64%, 0 50%, 39% 36%);
+  filter: drop-shadow(0 0 4px #fff4ca) drop-shadow(0 0 9px #d99c36) !important;
+  animation: fortuneGildedFlight 1.08s cubic-bezier(.12,.6,.21,1) both !important;
+}
+.fortune-page .turn-gold-sparks i:nth-child(1) { --spark-x: -210px; --spark-y: -170px; animation-delay: 0.04s !important; width: 11px; }
+.fortune-page .turn-gold-sparks i:nth-child(2) { --spark-x: -162px; --spark-y: -230px; animation-delay: 0.095s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(3) { --spark-x: -94px; --spark-y: -188px; animation-delay: 0.15s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(4) { --spark-x: -42px; --spark-y: -255px; animation-delay: 0.20500000000000002s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(5) { --spark-x: 37px; --spark-y: -235px; animation-delay: 0.26s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(6) { --spark-x: 98px; --spark-y: -194px; animation-delay: 0.315s !important; width: 11px; }
+.fortune-page .turn-gold-sparks i:nth-child(7) { --spark-x: 170px; --spark-y: -229px; animation-delay: 0.37s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(8) { --spark-x: 222px; --spark-y: -151px; animation-delay: 0.04s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(9) { --spark-x: -224px; --spark-y: -54px; animation-delay: 0.095s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(10) { --spark-x: -174px; --spark-y: 8px; animation-delay: 0.15s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(11) { --spark-x: -100px; --spark-y: 83px; animation-delay: 0.20500000000000002s !important; width: 11px; }
+.fortune-page .turn-gold-sparks i:nth-child(12) { --spark-x: -44px; --spark-y: 105px; animation-delay: 0.26s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(13) { --spark-x: 28px; --spark-y: 106px; animation-delay: 0.315s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(14) { --spark-x: 99px; --spark-y: 84px; animation-delay: 0.37s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(15) { --spark-x: 173px; --spark-y: 38px; animation-delay: 0.04s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(16) { --spark-x: 233px; --spark-y: -29px; animation-delay: 0.095s !important; width: 11px; }
+.fortune-page .turn-gold-sparks i:nth-child(17) { --spark-x: -120px; --spark-y: -129px; animation-delay: 0.15s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(18) { --spark-x: -55px; --spark-y: -165px; animation-delay: 0.20500000000000002s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(19) { --spark-x: 21px; --spark-y: -170px; animation-delay: 0.26s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(20) { --spark-x: 130px; --spark-y: -122px; animation-delay: 0.315s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(21) { --spark-x: -152px; --spark-y: 66px; animation-delay: 0.37s !important; width: 11px; }
+.fortune-page .turn-gold-sparks i:nth-child(22) { --spark-x: 153px; --spark-y: 103px; animation-delay: 0.04s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(23) { --spark-x: -13px; --spark-y: -90px; animation-delay: 0.095s !important;  }
+.fortune-page .turn-gold-sparks i:nth-child(24) { --spark-x: 80px; --spark-y: -45px; animation-delay: 0.15s !important;  }
+@keyframes fortuneGildedFlight {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.12) rotate(-25deg); }
+  15% { opacity: 1; transform: translate(-50%, -50%) scale(1.26) rotate(14deg); }
+  45% { opacity: 1; }
+  77% { opacity: .88; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x) * var(--spark-spread)), calc(-50% + var(--spark-y) * var(--spark-spread))) scale(.26) rotate(180deg); }
+}
+@media (max-width: 620px) {
+  .fortune-page .question-heading { min-height: 62px; padding-right: 40px; }
+  .fortune-page .question-heading .fortune-whistle-button { top: -7px !important; right: -7px !important; }
+  .fortune-page .turn-gold-sparks { --spark-spread: .64; }
+  .fortune-page .crystal-chamber .lens-answer strong { font-size: clamp(10px, 2.85vw, 13px) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting,
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer,
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer strong,
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting .answer-sigil,
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting .answer-kicker,
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer small,
+  .fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer::before,
+  .fortune-page .turn-gold-sparks i,
+  .fortune-page .turn-foreground-smoke .foreground-plume {
+    animation: none !important;
+    opacity: 1;
+    filter: none;
+  }
+  .fortune-page .turn-gold-sparks i,
+  .fortune-page .turn-foreground-smoke .foreground-plume { opacity: 0 !important; }
+}
