@@ -839,6 +839,7 @@
   top: var(--oracle-ball-y, 75.4%);
   width: var(--oracle-ball-w, 40%);
   height: var(--oracle-ball-h, 32.4%);
+  transform: translate(-50%, -50%);
   box-sizing: border-box;
   border-radius: 50%;
   overflow: hidden;
