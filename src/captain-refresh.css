@@ -213,9 +213,10 @@
 
 /* Captain final interaction polish: readable header and level horizontal sailing. */
 @media (min-width: 721px) {
+  /* Keep the entire title plaque on the right of Rosie's face. */
   .captain-game-page .captain-title {
-    flex: 0 1 58%;
-    width: 58%;
+    flex: 0 0 46%;
+    width: 46%;
   }
   .captain-game-page .captain-title-plaque {
     padding-inline: clamp(12px, 1.7vw, 18px);
@@ -229,7 +230,7 @@
   }
   .captain-game-page .captain-title h1 {
     white-space: nowrap;
-    font-size: clamp(27px, 3vw, 39px);
+    font-size: clamp(25px, 2.7vw, 36px);
     letter-spacing: -.035em;
   }
 }
