@@ -238,6 +238,7 @@
 .captain-game-page .captain-yacht.lane-1,
 .captain-game-page .captain-yacht.lane-2,
 .captain-game-page.captain-boosting .captain-yacht {
+  top: auto !important;
   transform: translateX(-50%) !important;
   transition: left .2s cubic-bezier(.2, .82, .2, 1) !important;
 }
