@@ -210,3 +210,59 @@
     height: 41px;
   }
 }
+
+/* Captain final interaction polish: readable header and level horizontal sailing. */
+@media (min-width: 721px) {
+  .captain-game-page .captain-title {
+    flex: 0 1 58%;
+    width: 58%;
+  }
+  .captain-game-page .captain-title-plaque {
+    padding-inline: clamp(12px, 1.7vw, 18px);
+  }
+  .captain-game-page .captain-marquee {
+    display: block;
+  }
+  .captain-game-page .marquee-crest,
+  .captain-game-page .marquee-burgee {
+    display: none;
+  }
+  .captain-game-page .captain-title h1 {
+    white-space: nowrap;
+    font-size: clamp(27px, 3vw, 39px);
+    letter-spacing: -.035em;
+  }
+}
+.captain-game-page .captain-yacht,
+.captain-game-page .captain-yacht.lane-0,
+.captain-game-page .captain-yacht.lane-1,
+.captain-game-page .captain-yacht.lane-2,
+.captain-game-page.captain-boosting .captain-yacht {
+  transform: translateX(-50%) !important;
+  transition: left .2s cubic-bezier(.2, .82, .2, 1) !important;
+}
+.captain-game-page .yacht-illustration {
+  animation: none !important;
+  transform: none !important;
+}
+.captain-game-page .helm-rosie-art {
+  animation: none !important;
+}
+.captain-game-page .captain-cargo-key span small {
+  margin-left: 3px;
+  color: #ffdc91;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .captain-game-page .captain-title-plaque {
+    overflow: visible;
+  }
+  .captain-game-page .captain-title h1 {
+    font-size: clamp(16px, 4.6vw, 21px);
+    letter-spacing: -.045em;
+    line-height: 1.02;
+  }
+}
