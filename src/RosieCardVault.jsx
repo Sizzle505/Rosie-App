@@ -240,12 +240,11 @@ function makeBatch(pool, batch, previousName = '') {
   return cards.map((card, index) => ({ ...card, wall_id: `${batch}:${index}:${card.id}` }));
 }
 
-function SilverBackKey() {
-  return <svg viewBox="0 0 64 64" aria-hidden="true">
-    <defs><linearGradient id="rosieVaultSilver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff"/><stop offset=".28" stopColor="#aeb6bf"/><stop offset=".52" stopColor="#f1f4f6"/><stop offset=".76" stopColor="#78818b"/><stop offset="1" stopColor="#d6dce2"/></linearGradient></defs>
-    <circle cx="18" cy="31" r="10" fill="none" stroke="url(#rosieVaultSilver)" strokeWidth="5"/>
-    <path d="M27 31h27M45 31v8M52 31v6" fill="none" stroke="url(#rosieVaultSilver)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>;
+function defaultCardsPerRow() {
+  if (typeof window === 'undefined') return 4;
+  if (window.matchMedia('(max-width: 720px)').matches) return 2;
+  // Match the wall's previous 310px minimum card width on first visit.
+  return Math.max(2, Math.min(10, Math.floor((window.innerWidth - 12 + 4) / 314)));
 }
 
 function CardImage({ card, eager = false, enlarged = false }) {
@@ -259,7 +258,7 @@ function CardImage({ card, eager = false, enlarged = false }) {
   />;
 }
 
-function RosieCardVaultWall({ onExit }) {
+function RosieCardVaultWall() {
   const pool = useMemo(() => rosieCards.filter(card => card?.id && card?.image), []);
   const nextBatch = useRef(2);
   const sentinel = useRef(null);
@@ -277,6 +276,10 @@ function RosieCardVaultWall({ onExit }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [speed, setSpeed] = useState(defaultDriftSpeedForViewport);
   const [isBraked, setIsBraked] = useState(false);
+  const [mobileZoom, setMobileZoom] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 720px)').matches);
+  const [cardsPerRow, setCardsPerRow] = useState(defaultCardsPerRow);
+  const zoomMin = mobileZoom ? 1 : 2;
+  const zoomMax = mobileZoom ? 4 : 10;
   const [cards, setCards] = useState(() => {
     const first = makeBatch(pool, 0);
     const second = makeBatch(pool, 1, first.at(-1)?.name);
@@ -289,6 +292,16 @@ function RosieCardVaultWall({ onExit }) {
 
   useEffect(() => {
     pauseUntil.current = performance.now() + INITIAL_DRIFT_DELAY_MS;
+  }, []);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 720px)');
+    const updateLayout = event => {
+      setMobileZoom(event.matches);
+      setCardsPerRow(defaultCardsPerRow());
+    };
+    query.addEventListener('change', updateLayout);
+    return () => query.removeEventListener('change', updateLayout);
   }, []);
 
   useEffect(() => {
@@ -488,8 +501,6 @@ function RosieCardVaultWall({ onExit }) {
   if (!pool.length) return <main className={styles.page}><div className={styles.empty}>Add Rosie cards to <code>data/rosieCards.js</code>.</div></main>;
 
   return <main className={styles.page} onPointerDown={() => pauseDrift()} onWheel={() => pauseDrift()} onTouchStart={() => pauseDrift()} onTouchEnd={() => pauseDrift()}>
-    <button type="button" className={styles.backKey} onClick={onExit} aria-label="Return to Madame Rosie" title="Return to Madame Rosie"><SilverBackKey/></button>
-
     <aside className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`} aria-label="Ambient card drift speed and direction">
       <button type="button" className={`${styles.brakeButton} ${isBraked ? styles.brakeButtonActive : ''}`} aria-label={isBraked ? 'Resume ambient card drift' : 'Pause ambient card drift'} aria-pressed={isBraked} title={isBraked ? 'Release brake' : 'Brake drift'} onPointerDown={event => event.stopPropagation()} onClick={toggleBrake}><span aria-hidden="true">{isBraked ? '▶' : 'Ⅱ'}</span></button>
       <span className={styles.speedReadout}>{speedLabel}</span>
@@ -518,7 +529,32 @@ function RosieCardVaultWall({ onExit }) {
       <div className={styles.headerRule} aria-hidden="true"/>
     </header>
 
-    <section className={styles.wall} aria-label="Randomized Rosie card wall" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
+    <div className={styles.zoomRow}>
+      <label className={styles.zoomControl}>
+        <span className={styles.zoomCaption}>ZOOM</span>
+        <span className={styles.zoomSign} aria-hidden="true">−</span>
+        <input
+          className={styles.zoomRange}
+          type="range"
+          min="0"
+          max={zoomMax - zoomMin}
+          step="1"
+          value={zoomMax - cardsPerRow}
+          onChange={event => {
+            setCardsPerRow(zoomMax - Number(event.target.value));
+            pauseDrift();
+          }}
+          onPointerDown={event => { event.stopPropagation(); pauseDrift(); }}
+          aria-label="Card Vault zoom"
+          aria-valuetext={`${cardsPerRow} cards per row`}
+          title={`${cardsPerRow} cards per row`}
+        />
+        <span className={styles.zoomSign} aria-hidden="true">+</span>
+        <output className={styles.zoomCount} aria-live="polite">{cardsPerRow}/row</output>
+      </label>
+    </div>
+
+    <section className={styles.wall} style={{ '--vault-columns': cardsPerRow }} aria-label="Randomized Rosie card wall" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
       {cards.map((card, index) => <button type="button" className={styles.tile} key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card} eager={index < 24}/></button>)}
     </section>
     <div ref={sentinel} className={styles.sentinel} aria-hidden="true"/>
@@ -540,7 +576,7 @@ function RosieCardVaultWall({ onExit }) {
 }
 
 
-export default function RosieCardVault({ onExit }) {
+export default function RosieCardVault() {
   return <>
     <TitleGleamAnimator
       selector={'h1[data-vault-title] [data-vault-layer="gleam"]'}
@@ -551,6 +587,6 @@ export default function RosieCardVault({ onExit }) {
       startPosition="155% 50%"
       endPosition="-55% 50%"
     />
-    <RosieCardVaultWall onExit={onExit} />
+    <RosieCardVaultWall />
   </>;
 }
