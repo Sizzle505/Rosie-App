@@ -1209,3 +1209,21 @@
     height: 66% !important;
   }
 }
+
+/* The artwork itself contains the original face. Removing that region from
+   the source painting on a completed whistle is necessary: a painted overlay
+   alone can still leave the far ear behind the turned transparent portrait. */
+.fortune-page .machine .stage.stage-flipped .stage-art {
+  -webkit-mask-image: radial-gradient(
+    ellipse 31% 39% at 60% 34%,
+    transparent 0 91%,
+    rgba(0,0,0,.06) 93%,
+    #000 100%
+  ) !important;
+  mask-image: radial-gradient(
+    ellipse 31% 39% at 60% 34%,
+    transparent 0 91%,
+    rgba(0,0,0,.06) 93%,
+    #000 100%
+  ) !important;
+}
