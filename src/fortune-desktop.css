@@ -1129,3 +1129,47 @@
   .fortune-page .turn-gold-sparks i,
   .fortune-page .turn-foreground-smoke .foreground-plume { opacity: 0 !important; }
 }
+
+
+/* FINAL Fortune glass registration: every effect is painted inside the physical glass. */
+.fortune-page .crystal-chamber {
+  overflow: hidden !important;
+  clip-path: ellipse(49.1% 48.7% at 50% 50%) !important;
+  -webkit-clip-path: ellipse(49.1% 48.7% at 50% 50%) !important;
+  contain: paint;
+  isolation: isolate;
+  background: transparent !important;
+}
+.fortune-page .crystal-chamber > .crystal-energy,
+.fortune-page .crystal-chamber > .fortune-lens {
+  overflow: hidden !important;
+  box-shadow: none !important;
+  filter: none !important;
+  clip-path: ellipse(49.1% 48.7% at 50% 50%) !important;
+  -webkit-clip-path: ellipse(49.1% 48.7% at 50% 50%) !important;
+}
+.fortune-page .crystal-chamber:has(.fortune-lens.has-answer) > .crystal-energy {
+  opacity: .14 !important;
+  filter: saturate(.24) sepia(.25) !important;
+}
+.fortune-page .crystal-chamber > .fortune-lens.has-answer {
+  background: radial-gradient(ellipse at 50% 49%, rgba(23,18,21,.24) 0%, rgba(30,23,24,.14) 52%, transparent 82%) !important;
+  box-shadow: inset 0 0 20px rgba(239,204,134,.19) !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.has-answer::before {
+  background: radial-gradient(ellipse, rgba(255,226,158,.12), rgba(238,200,123,.04) 53%, transparent 79%) !important;
+  box-shadow: none !important;
+}
+.fortune-page .crystal-chamber .lens-answer strong {
+  text-shadow: 0 2px 3px rgba(18,11,17,.9), 0 0 11px rgba(255,230,173,.7), 0 0 19px rgba(213,166,84,.38) !important;
+}
+.fortune-page .crystal-chamber .lens-answer .answer-sigil {
+  color: #f7d98a !important;
+  text-shadow: 0 0 9px rgba(255,236,175,.88), 0 0 22px rgba(213,167,83,.48) !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting .lens-answer::before {
+  background: radial-gradient(ellipse, rgba(255,245,216,.73), rgba(239,203,135,.28) 24%, rgba(199,147,72,.09) 48%, transparent 71%) !important;
+}
+.fortune-page .crystal-chamber .fortune-lens.is-manifesting {
+  box-shadow: inset 0 0 28px rgba(243,206,136,.18) !important;
+}
