@@ -1180,12 +1180,12 @@
 .fortune-page .machine .turn-seam-haze {
   display: block !important;
   z-index: 10 !important;
-  top: 4.3% !important;
-  left: 34.5% !important;
-  width: 57.5% !important;
-  height: 62% !important;
+  top: 1.8% !important;
+  left: 32.5% !important;
+  width: 60% !important;
+  height: 65% !important;
   transform: none !important;
-  border-radius: 17% 13% 15% 12% !important;
+  border-radius: 0 !important;
   background:
     radial-gradient(circle at 31% 20%, rgba(210, 160, 79, .15) 0 1px, transparent 2px),
     radial-gradient(circle at 80% 41%, rgba(237, 188, 105, .18) 0 1px, transparent 2px),
@@ -1204,8 +1204,8 @@
 @media (max-width: 620px) {
   .fortune-page .machine .turn-seam-haze {
     left: 28% !important;
-    width: 65% !important;
-    top: 4% !important;
-    height: 63% !important;
+    width: 67% !important;
+    top: 1.8% !important;
+    height: 66% !important;
   }
 }
