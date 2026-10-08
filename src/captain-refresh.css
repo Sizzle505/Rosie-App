@@ -17,7 +17,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('/captain-sakura-banner.avif');
+  background-image: url('/captain-sakura-banner.webp');
   background-size: cover;
   background-position: center 53%;
   background-repeat: no-repeat;
@@ -129,7 +129,7 @@
     inset: auto;
     width: 100%;
     height: auto;
-    aspect-ratio: 1916 / 821;
+    aspect-ratio: 1536 / 864;
     background-position: 37% 50%;
   }
   .captain-game-page .captain-hero::after {
