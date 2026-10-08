@@ -891,7 +891,7 @@
   pointer-events: auto;
 }
 .fortune-page .crystal-ball-shield {
-  clip-path: ellipse(calc(var(--oracle-ball-w, 40%) * .498) calc(var(--oracle-ball-h, 32.4%) * .498) at var(--oracle-ball-x, 50%) var(--oracle-ball-y, 75.4%));
+  clip-path: ellipse(var(--oracle-ball-rx, 20%) var(--oracle-ball-ry, 16.2%) at var(--oracle-ball-x, 50%) var(--oracle-ball-y, 75.4%));
 }
 .fortune-page .crystal-chamber .lens-answer {
   width: 96% !important;
@@ -1031,16 +1031,16 @@
   transform-origin: center;
   animation: fortuneSmokeFeather .97s cubic-bezier(.18,.64,.18,1) both !important;
 }
-.fortune-page .foreground-plume-a { --plume-left: 40%; --plume-top: 43%; --plume-width: 70%; --plume-height: 48%; --plume-x: -64px; --plume-y: -65px; }
-.fortune-page .foreground-plume-b { --plume-left: 61%; --plume-top: 51%; --plume-width: 74%; --plume-height: 45%; --plume-x: 85px; --plume-y: -94px; }
-.fortune-page .foreground-plume-c { --plume-left: 50%; --plume-top: 68%; --plume-width: 75%; --plume-height: 30%; --plume-x: 0px; --plume-y: 15px; }
-.fortune-page .foreground-plume-d { --plume-left: 26%; --plume-top: 58%; --plume-width: 54%; --plume-height: 31%; --plume-x: -98px; --plume-y: -26px; }
-.fortune-page .foreground-plume-e { --plume-left: 76%; --plume-top: 62%; --plume-width: 52%; --plume-height: 29%; --plume-x: 92px; --plume-y: -32px; }
+.fortune-page .foreground-plume-a { --plume-left: 40%; --plume-top: 43%; --plume-width: 70%; --plume-height: 48%; --plume-x: -64px; --plume-y: -65px; --plume-mid-x: -24px; --plume-mid-y: -27px; }
+.fortune-page .foreground-plume-b { --plume-left: 61%; --plume-top: 51%; --plume-width: 74%; --plume-height: 45%; --plume-x: 85px; --plume-y: -94px; --plume-mid-x: 32px; --plume-mid-y: -39px; }
+.fortune-page .foreground-plume-c { --plume-left: 50%; --plume-top: 68%; --plume-width: 75%; --plume-height: 30%; --plume-x: 0px; --plume-y: 15px; --plume-mid-x: 0px; --plume-mid-y: 6px; }
+.fortune-page .foreground-plume-d { --plume-left: 26%; --plume-top: 58%; --plume-width: 54%; --plume-height: 31%; --plume-x: -98px; --plume-y: -26px; --plume-mid-x: -37px; --plume-mid-y: -11px; }
+.fortune-page .foreground-plume-e { --plume-left: 76%; --plume-top: 62%; --plume-width: 52%; --plume-height: 29%; --plume-x: 92px; --plume-y: -32px; --plume-mid-x: 35px; --plume-mid-y: -14px; }
 @keyframes fortuneSmokeFeather {
   0% { opacity: 0; transform: translate(-50%, -40%) scale(.45, .52); }
   19% { opacity: .66; transform: translate(-50%, -48%) scale(.85, .87); }
   41% { opacity: .81; transform: translate(-50%, -50%) scale(1.02, 1.01); }
-  66% { opacity: .56; transform: translate(calc(-50% + var(--plume-x) * .38), calc(-50% + var(--plume-y) * .42)) scale(1.22, 1.22); }
+  66% { opacity: .56; transform: translate(calc(-50% + var(--plume-mid-x)), calc(-50% + var(--plume-mid-y))) scale(1.22, 1.22); }
   100% { opacity: 0; transform: translate(calc(-50% + var(--plume-x)), calc(-50% + var(--plume-y) - 58px)) scale(1.56, 1.66); }
 }
 .fortune-page .flip-magic .smoke-wisp {
@@ -1060,7 +1060,7 @@
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  --spark-spread: 1;
+  transform-origin: 50% 48%;
 }
 .fortune-page .turn-gold-sparks i {
   position: absolute;
@@ -1104,12 +1104,12 @@
   15% { opacity: 1; transform: translate(-50%, -50%) scale(1.26) rotate(14deg); }
   45% { opacity: 1; }
   77% { opacity: .88; }
-  100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x) * var(--spark-spread)), calc(-50% + var(--spark-y) * var(--spark-spread))) scale(.26) rotate(180deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(.26) rotate(180deg); }
 }
 @media (max-width: 620px) {
   .fortune-page .question-heading { min-height: 62px; padding-right: 40px; }
   .fortune-page .question-heading .fortune-whistle-button { top: -7px !important; right: -7px !important; }
-  .fortune-page .turn-gold-sparks { --spark-spread: .64; }
+  .fortune-page .turn-gold-sparks { transform: scale(.74); }
   .fortune-page .crystal-chamber .lens-answer strong { font-size: clamp(10px, 2.85vw, 13px) !important; }
 }
 @media (prefers-reduced-motion: reduce) {
