@@ -266,3 +266,14 @@
     line-height: 1.02;
   }
 }
+
+/* Make the live catch count visible even on the one-screen phone layout. */
+@media (max-width: 720px) {
+  .captain-game-page .captain-hud {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .captain-game-page .captain-hud > div:nth-child(4) {
+    display: grid !important;
+    place-content: center;
+  }
+}
