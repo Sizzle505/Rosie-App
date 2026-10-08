@@ -346,6 +346,8 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
       stage.style.setProperty("--oracle-ball-y", `${imageY + art.naturalHeight * .754 * scale}px`);
       stage.style.setProperty("--oracle-ball-w", `${art.naturalWidth * .386 * scale}px`);
       stage.style.setProperty("--oracle-ball-h", `${art.naturalHeight * .324 * scale}px`);
+      stage.style.setProperty("--oracle-ball-rx", `${art.naturalWidth * .386 * scale * .498}px`);
+      stage.style.setProperty("--oracle-ball-ry", `${art.naturalHeight * .324 * scale * .498}px`);
     }
 
     const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(registerBall) : null;
