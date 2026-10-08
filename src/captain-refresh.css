@@ -1,0 +1,281 @@
+/* Captain Sakura Sea refresh: art first, playable course untouched. */
+.captain-game-page .captain-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  min-height: 270px;
+  padding: 14px;
+  overflow: hidden;
+  background: #142f42;
+  border: 1px solid rgba(246, 210, 132, .76);
+  border-radius: 22px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .34), inset 0 0 0 1px rgba(255, 241, 183, .12);
+}
+.captain-game-page .captain-hero-banner {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('/captain-sakura-banner.webp');
+  background-size: cover;
+  background-position: center 18%;
+  background-repeat: no-repeat;
+}
+.captain-game-page .captain-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    transparent 0%, transparent 35%,
+    rgba(4, 22, 35, .18) 48%,
+    rgba(4, 22, 35, .62) 70%,
+    rgba(4, 22, 35, .78) 100%);
+}
+.captain-game-page .captain-hero::before {
+  z-index: 4;
+  border-color: rgba(255, 217, 142, .4);
+}
+.captain-game-page .captain-hero-rigging,
+.captain-game-page .captain-portrait {
+  display: none;
+}
+.captain-game-page .captain-title {
+  z-index: 3;
+  flex: 0 1 52%;
+  width: 52%;
+  margin: 0;
+  padding: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+.captain-game-page .captain-title-plaque {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  padding: 18px 18px 17px;
+  border-radius: 15px;
+  border: 1px solid rgba(244, 214, 147, .42);
+  background: rgba(5, 30, 43, .42);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.captain-game-page .captain-kicker {
+  color: #ffe6a6;
+  text-shadow: 0 1px 5px rgba(0,0,0,.5);
+}
+.captain-game-page .captain-title h1 {
+  font-size: clamp(27px, 4.3vw, 47px);
+  color: #ffe3a0;
+  text-shadow: 0 3px 10px rgba(9, 15, 21, .65);
+}
+.captain-game-page .captain-title p {
+  color: #fff3d4;
+}
+.captain-game-page .captain-title small {
+  color: #f4e9da;
+  font-size: 10px;
+  text-shadow: 0 1px 5px rgba(0,0,0,.5);
+}
+.captain-game-page .sea-pickup-ball,
+.captain-game-page .sea-pickup-treat,
+.captain-game-page .sea-pickup-buoy {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  filter: drop-shadow(0 5px 7px rgba(1, 23, 32, .48));
+}
+.captain-game-page .sea-pickup .pickup-art {
+  display: block;
+  width: 46px;
+  height: 46px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  overflow: visible;
+}
+.captain-game-page .sea-pickup-buoy .pickup-art {
+  height: 54px;
+  width: 54px;
+}
+.captain-game-page .captain-cargo-key .pickup-art {
+  display: block;
+  width: 28px;
+  height: 28px;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.22));
+}
+.captain-game-page .captain-cargo-key .cargo-buoy .pickup-art {
+  height: 32px;
+}
+@media (max-width: 720px) {
+  /* Preserve the one-screen mobile game while showing a real, legible banner. */
+  .captain-game-page {
+    grid-template-rows: clamp(132px, 19dvh, 164px) 39px minmax(0, 1fr);
+  }
+  .captain-game-page .captain-hero {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: stretch;
+    min-height: 0;
+    height: 100%;
+    padding: 0;
+    border-radius: 14px;
+  }
+  .captain-game-page .captain-hero-banner {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    background-size: cover;
+    background-position: center 18%;
+  }
+  .captain-game-page .captain-hero::after {
+    display: block;
+    background: linear-gradient(90deg,
+      transparent 0%, rgba(5, 23, 35, .09) 40%,
+      rgba(4, 22, 36, .46) 55%, rgba(4, 22, 36, .84) 100%);
+  }
+  .captain-game-page .captain-hero::before {
+    inset: 5px;
+    border-radius: 10px;
+  }
+  .captain-game-page .captain-title {
+    z-index: 3;
+    display: flex;
+    flex: 0 0 52%;
+    align-self: stretch;
+    align-items: center;
+    width: 52%;
+    padding: 6px 7px 6px 0;
+    margin: 0;
+    background: none;
+  }
+  .captain-game-page .captain-title-plaque {
+    width: 100%;
+    padding: 10px 8px;
+    border: 1px solid rgba(247, 207, 125, .28);
+    border-radius: 10px;
+    background: rgba(4, 26, 40, .34);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .captain-game-page .captain-kicker {
+    font-size: 5px;
+    line-height: 1.2;
+    letter-spacing: .06em;
+  }
+  .captain-game-page .captain-title h1 {
+    margin-top: 6px;
+    font-size: clamp(18px, 5vw, 25px);
+    white-space: normal;
+    line-height: .96;
+  }
+  .captain-game-page .captain-title p {
+    margin: 4px 0 0;
+    font-size: 13px;
+  }
+  .captain-game-page .captain-title small {
+    display: none;
+  }
+  .captain-game-page .captain-marquee {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin-top: 2px;
+  }
+  .captain-game-page .marquee-crest,
+  .captain-game-page .marquee-burgee {
+    display: none;
+  }
+  .captain-game-page .sea-pickup-ball,
+  .captain-game-page .sea-pickup-treat,
+  .captain-game-page .sea-pickup-buoy {
+    width: 38px;
+    height: 38px;
+  }
+  .captain-game-page .sea-pickup .pickup-art {
+    width: 37px;
+    height: 37px;
+  }
+  .captain-game-page .sea-pickup-buoy .pickup-art {
+    width: 41px;
+    height: 41px;
+  }
+}
+
+/* Captain final interaction polish: readable header and level horizontal sailing. */
+@media (min-width: 721px) {
+  /* Keep the entire title plaque on the right of Rosie's face. */
+  .captain-game-page .captain-title {
+    flex: 0 0 46%;
+    width: 46%;
+  }
+  .captain-game-page .captain-title-plaque {
+    padding-inline: clamp(12px, 1.7vw, 18px);
+  }
+  .captain-game-page .captain-marquee {
+    display: block;
+  }
+  .captain-game-page .marquee-crest,
+  .captain-game-page .marquee-burgee {
+    display: none;
+  }
+  .captain-game-page .captain-title h1 {
+    white-space: nowrap;
+    font-size: clamp(25px, 2.7vw, 36px);
+    letter-spacing: -.035em;
+  }
+}
+.captain-game-page .captain-yacht,
+.captain-game-page .captain-yacht.lane-0,
+.captain-game-page .captain-yacht.lane-1,
+.captain-game-page .captain-yacht.lane-2,
+.captain-game-page.captain-boosting .captain-yacht {
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  transition: left .2s cubic-bezier(.2, .82, .2, 1) !important;
+}
+.captain-game-page .yacht-illustration {
+  animation: none !important;
+  transform: none !important;
+}
+.captain-game-page .helm-rosie-art {
+  animation: none !important;
+}
+.captain-game-page .captain-cargo-key span small {
+  margin-left: 3px;
+  color: #ffdc91;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .captain-game-page .captain-title-plaque {
+    overflow: visible;
+  }
+  .captain-game-page .captain-title h1 {
+    font-size: clamp(16px, 4.6vw, 21px);
+    letter-spacing: -.045em;
+    line-height: 1.02;
+  }
+}
+
+/* Make the live catch count visible even on the one-screen phone layout. */
+@media (max-width: 720px) {
+  .captain-game-page .captain-hud {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .captain-game-page .captain-hud > div:nth-child(4) {
+    display: grid !important;
+    place-content: center;
+  }
+}

@@ -3,6 +3,10 @@ import { createRoot } from "react-dom/client";
 import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
+import "./fortune-desktop.css";
+import "./cheese-left-panel.css";
+import "./captain-refresh.css";
+import "./responsive-polish.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -266,9 +270,9 @@ function FortuneLens({
             <i /><i /><i /><i /><i /><i /><i /><i />
           </span>
           <span className="answer-sigil" aria-hidden="true">✦</span>
-          <span className="answer-kicker">ROSIE HAS SEEN IT</span>
+          <span className="answer-kicker">THE PAW HAS SPOKEN</span>
           <strong>{answer.text}</strong>
-
+          <small>Madame Rosie’s ruling is final.</small>
         </div>
       )}
 
@@ -286,7 +290,7 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
   const manifesting = revealStage === "manifesting";
   return (
     <div
-      className={`crystal-energy ${consulting ? "is-consulting" : ""} ${manifesting ? "is-manifesting" : ""} ${tone}`}
+      className={`crystal-energy ${consulting ? "is-consulting" : ""} ${manifesting ? "is-manifesting" : ""} ${answer ? "has-answer" : ""} ${tone}`}
       aria-hidden="true"
     >
       <span className="energy-halo" />
@@ -308,6 +312,58 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
 
 function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst }) {
   const manifesting = revealStage === "manifesting";
+  const stageRef = useRef(null);
+  const stageArtRef = useRef(null);
+
+  // Register the magic to the glass in the actual painting rather than to
+  // the width of the cabinet. The illustration is cropped with object-fit,
+  // so percentage-based circle offsets drift on narrow screens.
+  useEffect(() => {
+    const stage = stageRef.current;
+    const art = stageArtRef.current;
+    if (!stage || !art) return undefined;
+
+    function registerBall() {
+      if (!art.naturalWidth || !art.naturalHeight) return;
+      const stageBox = stage.getBoundingClientRect();
+      const artBox = art.getBoundingClientRect();
+      if (!stageBox.width || !stageBox.height) return;
+
+      const scale = Math.max(artBox.width / art.naturalWidth, artBox.height / art.naturalHeight);
+      const paintedWidth = art.naturalWidth * scale;
+      const paintedHeight = art.naturalHeight * scale;
+      const position = window.getComputedStyle(art).objectPosition.split(/\s+/);
+      const percent = (value, fallback) => {
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) && value?.includes("%") ? parsed / 100 : fallback;
+      };
+      const posX = percent(position[0], 0.5);
+      const posY = percent(position[1], 0.5);
+      const imageX = artBox.left - stageBox.left + (artBox.width - paintedWidth) * posX;
+      const imageY = artBox.top - stageBox.top + (artBox.height - paintedHeight) * posY;
+
+      // Measured fractions of /rosie-fortune-stage.webp's glass, not the
+      // decorative stand: center (.502, .754), diameter (.386, .324).
+      stage.style.setProperty("--oracle-ball-x", `${imageX + art.naturalWidth * .502 * scale}px`);
+      stage.style.setProperty("--oracle-ball-y", `${imageY + art.naturalHeight * .754 * scale}px`);
+      stage.style.setProperty("--oracle-ball-w", `${art.naturalWidth * .386 * scale}px`);
+      stage.style.setProperty("--oracle-ball-h", `${art.naturalHeight * .324 * scale}px`);
+      stage.style.setProperty("--oracle-ball-rx", `${art.naturalWidth * .386 * scale * .498}px`);
+      stage.style.setProperty("--oracle-ball-ry", `${art.naturalHeight * .324 * scale * .498}px`);
+    }
+
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(registerBall) : null;
+    observer?.observe(stage);
+    observer?.observe(art);
+    art.addEventListener("load", registerBall);
+    window.addEventListener("resize", registerBall);
+    registerBall();
+    return () => {
+      observer?.disconnect();
+      art.removeEventListener("load", registerBall);
+      window.removeEventListener("resize", registerBall);
+    };
+  }, []);
   return (
     <section
       className={`machine ${consulting ? "machine-consulting" : ""} ${manifesting ? "machine-manifesting" : ""}`}
@@ -327,18 +383,44 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div className={`stage ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
+        <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
           <img
+            ref={stageArtRef}
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
+
+          <div className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
 
           {/* A Rosie-only portrait layer.  The stage image never moves; the layer is
               revealed only under the whistle's smoke, then pivots in place. */}
           <img
             className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
             src="/rosie-fortune-turn-side.webp"
+            alt=""
+            aria-hidden="true"
+          />
+
+          <div className="stage-twinkles" aria-hidden="true">
+            <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+          </div>
+
+          <div className="fortune-books" aria-hidden="true">
+            <i><span>OMENS &amp; SNACKS</span></i>
+            <i><span>GOOD GIRL MOON LORE</span></i>
+            <i><span>CANINE ARCANA</span></i>
+            <i><span>CHEESE &amp; DESTINY</span></i>
+          </div>
+
+          <div
+            className={`rosie-turn-backplate ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            aria-hidden="true"
+          />
+
+          <img
+            className={`crystal-ball-shield ${flipped ? "is-visible" : ""}`}
+            src="/rosie-fortune-stage.webp"
             alt=""
             aria-hidden="true"
           />
@@ -379,27 +461,36 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
               </span>
             </div>
           )}
-        </div>
 
-        <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
-        <FortuneLens
-          consulting={consulting}
-          answer={answer}
-          revealStage={revealStage}
-          answerDismissed={answerDismissed}
-          onDismiss={onDismissAnswer}
-        />
-
-        {flipBurst > 0 && turning && (
-          <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
-            <span className="foreground-plume foreground-plume-a" />
-            <span className="foreground-plume foreground-plume-b" />
-            <span className="foreground-plume foreground-plume-c" />
-            <span className="foreground-glitter">
-              <i /><i /><i /><i /><i /><i /><i /><i />
-            </span>
+          <div className="crystal-chamber">
+            <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
+            <FortuneLens
+              consulting={consulting}
+              answer={answer}
+              revealStage={revealStage}
+              answerDismissed={answerDismissed}
+              onDismiss={onDismissAnswer}
+            />
           </div>
-        )}
+
+          {flipBurst > 0 && turning && (
+            <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
+              <span className="foreground-plume foreground-plume-a" />
+              <span className="foreground-plume foreground-plume-b" />
+              <span className="foreground-plume foreground-plume-c" />
+              <span className="foreground-plume foreground-plume-d" />
+              <span className="foreground-plume foreground-plume-e" />
+              <span className="foreground-glitter">
+                <i /><i /><i /><i /><i /><i /><i /><i />
+              </span>
+            </div>
+          )}
+          {flipBurst > 0 && (
+            <div className="turn-gold-sparks" aria-hidden="true" key={`gilded-${flipBurst}`}>
+              {Array.from({ length: 24 }, (_, index) => <i key={index} />)}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -533,25 +624,15 @@ function BarkbridgeSeal({ className = "" }) {
 
 function GraduateRosie() {
   return (
-    <div className="graduate-rosie-card" aria-label="Doctor Rosie celebrating graduation">
-      <div className="graduate-rosie-frame">
-        {/* This is Rosie's actual repository photo - never substitute a generic Shiba illustration here. */}
-        <img
-          className="graduate-rosie-photo"
-          src="/rosie-doctor-cheese.webp"
-          alt="Rosie the Shiba, Doctor of Cheese"
-        />
-        <span className="graduate-cap" aria-hidden="true">
-          <i className="graduate-cap-board" />
-          <i className="graduate-cap-band" />
-          <i className="graduate-cap-tassel" />
-        </span>
-        <span className="graduate-cheer" aria-hidden="true">✦</span>
-      </div>
-      <span>FACULTY EXAMINER</span>
-      <strong>Doctor Rosie</strong>
-      <small>Che.D. · University of Barkbridge</small>
-    </div>
+    <figure className="graduate-rosie" aria-label="Doctor Rosie celebrating graduation">
+      <img
+        src="/rosie-barkbridge-graduate.webp"
+        alt="Rosie celebrating in her graduation cap"
+      />
+      <figcaption>DOCTOR ROSIE, Che.D.</figcaption>
+      <span className="graduate-spark graduate-spark-one" aria-hidden="true">✦</span>
+      <span className="graduate-spark graduate-spark-two" aria-hidden="true">✧</span>
+    </figure>
   );
 }
 
@@ -578,14 +659,6 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   return (
     <section className="barkbridge-graduation" aria-live="polite">
       <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
-      <div className="graduation-kicker">
-        <BarkbridgeSeal className="graduation-kicker-seal" />
-        <div>
-          <span>UNIVERSITY OF BARKBRIDGE</span>
-          <small>FACULTY OF GASTRONOMIC SCIENCES</small>
-        </div>
-      </div>
-
       <div className="graduation-stage">
         <article className="barkbridge-diploma" aria-label="University of Barkbridge completion diploma">
           <div className="diploma-inner-border">
@@ -621,7 +694,9 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
         <GraduateRosie />
       </div>
 
-      <button type="button" className="barkbridge-replay" onClick={onReplay}>EXAMINE AGAIN</button>
+      <button type="button" className="barkbridge-replay" onClick={onReplay}>
+        <span aria-hidden="true">↻</span> EXAMINE AGAIN
+      </button>
     </section>
   );
 }
@@ -974,13 +1049,14 @@ function GoldenCheeseIcon({ compact = false }) {
 }
 
 function CaptainPickupIcon({ kind }) {
-  if (kind === "ball") {
-    return <svg className="pickup-art pickup-art-ball" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" /><path d="M12 22c11 1 18 8 19 20M52 42c-11-1-18-8-19-20" /><path d="M24 12c-1 11-8 18-20 19M40 52c1-11 8-18 20-19" /></svg>;
-  }
-  if (kind === "treat") {
-    return <svg className="pickup-art pickup-art-treat" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 23a10 10 0 1 1-7-13 10 10 0 0 1 13 7l17 17a10 10 0 1 1 7 13 10 10 0 0 1-13 7L18 37a10 10 0 1 1 0-14Z" /></svg>;
-  }
-  return <svg className="pickup-art pickup-art-buoy" viewBox="0 0 64 64" aria-hidden="true"><path d="M27 8h10l3 9-3 5 8 27H19l8-27-3-5Z" /><path d="M19 38h26M22 48h20" /><path d="M24 56h16" /></svg>;
+  const images = {
+    ball: "/captain-pickup-tennis.webp",
+    treat: "/captain-pickup-bone.webp",
+    buoy: "/captain-pickup-buoy.webp"
+  };
+  return <img className={"pickup-art pickup-art-" + kind}
+    src={images[kind] || images.ball}
+    alt="" aria-hidden="true" draggable="false" />;
 }
 
 function CaptainRosieIllustration({ className = "" }) {
@@ -1240,6 +1316,7 @@ function CaptainRosieGame({ soundOn }) {
   const [timeLeft, setTimeLeft] = useState(45);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
+  const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
   const [message, setMessage] = useState("Captain Rosie is on the bridge. The coastal passage is clear and the treats are somewhere ahead.");
   const [best, setBest] = useState(() => {
     const value = Number(localStorage.getItem("captainRosieBest") || 0);
@@ -1257,6 +1334,7 @@ function CaptainRosieGame({ soundOn }) {
   const [ended, setEnded] = useState(false);
 
   const laneRef = useRef(1);
+  const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
@@ -1272,6 +1350,7 @@ function CaptainRosieGame({ soundOn }) {
   const elapsed = 45 - timeLeft;
   const routeProgress = Math.min(100, Math.round(elapsed / 45 * 100));
   const missionProgress = Math.min(100, Math.round(score / 6.5));
+  const collectedTotal = catches.ball + catches.treat + catches.cheese;
   const rank = captainRank(score);
 
   function audioContext() {
@@ -1353,7 +1432,9 @@ function CaptainRosieGame({ soundOn }) {
     laneRef.current = 1;
     lastPhaseRef.current = "harbor";
     setLane(1);
+    itemsRef.current = [];
     setItems([]);
+    setCatches({ ball: 0, treat: 0, cheese: 0 });
     setScore(0);
     setLives(3);
     setTimeLeft(45);
@@ -1437,13 +1518,17 @@ function CaptainRosieGame({ soundOn }) {
       let turboDelta = 0;
       let lifeLoss = 0;
       let cheeseGain = 0;
+      const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
 
-      setItems((current) => {
+      // Resolve collisions synchronously against the authoritative item ref.
+      // React may defer a setState updater, so reading totals mutated inside
+      // setItems() immediately afterward previously lost earned points.
+      {
         spawnClockRef.current += 70;
         const phaseSpeed = phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75;
-        const next = current.map((item) => ({ ...item, y: item.y + item.speed + phaseSpeed }));
+        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + item.speed + phaseSpeed }));
 
         const spawnEvery = phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485;
         if (spawnClockRef.current >= spawnEvery) {
@@ -1465,7 +1550,7 @@ function CaptainRosieGame({ soundOn }) {
           });
         }
 
-        return next.filter((item) => {
+        const remaining = next.filter((item) => {
           const inCatchZone = item.y >= 77 && item.y <= 92;
           if (inCatchZone && item.lane === laneRef.current) {
             if (item.kind === "buoy") {
@@ -1481,6 +1566,7 @@ function CaptainRosieGame({ soundOn }) {
               turboDelta += item.turbo;
               lastHit = item.kind;
               if (item.kind === "cheese") cheeseGain += 1;
+              pickupsCaught[item.kind] += 1;
             }
             return false;
           }
@@ -1490,7 +1576,9 @@ function CaptainRosieGame({ soundOn }) {
           }
           return true;
         });
-      });
+        itemsRef.current = remaining;
+        setItems(remaining);
+      }
 
       if (missedGood && !scoreDelta) {
         streakRef.current = 0;
@@ -1500,6 +1588,11 @@ function CaptainRosieGame({ soundOn }) {
       }
 
       if (scoreDelta) {
+        setCatches((current) => ({
+          ball: current.ball + pickupsCaught.ball,
+          treat: current.treat + pickupsCaught.treat,
+          cheese: current.cheese + pickupsCaught.cheese
+        }));
         setScore((current) => current + scoreDelta);
         setStreak(streakRef.current);
         setCombo(comboRef.current);
@@ -1575,12 +1668,7 @@ function CaptainRosieGame({ soundOn }) {
   return (
     <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "")}>
       <section className="captain-hero">
-        <div className="captain-hero-rigging" aria-hidden="true"><i /><i /><i /><i /></div>
-        <div className="captain-portrait">
-          <div className="captain-portrait-medallion" aria-hidden="true"><i /><i /><i /></div>
-          <CaptainRosieIllustration className="hero-captain-illustration" idPrefix="heroRosie" />
-          <span><RosiePawCrest className="portrait-paw" /> CAPTAIN ON DECK</span>
-        </div>
+        <div className="captain-hero-banner" role="img" aria-label="Captain Rosie at the helm of an ornate Japanese sailing ship at sunset, with islands, torii gates and waterfalls" />
         <div className="captain-title">
           <div className="captain-title-plaque">
             <span className="captain-kicker">THE HOUSE OF ROSIE · RIVIERA YACHT CLUB</span>
@@ -1618,7 +1706,7 @@ function CaptainRosieGame({ soundOn }) {
         <div><span>SCORE</span><strong>{score}</strong></div>
         <div><span>TIME</span><strong>{timeLeft}s</strong></div>
         <div><span>HULL</span><strong className="captain-lives">{Array.from({ length: 3 }, (_, index) => index < lives ? "●" : "○").join(" ")}</strong></div>
-        <div><span>STREAK</span><strong>{streak}</strong></div>
+        <div><span>CARGO CAUGHT</span><strong>{collectedTotal}</strong></div>
         <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><span>MULTIPLIER</span><strong>x{combo}{boost ? " ×2" : ""}</strong></div>
       </section>
 
@@ -1710,6 +1798,7 @@ function CaptainRosieGame({ soundOn }) {
                   <div className="voyage-stats">
                     <span><b>{score}</b> score</span>
                     <span><b>{bestStreak}</b> best streak</span>
+                    <span><b>{collectedTotal}</b> cargo collected</span>
                     <span><b>{cheeses}</b> Golden Cheese</span>
                   </div>
                   <button type="button" onClick={startGame}>SAIL AGAIN</button>
@@ -1758,10 +1847,10 @@ function CaptainRosieGame({ soundOn }) {
         </div>
 
         <div className="captain-cargo-key">
-          <span><b className="cargo-ball">🎾</b><i>+10</i>Tennis</span>
-          <span><b className="cargo-treat">🦴</b><i>+20</i>Treat</span>
-          <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese</span>
-          <span><b className="cargo-buoy">◆</b><i>-1</i>Buoy</span>
+          <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>
+          <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
+          <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
+          <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to Admiral target</em></span>
         </div>
       </section>
@@ -2101,11 +2190,11 @@ function App() {
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
       window.navigator.vibrate?.([8, 20, 8]);
-    }, 520);
+    }, 390);
 
     turnEndTimerRef.current = window.setTimeout(() => {
       setTurning(false);
-    }, 1320);
+    }, 960);
   }
 
   function toggleDictation() {
@@ -2248,10 +2337,10 @@ function App() {
         <div className="loading-copy">Consulting the ancient treat ledger…</div>
       </div>
 
-      <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
+      <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
 
         {page === "fortune" ? (
-        <main>
+        <main className="fortune-page">
           <div className="fortune-console">
             <FortuneMachine
               consulting={consulting}
@@ -2266,22 +2355,23 @@ function App() {
 
             <div className="console-caption">
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
-              <button
-                type="button"
-                className="fortune-whistle-button"
-                aria-label="Whistle for Rosie"
-                title="Whistle for Rosie"
-                onClick={whistleForRosie}
-              >
-                <b aria-hidden="true">♪</b>
-                <small>WHISTLE FOR ROSIE</small>
-              </button>
             </div>
 
             <form className="question-card" onSubmit={askRosie}>
               <div className="console-rivets" aria-hidden="true"><i /><i /><i /><i /></div>
               <div className="question-heading">
                 <span className="question-kicker">PETITION THE ORACLE</span>
+                <button
+                  type="button"
+                  className="fortune-whistle-button"
+                  aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
+                  aria-pressed={flipped}
+                  title="Whistle for Rosie"
+                  onClick={whistleForRosie}
+                  disabled={turning}
+                >
+                  <span aria-hidden="true">♪</span>
+                </button>
                 <label htmlFor="question">Ask Rosie what you should do…</label>
               </div>
 
@@ -2351,7 +2441,15 @@ function App() {
           </div>
 
           <section className={`fortune-ticket ${answer && (revealStage === "revealed" || revealStage === "dismissing") ? "fortune-ticket-visible" : ""}`} aria-live="polite">
-            {answer && (
+            {(!answer || revealStage === "manifesting") && (
+              <div className={`fortune-waiting-card ${consulting || revealStage === "manifesting" ? "is-awake" : ""}`}>
+                <span aria-hidden="true">✦</span>
+                <small>THE PRIVATE CONSULTATION</small>
+                <strong>{consulting || revealStage === "manifesting" ? "The signs are gathering." : "Rosie will place her answer here."}</strong>
+                <p>Ask one excellent question. The crystal ball will stir, and Madame Rosie will deliver her ruling.</p>
+              </div>
+            )}
+            {answer && revealStage !== "manifesting" && (
               <div className="ticket-paper">
                 <span className="ticket-corner ticket-corner-tl" aria-hidden="true">✦</span>
                 <span className="ticket-corner ticket-corner-tr" aria-hidden="true">✦</span>
@@ -2419,7 +2517,7 @@ function App() {
         ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />
         ) : page === "vault" ? (
-          <RosieCardVault onExit={() => navigateTo("fortune")} />
+          <RosieCardVault />
         ) : (
           <RosieRandomizers />
         )}
@@ -2428,7 +2526,6 @@ function App() {
           <button className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span>✦</span><small>Fortune</small></button>
           <button className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span>♛</span><small>Cheese</small></button>
           <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
-          <button className={page === "captain2" ? "active" : ""} onClick={() => navigateTo("captain2")}><span>⛩</span><small>Captain 2</small></button>
           <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span aria-hidden="true">▣</span><small>Vault</small></button>
           <button className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span>♠</span><small>Random</small></button>
         </nav>

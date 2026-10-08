@@ -14,6 +14,10 @@
   box-sizing: border-box;
   color: var(--ink);
   font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(ellipse at 50% -8%, rgba(123, 16, 35, .15), transparent 38%),
+    repeating-linear-gradient(100deg, rgba(255,255,255,.009) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, #09080b, #0d090d 64%, #08070a);
 }
 
 .hero {
@@ -611,15 +615,30 @@
 .salonsFooter b { color: #6d5323; font: 800 8px/1 Arial, sans-serif; letter-spacing: .14em; font-style: normal; margin-right: 5px; }
 
 @media (max-width: 860px) {
+  .page { padding-inline: 12px; }
   .hero { grid-template-columns: 1fr 220px; padding: 25px 28px; }
   .hostPortrait { right: 28px; width: 218px; height: 218px; }
   .heroSignet { right: 236px; top: 44px; width: 125px; height: auto; transform: none; filter: none; }
+  .ivoryRow { gap: 12px; }
+  .ivoryCard { min-height: 480px; padding-inline: 18px; }
   .wheelSalon { grid-template-columns: 1fr; }
   .wheelEditor { width: min(520px, 100%); justify-self: center; box-sizing: border-box; }
 }
 
+@media (min-width: 681px) and (max-width: 820px) {
+  .hero { min-height: 230px; grid-template-columns: minmax(0,1fr) 190px; padding: 24px; }
+  .hero h1 { font-size: clamp(42px, 7.3vw, 56px); }
+  .hostPortrait { right: 18px; width: 190px; height: 205px; }
+  .heroSignet { right: 195px; top: 40px; width: 108px; }
+  .ivoryCard { min-height: 455px; }
+  .coinScene, .diceScene { min-height: 235px; }
+  .coin { width: 185px; height: 185px; }
+  .dieRig, .dieBody { width: 192px; height: 192px; }
+  .decorativeDie { width: 100px; height: 100px; }
+}
+
 @media (max-width: 680px) {
-  .page { padding: 10px 8px 96px; }
+  .page { padding: 8px 7px 92px; }
   .hero { min-height: 218px; padding: 21px 17px; border-radius: 19px; }
   .heroCopy { max-width: calc(100% - 132px); }
   .kicker { font-size: 7px; gap: 6px; letter-spacing: .14em; }
@@ -631,7 +650,7 @@
   .hostPortrait::before { inset: 31px 17px 18px; }
   .heroSignet { right: 27px; top: 15px; width: 62px; height: auto; transform: none; filter: none; }
   .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
-  .ivoryCard { min-height: 430px; padding: 18px 17px 20px; border-radius: 19px; }
+  .ivoryCard { min-height: 420px; padding: 18px 17px 20px; border-radius: 19px; }
   .ivoryCard h2 { font-size: 22px; }
   .coinScene, .diceScene { min-height: 225px; }
   .coin { width: 178px; height: 178px; }
