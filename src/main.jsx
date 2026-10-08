@@ -11,6 +11,35 @@ import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 
+function RosieNavIcon({ type }) {
+  const common = {
+    className: "rosie-nav-icon",
+    viewBox: "0 0 32 32",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.7,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": true
+  };
+
+  if (type === "fortune") return <svg {...common}>
+    <circle cx="16" cy="13.5" r="8"/><path d="M11 22h10l2 4H9l2-4Z"/><path d="m16 8 .8 2.1 2.2.8-2.2.8-.8 2.1-.8-2.1-2.2-.8 2.2-.8L16 8Z"/>
+  </svg>;
+  if (type === "cheese") return <svg {...common}>
+    <path d="M5.5 23.5 9 11.7l16.8 3.8v8H5.5Z"/><path d="m9 11.7 8-4.2 8.8 8"/><circle cx="12" cy="18" r="1.6"/><circle cx="20" cy="20.5" r="1.3"/>
+  </svg>;
+  if (type === "captain") return <svg {...common}>
+    <circle cx="16" cy="7" r="2.5"/><path d="M16 9.5v16M9 14h14M7 20c1.7 4 4.7 6 9 6s7.3-2 9-6M7 20l4 1M25 20l-4 1"/>
+  </svg>;
+  if (type === "vault") return <svg {...common}>
+    <rect x="7" y="5.5" width="18" height="21" rx="2.5"/><rect x="10.5" y="9" width="11" height="14" rx="1.5"/><circle cx="16" cy="16" r="3.3"/><path d="M16 12.7v6.6M12.7 16h6.6"/>
+  </svg>;
+  return <svg {...common}>
+    <rect x="6" y="6" width="20" height="20" rx="5"/><circle cx="11" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="21" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1" fill="currentColor" stroke="none"/><circle cx="11" cy="21" r="1" fill="currentColor" stroke="none"/><circle cx="21" cy="21" r="1" fill="currentColor" stroke="none"/>
+  </svg>;
+}
+
 const RESPONSES = {
   positive: [
     "Absolutely. My ears perked up for this one.",
@@ -2523,11 +2552,11 @@ function App() {
         )}
 
         <nav className="bottom-nav" aria-label="Primary">
-          <button className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span>✦</span><small>Fortune</small></button>
-          <button className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span>♛</span><small>Cheese</small></button>
-          <button className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span>⚓</span><small>Captain</small></button>
-          <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span aria-hidden="true">▣</span><small>Vault</small></button>
-          <button className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span>♠</span><small>Random</small></button>
+          <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
+          <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
+          <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
+          <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
+          <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
         </nav>
       </div>
 

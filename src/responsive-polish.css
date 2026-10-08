@@ -9,6 +9,14 @@
   --rosie-safe-bottom: calc(var(--rosie-nav-height) + var(--rosie-nav-gap) + env(safe-area-inset-bottom));
   --rosie-gold-line: rgba(231, 192, 111, .34);
   --rosie-panel-shadow: 0 22px 54px rgba(0, 0, 0, .34);
+  --rosie-oxblood-950: #10090d;
+  --rosie-oxblood-800: #2a111d;
+  --rosie-brass: #c99b4f;
+  --rosie-champagne: #efd594;
+  --rosie-ivory: #f2ead7;
+  --rosie-gunmetal: #282d32;
+  --rosie-hairline: rgba(239, 209, 143, .24);
+  --rosie-inner-light: inset 0 1px 0 rgba(255, 244, 215, .075);
 }
 
 html {
@@ -59,8 +67,9 @@ body {
   border-color: rgba(231, 192, 111, .3);
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(35, 21, 29, .965), rgba(13, 9, 13, .985)),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, transparent 1px 4px);
+    radial-gradient(ellipse at 50% 112%, rgba(193, 137, 55, .12), transparent 58%),
+    repeating-linear-gradient(92deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(43, 22, 31, .975), rgba(14, 9, 13, .99));
   box-shadow:
     0 20px 48px rgba(0,0,0,.5),
     0 0 0 1px rgba(0,0,0,.42),
@@ -71,7 +80,7 @@ body {
   position: relative;
   min-height: 64px;
   cursor: pointer;
-  transition: color .18s ease, background-color .18s ease, transform .18s ease;
+  transition: color .18s ease, background-color .18s ease, transform .18s ease, filter .18s ease;
 }
 
 .bottom-nav > button::before {
@@ -100,9 +109,33 @@ body {
   background: radial-gradient(circle at 50% 120%, rgba(222, 167, 66, .18), transparent 64%);
 }
 
-.bottom-nav button span {
-  font-size: 18px;
-  filter: drop-shadow(0 2px 5px rgba(0,0,0,.38));
+.bottom-nav .nav-icon-wrap {
+  width: 26px;
+  height: 26px;
+  margin-inline: auto;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,.42));
+}
+
+.bottom-nav .rosie-nav-icon {
+  display: block;
+  width: 23px;
+  height: 23px;
+  overflow: visible;
+}
+
+.bottom-nav > button:hover .rosie-nav-icon,
+.bottom-nav > button:focus-visible .rosie-nav-icon {
+  transform: translateY(-1px);
+}
+
+.bottom-nav .rosie-nav-icon {
+  transition: transform .18s ease, filter .18s ease;
+}
+
+.bottom-nav > button.active .rosie-nav-icon {
+  filter: drop-shadow(0 0 6px rgba(235, 195, 105, .28));
 }
 
 .bottom-nav button small {
@@ -342,7 +375,17 @@ body {
   }
 
   .bottom-nav button span {
-    font-size: 16px;
+    font-size: inherit;
+  }
+
+  .bottom-nav .nav-icon-wrap {
+    width: 23px;
+    height: 23px;
+  }
+
+  .bottom-nav .rosie-nav-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .bottom-nav button small {
