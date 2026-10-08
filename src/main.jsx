@@ -1315,6 +1315,7 @@ function CaptainRosieGame({ soundOn }) {
   const [timeLeft, setTimeLeft] = useState(45);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
+  const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
   const [message, setMessage] = useState("Captain Rosie is on the bridge. The coastal passage is clear and the treats are somewhere ahead.");
   const [best, setBest] = useState(() => {
     const value = Number(localStorage.getItem("captainRosieBest") || 0);
@@ -1332,6 +1333,7 @@ function CaptainRosieGame({ soundOn }) {
   const [ended, setEnded] = useState(false);
 
   const laneRef = useRef(1);
+  const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
@@ -1347,6 +1349,7 @@ function CaptainRosieGame({ soundOn }) {
   const elapsed = 45 - timeLeft;
   const routeProgress = Math.min(100, Math.round(elapsed / 45 * 100));
   const missionProgress = Math.min(100, Math.round(score / 6.5));
+  const collectedTotal = catches.ball + catches.treat + catches.cheese;
   const rank = captainRank(score);
 
   function audioContext() {
@@ -1428,7 +1431,9 @@ function CaptainRosieGame({ soundOn }) {
     laneRef.current = 1;
     lastPhaseRef.current = "harbor";
     setLane(1);
+    itemsRef.current = [];
     setItems([]);
+    setCatches({ ball: 0, treat: 0, cheese: 0 });
     setScore(0);
     setLives(3);
     setTimeLeft(45);
@@ -1512,13 +1517,17 @@ function CaptainRosieGame({ soundOn }) {
       let turboDelta = 0;
       let lifeLoss = 0;
       let cheeseGain = 0;
+      const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
 
-      setItems((current) => {
+      // Resolve collisions synchronously against the authoritative item ref.
+      // React may defer a setState updater, so reading totals mutated inside
+      // setItems() immediately afterward previously lost earned points.
+      {
         spawnClockRef.current += 70;
         const phaseSpeed = phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75;
-        const next = current.map((item) => ({ ...item, y: item.y + item.speed + phaseSpeed }));
+        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + item.speed + phaseSpeed }));
 
         const spawnEvery = phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485;
         if (spawnClockRef.current >= spawnEvery) {
@@ -1540,7 +1549,7 @@ function CaptainRosieGame({ soundOn }) {
           });
         }
 
-        return next.filter((item) => {
+        const remaining = next.filter((item) => {
           const inCatchZone = item.y >= 77 && item.y <= 92;
           if (inCatchZone && item.lane === laneRef.current) {
             if (item.kind === "buoy") {
@@ -1556,6 +1565,7 @@ function CaptainRosieGame({ soundOn }) {
               turboDelta += item.turbo;
               lastHit = item.kind;
               if (item.kind === "cheese") cheeseGain += 1;
+              pickupsCaught[item.kind] += 1;
             }
             return false;
           }
@@ -1565,7 +1575,9 @@ function CaptainRosieGame({ soundOn }) {
           }
           return true;
         });
-      });
+        itemsRef.current = remaining;
+        setItems(remaining);
+      }
 
       if (missedGood && !scoreDelta) {
         streakRef.current = 0;
@@ -1575,6 +1587,11 @@ function CaptainRosieGame({ soundOn }) {
       }
 
       if (scoreDelta) {
+        setCatches((current) => ({
+          ball: current.ball + pickupsCaught.ball,
+          treat: current.treat + pickupsCaught.treat,
+          cheese: current.cheese + pickupsCaught.cheese
+        }));
         setScore((current) => current + scoreDelta);
         setStreak(streakRef.current);
         setCombo(comboRef.current);
@@ -1688,7 +1705,7 @@ function CaptainRosieGame({ soundOn }) {
         <div><span>SCORE</span><strong>{score}</strong></div>
         <div><span>TIME</span><strong>{timeLeft}s</strong></div>
         <div><span>HULL</span><strong className="captain-lives">{Array.from({ length: 3 }, (_, index) => index < lives ? "●" : "○").join(" ")}</strong></div>
-        <div><span>STREAK</span><strong>{streak}</strong></div>
+        <div><span>CARGO CAUGHT</span><strong>{collectedTotal}</strong></div>
         <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><span>MULTIPLIER</span><strong>x{combo}{boost ? " ×2" : ""}</strong></div>
       </section>
 
@@ -1780,6 +1797,7 @@ function CaptainRosieGame({ soundOn }) {
                   <div className="voyage-stats">
                     <span><b>{score}</b> score</span>
                     <span><b>{bestStreak}</b> best streak</span>
+                    <span><b>{collectedTotal}</b> cargo collected</span>
                     <span><b>{cheeses}</b> Golden Cheese</span>
                   </div>
                   <button type="button" onClick={startGame}>SAIL AGAIN</button>
@@ -1828,9 +1846,9 @@ function CaptainRosieGame({ soundOn }) {
         </div>
 
         <div className="captain-cargo-key">
-          <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis</span>
-          <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat</span>
-          <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese</span>
+          <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>
+          <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
+          <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
           <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to Admiral target</em></span>
         </div>
