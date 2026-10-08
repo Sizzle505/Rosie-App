@@ -382,7 +382,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div ref={stageRef} className={`stage ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
+        <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
           <img
             ref={stageArtRef}
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
