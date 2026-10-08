@@ -5,6 +5,7 @@ import "./fortune-effects.css";
 import "./visual-rebuild.css";
 import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
+import "./captain-refresh.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1047,13 +1048,14 @@ function GoldenCheeseIcon({ compact = false }) {
 }
 
 function CaptainPickupIcon({ kind }) {
-  if (kind === "ball") {
-    return <svg className="pickup-art pickup-art-ball" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" /><path d="M12 22c11 1 18 8 19 20M52 42c-11-1-18-8-19-20" /><path d="M24 12c-1 11-8 18-20 19M40 52c1-11 8-18 20-19" /></svg>;
-  }
-  if (kind === "treat") {
-    return <svg className="pickup-art pickup-art-treat" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 23a10 10 0 1 1-7-13 10 10 0 0 1 13 7l17 17a10 10 0 1 1 7 13 10 10 0 0 1-13 7L18 37a10 10 0 1 1 0-14Z" /></svg>;
-  }
-  return <svg className="pickup-art pickup-art-buoy" viewBox="0 0 64 64" aria-hidden="true"><path d="M27 8h10l3 9-3 5 8 27H19l8-27-3-5Z" /><path d="M19 38h26M22 48h20" /><path d="M24 56h16" /></svg>;
+  const images = {
+    ball: "/captain-pickup-tennis.webp",
+    treat: "/captain-pickup-bone.webp",
+    buoy: "/captain-pickup-buoy.webp"
+  };
+  return <img className={"pickup-art pickup-art-" + kind}
+    src={images[kind] || images.ball}
+    alt="" aria-hidden="true" draggable="false" />;
 }
 
 function CaptainRosieIllustration({ className = "" }) {
@@ -1648,12 +1650,7 @@ function CaptainRosieGame({ soundOn }) {
   return (
     <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "")}>
       <section className="captain-hero">
-        <div className="captain-hero-rigging" aria-hidden="true"><i /><i /><i /><i /></div>
-        <div className="captain-portrait">
-          <div className="captain-portrait-medallion" aria-hidden="true"><i /><i /><i /></div>
-          <CaptainRosieIllustration className="hero-captain-illustration" idPrefix="heroRosie" />
-          <span><RosiePawCrest className="portrait-paw" /> CAPTAIN ON DECK</span>
-        </div>
+        <div className="captain-hero-banner" role="img" aria-label="Captain Rosie at the helm of an ornate Japanese sailing ship at sunset, with islands, torii gates and waterfalls" />
         <div className="captain-title">
           <div className="captain-title-plaque">
             <span className="captain-kicker">THE HOUSE OF ROSIE · RIVIERA YACHT CLUB</span>
@@ -1831,10 +1828,10 @@ function CaptainRosieGame({ soundOn }) {
         </div>
 
         <div className="captain-cargo-key">
-          <span><b className="cargo-ball">🎾</b><i>+10</i>Tennis</span>
-          <span><b className="cargo-treat">🦴</b><i>+20</i>Treat</span>
+          <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis</span>
+          <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat</span>
           <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese</span>
-          <span><b className="cargo-buoy">◆</b><i>-1</i>Buoy</span>
+          <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to Admiral target</em></span>
         </div>
       </section>
