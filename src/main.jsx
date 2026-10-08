@@ -310,6 +310,56 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
 
 function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst }) {
   const manifesting = revealStage === "manifesting";
+  const stageRef = useRef(null);
+  const stageArtRef = useRef(null);
+
+  // Register the magic to the glass in the actual painting rather than to
+  // the width of the cabinet. The illustration is cropped with object-fit,
+  // so percentage-based circle offsets drift on narrow screens.
+  useEffect(() => {
+    const stage = stageRef.current;
+    const art = stageArtRef.current;
+    if (!stage || !art) return undefined;
+
+    function registerBall() {
+      if (!art.naturalWidth || !art.naturalHeight) return;
+      const stageBox = stage.getBoundingClientRect();
+      const artBox = art.getBoundingClientRect();
+      if (!stageBox.width || !stageBox.height) return;
+
+      const scale = Math.max(artBox.width / art.naturalWidth, artBox.height / art.naturalHeight);
+      const paintedWidth = art.naturalWidth * scale;
+      const paintedHeight = art.naturalHeight * scale;
+      const position = window.getComputedStyle(art).objectPosition.split(/\s+/);
+      const percent = (value, fallback) => {
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) && value?.includes("%") ? parsed / 100 : fallback;
+      };
+      const posX = percent(position[0], 0.5);
+      const posY = percent(position[1], 0.5);
+      const imageX = artBox.left - stageBox.left + (artBox.width - paintedWidth) * posX;
+      const imageY = artBox.top - stageBox.top + (artBox.height - paintedHeight) * posY;
+
+      // Measured fractions of /rosie-fortune-stage.webp's glass, not the
+      // decorative stand: center (.502, .754), diameter (.386, .324).
+      stage.style.setProperty("--oracle-ball-x", `${imageX + art.naturalWidth * .502 * scale}px`);
+      stage.style.setProperty("--oracle-ball-y", `${imageY + art.naturalHeight * .754 * scale}px`);
+      stage.style.setProperty("--oracle-ball-w", `${art.naturalWidth * .386 * scale}px`);
+      stage.style.setProperty("--oracle-ball-h", `${art.naturalHeight * .324 * scale}px`);
+    }
+
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(registerBall) : null;
+    observer?.observe(stage);
+    observer?.observe(art);
+    art.addEventListener("load", registerBall);
+    window.addEventListener("resize", registerBall);
+    registerBall();
+    return () => {
+      observer?.disconnect();
+      art.removeEventListener("load", registerBall);
+      window.removeEventListener("resize", registerBall);
+    };
+  }, []);
   return (
     <section
       className={`machine ${consulting ? "machine-consulting" : ""} ${manifesting ? "machine-manifesting" : ""}`}
@@ -329,8 +379,9 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div className={`stage ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
+        <div ref={stageRef} className={`stage ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
           <img
+            ref={stageArtRef}
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
@@ -402,29 +453,35 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
               <span className="flip-sparkles">
                 <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
               </span>
-              <span className="turn-gold-sparks">
-                <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
-              </span>
             </div>
           )}
 
-          <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
-          <FortuneLens
-            consulting={consulting}
-            answer={answer}
-            revealStage={revealStage}
-            answerDismissed={answerDismissed}
-            onDismiss={onDismissAnswer}
-          />
+          <div className="crystal-chamber">
+            <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
+            <FortuneLens
+              consulting={consulting}
+              answer={answer}
+              revealStage={revealStage}
+              answerDismissed={answerDismissed}
+              onDismiss={onDismissAnswer}
+            />
+          </div>
 
           {flipBurst > 0 && turning && (
             <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
               <span className="foreground-plume foreground-plume-a" />
               <span className="foreground-plume foreground-plume-b" />
               <span className="foreground-plume foreground-plume-c" />
+              <span className="foreground-plume foreground-plume-d" />
+              <span className="foreground-plume foreground-plume-e" />
               <span className="foreground-glitter">
                 <i /><i /><i /><i /><i /><i /><i /><i />
               </span>
+            </div>
+          )}
+          {flipBurst > 0 && (
+            <div className="turn-gold-sparks" aria-hidden="true" key={`gilded-${flipBurst}`}>
+              {Array.from({ length: 24 }, (_, index) => <i key={index} />)}
             </div>
           )}
         </div>
