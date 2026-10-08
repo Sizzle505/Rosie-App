@@ -4,7 +4,7 @@
   min-height: 100vh;
   margin: 0;
   color: #202428;
-  padding: 0 6px 112px;
+  padding: 0 6px 104px;
   overflow-x: hidden;
   background:
     radial-gradient(ellipse at 22% 4%, rgba(255,255,255,.96) 0%, rgba(240,244,247,.52) 18%, transparent 44%),
@@ -374,7 +374,7 @@
 @keyframes vaultCardIn { from { opacity: 0; transform: scale(.91) translateY(18px); } to { opacity: 1; transform: none; } }
 
 @media (max-width: 720px) {
-  .page { padding-left: 4px; padding-right: 4px; padding-bottom: 72px; }
+  .page { padding-left: 4px; padding-right: 4px; padding-bottom: 78px; }
   .header { min-height: 100px; gap: 0; padding: max(22px, calc(env(safe-area-inset-top) + 12px)) 58px 12px 6px; }
   .headerRule { display: none; }
   .headerMark { min-width: 0; width: 100%; padding: 10px 8px; }
@@ -396,6 +396,13 @@
   .cardCaption strong { font-size: 16px; }
   .captionSet { font-size: 7px; }
   .selectionHint { font-size: 6px; }
+}
+
+@media (min-width: 721px) and (max-width: 1100px) {
+  .header { gap: 14px; padding-inline: 34px; }
+  .headerMark { min-width: min(410px, 58vw); }
+  .headerRule { max-width: 210px; }
+  .zoomRow { padding-inline: 10px; }
 }
 
 @media (hover: none) { .tile:hover { transform: none; filter: none; } }

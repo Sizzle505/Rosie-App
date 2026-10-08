@@ -6,6 +6,7 @@ import "./visual-rebuild.css";
 import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
 import "./captain-refresh.css";
+import "./responsive-polish.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -2336,7 +2337,7 @@ function App() {
         <div className="loading-copy">Consulting the ancient treat ledger…</div>
       </div>
 
-      <div className={`app-shell ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
+      <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
 
         {page === "fortune" ? (
         <main className="fortune-page">
