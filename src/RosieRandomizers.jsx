@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./RosieRandomizers.module.css";
 
 const DEFAULT_WHEEL = [
@@ -28,127 +28,35 @@ function randomIndex(length) {
   return Math.floor(Math.random() * length);
 }
 
-function smoothStep(edge0, edge1, value) {
-  const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
-  return t * t * (3 - 2 * t);
-}
-
-function drawSpriteDie(canvas, sprite, value) {
-  const size = 520;
-  const tileSize = 160;
-  const sourceIndex = value - 1;
-  const sourceX = (sourceIndex % 3) * tileSize;
-  const sourceY = Math.floor(sourceIndex / 3) * tileSize;
-
-  canvas.width = size;
-  canvas.height = size;
-
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  ctx.clearRect(0, 0, size, size);
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
-  ctx.filter = "contrast(1.075) saturate(1.08)";
-  ctx.drawImage(
-    sprite,
-    sourceX,
-    sourceY,
-    tileSize,
-    tileSize,
-    12,
-    12,
-    size - 24,
-    size - 24
-  );
-  ctx.filter = "none";
-
-  const image = ctx.getImageData(0, 0, size, size);
-  const data = image.data;
-  const cornerPoints = [
-    [24, 24],
-    [size - 25, 24],
-    [24, size - 25],
-    [size - 25, size - 25]
-  ];
-  const cornerColors = cornerPoints.map(([x, y]) => {
-    const offset = (y * size + x) * 4;
-    return [data[offset], data[offset + 1], data[offset + 2]];
-  });
-
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      const offset = (y * size + x) * 4;
-      const red = data[offset];
-      const green = data[offset + 1];
-      const blue = data[offset + 2];
-      const maxChannel = Math.max(red, green, blue);
-      const minChannel = Math.min(red, green, blue);
-      const chroma = maxChannel - minChannel;
-      const brightness = (red + green + blue) / 3;
-
-      let backgroundDistance = Infinity;
-      cornerColors.forEach(([cr, cg, cb]) => {
-        const distance = Math.hypot(red - cr, green - cg, blue - cb);
-        backgroundDistance = Math.min(backgroundDistance, distance);
-      });
-
-      const nx = Math.abs((x - size / 2) / (size * 0.49));
-      const ny = Math.abs((y - size / 2) / (size * 0.49));
-      const shapeRadius = Math.pow((nx ** 4) + (ny ** 4), 0.25);
-      const edgeFade = 1 - smoothStep(0.88, 1.02, shapeRadius);
-      const separation = smoothStep(15, 52, backgroundDistance);
-      const materialHint =
-        brightness > 184 ||
-        chroma > 52 ||
-        (brightness < 82 && shapeRadius < 0.9)
-          ? 1
-          : 0;
-
-      let alpha = Math.max(separation, materialHint * 0.92) * edgeFade;
-
-      if (shapeRadius < 0.67) alpha = Math.max(alpha, 0.98);
-      if (shapeRadius > 1.02) alpha = 0;
-
-      data[offset + 3] = Math.round(data[offset + 3] * alpha);
-    }
-  }
-
-  ctx.clearRect(0, 0, size, size);
-  ctx.putImageData(image, 0, 0);
-}
+const DIE_ASSETS = Object.freeze([
+  "/randomizers/rosie-die-1.webp",
+  "/randomizers/rosie-die-2.webp",
+  "/randomizers/rosie-die-3.webp",
+  "/randomizers/rosie-die-4.webp",
+  "/randomizers/rosie-die-5.webp",
+  "/randomizers/rosie-die-6.webp"
+]);
 
 function DiceFace({ value, rolling }) {
-  const canvasRef = useRef(null);
-  const [sprite, setSprite] = useState(null);
-
   useEffect(() => {
-    let active = true;
-    const image = new Image();
-    image.decoding = "async";
-    image.onload = () => {
-      if (active) setSprite(image);
-    };
-    image.src = "/randomizers/rosie-die-sprites-clean.webp";
-
-    return () => {
-      active = false;
-    };
+    DIE_ASSETS.forEach((src) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = src;
+    });
   }, []);
-
-  useEffect(() => {
-    if (canvasRef.current && sprite) {
-      drawSpriteDie(canvasRef.current, sprite, value);
-    }
-  }, [sprite, value]);
 
   return (
     <div className={`${styles.dieRig} ${rolling ? styles.isRolling : ""}`}>
       <span className={styles.dieLandingShadow} aria-hidden="true" />
       <div className={styles.dieBody}>
-        <canvas
-          ref={canvasRef}
-          className={styles.dieCanvas}
-          role="img"
-          aria-label={`Die shows ${value}`}
+        <img
+          src={DIE_ASSETS[value - 1]}
+          className={styles.dieImage}
+          alt={`Die shows ${value}`}
+          width="384"
+          height="384"
+          draggable="false"
         />
       </div>
     </div>
