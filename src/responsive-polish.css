@@ -9,6 +9,14 @@
   --rosie-safe-bottom: calc(var(--rosie-nav-height) + var(--rosie-nav-gap) + env(safe-area-inset-bottom));
   --rosie-gold-line: rgba(231, 192, 111, .34);
   --rosie-panel-shadow: 0 22px 54px rgba(0, 0, 0, .34);
+  --rosie-oxblood-950: #10090d;
+  --rosie-oxblood-800: #2a111d;
+  --rosie-brass: #c99b4f;
+  --rosie-champagne: #efd594;
+  --rosie-ivory: #f2ead7;
+  --rosie-gunmetal: #282d32;
+  --rosie-hairline: rgba(239, 209, 143, .24);
+  --rosie-inner-light: inset 0 1px 0 rgba(255, 244, 215, .075);
 }
 
 html {
@@ -59,8 +67,9 @@ body {
   border-color: rgba(231, 192, 111, .3);
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(35, 21, 29, .965), rgba(13, 9, 13, .985)),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, transparent 1px 4px);
+    radial-gradient(ellipse at 50% 112%, rgba(193, 137, 55, .12), transparent 58%),
+    repeating-linear-gradient(92deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(43, 22, 31, .975), rgba(14, 9, 13, .99));
   box-shadow:
     0 20px 48px rgba(0,0,0,.5),
     0 0 0 1px rgba(0,0,0,.42),
@@ -71,7 +80,7 @@ body {
   position: relative;
   min-height: 64px;
   cursor: pointer;
-  transition: color .18s ease, background-color .18s ease, transform .18s ease;
+  transition: color .18s ease, background-color .18s ease, transform .18s ease, filter .18s ease;
 }
 
 .bottom-nav > button::before {
@@ -100,9 +109,33 @@ body {
   background: radial-gradient(circle at 50% 120%, rgba(222, 167, 66, .18), transparent 64%);
 }
 
-.bottom-nav button span {
-  font-size: 18px;
-  filter: drop-shadow(0 2px 5px rgba(0,0,0,.38));
+.bottom-nav .nav-icon-wrap {
+  width: 26px;
+  height: 26px;
+  margin-inline: auto;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,.42));
+}
+
+.bottom-nav .rosie-nav-icon {
+  display: block;
+  width: 23px;
+  height: 23px;
+  overflow: visible;
+}
+
+.bottom-nav > button:hover .rosie-nav-icon,
+.bottom-nav > button:focus-visible .rosie-nav-icon {
+  transform: translateY(-1px);
+}
+
+.bottom-nav .rosie-nav-icon {
+  transition: transform .18s ease, filter .18s ease;
+}
+
+.bottom-nav > button.active .rosie-nav-icon {
+  filter: drop-shadow(0 0 6px rgba(235, 195, 105, .28));
 }
 
 .bottom-nav button small {
@@ -342,7 +375,17 @@ body {
   }
 
   .bottom-nav button span {
-    font-size: 16px;
+    font-size: inherit;
+  }
+
+  .bottom-nav .nav-icon-wrap {
+    width: 23px;
+    height: 23px;
+  }
+
+  .bottom-nav .rosie-nav-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .bottom-nav button small {
@@ -453,8 +496,368 @@ body {
   }
 }
 
+/* Fortune + Barkbridge material pass: lacquer, vellum, and brass depth. */
+.page-fortune .question-card,
+.page-fortune .fortune-waiting-card,
+.page-fortune .bottom-omens {
+  background-image:
+    radial-gradient(circle at 84% -12%, rgba(188, 119, 200, .12), transparent 34%),
+    repeating-linear-gradient(102deg, rgba(255,255,255,.013) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(8deg, rgba(229,184,101,.008) 0 1px, transparent 1px 8px),
+    linear-gradient(155deg, rgba(50, 18, 34, .985), rgba(22, 12, 23, .995) 58%, rgba(12, 9, 14, .995));
+}
+
+.page-fortune .input-shell {
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.035),
+    inset 0 -10px 22px rgba(0,0,0,.16),
+    0 8px 22px rgba(0,0,0,.22) !important;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.page-fortune .input-shell:focus-within {
+  border-color: rgba(245, 205, 126, .72) !important;
+  box-shadow:
+    0 0 0 3px rgba(206, 154, 69, .11),
+    0 0 24px rgba(142, 76, 159, .12),
+    inset 0 1px rgba(255,255,255,.045) !important;
+}
+
+.page-fortune .ask-button {
+  overflow: hidden;
+  border-color: #704418;
+  background:
+    linear-gradient(110deg, transparent 0 29%, rgba(255,255,255,.34) 43%, transparent 57%),
+    linear-gradient(180deg, #f6db96 0%, #ce9948 53%, #8d581f 100%);
+  background-size: 220% 100%, 100% 100%;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.72),
+    inset 0 -3px 7px rgba(77,39,10,.2),
+    0 7px 18px rgba(77,42,15,.25),
+    0 0 0 2px rgba(255,235,181,.07);
+  transition: transform .16s ease, filter .16s ease, background-position .35s ease;
+}
+
+.page-fortune .quick-prompts button,
+.page-fortune .omen-grid > div {
+  background-image:
+    linear-gradient(120deg, rgba(255,255,255,.025), transparent 34%),
+    repeating-linear-gradient(100deg, rgba(255,255,255,.009) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(73,35,55,.36), rgba(22,14,23,.5)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+
+.page-fortune .ticket-paper {
+  background-image:
+    radial-gradient(circle at 50% -12%, rgba(144,70,126,.32), transparent 41%),
+    repeating-linear-gradient(97deg, rgba(255,240,199,.012) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(7deg, rgba(232,186,102,.009) 0 1px, transparent 1px 8px),
+    linear-gradient(180deg, #25101d 0%, #140d16 58%, #09080c 100%);
+}
+
+.page-cheese .cheese-exam-header,
+.page-cheese .rosie-reaction {
+  background-image:
+    radial-gradient(circle at 20% -12%, rgba(227,179,91,.1), transparent 34%),
+    repeating-linear-gradient(102deg, rgba(255,255,255,.011) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(7deg, rgba(230,184,96,.008) 0 1px, transparent 1px 9px),
+    linear-gradient(155deg, rgba(53,19,33,.985), rgba(20,12,18,.995) 58%, rgba(9,8,10,.998));
+}
+
+.page-cheese .cheese-header-status > div {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(226, 183, 99, .24) !important;
+  background:
+    radial-gradient(circle at 50% -35%, rgba(224,176,89,.12), transparent 58%),
+    repeating-linear-gradient(98deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(48,25,34,.86), rgba(13,9,13,.91)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.035), inset 0 -8px 15px rgba(0,0,0,.12);
+}
+
+.page-cheese .cheese-game-frame {
+  border-color: rgba(226, 184, 102, .36);
+  box-shadow:
+    var(--rosie-panel-shadow),
+    0 0 0 4px rgba(35,16,24,.75),
+    0 0 0 5px rgba(226,184,102,.08),
+    inset 0 1px 0 rgba(255,239,204,.04);
+}
+
+.page-cheese .cheese-card {
+  transition: transform .18s ease, filter .18s ease;
+}
+
+@media (hover: hover) {
+  .page-fortune .ask-button:not(:disabled):hover {
+    transform: translateY(-1px);
+    filter: brightness(1.055);
+    background-position: 100% 0, 0 0;
+  }
+
+  .page-cheese .cheese-card:not(:disabled):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.035) drop-shadow(0 8px 12px rgba(0,0,0,.2));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .bottom-nav > button {
+  .bottom-nav > button,
+  .page-fortune .ask-button,
+  .page-cheese .cheese-card {
     transition: none;
+  }
+}
+
+/* iPhone Cheese: examiner first, compact institutional dossier second, board third.
+   Confined to phones so tablet/desktop compositions remain unchanged. */
+@media (max-width: 720px) {
+  .page-cheese .cheese-desktop-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    align-items: stretch;
+  }
+  .page-cheese .cheese-left-rail { display: contents; }
+  .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
+    order: 0;
+    position: static;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+  }
+  .page-cheese .cheese-desktop-layout .cheese-exam-header { order: 1; }
+  .page-cheese .cheese-desktop-layout > .cheese-game-frame { order: 2; }
+
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(122px, 43%) minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 10px;
+    align-items: stretch;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 9px;
+    overflow: hidden;
+    border: 1px solid rgba(230, 191, 116, .35);
+    border-radius: 16px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 100%;
+    height: clamp(164px, 47vw, 195px);
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    border-radius: 11px;
+  }
+  .page-cheese .cheese-examiner-rail .reaction-copy {
+    min-width: 0;
+    width: 100%;
+    align-self: center;
+    padding: 24px 5px 8px 0;
+    overflow: visible;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy span {
+    display: block;
+    font-size: 7px;
+    line-height: 1.35;
+    letter-spacing: .09em;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    display: block;
+    max-width: none;
+    margin-top: 9px;
+    font-size: clamp(13px, 3.8vw, 17px);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction > i {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 23px;
+    height: 23px;
+    margin: 0;
+    font-size: 11px;
+  }
+  .page-cheese .cheese-reset-mobile { display: none; }
+
+  .page-cheese .cheese-left-rail .cheese-exam-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    gap: 9px !important;
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 10px !important;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+  .page-cheese .cheese-exam-header::after { display: none; }
+  /* The live, changing reaction above replaces the static duplicate portrait. */
+  .page-cheese .cheese-exam-portrait { display: none; }
+
+  .page-cheese .barkbridge-ident {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 43px minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    padding: 7px 10px;
+    text-align: left;
+    align-items: center;
+    justify-items: stretch;
+    border-radius: 10px;
+  }
+  .page-cheese .barkbridge-ident-seal { width: 43px; height: 43px; }
+  .page-cheese .barkbridge-ident strong {
+    font-size: clamp(12px, 3.5vw, 15px);
+    line-height: 1.09;
+    letter-spacing: .035em;
+  }
+  .page-cheese .barkbridge-ident small {
+    margin-top: 4px;
+    font-size: 7px;
+    line-height: 1.2;
+    letter-spacing: .075em;
+  }
+  .page-cheese .cheese-exam-title {
+    grid-column: 1;
+    grid-row: 2;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 1px 5px 0;
+    align-self: auto;
+  }
+  .page-cheese .cheese-exam-title .cheese-eyebrow {
+    margin-bottom: 5px;
+    font-size: 7px;
+    line-height: 1.2;
+  }
+  .page-cheese .cheese-exam-title h1 {
+    max-width: none;
+    margin: 0;
+    font-size: clamp(24px, 6.6vw, 30px);
+    line-height: 1.03;
+    text-wrap: balance;
+  }
+  .page-cheese .cheese-exam-title > p {
+    margin: 5px 0 10px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .page-cheese .cheese-header-status {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    margin: 0;
+    gap: 6px;
+  }
+  .page-cheese .cheese-header-status > div {
+    min-width: 0;
+    min-height: 38px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 7px;
+    text-align: left;
+  }
+  .page-cheese .cheese-header-status span { font-size: 7px; letter-spacing: .08em; }
+  .page-cheese .cheese-header-status strong { font-size: 14px; }
+  .page-cheese .cheese-reset-left {
+    grid-column: 1;
+    grid-row: 3;
+    display: inline-flex !important;
+    width: 100%;
+    min-height: 33px;
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 9px;
+    font-size: 8px;
+    letter-spacing: .13em;
+  }
+}
+@media (max-width: 360px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: 42% minmax(0, 1fr);
+    gap: 8px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 162px; }
+  .page-cheese .cheese-exam-title h1 { font-size: 22px; }
+  .page-cheese .cheese-header-status > div { padding-inline: 4px; }
+}
+
+/* The live examiner follows the iPhone board rather than disappearing above
+   the fold. It stays in normal flow at the top and sticks during board play. */
+@media (max-width: 720px) {
+  .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
+    position: sticky;
+    top: max(6px, env(safe-area-inset-top));
+    z-index: 32;
+    align-self: stretch;
+    isolation: isolate;
+    filter: drop-shadow(0 9px 13px rgba(0,0,0,.40));
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: minmax(106px, 37%) minmax(0, 1fr);
+    gap: 9px;
+    padding: 7px;
+    border-radius: 13px;
+    background-color: #1a1017;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    height: clamp(108px, 33vw, 136px);
+    border-radius: 10px;
+  }
+  .page-cheese .cheese-examiner-rail .reaction-copy {
+    align-self: center;
+    padding: 21px 5px 5px 0;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    margin-top: 5px;
+    font-size: clamp(12px, 3.4vw, 15px);
+    line-height: 1.18;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy span {
+    font-size: 6.7px;
+  }
+}
+@media (max-width: 360px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: minmax(99px, 36%) minmax(0, 1fr);
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 108px; }
+}
+
+
+/* iPhone oracle desk: remove the empty caption strip between the cabinet and
+   petition, retaining the same motto as a discreet line within the petition. */
+.fortune-mobile-caption { display: none; }
+@media (max-width: 720px) {
+  .page-fortune .fortune-console .console-caption { display: none; }
+  .page-fortune .question-card { margin-top: 7px; }
+  .page-fortune .fortune-mobile-caption {
+    display: block;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(221, 184, 109, .20);
+    color: #cba56a;
+    font-size: 7px;
+    line-height: 1.25;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: .105em;
   }
 }

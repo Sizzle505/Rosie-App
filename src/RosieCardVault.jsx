@@ -210,11 +210,11 @@ function VaultTitleLaserAnimator() {
 
 
 const BASE_DRIFT_PX_PER_SECOND = 26;
-const INITIAL_DRIFT_DELAY_MS = 2200;
+const INITIAL_DRIFT_DELAY_MS = 250;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
-const DEFAULT_DRIFT_SPEED = 0.75;
-const MOBILE_DRIFT_SPEED = DEFAULT_DRIFT_SPEED * 2.55;
+const DEFAULT_DRIFT_SPEED = 0.9;
+const MOBILE_DRIFT_SPEED = DEFAULT_DRIFT_SPEED * 2.5;
 const DRAG_ACTIVATION_PX = 8;
 
 function defaultDriftSpeedForViewport() {
@@ -501,17 +501,31 @@ function RosieCardVaultWall() {
   if (!pool.length) return <main className={styles.page}><div className={styles.empty}>Add Rosie cards to <code>data/rosieCards.js</code>.</div></main>;
 
   return <main className={styles.page} onPointerDown={() => pauseDrift()} onWheel={() => pauseDrift()} onTouchStart={() => pauseDrift()} onTouchEnd={() => pauseDrift()}>
-    <aside className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`} aria-label="Ambient card drift speed and direction">
+    <aside
+      className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`}
+      aria-label="Ambient card drift speed and direction"
+      onPointerDown={event => event.stopPropagation()}
+      onTouchStart={event => event.stopPropagation()}
+      onTouchEnd={event => event.stopPropagation()}
+      onWheel={event => event.stopPropagation()}
+    >
       <button type="button" className={`${styles.brakeButton} ${isBraked ? styles.brakeButtonActive : ''}`} aria-label={isBraked ? 'Resume ambient card drift' : 'Pause ambient card drift'} aria-pressed={isBraked} title={isBraked ? 'Release brake' : 'Brake drift'} onPointerDown={event => event.stopPropagation()} onClick={toggleBrake}><span aria-hidden="true">{isBraked ? '▶' : 'Ⅱ'}</span></button>
       <span className={styles.speedReadout}>{speedLabel}</span>
       <div className={styles.rangeShell}>
-        <input className={styles.speedRange} type="range" min="-2.5" max="2.5" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => setSpeed(Number(event.target.value))} onPointerDown={event => event.stopPropagation()}/>
+        <input className={styles.speedRange} type="range" min="-2.5" max="2.5" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
+          const nextSpeed = Number(event.target.value);
+          setSpeed(nextSpeed);
+          if (nextSpeed !== 0) setIsBraked(false);
+          // A deliberate speed change overrides pauses from prior scrolling or touches.
+          pauseUntil.current = performance.now();
+        }} onPointerDown={event => event.stopPropagation()}/>
       </div>
     </aside>
 
     <header className={styles.header}>
       <div className={styles.headerRule} aria-hidden="true"/>
       <div className={styles.headerMark}>
+        <div className={styles.eyebrow}>THE HOUSE OF ROSIE · PRIVATE COLLECTION</div>
         <div className={styles.titleLine}>
           <svg className={styles.pawTitleIcon} viewBox="0 0 64 64" aria-hidden="true">
             <ellipse cx="32" cy="40" rx="15" ry="12"/>
@@ -525,37 +539,46 @@ function RosieCardVaultWall() {
             <span data-vault-layer="gleam" aria-hidden="true">Card Vault</span>
           </h1>
         </div>
+        <div className={styles.headerMeta}><span>CURATED ARCHIVE</span><i/><span>ONE OF ONE</span><i/><span>EST. 2016</span></div>
       </div>
       <div className={styles.headerRule} aria-hidden="true"/>
     </header>
 
-    <div className={styles.zoomRow}>
-      <label className={styles.zoomControl}>
-        <span className={styles.zoomCaption}>ZOOM</span>
-        <span className={styles.zoomSign} aria-hidden="true">−</span>
-        <input
-          className={styles.zoomRange}
-          type="range"
-          min="0"
-          max={zoomMax - zoomMin}
-          step="1"
-          value={zoomMax - cardsPerRow}
-          onChange={event => {
-            setCardsPerRow(zoomMax - Number(event.target.value));
-            pauseDrift();
-          }}
-          onPointerDown={event => { event.stopPropagation(); pauseDrift(); }}
-          aria-label="Card Vault zoom"
-          aria-valuetext={`${cardsPerRow} cards per row`}
-          title={`${cardsPerRow} cards per row`}
-        />
-        <span className={styles.zoomSign} aria-hidden="true">+</span>
-        <output className={styles.zoomCount} aria-live="polite">{cardsPerRow}/row</output>
-      </label>
-    </div>
+    <section className={styles.galleryShell} aria-label="Rosie archive display">
+      <div className={styles.archiveToolbar}>
+        <div className={styles.archiveIntro}>
+          <span>THE COMPLETE COLLECTION</span>
+          <small>Select any card for the archival presentation</small>
+        </div>
+        <div className={styles.zoomRow}>
+          <label className={styles.zoomControl}>
+            <span className={styles.zoomCaption}>ZOOM</span>
+            <span className={styles.zoomSign} aria-hidden="true">−</span>
+            <input
+              className={styles.zoomRange}
+              type="range"
+              min="0"
+              max={zoomMax - zoomMin}
+              step="1"
+              value={zoomMax - cardsPerRow}
+              onChange={event => {
+                setCardsPerRow(zoomMax - Number(event.target.value));
+                pauseDrift();
+              }}
+              onPointerDown={event => { event.stopPropagation(); pauseDrift(); }}
+              aria-label="Card Vault zoom"
+              aria-valuetext={`${cardsPerRow} cards per row`}
+              title={`${cardsPerRow} cards per row`}
+            />
+            <span className={styles.zoomSign} aria-hidden="true">+</span>
+            <output className={styles.zoomCount} aria-live="polite">{cardsPerRow}/row</output>
+          </label>
+        </div>
+      </div>
 
-    <section className={styles.wall} style={{ '--vault-columns': cardsPerRow }} aria-label="Randomized Rosie card wall" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
-      {cards.map((card, index) => <button type="button" className={styles.tile} key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card} eager={index < 24}/></button>)}
+      <section className={styles.wall} style={{ '--vault-columns': cardsPerRow }} aria-label="Randomized Rosie card wall" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
+        {cards.map((card, index) => <button type="button" className={styles.tile} key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card} eager={index < 24}/></button>)}
+      </section>
     </section>
     <div ref={sentinel} className={styles.sentinel} aria-hidden="true"/>
 
