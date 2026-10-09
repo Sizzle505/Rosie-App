@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs>
+<linearGradient id="gold"><stop stop-color="#5d3314"/><stop offset=".21" stop-color="#e8b970"/><stop offset=".43" stop-color="#fff0b9"/><stop offset=".66" stop-color="#a96e2d"/><stop offset=".87" stop-color="#f6d38e"/><stop offset="1" stop-color="#6c431a"/></linearGradient>
+<radialGradient id="room"><stop stop-color="#813043"/><stop offset=".38" stop-color="#411927"/><stop offset=".84" stop-color="#180d17"/><stop offset="1" stop-color="#09090f"/></radialGradient>
+<radialGradient id="fur"><stop stop-color="#3e4141"/><stop offset=".6" stop-color="#181e21"/><stop offset="1" stop-color="#080d12"/></radialGradient>
+<radialGradient id="cream"><stop stop-color="#fff0d2"/><stop offset=".6" stop-color="#e6c9a5"/><stop offset="1" stop-color="#af8068"/></radialGradient>
+<linearGradient id="throne" x2="1" y2="1"><stop stop-color="#9d4054"/><stop offset=".5" stop-color="#532037"/><stop offset="1" stop-color="#250c1e"/></linearGradient>
+<radialGradient id="light"><stop stop-color="#ffe8ac" stop-opacity=".4"/><stop offset="1" stop-color="#ffd48a" stop-opacity="0"/></radialGradient>
+<pattern id="wallpaper" width="125" height="170" patternUnits="userSpaceOnUse"><path d="M62 6Q-4 83 62 161Q128 83 62 6Zm0 32Q30 83 62 128Q94 83 62 38Z" fill="none" stroke="#e2b572" stroke-width="2" stroke-opacity=".12"/></pattern>
+<filter id="shadow"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1600" height="1000" fill="url(#room)"/>
+<rect width="1600" height="1000" fill="url(#wallpaper)"/>
+<ellipse cx="800" cy="370" rx="650" ry="520" fill="url(#light)"/>
+<path d="M248 900V265Q250-150 800-150Q1350-150 1352 265V900" stroke="#08070b" stroke-width="135" fill="none"/>
+<path d="M248 900V265Q250-150 800-150Q1350-150 1352 265V900" stroke="url(#gold)" stroke-width="30" fill="none"/>
+<path d="M281 900V270Q281-112 800-112Q1319-112 1319 270V900" stroke="#fff0b8" stroke-opacity=".4" stroke-width="4" fill="none"/>
+<g stroke="#100d11" stroke-width="115"><path d="M120 0v950m1360-950v950"/></g>
+<g stroke="url(#gold)" stroke-width="24"><path d="M120 0v950m1360-950v950"/></g>
+<g stroke="#f8d694" stroke-opacity=".28" stroke-width="4"><path d="M105 0v950m45-950v950m1300-950v950m45-950v950"/></g>
+<!-- chandelier and warm crystal pendants -->
+<g stroke="url(#gold)" stroke-width="8" fill="none">
+<path d="M800 0v125M558 110Q800 354 1042 110M622 132Q800 246 978 132"/>
+<path d="M570 124v77m99-8v56m131-34v70m131-92v56m99-125v77"/>
+</g>
+<g fill="#ffe5a4" stroke="#b67c3d" stroke-width="3">
+<path d="M570 197l-11 25 11 29 11-29zM669 246l-10 26 10 30 10-30zM800 278l-13 30 13 42 13-42zM931 246l-10 26 10 30 10-30zM1030 197l-11 25 11 29 11-29z"/>
+</g>
+<ellipse cx="800" cy="254" rx="320" ry="220" fill="url(#light)"/>
+<!-- wall sconces and ornate symmetrical urns -->
+<g stroke="url(#gold)" fill="none" stroke-width="10">
+<path d="M158 307h102m1082 0h102M209 307v173m1182-173v173"/>
+<path d="M181 394q28-38 56 0m1125 0q28-38 56 0"/>
+</g>
+<g fill="#fff1bf"><circle cx="209" cy="293" r="12"/><circle cx="1391" cy="293" r="12"/></g>
+<circle cx="209" cy="293" r="130" fill="url(#light)"/><circle cx="1391" cy="293" r="130" fill="url(#light)"/>
+<path d="M0 845Q800 734 1600 845V1000H0Z" fill="#0b0d11" stroke="url(#gold)" stroke-width="15"/>
+<path d="M0 916Q800 844 1600 916" fill="none" stroke="#ceae7d" opacity=".32" stroke-width="5"/>
+<ellipse cx="800" cy="870" rx="465" ry="95" fill="#000" opacity=".6" filter="url(#shadow)"/>
+<!-- high-backed velvet throne -->
+<path d="M548 768V492Q548 249 800 249Q1052 249 1052 492V768Z" fill="#120b12" stroke="url(#gold)" stroke-width="38"/>
+<path d="M584 740V498Q584 301 800 301Q1016 301 1016 498V740Z" fill="url(#throne)" stroke="#e8bb73" stroke-width="5"/>
+<path d="M662 466Q800 376 938 466" fill="none" stroke="#e7b87b" opacity=".22" stroke-width="5"/>
+<ellipse cx="800" cy="853" rx="456" ry="87" fill="#511b2d" stroke="url(#gold)" stroke-width="16"/>
+<ellipse cx="800" cy="853" rx="423" ry="65" fill="#8a3543" opacity=".35"/>
+<!-- sitting Shiba: broad dark coat, cream bib and upright front paws -->
+<path d="M616 781Q548 660 632 543Q696 463 805 477Q944 470 991 550Q1068 666 986 796Z" fill="url(#fur)" stroke="#131116" stroke-width="16"/>
+<path d="M680 778Q701 613 798 593Q911 613 928 784Q801 827 680 778Z" fill="url(#cream)" opacity=".87"/>
+<path d="M666 746Q642 765 655 836Q687 873 741 837L752 754Z" fill="#dac2a4" stroke="#242125" stroke-width="11"/>
+<path d="M858 756L861 837Q922 872 953 832Q951 766 928 746Z" fill="#dac2a4" stroke="#242125" stroke-width="11"/>
+<g stroke="#846b62" stroke-width="4" fill="none"><path d="M700 834q17 16 39 0m143 0q22 13 47-1"/></g>
+<!-- distinctive sharp Shiba ears -->
+<path d="M627 368Q568 171 623 104Q733 172 764 306Z" fill="#191b20" stroke="#080d10" stroke-width="17"/>
+<path d="M837 304Q869 174 982 104Q1039 173 975 368Z" fill="#191b20" stroke="#080d10" stroke-width="17"/>
+<path d="M647 309Q616 204 631 163Q698 231 718 303Z" fill="#bb8572" opacity=".8"/>
+<path d="M879 304Q904 229 974 163Q995 204 951 309Z" fill="#bb8572" opacity=".8"/>
+<!-- black mask of Rosie's face -->
+<path d="M618 310Q674 225 800 228Q934 223 981 314Q1035 422 986 551Q932 657 800 674Q661 653 614 549Q561 429 618 310Z" fill="url(#fur)" stroke="#0b0e12" stroke-width="17"/>
+<!-- warm eyebrows, tan cheeks and distinct triangular markings -->
+<path d="M636 392Q698 329 753 365Q746 397 702 416Q668 428 636 392Z" fill="#c0926e"/>
+<path d="M847 365Q905 329 965 392Q935 427 895 416Q852 402 847 365Z" fill="#c0926e"/>
+<path d="M614 456Q630 420 670 418Q705 481 685 553Q647 565 617 525Z" fill="#ba8a67"/>
+<path d="M929 420Q972 421 987 454L982 526Q945 558 910 552Q894 477 929 420Z" fill="#ba8a67"/>
+<!-- lively eyes with reflections -->
+<path d="M655 452Q707 421 752 452Q715 498 668 478Z" fill="#111013"/>
+<path d="M846 451Q895 421 946 453L928 477Q883 495 846 451Z" fill="#111013"/>
+<ellipse cx="709" cy="459" rx="19" ry="24" fill="#261a1a"/><ellipse cx="895" cy="459" rx="19" ry="24" fill="#261a1a"/>
+<circle cx="714" cy="450" r="7" fill="#fff9ec"/><circle cx="902" cy="450" r="7" fill="#fff9ec"/>
+<!-- smiling cream muzzle -->
+<path d="M635 536Q680 492 729 505Q775 510 799 546Q822 512 871 505Q932 494 966 538Q940 638 837 644Q803 665 759 642Q663 636 635 536Z" fill="url(#cream)"/>
+<path d="M745 529Q799 504 853 529L843 572Q800 607 756 572Z" fill="#f4dbc0"/>
+<path d="M751 546Q800 536 850 547Q827 577 800 585Q771 577 751 546Z" fill="#151218"/>
+<path d="M800 583v20m0 0q-44 52-88 2m88-2q45 51 91 2" fill="none" stroke="#483538" stroke-width="7" stroke-linecap="round"/>
+<path d="M771 636Q799 649 834 636" fill="none" stroke="#f8e2c6" stroke-width="4"/>
+<!-- satin and gilded collar, rosette -->
+<path d="M633 661Q800 721 966 661" stroke="#161016" stroke-width="30" fill="none"/>
+<path d="M633 660Q800 716 966 660" stroke="url(#gold)" stroke-width="17" fill="none"/>
+<circle cx="800" cy="705" r="44" fill="url(#gold)" stroke="#693b1c" stroke-width="6"/>
+<circle cx="800" cy="705" r="32" fill="#662c3b" stroke="#fbe3ae" stroke-width="3"/>
+<g fill="#ffe8b5"><ellipse cx="800" cy="715" rx="15" ry="12"/><circle cx="783" cy="695" r="6"/><circle cx="795" cy="685" r="6"/><circle cx="809" cy="685" r="6"/><circle cx="821" cy="696" r="6"/></g>
+<!-- symmetrical carved flourishes -->
+<g fill="none" stroke="url(#gold)" stroke-width="5" opacity=".75">
+<path d="M45 66h245M45 66v211M72 255q0-156 164-165m-93 151q32-95 120-111"/>
+<path d="M1555 66h-245m245 0v211m-27-22q0-156-164-165m93 151q-32-95-120-111"/>
+<path d="M45 934h245M45 934V723m27 22q0 156 164 165m-93-151q32 95 120 111"/>
+<path d="M1555 934h-245m245 0V723m-27 22q0 156-164 165m93-151q-32 95-120 111"/>
+</g>
+<g fill="#fff1c9" opacity=".6"><circle cx="369" cy="308" r="3"/><circle cx="1180" cy="318" r="4"/><circle cx="500" cy="628" r="3"/><circle cx="1092" cy="633" r="3"/></g>
+</svg>

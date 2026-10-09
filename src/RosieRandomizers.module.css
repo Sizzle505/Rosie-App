@@ -667,7 +667,7 @@
   .hero { min-height: 230px; grid-template-columns: minmax(0,1fr) 190px; padding: 24px; }
   .hero h1 { font-size: clamp(42px, 7.3vw, 56px); }
   .hostPortrait { right: 18px; width: 190px; height: 205px; }
-  .heroSignet { right: 195px; top: 40px; width: 108px; }
+  .heroSignet { right: 221px; top: 40px; width: 108px; }
   .ivoryCard { min-height: 455px; }
   .coinScene, .diceScene { min-height: 235px; }
   .coin { width: 185px; height: 185px; }
@@ -677,17 +677,13 @@
 
 @media (max-width: 680px) {
   .page { padding: 8px 7px 92px; }
-  .hero { min-height: 218px; padding: 21px 17px; border-radius: 19px; }
-  .heroCopy { max-width: calc(100% - 132px); }
+.heroCopy { max-width: calc(100% - 132px); }
   .kicker { font-size: 7px; gap: 6px; letter-spacing: .14em; }
   .kicker span { width: 13px; }
-  .hero h1 { margin-top: 8px; font-size: clamp(32px, 9vw, 42px); line-height: .98; }
-  .hero p { max-width: 240px; font-size: 11px; }
+.hero p { max-width: 240px; font-size: 11px; }
   .houseRule { max-width: 230px; margin-top: 12px; padding-top: 8px; font-size: 6px; line-height: 1.5; letter-spacing: .1em; }
-  .hostPortrait { right: 0; bottom: -4px; width: 116px; height: 136px; }
-  .hostPortrait::before { inset: 31px 17px 18px; }
-  .heroSignet { right: 27px; top: 15px; width: 62px; height: auto; transform: none; filter: none; }
-  .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
+.hostPortrait::before { inset: 31px 17px 18px; }
+.ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
   .ivoryCard { min-height: 420px; padding: 18px 17px 20px; border-radius: 19px; }
   .ivoryCard h2 { font-size: 22px; }
   .coinScene, .diceScene { min-height: 225px; }
@@ -714,11 +710,8 @@
 }
 
 @media (max-width: 390px) {
-  .hero { min-height: 220px; }
-  .heroCopy { max-width: calc(100% - 112px); }
-  .hero h1 { font-size: clamp(30px, 9vw, 36px); }
-  .hostPortrait { width: 100px; height: 122px; }
-  .heroSignet { right: 22px; width: 56px; }
+.heroCopy { max-width: calc(100% - 112px); }
+.hostPortrait { width: 100px; height: 122px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -890,69 +883,66 @@
   .wheel { box-shadow: 0 0 0 2px #ffedb0, 0 0 0 5px #8d621d, 0 0 0 8px #e0bb63, 0 0 0 12px #4a2d09, 0 0 0 15px #d2a64a, 0 0 0 18px #211304, inset 0 0 0 7px rgba(5,6,8,.62), inset 0 0 42px rgba(0,0,0,.76), 0 24px 30px rgba(0,0,0,.68); }
 }
 
-/* iPhone salon masthead: larger physical portrait and house crest without
-   reducing text readability or altering tablet/desktop positioning. */
-@media (max-width: 680px) {
-  .hero {
-    min-height: 263px;
-    padding: 19px 15px 22px;
-  }
-  .heroCopy { max-width: calc(100% - 132px); }
-  .hostPortrait {
-    width: clamp(145px, 41vw, 174px);
-    height: clamp(172px, 49vw, 206px);
-    right: -7px;
-    bottom: -6px;
-  }
-  .hostPortrait::before { inset: 34px 21px 17px; }
-  .heroSignet {
-    width: clamp(82px, 23vw, 98px);
-    height: auto;
-    top: 12px;
-    right: 24px;
-  }
-}
-@media (max-width: 390px) {
-  .hero { min-height: 253px; }
-  .heroCopy { max-width: calc(100% - 118px); }
-  .hostPortrait { width: 143px; height: 172px; right: -7px; }
-  .heroSignet { width: 80px; right: 17px; }
-}
 
-
-/* iPhone masthead: keep the crest above and completely separate from Rosie's
-   ears. The portrait remains large but occupies its own lower-right zone. */
-@media (max-width: 680px) {
+/* Canonical mobile salon header. Text, approved signet and approved portrait
+   occupy distinct grid areas rather than competing absolute positions. */
+@media (max-width:680px) {
   .hero {
-    min-height: 304px;
-    padding: 18px 15px 21px;
-    align-items: start;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) clamp(118px,35vw,158px);
+    grid-template-rows:minmax(73px,auto) minmax(126px,auto);
+    align-items:center;
+    min-height:0;
+    padding:15px 13px 10px;
+    column-gap:6px;
+    border-radius:19px;
   }
   .heroCopy {
-    max-width: calc(100% - 126px);
-    padding-top: 28px;
+    grid-column:1;
+    grid-row:1 / span 2;
+    max-width:none;
+    min-width:0;
+    padding:0;
+    align-self:center;
   }
   .hero h1 {
-    font-size: clamp(30px, 8.7vw, 39px);
-    line-height: .99;
+    margin:11px 0 10px;
+    font-size:clamp(28px,8.3vw,38px);
+    line-height:1.01;
+    letter-spacing:-.045em;
+    overflow-wrap:break-word;
   }
+  .hero p { max-width:100%; font-size:clamp(10px,2.8vw,12px); line-height:1.35; }
+  .kicker { font-size:7px; gap:5px; letter-spacing:.1em; flex-wrap:wrap; }
+  .kicker span { width:12px; }
+  .houseRule { max-width:100%; margin-top:10px; font-size:7px; line-height:1.35; letter-spacing:.06em; }
   .heroSignet {
-    top: 10px;
-    right: 19px;
-    width: clamp(78px, 21vw, 90px);
-    z-index: 4;
+    position:relative;
+    grid-column:2;
+    grid-row:1;
+    justify-self:center;
+    align-self:start;
+    top:auto;right:auto;bottom:auto;
+    width:clamp(65px,20vw,88px);
+    height:auto;
+    transform:none;
+    z-index:4;
   }
   .hostPortrait {
-    right: -6px;
-    bottom: -5px;
-    width: clamp(148px, 42vw, 172px);
-    height: clamp(170px, 47vw, 186px);
-    z-index: 2;
+    position:relative;
+    grid-column:2;
+    grid-row:2;
+    justify-self:center;
+    align-self:end;
+    width:100%;
+    height:clamp(124px,39vw,170px);
+    top:auto;bottom:auto;left:auto;right:auto;
+    z-index:2;
   }
+  .hostPortrait::before { inset:23px 11px 9px; }
 }
-@media (max-width: 390px) {
-  .hero { min-height: 290px; }
-  .heroCopy { max-width: calc(100% - 118px); }
-  .heroSignet { width: 77px; top: 10px; right: 17px; }
-  .hostPortrait { width: 149px; height: 172px; }
+@media (max-width:350px) {
+  .hero { grid-template-columns:minmax(0,1fr) 112px; padding-inline:11px; }
+  .hero h1 { font-size:27px; }
+  .heroSignet { width:63px; }
 }
