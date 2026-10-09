@@ -1900,6 +1900,7 @@ function App() {
   };
   const [page, setPage] = useState(pageFromLocation);
   const [question, setQuestion] = useState("");
+  const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
@@ -2267,6 +2268,8 @@ function App() {
 
     const result = chooseFortune();
     const askedQuestion = question.trim();
+    setSubmittedQuestion(askedQuestion);
+    setQuestion("");
     const delay = 1350 + secureIndex(650);
 
     revealTimerRef.current = window.setTimeout(() => {
@@ -2309,6 +2312,7 @@ function App() {
     window.clearTimeout(revealTimerRef.current);
     window.clearTimeout(revealFinishTimerRef.current);
     setQuestion("");
+    setSubmittedQuestion("");
     setAnswer(null);
     setAnswerDismissed(false);
     setConsulting(false);
@@ -2325,7 +2329,7 @@ function App() {
     } catch {}
 
     saved.unshift({
-      question: question.trim(),
+      question: submittedQuestion,
       answer: answer.text,
       tone: answer.tone,
       savedAt: new Date().toISOString()
@@ -2338,7 +2342,7 @@ function App() {
 
   async function shareFortune() {
     if (!answer) return;
-    const text = `I asked Madame Rosie: “${question.trim()}”\nRosie said: “${answer.text}”`;
+    const text = `I asked Madame Rosie: “${submittedQuestion}”\nRosie said: “${answer.text}”`;
 
     try {
       if (navigator.share) {
@@ -2466,6 +2470,7 @@ function App() {
                 </button>
                 <strong>{consultations} question{consultations === 1 ? "" : "s"} asked tonight</strong>
               </div>
+              <div className="fortune-mobile-caption">FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</div>
             </form>
           </div>
 
@@ -2495,7 +2500,7 @@ function App() {
                   <span>✦</span><b>🐾</b><span>✦</span>
                 </div>
 
-                <div className="ticket-question">“{question.trim()}”</div>
+                <div className="ticket-question">“{submittedQuestion}”</div>
                 <div className="ticket-answer">{answer.text}</div>
 
                 <div className="ticket-stamp"><span aria-hidden="true">🐾</span> THE PAW HAS SPOKEN</div>
