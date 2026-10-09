@@ -210,11 +210,11 @@ function VaultTitleLaserAnimator() {
 
 
 const BASE_DRIFT_PX_PER_SECOND = 26;
-const INITIAL_DRIFT_DELAY_MS = 2200;
+const INITIAL_DRIFT_DELAY_MS = 250;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
-const DEFAULT_DRIFT_SPEED = 0.75;
-const MOBILE_DRIFT_SPEED = DEFAULT_DRIFT_SPEED * 2.55;
+const DEFAULT_DRIFT_SPEED = 0.9;
+const MOBILE_DRIFT_SPEED = DEFAULT_DRIFT_SPEED * 2.5;
 const DRAG_ACTIVATION_PX = 8;
 
 function defaultDriftSpeedForViewport() {
@@ -501,11 +501,24 @@ function RosieCardVaultWall() {
   if (!pool.length) return <main className={styles.page}><div className={styles.empty}>Add Rosie cards to <code>data/rosieCards.js</code>.</div></main>;
 
   return <main className={styles.page} onPointerDown={() => pauseDrift()} onWheel={() => pauseDrift()} onTouchStart={() => pauseDrift()} onTouchEnd={() => pauseDrift()}>
-    <aside className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`} aria-label="Ambient card drift speed and direction">
+    <aside
+      className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`}
+      aria-label="Ambient card drift speed and direction"
+      onPointerDown={event => event.stopPropagation()}
+      onTouchStart={event => event.stopPropagation()}
+      onTouchEnd={event => event.stopPropagation()}
+      onWheel={event => event.stopPropagation()}
+    >
       <button type="button" className={`${styles.brakeButton} ${isBraked ? styles.brakeButtonActive : ''}`} aria-label={isBraked ? 'Resume ambient card drift' : 'Pause ambient card drift'} aria-pressed={isBraked} title={isBraked ? 'Release brake' : 'Brake drift'} onPointerDown={event => event.stopPropagation()} onClick={toggleBrake}><span aria-hidden="true">{isBraked ? '▶' : 'Ⅱ'}</span></button>
       <span className={styles.speedReadout}>{speedLabel}</span>
       <div className={styles.rangeShell}>
-        <input className={styles.speedRange} type="range" min="-2.5" max="2.5" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => setSpeed(Number(event.target.value))} onPointerDown={event => event.stopPropagation()}/>
+        <input className={styles.speedRange} type="range" min="-2.5" max="2.5" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
+          const nextSpeed = Number(event.target.value);
+          setSpeed(nextSpeed);
+          if (nextSpeed !== 0) setIsBraked(false);
+          // A deliberate speed change overrides pauses from prior scrolling or touches.
+          pauseUntil.current = performance.now();
+        }} onPointerDown={event => event.stopPropagation()}/>
       </div>
     </aside>
 
