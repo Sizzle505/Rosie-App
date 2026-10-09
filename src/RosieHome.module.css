@@ -1,0 +1,80 @@
+
+.home { color:#f7e9c9; min-height:100dvh; background:radial-gradient(ellipse at 50% -12%,#53232a8c,transparent 44%),repeating-linear-gradient(106deg,#ffffff04 0 1px,transparent 1px 5px),linear-gradient(#11090f,#150b13 55%,#080609); padding:0 22px 66px; font-family:Georgia,'Times New Roman',serif; overflow:hidden; }
+.masthead { display:flex; justify-content:center; align-items:center; gap:14px; margin:0 auto; max-width:1360px; padding:20px 0 16px; color:#d2ae6b; font:700 9px/1.3 Arial,sans-serif; letter-spacing:.24em; }
+.line { flex:1; height:1px; background:linear-gradient(90deg,transparent,#ae8955 65%,transparent); }
+.paw { font-size:16px; color:#f9dba0; }
+.hero { position:relative; display:grid; grid-template-columns:minmax(360px,.74fr) minmax(0,1.26fr); min-height:560px; max-width:1360px; margin:auto; border:1px solid #ad8550; border-radius:16px; overflow:hidden; background:radial-gradient(circle at 80% 10%,#4a182a,#0e0a10 70%); box-shadow:inset 0 0 0 6px #e6b87512,0 30px 90px #000a; }
+.hero::before { content:''; position:absolute; inset:12px; border:1px solid #e8c47d45; pointer-events:none; z-index:3; }
+.heroCopy { position:relative; z-index:2; align-self:center; padding:64px 12px 66px clamp(32px,5vw,90px); }
+.eyebrow { color:#deb978; font:700 10px/1.5 Arial,sans-serif; letter-spacing:.25em; }
+.hero h1 { display:flex; flex-direction:column; margin:22px 0 10px; color:#fff1d4; font-weight:400; font-size:clamp(54px,5vw,100px); line-height:.98; letter-spacing:-.042em; text-shadow:0 5px 34px #0007; }
+.hero h1 em { display:block; margin:0 0 0 46%; font-size:.48em; font-style:italic; line-height:1.25; color:#dcb97e; }
+.rule { display:flex; align-items:center; gap:14px; max-width:240px; color:#ead09b; margin:24px 0; }
+.rule i { flex:1; height:1px; background:linear-gradient(90deg,transparent,#d5ad67); }
+.rule i:last-child { transform:scaleX(-1); }
+.hero p { font-size:clamp(18px,1.8vw,26px); margin:0 0 12px; color:#eed2a2; }
+.hero small { display:block; max-width:330px; color:#c7ad9c; font:14px/1.65 Georgia,serif; }
+.enter { display:inline-flex; align-items:center; gap:38px; margin-top:30px; padding:15px 18px; border:1px solid #bca071; border-radius:3px; background:linear-gradient(145deg,#e0ba7f,#ad7f3e 45%,#f4d99c); color:#21140f; font:800 10px/1 Arial,sans-serif; letter-spacing:.16em; cursor:pointer; box-shadow:inset 0 1px 0 #fff8,0 8px 22px #0008; transition:transform .2s,filter .2s; }
+.enter:hover { filter:brightness(1.13); transform:translateY(-2px); }
+.artFrame { position:relative; align-self:stretch; min-width:0; min-height:560px; overflow:hidden; background:#150c11; }
+.artFrame::after { content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg,#100a10 0%,#100a1080 12%,transparent 40%),linear-gradient(0deg,#0d070bcb 0%,transparent 25%); }
+.artFrame img { width:100%; height:100%; position:absolute; inset:0; object-fit:cover; object-position:53% 50%; }
+.artCaption { position:absolute; bottom:24px; right:28px; z-index:1; font:700 9px/1.4 Arial,sans-serif; color:#ffdf9b; letter-spacing:.18em; }
+.artCaption span { margin:0 12px; }
+.destinations { max-width:1360px; margin:56px auto 0; scroll-margin-top:18px; }
+.sectionHead { text-align:center; }
+.sectionHead>span { color:#cfa75a; letter-spacing:.25em; font:700 9px Arial,sans-serif; }
+.sectionHead h2 { color:#fff0ce; margin:8px 0 5px; font-size:clamp(30px,3vw,43px); font-weight:400; }
+.sectionHead p { color:#bba797; margin:0 0 26px; font-size:15px; }
+.portalGrid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:13px; }
+.portal { --accent:#c5a168; appearance:none; text-align:left; position:relative; grid-column:span 2; display:flex; flex-direction:column; align-items:flex-start; min-height:240px; padding:18px 19px 15px; overflow:hidden; isolation:isolate; border:1px solid var(--accent); border-radius:9px; background:radial-gradient(ellipse at 80% 15%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 50%),linear-gradient(145deg,#24151e,#0c0c11 85%); color:#fff4de; box-shadow:inset 0 0 0 3px #d9aa4b12,inset 0 1px 0 #fff3,0 15px 30px #0006; cursor:pointer; transition:transform .23s,box-shadow .23s,border-color .23s; }
+.portal::before { content:''; position:absolute; inset:7px; border:1px solid #e0bf7b33; border-radius:4px; pointer-events:none; }
+.portal:hover { transform:translateY(-5px); border-color:#ffe0a5; box-shadow:inset 0 0 0 3px #d9aa4b18,0 18px 38px #000a,0 0 22px #cf9d3322; }
+.portal:active { transform:translateY(1px); }
+.portal:focus-visible,.enter:focus-visible { outline:3px solid #fff2c9; outline-offset:4px; }
+.portalHead,.portalFoot { width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px; font:700 8px/1.3 Arial,sans-serif; letter-spacing:.13em; color:#c6a878; }
+.portalHead { border-bottom:1px solid #d4b06b33; padding-bottom:9px; }
+.motif { align-self:flex-end; font-size:45px; line-height:1; margin:9px 8px 4px 0; color:#f5d59c; text-shadow:0 2px 10px #d5a75a6b; }
+.portal strong { display:block; font-weight:400; font-size:clamp(22px,2.05vw,33px); line-height:1.15; }
+.tagline { margin:7px 0 18px; color:#cab4a5; font:italic 14px/1.35 Georgia,serif; }
+.portalFoot { margin-top:auto; border-top:1px solid #d4b06b33; padding-top:12px; color:#f1d5a2; }
+.portalFoot span:last-child { font-size:18px; }
+.fortune { --accent:#b78b98; } .cheese { --accent:#b7a37a; } .captain { --accent:#728b9d; } .vault { --accent:#aaa095; } .randomizers { --accent:#bc8a6b; }
+.portal:nth-child(4) { grid-column:2 / span 2; } .portal:nth-child(5) { grid-column:4 / span 2; }
+.footer { margin:50px auto 0; text-align:center; color:#bc9d69; font:700 9px Arial,sans-serif; letter-spacing:.24em; }
+.footer span { padding:0 14px; }
+@media(max-width:980px){ .hero { grid-template-columns:.85fr 1.15fr; min-height:500px; } .heroCopy { padding:45px 10px 50px 35px; } .artFrame { min-height:500px; } .portal { grid-column:span 3; } .portal:nth-child(4),.portal:nth-child(5) { grid-column:span 3; } .portal:last-child { grid-column:2 / span 4; } }
+@media(max-width:680px){
+  .home { padding:0 9px 32px; }
+  .masthead { gap:7px; padding:10px 0; font-size:7px; letter-spacing:.12em; }
+  .masthead .line { display:none; }
+  .hero { display:flex; flex-direction:column; min-height:0; border-radius:12px; }
+  .hero::before { inset:7px; }
+  .heroCopy { display:contents; }
+  .eyebrow { order:1; width:100%; text-align:center; margin:17px 0 5px; padding:0 10px; box-sizing:border-box; font-size:8px; }
+  .hero h1 { order:2; flex-direction:row; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:7px; margin:0 8px 12px; font-size:clamp(27px,7.9vw,37px); line-height:1; }
+  .hero h1 em { margin:0; font-size:.6em; }
+  .rule { display:none; }
+  .artFrame { order:3; width:100%; height:clamp(260px,76vw,340px); min-height:0; flex:none; }
+  .artFrame img { object-position:50% 45%; }
+  .artFrame::after { background:linear-gradient(0deg,#0d070b9b,transparent 25%); }
+  .artCaption { right:15px; bottom:10px; font-size:6px; letter-spacing:.13em; }
+  .artCaption span { margin:0 5px; }
+  .hero p { order:4; text-align:center; font-size:19px; margin:15px 12px 4px; }
+  .hero small { order:5; text-align:center; font-size:12px; margin:0 16px 14px; }
+  .enter { order:6; align-self:center; margin:0 0 19px; font-size:9px; padding:12px 15px; }
+  .destinations { margin-top:28px; }
+  .sectionHead h2 { font-size:30px; }
+  .sectionHead p { font-size:12px; margin-bottom:16px; }
+  .portalGrid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .portal,.portal:nth-child(4),.portal:nth-child(5),.portal:last-child { grid-column:span 1; min-height:198px; padding:11px 10px 10px; }
+  .portal:last-child { grid-column:1 / -1; min-height:154px; }
+  .portalHead { font-size:6px; letter-spacing:.03em; }
+  .motif { font-size:30px; margin:8px 4px 3px; }
+  .portal strong { font-size:clamp(19px,5vw,25px); }
+  .tagline { font-size:11px; margin-bottom:11px; }
+  .portalFoot { font-size:6px; letter-spacing:.05em; }
+  .footer { margin-top:30px; }
+}
+@media(max-width:360px){.masthead{font-size:6px}.portal strong{font-size:18px}.artFrame{height:252px}.hero h1{font-size:26px}}
+@media(prefers-reduced-motion:reduce){ .portal,.enter { transition:none; transform:none!important; } }
