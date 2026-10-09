@@ -608,3 +608,191 @@ body {
     transition: none;
   }
 }
+
+/* iPhone Cheese: examiner first, compact institutional dossier second, board third.
+   Confined to phones so tablet/desktop compositions remain unchanged. */
+@media (max-width: 720px) {
+  .page-cheese .cheese-desktop-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    align-items: stretch;
+  }
+  .page-cheese .cheese-left-rail { display: contents; }
+  .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
+    order: 0;
+    position: static;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+  }
+  .page-cheese .cheese-desktop-layout .cheese-exam-header { order: 1; }
+  .page-cheese .cheese-desktop-layout > .cheese-game-frame { order: 2; }
+
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(122px, 43%) minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 10px;
+    align-items: stretch;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 9px;
+    overflow: hidden;
+    border: 1px solid rgba(230, 191, 116, .35);
+    border-radius: 16px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 100%;
+    height: clamp(164px, 47vw, 195px);
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    border-radius: 11px;
+  }
+  .page-cheese .cheese-examiner-rail .reaction-copy {
+    min-width: 0;
+    width: 100%;
+    align-self: center;
+    padding: 24px 5px 8px 0;
+    overflow: visible;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy span {
+    display: block;
+    font-size: 7px;
+    line-height: 1.35;
+    letter-spacing: .09em;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    display: block;
+    max-width: none;
+    margin-top: 9px;
+    font-size: clamp(13px, 3.8vw, 17px);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction > i {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 23px;
+    height: 23px;
+    margin: 0;
+    font-size: 11px;
+  }
+  .page-cheese .cheese-reset-mobile { display: none; }
+
+  .page-cheese .cheese-left-rail .cheese-exam-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    gap: 9px !important;
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 10px !important;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+  .page-cheese .cheese-exam-header::after { display: none; }
+  /* The live, changing reaction above replaces the static duplicate portrait. */
+  .page-cheese .cheese-exam-portrait { display: none; }
+
+  .page-cheese .barkbridge-ident {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 43px minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    padding: 7px 10px;
+    text-align: left;
+    align-items: center;
+    justify-items: stretch;
+    border-radius: 10px;
+  }
+  .page-cheese .barkbridge-ident-seal { width: 43px; height: 43px; }
+  .page-cheese .barkbridge-ident strong {
+    font-size: clamp(12px, 3.5vw, 15px);
+    line-height: 1.09;
+    letter-spacing: .035em;
+  }
+  .page-cheese .barkbridge-ident small {
+    margin-top: 4px;
+    font-size: 7px;
+    line-height: 1.2;
+    letter-spacing: .075em;
+  }
+  .page-cheese .cheese-exam-title {
+    grid-column: 1;
+    grid-row: 2;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 1px 5px 0;
+    align-self: auto;
+  }
+  .page-cheese .cheese-exam-title .cheese-eyebrow {
+    margin-bottom: 5px;
+    font-size: 7px;
+    line-height: 1.2;
+  }
+  .page-cheese .cheese-exam-title h1 {
+    max-width: none;
+    margin: 0;
+    font-size: clamp(24px, 6.6vw, 30px);
+    line-height: 1.03;
+    text-wrap: balance;
+  }
+  .page-cheese .cheese-exam-title > p {
+    margin: 5px 0 10px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .page-cheese .cheese-header-status {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    margin: 0;
+    gap: 6px;
+  }
+  .page-cheese .cheese-header-status > div {
+    min-width: 0;
+    min-height: 38px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 7px;
+    text-align: left;
+  }
+  .page-cheese .cheese-header-status span { font-size: 7px; letter-spacing: .08em; }
+  .page-cheese .cheese-header-status strong { font-size: 14px; }
+  .page-cheese .cheese-reset-left {
+    grid-column: 1;
+    grid-row: 3;
+    display: inline-flex !important;
+    width: 100%;
+    min-height: 33px;
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 9px;
+    font-size: 8px;
+    letter-spacing: .13em;
+  }
+}
+@media (max-width: 360px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: 42% minmax(0, 1fr);
+    gap: 8px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 162px; }
+  .page-cheese .cheese-exam-title h1 { font-size: 22px; }
+  .page-cheese .cheese-header-status > div { padding-inline: 4px; }
+}
