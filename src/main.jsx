@@ -10,6 +10,7 @@ import "./responsive-polish.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
+import RosieHome from "./RosieHome.jsx";
 
 function RosieNavIcon({ type }) {
   const common = {
@@ -1893,10 +1894,10 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["fortune", "cheese", "captain", "captain2", "vault", "randomizers"];
+  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
-    return validPages.includes(requested) ? requested : "fortune";
+    return validPages.includes(requested) ? requested : "home";
   };
   const [page, setPage] = useState(pageFromLocation);
   const [question, setQuestion] = useState("");
@@ -2372,7 +2373,10 @@ function App() {
 
       <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
 
-        {page === "fortune" ? (
+        {page !== "home" && <button type="button" className="house-return" aria-label="Return to the House of Rosie" title="The House of Rosie" onClick={() => navigateTo("home")}>⌂<span>HOME</span></button>}
+        {page === "home" ? (
+          <RosieHome onNavigate={navigateTo} />
+        ) : page === "fortune" ? (
         <main className="fortune-page">
           <div className="fortune-console">
             <FortuneMachine
@@ -2556,13 +2560,13 @@ function App() {
           <RosieRandomizers />
         )}
 
-        <nav className="bottom-nav" aria-label="Primary">
+        {page !== "home" && <nav className="bottom-nav" aria-label="Primary">
           <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
           <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
           <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
           <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
           <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
-        </nav>
+        </nav>}
       </div>
 
       <div className={`toast ${toast ? "toast-visible" : ""}`}>{toast}</div>
