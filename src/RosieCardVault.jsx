@@ -213,7 +213,7 @@ const BASE_DRIFT_PX_PER_SECOND = 26;
 const INITIAL_DRIFT_DELAY_MS = 250;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
-const DEFAULT_DRIFT_SPEED = 0.9;
+const DEFAULT_DRIFT_SPEED = 0.9 * 1.3;
 const MOBILE_DRIFT_SPEED = DEFAULT_DRIFT_SPEED * 2.5;
 const DRAG_ACTIVATION_PX = 8;
 
@@ -262,6 +262,8 @@ function RosieCardVaultWall() {
   const pool = useMemo(() => rosieCards.filter(card => card?.id && card?.image), []);
   const nextBatch = useRef(2);
   const sentinel = useRef(null);
+  const wallRef = useRef(null);
+  const touchStartY = useRef(null);
   const dragging = useRef(false);
   const dragPointerId = useRef(null);
   const dragStartY = useRef(0);
@@ -322,18 +324,20 @@ function RosieCardVaultWall() {
     if (!speed || isBraked || selectedCard) return undefined;
     let frame = 0;
     let last = performance.now();
-    let residualPixels = 0;
-
+    // Fractional target retains subpixel progress; native user scrolling rebases it.
+    let targetY = window.scrollY;
+    let appliedY = window.scrollY;
     const drift = now => {
-      const elapsed = Math.min(now - last, 80) / 1000;
+      const elapsed = Math.min(Math.max(now - last, 0), 48) / 1000;
       last = now;
       if (!dragging.current && now >= pauseUntil.current && document.visibilityState === 'visible') {
-        residualPixels += BASE_DRIFT_PX_PER_SECOND * speed * elapsed;
-        const wholePixels = residualPixels > 0 ? Math.floor(residualPixels) : Math.ceil(residualPixels);
-        if (wholePixels) {
-          window.scrollBy(0, wholePixels);
-          residualPixels -= wholePixels;
-        }
+        const actual = window.scrollY;
+        if (Math.abs(actual - appliedY) > 2) targetY = actual;
+        targetY = Math.max(0, targetY + BASE_DRIFT_PX_PER_SECOND * speed * elapsed);
+        window.scrollTo(0, targetY);
+        appliedY = window.scrollY;
+      } else {
+        targetY = appliedY = window.scrollY;
       }
       frame = requestAnimationFrame(drift);
     };
@@ -432,7 +436,6 @@ function RosieCardVaultWall() {
   }, [selectedCard]);
 
   const handlePointerDown = event => {
-    pauseDrift();
     if (event.pointerType !== 'mouse' || event.button !== 0) return;
     dragPointerId.current = event.pointerId;
     dragging.current = false;
@@ -449,6 +452,7 @@ function RosieCardVaultWall() {
     if (!dragging.current) {
       if (draggedDistance.current <= DRAG_ACTIVATION_PX) return;
       dragging.current = true;
+      pauseDrift();
       suppressNextClick.current = true;
       event.currentTarget.setPointerCapture?.(event.pointerId);
     }
@@ -459,9 +463,9 @@ function RosieCardVaultWall() {
   const endDrag = event => {
     if (dragPointerId.current !== event.pointerId) return;
     if (dragging.current) event.currentTarget.releasePointerCapture?.(event.pointerId);
+    if (dragging.current) pauseDrift();
     dragging.current = false;
     dragPointerId.current = null;
-    pauseDrift();
   };
 
   const openCard = card => {
@@ -496,11 +500,51 @@ function RosieCardVaultWall() {
     }
   };
 
+  // Limit foil effects to one onscreen tile per interval.
+  useEffect(() => {
+    const wall = wallRef.current;
+    if (!wall || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const visible = new Set();
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+    }, { rootMargin: '20px' });
+    wall.querySelectorAll('[data-vault-tile]').forEach(tile => observer.observe(tile));
+    const register = new MutationObserver(records => records.forEach(record =>
+      record.addedNodes.forEach(node => {
+        if (!(node instanceof Element)) return;
+        if (node.matches('[data-vault-tile]')) observer.observe(node);
+        node.querySelectorAll?.('[data-vault-tile]').forEach(tile => observer.observe(tile));
+      })
+    ));
+    register.observe(wall, { childList: true });
+    let current = null;
+    let cleanup = 0;
+    const timer = window.setInterval(() => {
+      if (document.hidden || selectedCard || !visible.size) return;
+      const options = [...visible].filter(tile => tile.isConnected);
+      if (!options.length) return;
+      const next = options[Math.floor(Math.random() * options.length)];
+      current?.classList.remove(styles.foilGlint);
+      next.classList.add(styles.foilGlint);
+      current = next;
+      window.clearTimeout(cleanup);
+      cleanup = window.setTimeout(() => { next.classList.remove(styles.foilGlint); if (current === next) current = null; }, 1400);
+    }, 3800);
+    return () => {
+      window.clearInterval(timer); window.clearTimeout(cleanup);
+      current?.classList.remove(styles.foilGlint);
+      register.disconnect(); observer.disconnect();
+    };
+  }, [selectedCard]);
+
   const speedLabel = speed === 0 ? '0' : `${speed > 0 ? '↓' : '↑'} ${Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×`;
 
   if (!pool.length) return <main className={styles.page}><div className={styles.empty}>Add Rosie cards to <code>data/rosieCards.js</code>.</div></main>;
 
-  return <main className={styles.page} onPointerDown={() => pauseDrift()} onWheel={() => pauseDrift()} onTouchStart={() => pauseDrift()} onTouchEnd={() => pauseDrift()}>
+  return <main className={styles.page}>
     <aside
       className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`}
       aria-label="Ambient card drift speed and direction"
@@ -512,7 +556,7 @@ function RosieCardVaultWall() {
       <button type="button" className={`${styles.brakeButton} ${isBraked ? styles.brakeButtonActive : ''}`} aria-label={isBraked ? 'Resume ambient card drift' : 'Pause ambient card drift'} aria-pressed={isBraked} title={isBraked ? 'Release brake' : 'Brake drift'} onPointerDown={event => event.stopPropagation()} onClick={toggleBrake}><span aria-hidden="true">{isBraked ? '▶' : 'Ⅱ'}</span></button>
       <span className={styles.speedReadout}>{speedLabel}</span>
       <div className={styles.rangeShell}>
-        <input className={styles.speedRange} type="range" min="-2.5" max="2.5" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
+        <input className={styles.speedRange} type="range" min="-3.25" max="3.25" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
           const nextSpeed = Number(event.target.value);
           setSpeed(nextSpeed);
           if (nextSpeed !== 0) setIsBraked(false);
@@ -563,9 +607,9 @@ function RosieCardVaultWall() {
               value={zoomMax - cardsPerRow}
               onChange={event => {
                 setCardsPerRow(zoomMax - Number(event.target.value));
-                pauseDrift();
+                pauseUntil.current = performance.now();
               }}
-              onPointerDown={event => { event.stopPropagation(); pauseDrift(); }}
+              onPointerDown={event => event.stopPropagation()}
               aria-label="Card Vault zoom"
               aria-valuetext={`${cardsPerRow} cards per row`}
               title={`${cardsPerRow} cards per row`}
@@ -576,8 +620,8 @@ function RosieCardVaultWall() {
         </div>
       </div>
 
-      <section className={styles.wall} style={{ '--vault-columns': cardsPerRow }} aria-label="Randomized Rosie card wall" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
-        {cards.map((card, index) => <button type="button" className={styles.tile} key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card} eager={index < 24}/></button>)}
+      <section ref={wallRef} className={styles.wall} style={{ '--vault-columns': cardsPerRow }} aria-label="Randomized Rosie card wall" onWheel={() => pauseDrift()} onTouchStart={event => { touchStartY.current = event.touches[0]?.clientY ?? null; }} onTouchMove={event => { if (touchStartY.current !== null && Math.abs((event.touches[0]?.clientY ?? touchStartY.current) - touchStartY.current) > 6) pauseDrift(); }} onTouchEnd={() => { touchStartY.current = null; }} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}>
+        {cards.map((card, index) => <button type="button" className={styles.tile} data-vault-tile key={card.wall_id} aria-label={`Open ${card.name} card`} onClick={() => openCard(card)}><CardImage card={card} eager={index < 24}/></button>)}
       </section>
     </section>
     <div ref={sentinel} className={styles.sentinel} aria-hidden="true"/>
