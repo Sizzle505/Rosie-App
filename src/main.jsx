@@ -149,8 +149,8 @@ function secureIndex(length) {
   return value[0] % length;
 }
 
-function samplePrompts(count = 4) {
-  const pool = [...QUICK_QUESTIONS];
+function samplePrompts(count = 4, exclude = []) {
+  const pool = QUICK_QUESTIONS.filter((prompt) => !exclude.includes(prompt));
   const chosen = [];
   while (pool.length && chosen.length < count) {
     chosen.push(pool.splice(secureIndex(pool.length), 1)[0]);
@@ -1905,7 +1905,6 @@ function App() {
   const [answer, setAnswer] = useState(null);
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
-  const [history, setHistory] = useState([]);
   const [flipped, setFlipped] = useState(false);
   const [turning, setTurning] = useState(false);
   const [flipBurst, setFlipBurst] = useState(0);
@@ -1972,7 +1971,7 @@ function App() {
   }
 
   function reshufflePrompts() {
-    setQuickQuestions(samplePrompts(4));
+    setQuickQuestions((current) => samplePrompts(4, current));
   }
 
   useEffect(() => {
@@ -2271,16 +2270,14 @@ function App() {
     const askedQuestion = question.trim();
     setSubmittedQuestion(askedQuestion);
     setQuestion("");
+    // Show a new, non-repeating set immediately after each submitted fortune.
+    reshufflePrompts();
     const delay = 1350 + secureIndex(650);
 
     revealTimerRef.current = window.setTimeout(() => {
       setAnswer(result);
       setConsulting(false);
       setRevealStage("manifesting");
-      setHistory((items) => [
-        { question: askedQuestion, answer: result.text, tone: result.tone },
-        ...items
-      ].slice(0, 5));
 
       const nextCount = consultations + 1;
       setConsultations(nextCount);
@@ -2318,7 +2315,6 @@ function App() {
     setAnswerDismissed(false);
     setConsulting(false);
     setRevealStage("idle");
-    reshufflePrompts();
     window.setTimeout(() => inputRef.current?.focus(), 50);
   }
 
@@ -2517,23 +2513,6 @@ function App() {
               </div>
             )}
           </section>
-
-          {history.length > 1 && (
-            <section className="session-history">
-              <div className="history-title">RECENT FORTUNES</div>
-              <div className="history-list">
-                {history.slice(1).map((item, index) => (
-                  <div className="history-item" key={`${item.question}-${index}`}>
-                    <span className={`history-dot tone-${item.tone}`} />
-                    <div>
-                      <strong>{item.question}</strong>
-                      <small>{item.answer}</small>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
 
           <section className="omen-rail bottom-omens" aria-label="Today's omens">
             <div className="omen-title">
