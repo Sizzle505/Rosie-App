@@ -918,3 +918,41 @@
   .hostPortrait { width: 143px; height: 172px; right: -7px; }
   .heroSignet { width: 80px; right: 17px; }
 }
+
+
+/* iPhone masthead: keep the crest above and completely separate from Rosie's
+   ears. The portrait remains large but occupies its own lower-right zone. */
+@media (max-width: 680px) {
+  .hero {
+    min-height: 304px;
+    padding: 18px 15px 21px;
+    align-items: start;
+  }
+  .heroCopy {
+    max-width: calc(100% - 126px);
+    padding-top: 28px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 8.7vw, 39px);
+    line-height: .99;
+  }
+  .heroSignet {
+    top: 10px;
+    right: 19px;
+    width: clamp(78px, 21vw, 90px);
+    z-index: 4;
+  }
+  .hostPortrait {
+    right: -6px;
+    bottom: -5px;
+    width: clamp(148px, 42vw, 172px);
+    height: clamp(170px, 47vw, 186px);
+    z-index: 2;
+  }
+}
+@media (max-width: 390px) {
+  .hero { min-height: 290px; }
+  .heroCopy { max-width: calc(100% - 118px); }
+  .heroSignet { width: 77px; top: 10px; right: 17px; }
+  .hostPortrait { width: 149px; height: 172px; }
+}
