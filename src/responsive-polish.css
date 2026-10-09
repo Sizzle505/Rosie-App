@@ -840,3 +840,24 @@ body {
   }
   .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 108px; }
 }
+
+
+/* iPhone oracle desk: remove the empty caption strip between the cabinet and
+   petition, retaining the same motto as a discreet line within the petition. */
+.fortune-mobile-caption { display: none; }
+@media (max-width: 720px) {
+  .page-fortune .fortune-console .console-caption { display: none; }
+  .page-fortune .question-card { margin-top: 7px; }
+  .page-fortune .fortune-mobile-caption {
+    display: block;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(221, 184, 109, .20);
+    color: #cba56a;
+    font-size: 7px;
+    line-height: 1.25;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: .105em;
+  }
+}
