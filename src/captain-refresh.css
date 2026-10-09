@@ -258,6 +258,89 @@
   font-weight: 800;
   white-space: nowrap;
 }
+
+/* Material pass: bridge the photographic hero and the illustrated course. */
+.captain-game-page .captain-hud > div {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(242, 205, 124, .38);
+  background:
+    radial-gradient(circle at 50% -18%, rgba(105, 193, 211, .16), transparent 48%),
+    repeating-linear-gradient(102deg, rgba(255,255,255,.018) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(8, 58, 80, .96), rgba(3, 25, 40, .98));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -12px 22px rgba(0,0,0,.16),
+    0 7px 16px rgba(0,0,0,.15);
+}
+.captain-game-page .captain-hud > div::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(242, 211, 145, .08);
+  border-radius: 8px;
+  pointer-events: none;
+}
+.captain-game-page .yacht-game-shell {
+  border-color: rgba(244, 209, 133, .68);
+  box-shadow:
+    0 26px 60px rgba(0,0,0,.42),
+    0 0 0 4px rgba(4, 27, 42, .92),
+    0 0 0 5px rgba(225, 184, 101, .16),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+.captain-game-page .yacht-game-sign {
+  background:
+    linear-gradient(90deg, transparent, rgba(234, 196, 119, .055) 34%, transparent 70%),
+    repeating-linear-gradient(100deg, rgba(255,255,255,.012) 0 1px, transparent 1px 6px),
+    linear-gradient(180deg, #0a4863, #042b42);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), inset 0 -12px 24px rgba(0,0,0,.14);
+}
+.captain-game-page .riviera-course-art {
+  filter: saturate(1.02) contrast(1.035) brightness(1.015);
+}
+.captain-game-page .yacht-course::after {
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(106deg, rgba(255,255,255,.018) 0 1px, transparent 1px 8px),
+    linear-gradient(180deg, rgba(255,250,225,.035), transparent 16% 72%, rgba(1,18,31,.23)),
+    radial-gradient(ellipse at 50% 54%, transparent 0 58%, rgba(1,18,31,.18) 100%);
+  mix-blend-mode: soft-light;
+}
+.captain-game-page .captain-course-banner {
+  border-color: rgba(244, 211, 142, .46);
+  background:
+    linear-gradient(115deg, rgba(255,255,255,.045), transparent 38%),
+    rgba(3, 38, 56, .72);
+  box-shadow: 0 8px 22px rgba(0,0,0,.19), inset 0 1px rgba(255,255,255,.08);
+}
+.captain-game-page .captain-command-deck {
+  background:
+    repeating-linear-gradient(92deg, rgba(231,191,111,.035) 0 1px, transparent 1px 11px),
+    radial-gradient(circle at 50% -50%, rgba(92,170,185,.16), transparent 56%),
+    linear-gradient(180deg, #073d57, #03263a);
+  box-shadow: inset 0 1px rgba(255,255,255,.06), inset 0 -14px 24px rgba(0,0,0,.18);
+}
+.captain-game-page .helm-button,
+.captain-game-page .boost-control {
+  border-color: rgba(235, 201, 129, .4);
+  box-shadow: inset 0 1px rgba(255,255,255,.07), 0 5px 12px rgba(0,0,0,.16);
+}
+.captain-game-page .captain-cargo-key {
+  border-top: 1px solid rgba(231, 193, 115, .2);
+  background:
+    repeating-linear-gradient(100deg, rgba(255,255,255,.014) 0 1px, transparent 1px 7px),
+    linear-gradient(180deg, #052d43, #031f31);
+}
+
+@media (hover: hover) {
+  .captain-game-page .helm-button:not(:disabled):hover,
+  .captain-game-page .boost-control:not(:disabled):hover {
+    border-color: rgba(255, 220, 148, .68);
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+}
 @media (max-width: 720px) {
   .captain-game-page .captain-title-plaque {
     overflow: visible;
