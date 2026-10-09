@@ -667,7 +667,7 @@
   .hero { min-height: 230px; grid-template-columns: minmax(0,1fr) 190px; padding: 24px; }
   .hero h1 { font-size: clamp(42px, 7.3vw, 56px); }
   .hostPortrait { right: 18px; width: 190px; height: 205px; }
-  .heroSignet { right: 195px; top: 40px; width: 108px; }
+  .heroSignet { right: 221px; top: 40px; width: 108px; }
   .ivoryCard { min-height: 455px; }
   .coinScene, .diceScene { min-height: 235px; }
   .coin { width: 185px; height: 185px; }
