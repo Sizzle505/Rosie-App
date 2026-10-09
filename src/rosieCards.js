@@ -313,6 +313,678 @@ const rosieCards = [
     "set": "Athletics",
     "image": "https://qzslxfu58z5dvuae.public.blob.vercel-storage.com/rosie-card-vault/rc-056-e7131TNJkzQetH7NASn5M1XyrE911y.avif",
     "alt": "Tennis Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-057",
+    "name": "Shogun Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-057.webp",
+    "alt": "Shogun Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-058",
+    "name": "Bungee Jump Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-058.webp",
+    "alt": "Bungee Jump Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-059",
+    "name": "Machu Picchu Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-059.webp",
+    "alt": "Machu Picchu Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-060",
+    "name": "Gunslinger Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-060.webp",
+    "alt": "Gunslinger Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-061",
+    "name": "Ancient Greek Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-061.webp",
+    "alt": "Ancient Greek Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-062",
+    "name": "Pandemic Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-062.webp",
+    "alt": "Pandemic Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-063",
+    "name": "Titanic Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-063.webp",
+    "alt": "Titanic Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-064",
+    "name": "Rosie Running Deer",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-064.webp",
+    "alt": "Rosie Running Deer collectible Rosie card"
+  },
+  {
+    "id": "rc-065",
+    "name": "Rosie the Riveter",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-065.webp",
+    "alt": "Rosie the Riveter collectible Rosie card"
+  },
+  {
+    "id": "rc-066",
+    "name": "Rosie Franklin",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-066.webp",
+    "alt": "Rosie Franklin collectible Rosie card"
+  },
+  {
+    "id": "rc-067",
+    "name": "Lil Barksy",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-067.webp",
+    "alt": "Lil Barksy collectible Rosie card"
+  },
+  {
+    "id": "rc-068",
+    "name": "Rosie Parks",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-068.webp",
+    "alt": "Rosie Parks collectible Rosie card"
+  },
+  {
+    "id": "rc-069",
+    "name": "Lord Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-069.webp",
+    "alt": "Lord Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-070",
+    "name": "Pop Art Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-070.webp",
+    "alt": "Pop Art Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-071",
+    "name": "Noir Rosie",
+    "set": "Icons & Eras",
+    "image": "/card-vault/rc-071.webp",
+    "alt": "Noir Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-072",
+    "name": "Therapist Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-072-therapist-rosie.webp",
+    "alt": "Therapist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-073",
+    "name": "Painter Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-073-painter-rosie.webp",
+    "alt": "Painter Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-074",
+    "name": "Jazz Player Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-074-jazz-player-rosie.webp",
+    "alt": "Jazz Player Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-075",
+    "name": "Acrobat Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-075-acrobat-rosie.webp",
+    "alt": "Acrobat Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-076",
+    "name": "Roastmaster Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-076-roastmaster-rosie.webp",
+    "alt": "Roastmaster Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-077",
+    "name": "DJ Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-077-dj-rosie.webp",
+    "alt": "DJ Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-078",
+    "name": "Rocket Scientist Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-078-rocket-scientist-rosie.webp",
+    "alt": "Rocket Scientist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-079",
+    "name": "Valet Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-079-valet-rosie.webp",
+    "alt": "Valet Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-080",
+    "name": "News Anchor Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-080-news-anchor-rosie.webp",
+    "alt": "News Anchor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-081",
+    "name": "Greaser Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-081-greaser-rosie.webp",
+    "alt": "Greaser Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-082",
+    "name": "AI Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-082-ai-rosie.webp",
+    "alt": "AI Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-083",
+    "name": "Grill Master Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-083-grill-master-rosie.webp",
+    "alt": "Grill Master Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-084",
+    "name": "Hair Stylist Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-084-hair-stylist-rosie.webp",
+    "alt": "Hair Stylist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-085",
+    "name": "Robotics Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-085-robotics-rosie.webp",
+    "alt": "Robotics Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-086",
+    "name": "Kayak Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-086-kayak-rosie.webp",
+    "alt": "Kayak Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-087",
+    "name": "Ballerina Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-087-ballerina-rosie.webp",
+    "alt": "Ballerina Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-088",
+    "name": "Vegas Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-088-vegas-rosie.webp",
+    "alt": "Vegas Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-089",
+    "name": "Professor Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-089-professor-rosie.webp",
+    "alt": "Professor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-090",
+    "name": "Podcaster Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-090-podcaster-rosie.webp",
+    "alt": "Podcaster Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-091",
+    "name": "Lion Tamer Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-091-lion-tamer-rosie.webp",
+    "alt": "Lion Tamer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-092",
+    "name": "Safe Cracker Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-092-safe-cracker-rosie.webp",
+    "alt": "Safe Cracker Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-093",
+    "name": "Crab Fisher Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-093-crab-fisher-rosie.webp",
+    "alt": "Crab Fisher Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-094",
+    "name": "Marionettist Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-094-marionettist-rosie.webp",
+    "alt": "Marionettist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-095",
+    "name": "Paragliding Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-095-paragliding-rosie.webp",
+    "alt": "Paragliding Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-096",
+    "name": "Jeopardy Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-096-jeopardy-rosie.webp",
+    "alt": "Jeopardy Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-097",
+    "name": "Wolverine Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-097-wolverine-rosie.webp",
+    "alt": "Wolverine Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-098",
+    "name": "Taekwondo Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-098-taekwondo-rosie.webp",
+    "alt": "Taekwondo Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-099",
+    "name": "Escape Artist Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-099-escape-artist-rosie.webp",
+    "alt": "Escape Artist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-100",
+    "name": "Helicopter Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-100-helicopter-rosie.webp",
+    "alt": "Helicopter Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-101",
+    "name": "Corsair Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-101-corsair-rosie.webp",
+    "alt": "Corsair Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-102",
+    "name": "Maid Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-102-maid-rosie.webp",
+    "alt": "Maid Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-103",
+    "name": "Ice Sculptor Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-103-ice-sculptor-rosie.webp",
+    "alt": "Ice Sculptor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-104",
+    "name": "International Rosie of Mystery",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-104-international-rosie-of-mystery.webp",
+    "alt": "International Rosie of Mystery collectible Rosie card"
+  },
+  {
+    "id": "rc-105",
+    "name": "Cozy Cabin Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-105-cozy-cabin-rosie.webp",
+    "alt": "Cozy Cabin Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-106",
+    "name": "Submarine Commander Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-106-submarine-commander-rosie.webp",
+    "alt": "Submarine Commander Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-107",
+    "name": "Stunt Plane Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-107-stunt-plane-rosie.webp",
+    "alt": "Stunt Plane Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-108",
+    "name": "Pro Gamer Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-108-pro-gamer-rosie.webp",
+    "alt": "Pro Gamer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-109",
+    "name": "Ascended Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-109-ascended-rosie.webp",
+    "alt": "Ascended Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-110",
+    "name": "Bugatti Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-110-bugatti-rosie.webp",
+    "alt": "Bugatti Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-111",
+    "name": "Master Chef Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-111-master-chef-rosie.webp",
+    "alt": "Master Chef Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-112",
+    "name": "Philosopher Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-112-philosopher-rosie.webp",
+    "alt": "Philosopher Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-113",
+    "name": "Thespian Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-113-thespian-rosie.webp",
+    "alt": "Thespian Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-114",
+    "name": "Volcanologist Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-114-volcanologist-rosie.webp",
+    "alt": "Volcanologist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-115",
+    "name": "Looksmaxxer Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-115-looksmaxxer-rosie.webp",
+    "alt": "Looksmaxxer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-116",
+    "name": "Lumberjack Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-116-lumberjack-rosie.webp",
+    "alt": "Lumberjack Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-117",
+    "name": "Skateboard Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-117-skateboard-rosie.webp",
+    "alt": "Skateboard Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-118",
+    "name": "Cliffjumping Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-118-cliffjumping-rosie.webp",
+    "alt": "Cliffjumping Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-119",
+    "name": "NSA Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-119-nsa-rosie.webp",
+    "alt": "NSA Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-120",
+    "name": "Warden Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-120-warden-rosie.webp",
+    "alt": "Warden Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-121",
+    "name": "Safari Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-121-safari-rosie.webp",
+    "alt": "Safari Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-122",
+    "name": "Slam Dunk Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-122-slam-dunk-rosie.webp",
+    "alt": "Slam Dunk Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-123",
+    "name": "Bermuda Triangle Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-123-bermuda-triangle-rosie.webp",
+    "alt": "Bermuda Triangle Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-124",
+    "name": "Bayou Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-124-bayou-rosie.webp",
+    "alt": "Bayou Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-125",
+    "name": "Galapagos Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-125-galapagos-rosie.webp",
+    "alt": "Galapagos Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-126",
+    "name": "Diamond in the Ruff Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-126-diamond-in-the-ruff-rosie.webp",
+    "alt": "Diamond in the Ruff Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-127",
+    "name": "Herald Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-127-herald-rosie.webp",
+    "alt": "Herald Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-128",
+    "name": "Gladiator Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-128-gladiator-rosie.webp",
+    "alt": "Gladiator Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-129",
+    "name": "Mayor Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-129-mayor-rosie.webp",
+    "alt": "Mayor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-130",
+    "name": "Patriot Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-130-patriot-rosie.webp",
+    "alt": "Patriot Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-131",
+    "name": "Wine Expert Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-131-wine-expert-rosie.webp",
+    "alt": "Wine Expert Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-132",
+    "name": "Fastball Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-132-fastball-rosie.webp",
+    "alt": "Fastball Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-133",
+    "name": "Abstract Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-133-abstract-rosie.webp",
+    "alt": "Abstract Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-134",
+    "name": "Formula 1 Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-134-formula-1-rosie.webp",
+    "alt": "Formula 1 Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-135",
+    "name": "Elite Protection Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-135-elite-protection-rosie.webp",
+    "alt": "Elite Protection Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-136",
+    "name": "Talent Show Rosie",
+    "set": "Collector Series",
+    "image": "/card-vault/rc-136-talent-show-rosie.webp",
+    "alt": "Talent Show Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-137",
+    "name": "Matador Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-137.webp",
+    "alt": "Matador Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-138",
+    "name": "Gondolier Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-138.webp",
+    "alt": "Gondolier Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-139",
+    "name": "Snowball Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-139.webp",
+    "alt": "Snowball Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-140",
+    "name": "Cube Master Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-140.webp",
+    "alt": "Cube Master Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-141",
+    "name": "Dinosaur Age Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-141.webp",
+    "alt": "Dinosaur Age Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-142",
+    "name": "Highrise Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-142.webp",
+    "alt": "Highrise Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-143",
+    "name": "Rockstar Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-143.webp",
+    "alt": "Rockstar Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-144",
+    "name": "Ringbearer Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-144.webp",
+    "alt": "Ringbearer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-145",
+    "name": "Pope Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-145.webp",
+    "alt": "Pope Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-146",
+    "name": "Zeppelin Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-146.webp",
+    "alt": "Zeppelin Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-147",
+    "name": "Runway Model Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-147.webp",
+    "alt": "Runway Model Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-148",
+    "name": "Vice City Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-148.webp",
+    "alt": "Vice City Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-149",
+    "name": "Monster Truck Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-149.webp",
+    "alt": "Monster Truck Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-150",
+    "name": "Hibachi Chef Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-150.webp",
+    "alt": "Hibachi Chef Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-151",
+    "name": "Magician Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-151.webp",
+    "alt": "Magician Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-152",
+    "name": "Falconer Rosie",
+    "set": "Grand Adventures",
+    "image": "/card-vault/rc-152.webp",
+    "alt": "Falconer Rosie collectible Rosie card"
   }
 ];
 
