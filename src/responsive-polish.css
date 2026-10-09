@@ -496,8 +496,115 @@ body {
   }
 }
 
+/* Fortune + Barkbridge material pass: lacquer, vellum, and brass depth. */
+.page-fortune .question-card,
+.page-fortune .fortune-waiting-card,
+.page-fortune .bottom-omens {
+  background-image:
+    radial-gradient(circle at 84% -12%, rgba(188, 119, 200, .12), transparent 34%),
+    repeating-linear-gradient(102deg, rgba(255,255,255,.013) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(8deg, rgba(229,184,101,.008) 0 1px, transparent 1px 8px),
+    linear-gradient(155deg, rgba(50, 18, 34, .985), rgba(22, 12, 23, .995) 58%, rgba(12, 9, 14, .995));
+}
+
+.page-fortune .input-shell {
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.035),
+    inset 0 -10px 22px rgba(0,0,0,.16),
+    0 8px 22px rgba(0,0,0,.22) !important;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.page-fortune .input-shell:focus-within {
+  border-color: rgba(245, 205, 126, .72) !important;
+  box-shadow:
+    0 0 0 3px rgba(206, 154, 69, .11),
+    0 0 24px rgba(142, 76, 159, .12),
+    inset 0 1px rgba(255,255,255,.045) !important;
+}
+
+.page-fortune .ask-button {
+  overflow: hidden;
+  border-color: #704418;
+  background:
+    linear-gradient(110deg, transparent 0 29%, rgba(255,255,255,.34) 43%, transparent 57%),
+    linear-gradient(180deg, #f6db96 0%, #ce9948 53%, #8d581f 100%);
+  background-size: 220% 100%, 100% 100%;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.72),
+    inset 0 -3px 7px rgba(77,39,10,.2),
+    0 7px 18px rgba(77,42,15,.25),
+    0 0 0 2px rgba(255,235,181,.07);
+  transition: transform .16s ease, filter .16s ease, background-position .35s ease;
+}
+
+.page-fortune .quick-prompts button,
+.page-fortune .omen-grid > div {
+  background-image:
+    linear-gradient(120deg, rgba(255,255,255,.025), transparent 34%),
+    repeating-linear-gradient(100deg, rgba(255,255,255,.009) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(73,35,55,.36), rgba(22,14,23,.5)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+
+.page-fortune .ticket-paper {
+  background-image:
+    radial-gradient(circle at 50% -12%, rgba(144,70,126,.32), transparent 41%),
+    repeating-linear-gradient(97deg, rgba(255,240,199,.012) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(7deg, rgba(232,186,102,.009) 0 1px, transparent 1px 8px),
+    linear-gradient(180deg, #25101d 0%, #140d16 58%, #09080c 100%);
+}
+
+.page-cheese .cheese-exam-header,
+.page-cheese .rosie-reaction {
+  background-image:
+    radial-gradient(circle at 20% -12%, rgba(227,179,91,.1), transparent 34%),
+    repeating-linear-gradient(102deg, rgba(255,255,255,.011) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(7deg, rgba(230,184,96,.008) 0 1px, transparent 1px 9px),
+    linear-gradient(155deg, rgba(53,19,33,.985), rgba(20,12,18,.995) 58%, rgba(9,8,10,.998));
+}
+
+.page-cheese .cheese-header-status > div {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(226, 183, 99, .24) !important;
+  background:
+    radial-gradient(circle at 50% -35%, rgba(224,176,89,.12), transparent 58%),
+    repeating-linear-gradient(98deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, rgba(48,25,34,.86), rgba(13,9,13,.91)) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.035), inset 0 -8px 15px rgba(0,0,0,.12);
+}
+
+.page-cheese .cheese-game-frame {
+  border-color: rgba(226, 184, 102, .36);
+  box-shadow:
+    var(--rosie-panel-shadow),
+    0 0 0 4px rgba(35,16,24,.75),
+    0 0 0 5px rgba(226,184,102,.08),
+    inset 0 1px 0 rgba(255,239,204,.04);
+}
+
+.page-cheese .cheese-card {
+  transition: transform .18s ease, filter .18s ease;
+}
+
+@media (hover: hover) {
+  .page-fortune .ask-button:not(:disabled):hover {
+    transform: translateY(-1px);
+    filter: brightness(1.055);
+    background-position: 100% 0, 0 0;
+  }
+
+  .page-cheese .cheese-card:not(:disabled):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.035) drop-shadow(0 8px 12px rgba(0,0,0,.2));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .bottom-nav > button {
+  .bottom-nav > button,
+  .page-fortune .ask-button,
+  .page-cheese .cheese-card {
     transition: none;
   }
 }
