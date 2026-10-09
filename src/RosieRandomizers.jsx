@@ -82,7 +82,11 @@ function makeWheelGradient(count) {
     slices.push(`#D9BB68 ${Math.max(start, end - 1.35)}deg ${end}deg`);
   }
 
-  return `conic-gradient(from ${-step / 2}deg, ${slices.join(", ")})`;
+  return [
+    "radial-gradient(circle at 34% 24%, rgba(255,255,255,.16), transparent 25%)",
+    "radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,.18) 68%, rgba(0,0,0,.58) 100%)",
+    `conic-gradient(from ${-step / 2}deg, ${slices.join(", ")})`
+  ].join(", ");
 }
 
 function wheelLabelColor(index, count) {

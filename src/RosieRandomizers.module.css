@@ -725,3 +725,167 @@
   .coinFlipping, .isRolling .dieBody, .isRolling .dieLandingShadow { animation-duration: .01ms; }
   .wheel, .wheelHub { transition-duration: .01ms; }
 }
+
+/* Salon atmosphere and a more physical roulette assembly. */
+.page {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% -9%, rgba(143, 43, 67, .24), transparent 34%),
+    radial-gradient(circle at 8% 36%, rgba(196, 151, 63, .07), transparent 25%),
+    radial-gradient(circle at 92% 48%, rgba(196, 151, 63, .06), transparent 28%),
+    repeating-linear-gradient(118deg, rgba(255,255,255,.01) 0 1px, transparent 1px 6px),
+    linear-gradient(180deg, #0c080c 0%, #130a10 48%, #07070a 100%);
+}
+.page::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  opacity: .52;
+  background:
+    radial-gradient(circle at center, transparent 0 8px, rgba(216,177,91,.07) 9px 10px, transparent 11px 34px),
+    repeating-conic-gradient(from 45deg at 50% 50%, rgba(217,177,91,.022) 0deg 8deg, transparent 8deg 16deg);
+  background-size: 72px 72px, 220px 220px;
+  mask-image: linear-gradient(180deg, transparent, #000 18%, #000 88%, transparent);
+}
+.page > * { width: min(1180px, 100%); margin-inline: auto; box-sizing: border-box; }
+
+.hero {
+  background:
+    radial-gradient(circle at 77% 34%, rgba(139, 25, 51, .4), transparent 26%),
+    linear-gradient(116deg, rgba(255,255,255,.035), transparent 24%),
+    repeating-linear-gradient(96deg, rgba(255,255,255,.009) 0 1px, transparent 1px 6px),
+    linear-gradient(115deg, #0a0b0d 0%, #171118 59%, #07080a 100%);
+}
+
+.wheelSalon {
+  border-color: rgba(221, 181, 91, .66);
+  background:
+    radial-gradient(ellipse at 31% 52%, rgba(100, 9, 30, .5), transparent 34%),
+    radial-gradient(circle at 19% 22%, rgba(218, 177, 86, .09), transparent 27%),
+    radial-gradient(circle at 74% 100%, rgba(197,161,77,.08), transparent 33%),
+    repeating-linear-gradient(96deg, rgba(255,255,255,.01) 0 1px, transparent 1px 6px),
+    linear-gradient(145deg, #09090c 0%, #151016 58%, #07080a 100%);
+  box-shadow:
+    inset 0 0 0 5px rgba(197,161,77,.055),
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 28px 58px rgba(0,0,0,.38);
+}
+.wheelSalon::before { border-color: rgba(220, 178, 84, .21); box-shadow: inset 0 0 42px rgba(0,0,0,.28); }
+
+.wheelStage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 83px;
+  width: min(520px, 94%);
+  height: 430px;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 42% 42%;
+  background: radial-gradient(ellipse at 50% 41%, rgba(103, 10, 32, .38), rgba(22, 11, 18, .18) 48%, transparent 72%);
+  filter: blur(.2px);
+  pointer-events: none;
+}
+.wheelWrap::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 17px;
+  border: 1px solid rgba(232, 198, 116, .19);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 57%, rgba(213,171,78,.07) 58% 59%, transparent 60%),
+    radial-gradient(circle, rgba(112,13,36,.28), rgba(9,9,12,.12) 64%, transparent 68%);
+  box-shadow: 0 0 42px rgba(134, 19, 46, .16);
+  pointer-events: none;
+}
+.wheelWrap::after {
+  content: "";
+  position: absolute;
+  z-index: 6;
+  top: 40px;
+  left: 82px;
+  width: 118px;
+  height: 56px;
+  transform: rotate(-28deg);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255,244,207,.12), transparent 68%);
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+.pointer {
+  top: -2px;
+  width: 38px;
+  height: 46px;
+  filter: drop-shadow(0 6px 5px rgba(0,0,0,.82));
+}
+.pointer::before {
+  clip-path: polygon(50% 100%, 5% 8%, 17% 0, 83% 0, 95% 8%);
+  background: linear-gradient(90deg, #59370d 0%, #bd8f35 22%, #fff0b0 49%, #b47f28 76%, #4e2e09 100%);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.5);
+}
+.pointer i { top: 8px; width: 8px; height: 8px; border-radius: 50%; transform: translateX(-50%); background: #7b1023; box-shadow: 0 0 0 2px #342006, 0 0 0 3px #f2d98d; }
+
+.wheel {
+  border-color: #c99a3d;
+  box-shadow:
+    0 0 0 2px #ffedb0,
+    0 0 0 6px #8d621d,
+    0 0 0 10px #e0bb63,
+    0 0 0 14px #4a2d09,
+    0 0 0 17px #d2a64a,
+    0 0 0 20px #211304,
+    inset 0 0 0 8px rgba(5,6,8,.62),
+    inset 0 0 52px rgba(0,0,0,.78),
+    0 27px 34px rgba(0,0,0,.72),
+    0 0 38px rgba(176, 41, 72, .12);
+}
+.wheel::before {
+  inset: -9px;
+  background: repeating-conic-gradient(from 0deg, #fff0ad 0deg 1deg, #b57d27 1deg 3deg, #55330b 3deg 4deg, transparent 4deg 15deg);
+  -webkit-mask: radial-gradient(circle, transparent 69%, #000 70% 77%, transparent 78%);
+  mask: radial-gradient(circle, transparent 69%, #000 70% 77%, transparent 78%);
+}
+.wheel::after {
+  inset: 22px;
+  border-color: rgba(255,229,158,.74);
+  background:
+    radial-gradient(circle at 31% 22%, rgba(255,255,255,.15), transparent 24%),
+    radial-gradient(circle at 50% 50%, transparent 51%, rgba(0,0,0,.19) 68%, rgba(0,0,0,.54) 100%);
+  box-shadow: inset 0 0 0 3px rgba(0,0,0,.48), inset 0 0 0 5px rgba(244,211,129,.08), inset 0 0 34px rgba(0,0,0,.42);
+}
+.wheelLabel { text-shadow: 0 1px 0 rgba(0,0,0,.95), 0 2px 6px rgba(0,0,0,.9); }
+.wheelHub {
+  background: radial-gradient(circle at 35% 27%, #282018, #08090b 60%);
+  box-shadow:
+    0 0 0 2px #f4d985,
+    0 0 0 6px #6a430e,
+    0 0 0 9px #d7ae51,
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 10px 20px rgba(0,0,0,.7);
+}
+.wheelBase { width: 292px; height: 39px; bottom: 0; background: radial-gradient(ellipse, rgba(220,174,76,.3), rgba(0,0,0,.88) 68%); filter: blur(4px); }
+
+.wheelEditor {
+  background:
+    radial-gradient(circle at 82% 4%, rgba(213,171,78,.13), transparent 23%),
+    repeating-linear-gradient(98deg, rgba(88,61,23,.024) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(8deg, rgba(255,255,255,.17) 0 1px, transparent 1px 8px),
+    linear-gradient(rgba(255,255,255,.48), rgba(255,255,255,0)),
+    linear-gradient(145deg, #fffaf0, #e7dac0);
+}
+
+@media (max-width: 680px) {
+  .page > * { width: 100%; }
+  .wheelStage::before { top: 77px; height: 355px; }
+  .wheelWrap::before { inset: 13px; }
+  .wheelWrap::after { top: 36px; left: 67px; width: 95px; height: 45px; }
+  .wheel { box-shadow: 0 0 0 2px #ffedb0, 0 0 0 5px #8d621d, 0 0 0 8px #e0bb63, 0 0 0 12px #4a2d09, 0 0 0 15px #d2a64a, 0 0 0 18px #211304, inset 0 0 0 7px rgba(5,6,8,.62), inset 0 0 42px rgba(0,0,0,.76), 0 24px 30px rgba(0,0,0,.68); }
+}
