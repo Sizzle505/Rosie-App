@@ -718,3 +718,15 @@
     white-space: normal;
   }
 }
+
+
+/* Standard archive slot policy: mismatched source aspect ratios expand to fill
+   the entire thumbnail from its top-left anchor. Never center-crop the art.
+   The enlarged viewer still preserves the original uncropped card image. */
+.wall .tile .cardImage {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: fill;
+  object-position: left top;
+}
