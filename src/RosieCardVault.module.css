@@ -682,3 +682,39 @@
     line-height: 1.15;
   }
 }
+
+/* Phone archive masthead: symmetrical gutters and genuinely centered typography. */
+@media (max-width: 720px) {
+  .header {
+    width: 100%;
+    justify-content: center;
+    gap: 0;
+    padding: max(16px, calc(env(safe-area-inset-top) + 10px)) 10px 12px;
+  }
+  .headerMark {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: min(100%, 520px);
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 12px 8px 13px;
+    text-align: center;
+  }
+  .eyebrow { text-align: center; letter-spacing: .18em; white-space: normal; }
+  .titleLine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 9px;
+  }
+  .header h1 { font-size: clamp(25px, 7.25vw, 33px); }
+  .headerMeta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+    white-space: normal;
+  }
+}
