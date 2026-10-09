@@ -889,3 +889,32 @@
   .wheelWrap::after { top: 36px; left: 67px; width: 95px; height: 45px; }
   .wheel { box-shadow: 0 0 0 2px #ffedb0, 0 0 0 5px #8d621d, 0 0 0 8px #e0bb63, 0 0 0 12px #4a2d09, 0 0 0 15px #d2a64a, 0 0 0 18px #211304, inset 0 0 0 7px rgba(5,6,8,.62), inset 0 0 42px rgba(0,0,0,.76), 0 24px 30px rgba(0,0,0,.68); }
 }
+
+/* iPhone salon masthead: larger physical portrait and house crest without
+   reducing text readability or altering tablet/desktop positioning. */
+@media (max-width: 680px) {
+  .hero {
+    min-height: 263px;
+    padding: 19px 15px 22px;
+  }
+  .heroCopy { max-width: calc(100% - 132px); }
+  .hostPortrait {
+    width: clamp(145px, 41vw, 174px);
+    height: clamp(172px, 49vw, 206px);
+    right: -7px;
+    bottom: -6px;
+  }
+  .hostPortrait::before { inset: 34px 21px 17px; }
+  .heroSignet {
+    width: clamp(82px, 23vw, 98px);
+    height: auto;
+    top: 12px;
+    right: 24px;
+  }
+}
+@media (max-width: 390px) {
+  .hero { min-height: 253px; }
+  .heroCopy { max-width: calc(100% - 118px); }
+  .hostPortrait { width: 143px; height: 172px; right: -7px; }
+  .heroSignet { width: 80px; right: 17px; }
+}
