@@ -61,14 +61,31 @@ def render_button(name):
         if alpha[yy, xx] > 24:
             raise RuntimeError(f"{name}: the exterior matte was not removed")
 
-    rgba = np.dstack((rgb, alpha))
+    # Crop the unused *transparent* margins after masking. This is essential
+    # for the stacked 2+3 iPhone grid: an uncropped WebP still reserves invisible
+    # image-box pixels that create dead space around adjacent gold frames.
+    visible_y, visible_x = np.where(alpha > 100)
+    assert len(visible_x) > 0
+    margin_x = max(4, round(w * .008))
+    margin_y = max(4, round(h * .008))
+    left = max(0, int(visible_x.min()) - margin_x)
+    right = min(w, int(visible_x.max()) + margin_x + 1)
+    top = max(0, int(visible_y.min()) - margin_y)
+    bottom = min(h, int(visible_y.max()) + margin_y + 1)
+    if (right-left) < w * .88 or (bottom-top) < h * .88:
+        raise RuntimeError(f"{name}: excessive crop {(left, top, right, bottom)}")
+    rgba = np.dstack((rgb, alpha))[top:bottom, left:right]
     target = OUTPUT_DIR / f"{name}.webp"
     Image.fromarray(rgba, mode="RGBA").save(
         target, "WEBP", quality=94, method=6, exact=True
     )
     with Image.open(target) as check:
-        assert check.mode == "RGBA" and check.size == (w, h)
-    print(f"{name}: {w}x{h}, coverage {covered:.1%}, {target.stat().st_size:,} bytes")
+        assert check.mode == "RGBA" and check.size == (right-left, bottom-top)
+    print(
+        f"{name}: source {w}x{h}, trimmed {right-left}x{bottom-top}, "
+        f"crop {(left,top,right,bottom)}, coverage {covered:.1%}, "
+        f"{target.stat().st_size:,} bytes"
+    )
 
 
 if __name__ == "__main__":
