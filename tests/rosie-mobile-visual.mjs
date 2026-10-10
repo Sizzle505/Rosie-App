@@ -122,13 +122,21 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       const fit = await diploma.evaluate(article => {
         const frame = article.getBoundingClientRect();
         const signatures = article.querySelector(".diploma-signatures").getBoundingClientRect();
+        const date = article.querySelector(".diploma-date").getBoundingClientRect();
+        const dissertation = article.querySelector(".diploma-dissertation").getBoundingClientRect();
         return {
           innerBottom: Math.round(frame.bottom),
+          signatureTop: Math.round(signatures.top),
           signatureBottom: Math.round(signatures.bottom),
+          dateTop: Math.round(date.top),
+          dateBottom: Math.round(date.bottom),
+          dissertationBottom: Math.round(dissertation.bottom),
           inset: Math.round(frame.bottom - signatures.bottom)
         };
       });
       assert(fit.inset >= 25, "signatures too close to certificate border: " + JSON.stringify(fit));
+      assert(fit.signatureTop >= fit.dateBottom + 3, "signatures overlap certificate date: " + JSON.stringify(fit));
+      assert(fit.dateTop >= fit.dissertationBottom + 2, "dissertation overlaps certificate date: " + JSON.stringify(fit));
       await page.screenshot({ path: output + "/" + title + "-diploma.png", fullPage: true });
       await page.getByRole("button", { name: /View diploma at full size/i }).click();
       assert(await page.locator("dialog.barkbridge-zoom-dialog").evaluate(dialog => dialog.open), "enlargement dialog not open");
