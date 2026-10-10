@@ -754,7 +754,7 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
           <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
           <figure className="barkbridge-cheese-reward" aria-label="Celebratory gourmet cheese platter">
             <span className="barkbridge-cheese-halo" aria-hidden="true" />
-            <img src="/barkbridge/diploma/gourmet-cheese-reward.png" alt="A golden platter of gourmet cheeses, fruit and honey" loading="eager" decoding="async" />
+            <img src="/barkbridge/diploma/gourmet-cheese-reward.png?v=ceremony-platter-v2" alt="A golden platter of gourmet cheeses, fruit and honey" loading="eager" decoding="async" />
             <span className="barkbridge-cheese-sparkles" aria-hidden="true"><i /><i /><i /><i /></span>
           </figure>
         </div>

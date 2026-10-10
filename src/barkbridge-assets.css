@@ -165,23 +165,24 @@
 @media (max-width: 700px) {
   .barkbridge-graduation .graduation-stage { gap: 4px; }
 
-  /* The platter is a compact visual bridge, not a second full-height panel. */
+  /* Preserve the platter’s native 3:1 canvas on phones. Its transparent edges
+     belong inside that canvas; constraining its height cuts the cheeses away. */
   .barkbridge-graduation .barkbridge-cheese-reward {
-    width: 84%;
-    height: 104px;
-    aspect-ratio: auto;
-    margin: -8px auto -6px;
+    width: 92%;
+    height: auto;
+    aspect-ratio: 3 / 1;
+    margin: -4px auto -12px;
     overflow: visible;
   }
 
   .barkbridge-graduation .barkbridge-cheese-reward > img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    position: relative;
+    left: auto;
+    top: auto;
     width: 100%;
     height: auto;
     max-width: none;
-    transform: translate(-50%, -50%);
+    transform: none;
   }
 
   .barkbridge-graduation .barkbridge-cheese-halo,
