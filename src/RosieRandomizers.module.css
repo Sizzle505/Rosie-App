@@ -684,15 +684,18 @@
   .houseRule { max-width: 230px; margin-top: 12px; padding-top: 8px; font-size: 6px; line-height: 1.5; letter-spacing: .1em; }
 .hostPortrait::before { inset: 31px 17px 18px; }
 .ivoryRow { grid-template-columns: 1fr; gap: 9px; margin-top: 9px; }
-  .ivoryCard { min-height: 420px; padding: 18px 17px 20px; border-radius: 19px; }
-  .ivoryCard h2 { font-size: 22px; }
-  .coinScene, .diceScene { min-height: 225px; }
-  .coin { width: 178px; height: 178px; }
-  .coinShadow { width: 158px; bottom: 24px; }
-  .dieRig, .dieBody { width: 186px; height: 186px; }
-  .decorativeDie { width: 92px; height: 92px; }
+  .ivoryCard { min-height: 0; padding: 14px 16px 17px; border-radius: 19px; }
+  .ivoryCard h2 { margin-top: 6px; font-size: 22px; }
+  .coinScene, .diceScene { min-height: 0; flex: 0 0 auto; height: clamp(166px, 48vw, 200px); }
+  .coin { width: clamp(145px, 43vw, 175px); height: clamp(145px, 43vw, 175px); }
+  .coinShadow { width: 148px; bottom: 11px; }
+  .dieRig, .dieBody { width: clamp(155px, 45vw, 180px); height: clamp(155px, 45vw, 180px); }
+  .decorativeDie { width: clamp(72px, 21vw, 82px); height: clamp(72px, 21vw, 82px); }
   .decorativeDieLeft { left: 14%; }
   .decorativeDieRight { left: 86%; }
+  .readout { min-height: 0; margin: 0 0 9px; gap: 0; }
+  .readout span { margin-top: 4px; }
+  .goldButton { min-height: 48px; padding: 14px 20px; }
   .wheelSalon { gap: 10px; margin-top: 9px; padding: 14px 9px; border-radius: 20px; }
   .wheelStage { padding: 9px 0 5px; }
   .wheelHeading h2 { font-size: 25px; }
