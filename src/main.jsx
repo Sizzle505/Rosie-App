@@ -101,56 +101,36 @@ const FORTUNES = Object.entries(RESPONSES).flatMap(([tone, values]) =>
 );
 
 const QUICK_QUESTIONS = [
-  "Should I buy the fancy cheese?",
-  "Should I cancel my plans and become a blanket burrito?",
-  "Would a tiny treat improve morale?",
-  "Should I send the text or stare nobly into the distance?",
-  "Is today a good day to wear the dramatic coat?",
-  "Would Rosie consider this a snack emergency?",
-  "Should I choose the option with better snacks?",
-  "Am I being mysterious or just avoiding my inbox?",
-  "Would a walk fix my entire personality?",
-  "Should I order fries for the table and mostly eat them myself?",
-  "Is one more little treat technically self-care?",
-  "Should I trust a plan conceived after 10 p.m.?",
-  "Would a ceremonial cheese plate improve negotiations?",
-  "Should I dramatically leave five minutes early?",
-  "Is the universe telling me to take a nap?",
-  "Would Rosie approve of this level of nonsense?",
-  "Should I take the scenic route if snacks are involved?",
-  "Is this person worthy of sharing my best cheese?",
-  "Should I pretend I didn't hear the vacuum?",
-  "Would a tiny adventure be good for morale?",
+  "Should I send the message, or let them wonder beautifully?",
+  "Would a tiny adventure be wise, or merely excellent?",
+  "Is this a real sign, or just the moon being dramatic?",
+  "Should I wear the impractical shoes in service of the vision?",
+  "Would this problem improve after a walk and a snack?",
+  "Should I say yes, then become mysteriously unavailable?",
+  "Is it brave to order dessert first?",
+  "Would Rosie call this intuition, or snack-based optimism?",
+  "Should I make a list, or simply look confident near one?",
+  "Is this a good idea, or just excellent lighting?",
+  "Should I trust the plan my 10 p.m. self invented?",
+  "Would a ceremonial cheese plate clarify the situation?",
+  "Should I accept the invitation if there is a dog there?",
+  "Is my eyebrow raised for a reason?",
+  "Would a nap count as a tactical reset?",
   "Should I make the responsible choice or the charming one?",
-  "Am I overthinking this, or is my eyebrow correctly raised?",
-  "Should I bring a snack just in case there is no snack?",
-  "Should I buy it because it has a tiny bow?",
-  "Is this meeting worth putting on real pants for?",
-  "Should I leave before everyone starts saying 'one more drink'?",
-  "Would adding champagne make this a plan?",
-  "Should I trust someone who dislikes dogs?",
-  "Is this a sign or just excellent lighting?",
-  "Should I send the risky text with impeccable punctuation?",
-  "Do I deserve a reward for answering two emails?",
-  "Should I spend the afternoon being unavailable and exquisite?",
-  "Would Rosie choose cozy or chaos?",
-  "Should I wear the impractical shoes if they complete the vision?",
-  "Should I make an entrance?",
-  "Would one more coffee make me wiser or merely faster?",
-  "Should I take the last cookie and deny everything?",
-  "Should I solve this now or delegate it to Future Me?",
-  "Is my first instinct brilliant or theatrically wrong?",
-  "Should I order dessert before anyone can object?",
-  "Would a nap count as strategic planning?",
-  "Should I buy flowers because Tuesday looked lonely?",
-  "Do I need a plan, or just suspiciously good confidence?",
-  "Should I say yes and let Future Me discover the details?",
-  "Would this decision be improved by wearing sunglasses?",
-  "Should I forgive them if they arrive with cheese?",
-  "Is it too early to declare victory and lie in the sun?",
-  "Should I pursue this squirrel of an idea?",
-  "Would Rosie classify this as elegant mischief?",
-  "Should I reward myself for showing tremendous restraint so far?"
+  "Do I need a plan, or a small cape?",
+  "Should I buy the flowers before Tuesday gets lonely?",
+  "Would one more coffee make me brilliant or alarmingly fast?",
+  "Is this person worthy of my best cheese?",
+  "Should I follow this squirrel of an idea?",
+  "Would Rosie consider this elegant mischief?",
+  "Should I leave before people say “one more drink”?",
+  "Would a tiny bow make this decision correct?",
+  "Should I solve this now, or appoint Future Me as minister?",
+  "Is today a good day for a glorious, unnecessary entrance?",
+  "Should I bring a snack in case destiny is poorly catered?",
+  "Would saying no be more powerful in a dramatic coat?",
+  "Should I choose cozy, chaos, or both?",
+  "Is the universe asking me to rest, or just reboot my router?"
 ]
 
 const OMENS = {
@@ -460,7 +440,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           </div>
 
           <div
-            className={`rosie-turn-backplate ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
             aria-hidden="true"
           />
 
@@ -2414,7 +2394,6 @@ function App() {
 
   function choosePrompt(prompt) {
     setQuestion(prompt);
-    inputRef.current?.focus();
   }
 
   return (
@@ -2481,7 +2460,7 @@ function App() {
                     maxLength={160}
                     autoComplete="off"
                     enterKeyHint="go"
-                    placeholder="Should I text them back?"
+                    placeholder="Bring Rosie your most delicious dilemma…"
                   />
                   <button
                     className={`mic-button ${listening ? "is-listening" : ""}`}
