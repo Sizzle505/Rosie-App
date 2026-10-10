@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "node scripts/generate-rosieverse-icons.mjs && vite build",
+    "preview": "vite preview",
+    "icons:generate": "node scripts/generate-rosieverse-icons.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.4",
