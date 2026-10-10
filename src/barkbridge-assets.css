@@ -3,7 +3,6 @@
 .barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
   background:
     url("/barkbridge/diploma/ornate_golden_canine_certificate_frame.png") center / 100% 100% no-repeat,
-    url("/barkbridge/diploma/ornate-frame.png") center / 100% 100% no-repeat,
     url("/barkbridge/diploma/parchment.png") center / 100% 100% no-repeat,
     #f4ddb0 !important;
   -webkit-print-color-adjust: exact;
@@ -105,6 +104,8 @@
 }
 
 /* Cheez Whiz ceremony - award art stays independent of editable diploma text. */
+/* The new illustrated frame includes its own center canine roundel. */
+.barkbridge-graduation .diploma-photo-crest { display: none !important; }
 .barkbridge-graduation {
   padding-bottom: calc(124px + env(safe-area-inset-bottom)) !important;
   overflow-x: clip;
