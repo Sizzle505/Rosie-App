@@ -4,6 +4,8 @@ import fs from "node:fs/promises";
 const BASE = "http://127.0.0.1:4173/#captain";
 const viewports = [
   ["small-iphone", 320, 568],
+  ["compact-iphone", 320, 650],
+  ["standard-iphone", 375, 667],
   ["modern-iphone", 390, 844],
   ["iphone-landscape", 844, 390],
   ["tablet-portrait", 768, 1024],
@@ -58,9 +60,86 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
           overflow: document.documentElement.scrollWidth > innerWidth + 2,
         };
       });
-      if (!atmosphere.outer || !atmosphere.scenicImage.includes("captain-sakura-course") || !atmosphere.animating
+      if (!atmosphere.outer || !atmosphere.scenicImage.includes("captain-levels/") || !atmosphere.animating
           || !atmosphere.wave || !atmosphere.glimmer || !atmosphere.foam || atmosphere.overflow) {
         throw new Error(`${engine}/${label}: cinematic margin or wave regression: ${JSON.stringify(atmosphere)}`);
+      }
+      const scene = await page.locator(".yacht-course").evaluate((el) => {
+        const src = el.querySelector(".captain-level-painting img")?.getAttribute("src");
+        return { id: el.dataset.captainLevel, passage: el.dataset.captainPassage, src };
+      });
+      const sceneNames = ["sunrise", "twilight", "moonlight", "golden", "tempest"];
+      if (!sceneNames.includes(scene.id) || scene.passage !== "1" || !scene.src?.startsWith("/captain-levels/")) {
+        throw new Error(`${engine}/${label}: randomized opening scene missing: ${JSON.stringify(scene)}`);
+      }
+      if (await page.locator(".captain-level-effects img").count() < 4) {
+        throw new Error(`${engine}/${label}: animated transparent layers missing`);
+      }
+      if (label === "modern-iphone") {
+        for (const path of [
+          "sunrise-across-torii-sea", "twilight-sakura-harbor", "moonlit-shrine-valley",
+          "golden-misty-isles", "tempest-gate", "wake-splash", "ocean-wave-frame",
+          "ocean-wave-wide", "sakura-petals", "ocean-mist", "rain-spray",
+          "lightning", "golden-reflections"
+        ]) {
+          const resp = await page.request.get(`http://127.0.0.1:4173/captain-levels/${path}.webp`);
+          if (!resp.ok() || !resp.headers()["content-type"]?.includes("image/")) {
+            throw new Error(`${engine}: missing optimized background/effect ${path}: ${resp.status()}`);
+          }
+        }
+      }
+      const ship = await page.locator(".captain-painted-sprite").evaluate((img) => {
+        const boat = img.closest(".captain-yacht");
+        const world = img.closest(".yacht-course");
+        const rect = boat?.getBoundingClientRect();
+        const courseRect = world?.getBoundingClientRect();
+        return {
+          complete: img.complete,
+          imageWidth: img.naturalWidth,
+          imageHeight: img.naturalHeight,
+          boatWidth: rect?.width,
+          boatHeight: rect?.height,
+          courseWidth: courseRect?.width,
+          courseHeight: courseRect?.height,
+          currentAnimation: getComputedStyle(img).animationName,
+        };
+      });
+      if (!ship.complete || ship.imageWidth < 320 || ship.imageHeight < 580
+          || ship.boatWidth < 90 || ship.boatWidth > ship.courseWidth * .6
+          || ship.boatHeight > ship.courseHeight * .9
+          || ship.currentAnimation === "none") {
+        throw new Error(`${engine}/${label}: painted Rosie ship not sized or rendered correctly: ${JSON.stringify(ship)}`);
+      }
+      // The captain is a transparency-extracted EXISTING Rosie portrait,
+      // not a newly synthesized Shiba or an SVG hue-key that loses navy trim.
+      const reference = await page.locator("img.captain-painted-rosie").evaluate((img) => ({
+        asset: img.getAttribute("src"),
+        complete: img.complete,
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight,
+        width: img.getBoundingClientRect().width,
+        animation: getComputedStyle(img).animationName,
+      }));
+      if (reference.asset !== "/captain-rosie-deck.webp"
+          || !reference.complete || reference.naturalWidth !== 207
+          || reference.naturalHeight !== 240
+          || reference.width < ship.boatWidth * .40
+          || reference.width > ship.boatWidth * .46
+          || reference.animation === "none") {
+        throw new Error(`${engine}/${label}: authentic Rosie portrait missing or displaced: ${JSON.stringify(reference)}`);
+      }
+      const actualReferenceResponse = await page.request.get("http://127.0.0.1:4173/captain-rosie-deck.webp");
+      if (!actualReferenceResponse.ok()) {
+        throw new Error(`${engine}/${label}: authentic Rosie artwork failed to load: ${actualReferenceResponse.status()}`);
+      }
+      const widthLimit = label === "modern-iphone" ? 105
+        : (label === "standard-iphone" ? 104 : label === "compact-iphone" ? 94 : null);
+      if (widthLimit !== null && ship.boatWidth > widthLimit) {
+        throw new Error(`${engine}/${label}: ship did not shrink by about ten percent (width=${ship.boatWidth})`);
+      }
+      if (await page.locator(".captain-cinematic-current i").count() !== 4
+          || await page.locator(".captain-cinematic-water-stars i").count() !== 6) {
+        throw new Error(`${engine}/${label}: living water highlight layers missing`);
       }
       const video = page.locator(".captain-cinematic-water");
       if (await video.count() !== 1) throw new Error(`${engine}/${label}: video layer missing`);
@@ -80,6 +159,9 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
         }));
         throw new Error(`${engine}/${label}: supported MP4 stalled before screenshot (${timeA}->${timeB}): ${JSON.stringify(diagnostics)}`);
       }
+      if (label === "modern-iphone") {
+        await page.screenshot({ path: `captain-test-artifacts/${engine}-modern-iphone-full.png`, fullPage: true });
+      }
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
       await page.waitForTimeout(2100);
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
@@ -87,6 +169,21 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       // a screenshot-induced media clock reset is not treated as a stall.
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
+      // Capture the vessel in PLAY, not behind the departure modal. The
+      // first-generation screenshots hid Rosie's face with the start panel.
+      if (["modern-iphone", "standard-iphone", "compact-iphone", "tablet-portrait", "desktop"].includes(label)) {
+        await page.getByRole("button", { name: "CAST OFF" }).click();
+        await page.waitForTimeout(750);
+        await page.locator(".yacht-course").screenshot({
+          path: `captain-test-artifacts/${engine}-${label}-gameplay.png`
+        });
+        if (label === "modern-iphone") {
+          await page.screenshot({
+            path: `captain-test-artifacts/${engine}-modern-iphone-gameplay-full.png`,
+            fullPage: true,
+          });
+        }
+      }
       if (errors.length) throw new Error(`${engine}/${label}: ${errors.join(", ")}`);
       await context.close();
     }
@@ -94,21 +191,33 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const reducedPage = await reduced.newPage();
     await reducedPage.goto(BASE);
     if (await reducedPage.locator(".captain-cinematic video").count() !== 0) throw new Error(`${engine}: reduced motion still renders moving video`);
+    await reducedPage.getByRole("button", { name: "CAST OFF" }).click();
+    if (await reducedPage.locator(".captain-lotus-gust").count()) throw new Error(`${engine}: reduced-motion blossom gust should not mount`);
+    const shipStill = await reducedPage.locator(".captain-painted-sprite").evaluate((node) => getComputedStyle(node).animationName === "none");
+    if (!shipStill) throw new Error(`${engine}: painted ship pitch ignores reduced motion`);
     const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
     if (!outerStill) throw new Error(`${engine}: cinematic margins ignored reduced motion`);
     await reduced.close();
-    console.log(`${engine}: six responsive layouts and reduced motion passed`);
+    console.log(`${engine}: eight responsive layouts and reduced motion passed`);
   } finally {
     await browser.close();
   }
 }
 
-// Full 45-second voyage with steering, score/cargo assertions and a restart.
+// Full 75-second voyage with steering, all five painted seas, lotus timing and restart.
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   await page.goto(BASE);
+  const scenesSeen = [];
+  await page.evaluate(() => {
+    window.__captainScenesSeen = new Set();
+    window.__captainScenesTrack = window.setInterval(() => {
+      const scene = document.querySelector(".yacht-course")?.dataset.captainLevel;
+      if (scene) window.__captainScenesSeen.add(scene);
+    }, 150);
+  });
   await page.getByRole("button", { name: "CAST OFF" }).click();
   await page.evaluate(() => {
     window.__captainPilot = window.setInterval(() => {
@@ -132,15 +241,53 @@ try {
       course.dispatchEvent(new PointerEvent("pointerup", { bubbles:true, clientX:x, clientY:y, pointerId:1 }));
     }, 140);
   });
-  await page.waitForTimeout(45900);
-  await page.evaluate(() => clearInterval(window.__captainPilot));
+  // Inspect the actual rendered 390x844 playfield on either side of passage two.
+  await page.waitForTimeout(14350);
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-before-crossfade.png" });
+  await page.waitForTimeout(1250);
+  const duringTransition = await page.locator(".yacht-course").evaluate((node) => ({
+    images: node.querySelectorAll(".captain-level-painting img").length,
+    effects: node.querySelectorAll(".captain-climate-layer").length,
+    passage: node.dataset.captainPassage
+  }));
+  if (duringTransition.passage !== "2" || duringTransition.images !== 2 || duringTransition.effects !== 2) {
+    throw new Error("Cinematic crossfade did not preserve paired backdrops: " + JSON.stringify(duringTransition));
+  }
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-during-crossfade.png" });
+  await page.waitForTimeout(2200);
+  const afterTransition = await page.locator(".yacht-course").evaluate((node) => ({
+    images: node.querySelectorAll(".captain-level-painting img").length,
+    effects: node.querySelectorAll(".captain-climate-layer").length,
+    passage: node.dataset.captainPassage
+  }));
+  if (afterTransition.passage !== "2" || afterTransition.images !== 1 || afterTransition.effects !== 1) {
+    throw new Error("Outgoing scenery was not released after transition: " + JSON.stringify(afterTransition));
+  }
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-after-crossfade.png" });
+  await page.waitForTimeout(17900);
+  const lotuses = await page.locator(".captain-lotus-gust img").count();
+  if (lotuses < 4 || lotuses > 6) throw new Error("35-second lotus breeze missing or oversized: " + lotuses);
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-35-second-lotus.png" });
+  await page.waitForTimeout(40200);
+  await page.evaluate(() => {
+    clearInterval(window.__captainPilot);
+    clearInterval(window.__captainScenesTrack);
+  });
+  const visited = await page.evaluate(() => [...window.__captainScenesSeen]);
+  if (visited.length !== 5 || new Set(visited).size !== 5) {
+    throw new Error(`Five Sea passage rotation failed: ${JSON.stringify(visited)}`);
+  }
+  console.log("Five unique scenery levels completed:", visited.join(" -> "));
   const time = await page.locator(".captain-hud > div:nth-child(2) strong").innerText();
   const score = Number(await page.locator(".captain-hud > div:first-child strong").innerText());
   const cargo = Number(await page.locator(".captain-hud > div:nth-child(4) strong").innerText());
-  if (time !== "0s") throw new Error(`45-second round ended prematurely (time: ${time})`);
+  if (time !== "0s") throw new Error(`75-second round ended prematurely (time: ${time})`);
   if (score < 0 || cargo < 0) throw new Error("Invalid gameplay counters");
   await page.getByRole("button", { name: "SAIL AGAIN" }).click();
   if (!(await page.locator(".yacht-course").evaluate((node) => node.classList.contains("is-underway")))) throw new Error("Restart failed");
+  const restartTimer = await page.locator(".captain-hud > div:nth-child(2) strong").innerText();
+  if (restartTimer !== "75s") throw new Error("Restart did not reset 75-second voyage: " + restartTimer);
+  if (await page.locator(".captain-lotus-gust img").count()) throw new Error("Lotus gust did not reset on new voyage");
   console.log(`full voyage and restart passed: score=${score}, cargo=${cargo}`);
   await context.close();
 } finally { await browser.close(); }

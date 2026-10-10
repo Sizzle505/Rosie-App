@@ -1,0 +1,144 @@
+/* Two composited paints only. The incoming painting covers the outgoing
+   smoothly; CSS, not React, handles every animation frame. */
+.captain-game-page .captain-level-painting {
+  animation: none !important;
+  background: #163b51;
+}
+.captain-game-page .captain-level-painting > img {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  object-fit: cover;
+  object-position: center 42%;
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1.015);
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+.captain-game-page .captain-level-painting > .captain-backdrop-incoming {
+  opacity: 0;
+  transform: translate3d(.35%, -.25%, 0) scale(1.035);
+  transition: opacity 2100ms ease-in-out, transform 2100ms ease-in-out;
+}
+.captain-game-page .captain-level-painting > .captain-backdrop-incoming.is-entered {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1.015);
+}
+.captain-game-page .captain-level-painting > .captain-backdrop-incoming:only-child {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1.015);
+}
+.page-captain .captain-outer-scene .captain-outer-painted-outgoing,
+.page-captain .captain-outer-scene .captain-outer-painted-incoming {
+  background-position: center 56%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  backface-visibility: hidden;
+}
+.page-captain .captain-outer-scene .captain-outer-painted-incoming {
+  opacity: 0;
+  transition: opacity 2100ms ease-in-out;
+}
+.page-captain .captain-outer-scene .captain-outer-painted-incoming.is-entered,
+.page-captain .captain-outer-scene .captain-outer-painted-incoming:only-of-type {
+  opacity: 1;
+}
+.page-captain .captain-outer-scene .captain-outer-painted-outgoing { opacity: 1; }
+.page-captain .captain-outer-scene[data-climate="storm"] .captain-outer-glow,
+.page-captain .captain-outer-scene[data-climate="moonlit"] .captain-outer-glow {
+  opacity: .11;
+}
+.page-captain .captain-outer-scene .captain-outer-glow { transition: opacity 2100ms ease-in-out; }
+.captain-game-page .captain-level-effects .captain-climate-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(.35%,0,0) scale(1.018);
+  transition: opacity 2100ms ease-in-out, transform 2100ms ease-in-out;
+}
+.captain-game-page .captain-level-effects .captain-climate-layer.is-entered {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+}
+.captain-game-page .captain-level-effects .captain-climate-layer:only-child {
+  opacity: 1;
+  transform: none;
+}
+.captain-game-page .captain-level-effects .captain-level-wave {
+  animation-timing-function: cubic-bezier(.45,.05,.6,.95);
+}
+.captain-game-page .captain-level-wave.wave-b { animation-duration: 8.2s; }
+.captain-game-page .captain-yacht .captain-painted-sprite,
+.captain-game-page .captain-yacht .captain-painted-rosie {
+  animation: captainVoyagePitch 5.6s ease-in-out infinite;
+}
+.captain-game-page .captain-yacht.yacht-boost .captain-painted-sprite,
+.captain-game-page .captain-yacht.yacht-boost .captain-painted-rosie {
+  animation-duration: 3.1s;
+}
+@keyframes captainVoyagePitch {
+  0%,100% { transform: translate3d(0,1px,0) rotate(-.65deg); }
+  27% { transform: translate3d(-1px,-2px,0) rotate(.55deg); }
+  54% { transform: translate3d(1px,3px,0) rotate(-.28deg); }
+  77% { transform: translate3d(0,-1px,0) rotate(.65deg); }
+}
+.captain-game-page .yacht-course .captain-cinematic-water {
+  /* Existing sunrise footage stays extremely faint in cooler scenes; the
+     approved painting carries the real scene color without costly video filters. */
+  filter: none !important;
+  opacity: .39;
+  transition: opacity 2100ms ease-in-out;
+}
+.captain-game-page .yacht-course[data-captain-climate="moonlit"] .captain-cinematic-water { opacity: .15; }
+.captain-game-page .yacht-course[data-captain-climate="storm"] .captain-cinematic-water { opacity: .24; }
+.captain-game-page .captain-lotus-gust {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none !important;
+  touch-action: none;
+  user-select: none;
+  contain: layout paint;
+}
+.captain-game-page .captain-lotus-gust img {
+  position: absolute;
+  left: -12%;
+  top: var(--lotus-y);
+  width: var(--lotus-size);
+  height: var(--lotus-size);
+  object-fit: contain;
+  pointer-events: none !important;
+  opacity: 0;
+  transform: translate3d(0,0,0) rotate(var(--lotus-tilt));
+  animation: captainLotusBreeze var(--lotus-time) cubic-bezier(.3,.01,.65,1)
+    var(--lotus-delay) 1 both;
+}
+@keyframes captainLotusBreeze {
+  0% { opacity: 0; transform: translate3d(-8%, 5px, 0) rotate(var(--lotus-tilt)) scale(.8); }
+  15% { opacity: .68; }
+  44% { transform: translate3d(52vw, -14px, 0) rotate(13deg) scale(.96); opacity: .76; }
+  76% { opacity: .52; }
+  100% { transform: translate3d(113vw, 21px, 0) rotate(63deg) scale(.72); opacity: 0; }
+}
+@media (max-width: 380px) {
+  .captain-game-page .captain-lotus-gust img { width: calc(var(--lotus-size) * .85); height: calc(var(--lotus-size) * .85); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .captain-game-page .captain-level-painting > img,
+  .captain-game-page .captain-level-effects .captain-climate-layer,
+  .page-captain .captain-outer-scene .captain-outer-painted-incoming {
+    transition: none !important;
+    transform: none !important;
+  }
+  .captain-game-page .captain-level-painting > .captain-backdrop-incoming,
+  .captain-game-page .captain-level-effects .captain-climate-layer.is-entered,
+  .page-captain .captain-outer-scene .captain-outer-painted-incoming { opacity: 1; }
+  .captain-game-page .captain-yacht .captain-painted-sprite,
+  .captain-game-page .captain-yacht .captain-painted-rosie { animation: none !important; }
+  .captain-game-page .yacht-course .captain-cinematic-water { transition: none !important; }
+  .captain-game-page .captain-lotus-gust { display: none !important; }
+}
