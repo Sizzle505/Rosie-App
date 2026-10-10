@@ -282,6 +282,7 @@ function RosieCardVaultWall() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [speed, setSpeed] = useState(defaultDriftSpeedForViewport);
   const [isBraked, setIsBraked] = useState(false);
+  const [mobileDriftExpanded, setMobileDriftExpanded] = useState(false);
   const [mobileZoom, setMobileZoom] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 720px)').matches);
   const [cardsPerRow, setCardsPerRow] = useState(defaultCardsPerRow);
   const zoomMin = mobileZoom ? 1 : 2;
@@ -550,7 +551,7 @@ function RosieCardVaultWall() {
 
   return <main className={styles.page}>
     <aside
-      className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''}`}
+      className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''} ${mobileDriftExpanded ? styles.driftControlExpanded : ''}`}
       aria-label="Ambient card drift speed and direction"
       onPointerDown={event => event.stopPropagation()}
       onTouchStart={event => event.stopPropagation()}
@@ -560,7 +561,7 @@ function RosieCardVaultWall() {
       <button type="button" className={`${styles.brakeButton} ${isBraked ? styles.brakeButtonActive : ''}`} aria-label={isBraked ? 'Resume ambient card drift' : 'Pause ambient card drift'} aria-pressed={isBraked} title={isBraked ? 'Release brake' : 'Brake drift'} onPointerDown={event => event.stopPropagation()} onClick={toggleBrake}><span aria-hidden="true">{isBraked ? '▶' : 'Ⅱ'}</span></button>
       <span className={styles.speedReadout}>{speedLabel}</span>
       <div className={styles.rangeShell}>
-        <input className={styles.speedRange} type="range" min="-3.25" max="3.25" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
+        <input className={styles.speedRange} id="rosie-vault-drift-slider" type="range" min="-3.25" max="3.25" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
           const nextSpeed = Number(event.target.value);
           setSpeed(nextSpeed);
           if (nextSpeed !== 0) setIsBraked(false);
@@ -568,6 +569,15 @@ function RosieCardVaultWall() {
           pauseUntil.current = performance.now();
         }} onPointerDown={event => event.stopPropagation()}/>
       </div>
+      <button
+        type="button"
+        className={styles.driftToggle}
+        aria-label={mobileDriftExpanded ? 'Collapse drift speed controls' : 'Expand drift speed controls'}
+        aria-expanded={mobileDriftExpanded}
+        aria-controls="rosie-vault-drift-slider"
+        onPointerDown={event => event.stopPropagation()}
+        onClick={event => { event.stopPropagation(); setMobileDriftExpanded(current => !current); }}
+      >{mobileDriftExpanded ? '×' : `${Math.abs(speed).toFixed(1)}×`}</button>
     </aside>
 
     <header className={styles.header}>
