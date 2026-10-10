@@ -1,0 +1,59 @@
+name: Import RosieVerse scenery from staged artwork
+on:
+  push:
+    branches:
+      - work/rosieverse-landing-cinematic-20261009
+    paths:
+      - .github/workflows/import-rosieverse-scenery.yml
+permissions:
+  contents: write
+jobs:
+  import-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Import optimized WebP layers and atmosphere component
+        env:
+          PACKAGE_URL: "https://uc8af722688c347c85ab04d50458.dl.dropboxusercontent.com/cd/0/get/DJsWY-s4-HgiXO8jz5eYlnog57Vy0RqaouCRewCjlAhdItfR3RO8Eh-JHAechnq04-YNMk34mv3vDzQD6euceHpbXeSWezvWMpSiDsgIoCGVu6ouN8b--ZisUWIqqf4rXobu_MN76XHKcv1LEu5Zgrfn6W0Lf3zZZxoOJWMTnD5WvA/file?c_luid=667ded1d"
+        run: |
+          python3 - <<'PY'
+          from urllib.request import urlopen, Request
+          from zipfile import ZipFile
+          from pathlib import Path
+          import os
+          req = Request(os.environ['PACKAGE_URL'],headers={'User-Agent':'RosieVerseAssetImport/1.0'})
+          with urlopen(req,timeout=180) as response:
+              payload = response.read()
+          Path('/tmp/rosieverse-scenery.zip').write_bytes(payload)
+          with ZipFile('/tmp/rosieverse-scenery.zip') as z:
+              selected = []
+              for name in z.namelist():
+                  if name in ('src/RosieVerseAtmosphere.jsx','src/RosieVerseAtmosphere.module.css'):
+                      selected.append(name)
+                  elif name.startswith('public/rosieverse/scenery/') and name.endswith('.webp') and name not in ('public/rosieverse/scenery/canopy.webp','public/rosieverse/scenery/petal-sheet.webp'):
+                      selected.append(name)
+              assert len(selected) == 23, f'Expected 21 scenery files plus 2 components, got {len(selected)}'
+              for name in selected:
+                  out = Path(name)
+                  out.parent.mkdir(parents=True,exist_ok=True)
+                  out.write_bytes(z.read(name))
+              print(f'Imported {len(selected)} files; {len(payload)} input bytes')
+          PY
+      - name: Validate production build
+        run: |
+          npm ci
+          npm run build
+          test -f dist/rosieverse/scenery/background-mobile.webp
+          test -f dist/rosieverse/scenery/canopy-left.webp
+          test -f dist/rosieverse/scenery/canopy-right.webp
+          test -f dist/rosieverse/scenery/stage.webp
+      - name: Commit imported scenery to landing branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/RosieVerseAtmosphere.jsx src/RosieVerseAtmosphere.module.css public/rosieverse/scenery
+          git diff --cached --check
+          git commit -m "Import optimized RosieVerse cinematic scenery, sakura canopy, and drifting petals"
+          git push origin HEAD:refs/heads/work/rosieverse-landing-cinematic-20261009
