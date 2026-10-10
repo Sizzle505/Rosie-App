@@ -20,11 +20,13 @@ export function useCaptainSceneryTransition(level, broadcast = false) {
       return undefined;
     }
     let cancelled = false;
+    let started = false;
     let frame1 = 0, frame2 = 0, cleanupTimer = 0;
     const image = new Image();
     image.decoding = "async";
     const begin = () => {
-      if (cancelled) return;
+      if (cancelled || started) return;
+      started = true;
       const outgoing = activeRef.current;
       activeRef.current = level;
       setScene({ current: level, previous: outgoing, entered: !outgoing });
