@@ -1,52 +1,53 @@
 import React from "react";
 import styles from "./RosieHome.module.css";
 
-/* The portraits are existing, authentic Rosie assets - never generated substitutes. */
 const worlds = [
-  { id:"fortune", title:"Madame Rosie", subtitle:"The Fortune Teller", invitation:"ASK THE ORACLE", image:"/rosie-mood-focused.webp", alt:"Rosie thoughtfully considering a fortune", symbol:"✧" },
-  { id:"cheese", title:"Barkbridge", subtitle:"The Cheese Academy", invitation:"TAKE THE EXAM", image:"/rosie-doctor-cheese.webp", alt:"Rosie as the distinguished cheese doctor", symbol:"✦" },
-  { id:"captain", title:"Captain Rosie", subtitle:"The Coastal Voyage", invitation:"TAKE THE HELM", image:"/captain-rosie.webp", alt:"The real Rosie dressed as captain", symbol:"⚓" },
-  { id:"vault", title:"The Card Vault", subtitle:"A Thousand Faces of Rosie", invitation:"OPEN THE VAULT", image:"/rosie-reaction-proud.webp", alt:"Rosie looking proud", symbol:"❖" },
-  { id:"randomizers", title:"Rosie's Randomizers", subtitle:"The Parlour of Chance", invitation:"TRY YOUR LUCK", image:"/rosie-reaction-amused.webp", alt:"Rosie looking amused", symbol:"✳" }
+  { id: "fortune", name: "Fortune Teller", art: "fortune.webp" },
+  { id: "cheese", name: "Cheese Board Exam", art: "cheese.webp" },
+  { id: "captain", name: "Captain Rosie", art: "captain.webp" },
+  { id: "vault", name: "Card Vault", art: "vault.webp" },
+  { id: "randomizers", name: "Randomizers", art: "randomizers.webp" }
 ];
 
+const petals = Array.from({ length: 16 }, (_, index) => index);
+const art = (filename) => `/rosieverse/${filename}`;
+
+/** RosieVerse art landing. Navigates through the existing app router; no new routing dependency. */
 export default function RosieHome({ onNavigate }) {
   return (
-    <main className={styles.home} aria-labelledby="rosie-house-title">
-      <div className={styles.cornerEtching} aria-hidden="true" />
-      <header className={styles.heading}>
-        <div className={styles.overline}><i/> EST. 28 APRIL 2016 <span>✦</span> HER VERY OWN LITTLE KINGDOM <i/></div>
-        <div className={styles.brandLine}>
-          <span className={styles.brandFlourish} aria-hidden="true">❧</span>
-          <h1 id="rosie-house-title"><span>The House</span><em>of</em><span>Rosie</span></h1>
-          <span className={styles.brandFlourish} aria-hidden="true">❧</span>
-        </div>
-        <p>Five delightful worlds. One very extraordinary Shiba.</p>
-        <div className={styles.underRule} aria-hidden="true"><i/><span>✦</span><i/></div>
+    <main className={styles.home} aria-label="RosieVerse - discover Rosie's five worlds">
+      <div className={styles.sceneWash} aria-hidden="true" />
+      <div className={styles.petalField} aria-hidden="true">
+        {petals.map((index) => <i key={index} style={{ "--petal-number": index }} />)}
+      </div>
+
+      <header className={styles.banner}>
+        <h1 className={styles.screenReaderOnly}>RosieVerse</h1>
+        <img src={art("title.webp")} alt="RosieVerse - Play, Explore, Discover - A Brighter Day with Rosie" fetchPriority="high" draggable="false" />
       </header>
-      <nav className={styles.worldGrid} aria-label="Choose a world of Rosie">
+
+      <section className={styles.hero} aria-label="Rosie standing in a Japanese sunset landscape">
+        <img src={art("hero.webp")}
+          alt="Rosie proudly overlooking cherry blossoms, a golden Japanese bay, lanterns, bridges and Mount Fuji"
+          fetchPriority="high" draggable="false" />
+        <div className={styles.waterGlow} aria-hidden="true" />
+        <div className={styles.heroShade} aria-hidden="true" />
+      </section>
+
+      <nav className={styles.worldGrid} aria-label="RosieVerse destinations">
         {worlds.map((world, index) => (
-          <button type="button" key={world.id}
-            className={`${styles.world} ${styles[world.id]}`}
+          <button
+            type="button"
+            key={world.id}
+            aria-label={`Open ${world.name}`}
+            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary}`}
             onClick={() => onNavigate(world.id)}
-            aria-label={`Visit ${world.title}: ${world.subtitle}`}>
-            <span className={styles.cardNumber}>THE HOUSE OF ROSIE <span>{String(index + 1).padStart(2,"0")} / 05</span></span>
-            <span className={styles.portraitStage}>
-              <span className={styles.rays} aria-hidden="true"/>
-              <span className={styles.portraitRing}>
-                <img src={world.image} alt={world.alt} loading="eager" draggable="false" />
-              </span>
-              <span className={styles.sparkle} aria-hidden="true">{world.symbol}</span>
-            </span>
-            <span className={styles.worldCopy}>
-              <strong>{world.title}</strong>
-              <span className={styles.subtitle}>{world.subtitle}</span>
-            </span>
-            <span className={styles.cardLink}>{world.invitation}<span aria-hidden="true">↗</span></span>
+          >
+            <img src={art(world.art)} alt="" draggable="false" loading="eager" />
+            <span className={styles.activeSheen} aria-hidden="true" />
           </button>
         ))}
       </nav>
-      <footer className={styles.footer}><span>✦</span> CURATED BY ROSIE · APPROVED BY ROSIE <span>✦</span></footer>
     </main>
   );
 }

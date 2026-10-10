@@ -1,0 +1,26 @@
+{
+  "note": "Binary image assets prepared and included in accompanying RosieVerse_Landing_Assembly.zip; awaiting import into this branch.",
+  "assets": [
+    {
+      "path": "public/rosieverse/hero.webp"
+    },
+    {
+      "path": "public/rosieverse/title.webp"
+    },
+    {
+      "path": "public/rosieverse/fortune.webp"
+    },
+    {
+      "path": "public/rosieverse/cheese.webp"
+    },
+    {
+      "path": "public/rosieverse/captain.webp"
+    },
+    {
+      "path": "public/rosieverse/vault.webp"
+    },
+    {
+      "path": "public/rosieverse/randomizers.webp"
+    }
+  ]
+}
