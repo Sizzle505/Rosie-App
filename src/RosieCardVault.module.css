@@ -724,8 +724,8 @@
 
 /* A single portrait viewport owns thumbnail geometry across every zoom step.
    Never stretch the artwork: source cards are 2:3, and cover is a proportional
-   fallback for future nonstandard dimensions. Paint containment on each tile
-   caused WebKit/Safari to intermittently omit image pixels during live scroll. */
+   fallback for future nonstandard dimensions. Avoid per-tile paint containment
+   so Safari can repaint decoded images during continuous scrolling. */
 .wall {
   grid-auto-rows: max-content;
   align-items: start;
