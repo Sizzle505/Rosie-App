@@ -78,6 +78,8 @@ export default function CaptainCinematicEnvironment({ underway, boost, streak, t
       <span className="captain-cinematic-sun-track" />
       <span className="captain-cinematic-wave-glints" />
       <span className="captain-cinematic-foam" />
+      <span className="captain-cinematic-current"><i /><i /><i /><i /></span>
+      <span className="captain-cinematic-water-stars"><i /><i /><i /><i /><i /><i /></span>
       <span className="captain-cinematic-light" />
       <span className="captain-cinematic-sail" />
       <span className="captain-cinematic-birds"><i /><i /><i /></span>

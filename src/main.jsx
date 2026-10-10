@@ -10,8 +10,11 @@ import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
 import "./captain-immersive.css";
+import "./captain-levels.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
+import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
+import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1276,75 +1279,30 @@ function RivieraCourseArt() {
 
 function CaptainYachtArt({ boost }) {
   return (
-    <div className="yacht-illustration" aria-label="Captain Rosie commanding the ROSIE I">
-      <div className="yacht-vector-shadow" aria-hidden="true" />
-      <div className="captain-at-helm" aria-hidden="true">
-        <CaptainRosieIllustration className="helm-rosie-art" />
-        <span className="captain-window-glint" />
+    <div className="yacht-illustration captain-painted-ship" aria-label="Rosie commanding her lantern-lit Japanese sailing ship">
+      <div className="captain-painted-shadow" aria-hidden="true" />
+      <div className="captain-painted-spray" aria-hidden="true">
+        <i /><i /><i /><i /><i /><i />
       </div>
-
-      <svg className="rosie-yacht-base" viewBox="0 0 320 210" aria-hidden="true">
-        <defs>
-          <linearGradient id="captainHullIvory" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#fffdf4" />
-            <stop offset=".56" stopColor="#f0dfc0" />
-            <stop offset="1" stopColor="#b89969" />
-          </linearGradient>
-          <linearGradient id="captainHullNavy" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#173f61" />
-            <stop offset=".48" stopColor="#0b2946" />
-            <stop offset="1" stopColor="#04172b" />
-          </linearGradient>
-          <linearGradient id="captainTeak" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#8f552e" />
-            <stop offset=".3" stopColor="#d7aa70" />
-            <stop offset=".57" stopColor="#f2d39f" />
-            <stop offset=".82" stopColor="#b8753d" />
-            <stop offset="1" stopColor="#744126" />
-          </linearGradient>
-          <linearGradient id="captainBrass" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#fff0ad" />
-            <stop offset=".34" stopColor="#e0b65b" />
-            <stop offset=".72" stopColor="#8f5d23" />
-            <stop offset="1" stopColor="#f1ce78" />
-          </linearGradient>
-        </defs>
-
-        <path d="M26 124c38-16 82-23 134-23s96 7 134 23l-29 58c-30 17-65 25-105 25s-75-8-105-25Z" fill="url(#captainHullIvory)" stroke="#956322" strokeWidth="3" />
-        <path d="M44 153c72 17 160 17 232 0l-14 30c-31 15-65 22-102 22-38 0-72-7-103-22Z" fill="url(#captainHullNavy)" />
-        <path d="M47 149c72 12 154 12 226 0" fill="none" stroke="url(#captainBrass)" strokeWidth="5" />
-        <path d="M68 116c52-16 113-18 184-5l14 12c-72 9-143 9-213 0Z" fill="url(#captainTeak)" stroke="#744426" strokeWidth="2.5" />
-        <path d="M92 108 110 58c5-14 15-22 31-25h39c16 3 26 11 31 25l18 50Z" fill="#f7efde" stroke="#b38136" strokeWidth="3" />
-        <path d="M102 102h116" stroke="#dfbd71" strokeWidth="3" />
-        <path d="M74 120c57-7 115-8 173-1" fill="none" stroke="#fffdf4" strokeWidth="2.5" opacity=".8" />
-
-        <path d="M257 88V31" stroke="#bd8d3c" strokeWidth="3" />
-        <path d="M259 34c18 2 34 7 49 16-13 8-30 11-49 11Z" fill="#12385a" stroke="#e0b65b" strokeWidth="2" />
-        <text x="274" y="52" fontSize="12" fontWeight="900" fill="#f7d98a">R</text>
-
-        <text x="160" y="190" textAnchor="middle" fontSize="12" fontWeight="900" letterSpacing="4" fill="#f3d47f">ROSIE I</text>
-        <g fill="#d7aa51">
-          <circle cx="151" cy="137" r="2.8" />
-          <circle cx="160" cy="133" r="2.8" />
-          <circle cx="169" cy="137" r="2.8" />
-          <path d="M152 147c0-5.5 3.6-9 8-9s8 3.5 8 9c0 3.8-3 5.8-8 5.8s-8-2-8-5.8Z" />
-        </g>
-      </svg>
-
-      <svg className="rosie-yacht-overlay" viewBox="0 0 320 210" aria-hidden="true">
-        <defs>
-          <linearGradient id="captainGlassOverlay" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#effcff" stopOpacity=".46" />
-            <stop offset=".45" stopColor="#95d8e7" stopOpacity=".13" />
-            <stop offset="1" stopColor="#0a5476" stopOpacity=".35" />
-          </linearGradient>
-        </defs>
-        <path d="M111 58h98l22 52H90Z" fill="url(#captainGlassOverlay)" stroke="#dbb25d" strokeWidth="3" />
-        <path d="M160 58v51M109 59 91 108m120-49 20 49" fill="none" stroke="#dbb25d" strokeWidth="2.5" opacity=".9" />
-        <path d="M117 67c20-8 35-10 44-10" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity=".23" />
-      </svg>
-
-      <span className="captain-scarf-tail" aria-hidden="true" />
+      <img
+        className="captain-painted-sprite"
+        src="/captain-rosie-ship.webp"
+        alt=""
+        draggable="false"
+        decoding="async"
+      />
+      {/* Actual Captain Rosie portrait, extracted from the existing artwork.
+          No generated substitute; the stern remains the original painting. */}
+      <img
+        className="captain-painted-rosie"
+        src="/captain-rosie-deck.webp"
+        alt=""
+        aria-hidden="true"
+        draggable="false"
+        decoding="async"
+      />
+      <span className="captain-painted-lantern captain-painted-lantern-port" aria-hidden="true" />
+      <span className="captain-painted-lantern captain-painted-lantern-starboard" aria-hidden="true" />
       <div className="yacht-wake-stack" aria-hidden="true"><i /><i /><i /></div>
       {boost && <div className="golden-wake" aria-hidden="true" />}
     </div>
@@ -1378,6 +1336,7 @@ function CaptainRosieGame({ soundOn }) {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(45);
+  const [levelOrder, setLevelOrder] = useState(shuffleCaptainLevelOrder);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
   const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
@@ -1412,6 +1371,12 @@ function CaptainRosieGame({ soundOn }) {
   const phaseKey = timeLeft > 30 ? "harbor" : timeLeft > 15 ? "riviera" : "sunset";
   const phase = CAPTAIN_PHASES[phaseKey];
   const elapsed = 45 - timeLeft;
+  const levelNumber = Math.min(CAPTAIN_LEVELS.length - 1, Math.floor(elapsed / (45 / CAPTAIN_LEVELS.length)));
+  const level = CAPTAIN_LEVELS[levelOrder[levelNumber]];
+  useEffect(() => {
+    document.documentElement.style.setProperty("--captain-active-level-art", `url("${level.background}")`);
+    return () => document.documentElement.style.removeProperty("--captain-active-level-art");
+  }, [level.background]);
   const routeProgress = Math.min(100, Math.round(elapsed / 45 * 100));
   const missionProgress = Math.min(100, Math.round(score / 6.5));
   const collectedTotal = catches.ball + catches.treat + catches.cheese;
@@ -1488,6 +1453,7 @@ function CaptainRosieGame({ soundOn }) {
 
   function startGame() {
     audioContext();
+    if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
     boostRef.current = false;
     streakRef.current = 0;
@@ -1509,7 +1475,7 @@ function CaptainRosieGame({ soundOn }) {
     setBoost(false);
     setCheeses(0);
     setEnded(false);
-    setPhaseNotice("GOLDEN HARBOR");
+    setPhaseNotice("CAST OFF");
     setMessage("Lines cast off. Tennis balls are 10, treats are 20, Golden Cheese is 40. Keep clear of the red buoys.");
     setRunning(true);
     window.setTimeout(() => setPhaseNotice(""), 1500);
@@ -1786,14 +1752,15 @@ function CaptainRosieGame({ soundOn }) {
 
         <div
           className={`yacht-course${running ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
+          data-captain-level={level.id}
+          data-captain-passage={levelNumber + 1}
           style={{ "--course-pace": boost ? "1.25s" : running ? "3.1s" : "8s" }}
           aria-label="Three-lane yacht course. Swipe, tap a lane, or use the controls below to steer."
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
         >
-          <picture className="captain-scene" aria-hidden="true">
-            <source media="(max-width: 720px) and (orientation: portrait)" srcSet="/captain-sakura-course-portrait.webp" />
-            <img src="/captain-sakura-course-wide.webp" alt="" draggable="false" decoding="async" fetchPriority="high" />
+          <picture key={level.id} className="captain-scene captain-level-painting" aria-hidden="true">
+            <img src={level.background} alt="" draggable="false" decoding="async" fetchPriority="high" />
           </picture>
           <CaptainCinematicEnvironment
             underway={running}
@@ -1804,6 +1771,7 @@ function CaptainRosieGame({ soundOn }) {
             eventPulse={eventPulse}
             eventKind={eventKind}
           />
+          <CaptainLevelScenery level={level} underway={running} boost={boost} />
           <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
           <div className="sun-glint" aria-hidden="true" />
           <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
@@ -1815,8 +1783,8 @@ function CaptainRosieGame({ soundOn }) {
           </div>
 
           <div className="captain-course-banner">
-            <span>{phase.eyebrow}</span>
-            <strong>{phase.name}</strong>
+            <span>PASSAGE {levelNumber + 1} OF {CAPTAIN_LEVELS.length}</span>
+            <strong>{level.name}</strong>
           </div>
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
