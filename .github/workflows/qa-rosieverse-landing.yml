@@ -40,6 +40,7 @@ jobs:
               page.on('pageerror',e=>errors.push(e.message));
               await page.goto('http://127.0.0.1:4173/#home',{waitUntil:'networkidle'});
               await page.locator('nav[aria-label="RosieVerse destinations"] button').first().waitFor();
+              await page.locator('.loading-screen').waitFor({state:'hidden',timeout:10000});
               await page.waitForTimeout(250);
               const v=await page.evaluate(()=>({
                 inner:[innerWidth,innerHeight],
