@@ -145,6 +145,21 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       // a screenshot-induced media clock reset is not treated as a stall.
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
+      // Capture the vessel in PLAY, not behind the departure modal. The
+      // first-generation screenshots hid Rosie's face with the start panel.
+      if (["modern-iphone", "standard-iphone", "compact-iphone", "tablet-portrait", "desktop"].includes(label)) {
+        await page.getByRole("button", { name: "CAST OFF" }).click();
+        await page.waitForTimeout(750);
+        await page.locator(".yacht-course").screenshot({
+          path: `captain-test-artifacts/${engine}-${label}-gameplay.png`
+        });
+        if (label === "modern-iphone") {
+          await page.screenshot({
+            path: `captain-test-artifacts/${engine}-modern-iphone-gameplay-full.png`,
+            fullPage: true,
+          });
+        }
+      }
       if (errors.length) throw new Error(`${engine}/${label}: ${errors.join(", ")}`);
       await context.close();
     }
