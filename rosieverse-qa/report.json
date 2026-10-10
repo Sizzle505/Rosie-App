@@ -1,0 +1,526 @@
+{
+  "ref": "5caa10041e8c2d7b7b3d632847843bed0e17e452",
+  "tests": [
+    {
+      "engine": "chromium",
+      "viewport": [
+        390,
+        844
+      ],
+      "width": 390,
+      "height": 844,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "viewport": [
+        375,
+        667
+      ],
+      "width": 375,
+      "height": 667,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "viewport": [
+        320,
+        650
+      ],
+      "width": 320,
+      "height": 650,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "viewport": [
+        768,
+        1024
+      ],
+      "width": 768,
+      "height": 1024,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "viewport": [
+        1440,
+        900
+      ],
+      "width": 1440,
+      "height": 900,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "viewport": [
+        390,
+        844
+      ],
+      "width": 390,
+      "height": 844,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "viewport": [
+        375,
+        667
+      ],
+      "width": 375,
+      "height": 667,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "viewport": [
+        320,
+        650
+      ],
+      "width": 320,
+      "height": 650,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "viewport": [
+        768,
+        1024
+      ],
+      "width": 768,
+      "height": 1024,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "viewport": [
+        1440,
+        900
+      ],
+      "width": 1440,
+      "height": 900,
+      "buttons": 5,
+      "images": [
+        {
+          "src": "/rosieverse/buttons/fortune.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/cheese.webp",
+          "natural": [
+            1448,
+            1086
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/captain.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/vault.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        },
+        {
+          "src": "/rosieverse/buttons/randomizers.webp",
+          "natural": [
+            1254,
+            1254
+          ],
+          "transparentTopLeft": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
