@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/render_captain_motion.py
       - scripts/verify_captain_browser.mjs
+      - src/CaptainCinematicEnvironment.jsx
+      - src/captain-motion.css
       - .github/workflows/captain-cinematic.yml
 
 permissions:
@@ -41,6 +43,15 @@ jobs:
             ffprobe -v error -show_entries format=duration,size -of default=nw=1 "$f"
             test "$(stat -c %s "$f")" -lt 12582912
           done
+      - name: Commit optimized motion assets to feature branch
+        run: |
+          git config user.name "Rosie Cinematic CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/captain-motion/
+          if ! git diff --cached --quiet; then
+            git commit -m "Render image-registered portrait and wide Captain motion assets [skip ci]"
+            git push origin HEAD:work/captain-living-cinematic-20261009
+          fi
       - name: Install and build app
         run: |
           npm ci
@@ -79,12 +90,3 @@ jobs:
           name: captain-cinematic-browser-frames
           path: captain-test-artifacts/
           if-no-files-found: ignore
-      - name: Commit optimized motion assets to feature branch
-        run: |
-          git config user.name "Rosie Cinematic CI"
-          git config user.email "actions@users.noreply.github.com"
-          git add public/captain-motion/
-          if ! git diff --cached --quiet; then
-            git commit -m "Render image-registered portrait and wide Captain motion assets [skip ci]"
-            git push origin HEAD:work/captain-living-cinematic-20261009
-          fi
