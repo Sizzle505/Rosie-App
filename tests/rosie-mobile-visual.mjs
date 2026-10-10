@@ -75,6 +75,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       }
 
       await page.goto(base + "/#fortune", { waitUntil: "networkidle" });
+      await page.locator(".omen-grid strong").first().waitFor({ timeout: 7000 });
       const omens = (await page.locator(".omen-grid strong").allTextContents()).map(x => x.trim());
       assert.equal(omens.length, 3);
       for (const s of [omens[0], omens[2]]) assert(s.length > 0 && s[0] === s[0].toUpperCase(), "omen not sentence-cased: " + s);
@@ -100,6 +101,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         await page.waitForTimeout(480);
       }
       await page.locator(".barkbridge-diploma").first().waitFor({ timeout: 6000 });
+      await page.waitForTimeout(1000); // allow graduate entrance and certificate motion to settle before visual capture
       const diploma = page.locator(".graduation-stage .barkbridge-diploma").first();
       const certificateText = await diploma.innerText();
       for (const required of [
