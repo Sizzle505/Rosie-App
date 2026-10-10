@@ -681,12 +681,13 @@ function GraduateRosie() {
 function BarkbridgeDiploma({ recipient, awardDate }) {
   return (
     <article className="barkbridge-diploma" aria-label="University of Barkbridge Doctor of Cheese diploma">
+      <span className="barkbridge-gold-gleam" aria-hidden="true"><i /><i /><i /></span>
       <div className="diploma-inner-border">
         <span className="diploma-photo-crest" aria-label="Academic crest featuring the Shiba Inu" role="img" />
         <h1>UNIVERSITY OF BARKBRIDGE</h1>
         <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
         <p className="diploma-intro">Upon recommendation of the Faculty hereby confers upon</p>
-        <strong className="diploma-exam-name" style={{ "--recipient-font": `clamp(16px, ${Math.min(8.7, 190 / Math.max(20, recipient.length))}cqw, 68px)` }}>{recipient || "The Graduate"}</strong>
+        <strong className="diploma-exam-name" style={{ "--recipient-font": `clamp(16px, ${Math.min(8.7, 170 / Math.max(12, recipient.length))}cqw, 68px)` }}>{recipient || "Cheez Whiz"}</strong>
         <p className="diploma-confers">the degree of</p>
         <h3>Doctor of Cheese (Che.D.)</h3>
         <p className="diploma-dissertation">“Fetch the Fromage: A Shiba Inu’s Paw-Validated Flavor Index for Mapping the Terroirs of Regional Curds”</p>
@@ -720,13 +721,19 @@ function BarkbridgeDiploma({ recipient, awardDate }) {
 function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   const diplomaDialogRef = useRef(null);
   const [graduateName, setGraduateName] = useState(() => {
-    try { return localStorage.getItem("barkbridgeGraduateName") || ""; } catch { return ""; }
+    try {
+      const saved = localStorage.getItem("barkbridgeGraduateName");
+      const next = !saved?.trim() || saved.trim().toLowerCase() === "the graduate"
+        ? "Cheez Whiz" : saved;
+      if (next !== saved) localStorage.setItem("barkbridgeGraduateName", next);
+      return next;
+    } catch { return "Cheez Whiz"; }
   });
   const awardDate = useMemo(
     () => new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }),
     []
   );
-  const recipient = graduateName.trim() || "The Graduate";
+  const recipient = graduateName.trim() || "Cheez Whiz";
   function personalizeDiploma(value) {
     const next = value.slice(0, 42);
     setGraduateName(next);
@@ -755,7 +762,14 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
     <section className="barkbridge-graduation" aria-live="polite">
       <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
       <div className="graduation-stage">
-        <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
+        <div className="barkbridge-certificate-and-reward">
+          <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
+          <figure className="barkbridge-cheese-reward" aria-label="Celebratory gourmet cheese platter">
+            <span className="barkbridge-cheese-halo" aria-hidden="true" />
+            <img src="/barkbridge/diploma/gourmet-cheese-reward.png" alt="A golden platter of gourmet cheeses, fruit and honey" loading="eager" decoding="async" />
+            <span className="barkbridge-cheese-sparkles" aria-hidden="true"><i /><i /><i /><i /></span>
+          </figure>
+        </div>
         <GraduateRosie />
       </div>
 

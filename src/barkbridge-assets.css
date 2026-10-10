@@ -2,7 +2,7 @@
 .barkbridge-graduation .graduation-stage .barkbridge-diploma,
 .barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
   background:
-    url("/barkbridge/diploma/ornate-frame.png") center / 100% 100% no-repeat,
+    url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat,
     url("/barkbridge/diploma/parchment.png") center / 100% 100% no-repeat,
     #f4ddb0 !important;
   -webkit-print-color-adjust: exact;
@@ -101,4 +101,66 @@
     bottom: 16.7%;
     width: 5.6%;
   }
+}
+
+/* Cinematic Cheez Whiz ceremony additions. The frame mask confines light to gold. */
+.barkbridge-graduation .barkbridge-certificate-and-reward {
+  width: 100%; max-width: 760px; min-width: 0; display: flex;
+  flex-direction: column; align-items: center; position: relative;
+}
+.barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam {
+  position: absolute; z-index: 6; inset: 0; display: block; pointer-events: none; overflow: hidden;
+  -webkit-mask: url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat;
+  mask: url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat;
+  background: linear-gradient(106deg, transparent 32%, rgba(255,250,202,.02) 41%, rgba(255,245,191,.78) 50%, rgba(241,179,77,.20) 57%, transparent 68%) 170% 0 / 125% 100% no-repeat;
+  animation: barkbridgeMetalSweep 7.4s ease-in-out infinite; will-change: background-position;
+}
+.barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam i {
+  position: absolute; width: 8%; aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255,255,234,.98) 0 4%, rgba(255,246,181,.88) 8%, rgba(255,199,74,.22) 23%, transparent 62%);
+  opacity: 0; animation: barkbridgeGoldPoint 7.4s ease-in-out infinite;
+}
+.barkbridge-graduation .barkbridge-gold-gleam i:nth-child(1) { left: 2%; top: 3%; animation-delay: .16s; }
+.barkbridge-graduation .barkbridge-gold-gleam i:nth-child(2) { right: 1%; top: 5%; animation-delay: .47s; }
+.barkbridge-graduation .barkbridge-gold-gleam i:nth-child(3) { right: 2%; bottom: 5%; animation-delay: .79s; }
+@keyframes barkbridgeMetalSweep {
+  0%, 5% { background-position: 170% 0; opacity: 0; } 8% { opacity: .9; }
+  26% { background-position: -150% 0; opacity: .85; } 28%, 100% { background-position: -150% 0; opacity: 0; }
+}
+@keyframes barkbridgeGoldPoint {
+  0%, 7%, 26%, 100% { opacity: 0; transform: scale(.4); }
+  13% { opacity: .95; transform: scale(1.12); } 18% { opacity: .15; transform: scale(.7); }
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-exam-name {
+  top: 37.4%; min-height: 10%; max-height: 13%; display: flex !important; align-items: center; justify-content: center;
+  white-space: normal !important; overflow-wrap: anywhere; line-height: 1.02 !important; text-wrap: balance;
+}
+.barkbridge-graduation .barkbridge-cheese-reward {
+  position: relative; isolation: isolate; width: min(100%, 730px); margin: -1.4% auto 0; aspect-ratio: 3 / 1;
+  display: grid; place-items: center; pointer-events: none; opacity: 0; transform: translateY(13px) scale(.95); filter: blur(3px);
+  animation: barkbridgeRewardReveal 1.5s .18s cubic-bezier(.18,.7,.2,1) forwards;
+}
+.barkbridge-graduation .barkbridge-cheese-reward > img { position: relative; z-index: 1; display: block; width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 15px 12px rgba(0,0,0,.28)); }
+.barkbridge-graduation .barkbridge-cheese-halo { position: absolute; z-index: 0; inset: 15% 14% 10%; border-radius: 50%; background: radial-gradient(ellipse, rgba(231,165,55,.35), rgba(244,198,100,.13) 36%, transparent 73%); animation: barkbridgeHaloDissolve 1.4s .3s both; }
+.barkbridge-graduation .barkbridge-cheese-sparkles { position: absolute; inset: 0; z-index: 2; }
+.barkbridge-graduation .barkbridge-cheese-sparkles > i { position: absolute; width: 6%; aspect-ratio: 1; background: radial-gradient(circle, #fff9d6 0 4%, #ffe29e 9%, transparent 54%); opacity: 0; animation: barkbridgeCheeseGlint .85s ease-out both; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(1) { left: 18%; top: 30%; animation-delay: 1s; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(2) { left: 46%; top: 8%; animation-delay: 1.25s; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(3) { right: 23%; top: 28%; animation-delay: 1.5s; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(4) { right: 9%; top: 42%; animation-delay: 1.7s; }
+@keyframes barkbridgeRewardReveal { 0% { opacity: 0; transform: translateY(13px) scale(.95); filter: blur(3px); } 45% { opacity: .8; filter: blur(.9px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+@keyframes barkbridgeHaloDissolve { 0% { opacity: 0; transform: scale(.8); } 44% { opacity: 1; } 100% { opacity: .25; transform: scale(1.13); } }
+@keyframes barkbridgeCheeseGlint { 0%, 100% { opacity: 0; transform: scale(.5); } 44% { opacity: .9; transform: scale(1.12); } }
+.barkbridge-graduation .barkbridge-replay { position: relative; z-index: 8; scroll-margin-block-end: calc(148px + env(safe-area-inset-bottom)); margin-bottom: calc(155px + env(safe-area-inset-bottom)) !important; min-height: 49px; }
+.barkbridge-graduation { overflow-x: clip; }
+@media (max-width: 900px) {
+  .barkbridge-graduation .graduation-stage { align-items: center; }
+  .barkbridge-graduation .barkbridge-certificate-and-reward { width: 100%; }
+  .barkbridge-graduation .barkbridge-cheese-reward { width: 97%; }
+  .barkbridge-graduation .graduate-rosie { position: relative !important; right: auto !important; bottom: auto !important; margin: -10px auto 0 !important; z-index: 4; }
+}
+@media (max-width: 700px) { .barkbridge-graduation .graduation-stage { gap: 4px; } .barkbridge-graduation .barkbridge-cheese-reward { margin-top: -2%; } .barkbridge-graduation .barkbridge-replay { margin-bottom: calc(165px + env(safe-area-inset-bottom)) !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam, .barkbridge-graduation .barkbridge-gold-gleam i, .barkbridge-graduation .barkbridge-cheese-sparkles > i, .barkbridge-graduation .barkbridge-cheese-halo { animation: none !important; opacity: 0 !important; }
+  .barkbridge-graduation .barkbridge-cheese-reward { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
 }
