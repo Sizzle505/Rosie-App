@@ -32,14 +32,6 @@ export default function CaptainCinematicEnvironment({ underway, boost, streak, t
     };
   }, [smallPortrait, reduceMotion]);
 
-  // State-driven playback changes only on voyage/boost transitions, never on
-  // animation frames or the 70 ms gameplay ticker.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || reduceMotion) return;
-    video.playbackRate = boost ? 1.38 : underway ? 1.07 : .92;
-  }, [boost, underway, smallPortrait, reduceMotion]);
-
   if (reduceMotion) return null;
   const composition = smallPortrait ? "portrait" : "wide";
   // Chromium systems without licensed H.264 decoding use the VP9 alternative.
