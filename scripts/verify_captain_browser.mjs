@@ -86,26 +86,27 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
           || ship.currentAnimation === "none") {
         throw new Error(`${engine}/${label}: painted Rosie ship not sized or rendered correctly: ${JSON.stringify(ship)}`);
       }
-      // The overlaid captain is the canonical Rosie portrait used elsewhere
-      // in the app, not a replacement/generated Shiba. Her silhouette and
-      // ship render independently, while all lane/collision logic is unchanged.
-      const reference = await page.locator(".captain-painted-rosie").evaluate((svg) => ({
-        asset: svg.querySelector("image")?.getAttribute("href"),
-        clip: !!svg.querySelector("clipPath"),
-        key: !!svg.querySelector("feColorMatrix"),
-        width: svg.getBoundingClientRect().width,
-        animation: getComputedStyle(svg).animationName,
+      // The captain is a transparency-extracted EXISTING Rosie portrait,
+      // not a newly synthesized Shiba or an SVG hue-key that loses navy trim.
+      const reference = await page.locator("img.captain-painted-rosie").evaluate((img) => ({
+        asset: img.getAttribute("src"),
+        complete: img.complete,
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight,
+        width: img.getBoundingClientRect().width,
+        animation: getComputedStyle(img).animationName,
       }));
-      if (reference.asset !== "/captain-rosie-illustrated.webp"
-          || !reference.clip || !reference.key
+      if (reference.asset !== "/captain-rosie-deck.webp"
+          || !reference.complete || reference.naturalWidth !== 208
+          || reference.naturalHeight !== 240
           || reference.width < ship.boatWidth * .40
           || reference.width > ship.boatWidth * .46
           || reference.animation === "none") {
-        throw new Error(`${engine}/${label}: canonical Rosie portrait missing or displaced: ${JSON.stringify(reference)}`);
+        throw new Error(`${engine}/${label}: authentic Rosie portrait missing or displaced: ${JSON.stringify(reference)}`);
       }
-      const actualReferenceResponse = await page.request.get("http://127.0.0.1:4173/captain-rosie-illustrated.webp");
+      const actualReferenceResponse = await page.request.get("http://127.0.0.1:4173/captain-rosie-deck.webp");
       if (!actualReferenceResponse.ok()) {
-        throw new Error(`${engine}/${label}: canonical Rosie artwork failed to load: ${actualReferenceResponse.status()}`);
+        throw new Error(`${engine}/${label}: authentic Rosie artwork failed to load: ${actualReferenceResponse.status()}`);
       }
       const widthLimit = label === "modern-iphone" ? 105
         : (label === "standard-iphone" ? 104 : label === "compact-iphone" ? 94 : null);
