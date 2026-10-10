@@ -216,7 +216,7 @@
 .captain-game-page .captain-yacht.lane-1,
 .captain-game-page .captain-yacht.lane-2,
 .captain-game-page.captain-boosting .captain-yacht {
-  width: clamp(112px, 29vw, 190px) !important;
+  width: clamp(101px, 26.1vw, 176px) !important;
   height: auto !important;
   aspect-ratio: 364 / 631;
   top: auto !important;
@@ -405,13 +405,13 @@
   .captain-game-page .captain-yacht,
   .captain-game-page .captain-yacht.lane-0,
   .captain-game-page .captain-yacht.lane-1,
-  .captain-game-page .captain-yacht.lane-2 { width: 102px !important; }
+  .captain-game-page .captain-yacht.lane-2 { width: 92px !important; }
 }
 @media (max-height: 500px) and (orientation: landscape) {
   .captain-game-page .captain-yacht,
   .captain-game-page .captain-yacht.lane-0,
   .captain-game-page .captain-yacht.lane-1,
-  .captain-game-page .captain-yacht.lane-2 { width: 94px !important; }
+  .captain-game-page .captain-yacht.lane-2 { width: 90px !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   .captain-game-page .captain-painted-sprite,
@@ -424,4 +424,90 @@
   }
   .captain-game-page .captain-painted-spray,
   .captain-game-page .captain-cinematic-water-stars { display: none !important; }
+}
+
+/* The actual Captain Rosie painted portrait is composited into the deck scene.
+ * Keep the two illustrations moving together; never enlarge the whole ship
+ * just to make Rosie's hat visible. All coordinates remain inside its sprite. */
+.captain-game-page .captain-painted-rosie {
+  position: absolute;
+  z-index: 6;
+  width: 43%;
+  aspect-ratio: 208 / 240;
+  height: auto;
+  left: 41%;
+  top: 51.5%;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+  transform-origin: center 85%;
+  animation: captainPaintedPitch 3.9s ease-in-out infinite;
+  filter: drop-shadow(0 1px 2px rgba(5, 21, 25, .22));
+}
+
+/* Split wake widens from the vessel rather than repeating bands across lanes. */
+.captain-game-page .captain-painted-spray::before,
+.captain-game-page .captain-painted-spray::after {
+  content: "";
+  position: absolute;
+  bottom: -10%;
+  width: 43%;
+  height: 21%;
+  border-bottom: 2px solid rgba(229, 248, 238, .48);
+  border-radius: 0 0 70% 60%;
+  opacity: 0;
+  transform-origin: center top;
+  animation: captainWakeFan 2.6s ease-out infinite;
+}
+.captain-game-page .captain-painted-spray::before {
+  left: 4%;
+  --wake-angle: -18deg;
+}
+.captain-game-page .captain-painted-spray::after {
+  right: 4%;
+  --wake-angle: 18deg;
+  animation-delay: -1.3s;
+}
+.captain-game-page .captain-yacht.yacht-boost .captain-painted-spray::before,
+.captain-game-page .captain-yacht.yacht-boost .captain-painted-spray::after {
+  border-bottom-width: 3px;
+  animation-duration: 1.25s;
+}
+.captain-game-page .captain-yacht.yacht-boost .captain-painted-spray i {
+  animation-duration: calc(var(--spray-time, 1.9s) * .67);
+}
+.captain-game-page .captain-yacht.yacht-boost .yacht-wake-stack {
+  opacity: .93;
+}
+@keyframes captainWakeFan {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(var(--wake-angle)) scale(.6, .75); }
+  26% { opacity: .6; }
+  100% { opacity: 0; transform: translate3d(0, 13px, 0) rotate(var(--wake-angle)) scale(1.34, 1.12); }
+}
+/* Warm highlights drift in loosely spaced bursts across moving video water. */
+.captain-game-page .captain-cinematic-sun-track::after {
+  content: "";
+  position: absolute;
+  inset: 12% 18% 5%;
+  background: radial-gradient(ellipse 29% 6% at 30% 65%, rgba(255, 232, 178, .42), transparent 95%),
+              radial-gradient(ellipse 24% 4% at 71% 35%, rgba(255, 240, 205, .35), transparent 95%);
+  opacity: 0;
+  animation: captainTravelingGold 11.7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes captainTravelingGold {
+  0%, 12%, 74%, 100% { transform: translate3d(-12%, 3px, 0); opacity: 0; }
+  29% { opacity: .64; }
+  50% { transform: translate3d(18%, -2px, 0); opacity: .42; }
+  64% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .captain-game-page .captain-painted-rosie,
+  .captain-game-page .captain-painted-spray::before,
+  .captain-game-page .captain-painted-spray::after,
+  .captain-game-page .captain-cinematic-sun-track::after {
+    animation: none !important;
+  }
+  .captain-game-page .captain-painted-spray::before,
+  .captain-game-page .captain-painted-spray::after { display: none !important; }
 }
