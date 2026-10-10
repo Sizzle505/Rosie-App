@@ -1,0 +1,27 @@
+name: Build transparent RosieVerse buttons once
+on:
+  push:
+    branches: [work/rosieverse-landing-cinematic-20261009]
+    paths: [.github/workflows/rosieverse-button-cutouts.yml]
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install image processing requirements
+        run: python3 -m pip install --quiet pillow numpy opencv-python-headless
+      - name: Extract floating ornamental frames from supplied artwork
+        run: python3 scripts/build_rosieverse_buttons.py
+      - name: Commit button cutouts to the feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/rosieverse/buttons
+          git diff --cached --check
+          git commit -m "Add polished transparent RosieVerse destination art"
+          git push origin HEAD:refs/heads/work/rosieverse-landing-cinematic-20261009
