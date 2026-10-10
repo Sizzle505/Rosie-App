@@ -1,0 +1,127 @@
+/* Scope: the RosieVerse landing page only. No changes to other app pages. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  border-radius: inherit;
+}
+.scenery {
+  position: absolute;
+  inset: -1%;
+  z-index: -1;
+  background: #1a1326 url('/rosieverse/scenery/background-mobile.webp') center 48% / cover no-repeat;
+  filter: saturate(.90) brightness(.72);
+}
+.colorMatte {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(7, 8, 24, .30) 0%, rgba(16, 9, 26, .15) 22%, rgba(10, 10, 26, .52) 67%, rgba(5, 8, 22, .42) 100%),
+    radial-gradient(ellipse 60% 28% at 50% 5%, rgba(233, 126, 122, .22), transparent);
+}
+.stage {
+  position: absolute;
+  inset: auto -4% -4% -4%;
+  height: 43%;
+  background: url('/rosieverse/scenery/stage.webp') center bottom / 100% 100% no-repeat;
+  opacity: .79;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 31%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent, #000 31%, #000 100%);
+}
+.ambientLight {
+  position: absolute;
+  inset: 25% -8% 20%;
+  z-index: 1;
+  background: url('/rosieverse/scenery/ambient.webp') center / cover no-repeat;
+  opacity: .13;
+  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(ellipse 75% 52% at 63% 58%, #000 5%, transparent 85%);
+  mask-image: radial-gradient(ellipse 75% 52% at 63% 58%, #000 5%, transparent 85%);
+  animation: reflectionDrift 15s ease-in-out infinite alternate;
+}
+.canopyLeft, .canopyRight {
+  position: absolute;
+  z-index: 2;
+  top: -1%;
+  width: min(61vw, 570px);
+  height: min(26dvh, 310px);
+  background-position: center top;
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 2px 6px rgba(23, 8, 19, .4));
+  will-change: transform;
+}
+.canopyLeft {
+  left: -5%;
+  transform-origin: 0 0;
+  background-image: url('/rosieverse/scenery/canopy-left.webp');
+  animation: canopyBreatheLeft 9.2s ease-in-out infinite alternate;
+}
+.canopyRight {
+  right: -5%;
+  transform-origin: 100% 0;
+  background-image: url('/rosieverse/scenery/canopy-right.webp');
+  animation: canopyBreatheRight 10.4s ease-in-out infinite alternate;
+}
+.petalField {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+}
+.windLayer { position: absolute; inset: 0; animation: intermittentGust 38s ease-in-out infinite; }
+.petal {
+  position: absolute;
+  top: -35px;
+  left: var(--left);
+  width: var(--size);
+  height: auto;
+  opacity: 0;
+  object-fit: contain;
+  will-change: transform, opacity;
+  animation: cinematicPetal var(--duration) linear var(--delay) infinite;
+  filter: drop-shadow(0 1px 2px rgba(52, 15, 35, .28));
+}
+@keyframes canopyBreatheLeft {
+  from { transform: rotate(-.45deg) translate3d(-2px, 0, 0); }
+  to { transform: rotate(1.1deg) translate3d(3px, 1px, 0); }
+}
+@keyframes canopyBreatheRight {
+  from { transform: rotate(.5deg) translate3d(1px, -1px, 0); }
+  to { transform: rotate(-1deg) translate3d(-3px, 2px, 0); }
+}
+@keyframes reflectionDrift {
+  from { transform: translate3d(-10px, 0, 0); opacity: .10; }
+  to { transform: translate3d(15px, 2px, 0); opacity: .17; }
+}
+@keyframes intermittentGust {
+  0%, 54%, 78%, 100% { transform: translate3d(0, 0, 0); }
+  61% { transform: translate3d(20px, 0, 0); }
+  68% { transform: translate3d(53px, 0, 0); }
+  74% { transform: translate3d(62px, 0, 0); }
+}
+@keyframes cinematicPetal {
+  0% { opacity: 0; transform: translate3d(-20px, -20px, 0) rotate(0deg); }
+  11% { opacity: .85; }
+  38% { transform: translate3d(22px, 38dvh, 0) rotate(130deg); }
+  70% { opacity: .70; transform: translate3d(var(--wind), 72dvh, 0) rotate(245deg); }
+  100% { opacity: 0; transform: translate3d(calc(var(--wind) + 64px), 112dvh, 0) rotate(390deg); }
+}
+@media (max-width: 600px) {
+  .canopyLeft, .canopyRight { width: 63vw; height: 21dvh; top: -1%; }
+  .stage { height: 45%; }
+  .scenery { background-position: center 49%; }
+}
+@media (min-width: 1100px) {
+  .scenery { background-size: cover; background-position: center 45%; }
+  .stage { height: 44%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambientLight, .canopyLeft, .canopyRight, .windLayer, .petal { animation: none !important; }
+  .petalField { display: none; }
+  .canopyLeft, .canopyRight { will-change: auto; }
+}

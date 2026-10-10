@@ -1,0 +1,48 @@
+{
+  "project": "RosieVerse landing page",
+  "status": "imported",
+  "branch": "work/rosieverse-landing-cinematic-20261009",
+  "source": "Generated artwork approved for RosieVerse assembly and transferred via temporary Dropbox staging",
+  "asset_count": 7,
+  "assets": [
+    {
+      "path": "public/rosieverse/hero.webp",
+      "bytes": 595262
+    },
+    {
+      "path": "public/rosieverse/title.webp",
+      "bytes": 418686
+    },
+    {
+      "path": "public/rosieverse/fortune.webp",
+      "bytes": 462836
+    },
+    {
+      "path": "public/rosieverse/cheese.webp",
+      "bytes": 362746
+    },
+    {
+      "path": "public/rosieverse/captain.webp",
+      "bytes": 474882
+    },
+    {
+      "path": "public/rosieverse/vault.webp",
+      "bytes": 474476
+    },
+    {
+      "path": "public/rosieverse/randomizers.webp",
+      "bytes": 452446
+    }
+  ],
+  "routes": {
+    "fortune": "#fortune",
+    "cheese": "#cheese",
+    "captain": "#captain",
+    "vault": "#vault",
+    "randomizers": "#randomizers"
+  },
+  "notes": [
+    "Artwork files committed to branch; temporary workflow removed automatically",
+    "Main production branch is not modified by this isolated preview"
+  ]
+}
