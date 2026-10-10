@@ -3961,3 +3961,32 @@
     scroll-margin-block: 12px;
   }
 }
+
+
+/* === FORTUNE TURN REPAIR ===
+   The portrait layer was a mirrored crop of a single, already-composed painting.
+   It could not turn Rosie without also covering the moonlit set and crystal ball.
+   Keep the painting intact and give the oracle a tiny, contained “considering” motion instead. */
+.rosie-turn-layer,
+.rosie-turn-backdrop,
+.turn-seam-haze,
+.crystal-ball-shield {
+  display: none !important;
+}
+
+.stage-turning .stage-art {
+  filter: saturate(1.05) contrast(1.02) brightness(.98) !important;
+  transform-origin: 57% 38% !important;
+  animation: rosieConsidersYourQuestion .88s cubic-bezier(.2,.78,.25,1) both !important;
+}
+
+@keyframes rosieConsidersYourQuestion {
+  0% { transform: scale(1) translate3d(0,0,0) rotate(0deg); }
+  34% { transform: scale(1.012) translate3d(-1px,-1px,0) rotate(-.18deg); }
+  63% { transform: scale(1.008) translate3d(.6px,-.4px,0) rotate(.08deg); }
+  100% { transform: scale(1) translate3d(0,0,0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-turning .stage-art { animation: none !important; }
+}
