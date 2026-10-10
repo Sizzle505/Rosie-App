@@ -5274,13 +5274,27 @@ body {
   .barkbridge-graduation .barkbridge-diploma {
     min-height: 0 !important;
     width: 100% !important;
-    aspect-ratio: 1.38 / 1;
+    aspect-ratio: 1.32 / 1;
     padding: 4px !important;
     border-width: 4px !important;
     transform: none !important;
   }
-  .barkbridge-graduation .diploma-inner-border { min-height: 0 !important; }
-  .barkbridge-graduation .diploma-signatures { width: 88%; }
+  .barkbridge-graduation .diploma-inner-border {
+    min-height: 0 !important;
+    padding-bottom: clamp(14px, 4cqw, 27px) !important;
+  }
+  .barkbridge-graduation .diploma-signatures {
+    width: 96% !important;
+    gap: 3px;
+  }
+  .barkbridge-graduation .diploma-signatures span {
+    font-size: clamp(6.5px, 1.58cqw, 12px) !important;
+    white-space: nowrap;
+  }
+  .barkbridge-graduation .diploma-signatures small {
+    font-size: clamp(6px, 1.12cqw, 9px) !important;
+    white-space: nowrap;
+  }
   .barkbridge-graduation .diploma-stats strong { font-size: 17px !important; }
   .barkbridge-graduation .diploma-stats span { font-size: 8px !important; }
   .barkbridge-graduation .diploma-aftercare { margin-top: 6px; }
@@ -5296,4 +5310,24 @@ body {
   .barkbridge-zoom-dialog .barkbridge-diploma h1 { font-size: 30px !important; }
   .barkbridge-zoom-dialog .barkbridge-diploma h2 { font-size: 14px !important; }
   .barkbridge-zoom-dialog .diploma-enlarge-button { display: none; }
+}
+
+/* Final legibility and zoom motion corrections after screenshot inspection. */
+.barkbridge-graduation .diploma-results-strip .diploma-stats strong {
+  color: #4b2c17 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+.barkbridge-graduation .diploma-results-strip .diploma-stats span {
+  color: #79532c !important;
+}
+.barkbridge-zoom-dialog .barkbridge-diploma {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+@media (max-width: 350px) {
+  .barkbridge-graduation .graduation-stage .barkbridge-diploma {
+    aspect-ratio: 1.22 / 1;
+  }
 }
