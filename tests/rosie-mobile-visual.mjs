@@ -115,7 +115,12 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       const performance = await page.locator(".diploma-results-strip").innerText();
       assert(performance.includes("MOVES") && performance.includes("TIME") && performance.includes("MATCH EFFICIENCY"));
       assert(performance.includes("8") && performance.includes("100%"), "expected perfect 8-move completion: " + performance);
-      assert(await page.locator(".graduate-rosie img").isVisible(), "Graduate Rosie missing");
+      const graduateImage = page.locator(".graduate-rosie img");
+      assert(await graduateImage.isVisible(), "Graduate Rosie missing");
+      await graduateImage.evaluate(async (img) => {
+        if (!img.complete || img.naturalWidth === 0) await img.decode();
+      });
+      assert(await graduateImage.evaluate(img => img.complete && img.naturalWidth > 0), "Graduate Rosie image did not load or decode");
       assert.equal(await page.locator(".barkbridge-confetti i").count(), 34, "confetti changed");
       const pageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       assert(pageWidth <= width + 3, "horizontal overflow: viewport " + width + " document " + pageWidth);
