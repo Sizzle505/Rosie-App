@@ -665,6 +665,9 @@ function GraduateRosie() {
       <img
         src="/rosie-barkbridge-graduate.webp"
         alt="Rosie celebrating in her graduation cap"
+        loading="eager"
+        decoding="sync"
+        fetchPriority="high"
       />
       <figcaption>DOCTOR ROSIE, Che.D.</figcaption>
       <span className="graduate-spark graduate-spark-one" aria-hidden="true">✦</span>
