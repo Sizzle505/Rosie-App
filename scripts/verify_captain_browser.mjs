@@ -60,9 +60,33 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
           overflow: document.documentElement.scrollWidth > innerWidth + 2,
         };
       });
-      if (!atmosphere.outer || !atmosphere.scenicImage.includes("captain-sakura-course") || !atmosphere.animating
+      if (!atmosphere.outer || !atmosphere.scenicImage.includes("captain-levels/") || !atmosphere.animating
           || !atmosphere.wave || !atmosphere.glimmer || !atmosphere.foam || atmosphere.overflow) {
         throw new Error(`${engine}/${label}: cinematic margin or wave regression: ${JSON.stringify(atmosphere)}`);
+      }
+      const scene = await page.locator(".yacht-course").evaluate((el) => {
+        const src = el.querySelector(".captain-level-painting img")?.getAttribute("src");
+        return { id: el.dataset.captainLevel, passage: el.dataset.captainPassage, src };
+      });
+      const sceneNames = ["sunrise", "twilight", "moonlight", "golden", "tempest"];
+      if (!sceneNames.includes(scene.id) || scene.passage !== "1" || !scene.src?.startsWith("/captain-levels/")) {
+        throw new Error(`${engine}/${label}: randomized opening scene missing: ${JSON.stringify(scene)}`);
+      }
+      if (await page.locator(".captain-level-effects img").count() < 4) {
+        throw new Error(`${engine}/${label}: animated transparent layers missing`);
+      }
+      if (label === "modern-iphone") {
+        for (const path of [
+          "sunrise-across-torii-sea", "twilight-sakura-harbor", "moonlit-shrine-valley",
+          "golden-misty-isles", "tempest-gate", "wake-splash", "ocean-wave-frame",
+          "ocean-wave-wide", "sakura-petals", "ocean-mist", "rain-spray",
+          "lightning", "golden-reflections"
+        ]) {
+          const resp = await page.request.get(`http://127.0.0.1:4173/captain-levels/${path}.webp`);
+          if (!resp.ok() || !resp.headers()["content-type"]?.includes("image/")) {
+            throw new Error(`${engine}: missing optimized background/effect ${path}: ${resp.status()}`);
+          }
+        }
       }
       const ship = await page.locator(".captain-painted-sprite").evaluate((img) => {
         const boat = img.closest(".captain-yacht");
@@ -172,7 +196,7 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
     if (!outerStill) throw new Error(`${engine}: cinematic margins ignored reduced motion`);
     await reduced.close();
-    console.log(`${engine}: six responsive layouts and reduced motion passed`);
+    console.log(`${engine}: eight responsive layouts and reduced motion passed`);
   } finally {
     await browser.close();
   }
@@ -184,6 +208,14 @@ try {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   await page.goto(BASE);
+  const scenesSeen = [];
+  await page.evaluate(() => {
+    window.__captainScenesSeen = new Set();
+    window.__captainScenesTrack = window.setInterval(() => {
+      const scene = document.querySelector(".yacht-course")?.dataset.captainLevel;
+      if (scene) window.__captainScenesSeen.add(scene);
+    }, 150);
+  });
   await page.getByRole("button", { name: "CAST OFF" }).click();
   await page.evaluate(() => {
     window.__captainPilot = window.setInterval(() => {
@@ -208,7 +240,15 @@ try {
     }, 140);
   });
   await page.waitForTimeout(45900);
-  await page.evaluate(() => clearInterval(window.__captainPilot));
+  await page.evaluate(() => {
+    clearInterval(window.__captainPilot);
+    clearInterval(window.__captainScenesTrack);
+  });
+  const visited = await page.evaluate(() => [...window.__captainScenesSeen]);
+  if (visited.length !== 5 || new Set(visited).size !== 5) {
+    throw new Error(`Five Sea passage rotation failed: ${JSON.stringify(visited)}`);
+  }
+  console.log("Five unique scenery levels completed:", visited.join(" -> "));
   const time = await page.locator(".captain-hud > div:nth-child(2) strong").innerText();
   const score = Number(await page.locator(".captain-hud > div:first-child strong").innerText());
   const cargo = Number(await page.locator(".captain-hud > div:nth-child(4) strong").innerText());
