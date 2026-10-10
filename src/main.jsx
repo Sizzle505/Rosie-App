@@ -9,6 +9,7 @@ import "./captain-refresh.css";
 import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
+import "./barkbridge-reference.css";
 import "./captain-immersive.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
@@ -680,7 +681,7 @@ function BarkbridgeDiploma() {
   return (
     <article className="barkbridge-diploma" aria-label="University of Barkbridge Doctor of Cheese diploma">
       <div className="diploma-inner-border">
-        <BarkbridgeSeal className="diploma-seal" />
+        <span className="diploma-photo-crest" aria-label="Academic crest featuring the Shiba Inu" role="img" />
         <h1>UNIVERSITY OF BARKBRIDGE</h1>
         <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
         <p className="diploma-intro">Upon recommendation of the Faculty hereby confers upon</p>
@@ -694,7 +695,17 @@ function BarkbridgeDiploma() {
             <span>Prof. Manchego P. Curdwell</span>
             <small>Dissertation Supervisor</small>
           </div>
-          <div className="diploma-wax-seal" aria-hidden="true"><b>R</b></div>
+          <div className="diploma-wax-seal" aria-hidden="true">
+            <svg viewBox="0 0 100 100" focusable="false" aria-hidden="true">
+              <circle cx="50" cy="50" r="37" fill="none" stroke="currentColor" strokeWidth="1.4" />
+              <circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" strokeWidth=".85" />
+              <ellipse cx="50" cy="61" rx="17" ry="13" transform="rotate(-6 50 61)" fill="currentColor" />
+              <ellipse cx="27" cy="39" rx="7" ry="10" transform="rotate(-20 27 39)" fill="currentColor" />
+              <ellipse cx="42" cy="29" rx="7" ry="10" transform="rotate(-6 42 29)" fill="currentColor" />
+              <ellipse cx="59" cy="29" rx="7" ry="10" transform="rotate(10 59 29)" fill="currentColor" />
+              <ellipse cx="74" cy="42" rx="7" ry="10" transform="rotate(20 74 42)" fill="currentColor" />
+            </svg>
+          </div>
           <div>
             <span>Dr. Brie de Bloom</span>
             <small>Dean</small>
