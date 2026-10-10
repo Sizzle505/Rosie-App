@@ -12,9 +12,13 @@ import "./responsive-polish.css";
 import "./barkbridge-reference.css";
 import "./captain-immersive.css";
 import "./captain-levels.css";
+import "./captain-cinematic-refinement.css";
+import "./barkbridge-assets.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
+import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
+import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
@@ -680,7 +684,7 @@ function GraduateRosie() {
   );
 }
 
-function BarkbridgeDiploma() {
+function BarkbridgeDiploma({ recipient, awardDate }) {
   return (
     <article className="barkbridge-diploma" aria-label="University of Barkbridge Doctor of Cheese diploma">
       <div className="diploma-inner-border">
@@ -688,11 +692,11 @@ function BarkbridgeDiploma() {
         <h1>UNIVERSITY OF BARKBRIDGE</h1>
         <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
         <p className="diploma-intro">Upon recommendation of the Faculty hereby confers upon</p>
-        <strong className="diploma-exam-name">Rosie the Shiba</strong>
+        <strong className="diploma-exam-name" style={{ "--recipient-font": `clamp(16px, ${Math.min(8.7, 190 / Math.max(20, recipient.length))}cqw, 68px)` }}>{recipient || "The Graduate"}</strong>
         <p className="diploma-confers">the degree of</p>
         <h3>Doctor of Cheese (Che.D.)</h3>
         <p className="diploma-dissertation">“Fetch the Fromage: A Shiba Inu’s Paw-Validated Flavor Index for Mapping the Terroirs of Regional Curds”</p>
-        <p className="diploma-date">May 2025</p>
+        <p className="diploma-date">{awardDate}</p>
         <div className="diploma-signatures">
           <div>
             <span>Prof. Manchego P. Curdwell</span>
@@ -721,6 +725,19 @@ function BarkbridgeDiploma() {
 
 function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   const diplomaDialogRef = useRef(null);
+  const [graduateName, setGraduateName] = useState(() => {
+    try { return localStorage.getItem("barkbridgeGraduateName") || ""; } catch { return ""; }
+  });
+  const awardDate = useMemo(
+    () => new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+    []
+  );
+  const recipient = graduateName.trim() || "The Graduate";
+  function personalizeDiploma(value) {
+    const next = value.slice(0, 42);
+    setGraduateName(next);
+    try { localStorage.setItem("barkbridgeGraduateName", next); } catch {}
+  }
   const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
   const confetti = Array.from({ length: 34 }, (_, index) => {
     const left = (index * 37 + 11) % 98;
@@ -744,11 +761,25 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
     <section className="barkbridge-graduation" aria-live="polite">
       <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
       <div className="graduation-stage">
-        <BarkbridgeDiploma />
+        <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
         <GraduateRosie />
       </div>
 
       <div className="diploma-aftercare">
+        <label className="diploma-recipient-editor">
+          <span>NAME ON DIPLOMA</span>
+          <input
+            className="diploma-recipient-input"
+            type="text"
+            autoComplete="name"
+            maxLength={42}
+            aria-label="Name on diploma"
+            placeholder="Enter the graduate's name"
+            value={graduateName}
+            onChange={(event) => personalizeDiploma(event.target.value)}
+          />
+          <small>Your name appears on both the diploma and its enlarged view.</small>
+        </label>
         <button type="button" className="diploma-enlarge-button" onClick={() => diplomaDialogRef.current?.showModal()}>
           <span aria-hidden="true">↗</span> View diploma at full size
         </button>
@@ -768,7 +799,7 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
           <button type="button" onClick={() => diplomaDialogRef.current?.close()}>Close ×</button>
         </div>
         <div className="barkbridge-zoom-scroll" tabIndex={0}>
-          <BarkbridgeDiploma />
+          <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
         </div>
       </dialog>
 
@@ -1100,10 +1131,10 @@ const CAPTAIN_PHASES = {
 };
 
 function captainRank(score) {
-  if (score >= 900) return { title: "Admiral of Treats", mark: "S", copy: "A voyage worthy of the House of Rosie." };
-  if (score >= 650) return { title: "Commodore", mark: "A", copy: "Impeccable yachtcraft. Rosie is visibly impressed." };
-  if (score >= 430) return { title: "First Officer", mark: "B", copy: "A highly respectable command performance." };
-  if (score >= 250) return { title: "Able Seadog", mark: "C", copy: "Solid seamanship. More treats would help." };
+  if (score >= 1500) return { title: "Admiral of Treats", mark: "S", copy: "A voyage worthy of the House of Rosie." };
+  if (score >= 1080) return { title: "Commodore", mark: "A", copy: "Impeccable yachtcraft. Rosie is visibly impressed." };
+  if (score >= 720) return { title: "First Officer", mark: "B", copy: "A highly respectable command performance." };
+  if (score >= 420) return { title: "Able Seadog", mark: "C", copy: "Solid seamanship. More treats would help." };
   return { title: "Junior Deckhand", mark: "D", copy: "Rosie has scheduled remedial yacht time." };
 }
 
@@ -1346,7 +1377,7 @@ function CaptainRosieGame({ soundOn }) {
   const [running, setRunning] = useState(false);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(45);
+  const [timeLeft, setTimeLeft] = useState(75);
   const [levelOrder, setLevelOrder] = useState(shuffleCaptainLevelOrder);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
@@ -1379,17 +1410,23 @@ function CaptainRosieGame({ soundOn }) {
   const audioRef = useRef(null);
   const lastPhaseRef = useRef("harbor");
 
-  const phaseKey = timeLeft > 30 ? "harbor" : timeLeft > 15 ? "riviera" : "sunset";
+  const phaseKey = timeLeft > 50 ? "harbor" : timeLeft > 25 ? "riviera" : "sunset";
   const phase = CAPTAIN_PHASES[phaseKey];
-  const elapsed = 45 - timeLeft;
-  const levelNumber = Math.min(CAPTAIN_LEVELS.length - 1, Math.floor(elapsed / (45 / CAPTAIN_LEVELS.length)));
+  const elapsed = 75 - timeLeft;
+  const levelNumber = Math.min(CAPTAIN_LEVELS.length - 1, Math.floor(elapsed / (75 / CAPTAIN_LEVELS.length)));
   const level = CAPTAIN_LEVELS[levelOrder[levelNumber]];
+  const scenery = useCaptainSceneryTransition(level, true);
+  // Fetch only the NEXT painting in advance; no mounting or accumulating five layers.
+  const nextLevel = CAPTAIN_LEVELS[levelOrder[levelNumber + 1]] || null;
   useEffect(() => {
-    document.documentElement.style.setProperty("--captain-active-level-art", `url("${level.background}")`);
-    return () => document.documentElement.style.removeProperty("--captain-active-level-art");
-  }, [level.background]);
-  const routeProgress = Math.min(100, Math.round(elapsed / 45 * 100));
-  const missionProgress = Math.min(100, Math.round(score / 6.5));
+    if (!nextLevel) return undefined;
+    const image = new Image();
+    image.decoding = "async";
+    image.src = nextLevel.background;
+    return () => { image.onload = null; };
+  }, [nextLevel?.background]);
+  const routeProgress = Math.min(100, Math.round(elapsed / 75 * 100));
+  const missionProgress = Math.min(100, Math.round(score / 15));
   const collectedTotal = catches.ball + catches.treat + catches.cheese;
   const rank = captainRank(score);
 
@@ -1478,7 +1515,7 @@ function CaptainRosieGame({ soundOn }) {
     setCatches({ ball: 0, treat: 0, cheese: 0 });
     setScore(0);
     setLives(3);
-    setTimeLeft(45);
+    setTimeLeft(75);
     setStreak(0);
     setBestStreak(0);
     setCombo(1);
@@ -1770,9 +1807,7 @@ function CaptainRosieGame({ soundOn }) {
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
         >
-          <picture key={level.id} className="captain-scene captain-level-painting" aria-hidden="true">
-            <img src={level.background} alt="" draggable="false" decoding="async" fetchPriority="high" />
-          </picture>
+          <CaptainScenicPainting scene={scenery} />
           <CaptainCinematicEnvironment
             underway={running}
             boost={boost}
@@ -1782,7 +1817,8 @@ function CaptainRosieGame({ soundOn }) {
             eventPulse={eventPulse}
             eventKind={eventKind}
           />
-          <CaptainLevelScenery level={level} underway={running} boost={boost} />
+          <CaptainLevelScenery scene={scenery} underway={running} boost={boost} />
+          <CaptainLotusGust underway={running} />
           <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
           <div className="sun-glint" aria-hidden="true" />
           <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
@@ -1845,7 +1881,7 @@ function CaptainRosieGame({ soundOn }) {
                   <strong>Take the Helm</strong>
                   <p>Swipe or tap across three lanes. Build streaks to raise your multiplier. Fill the brass gauge and unleash Full Steam for double points.</p>
                   <div className="start-mission">
-                    <span><b>650</b> Admiral target</span>
+                    <span><b>1500</b> Admiral target</span>
                     <span><b className="mini-cheese-count"><GoldenCheeseIcon compact /></b> Golden Cheese</span>
                     <span><b>3</b> Hull integrity</span>
                   </div>
