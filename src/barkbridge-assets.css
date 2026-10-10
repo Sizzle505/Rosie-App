@@ -1,0 +1,103 @@
+/* Barkbridge photographic asset layer. Five self-hosted original art assets. */
+.barkbridge-graduation .barkbridge-diploma {
+  background:
+    url("/barkbridge/diploma/ornate-frame.png") center / 100% 100% no-repeat,
+    url("/barkbridge/diploma/parchment.png") center / 100% 100% no-repeat,
+    #f4ddb0 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.barkbridge-graduation .diploma-photo-crest {
+  position: absolute;
+  top: 5.4%;
+  left: 44.35%;
+  width: 11.3%;
+  height: 14.8%;
+  background: url("/barkbridge/diploma/canine-crest.png") center / contain no-repeat;
+  filter: drop-shadow(0 1px 1px #58311077);
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal {
+  position: relative;
+  background: url("/barkbridge/diploma/wax-seal.png") center / contain no-repeat !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 3px 3px #4f170c55);
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal::after,
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal svg {
+  display: none !important;
+}
+.barkbridge-graduation .barkbridge-diploma::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  width: 6%;
+  height: 6%;
+  right: 14.5%;
+  bottom: 17.4%;
+  pointer-events: none;
+  background: url("/barkbridge/diploma/cheese-stamp.png") center / contain no-repeat;
+  opacity: .84;
+}
+.barkbridge-graduation .diploma-exam-name {
+  font-size: var(--recipient-font, clamp(22px, 8.7cqw, 68px)) !important;
+  overflow: visible;
+  white-space: nowrap;
+}
+.barkbridge-graduation .diploma-recipient-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: min(385px, 94%);
+  margin: 2px auto 14px;
+  padding: 13px 15px 10px;
+  border: 1px solid #d9ac6480;
+  border-radius: 12px;
+  background: linear-gradient(150deg, #321825, #1a1017);
+  color: #efd69d;
+  box-shadow: inset 0 1px #f9df8c14;
+}
+.barkbridge-graduation .diploma-recipient-editor > span {
+  font: 700 10px/1.2 Georgia, serif;
+  letter-spacing: .16em;
+  color: #f3d6a0;
+}
+.barkbridge-graduation .diploma-recipient-input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid #a97b38;
+  border-radius: 7px;
+  outline-offset: 3px;
+  background: #f8edda;
+  color: #3d2717;
+  text-align: center;
+  font: 500 17px/1.2 Georgia, serif;
+}
+.barkbridge-graduation .diploma-recipient-editor small {
+  text-align: center;
+  line-height: 1.35;
+  font: italic 10px/1.4 Georgia, serif;
+  color: #d8bd91;
+}
+.barkbridge-graduation .diploma-aftercare {
+  max-width: 760px;
+}
+.barkbridge-graduation .barkbridge-replay {
+  min-height: 49px;
+  margin-bottom: calc(112px + env(safe-area-inset-bottom)) !important;
+}
+@media (max-width: 700px) {
+  .barkbridge-graduation .diploma-recipient-editor {
+    margin: 5px auto 12px;
+    padding: 12px 10px;
+  }
+  .barkbridge-graduation .barkbridge-diploma::after {
+    right: 14.4%;
+    bottom: 16.7%;
+    width: 5.6%;
+  }
+}
