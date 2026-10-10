@@ -47,10 +47,10 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       const format = await video.evaluate((node) => node.canPlayType('video/mp4; codecs="avc1.42E01E"'));
       await page.waitForTimeout(1200);
       const timeA = await video.evaluate((node) => node.currentTime);
-      await page.screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
+      await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
       await page.waitForTimeout(2100);
       const timeB = await video.evaluate((node) => node.currentTime);
-      await page.screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
+      await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
       if (format && timeB <= timeA + .35) throw new Error(`${engine}/${label}: supported MP4 did not autoplay (${timeA}->${timeB})`);
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
