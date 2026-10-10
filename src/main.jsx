@@ -408,19 +408,12 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
+        <div ref={stageRef} className={`stage ${manifesting ? "stage-manifesting" : ""}`}>
           <img
             ref={stageArtRef}
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
-          />
-
-          <img
-            className={`stage-art stage-art-glance ${flipped ? "is-visible" : ""} ${consulting ? "stage-art-consulting" : ""}`}
-            src="/rosie-fortune-stage-glance.webp"
-            alt=""
-            aria-hidden="true"
           />
 
           <div className="stage-twinkles" aria-hidden="true">
@@ -2200,21 +2193,8 @@ function App() {
 
   function whistleForRosie() {
     void playWhistle();
-    setTurning(true);
     setFlipBurst((value) => value + 1);
-
-    window.clearTimeout(flipTimerRef.current);
-    window.clearTimeout(turnEndTimerRef.current);
-
-    // The visual swap happens only once the smoke is fully opaque.
-    flipTimerRef.current = window.setTimeout(() => {
-      setFlipped((value) => !value);
-      window.navigator.vibrate?.([8, 20, 8]);
-    }, 390);
-
-    turnEndTimerRef.current = window.setTimeout(() => {
-      setTurning(false);
-    }, 960);
+    window.navigator.vibrate?.([8, 20, 8]);
   }
 
   function toggleDictation() {
@@ -2387,8 +2367,8 @@ function App() {
                 <button
                   type="button"
                   className="fortune-whistle-button"
-                  aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
-                  aria-pressed={flipped}
+                  aria-label="Whistle for Rosie"
+                  aria-pressed={false}
                   title="Whistle for Rosie"
                   onClick={whistleForRosie}
                   disabled={turning}
