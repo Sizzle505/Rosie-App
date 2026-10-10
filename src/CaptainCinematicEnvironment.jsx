@@ -36,7 +36,7 @@ export default function CaptainCinematicEnvironment({ underway, boost, streak, t
   const composition = smallPortrait ? "portrait" : "wide";
   // Chromium systems without licensed H.264 decoding use the VP9 alternative.
   // All iOS browsers retain native MP4 playback through WebKit.
-  const isDesktopChromium = /(?:Chrome|Chromium|Edg|OPR)\\//.test(navigator.userAgent)
+  const isDesktopChromium = /(?:Chrome|Chromium|Edg|OPR)\//.test(navigator.userAgent)
     && !/(?:iPhone|iPad|iPod)/.test(navigator.userAgent);
   const motionFormat = isDesktopChromium ? "webm" : "mp4";
   const atmosphere = [
