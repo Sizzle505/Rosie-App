@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./RosieVerseAtmosphere.module.css";
 
 const BASE = "/rosieverse/scenery";
-const PETALS = Array.from({ length: 12 }, (_, index) => ({
+const PETALS = Array.from({ length: 16 }, (_, index) => ({
   index,
   src: `${BASE}/petals/petal-${String(1 + ((index * 5) % 16)).padStart(2, "0")}.webp`,
   style: {
@@ -26,6 +26,8 @@ export default function RosieVerseAtmosphere() {
         <div className={styles.scenery} />
         <div className={styles.colorMatte} />
         <div className={styles.stage} />
+        <div className={styles.shoreGlow} />
+        <div className={styles.waterReflections} />
         <div className={styles.ambientLight} />
         <div className={styles.canopyLeft} />
         <div className={styles.canopyRight} />
