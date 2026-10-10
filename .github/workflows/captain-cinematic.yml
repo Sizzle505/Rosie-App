@@ -11,6 +11,10 @@ on:
       - src/captain-immersive.css
       - src/CaptainCinematicEnvironment.jsx
       - src/captain-motion.css
+      - src/captain-levels.css
+      - src/CaptainLevelScenery.jsx
+      - src/captainLevels.js
+      - public/captain-levels/**
       - .github/workflows/captain-cinematic.yml
 
 concurrency:
