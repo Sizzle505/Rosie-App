@@ -95,6 +95,15 @@ def render(name, path, width, horizon, seconds, fps):
         process.stdin.close()
     if process.wait() != 0:
         raise RuntimeError(f"Video rendering failed for {name}")
+    # VP9 prevents Chromium/Playwright systems without licensed H.264 decoding
+    # from showing a static ocean while the video clock advances.
+    webm = ASSETS / f"captain-{name}-water.webm"
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(filename),
+         "-an", "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "28",
+         "-deadline", "good", "-cpu-used", "4", "-row-mt", "1", str(webm)],
+        check=True
+    )
     save_atmosphere(pixels, name, horizon)
     a = frame_at(pixels, x, y, horizon, 0)
     b = frame_at(pixels, x, y, horizon, .2)
@@ -102,7 +111,7 @@ def render(name, path, width, horizon, seconds, fps):
     channel_delta = np.mean(np.abs(a[region].astype(np.float32) - b[region].astype(np.float32)))
     if channel_delta < 3:
         raise RuntimeError(f"Water is insufficiently animated: {channel_delta:.2f}")
-    print(f"{name}: {w}x{h}, {seconds}s x {fps}fps, {filename.stat().st_size} bytes, delta {channel_delta:.2f}")
+    print(f"{name}: {w}x{h}, {seconds}s x {fps}fps, mp4={filename.stat().st_size} bytes, webm={webm.stat().st_size} bytes, delta={channel_delta:.2f}")
 
 
 def main():
