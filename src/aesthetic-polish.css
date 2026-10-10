@@ -128,3 +128,20 @@
     aspect-ratio: 1200 / 920 !important;
   }
 }
+
+/* The reward PNG is not reliably decoded by mobile Safari and reserves a large
+   transparent box under the diploma. Keep the iPhone ceremony compact until it
+   is replaced with a verified mobile-safe asset. */
+@media (max-width: 700px) {
+  .barkbridge-graduation .barkbridge-cheese-reward {
+    display: none !important;
+  }
+
+  .barkbridge-graduation .graduation-stage {
+    gap: 0 !important;
+  }
+
+  .barkbridge-graduation .graduate-rosie {
+    margin: -6px auto 0 !important;
+  }
+}
