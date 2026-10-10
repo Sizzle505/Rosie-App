@@ -6,12 +6,11 @@
   padding:max(9px,env(safe-area-inset-top)) clamp(8px,2vw,22px) max(20px,env(safe-area-inset-bottom));
   overflow:hidden; background:radial-gradient(ellipse 72% 33% at 50% 20%,#734552b8,transparent),linear-gradient(180deg,#221a31 0%,#181527 50%,#080d1b 92%);
 }
-.sceneWash {position:absolute;z-index:-2;pointer-events:none;inset:0;background:radial-gradient(ellipse 68% 46% at 50% 38%,#eb977d28,transparent 75%);animation:skyGlow 12s ease-in-out infinite alternate;}
 .banner {width:min(100%,750px);position:relative;z-index:4;flex:none;margin-inline:auto;filter:drop-shadow(0 8px 8px #080612a8);}
 .banner img {display:block;width:100%;height:auto;user-select:none;}
 .screenReaderOnly {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 .hero {
-  position:relative;isolation:isolate;flex:none;width:min(100%,1120px);height:clamp(315px,42dvh,570px);
+  position:relative;z-index:2;isolation:isolate;flex:none;width:min(100%,1120px);height:clamp(315px,42dvh,570px);
   overflow:hidden;border-radius:clamp(13px,2.1vw,25px);
   box-shadow:0 0 0 1px #edb46d7d,0 10px 32px #050816ad,inset 0 0 18px #000a;
 }
@@ -44,26 +43,9 @@
   background-size:240% 100%;opacity:0;transition:opacity .15s;
 }
 .world:hover .activeSheen,.world:focus-visible .activeSheen {opacity:.66;animation:cardSheen 1.2s ease-out;}
-.petalField {position:absolute;z-index:5;inset:0;pointer-events:none;overflow:hidden;}
-.petalField i {
-  position:absolute;top:-20px;left:calc(1% + var(--petal-number) * 5.9%);width:11px;height:7px;
-  border-radius:82% 3% 83% 12%;background:linear-gradient(135deg,#ffe5df,#ef9cb8 67%,#cf729e);
-  opacity:0;box-shadow:0 0 6px #fff7e35a;will-change:transform,opacity;
-  animation:driftingPetal calc(11s + var(--petal-number) * .34s) linear infinite;
-  animation-delay:calc(var(--petal-number) * -1.19s);
-}
-.petalField i:nth-child(3n) {width:7px;height:6px;filter:blur(.4px);}
-.petalField i:nth-child(5n) {width:14px;height:9px;}
 @keyframes skyGlow {from{opacity:.58}to{opacity:1}}
 @keyframes waterShift {from{transform:translateX(-5%)}to{transform:translateX(8%)}}
 @keyframes cardSheen {from{background-position:100% 0}to{background-position:-100% 0}}
-@keyframes driftingPetal {
-  0%{opacity:0;transform:translate3d(-18px,-15px,0) rotate(0deg)}
-  8%{opacity:.84}
-  40%{transform:translate3d(48px,42dvh,0) rotate(130deg)}
-  75%{opacity:.75}
-  100%{opacity:0;transform:translate3d(118px,113dvh,0) rotate(385deg)}
-}
 @media(min-width:850px) {
   .home{gap:16px;padding-block:18px 36px;}
   .hero{height:min(48dvh,560px);}
@@ -80,23 +62,10 @@
 @media(max-width:370px){.hero{height:305px;}.worldGrid{gap:3px;}}
 @media(max-height:670px) and (max-width:600px){.hero{height:300px;}}
 @media(prefers-reduced-motion:reduce) {
- .sceneWash,.waterGlow,.petalField i {animation:none;}
- .petalField i {display:none;}
- .world,.activeSheen {transition:none;}
+ .sceneWash,.waterGlow,  .world,.activeSheen {transition:none;}
 }
 
 /* Match the single-screen illustrated composition over viewport sizes. */
-.home::before {
-  content: "";
-  position: absolute;
-  z-index: -3;
-  inset: -24px;
-  pointer-events: none;
-  background: linear-gradient(180deg, #100e2278 0%, #0b102283 62%, #080e20e8 100%),
-    url("/rosieverse/hero.webp") center 44% / cover no-repeat;
-  opacity: .62;
-  filter: blur(18px) saturate(.85);
-}
 @media (min-width: 601px) {
   .home { gap: min(1.15dvh,12px); padding: min(2dvh,17px) 12px; }
   .banner { width: min(100%,580px,60dvh); }
