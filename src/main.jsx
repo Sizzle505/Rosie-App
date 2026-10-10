@@ -1259,32 +1259,16 @@ function CaptainYachtArt({ boost }) {
         draggable="false"
         decoding="async"
       />
-      {/* The actual established Captain Rosie portrait, not a newly invented Shiba.
-          Clip the dark studio background and seat her upper body behind the
-          painted stern details so her hat and face read at phone scale. */}
-      <svg
+      {/* Actual Captain Rosie portrait, extracted from the existing artwork.
+          No generated substitute; the stern remains the original painting. */}
+      <img
         className="captain-painted-rosie"
-        viewBox="0 0 208 240"
-        preserveAspectRatio="xMidYMid meet"
+        src="/captain-rosie-deck.webp"
+        alt=""
         aria-hidden="true"
-        focusable="false"
-      >
-        <defs>
-          <clipPath id="captain-rosie-reference-outline">
-            <path d="M81 17Q87 2 112 1Q137 0 148 18L159 39Q175 34 193 34L193 52Q191 83 179 111Q197 123 203 132Q210 143 194 150L181 158L173 175Q197 179 205 204L203 212L190 208L193 222L179 226L176 240L43 240Q32 233 29 219Q27 197 44 177Q35 163 34 143Q35 120 45 106Q39 83 42 49Q42 30 51 28Q63 29 77 46Z" />
-          </clipPath>
-          <filter id="captain-rosie-reference-blue-key" colorInterpolationFilters="sRGB">
-            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  7 0 -7 0 .9" />
-          </filter>
-        </defs>
-        <image
-          href="/captain-rosie-illustrated.webp"
-          x="0" y="0" width="208" height="240"
-          clipPath="url(#captain-rosie-reference-outline)"
-          filter="url(#captain-rosie-reference-blue-key)"
-          preserveAspectRatio="xMidYMid meet"
-        />
-      </svg>
+        draggable="false"
+        decoding="async"
+      />
       <span className="captain-painted-lantern captain-painted-lantern-port" aria-hidden="true" />
       <span className="captain-painted-lantern captain-painted-lantern-starboard" aria-hidden="true" />
       <div className="yacht-wake-stack" aria-hidden="true"><i /><i /><i /></div>
