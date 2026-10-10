@@ -13,13 +13,16 @@
   inset: -1%;
   z-index: -1;
   background: #1a1326 url('/rosieverse/scenery/background-mobile.webp') center 48% / cover no-repeat;
-  filter: saturate(.90) brightness(.72);
+  filter: saturate(1.06) brightness(.91);
+  transform: scale(1.038);
+  transform-origin: 50% 55%;
+  animation: scenicBreathing 34s ease-in-out infinite alternate;
 }
 .colorMatte {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(7, 8, 24, .30) 0%, rgba(16, 9, 26, .15) 22%, rgba(10, 10, 26, .52) 67%, rgba(5, 8, 22, .42) 100%),
+    linear-gradient(180deg, rgba(7, 8, 24, .22) 0%, rgba(16, 9, 26, .08) 22%, rgba(40, 19, 47, .16) 65%, rgba(30, 17, 43, .08) 100%),
     radial-gradient(ellipse 60% 28% at 50% 5%, rgba(233, 126, 122, .22), transparent);
 }
 .stage {
@@ -27,16 +30,16 @@
   inset: auto -4% -4% -4%;
   height: 43%;
   background: url('/rosieverse/scenery/stage.webp') center bottom / 100% 100% no-repeat;
-  opacity: .79;
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 31%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent, #000 31%, #000 100%);
+  opacity: .91;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 25%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent, #000 25%, #000 100%);
 }
 .ambientLight {
   position: absolute;
   inset: 25% -8% 20%;
   z-index: 1;
   background: url('/rosieverse/scenery/ambient.webp') center / cover no-repeat;
-  opacity: .13;
+  opacity: .18;
   mix-blend-mode: screen;
   -webkit-mask-image: radial-gradient(ellipse 75% 52% at 63% 58%, #000 5%, transparent 85%);
   mask-image: radial-gradient(ellipse 75% 52% at 63% 58%, #000 5%, transparent 85%);
@@ -86,6 +89,49 @@
   animation: cinematicPetal var(--duration) linear var(--delay) infinite;
   filter: drop-shadow(0 1px 2px rgba(52, 15, 35, .28));
 }
+/* Illuminated scenery remains visible in the small negative spaces between cards. */
+.shoreGlow {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  inset: 47% -12% -8%;
+  background:
+    radial-gradient(ellipse 53% 33% at 49% 52%, rgba(255, 183, 100, .33), transparent 82%),
+    radial-gradient(ellipse 35% 43% at 15% 58%, rgba(233, 107, 112, .20), transparent 92%),
+    radial-gradient(ellipse 40% 37% at 87% 72%, rgba(226, 133, 159, .24), transparent 85%);
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 100%);
+  animation: shoreGlowPulse 17s ease-in-out infinite alternate;
+}
+.waterReflections {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  inset: 56% -18% -4%;
+  background:
+    repeating-linear-gradient(178deg, transparent 0 16px, rgba(255, 225, 171, .27) 17px 18px, transparent 19px 34px),
+    repeating-linear-gradient(3deg, transparent 0 27px, rgba(255, 180, 130, .17) 28px 30px, transparent 32px 57px);
+  background-size: 105% 100%, 93% 100%;
+  mix-blend-mode: screen;
+  opacity: .37;
+  -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 63%, #000 5%, transparent 94%);
+  mask-image: radial-gradient(ellipse 65% 65% at 50% 63%, #000 5%, transparent 94%);
+  animation: waterCurrent 11s ease-in-out infinite alternate;
+}
+@keyframes scenicBreathing {
+  from { transform: scale(1.038) translate3d(-.25%, 0, 0); }
+  to { transform: scale(1.064) translate3d(.42%, -.3%, 0); }
+}
+@keyframes shoreGlowPulse {
+  from { opacity: .56; transform: translate3d(-1.5%, 0, 0); }
+  to { opacity: .91; transform: translate3d(1.5%, 0, 0); }
+}
+@keyframes waterCurrent {
+  from { opacity: .23; transform: translate3d(-3%, -1%, 0) scaleX(1.01); }
+  to { opacity: .46; transform: translate3d(3%, 1%, 0) scaleX(.99); }
+}
+
 @keyframes canopyBreatheLeft {
   from { transform: rotate(-.45deg) translate3d(-2px, 0, 0); }
   to { transform: rotate(1.1deg) translate3d(3px, 1px, 0); }
@@ -96,7 +142,7 @@
 }
 @keyframes reflectionDrift {
   from { transform: translate3d(-10px, 0, 0); opacity: .10; }
-  to { transform: translate3d(15px, 2px, 0); opacity: .17; }
+  to { transform: translate3d(15px, 2px, 0); opacity: .22; }
 }
 @keyframes intermittentGust {
   0%, 54%, 78%, 100% { transform: translate3d(0, 0, 0); }
@@ -121,7 +167,7 @@
   .stage { height: 44%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ambientLight, .canopyLeft, .canopyRight, .windLayer, .petal { animation: none !important; }
+  .scenery, .shoreGlow, .waterReflections, .ambientLight, .canopyLeft, .canopyRight, .windLayer, .petal { animation: none !important; }
   .petalField { display: none; }
   .canopyLeft, .canopyRight { will-change: auto; }
 }

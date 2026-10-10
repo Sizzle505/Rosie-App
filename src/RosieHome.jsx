@@ -38,6 +38,10 @@ export default function RosieHome({ onNavigate }) {
             key={world.id}
             aria-label={`Open ${world.name}`}
             className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary}`}
+            style={{
+              "--glint-delay": `${-index * 1.7}s`,
+              "--frame-mask": `url("${art(world.art)}")`
+            }}
             onClick={() => onNavigate(world.id)}
           >
             <img src={art(world.art)} alt="" draggable="false" loading="eager" />
