@@ -45,7 +45,7 @@
   opacity: .12;
 }
 
-@media (max-width: 720px), (orientation: portrait) {
+@media (max-width: 720px) and (orientation: portrait) {
   .captain-game-page .captain-scene img { object-position: center 39%; }
 }
 
