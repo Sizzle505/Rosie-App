@@ -7,8 +7,10 @@ import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
 import "./captain-refresh.css";
 import "./captain-scene.css";
+import "./captain-motion.css";
 import "./responsive-polish.css";
 import Captain2Game from "./captain2.jsx";
+import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
@@ -1762,6 +1764,15 @@ function CaptainRosieGame({ soundOn }) {
             <source media="(max-width: 720px) and (orientation: portrait)" srcSet="/captain-sakura-course-portrait.webp" />
             <img src="/captain-sakura-course-wide.webp" alt="" draggable="false" decoding="async" fetchPriority="high" />
           </picture>
+          <CaptainCinematicEnvironment
+            underway={running}
+            boost={boost}
+            streak={streak}
+            timeLeft={timeLeft}
+            ended={ended}
+            eventPulse={eventPulse}
+            eventKind={eventKind}
+          />
           <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
           <div className="sun-glint" aria-hidden="true" />
           <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
