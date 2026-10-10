@@ -1,0 +1,207 @@
+/*
+ * Captain Rosie immersive maritime surround and playfield highlights.
+ * Existing game logic, buttons, HUD and painted course image are unchanged.
+ * This stylesheet is imported last to keep all changes scoped to Captain.
+ */
+
+/* Carry the same coast beyond the illustrated game cabinet into empty margins. */
+.app-shell.page-captain {
+  position: relative;
+  isolation: isolate;
+  background: #152335;
+}
+.page-captain > .captain-outer-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  contain: paint;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.page-captain .captain-outer-paint {
+  position: absolute;
+  inset: -4%;
+  background: url("/captain-sakura-course-portrait.webp") center 56% / cover no-repeat;
+  filter: brightness(.78) saturate(.88);
+  transform: translate3d(0, 0, 0) scale(1.015);
+  animation: captainOuterLandscape 42s ease-in-out infinite alternate;
+}
+.page-captain .captain-outer-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 15, 29, .38) 0%, rgba(13, 21, 36, .44) 34%, rgba(12, 24, 41, .34) 67%, rgba(7, 16, 31, .48) 100%),
+    radial-gradient(ellipse 74% 38% at 46% -4%, rgba(255, 182, 103, .13), transparent);
+}
+.page-captain .captain-outer-glow {
+  position: absolute;
+  inset: 32% -22% 0;
+  opacity: .36;
+  background:
+    radial-gradient(ellipse 25% 37% at 66% 34%, rgba(255, 215, 136, .3), transparent 85%),
+    repeating-linear-gradient(175deg, transparent 0 37px, rgba(255, 226, 158, .075) 39px 40px, transparent 43px 86px);
+  -webkit-mask-image: radial-gradient(ellipse 65% 65% at 64% 57%, #000, transparent 86%);
+  mask-image: radial-gradient(ellipse 65% 65% at 64% 57%, #000, transparent 86%);
+  animation: captainOuterShimmer 16s ease-in-out infinite alternate;
+}
+.page-captain .captain-outer-petals {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.page-captain .captain-outer-petals i {
+  position: absolute;
+  top: var(--petal-top);
+  left: -35px;
+  width: var(--petal-size);
+  height: var(--petal-size);
+  background: url("/captain-motion/sakura-petal.svg") center / contain no-repeat;
+  opacity: 0;
+  animation: captainOuterPetal var(--petal-duration) linear var(--petal-delay) infinite;
+  will-change: transform, opacity;
+}
+.page-captain .captain-outer-petals i:nth-child(4n) {
+  background-image: url("/captain-motion/maple-leaf.svg");
+}
+.page-captain > .captain-game-page {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+.page-captain > .house-return { z-index: 12; }
+.page-captain > .bottom-nav { z-index: 90; }
+
+/* Underwater shimmer and wind across the painted course, not across the HUD. */
+.captain-game-page .captain-cinematic-sun-track {
+  position: absolute;
+  z-index: 2;
+  top: 48%;
+  left: 45%;
+  width: 53%;
+  height: 50%;
+  opacity: .44;
+  background:
+    radial-gradient(ellipse 22% 87% at 51% 12%, rgba(255, 241, 189, .24), transparent 84%),
+    repeating-linear-gradient(178deg,
+      transparent 0 17px,
+      rgba(255, 238, 175, .25) 19px 20px,
+      transparent 22px 45px);
+  -webkit-mask-image: radial-gradient(ellipse 42% 78% at 54% 43%, #000 9%, transparent 96%);
+  mask-image: radial-gradient(ellipse 42% 78% at 54% 43%, #000 9%, transparent 96%);
+  transform-origin: center top;
+  animation: captainSunTrack 9.5s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-cinematic-wave-glints {
+  position: absolute;
+  z-index: 2;
+  inset: 61% -10% -4%;
+  opacity: .30;
+  background:
+    repeating-linear-gradient(173deg,
+      transparent 0 34px,
+      rgba(255, 242, 202, .18) 36px 37px,
+      transparent 40px 69px);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 23%, #000 76%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 23%, #000 76%, transparent);
+  animation: captainSeaGlints 5.8s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-cinematic-foam {
+  position: absolute;
+  z-index: 2;
+  inset: 76% -15% -3%;
+  opacity: .22;
+  background:
+    repeating-linear-gradient(176deg,
+      rgba(226, 250, 246, 0) 0 22px,
+      rgba(234, 253, 245, .29) 24px 25px,
+      rgba(226, 250, 246, 0) 28px 57px);
+  animation: captainFoamCurrent 4.5s linear infinite;
+}
+.captain-game-page .captain-cinematic.is-sailing .captain-cinematic-wave-glints {
+  opacity: .48;
+  animation-duration: 3.9s;
+}
+.captain-game-page .captain-cinematic.is-sailing .captain-cinematic-foam {
+  opacity: .34;
+  animation-duration: 2.9s;
+}
+.captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-wave-glints {
+  opacity: .58;
+  animation-duration: 2.1s;
+}
+.captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-foam {
+  opacity: .46;
+  animation-duration: 1.6s;
+}
+
+/* Evenly stagger the blossoms instead of releasing the existing eight together. */
+.captain-game-page .captain-cinematic-petals i {
+  animation-duration: var(--captain-petal-duration, 28s);
+}
+.captain-game-page .captain-cinematic-petals i:nth-child(1) { --petal-delay: -3s; --captain-petal-duration: 25s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(2) { --petal-delay: -11s; --captain-petal-duration: 31s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(3) { --petal-delay: -19s; --captain-petal-duration: 27s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(4) { --petal-delay: -26s; --captain-petal-duration: 33s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(5) { --petal-delay: -7s; --captain-petal-duration: 29s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(6) { --petal-delay: -16s; --captain-petal-duration: 26s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(7) { --petal-delay: -23s; --captain-petal-duration: 30s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(8) { --petal-delay: -13s; --captain-petal-duration: 34s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(9) { --petal-top: 9%; --petal-size: 12px; --petal-delay: -21s; --captain-petal-duration: 26s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(10) { --petal-top: 41%; --petal-size: 16px; --petal-delay: -5s; --captain-petal-duration: 32s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(11) { --petal-top: 58%; --petal-size: 10px; --petal-delay: -29s; --captain-petal-duration: 28s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(12) { --petal-top: 21%; --petal-size: 13px; --petal-delay: -17s; --captain-petal-duration: 35s; }
+
+@keyframes captainOuterLandscape {
+  from { transform: translate3d(-1%, 0, 0) scale(1.015); }
+  to { transform: translate3d(1%, -1.4%, 0) scale(1.045); }
+}
+@keyframes captainOuterShimmer {
+  from { transform: translate3d(-1.5%, 0, 0); opacity: .24; }
+  to { transform: translate3d(2%, 1%, 0); opacity: .48; }
+}
+@keyframes captainOuterPetal {
+  0%, 3% { transform: translate3d(-30px, -24px, 0) rotate(-18deg); opacity: 0; }
+  7% { opacity: .72; }
+  35% { transform: translate3d(42vw, 34px, 0) rotate(135deg); opacity: .76; }
+  72% { transform: translate3d(91vw, 72px, 0) rotate(325deg); opacity: .57; }
+  92%, 100% { transform: translate3d(116vw, 118px, 0) rotate(465deg); opacity: 0; }
+}
+@keyframes captainSunTrack {
+  from { transform: translate3d(-6px, 2px, 0) scaleX(.86); opacity: .26; }
+  to { transform: translate3d(9px, -1px, 0) scaleX(1.14); opacity: .5; }
+}
+@keyframes captainSeaGlints {
+  from { transform: translate3d(-18px, 1px, 0); }
+  to { transform: translate3d(21px, -2px, 0); }
+}
+@keyframes captainFoamCurrent {
+  from { transform: translate3d(-21px, 0, 0); }
+  to { transform: translate3d(24px, -2px, 0); }
+}
+@media (min-width: 721px) and (orientation: landscape) {
+  .page-captain .captain-outer-paint {
+    background-image: url("/captain-sakura-course-wide.webp");
+    background-position: center 62%;
+  }
+  .page-captain .captain-outer-veil {
+    background: linear-gradient(90deg, rgba(7, 18, 32, .46), rgba(7, 18, 32, .25) 32%, rgba(7, 18, 32, .25) 68%, rgba(7, 18, 32, .46));
+  }
+}
+@media (max-width: 380px) {
+  .page-captain .captain-outer-petals i:nth-child(n+7) { display: none; }
+  .captain-game-page .captain-cinematic-petals i:nth-child(n+7) { display: none; }
+  .captain-game-page .captain-cinematic-wave-glints { opacity: .2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-captain .captain-outer-paint,
+  .page-captain .captain-outer-glow,
+  .page-captain .captain-outer-petals i,
+  .captain-game-page .captain-cinematic-sun-track,
+  .captain-game-page .captain-cinematic-wave-glints,
+  .captain-game-page .captain-cinematic-foam {
+    animation: none !important;
+  }
+  .page-captain .captain-outer-petals { display: none; }
+}
