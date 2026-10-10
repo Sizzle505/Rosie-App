@@ -4,6 +4,8 @@ import fs from "node:fs/promises";
 const BASE = "http://127.0.0.1:4173/#captain";
 const viewports = [
   ["small-iphone", 320, 568],
+  ["compact-iphone", 320, 650],
+  ["standard-iphone", 375, 667],
   ["modern-iphone", 390, 844],
   ["iphone-landscape", 844, 390],
   ["tablet-portrait", 768, 1024],
@@ -83,6 +85,32 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
           || ship.boatHeight > ship.courseHeight * .9
           || ship.currentAnimation === "none") {
         throw new Error(`${engine}/${label}: painted Rosie ship not sized or rendered correctly: ${JSON.stringify(ship)}`);
+      }
+      // The overlaid captain is the canonical Rosie portrait used elsewhere
+      // in the app, not a replacement/generated Shiba. Her silhouette and
+      // ship render independently, while all lane/collision logic is unchanged.
+      const reference = await page.locator(".captain-painted-rosie").evaluate((svg) => ({
+        asset: svg.querySelector("image")?.getAttribute("href"),
+        clip: !!svg.querySelector("clipPath"),
+        key: !!svg.querySelector("feColorMatrix"),
+        width: svg.getBoundingClientRect().width,
+        animation: getComputedStyle(svg).animationName,
+      }));
+      if (reference.asset !== "/captain-rosie-illustrated.webp"
+          || !reference.clip || !reference.key
+          || reference.width < ship.boatWidth * .40
+          || reference.width > ship.boatWidth * .46
+          || reference.animation === "none") {
+        throw new Error(`${engine}/${label}: canonical Rosie portrait missing or displaced: ${JSON.stringify(reference)}`);
+      }
+      const actualReferenceResponse = await page.request.get("http://127.0.0.1:4173/captain-rosie-illustrated.webp");
+      if (!actualReferenceResponse.ok()) {
+        throw new Error(`${engine}/${label}: canonical Rosie artwork failed to load: ${actualReferenceResponse.status()}`);
+      }
+      const widthLimit = label === "modern-iphone" ? 105
+        : (label === "standard-iphone" ? 104 : label === "compact-iphone" ? 94 : null);
+      if (widthLimit !== null && ship.boatWidth > widthLimit) {
+        throw new Error(`${engine}/${label}: ship did not shrink by about ten percent (width=${ship.boatWidth})`);
       }
       if (await page.locator(".captain-cinematic-current i").count() !== 4
           || await page.locator(".captain-cinematic-water-stars i").count() !== 6) {
