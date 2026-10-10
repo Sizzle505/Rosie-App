@@ -1,5 +1,6 @@
 /* Barkbridge photographic asset layer. Five self-hosted original art assets. */
-.barkbridge-graduation .barkbridge-diploma {
+.barkbridge-graduation .graduation-stage .barkbridge-diploma,
+.barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
   background:
     url("/barkbridge/diploma/ornate-frame.png") center / 100% 100% no-repeat,
     url("/barkbridge/diploma/parchment.png") center / 100% 100% no-repeat,
