@@ -1,0 +1,248 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap");
+
+/*
+ * Photograph-led Barkbridge certificate.
+ * All rules are scoped to the graduation article; the earlier achievement
+ * screen styles are intentionally not reused as its certificate geometry.
+ * The continuous ornate engraving and canine roundel live in an SVG only:
+ * certificate lettering remains responsive, real, selectable DOM text.
+ */
+.barkbridge-graduation .graduation-stage .barkbridge-diploma,
+.barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
+  position: relative;
+  display: block;
+  width: 100% !important;
+  max-width: 760px;
+  min-width: 0;
+  height: auto;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  aspect-ratio: 1200 / 920 !important;
+  box-sizing: border-box;
+  container-type: inline-size;
+  overflow: hidden;
+  background:
+    url("/barkbridge-photo-reference-engraving.svg") center / 100% 100% no-repeat,
+    radial-gradient(ellipse at 51% 43%, rgba(255,254,242,.81), transparent 66%),
+    repeating-linear-gradient(23deg, #7b4b2109 0 1px, transparent 1px 5px),
+    linear-gradient(110deg, #eac98d 0%, #f9e6bb 21%, #f7dfaa 51%, #e9c789 100%) !important;
+  color: #352517;
+  box-shadow: 0 22px 54px rgba(0,0,0,.47), 0 0 0 1px #70431c !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.barkbridge-graduation .barkbridge-diploma .diploma-inner-border {
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0 !important;
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  isolation: isolate;
+}
+.barkbridge-graduation .diploma-inner-border::before,
+.barkbridge-graduation .diploma-inner-border::after {
+  display: none !important;
+}
+.barkbridge-graduation .diploma-photo-crest {
+  position: absolute;
+  top: 7%;
+  left: 46%;
+  width: 8%;
+  height: 12%;
+}
+.barkbridge-graduation .barkbridge-diploma h1,
+.barkbridge-graduation .barkbridge-diploma h2,
+.barkbridge-graduation .barkbridge-diploma h3,
+.barkbridge-graduation .barkbridge-diploma p,
+.barkbridge-graduation .barkbridge-diploma strong {
+  box-sizing: border-box;
+  position: absolute;
+  display: block;
+  left: 13%;
+  width: 74%;
+  max-width: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: normal;
+  text-align: center;
+  text-wrap: balance;
+  color: #31261e;
+}
+.barkbridge-graduation .barkbridge-diploma h1 {
+  top: 20.6%;
+  font: 600 clamp(9px, 4.0cqw, 31px)/1.1 "IM Fell English", Georgia, "Times New Roman", serif !important;
+  letter-spacing: .018em !important;
+  white-space: nowrap;
+}
+.barkbridge-graduation .barkbridge-diploma h2 {
+  top: 27.1%;
+  color: #39281d;
+  font: 600 clamp(6px, 2.15cqw, 17px)/1.15 "IM Fell English", Georgia, serif !important;
+  letter-spacing: .005em;
+  white-space: nowrap;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-intro {
+  top: 33.0%;
+  font: italic 400 clamp(7px, 2.20cqw, 17px)/1.15 "IM Fell English", Georgia, serif !important;
+  white-space: nowrap;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-exam-name {
+  top: 38.5%;
+  width: 84%;
+  left: 8%;
+  color: #3a291f;
+  font: 400 clamp(22px, 8.7cqw, 68px)/1.2 "Great Vibes", "Snell Roundhand", "Apple Chancery", cursive !important;
+  letter-spacing: .005em !important;
+  white-space: nowrap;
+  text-align: center;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-confers {
+  top: 49.8%;
+  font: italic 400 clamp(7px, 2cqw, 16px)/1.2 "IM Fell English", Georgia, serif !important;
+}
+.barkbridge-graduation .barkbridge-diploma h3 {
+  top: 54.7%;
+  font: 600 clamp(10px, 3.55cqw, 28px)/1.15 "IM Fell English", Georgia, serif !important;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-dissertation {
+  top: 61.0%;
+  left: 17%;
+  width: 66%;
+  color: #35271e;
+  font: italic 500 clamp(7px, 1.98cqw, 15.2px)/1.15 "IM Fell English", Georgia, serif !important;
+  text-wrap: balance;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-date {
+  top: 71.5%;
+  color: #352319;
+  font: 600 clamp(7px, 1.95cqw, 15px)/1.14 "IM Fell English", Georgia, serif !important;
+  letter-spacing: 0;
+  transform: none !important;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-signatures {
+  position: absolute;
+  box-sizing: border-box;
+  display: grid !important;
+  top: 76.6%;
+  left: 14%;
+  width: 72% !important;
+  height: 11.6%;
+  grid-template-columns: minmax(0, 1fr) minmax(39px, 13cqw) minmax(0, 1fr) !important;
+  column-gap: 0;
+  align-items: start;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-signatures > div:not(.diploma-wax-seal) {
+  padding: 0 !important;
+  border: 0 !important;
+  min-width: 0;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-signatures > div:not(.diploma-wax-seal) span {
+  display: block;
+  width: 100%;
+  margin: 0 auto !important;
+  color: #392519;
+  font: 400 clamp(7px, 2.42cqw, 18.6px)/1.15 "Pinyon Script", "Great Vibes", "Apple Chancery", cursive !important;
+  white-space: nowrap;
+  letter-spacing: -.015em;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-signatures small {
+  display: block;
+  margin: 0 auto !important;
+  color: #3c291d;
+  font: 600 clamp(6px, 1.58cqw, 12px)/1.15 "IM Fell English", Georgia, serif !important;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal {
+  position: relative;
+  z-index: 4;
+  top: -12%;
+  box-sizing: border-box;
+  width: 10.4cqw !important;
+  height: 10.4cqw !important;
+  min-width: 30px;
+  min-height: 30px;
+  margin: 0 auto !important;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 48% 53% 46% 54% / 51% 47% 53% 49%;
+  background:
+    radial-gradient(ellipse at 33% 21%, rgba(255,183,152,.75), transparent 28%),
+    radial-gradient(circle at 39% 33%, #d4483c 0%, #a01621 43%, #650914 77%, #44060f 100%);
+  box-shadow:
+    inset 0 0 0 2px #4c0714cc,
+    inset 0 0 0 5px #e64e4888,
+    inset 0 0 0 8px #4d0a1888,
+    inset 1px 2px 5px #fa998477,
+    0 3px 6px #48251866,
+    0 0 0 1px #4a0612;
+  color: #540b18;
+  filter: drop-shadow(1px 2px 2px #3e120b88);
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal::after {
+  content: "";
+  position: absolute;
+  inset: 11%;
+  border-radius: 50%;
+  border: 2px solid #4b091a88;
+  box-shadow: inset 0 1px 1px #f68f7366, 0 1px 0 #f9835955;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal svg {
+  display: block;
+  width: 73%;
+  height: 73%;
+  opacity: .75;
+  color: #660e1a;
+  filter: drop-shadow(0 1px 0 #e7796688);
+}
+
+/* A photographic landscape certificate is taller than the previous reward
+   panel. Keep the replay action above the persistent nav on desktop. */
+@media (min-width: 901px) {
+  .barkbridge-graduation .graduation-stage {
+    width: min(100%, 960px);
+    grid-template-columns: minmax(0, 680px) minmax(125px, 195px);
+  }
+}
+
+/* The photo reference is a ~1.30:1 horizontal certificate at EVERY width.
+   The full-resolution scrollable dialog is retained for small-screen reading. */
+@media (max-width: 900px) {
+  .barkbridge-graduation .graduation-stage .barkbridge-diploma {
+    aspect-ratio: 1200 / 920 !important;
+  }
+}
+@media (max-width: 700px) {
+  .barkbridge-graduation .graduation-stage .barkbridge-diploma {
+    aspect-ratio: 1200 / 920 !important;
+  }
+  .barkbridge-graduation .barkbridge-diploma .diploma-signatures {
+    grid-template-columns: minmax(0, 1fr) minmax(30px, 12cqw) minmax(0, 1fr) !important;
+  }
+  .barkbridge-graduation .barkbridge-diploma .diploma-dissertation {
+    left: 13%;
+    width: 74%;
+  }
+}
+.barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
+  width: 760px !important;
+  min-width: 760px !important;
+  max-width: 760px !important;
+  aspect-ratio: 1200 / 920 !important;
+}

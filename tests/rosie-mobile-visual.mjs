@@ -111,7 +111,16 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       ]) assert(certificateText.includes(required), "diploma missing: " + required);
       const bounds = await diploma.boundingBox();
       assert(bounds && bounds.width <= width + 1, "diploma wider than viewport: " + JSON.stringify(bounds));
-      assert(bounds.width > bounds.height * 1.15, "diploma is not landscape");
+      const diplomaAspect = bounds.width / bounds.height;
+      assert(diplomaAspect >= 1.28 && diplomaAspect <= 1.33, "diploma aspect diverges from photographed certificate: " + diplomaAspect);
+      const diplomaComputed = await diploma.evaluate(node => ({
+        image: getComputedStyle(node).backgroundImage,
+        recipientFont: getComputedStyle(node.querySelector(".diploma-exam-name")).fontFamily,
+        sealSvg: Boolean(node.querySelector(".diploma-wax-seal svg"))
+      }));
+      assert(diplomaComputed.image.includes("barkbridge-photo-reference-engraving.svg"), "photo-led ornate frame not loaded");
+      assert(diplomaComputed.recipientFont.includes("Great Vibes"), "calligraphic recipient styling missing");
+      assert(diplomaComputed.sealSvg, "embossed wax impression missing");
       const performance = await page.locator(".diploma-results-strip").innerText();
       assert(performance.includes("MOVES") && performance.includes("TIME") && performance.includes("MATCH EFFICIENCY"));
       assert(performance.includes("8") && performance.includes("100%"), "expected perfect 8-move completion: " + performance);
@@ -142,6 +151,14 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       assert(fit.inset >= 25, "signatures too close to certificate border: " + JSON.stringify(fit));
       assert(fit.signatureTop >= fit.dateBottom + 3, "signatures overlap certificate date: " + JSON.stringify(fit));
       assert(fit.dateTop >= fit.dissertationBottom + 2, "dissertation overlaps certificate date: " + JSON.stringify(fit));
+      if (width >= 1200) {
+        const navClearance = await page.evaluate(() => {
+          const replay = document.querySelector(".barkbridge-replay").getBoundingClientRect();
+          const nav = document.querySelector(".bottom-nav").getBoundingClientRect();
+          return { replayBottom: Math.round(replay.bottom), navTop: Math.round(nav.top) };
+        });
+        assert(navClearance.replayBottom <= navClearance.navTop - 6, "desktop replay obstructed by bottom nav: " + JSON.stringify(navClearance));
+      }
       await page.screenshot({ path: output + "/" + title + "-diploma.png", fullPage: true });
       await page.getByRole("button", { name: /View diploma at full size/i }).click();
       assert(await page.locator("dialog.barkbridge-zoom-dialog").evaluate(dialog => dialog.open), "enlargement dialog not open");
