@@ -1,0 +1,31 @@
+name: Temporary RosieVerse artwork import
+on:
+  push:
+    branches:
+      - work/rosieverse-landing-cinematic-20261009
+    paths:
+      - .github/workflows/rosieverse-art-import.yml
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install generated artwork and remove temporary workflow
+        shell: bash
+        env:
+          ROSIEVERSE_BUNDLE_URL: 'https://uc4566341450f49a770a6511ca31.dl.dropboxusercontent.com/cd/0/get/DJsAh0KLV5WoiqUPMoGuin0pQrcdjQ-Ut28_fYGVbhtiC4JvXKeFyDlVS-1m06SbBNd2Psqe_08pb2hvFZ4ulVKeuiLpSVnbzfyrKpM_e0C9Z9VW0R74pvLyr0CrL58HN5H9fOJ9MWfJ-wVDefWKAkHMQpkyfMSRB2dlAU4GMyyGxw/file?c_luid=667ded1d'
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --max-time 180 "$ROSIEVERSE_BUNDLE_URL" --output "$RUNNER_TEMP/rosieverse-bundle.zip"
+          unzip -oq "$RUNNER_TEMP/rosieverse-bundle.zip" 'public/rosieverse/*' -d .
+          for f in hero title fortune cheese captain vault randomizers; do
+            test -s "public/rosieverse/$f.webp"
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/rosieverse/
+          git rm .github/workflows/rosieverse-art-import.yml
+          git commit -m "Import seven generated RosieVerse illustrations from temporary staging"
+          git push origin HEAD:work/rosieverse-landing-cinematic-20261009
