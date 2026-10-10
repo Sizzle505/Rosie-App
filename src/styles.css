@@ -1325,7 +1325,7 @@ main {
   display: block;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-  transition: transform .5s cubic-bezier(.2,.78,.25,1), filter .25s ease;
+  transition: transform .22s cubic-bezier(.22,.65,.32,1), filter .18s ease;
 }
 .cheese-card.is-flipped .cheese-card-inner {
   transform: rotateY(180deg);
@@ -7635,3 +7635,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .house-return span { position:absolute; left:50%; bottom:-10px; transform:translateX(-50%); font:700 7px/1 Arial,sans-serif; letter-spacing:.12em; color:#e6c684; }
 .house-return:focus-visible { outline:2px solid #fff7d9; outline-offset:3px; }
 @media(max-width:680px){.house-return{width:29px;height:29px;font-size:20px;top:max(5px,env(safe-area-inset-top));left:5px}.house-return span{display:none}}
+
+/* Instant-response cheese flips on motion-limited devices. */
+@media (prefers-reduced-motion: reduce) {
+  .cheese-card-inner { transition: none !important; }
+}
