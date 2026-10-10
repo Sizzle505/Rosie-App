@@ -822,9 +822,10 @@
 }
 
 /* The iPhone dock must not obscure an entire card column while auto-scrolling.
-   Keep Pause immediately accessible; expand speed adjustment only on demand. */
+   Keep Pause immediately accessible; expand speed adjustment only on demand.
+   Include landscape phones, whose CSS width can exceed 720px. */
 .driftToggle { display: none; }
-@media (max-width: 720px) {
+@media (max-width: 720px), (max-height: 500px) and (pointer: coarse) {
   .driftControl {
     top: auto;
     bottom: calc(78px + env(safe-area-inset-bottom));
