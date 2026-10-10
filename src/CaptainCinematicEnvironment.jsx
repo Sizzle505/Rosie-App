@@ -75,11 +75,14 @@ export default function CaptainCinematicEnvironment({ underway, boost, streak, t
         draggable="false"
         loading="eager"
       />
+      <span className="captain-cinematic-sun-track" />
+      <span className="captain-cinematic-wave-glints" />
+      <span className="captain-cinematic-foam" />
       <span className="captain-cinematic-light" />
       <span className="captain-cinematic-sail" />
       <span className="captain-cinematic-birds"><i /><i /><i /></span>
       <span className="captain-cinematic-petals">
-        {Array.from({ length: 8 }, (_, index) => (
+        {Array.from({ length: 12 }, (_, index) => (
           <i key={index} className={index % 4 === 0 ? "is-maple" : "is-sakura"} />
         ))}
       </span>
