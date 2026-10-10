@@ -1,0 +1,61 @@
+name: Import Captain Five Seas artwork from staged Dropbox files
+on:
+  push:
+    branches: [work/captain-five-seas-levels-20261010]
+    paths: [.github/workflows/captain-five-seas-import.yml]
+permissions:
+  contents: write
+jobs:
+  import-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/captain-five-seas-levels-20261010
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install pillow==11.3.0
+      - name: Download, validate, and optimize separate scenery and effect images
+        run: |
+          python - <<'PY'
+          from io import BytesIO
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          import json
+          from PIL import Image
+          manifest = json.loads(r'''[["sunrise-across-torii-sea.png","https://uc5b5d9fa679cba7c525bae9fbe6.dl.dropboxusercontent.com/cd/0/get/DJvMkMPq18uAvjjFgjC6QTQB59klE6TzQNP5I3_chKIMBwaKam7S9KHgfaJgkWV3JItiUdP6zThkEzsnblXkpn_nzmZmIU9_eKSDElX82guet1JSJ8SYAwX2WUCMB7X5U-ooRUmXpFv4769xNGF8AanyOwWtMu7L6bNwMSb8ahz1wA/file?c_luid=667ded1d"],["twilight-sakura-harbor.png","https://ucda7a32e6b6c1eb138ba9664ae8.dl.dropboxusercontent.com/cd/0/get/DJuk2QHqkqR50zEJhazE1j6Uf0TUlc0eH5TSebMrk6yNEHNrxkR-y9i_dzjVoDXYMvrpxT796ZUGz4V7VN9zW4ERT4JCN4h_NctWNlFBzOTW_Qj7kUuvgB9SeCpw3Rf67x5Mv53rwSMLQ14hZdHmhhM1tU3Nj7WbLneYmsVYgaA4eg/file?c_luid=667ded1d"],["moonlit-shrine-valley.png","https://ucafda9f9dca87f97ffc4e500708.dl.dropboxusercontent.com/cd/0/get/DJs0Zn95oXX6yBGFMeUfksNG8fhUGZmtVImc3SNajAt3DFJ0i1w09xFOBx36XXs_E2IteWYZPG7vkQ3peckm1ghdMVlGcMvDkjrvul1D15LHAj-6pud8ZSHU3TAVVnK2mBpy8L7iKeS5mDuRfQizbFhhyDKy3TblIQ19K6xScXo3sw/file?c_luid=667ded1d"],["golden-misty-isles.png","https://ucb8e3ea45383bd17034194cab0e.dl.dropboxusercontent.com/cd/0/get/DJsAyK2rlIL792zLNFZvH5LfHF5YzGSEGzmJQa934fwqNO_Mx24kRA3wxcE_rnYfL-hAS3JxKGO8NVsIdcdnw7Rj-6XHr9nywh4XlAd4wxjEZR4Np2vAMQXzVyPM8sFIvNHX8kuERD_GPkT8v8kDrqJrCDC1yHtCfpEPWPrI1yQnSg/file?c_luid=667ded1d"],["tempest-gate.png","https://ucdbd932063e83b3dee84f4ed5d8.dl.dropboxusercontent.com/cd/0/get/DJuVrd8WalAlsUQlTwypLYGdgT30Jnup1lnyRMQ8I2pRwFreTMImAFe7qpCcqPZCKqVMaoglo4oiuK8u67_apNpAkExgm0uT-YoXsp4g_3GUlZt893IcOjM6R1O5ECTfGqL--JBDsBhnL1PTyUh-rMIranwBNoNvmi0RorH0JWxOKA/file?c_luid=667ded1d"],["wake-splash.png","https://uc92f2204e83b1afafccde6d6c46.dl.dropboxusercontent.com/cd/0/get/DJsgaB6Gdu2UvpCU09GxszsA1UEKOpvAiNz96VsOLQlM-VcH7JDcOkoVR7iPNaQ7vrCUPy9pqjSr_awqGiZT3PsvEDT2BIVF2bFfpMvlCoInjfTOF-5Mucf8rv3SJG14SaBhHa9MJaZA_Lp_FiUDNZoU2FIA6iQdYmYaeMaoO45ckg/file?c_luid=667ded1d"],["ocean-wave-frame.png","https://uc975cc87047b411350446ac35d6.dl.dropboxusercontent.com/cd/0/get/DJsjsmdYM9znxUovqi_-93mjso-0GAGmjV_J0UYBsgIHMKb-sWNxvtYGLqJsCmzjbYd2RRbyWpGbqa11h9I3gzi7aVsjbC2GOTxzQsby7F5yZKEaouHCuDIlBG5hbVd1WjSFgEjVKncCVZqkHxu9N6P1RQEkr-79OaVEsna5Rxb6bA/file?c_luid=667ded1d"],["sakura-petals.png","https://uc9f758f175a62ee5e5d6d37b0da.dl.dropboxusercontent.com/cd/0/get/DJuHFs5sKLbzmL7sK9Z2W94WQD6nwKlFHvFa4Nu6wR9lCo4c5VQD0IG-kov14VCjVXKbrOoedGj8PnxpDR4HP9GMPCtqzuWhqHLH1IefQzgR7KBol-bzV7teiKFc15iU9L7Kh90lodvpfa-ga2XPGrLdx6HBmeoVB5ndqfZnoalgZQ/file?c_luid=667ded1d"],["ocean-mist.png","https://uc4a81e093fed1226aea6cab59b2.dl.dropboxusercontent.com/cd/0/get/DJuK-GpxE83YqDoB4HziB1KJe-3LRouVoliHTcpKvUsZpbCoslqR3OcGfc9IDuHoSvCgIMzvr9TjH6iRmmEpHPcbUC-gzM7qOnYkNqt-V__yFlrK4C9t6CrLhQIwuhVrWmUWURDdmSedB7JLGAL5CQQpWouNqVICQQQCcQBWbcQizA/file?c_luid=667ded1d"],["rain-spray.png","https://uc6527c61b8c4c32f7d26eaf06ed.dl.dropboxusercontent.com/cd/0/get/DJuNkfXCPTG2CQogQxKYB9tRChJ9x76YVCgoVd5w4bOyzFynkSbzfrLdWCmoTnIHNkT1UceqmoMCOCWJDtajK-uhEDQmQCUeJLpLXNfdxciyEyL15N5Ta_-iIUKPD_LGIFoEl5yLmE83K9BjOcybimvjhkE1Q4TQHCsUd8g3jHfBjw/file?c_luid=667ded1d"],["lightning.png","https://ucc8847e0741adcc39dfa89b7850.dl.dropboxusercontent.com/cd/0/get/DJsC_SO4IAN5Q4TOvgUq4cS1NXfldW60grobN4zhlVNQYJTJSUjLO4QrHHz0ew4eueO4r_JYGa69dP05MMnGThUOEaoFIdwnXDk2LDt8v8BhDBPGL4WwqJEb8BSvJ4EL-M00-Eij6fzny9a1kqq6i4DpInFNTeS8B1YrimTiFW4NzA/file?c_luid=667ded1d"],["golden-reflections.png","https://uc10d333987a1abba2d7d9c50721.dl.dropboxusercontent.com/cd/0/get/DJtzSKX0wRrkJaRQwkPvJCar0lmRgooMUI0LgbTWBbKP96GZurXHFBSmDwigL5q2z1rAu22LNKxWI2M3QcFyytGQiz7YjGqgcc5Uh1YaNqs5medqlRMu6nQSq9qTpb0Sxi2wvHRYEUYXW-pd1WmFE0g2DJcWnSPymkjH3aeX6cJ_aw/file?c_luid=667ded1d"],["ocean-wave-wide.png","https://uc2f520b7504b51739d8cb3b069c.dl.dropboxusercontent.com/cd/0/get/DJsDGApqB71sMs_O53QxedxAHYFKRywrkuYtC3usYDltT9EdI1nfCbGhi_Xm55Vd3x0_I2WNAi9Yw8KoQhCRaoJ347TlI_bcvjbf39U5CufFvdyr_VEh0WUX5A-HfB7V_V-9ad0x7Z6J0YY6MH-C3ObXI8g64u7W4r_B0yvDG9p9FQ/file?c_luid=667ded1d"]]''')
+          target = Path("public/captain-levels")
+          target.mkdir(parents=True, exist_ok=True)
+          for index, (name, url) in enumerate(manifest):
+              request = Request(url, headers={"User-Agent": "CaptainRosieAssetImport/1.0"})
+              with urlopen(request, timeout=100) as response:
+                  payload = response.read()
+              if not (25000 < len(payload) < 12000000):
+                  raise ValueError(f"Unusual source size for {name}: {len(payload)}")
+              picture = Image.open(BytesIO(payload))
+              picture.load()
+              if picture.width < 900 or picture.height < 1500:
+                  raise ValueError(f"Invalid source dimensions for {name}: {picture.size}")
+              is_effect = index >= 5
+              if is_effect and picture.mode != "RGBA":
+                  raise ValueError(f"Effect must have alpha channel: {name}")
+              mode = "RGBA" if is_effect else "RGB"
+              output = target / name.replace(".png", ".webp")
+              picture.convert(mode).save(output, "WEBP", quality=(79 if not is_effect else 75), method=6)
+              verified = Image.open(output)
+              if verified.size != picture.size or (is_effect and "A" not in verified.getbands()):
+                  raise ValueError(f"Bad WebP export: {name}")
+              print(output, output.stat().st_size, verified.mode, verified.size)
+          assert len(list(target.glob("*.webp"))) == len(manifest)
+          PY
+      - name: Commit validated optimized image assets to preview branch
+        run: |
+          git config user.name "Rosie Five Seas Assets"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/captain-levels/
+          git diff --cached --check
+          git commit -m "Import 5 painted Captain passage backdrops and 8 transparent wave/weather layers [skip ci]"
+          git push origin HEAD:work/captain-five-seas-levels-20261010
