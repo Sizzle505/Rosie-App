@@ -3,11 +3,11 @@ import styles from "./RosieHome.module.css";
 import RosieVerseAtmosphere from "./RosieVerseAtmosphere";
 
 const worlds = [
-  { id: "fortune", name: "Fortune Teller", art: "fortune.webp" },
-  { id: "cheese", name: "Cheese Board Exam", art: "cheese.webp" },
-  { id: "captain", name: "Captain Rosie", art: "captain.webp" },
-  { id: "vault", name: "Card Vault", art: "vault.webp" },
-  { id: "randomizers", name: "Randomizers", art: "randomizers.webp" }
+  { id: "fortune", name: "Fortune Teller", art: "buttons/fortune.webp" },
+  { id: "cheese", name: "Cheese Board Exam", art: "buttons/cheese.webp" },
+  { id: "captain", name: "Captain Rosie", art: "buttons/captain.webp" },
+  { id: "vault", name: "Card Vault", art: "buttons/vault.webp" },
+  { id: "randomizers", name: "Randomizers", art: "buttons/randomizers.webp" }
 ];
 
 const art = (filename) => `/rosieverse/${filename}`;
