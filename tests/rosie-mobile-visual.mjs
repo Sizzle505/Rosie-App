@@ -128,7 +128,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
           inset: Math.round(frame.bottom - signatures.bottom)
         };
       });
-      assert(fit.inset >= 6, "signatures overlap certificate border: " + JSON.stringify(fit));
+      assert(fit.inset >= 25, "signatures too close to certificate border: " + JSON.stringify(fit));
       await page.screenshot({ path: output + "/" + title + "-diploma.png", fullPage: true });
       await page.getByRole("button", { name: /View diploma at full size/i }).click();
       assert(await page.locator("dialog.barkbridge-zoom-dialog").evaluate(dialog => dialog.open), "enlargement dialog not open");
