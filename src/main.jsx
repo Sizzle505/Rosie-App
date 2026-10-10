@@ -399,6 +399,8 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
       <div className="booth">
         <div className="cabinet-lights cabinet-lights-left" />
         <div className="cabinet-lights cabinet-lights-right" />
+        <div className="curtain curtain-left" />
+        <div className="curtain curtain-right" />
 
         <div className="sign">
           <div className="sign-paw">🐾</div>
@@ -408,12 +410,23 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div ref={stageRef} className={`stage ${manifesting ? "stage-manifesting" : ""}`}>
+        <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
           <img
             ref={stageArtRef}
             className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
             src="/rosie-fortune-stage.webp"
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
+          />
+
+          <div className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
+
+          {/* A Rosie-only portrait layer.  The stage image never moves; the layer is
+              revealed only under the whistle's smoke, then pivots in place. */}
+          <img
+            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            src="/rosie-fortune-turn-side.webp"
+            alt=""
+            aria-hidden="true"
           />
 
           <div className="stage-twinkles" aria-hidden="true">
@@ -427,18 +440,54 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <i><span>CHEESE &amp; DESTINY</span></i>
           </div>
 
+          <div
+            className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
+            aria-hidden="true"
+          />
+
+          <img
+            className={`crystal-ball-shield ${flipped ? "is-visible" : ""}`}
+            src="/rosie-fortune-stage.webp"
+            alt=""
+            aria-hidden="true"
+          />
+
           <div className="lantern-life" aria-hidden="true">
             <span className="lantern-glow lantern-glow-left"><i /></span>
             <span className="lantern-glow lantern-glow-right"><i /></span>
           </div>
 
-          {/* The whistle swaps between two complete, coherent paintings beneath the
-              magic, so no cropped portrait can disturb the set or crystal ball. */}
+          {/* The stage is deliberately one immutable painting. The whistle effect is
+              additive magic only - no mirrored/cropped duplicate of Rosie or the set. */}
 
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
             <i /><i /><i /><i /><i /><i />
           </div>
+
+          {flipBurst > 0 && (
+            <div className="flip-magic" aria-hidden="true" key={flipBurst}>
+              <span className="turn-veil" />
+              <span className="turn-lower-smoke" />
+              <span className="turn-ball-haze" />
+              <span className="turn-orbit turn-orbit-a" />
+              <span className="turn-orbit turn-orbit-b" />
+              <span className="smoke-wisp smoke-wisp-a" />
+              <span className="smoke-wisp smoke-wisp-b" />
+              <span className="smoke-wisp smoke-wisp-c" />
+              <span className="smoke-wisp smoke-wisp-d" />
+              <span className="smoke-wisp smoke-wisp-e" />
+              <span className="smoke-wisp smoke-wisp-f" />
+              <span className="smoke-wisp smoke-wisp-g" />
+              <span className="smoke-wisp smoke-wisp-h" />
+              <span className="smoke-wisp smoke-wisp-i" />
+              <span className="smoke-wisp smoke-wisp-j" />
+              <span className="flip-flash" />
+              <span className="flip-sparkles">
+                <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+              </span>
+            </div>
+          )}
 
           <div className="crystal-chamber">
             <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
@@ -451,6 +500,18 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             />
           </div>
 
+          {flipBurst > 0 && turning && (
+            <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
+              <span className="foreground-plume foreground-plume-a" />
+              <span className="foreground-plume foreground-plume-b" />
+              <span className="foreground-plume foreground-plume-c" />
+              <span className="foreground-plume foreground-plume-d" />
+              <span className="foreground-plume foreground-plume-e" />
+              <span className="foreground-glitter">
+                <i /><i /><i /><i /><i /><i /><i /><i />
+              </span>
+            </div>
+          )}
           {flipBurst > 0 && (
             <div className="turn-gold-sparks" aria-hidden="true" key={`gilded-${flipBurst}`}>
               {Array.from({ length: 24 }, (_, index) => <i key={index} />)}
@@ -2193,8 +2254,21 @@ function App() {
 
   function whistleForRosie() {
     void playWhistle();
+    setTurning(true);
     setFlipBurst((value) => value + 1);
-    window.navigator.vibrate?.([8, 20, 8]);
+
+    window.clearTimeout(flipTimerRef.current);
+    window.clearTimeout(turnEndTimerRef.current);
+
+    // The visual swap happens only once the smoke is fully opaque.
+    flipTimerRef.current = window.setTimeout(() => {
+      setFlipped((value) => !value);
+      window.navigator.vibrate?.([8, 20, 8]);
+    }, 390);
+
+    turnEndTimerRef.current = window.setTimeout(() => {
+      setTurning(false);
+    }, 960);
   }
 
   function toggleDictation() {
@@ -2367,8 +2441,8 @@ function App() {
                 <button
                   type="button"
                   className="fortune-whistle-button"
-                  aria-label="Whistle for Rosie"
-                  aria-pressed={false}
+                  aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
+                  aria-pressed={flipped}
                   title="Whistle for Rosie"
                   onClick={whistleForRosie}
                   disabled={turning}
