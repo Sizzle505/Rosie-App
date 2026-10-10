@@ -623,7 +623,18 @@
   .header { padding-top: max(16px, calc(env(safe-area-inset-top) + 10px)); }
   .headerMark { padding-block: 11px 12px; border-radius: 11px; }
   .header h1 { font-size: clamp(25px, 7.4vw, 33px); }
-  .wall { gap: 5px; }
+  /* Safari can preserve a fractional inline offset after restoring a page.
+     Make the card belt establish a real centered resting position before
+     its vertical drift begins. */
+  .galleryShell { margin-inline: auto; }
+  .wall {
+    gap: 5px;
+    margin-inline: auto;
+    justify-content: center;
+    justify-items: center;
+    transform: translateZ(0);
+  }
+  .wall .tile { justify-self: center; }
   .tile { padding: 3px; }
 }
 
