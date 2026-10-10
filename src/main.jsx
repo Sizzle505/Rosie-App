@@ -1801,6 +1801,7 @@ function CaptainRosieGame({ soundOn }) {
         <div
           className={`yacht-course${running ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
           data-captain-level={level.id}
+          data-captain-climate={level.climate}
           data-captain-passage={levelNumber + 1}
           style={{ "--course-pace": boost ? "1.25s" : running ? "3.1s" : "8s" }}
           aria-label="Three-lane yacht course. Swipe, tap a lane, or use the controls below to steer."
