@@ -53,12 +53,16 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       const dice = page.getByRole("button", { name: /ROLL THE DIE/i });
       await coin.click();
       assert(await coin.isDisabled(), "coin must disable during animation");
-      await page.waitForTimeout(1050);
-      assert(await coin.isEnabled(), "coin never reenabled");
+      await page.waitForFunction(() => {
+        const button = [...document.querySelectorAll("button")].find(node => node.textContent.includes("FLIP THE COIN"));
+        return button && !button.disabled;
+      }, null, { timeout: 5000 });
       await dice.click();
       assert(await dice.isDisabled(), "die must disable during animation");
-      await page.waitForTimeout(1350);
-      assert(await dice.isEnabled(), "die never reenabled");
+      await page.waitForFunction(() => {
+        const button = [...document.querySelectorAll("button")].find(node => node.textContent.includes("ROLL THE DIE"));
+        return button && !button.disabled;
+      }, null, { timeout: 5000 });
       if (narrow) {
         await dice.scrollIntoViewIfNeeded();
         const position = await page.evaluate(() => ({
