@@ -9,8 +9,10 @@ import "./captain-refresh.css";
 import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
+import "./captain-immersive.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
+import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
@@ -2364,6 +2366,7 @@ function App() {
       </div>
 
       <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
+        {page === "captain" && <CaptainOuterAtmosphere />}
 
         {page !== "home" && <button type="button" className="house-return" aria-label="Return to the House of Rosie" title="The House of Rosie" onClick={() => navigateTo("home")}>⌂<span>HOME</span></button>}
         {page === "home" ? (

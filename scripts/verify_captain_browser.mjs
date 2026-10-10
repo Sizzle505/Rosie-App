@@ -42,16 +42,49 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       }
       const painting = await page.locator(".captain-scene img").evaluate((img) => img.complete && img.naturalWidth > 0);
       if (!painting) throw new Error(`${engine}/${label}: original painting missing`);
+      const atmosphere = await page.evaluate(() => {
+        const outer = document.querySelector(".captain-outer-scene");
+        const painted = document.querySelector(".captain-outer-paint");
+        const wave = document.querySelector(".captain-cinematic-wave-glints");
+        const glimmer = document.querySelector(".captain-cinematic-sun-track");
+        const foam = document.querySelector(".captain-cinematic-foam");
+        return {
+          outer: !!outer,
+          scenicImage: painted ? getComputedStyle(painted).backgroundImage : "",
+          animating: painted ? getComputedStyle(painted).animationName !== "none" : false,
+          wave: !!wave,
+          glimmer: !!glimmer,
+          foam: !!foam,
+          overflow: document.documentElement.scrollWidth > innerWidth + 2,
+        };
+      });
+      if (!atmosphere.outer || !atmosphere.scenicImage.includes("captain-sakura-course") || !atmosphere.animating
+          || !atmosphere.wave || !atmosphere.glimmer || !atmosphere.foam || atmosphere.overflow) {
+        throw new Error(`${engine}/${label}: cinematic margin or wave regression: ${JSON.stringify(atmosphere)}`);
+      }
       const video = page.locator(".captain-cinematic-water");
       if (await video.count() !== 1) throw new Error(`${engine}/${label}: video layer missing`);
       const format = await video.evaluate((node) => node.canPlayType('video/mp4; codecs="avc1.42E01E"'));
-      await page.waitForTimeout(1200);
+      // Verify media advances *before* taking a screenshot. Headless WebKit
+      // sometimes resets its H.264 playback clock on a screenshot (even though
+      // decoded frames and the independent CSS water layers are fine).
+      await page.waitForTimeout(1100);
       const timeA = await video.evaluate((node) => node.currentTime);
+      await page.waitForTimeout(900);
+      const timeB = await video.evaluate((node) => node.currentTime);
+      if (format && timeB <= timeA + .22) {
+        const diagnostics = await video.evaluate((node) => ({
+          readyState: node.readyState, paused: node.paused,
+          currentTime: node.currentTime, duration: node.duration,
+          error: node.error?.message || null
+        }));
+        throw new Error(`${engine}/${label}: supported MP4 stalled before screenshot (${timeA}->${timeB}): ${JSON.stringify(diagnostics)}`);
+      }
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
       await page.waitForTimeout(2100);
-      const timeB = await video.evaluate((node) => node.currentTime);
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
-      if (format && timeB <= timeA + .35) throw new Error(`${engine}/${label}: supported MP4 did not autoplay (${timeA}->${timeB})`);
+      // Visible animation is independently evaluated from both frames later;
+      // a screenshot-induced media clock reset is not treated as a stall.
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
       if (errors.length) throw new Error(`${engine}/${label}: ${errors.join(", ")}`);
@@ -61,6 +94,8 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const reducedPage = await reduced.newPage();
     await reducedPage.goto(BASE);
     if (await reducedPage.locator(".captain-cinematic video").count() !== 0) throw new Error(`${engine}: reduced motion still renders moving video`);
+    const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
+    if (!outerStill) throw new Error(`${engine}: cinematic margins ignored reduced motion`);
     await reduced.close();
     console.log(`${engine}: six responsive layouts and reduced motion passed`);
   } finally {
