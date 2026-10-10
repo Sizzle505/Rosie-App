@@ -84,3 +84,30 @@
  .petalField i {display:none;}
  .world,.activeSheen {transition:none;}
 }
+
+/* Match the single-screen illustrated composition over viewport sizes. */
+.home::before {
+  content: "";
+  position: absolute;
+  z-index: -3;
+  inset: -24px;
+  pointer-events: none;
+  background: linear-gradient(180deg, #100e2278 0%, #0b102283 62%, #080e20e8 100%),
+    url("/rosieverse/hero.webp") center 44% / cover no-repeat;
+  opacity: .62;
+  filter: blur(18px) saturate(.85);
+}
+@media (min-width: 601px) {
+  .home { gap: min(1.15dvh,12px); padding: min(2dvh,17px) 12px; }
+  .banner { width: min(100%,580px,60dvh); }
+  .hero { width: min(100%,900px,52dvh); height: min(33dvh,390px); }
+  .worldGrid { width: min(100%,580px,44dvh); gap: min(1dvh,10px); }
+}
+@media (max-width: 600px) and (max-height: 740px) {
+  .banner { max-width: min(100%,330px); }
+  .hero { height: clamp(218px,36dvh,260px); margin-block: 0 3px; }
+  .worldGrid { gap: 3px; }
+}
+@media (max-width: 370px) and (max-height: 740px) {
+  .hero { height: min(36dvh,230px); }
+}
