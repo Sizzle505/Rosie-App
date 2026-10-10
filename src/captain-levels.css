@@ -108,3 +108,19 @@
   .captain-game-page .captain-level-lightning { display: none !important; }
   .captain-game-page .captain-level-weather { opacity: .07; }
 }
+
+/* The original source-registered water video is retained, but blended well
+   below the differing level horizons to prevent a straight scenery seam. */
+.captain-game-page .yacht-course .captain-cinematic-water {
+  opacity: .44;
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0%, transparent 57%,
+    rgba(0,0,0,.08) 66%, rgba(0,0,0,.43) 81%, #000 100%);
+  mask-image: linear-gradient(to bottom,
+    transparent 0%, transparent 57%,
+    rgba(0,0,0,.08) 66%, rgba(0,0,0,.43) 81%, #000 100%);
+}
+.captain-game-page .yacht-course[data-captain-level="moonlight"] .captain-cinematic-water,
+.captain-game-page .yacht-course[data-captain-level="tempest"] .captain-cinematic-water {
+  opacity: .36;
+}
