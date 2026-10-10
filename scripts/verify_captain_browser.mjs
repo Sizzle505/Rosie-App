@@ -191,6 +191,8 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const reducedPage = await reduced.newPage();
     await reducedPage.goto(BASE);
     if (await reducedPage.locator(".captain-cinematic video").count() !== 0) throw new Error(`${engine}: reduced motion still renders moving video`);
+    await reducedPage.getByRole("button", { name: "CAST OFF" }).click();
+    if (await reducedPage.locator(".captain-lotus-gust").count()) throw new Error(`${engine}: reduced-motion blossom gust should not mount`);
     const shipStill = await reducedPage.locator(".captain-painted-sprite").evaluate((node) => getComputedStyle(node).animationName === "none");
     if (!shipStill) throw new Error(`${engine}: painted ship pitch ignores reduced motion`);
     const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
@@ -202,7 +204,7 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
   }
 }
 
-// Full 45-second voyage with steering, score/cargo assertions and a restart.
+// Full 75-second voyage with steering, all five painted seas, lotus timing and restart.
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
@@ -239,7 +241,34 @@ try {
       course.dispatchEvent(new PointerEvent("pointerup", { bubbles:true, clientX:x, clientY:y, pointerId:1 }));
     }, 140);
   });
-  await page.waitForTimeout(45900);
+  // Inspect the actual rendered 390x844 playfield on either side of passage two.
+  await page.waitForTimeout(14350);
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-before-crossfade.png" });
+  await page.waitForTimeout(1250);
+  const duringTransition = await page.locator(".yacht-course").evaluate((node) => ({
+    images: node.querySelectorAll(".captain-level-painting img").length,
+    effects: node.querySelectorAll(".captain-climate-layer").length,
+    passage: node.dataset.captainPassage
+  }));
+  if (duringTransition.passage !== "2" || duringTransition.images !== 2 || duringTransition.effects !== 2) {
+    throw new Error("Cinematic crossfade did not preserve paired backdrops: " + JSON.stringify(duringTransition));
+  }
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-during-crossfade.png" });
+  await page.waitForTimeout(2200);
+  const afterTransition = await page.locator(".yacht-course").evaluate((node) => ({
+    images: node.querySelectorAll(".captain-level-painting img").length,
+    effects: node.querySelectorAll(".captain-climate-layer").length,
+    passage: node.dataset.captainPassage
+  }));
+  if (afterTransition.passage !== "2" || afterTransition.images !== 1 || afterTransition.effects !== 1) {
+    throw new Error("Outgoing scenery was not released after transition: " + JSON.stringify(afterTransition));
+  }
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-after-crossfade.png" });
+  await page.waitForTimeout(17900);
+  const lotuses = await page.locator(".captain-lotus-gust img").count();
+  if (lotuses < 4 || lotuses > 6) throw new Error("35-second lotus breeze missing or oversized: " + lotuses);
+  await page.locator(".yacht-course").screenshot({ path: "captain-test-artifacts/iphone-35-second-lotus.png" });
+  await page.waitForTimeout(40200);
   await page.evaluate(() => {
     clearInterval(window.__captainPilot);
     clearInterval(window.__captainScenesTrack);
@@ -252,10 +281,13 @@ try {
   const time = await page.locator(".captain-hud > div:nth-child(2) strong").innerText();
   const score = Number(await page.locator(".captain-hud > div:first-child strong").innerText());
   const cargo = Number(await page.locator(".captain-hud > div:nth-child(4) strong").innerText());
-  if (time !== "0s") throw new Error(`45-second round ended prematurely (time: ${time})`);
+  if (time !== "0s") throw new Error(`75-second round ended prematurely (time: ${time})`);
   if (score < 0 || cargo < 0) throw new Error("Invalid gameplay counters");
   await page.getByRole("button", { name: "SAIL AGAIN" }).click();
   if (!(await page.locator(".yacht-course").evaluate((node) => node.classList.contains("is-underway")))) throw new Error("Restart failed");
+  const restartTimer = await page.locator(".captain-hud > div:nth-child(2) strong").innerText();
+  if (restartTimer !== "75s") throw new Error("Restart did not reset 75-second voyage: " + restartTimer);
+  if (await page.locator(".captain-lotus-gust img").count()) throw new Error("Lotus gust did not reset on new voyage");
   console.log(`full voyage and restart passed: score=${score}, cargo=${cargo}`);
   await context.close();
 } finally { await browser.close(); }
