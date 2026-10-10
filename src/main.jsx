@@ -418,13 +418,9 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
           />
 
-          <div className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
-
-          {/* A Rosie-only portrait layer.  The stage image never moves; the layer is
-              revealed only under the whistle's smoke, then pivots in place. */}
           <img
-            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            src="/rosie-fortune-turn-side.webp"
+            className={`stage-art stage-art-glance ${flipped ? "is-visible" : ""} ${consulting ? "stage-art-consulting" : ""}`}
+            src="/rosie-fortune-stage-glance.webp"
             alt=""
             aria-hidden="true"
           />
@@ -440,25 +436,13 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <i><span>CHEESE &amp; DESTINY</span></i>
           </div>
 
-          <div
-            className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            aria-hidden="true"
-          />
-
-          <img
-            className={`crystal-ball-shield ${flipped ? "is-visible" : ""}`}
-            src="/rosie-fortune-stage.webp"
-            alt=""
-            aria-hidden="true"
-          />
-
           <div className="lantern-life" aria-hidden="true">
             <span className="lantern-glow lantern-glow-left"><i /></span>
             <span className="lantern-glow lantern-glow-right"><i /></span>
           </div>
 
-          {/* The stage is deliberately one immutable painting. The whistle effect is
-              additive magic only - no mirrored/cropped duplicate of Rosie or the set. */}
+          {/* The whistle swaps between two complete, coherent paintings beneath the
+              magic, so no cropped portrait can disturb the set or crystal ball. */}
 
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
