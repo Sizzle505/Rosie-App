@@ -1,0 +1,93 @@
+/* Cross-tab finishing layer: intentionally decorative only. */
+
+/* Fortune - deepen the reading room without placing anything over Rosie or the painted crystal ball. */
+.page-fortune .fortune-console {
+  position: relative;
+  isolation: isolate;
+}
+
+.page-fortune .fortune-console::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 3px 4px 22px;
+  pointer-events: none;
+  opacity: .34;
+  background: url("/atmosphere/fortune-constellation-drift.webp") center / cover no-repeat;
+  mix-blend-mode: screen;
+}
+
+.page-fortune .machine,
+.page-fortune .question-card,
+.page-fortune .console-caption { position: relative; z-index: 1; }
+
+.page-fortune .question-card {
+  box-shadow: 0 20px 44px rgba(8, 3, 14, .32), inset 0 1px 0 rgba(255, 242, 205, .08);
+}
+
+.page-fortune .fortune-waiting-card {
+  background:
+    linear-gradient(135deg, rgba(48, 21, 56, .92), rgba(17, 9, 27, .95)),
+    url("/atmosphere/fortune-constellation-drift.webp") center / 125% auto no-repeat;
+}
+
+.page-fortune .omen-rail {
+  background-image:
+    linear-gradient(180deg, rgba(42, 17, 47, .9), rgba(13, 7, 19, .96)),
+    url("/atmosphere/fortune-constellation-drift.webp");
+  background-size: auto, 670px auto;
+  background-position: center, right center;
+  background-repeat: no-repeat;
+}
+
+/* Cheese - give the exam a quiet, bespoke university setting while retaining the game board's geometry. */
+.cheese-game-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.cheese-game-page::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: .16;
+  pointer-events: none;
+  background: url("/atmosphere/barkbridge-academic-ornament.webp") center top / min(1180px, 100%) auto no-repeat;
+}
+
+.cheese-game-page .cheese-desktop-layout {
+  box-shadow: 0 22px 58px rgba(41, 14, 29, .18);
+}
+
+.cheese-game-page .cheese-game-frame,
+.cheese-game-page .cheese-examiner-rail,
+.cheese-game-page .cheese-left-rail {
+  position: relative;
+}
+
+.cheese-game-page .cheese-game-frame::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  inset: auto 6% 8px;
+  height: 36px;
+  opacity: .35;
+  background: url("/atmosphere/barkbridge-academic-ornament.webp") center bottom / 135% auto no-repeat;
+  mix-blend-mode: screen;
+}
+
+.cheese-game-page .rosie-reaction {
+  box-shadow: 0 14px 30px rgba(38, 11, 26, .2), inset 0 1px 0 rgba(255, 246, 214, .12);
+}
+
+/* Shared iPhone restraint: atmosphere never competes with touch targets. */
+@media (max-width: 620px) {
+  .page-fortune .fortune-console::before { inset: 0 0 15px; opacity: .23; }
+  .cheese-game-page::before { opacity: .1; background-size: 900px auto; }
+  .cheese-game-page .cheese-game-frame::after { opacity: .22; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fortune .fortune-console::before { mix-blend-mode: normal; }
+}
