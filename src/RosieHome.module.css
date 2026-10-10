@@ -4,7 +4,7 @@
   position:relative; isolation:isolate; box-sizing:border-box; width:100%; min-width:320px; min-height:100dvh;
   display:flex; flex-direction:column; align-items:center; gap:clamp(6px,1.1vw,13px);
   padding:max(9px,env(safe-area-inset-top)) clamp(8px,2vw,22px) max(20px,env(safe-area-inset-bottom));
-  overflow:hidden; background:radial-gradient(ellipse 72% 33% at 50% 20%,#734552b8,transparent),linear-gradient(180deg,#221a31 0%,#181527 50%,#080d1b 92%);
+  overflow:hidden; background:#14111f; /* Solid fallback only: RosieVerseAtmosphere supplies the full-bleed scenery. */
 }
 .banner {width:min(100%,750px);position:relative;z-index:4;flex:none;margin-inline:auto;filter:drop-shadow(0 8px 8px #080612a8);}
 .banner img {display:block;width:100%;height:auto;user-select:none;}
@@ -43,7 +43,6 @@
   background-size:240% 100%;opacity:0;transition:opacity .15s;
 }
 .world:hover .activeSheen,.world:focus-visible .activeSheen {opacity:.66;animation:cardSheen 1.2s ease-out;}
-@keyframes skyGlow {from{opacity:.58}to{opacity:1}}
 @keyframes waterShift {from{transform:translateX(-5%)}to{transform:translateX(8%)}}
 @keyframes cardSheen {from{background-position:100% 0}to{background-position:-100% 0}}
 @media(min-width:850px) {
@@ -62,7 +61,8 @@
 @media(max-width:370px){.hero{height:305px;}.worldGrid{gap:3px;}}
 @media(max-height:670px) and (max-width:600px){.hero{height:300px;}}
 @media(prefers-reduced-motion:reduce) {
- .sceneWash,.waterGlow,  .world,.activeSheen {transition:none;}
+ .waterGlow,.activeSheen {animation:none !important;}
+ .world,.activeSheen {transition:none;}
 }
 
 /* Match the single-screen illustrated composition over viewport sizes. */
