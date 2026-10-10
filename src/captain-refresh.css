@@ -362,3 +362,53 @@
     place-content: center;
   }
 }
+
+/*
+ * Captain's Japanese coast.  The original course remains the interactive layer;
+ * this painted scene replaces its flat background without changing steering,
+ * hit targets, horizontal yacht position or game-speed settings.
+ */
+.captain-game-page .yacht-course {
+  background-color:#163d50;
+  background-image:
+    linear-gradient(180deg,rgba(18,25,48,.06) 0%,rgba(20,66,78,.03) 31%,rgba(3,45,64,.12) 65%,rgba(2,32,51,.22) 100%),
+    url("/captain-tsushima-coast.svg");
+  background-size:cover;
+  background-position:center 45%;
+  background-repeat:no-repeat;
+}
+.captain-game-page .riviera-course-art {
+  opacity:.20;
+  mix-blend-mode:soft-light;
+  filter:saturate(.9) contrast(1.1);
+}
+.captain-game-page .captain-sky,
+.captain-game-page .riviera-mountains,
+.captain-game-page .captain-horizon {
+  display:none;
+}
+.captain-game-page .yacht-course::before {
+  inset:40% 0 0;
+  background:repeating-linear-gradient(169deg,rgba(246,232,211,.09) 0 1px,transparent 1px 33px);
+  mix-blend-mode:screen;
+  opacity:.37;
+}
+.captain-game-page .yacht-course::after {
+  background:linear-gradient(180deg,rgba(255,247,230,.07),transparent 37%,rgba(2,27,43,.19) 100%),
+  radial-gradient(ellipse at 50% 52%,transparent 0 62%,rgba(7,22,34,.25) 100%);
+  opacity:.9;
+}
+.captain-game-page .yacht-game-sign {
+  background:linear-gradient(180deg,#1b3a46,#0c2838);
+}
+.captain-game-page .captain-command-deck {
+  background:repeating-linear-gradient(93deg,rgba(218,180,121,.026) 0 1px,transparent 1px 11px),
+  linear-gradient(180deg,#153b48,#092b3a);
+}
+@media(max-width:720px) {
+  .captain-game-page .yacht-course {background-position:center 41%;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .captain-game-page .riviera-course-art,
+  .captain-game-page .riviera-course-art * { animation:none !important; }
+}
