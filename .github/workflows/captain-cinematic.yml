@@ -10,6 +10,10 @@ on:
       - src/captain-motion.css
       - .github/workflows/captain-cinematic.yml
 
+concurrency:
+  group: captain-cinematic-${{ github.head_ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -39,7 +43,7 @@ jobs:
       - name: Validate encoded assets
         run: |
           set -e
-          for f in public/captain-motion/*-water.mp4; do
+          for f in public/captain-motion/*-water.mp4 public/captain-motion/*-water.webm; do
             ffprobe -v error -show_entries format=duration,size -of default=nw=1 "$f"
             test "$(stat -c %s "$f")" -lt 12582912
           done
