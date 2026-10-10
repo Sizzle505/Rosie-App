@@ -1,0 +1,85 @@
+name: One-time RosieVerse responsive browser QA
+on:
+  push:
+    branches:
+      - work/rosieverse-landing-cinematic-20261009
+    paths:
+      - .github/workflows/qa-rosieverse-landing.yml
+permissions:
+  contents: write
+jobs:
+  inspect-landing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install app and Chromium/WebKit test browsers
+        run: |
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium webkit
+      - name: Build and launch preview
+        run: |
+          npm run build
+          npm run preview -- --host 127.0.0.1 > /tmp/rosieverse-preview.log 2>&1 &
+          for x in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ >/dev/null && break || sleep 1; done
+      - name: Capture real renderer QA across five viewport dimensions
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium, webkit } from 'playwright';
+          import { mkdirSync, writeFileSync } from 'node:fs';
+          mkdirSync('qa-screenshots',{recursive:true});
+          const specs = [[390,844],[375,667],[320,650],[768,1024],[1440,900]];
+          const report={commit:process.env.GITHUB_SHA, browsers:[], issues:[]};
+          for(const [engine,browserType] of [['Chromium',chromium],['WebKit',webkit]]){
+            const browser=await browserType.launch({headless:true});
+            for(const [w,h] of specs){
+              const ctx=await browser.newContext({viewport:{width:w,height:h},deviceScaleFactor:1,isMobile:w<=390,hasTouch:w<=390});
+              const page=await ctx.newPage();
+              const errors=[];
+              page.on('pageerror',e=>errors.push(e.message));
+              await page.goto('http://127.0.0.1:4173/#home',{waitUntil:'networkidle'});
+              await page.locator('nav[aria-label="RosieVerse destinations"] button').first().waitFor();
+              await page.waitForTimeout(250);
+              const v=await page.evaluate(()=>({
+                inner:[innerWidth,innerHeight],
+                document:[document.documentElement.scrollWidth,document.documentElement.scrollHeight],
+                buttons:document.querySelectorAll('nav[aria-label="RosieVerse destinations"] button').length,
+                images:[...document.querySelectorAll('main[aria-label^="RosieVerse"] img')].map(x=>({src:x.getAttribute('src'),ok:x.complete&&x.naturalWidth>0,width:Math.round(x.getBoundingClientRect().width)})),
+                scenery:[...document.querySelectorAll('div')].some(x=>getComputedStyle(x).backgroundImage.includes('background-mobile.webp')),
+              }));
+              const imgFails=v.images.filter(x=>!x.ok);
+              if(v.document[0]>w+2)report.issues.push(`${engine} ${w}x${h} horizontal overflow ${v.document[0]}`);
+              if(v.buttons!==5)report.issues.push(`${engine} ${w}x${h} button count ${v.buttons}`);
+              if(imgFails.length)report.issues.push(`${engine} ${w}x${h} broken images: ${imgFails.map(x=>x.src).join(',')}`);
+              if(!v.scenery)report.issues.push(`${engine} ${w}x${h} missing scenery`);
+              if(errors.length)report.issues.push(`${engine} ${w}x${h} runtime errors: ${errors.join(';')}`);
+              await page.screenshot({path:`qa-screenshots/${engine.toLowerCase()}-${w}x${h}.png`,fullPage:true});
+              report.browsers.push({engine,width:w,height:h,...v});
+              if(w===390&&h===844){
+                for(const id of ['fortune','cheese','captain','vault','randomizers']){
+                  await page.goto('http://127.0.0.1:4173/#home');
+                  await page.getByRole('button',{name:new RegExp('Open '+id.replace('vault','Card Vault').replace('randomizers','Randomizers').replace('fortune','Fortune Teller').replace('cheese','Cheese Board Exam').replace('captain','Captain Rosie'),'i')}).click();
+                  if(!page.url().endsWith('#'+id))report.issues.push(`${engine}: failed navigation #${id}`);
+                }
+                await page.goto('http://127.0.0.1:4173/#home');
+                await page.emulateMedia({reducedMotion:'reduce'});
+                const reduced=await page.locator('img[src*="/rosieverse/scenery/petals/"]').first().evaluate(el=>getComputedStyle(el).animationName);
+                if(reduced!=='none')report.issues.push(`${engine}: reduced-motion petal animation remains enabled`);
+              }
+              await ctx.close();
+            }
+            await browser.close();
+          }
+          writeFileSync('qa-screenshots/qa-results.json',JSON.stringify(report,null,2));
+          console.log(JSON.stringify({rendered:report.browsers.length,issues:report.issues,metrics:report.browsers.map(({engine,width,height,document:doc})=>({engine,width,height,scroll:doc}))},null,2));
+          JS
+      - name: Save QA screenshots and metrics for review
+        if: always()
+        run: |
+          if [ ! -f qa-screenshots/qa-results.json ]; then echo '{"issues":["QA run did not finish"]}' > qa-screenshots/qa-results.json; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qa-screenshots
+          git commit -m "Temporary RosieVerse WebKit and Chromium visual QA captures" || true
+          git push origin HEAD:refs/heads/work/rosieverse-landing-cinematic-20261009
