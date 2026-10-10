@@ -1759,7 +1759,7 @@ function CaptainRosieGame({ soundOn }) {
           onPointerUp={onCoursePointerUp}
         >
           <picture className="captain-scene" aria-hidden="true">
-            <source media="(max-width: 720px), (orientation: portrait)" srcSet="/captain-sakura-course-portrait.webp" />
+            <source media="(max-width: 720px) and (orientation: portrait)" srcSet="/captain-sakura-course-portrait.webp" />
             <img src="/captain-sakura-course-wide.webp" alt="" draggable="false" decoding="async" fetchPriority="high" />
           </picture>
           <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
