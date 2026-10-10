@@ -1,0 +1,40 @@
+name: Import illustrated Barkbridge diploma image assets
+on:
+  push:
+    paths:
+      - '.github/workflows/barkbridge-import-assets.yml'
+permissions:
+  contents: write
+jobs:
+  import-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Import standalone art assets
+        env:
+          BARKBRIDGE_0_URL: "https://uc6ac0d4f1c877c8b1765f84d674.dl.dropboxusercontent.com/cd/0/get/DJv4s_AQxM3hyVFLT6eaKZUKoD5d1DvX7_W40zW3naxdWB_x8dpuA6kn3uV4Kgk1DFNY_DyS12gCgI4oEdIf-3nfj4lgABi71AoJ59AMSwjfciNWRrzeyj7M6h1tp_9PkYTGaREmNV0JsYTaFx9m1ToD74ciOZwtqKNkdVVXvwxrQQ/file?c_luid=667ded1d"
+          BARKBRIDGE_1_URL: "https://uceefb7191a51d1939e0450e670d.dl.dropboxusercontent.com/cd/0/get/DJtaP_EH_zLlnjv6Gtyd8SSrK-lftHIP1gGKswh3IoYxGFyhl4CCpvKcDJrpBt79-xquJI9tP4-zOtir70NeoaEpc_pYNtexcjm8loYas7_0mS_asWYh0YrC4vZc3KcPIpbcik4ApR0_aD5XA9_Em_Hi7YMQBTv-_3dhh-zeKJIlmA/file?c_luid=667ded1d"
+          BARKBRIDGE_2_URL: "https://uc5f570e55f1a947fcae2f32202c.dl.dropboxusercontent.com/cd/0/get/DJs0l_6zSHh73PVKvhXtmAQPENl0gnIE8z0tGiODXe_6N47t-y8IDODnZACj0lwJ-Xs_i7J1reXaumg6SDTkFd2CNWDkJDhsulQ1EPFbxdpYbFwII4e74DvyxTvjTSs2wTTQ2FGmwuslXo32zmYkso5dJs7kMJ5OeOHvmV0J1MLIWw/file?c_luid=667ded1d"
+          BARKBRIDGE_3_URL: "https://uc1c6414fb2f97f41541f490f67a.dl.dropboxusercontent.com/cd/0/get/DJsmJ6q1sH75_h3wOnP0FW9Yz8soJ2tNREV4U5PayOREo9a5o_tw1ijlKPNbHTfz4IcxE3plsqO5sAIC7SkqznTp83zTPQxnu7oPKWTlsPvaovsPaOGETHr6i5fDuyBfmX0hKt7j21nzKxvtp_p_SgcxOZtcljtA4CagRsNCT4C4_Q/file?c_luid=667ded1d"
+          BARKBRIDGE_4_URL: "https://ucb007862c629657e78ba44cc665.dl.dropboxusercontent.com/cd/0/get/DJsZUwa8MvZ3qOI3_N0_oDEZ5wesaRiveD1TGBJacgXmdSJrXLs84rrECZuGFZ98_eJ9sT8iCpg18M21mulzWn0lqFEguUPTYmMTX_f1JSm7N-2g2SKvFnIaZdinzIk0Gj-P-4Rt6wlvlyR-9ne5NM4NqMraDcxyQUCe9yNvZOZR8w/file?c_luid=667ded1d"
+        run: |
+          set -euo pipefail
+          mkdir -p public/barkbridge/diploma
+          curl --fail --silent --show-error --location --max-time 50 "$BARKBRIDGE_0_URL" --output "public/barkbridge/diploma/ornate-frame.png"
+          curl --fail --silent --show-error --location --max-time 50 "$BARKBRIDGE_1_URL" --output "public/barkbridge/diploma/parchment.png"
+          curl --fail --silent --show-error --location --max-time 50 "$BARKBRIDGE_2_URL" --output "public/barkbridge/diploma/canine-crest.png"
+          curl --fail --silent --show-error --location --max-time 50 "$BARKBRIDGE_3_URL" --output "public/barkbridge/diploma/wax-seal.png"
+          curl --fail --silent --show-error --location --max-time 50 "$BARKBRIDGE_4_URL" --output "public/barkbridge/diploma/cheese-stamp.png"
+          test -s "public/barkbridge/diploma/ornate-frame.png" && file "public/barkbridge/diploma/ornate-frame.png" | grep -q 'PNG image'
+          test -s "public/barkbridge/diploma/parchment.png" && file "public/barkbridge/diploma/parchment.png" | grep -q 'PNG image'
+          test -s "public/barkbridge/diploma/canine-crest.png" && file "public/barkbridge/diploma/canine-crest.png" | grep -q 'PNG image'
+          test -s "public/barkbridge/diploma/wax-seal.png" && file "public/barkbridge/diploma/wax-seal.png" | grep -q 'PNG image'
+          test -s "public/barkbridge/diploma/cheese-stamp.png" && file "public/barkbridge/diploma/cheese-stamp.png" | grep -q 'PNG image'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/barkbridge/diploma
+          git commit -m "Import five original Barkbridge diploma art assets"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
