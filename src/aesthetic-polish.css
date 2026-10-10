@@ -91,3 +91,40 @@
 @media (prefers-reduced-motion: reduce) {
   .page-fortune .fortune-console::before { mix-blend-mode: normal; }
 }
+
+/* Barkbridge diploma viewer - iPhone must fit the whole certificate.
+   The desktop viewer deliberately uses a fixed reading canvas; on iPhone that
+   canvas exceeded the dialog and Safari exposed only its left portion. */
+@media (max-width: 700px) {
+  .barkbridge-zoom-dialog {
+    width: calc(100dvw - 18px) !important;
+    max-width: calc(100dvw - 18px) !important;
+    max-height: calc(100dvh - 28px) !important;
+    padding: 8px !important;
+  }
+
+  .barkbridge-zoom-toolbar {
+    min-width: 0;
+    padding: 2px 2px 8px !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+  }
+
+  .barkbridge-zoom-toolbar button {
+    min-height: 36px;
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .barkbridge-zoom-scroll {
+    max-height: calc(100dvh - 82px - env(safe-area-inset-bottom)) !important;
+    overflow-x: hidden !important;
+  }
+
+  .barkbridge-zoom-dialog .barkbridge-diploma {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    aspect-ratio: 1200 / 920 !important;
+  }
+}
