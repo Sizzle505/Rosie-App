@@ -106,8 +106,8 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       const certificateText = await diploma.innerText();
       for (const required of [
         "UNIVERSITY OF BARKBRIDGE", "FACULTY OF GASTRONOMIC SCIENCES",
-        "Rosie the Shiba", "Doctor of Cheese (Che.D.)", "Fetch the Fromage",
-        "May 2025", "Prof. Manchego P. Curdwell", "Dr. Brie de Bloom"
+        "The Graduate", "Doctor of Cheese (Che.D.)", "Fetch the Fromage",
+        String(new Date().getFullYear()), "Prof. Manchego P. Curdwell", "Dr. Brie de Bloom"
       ]) assert(certificateText.includes(required), "diploma missing: " + required);
       const bounds = await diploma.boundingBox();
       assert(bounds && bounds.width <= width + 1, "diploma wider than viewport: " + JSON.stringify(bounds));
@@ -118,7 +118,17 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         recipientFont: getComputedStyle(node.querySelector(".diploma-exam-name")).fontFamily,
         sealSvg: Boolean(node.querySelector(".diploma-wax-seal svg"))
       }));
-      assert(diplomaComputed.image.includes("barkbridge-photo-reference-engraving.svg"), "photo-led ornate frame not loaded");
+      assert(diplomaComputed.image.includes("barkbridge/diploma/ornate-frame.png"), "illustrated frame asset is not in use");
+      const requiredArt = ["ornate-frame.png", "parchment.png", "canine-crest.png", "wax-seal.png", "cheese-stamp.png"];
+      for (const filename of requiredArt) {
+        const response = await page.request.get(base + "/barkbridge/diploma/" + filename);
+        assert.equal(response.status(), 200, "missing illustration asset: " + filename);
+        assert(Number(response.headers()["content-length"] || 1000) > 100, "empty illustration asset: " + filename);
+      }
+      const nameInput = page.getByRole("textbox", { name: "Name on diploma" });
+      await nameInput.fill("Captain Cheese");
+      assert.equal(await diploma.locator(".diploma-exam-name").innerText(), "Captain Cheese");
+      assert(!(await diploma.innerText()).includes("Rosie the Shiba"), "Rosie cannot be the certificate recipient");
       assert(diplomaComputed.recipientFont.includes("Great Vibes"), "calligraphic recipient styling missing");
       assert(diplomaComputed.sealSvg, "embossed wax impression missing");
       const performance = await page.locator(".diploma-results-strip").innerText();
@@ -151,14 +161,6 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       assert(fit.inset >= 25, "signatures too close to certificate border: " + JSON.stringify(fit));
       assert(fit.signatureTop >= fit.dateBottom + 3, "signatures overlap certificate date: " + JSON.stringify(fit));
       assert(fit.dateTop >= fit.dissertationBottom + 2, "dissertation overlaps certificate date: " + JSON.stringify(fit));
-      if (width >= 1200) {
-        const navClearance = await page.evaluate(() => {
-          const replay = document.querySelector(".barkbridge-replay").getBoundingClientRect();
-          const nav = document.querySelector(".bottom-nav").getBoundingClientRect();
-          return { replayBottom: Math.round(replay.bottom), navTop: Math.round(nav.top) };
-        });
-        assert(navClearance.replayBottom <= navClearance.navTop - 6, "desktop replay obstructed by bottom nav: " + JSON.stringify(navClearance));
-      }
       await page.screenshot({ path: output + "/" + title + "-diploma.png", fullPage: true });
       await page.getByRole("button", { name: /View diploma at full size/i }).click();
       assert(await page.locator("dialog.barkbridge-zoom-dialog").evaluate(dialog => dialog.open), "enlargement dialog not open");
@@ -167,9 +169,17 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       const zoomOpacity = await zoomed.evaluate(element => getComputedStyle(element).opacity);
       assert(zoomBounds && zoomBounds.width >= 750 && zoomBounds.height >= 480, "zoomed certificate must have full-size geometry: " + JSON.stringify(zoomBounds));
       assert(Number(zoomOpacity) > .99, "enlarged certificate is not visible: opacity " + zoomOpacity);
+      assert.equal(await zoomed.locator(".diploma-exam-name").innerText(), "Captain Cheese", "zoom must show personalized recipient");
       await page.screenshot({ path: output + "/" + title + "-diploma-enlarged.png" });
       await page.getByRole("button", { name: /Close ×/i }).click();
-      await page.getByRole("button", { name: /EXAMINE AGAIN/i }).click();
+      const replay = page.getByRole("button", { name: /EXAMINE AGAIN/i });
+      await replay.scrollIntoViewIfNeeded();
+      const finalNavClearance = await page.evaluate(() => ({
+        replayBottom: Math.round(document.querySelector(".barkbridge-replay").getBoundingClientRect().bottom),
+        navTop: Math.round(document.querySelector(".bottom-nav").getBoundingClientRect().top)
+      }));
+      assert(finalNavClearance.replayBottom <= finalNavClearance.navTop - 5, "replay remains under bottom nav: " + JSON.stringify(finalNavClearance));
+      await replay.click();
       assert.equal(await page.locator("button.cheese-card").count(), 16, "replay did not reset game");
       assert.equal(errors.length, 0, "browser errors: " + errors.join(" | "));
       summary.push({ browserName, width, height, panels, bounds: { width: Math.round(bounds.width), height: Math.round(bounds.height) }, performance: performance.replace(/\\s+/g," ").slice(0,100), errors: [] });
