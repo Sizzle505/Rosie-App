@@ -11,6 +11,7 @@ import "./captain-motion.css";
 import "./responsive-polish.css";
 import "./barkbridge-reference.css";
 import "./captain-immersive.css";
+import "./fortune-barkbridge-atmosphere.css";
 import "./captain-levels.css";
 import "./captain-cinematic-refinement.css";
 import "./barkbridge-assets.css";
