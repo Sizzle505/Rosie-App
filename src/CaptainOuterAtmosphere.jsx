@@ -21,7 +21,7 @@ export default function CaptainOuterAtmosphere() {
   }, []);
   const scene = useCaptainSceneryTransition(requestedLevel);
   return (
-    <div className="captain-outer-scene" aria-hidden="true">
+    <div className="captain-outer-scene" data-climate={scene.current?.climate || "sunlit"} aria-hidden="true">
       {scene.previous && <div className="captain-outer-paint captain-outer-painted-outgoing" style={{ backgroundImage: `url("${scene.previous.background}")` }} />}
       <div className={`captain-outer-paint captain-outer-painted-incoming${scene.entered ? " is-entered" : ""}`} style={scene.current ? { backgroundImage: `url("${scene.current.background}")` } : undefined} />
       <div className="captain-outer-veil" />
