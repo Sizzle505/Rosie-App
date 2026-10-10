@@ -1,0 +1,168 @@
+/* Captain cinematic environment - opt-in compositor layers; the original picture stays authoritative. */
+.captain-game-page .captain-cinematic {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none !important;
+  user-select: none;
+  -webkit-user-select: none;
+  contain: paint;
+}
+.captain-game-page .captain-cinematic * { pointer-events: none !important; }
+.captain-game-page .captain-cinematic-water,
+.captain-game-page .captain-cinematic-mist,
+.captain-game-page .captain-cinematic-cloud {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 50%;
+  user-select: none;
+}
+.captain-game-page .captain-cinematic-water {
+  z-index: 1;
+  /* Feather water movement in at the painted shoreline - sky/mountains remain original. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 42%, black 57%);
+  mask-image: linear-gradient(to bottom, transparent 42%, black 57%);
+}
+.captain-game-page .captain-cinematic-mist {
+  z-index: 2;
+  opacity: .6;
+  animation: captainMistTravel 22s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-cinematic-cloud {
+  z-index: 2;
+  opacity: .47;
+  animation: captainSkyBreathe 30s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-cinematic-light {
+  position: absolute;
+  z-index: 2;
+  inset: 49% 0 0;
+  background: radial-gradient(ellipse 17% 64% at 68% 24%, rgba(255,210,123,.09), transparent 94%);
+  mix-blend-mode: screen;
+  opacity: .55;
+  animation: captainLightBreathe 10s ease-in-out infinite;
+}
+.captain-game-page .captain-cinematic.has-streak .captain-cinematic-light { opacity: .95; }
+.captain-game-page .captain-cinematic.is-final-approach .captain-cinematic-light,
+.captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-light { opacity: 1; }
+.captain-game-page .captain-cinematic-sail {
+  position: absolute;
+  z-index: 2;
+  top: 49%;
+  left: 80%;
+  width: clamp(8px, 1.7%, 18px);
+  height: clamp(10px, 2.1%, 21px);
+  opacity: .65;
+  background: linear-gradient(120deg, rgba(255,229,184,.85), rgba(134,65,52,.9));
+  clip-path: polygon(73% 0%, 77% 88%, 5% 85%);
+  transform-origin: 80% 94%;
+  filter: drop-shadow(0 1px 1px rgba(17,36,49,.6));
+  animation: captainDistantSail 33s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-cinematic-birds {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  animation: captainBirdsPass 29s linear infinite;
+}
+.captain-game-page .captain-cinematic-birds i {
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  border-top: 1.4px solid rgba(48,50,58,.65);
+  border-radius: 65% 90% 0 0;
+  transform: rotate(-14deg);
+}
+.captain-game-page .captain-cinematic-birds i::after {
+  content:"";
+  position:absolute; left:8px; top:-1px;
+  width: 9px; height: 5px; border-top:1.4px solid rgba(48,50,58,.65);
+  border-radius: 85% 85% 0 0;
+  transform: rotate(28deg);
+}
+.captain-game-page .captain-cinematic-birds i:nth-child(1) { top:26%; left:12%; }
+.captain-game-page .captain-cinematic-birds i:nth-child(2) { top:29%; left:16%; transform:rotate(-13deg) scale(.7); }
+.captain-game-page .captain-cinematic-birds i:nth-child(3) { top:24%; left:9%; transform:rotate(-13deg) scale(.53); }
+.captain-game-page .captain-cinematic-petals { position:absolute; z-index:3; inset:0; }
+.captain-game-page .captain-cinematic-petals i {
+  position:absolute;
+  left:-9%;
+  top:var(--petal-top);
+  width:var(--petal-size);
+  height:var(--petal-size);
+  background: url('/captain-motion/sakura-petal.svg') center / contain no-repeat;
+  opacity:0;
+  will-change:transform;
+  animation: captainPetalWind 28s linear infinite;
+  animation-delay:var(--petal-delay);
+}
+.captain-game-page .captain-cinematic-petals i.is-maple { background-image:url('/captain-motion/maple-leaf.svg'); }
+.captain-game-page .captain-cinematic-petals i:nth-child(1) { --petal-top:12%; --petal-size:14px; --petal-delay:-.8s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(2) { --petal-top:24%; --petal-size:10px; --petal-delay:-1.3s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(3) { --petal-top:31%; --petal-size:15px; --petal-delay:-2s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(4) { --petal-top:49%; --petal-size:10px; --petal-delay:-2.8s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(5) { --petal-top:16%; --petal-size:12px; --petal-delay:-3.4s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(6) { --petal-top:35%; --petal-size:12px; --petal-delay:-3.9s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(7) { --petal-top:48%; --petal-size:9px; --petal-delay:-4.3s; }
+.captain-game-page .captain-cinematic-petals i:nth-child(8) { --petal-top:21%; --petal-size:13px; --petal-delay:-4.8s; }
+.captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-petals i { animation-duration:20s; }
+.captain-game-page .captain-cinematic-catch-glint {
+  position:absolute; z-index:3; left:50%; bottom:17%;
+  width:90px; height:50px; transform:translateX(-50%);
+  animation: captainCatchGlimmer .8s ease-out both;
+}
+.captain-game-page .captain-cinematic-catch-glint i {
+  position:absolute; left:15%; top:38%; width:5px; height:5px;
+  border-radius:50%;
+  background:rgba(255,229,140,.85);
+  box-shadow:0 0 8px rgba(255,201,106,.8);
+}
+.captain-game-page .captain-cinematic-catch-glint i:nth-child(2) { left:54%; top:15%; transform:scale(.7); }
+.captain-game-page .captain-cinematic-catch-glint i:nth-child(3) { left:77%; top:65%; transform:scale(.5); }
+@media (max-width:720px) and (orientation:portrait) {
+  .captain-game-page .captain-cinematic-water,
+  .captain-game-page .captain-cinematic-mist,
+  .captain-game-page .captain-cinematic-cloud { object-position:center 39%; }
+  .captain-game-page .captain-cinematic-water {
+    -webkit-mask-image:linear-gradient(to bottom, transparent 35%, black 52%);
+    mask-image:linear-gradient(to bottom, transparent 35%, black 52%);
+  }
+  .captain-game-page .captain-cinematic-light {
+    background:radial-gradient(ellipse 29% 64% at 67% 25%,rgba(255,210,123,.1),transparent 95%);
+  }
+}
+@media (max-width:380px) {
+  .captain-game-page .captain-cinematic-petals i:nth-child(n+6) {display:none;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .captain-game-page .captain-cinematic {display:none!important;}
+}
+@keyframes captainMistTravel { from {transform:translate3d(-8px,2px,0); opacity:.45;} to {transform:translate3d(13px,-3px,0); opacity:.65;} }
+@keyframes captainSkyBreathe { from {transform:translate3d(-10px,0,0); opacity:.36;} to {transform:translate3d(14px,0,0); opacity:.53;} }
+@keyframes captainLightBreathe { 0%,100% {transform:scaleX(.91);opacity:.6;} 52% {transform:scaleX(1.1);opacity:.98;} }
+@keyframes captainDistantSail { 0% { transform:translate3d(-20px,0,0) rotate(-2deg); } 100% {transform:translate3d(15px,1px,0) rotate(2deg);} }
+@keyframes captainBirdsPass {
+  0%,8% { opacity:0;transform:translate3d(-30%,5%,0);}
+  12% {opacity:.85;}
+  34% {opacity:.85;}
+  39%,100% {opacity:0; transform:translate3d(115%,-8%,0);}
+}
+@keyframes captainPetalWind {
+  0%,3% {opacity:0;transform:translate3d(0,0,0) rotate(-25deg);}
+  6% {opacity:.9;}
+  12% {transform:translate3d(26vw,32px,0) rotate(95deg);opacity:.87;}
+  24% {transform:translate3d(62vw,-9px,0) rotate(240deg);opacity:.78;}
+  38% {transform:translate3d(110vw,48px,0) rotate(425deg);opacity:0;}
+  39%,100% {opacity:0;transform:translate3d(110vw,48px,0) rotate(425deg);}
+}
+@keyframes captainCatchGlimmer {
+  0% {opacity:0; transform:translateX(-50%) scale(.6);}
+  25% {opacity:.75;}
+  100% {opacity:0; transform:translateX(-50%) scale(1.55);}
+}
