@@ -17,6 +17,8 @@ import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
 
+const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+
 function RosieNavIcon({ type }) {
   const common = {
     className: "rosie-nav-icon",
@@ -671,7 +673,37 @@ function GraduateRosie() {
   );
 }
 
+function BarkbridgeDiploma() {
+  return (
+    <article className="barkbridge-diploma" aria-label="University of Barkbridge Doctor of Cheese diploma">
+      <div className="diploma-inner-border">
+        <BarkbridgeSeal className="diploma-seal" />
+        <h1>UNIVERSITY OF BARKBRIDGE</h1>
+        <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
+        <p className="diploma-intro">Upon recommendation of the Faculty hereby confers upon</p>
+        <strong className="diploma-exam-name">Rosie the Shiba</strong>
+        <p className="diploma-confers">the degree of</p>
+        <h3>Doctor of Cheese (Che.D.)</h3>
+        <p className="diploma-dissertation">“Fetch the Fromage: A Shiba Inu’s Paw-Validated Flavor Index for Mapping the Terroirs of Regional Curds”</p>
+        <p className="diploma-date">May 2025</p>
+        <div className="diploma-signatures">
+          <div>
+            <span>Prof. Manchego P. Curdwell</span>
+            <small>Dissertation Supervisor</small>
+          </div>
+          <div className="diploma-wax-seal" aria-hidden="true"><b>R</b></div>
+          <div>
+            <span>Dr. Brie de Bloom</span>
+            <small>Dean</small>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
+  const diplomaDialogRef = useRef(null);
   const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
   const confetti = Array.from({ length: 34 }, (_, index) => {
     const left = (index * 37 + 11) % 98;
@@ -695,39 +727,33 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
     <section className="barkbridge-graduation" aria-live="polite">
       <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
       <div className="graduation-stage">
-        <article className="barkbridge-diploma" aria-label="University of Barkbridge completion diploma">
-          <div className="diploma-inner-border">
-            <BarkbridgeSeal className="diploma-seal" />
-            <h1>UNIVERSITY OF BARKBRIDGE</h1>
-            <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
-            <p className="diploma-intro">Upon recommendation of Doctor Rosie<br />hereby recognizes successful completion of</p>
-            <strong className="diploma-exam-name">ROSIE'S CHEESE BOARD EXAM</strong>
-            <p className="diploma-confers">and confers the</p>
-            <h3>CERTIFICATE OF CHEESE BOARD PROFICIENCY</h3>
-            <p className="diploma-distinction">with distinction in<br /><b>Curd Recognition &amp; Regional Recall</b></p>
-
-            <div className="diploma-stats" aria-label="Exam performance">
-              <div><span>MOVES</span><strong>{moves}</strong></div>
-              <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
-              <div><span>MATCH EFFICIENCY</span><strong>{efficiency}%</strong></div>
-            </div>
-
-            <div className="diploma-signatures">
-              <div>
-                <span>Doctor Rosie</span>
-                <small>Examiner</small>
-              </div>
-              <div className="diploma-wax-seal" aria-hidden="true"><b>R</b><i>🐾</i></div>
-              <div>
-                <span>Dean Brie de Bloom</span>
-                <small>Dean</small>
-              </div>
-            </div>
-          </div>
-        </article>
-
+        <BarkbridgeDiploma />
         <GraduateRosie />
       </div>
+
+      <div className="diploma-aftercare">
+        <button type="button" className="diploma-enlarge-button" onClick={() => diplomaDialogRef.current?.showModal()}>
+          <span aria-hidden="true">↗</span> View diploma at full size
+        </button>
+        <div className="diploma-results-strip" aria-label="Examination results">
+          <span className="diploma-results-heading">EXAMINATION RESULTS</span>
+          <div className="diploma-stats">
+            <div><span>MOVES</span><strong>{moves}</strong></div>
+            <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+            <div><span>MATCH EFFICIENCY</span><strong>{efficiency}%</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <dialog ref={diplomaDialogRef} className="barkbridge-zoom-dialog" aria-label="Enlarged University of Barkbridge diploma">
+        <div className="barkbridge-zoom-toolbar">
+          <span>UNIVERSITY OF BARKBRIDGE · OFFICIAL DIPLOMA</span>
+          <button type="button" onClick={() => diplomaDialogRef.current?.close()}>Close ×</button>
+        </div>
+        <div className="barkbridge-zoom-scroll" tabIndex={0}>
+          <BarkbridgeDiploma />
+        </div>
+      </dialog>
 
       <button type="button" className="barkbridge-replay" onClick={onReplay}>
         <span aria-hidden="true">↻</span> EXAMINE AGAIN
@@ -2520,9 +2546,9 @@ function App() {
               <span>✦</span>
             </div>
             <div className="omen-grid">
-              <div><small>LUCKY TREAT</small><strong>{daily.treat}</strong></div>
+              <div><small>LUCKY TREAT</small><strong>{capitalizeFirst(daily.treat)}</strong></div>
               <div><small>AUSPICIOUS HOUR</small><strong>{daily.hour}</strong></div>
-              <div><small>AVOID</small><strong>{daily.avoid}</strong></div>
+              <div><small>AVOID</small><strong>{capitalizeFirst(daily.avoid)}</strong></div>
             </div>
           </section>
         </main>
