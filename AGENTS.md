@@ -77,15 +77,3 @@ This preflight should be silent unless something actually fails.
 
 A signed-out Work browser is not a failed preflight.
 
-
-## 7. Rosie likeness: photograph-anchored identity (mandatory)
-
-Before any new or modified portrayal of Rosie (cards, home-screen hero, game character, icons, animation, marketing), **read [docs/ROSIE_IDENTITY_POLICY.md](docs/ROSIE_IDENTITY_POLICY.md)** and use its real-photograph reference files. The user's original photos are kept in private ChatGPT Library at `/RosieVerse/Canonical-Identity/` (primary: `rosie-real-front-tuxedo.jpeg`; secondary: `rosie-real-three-quarter-race.jpeg`). The repo is public; do not add these private photographs to it without explicit permission.
-
-- Retrieve and **visually inspect** the actual photographs before generation. Show or identify which photos were actually used.
-- Photographs determine facial and body identity; existing AI-generated Rosie app art determines style only. Generic black-and-tan Shibas are not acceptable substitutes.
-- If real photos are inaccessible or not available to the image-generation process, stop and ask for the reference pack or provide a handoff. Do not claim verification or create lookalike guesses.
-- After generation, check likeness against the actual photos and correct mismatches.
-- RosieVerse navigation illustrations should use recognizable page iconography; not all five buttons need Rosie headshots.
-
-This rule applies regardless of which ChatGPT/agent instance is doing the work.
