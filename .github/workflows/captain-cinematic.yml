@@ -6,6 +6,9 @@ on:
     paths:
       - scripts/render_captain_motion.py
       - scripts/verify_captain_browser.mjs
+      - scripts/extract_captain_reference.py
+      - src/main.jsx
+      - src/captain-immersive.css
       - src/CaptainCinematicEnvironment.jsx
       - src/captain-motion.css
       - .github/workflows/captain-cinematic.yml
@@ -60,6 +63,17 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "Render image-registered portrait and wide Captain motion assets [skip ci]"
             git push origin HEAD:work/captain-living-cinematic-20261009
+          fi
+      - name: Extract the established Rosie portrait to transparent WebP
+        run: python scripts/extract_captain_reference.py
+      - name: Commit authentic Rosie cutout to the existing feature branch
+        run: |
+          git config user.name "Rosie Cinematic CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/captain-rosie-deck.webp
+          if ! git diff --cached --quiet; then
+            git commit -m "Preserve canonical Rosie portrait as transparent deck artwork [skip ci]"
+            git push origin HEAD:${{ github.head_ref }}
           fi
       - name: Install and build app
         run: |

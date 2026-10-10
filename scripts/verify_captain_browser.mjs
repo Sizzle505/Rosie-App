@@ -4,6 +4,8 @@ import fs from "node:fs/promises";
 const BASE = "http://127.0.0.1:4173/#captain";
 const viewports = [
   ["small-iphone", 320, 568],
+  ["compact-iphone", 320, 650],
+  ["standard-iphone", 375, 667],
   ["modern-iphone", 390, 844],
   ["iphone-landscape", 844, 390],
   ["tablet-portrait", 768, 1024],
@@ -62,6 +64,59 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
           || !atmosphere.wave || !atmosphere.glimmer || !atmosphere.foam || atmosphere.overflow) {
         throw new Error(`${engine}/${label}: cinematic margin or wave regression: ${JSON.stringify(atmosphere)}`);
       }
+      const ship = await page.locator(".captain-painted-sprite").evaluate((img) => {
+        const boat = img.closest(".captain-yacht");
+        const world = img.closest(".yacht-course");
+        const rect = boat?.getBoundingClientRect();
+        const courseRect = world?.getBoundingClientRect();
+        return {
+          complete: img.complete,
+          imageWidth: img.naturalWidth,
+          imageHeight: img.naturalHeight,
+          boatWidth: rect?.width,
+          boatHeight: rect?.height,
+          courseWidth: courseRect?.width,
+          courseHeight: courseRect?.height,
+          currentAnimation: getComputedStyle(img).animationName,
+        };
+      });
+      if (!ship.complete || ship.imageWidth < 320 || ship.imageHeight < 580
+          || ship.boatWidth < 90 || ship.boatWidth > ship.courseWidth * .6
+          || ship.boatHeight > ship.courseHeight * .9
+          || ship.currentAnimation === "none") {
+        throw new Error(`${engine}/${label}: painted Rosie ship not sized or rendered correctly: ${JSON.stringify(ship)}`);
+      }
+      // The captain is a transparency-extracted EXISTING Rosie portrait,
+      // not a newly synthesized Shiba or an SVG hue-key that loses navy trim.
+      const reference = await page.locator("img.captain-painted-rosie").evaluate((img) => ({
+        asset: img.getAttribute("src"),
+        complete: img.complete,
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight,
+        width: img.getBoundingClientRect().width,
+        animation: getComputedStyle(img).animationName,
+      }));
+      if (reference.asset !== "/captain-rosie-deck.webp"
+          || !reference.complete || reference.naturalWidth !== 207
+          || reference.naturalHeight !== 240
+          || reference.width < ship.boatWidth * .40
+          || reference.width > ship.boatWidth * .46
+          || reference.animation === "none") {
+        throw new Error(`${engine}/${label}: authentic Rosie portrait missing or displaced: ${JSON.stringify(reference)}`);
+      }
+      const actualReferenceResponse = await page.request.get("http://127.0.0.1:4173/captain-rosie-deck.webp");
+      if (!actualReferenceResponse.ok()) {
+        throw new Error(`${engine}/${label}: authentic Rosie artwork failed to load: ${actualReferenceResponse.status()}`);
+      }
+      const widthLimit = label === "modern-iphone" ? 105
+        : (label === "standard-iphone" ? 104 : label === "compact-iphone" ? 94 : null);
+      if (widthLimit !== null && ship.boatWidth > widthLimit) {
+        throw new Error(`${engine}/${label}: ship did not shrink by about ten percent (width=${ship.boatWidth})`);
+      }
+      if (await page.locator(".captain-cinematic-current i").count() !== 4
+          || await page.locator(".captain-cinematic-water-stars i").count() !== 6) {
+        throw new Error(`${engine}/${label}: living water highlight layers missing`);
+      }
       const video = page.locator(".captain-cinematic-water");
       if (await video.count() !== 1) throw new Error(`${engine}/${label}: video layer missing`);
       const format = await video.evaluate((node) => node.canPlayType('video/mp4; codecs="avc1.42E01E"'));
@@ -80,6 +135,9 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
         }));
         throw new Error(`${engine}/${label}: supported MP4 stalled before screenshot (${timeA}->${timeB}): ${JSON.stringify(diagnostics)}`);
       }
+      if (label === "modern-iphone") {
+        await page.screenshot({ path: `captain-test-artifacts/${engine}-modern-iphone-full.png`, fullPage: true });
+      }
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
       await page.waitForTimeout(2100);
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
@@ -87,6 +145,21 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       // a screenshot-induced media clock reset is not treated as a stall.
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
+      // Capture the vessel in PLAY, not behind the departure modal. The
+      // first-generation screenshots hid Rosie's face with the start panel.
+      if (["modern-iphone", "standard-iphone", "compact-iphone", "tablet-portrait", "desktop"].includes(label)) {
+        await page.getByRole("button", { name: "CAST OFF" }).click();
+        await page.waitForTimeout(750);
+        await page.locator(".yacht-course").screenshot({
+          path: `captain-test-artifacts/${engine}-${label}-gameplay.png`
+        });
+        if (label === "modern-iphone") {
+          await page.screenshot({
+            path: `captain-test-artifacts/${engine}-modern-iphone-gameplay-full.png`,
+            fullPage: true,
+          });
+        }
+      }
       if (errors.length) throw new Error(`${engine}/${label}: ${errors.join(", ")}`);
       await context.close();
     }
@@ -94,6 +167,8 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const reducedPage = await reduced.newPage();
     await reducedPage.goto(BASE);
     if (await reducedPage.locator(".captain-cinematic video").count() !== 0) throw new Error(`${engine}: reduced motion still renders moving video`);
+    const shipStill = await reducedPage.locator(".captain-painted-sprite").evaluate((node) => getComputedStyle(node).animationName === "none");
+    if (!shipStill) throw new Error(`${engine}: painted ship pitch ignores reduced motion`);
     const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
     if (!outerStill) throw new Error(`${engine}: cinematic margins ignored reduced motion`);
     await reduced.close();
