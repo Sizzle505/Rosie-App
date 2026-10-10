@@ -825,6 +825,11 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   );
 }
 
+// Allow each cheese to turn visibly before scoring, without making players wait.
+const CHEESE_MATCH_REVEAL_MS = 360;
+const CHEESE_MISS_REVEAL_MS = 760;
+const CHEESE_GRADUATION_PAUSE_MS = 400;
+
 function CheeseMemoryGame() {
   const [deck, setDeck] = useState(() => shuffleCheeseDeck());
   const [openCards, setOpenCards] = useState([]);
@@ -983,9 +988,9 @@ function CheeseMemoryGame() {
 
         if (finishing) {
           window.clearTimeout(graduationTimerRef.current);
-          graduationTimerRef.current = window.setTimeout(() => setCeremonyVisible(true), 780);
+          graduationTimerRef.current = window.setTimeout(() => setCeremonyVisible(true), CHEESE_GRADUATION_PAUSE_MS);
         }
-      }, 430);
+      }, CHEESE_MATCH_REVEAL_MS);
     } else {
       pendingFlipRef.current = window.setTimeout(() => {
         const nextTotalMisses = totalMisses + 1;
@@ -999,7 +1004,7 @@ function CheeseMemoryGame() {
         setConsecutiveMisses(nextConsecutiveMisses);
         setPreviousResolvedResult("miss");
         applyReaction(nextReaction, reactionCopy(nextReaction));
-      }, 850);
+      }, CHEESE_MISS_REVEAL_MS);
     }
   }
 
