@@ -1,0 +1,89 @@
+name: Captain cinematic motion - render and verify
+on:
+  push:
+    branches:
+      - work/captain-living-cinematic-20261009
+    paths:
+      - scripts/render_captain_motion.py
+      - scripts/verify_captain_browser.mjs
+      - .github/workflows/captain-cinematic.yml
+
+permissions:
+  contents: write
+
+jobs:
+  paint-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install offline painting tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check numpy==2.2.6 pillow==11.3.0 opencv-python-headless==4.12.0.88
+      - name: Render 10-second periodic image-derived water and atmosphere
+        run: python scripts/render_captain_motion.py --seconds 10 --fps 15
+      - name: Validate encoded assets
+        run: |
+          set -e
+          for f in public/captain-motion/*-water.mp4; do
+            ffprobe -v error -show_entries format=duration,size -of default=nw=1 "$f"
+            test "$(stat -c %s "$f")" -lt 12582912
+          done
+      - name: Install and build app
+        run: |
+          npm ci
+          npm run build
+      - name: Install browser tests
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium webkit
+      - name: Run real responsive and gameplay browser tests
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/captain-preview.log 2>&1 &
+          sleep 4
+          node scripts/verify_captain_browser.mjs
+      - name: Check visible water changed in browser screenshots
+        run: |
+          python - <<'PY'
+          import numpy as np
+          from PIL import Image
+          from pathlib import Path
+          for browser in ('webkit','chromium'):
+              for viewport in ('modern-iphone','desktop'):
+                  base=Path('captain-test-artifacts')
+                  a=np.asarray(Image.open(base/f'{browser}-{viewport}-start.png').convert('RGB'), dtype=np.float32)
+                  b=np.asarray(Image.open(base/f'{browser}-{viewport}-moving.png').convert('RGB'), dtype=np.float32)
+                  h,w=a.shape[:2]
+                  part=np.s_[round(h*.52):round(h*.73), round(w*.08):round(w*.92)]
+                  diff=np.mean(np.abs(a[part]-b[part]))
+                  print(browser, viewport, 'visible pixel delta', round(float(diff),3))
+                  if diff < .7:
+                      raise AssertionError(f'Insufficient visible background movement: {browser}/{viewport}')
+          PY
+      - name: Preserve render evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: captain-cinematic-browser-frames
+          path: captain-test-artifacts/
+          if-no-files-found: ignore
+      - name: Commit optimized motion assets to feature branch
+        run: |
+          git config user.name "Rosie Cinematic CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/captain-motion/
+          if ! git diff --cached --quiet; then
+            git commit -m "Render image-registered portrait and wide Captain motion assets [skip ci]"
+            git push origin HEAD:work/captain-living-cinematic-20261009
+          fi
