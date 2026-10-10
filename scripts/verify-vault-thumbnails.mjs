@@ -48,6 +48,8 @@ try {
     const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 2, isMobile: width < 721, hasTouch: width < 721 });
     await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 40000 });
     await page.locator('[data-vault-tile]').first().waitFor({ timeout: 20000 });
+    // The app continuously moves the page; brake it to make DOM measurements stable.
+    await page.getByRole('button', { name: 'Pause ambient card drift' }).click();
     await checkGrid(page, label);
 
     const slider = page.locator('input[aria-label="Card Vault zoom"]');
