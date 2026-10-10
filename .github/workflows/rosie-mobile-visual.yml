@@ -5,6 +5,8 @@ on:
       - 'src/main.jsx'
       - 'src/RosieRandomizers.module.css'
       - 'src/visual-rebuild.css'
+      - 'src/barkbridge-reference.css'
+      - 'public/barkbridge-photo-reference-engraving.svg'
       - 'public/barkbridge-ornamental-border.svg'
       - 'tests/rosie-mobile-visual.mjs'
       - '.github/workflows/rosie-mobile-visual.yml'
