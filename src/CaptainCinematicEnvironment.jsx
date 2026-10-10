@@ -34,6 +34,11 @@ export default function CaptainCinematicEnvironment({ underway, boost, streak, t
 
   if (reduceMotion) return null;
   const composition = smallPortrait ? "portrait" : "wide";
+  // Chromium systems without licensed H.264 decoding use the VP9 alternative.
+  // All iOS browsers retain native MP4 playback through WebKit.
+  const isDesktopChromium = /(?:Chrome|Chromium|Edg|OPR)\\//.test(navigator.userAgent)
+    && !/(?:iPhone|iPad|iPod)/.test(navigator.userAgent);
+  const motionFormat = isDesktopChromium ? "webm" : "mp4";
   const atmosphere = [
     "captain-cinematic",
     underway ? "is-sailing" : "is-idle",
@@ -51,7 +56,7 @@ export default function CaptainCinematicEnvironment({ underway, boost, streak, t
         autoPlay muted loop playsInline
         preload="metadata"
         disablePictureInPicture
-        src={`/captain-motion/captain-${composition}-water.mp4`}
+        src={`/captain-motion/captain-${composition}-water.${motionFormat}`}
         onCanPlay={(event) => { if (!document.hidden) event.currentTarget.play().catch(() => {}); }}
       />
       <img
