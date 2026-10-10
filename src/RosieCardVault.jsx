@@ -254,6 +254,10 @@ function CardImage({ card, eager = false, enlarged = false }) {
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
     draggable={false}
+    /* Gallery geometry is reserved before decode; the lightbox keeps the
+       original source's intrinsic dimensions and complete artwork. */
+    width={enlarged ? undefined : 1024}
+    height={enlarged ? undefined : 1536}
     className={enlarged ? styles.enlargedImage : styles.cardImage}
   />;
 }
