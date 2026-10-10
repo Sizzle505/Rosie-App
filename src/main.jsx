@@ -15,6 +15,7 @@ import "./fortune-barkbridge-atmosphere.css";
 import "./captain-levels.css";
 import "./captain-cinematic-refinement.css";
 import "./barkbridge-assets.css";
+import "./aesthetic-polish.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
