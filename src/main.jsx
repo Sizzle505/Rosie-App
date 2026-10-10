@@ -10,6 +10,7 @@ import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
 import "./barkbridge-reference.css";
+import "./barkbridge-assets.css";
 import "./captain-immersive.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
@@ -685,7 +686,7 @@ function BarkbridgeDiploma({ recipient, awardDate }) {
         <h1>UNIVERSITY OF BARKBRIDGE</h1>
         <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
         <p className="diploma-intro">Upon recommendation of the Faculty hereby confers upon</p>
-        <strong className="diploma-exam-name">{recipient || "The Graduate"}</strong>
+        <strong className="diploma-exam-name" style={{ "--recipient-font": `clamp(16px, ${Math.min(8.7, 190 / Math.max(20, recipient.length))}cqw, 68px)` }}>{recipient || "The Graduate"}</strong>
         <p className="diploma-confers">the degree of</p>
         <h3>Doctor of Cheese (Che.D.)</h3>
         <p className="diploma-dissertation">“Fetch the Fromage: A Shiba Inu’s Paw-Validated Flavor Index for Mapping the Terroirs of Regional Curds”</p>
