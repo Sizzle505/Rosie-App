@@ -3939,3 +3939,25 @@
   }
 }
 
+
+
+/* === iPhone Fortune input comfort - 2026-10-10 ===
+   Safari zooms focused inputs smaller than 16px and recenters the document,
+   which pushed the oracle stage and Rosie offscreen while composing a question. */
+@media (max-width: 620px) {
+  .page-fortune {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-block: 12px;
+  }
+
+  .page-fortune .input-shell input {
+    min-height: 46px;
+    font-size: 16px !important;
+    line-height: 1.35;
+    scroll-margin-block: 12px;
+  }
+
+  .page-fortune .question-card {
+    scroll-margin-block: 12px;
+  }
+}
