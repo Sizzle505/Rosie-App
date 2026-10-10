@@ -5340,3 +5340,22 @@ body {
 .barkbridge-graduation .diploma-signatures {
   transform: translateY(-36px);
 }
+
+/* Certificate composition - reserve a bottom paper margin for the academic
+   signatures and red wax seal without shifting them over the thesis or date. */
+.barkbridge-graduation .diploma-date,
+.barkbridge-graduation .diploma-signatures {
+  transform: none !important;
+}
+.barkbridge-graduation .graduation-stage .diploma-inner-border,
+.barkbridge-graduation .barkbridge-zoom-dialog .diploma-inner-border {
+  padding-bottom: 60px !important;
+}
+@media (max-width: 700px) {
+  .barkbridge-graduation .graduation-stage .barkbridge-diploma {
+    aspect-ratio: 1.16 / 1 !important;
+  }
+  .barkbridge-graduation .graduation-stage .diploma-inner-border {
+    padding-bottom: clamp(41px, 13cqw, 50px) !important;
+  }
+}
