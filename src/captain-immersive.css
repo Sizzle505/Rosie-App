@@ -205,3 +205,223 @@
   }
   .page-captain .captain-outer-petals { display: none; }
 }
+
+
+/* --------------------------------------------------------------------------
+ * ROSIE I · handcrafted Japanese sunset sailing vessel
+ * The existing three-lane position and steering remain owned by CaptainRosieGame.
+ * -------------------------------------------------------------------------- */
+.captain-game-page .captain-yacht,
+.captain-game-page .captain-yacht.lane-0,
+.captain-game-page .captain-yacht.lane-1,
+.captain-game-page .captain-yacht.lane-2,
+.captain-game-page.captain-boosting .captain-yacht {
+  width: clamp(112px, 29vw, 190px) !important;
+  height: auto !important;
+  aspect-ratio: 364 / 631;
+  top: auto !important;
+  bottom: 7px !important;
+  filter: drop-shadow(0 9px 10px rgba(2, 19, 28, .45));
+  overflow: visible;
+}
+.captain-game-page .captain-painted-ship {
+  position: absolute;
+  inset: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: none;
+  overflow: visible;
+  pointer-events: none;
+}
+.captain-game-page .captain-painted-sprite {
+  display: block;
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: center 85%;
+  animation: captainPaintedPitch 3.9s ease-in-out infinite;
+  filter: drop-shadow(0 3px 2px rgba(0, 14, 29, .26));
+}
+.captain-game-page .captain-painted-shadow {
+  position: absolute;
+  z-index: 0;
+  bottom: .5%;
+  left: 10%;
+  width: 80%;
+  height: 8%;
+  border-radius: 50%;
+  background: rgba(6, 28, 41, .42);
+  filter: blur(7px);
+  animation: captainPaintedShadow 3.9s ease-in-out infinite;
+}
+.captain-game-page .captain-painted-spray {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.captain-game-page .captain-painted-spray i {
+  position: absolute;
+  bottom: 1%;
+  left: calc(6% + var(--spray-x, 0%));
+  width: var(--spray-size, 8px);
+  height: calc(var(--spray-size, 8px) * .47);
+  border: 1.5px solid rgba(239, 249, 241, .82);
+  border-bottom: 0;
+  border-radius: 100% 100% 0 0;
+  transform-origin: center bottom;
+  opacity: 0;
+  animation: captainShipSpray var(--spray-time, 1.9s) ease-out infinite;
+  animation-delay: var(--spray-delay, 0s);
+}
+.captain-game-page .captain-painted-spray i:nth-child(1) { --spray-x: 2%; --spray-size: 15px; --spray-delay: -.3s; --spray-time: 1.9s; }
+.captain-game-page .captain-painted-spray i:nth-child(2) { --spray-x: 12%; --spray-size: 10px; --spray-delay: -1.25s; --spray-time: 2.3s; }
+.captain-game-page .captain-painted-spray i:nth-child(3) { --spray-x: 25%; --spray-size: 7px; --spray-delay: -.9s; --spray-time: 1.6s; }
+.captain-game-page .captain-painted-spray i:nth-child(4) { left: 88%; --spray-size: 16px; --spray-delay: -.65s; --spray-time: 2s; }
+.captain-game-page .captain-painted-spray i:nth-child(5) { left: 78%; --spray-size: 10px; --spray-delay: -1.5s; --spray-time: 2.2s; }
+.captain-game-page .captain-painted-spray i:nth-child(6) { left: 68%; --spray-size: 8px; --spray-delay: -1.1s; --spray-time: 1.8s; }
+.captain-game-page .captain-painted-lantern {
+  position: absolute;
+  z-index: 7;
+  bottom: 5.7%;
+  width: 7%;
+  height: 5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 213, 109, .65), rgba(255, 175, 83, .28) 38%, transparent 76%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: captainLanternGlow 3.2s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-painted-lantern-port { left: 7%; }
+.captain-game-page .captain-painted-lantern-starboard { right: 4%; animation-delay: -1.5s; }
+.captain-game-page .captain-painted-ship .yacht-wake-stack {
+  position: absolute;
+  z-index: 2;
+  bottom: -3%;
+  opacity: .72;
+}
+.captain-game-page .captain-painted-ship .golden-wake { z-index: 3; bottom: -5%; }
+
+/* More legible movement in the painterly ocean: real animated video stays below. */
+.captain-game-page .captain-cinematic-water {
+  opacity: .98;
+  filter: contrast(1.075) saturate(1.11);
+}
+.captain-game-page .captain-cinematic-mist {
+  opacity: .71;
+  animation-duration: 17s;
+}
+.captain-game-page .captain-cinematic-cloud {
+  opacity: .54;
+  animation-duration: 25s;
+}
+.captain-game-page .captain-cinematic-current {
+  position: absolute;
+  z-index: 2;
+  inset: 59% -9% -1%;
+  overflow: hidden;
+  opacity: .35;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 83%, transparent);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 83%, transparent);
+}
+.captain-game-page .captain-cinematic-current i {
+  position: absolute;
+  left: -24%;
+  width: 145%;
+  height: 24%;
+  border-top: 1px solid rgba(255, 241, 205, .46);
+  border-radius: 49% 52% 0 0;
+  opacity: .45;
+  animation: captainTidalCurrent 5.5s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-cinematic-current i:nth-child(1) { top: 8%; animation-delay: -2s; }
+.captain-game-page .captain-cinematic-current i:nth-child(2) { top: 31%; opacity: .28; animation-duration: 7.1s; }
+.captain-game-page .captain-cinematic-current i:nth-child(3) { top: 55%; opacity: .52; animation-delay: -3s; }
+.captain-game-page .captain-cinematic-current i:nth-child(4) { top: 83%; opacity: .35; animation-duration: 6.4s; }
+.captain-game-page .captain-cinematic.is-sailing .captain-cinematic-current { opacity: .46; }
+.captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-current { opacity: .64; }
+.captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-current i { animation-duration: 2.8s; }
+
+/* Small reflective fireflies over the water, staggered rather than flickering in sync. */
+.captain-game-page .captain-cinematic-water-stars {
+  position: absolute;
+  z-index: 3;
+  inset: 48% 0 0;
+  pointer-events: none;
+}
+.captain-game-page .captain-cinematic-water-stars i {
+  position: absolute;
+  top: var(--star-y, 30%);
+  left: var(--star-x, 50%);
+  width: var(--star-size, 4px);
+  height: var(--star-size, 4px);
+  background: rgba(255, 231, 173, .92);
+  box-shadow: 0 0 7px rgba(255, 225, 153, .54);
+  clip-path: polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+  opacity: 0;
+  animation: captainWaterStarlight var(--star-time, 5s) ease-in-out var(--star-delay, 0s) infinite;
+}
+.captain-game-page .captain-cinematic-water-stars i:nth-child(1) { --star-x: 11%; --star-y: 51%; --star-size: 4px; --star-delay: -1s; }
+.captain-game-page .captain-cinematic-water-stars i:nth-child(2) { --star-x: 26%; --star-y: 27%; --star-size: 5px; --star-delay: -3.7s; --star-time: 7s; }
+.captain-game-page .captain-cinematic-water-stars i:nth-child(3) { --star-x: 37%; --star-y: 72%; --star-size: 4px; --star-delay: -2.5s; --star-time: 6.7s; }
+.captain-game-page .captain-cinematic-water-stars i:nth-child(4) { --star-x: 61%; --star-y: 44%; --star-size: 3px; --star-delay: -4.6s; }
+.captain-game-page .captain-cinematic-water-stars i:nth-child(5) { --star-x: 79%; --star-y: 67%; --star-size: 5px; --star-delay: -1.8s; --star-time: 6s; }
+.captain-game-page .captain-cinematic-water-stars i:nth-child(6) { --star-x: 91%; --star-y: 30%; --star-size: 4px; --star-delay: -5s; --star-time: 7.3s; }
+
+@keyframes captainPaintedPitch {
+  0%,100% { transform: translate3d(0, 0, 0) rotate(-.65deg); }
+  50% { transform: translate3d(0, 2px, 0) rotate(.7deg); }
+}
+@keyframes captainPaintedShadow {
+  0%,100% { transform: scaleX(.93); opacity: .7; }
+  50% { transform: scaleX(1.1); opacity: .43; }
+}
+@keyframes captainShipSpray {
+  0% { opacity: 0; transform: translate3d(0, 2px, 0) scale(.45); }
+  18% { opacity: .72; }
+  65% { opacity: .38; }
+  100% { opacity: 0; transform: translate3d(0, -24px, 0) scale(1.38); }
+}
+@keyframes captainLanternGlow {
+  from { opacity: .45; transform: scale(.8); }
+  to { opacity: .85; transform: scale(1.2); }
+}
+@keyframes captainTidalCurrent {
+  from { transform: translate3d(-4%, 0, 0) scaleY(.86); }
+  to { transform: translate3d(4%, -8px, 0) scaleY(1.15); }
+}
+@keyframes captainWaterStarlight {
+  0%, 18%, 76%, 100% { opacity: 0; transform: scale(.3); }
+  40%, 51% { opacity: .82; transform: scale(1); }
+}
+@media (max-width: 380px) {
+  .captain-game-page .captain-yacht,
+  .captain-game-page .captain-yacht.lane-0,
+  .captain-game-page .captain-yacht.lane-1,
+  .captain-game-page .captain-yacht.lane-2 { width: 102px !important; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .captain-game-page .captain-yacht,
+  .captain-game-page .captain-yacht.lane-0,
+  .captain-game-page .captain-yacht.lane-1,
+  .captain-game-page .captain-yacht.lane-2 { width: 94px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .captain-game-page .captain-painted-sprite,
+  .captain-game-page .captain-painted-shadow,
+  .captain-game-page .captain-painted-spray i,
+  .captain-game-page .captain-painted-lantern,
+  .captain-game-page .captain-cinematic-current i,
+  .captain-game-page .captain-cinematic-water-stars i {
+    animation: none !important;
+  }
+  .captain-game-page .captain-painted-spray,
+  .captain-game-page .captain-cinematic-water-stars { display: none !important; }
+}
