@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./RosieHome.module.css";
+import RosieVerseAtmosphere from "./RosieVerseAtmosphere";
 
 const worlds = [
   { id: "fortune", name: "Fortune Teller", art: "fortune.webp" },
@@ -9,17 +10,13 @@ const worlds = [
   { id: "randomizers", name: "Randomizers", art: "randomizers.webp" }
 ];
 
-const petals = Array.from({ length: 16 }, (_, index) => index);
 const art = (filename) => `/rosieverse/${filename}`;
 
 /** RosieVerse art landing. Navigates through the existing app router; no new routing dependency. */
 export default function RosieHome({ onNavigate }) {
   return (
     <main className={styles.home} aria-label="RosieVerse - discover Rosie's five worlds">
-      <div className={styles.sceneWash} aria-hidden="true" />
-      <div className={styles.petalField} aria-hidden="true">
-        {petals.map((index) => <i key={index} style={{ "--petal-number": index }} />)}
-      </div>
+      <RosieVerseAtmosphere />
 
       <header className={styles.banner}>
         <h1 className={styles.screenReaderOnly}>RosieVerse</h1>
