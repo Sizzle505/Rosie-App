@@ -51,6 +51,10 @@
 .captain-game-page .captain-cinematic.has-streak .captain-cinematic-light { opacity: .95; }
 .captain-game-page .captain-cinematic.is-final-approach .captain-cinematic-light,
 .captain-game-page .captain-cinematic.is-full-steam .captain-cinematic-light { opacity: 1; }
+/* Voyage complete: one warm reflected flourish, fading naturally to calm. */
+.captain-game-page .captain-cinematic.is-home .captain-cinematic-light {
+  animation: captainHomecoming 2.9s ease-out 1 both;
+}
 .captain-game-page .captain-cinematic-sail {
   position: absolute;
   z-index: 2;
@@ -142,6 +146,12 @@
 }
 @media (prefers-reduced-motion:reduce) {
   .captain-game-page .captain-cinematic {display:none!important;}
+}
+@keyframes captainHomecoming {
+  0% { opacity:.48; transform:scaleX(.9); }
+  27% { opacity:1; transform:scaleX(1.23); }
+  68% { opacity:.68; transform:scaleX(1.08); }
+  100% { opacity:.45; transform:scaleX(.96); }
 }
 @keyframes captainMistTravel { from {transform:translate3d(-8px,2px,0); opacity:.45;} to {transform:translate3d(13px,-3px,0); opacity:.65;} }
 @keyframes captainSkyBreathe { from {transform:translate3d(-10px,0,0); opacity:.36;} to {transform:translate3d(14px,0,0); opacity:.53;} }
