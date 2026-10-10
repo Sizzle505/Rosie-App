@@ -71,7 +71,24 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       await page.waitForTimeout(2100);
       const timeB = await video.evaluate((node) => node.currentTime);
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
-      if (format && timeB <= timeA + .35) throw new Error(`${engine}/${label}: supported MP4 did not autoplay (${timeA}->${timeB})`);
+      // Video playback in WebKit can restart from zero after an internal media
+      // reset, including on its first decoded frame. A second advancing sample
+      // distinguishes a restart from a video genuinely stalled at 0.
+      if (format && timeB <= timeA + .35) {
+        const probeA = await video.evaluate((node) => ({
+          time: node.currentTime, duration: node.duration,
+          readyState: node.readyState, paused: node.paused,
+          error: node.error?.message || null,
+        }));
+        await page.waitForTimeout(1200);
+        const probeB = await video.evaluate((node) => ({
+          time: node.currentTime, readyState: node.readyState,
+          paused: node.paused, error: node.error?.message || null,
+        }));
+        if (probeB.time <= probeA.time + .3) {
+          throw new Error(`${engine}/${label}: MP4 did not advance after reset (${JSON.stringify({ timeA, timeB, probeA, probeB })})`);
+        }
+      }
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
       if (errors.length) throw new Error(`${engine}/${label}: ${errors.join(", ")}`);
