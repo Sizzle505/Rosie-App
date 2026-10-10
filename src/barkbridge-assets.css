@@ -162,7 +162,35 @@
   .barkbridge-graduation .barkbridge-cheese-reward { width: 97%; }
   .barkbridge-graduation .graduate-rosie { position: relative !important; right: auto !important; bottom: auto !important; margin: -10px auto 0 !important; z-index: 4; }
 }
-@media (max-width: 700px) { .barkbridge-graduation .graduation-stage { gap: 4px; } .barkbridge-graduation .barkbridge-cheese-reward { margin-top: -2%; } .barkbridge-graduation .barkbridge-replay { margin-bottom: calc(165px + env(safe-area-inset-bottom)) !important; } }
+@media (max-width: 700px) {
+  .barkbridge-graduation .graduation-stage { gap: 4px; }
+
+  /* The platter is a compact visual bridge, not a second full-height panel. */
+  .barkbridge-graduation .barkbridge-cheese-reward {
+    width: 84%;
+    height: 104px;
+    aspect-ratio: auto;
+    margin: -8px auto -6px;
+    overflow: visible;
+  }
+
+  .barkbridge-graduation .barkbridge-cheese-reward > img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .barkbridge-graduation .barkbridge-cheese-halo,
+  .barkbridge-graduation .barkbridge-cheese-sparkles {
+    inset: 0;
+  }
+
+  .barkbridge-graduation .barkbridge-replay { margin-bottom: calc(165px + env(safe-area-inset-bottom)) !important; }
+}
 @media (prefers-reduced-motion: reduce) {
   .barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam, .barkbridge-graduation .barkbridge-gold-gleam i, .barkbridge-graduation .barkbridge-cheese-sparkles > i, .barkbridge-graduation .barkbridge-cheese-halo { animation: none !important; opacity: 0 !important; }
   .barkbridge-graduation .barkbridge-cheese-reward { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
