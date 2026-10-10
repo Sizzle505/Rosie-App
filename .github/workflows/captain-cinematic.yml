@@ -38,8 +38,13 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
           python -m pip install --disable-pip-version-check numpy==2.2.6 pillow==11.3.0 opencv-python-headless==4.12.0.88
-      - name: Render 10-second periodic image-derived water and atmosphere
-        run: python scripts/render_captain_motion.py --seconds 10 --fps 15
+      - name: Render missing cinematic assets
+        run: |
+          if [ -s public/captain-motion/captain-wide-water.mp4 ] && [ -s public/captain-motion/captain-portrait-water.mp4 ] && [ -s public/captain-motion/captain-wide-water.webm ] && [ -s public/captain-motion/captain-portrait-water.webm ] && [ -s public/captain-motion/captain-wide-mist.webp ] && [ -s public/captain-motion/captain-portrait-mist.webp ]; then
+            echo "Reuse tracked source-derived videos and atmosphere assets"
+          else
+            python scripts/render_captain_motion.py --seconds 10 --fps 15
+          fi
       - name: Validate encoded assets
         run: |
           set -e
