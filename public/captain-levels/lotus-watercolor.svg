@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 110" role="img" aria-label="Pale blush and white watercolor lotus blossom">
+<defs>
+ <radialGradient id="pink"><stop offset="0" stop-color="#fffbed"/><stop offset=".5" stop-color="#fff1ed"/><stop offset=".84" stop-color="#e9a4b4" stop-opacity=".8"/><stop offset="1" stop-color="#d682a2" stop-opacity=".57"/></radialGradient>
+ <linearGradient id="ivory" x2=".7" y2="1"><stop stop-color="#fffef8" stop-opacity=".96"/><stop offset=".75" stop-color="#f5cedc" stop-opacity=".82"/><stop offset="1" stop-color="#d78eaa" stop-opacity=".7"/></linearGradient>
+</defs>
+<g stroke="#c07995" stroke-opacity=".31" stroke-width="1.25" stroke-linejoin="round">
+ <path d="M59 86C40 69 39 40 59 7c20 30 23 57 0 79Z" fill="url(#ivory)"/>
+ <path d="M55 84C27 78 16 52 22 24c26 15 39 35 33 60Z" fill="url(#pink)"/>
+ <path d="M63 85C90 74 100 53 95 22 69 37 58 57 63 85Z" fill="url(#pink)"/>
+ <path d="M49 86C20 96 7 74 9 51c24 5 41 18 40 35Z" fill="url(#ivory)"/>
+ <path d="M72 86c30 6 43-14 40-37-25 6-41 20-40 37Z" fill="url(#ivory)"/>
+ <path d="M60 91C38 83 30 68 35 46c19 8 26 25 25 45Z" fill="url(#pink)"/>
+ <path d="M60 91C83 84 91 66 85 45 67 55 60 71 60 91Z" fill="url(#pink)"/>
+ <path d="M60 93C46 79 48 61 60 40c14 20 16 39 0 53Z" fill="url(#ivory)"/>
+</g>
+<g stroke="#d38e9f" stroke-opacity=".28" fill="none" stroke-width="1"><path d="M60 84V24M50 78 28 38M70 78 90 37M42 84 16 60M79 83l25-24"/></g>
+<ellipse cx="60" cy="88" rx="9" ry="5" fill="#ebc37b" opacity=".85"/>
+<circle cx="55" cy="86" r="1.6" fill="#f6e4ab"/><circle cx="61" cy="85" r="1.8" fill="#f7e8bd"/><circle cx="65" cy="89" r="1.4" fill="#f1d5a0"/>
+</svg>
