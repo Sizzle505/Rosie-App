@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 /** Purely decorative; keeps the original painted picture in the DOM underneath. */
 export default function CaptainCinematicEnvironment({ underway, boost, streak, timeLeft, ended, eventPulse, eventKind }) {
