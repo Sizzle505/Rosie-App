@@ -86,8 +86,14 @@
   77% { transform: translate3d(0,-1px,0) rotate(.65deg); }
 }
 .captain-game-page .yacht-course .captain-cinematic-water {
+  /* Existing sunrise footage stays extremely faint in cooler scenes; the
+     approved painting carries the real scene color without costly video filters. */
+  filter: none !important;
+  opacity: .39;
   transition: opacity 2100ms ease-in-out;
 }
+.captain-game-page .yacht-course[data-captain-climate="moonlit"] .captain-cinematic-water { opacity: .15; }
+.captain-game-page .yacht-course[data-captain-climate="storm"] .captain-cinematic-water { opacity: .24; }
 .captain-game-page .captain-lotus-gust {
   position: absolute;
   inset: 0;
@@ -133,5 +139,6 @@
   .page-captain .captain-outer-scene .captain-outer-painted-incoming { opacity: 1; }
   .captain-game-page .captain-yacht .captain-painted-sprite,
   .captain-game-page .captain-yacht .captain-painted-rosie { animation: none !important; }
+  .captain-game-page .yacht-course .captain-cinematic-water { transition: none !important; }
   .captain-game-page .captain-lotus-gust { display: none !important; }
 }
