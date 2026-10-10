@@ -399,8 +399,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
       <div className="booth">
         <div className="cabinet-lights cabinet-lights-left" />
         <div className="cabinet-lights cabinet-lights-right" />
-        <div className="curtain curtain-left" />
-        <div className="curtain curtain-right" />
 
         <div className="sign">
           <div className="sign-paw">🐾</div>
@@ -449,30 +447,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <i /><i /><i /><i /><i /><i />
           </div>
 
-          {flipBurst > 0 && (
-            <div className="flip-magic" aria-hidden="true" key={flipBurst}>
-              <span className="turn-veil" />
-              <span className="turn-lower-smoke" />
-              <span className="turn-ball-haze" />
-              <span className="turn-orbit turn-orbit-a" />
-              <span className="turn-orbit turn-orbit-b" />
-              <span className="smoke-wisp smoke-wisp-a" />
-              <span className="smoke-wisp smoke-wisp-b" />
-              <span className="smoke-wisp smoke-wisp-c" />
-              <span className="smoke-wisp smoke-wisp-d" />
-              <span className="smoke-wisp smoke-wisp-e" />
-              <span className="smoke-wisp smoke-wisp-f" />
-              <span className="smoke-wisp smoke-wisp-g" />
-              <span className="smoke-wisp smoke-wisp-h" />
-              <span className="smoke-wisp smoke-wisp-i" />
-              <span className="smoke-wisp smoke-wisp-j" />
-              <span className="flip-flash" />
-              <span className="flip-sparkles">
-                <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
-              </span>
-            </div>
-          )}
-
           <div className="crystal-chamber">
             <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
             <FortuneLens
@@ -484,18 +458,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             />
           </div>
 
-          {flipBurst > 0 && turning && (
-            <div className="turn-foreground-smoke" aria-hidden="true" key={`foreground-${flipBurst}`}>
-              <span className="foreground-plume foreground-plume-a" />
-              <span className="foreground-plume foreground-plume-b" />
-              <span className="foreground-plume foreground-plume-c" />
-              <span className="foreground-plume foreground-plume-d" />
-              <span className="foreground-plume foreground-plume-e" />
-              <span className="foreground-glitter">
-                <i /><i /><i /><i /><i /><i /><i /><i />
-              </span>
-            </div>
-          )}
           {flipBurst > 0 && (
             <div className="turn-gold-sparks" aria-hidden="true" key={`gilded-${flipBurst}`}>
               {Array.from({ length: 24 }, (_, index) => <i key={index} />)}

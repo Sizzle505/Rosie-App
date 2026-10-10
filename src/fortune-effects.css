@@ -3991,6 +3991,14 @@
   opacity: 1;
 }
 
+/* The scene art already includes drapery.  Extra geometric overlay curtains made
+   the cabinet look synthetic on a phone, so keep the original painted fabric only. */
+.fortune-page .curtain,
+.fortune-page .flip-magic,
+.fortune-page .turn-foreground-smoke {
+  display: none !important;
+}
+
 .stage-turning .stage-art {
   animation: none !important;
 }
