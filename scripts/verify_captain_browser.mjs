@@ -20,7 +20,26 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       const errors = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.goto(BASE, { waitUntil: "networkidle" });
-      await page.locator(".captain-scene img").waitFor();
+      await page.waitForTimeout(1800);
+      const found = await page.locator(".captain-scene img").count();
+      const sceneInfo = await page.evaluate(() => ({
+        href: location.href,
+        hash: location.hash,
+        root: document.querySelector("#root")?.textContent?.slice(0,350),
+        game: !!document.querySelector(".captain-game-page"),
+        image: !!document.querySelector(".captain-scene img"),
+        title: document.title
+      }));
+      if (!found) {
+        await page.screenshot({ path: `captain-test-artifacts/${engine}-${label}-diagnostic.png` });
+        throw new Error(`${engine}/${label}: Captain scene not mounted: ${JSON.stringify(sceneInfo)}. Browser errors: ${errors.join(" | ")}`);
+      }
+      await page.locator(".captain-scene img").waitFor({ state: "attached", timeout: 6000 });
+      const visible = await page.locator(".captain-scene img").isVisible();
+      if (!visible) {
+        await page.screenshot({ path: `captain-test-artifacts/${engine}-${label}-diagnostic.png` });
+        throw new Error(`${engine}/${label}: mounted but hidden: ${JSON.stringify(sceneInfo)}; browser errors: ${errors.join(" | ")}`);
+      }
       const painting = await page.locator(".captain-scene img").evaluate((img) => img.complete && img.naturalWidth > 0);
       if (!painting) throw new Error(`${engine}/${label}: original painting missing`);
       const video = page.locator(".captain-cinematic-water");
