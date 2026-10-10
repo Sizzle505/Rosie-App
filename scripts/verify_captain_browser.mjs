@@ -42,6 +42,26 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       }
       const painting = await page.locator(".captain-scene img").evaluate((img) => img.complete && img.naturalWidth > 0);
       if (!painting) throw new Error(`${engine}/${label}: original painting missing`);
+      const atmosphere = await page.evaluate(() => {
+        const outer = document.querySelector(".captain-outer-scene");
+        const painted = document.querySelector(".captain-outer-paint");
+        const wave = document.querySelector(".captain-cinematic-wave-glints");
+        const glimmer = document.querySelector(".captain-cinematic-sun-track");
+        const foam = document.querySelector(".captain-cinematic-foam");
+        return {
+          outer: !!outer,
+          scenicImage: painted ? getComputedStyle(painted).backgroundImage : "",
+          animating: painted ? getComputedStyle(painted).animationName !== "none" : false,
+          wave: !!wave,
+          glimmer: !!glimmer,
+          foam: !!foam,
+          overflow: document.documentElement.scrollWidth > innerWidth + 2,
+        };
+      });
+      if (!atmosphere.outer || !atmosphere.scenicImage.includes("captain-sakura-course") || !atmosphere.animating
+          || !atmosphere.wave || !atmosphere.glimmer || !atmosphere.foam || atmosphere.overflow) {
+        throw new Error(`${engine}/${label}: cinematic margin or wave regression: ${JSON.stringify(atmosphere)}`);
+      }
       const video = page.locator(".captain-cinematic-water");
       if (await video.count() !== 1) throw new Error(`${engine}/${label}: video layer missing`);
       const format = await video.evaluate((node) => node.canPlayType('video/mp4; codecs="avc1.42E01E"'));
@@ -61,6 +81,8 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const reducedPage = await reduced.newPage();
     await reducedPage.goto(BASE);
     if (await reducedPage.locator(".captain-cinematic video").count() !== 0) throw new Error(`${engine}: reduced motion still renders moving video`);
+    const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
+    if (!outerStill) throw new Error(`${engine}: cinematic margins ignored reduced motion`);
     await reduced.close();
     console.log(`${engine}: six responsive layouts and reduced motion passed`);
   } finally {
