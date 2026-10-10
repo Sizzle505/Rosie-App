@@ -62,6 +62,32 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
           || !atmosphere.wave || !atmosphere.glimmer || !atmosphere.foam || atmosphere.overflow) {
         throw new Error(`${engine}/${label}: cinematic margin or wave regression: ${JSON.stringify(atmosphere)}`);
       }
+      const ship = await page.locator(".captain-painted-sprite").evaluate((img) => {
+        const boat = img.closest(".captain-yacht");
+        const world = img.closest(".yacht-course");
+        const rect = boat?.getBoundingClientRect();
+        const courseRect = world?.getBoundingClientRect();
+        return {
+          complete: img.complete,
+          imageWidth: img.naturalWidth,
+          imageHeight: img.naturalHeight,
+          boatWidth: rect?.width,
+          boatHeight: rect?.height,
+          courseWidth: courseRect?.width,
+          courseHeight: courseRect?.height,
+          currentAnimation: getComputedStyle(img).animationName,
+        };
+      });
+      if (!ship.complete || ship.imageWidth < 320 || ship.imageHeight < 580
+          || ship.boatWidth < 90 || ship.boatWidth > ship.courseWidth * .6
+          || ship.boatHeight > ship.courseHeight * .9
+          || ship.currentAnimation === "none") {
+        throw new Error(`${engine}/${label}: painted Rosie ship not sized or rendered correctly: ${JSON.stringify(ship)}`);
+      }
+      if (await page.locator(".captain-cinematic-current i").count() !== 4
+          || await page.locator(".captain-cinematic-water-stars i").count() !== 6) {
+        throw new Error(`${engine}/${label}: living water highlight layers missing`);
+      }
       const video = page.locator(".captain-cinematic-water");
       if (await video.count() !== 1) throw new Error(`${engine}/${label}: video layer missing`);
       const format = await video.evaluate((node) => node.canPlayType('video/mp4; codecs="avc1.42E01E"'));
@@ -80,6 +106,9 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
         }));
         throw new Error(`${engine}/${label}: supported MP4 stalled before screenshot (${timeA}->${timeB}): ${JSON.stringify(diagnostics)}`);
       }
+      if (label === "modern-iphone") {
+        await page.screenshot({ path: `captain-test-artifacts/${engine}-modern-iphone-full.png`, fullPage: true });
+      }
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
       await page.waitForTimeout(2100);
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
@@ -94,6 +123,8 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
     const reducedPage = await reduced.newPage();
     await reducedPage.goto(BASE);
     if (await reducedPage.locator(".captain-cinematic video").count() !== 0) throw new Error(`${engine}: reduced motion still renders moving video`);
+    const shipStill = await reducedPage.locator(".captain-painted-sprite").evaluate((node) => getComputedStyle(node).animationName === "none");
+    if (!shipStill) throw new Error(`${engine}: painted ship pitch ignores reduced motion`);
     const outerStill = await reducedPage.locator(".captain-outer-paint").evaluate((node) => getComputedStyle(node).animationName === "none");
     if (!outerStill) throw new Error(`${engine}: cinematic margins ignored reduced motion`);
     await reduced.close();
