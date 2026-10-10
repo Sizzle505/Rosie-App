@@ -2,7 +2,6 @@
 .barkbridge-graduation .graduation-stage .barkbridge-diploma,
 .barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
   background:
-    url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat,
     url("/barkbridge/diploma/parchment.png") center / 100% 100% no-repeat,
     #f4ddb0 !important;
   -webkit-print-color-adjust: exact;
@@ -110,9 +109,10 @@
 }
 .barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam {
   position: absolute; z-index: 20; inset: 0; display: block; pointer-events: none; overflow: hidden;
-  -webkit-mask: url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat;
-  mask: url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat;
-  background: linear-gradient(106deg, transparent 32%, rgba(255,250,202,.02) 41%, rgba(255,245,191,.78) 50%, rgba(241,179,77,.20) 57%, transparent 68%) 170% 0 / 125% 100% no-repeat;
+  /* The actual frame belongs above the parchment, so the diploma sits inside it. */
+  background:
+    url("/barkbridge/diploma/gleaming-gold-frame.png") center / 100% 100% no-repeat,
+    linear-gradient(106deg, transparent 32%, rgba(255,250,202,.02) 41%, rgba(255,245,191,.78) 50%, rgba(241,179,77,.20) 57%, transparent 68%) 170% 0 / 125% 100% no-repeat;
   animation: barkbridgeMetalSweep 7.4s ease-in-out infinite; will-change: background-position;
 }
 .barkbridge-graduation .barkbridge-diploma .diploma-inner-border {
