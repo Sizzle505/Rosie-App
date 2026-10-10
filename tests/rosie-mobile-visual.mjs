@@ -29,6 +29,8 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
 
       await page.goto(base + "/#randomizers", { waitUntil: "networkidle" });
       await page.locator("section[aria-label='Quick randomizers'] article").first().waitFor();
+      await page.locator(".loading-screen-hidden").waitFor();
+      await page.waitForTimeout(650);
       const panels = await page.locator("section[aria-label='Quick randomizers'] article").evaluateAll(nodes =>
         nodes.map(node => {
           const rect = node.getBoundingClientRect();
@@ -115,9 +117,24 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       assert.equal(await page.locator(".barkbridge-confetti i").count(), 34, "confetti changed");
       const pageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       assert(pageWidth <= width + 3, "horizontal overflow: viewport " + width + " document " + pageWidth);
+      const fit = await diploma.evaluate(article => {
+        const frame = article.getBoundingClientRect();
+        const signatures = article.querySelector(".diploma-signatures").getBoundingClientRect();
+        return {
+          innerBottom: Math.round(frame.bottom),
+          signatureBottom: Math.round(signatures.bottom),
+          inset: Math.round(frame.bottom - signatures.bottom)
+        };
+      });
+      assert(fit.inset >= 6, "signatures overlap certificate border: " + JSON.stringify(fit));
       await page.screenshot({ path: output + "/" + title + "-diploma.png", fullPage: true });
       await page.getByRole("button", { name: /View diploma at full size/i }).click();
       assert(await page.locator("dialog.barkbridge-zoom-dialog").evaluate(dialog => dialog.open), "enlargement dialog not open");
+      const zoomed = page.locator(".barkbridge-zoom-dialog .barkbridge-diploma");
+      const zoomBounds = await zoomed.boundingBox();
+      const zoomOpacity = await zoomed.evaluate(element => getComputedStyle(element).opacity);
+      assert(zoomBounds && zoomBounds.width >= 750 && zoomBounds.height >= 480, "zoomed certificate must have full-size geometry: " + JSON.stringify(zoomBounds));
+      assert(Number(zoomOpacity) > .99, "enlarged certificate is not visible: opacity " + zoomOpacity);
       await page.screenshot({ path: output + "/" + title + "-diploma-enlarged.png" });
       await page.getByRole("button", { name: /Close ×/i }).click();
       await page.getByRole("button", { name: /EXAMINE AGAIN/i }).click();
