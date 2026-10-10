@@ -6,6 +6,7 @@ import "./visual-rebuild.css";
 import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
 import "./captain-refresh.css";
+import "./captain-scene.css";
 import "./responsive-polish.css";
 import Captain2Game from "./captain2.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
@@ -1757,27 +1758,11 @@ function CaptainRosieGame({ soundOn }) {
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
         >
-          <RivieraCourseArt />
+          <picture className="captain-scene" aria-hidden="true">
+            <source media="(max-width: 720px), (orientation: portrait)" srcSet="/captain-sakura-course-portrait.webp" />
+            <img src="/captain-sakura-course-wide.webp" alt="" draggable="false" decoding="async" fetchPriority="high" />
+          </picture>
           <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
-          <div className="captain-sky" aria-hidden="true">
-            <div className="captain-sky-haze" />
-            <div className="captain-sun"><i /></div>
-            <div className="captain-cloud cloud-one"><i /><i /><i /></div>
-            <div className="captain-cloud cloud-two"><i /><i /><i /></div>
-            <div className="captain-cloud cloud-three"><i /><i /><i /></div>
-            <div className="captain-gulls"><i /><i /><i /></div>
-          </div>
-          <div className="riviera-mountains mountains-far" aria-hidden="true" />
-          <div className="riviera-mountains mountains-near" aria-hidden="true" />
-          <div className="captain-horizon" aria-hidden="true">
-            <div className="riviera-cliff cliff-left"><i /><i /><i /><i /></div>
-            <div className="riviera-cliff cliff-right"><i /><i /><i /></div>
-            <div className="horizon-villas villas-left" />
-            <div className="horizon-villas villas-right" />
-            <div className="captain-lighthouse"><i /><b /></div>
-            <div className="distant-yacht distant-yacht-one"><i /><b /></div>
-            <div className="distant-yacht distant-yacht-two"><i /><b /></div>
-          </div>
           <div className="sun-glint" aria-hidden="true" />
           <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
           <div className="wake-lines" aria-hidden="true" />
