@@ -14,6 +14,11 @@ on:
       - src/captain-levels.css
       - src/CaptainLevelScenery.jsx
       - src/captainLevels.js
+      - src/CaptainSceneryTransition.jsx
+      - src/CaptainLotusGust.jsx
+      - src/CaptainOuterAtmosphere.jsx
+      - src/captain-cinematic-refinement.css
+      - tests/rosie-mobile-visual.mjs
       - public/captain-levels/**
       - .github/workflows/captain-cinematic.yml
 
@@ -92,6 +97,11 @@ jobs:
           npm run preview -- --host 127.0.0.1 > /tmp/captain-preview.log 2>&1 &
           sleep 4
           node scripts/verify_captain_browser.mjs
+      - name: Run existing mobile visual regression suite
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-mobile-dev.log 2>&1 &
+          sleep 4
+          node tests/rosie-mobile-visual.mjs
       - name: Check visible water changed in browser screenshots
         run: |
           python - <<'PY'
@@ -115,5 +125,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: captain-cinematic-browser-frames
-          path: captain-test-artifacts/
+          path: |
+            captain-test-artifacts/
+            artifacts/rosie-visual/
           if-no-files-found: ignore
