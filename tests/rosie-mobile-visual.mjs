@@ -174,11 +174,19 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       await page.getByRole("button", { name: /Close ×/i }).click();
       const replay = page.getByRole("button", { name: /EXAMINE AGAIN/i });
       await replay.scrollIntoViewIfNeeded();
+      // scrollIntoViewIfNeeded counts fixed-nav-covered pixels as "inside the
+      // viewport" on desktop WebKit. Explicitly scroll to test real reachability.
+      await page.evaluate(() => {
+        const button = document.querySelector(".barkbridge-replay");
+        const nav = document.querySelector(".bottom-nav");
+        const overlap = button.getBoundingClientRect().bottom - nav.getBoundingClientRect().top + 18;
+        if (overlap > 0) window.scrollBy({ top: overlap, behavior: "instant" });
+      });
       const finalNavClearance = await page.evaluate(() => ({
         replayBottom: Math.round(document.querySelector(".barkbridge-replay").getBoundingClientRect().bottom),
         navTop: Math.round(document.querySelector(".bottom-nav").getBoundingClientRect().top)
       }));
-      assert(finalNavClearance.replayBottom <= finalNavClearance.navTop - 5, "replay remains under bottom nav: " + JSON.stringify(finalNavClearance));
+      assert(finalNavClearance.replayBottom <= finalNavClearance.navTop - 5, "replay remains under bottom nav after scrolling: " + JSON.stringify(finalNavClearance));
       await replay.click();
       assert.equal(await page.locator("button.cheese-card").count(), 16, "replay did not reset game");
       assert.equal(errors.length, 0, "browser errors: " + errors.join(" | "));
