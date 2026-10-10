@@ -65,30 +65,26 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
       const video = page.locator(".captain-cinematic-water");
       if (await video.count() !== 1) throw new Error(`${engine}/${label}: video layer missing`);
       const format = await video.evaluate((node) => node.canPlayType('video/mp4; codecs="avc1.42E01E"'));
-      await page.waitForTimeout(1200);
+      // Verify media advances *before* taking a screenshot. Headless WebKit
+      // sometimes resets its H.264 playback clock on a screenshot (even though
+      // decoded frames and the independent CSS water layers are fine).
+      await page.waitForTimeout(1100);
       const timeA = await video.evaluate((node) => node.currentTime);
+      await page.waitForTimeout(900);
+      const timeB = await video.evaluate((node) => node.currentTime);
+      if (format && timeB <= timeA + .22) {
+        const diagnostics = await video.evaluate((node) => ({
+          readyState: node.readyState, paused: node.paused,
+          currentTime: node.currentTime, duration: node.duration,
+          error: node.error?.message || null
+        }));
+        throw new Error(`${engine}/${label}: supported MP4 stalled before screenshot (${timeA}->${timeB}): ${JSON.stringify(diagnostics)}`);
+      }
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-start.png` });
       await page.waitForTimeout(2100);
-      const timeB = await video.evaluate((node) => node.currentTime);
       await page.locator(".yacht-course").screenshot({ path: `captain-test-artifacts/${engine}-${label}-moving.png` });
-      // Video playback in WebKit can restart from zero after an internal media
-      // reset, including on its first decoded frame. A second advancing sample
-      // distinguishes a restart from a video genuinely stalled at 0.
-      if (format && timeB <= timeA + .35) {
-        const probeA = await video.evaluate((node) => ({
-          time: node.currentTime, duration: node.duration,
-          readyState: node.readyState, paused: node.paused,
-          error: node.error?.message || null,
-        }));
-        await page.waitForTimeout(1200);
-        const probeB = await video.evaluate((node) => ({
-          time: node.currentTime, readyState: node.readyState,
-          paused: node.paused, error: node.error?.message || null,
-        }));
-        if (probeB.time <= probeA.time + .3) {
-          throw new Error(`${engine}/${label}: MP4 did not advance after reset (${JSON.stringify({ timeA, timeB, probeA, probeB })})`);
-        }
-      }
+      // Visible animation is independently evaluated from both frames later;
+      // a screenshot-induced media clock reset is not treated as a stall.
       const widthOfScene = await page.locator(".yacht-course").evaluate((node) => node.getBoundingClientRect().width);
       if (widthOfScene < 250) throw new Error(`${engine}/${label}: playfield too narrow`);
       if (errors.length) throw new Error(`${engine}/${label}: ${errors.join(", ")}`);
