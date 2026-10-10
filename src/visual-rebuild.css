@@ -5331,3 +5331,12 @@ body {
     aspect-ratio: 1.22 / 1;
   }
 }
+
+/* Keep the names, handwritten roles and wax impression in the inner parchment
+   field rather than superimposed on the lower engraved frame. */
+.barkbridge-graduation .diploma-date {
+  transform: translateY(-18px);
+}
+.barkbridge-graduation .diploma-signatures {
+  transform: translateY(-36px);
+}
