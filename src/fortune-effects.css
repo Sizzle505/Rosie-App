@@ -3963,10 +3963,10 @@
 }
 
 
-/* === FORTUNE TURN: COMPLETE SCENE SWAP ===
-   A partial portrait composite cannot turn Rosie without disturbing the painted set.
-   Crossfade between two matched, complete scenes so the ball and background remain
-   physically coherent while Rosie looks in the other direction. */
+/* === FORTUNE TURN REPAIR ===
+   The portrait layer was a mirrored crop of a single, already-composed painting.
+   It could not turn Rosie without also covering the moonlit set and crystal ball.
+   Keep the painting intact and give the oracle a tiny, contained “considering” motion instead. */
 .rosie-turn-layer,
 .rosie-turn-backdrop,
 .turn-seam-haze,
@@ -3974,45 +3974,19 @@
   display: none !important;
 }
 
-.stage.stage-flipped .stage-art {
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-
-.stage-art-glance {
-  z-index: 1;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .28s cubic-bezier(.2,.72,.24,1);
-  will-change: opacity;
-}
-
-.stage-art-glance.is-visible {
-  opacity: 1;
-}
-
-/* The scene art already includes drapery.  Extra geometric overlay curtains made
-   the cabinet look synthetic on a phone, so keep the original painted fabric only. */
-.fortune-page .curtain,
-.fortune-page .flip-magic,
-.fortune-page .turn-foreground-smoke {
-  display: none !important;
-}
-
 .stage-turning .stage-art {
-  animation: none !important;
+  filter: saturate(1.05) contrast(1.02) brightness(.98) !important;
+  transform-origin: 57% 38% !important;
+  animation: rosieConsidersYourQuestion .88s cubic-bezier(.2,.78,.25,1) both !important;
 }
 
-.stage-turning .stage-art-glance.is-visible {
-  animation: rosieGlanceArrives .78s cubic-bezier(.2,.78,.25,1) both !important;
-}
-
-@keyframes rosieGlanceArrives {
-  0% { opacity: 0; }
-  48% { opacity: .72; }
-  100% { opacity: 1; }
+@keyframes rosieConsidersYourQuestion {
+  0% { transform: scale(1) translate3d(0,0,0) rotate(0deg); }
+  34% { transform: scale(1.012) translate3d(-1px,-1px,0) rotate(-.18deg); }
+  63% { transform: scale(1.008) translate3d(.6px,-.4px,0) rotate(.08deg); }
+  100% { transform: scale(1) translate3d(0,0,0) rotate(0deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stage-turning .stage-art-glance.is-visible { animation: none !important; }
+  .stage-turning .stage-art { animation: none !important; }
 }
