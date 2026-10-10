@@ -10,6 +10,7 @@ import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
 import "./barkbridge-reference.css";
+import "./barkbridge-assets.css";
 import "./captain-immersive.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
@@ -677,7 +678,7 @@ function GraduateRosie() {
   );
 }
 
-function BarkbridgeDiploma() {
+function BarkbridgeDiploma({ recipient, awardDate }) {
   return (
     <article className="barkbridge-diploma" aria-label="University of Barkbridge Doctor of Cheese diploma">
       <div className="diploma-inner-border">
@@ -685,11 +686,11 @@ function BarkbridgeDiploma() {
         <h1>UNIVERSITY OF BARKBRIDGE</h1>
         <h2>FACULTY OF GASTRONOMIC SCIENCES</h2>
         <p className="diploma-intro">Upon recommendation of the Faculty hereby confers upon</p>
-        <strong className="diploma-exam-name">Rosie the Shiba</strong>
+        <strong className="diploma-exam-name" style={{ "--recipient-font": `clamp(16px, ${Math.min(8.7, 190 / Math.max(20, recipient.length))}cqw, 68px)` }}>{recipient || "The Graduate"}</strong>
         <p className="diploma-confers">the degree of</p>
         <h3>Doctor of Cheese (Che.D.)</h3>
         <p className="diploma-dissertation">“Fetch the Fromage: A Shiba Inu’s Paw-Validated Flavor Index for Mapping the Terroirs of Regional Curds”</p>
-        <p className="diploma-date">May 2025</p>
+        <p className="diploma-date">{awardDate}</p>
         <div className="diploma-signatures">
           <div>
             <span>Prof. Manchego P. Curdwell</span>
@@ -718,6 +719,19 @@ function BarkbridgeDiploma() {
 
 function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   const diplomaDialogRef = useRef(null);
+  const [graduateName, setGraduateName] = useState(() => {
+    try { return localStorage.getItem("barkbridgeGraduateName") || ""; } catch { return ""; }
+  });
+  const awardDate = useMemo(
+    () => new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+    []
+  );
+  const recipient = graduateName.trim() || "The Graduate";
+  function personalizeDiploma(value) {
+    const next = value.slice(0, 42);
+    setGraduateName(next);
+    try { localStorage.setItem("barkbridgeGraduateName", next); } catch {}
+  }
   const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
   const confetti = Array.from({ length: 34 }, (_, index) => {
     const left = (index * 37 + 11) % 98;
@@ -741,11 +755,25 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
     <section className="barkbridge-graduation" aria-live="polite">
       <div className="barkbridge-confetti" aria-hidden="true">{confetti}</div>
       <div className="graduation-stage">
-        <BarkbridgeDiploma />
+        <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
         <GraduateRosie />
       </div>
 
       <div className="diploma-aftercare">
+        <label className="diploma-recipient-editor">
+          <span>NAME ON DIPLOMA</span>
+          <input
+            className="diploma-recipient-input"
+            type="text"
+            autoComplete="name"
+            maxLength={42}
+            aria-label="Name on diploma"
+            placeholder="Enter the graduate's name"
+            value={graduateName}
+            onChange={(event) => personalizeDiploma(event.target.value)}
+          />
+          <small>Your name appears on both the diploma and its enlarged view.</small>
+        </label>
         <button type="button" className="diploma-enlarge-button" onClick={() => diplomaDialogRef.current?.showModal()}>
           <span aria-hidden="true">↗</span> View diploma at full size
         </button>
@@ -765,7 +793,7 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
           <button type="button" onClick={() => diplomaDialogRef.current?.close()}>Close ×</button>
         </div>
         <div className="barkbridge-zoom-scroll" tabIndex={0}>
-          <BarkbridgeDiploma />
+          <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
         </div>
       </dialog>
 
