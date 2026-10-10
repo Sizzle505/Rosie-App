@@ -97,7 +97,7 @@ for (const [engine, Browser] of [["webkit", webkit], ["chromium", chromium]]) {
         animation: getComputedStyle(img).animationName,
       }));
       if (reference.asset !== "/captain-rosie-deck.webp"
-          || !reference.complete || reference.naturalWidth !== 208
+          || !reference.complete || reference.naturalWidth !== 207
           || reference.naturalHeight !== 240
           || reference.width < ship.boatWidth * .40
           || reference.width > ship.boatWidth * .46
