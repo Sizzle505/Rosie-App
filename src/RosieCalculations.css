@@ -5,9 +5,9 @@
 .rc-page button,.rc-page input,.rc-page select {font:inherit;}
 .rc-page button {cursor:pointer;touch-action:manipulation;}
 .rc-page button:focus-visible,.rc-page input:focus-visible,.rc-page select:focus-visible {outline:3px solid #edca77;outline-offset:3px;}
-.rc-hero {position:relative;width:min(100%,850px);height:clamp(194px,33vw,365px);margin:0 auto;overflow:hidden;border-bottom:2px solid #b48a3e;
+.rc-hero {position:relative;width:min(100%,850px);aspect-ratio:16/9;margin:0 auto;overflow:hidden;border-bottom:2px solid #b48a3e;
   background:linear-gradient(135deg,#271c22,#090e15);box-shadow:0 15px 40px rgba(0,0,0,.4);}
-.rc-custom-hero {width:100%;height:100%;display:block;object-fit:cover;object-position:50% 46%;}
+.rc-custom-hero {width:100%;height:100%;display:block;object-fit:cover;object-position:50% 40%;}
 .rc-hero-backup {position:absolute;inset:0;background-image:
   linear-gradient(90deg,transparent 29%,rgba(7,9,15,.52) 53%,#09101d 81%),
   url("/rosieverse/reminders/hero-mobile.webp");background-position:center,35% 48%;background-size:cover,cover;
