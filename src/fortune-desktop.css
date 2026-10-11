@@ -1243,3 +1243,29 @@
   letter-spacing:0;
 }
 .fortune-page .quick-prompts button {min-height:38px;line-height:1.3;}
+
+/* Large enough to actually read and tap on iPhone. Old 8px pill text was too
+   faint to make the updated suggestions discoverable. */
+.fortune-page .quick-row::before{display:none;}
+.fortune-page .quick-prompts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.fortune-page .quick-prompts button{
+  min-height:54px;
+  padding:10px 11px;
+  border:1px solid #ba8f5e80;
+  border-radius:11px;
+  color:#ffe9bc;
+  white-space:normal;
+  overflow-wrap:break-word;
+  text-align:left;
+  font:600 clamp(11px,1.25vw,15px)/1.34 Georgia,serif;
+  box-shadow:0 2px 5px #0007,inset 0 1px #ffdc9e18;
+}
+@media(max-width:700px) {
+  .fortune-page .quick-prompts button{
+    font-size:clamp(11px,2.85vw,13px)!important;
+    min-height:67px!important;
+    padding:9px 10px!important;
+    line-height:1.3!important;
+  }
+  .fortune-page .fortune-sample-heading{font-size:11px;letter-spacing:.08em;}
+}
