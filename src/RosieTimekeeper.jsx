@@ -112,6 +112,9 @@ export default function RosieTimekeeper() {
 
   const remaining = Math.max(0, duration - elapsed);
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining);
+  const [wholeTime, centiseconds] = mode === "stopwatch" ? shown.split(".") : [shown, null];
+  const status = message || (running ? "RUNNING" : elapsed > 0 ? "PAUSED" :
+    mode === "stopwatch" ? (laps.length ? laps.length + " LAPS RECORDED" : "READY TO BEGIN") : "COUNTDOWN READY");
 
   return (
     <main className="rtk-page" aria-label="Rosie's Timekeeper">
@@ -135,12 +138,27 @@ export default function RosieTimekeeper() {
             <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
           </div>
-          <output className="rtk-time" aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>{shown}</output>
-          <div className="rtk-caption">{message || (running ? "IN MOTION" : mode === "stopwatch" ? (laps.length ? laps.length + " LAPS RECORDED" : "READY TO BEGIN") : "COUNTDOWN READY")}</div>
+          <output className="rtk-time" aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
+            <span className="rtk-time-whole">{wholeTime}</span>
+            {centiseconds !== null && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{centiseconds}</span>}
+          </output>
+          <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
           <div className="rtk-controls">
-            <button type="button" onClick={mode === "stopwatch" ? lap : stopAndReset} disabled={mode === "stopwatch" && !running} aria-label={mode === "stopwatch" ? "Record lap" : "Reset countdown"}>{mode === "stopwatch" ? "Lap" : "Reset"}</button>
-            <button type="button" className="rtk-primary-action" onClick={startOrPause} aria-label={running ? "Pause" : "Start"}>{running ? "❚❚" : "▶"}</button>
-            <button type="button" onClick={stopAndReset} aria-label="Reset stopwatch or countdown">↺</button>
+            <button type="button" className="rtk-secondary-action rtk-lap-action"
+              onClick={mode === "stopwatch" ? lap : stopAndReset}
+              disabled={mode === "stopwatch" && !running}
+              aria-label={mode === "stopwatch" ? "Record lap" : "Reset countdown"}>
+              {mode === "stopwatch" ? "Lap" : "Reset"}
+            </button>
+            <button type="button" className="rtk-primary-action" onClick={startOrPause}
+              aria-label={running ? "Pause" : "Start"}>
+              {running ? <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx=".8" /><rect x="14" y="4" width="5" height="16" rx=".8" /></svg>
+                : <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.3a1.3 1.3 0 0 1 2-.98l12 7.65a1.25 1.25 0 0 1 0 2.1L9 20.72a1.3 1.3 0 0 1-2-.99Z" /></svg>}
+            </button>
+            <button type="button" className="rtk-secondary-action rtk-reset-action"
+              onClick={stopAndReset} aria-label="Reset stopwatch or countdown">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4.3 12a7.7 7.7 0 1 0 2.5-5.7L4 9" /><path d="M4 3.8V9h5.2" /></svg>
+            </button>
           </div>
         </section>
         <section className="rtk-utility" aria-label="Timekeeper settings and splits">
