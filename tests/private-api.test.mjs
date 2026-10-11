@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
-import { hashPin, verifyPin } from "../api/_lib/core.js";
+import { db, hashPin, verifyPin } from "../api/_lib/core.js";
 import login from "../api/auth/login.js";
 import sessionRoute from "../api/auth/session.js";
 import logout from "../api/auth/logout.js";
@@ -134,6 +134,36 @@ test("Account lockout, cookie sessions, sign-out, and A/B ownership enforced by 
   } finally {
     globalThis.fetch = original;
     delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+  }
+});
+
+test("Current Supabase secret keys use apikey without JWT bearer, legacy service roles retain JWT bearer", async () => {
+  process.env.SUPABASE_URL = "https://example.supabase.co";
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async (_url, opts) => {
+    calls += 1;
+    if (calls === 1) {
+      assert.equal(opts.headers.apikey, "sb_secret_synthetic_test_only");
+      assert.equal(opts.headers.Authorization, undefined);
+    } else {
+      assert.equal(opts.headers.apikey, "legacy-unit-test-only");
+      assert.equal(opts.headers.Authorization, "Bearer legacy-unit-test-only");
+    }
+    return response(200, []);
+  };
+  try {
+    process.env.SUPABASE_SECRET_KEY = "sb_secret_synthetic_test_only";
+    await db("rosie_users?select=id");
+    delete process.env.SUPABASE_SECRET_KEY;
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "legacy-unit-test-only";
+    await db("rosie_users?select=id");
+    assert.equal(calls, 2);
+  } finally {
+    globalThis.fetch = original;
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SECRET_KEY;
     delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   }
 });
