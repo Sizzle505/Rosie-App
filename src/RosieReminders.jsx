@@ -175,8 +175,11 @@ export default function RosieReminders() {
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
     <header className="rr-hero">
       {!heroLoaded && <div className="rr-hero-fallback"><small>ROSIEVERSE</small><h1>Rosie’s Reminders</h1><p>Personal Organizer</p></div>}
-      <img src="/rosieverse/reminders/hero-mobile.webp" alt="Rosie, chief executive dog, at her moonlit organizer desk"
-        draggable="false" onLoad={() => setHeroLoaded(true)} onError={() => setHeroLoaded(false)} />
+      <picture>
+        <source media="(min-width: 760px)" srcSet="/rosieverse/reminders/hero-desktop.webp" />
+        <img src="/rosieverse/reminders/hero-mobile.webp" alt="Rosie, chief executive dog, at her moonlit organizer desk"
+          draggable="false" onLoad={() => setHeroLoaded(true)} onError={() => setHeroLoaded(false)} />
+      </picture>
       <h1 className="rr-screen-reader">Rosie’s Reminders - Personal Organizer</h1>
     </header>
 
