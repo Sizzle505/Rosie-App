@@ -93,7 +93,7 @@ test("Account lockout, cookie sessions, sign-out, and A/B ownership enforced by 
   try {
     for (let i = 1; i <= 5; i++) {
       const denied = await call(login, { method: "POST", body: { username: "ALICE", pin: "0000" } });
-      assert.equal(denied.statusCode, i === 5 ? 423 : 401, "failed attempt " + i);
+      assert.equal(denied.statusCode, i === 5 ? 423 : 401, JSON.stringify({ i, data: denied.data, attempts: alice.failed_attempts, until: alice.locked_until }));
     }
     assert.equal(alice.failed_attempts, 5);
     assert.equal((await call(login, { method: "POST", body: { username: "alice", pin: "1234" } })).statusCode, 423);
