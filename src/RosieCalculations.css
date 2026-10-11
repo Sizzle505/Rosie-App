@@ -152,4 +152,10 @@
   margin:0 auto; padding:0; box-sizing:border-box;
 }
 .rc-page .rc-workspace {position:relative; z-index:1; min-width:0;}
-@media(min-width:601px){.rc-page .rc-calculator-stage{padding-inline:clamp(12px,2vw,24px);}}
+/* Landscape iPhones remain truly edge-to-edge, not capped at desktop width. */
+@media(max-width:1023px){
+  .rc-page .rc-hero,.rc-page .rc-calculator-stage{max-width:none;}
+}
+@media(min-width:1024px){
+  .rc-page .rc-calculator-stage{padding-inline:clamp(12px,2vw,24px);}
+}
