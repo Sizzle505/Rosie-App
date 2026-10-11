@@ -267,12 +267,14 @@ export default function RosieReminders() {
           {!store.gratitude.length && !store.goals.length && <p className="rr-empty">A brighter day begins with one small step.</p>}
         </div>}
       </section>
-      <div className="rr-feature-grid">
-        {CATEGORIES.map(c => <button type="button" key={c.id} className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
-          onClick={() => chooseSection(c.id)} aria-label={"Open "+c.title}>
-          <span className="rr-feature-art" aria-hidden="true"><img src={"/rosieverse/reminders/icons/"+c.id+".webp"} alt="" draggable="false" loading="lazy" /></span><span className="rr-feature-copy"><b>{c.title}</b><small>{c.detail}</small></span>
-          <span className="rr-feature-arrow" aria-hidden="true">›</span>
-          {counts[c.id] > 0 && <span className="rr-feature-count">{counts[c.id]}</span>}
+      <div className="rr-feature-grid" aria-label="Organizer tools">
+        {CATEGORIES.map(c => <button type="button" key={c.id}
+          className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
+          onClick={() => chooseSection(c.id)}
+          aria-label={"Open "+c.title+(counts[c.id] ? ", "+counts[c.id]+" entries" : "")}
+          aria-pressed={section === c.id}>
+          <img className="rr-button-image" src={"/rosieverse/reminders/buttons/"+c.id+".webp"}
+            alt="" draggable="false" loading="lazy" />
         </button>)}
       </div>
       <div className="rr-tools"><button type="button" onClick={exportData}>Export backup</button>
