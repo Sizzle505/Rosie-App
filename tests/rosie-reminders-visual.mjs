@@ -196,10 +196,30 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.getByRole("tab", {name:"Today"}).click();
 
       await page.getByRole("button", {name:"Open Shopping List"}).click();
-      await page.getByRole("button", {name:/Add Shopping Item/i}).click();
-      await page.getByLabel("Title", {exact:true}).fill("Rosie cheese treats");
-      await page.getByRole("button", {name:"Save Reminder"}).click();
-      assert((await page.locator(".rr-rows").innerText()).includes("Rosie cheese treats"));
+      await page.getByRole("textbox", {name:"Grocery list items"}).fill("Rosie cheese treats, bananas, eggs");
+      await page.getByRole("button", {name:/Add to Grocery List/i}).click();
+      assert.equal(await page.locator(".rr-simple-row").count(),3,
+        "Bulk grocery paste should create three individual rows");
+      assert((await page.getByRole("region", {name:"Produce"}).innerText()).includes("Bananas"),
+        "Produce item should have a neat category heading");
+      assert((await page.getByRole("region", {name:"Dairy & Eggs"}).innerText()).includes("Eggs"),
+        "Dairy item should be organized by category");
+      assert((await page.locator(".rr-simple-rows").allInnerTexts()).join(" ").includes("Rosie cheese treats"),
+        "First grocery item lost");
+      await page.getByRole("button", {name:"Complete: Bananas"}).click();
+      assert.equal(await page.getByRole("button", {name:"Mark incomplete: Bananas"}).count(),1,
+        "Grocery checkbox did not mark item complete");
+      await page.getByRole("button", {name:"Open Task List"}).click();
+      await page.getByRole("textbox", {name:"New task"}).fill("Walk Rosie");
+      await page.getByRole("button", {name:"Add task"}).click();
+      await page.getByRole("textbox", {name:"New task"}).fill("Research the stars");
+      await page.getByRole("textbox", {name:"New task"}).press("Enter");
+      assert.equal(await page.locator(".rr-task-rows .rr-simple-row").filter({hasText:"Walk Rosie"}).count(),1,
+        "First typed task should create one checkbox row");
+      assert.equal(await page.locator(".rr-task-rows .rr-simple-row").filter({hasText:"Research the stars"}).count(),1,
+        "Pressing Enter should create exactly one new task row");
+      await page.getByRole("button", {name:"Complete: Walk Rosie"}).click();
+      assert.equal(await page.getByRole("button", {name:"Mark incomplete: Walk Rosie"}).count(),1);
 
       await page.getByRole("button", {name:"Open Notes & Ideas"}).click();
       await page.getByRole("button", {name:/New note/i}).click();
@@ -239,6 +259,41 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(raw.gratitude.some(g=>g.text==="Rosie is brilliant"));
       await page.goto(base + "/#fortune",{waitUntil:"networkidle"});
       assert.equal(await page.locator("main.fortune-page").count(),1,"fortune route broken");
+      const sampleQuestions = page.locator(".quick-prompts button");
+      assert.equal(await sampleQuestions.count(),4,"Fortune should offer four whimsical sample questions");
+      assert.equal(await page.locator(".fortune-sample-heading").count(),1,"Sample questions label missing");
+      const ask = page.locator(".ask-button");
+      const fortuneText = page.locator("#question");
+      assert.equal(await fortuneText.inputValue(),"","Fortune should start with an empty input");
+      // Safari's sticky cabinet and persistent bottom nav otherwise overlap a
+      // center-of-viewport test tap. A visitor can scroll the form into clear view.
+      await ask.evaluate(el => el.scrollIntoView({block:"center",behavior:"instant"}));
+      await page.waitForTimeout(110);
+      await ask.click();
+      const autoQuestion=await fortuneText.inputValue();
+      assert(autoQuestion.length>15 && autoQuestion.endsWith("?"),
+        "Blank Ask should visibly fill in a sample, not silently submit");
+      assert.equal(await page.locator(".fortune-ticket-visible").count(),0,
+        "Choosing a sample should not submit a fortune yet");
+      await ask.click();
+      await page.waitForTimeout(80);
+      assert.equal(await page.locator("#question").inputValue(),"",
+        "Second Ask should submit selected question");
+      const navToggle=page.getByRole("button",{name:"Switch bottom buttons to Rosie’s Resources"});
+      assert.equal(await navToggle.count(),1,"Navigation family switch missing");
+      await navToggle.click();
+      assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
+        "Resources nav should expose the three utility destinations");
+      await page.getByRole("button",{name:"Switch bottom buttons to RosieVerse games"}).click();
+      assert.equal(await page.locator("nav.bottom-nav:not(.resources-bottom-nav) button").count(),5,
+        "Navigation switch failed to restore entertainment buttons");
+      await page.goto(base + "/#home",{waitUntil:"networkidle"});
+      assert.equal(await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).count(),1,
+        "Grand Salon should expose the Resources side shortcut");
+      await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).click();
+      await page.waitForURL("**/#resources");
+      assert.equal(await page.locator(".rr-hub-button").count(),3,
+        "Resources shortcut did not open the illustrated Resources hub");
       assert.equal(errors.length,0,"Browser errors: "+errors.join(" | "));
       results.push({engine,width,height,hero:displayedHero.split("/").at(-1),errors:0});
       await context.close();

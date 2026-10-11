@@ -36,7 +36,7 @@
   justify-content: center;
   flex: none;
   width: 100%;
-  height: clamp(150px, 26svh, 245px);
+  height: clamp(160px, 26.5svh, 245px);
   pointer-events: none;
 }
 .rr-hub-crest {
@@ -55,8 +55,8 @@
   width: min(98%, 540px);
   flex: none;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(0px, .55svh, 9px);
-  margin: clamp(26px, 5.7svh, 62px) auto 0;
+  gap: clamp(7px, 1.8svh, 22px);
+  margin: clamp(10px, 2.1svh, 23px) auto 0;
   padding: 0;
 }
 
@@ -103,7 +103,7 @@
 
 @media (max-width: 390px) and (max-height: 730px) {
   .rr-hub-header { height: clamp(130px, 22svh, 175px); }
-  .rr-hub-buttons { width: min(94%, 480px); gap: 0; margin-top:clamp(23px,4.5svh,40px); }
+  .rr-hub-buttons { width: min(94%, 480px); gap: clamp(5px,1.3svh,10px); margin-top:clamp(5px,1.5svh,15px); }
 }
 
 @media (min-width: 701px) {

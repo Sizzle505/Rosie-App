@@ -141,3 +141,29 @@
   width: 100%;
   height: auto;
 }
+
+/* Rapid lists: clean, legible parchment rows instead of one modal per item. */
+.rr-quick-list-form { margin:16px auto 16px; padding:14px; border:1px solid #c79e67; border-radius:15px; background:#fff4e3b0; }
+.rr-quick-list-form > label {display:block; margin:0 0 7px; font:700 clamp(20px,4.8vw,26px) Georgia,serif; color:#4f2330;}
+.rr-quick-list-form p {font:italic 13px/1.35 Georgia,serif; color:#6e4f45; margin:0 0 10px;}
+.rr-quick-list-form > textarea {display:block;width:100%;min-height:94px; padding:12px 14px; resize:vertical;box-sizing:border-box;border:1px solid #b78b57;border-radius:9px;background:#fffbef;color:#2d1b24;box-shadow:inset 0 1px 4px #51311c15;font:17px/1.45 Georgia,serif;}
+.rr-quick-list-form > button,.rr-task-input-row button {display:block;border:1px solid #c59a5c;background:linear-gradient(#862c45,#4b1329);color:#ffe6b0;min-height:44px;border-radius:10px;font:700 16px Georgia,serif;}
+.rr-groceries-input > button{width:100%;margin-top:10px;}
+.rr-quick-list-form button:disabled{opacity:.55;cursor:not-allowed;}
+.rr-task-input-row {display:flex;gap:7px;align-items:center;}
+.rr-task-input-row input {width:100%;min-width:0;flex:1;min-height:48px;padding:8px 12px;border:1px solid #b78b57;border-radius:9px;color:#2f1b1f;background:#fffbef;font:18px Georgia,serif;}
+.rr-task-input-row button{min-width:49px;min-height:49px;font-size:25px;}
+.rr-task-entry small {display:block;margin-top:9px;color:#6f5044;font:italic 13px Georgia,serif;}
+.rr-grocery-group{margin:15px 0 20px;}
+.rr-grocery-group > h3{border-bottom:1px solid #c89f69;margin:0 0 2px;padding:0 0 7px;font:700 19px Georgia,serif;color:#642b3c;letter-spacing:.025em;}
+.rr-simple-rows {display:grid;gap:0;margin:0 0 6px;}
+.rr-simple-row {display:flex;align-items:center;min-height:48px;gap:11px;border-bottom:1px solid #ccab7d73;padding:7px 1px;}
+.rr-simple-row.is-done > span{text-decoration:line-through;color:#907f71;}
+.rr-simple-check{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:7px;border:2px solid #916537;background:#fff8e8;color:#fff;font:700 21px/1 Arial,sans-serif;}
+.rr-simple-check[aria-pressed="true"]{background:linear-gradient(#892b47,#531329);border-color:#98642e;}
+.rr-simple-row > span{flex:1;min-width:0;overflow-wrap:anywhere;color:#3c2425;font:18px/1.35 Georgia,serif;cursor:text;}
+.rr-simple-remove{display:grid;place-items:center;min-width:34px;width:34px;height:36px;background:none;border:0;color:#925b4f;font:24px Arial,sans-serif;opacity:.75;}
+.rr-simple-edit{min-width:0;flex:1;}
+.rr-simple-edit input{width:100%;padding:7px;border:1px solid #b9986b;border-radius:5px;background:#fffdf6;color:#351d23;font:18px Georgia,serif;}
+.rr-quick-empty {text-align:center;margin:16px 0;font:italic 15px Georgia,serif;color:#806457;}
+@media(max-width:385px){.rr-simple-row>span{font-size:16px}.rr-quick-list-form{padding:10px}.rr-simple-row{gap:8px}}

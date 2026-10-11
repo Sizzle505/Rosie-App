@@ -17,7 +17,13 @@
   border-radius: 50%;
   overflow: hidden;
   pointer-events: none;
-  /* No second bezel, painted inner circle or layout changes. */
+  /* Rich velvet dial lining under the gears; never touches approved outer gold artwork. */
+  background:
+    radial-gradient(ellipse at 44% 30%,#73284265,transparent 65%),
+    repeating-linear-gradient(100deg,transparent 0 2px,#e24e7130 3px,#2908111b 5px,transparent 7px 11px),
+    radial-gradient(circle at 48% 48%,#521526 0%,#3c0f20 56%,#180b14 94%);
+  box-shadow:inset 0 0 23px #10060fd9;
+  /* The existing gold frame is not repainted or enlarged. */
   -webkit-mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
   mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
 }
@@ -67,13 +73,7 @@
   inset: 0;
   pointer-events: none;
   /* Preserve original near-black face beneath digits and live buttons. */
-  background: radial-gradient(ellipse at 50% 48%,
-    #100d13f0 0%,
-    #100d13e6 20%,
-    #100d13c4 32%,
-    #100d138c 43%,
-    #100d1325 61%,
-    transparent 76%);
+  background:radial-gradient(ellipse at 50% 47%,#2c0a1af0 0%,#290b19e3 17%,#290b19cb 28%,#290b19a0 39%,#290b1940 56%,transparent 72%);
 }
 @keyframes rtk-wheel-turn { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {

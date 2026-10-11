@@ -130,34 +130,42 @@ const FORTUNES = Object.entries(RESPONSES).flatMap(([tone, values]) =>
 );
 
 const QUICK_QUESTIONS = [
-  "Would this problem improve after a walk and a snack?",
-  "Should I say yes, then become mysteriously unavailable?",
-  "Is it brave to order dessert first?",
-  "Would a ceremonial cheese plate clarify the situation?",
-  "Should I accept the invitation if there is a dog there?",
-  "Would a nap count as a tactical reset?",
-  "Should I make the responsible choice or the charming one?",
-  "Is this person worthy of my best cheese?",
-  "Should I follow this squirrel of an idea?",
-  "Would Rosie consider this elegant mischief?",
-  "Should I solve this now, or appoint Future Me as minister?",
-  "Is today a good day for a glorious, unnecessary entrance?",
-  "Should I bring a snack in case destiny is poorly catered?",
-  "Would saying no be more powerful in a dramatic coat?",
-  "Should I choose cozy, chaos, or both?",
-  "Should I answer now, or preserve the mystique until morning?",
-  "Would this be easier after I put on a better outfit?",
-  "Would Rosie approve of the level of drama here?",
-  "Should I go, provided there are appetizers?",
-  "Would a walk around the block improve my perspective?",
-  "Is the plan elegant enough to survive daylight?",
-  "Should I ask the question everyone is politely avoiding?",
-  "Would one small treat improve everyone’s judgment?",
-  "Would tomorrow-me thank me for doing this tonight?",
-  "Is there a graceful way to make this somebody else’s problem?",
-  "Is this a moment for poise, snacks, or both?",
-  "Is this worth my energy, or just a very shiny distraction?",
-  "Should I follow the sensible route, or the one with better snacks?"
+  "Should I trust a plan that doesn't include snacks?",
+  "Is this an adventure or an elaborate excuse for cheese?",
+  "Would Rosie approve of this dramatic entrance?",
+  "Should I send the message or consult the moon first?",
+  "Is it time to turn my brilliant idea into an invention?",
+  "Should I be sensible, or spectacularly well dressed?",
+  "Would this decision improve with a victory lap?",
+  "Is the universe sending a sign, or is that just a squirrel?",
+  "Should I accept an invitation without a dessert menu?",
+  "Would an hourglass help me decide, or merely look elegant?",
+  "Is this a crisis or an opportunity for a little mischief?",
+  "Should I choose the path with more windows to sniff?",
+  "Would a clever dog delegate this problem?",
+  "Is today for bold experiments or cozy research?",
+  "Would a perfectly timed nap solve everything?",
+  "Should I negotiate for extra treats?",
+  "Is a grand gesture better than a graceful exit?",
+  "Would my future self appreciate this detour?",
+  "Should I reveal the plan or preserve the mystery?",
+  "Does this deserve my attention, or just a raised eyebrow?",
+  "Would wearing a tiny crown improve the outcome?",
+  "Is the sensible answer secretly the boring one?",
+  "Should I chase the opportunity or let it come to me?",
+  "Would a cheese tasting count as serious research?",
+  "Is this my cue to make an entrance?",
+  "Should I trust my instincts or check the treat ledger?",
+  "Is someone mistaking my kindness for unlimited biscuits?",
+  "Would the night sky approve of this wish?",
+  "Should I say yes to the adventure and no to the paperwork?",
+  "Is it time to invent a more efficient way to relax?",
+  "Could an elegant refusal save the entire afternoon?",
+  "Does this plan need courage, charm, or a calculator?",
+  "Should I risk the shortcut or enjoy the scenic walk?",
+  "Would Rosie call this genius or delightful nonsense?",
+  "Is tomorrow better suited to this important decision?",
+  "Should I celebrate a small victory in a very big way?"
 ];
 
 const OMENS = {
@@ -2042,6 +2050,11 @@ function App() {
   };
   const [page, setPage] = useState(pageFromLocation);
   const [fortuneScrolled, setFortuneScrolled] = useState(false);
+  // Users can flip navigation families in place; visiting a destination
+  // restores the family appropriate to that page.
+  const [navFamily, setNavFamily] = useState(() =>
+    RESOURCE_PAGE_IDS.has(pageFromLocation()) ? "resources" : "salon");
+
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
@@ -2097,7 +2110,11 @@ function App() {
   // The three games are directly linkable and browser navigation stays in sync.
   // This also avoids a stale Captain tab after a reload or shared URL.
   useEffect(() => {
-    const onLocationChange = () => setPage(pageFromLocation());
+    const onLocationChange = () => {
+      const nextPage = pageFromLocation();
+      setPage(nextPage);
+      setNavFamily(RESOURCE_PAGE_IDS.has(nextPage) ? "resources" : "salon");
+    };
     window.addEventListener("hashchange", onLocationChange);
     window.addEventListener("popstate", onLocationChange);
     return () => {
@@ -2143,6 +2160,7 @@ function App() {
 
   function navigateTo(nextPage) {
     if (!validPages.includes(nextPage)) return;
+    setNavFamily(RESOURCE_PAGE_IDS.has(nextPage) ? "resources" : "salon");
     setFortuneScrolled(false);
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (window.location.hash !== `#${nextPage}`) {
@@ -2437,9 +2455,17 @@ function App() {
     event.preventDefault();
     if (consulting) return;
 
-    // A blank primary action automatically chooses one visible sample question
-    // and proceeds directly to Rosie's reading.
-    const askedQuestion = question.trim() || quickQuestions[secureIndex(quickQuestions.length)] || samplePrompts(1)[0];
+    // A blank Ask is an invitation to suggest a question, not to send one
+    // invisibly. First tap fills the input; the next tap consults Rosie.
+    if (!question.trim()) {
+      const suggested = quickQuestions[secureIndex(quickQuestions.length)] || samplePrompts(1)[0];
+      if (suggested) {
+        setQuestion(suggested);
+        setSubmittedQuestion("");
+      }
+      return;
+    }
+    const askedQuestion = question.trim();
 
     primeAudio();
     window.clearTimeout(revealTimerRef.current);
@@ -2560,6 +2586,9 @@ function App() {
             onClick={() => navigateTo("resources")}
           >R</button>
         </>}
+        {page === "home" && <button type="button" className="resources-return resources-return--home"
+          aria-label="Open Rosie’s Resources hub" title="Rosie’s Resources"
+          onClick={() => navigateTo("resources")}>R</button>}
         {page === "home" ? (
           <RosieHome onNavigate={navigateTo} />
         ) : page === "fortune" ? (
@@ -2645,6 +2674,7 @@ function App() {
               )}
 
               <div className="quick-row">
+                <p className="fortune-sample-heading">ROSIE’S SAMPLE QUESTIONS <span>Tap to choose · Or press Ask for a surprise</span></p>
                 <div className="quick-prompts">
                   {quickQuestions.map((prompt) => (
                     <button type="button" key={prompt} onClick={() => choosePrompt(prompt)}>
@@ -2737,7 +2767,19 @@ function App() {
           <RosieRandomizers />
         )}
 
-        {page !== "home" && (RESOURCE_PAGE_IDS.has(page) ?
+        {page !== "home" && <>
+          <button className={"nav-family-toggle" + (navFamily === "resources" ? " on-resources" : "")}
+            type="button"
+            aria-label={navFamily === "resources" ? "Switch bottom buttons to RosieVerse games" : "Switch bottom buttons to Rosie’s Resources"}
+            title={navFamily === "resources" ? "Show RosieVerse games" : "Show Rosie’s Resources"}
+            onClick={() => setNavFamily(family => family === "resources" ? "salon" : "resources")}>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+              strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 7h14m0 0-3-3m3 3-3 3M19 17H5m0 0 3-3m-3 3 3 3"/>
+            </svg>
+            <span>{navFamily === "resources" ? "Games" : "Tools"}</span>
+          </button>
+          {navFamily === "resources" ?
           <nav className="bottom-nav resources-bottom-nav" aria-label="Rosie’s Resources">
             <button type="button" aria-label="Open Rosie’s Reminders" className={page === "reminders" ? "active" : ""} aria-current={page === "reminders" ? "page" : undefined} onClick={() => navigateTo("reminders")}><span className="nav-icon-wrap"><ResourceNavIcon type="reminders" /></span><small>Reminders</small></button>
             <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
@@ -2749,7 +2791,8 @@ function App() {
             <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
             <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
             <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
-          </nav>)}
+          </nav>}
+        </>}
       </div>
 
       <div className={`toast ${toast ? "toast-visible" : ""}`}>{toast}</div>

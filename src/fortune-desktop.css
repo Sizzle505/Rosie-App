@@ -1227,3 +1227,63 @@
     #000 100%
   ) !important;
 }
+
+/* Clearly distinguish the refreshed, selectable questions from footer copy. */
+.fortune-sample-heading {
+  margin:4px auto 10px;
+  color:#e6c182;
+  text-align:center;
+  font:700 clamp(9px,1.6vw,12px)/1.35 Georgia,serif;
+  letter-spacing:.12em;
+  text-shadow:0 1px 3px #000b;
+}
+.fortune-sample-heading span {
+  display:block;margin-top:4px;color:#e2ceab;
+  font:italic clamp(10px,1.8vw,13px)/1.35 Georgia,serif;
+  letter-spacing:0;
+}
+.fortune-page .quick-prompts button {min-height:38px;line-height:1.3;}
+
+/* Large enough to actually read and tap on iPhone. Old 8px pill text was too
+   faint to make the updated suggestions discoverable. */
+.fortune-page .quick-row::before{display:none;}
+.fortune-page .quick-prompts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.fortune-page .quick-prompts button{
+  min-height:54px;
+  padding:10px 11px;
+  border:1px solid #ba8f5e80;
+  border-radius:11px;
+  color:#ffe9bc;
+  white-space:normal;
+  overflow-wrap:break-word;
+  text-align:left;
+  font:600 clamp(11px,1.25vw,15px)/1.34 Georgia,serif;
+  box-shadow:0 2px 5px #0007,inset 0 1px #ffdc9e18;
+}
+@media(max-width:700px) {
+  .fortune-page .quick-prompts button{
+    font-size:clamp(11px,2.85vw,13px)!important;
+    min-height:67px!important;
+    padding:9px 10px!important;
+    line-height:1.3!important;
+  }
+  .fortune-page .fortune-sample-heading{font-size:11px;letter-spacing:.08em;}
+}
+
+/* iPhone sticky cabinet may remain above the scenic backdrop, but the actual
+   question form must be in front of it so Ask and sample choices receive taps. */
+@media(max-width:720px){
+  .page-fortune .fortune-console > .question-card{
+    position:relative !important;
+    z-index:24 !important;
+    isolation:isolate;
+    scroll-margin-block-end:calc(105px + env(safe-area-inset-bottom,0px));
+  }
+  .page-fortune .fortune-console > .machine{z-index:12 !important;}
+  .page-fortune .fortune-console .ask-button,
+  .page-fortune .fortune-console .quick-prompts button {
+    position:relative;
+    z-index:2;
+    touch-action:manipulation;
+  }
+}
