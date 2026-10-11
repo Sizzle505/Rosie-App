@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./RosieTimekeeper.css";
+import TimekeeperClockwork from "./TimekeeperClockwork.jsx";
 
 const ART = "/rosieverse/timekeeper/grand-clockwork-hall.jpg";
 const PRESETS = [
@@ -129,6 +130,7 @@ export default function RosieTimekeeper() {
           </p>
         )}
         <section className="rtk-dial" aria-label="Working stopwatch and countdown">
+          <TimekeeperClockwork />
           <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode">
             <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
