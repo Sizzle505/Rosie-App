@@ -110,12 +110,12 @@ function ToolPanel({ active, values, update }) {
 
 export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
-  const [tool, setTool] = useState("calculator");
+  const [tool, setTool] = useState(null);
   const [values, setValues] = useState(DEFAULTS);
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
   useEffect(() => {
     const onKey = (event) => {
-      if (tool !== "calculator" || event.metaKey || event.ctrlKey || event.altKey ||
+      if (event.metaKey || event.ctrlKey || event.altKey ||
           event.target?.closest?.("input,textarea,select,[contenteditable=true]")) return;
       const mapped = keyFromKeyboard(event);
       if (mapped) { event.preventDefault(); send(mapped); }
@@ -127,22 +127,19 @@ export default function RosieCalculations() {
     <header className="rc-hero">
       <img
         className="rc-custom-hero"
-        src="/rosieverse/calculations/hero/hero-mobile-16x9.webp"
+        src="/rosieverse/calculations/hero/hero-full-resolution.webp"
         alt="Rosie at her mathematical desk in the library"
         width="1448"
-        height="814"
+        height="1086"
         decoding="async"
         fetchPriority="high"
       />
     </header>
     <div className="rc-workspace">
-      <div className="rc-mode-tabs" role="tablist" aria-label="Calculations mode">
-        <button type="button" role="tab" aria-selected={tool==="calculator"} className={tool==="calculator"?"selected":""} onClick={()=>setTool("calculator")}>Calculator</button>
-        <button type="button" role="tab" aria-selected={tool!=="calculator"} className={tool!=="calculator"?"selected":""} onClick={()=>setTool("tip")}>Pocket Tools</button>
-      </div>
-      {tool === "calculator" ? <AssetCalculator calc={calc} send={send} /> : <ToolPanel active={tool} values={values} update={update}/>}
+      <AssetCalculator calc={calc} send={send} />
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
-      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card "+(tool===item.id?"active":"")} onClick={()=>{setTool(item.id);document.querySelector(".rc-workspace")?.scrollIntoView({behavior:"smooth",block:"start"});}}><span className="rc-tool-mark" aria-hidden="true">{item.mark}</span><span className="rc-tool-copy"><strong>{item.title}</strong><small>{item.detail}</small></span><span className="rc-chevron" aria-hidden="true">›</span></button>)}</div>
+      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card "+(tool===item.id?"active":"")} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><span className="rc-tool-mark" aria-hidden="true">{item.mark}</span><span className="rc-tool-copy"><strong>{item.title}</strong><small>{item.detail}</small></span><span className="rc-chevron" aria-hidden="true">›</span></button>)}</div>
+      {tool && <ToolPanel active={tool} values={values} update={update}/>}
       <p className="rc-footer-note">Crafted in Rosie’s study · Numbers with a little extra charm</p>
     </div>
   </main>;

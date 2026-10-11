@@ -3,9 +3,9 @@
   box-sizing: border-box;
   isolation: isolate;
   position: relative;
-  width: min(100%, 690px);
-  margin: 20px auto 12px;
-  padding: 42px clamp(20px, 5%, 32px) 25px;
+  width: 100%;
+  margin: 12px auto 10px;
+  padding: 40px clamp(13px, 3.4%, 24px) 18px;
   border-radius: 20px;
   background: #0b1018 url('/rosieverse/calculations/calculator/marble-inlay.webp') center / cover no-repeat;
   color: #fff0cc;
@@ -32,9 +32,9 @@
   position: relative;
   width: 100%;
   min-width: 0;
-  height: 76px;
-  padding: 9px 10px 9px 15px;
-  margin-bottom: 10px;
+  height: 66px;
+  padding: 7px 13px;
+  margin-bottom: 8px;
   gap: 7px;
   background: #e9d4aa url('/rosieverse/calculations/calculator/display-parchment-no-fleur.webp') center / 100% 100% no-repeat;
   border-radius: 9px;
@@ -44,14 +44,9 @@
 .rac-readout { display: flex; flex: 1; min-width: 0; flex-direction: column; justify-content: center; align-items: flex-end; overflow: hidden; }
 .rac-readout small { max-width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; color: #7a6043; font: 12px Georgia,serif; }
 .rac-readout output { max-width: 100%; overflow: hidden; text-overflow: clip; white-space: nowrap; font: clamp(25px, 6vw, 46px) Georgia,serif; font-variant-numeric: tabular-nums; letter-spacing: -.025em; }
-.rac-backspace {
-  flex: 0 0 52px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent url('/rosieverse/calculations/keys/key-backspace.webp') center / contain no-repeat;
-  cursor: pointer;
-  touch-action: manipulation;
-}
+.rac-command-keys { position:absolute; z-index:4; top:8px; right:clamp(18px,5%,34px); display:flex; gap:6px; }
+.rac-backspace,.rac-all-clear { width:40px; height:28px; padding:0; border:0; border-radius:7px; cursor:pointer; touch-action:manipulation; }
+.rac-backspace { background:transparent url('/rosieverse/calculations/keys/key-backspace.webp') center / contain no-repeat; }
 .rac-memory-keys { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: clamp(2px,.7vw,6px); margin-bottom: 6px; }
 .rac-digit-keys { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: clamp(4px,1vw,8px); }
 .rac-key {
@@ -61,7 +56,7 @@
   align-items: center;
   min-width: 0;
   padding: 0;
-  height: clamp(48px, 11vw, 64px);
+  height: clamp(44px, 10vw, 58px);
   color: #ffedc6;
   font: clamp(20px,4.5vw,32px) Georgia,serif;
   cursor: pointer;
@@ -79,29 +74,24 @@
 .rac-key--small { --key-asset: url('/rosieverse/calculations/keys/key-dark-small.webp'); }
 .rac-key--crimson { --key-asset: url('/rosieverse/calculations/keys/key-crimson.webp'); }
 .rac-key--gold { --key-asset: url('/rosieverse/calculations/keys/key-gold.webp'); color: #2c1706; }
-.rac-key--memory { height: 44px; font-size: clamp(11px,2.55vw,17px); border-width: 8px; border-image-width: 8px; }
+.rac-key--memory { height: 38px; font-size: clamp(11px,2.55vw,16px); border-width: 8px; border-image-width: 8px; }
 .rac-key--wide { grid-column: span 2; }
 .rac-key:active { transform: translateY(2px); filter: brightness(1.16); }
 .rac-key:disabled { opacity:.47;cursor:default; }
 .rac-key:focus-visible, .rac-backspace:focus-visible, .rac-all-clear:focus-visible { outline: 3px solid #f8c76a; outline-offset: 2px; }
 .rac-all-clear {
-  flex: 0 0 44px;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  border: 8px solid transparent;
-  border-image: url('/rosieverse/calculations/keys/key-crimson.webp') 29% fill / 8px stretch;
+  border: 6px solid transparent;
+  border-image: url('/rosieverse/calculations/keys/key-crimson.webp') 29% fill / 6px stretch;
   background: transparent;
   color: #fff0cf;
-  font: 14px Georgia,serif;
-  cursor: pointer;
-  touch-action: manipulation;
+  font: 13px Georgia,serif;
 }
 .rac-sr-only { position: absolute; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
 @media(max-width: 350px) {
-  .rac-frame { padding-inline: 22px; }
+  .rac-frame { padding-inline: 13px; }
   .rac-memory-keys { gap: 1px; }
   .rac-key--memory { font-size: 10px; }
-  .rac-backspace { flex-basis: 41px; }
+  .rac-command-keys { right:14px; gap:3px; }
+  .rac-backspace,.rac-all-clear { width:35px; }
 }
 @media(prefers-reduced-motion:reduce){.rac-key{transition:none;}}

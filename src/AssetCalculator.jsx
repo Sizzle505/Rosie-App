@@ -49,6 +49,8 @@ export default function AssetCalculator({ calc, send }) {
           <small aria-hidden="true">{calc.expression || "\u00a0"}</small>
           <output aria-live="polite" aria-atomic="true">{formatCalculatorEntry(calc.entry)}</output>
         </div>
+      </div>
+      <div className="rac-command-keys" aria-label="Calculator clear controls">
         <button type="button" className="rac-backspace" aria-label="Backspace" aria-keyshortcuts="Backspace" onClick={() => send("DEL")}>
           <span className="rac-sr-only">Backspace</span>
         </button>
