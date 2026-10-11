@@ -1,0 +1,91 @@
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import { chromium, webkit } from "playwright";
+
+const base = "http://127.0.0.1:5173/#calculations";
+const sizes = [[375,812],[390,844],[430,932],[844,390]];
+const output = "artifacts/calculations-iphone";
+await fs.mkdir(output, { recursive: true });
+const results = [];
+
+for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
+  const browser = await browserType.launch({ headless:true });
+  try {
+    for (const [width,height] of sizes) {
+      const context = await browser.newContext({
+        viewport:{width,height}, deviceScaleFactor:2, isMobile:true,
+        hasTouch:true, reducedMotion:"reduce"
+      });
+      const page = await context.newPage();
+      const errors = [];
+      page.on("pageerror", error => errors.push(String(error)));
+      await page.goto(base,{waitUntil:"networkidle"});
+      await page.locator(".loading-screen-hidden").waitFor();
+      const hero=page.locator(".rc-custom-hero");
+      await hero.evaluate(async img => {if(!img.complete) await img.decode();});
+      const frame=page.locator(".rac-frame");
+      const geometry=await page.evaluate(()=>{
+        const rect=selector=>{
+          const r=document.querySelector(selector).getBoundingClientRect();
+          return {x:r.x,y:r.y,left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};
+        };
+        const img=document.querySelector(".rc-custom-hero");
+        const keys=[...document.querySelectorAll(".rac-key,.rac-backspace,.rac-all-clear")];
+        return {
+          width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
+          hero:rect(".rc-hero"),image:rect(".rc-custom-hero"),
+          frame:rect(".rac-frame"),display:rect(".rac-display"),
+          value:rect(".rac-readout output"),history:rect(".rac-readout small"),
+          nativeWidth:img.naturalWidth,nativeHeight:img.naturalHeight,
+          imageLoaded:img.complete,objectFit:getComputedStyle(img).objectFit,
+          keys:keys.map(key=>{const r=key.getBoundingClientRect();return {name:key.getAttribute("aria-label"),left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};})
+        };
+      });
+      assert(geometry.imageLoaded && geometry.nativeWidth>0 && geometry.nativeHeight>0, "high-resolution header missing");
+      assert(geometry.nativeWidth>=1000, "header resolution unexpectedly low");
+      assert.equal(geometry.objectFit,"contain","artwork must never be cropped");
+      assert(Math.abs(geometry.image.width-width)<=1.5,"header must span entire viewport");
+      assert(Math.abs(geometry.image.height-geometry.image.width*geometry.nativeHeight/geometry.nativeWidth)<=1.5,
+        "header natural aspect ratio was distorted");
+      assert(Math.abs(geometry.hero.bottom-geometry.frame.top)<=1.5,"calculator must touch header seam");
+      assert(Math.abs(geometry.frame.width-width)<=1.5,"calculator must fill viewport");
+      assert(Math.abs(geometry.frame.left)<=1.5,"calculator left edge offset");
+      assert(geometry.scrollWidth<=width+2,"horizontal overflow");
+      assert(geometry.display.right-geometry.value.right>=27,"result touches display's decorative right border");
+      assert(geometry.display.right-geometry.history.right>=27,"history touches display's decorative right border");
+      assert(geometry.keys.every(k=>k.left>=geometry.frame.left-1&&k.right<=geometry.frame.right+1),
+        "calculator controls overflow gold frame");
+      assert(geometry.keys.every(k=>k.width>=30&&k.height>=38),"unusable small key");
+      assert.equal(await page.locator(".rc-tool-card").count(),7,"pocket tools removed");
+      const name=engine+"-"+width+"x"+height;
+      await page.screenshot({path:output+"/"+name+"-full.png",fullPage:true});
+      await hero.screenshot({path:output+"/"+name+"-header.png"});
+      await frame.screenshot({path:output+"/"+name+"-calculator.png"});
+
+      const digit=n=>page.getByRole("button",{name:String(n),exact:true});
+      await digit(7).click();
+      await page.getByRole("button",{name:"Multiply"}).click();
+      await digit(8).click();
+      await page.getByRole("button",{name:"Equals"}).click();
+      assert.equal(await page.locator(".rac-readout output").innerText(),"56","arithmetic regression");
+      await page.getByRole("button",{name:"Clear all"}).click();
+      for(const n of "123") await digit(n).click();
+      await page.getByRole("button",{name:"Backspace"}).click();
+      assert.equal(await page.locator(".rac-readout output").innerText(),"12","backspace regression");
+      await page.getByRole("button",{name:"Add to memory"}).click();
+      await page.getByRole("button",{name:"Clear all"}).click();
+      await page.getByRole("button",{name:"Memory recall"}).click();
+      assert.equal(await page.locator(".rac-readout output").innerText(),"12","memory regression");
+      await page.getByRole("button",{name:"Clear all"}).click();
+      for(const n of "12345678901234") await digit(n).click();
+      const fits=await page.locator(".rac-readout output").evaluate(el=>el.scrollWidth<=el.clientWidth+2);
+      assert(fits,"long values clipped in parchment");
+      assert.equal(errors.length,0,"console page error(s): "+errors.join(" | "));
+      results.push({engine,width,height,headerNatural:[geometry.nativeWidth,geometry.nativeHeight],seam:geometry.frame.top-geometry.hero.bottom,displayInset:geometry.display.right-geometry.value.right,passed:true});
+      await context.close();
+      console.log("PASS",name,JSON.stringify(results.at(-1)));
+    }
+  } finally { await browser.close(); }
+}
+await fs.writeFile(output+"/metrics.json",JSON.stringify(results,null,2));
+console.log("All calculations iPhone viewports and interactions passed");
