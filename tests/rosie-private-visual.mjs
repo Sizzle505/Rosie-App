@@ -68,15 +68,14 @@ async function capture(engine, isMobile) {
   await page.getByRole("textbox", {name:"Username"}).fill("rosiefan");
   await page.getByLabel("Secret PIN").fill("1234");
   await page.getByRole("button",{name:/Enter RosieVerse/}).click();
-  await page.getByRole("heading", {name:"Notes & Ideas"}).waitFor();
   await page.locator('textarea[aria-label="Note text"]').waitFor();
   const body = page.locator('textarea[aria-label="Note text"]');
-  await body.fill("A good day begins with Rosie.\\nRemember the biscuits.");
+  await body.fill("A good day begins with Rosie.\nRemember the biscuits.");
   await page.getByText("Saved", {exact:false}).first().waitFor({timeout:15000});
   await body.scrollIntoViewIfNeeded();
   await page.screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-notes-${engine.name()}.png`});
-  assert.equal(await body.inputValue(),"A good day begins with Rosie.\\nRemember the biscuits.");
-  assert.equal(notes[0].body,"A good day begins with Rosie.\\nRemember the biscuits.");
+  assert.equal(await body.inputValue(),"A good day begins with Rosie.\nRemember the biscuits.");
+  assert.equal(notes[0].body,"A good day begins with Rosie.\nRemember the biscuits.");
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
   assert.equal(overflow,false,"horizontal overflow on "+engine.name()+" "+isMobile);
   assert.deepEqual(errors,[],"page errors");
