@@ -763,13 +763,18 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
       <div className="graduation-stage">
         <div className="barkbridge-certificate-and-reward">
           <BarkbridgeDiploma recipient={recipient} awardDate={awardDate} />
-          <figure className="barkbridge-cheese-reward" aria-label="Celebratory gourmet cheese platter">
+          <figure className="barkbridge-cheese-reward barkbridge-cheese-reward-desktop" aria-label="Celebratory gourmet cheese platter">
             <span className="barkbridge-cheese-halo" aria-hidden="true" />
             <img src="/barkbridge/diploma/gourmet-cheese-platter-v2.png" alt="A golden platter of gourmet cheeses, fruit and honey" loading="eager" decoding="async" />
             <span className="barkbridge-cheese-sparkles" aria-hidden="true"><i /><i /><i /><i /></span>
           </figure>
         </div>
         <GraduateRosie />
+        <figure className="barkbridge-cheese-reward barkbridge-cheese-reward-mobile" aria-label="Celebratory gourmet cheese platter">
+          <span className="barkbridge-cheese-halo" aria-hidden="true" />
+          <img src="/barkbridge/diploma/gourmet-cheese-platter-v2.png" alt="A golden platter of gourmet cheeses, fruit and honey" loading="eager" decoding="async" />
+          <span className="barkbridge-cheese-sparkles" aria-hidden="true"><i /><i /><i /><i /></span>
+        </figure>
       </div>
 
       <div className="diploma-aftercare">
@@ -1162,9 +1167,9 @@ function CheeseMemoryGame() {
 }
 
 const CAPTAIN_PICKUPS = [
-  { kind: "ball", icon: "🎾", label: "Tennis ball", points: 10, turbo: 12 },
-  { kind: "treat", icon: "🦴", label: "Captain's treat", points: 20, turbo: 18 },
-  { kind: "cheese", icon: "", label: "Golden Cheese", points: 40, turbo: 30 },
+  { kind: "ball", icon: "🎾", label: "Tennis ball", points: 10, turbo: 6 },
+  { kind: "treat", icon: "🦴", label: "Captain's treat", points: 20, turbo: 9 },
+  { kind: "cheese", icon: "", label: "Golden Cheese", points: 40, turbo: 15 },
   { kind: "buoy", icon: "◆", label: "Navigation buoy", points: 0, turbo: 0 }
 ];
 
