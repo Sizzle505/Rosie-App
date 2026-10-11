@@ -22,7 +22,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       page.on("console", m => { if (m.type() === "error") errors.push(m.text()); });
       await page.goto(base + "/#reminders", { waitUntil: "networkidle" });
       await page.locator(".rr-page").waitFor();
-      await page.locator(".loading-screen-hidden").waitFor();
+      await page.locator(".loading-screen-hidden").waitFor({ state: "attached" });
       await page.waitForTimeout(1100); // Wait for the loading overlay fade before visual capture.
       const img = page.locator(".rr-hero img");
       await img.evaluate(async node => { if (!node.complete) await node.decode(); });
@@ -85,12 +85,13 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert((await page.locator(".rr-rows").innerText()).includes("Rosie cheese treats"));
 
       await page.getByRole("button", {name:"Open Notes & Ideas"}).click();
-      await page.getByRole("button", {name:/New note/i}).click();
-      await page.getByRole("textbox", {name:"Note title"}).fill("Genius Rosie notes");
-      await page.getByRole("textbox", {name:"Note text"}).fill("Remember to demand treats.");
+      await page.getByRole("heading", {name:"Welcome to RosieVerse"}).waitFor();
+      assert.equal(await page.getByRole("button", {name:/Enter RosieVerse/i}).count(), 1,
+        "private cloud notes should require membership; all other organizer sections stay public");
       await page.reload({waitUntil:"networkidle"});
       await page.getByRole("button", {name:"Open Notes & Ideas"}).click();
-      assert.equal(await page.getByRole("textbox", {name:"Note text"}).inputValue(), "Remember to demand treats.");
+      assert.equal(await page.getByRole("heading", {name:"Welcome to RosieVerse"}).count(), 1,
+        "anonymous guests must remain signed out after refresh");
 
       await page.getByRole("button", {name:"Open Goals & Gratitude"}).click();
       await page.getByRole("textbox", {name:"New goal"}).fill("Walk every day");
@@ -118,7 +119,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(download.suggestedFilename().startsWith("rosie-reminders-backup-"));
       const raw = JSON.parse(await fs.readFile(await download.path(),"utf8"));
       assert(raw.items.some(item=>item.title==="Rosie cheese treats"));
-      assert(raw.notes.some(note=>note.title==="Genius Rosie notes"));
+      assert.equal(raw.notes.length, 0, "cloud notes must not leak into local backup");
       assert(raw.gratitude.some(g=>g.text==="Rosie is brilliant"));
       await page.goto(base + "/#fortune",{waitUntil:"networkidle"});
       assert.equal(await page.locator("main.fortune-page").count(),1,"fortune route broken");
