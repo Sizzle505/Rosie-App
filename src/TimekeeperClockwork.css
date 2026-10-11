@@ -1,5 +1,5 @@
-/* Rosie Timekeeper: motion is confined to the original black clock interior.
-   The approved image, gold bezel, dimensions, controls, and navigation are unchanged. */
+/* No replacement bezel and no painted black circle. This sits directly
+   over the approved original dial, preserving all scene geometry. */
 .rtk-dial { isolation: isolate; }
 .rtk-dial > .rtk-mode-switch,
 .rtk-dial > .rtk-time,
@@ -9,25 +9,22 @@
 .rtk-clockwork {
   position: absolute;
   z-index: 0;
-  inset: 6%;
+  top: 50%;
+  left: 50%;
+  width: 107%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) translateZ(0);
   border-radius: 50%;
   overflow: hidden;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 49%, #111015 0%, #131016 43%, #231916 75%, #2b1b13 100%);
-  box-shadow: inset 0 0 18px 5px #09090da8, inset 0 0 2px 1px #b98e4b65;
-  transform: translateZ(0);
-}
-.rtk-engraved-dial {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: .92;
+  /* Gradual disappearance into the original, photographic black dial,
+     not a second visible circular background. Safari supports -webkit-mask. */
+  -webkit-mask-image: radial-gradient(circle, #000 0%, #000 77%, #000b 87%, transparent 99%);
+  mask-image: radial-gradient(circle, #000 0%, #000 77%, #000b 87%, transparent 99%);
 }
 .rtk-gear-mount {
   position: absolute;
   display: block;
-  height: auto;
   aspect-ratio: 1;
   transform: translate(-50%, -50%) translateZ(0);
 }
@@ -36,31 +33,45 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  opacity: .89;
-  filter: drop-shadow(0 2px 3px #050408d9);
+  opacity: var(--rtk-opacity, .72);
+  filter: saturate(.76) brightness(.82) drop-shadow(0 2px 3px #000c);
   transform-origin: 50% 50%;
-  will-change: transform;
-  animation: rtk-wheel-turn var(--rtk-cycle, 60s) linear infinite;
+  animation: rtk-wheel-turn var(--rtk-cycle, 90s) linear infinite;
   animation-direction: var(--rtk-direction, normal);
+  will-change: transform;
 }
 .rtk-stationary-axle {
   position: absolute;
-  width: 13%;
-  height: 13%;
+  width: 8%;
+  height: 8%;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
-  border: 1px solid #ffe0a2;
+  transform: translate(-50%, -50%);
+  border: 1px solid #c79758;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 26%, #ffe6dd 0%, #b43d6c 14%, #5f1539 46%, #200a1b 71%, #b27a44 78%, #f4cb84 93%);
-  box-shadow: 0 0 0 1px #59371b, 0 1px 3px #000c;
+  background: radial-gradient(circle at 32% 25%, #ffe9c2, #a96e48 25%, #4a1d35 51%, #1b0e1a 78%, #b48c51 100%);
+  box-shadow: 0 1px 3px #000c;
+  opacity: .9;
+}
+.rtk-mechanical-bridges {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .76;
 }
 .rtk-clockwork-vignette {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 48%, #0e0d14f5 0%, #0e0d14ec 33%, #0d0c12bb 49%, #0d0c1290 62%, #0d0c1230 77%, transparent 92%);
-  box-shadow: inset 0 0 10px 3px #0d0a10b5;
+  pointer-events: none;
+  /* Clear central controls; no visible border or circular "panel." */
+  background: radial-gradient(ellipse at 50% 47%,
+    #100d13ed 0%,
+    #100d13e2 24%,
+    #100d13bf 36%,
+    #100d1388 47%,
+    #100d1340 60%,
+    transparent 78%);
 }
 @keyframes rtk-wheel-turn { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
