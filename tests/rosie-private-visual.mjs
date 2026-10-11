@@ -63,6 +63,9 @@ async function capture(engine, isMobile) {
   await goNotes.waitFor({timeout:30000});
   await goNotes.click();
   await page.getByRole("heading", {name:"Welcome to RosieVerse"}).waitFor();
+  await page.getByRole("heading", {name:"Welcome to RosieVerse"}).locator("..").screenshot({
+    path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-entrance-${engine.name()}.png`
+  });
   await page.getByRole("heading", {name:"Welcome to RosieVerse"}).scrollIntoViewIfNeeded();
   await page.screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-login-${engine.name()}.png`});
   await page.getByRole("textbox", {name:"Username"}).fill("rosiefan");
@@ -72,6 +75,9 @@ async function capture(engine, isMobile) {
   const body = page.locator('textarea[aria-label="Note text"]');
   await body.fill("A good day begins with Rosie.\nRemember the biscuits.");
   await page.getByText("Saved", {exact:false}).first().waitFor({timeout:15000});
+  await page.getByRole("heading", {name:"Notes & Ideas"}).locator("../..").screenshot({
+    path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-ledger-${engine.name()}.png`
+  });
   await body.scrollIntoViewIfNeeded();
   await page.screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-notes-${engine.name()}.png`});
   assert.equal(await body.inputValue(),"A good day begins with Rosie.\nRemember the biscuits.");
