@@ -11,7 +11,7 @@
 .rr-tabs {display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;}
 .rr-tabs button {min-height:50px;color:#f8df9d;border:1px solid #a97a39;border-radius:16px 16px 4px 4px;background:linear-gradient(#203047,#081526);box-shadow:inset 0 1px #fae0a158;font:600 clamp(18px,4vw,23px) Georgia,serif;}
 .rr-tabs button.active {background:linear-gradient(#6d0e29,#31081a);color:#ffe9bd;border-color:#efbc60;}
-.rr-paper {background:linear-gradient(155deg,#fff3d6,#f3d9a9);border:4px double #a87037;border-radius:18px;color:#2c1c19;box-shadow:0 2px 14px #000a,inset 0 0 32px #a6713533;min-height:200px;padding:clamp(13px,3vw,25px);}
+.rr-paper {background:linear-gradient(155deg,#fff3d6de,#f3d9a9df), url("/rosieverse/reminders/textures/parchment.webp") center / 320px repeat;border:4px double #a87037;border-radius:18px;color:#2c1c19;box-shadow:0 2px 14px #000a,inset 0 0 32px #a6713533;min-height:200px;padding:clamp(13px,3vw,25px);}
 .rr-panel-head {display:flex;gap:16px;align-items:center;padding-bottom:15px;border-bottom:1px solid #ba8a51;}
 .rr-emblem {width:62px;min-width:62px;aspect-ratio:1;display:grid;place-items:center;background:#720f2a;color:#f8ca75;border:3px double #e7b85d;border-radius:50%;font-size:30px;}
 .rr-panel-head h2 {margin:0;font:normal clamp(25px,5.8vw,38px) Georgia,serif;line-height:1.06;}
