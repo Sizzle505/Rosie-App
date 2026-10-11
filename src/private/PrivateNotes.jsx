@@ -232,7 +232,7 @@ function Notebook({ onCountChange }) {
       if (pending.current.size) throw new Error("Rosie could not save your changes. Please retry before signing out.");
     }} />
     <div className={styles.ledgerHeader}><div><span className={styles.eyebrow}>ROSIE’S PRIVATE LEDGER</span>
-      <h3>Notes &amp; Ideas</h3><p>Collected thoughts, safely tucked away in the cloud.</p></div>
+      <h3>Notes &amp; Ideas</h3><p>Welcome back, {user.displayName}!</p><p>Collected thoughts, safely tucked away in the cloud.</p></div>
       <button type="button" className={styles.newNote} disabled={creating || loading} onClick={add}>
         {creating ? "Preparing…" : "＋ New Note"}</button></div>
     {error && <p role="alert" className={styles.failure}>{error} <button type="button" className={styles.retry}
