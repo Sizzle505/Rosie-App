@@ -18,6 +18,7 @@ import "./barkbridge-assets.css";
 import "./aesthetic-polish.css";
 import "./requested-polish.css";
 import "./barkbridge-premium-crests.css";
+import "./barkbridge-option-one.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
@@ -1981,7 +1982,7 @@ function CaptainRosieGame({ soundOn }) {
             aria-label={"Treat Turbo boost " + turbo + " percent charged"}
           >
             <span className="boost-ring" style={{ "--boost": turbo + "%" }}>
-              <b>{boost ? "2×" : turbo >= 100 ? "GO" : turbo}</b>
+              {boost ? <svg className="boost-bolt" viewBox="0 0 48 48" aria-hidden="true"><path d="M28.5 3 9.5 27.4h12.6L19.4 45l19.1-25.4H25.9L28.5 3Z"/></svg> : <b>{turbo >= 100 ? "GO" : turbo}</b>}
             </span>
             <span className="boost-copy">
               <strong>TREAT TURBO</strong>
@@ -2088,11 +2089,18 @@ function App() {
     }
     // A Fortune visit always opens in its composed safe-area layout. It only
     // becomes pinned after the visitor actually starts to scroll.
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    setFortuneScrolled(false);
-    const updateOraclePosition = () => setFortuneScrolled(window.scrollY > 24);
+    const resetFortuneEntry = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      setFortuneScrolled(false);
+    };
+    resetFortuneEntry();
+    const resetFrame = window.requestAnimationFrame(resetFortuneEntry);
+    const updateOraclePosition = () => setFortuneScrolled(window.scrollY > 150);
     window.addEventListener("scroll", updateOraclePosition, { passive: true });
-    return () => window.removeEventListener("scroll", updateOraclePosition);
+    return () => {
+      window.cancelAnimationFrame(resetFrame);
+      window.removeEventListener("scroll", updateOraclePosition);
+    };
   }, [page]);
 
   function navigateTo(nextPage) {
