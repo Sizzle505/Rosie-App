@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { calculatorReducer, initialCalculator, keyFromKeyboard } from "./calculationsEngine.js";
 import AssetCalculator from "./AssetCalculator.jsx";
 import "./RosieCalculations.css";
@@ -112,6 +112,29 @@ export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
   const [tool, setTool] = useState(null);
   const [values, setValues] = useState(DEFAULTS);
+  const heroRef = useRef(null);
+  const [headerDocked, setHeaderDocked] = useState(false);
+
+  useEffect(() => {
+    const updateDock = () => {
+      const docked = Boolean(heroRef.current && heroRef.current.getBoundingClientRect().bottom <= 1);
+      setHeaderDocked(previous => previous === docked ? previous : docked);
+    };
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => { frame = 0; updateDock(); });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    updateDock();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
   useEffect(() => {
     const onKey = (event) => {
@@ -124,7 +147,7 @@ export default function RosieCalculations() {
     return () => window.removeEventListener("keydown", onKey);
   }, [tool]);
   return <main className="rc-page">
-    <header className="rc-hero">
+    <header className="rc-hero" ref={heroRef}>
       <img
         className="rc-custom-hero"
         src="/rosieverse/calculations/hero/hero-full-resolution.webp"
@@ -133,6 +156,11 @@ export default function RosieCalculations() {
         fetchPriority="high"
       />
     </header>
+    <div className={"rc-pinned-dock"+(headerDocked ? " is-visible" : "")} aria-hidden={!headerDocked}>
+      <span className="rc-pinned-brand">RosieVerse</span>
+      <span className="rc-pinned-title">Rosie’s Calculations</span>
+      <span className="rc-pinned-ornament" aria-hidden="true">✦</span>
+    </div>
     <div className="rc-calculator-stage">
       <AssetCalculator calc={calc} send={send} />
     </div>
