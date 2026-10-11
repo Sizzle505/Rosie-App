@@ -111,3 +111,53 @@
   .rac-memory-keys {gap:3px;margin-bottom:5px;}
   .rac-digit-keys {gap:clamp(4px,1.25vw,7px);}
 }
+
+/* Calculator lives in normal flow immediately after the entire header. */
+.rc-page .rac-frame {
+  width:100%; max-width:none; margin:0 0 16px;
+  padding:20px clamp(12px,3.4vw,24px) 34px;
+  border-radius:0 0 18px 18px;
+}
+/* Extra 20-28px right-side clearance within the decorative parchment border. */
+.rc-page .rac-display {
+  min-width:0; height:62px; overflow:hidden;
+  padding:6px clamp(33px,8.8vw,45px) 6px 12px;
+}
+.rc-page .rac-readout { min-width:0; padding-right:0; text-align:right; }
+.rc-page .rac-readout small {
+  display:block; width:100%; text-align:right;
+  font:12px/1.2 "Baskerville","Iowan Old Style",Georgia,serif;
+  letter-spacing:.01em;
+}
+.rc-page .rac-readout output {
+  display:block; max-width:100%;
+  font-family:"Baskerville","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  font-size:clamp(23px,6.4vw,43px); font-weight:600;
+  font-variant-numeric:lining-nums tabular-nums;
+  line-height:1.05; letter-spacing:-.025em; text-align:right;
+  color:#2b1a12; text-shadow:0 1px 0 #fff3d4aa,0 -1px 1px #70502b35;
+}
+.rc-page .rac-readout--medium output {font-size:clamp(19px,5.2vw,34px);}
+.rc-page .rac-readout--long output {font-size:clamp(15px,4.15vw,26px);letter-spacing:-.045em;}
+.rc-page .rac-key {
+  min-height:44px;
+  font-family:"Baskerville","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  font-weight:600; letter-spacing:.012em;
+  text-shadow:0 1px 0 #fff9e844,0 -1px 1px #070505,0 2px 3px #000b;
+}
+.rc-page .rac-key--dark,.rc-page .rac-key--small{color:#f4dfb0;}
+.rc-page .rac-key--crimson{
+  color:#ffe1a0; font-weight:700; text-shadow:0 1px 0 #fff6d855,0 2px 3px #27050c;
+}
+.rc-page .rac-key--gold {color:#271708;text-shadow:0 1px 0 #fff5c999,0 -1px 1px #70431544;}
+.rc-page .rac-key--memory {
+  min-height:40px; height:40px; font-size:clamp(11px,2.8vw,16px);
+}
+.rc-page .rac-digit-keys .rac-key {height:clamp(48px,12vw,58px);}
+.rc-page .rac-command-keys {margin:2px 0 6px;}
+.rc-page .rac-backspace,.rc-page .rac-all-clear {min-height:38px;height:38px;min-width:44px;}
+@media(max-width:600px){
+  .rc-page .rac-frame{
+    width:100%; margin:0 0 16px; padding:18px clamp(10px,3vw,15px) 33px;
+  }
+}
