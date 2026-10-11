@@ -39,7 +39,7 @@ export default function RosieHome({ onNavigate }) {
             type="button"
             key={world.id}
             aria-label={`Open ${world.name}`}
-            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary} ${world.id === "resources" ? styles.resourcesWorld : ""}`}
+            className={`${styles.world} ${world.id === "resources" ? styles.resourcesWorld : index < 2 ? styles.featured : styles.secondary}`}
             style={{
               "--glint-delay": `${-index * 1.7}s`,
               "--frame-mask": world.art ? `url("${art(world.art)}")` : "none"
