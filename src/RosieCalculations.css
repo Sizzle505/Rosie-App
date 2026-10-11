@@ -129,3 +129,9 @@
   .rc-tool-mark { width: 28px; height: 31px; font-size: 19px; }
   .rc-chevron { font-size: 17px; }
 }
+
+/* Keep the hero-to-calculator junction seamless on phone sizes. */
+@media (max-width:600px) {
+  .rc-hero {width:100%;max-width:none;margin:0;border-bottom:0;box-shadow:none;}
+  .rc-workspace {padding-top:0;}
+}

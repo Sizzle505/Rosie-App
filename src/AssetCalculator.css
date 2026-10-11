@@ -97,3 +97,17 @@
   .rac-backspace,.rac-all-clear { width:40px; }
 }
 @media(prefers-reduced-motion:reduce){.rac-key{transition:none;}}
+
+/* iPhone: calculator starts at the hero seam and reaches both screen edges.
+   Keep ordinary Pocket Toolkit cards inset without shrinking the calculator. */
+@media (max-width:600px) {
+  .rc-workspace { width:100%; max-width:none; padding:0 12px 32px; }
+  .rac-frame { width:calc(100% + 24px); max-width:none; margin:0 -12px 16px;
+    padding:20px 12px 33px; border-radius:0 0 18px 18px; }
+  .rac-frame::before { border-image-width:40px 26px 38px 26px; }
+  .rac-display {height:55px;}
+  .rac-key {height:clamp(43px,11.4vw,51px);}
+  .rac-key--memory {height:31px;font-size:clamp(11px,2.8vw,14px);}
+  .rac-memory-keys {gap:3px;margin-bottom:5px;}
+  .rac-digit-keys {gap:clamp(4px,1.25vw,7px);}
+}
