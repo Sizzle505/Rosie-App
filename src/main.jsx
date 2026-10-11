@@ -2413,10 +2413,11 @@ function App() {
 
   function askRosie(event) {
     event.preventDefault();
-    if (!question.trim() || consulting) {
-      inputRef.current?.focus();
-      return;
-    }
+    if (consulting) return;
+
+    // A blank primary action automatically chooses one visible sample question
+    // and proceeds directly to Rosie's reading.
+    const askedQuestion = question.trim() || quickQuestions[secureIndex(quickQuestions.length)] || samplePrompts(1)[0];
 
     primeAudio();
     window.clearTimeout(revealTimerRef.current);
@@ -2427,7 +2428,6 @@ function App() {
     setConsulting(true);
 
     const result = chooseFortune();
-    const askedQuestion = question.trim();
     setSubmittedQuestion(askedQuestion);
     setQuestion("");
     // Show a new, non-repeating set immediately after each submitted fortune.
