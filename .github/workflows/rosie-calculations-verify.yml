@@ -4,6 +4,10 @@ on:
     paths:
       - 'src/RosieCalculations.jsx'
       - 'src/RosieCalculations.css'
+      - 'src/AssetCalculator.jsx'
+      - 'src/AssetCalculator.css'
+      - 'tests/calculations-iphone-visual.mjs'
+      - '.github/workflows/rosie-calculations-verify.yml'
       - 'src/calculationsEngine.js'
       - 'tests/calculations-engine.test.mjs'
       - 'src/main.jsx'
@@ -24,3 +28,34 @@ jobs:
       - run: npm ci
       - run: node --test tests/calculations-engine.test.mjs
       - run: npm run build
+
+  calculations-iphone-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run build
+      - name: Start and await Vite
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-calculations-vite.log 2>&1 &
+          for attempt in {1..40}; do
+            if curl -fsS http://127.0.0.1:5173/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-calculations-vite.log
+          exit 1
+      - run: node tests/calculations-iphone-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rosie-calculations-iphone-screenshots
+          path: artifacts/calculations-iphone/
+          retention-days: 14
