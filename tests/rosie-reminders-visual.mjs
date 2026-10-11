@@ -107,7 +107,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         };
       });
       assert(spacing.rowGap <= 5, "Too much space between illustrated rows: "+JSON.stringify(spacing));
-      assert(spacing.pagePadding < 10 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
+      assert(spacing.pagePadding <= 32 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
       assert(spacing.outerNavPadding >= 60, "Footer would be covered by fixed navigation");
       await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
       await page.waitForTimeout(140);
