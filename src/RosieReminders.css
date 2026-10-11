@@ -94,6 +94,11 @@
   pointer-events:none;user-select:none;-webkit-user-drag:none;
 }
 .rr-feature-goals .rr-button-image { height:auto;object-fit:contain; }
+/* Gold frame rails in the source art sit lower beneath Shopping's basket
+   and the Appointments calendar. Recenter those two illustrations inside
+   their matching row-height hit areas; no clipping or image replacements. */
+.rr-feature-shopping .rr-button-image { transform:translateY(-8%); }
+.rr-feature-appointments .rr-button-image { transform:translateY(-4%); }
 .rr-feature:hover,.rr-feature:focus-visible {
   filter:drop-shadow(0 5px 13px #e7ab6c8d) brightness(1.07);
   transform:translateY(-2px);
