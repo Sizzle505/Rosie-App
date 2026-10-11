@@ -72,8 +72,8 @@ export default function RosieReminders() {
     catch { setStorageError("This device could not save your changes. Export a backup before leaving."); }
   }, [store]);
 
-  // The large Rosie illustration scrolls naturally; a slim branded header takes over
-  // only once the illustration has reached the top and passed out of view.
+  // The approved full hero remains at the top of the page. When it scrolls
+  // away, a fixed compact branded header remains visible over the content.
   useEffect(() => {
     let frame = 0;
     const update = () => {
