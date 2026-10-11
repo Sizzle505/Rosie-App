@@ -148,3 +148,31 @@
 .rr-page{padding-bottom:0;}
 .rr-storage-note{margin:6px auto 0;max-width:550px;padding:0 6px 5px;}
 @media(prefers-reduced-motion:reduce){.rr-page * {scroll-behavior:auto!important;transition:none!important;}}
+
+/* Guarantee the compact Reminders heading stays pinned during scrolling.
+   position:sticky on a zero-height dock was unreliable in iPhone Safari. */
+.rr-page .rr-sticky-dock {
+  position:fixed;
+  top:env(safe-area-inset-top,0px);
+  left:50%;
+  width:min(100%,850px);
+  max-width:850px;
+  height:56px;
+  margin:0;
+  transform:translateX(-50%);
+  z-index:81;
+  visibility:hidden;
+  pointer-events:none;
+}
+.rr-page .rr-sticky-dock.is-visible {visibility:visible;}
+.rr-page .rr-sticky-banner {
+  position:relative;
+  background:
+    linear-gradient(95deg,#360d24fa,#11182cf5 60%,#2c101ff9),
+    url("/rosieverse/reminders/hero-mobile.webp") center 45% / cover no-repeat;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+@media(prefers-reduced-motion:reduce){
+  .rr-page .rr-sticky-banner {transition:none;}
+}
