@@ -63,7 +63,7 @@ function Entrance() {
       <label htmlFor="rv-pin">Secret PIN</label>
       <input id="rv-pin" name="pin" type="password" inputMode="numeric" pattern="[0-9]*"
         autoComplete="current-password" maxLength={6} minLength={4} required enterKeyHint="go"
-        value={pin} onChange={event => setPin(event.target.value.replace(/\\D/g, "").slice(0, 6))}
+        value={pin} onChange={event => setPin(event.target.value.replace(/\D/g, "").slice(0, 6))}
         placeholder="•••• or ••••••" />
       {error && <div role="alert" className={styles.failure}>{error}{retryAfter > 0 && <span> Try again in {mins}:{secs}.</span>}</div>}
       {connectionError && !error && <div role="status" className={styles.failure}>{connectionError}
