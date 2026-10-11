@@ -144,7 +144,9 @@ export default function RosieReminders() {
     const link = document.createElement("a");
     link.href = url;
     link.download = "rosie-reminders-backup-" + dateKey() + ".json";
+    document.body.appendChild(link);
     link.click();
+    link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   const importData = async (event) => {
@@ -162,6 +164,13 @@ export default function RosieReminders() {
     } catch (error) { window.alert(error.message || "Unable to import backup."); }
   };
   const notesActive = store.notes.find(n => n.id === focusedNote) || store.notes[0];
+
+  useEffect(() => {
+    if (!editorOpen) return undefined;
+    const onEscape = event => { if (event.key === "Escape") setEditorOpen(false); };
+    document.addEventListener("keydown", onEscape);
+    return () => document.removeEventListener("keydown", onEscape);
+  }, [editorOpen]);
 
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
     <header className="rr-hero">
