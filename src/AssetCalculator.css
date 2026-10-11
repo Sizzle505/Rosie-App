@@ -142,7 +142,7 @@
 .rc-page .rac-key {
   min-height:44px;
   font-family:"Baskerville","Iowan Old Style","Palatino Linotype",Georgia,serif;
-  font-weight:600; letter-spacing:.012em;
+  font-size:clamp(23px,6.2vw,33px); font-weight:600; letter-spacing:.012em;
   text-shadow:0 1px 0 #fff9e844,0 -1px 1px #070505,0 2px 3px #000b;
 }
 .rc-page .rac-key--dark,.rc-page .rac-key--small{color:#f4dfb0;}
