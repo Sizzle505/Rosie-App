@@ -35,6 +35,9 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
           hero:rect(".rc-hero"),image:rect(".rc-custom-hero"),
           frame:rect(".rac-frame"),display:rect(".rac-display"),
+          quickRow:rect(".rac-memory-keys"),
+          frameFilter:getComputedStyle(document.querySelector(".rac-frame")).filter,
+          railIndex:getComputedStyle(document.querySelector(".rac-frame"),"::before").zIndex,
           value:rect(".rac-readout output"),history:rect(".rac-readout small"),
           nativeWidth:img.naturalWidth,nativeHeight:img.naturalHeight,
           imageLoaded:img.complete,objectFit:getComputedStyle(img).objectFit,
@@ -55,10 +58,20 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert(geometry.scrollWidth<=width+2,"horizontal overflow");
       assert(geometry.display.right-geometry.value.right>=27,"result touches display's decorative right border");
       assert(geometry.display.right-geometry.history.right>=27,"history touches display's decorative right border");
-      assert(geometry.keys.every(k=>k.left>=geometry.frame.left-1&&k.right<=geometry.frame.right+1),
-        "calculator controls overflow gold frame");
+      assert(geometry.keys.every(k=>k.left>=geometry.frame.left+26&&k.right<=geometry.frame.right-26),
+        "calculator keys intrude into the decorative gold side rails");
+      assert(geometry.display.left>=geometry.frame.left+26&&geometry.display.right<=geometry.frame.right-26,
+        "parchment display intrudes into frame");
+      assert(geometry.quickRow.top-geometry.display.bottom>=0&&geometry.quickRow.top-geometry.display.bottom<=12,
+        "dead space between parchment and quick keys");
+      assert.equal(geometry.frameFilter,"none","outer frame filter causes full repaint / flicker");
+      assert.equal(geometry.railIndex,"0","border image must sit behind controls");
       assert(geometry.keys.every(k=>k.width>=30&&k.height>=38),"unusable small key");
       assert.equal(await page.locator(".rc-tool-card").count(),7,"pocket tools removed");
+      assert.equal(await page.locator(".rac-command-keys").count(),0,"obsolete separate clear row remains");
+      assert.deepEqual(await page.locator(".rac-memory-keys button").evaluateAll(nodes=>nodes.map(n=>n.getAttribute("aria-label"))),
+        ["Backspace","Clear all","Add to memory","Subtract from memory","Percent","Change sign","Divide"],
+        "quick row must start with Backspace and AC in place of MC/MR");
       const name=engine+"-"+width+"x"+height;
       await page.screenshot({path:output+"/"+name+"-full.png",fullPage:true});
       await hero.screenshot({path:output+"/"+name+"-header.png"});
@@ -75,12 +88,23 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       await page.getByRole("button",{name:"Backspace"}).click();
       assert.equal(await page.locator(".rac-readout output").innerText(),"12","backspace regression");
       await page.getByRole("button",{name:"Add to memory"}).click();
+      assert.equal(await page.locator(".rac-memory-indicator").innerText(),"M","memory storage regression");
       await page.getByRole("button",{name:"Clear all"}).click();
-      await page.getByRole("button",{name:"Memory recall"}).click();
-      assert.equal(await page.locator(".rac-readout output").innerText(),"12","memory regression");
+      assert.equal(await page.locator(".rac-memory-indicator").innerText(),"M","AC must preserve memory");
+      assert.equal(await page.locator(".rac-readout output").innerText(),"0","AC reset regression");
+      assert.equal(await page.getByRole("button",{name:"Memory recall"}).count(),0,"unused MR key must be removed");
+      assert.equal(await page.getByRole("button",{name:"Memory clear"}).count(),0,"unused MC key must be removed");
       await page.getByRole("button",{name:"Clear all"}).click();
       for(const n of "12345678901234") await digit(n).click();
       const fits=await page.locator(".rac-readout output").evaluate(el=>el.scrollWidth<=el.clientWidth+2);
+      const stable=await frame.evaluate(el=>{
+        const frameRect=el.getBoundingClientRect();
+        const border=getComputedStyle(el,"::before");
+        return {width:frameRect.width,top:frameRect.top,railIndex:border.zIndex,filter:getComputedStyle(el).filter};
+      });
+      assert(Math.abs(stable.width-geometry.frame.width)<=1,"frame changes width while typing");
+      assert.equal(stable.railIndex,"0","gold rail lost stable lower layer after input");
+      assert.equal(stable.filter,"none","frame filter reapplied after input");
       assert(fits,"long values clipped in parchment");
       assert.equal(errors.length,0,"console page error(s): "+errors.join(" | "));
       // Rosie Resources uses the original page artworks as three equal interactive thirds.
