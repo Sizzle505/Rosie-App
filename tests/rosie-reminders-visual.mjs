@@ -73,9 +73,9 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         const tasks=metrics("tasks"), shopping=metrics("shopping"), appointments=metrics("appointments");
         const notes=metrics("notes"), goals=metrics("goals");
         return {columns:getComputedStyle(grid).gridTemplateColumns,
-          sameTopRow:Math.abs(tasks.top-shopping.top)<3,
-          sameSecondRow:Math.abs(appointments.top-notes.top)<3,
-          goalsBelow:goals.top>appointments.bottom,
+          sameTopRow:Math.abs(notes.top-shopping.top)<3,
+          sameSecondRow:Math.abs(appointments.top-tasks.top)<3,
+          goalsBelow:goals.top>=Math.max(appointments.bottom,tasks.bottom)-1,
           goalsWider:goals.width>tasks.width*1.8,
           totalHeight:grid.getBoundingClientRect().height,
           minButtonWidth:Math.min(tasks.width,shopping.width,appointments.width,notes.width)
