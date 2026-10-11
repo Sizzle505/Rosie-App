@@ -45,7 +45,7 @@ test("Account lockout, cookie sessions, sign-out, and A/B ownership enforced by 
     const body = options.body ? JSON.parse(options.body) : {};
     const method = options.method;
     const filt = (arr) => arr.filter(row =>
-      [...query].every(([key, value]) => (["select", "order", "limit"].includes(key) || (
+      [...query].every(([key, value]) => ["select", "order", "limit"].includes(key) || (
         value === "is.null" ? row[key] == null : String(row[key]) === value.slice(3)
       )));
     if (path === "rpc/rosie_rate_limit") {
