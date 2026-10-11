@@ -214,8 +214,10 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.getByRole("button", {name:"Add task"}).click();
       await page.getByRole("textbox", {name:"New task"}).fill("Research the stars");
       await page.getByRole("textbox", {name:"New task"}).press("Enter");
-      assert.equal(await page.locator(".rr-task-rows .rr-simple-row").count(),2,
-        "Pressing Enter should add one checkbox per task");
+      assert.equal(await page.locator(".rr-task-rows .rr-simple-row").filter({hasText:"Walk Rosie"}).count(),1,
+        "First typed task should create one checkbox row");
+      assert.equal(await page.locator(".rr-task-rows .rr-simple-row").filter({hasText:"Research the stars"}).count(),1,
+        "Pressing Enter should create exactly one new task row");
       await page.getByRole("button", {name:"Complete: Walk Rosie"}).click();
       assert.equal(await page.getByRole("button", {name:"Mark incomplete: Walk Rosie"}).count(),1);
 
