@@ -1,0 +1,45 @@
+name: Rosie Reminders mobile visual QA
+on:
+  pull_request:
+    paths:
+      - 'src/RosieReminders.jsx'
+      - 'src/RosieReminders.css'
+      - 'src/RosieHome.jsx'
+      - 'src/RosieHome.module.css'
+      - 'src/main.jsx'
+      - 'public/rosieverse/reminders/**'
+      - 'tests/rosie-reminders-visual.mjs'
+      - '.github/workflows/rosie-reminders-visual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reminders-browser-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run build
+      - name: Start and await Vite
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-vite.log 2>&1 &
+          for attempt in {1..40}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-vite.log
+          exit 1
+      - run: node tests/rosie-reminders-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rosie-reminders-webkit-chromium-qa
+          path: artifacts/rosie-reminders-visual/
+          retention-days: 14

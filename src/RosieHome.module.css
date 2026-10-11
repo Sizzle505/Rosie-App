@@ -110,3 +110,12 @@
 @media (max-width: 370px) and (max-height: 740px) {
   .hero { height: min(36dvh,230px); }
 }
+
+/* The sixth Grand Salon destination is centered without disturbing the original five. */
+.remindersWorld { grid-column:3 / span 2; min-height:85px; margin-top:-5px; }
+.remindersButtonArt { display:flex; flex-direction:column; align-items:center; justify-content:center; box-sizing:border-box; min-height:106px; height:100%; border:3px ridge #bb8b47; border-radius:18px; background:radial-gradient(ellipse at 50% 10%,#823046,#310f24 58%,#121424); box-shadow:inset 0 0 12px #fdcf7c88,0 5px 13px #0606119c; font-family:Georgia,serif; color:#ffe1a2; line-height:1.08; letter-spacing:.06em; text-shadow:0 1px 5px #000b; }
+.remindersCrest {display:block;font-size:18px; color:#f4c672; line-height:1;}
+.remindersButtonArt span:not(.remindersCrest) {font-size:10px;}
+.remindersButtonArt b {font-size:clamp(13px,2.9vw,23px);letter-spacing:.035em;}
+.remindersButtonArt small{font-size:clamp(7px,1.2vw,10px); margin-top:4px;}
+@media(max-width:600px){.remindersWorld{min-height:80px}.remindersButtonArt{min-height:82px;border-radius:12px;}}
