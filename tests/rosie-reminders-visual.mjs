@@ -38,6 +38,20 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         assert.equal(response.status(), 200, "missing asset " + path);
         assert(Number(response.headers()["content-length"] || 2000) >= 1000, "empty asset " + path);
       }
+      // The five bespoke RosieVerse medallions must load, not generic glyphs.
+      for (const section of ["tasks", "shopping", "appointments", "notes", "goals"]) {
+        const tile = page.locator(".rr-feature-" + section);
+        const illustration = tile.locator(".rr-feature-art img");
+        assert.equal(await illustration.count(), 1, "missing custom icon markup: " + section);
+        await illustration.evaluate(async img => { if (!img.complete) await img.decode(); });
+        assert(await illustration.evaluate(img => img.naturalWidth === 320), "icon failed: " + section);
+        const geom = await tile.evaluate(node => ({
+          artBottom: node.querySelector(".rr-feature-art").getBoundingClientRect().bottom,
+          labelTop: node.querySelector(".rr-feature-copy").getBoundingClientRect().top
+        }));
+        if (section !== "goals") assert(geom.labelTop >= geom.artBottom - 4,
+          "illustration overlaps text: " + section + " " + JSON.stringify(geom));
+      }
       const overflow = () => page.evaluate(() => ({
         document: document.documentElement.scrollWidth, body: document.body.scrollWidth,
         viewport: window.innerWidth, nav: Boolean(document.querySelector(".bottom-nav"))
@@ -86,6 +100,16 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert((await page.locator(".rr-goals").innerText()).includes("Rosie is brilliant"));
       const after = await overflow();
       assert(after.document <= width + 3, "horizontal overflow after interactions: " + JSON.stringify(after));
+      if (width < 600) {
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+        await page.waitForTimeout(120);
+        const pos = await page.evaluate(() => ({
+          noteBottom: document.querySelector(".rr-storage-note").getBoundingClientRect().bottom,
+          navTop: document.querySelector(".bottom-nav").getBoundingClientRect().top
+        }));
+        assert(pos.noteBottom <= pos.navTop - 8,
+          "footer behind bottom nav: " + JSON.stringify(pos));
+      }
       await page.screenshot({path:dir + "/" + name + "-goals.png",fullPage:true});
       const [download] = await Promise.all([
         page.waitForEvent("download"), page.getByRole("button", {name:"Export backup"}).click()
