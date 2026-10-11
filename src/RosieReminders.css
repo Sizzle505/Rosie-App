@@ -1,11 +1,39 @@
 /* Rosie’s Reminders: decorative imagery never owns interactive text or data. */
-.rr-page { min-height:100dvh; color:#f9e8bb; padding:0 0 110px; background:radial-gradient(ellipse at 50% 5%,#44304a 0,#111323 48%,#080d19 100%); }
+.rr-page { min-height:0; color:#f9e8bb; padding:0; background:radial-gradient(ellipse at 50% 5%,#44304a 0,#111323 48%,#080d19 100%); }
 .rr-screen-reader {position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
 .rr-page button, .rr-page input, .rr-page textarea, .rr-page select {font:inherit;}
 .rr-page button {touch-action:manipulation;cursor:pointer;}
 .rr-hero {position:relative;max-width:850px;margin:auto;min-height:180px;background:linear-gradient(150deg,#1b1824,#5a302c 45%,#100e1d);overflow:hidden;}
 .rr-hero img {display:block;width:100%;height:auto;min-height:220px;object-fit:cover;position:relative;z-index:1;}
 .rr-hero-fallback {position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse,#57362e,#171426 75%);}
+.rr-sticky-dock {
+  position:sticky;top:env(safe-area-inset-top, 0px);z-index:81;
+  height:0;max-width:850px;margin:0 auto;pointer-events:none;
+}
+.rr-sticky-banner {
+  display:flex;align-items:center;justify-content:space-between;gap:9px;
+  height:56px;padding:0 clamp(12px,3vw,24px);
+  border:1px solid #b99254;border-top:0;border-radius:0 0 16px 16px;
+  background:linear-gradient(100deg,rgba(52,12,31,.985),rgba(12,19,34,.985) 62%,rgba(44,12,27,.985));
+  box-shadow:0 7px 19px #000b,inset 0 -1px #f2c87754;
+  color:#ffe5b0;opacity:0;transform:translateY(-9px);
+  transition:opacity .17s ease,transform .17s ease;
+}
+.rr-sticky-dock.is-visible .rr-sticky-banner {opacity:1;transform:translateY(0);}
+.rr-sticky-brand {font:normal 13px Georgia,serif;color:#cfa35e;white-space:nowrap;}
+.rr-sticky-title {font:normal clamp(18px,4.8vw,27px) Georgia,serif;white-space:nowrap;}
+.rr-sticky-crown {font-size:22px;color:#e9bb70;}
+@media(max-width:600px){
+  /* Home navigation floats over the left edge on iPhone: keep the compact title clear. */
+  .rr-sticky-banner {
+    justify-content:center;padding-inline:clamp(48px,12vw,66px);
+    background:linear-gradient(95deg,#310e24,#10182b 60%,#290e20);
+    backdrop-filter:blur(14px);
+  }
+  .rr-sticky-brand,.rr-sticky-crown {display:none;}
+  .rr-sticky-title {font-size:clamp(17px,5.1vw,23px);text-align:center;}
+}
+@media(max-width:350px){.rr-sticky-title{font-size:17px}}
 .rr-hero-fallback small{letter-spacing:.35em;color:#fad284;}.rr-hero-fallback h1 {font:normal clamp(30px,7vw,54px) Georgia,serif;color:#ffedc6;margin:14px 0 0}.rr-hero-fallback p {margin:8px;color:#ecc27b;}
 .rr-content {max-width:850px;margin:auto;padding:0 clamp(10px,3vw,24px);}
 .rr-tabs {display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;}
@@ -39,54 +67,52 @@
 .rr-primary,.rr-save {color:#fff0d1!important;border:2px solid #efc268;border-radius:30px;background:linear-gradient(#820c2c,#3c0b1c);box-shadow:inset 0 1px #f7d69e88,0 2px 6px #23110d88;font:600 20px Georgia,serif!important;padding:11px 24px;min-height:49px;}
 .rr-primary {width:min(100%,520px);display:block;margin:16px auto 0;}
 /* Standalone illustrated icon assets: no baked-in labels or overlapping text. */
-.rr-feature-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:16px 0 20px;}
+/* Full original artwork is the button: integrated frame/title, no duplicated card or labels. */
+.rr-feature-grid {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:clamp(3px,.9vw,9px);row-gap:clamp(0px,.35vw,4px);
+  margin:6px 0 10px;align-items:start;
+}
 .rr-feature {
-  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  min-width:0;min-height:204px;gap:0;overflow:hidden;text-align:center;
-  padding:8px 10px 15px;border:2px solid #bb914f;border-radius:17px;
-  background:radial-gradient(ellipse at 48% 12%,#5a2339 0%,#270d24 47%,#081326 100%);
-  box-shadow:inset 0 0 0 2px #ead19b18,inset 0 1px 10px #ffcf6d22,0 4px 12px #0008;
-  color:#fff0c7;
+  display:block;position:relative;min-width:0;width:100%;padding:0;margin:0;
+  appearance:none;-webkit-appearance:none;background:transparent;border:0;
+  border-radius:10px;overflow:visible;line-height:0;color:inherit;
+  filter:drop-shadow(0 5px 7px #020512b0);
+  transition:transform .18s ease,filter .18s ease;
 }
-.rr-feature::after {
-  content:"";pointer-events:none;position:absolute;inset:3px;border:1px solid #cfa45d35;
-  border-radius:12px;
+/* Matched visual frame edges on each row.
+   The source banners differ in height (Notes 547, Shopping 620,
+   Appointments 516, Tasks 435 at 1350px width). A small per-row
+   aspect-ratio adjustment aligns the gilded borders without cropping. */
+.rr-feature-notes,
+.rr-feature-shopping { aspect-ratio: 1350 / 577; }
+.rr-feature-appointments,
+.rr-feature-tasks { aspect-ratio: 1350 / 475; }
+.rr-feature .rr-button-image {
+  display:block;width:100%;height:100%;max-width:100%;
+  object-fit:fill;
+  pointer-events:none;user-select:none;-webkit-user-drag:none;
 }
+.rr-feature-goals .rr-button-image { height:auto;object-fit:contain; }
+/* Gold frame rails in the source art sit lower beneath Shopping's basket
+   and the Appointments calendar. Recenter those two illustrations inside
+   their matching row-height hit areas; no clipping or image replacements. */
+.rr-feature-shopping .rr-button-image { transform:translateY(-8%); }
+.rr-feature-appointments .rr-button-image { transform:translateY(-4%); }
+.rr-feature:hover,.rr-feature:focus-visible {
+  filter:drop-shadow(0 5px 13px #e7ab6c8d) brightness(1.07);
+  transform:translateY(-2px);
+}
+.rr-feature:active {transform:scale(.987);}
 .rr-feature:focus-visible {outline:3px solid #ffdc8e;outline-offset:3px;}
-.rr-feature:active {transform:scale(.986);}
-.rr-feature.selected {border-color:#ffe7a5;box-shadow:inset 0 0 13px #ffdf8e47,0 0 12px #cf9f556e;}
-.rr-feature-art {
-  display:grid;place-items:center;flex:none;position:relative;z-index:1;
-  width:100%;height:116px;margin:0 auto 5px;
+.rr-feature.selected {filter:drop-shadow(0 4px 12px #f0c3758a) brightness(1.055);}
+/* Four compact image-buttons, then the wide fifth button - at iPhone and desktop sizes. */
+.rr-feature-goals {grid-column:1 / -1;width:100%;justify-self:center;}
+@media (min-width:760px) {
+  .rr-feature-grid {column-gap:9px;row-gap:3px;}
+  .rr-feature-goals {width:min(100%,540px);}
 }
-.rr-feature-art::before {
-  content:"";position:absolute;inset:20px 10px 5px;
-  background:radial-gradient(ellipse,#f7bd716b,transparent 70%);
-  pointer-events:none;
-}
-.rr-feature-art img {
-  position:relative;max-width:100%;width:121px;height:115px;object-fit:contain;
-  filter:drop-shadow(0 5px 5px #0008);
-}
-.rr-feature-copy {position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 1px;}
-.rr-feature-copy b {font:normal clamp(17px,3.9vw,24px)/1.14 Georgia,serif;color:#ffecc4;}
-.rr-feature-copy small {font:normal clamp(12px,2.7vw,15px)/1.22 Georgia,serif;color:#ebd7b7;}
-.rr-feature-arrow {position:absolute;right:9px;bottom:7px;z-index:1;color:#f9d998;font:normal 24px/1 Georgia,serif;}
-.rr-feature-count {
-  position:absolute;z-index:2;right:9px;top:8px;min-width:19px;height:19px;padding:2px;
-  border:1px solid #f6d78e;border-radius:50%;background:#66122b;
-  font:bold 12px/19px Georgia,serif;color:#fce2aa;text-align:center;
-}
-.rr-feature-goals {
-  grid-column:1 / -1;display:grid;grid-template-columns:minmax(110px,33%) 1fr;
-  align-items:center;min-height:138px;gap:9px;text-align:left;padding:8px 24px 8px 7px;
-}
-.rr-feature-goals .rr-feature-art {width:100%;height:130px;margin:0;}
-.rr-feature-goals .rr-feature-art img {width:138px;height:128px;}
-.rr-feature-goals .rr-feature-copy {align-items:flex-start;text-align:left;padding:0 8px;}
-.rr-feature-goals .rr-feature-copy b {font-size:clamp(21px,4.7vw,29px);}
-.rr-feature-goals .rr-feature-copy small {font-size:clamp(13px,3vw,17px);}
-.rr-tools {display:flex;justify-content:center;gap:10px;margin:15px 0 8px;}
+.rr-tools {display:flex;justify-content:center;gap:10px;margin:7px 0 4px;}
 .rr-tools button {border:1px solid #96704c;background:#172238;border-radius:20px;padding:8px 14px;color:#f8dfa7;font:14px Georgia,serif;}
 .rr-storage-note {text-align:center;color:#b8b5b7;font:13px Georgia,serif;margin:6px 0 16px;}
 .rr-side-head {display:flex;align-items:center;justify-content:space-between;gap:8px;margin:14px 0;}.rr-side-head button,.rr-inline-add button,.rr-goal button {border:1px solid #a97b43;background:#71172d;color:#fff0d7;padding:8px 12px;border-radius:9px;}
@@ -114,46 +140,11 @@
 @media(max-width:425px){
   .rr-content{padding:0 9px}
   .rr-emblem{width:44px;min-width:44px;font-size:22px}
-  .rr-feature{min-height:190px;padding:6px 7px 13px}
-  .rr-feature-art{height:105px;margin-bottom:4px}
-  .rr-feature-art img{width:111px;height:106px}
-  .rr-feature-copy b{font-size:clamp(16px,4vw,19px)}
-  .rr-feature-copy small{font-size:12px;line-height:1.24}
-  .rr-feature-goals{min-height:125px;padding:6px 20px 6px 5px;gap:4px}
-  .rr-feature-goals .rr-feature-art{height:113px}
-  .rr-feature-goals .rr-feature-art img{width:114px;height:111px}
-  .rr-feature-goals .rr-feature-copy b{font-size:clamp(19px,4.5vw,23px)}
-  .rr-feature-goals .rr-feature-copy small{font-size:12px}
-  .rr-form-grid{grid-template-columns:1fr 1fr}
+  .rr-feature-grid{column-gap:3px;row-gap:0px}
   .rr-month-head button{min-width:36px}
   .rr-hero img{min-height:180px}
   .rr-storage-note{font-size:11px}
 }
-@media(max-width:350px){
-  .rr-feature-grid{gap:7px}
-  .rr-feature-copy small{font-size:11px}
-  .rr-feature-art img{width:101px;height:100px}
-  .rr-feature-goals .rr-feature-copy b{font-size:18px}
-}
-.rr-page{padding-bottom:calc(170px + env(safe-area-inset-bottom, 0px));}
-.rr-storage-note{margin-bottom:35px;max-width:550px;margin-inline:auto;}
+.rr-page{padding-bottom:0;}
+.rr-storage-note{margin:6px auto 0;max-width:550px;padding:0 6px 5px;}
 @media(prefers-reduced-motion:reduce){.rr-page * {scroll-behavior:auto!important;transition:none!important;}}
-
-
-/* Approved high-fidelity RosieVerse medallion icons - preserve their own embossed rims. */
-.rr-feature-icon {
-  width:clamp(38px,7vw,54px); min-width:clamp(38px,7vw,54px);
-  height:clamp(38px,7vw,54px); border:0; border-radius:50%;
-  background-color:transparent; background-position:center;
-  background-repeat:no-repeat; background-size:contain;
-  box-shadow:none; color:transparent; font-size:0;
-  filter:drop-shadow(0 2px 3px #0008);
-}
-.rr-feature-tasks .rr-feature-icon {background-image:url("/rosieverse/reminders/icons/tasks.webp");}
-.rr-feature-shopping .rr-feature-icon {background-image:url("/rosieverse/reminders/icons/shopping.webp");}
-.rr-feature-appointments .rr-feature-icon {background-image:url("/rosieverse/reminders/icons/appointments.webp");}
-.rr-feature-notes .rr-feature-icon {background-image:url("/rosieverse/reminders/icons/notes.webp");}
-.rr-feature-goals .rr-feature-icon {background-image:url("/rosieverse/reminders/icons/goals.webp");}
-@media(max-width:425px) {
-  .rr-feature-icon {width:38px;min-width:38px;height:38px;}
-}
