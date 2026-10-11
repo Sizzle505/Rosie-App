@@ -1,0 +1,72 @@
+/* The original hall artwork owns the clock and bezel. Only the vacant black
+   interior receives the transparent, independently rotating original art. */
+.rtk-dial { isolation: isolate; }
+.rtk-dial > .rtk-mode-switch,
+.rtk-dial > .rtk-time,
+.rtk-dial > .rtk-caption,
+.rtk-dial > .rtk-controls { position: relative; z-index: 2; }
+
+.rtk-clockwork {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 107%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) translateZ(0);
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  /* No second bezel, painted inner circle or layout changes. */
+  -webkit-mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
+  mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
+}
+.rtk-gear-mount {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) translateZ(0);
+}
+.rtk-rotating-wheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  opacity: var(--rtk-opacity, .82);
+  filter: saturate(.90) brightness(.90) drop-shadow(0 2px 3px #000b);
+  transform-origin: 50% 50%;
+  animation: rtk-wheel-turn var(--rtk-cycle, 90s) linear infinite;
+  animation-direction: var(--rtk-direction, normal);
+  will-change: transform;
+}
+.rtk-stationary-axle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 11%;
+  height: 11%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #c3965d;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 25%, #ffe4ca 0%, #b84d71 18%, #6a193f 46%, #220d1c 72%, #c49860 88%, #f4d093 100%);
+  box-shadow: 0 1px 4px #000c;
+  opacity: .95;
+}
+.rtk-clockwork-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Preserve original near-black face beneath digits and live buttons. */
+  background: radial-gradient(ellipse at 50% 48%,
+    #100d13f1 0%,
+    #100d13e9 21%,
+    #100d13d6 33%,
+    #100d13ac 43%,
+    #100d1350 61%,
+    transparent 80%);
+}
+@keyframes rtk-wheel-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .rtk-rotating-wheel { animation: none; will-change: auto; }
+}

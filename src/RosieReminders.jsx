@@ -4,10 +4,10 @@ import "./RosieReminders.css";
 const KEY = "rosieverse.reminders.v1";
 const EMPTY = { version: 1, items: [], notes: [], goals: [], gratitude: [] };
 const CATEGORIES = [
-  { id: "tasks", title: "Task List", detail: "Get it done, one paw at a time." },
+  { id: "notes", title: "Notes & Ideas", detail: "Capture your brightest thoughts." },
   { id: "shopping", title: "Shopping List", detail: "Everything your pup could want." },
   { id: "appointments", title: "Appointments", detail: "Keep your important dates." },
-  { id: "notes", title: "Notes & Ideas", detail: "Capture your brightest thoughts." },
+  { id: "tasks", title: "Task List", detail: "Get it done, one paw at a time." },
   { id: "goals", title: "Goals & Gratitude", detail: "Celebrate progress and brighter days." }
 ];
 const two = (n) => String(n).padStart(2, "0");
@@ -53,12 +53,14 @@ function calendarDays(month) {
 export default function RosieReminders() {
   const [store, setStore] = useState(readStore);
   const [section, setSection] = useState("today");
-  const [tab, setTab] = useState("today");
+  const [tab, setTab] = useState("calendar");
   const [selectedDate, setSelectedDate] = useState(dateKey);
   const [month, setMonth] = useState(() => dateObj(dateKey()));
   const [editorOpen, setEditorOpen] = useState(false);
   const [form, setForm] = useState(() => blankItem("tasks"));
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const heroRef = useRef(null);
+  const [headerDocked, setHeaderDocked] = useState(false);
   const [storageError, setStorageError] = useState("");
   const [gratitudeInput, setGratitudeInput] = useState("");
   const [goalInput, setGoalInput] = useState("");
@@ -69,6 +71,29 @@ export default function RosieReminders() {
     try { localStorage.setItem(KEY, JSON.stringify(store)); setStorageError(""); }
     catch { setStorageError("This device could not save your changes. Export a backup before leaving."); }
   }, [store]);
+
+  // The large Rosie illustration scrolls naturally; a slim branded header takes over
+  // only once the illustration has reached the top and passed out of view.
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!heroRef.current) return;
+      const docked = heroRef.current.getBoundingClientRect().bottom <= 1;
+      setHeaderDocked(previous => previous === docked ? previous : docked);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
 
   const shown = useMemo(() => {
     const source = section === "today" ? store.items.filter(x => isScheduled(x, selectedDate))
@@ -173,7 +198,7 @@ export default function RosieReminders() {
   }, [editorOpen]);
 
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
-    <header className="rr-hero">
+    <header className="rr-hero" ref={heroRef}>
       {!heroLoaded && <div className="rr-hero-fallback"><small>ROSIEVERSE</small><h1>Rosie’s Reminders</h1><p>Personal Organizer</p></div>}
       <picture>
         <source media="(min-width: 760px)" srcSet="/rosieverse/reminders/hero-desktop.webp" />
@@ -182,6 +207,13 @@ export default function RosieReminders() {
       </picture>
       <h1 className="rr-screen-reader">Rosie’s Reminders - Personal Organizer</h1>
     </header>
+    <div className={"rr-sticky-dock"+(headerDocked ? " is-visible" : "")} aria-hidden={!headerDocked}>
+      <div className="rr-sticky-banner">
+        <span className="rr-sticky-brand">RosieVerse</span>
+        <span className="rr-sticky-title">Rosie’s Reminders</span>
+        <span className="rr-sticky-crown" aria-hidden="true">♛</span>
+      </div>
+    </div>
 
     <section className="rr-content">
       <div className="rr-tabs" role="tablist" aria-label="Organizer view">
@@ -191,13 +223,15 @@ export default function RosieReminders() {
           onClick={() => { setTab("calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
       </div>
       <section className="rr-paper" aria-label="Reminders organizer">
-        <div className="rr-panel-head">
-          <span className="rr-emblem" aria-hidden="true">♛</span>
-          <div><h2>{section === "today" ? (tab === "calendar" ? "Your Calendar" : "Today at a Glance")
-            : CATEGORIES.find(x => x.id === section)?.title}</h2>
-            <p>{section === "today" ? "Your day, beautifully organized. Small steps make a brighter tomorrow."
-              : CATEGORIES.find(x => x.id === section)?.detail}</p></div>
-        </div>
+        {!(section === "today" && tab === "calendar") && (
+          <div className="rr-panel-head">
+            <span className="rr-emblem" aria-hidden="true">♛</span>
+            <div><h2>{section === "today" ? "Today at a Glance"
+              : CATEGORIES.find(x => x.id === section)?.title}</h2>
+              <p>{section === "today" ? "Your day, beautifully organized. Small steps make a brighter tomorrow."
+                : CATEGORIES.find(x => x.id === section)?.detail}</p></div>
+          </div>
+        )}
         {storageError && <p className="rr-warning" role="alert">{storageError}</p>}
 
         {section === "today" && <>
@@ -223,8 +257,8 @@ export default function RosieReminders() {
           </div>
         </>}
         {(section === "today" || ["tasks","shopping","appointments"].includes(section)) && <>
-          <div className="rr-rows">
-            {shown.length ? shown.map(item => <div key={item.id} className={"rr-entry" + (isDone(item, selectedDate) ? " is-done" : "")}>
+          {shown.length > 0 && <div className="rr-rows">
+            {shown.map(item => <div key={item.id} className={"rr-entry" + (isDone(item, selectedDate) ? " is-done" : "")}>
               <button type="button" className="rr-check" aria-label={(isDone(item, selectedDate) ? "Mark incomplete: " : "Complete: ") + item.title}
                 aria-pressed={isDone(item, selectedDate)} onClick={() => toggleDone(item)}>{isDone(item, selectedDate) ? "✓" : ""}</button>
               <div className="rr-entry-content"><strong>{item.title}</strong>
@@ -233,8 +267,8 @@ export default function RosieReminders() {
                     item.time || "", item.repeat !== "none" ? item.repeat : "", item.detail].filter(Boolean).join(" · ")}</small>}
               </div>{item.priority === "high" && <span className="rr-star" aria-label="High priority">★</span>}
               <button type="button" className="rr-edit" onClick={() => openEdit(item)} aria-label={"Edit "+item.title}>›</button>
-            </div>) : <p className="rr-empty">Nothing scheduled here yet. Rosie approves of a clear desk.</p>}
-          </div>
+            </div>)}
+          </div>}
           {featured && <div className="rr-priority"><span>★</span><div><b>Top Priority</b><p>{featured.title}</p></div></div>}
           <button type="button" className="rr-primary" onClick={() => openNew()}>＋ Add {section === "appointments" ? "Appointment" : section === "shopping" ? "Shopping Item" : "Reminder"}</button>
         </>}
@@ -267,12 +301,14 @@ export default function RosieReminders() {
           {!store.gratitude.length && !store.goals.length && <p className="rr-empty">A brighter day begins with one small step.</p>}
         </div>}
       </section>
-      <div className="rr-feature-grid">
-        {CATEGORIES.map(c => <button type="button" key={c.id} className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
-          onClick={() => chooseSection(c.id)} aria-label={"Open "+c.title}>
-          <span className="rr-feature-art" aria-hidden="true"><img src={"/rosieverse/reminders/icons/"+c.id+".webp"} alt="" draggable="false" loading="lazy" /></span><span className="rr-feature-copy"><b>{c.title}</b><small>{c.detail}</small></span>
-          <span className="rr-feature-arrow" aria-hidden="true">›</span>
-          {counts[c.id] > 0 && <span className="rr-feature-count">{counts[c.id]}</span>}
+      <div className="rr-feature-grid" aria-label="Organizer tools">
+        {CATEGORIES.map(c => <button type="button" key={c.id}
+          className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
+          onClick={() => chooseSection(c.id)}
+          aria-label={"Open "+c.title+(counts[c.id] ? ", "+counts[c.id]+" entries" : "")}
+          aria-pressed={section === c.id}>
+          <img className="rr-button-image" src={"/rosieverse/reminders/buttons/"+c.id+".webp"}
+            alt="" draggable="false" loading="lazy" />
         </button>)}
       </div>
       <div className="rr-tools"><button type="button" onClick={exportData}>Export backup</button>

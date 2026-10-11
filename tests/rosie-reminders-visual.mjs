@@ -29,6 +29,14 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(await img.evaluate(node => node.naturalWidth >= 1000), "Rosie hero did not load");
       const displayedHero = await img.evaluate(node => node.currentSrc);
       assert(displayedHero.includes(width >= 760 ? "hero-desktop" : "hero-mobile"), "wrong hero: " + displayedHero);
+      // Calendar is the landing view. Empty dates do not render a schedule message or blank list.
+      assert.equal(await page.getByRole("tab", {name:"Calendar"}).getAttribute("aria-selected"),
+        "true", "Calendar must be selected on initial load");
+      assert.equal(await page.locator(".rr-calendar").count(), 1, "Calendar must be visible by default");
+      assert.equal(await page.locator(".rr-rows").count(), 0, "Empty schedule section must not render");
+      assert.equal(await page.locator(".rr-empty").count(), 0, "Empty schedule message must not render");
+      assert.equal(await page.getByRole("button", {name:/Add Reminder/i}).count(),1,
+        "Add Reminder must remain available when the schedule is empty");
       for (const path of [
         "/rosieverse/reminders/hero-mobile.webp", "/rosieverse/reminders/hero-desktop.webp",
         "/rosieverse/reminders/textures/parchment.webp", "/rosieverse/reminders/cards/shopping.webp",
@@ -38,20 +46,70 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         assert.equal(response.status(), 200, "missing asset " + path);
         assert(Number(response.headers()["content-length"] || 2000) >= 1000, "empty asset " + path);
       }
-      // The five bespoke RosieVerse medallions must load, not generic glyphs.
+      // Entire ornamental images are native clickable buttons, not inset medallions.
       for (const section of ["tasks", "shopping", "appointments", "notes", "goals"]) {
         const tile = page.locator(".rr-feature-" + section);
-        const illustration = tile.locator(".rr-feature-art img");
-        assert.equal(await illustration.count(), 1, "missing custom icon markup: " + section);
-        await illustration.scrollIntoViewIfNeeded();
-        await illustration.evaluate(async img => { if (!img.complete) await img.decode(); });
-        assert(await illustration.evaluate(img => img.naturalWidth === 320), "icon failed: " + section);
-        const geom = await tile.evaluate(node => ({
-          artBottom: node.querySelector(".rr-feature-art").getBoundingClientRect().bottom,
-          labelTop: node.querySelector(".rr-feature-copy").getBoundingClientRect().top
-        }));
-        if (section !== "goals") assert(geom.labelTop >= geom.artBottom - 4,
-          "illustration overlaps text: " + section + " " + JSON.stringify(geom));
+        assert.equal(await tile.count(), 1, "missing full-art button " + section);
+        const art = tile.locator(".rr-button-image");
+        await tile.scrollIntoViewIfNeeded();
+        await art.evaluate(async image => { if (!image.complete) await image.decode(); });
+        const geometry = await tile.evaluate(node => {
+          const rect = node.getBoundingClientRect();
+          const image = node.querySelector("img");
+          return { buttonWidth: rect.width, imageWidth: image.getBoundingClientRect().width,
+            naturalWidth: image.naturalWidth, ratio: image.naturalWidth / image.naturalHeight,
+            textDuplicate: Boolean(node.querySelector(".rr-feature-copy,.rr-feature-art,.rr-feature-icon")) };
+        });
+        assert(geometry.naturalWidth >= 1000, "full-size button art failed: " + section + " " + JSON.stringify(geometry));
+        assert(Math.abs(geometry.buttonWidth - geometry.imageWidth) <= 2, "art is an inset, not button: " + section);
+        assert(!geometry.textDuplicate, "duplicate title or medallion found: " + section);
+        assert(geometry.ratio > 2 && geometry.ratio < 3.5, "button ratio unexpected: " + section);
+        assert(await tile.getAttribute("aria-label").then(label => label.includes("Open ")), "button inaccessible");
+      }
+      // The approved button arrangement now balances the tall shopping banner
+      // with Notes on the first row, and the task banner with Appointments below.
+      const order = await page.locator(".rr-feature-grid > button").evaluateAll(nodes =>
+        nodes.map(node => [...node.classList].find(cls => cls.startsWith("rr-feature-") && cls !== "rr-feature-grid"))
+      );
+      assert.deepEqual(order, [
+        "rr-feature-notes", "rr-feature-shopping", "rr-feature-appointments",
+        "rr-feature-tasks", "rr-feature-goals"
+      ], "Incorrect illustrated button order");
+      // Original mockup: two compact button columns, followed by a wide fifth.
+      const gridLayout = await page.locator(".rr-feature-grid").evaluate(grid => {
+        const metrics = section => grid.querySelector(".rr-feature-"+section).getBoundingClientRect();
+        const tasks=metrics("tasks"), shopping=metrics("shopping"), appointments=metrics("appointments");
+        const notes=metrics("notes"), goals=metrics("goals");
+        return {columns:getComputedStyle(grid).gridTemplateColumns,
+          sameTopRow:Math.abs(notes.top-shopping.top)<3,
+          sameSecondRow:Math.abs(appointments.top-tasks.top)<3,
+          goalsBelow:goals.top>=Math.max(appointments.bottom,tasks.bottom)-1,
+          goalsWider:goals.width>tasks.width*1.8,
+          totalHeight:grid.getBoundingClientRect().height,
+          minButtonWidth:Math.min(tasks.width,shopping.width,appointments.width,notes.width)
+        };
+      });
+      assert(gridLayout.sameTopRow && gridLayout.sameSecondRow && gridLayout.goalsBelow,
+        "Not the approved 2x2-plus-wide arrangement: "+JSON.stringify(gridLayout));
+      assert(gridLayout.goalsWider || (width >= 600 && gridLayout.goalsBelow && gridLayout.minButtonWidth >= 300),
+        "Goals & Gratitude does not occupy the intended bottom row: "+JSON.stringify(gridLayout));
+      const frameAlignment = await page.locator(".rr-feature-grid").evaluate(grid => {
+        const r = category => grid.querySelector(".rr-feature-"+category).getBoundingClientRect();
+        const n=r("notes"),s=r("shopping"),a=r("appointments"),t=r("tasks");
+        return {
+          firstTop:Math.abs(n.top-s.top), firstBottom:Math.abs(n.bottom-s.bottom),
+          secondTop:Math.abs(a.top-t.top), secondBottom:Math.abs(a.bottom-t.bottom),
+          noClipping:[...grid.querySelectorAll(".rr-feature")].every(button=>getComputedStyle(button).overflow==="visible")
+        };
+      });
+      assert(frameAlignment.firstTop<=2 && frameAlignment.firstBottom<=2,
+        "First-row gold borders are not aligned: "+JSON.stringify(frameAlignment));
+      assert(frameAlignment.secondTop<=2 && frameAlignment.secondBottom<=2,
+        "Second-row gold borders are not aligned: "+JSON.stringify(frameAlignment));
+      assert(frameAlignment.noClipping, "Illustration is being cropped");
+      if (width<600) {
+        assert(gridLayout.totalHeight < 400, "Mobile tool buttons too tall: "+JSON.stringify(gridLayout));
+        assert(gridLayout.minButtonWidth >= 135, "Mobile button artwork too narrow: "+JSON.stringify(gridLayout));
       }
       const overflow = () => page.evaluate(() => ({
         document: document.documentElement.scrollWidth, body: document.body.scrollWidth,
@@ -60,8 +118,53 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       const entry = await overflow();
       assert(entry.document <= width + 3, "horizontal overflow: " + JSON.stringify(entry));
       assert(entry.nav, "existing navigation missing");
-      assert.equal(await page.getByRole("button", {name:"Open Rosie’s Randomizers"}).count(), 1);
+      // Reminders belongs to Resources, not the five entertainment destinations.
+      const resourceNav = page.locator("nav.bottom-nav.resources-bottom-nav");
+      assert.equal(await resourceNav.count(), 1, "Resources-specific bottom nav missing");
+      assert.deepEqual(await resourceNav.locator("button").evaluateAll(nodes =>
+        nodes.map(n => n.getAttribute("aria-label"))), [
+        "Open Rosie’s Reminders",
+        "Open Rosie’s Timekeepers",
+        "Open Rosie’s Calculations"
+      ], "Resources navigation must contain only its three utility pages");
+      assert.equal(await page.getByRole("button", {name:"Open Rosie’s Randomizers"}).count(), 0,
+        "Entertainment tabs must not appear in Reminders bottom nav");
+      assert.equal(await page.getByRole("button", {name:"Open Rosie’s Resources hub"}).count(), 1,
+        "Resources hub shortcut missing beneath Home");
+      const spacing = await page.locator(".rr-page").evaluate(node => {
+        const grid = node.querySelector(".rr-feature-grid");
+        return {
+          rowGap: parseFloat(getComputedStyle(grid).rowGap),
+          pagePadding: parseFloat(getComputedStyle(node).paddingBottom),
+          footerMargin: parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom),
+          outerNavPadding: parseFloat(getComputedStyle(document.querySelector(".app-shell")).paddingBottom)
+        };
+      });
+      assert(spacing.rowGap <= 5, "Too much space between illustrated rows: "+JSON.stringify(spacing));
+      assert(spacing.pagePadding <= 32 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
+      assert(spacing.outerNavPadding >= 60, "Footer would be covered by fixed navigation");
+      await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
+      await page.waitForTimeout(140);
+      assert(!(await page.locator(".rr-sticky-dock").evaluate(n=>n.classList.contains("is-visible"))),
+        "Compact header visible before reaching the top");
       await page.screenshot({path: dir + "/" + name + "-empty.png", fullPage:true});
+      await page.evaluate(() => {
+        const hero=document.querySelector(".rr-hero");
+        window.scrollTo({top: window.scrollY + hero.getBoundingClientRect().bottom + 85, behavior:"instant"});
+      });
+      await page.waitForFunction(() => document.querySelector(".rr-sticky-dock")?.classList.contains("is-visible"));
+      const sticky = await page.locator(".rr-sticky-dock").evaluate(el => ({
+        top: el.getBoundingClientRect().top,
+        position: getComputedStyle(el).position,
+        title: el.querySelector(".rr-sticky-title")?.textContent,
+        visible: getComputedStyle(el.querySelector(".rr-sticky-banner")).opacity
+      }));
+      assert.equal(sticky.position, "sticky", "Reminders header must stick on scroll");
+      assert(sticky.top >= -1 && sticky.top <= 90, "Sticky header out of view: "+JSON.stringify(sticky));
+      assert(sticky.title === "Rosie’s Reminders", "Sticky header title incorrect");
+      await page.screenshot({path:dir + "/" + name + "-sticky.png"});
+      await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
+      await page.waitForFunction(() => !document.querySelector(".rr-sticky-dock")?.classList.contains("is-visible"));
 
       await page.getByRole("button", {name:/Add Reminder/i}).click();
       await page.getByLabel("Title", {exact:true}).fill("Test Rosie reminder");
@@ -73,6 +176,8 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.getByRole("button", {name:"Complete: Test Rosie reminder"}).click();
       await page.reload({waitUntil:"networkidle"});
       await page.locator(".rr-page").waitFor();
+      assert.equal(await page.getByRole("tab", {name:"Calendar"}).getAttribute("aria-selected"),"true",
+        "Calendar must remain the default after reload");
       assert.equal(await page.getByRole("button", {name:"Mark incomplete: Test Rosie reminder"}).count(),1, "completion not persisted");
       await page.getByRole("tab", {name:"Calendar"}).click();
       assert(await page.locator(".rr-calendar-grid button").count() >= 28, "calendar missing");
