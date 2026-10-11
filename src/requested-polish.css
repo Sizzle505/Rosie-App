@@ -24,7 +24,7 @@
 @media(max-width:390px){.page-cheese .cheese-exam-title{padding-right:92px}.page-cheese .barkbridge-cap-emblem{width:84px;height:84px}}
 /* The cabinet has a deliberate iPhone safe-area stage at rest. Native sticky
    takes over only after the visitor has actually scrolled past that stage. */
-@media(max-width:720px){.page-fortune .fortune-console>.machine{position:sticky;top:0;z-index:12;margin-top:calc(38px + env(safe-area-inset-top));box-shadow:0 14px 28px rgba(0,0,0,.54),0 0 0 1px rgba(248,218,151,.18)}.page-fortune .question-card{margin-top:12px!important}.page-fortune .fortune-console{padding-bottom:8px}}
+@media(max-width:720px){.page-fortune .fortune-console{padding-top:calc(38px + env(safe-area-inset-top))!important;padding-bottom:8px}.page-fortune .fortune-console>.machine{position:sticky;top:0;z-index:12;margin-top:0!important;box-shadow:0 14px 28px rgba(0,0,0,.54),0 0 0 1px rgba(248,218,151,.18)}.page-fortune .question-card{margin-top:12px!important}}
 /* Graduation hierarchy: Rosie overlaps the certificate and frame, with the tray lifted one quarter-inch. */
 /* On iPhone the platter is a true foreground layer: it crosses Rosie's shirt at its hem. */
 .barkbridge-cheese-reward-mobile{display:none!important}
@@ -36,3 +36,6 @@
 /* Keep offscreen card paint work out of the iPhone scrolling budget. */
 @media(max-width:720px){.wall .tile{content-visibility:auto;contain-intrinsic-size:auto 220px}.wall .tile:focus-within{content-visibility:visible}}
 @media(prefers-reduced-motion:reduce){.captain-game-page .boost-control.boost-ready:not(.boost-active),.captain-game-page .boost-control.boost-ready:not(.boost-active)::after,.captain-game-page .captain-nitro::before,.captain-game-page .captain-nitro i,.page-cheese .barkbridge-cap-emblem{animation:none!important}}
+
+/* Position the large right crest in the breathing room between the masthead and Accuracy. */
+@media(max-width:720px){.page-cheese .barkbridge-cap-emblem{top:-17px!important}}
