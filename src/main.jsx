@@ -762,6 +762,15 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
       </div>
 
       <div className="diploma-aftercare">
+        <div className="diploma-results-strip" aria-label="Examination results">
+          <span className="diploma-results-heading">EXAMINATION RESULTS</span>
+          <div className="diploma-stats">
+            <div><span>MOVES</span><strong>{moves}</strong></div>
+            <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+            <div><span>MATCH EFFICIENCY</span><strong>{efficiency}%</strong></div>
+          </div>
+        </div>
+
         <label className="diploma-recipient-editor">
           <span>NAME ON DIPLOMA</span>
           <input
@@ -779,14 +788,7 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
         <button type="button" className="diploma-enlarge-button" onClick={() => diplomaDialogRef.current?.showModal()}>
           <span aria-hidden="true">↗</span> View diploma at full size
         </button>
-        <div className="diploma-results-strip" aria-label="Examination results">
-          <span className="diploma-results-heading">EXAMINATION RESULTS</span>
-          <div className="diploma-stats">
-            <div><span>MOVES</span><strong>{moves}</strong></div>
-            <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
-            <div><span>MATCH EFFICIENCY</span><strong>{efficiency}%</strong></div>
-          </div>
-        </div>
+
       </div>
 
       <dialog ref={diplomaDialogRef} className="barkbridge-zoom-dialog" aria-label="Enlarged University of Barkbridge diploma">

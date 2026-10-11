@@ -165,7 +165,16 @@
   .barkbridge-graduation .graduate-rosie { position: relative !important; right: auto !important; bottom: auto !important; margin: -10px auto 0 !important; z-index: 4; }
 }
 @media (max-width: 700px) {
-  .barkbridge-graduation .graduation-stage { gap: 4px; }
+  .barkbridge-graduation .graduation-stage { gap: 0; }
+  .barkbridge-graduation .barkbridge-certificate-and-reward { z-index: 2; }
+  /* Rosie rises from behind the platter: her lower half is deliberately hidden
+     by the tray, while her happy cap-and-paws silhouette clears its top edge. */
+  .barkbridge-graduation .graduate-rosie {
+    width: clamp(128px, 39vw, 166px) !important;
+    margin: -118px auto -12px !important;
+    z-index: 1 !important;
+    transform: translateY(0);
+  }
 
   /* Preserve the platter’s native 3:1 canvas on phones. Its transparent edges
      belong inside that canvas; constraining its height cuts the cheeses away. */
@@ -197,4 +206,11 @@
 @media (prefers-reduced-motion: reduce) {
   .barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam, .barkbridge-graduation .barkbridge-gold-gleam i, .barkbridge-graduation .barkbridge-cheese-sparkles > i, .barkbridge-graduation .barkbridge-cheese-halo { animation: none !important; opacity: 0 !important; }
   .barkbridge-graduation .barkbridge-cheese-reward { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* Ceremony hierarchy: results belong directly after Rosie, before personalization. */
+@media (max-width: 700px) {
+  .barkbridge-graduation .diploma-aftercare { display: flex; flex-direction: column; }
+  .barkbridge-graduation .diploma-results-strip { order: -1; margin: 8px auto 13px; }
+  .barkbridge-graduation .diploma-recipient-editor { margin-top: 0; }
 }
