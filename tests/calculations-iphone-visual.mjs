@@ -41,6 +41,8 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           keys:keys.map(key=>{const r=key.getBoundingClientRect();return {name:key.getAttribute("aria-label"),left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};})
         };
       });
+      console.log("GEOMETRY",engine,width,height,JSON.stringify({viewport:geometry.width,image:geometry.image,hero:geometry.hero,frame:geometry.frame,native:[geometry.nativeWidth,geometry.nativeHeight],scrollWidth:geometry.scrollWidth}));
+      await page.screenshot({path:output+"/"+engine+"-"+width+"x"+height+"-diagnostic.png",fullPage:true});
       assert(geometry.imageLoaded && geometry.nativeWidth>0 && geometry.nativeHeight>0, "high-resolution header missing");
       assert(geometry.nativeWidth>=1000, "header resolution unexpectedly low");
       assert.equal(geometry.objectFit,"contain","artwork must never be cropped");
