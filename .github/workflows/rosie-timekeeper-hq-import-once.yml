@@ -1,0 +1,28 @@
+name: Import HQ Timekeeper gear artwork (one-time)
+on:
+  push:
+    paths:
+      - '.github/workflows/rosie-timekeeper-hq-import-once.yml'
+permissions:
+  contents: write
+jobs:
+  import:
+    if: github.ref == 'refs/heads/work/rosie-resources-integrated-20261011'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Upgrade original gear textures and remove importer
+        env:
+          TRANSFER_URL: 'https://uc5de1a6f4105b1acfb83ac62868.dl.dropboxusercontent.com/cd/0/get/DJ35oCKBxgmX0m5CPD3fZW-zRY0_g1V-avheJS_js_Rqsj4v1Tp3v7wTaevJO2tGYjVP8wuJyIr5_4CwpoFknKmphjRxcPUwm08Y9nIndYZi48_u1qvnvLxyCpFUPnedenk5C_PL1b8jOZEpYFDEGLHTnxqfkUKqZ8gGtq_oNUdlhA/file?c_luid=667ded1d'
+        run: |
+          set -euo pipefail
+          mkdir -p public/rosieverse/timekeeper
+          curl --fail --location --silent --show-error --retry 2 "$TRANSFER_URL" --output public/rosieverse/timekeeper/gear-atlas.png
+          echo 'acb24ee151a675211faaab0900d7be4ce9372c0d7ef44587c3557457eb83ae8a  public/rosieverse/timekeeper/gear-atlas.png' | sha256sum --check
+          file public/rosieverse/timekeeper/gear-atlas.png
+          git rm -- .github/workflows/rosie-timekeeper-hq-import-once.yml
+          git add public/rosieverse/timekeeper/gear-atlas.png
+          git -c user.name='Rosie Gear Importer' -c user.email='actions@users.noreply.github.com' commit -m 'Upgrade Rosie Timekeeper gear atlas to Retina-resolution originals'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
