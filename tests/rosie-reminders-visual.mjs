@@ -257,6 +257,37 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(raw.gratitude.some(g=>g.text==="Rosie is brilliant"));
       await page.goto(base + "/#fortune",{waitUntil:"networkidle"});
       assert.equal(await page.locator("main.fortune-page").count(),1,"fortune route broken");
+      const sampleQuestions = page.locator(".quick-prompts button");
+      assert.equal(await sampleQuestions.count(),4,"Fortune should offer four whimsical sample questions");
+      assert.equal(await page.locator(".fortune-sample-heading").count(),1,"Sample questions label missing");
+      const ask = page.locator(".ask-button");
+      const fortuneText = page.locator("#question");
+      assert.equal(await fortuneText.inputValue(),"","Fortune should start with an empty input");
+      await ask.click();
+      const autoQuestion=await fortuneText.inputValue();
+      assert(autoQuestion.length>15 && autoQuestion.endsWith("?"),
+        "Blank Ask should visibly fill in a sample, not silently submit");
+      assert.equal(await page.locator(".fortune-ticket-visible").count(),0,
+        "Choosing a sample should not submit a fortune yet");
+      await ask.click();
+      await page.waitForTimeout(80);
+      assert.equal(await page.locator("#question").inputValue(),"",
+        "Second Ask should submit selected question");
+      const navToggle=page.getByRole("button",{name:"Switch bottom buttons to Rosie’s Resources"});
+      assert.equal(await navToggle.count(),1,"Navigation family switch missing");
+      await navToggle.click();
+      assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
+        "Resources nav should expose the three utility destinations");
+      await page.getByRole("button",{name:"Switch bottom buttons to RosieVerse games"}).click();
+      assert.equal(await page.locator("nav.bottom-nav:not(.resources-bottom-nav) button").count(),5,
+        "Navigation switch failed to restore entertainment buttons");
+      await page.goto(base + "/#home",{waitUntil:"networkidle"});
+      assert.equal(await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).count(),1,
+        "Grand Salon should expose the Resources side shortcut");
+      await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).click();
+      await page.waitForURL("**/#resources");
+      assert.equal(await page.locator(".rr-hub-button").count(),3,
+        "Resources shortcut did not open the illustrated Resources hub");
       assert.equal(errors.length,0,"Browser errors: "+errors.join(" | "));
       results.push({engine,width,height,hero:displayedHero.split("/").at(-1),errors:0});
       await context.close();
