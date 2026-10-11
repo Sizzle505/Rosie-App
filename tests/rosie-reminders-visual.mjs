@@ -29,6 +29,14 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(await img.evaluate(node => node.naturalWidth >= 1000), "Rosie hero did not load");
       const displayedHero = await img.evaluate(node => node.currentSrc);
       assert(displayedHero.includes(width >= 760 ? "hero-desktop" : "hero-mobile"), "wrong hero: " + displayedHero);
+      // Calendar is the landing view. Empty dates do not render a schedule message or blank list.
+      assert.equal(await page.getByRole("tab", {name:"Calendar"}).getAttribute("aria-selected"),
+        "true", "Calendar must be selected on initial load");
+      assert.equal(await page.locator(".rr-calendar").count(), 1, "Calendar must be visible by default");
+      assert.equal(await page.locator(".rr-rows").count(), 0, "Empty schedule section must not render");
+      assert.equal(await page.locator(".rr-empty").count(), 0, "Empty schedule message must not render");
+      assert.equal(await page.getByRole("button", {name:/Add Reminder/i}).count(),1,
+        "Add Reminder must remain available when the schedule is empty");
       for (const path of [
         "/rosieverse/reminders/hero-mobile.webp", "/rosieverse/reminders/hero-desktop.webp",
         "/rosieverse/reminders/textures/parchment.webp", "/rosieverse/reminders/cards/shopping.webp",
@@ -168,6 +176,8 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.getByRole("button", {name:"Complete: Test Rosie reminder"}).click();
       await page.reload({waitUntil:"networkidle"});
       await page.locator(".rr-page").waitFor();
+      assert.equal(await page.getByRole("tab", {name:"Calendar"}).getAttribute("aria-selected"),"true",
+        "Calendar must remain the default after reload");
       assert.equal(await page.getByRole("button", {name:"Mark incomplete: Test Rosie reminder"}).count(),1, "completion not persisted");
       await page.getByRole("tab", {name:"Calendar"}).click();
       assert(await page.locator(".rr-calendar-grid button").count() >= 28, "calendar missing");
