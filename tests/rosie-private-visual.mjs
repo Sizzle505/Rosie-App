@@ -67,7 +67,7 @@ async function capture(engine, isMobile) {
     path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-entrance-${engine.name()}.png`
   });
   await page.getByRole("heading", {name:"Welcome to RosieVerse"}).scrollIntoViewIfNeeded();
-  await page.screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-login-${engine.name()}.png`});
+  await page.getByRole("heading", {name:"Welcome to RosieVerse"}).locator("xpath=..").screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-login-${engine.name()}.png`});
   await page.getByRole("textbox", {name:"Username"}).fill("rosiefan");
   await page.getByLabel("Secret PIN").fill("1234");
   await page.getByRole("button",{name:/Enter RosieVerse/}).click();
@@ -79,7 +79,8 @@ async function capture(engine, isMobile) {
     path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-ledger-${engine.name()}.png`
   });
   await body.scrollIntoViewIfNeeded();
-  await page.screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-notes-${engine.name()}.png`});
+  await body.evaluate(element => element.blur());
+  await page.getByRole("heading", {name:"Notes & Ideas", level:3}).locator("xpath=../../..").screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-notes-${engine.name()}.png`});
   assert.equal(await body.inputValue(),"A good day begins with Rosie.\nRemember the biscuits.");
   assert.equal(notes[0].body,"A good day begins with Rosie.\nRemember the biscuits.");
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
