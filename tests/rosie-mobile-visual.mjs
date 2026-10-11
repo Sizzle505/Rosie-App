@@ -106,7 +106,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       const certificateText = await diploma.innerText();
       for (const required of [
         "UNIVERSITY OF BARKBRIDGE", "FACULTY OF GASTRONOMIC SCIENCES",
-        "The Graduate", "Doctor of Cheese (Che.D.)", "Fetch the Fromage",
+        "Cheez Whiz", "Doctor of Cheese (Che.D.)", "Fetch the Fromage",
         String(new Date().getFullYear()), "Prof. Manchego P. Curdwell", "Dr. Brie de Bloom"
       ]) assert(certificateText.includes(required), "diploma missing: " + required);
       const bounds = await diploma.boundingBox();
@@ -118,7 +118,8 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         recipientFont: getComputedStyle(node.querySelector(".diploma-exam-name")).fontFamily,
         sealSvg: Boolean(node.querySelector(".diploma-wax-seal svg"))
       }));
-      assert(diplomaComputed.image.includes("barkbridge/diploma/ornate-frame.png"), "illustrated frame asset is not in use");
+      assert(diplomaComputed.image.includes("barkbridge/diploma/parchment.png"), "approved parchment background missing");
+      assert(await diploma.locator(".barkbridge-gold-gleam").evaluate(el => getComputedStyle(el).backgroundImage.includes("barkbridge-full-gold-frame-v3.png")), "approved full gold frame overlay missing");
       const requiredArt = ["ornate-frame.png", "parchment.png", "canine-crest.png", "wax-seal.png", "cheese-stamp.png"];
       for (const filename of requiredArt) {
         const response = await page.request.get(base + "/barkbridge/diploma/" + filename);
