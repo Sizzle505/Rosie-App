@@ -2558,7 +2558,7 @@ function App() {
             aria-label="Open Rosie’s Resources hub"
             title="Rosie’s Resources"
             onClick={() => navigateTo("resources")}
-          >R<span>TOOLS</span></button>
+          >R</button>
         </>}
         {page === "home" ? (
           <RosieHome onNavigate={navigateTo} />
