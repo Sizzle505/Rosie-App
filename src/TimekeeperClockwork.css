@@ -21,6 +21,15 @@
   -webkit-mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
   mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
 }
+.rtk-mechanical-chassis {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .84;
+}
 .rtk-gear-mount {
   position: absolute;
   display: block;
@@ -33,8 +42,8 @@
   height: 100%;
   background-repeat: no-repeat;
   background-size: 200% 200%;
-  opacity: var(--rtk-opacity, .82);
-  filter: saturate(.90) brightness(.90) drop-shadow(0 2px 3px #000b);
+  opacity: var(--rtk-opacity, .90);
+  filter: saturate(1.05) brightness(1.10) contrast(1.07) drop-shadow(0 2px 3px #000b);
   transform-origin: 50% 50%;
   animation: rtk-wheel-turn var(--rtk-cycle, 90s) linear infinite;
   animation-direction: var(--rtk-direction, normal);
@@ -44,8 +53,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 11%;
-  height: 11%;
+  width: 7%;
+  height: 7%;
   transform: translate(-50%, -50%);
   border: 1px solid #c3965d;
   border-radius: 50%;
@@ -59,12 +68,12 @@
   pointer-events: none;
   /* Preserve original near-black face beneath digits and live buttons. */
   background: radial-gradient(ellipse at 50% 48%,
-    #100d13f1 0%,
-    #100d13e9 21%,
-    #100d13d6 33%,
-    #100d13ac 43%,
-    #100d1350 61%,
-    transparent 80%);
+    #100d13f0 0%,
+    #100d13e6 20%,
+    #100d13c4 32%,
+    #100d138c 43%,
+    #100d1325 61%,
+    transparent 76%);
 }
 @keyframes rtk-wheel-turn { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
