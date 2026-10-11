@@ -14,7 +14,7 @@ const GEARS = [
   { x: 9, y: 73, size: 42, sprite: 2, seconds: 92, reverse: true, opacity: 0.86 },
   { x: 83, y: 82, size: 54, sprite: 3, seconds: 106, reverse: false, opacity: 0.89 },
   { x: 45, y: 108, size: 40, sprite: 0, seconds: 100, reverse: true, opacity: 0.73 },
-  { x: 51, y: -5, size: 26, sprite: 2, seconds: 57, reverse: false, opacity: 0.63 },
+  { x: 51, y: -5, size: 26, sprite: 2, seconds: 57, reverse: true, opacity: 0.63 },
 ];
 
 const SPRITES = [
