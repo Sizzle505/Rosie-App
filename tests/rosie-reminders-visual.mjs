@@ -23,6 +23,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.goto(base + "/#reminders", { waitUntil: "networkidle" });
       await page.locator(".rr-page").waitFor();
       await page.locator(".loading-screen-hidden").waitFor();
+      await page.waitForTimeout(1100); // Wait for the loading overlay fade before visual capture.
       const img = page.locator(".rr-hero img");
       await img.evaluate(async node => { if (!node.complete) await node.decode(); });
       assert(await img.evaluate(node => node.naturalWidth >= 1000), "Rosie hero did not load");
