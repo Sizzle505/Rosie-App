@@ -145,7 +145,7 @@ export default function RosieReminders() {
     if (!title) return;
     setStore(prev => ({ ...prev, items: [...prev.items, {
       ...blankItem("tasks", selectedDate), id: makeId(), title,
-      date: "", completedDates: []
+      completedDates: []
     }] }));
     setQuickTask("");
   };
