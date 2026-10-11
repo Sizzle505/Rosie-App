@@ -38,20 +38,25 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         assert.equal(response.status(), 200, "missing asset " + path);
         assert(Number(response.headers()["content-length"] || 2000) >= 1000, "empty asset " + path);
       }
-      // The five bespoke RosieVerse medallions must load, not generic glyphs.
+      // Entire ornamental images are native clickable buttons, not inset medallions.
       for (const section of ["tasks", "shopping", "appointments", "notes", "goals"]) {
         const tile = page.locator(".rr-feature-" + section);
-        const illustration = tile.locator(".rr-feature-art img");
-        assert.equal(await illustration.count(), 1, "missing custom icon markup: " + section);
-        await illustration.scrollIntoViewIfNeeded();
-        await illustration.evaluate(async img => { if (!img.complete) await img.decode(); });
-        assert(await illustration.evaluate(img => img.naturalWidth === 320), "icon failed: " + section);
-        const geom = await tile.evaluate(node => ({
-          artBottom: node.querySelector(".rr-feature-art").getBoundingClientRect().bottom,
-          labelTop: node.querySelector(".rr-feature-copy").getBoundingClientRect().top
-        }));
-        if (section !== "goals") assert(geom.labelTop >= geom.artBottom - 4,
-          "illustration overlaps text: " + section + " " + JSON.stringify(geom));
+        assert.equal(await tile.count(), 1, "missing full-art button " + section);
+        const art = tile.locator(".rr-button-image");
+        await tile.scrollIntoViewIfNeeded();
+        await art.evaluate(async image => { if (!image.complete) await image.decode(); });
+        const geometry = await tile.evaluate(node => {
+          const rect = node.getBoundingClientRect();
+          const image = node.querySelector("img");
+          return { buttonWidth: rect.width, imageWidth: image.getBoundingClientRect().width,
+            naturalWidth: image.naturalWidth, ratio: image.naturalWidth / image.naturalHeight,
+            textDuplicate: Boolean(node.querySelector(".rr-feature-copy,.rr-feature-art,.rr-feature-icon")) };
+        });
+        assert(geometry.naturalWidth >= 1000, "full-size button art failed: " + section + " " + JSON.stringify(geometry));
+        assert(Math.abs(geometry.buttonWidth - geometry.imageWidth) <= 2, "art is an inset, not button: " + section);
+        assert(!geometry.textDuplicate, "duplicate title or medallion found: " + section);
+        assert(geometry.ratio > 2 && geometry.ratio < 3.5, "button ratio unexpected: " + section);
+        assert(await tile.getAttribute("aria-label").then(label => label.includes("Open ")), "button inaccessible");
       }
       const overflow = () => page.evaluate(() => ({
         document: document.documentElement.scrollWidth, body: document.body.scrollWidth,
