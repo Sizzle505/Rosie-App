@@ -107,32 +107,37 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert.equal(stable.filter,"none","frame filter reapplied after input");
       assert(fits,"long values clipped in parchment");
       assert.equal(errors.length,0,"console page error(s): "+errors.join(" | "));
-      // Rosie Resources uses the original page artworks as three equal interactive thirds.
+      // Rosie Resources is now the approved observatory: one backdrop, a title crest,
+      // and three complete, independently clickable image-buttons.
       await page.goto("http://127.0.0.1:5173/#resources",{waitUntil:"networkidle"});
-      await page.locator(".rr-hub-panel").first().waitFor();
-      // WebKit can mark the page network-idle before its large source-art images
-      // finish decoding (most noticeable after rotating to landscape).
-      await page.locator(".rr-hub-panel img").evaluateAll(async images => {
+      await page.locator(".rr-hub-button").first().waitFor();
+      const art = page.locator(".rr-hub-crest,.rr-hub-button img");
+      await art.evaluateAll(async images => {
         await Promise.all(images.map(async img => {
           if (!img.complete || img.naturalWidth === 0) await img.decode();
         }));
       });
-      const triptych=await page.locator(".rr-hub-panel").evaluateAll(elements=>elements.map(el=>{
+      const resources = await page.locator(".rr-hub-button").evaluateAll(elements => elements.map(el => {
         const rect=el.getBoundingClientRect();
         const img=el.querySelector("img");
         return {title:el.getAttribute("aria-label"),height:rect.height,width:rect.width,x:rect.x,
           naturalWidth:img.naturalWidth,loaded:img.complete,src:img.getAttribute("src")};
       }));
-      assert.equal(triptych.length,3,"Resources needs exactly three resource panels");
-      assert(triptych.every(x=>x.loaded&&x.naturalWidth>0),"Resources imagery is missing");
-      assert(triptych.every(x=>Math.abs(x.width-width)<2&&Math.abs(x.x)<2),"Resources panels inset from viewport");
-      assert(Math.max(...triptych.map(x=>x.height))-Math.min(...triptych.map(x=>x.height))<=1,
-        "Resources panels are not equal thirds");
+      const backdrop=await page.locator(".rr-hub-page").evaluate(el=>getComputedStyle(el).backgroundImage);
+      assert(backdrop.includes("observatory.webp"),"Approved observatory background is missing");
+      assert.equal(await page.locator(".rr-hub-crest").count(),1,"Resources title crest missing");
+      assert.equal(resources.length,3,"Resources needs exactly three image-buttons");
+      assert(resources.every(x=>x.loaded&&x.naturalWidth>=1000),"Resources button imagery is missing or low resolution");
+      assert(resources.every(x=>x.width<=width+1&&x.x>=-1&&x.x+x.width<=width+1),"Resources buttons overflow the screen");
+      assert.deepEqual(resources.map(x=>x.title),[
+        "Open Rosie’s Reminders","Open Rosie’s Timekeeper","Open Rosie’s Calculations"
+      ],"Resources order or destination text changed");
       await page.screenshot({path:output+"/"+name+"-resources.png",fullPage:true});
-      for(const [index,hash] of [[0,"reminders"],[1,"calculations"],[2,"timekeeper"]]){
-        await page.locator(".rr-hub-panel").nth(index).click();
+      for(const [index,hash] of [[0,"reminders"],[1,"timekeeper"],[2,"calculations"]]){
+        await page.locator(".rr-hub-button").nth(index).click();
         await page.waitForURL("**/#"+hash);
         await page.goto("http://127.0.0.1:5173/#resources",{waitUntil:"networkidle"});
+        await page.locator(".rr-hub-button").first().waitFor();
       }
       results.push({engine,width,height,headerNatural:[geometry.nativeWidth,geometry.nativeHeight],seam:geometry.frame.top-geometry.hero.bottom,displayInset:geometry.display.right-geometry.value.right,passed:true});
       await context.close();
