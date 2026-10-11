@@ -645,7 +645,7 @@ function BarkbridgeSeal({ className = "" }) {
   return (
     <img
       className={className}
-      src="/barkbridge-premium-seal.webp"
+      src="/barkbridge-premium-cap.webp"
       alt=""
       aria-hidden="true"
     />
@@ -655,7 +655,7 @@ function BarkbridgeSeal({ className = "" }) {
 function BarkbridgeCapEmblem() {
   return (
     <div className="barkbridge-cap-emblem" aria-hidden="true">
-      <img src="/barkbridge-premium-cap.webp" alt="" width="640" height="640" decoding="async" />
+      <img src="/barkbridge-premium-seal.webp" alt="" width="640" height="640" decoding="async" />
     </div>
   );
 }
@@ -845,6 +845,9 @@ function CheeseMemoryGame() {
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
+  // Accuracy is based on resolved two-card attempts, not an unresolved flip.
+  const resolvedAttempts = matched.length + totalMisses;
+  const accuracyPercentage = resolvedAttempts ? Math.round((matched.length / resolvedAttempts) * 100) : null;
 
   useEffect(() => {
     if (!started || complete) return undefined;
@@ -1078,6 +1081,7 @@ function CheeseMemoryGame() {
                 <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
                 <div><span>MOVES</span><strong>{moves}</strong></div>
                 <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+                <div title="Matched pairs divided by completed attempts"><span>ACCURACY</span><strong>{accuracyPercentage === null ? "—" : `${accuracyPercentage}%`}</strong></div>
               </div>
             </div>
 
