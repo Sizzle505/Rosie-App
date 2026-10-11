@@ -30,6 +30,7 @@ import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
 import RosieReminders from "./RosieReminders.jsx";
+import { AccountProvider } from "./private/AccountContext.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
@@ -2713,4 +2714,4 @@ function App() {
     </>
   );
 }
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(<AccountProvider><App /></AccountProvider>);

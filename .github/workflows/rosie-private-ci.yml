@@ -1,0 +1,54 @@
+name: Rosie Private Accounts CI
+on:
+  push:
+    branches:
+      - work/rosie-private-accounts-cloud-notes-20261011
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/private-api.test.mjs
+      - run: npm run build
+  rendered-views:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Start Vite for browser screenshots
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-private-vite.log 2>&1 &
+          for attempt in {1..50}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-private-vite.log
+          exit 1
+      - run: node tests/rosie-private-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rosie-private-login-notes-screenshots
+          path: artifacts/rosie-private/
+          retention-days: 14

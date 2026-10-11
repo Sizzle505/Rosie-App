@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./RosieReminders.css";
+import { PrivateNotes, AccountChip } from "./private/PrivateNotes.jsx";
 
 const KEY = "rosieverse.reminders.v1";
 const EMPTY = { version: 1, items: [], notes: [], goals: [], gratitude: [] };
@@ -62,7 +63,7 @@ export default function RosieReminders() {
   const [storageError, setStorageError] = useState("");
   const [gratitudeInput, setGratitudeInput] = useState("");
   const [goalInput, setGoalInput] = useState("");
-  const [focusedNote, setFocusedNote] = useState(null);
+  const [noteCount, setNoteCount] = useState(0);
   const importRef = useRef(null);
 
   useEffect(() => {
@@ -83,8 +84,8 @@ export default function RosieReminders() {
     tasks: store.items.filter(x => x.category === "tasks" && !isDone(x, selectedDate)).length,
     shopping: store.items.filter(x => x.category === "shopping" && !isDone(x, selectedDate)).length,
     appointments: store.items.filter(x => x.category === "appointments" && !isDone(x, selectedDate)).length,
-    notes: store.notes.length, goals: store.goals.length
-  }), [store, selectedDate]);
+    notes: noteCount, goals: store.goals.length
+  }), [store, selectedDate, noteCount]);
   const featured = shown.find(x => x.priority === "high" && !isDone(x, selectedDate));
 
   const openNew = (category = section === "today" ? "tasks" : section) => {
@@ -119,13 +120,6 @@ export default function RosieReminders() {
   };
   const moveDay = (delta) => setSelectedDate(prev => dateKey(new Date(dateObj(prev).getFullYear(), dateObj(prev).getMonth(), dateObj(prev).getDate() + delta)));
   const chooseSection = (id) => { setSection(id); if (id === "today") setTab("today"); };
-  const addNote = () => {
-    const id = makeId();
-    setStore(prev => ({ ...prev, notes: [{ id, title: "Untitled note", body: "", updatedAt: Date.now() }, ...prev.notes] }));
-    setFocusedNote(id);
-    setSection("notes");
-  };
-  const updateNote = (id, patch) => setStore(prev => ({ ...prev, notes: prev.notes.map(x => x.id === id ? { ...x, ...patch, updatedAt: Date.now() } : x) }));
   const addGoal = (event) => {
     event.preventDefault();
     if (!goalInput.trim()) return;
@@ -160,10 +154,10 @@ export default function RosieReminders() {
         throw new Error("This is not a compatible Rosie Reminders backup.");
       if (!window.confirm("Replace all current Reminders data with the backup?")) return;
       setStore(parsed);
-      setFocusedNote(null);
+      // Legacy device-only notes remain in the imported backup until deliberately migrated.
     } catch (error) { window.alert(error.message || "Unable to import backup."); }
   };
-  const notesActive = store.notes.find(n => n.id === focusedNote) || store.notes[0];
+
 
   useEffect(() => {
     if (!editorOpen) return undefined;
@@ -184,6 +178,7 @@ export default function RosieReminders() {
     </header>
 
     <section className="rr-content">
+      {section !== "notes" && <AccountChip />}
       <div className="rr-tabs" role="tablist" aria-label="Organizer view">
         <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
           onClick={() => { setTab("today"); setSection("today"); }}>Today</button>
@@ -239,18 +234,7 @@ export default function RosieReminders() {
           <button type="button" className="rr-primary" onClick={() => openNew()}>＋ Add {section === "appointments" ? "Appointment" : section === "shopping" ? "Shopping Item" : "Reminder"}</button>
         </>}
 
-        {section === "notes" && <div className="rr-notes">
-          <div className="rr-side-head"><strong>Your Notes</strong><button type="button" onClick={addNote}>＋ New note</button></div>
-          <div className="rr-note-picker">{store.notes.map(note => <button key={note.id} type="button"
-            className={notesActive?.id === note.id ? "active" : ""} onClick={() => setFocusedNote(note.id)}>{note.title}</button>)}</div>
-          {notesActive ? <div className="rr-note-editor">
-            <input aria-label="Note title" value={notesActive.title} onChange={e => updateNote(notesActive.id, { title: e.target.value })} />
-            <textarea aria-label="Note text" rows={7} value={notesActive.body}
-              onChange={e => updateNote(notesActive.id, { body: e.target.value })} placeholder="Write down your brightest thoughts..." />
-            <div className="rr-note-footer"><span>Saved automatically on this device</span>
-              <button type="button" onClick={() => { if(window.confirm("Delete this note?")) {setStore(prev => ({...prev, notes:prev.notes.filter(n => n.id !== notesActive.id)})); setFocusedNote(null);}}}>Delete note</button></div>
-          </div> : <p className="rr-empty">A fresh page, waiting for an excellent idea.</p>}
-        </div>}
+        {section === "notes" && <PrivateNotes onCountChange={setNoteCount} />}
 
         {section === "goals" && <div className="rr-goals">
           <h3>Goals</h3>
@@ -278,7 +262,7 @@ export default function RosieReminders() {
       <div className="rr-tools"><button type="button" onClick={exportData}>Export backup</button>
         <button type="button" onClick={() => importRef.current?.click()}>Import backup</button>
         <input ref={importRef} type="file" accept=".json,application/json" onChange={importData} hidden aria-label="Import backup file"/></div>
-      <p className="rr-storage-note">Saved on this device. Account synchronization and background notifications are not enabled yet.</p>
+      <p className="rr-storage-note">Tasks, lists, appointments, goals, and gratitude remain on this device. Private notes sync through your RosieVerse account.</p>
     </section>
     {editorOpen && <div className="rr-modal-cover" onMouseDown={e => { if(e.target===e.currentTarget) setEditorOpen(false); }}>
       <section role="dialog" aria-modal="true" aria-labelledby="rr-modal-title" className="rr-modal">
