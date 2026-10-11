@@ -8,7 +8,8 @@ const worlds = [
   { id: "captain", name: "Captain Rosie", art: "buttons/captain.webp" },
   { id: "vault", name: "Card Vault", art: "buttons/vault.webp" },
   { id: "randomizers", name: "Randomizers", art: "buttons/randomizers.webp" },
-  { id: "reminders", name: "Rosie’s Reminders", art: null }
+  { id: "reminders", name: "Rosie’s Reminders", art: null },
+  { id: "calculations", name: "Rosie’s Calculations", art: null }
 ];
 
 const art = (filename) => `/rosieverse/${filename}`;
@@ -16,7 +17,7 @@ const art = (filename) => `/rosieverse/${filename}`;
 /** RosieVerse art landing. Navigates through the existing app router; no new routing dependency. */
 export default function RosieHome({ onNavigate }) {
   return (
-    <main className={styles.home} aria-label="RosieVerse - discover Rosie's five worlds">
+    <main className={styles.home} aria-label="RosieVerse - discover Rosie's worlds">
       <RosieVerseAtmosphere />
 
       <header className={styles.banner}>
@@ -38,14 +39,14 @@ export default function RosieHome({ onNavigate }) {
             type="button"
             key={world.id}
             aria-label={`Open ${world.name}`}
-            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary} ${world.id === "reminders" ? styles.remindersWorld : ""}`}
+            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary} ${world.id === "reminders" ? styles.remindersWorld : ""} ${world.id === "calculations" ? styles.calculationsWorld : ""}`}
             style={{
               "--glint-delay": `${-index * 1.7}s`,
               "--frame-mask": world.art ? `url("${art(world.art)}")` : "none"
             }}
             onClick={() => onNavigate(world.id)}
           >
-            {world.art ? <img src={art(world.art)} alt="" draggable="false" loading="eager" /> : <span className={styles.remindersButtonArt} aria-hidden="true"><span className={styles.remindersCrest}>♛</span><span>ROSIE’S</span><b>REMINDERS</b><small>PERSONAL ORGANIZER</small></span>}
+            {world.art ? <img src={art(world.art)} alt="" draggable="false" loading="eager" /> : world.id === "reminders" ? <span className={styles.remindersButtonArt} aria-hidden="true"><span className={styles.remindersCrest}>♛</span><span>ROSIE’S</span><b>REMINDERS</b><small>PERSONAL ORGANIZER</small></span> : <span className={styles.calculationsButtonArt} aria-hidden="true"><span className={styles.calculationsCrest}>✤</span><span>ROSIE’S</span><b>CALCULATIONS</b><small>POCKET TOOLKIT</small></span>}
             <span className={styles.activeSheen} aria-hidden="true" />
           </button>
         ))}
