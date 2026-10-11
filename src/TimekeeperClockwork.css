@@ -1,5 +1,5 @@
-/* No replacement bezel and no painted black circle. This sits directly
-   over the approved original dial, preserving all scene geometry. */
+/* The original hall artwork owns the clock and bezel. Only the vacant black
+   interior receives the transparent, independently rotating original art. */
 .rtk-dial { isolation: isolate; }
 .rtk-dial > .rtk-mode-switch,
 .rtk-dial > .rtk-time,
@@ -17,10 +17,9 @@
   border-radius: 50%;
   overflow: hidden;
   pointer-events: none;
-  /* Gradual disappearance into the original, photographic black dial,
-     not a second visible circular background. Safari supports -webkit-mask. */
-  -webkit-mask-image: radial-gradient(circle, #000 0%, #000 77%, #000b 87%, transparent 99%);
-  mask-image: radial-gradient(circle, #000 0%, #000 77%, #000b 87%, transparent 99%);
+  /* No second bezel, painted inner circle or layout changes. */
+  -webkit-mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
+  mask-image: radial-gradient(circle, #000 0%, #000 81%, #0009 90%, transparent 100%);
 }
 .rtk-gear-mount {
   position: absolute;
@@ -32,9 +31,10 @@
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
-  opacity: var(--rtk-opacity, .72);
-  filter: saturate(.76) brightness(.82) drop-shadow(0 2px 3px #000c);
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  opacity: var(--rtk-opacity, .82);
+  filter: saturate(.90) brightness(.90) drop-shadow(0 2px 3px #000b);
   transform-origin: 50% 50%;
   animation: rtk-wheel-turn var(--rtk-cycle, 90s) linear infinite;
   animation-direction: var(--rtk-direction, normal);
@@ -42,36 +42,29 @@
 }
 .rtk-stationary-axle {
   position: absolute;
-  width: 8%;
-  height: 8%;
   left: 50%;
   top: 50%;
+  width: 11%;
+  height: 11%;
   transform: translate(-50%, -50%);
-  border: 1px solid #c79758;
+  border: 1px solid #c3965d;
   border-radius: 50%;
-  background: radial-gradient(circle at 32% 25%, #ffe9c2, #a96e48 25%, #4a1d35 51%, #1b0e1a 78%, #b48c51 100%);
-  box-shadow: 0 1px 3px #000c;
-  opacity: .9;
-}
-.rtk-mechanical-bridges {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: .76;
+  background: radial-gradient(circle at 34% 25%, #ffe4ca 0%, #b84d71 18%, #6a193f 46%, #220d1c 72%, #c49860 88%, #f4d093 100%);
+  box-shadow: 0 1px 4px #000c;
+  opacity: .95;
 }
 .rtk-clockwork-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Clear central controls; no visible border or circular "panel." */
-  background: radial-gradient(ellipse at 50% 47%,
-    #100d13ed 0%,
-    #100d13e2 24%,
-    #100d13bf 36%,
-    #100d1388 47%,
-    #100d1340 60%,
-    transparent 78%);
+  /* Preserve original near-black face beneath digits and live buttons. */
+  background: radial-gradient(ellipse at 50% 48%,
+    #100d13f1 0%,
+    #100d13e9 21%,
+    #100d13d6 33%,
+    #100d13ac 43%,
+    #100d1350 61%,
+    transparent 80%);
 }
 @keyframes rtk-wheel-turn { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
