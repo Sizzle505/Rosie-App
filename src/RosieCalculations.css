@@ -169,3 +169,46 @@
   padding-inline:0 !important;
   padding-top:0 !important;
 }
+
+/* Show the original complete header initially; pin a compact title only after
+   the artwork has scrolled away, preserving full calculator working area. */
+.rc-page .rc-pinned-dock {
+  position:fixed;
+  z-index:81;
+  top:env(safe-area-inset-top,0px);
+  left:50%;
+  width:min(100%,850px);
+  height:56px;
+  padding:0 clamp(15px,3vw,26px);
+  transform:translate(-50%,-10px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  pointer-events:none;
+  visibility:hidden;
+  opacity:0;
+  border:1px solid #c39958;
+  border-top:0;
+  border-radius:0 0 15px 15px;
+  background:linear-gradient(95deg,#381327f8,#131929fa 60%,#301223f8);
+  box-shadow:0 7px 19px #000b,inset 0 -1px #f2c87754;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  transition:transform .17s ease,opacity .17s ease;
+  color:#ffe6b6;
+}
+.rc-page .rc-pinned-dock.is-visible {
+  visibility:visible;
+  opacity:1;
+  transform:translate(-50%,0);
+}
+.rc-pinned-brand {font:normal 13px Georgia,serif;color:#cfa35e;}
+.rc-pinned-title {font:normal clamp(18px,4.8vw,26px) Georgia,serif;white-space:nowrap;text-shadow:0 1px 5px #000;}
+.rc-pinned-ornament {font-size:22px;color:#e7ba77;}
+@media(max-width:600px){
+  .rc-page .rc-pinned-dock {justify-content:center;padding-inline:clamp(50px,13vw,70px);}
+  .rc-pinned-brand,.rc-pinned-ornament {display:none;}
+  .rc-pinned-title {font-size:clamp(17px,5vw,23px);}
+}
+@media(prefers-reduced-motion:reduce){.rc-page .rc-pinned-dock{transition:none;}}
