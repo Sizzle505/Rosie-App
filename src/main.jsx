@@ -16,6 +16,7 @@ import "./captain-levels.css";
 import "./captain-cinematic-refinement.css";
 import "./barkbridge-assets.css";
 import "./aesthetic-polish.css";
+import "./requested-polish.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
@@ -649,6 +650,23 @@ function BarkbridgeSeal({ className = "" }) {
   );
 }
 
+function BarkbridgeCapEmblem() {
+  return (
+    <div className="barkbridge-cap-emblem" aria-hidden="true">
+      <svg viewBox="0 0 120 120" role="presentation">
+        <defs>
+          <linearGradient id="cap-velvet" x1="0" x2="1" y1="0" y2="1"><stop stopColor="#552a42" /><stop offset=".55" stopColor="#271426" /><stop offset="1" stopColor="#120c17" /></linearGradient>
+          <linearGradient id="cheese-gold" x1="0" x2="1" y1="0" y2="1"><stop stopColor="#fff0a2" /><stop offset=".48" stopColor="#e9b949" /><stop offset="1" stopColor="#b86f25" /></linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="#174d41" stroke="#e7c26c" strokeWidth="3" /><circle cx="60" cy="60" r="49" fill="none" stroke="#f7dc96" strokeOpacity=".36" />
+        <path d="M22 51 59 29l39 22-38 20Z" fill="url(#cap-velvet)" stroke="#f0cf7d" strokeWidth="2" /><path d="M43 59h34v11c-9 7-25 7-34 0Z" fill="#35182c" stroke="#e9c475" strokeWidth="2" /><path d="M79 47h15v23" fill="none" stroke="#e7c26c" strokeWidth="2" /><circle cx="94" cy="72" r="4" fill="#f6d67f" />
+        <path d="M39 88c2-7 8-9 12-5 3-4 10-2 12 5-3 4-8 6-12 6s-9-2-12-6Z" fill="#f0dec0" stroke="#6b3e32" strokeWidth="1.6" /><circle cx="49" cy="87" r="2" fill="#6b3e32" /><circle cx="54" cy="84" r="2" fill="#6b3e32" /><circle cx="59" cy="87" r="2" fill="#6b3e32" /><ellipse cx="54" cy="91" rx="3.5" ry="2.5" fill="#6b3e32" />
+        <path d="m70 82 20 12H70Z" fill="url(#cheese-gold)" stroke="#8f541d" strokeWidth="1.5" /><circle cx="78" cy="89" r="2.4" fill="#b77025" /><circle cx="84" cy="91" r="1.7" fill="#b77025" />
+      </svg>
+    </div>
+  );
+}
+
 function GraduateRosie() {
   return (
     <figure className="graduate-rosie" aria-label="Doctor Rosie celebrating graduation">
@@ -1033,6 +1051,7 @@ function CheeseMemoryGame() {
             </div>
 
             <div className="cheese-exam-title">
+              <BarkbridgeCapEmblem />
               <div className="cheese-eyebrow">PRACTICAL BOARD EXAMINATION</div>
               <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
               <p>A memory examination for serious cheese scholars.</p>
@@ -1341,6 +1360,7 @@ function CaptainYachtArt({ boost }) {
       <div className="captain-painted-spray" aria-hidden="true">
         <i /><i /><i /><i /><i /><i />
       </div>
+      {boost && <div className="captain-nitro" aria-hidden="true"><i /><i /><i /><i /></div>}
       <img
         className="captain-painted-sprite"
         src="/captain-rosie-ship.webp"
@@ -1895,12 +1915,6 @@ function CaptainRosieGame({ soundOn }) {
                 <>
                   <span>CAPTAIN ROSIE AWAITS YOUR ORDERS</span>
                   <strong>Take the Helm</strong>
-                  <p>Swipe or tap across three lanes. Build streaks to raise your multiplier. Fill the brass gauge and unleash Full Steam for double points.</p>
-                  <div className="start-mission">
-                    <span><b>1500</b> Admiral target</span>
-                    <span><b className="mini-cheese-count"><GoldenCheeseIcon compact /></b> Golden Cheese</span>
-                    <span><b>3</b> Hull integrity</span>
-                  </div>
                   <button type="button" onClick={startGame}>CAST OFF</button>
                 </>
               )}
