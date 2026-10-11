@@ -841,6 +841,7 @@ function CheeseMemoryGame() {
   const [ceremonyVisible, setCeremonyVisible] = useState(false);
   const pendingFlipRef = useRef(null);
   const graduationTimerRef = useRef(null);
+  const testWinTapsRef = useRef(0);
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
@@ -931,6 +932,7 @@ function CheeseMemoryGame() {
     setCeremonyVisible(false);
     setRosieMood("watching");
     setMessage("Doctor Rosie is ready. Show her what you remember.");
+    testWinTapsRef.current = 0;
   }
 
   function chooseMatchReaction(progress, finishing) {
@@ -959,6 +961,29 @@ function CheeseMemoryGame() {
   }
 
   function chooseCard(index) {
+    // Deliberately hidden test shortcut: tap the penultimate card five times
+    // consecutively to review the completed ceremony without playing a round.
+    if (index === deck.length - 2) {
+      testWinTapsRef.current += 1;
+      if (testWinTapsRef.current >= 5) {
+        window.clearTimeout(pendingFlipRef.current);
+        setStarted(true);
+        setLocked(true);
+        setOpenCards([]);
+        setMatched(CHEESES.map((cheese) => cheese.id));
+        setMoves((value) => Math.max(value, CHEESES.length));
+        setConsecutiveMisses(0);
+        setPreviousResolvedResult("match");
+        applyReaction("elated", "Testing complete. Doctor Rosie has awarded full distinction.");
+        window.navigator.vibrate?.([18, 24, 18, 24, 36]);
+        window.clearTimeout(graduationTimerRef.current);
+        graduationTimerRef.current = window.setTimeout(() => setCeremonyVisible(true), 180);
+        testWinTapsRef.current = 0;
+        return;
+      }
+    } else {
+      testWinTapsRef.current = 0;
+    }
     if (locked || complete || openCards.includes(index) || matched.includes(deck[index].id)) return;
     if (!started) setStarted(true);
 
@@ -1930,14 +1955,14 @@ function CaptainRosieGame({ soundOn }) {
             className={"boost-control" + (turbo >= 100 ? " boost-ready" : "") + (boost ? " boost-active" : "")}
             onClick={engageBoost}
             disabled={!running || turbo < 100 || boost}
-            aria-label={"Full Steam boost " + turbo + " percent charged"}
+            aria-label={"Treat Turbo boost " + turbo + " percent charged"}
           >
             <span className="boost-ring" style={{ "--boost": turbo + "%" }}>
               <b>{boost ? "2×" : turbo >= 100 ? "GO" : turbo}</b>
             </span>
             <span className="boost-copy">
-              <strong>{boost ? "FULL STEAM" : "CAPTAIN'S GAUGE"}</strong>
-              <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TO CHARGE"}</small>
+              <strong>TREAT TURBO</strong>
+              <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
             </span>
           </button>
 
