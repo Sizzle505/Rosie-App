@@ -119,3 +119,20 @@
 .remindersButtonArt b {font-size:clamp(13px,2.9vw,23px);letter-spacing:.035em;}
 .remindersButtonArt small{font-size:clamp(7px,1.2vw,10px); margin-top:4px;}
 @media(max-width:600px){.remindersWorld{min-height:80px}.remindersButtonArt{min-height:82px;border-radius:12px;}}
+
+/* Seventh Grand Salon destination: two matching entrances beneath the five games. */
+.remindersWorld { grid-column:span 3; margin-top:-5px; }
+.timekeeperWorld { grid-column:span 3; margin-top:-5px; }
+.timekeeperButtonArt {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  box-sizing:border-box; min-height:106px; height:100%; padding:8px 5px;
+  border:3px ridge #c99c59; border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0%,#453244,#191425 55%,#0b1222);
+  box-shadow:inset 0 0 12px #ffd68b80,0 5px 13px #0606119c;
+  font-family:Georgia,serif; color:#ffe8b4; line-height:1.08; letter-spacing:.04em;
+  text-shadow:0 1px 5px #000c;
+}
+.timekeeperEmblem { font-size:29px; line-height:1; color:#ffcb70; }
+.timekeeperButtonArt span:not(.timekeeperEmblem) { font-size:10px; }
+.timekeeperButtonArt b { font-size:clamp(13px,2.8vw,20px); }
+.timekeeperButtonArt small { font-size:clamp(7px,1.3vw,10px); margin-top:3px; }
