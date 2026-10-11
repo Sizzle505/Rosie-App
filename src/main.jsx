@@ -106,37 +106,35 @@ const FORTUNES = Object.entries(RESPONSES).flatMap(([tone, values]) =>
 );
 
 const QUICK_QUESTIONS = [
-  "Should I send the message, or let them wonder beautifully?",
-  "Would a tiny adventure be wise, or merely excellent?",
-  "Is this a real sign, or just the moon being dramatic?",
-  "Should I wear the impractical shoes in service of the vision?",
   "Would this problem improve after a walk and a snack?",
   "Should I say yes, then become mysteriously unavailable?",
   "Is it brave to order dessert first?",
-  "Would Rosie call this intuition, or snack-based optimism?",
-  "Should I make a list, or simply look confident near one?",
-  "Is this a good idea, or just excellent lighting?",
-  "Should I trust the plan my 10 p.m. self invented?",
   "Would a ceremonial cheese plate clarify the situation?",
   "Should I accept the invitation if there is a dog there?",
-  "Is my eyebrow raised for a reason?",
   "Would a nap count as a tactical reset?",
   "Should I make the responsible choice or the charming one?",
-  "Do I need a plan, or a small cape?",
-  "Should I buy the flowers before Tuesday gets lonely?",
-  "Would one more coffee make me brilliant or alarmingly fast?",
   "Is this person worthy of my best cheese?",
   "Should I follow this squirrel of an idea?",
   "Would Rosie consider this elegant mischief?",
-  "Should I leave before people say “one more drink”?",
-  "Would a tiny bow make this decision correct?",
   "Should I solve this now, or appoint Future Me as minister?",
   "Is today a good day for a glorious, unnecessary entrance?",
   "Should I bring a snack in case destiny is poorly catered?",
   "Would saying no be more powerful in a dramatic coat?",
   "Should I choose cozy, chaos, or both?",
-  "Is the universe asking me to rest, or just reboot my router?"
-]
+  "Should I answer now, or preserve the mystique until morning?",
+  "Would this be easier after I put on a better outfit?",
+  "Would Rosie approve of the level of drama here?",
+  "Should I go, provided there are appetizers?",
+  "Would a walk around the block improve my perspective?",
+  "Is the plan elegant enough to survive daylight?",
+  "Should I ask the question everyone is politely avoiding?",
+  "Would one small treat improve everyone’s judgment?",
+  "Would tomorrow-me thank me for doing this tonight?",
+  "Is there a graceful way to make this somebody else’s problem?",
+  "Is this a moment for poise, snacks, or both?",
+  "Is this worth my energy, or just a very shiny distraction?",
+  "Should I follow the sensible route, or the one with better snacks?"
+];
 
 const OMENS = {
   treat: ["cheddar", "peanut butter", "salmon", "chicken", "sweet potato", "a suspicious crumb"],
