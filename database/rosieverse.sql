@@ -29,7 +29,7 @@ create table if not exists public.rosie_notes (
  updated_at timestamptz not null default now()
 );
 create index if not exists rosie_notes_owner_idx on public.rosie_notes(owner_id,updated_at desc);
-create or replace function public.rosie_note_timestamp() returns trigger language plpgsql as $$
+create or replace function public.rosie_note_timestamp() returns trigger language plpgsql set search_path = '' as $
 begin new.updated_at = now(); return new; end; $$;
 drop trigger if exists rosie_notes_set_updated on public.rosie_notes;
 create trigger rosie_notes_set_updated before update on public.rosie_notes for each row execute function public.rosie_note_timestamp();
@@ -77,7 +77,7 @@ alter table public.rosie_notes enable row level security;
 alter table public.rosie_attempt_buckets enable row level security;
 -- No browser roles have policies. Server functions use the service role, kept exclusively on Vercel.
 revoke all on public.rosie_users,public.rosie_sessions,public.rosie_notes,public.rosie_attempt_buckets from anon,authenticated;
-revoke all on function public.rosie_rate_limit(text),public.rosie_pin_failure(uuid),public.rosie_pin_success(uuid) from public,anon,authenticated;
+revoke all on function public.rosie_rate_limit(text),public.rosie_pin_failure(uuid),public.rosie_pin_success(uuid),public.rosie_note_timestamp() from public,anon,authenticated;
 grant usage on schema public to service_role;
 grant all on public.rosie_users,public.rosie_sessions,public.rosie_notes,public.rosie_attempt_buckets to service_role;
-grant execute on function public.rosie_rate_limit(text),public.rosie_pin_failure(uuid),public.rosie_pin_success(uuid) to service_role;
+grant execute on function public.rosie_rate_limit(text),public.rosie_pin_failure(uuid),public.rosie_pin_success(uuid),public.rosie_note_timestamp() to service_role;
