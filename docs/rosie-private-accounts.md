@@ -4,7 +4,7 @@
 
 - Existing entertainment pages remain completely public.
 - The Notes & Ideas card in **Rosie's Reminders** prompts invited members to sign in. Sign-in is optional elsewhere.
-- Vercel functions under `/api/auth/*` and `/api/notes/*` verify the username/PIN, manage HttpOnly cookies, and enforce each note's owner on the server. The browser never receives a Supabase service-role key, PIN hash, or other user's note.
+- Vercel functions under `/api/auth/*` and `/api/notes/*` verify the username/PIN, manage HttpOnly cookies, and enforce each note's owner on the server. The browser never receives a Supabase secret key, PIN hash, or other user's note.
 - **Supabase PostgreSQL** is accessed only by the functions through its PostgREST HTTP interface. No additional NPM packages or public sign-up routes are necessary.
 - PIN hashes use salted Node scrypt. Six-digit PINs can be selected when creating/resetting an account.
 - Five consecutive incorrect PINs lock the account for 15 minutes. Successful authentication resets the counter. A separate persistent username/IP attempt bucket limits repeated guessing.
@@ -13,13 +13,11 @@
 
 ## Initial database setup
 
-1. Create a Supabase project under an account you control and locate its **Project URL** and **service_role secret key**. Do not use the public anon/publishable key as the service-role credential.
-2. In the Supabase SQL editor, execute `database/rosieverse.sql` once. This creates users, sessions, notes, lockout functions, throttling, indexes, and RLS restrictions.
-3. Add the following encrypted **server-only** environment variables to Vercel's project `rosie-app-git` for **Preview** and **Production** (and Development if needed):
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-4. Do **not** prefix either with `VITE_`; never expose the service-role key to browser code. Redeploy the preview so the serverless functions receive the variables.
-5. Run the admin script on a trusted computer with those two variables set in the shell's environment. Do not paste their values into tickets, commit messages, screenshots, or logs.
+1. **Already done October 11, 2026:** Supabase project **RosieVerse** (`xayfcfzkbmrsdxkivwtn`, US East) was provisioned. Its API URL is `https://xayfcfzkbmrsdxkivwtn.supabase.co`. The `rosieverse_private_accounts` migration and follow-up `lock_down_note_trigger` migration were applied. Security advisors found no warning-level issues after hardening; informational notices about RLS without policies are intentional. The migration SQL is also stored at `database/rosieverse.sql` for reproducibility. **Do not rerun setup blindly against populated data.**
+2. **Already done:** Vercel project `rosie-app-git` has `SUPABASE_URL` as an encrypted environment variable in **Preview**, restricted to branch `work/rosie-private-accounts-cloud-notes-20261011`. Production is intentionally untouched.
+3. **Remaining private credential:** From the [RosieVerse Supabase API Keys dashboard](https://supabase.com/dashboard/project/xayfcfzkbmrsdxkivwtn/settings/api-keys), copy or generate a **secret** key beginning `sb_secret_`, *not* a publishable key. Set `SUPABASE_SECRET_KEY` as an encrypted/sensitive **server-only** environment variable in [Vercel project settings](https://vercel.com/) scoped to **Preview** and only the feature branch. Do not set any `VITE_` key or expose the value in chat. Legacy JWT `service_role` keys via `SUPABASE_SERVICE_ROLE_KEY` are supported as a fallback, but new secret keys are preferred.
+4. Redeploy the feature-branch preview to make the new variable available to the serverless API functions. Do **not** configure production or merge to main yet.
+5. Run the admin script on a trusted computer with `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in the shell environment. Do not paste secret values into tickets, commits, screenshots, or logs.
 6. Create **two different accounts** and run manual live multiuser verification before approving any production merge.
 
 ### Account administration
