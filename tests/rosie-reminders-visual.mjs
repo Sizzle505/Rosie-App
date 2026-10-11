@@ -110,7 +110,19 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       const entry = await overflow();
       assert(entry.document <= width + 3, "horizontal overflow: " + JSON.stringify(entry));
       assert(entry.nav, "existing navigation missing");
-      assert.equal(await page.getByRole("button", {name:"Open Rosie’s Randomizers"}).count(), 1);
+      // Reminders belongs to Resources, not the five entertainment destinations.
+      const resourceNav = page.locator("nav.bottom-nav.resources-bottom-nav");
+      assert.equal(await resourceNav.count(), 1, "Resources-specific bottom nav missing");
+      assert.deepEqual(await resourceNav.locator("button").evaluateAll(nodes =>
+        nodes.map(n => n.getAttribute("aria-label"))), [
+        "Open Rosie’s Reminders",
+        "Open Rosie’s Timekeepers",
+        "Open Rosie’s Calculations"
+      ], "Resources navigation must contain only its three utility pages");
+      assert.equal(await page.getByRole("button", {name:"Open Rosie’s Randomizers"}).count(), 0,
+        "Entertainment tabs must not appear in Reminders bottom nav");
+      assert.equal(await page.getByRole("button", {name:"Open Rosie’s Resources hub"}).count(), 1,
+        "Resources hub shortcut missing beneath Home");
       const spacing = await page.locator(".rr-page").evaluate(node => {
         const grid = node.querySelector(".rr-feature-grid");
         return {
