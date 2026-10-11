@@ -210,14 +210,11 @@ function VaultTitleLaserAnimator() {
 
 
 const BASE_DRIFT_PX_PER_SECOND = 26;
-const INITIAL_DRIFT_DELAY_MS = 250;
+const INITIAL_DRIFT_DELAY_MS = 1000;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
-const DEFAULT_DRIFT_SPEED = 0.9 * 1.3;
-// iPhone Safari competes poorly with a continuous programmatic scroll while
-// it is decoding a large, image-forward wall.  Start stationary on touch
-// devices; the existing drift control still lets a visitor opt in.
-const MOBILE_DRIFT_SPEED = 0;
+const DEFAULT_DRIFT_SPEED = 3;
+const MOBILE_DRIFT_SPEED = 3;
 const DRAG_ACTIVATION_PX = 8;
 
 function defaultDriftSpeedForViewport() {
@@ -564,7 +561,7 @@ function RosieCardVaultWall() {
       <button type="button" className={`${styles.brakeButton} ${isBraked ? styles.brakeButtonActive : ''}`} aria-label={isBraked ? 'Resume ambient card drift' : 'Pause ambient card drift'} aria-pressed={isBraked} title={isBraked ? 'Release brake' : 'Brake drift'} onPointerDown={event => event.stopPropagation()} onClick={toggleBrake}><span aria-hidden="true">{isBraked ? '▶' : 'Ⅱ'}</span></button>
       <span className={styles.speedReadout}>{speedLabel}</span>
       <div className={styles.rangeShell}>
-        <input className={styles.speedRange} id="rosie-vault-drift-slider" type="range" min="-3.25" max="3.25" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
+        <input className={styles.speedRange} id="rosie-vault-drift-slider" type="range" min="-4" max="4" step="0.025" value={speed} aria-label="Card drift speed and direction; center is zero" onChange={event => {
           const nextSpeed = Number(event.target.value);
           setSpeed(nextSpeed);
           if (nextSpeed !== 0) setIsBraked(false);
