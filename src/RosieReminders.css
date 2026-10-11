@@ -6,34 +6,6 @@
 .rr-hero {position:relative;max-width:850px;margin:auto;min-height:180px;background:linear-gradient(150deg,#1b1824,#5a302c 45%,#100e1d);overflow:hidden;}
 .rr-hero img {display:block;width:100%;height:auto;min-height:220px;object-fit:cover;position:relative;z-index:1;}
 .rr-hero-fallback {position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse,#57362e,#171426 75%);}
-.rr-sticky-dock {
-  position:sticky;top:env(safe-area-inset-top, 0px);z-index:81;
-  height:0;max-width:850px;margin:0 auto;pointer-events:none;
-}
-.rr-sticky-banner {
-  display:flex;align-items:center;justify-content:space-between;gap:9px;
-  height:56px;padding:0 clamp(12px,3vw,24px);
-  border:1px solid #b99254;border-top:0;border-radius:0 0 16px 16px;
-  background:linear-gradient(100deg,rgba(52,12,31,.985),rgba(12,19,34,.985) 62%,rgba(44,12,27,.985));
-  box-shadow:0 7px 19px #000b,inset 0 -1px #f2c87754;
-  color:#ffe5b0;opacity:0;transform:translateY(-9px);
-  transition:opacity .17s ease,transform .17s ease;
-}
-.rr-sticky-dock.is-visible .rr-sticky-banner {opacity:1;transform:translateY(0);}
-.rr-sticky-brand {font:normal 13px Georgia,serif;color:#cfa35e;white-space:nowrap;}
-.rr-sticky-title {font:normal clamp(18px,4.8vw,27px) Georgia,serif;white-space:nowrap;}
-.rr-sticky-crown {font-size:22px;color:#e9bb70;}
-@media(max-width:600px){
-  /* Home navigation floats over the left edge on iPhone: keep the compact title clear. */
-  .rr-sticky-banner {
-    justify-content:center;padding-inline:clamp(48px,12vw,66px);
-    background:linear-gradient(95deg,#310e24,#10182b 60%,#290e20);
-    backdrop-filter:blur(14px);
-  }
-  .rr-sticky-brand,.rr-sticky-crown {display:none;}
-  .rr-sticky-title {font-size:clamp(17px,5.1vw,23px);text-align:center;}
-}
-@media(max-width:350px){.rr-sticky-title{font-size:17px}}
 .rr-hero-fallback small{letter-spacing:.35em;color:#fad284;}.rr-hero-fallback h1 {font:normal clamp(30px,7vw,54px) Georgia,serif;color:#ffedc6;margin:14px 0 0}.rr-hero-fallback p {margin:8px;color:#ecc27b;}
 .rr-content {max-width:850px;margin:auto;padding:0 clamp(10px,3vw,24px);}
 .rr-tabs {display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;}
@@ -148,3 +120,24 @@
 .rr-page{padding-bottom:0;}
 .rr-storage-note{margin:6px auto 0;max-width:550px;padding:0 6px 5px;}
 @media(prefers-reduced-motion:reduce){.rr-page * {scroll-behavior:auto!important;transition:none!important;}}
+
+/* Pin the ACTUAL approved Rosie banner, not a replacement title bar.
+   Sticky stays in the document flow and anchors only after reaching the top. */
+.app-shell.page-reminders main.rr-page > header.rr-hero {
+  /* Decorative art stays pinned, but must never intercept interactive controls beneath. */
+  pointer-events: none;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 81;
+  width: 100%;
+  max-width: 850px;
+  margin-inline: auto;
+  box-shadow: 0 5px 15px rgba(6,5,11,.42);
+}
+.app-shell.page-reminders .rr-hero picture,
+.app-shell.page-reminders .rr-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

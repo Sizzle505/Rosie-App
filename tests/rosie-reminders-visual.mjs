@@ -143,28 +143,40 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(spacing.rowGap <= 5, "Too much space between illustrated rows: "+JSON.stringify(spacing));
       assert(spacing.pagePadding <= 32 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
       assert(spacing.outerNavPadding >= 60, "Footer would be covered by fixed navigation");
+      // The complete APPROVED image banner, not a text-only replacement,
+      // must remain visible and fixed at the viewport top during scrolling.
+      assert.equal(await page.locator(".rr-sticky-dock").count(),0,
+        "Old substitute text dock must be removed");
       await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
-      await page.waitForTimeout(140);
-      assert(!(await page.locator(".rr-sticky-dock").evaluate(n=>n.classList.contains("is-visible"))),
-        "Compact header visible before reaching the top");
-      await page.screenshot({path: dir + "/" + name + "-empty.png", fullPage:true});
+      await page.waitForTimeout(150);
+      const heroAtEntry = await page.locator(".rr-hero").evaluate(el => ({
+        position:getComputedStyle(el).position,
+        top:el.getBoundingClientRect().top,
+        picture:Boolean(el.querySelector("picture img")),
+        height:el.getBoundingClientRect().height
+      }));
+      assert.equal(heroAtEntry.position,"sticky","Approved Reminders artwork must itself be sticky");
+      assert(heroAtEntry.picture && heroAtEntry.height>120, "Actual illustrated Rosie header missing");
+      await page.screenshot({path:dir + "/" + name + "-empty.png",fullPage:true});
       await page.evaluate(() => {
         const hero=document.querySelector(".rr-hero");
-        window.scrollTo({top: window.scrollY + hero.getBoundingClientRect().bottom + 85, behavior:"instant"});
+        window.scrollTo({top:hero.getBoundingClientRect().height + 140,behavior:"instant"});
       });
-      await page.waitForFunction(() => document.querySelector(".rr-sticky-dock")?.classList.contains("is-visible"));
-      const sticky = await page.locator(".rr-sticky-dock").evaluate(el => ({
-        top: el.getBoundingClientRect().top,
-        position: getComputedStyle(el).position,
-        title: el.querySelector(".rr-sticky-title")?.textContent,
-        visible: getComputedStyle(el.querySelector(".rr-sticky-banner")).opacity
+      await page.waitForTimeout(230);
+      const pinned = await page.locator(".rr-hero").evaluate(el=>({
+        top:el.getBoundingClientRect().top,
+        position:getComputedStyle(el).position,
+        imgVisible:el.querySelector("picture img").getBoundingClientRect().height>120,
+        scroll:window.scrollY
       }));
-      assert.equal(sticky.position, "sticky", "Reminders header must stick on scroll");
-      assert(sticky.top >= -1 && sticky.top <= 90, "Sticky header out of view: "+JSON.stringify(sticky));
-      assert(sticky.title === "Rosie’s Reminders", "Sticky header title incorrect");
+      assert(pinned.scroll>100,"Reminders should scroll past the banner while image remains pinned");
+      assert.equal(pinned.position,"sticky","Approved Reminders image no longer sticky");
+      assert(pinned.top>=-1 && pinned.top<=90,
+        "Original Rosie artwork did not stay pinned: "+JSON.stringify(pinned));
+      assert(pinned.imgVisible,"Original Rosie header picture disappeared on scroll");
       await page.screenshot({path:dir + "/" + name + "-sticky.png"});
       await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
-      await page.waitForFunction(() => !document.querySelector(".rr-sticky-dock")?.classList.contains("is-visible"));
+      await page.waitForTimeout(130);
 
       await page.getByRole("button", {name:/Add Reminder/i}).click();
       await page.getByLabel("Title", {exact:true}).fill("Test Rosie reminder");

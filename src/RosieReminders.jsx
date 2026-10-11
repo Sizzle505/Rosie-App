@@ -59,8 +59,6 @@ export default function RosieReminders() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [form, setForm] = useState(() => blankItem("tasks"));
   const [heroLoaded, setHeroLoaded] = useState(false);
-  const heroRef = useRef(null);
-  const [headerDocked, setHeaderDocked] = useState(false);
   const [storageError, setStorageError] = useState("");
   const [gratitudeInput, setGratitudeInput] = useState("");
   const [goalInput, setGoalInput] = useState("");
@@ -71,29 +69,6 @@ export default function RosieReminders() {
     try { localStorage.setItem(KEY, JSON.stringify(store)); setStorageError(""); }
     catch { setStorageError("This device could not save your changes. Export a backup before leaving."); }
   }, [store]);
-
-  // The large Rosie illustration scrolls naturally; a slim branded header takes over
-  // only once the illustration has reached the top and passed out of view.
-  useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      if (!heroRef.current) return;
-      const docked = heroRef.current.getBoundingClientRect().bottom <= 1;
-      setHeaderDocked(previous => previous === docked ? previous : docked);
-    };
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    update();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
 
   const shown = useMemo(() => {
     const source = section === "today" ? store.items.filter(x => isScheduled(x, selectedDate))
@@ -198,7 +173,7 @@ export default function RosieReminders() {
   }, [editorOpen]);
 
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
-    <header className="rr-hero" ref={heroRef}>
+    <header className="rr-hero">
       {!heroLoaded && <div className="rr-hero-fallback"><small>ROSIEVERSE</small><h1>Rosie’s Reminders</h1><p>Personal Organizer</p></div>}
       <picture>
         <source media="(min-width: 760px)" srcSet="/rosieverse/reminders/hero-desktop.webp" />
@@ -207,14 +182,6 @@ export default function RosieReminders() {
       </picture>
       <h1 className="rr-screen-reader">Rosie’s Reminders - Personal Organizer</h1>
     </header>
-    <div className={"rr-sticky-dock"+(headerDocked ? " is-visible" : "")} aria-hidden={!headerDocked}>
-      <div className="rr-sticky-banner">
-        <span className="rr-sticky-brand">RosieVerse</span>
-        <span className="rr-sticky-title">Rosie’s Reminders</span>
-        <span className="rr-sticky-crown" aria-hidden="true">♛</span>
-      </div>
-    </div>
-
     <section className="rr-content">
       <div className="rr-tabs" role="tablist" aria-label="Organizer view">
         <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
