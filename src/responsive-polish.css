@@ -861,3 +861,9 @@ body {
     letter-spacing: .105em;
   }
 }
+
+/* Rosie Fortune: move the entire starting composition down by precisely 20px
+   at all viewport sizes, without scaling art or changing bottom navigation. */
+.app-shell.page-fortune > main.fortune-page {
+  margin-top:20px;
+}
