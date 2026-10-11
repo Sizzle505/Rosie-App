@@ -139,7 +139,47 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         await page.goto("http://127.0.0.1:5173/#resources",{waitUntil:"networkidle"});
         await page.locator(".rr-hub-button").first().waitFor();
       }
-      results.push({engine,width,height,headerNatural:[geometry.nativeWidth,geometry.nativeHeight],seam:geometry.frame.top-geometry.hero.bottom,displayInset:geometry.display.right-geometry.value.right,passed:true});
+      // Grand Salon approved illustration must be full width, not the previous two-column tile.
+      await page.goto("http://127.0.0.1:5173/#home",{waitUntil:"networkidle"});
+      const salonNav = page.locator('nav[aria-label="RosieVerse destinations"]');
+      const resourceTile = salonNav.getByRole("button",{name:"Open Rosie’s Resources"});
+      await resourceTile.locator("img").evaluate(async img => {if (!img.complete) await img.decode();});
+      const tileGeometry = await resourceTile.evaluate(el => {
+        const r=el.getBoundingClientRect(), nav=el.parentElement.getBoundingClientRect();
+        const img=el.querySelector("img");
+        return {width:r.width,navWidth:nav.width,left:r.left,right:r.right,
+          imageWidth:img.getBoundingClientRect().width,naturalWidth:img.naturalWidth,
+          currentSrc:img.currentSrc};
+      });
+      assert(tileGeometry.currentSrc.endsWith("/rosieverse/buttons/resources.png"),
+        "wrong Grand Salon Resources button asset");
+      assert.equal(tileGeometry.naturalWidth,2172,"original button art was replaced or missing");
+      assert(tileGeometry.width>=tileGeometry.navWidth*.93 && Math.abs(tileGeometry.width-tileGeometry.imageWidth)<=2,
+        "Resources button is still a tiny two-column tile: "+JSON.stringify(tileGeometry));
+      assert(tileGeometry.left>=-1 && tileGeometry.right<=width+1,
+        "full-width Resources tile overflows iPhone");
+      await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
+
+      await resourceTile.click();
+      await page.waitForURL("**/#resources");
+      const resourceNav = page.locator("nav.resources-bottom-nav");
+      assert.equal(await resourceNav.locator("button").count(),3,"Resources needs 3 utility nav tabs");
+      assert.deepEqual(await resourceNav.locator("button").evaluateAll(nodes=>
+        nodes.map(n=>n.getAttribute("aria-label"))),[
+          "Open Rosie’s Reminders","Open Rosie’s Timekeepers","Open Rosie’s Calculations"
+        ],"Resources bottom nav destinations are incorrect");
+      await resourceNav.getByRole("button",{name:"Open Rosie’s Timekeepers"}).click();
+      await page.waitForURL("**/#timekeeper");
+      assert.equal(await page.getByRole("button",{name:"Open Cheese Board Exam"}).count(),0,
+        "Entertainment nav leaked into Timekeepers");
+      await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).click();
+      await page.waitForURL("**/#resources");
+      await page.goto("http://127.0.0.1:5173/#fortune",{waitUntil:"networkidle"});
+      assert.equal(await page.getByRole("button",{name:"Open Cheese Board Exam"}).count(),1,
+        "ordinary entertainment nav changed");
+      await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).click();
+      await page.waitForURL("**/#resources");
+            results.push({engine,width,height,headerNatural:[geometry.nativeWidth,geometry.nativeHeight],seam:geometry.frame.top-geometry.hero.bottom,displayInset:geometry.display.right-geometry.value.right,passed:true});
       await context.close();
       console.log("PASS",name,JSON.stringify(results.at(-1)));
     }
