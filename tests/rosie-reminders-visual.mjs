@@ -58,6 +58,27 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         assert(geometry.ratio > 2 && geometry.ratio < 3.5, "button ratio unexpected: " + section);
         assert(await tile.getAttribute("aria-label").then(label => label.includes("Open ")), "button inaccessible");
       }
+      // Original mockup: two compact button columns, followed by a wide fifth.
+      const gridLayout = await page.locator(".rr-feature-grid").evaluate(grid => {
+        const metrics = section => grid.querySelector(".rr-feature-"+section).getBoundingClientRect();
+        const tasks=metrics("tasks"), shopping=metrics("shopping"), appointments=metrics("appointments");
+        const notes=metrics("notes"), goals=metrics("goals");
+        return {columns:getComputedStyle(grid).gridTemplateColumns,
+          sameTopRow:Math.abs(tasks.top-shopping.top)<3,
+          sameSecondRow:Math.abs(appointments.top-notes.top)<3,
+          goalsBelow:goals.top>appointments.bottom,
+          goalsWider:goals.width>tasks.width*1.8,
+          totalHeight:grid.getBoundingClientRect().height,
+          minButtonWidth:Math.min(tasks.width,shopping.width,appointments.width,notes.width)
+        };
+      });
+      assert(gridLayout.sameTopRow && gridLayout.sameSecondRow && gridLayout.goalsBelow,
+        "Not the approved 2x2-plus-wide arrangement: "+JSON.stringify(gridLayout));
+      assert(gridLayout.goalsWider, "Goals & Gratitude does not span the row");
+      if (width<600) {
+        assert(gridLayout.totalHeight < 400, "Mobile tool buttons too tall: "+JSON.stringify(gridLayout));
+        assert(gridLayout.minButtonWidth >= 135, "Mobile button artwork too narrow: "+JSON.stringify(gridLayout));
+      }
       const overflow = () => page.evaluate(() => ({
         document: document.documentElement.scrollWidth, body: document.body.scrollWidth,
         viewport: window.innerWidth, nav: Boolean(document.querySelector(".bottom-nav"))
