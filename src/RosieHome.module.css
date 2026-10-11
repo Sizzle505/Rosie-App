@@ -119,3 +119,16 @@
 .remindersButtonArt b {font-size:clamp(13px,2.9vw,23px);letter-spacing:.035em;}
 .remindersButtonArt small{font-size:clamp(7px,1.2vw,10px); margin-top:4px;}
 @media(max-width:600px){.remindersWorld{min-height:80px}.remindersButtonArt{min-height:82px;border-radius:12px;}}
+
+/* The two new practical worlds share the last Salon row. */
+.remindersWorld { grid-column:2 / span 2; }
+.calculationsWorld { grid-column:4 / span 2; margin-top:-5px; }
+.calculationsButtonArt { box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:106px;height:100%;
+  border:3px ridge #d7a750;border-radius:18px;background:radial-gradient(ellipse at 50% 4%,#594027,#101b29 58%,#0c0c15);
+  box-shadow:inset 0 0 13px #e9c3717d,0 5px 13px #020309ad;color:#ffe5ac;font-family:Georgia,serif;
+  line-height:1.08;letter-spacing:.06em;text-shadow:0 1px 5px #000b;}
+.calculationsCrest {font-size:24px;color:#f4c672;}
+.calculationsButtonArt span:not(.calculationsCrest){font-size:10px;}
+.calculationsButtonArt b {font-size:clamp(11px,2.75vw,22px);letter-spacing:.025em;}
+.calculationsButtonArt small {font-size:clamp(7px,1.2vw,10px);margin-top:4px;}
+@media(max-width:600px){.calculationsWorld{min-height:80px}.calculationsButtonArt{min-height:82px;border-radius:12px;}}
