@@ -110,6 +110,13 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       // Rosie Resources uses the original page artworks as three equal interactive thirds.
       await page.goto("http://127.0.0.1:5173/#resources",{waitUntil:"networkidle"});
       await page.locator(".rr-hub-panel").first().waitFor();
+      // WebKit can mark the page network-idle before its large source-art images
+      // finish decoding (most noticeable after rotating to landscape).
+      await page.locator(".rr-hub-panel img").evaluateAll(async images => {
+        await Promise.all(images.map(async img => {
+          if (!img.complete || img.naturalWidth === 0) await img.decode();
+        }));
+      });
       const triptych=await page.locator(".rr-hub-panel").evaluateAll(elements=>elements.map(el=>{
         const rect=el.getBoundingClientRect();
         const img=el.querySelector("img");
