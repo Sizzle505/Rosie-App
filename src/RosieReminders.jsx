@@ -53,7 +53,7 @@ function calendarDays(month) {
 export default function RosieReminders() {
   const [store, setStore] = useState(readStore);
   const [section, setSection] = useState("today");
-  const [tab, setTab] = useState("today");
+  const [tab, setTab] = useState("calendar");
   const [selectedDate, setSelectedDate] = useState(dateKey);
   const [month, setMonth] = useState(() => dateObj(dateKey()));
   const [editorOpen, setEditorOpen] = useState(false);
@@ -257,8 +257,8 @@ export default function RosieReminders() {
           </div>
         </>}
         {(section === "today" || ["tasks","shopping","appointments"].includes(section)) && <>
-          <div className="rr-rows">
-            {shown.length ? shown.map(item => <div key={item.id} className={"rr-entry" + (isDone(item, selectedDate) ? " is-done" : "")}>
+          {shown.length > 0 && <div className="rr-rows">
+            {shown.map(item => <div key={item.id} className={"rr-entry" + (isDone(item, selectedDate) ? " is-done" : "")}>
               <button type="button" className="rr-check" aria-label={(isDone(item, selectedDate) ? "Mark incomplete: " : "Complete: ") + item.title}
                 aria-pressed={isDone(item, selectedDate)} onClick={() => toggleDone(item)}>{isDone(item, selectedDate) ? "✓" : ""}</button>
               <div className="rr-entry-content"><strong>{item.title}</strong>
@@ -267,8 +267,8 @@ export default function RosieReminders() {
                     item.time || "", item.repeat !== "none" ? item.repeat : "", item.detail].filter(Boolean).join(" · ")}</small>}
               </div>{item.priority === "high" && <span className="rr-star" aria-label="High priority">★</span>}
               <button type="button" className="rr-edit" onClick={() => openEdit(item)} aria-label={"Edit "+item.title}>›</button>
-            </div>) : <p className="rr-empty">Nothing scheduled here yet. Rosie approves of a clear desk.</p>}
-          </div>
+            </div>)}
+          </div>}
           {featured && <div className="rr-priority"><span>★</span><div><b>Top Priority</b><p>{featured.title}</p></div></div>}
           <button type="button" className="rr-primary" onClick={() => openNew()}>＋ Add {section === "appointments" ? "Appointment" : section === "shopping" ? "Shopping Item" : "Reminder"}</button>
         </>}
