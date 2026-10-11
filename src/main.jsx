@@ -1982,7 +1982,7 @@ function CaptainRosieGame({ soundOn }) {
             aria-label={"Treat Turbo boost " + turbo + " percent charged"}
           >
             <span className="boost-ring" style={{ "--boost": turbo + "%" }}>
-              {boost ? <svg className="boost-bolt" viewBox="0 0 48 48" aria-hidden="true"><path d="M28.5 3 9.5 27.4h12.6L19.4 45l19.1-25.4H25.9L28.5 3Z"/></svg> : <b>{turbo >= 100 ? "GO" : turbo}</b>}
+              {(boost || turbo >= 100) ? <svg className="boost-bolt" viewBox="0 0 48 48" aria-hidden="true"><path d="M28.5 3 9.5 27.4h12.6L19.4 45l19.1-25.4H25.9L28.5 3Z"/></svg> : <b>{turbo}</b>}
             </span>
             <span className="boost-copy">
               <strong>TREAT TURBO</strong>
