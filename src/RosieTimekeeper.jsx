@@ -138,7 +138,7 @@ export default function RosieTimekeeper() {
             <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
           </div>
-          <output className="rtk-time" aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
+          <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
             {centiseconds !== null && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{centiseconds}</span>}
           </output>
