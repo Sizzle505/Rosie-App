@@ -58,6 +58,15 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         assert(geometry.ratio > 2 && geometry.ratio < 3.5, "button ratio unexpected: " + section);
         assert(await tile.getAttribute("aria-label").then(label => label.includes("Open ")), "button inaccessible");
       }
+      // The approved button arrangement now balances the tall shopping banner
+      // with Notes on the first row, and the task banner with Appointments below.
+      const order = await page.locator(".rr-feature-grid > button").evaluateAll(nodes =>
+        nodes.map(node => [...node.classList].find(cls => cls.startsWith("rr-feature-") && cls !== "rr-feature-grid"))
+      );
+      assert.deepEqual(order, [
+        "rr-feature-notes", "rr-feature-shopping", "rr-feature-appointments",
+        "rr-feature-tasks", "rr-feature-goals"
+      ], "Incorrect illustrated button order");
       // Original mockup: two compact button columns, followed by a wide fifth.
       const gridLayout = await page.locator(".rr-feature-grid").evaluate(grid => {
         const metrics = section => grid.querySelector(".rr-feature-"+section).getBoundingClientRect();
@@ -88,7 +97,40 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(entry.document <= width + 3, "horizontal overflow: " + JSON.stringify(entry));
       assert(entry.nav, "existing navigation missing");
       assert.equal(await page.getByRole("button", {name:"Open Rosie’s Randomizers"}).count(), 1);
+      const spacing = await page.locator(".rr-page").evaluate(node => {
+        const grid = node.querySelector(".rr-feature-grid");
+        return {
+          rowGap: parseFloat(getComputedStyle(grid).rowGap),
+          pagePadding: parseFloat(getComputedStyle(node).paddingBottom),
+          footerMargin: parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom),
+          outerNavPadding: parseFloat(getComputedStyle(document.querySelector(".app-shell")).paddingBottom)
+        };
+      });
+      assert(spacing.rowGap <= 5, "Too much space between illustrated rows: "+JSON.stringify(spacing));
+      assert(spacing.pagePadding < 10 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
+      assert(spacing.outerNavPadding >= 60, "Footer would be covered by fixed navigation");
+      await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
+      await page.waitForTimeout(140);
+      assert(!(await page.locator(".rr-sticky-dock").evaluate(n=>n.classList.contains("is-visible"))),
+        "Compact header visible before reaching the top");
       await page.screenshot({path: dir + "/" + name + "-empty.png", fullPage:true});
+      await page.evaluate(() => {
+        const hero=document.querySelector(".rr-hero");
+        window.scrollTo({top: window.scrollY + hero.getBoundingClientRect().bottom + 85, behavior:"instant"});
+      });
+      await page.waitForFunction(() => document.querySelector(".rr-sticky-dock")?.classList.contains("is-visible"));
+      const sticky = await page.locator(".rr-sticky-dock").evaluate(el => ({
+        top: el.getBoundingClientRect().top,
+        position: getComputedStyle(el).position,
+        title: el.querySelector(".rr-sticky-title")?.textContent,
+        visible: getComputedStyle(el.querySelector(".rr-sticky-banner")).opacity
+      }));
+      assert.equal(sticky.position, "sticky", "Reminders header must stick on scroll");
+      assert(sticky.top >= -1 && sticky.top <= 90, "Sticky header out of view: "+JSON.stringify(sticky));
+      assert(sticky.title === "Rosie’s Reminders", "Sticky header title incorrect");
+      await page.screenshot({path:dir + "/" + name + "-sticky.png"});
+      await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
+      await page.waitForFunction(() => !document.querySelector(".rr-sticky-dock")?.classList.contains("is-visible"));
 
       await page.getByRole("button", {name:/Add Reminder/i}).click();
       await page.getByLabel("Title", {exact:true}).fill("Test Rosie reminder");
