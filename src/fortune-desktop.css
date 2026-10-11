@@ -1269,3 +1269,21 @@
   }
   .fortune-page .fortune-sample-heading{font-size:11px;letter-spacing:.08em;}
 }
+
+/* iPhone sticky cabinet may remain above the scenic backdrop, but the actual
+   question form must be in front of it so Ask and sample choices receive taps. */
+@media(max-width:720px){
+  .page-fortune .fortune-console > .question-card{
+    position:relative !important;
+    z-index:24 !important;
+    isolation:isolate;
+    scroll-margin-block-end:calc(105px + env(safe-area-inset-bottom,0px));
+  }
+  .page-fortune .fortune-console > .machine{z-index:12 !important;}
+  .page-fortune .fortune-console .ask-button,
+  .page-fortune .fortune-console .quick-prompts button {
+    position:relative;
+    z-index:2;
+    touch-action:manipulation;
+  }
+}
