@@ -214,7 +214,10 @@ const INITIAL_DRIFT_DELAY_MS = 250;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
 const DEFAULT_DRIFT_SPEED = 0.9 * 1.3;
-const MOBILE_DRIFT_SPEED = DEFAULT_DRIFT_SPEED * 2.5;
+// iPhone Safari competes poorly with a continuous programmatic scroll while
+// it is decoding a large, image-forward wall.  Start stationary on touch
+// devices; the existing drift control still lets a visitor opt in.
+const MOBILE_DRIFT_SPEED = 0;
 const DRAG_ACTIVATION_PX = 8;
 
 function defaultDriftSpeedForViewport() {
