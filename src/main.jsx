@@ -1466,6 +1466,7 @@ function CaptainRosieGame({ soundOn }) {
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
   const boostRef = useRef(false);
+  const boostDrainTimerRef = useRef(0);
   const streakRef = useRef(0);
   const comboRef = useRef(1);
   const touchStartRef = useRef(null);
@@ -1554,6 +1555,7 @@ function CaptainRosieGame({ soundOn }) {
     if (finishedRef.current) return;
     finishedRef.current = true;
     boostRef.current = false;
+    window.clearInterval(boostDrainTimerRef.current);
     setBoost(false);
     setRunning(false);
     setEnded(true);
@@ -1566,6 +1568,7 @@ function CaptainRosieGame({ soundOn }) {
     if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
     boostRef.current = false;
+    window.clearInterval(boostDrainTimerRef.current);
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
@@ -1595,16 +1598,26 @@ function CaptainRosieGame({ soundOn }) {
     if (!running || boostRef.current || turbo < 100) return;
     boostRef.current = true;
     setBoost(true);
-    setTurbo(0);
+    // The active boost visibly burns off from right to left; pickups cannot
+    // refill the meter again until this six-second run has ended.
+    const duration = 6000;
+    const startedAt = performance.now();
+    window.clearInterval(boostDrainTimerRef.current);
+    boostDrainTimerRef.current = window.setInterval(() => {
+      const elapsed = performance.now() - startedAt;
+      setTurbo(Math.max(0, Math.ceil(100 - elapsed / duration * 100)));
+    }, 80);
     setMessage("FULL STEAM. Captain Rosie's golden wake doubles every score for six seconds.");
     pulse("boost");
     captainTone("boost");
     window.navigator.vibrate?.([20, 25, 20, 25, 35]);
     window.setTimeout(() => {
+      window.clearInterval(boostDrainTimerRef.current);
       boostRef.current = false;
       setBoost(false);
+      setTurbo(0);
       setMessage("Boost complete. Return to elegant, responsible yacht speeds.");
-    }, 6000);
+    }, duration);
   }
 
   function onCoursePointerDown(event) {
@@ -1742,7 +1755,7 @@ function CaptainRosieGame({ soundOn }) {
         setStreak(streakRef.current);
         setCombo(comboRef.current);
         setBestStreak((current) => Math.max(current, streakRef.current));
-        setTurbo((current) => Math.min(100, current + turboDelta));
+        if (!boostRef.current) setTurbo((current) => Math.min(100, current + turboDelta));
         if (cheeseGain) setCheeses((current) => current + cheeseGain);
         const phrase = lastHit === "cheese"
           ? "Golden Cheese aboard. Rosie has inventoried it as priceless cargo."
@@ -1962,6 +1975,7 @@ function CaptainRosieGame({ soundOn }) {
           <button
             type="button"
             className={"boost-control" + (turbo >= 100 ? " boost-ready" : "") + (boost ? " boost-active" : "")}
+            style={{ "--turbo-fill": turbo + "%" }}
             onClick={engageBoost}
             disabled={!running || turbo < 100 || boost}
             aria-label={"Treat Turbo boost " + turbo + " percent charged"}
@@ -2072,20 +2086,24 @@ function App() {
       setFortuneScrolled(false);
       return undefined;
     }
+    // A Fortune visit always opens in its composed safe-area layout. It only
+    // becomes pinned after the visitor actually starts to scroll.
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    setFortuneScrolled(false);
     const updateOraclePosition = () => setFortuneScrolled(window.scrollY > 24);
-    updateOraclePosition();
     window.addEventListener("scroll", updateOraclePosition, { passive: true });
     return () => window.removeEventListener("scroll", updateOraclePosition);
   }, [page]);
 
   function navigateTo(nextPage) {
     if (!validPages.includes(nextPage)) return;
+    setFortuneScrolled(false);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (window.location.hash !== `#${nextPage}`) {
       window.location.hash = nextPage;
     } else {
       setPage(nextPage);
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function reshufflePrompts() {
