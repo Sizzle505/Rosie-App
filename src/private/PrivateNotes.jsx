@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { rosieRequest, useRosieAccount } from "./AccountContext.jsx";
 import styles from "./PrivateNotes.module.css";
 
-function AccountChip() {
+function AccountChip({ beforeLogout }) {
   const { user, logout } = useRosieAccount();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   if (!user) return null;
   async function signOut() {
     setBusy(true); setError("");
-    try { await logout(); } catch (issue) { setError(issue.message); }
+    try { await beforeLogout?.(); await logout(); } catch (issue) { setError(issue.message); }
     finally { setBusy(false); }
   }
   return <div className={styles.accountArea}>
@@ -226,7 +226,11 @@ function Notebook({ onCountChange }) {
   };
   const active = notes.find(n => n.id === selected);
   return <div className={styles.ledger}>
-    <AccountChip />
+    <AccountChip beforeLogout={async () => {
+      const ids = [...new Set([...pending.current.keys(), ...inflight.current.keys()])];
+      await Promise.all(ids.map(id => flush(id)));
+      if (pending.current.size) throw new Error("Rosie could not save your changes. Please retry before signing out.");
+    }} />
     <div className={styles.ledgerHeader}><div><span className={styles.eyebrow}>ROSIE’S PRIVATE LEDGER</span>
       <h3>Notes &amp; Ideas</h3><p>Collected thoughts, safely tucked away in the cloud.</p></div>
       <button type="button" className={styles.newNote} disabled={creating || loading} onClick={add}>
