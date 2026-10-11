@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import { calculatorReducer, initialCalculator, keyFromKeyboard, formatCalculatorEntry } from "./calculationsEngine.js";
+import React, { useEffect, useReducer, useState } from "react";
+import { calculatorReducer, initialCalculator, keyFromKeyboard } from "./calculationsEngine.js";
+import AssetCalculator from "./AssetCalculator.jsx";
 import "./RosieCalculations.css";
 
 const TOOLS = [
@@ -10,12 +11,6 @@ const TOOLS = [
   { id: "percent", title: "Percentages & Discounts", detail: "Savings, increases and portions", mark: "%" },
   { id: "loan", title: "Loan & Interest", detail: "Payments and total interest", mark: "◈" },
   { id: "currency", title: "Currency Converter", detail: "Use your own exchange rate", mark: "¤" }
-];
-const KEYROWS = [
-  ["7", "8", "9", "×"],
-  ["4", "5", "6", "−"],
-  ["1", "2", "3", "+"],
-  ["0", ".", "="]
 ];
 const UNIT_SETS = {
   Length: { m: 1, km: 1000, mi: 1609.344, ft: .3048, in: .0254, cm: .01, yd: .9144 },
@@ -115,12 +110,12 @@ function ToolPanel({ active, values, update }) {
 
 export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
-  const [tool, setTool] = useState("calculator");
+  const [tool, setTool] = useState(null);
   const [values, setValues] = useState(DEFAULTS);
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
   useEffect(() => {
     const onKey = (event) => {
-      if (tool !== "calculator" || event.metaKey || event.ctrlKey || event.altKey ||
+      if (event.metaKey || event.ctrlKey || event.altKey ||
           event.target?.closest?.("input,textarea,select,[contenteditable=true]")) return;
       const mapped = keyFromKeyboard(event);
       if (mapped) { event.preventDefault(); send(mapped); }
@@ -128,30 +123,23 @@ export default function RosieCalculations() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [tool]);
-  const [heroFailed, setHeroFailed] = useState(false);
-  const display = useMemo(() => formatCalculatorEntry(calc.entry), [calc.entry]);
   return <main className="rc-page">
-    <header className={`rc-hero ${heroFailed ? "is-fallback" : ""}`}>
-      {!heroFailed && <img className="rc-custom-hero" src="/calculations/hero.avif" alt="Rosie in her mathematical study with a gold cryptex and three-tier chess set" onError={() => setHeroFailed(true)} />}
-      {heroFailed && <div className="rc-hero-backup" aria-hidden="true" />}
-      <div className="rc-hero-copy"><span className="rc-brand"><b>♛</b> RosieVerse</span><div className="rc-hero-title"><span className="rc-equations">π &nbsp; Σ &nbsp; a²+b²=c²</span><h1>Rosie’s<br/>Calculations</h1><p>✦ Pocket Toolkit ✦</p></div></div>
+    <header className="rc-hero">
+      <img
+        className="rc-custom-hero"
+        src="/rosieverse/calculations/hero/hero-mobile-16x9.webp"
+        alt="Rosie at her mathematical desk in the library"
+        width="1448"
+        height="814"
+        decoding="async"
+        fetchPriority="high"
+      />
     </header>
     <div className="rc-workspace">
-      <div className="rc-mode-tabs" role="tablist" aria-label="Calculations mode">
-        <button type="button" role="tab" aria-selected={tool==="calculator"} className={tool==="calculator"?"selected":""} onClick={()=>setTool("calculator")}>Calculator</button>
-        <button type="button" role="tab" aria-selected={tool!=="calculator"} className={tool!=="calculator"?"selected":""} onClick={()=>setTool("tip")}>Pocket Tools</button>
-      </div>
-      {tool === "calculator" ? <section className="rc-calculator" aria-label="Rosie's standard calculator">
-        <div className="rc-paw-crest" aria-hidden="true"><svg viewBox="0 0 48 48" fill="currentColor"><ellipse cx="11" cy="16" rx="4" ry="6" transform="rotate(-24 11 16)"/><ellipse cx="23" cy="10" rx="4" ry="6"/><ellipse cx="36" cy="16" rx="4" ry="6" transform="rotate(24 36 16)"/><ellipse cx="42" cy="26" rx="3.3" ry="5" transform="rotate(30 42 26)"/><path d="M24 23c-6 0-9 5-13 10-3 6 2 10 7 8 4-2 7-2 11 0 6 2 10-3 7-8-4-6-7-10-12-10Z"/></svg></div>
-        <div className="rc-display"><span className="rc-memory" aria-label={calc.hasMemory?"Memory stored":"Memory empty"}>{calc.hasMemory?"M":""}</span><div className="rc-screen"><small>{calc.expression || "\u00a0"}</small><output aria-live="polite" aria-atomic="true">{display}</output></div><button type="button" className="rc-delete" aria-label="Backspace" onClick={()=>send("DEL")}>⌫</button></div>
-        <div className="rc-keypad">
-          <div className="rc-memory-row">{["MC","MR","M+","M−","%","±","÷"].map(key=><button key={key} type="button" disabled={["MC","MR"].includes(key)&&!calc.hasMemory} className={["%","±","÷"].includes(key)?"ruby":""} onClick={()=>send(key)} aria-label={key==="±"?"Change sign":key}>{key}</button>)}</div>
-          <div className="rc-number-pad">{KEYROWS.flatMap((row,r)=>row.map((key,c)=><button key={r+"-"+c} type="button" className={[["×","−","+","="].includes(key)?"ruby":"",key==="="?"gold":"",key==="0"?"wide":""].filter(Boolean).join(" ")} onClick={()=>send(key)} aria-label={key==="="?"Equals":key}>{key}</button>))}</div>
-          <button type="button" className="rc-clear" onClick={()=>send("AC")}>AC · Clear all</button>
-        </div>
-      </section> : <ToolPanel active={tool} values={values} update={update}/>}
+      <AssetCalculator calc={calc} send={send} />
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
-      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card "+(tool===item.id?"active":"")} onClick={()=>{setTool(item.id);document.querySelector(".rc-workspace")?.scrollIntoView({behavior:"smooth",block:"start"});}}><span className="rc-tool-mark" aria-hidden="true">{item.mark}</span><span className="rc-tool-copy"><strong>{item.title}</strong><small>{item.detail}</small></span><span className="rc-chevron" aria-hidden="true">›</span></button>)}</div>
+      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card "+(tool===item.id?"active":"")} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><span className="rc-tool-mark" aria-hidden="true">{item.mark}</span><span className="rc-tool-copy"><strong>{item.title}</strong><small>{item.detail}</small></span><span className="rc-chevron" aria-hidden="true">›</span></button>)}</div>
+      {tool && <ToolPanel active={tool} values={values} update={update}/>}
       <p className="rc-footer-note">Crafted in Rosie’s study · Numbers with a little extra charm</p>
     </div>
   </main>;

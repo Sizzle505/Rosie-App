@@ -5,9 +5,9 @@
 .rc-page button,.rc-page input,.rc-page select {font:inherit;}
 .rc-page button {cursor:pointer;touch-action:manipulation;}
 .rc-page button:focus-visible,.rc-page input:focus-visible,.rc-page select:focus-visible {outline:3px solid #edca77;outline-offset:3px;}
-.rc-hero {position:relative;width:min(100%,850px);height:clamp(194px,33vw,365px);margin:0 auto;overflow:hidden;border-bottom:2px solid #b48a3e;
+.rc-hero {position:relative;width:min(100%,850px);aspect-ratio:16/9;margin:0 auto;overflow:hidden;border-bottom:2px solid #b48a3e;
   background:linear-gradient(135deg,#271c22,#090e15);box-shadow:0 15px 40px rgba(0,0,0,.4);}
-.rc-custom-hero {width:100%;height:100%;display:block;object-fit:cover;object-position:50% 46%;}
+.rc-custom-hero {width:100%;height:100%;display:block;object-fit:cover;object-position:center;}
 .rc-hero-backup {position:absolute;inset:0;background-image:
   linear-gradient(90deg,transparent 29%,rgba(7,9,15,.52) 53%,#09101d 81%),
   url("/rosieverse/reminders/hero-mobile.webp");background-position:center,35% 48%;background-size:cover,cover;
@@ -87,7 +87,45 @@
 .rc-tool-result span {font-size:13px;}
 .rc-tool-result p {margin:0;font-size:14px;}
 .rc-footer-note {text-align:center;color:#bbaa86;font-size:12px;margin:23px 0;}
-@media(max-width:410px){.rc-hero{height:205px}.rc-hero-title {width:56%}.rc-calculator{padding-left:9px;padding-right:9px}.rc-tool-copy small{font-size:10px}.rc-tool-mark{width:34px;height:34px}}
+@media(max-width:410px){.rc-hero{height:auto}.rc-hero-title {width:56%}.rc-calculator{padding-left:9px;padding-right:9px}.rc-tool-copy small{font-size:10px}.rc-tool-mark{width:34px;height:34px}}
 @media(max-width:340px){.rc-memory-row{gap:2px}.rc-memory-row button{font-size:11px;height:36px}.rc-tool-grid{grid-template-columns:1fr}.rc-screen output{font-size:26px}.rc-calculator{padding-left:6px;padding-right:6px}}
 @media(min-width:768px){.rc-hero{height:330px}.rc-number-pad button{height:68px}.rc-workspace{max-width:740px}}
 @media(prefers-reduced-motion:reduce){.rc-page *{transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Repair pass: approved image art remains pending source recovery.
+   Keep the working engine, but restore appropriate iPhone-size hit targets
+   and the narrow, centered proportions of the approved physical calculator. */
+.rc-calculator {
+  max-width: 432px;
+  margin: 18px auto 10px;
+  padding: 26px clamp(9px,2.3vw,16px) 17px;
+}
+.rc-memory-row {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: clamp(6px,1.5vw,11px);
+  margin-bottom: 9px;
+}
+.rc-memory-row button {
+  min-height: 44px;
+  height: clamp(44px,8.4vw,50px);
+  font-size: clamp(14px,3.5vw,18px);
+}
+.rc-number-pad button {
+  min-height: 48px;
+  height: clamp(52px,12.9vw,66px);
+}
+.rc-delete { min-width: 44px; }
+.rc-workspace { min-width: 0; }
+.rc-screen output { font-size: clamp(26px,6.6vw,43px); }
+@media(max-width:340px){
+  .rc-memory-row { gap: 5px; }
+  .rc-memory-row button { min-height: 44px; height: 44px; font-size: 12px; }
+  .rc-number-pad { gap: 5px; }
+  .rc-number-pad button { min-height: 48px; height: 49px; }
+  .rc-tool-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rc-tool-card { gap: 5px; padding: 7px 5px; }
+  .rc-tool-copy small { display: none; }
+  .rc-tool-mark { width: 28px; height: 31px; font-size: 19px; }
+  .rc-chevron { font-size: 17px; }
+}

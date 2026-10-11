@@ -11,6 +11,7 @@ on:
   push:
     branches:
       - 'work/rosies-calculations-functional-20261011'
+      - 'work/rosies-calculations-asset-repair-20261011'
 jobs:
   test-and-build:
     runs-on: ubuntu-latest

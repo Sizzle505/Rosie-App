@@ -43,3 +43,23 @@ test("keyboard mapping is predictable", () => {
   assert.equal(keyFromKeyboard({key:"Backspace"}),"DEL");
   assert.equal(keyFromKeyboard({key:"*"}),"×");
 });
+
+test("memory subtraction, recall and clear memory remain consistent", () => {
+  const state = press("9", "M+", "AC", "5", "M−", "MR");
+  assert.equal(state.entry, "4");
+  assert.equal(state.hasMemory, true);
+  const cleared = calculatorReducer(state, "MC");
+  assert.equal(cleared.hasMemory, false);
+  assert.equal(cleared.memory, 0);
+});
+test("keypad controls handle backspace, negative numbers and repeated equals", () => {
+  assert.equal(press("1", ".", "2", "3", "DEL").entry, "1.2");
+  assert.equal(press("1", "0", "±").entry, "-10");
+  assert.equal(press("5", "+", "2", "=", "=", "=").entry, "11");
+  assert.equal(press("7", "AC", "4").entry, "4");
+});
+test("keyboard supports each arithmetic operator and reset", () => {
+  for (const [key, expected] of [["+", "+"], ["-", "−"], ["*", "×"], ["/", "÷"], ["%", "%"], [".", "."], ["=", "="], ["Enter", "="], ["Backspace", "DEL"], ["Delete", "C"], ["Escape", "AC"]]) {
+    assert.equal(keyFromKeyboard({key}), expected);
+  }
+});
