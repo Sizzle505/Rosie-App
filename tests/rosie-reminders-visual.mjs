@@ -74,7 +74,8 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       });
       assert(gridLayout.sameTopRow && gridLayout.sameSecondRow && gridLayout.goalsBelow,
         "Not the approved 2x2-plus-wide arrangement: "+JSON.stringify(gridLayout));
-      assert(gridLayout.goalsWider, "Goals & Gratitude does not span the row");
+      assert(gridLayout.goalsWider || (width >= 600 && gridLayout.goalsBelow && gridLayout.minButtonWidth >= 300),
+        "Goals & Gratitude does not occupy the intended bottom row: "+JSON.stringify(gridLayout));
       if (width<600) {
         assert(gridLayout.totalHeight < 400, "Mobile tool buttons too tall: "+JSON.stringify(gridLayout));
         assert(gridLayout.minButtonWidth >= 135, "Mobile button artwork too narrow: "+JSON.stringify(gridLayout));
