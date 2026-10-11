@@ -7,7 +7,8 @@ const worlds = [
   { id: "cheese", name: "Cheese Board Exam", art: "buttons/cheese.webp" },
   { id: "captain", name: "Captain Rosie", art: "buttons/captain.webp" },
   { id: "vault", name: "Card Vault", art: "buttons/vault.webp" },
-  { id: "randomizers", name: "Randomizers", art: "buttons/randomizers.webp" }
+  { id: "randomizers", name: "Randomizers", art: "buttons/randomizers.webp" },
+  { id: "reminders", name: "Rosie’s Reminders", art: null }
 ];
 
 const art = (filename) => `/rosieverse/${filename}`;
@@ -37,14 +38,14 @@ export default function RosieHome({ onNavigate }) {
             type="button"
             key={world.id}
             aria-label={`Open ${world.name}`}
-            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary}`}
+            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary} ${world.id === "reminders" ? styles.remindersWorld : ""}`}
             style={{
               "--glint-delay": `${-index * 1.7}s`,
-              "--frame-mask": `url("${art(world.art)}")`
+              "--frame-mask": world.art ? `url("${art(world.art)}")` : "none"
             }}
             onClick={() => onNavigate(world.id)}
           >
-            <img src={art(world.art)} alt="" draggable="false" loading="eager" />
+            {world.art ? <img src={art(world.art)} alt="" draggable="false" loading="eager" /> : <span className={styles.remindersButtonArt} aria-hidden="true"><span className={styles.remindersCrest}>♛</span><span>ROSIE’S</span><b>REMINDERS</b><small>PERSONAL ORGANIZER</small></span>}
             <span className={styles.activeSheen} aria-hidden="true" />
           </button>
         ))}
