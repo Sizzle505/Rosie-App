@@ -77,6 +77,32 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       await hero.screenshot({path:output+"/"+name+"-header.png"});
       await frame.screenshot({path:output+"/"+name+"-calculator.png"});
 
+      // The user's approved Rosie banner is itself sticky. No substitute
+      // title-only bar is permitted, and the full uncropped image remains pinned.
+      assert.equal(await page.locator(".rc-pinned-dock").count(),0,
+        "The replacement Calculations text banner should have been removed");
+      assert.equal(await page.locator(".rc-hero").evaluate(el=>getComputedStyle(el).position),
+        "sticky","The original Calculations banner is not sticky");
+      await page.evaluate(()=>{
+        const banner=document.querySelector(".rc-hero");
+        window.scrollTo({top:banner.getBoundingClientRect().height+160,behavior:"instant"});
+      });
+      await page.waitForTimeout(200);
+      const pinnedHero=await page.locator(".rc-hero").evaluate(el=>({
+        top:el.getBoundingClientRect().top,
+        position:getComputedStyle(el).position,
+        imgHeight:el.querySelector("img").getBoundingClientRect().height,
+        scroll:window.scrollY
+      }));
+      assert(pinnedHero.scroll>90, "Calculations does not scroll past the full banner");
+      assert.equal(pinnedHero.position,"sticky","The Rosie Calculations artwork stopped being sticky");
+      assert(pinnedHero.top>=-1 && pinnedHero.top<=90,
+        "Full Calculations image did not remain pinned: "+JSON.stringify(pinnedHero));
+      assert(pinnedHero.imgHeight>90,"Pinned Rosie Calculations picture was hidden");
+      await page.screenshot({path:output+"/"+name+"-pinned-banner.png"});
+      await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
+      await page.waitForTimeout(130);
+
       const digit=n=>page.getByRole("button",{name:String(n),exact:true});
       await digit(7).click();
       await page.getByRole("button",{name:"Multiply"}).click();
