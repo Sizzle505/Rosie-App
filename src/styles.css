@@ -7717,3 +7717,36 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .resources-return span {font-size: 5px; bottom: -8px;}
   .resources-bottom-nav button small {font-size: 10px;}
 }
+
+/* Small floating page-family switch just above the right side of the fixed
+   navigation; neither group is squeezed to make room for another nav cell. */
+.nav-family-toggle {
+  position:fixed;
+  z-index:92;
+  right:clamp(12px,3vw,30px);
+  bottom:calc(87px + env(safe-area-inset-bottom,0px));
+  width:auto;
+  min-height:27px;
+  display:flex;gap:4px;align-items:center;justify-content:center;
+  padding:4px 9px;
+  border:1px solid #ad864d;
+  border-radius:18px;
+  background:linear-gradient(145deg,#281620ef,#100f1eea);
+  color:#eac990;
+  box-shadow:inset 0 1px #f2c5783f,0 3px 12px #0008;
+  font:700 10px/1 Georgia,serif;
+  letter-spacing:.02em;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-family-toggle svg {display:block;flex:none;}
+.nav-family-toggle.on-resources {border-color:#d5ab68;color:#fff1c5;}
+.nav-family-toggle:focus-visible{outline:2px solid #f9d994;outline-offset:3px;}
+/* Keep the main Grand Salon's illustrated Resources entrance intact, with a
+   small persistent shortcut like the other secondary pages. */
+.resources-return--home{top:max(9px,env(safe-area-inset-top));}
+@media(max-width:680px){
+  .nav-family-toggle {right:12px;bottom:calc(89px + env(safe-area-inset-bottom,0px));font-size:9px;min-height:25px;padding:3px 8px;opacity:.92;}
+  .resources-return--home{top:max(5px,env(safe-area-inset-top));left:5px;}
+}
