@@ -1,34 +1,92 @@
-/* RosieVerse luxury utility landing, no assets baked into functional controls. */
-.app-shell.page-resources {background:#140f21;}
-.rr-page {width:100%;min-height:100dvh;padding:clamp(60px,10dvh,100px) 16px calc(125px + env(safe-area-inset-bottom));
-  color:#f5dfb1;font-family:Georgia,"Times New Roman",serif;
-  background:linear-gradient(#120e1bdd,#190e1aba),url('/rosieverse/scenery/background-mobile.webp') center/cover fixed no-repeat;}
-.rr-page *{box-sizing:border-box;}
-.rr-shell{width:min(100%,620px);margin:0 auto;}
-.rr-heading{text-align:center;padding:26px 12px 29px;border:1px solid #bd985a66;border-radius:24px 24px 8px 8px;
-  background:radial-gradient(ellipse at 50% 0%,#74344888,transparent 65%),linear-gradient(#0e1225ec,#170e1be8);
-  box-shadow:0 12px 26px #0008,inset 0 0 22px #b47a3b34;}
-.rr-eyebrow{color:#d7a967;letter-spacing:.25em;font:11px/1.3 Georgia,serif;}
-.rr-heading h1{font:normal clamp(34px,8vw,58px)/1.1 Georgia,serif;color:#f9df9e;letter-spacing:-.02em;
-  margin:13px 0 7px;text-shadow:0 3px 7px #000,0 0 18px #dca55a5e;}
-.rr-heading p{color:#e6c8a2;margin:0;font-size:clamp(14px,3.5vw,17px);}
-.rr-tools{display:grid;gap:12px;margin-top:17px;}
-.rr-destination{display:flex;align-items:center;gap:15px;width:100%;min-height:120px;
-  border:2px solid #bd8e47;border-radius:18px;padding:14px 16px;color:#f7dfaa;text-align:left;
-  background:radial-gradient(circle at 100% 0%,#783f4d88,transparent 45%),linear-gradient(145deg,#1e283a,#090e19 70%,#260e20);
-  box-shadow:0 10px 18px #0009,inset 0 0 0 2px #d1a76c55,inset 0 0 18px #b48b3740;
-  cursor:pointer;touch-action:manipulation;transition:transform .18s ease,filter .18s ease;}
-.rr-destination:active{transform:scale(.99);filter:brightness(1.13);}
-.rr-destination:hover{filter:brightness(1.14);}
-.rr-destination:focus-visible{outline:3px solid #ffeac0;outline-offset:3px;}
-.rr-seal{width:64px;height:64px;flex:none;border:2px solid #e0b867;border-radius:50%;
-  display:grid;place-items:center;font:normal 43px Georgia,serif;color:#ffdd8e;
-  background:radial-gradient(circle at 40% 20%,#ab6c6a,#381726 65%,#111223);
-  box-shadow:inset 0 0 0 3px #281625,0 3px 10px #000b;}
-.rr-copy{display:grid;gap:8px;min-width:0;flex:1;}
-.rr-copy strong{font:normal clamp(22px,5.5vw,31px)/1.1 Georgia,serif;}
-.rr-copy small{font:normal 13px/1.35 Georgia,serif;color:#d6c0a6;}
-.rr-arrow{font:40px/1 Georgia,serif;color:#e0b675;}
-.rr-foot{text-align:center;font-size:13px;color:#c7a77f;margin:25px auto 0;}
-@media(max-width:390px){.rr-destination{min-height:105px;gap:10px;padding:12px 10px}.rr-seal{width:54px;height:54px;font-size:35px}.rr-copy strong{font-size:21px}.rr-copy small{font-size:11px}}
-@media(prefers-reduced-motion:reduce){.rr-destination{transition:none}}
+/* Rosie Resources - three art-as-button panels using approved full-size artwork. */
+.app-shell.page-resources {background:#100b13; padding-bottom:0;}
+.rr-hub-page {
+  display:block;
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  min-width:0;
+  min-height:100svh;
+  padding:0 0 calc(85px + env(safe-area-inset-bottom,0px));
+  margin:0;
+  color:#ffeac3;
+  background:#120c16;
+}
+.rr-hub-page * {box-sizing:border-box;}
+.rr-hub-thirds {
+  display:grid;
+  width:100%;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:repeat(3,minmax(0,1fr));
+  height:calc(100svh - 85px - env(safe-area-inset-bottom,0px));
+  min-height:390px;
+  overflow:hidden;
+}
+.rr-hub-panel {
+  position:relative;
+  isolation:isolate;
+  display:block;
+  width:100%;
+  min-width:0;
+  min-height:0;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:0;
+  color:#f2d297;
+  background:linear-gradient(120deg,#2a1928,#090e19 70%);
+  overflow:hidden;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:inset 0 0 0 1px #b38d4e;
+}
+.rr-hub-panel + .rr-hub-panel {border-top:2px solid #d4aa62;}
+.rr-hub-panel img {
+  display:block;
+  width:100%;
+  height:100%;
+  margin:0;
+  object-fit:contain; /* show complete Reminders and Calculations headers */
+  object-position:center;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.rr-hub-panel--timekeeper img {
+  object-fit:cover;
+  object-position:center top; /* only the top of the tall scene appears */
+}
+.rr-hub-panel::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  box-shadow:inset 0 0 0 1px #e9c37890,inset 0 0 22px #12091077;
+}
+.rr-hub-chevron {
+  position:absolute;
+  z-index:2;
+  right:12px;
+  bottom:8px;
+  display:grid;
+  place-items:center;
+  width:27px;
+  height:27px;
+  border:1px solid #ead19a8c;
+  border-radius:50%;
+  color:#ffebc3;
+  background:#1a1018bd;
+  font:26px/1 Georgia,serif;
+  text-shadow:0 1px 2px #000;
+}
+.rr-hub-panel:focus-visible {
+  outline:3px solid #fff0ca;
+  outline-offset:-5px;
+}
+.rr-hub-panel:hover img {filter:brightness(1.07);}
+.rr-hub-panel:active img {filter:brightness(1.16);}
+@media(max-height:550px) and (orientation:landscape){
+  .rr-hub-thirds{min-height:330px;}
+}
+@media(prefers-reduced-motion:reduce){.rr-hub-panel img{transition:none;}}
