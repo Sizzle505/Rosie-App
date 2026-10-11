@@ -27,6 +27,7 @@ import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
+import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -1360,24 +1361,24 @@ function CaptainYachtArt({ boost }) {
       <div className="captain-painted-spray" aria-hidden="true">
         <i /><i /><i /><i /><i /><i />
       </div>
-      {boost && <div className="captain-nitro" aria-hidden="true"><i /><i /><i /><i /></div>}
+      {boost && <div className="captain-wind-gust" aria-hidden="true"><i /><i /><i /></div>}
       <img
         className="captain-painted-sprite"
-        src="/captain-rosie-ship.webp"
+        src={boost ? captainWindSprite : "/captain-rosie-ship.webp"}
         alt=""
         draggable="false"
         decoding="async"
       />
       {/* Actual Captain Rosie portrait, extracted from the existing artwork.
           No generated substitute; the stern remains the original painting. */}
-      <img
-        className="captain-painted-rosie"
-        src="/captain-rosie-deck.webp"
-        alt=""
-        aria-hidden="true"
-        draggable="false"
-        decoding="async"
-      />
+      {!boost && <img
+          className="captain-painted-rosie"
+          src="/captain-rosie-deck.webp"
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+          decoding="async"
+        />}
       <span className="captain-painted-lantern captain-painted-lantern-port" aria-hidden="true" />
       <span className="captain-painted-lantern captain-painted-lantern-starboard" aria-hidden="true" />
       <div className="yacht-wake-stack" aria-hidden="true"><i /><i /><i /></div>
@@ -1977,6 +1978,7 @@ function App() {
     return validPages.includes(requested) ? requested : "home";
   };
   const [page, setPage] = useState(pageFromLocation);
+  const [fortuneScrolled, setFortuneScrolled] = useState(false);
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
@@ -2036,6 +2038,19 @@ function App() {
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
+
+  // The oracle begins in its original, stately position. Once the visitor is
+  // reading below it, it rises slightly into the otherwise empty top space.
+  useEffect(() => {
+    if (page !== "fortune") {
+      setFortuneScrolled(false);
+      return undefined;
+    }
+    const updateOraclePosition = () => setFortuneScrolled(window.scrollY > 24);
+    updateOraclePosition();
+    window.addEventListener("scroll", updateOraclePosition, { passive: true });
+    return () => window.removeEventListener("scroll", updateOraclePosition);
+  }, [page]);
 
   function navigateTo(nextPage) {
     if (!validPages.includes(nextPage)) return;
@@ -2450,7 +2465,7 @@ function App() {
         {page === "home" ? (
           <RosieHome onNavigate={navigateTo} />
         ) : page === "fortune" ? (
-        <main className="fortune-page">
+        <main className={`fortune-page ${fortuneScrolled ? "fortune-scrolled" : ""}`}>
           <div className="fortune-console">
             <FortuneMachine
               consulting={consulting}
