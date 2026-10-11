@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./RosieTimekeeper.css";
 
-const ART = "/rosieverse/timekeeper/grand-clockwork-hall.webp";
+const ART = "/rosieverse/timekeeper/grand-clockwork-hall.jpg";
 const PRESETS = [
   { label: "5 min", ms: 5 * 60_000 },
   { label: "10 min", ms: 10 * 60_000 },
