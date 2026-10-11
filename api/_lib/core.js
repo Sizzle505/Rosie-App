@@ -29,8 +29,10 @@ export async function db(path, { method = "GET", body, returnRows = true } = {})
     method,
     headers: {
       apikey: key,
-      // New sb_secret keys are API keys, not JWTs. Legacy service_role JWTs also use Authorization.
-      ...(key.startsWith("sb_secret_") ? {} : { Authorization: "Bearer " + key }),
+      // Supabase recognizes modern sb_secret keys as API credentials when they are
+      // supplied in both standard API-key locations. Legacy service-role JWTs use
+      // the same Bearer form.
+      Authorization: "Bearer " + key,
       "Content-Type": "application/json",
       ...(method !== "GET" ? { Prefer: returnRows ? "return=representation" : "return=minimal" } : {})
     },
