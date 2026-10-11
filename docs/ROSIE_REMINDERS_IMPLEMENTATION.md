@@ -34,5 +34,5 @@ The page has CSS/typography fallbacks when art is absent, but should not be acce
 ## Integration notes
 - Live text and dynamic rows use React and CSS, not baked-in image buttons.
 - Frontend-only V1 stores everything on the current browser. Connect to account-scoped storage when the separate PIN/login work is ready, with explicit migration from localStorage.
-- No Vercel deployment verification was possible from this session because the Vercel team scope returned 403.
+- The GitHub commit status reports **Vercel: success** for the preview build. Direct Vercel project inspection returned 403 in this session, so screenshot/layout and actual iPhone interaction remain unverified.
 - This is a review branch, not a production deployment.
