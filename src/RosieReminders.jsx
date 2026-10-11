@@ -4,11 +4,11 @@ import "./RosieReminders.css";
 const KEY = "rosieverse.reminders.v1";
 const EMPTY = { version: 1, items: [], notes: [], goals: [], gratitude: [] };
 const CATEGORIES = [
-  { id: "tasks", title: "Task List", detail: "Get it done, one paw at a time.", glyph: "☑" },
-  { id: "shopping", title: "Shopping List", detail: "Everything your pup could want.", glyph: "▣" },
-  { id: "appointments", title: "Appointments", detail: "Keep your important dates.", glyph: "▦" },
-  { id: "notes", title: "Notes & Ideas", detail: "Capture your brightest thoughts.", glyph: "✎" },
-  { id: "goals", title: "Goals & Gratitude", detail: "Celebrate progress and brighter days.", glyph: "✦" }
+  { id: "tasks", title: "Task List", detail: "Get it done, one paw at a time." },
+  { id: "shopping", title: "Shopping List", detail: "Everything your pup could want." },
+  { id: "appointments", title: "Appointments", detail: "Keep your important dates." },
+  { id: "notes", title: "Notes & Ideas", detail: "Capture your brightest thoughts." },
+  { id: "goals", title: "Goals & Gratitude", detail: "Celebrate progress and brighter days." }
 ];
 const two = (n) => String(n).padStart(2, "0");
 const dateKey = (date = new Date()) => [date.getFullYear(), two(date.getMonth() + 1), two(date.getDate())].join("-");
@@ -270,7 +270,7 @@ export default function RosieReminders() {
       <div className="rr-feature-grid">
         {CATEGORIES.map(c => <button type="button" key={c.id} className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
           onClick={() => chooseSection(c.id)} aria-label={"Open "+c.title}>
-          <span className="rr-feature-icon" aria-hidden="true">{c.glyph}</span><span className="rr-feature-copy"><b>{c.title}</b><small>{c.detail}</small></span>
+          <span className="rr-feature-art" aria-hidden="true"><img src={"/rosieverse/reminders/icons/"+c.id+".webp"} alt="" draggable="false" loading="lazy" /></span><span className="rr-feature-copy"><b>{c.title}</b><small>{c.detail}</small></span>
           <span className="rr-feature-arrow" aria-hidden="true">›</span>
           {counts[c.id] > 0 && <span className="rr-feature-count">{counts[c.id]}</span>}
         </button>)}
