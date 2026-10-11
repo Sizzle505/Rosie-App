@@ -7,7 +7,7 @@ import "./AssetCalculator.css";
  * Props use the EXISTING calculator reducer; never replace the arithmetic engine.
  * Place this file under src/ next to calculationsEngine.js.
  */
-const MEMORY_KEYS = ["MC", "MR", "M+", "M−", "%", "±", "÷"];
+const QUICK_KEYS = ["DEL", "AC", "M+", "M−", "%", "±", "÷"];
 const NUMERIC_ROWS = [
   ["7", "8", "9", "×"],
   ["4", "5", "6", "−"],
@@ -15,9 +15,9 @@ const NUMERIC_ROWS = [
   ["0", ".", "="]
 ];
 
-const OPERATOR_KEYS = new Set(["%", "±", "÷", "×", "−", "+"]);
+const OPERATOR_KEYS = new Set(["AC", "%", "±", "÷", "×", "−", "+"]);
 const LABELS = {
-  "MC": "Memory clear", "MR": "Memory recall", "M+": "Add to memory",
+  "DEL": "Backspace", "AC": "Clear all", "M+": "Add to memory",
   "M−": "Subtract from memory", "%": "Percent", "±": "Change sign",
   "÷": "Divide", "×": "Multiply", "−": "Subtract", "+": "Add",
   ".": "Decimal point", "=": "Equals"
@@ -30,10 +30,11 @@ function Key({ value, send, small = false, wide = false, disabled = false }) {
       type="button"
       className={`rac-key rac-key--${variant}${wide ? " rac-key--wide" : ""}${small ? " rac-key--memory" : ""}`}
       aria-label={LABELS[value] || value}
+      aria-keyshortcuts={value === "DEL" ? "Backspace" : undefined}
       onClick={() => send(value)}
       disabled={disabled}
     >
-      <span>{value}</span>
+      <span>{value === "DEL" ? "⌫" : value}</span>
     </button>
   );
 }
@@ -52,14 +53,8 @@ export default function AssetCalculator({ calc, send }) {
           <output aria-live="polite" aria-atomic="true" title={entry}>{entry}</output>
         </div>
       </div>
-      <div className="rac-command-keys" aria-label="Calculator clear controls">
-        <button type="button" className="rac-backspace" aria-label="Backspace" aria-keyshortcuts="Backspace" onClick={() => send("DEL")}>
-          <span className="rac-sr-only">Backspace</span>
-        </button>
-        <button type="button" className="rac-all-clear" aria-label="Clear all" onClick={() => send("AC")}>AC</button>
-      </div>
-      <div className="rac-memory-keys" aria-label="Memory and quick operations">
-        {MEMORY_KEYS.map(value => <Key key={value} value={value} send={send} small disabled={(["MC", "MR"].includes(value) && !calc.hasMemory)} />)}
+      <div className="rac-memory-keys" aria-label="Clear, memory and quick operations">
+        {QUICK_KEYS.map(value => <Key key={value} value={value} send={send} small />)}
       </div>
       <div className="rac-digit-keys" aria-label="Digits and operations">
         {NUMERIC_ROWS.flat().map(value => <Key key={value} value={value} send={send} wide={value === "0"} />)}
