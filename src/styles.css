@@ -7724,7 +7724,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   position:fixed;
   z-index:92;
   right:clamp(12px,3vw,30px);
-  bottom:calc(87px + env(safe-area-inset-bottom,0px));
+  bottom:calc(max(8px,env(safe-area-inset-bottom,0px)) + 56px);
   width:auto;
   min-height:27px;
   display:flex;gap:4px;align-items:center;justify-content:center;
@@ -7747,6 +7747,6 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
    small persistent shortcut like the other secondary pages. */
 .resources-return--home{top:max(9px,env(safe-area-inset-top));}
 @media(max-width:680px){
-  .nav-family-toggle {right:12px;bottom:calc(89px + env(safe-area-inset-bottom,0px));font-size:9px;min-height:25px;padding:3px 8px;opacity:.92;}
+  .nav-family-toggle {right:12px;bottom:calc(max(6px,env(safe-area-inset-bottom,0px)) + 51px);font-size:9px;min-height:25px;padding:3px 8px;opacity:.92;}
   .resources-return--home{top:max(5px,env(safe-area-inset-top));left:5px;}
 }
