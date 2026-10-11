@@ -38,4 +38,4 @@
 @media(prefers-reduced-motion:reduce){.captain-game-page .boost-control.boost-ready:not(.boost-active),.captain-game-page .boost-control.boost-ready:not(.boost-active)::after,.captain-game-page .captain-nitro::before,.captain-game-page .captain-nitro i,.page-cheese .barkbridge-cap-emblem{animation:none!important}}
 
 /* Position the large right crest in the breathing room between the masthead and Accuracy. */
-@media(max-width:720px){.page-cheese .barkbridge-cap-emblem{top:23px!important}}
+@media(max-width:720px){.page-cheese .barkbridge-cap-emblem{top:5px!important}}
