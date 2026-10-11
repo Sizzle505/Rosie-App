@@ -30,7 +30,7 @@ function groceryGroup(title) {
   return GROCERY_MATCHERS.find(([, match]) => match.test(title))?.[0] || "other";
 }
 function cleanListItem(raw) {
-  const entry = raw.trim().replace(/^[\s*•\-\d.)\]]+/, "").replace(/\s+/g, " ");
+  const entry = raw.trim().replace(/^(?:[•*]\s*|[-–]\s+|\d+[.)]\s+)/, "").replace(/\s+/g, " ");
   return entry ? entry.charAt(0).toUpperCase() + entry.slice(1) : "";
 }
 function parseGroceryPaste(text) {
