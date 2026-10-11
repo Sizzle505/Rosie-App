@@ -127,10 +127,10 @@ export default function RosieCalculations() {
     <header className="rc-hero">
       <img
         className="rc-custom-hero"
-        src="/rosieverse/calculations/hero/hero-full-resolution.webp"
+        src="/rosieverse/calculations/hero/hero-mobile-16x9.webp"
         alt="Rosie at her mathematical desk in the library"
         width="1448"
-        height="1086"
+        height="814"
         decoding="async"
         fetchPriority="high"
       />
