@@ -138,7 +138,7 @@ test("Account lockout, cookie sessions, sign-out, and A/B ownership enforced by 
   }
 });
 
-test("Current Supabase secret keys use apikey without JWT bearer, legacy service roles retain JWT bearer", async () => {
+test("Current Supabase secret keys use standard API and Bearer headers", async () => {
   process.env.SUPABASE_URL = "https://example.supabase.co";
   const original = globalThis.fetch;
   let calls = 0;
@@ -146,7 +146,7 @@ test("Current Supabase secret keys use apikey without JWT bearer, legacy service
     calls += 1;
     if (calls === 1) {
       assert.equal(opts.headers.apikey, "sb_secret_synthetic_test_only");
-      assert.equal(opts.headers.Authorization, undefined);
+      assert.equal(opts.headers.Authorization, "Bearer sb_secret_synthetic_test_only");
     } else {
       assert.equal(opts.headers.apikey, "legacy-unit-test-only");
       assert.equal(opts.headers.Authorization, "Bearer legacy-unit-test-only");
