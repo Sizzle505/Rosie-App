@@ -37,6 +37,26 @@ import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
+// The three utility pages and their landing hub form a separate navigation family.
+const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "timekeeper", "calculations"]);
+
+function ResourceNavIcon({ type }) {
+  const common = { viewBox: "0 0 32 32", fill: "none", stroke: "currentColor",
+    strokeWidth: 1.7, strokeLinecap: "round", strokeLinejoin: "round",
+    className: "rosie-nav-icon", "aria-hidden": true };
+  if (type === "reminders") return <svg {...common}>
+    <rect x="8" y="5" width="16" height="23" rx="2"/><path d="M12 4v3M20 4v3M12 13h8M12 18h8M12 23h4"/>
+  </svg>;
+  if (type === "timekeeper") return <svg {...common}>
+    <circle cx="16" cy="17" r="10"/><path d="M16 10v7l4 2M12 3h8M16 3v4"/>
+  </svg>;
+  return <svg {...common}>
+    <rect x="7" y="4" width="18" height="24" rx="3"/>
+    <rect x="11" y="8" width="10" height="5" rx="1"/>
+    <path d="M11 18h2M17 18h2M11 23h2M17 23h2"/>
+  </svg>;
+}
+
 function RosieNavIcon({ type }) {
   const common = {
     className: "rosie-nav-icon",
@@ -2531,7 +2551,15 @@ function App() {
       <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
         {page === "captain" && <CaptainOuterAtmosphere />}
 
-        {page !== "home" && <button type="button" className="house-return" aria-label="Return to the House of Rosie" title="The House of Rosie" onClick={() => navigateTo("home")}>⌂<span>HOME</span></button>}
+        {page !== "home" && <>
+          <button type="button" className="house-return" aria-label="Return to the RosieVerse Grand Salon" title="RosieVerse Home" onClick={() => navigateTo("home")}>⌂<span>HOME</span></button>
+          <button type="button"
+            className={`resources-return ${RESOURCE_PAGE_IDS.has(page) ? "resources-return--active" : ""}`}
+            aria-label="Open Rosie’s Resources hub"
+            title="Rosie’s Resources"
+            onClick={() => navigateTo("resources")}
+          >R<span>TOOLS</span></button>
+        </>}
         {page === "home" ? (
           <RosieHome onNavigate={navigateTo} />
         ) : page === "fortune" ? (
@@ -2709,13 +2737,19 @@ function App() {
           <RosieRandomizers />
         )}
 
-        {page !== "home" && <nav className="bottom-nav" aria-label="Primary">
-          <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
-          <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
-          <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
-          <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
-          <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
-        </nav>}
+        {page !== "home" && (RESOURCE_PAGE_IDS.has(page) ?
+          <nav className="bottom-nav resources-bottom-nav" aria-label="Rosie’s Resources">
+            <button type="button" aria-label="Open Rosie’s Reminders" className={page === "reminders" ? "active" : ""} aria-current={page === "reminders" ? "page" : undefined} onClick={() => navigateTo("reminders")}><span className="nav-icon-wrap"><ResourceNavIcon type="reminders" /></span><small>Reminders</small></button>
+            <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
+            <button type="button" aria-label="Open Rosie’s Calculations" className={page === "calculations" ? "active" : ""} aria-current={page === "calculations" ? "page" : undefined} onClick={() => navigateTo("calculations")}><span className="nav-icon-wrap"><ResourceNavIcon type="calculations" /></span><small>Calculations</small></button>
+          </nav> :
+          <nav className="bottom-nav" aria-label="RosieVerse destinations">
+            <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
+            <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
+            <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
+            <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
+            <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
+          </nav>)}
       </div>
 
       <div className={`toast ${toast ? "toast-visible" : ""}`}>{toast}</div>
