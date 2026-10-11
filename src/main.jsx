@@ -30,6 +30,7 @@ import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
 import RosieReminders from "./RosieReminders.jsx";
+import RosieCalculations from "./RosieCalculations.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
@@ -2012,7 +2013,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders"];
+  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "home";
@@ -2696,6 +2697,8 @@ function App() {
           <RosieCardVault />
         ) : page === "reminders" ? (
           <RosieReminders />
+        ) : page === "calculations" ? (
+          <RosieCalculations />
         ) : (
           <RosieRandomizers />
         )}
