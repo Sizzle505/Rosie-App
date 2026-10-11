@@ -1227,3 +1227,19 @@
     #000 100%
   ) !important;
 }
+
+/* Clearly distinguish the refreshed, selectable questions from footer copy. */
+.fortune-sample-heading {
+  margin:4px auto 10px;
+  color:#e6c182;
+  text-align:center;
+  font:700 clamp(9px,1.6vw,12px)/1.35 Georgia,serif;
+  letter-spacing:.12em;
+  text-shadow:0 1px 3px #000b;
+}
+.fortune-sample-heading span {
+  display:block;margin-top:4px;color:#e2ceab;
+  font:italic clamp(10px,1.8vw,13px)/1.35 Georgia,serif;
+  letter-spacing:0;
+}
+.fortune-page .quick-prompts button {min-height:38px;line-height:1.3;}
