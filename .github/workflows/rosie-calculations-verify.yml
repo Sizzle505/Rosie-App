@@ -1,0 +1,25 @@
+name: Rosie Calculations Verify
+on:
+  pull_request:
+    paths:
+      - 'src/RosieCalculations.jsx'
+      - 'src/RosieCalculations.css'
+      - 'src/calculationsEngine.js'
+      - 'tests/calculations-engine.test.mjs'
+      - 'src/main.jsx'
+      - 'src/RosieHome.jsx'
+  push:
+    branches:
+      - 'work/rosies-calculations-functional-20261011'
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/calculations-engine.test.mjs
+      - run: npm run build
