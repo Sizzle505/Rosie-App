@@ -75,9 +75,6 @@ async function capture(engine, isMobile) {
   const body = page.locator('textarea[aria-label="Note text"]');
   await body.fill("A good day begins with Rosie.\nRemember the biscuits.");
   await page.getByText("Saved", {exact:false}).first().waitFor({timeout:15000});
-  await page.getByRole("heading", {name:"Notes & Ideas"}).locator("../..").screenshot({
-    path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-ledger-${engine.name()}.png`
-  });
   await body.scrollIntoViewIfNeeded();
   await body.evaluate(element => element.blur());
   await page.getByRole("heading", {name:"Notes & Ideas", level:3}).locator("xpath=../../..").screenshot({path:`artifacts/rosie-private/${isMobile?"iphone":"desktop"}-notes-${engine.name()}.png`});
