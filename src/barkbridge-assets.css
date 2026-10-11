@@ -214,3 +214,10 @@
   .barkbridge-graduation .diploma-results-strip { order: -1; margin: 8px auto 13px; }
   .barkbridge-graduation .diploma-recipient-editor { margin-top: 0; }
 }
+
+/* iPhone ceremony staging: Rosie rises behind the foreground tray; the tray sits at her knees. */
+@media (max-width: 700px) {
+  .barkbridge-graduation .barkbridge-cheese-reward { top: 118px; }
+  .barkbridge-graduation .graduate-rosie { margin-bottom: -2px !important; }
+  .cheese-graduation-page { scroll-margin-top: 0; }
+}

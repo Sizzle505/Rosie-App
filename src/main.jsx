@@ -845,6 +845,18 @@ function CheeseMemoryGame() {
     window.clearTimeout(graduationTimerRef.current);
   }, []);
 
+  // Completing the board replaces a tall scrolled layout. Reset both document
+  // scrollers so the ceremony begins centered at the top on iPhone Safari.
+  useEffect(() => {
+    if (!ceremonyVisible) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [ceremonyVisible]);
+
   function recentlyUsed(reaction) {
     return reactionHistory.slice(-2).includes(reaction);
   }
