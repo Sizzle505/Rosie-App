@@ -1626,6 +1626,11 @@ function CaptainRosieGame({ soundOn }) {
   useEffect(() => {
     if (!running) return undefined;
 
+    // A modestly longer mobile cadence substantially reduces paint pressure on
+    // iPhone while preserving the same world speed and pickup timings.
+    const tickMs = window.matchMedia?.("(max-width: 720px)").matches ? 84 : 70;
+    const movementScale = tickMs / 70;
+
     const tick = window.setInterval(() => {
       let scoreDelta = 0;
       let turboDelta = 0;
@@ -1639,9 +1644,9 @@ function CaptainRosieGame({ soundOn }) {
       // React may defer a setState updater, so reading totals mutated inside
       // setItems() immediately afterward previously lost earned points.
       {
-        spawnClockRef.current += 70;
+        spawnClockRef.current += tickMs;
         const phaseSpeed = phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75;
-        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + item.speed + phaseSpeed }));
+        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + (item.speed + phaseSpeed) * movementScale }));
 
         const spawnEvery = phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485;
         if (spawnClockRef.current >= spawnEvery) {
@@ -1741,7 +1746,7 @@ function CaptainRosieGame({ soundOn }) {
           return next;
         });
       }
-    }, 70);
+    }, tickMs);
 
     return () => window.clearInterval(tick);
   }, [running, phaseKey]);
