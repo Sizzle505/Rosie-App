@@ -85,6 +85,20 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         "Not the approved 2x2-plus-wide arrangement: "+JSON.stringify(gridLayout));
       assert(gridLayout.goalsWider || (width >= 600 && gridLayout.goalsBelow && gridLayout.minButtonWidth >= 300),
         "Goals & Gratitude does not occupy the intended bottom row: "+JSON.stringify(gridLayout));
+      const frameAlignment = await page.locator(".rr-feature-grid").evaluate(grid => {
+        const r = category => grid.querySelector(".rr-feature-"+category).getBoundingClientRect();
+        const n=r("notes"),s=r("shopping"),a=r("appointments"),t=r("tasks");
+        return {
+          firstTop:Math.abs(n.top-s.top), firstBottom:Math.abs(n.bottom-s.bottom),
+          secondTop:Math.abs(a.top-t.top), secondBottom:Math.abs(a.bottom-t.bottom),
+          noClipping:[...grid.querySelectorAll(".rr-feature")].every(button=>getComputedStyle(button).overflow==="visible")
+        };
+      });
+      assert(frameAlignment.firstTop<=2 && frameAlignment.firstBottom<=2,
+        "First-row gold borders are not aligned: "+JSON.stringify(frameAlignment));
+      assert(frameAlignment.secondTop<=2 && frameAlignment.secondBottom<=2,
+        "Second-row gold borders are not aligned: "+JSON.stringify(frameAlignment));
+      assert(frameAlignment.noClipping, "Illustration is being cropped");
       if (width<600) {
         assert(gridLayout.totalHeight < 400, "Mobile tool buttons too tall: "+JSON.stringify(gridLayout));
         assert(gridLayout.minButtonWidth >= 135, "Mobile button artwork too narrow: "+JSON.stringify(gridLayout));
