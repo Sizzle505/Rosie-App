@@ -6,7 +6,7 @@ export const COOKIE = "rosie_session";
 export const DAYS = 30;
 const COOKIE_AGE = 60 * 60 * 24 * DAYS;
 const DB_URL = () => process.env.SUPABASE_URL?.replace(/\/$/, "");
-const DB_KEY = () => process.env.SUPABASE_SERVICE_ROLE_KEY;
+const DB_KEY = () => process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export function sha256(value) { return createHash("sha256").update(value).digest("hex"); }
 export async function hashPin(pin) {
@@ -24,10 +24,13 @@ export async function verifyPin(pin, encoded) {
 }
 export async function db(path, { method = "GET", body, returnRows = true } = {}) {
   if (!DB_URL() || !DB_KEY()) throw new Error("Database has not been configured.");
+  const key = DB_KEY();
   const response = await fetch(DB_URL() + "/rest/v1/" + path, {
     method,
     headers: {
-      apikey: DB_KEY(), Authorization: "Bearer " + DB_KEY(),
+      apikey: key,
+      // New sb_secret keys are API keys, not JWTs. Legacy service_role JWTs also use Authorization.
+      ...(key.startsWith("sb_secret_") ? {} : { Authorization: "Bearer " + key }),
       "Content-Type": "application/json",
       ...(method !== "GET" ? { Prefer: returnRows ? "return=representation" : "return=minimal" } : {})
     },
