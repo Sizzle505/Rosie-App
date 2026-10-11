@@ -39,15 +39,17 @@ function Key({ value, send, small = false, wide = false, disabled = false }) {
 }
 
 export default function AssetCalculator({ calc, send }) {
+  const entry = formatCalculatorEntry(calc.entry);
+  const readoutClass = entry.length > 17 ? "rac-readout--long" : entry.length > 11 ? "rac-readout--medium" : "";
   return (
     <section className="rac-frame" aria-label="Rosie's calculator" role="group">
       <div className="rac-display" aria-label="Calculator display">
         <span className="rac-memory-indicator" aria-label={calc.hasMemory ? "Memory stored" : "Memory empty"}>
           {calc.hasMemory ? "M" : ""}
         </span>
-        <div className="rac-readout">
+        <div className={`rac-readout ${readoutClass}`}>
           <small aria-hidden="true">{calc.expression || "\u00a0"}</small>
-          <output aria-live="polite" aria-atomic="true">{formatCalculatorEntry(calc.entry)}</output>
+          <output aria-live="polite" aria-atomic="true" title={entry}>{entry}</output>
         </div>
       </div>
       <div className="rac-command-keys" aria-label="Calculator clear controls">
