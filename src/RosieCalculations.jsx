@@ -131,7 +131,7 @@ export default function RosieCalculations() {
   const [heroFailed, setHeroFailed] = useState(false);
   const display = useMemo(() => formatCalculatorEntry(calc.entry), [calc.entry]);
   return <main className="rc-page">
-    <header className="rc-hero">
+    <header className={`rc-hero ${heroFailed ? "is-fallback" : ""}`}>
       {!heroFailed && <img className="rc-custom-hero" src="/calculations/hero.webp" alt="Rosie in her mathematical study with a gold cryptex and three-tier chess set" onError={() => setHeroFailed(true)} />}
       {heroFailed && <div className="rc-hero-backup" aria-hidden="true" />}
       <div className="rc-hero-copy"><span className="rc-brand"><b>♛</b> RosieVerse</span><div className="rc-hero-title"><span className="rc-equations">π &nbsp; Σ &nbsp; a²+b²=c²</span><h1>Rosie’s<br/>Calculations</h1><p>✦ Pocket Toolkit ✦</p></div></div>
