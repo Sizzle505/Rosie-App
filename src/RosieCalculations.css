@@ -159,3 +159,13 @@
 @media(min-width:1024px){
   .rc-page .rc-calculator-stage{padding-inline:clamp(12px,2vw,24px);}
 }
+
+/* Override generic .app-shell > main mobile gutters: no 7px horizontal crop. */
+.app-shell.page-calculations > main.rc-page {
+  box-sizing:border-box;
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding-inline:0 !important;
+  padding-top:0 !important;
+}
