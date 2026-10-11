@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 import "./fortune-effects.css";
@@ -2075,32 +2075,48 @@ function App() {
   // The three games are directly linkable and browser navigation stays in sync.
   // This also avoids a stale Captain tab after a reload or shared URL.
   useEffect(() => {
-    const onHashChange = () => setPage(pageFromLocation());
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    const onLocationChange = () => setPage(pageFromLocation());
+    window.addEventListener("hashchange", onLocationChange);
+    window.addEventListener("popstate", onLocationChange);
+    return () => {
+      window.removeEventListener("hashchange", onLocationChange);
+      window.removeEventListener("popstate", onLocationChange);
+    };
   }, []);
 
-  // The oracle begins in its original, stately position. Once the visitor is
-  // reading below it, it rises slightly into the otherwise empty top space.
-  useEffect(() => {
+  // The oracle starts with an intentional safe-area stage and only becomes
+  // pinned after the visitor scrolls it into the top of the viewport.
+  useLayoutEffect(() => {
     if (page !== "fortune") {
       setFortuneScrolled(false);
       return undefined;
     }
-    // A Fortune visit always opens in its composed safe-area layout. It only
-    // becomes pinned after the visitor actually starts to scroll.
+    // location.hash restores the previous iPhone scroll position. Reset after
+    // this page has committed, then once more after browser restoration.
     const resetFortuneEntry = () => {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       setFortuneScrolled(false);
     };
     resetFortuneEntry();
-    const resetFrame = window.requestAnimationFrame(resetFortuneEntry);
-    const updateOraclePosition = () => setFortuneScrolled(window.scrollY > 150);
-    window.addEventListener("scroll", updateOraclePosition, { passive: true });
+    const firstFrame = window.requestAnimationFrame(() => {
+      resetFortuneEntry();
+      window.requestAnimationFrame(resetFortuneEntry);
+    });
+    const restoredScrollTimer = window.setTimeout(resetFortuneEntry, 80);
     return () => {
-      window.cancelAnimationFrame(resetFrame);
-      window.removeEventListener("scroll", updateOraclePosition);
+      window.cancelAnimationFrame(firstFrame);
+      window.clearTimeout(restoredScrollTimer);
     };
+  }, [page]);
+
+  useEffect(() => {
+    if (page !== "fortune") return undefined;
+    const updateOraclePosition = () => setFortuneScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", updateOraclePosition, { passive: true });
+    updateOraclePosition();
+    return () => window.removeEventListener("scroll", updateOraclePosition);
   }, [page]);
 
   function navigateTo(nextPage) {
@@ -2108,10 +2124,10 @@ function App() {
     setFortuneScrolled(false);
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (window.location.hash !== `#${nextPage}`) {
-      window.location.hash = nextPage;
-    } else {
-      setPage(nextPage);
+      // Preserve deep links without native hash scrolling/restoration.
+      window.history.pushState(null, "", `#${nextPage}`);
     }
+    setPage(nextPage);
   }
 
   function reshufflePrompts() {
