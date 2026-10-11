@@ -196,10 +196,28 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.getByRole("tab", {name:"Today"}).click();
 
       await page.getByRole("button", {name:"Open Shopping List"}).click();
-      await page.getByRole("button", {name:/Add Shopping Item/i}).click();
-      await page.getByLabel("Title", {exact:true}).fill("Rosie cheese treats");
-      await page.getByRole("button", {name:"Save Reminder"}).click();
-      assert((await page.locator(".rr-rows").innerText()).includes("Rosie cheese treats"));
+      await page.getByRole("textbox", {name:"Grocery list items"}).fill("Rosie cheese treats, bananas, eggs");
+      await page.getByRole("button", {name:/Add to Grocery List/i}).click();
+      assert.equal(await page.locator(".rr-simple-row").count(),3,
+        "Bulk grocery paste should create three individual rows");
+      assert((await page.getByRole("region", {name:"Produce"}).innerText()).includes("Bananas"),
+        "Produce item should have a neat category heading");
+      assert((await page.getByRole("region", {name:"Dairy & Eggs"}).innerText()).includes("Eggs"),
+        "Dairy item should be organized by category");
+      assert((await page.locator(".rr-simple-rows").allInnerTexts()).join(" ").includes("Rosie cheese treats"),
+        "First grocery item lost");
+      await page.getByRole("button", {name:"Complete: Bananas"}).click();
+      assert.equal(await page.getByRole("button", {name:"Mark incomplete: Bananas"}).count(),1,
+        "Grocery checkbox did not mark item complete");
+      await page.getByRole("button", {name:"Open Task List"}).click();
+      await page.getByRole("textbox", {name:"New task"}).fill("Walk Rosie");
+      await page.getByRole("button", {name:"Add task"}).click();
+      await page.getByRole("textbox", {name:"New task"}).fill("Research the stars");
+      await page.getByRole("textbox", {name:"New task"}).press("Enter");
+      assert.equal(await page.locator(".rr-task-rows .rr-simple-row").count(),2,
+        "Pressing Enter should add one checkbox per task");
+      await page.getByRole("button", {name:"Complete: Walk Rosie"}).click();
+      assert.equal(await page.getByRole("button", {name:"Mark incomplete: Walk Rosie"}).count(),1);
 
       await page.getByRole("button", {name:"Open Notes & Ideas"}).click();
       await page.getByRole("button", {name:/New note/i}).click();
