@@ -2660,7 +2660,7 @@ function App() {
 
                 <button className="ask-button" type="submit" disabled={consulting || revealStage === "manifesting"}>
                   <span className="button-paw">🐾</span>
-                  {revealStage === "manifesting" ? "RECEIVING…" : consulting ? "CONSULTING…" : question.trim() ? "ASK ROSIE" : "SURPRISE ME"}
+                  {revealStage === "manifesting" ? "RECEIVING…" : consulting ? "CONSULTING…" : "ASK ROSIE"}
                 </button>
               </div>
 
