@@ -90,3 +90,12 @@
   .rr-hub-thirds{min-height:330px;}
 }
 @media(prefers-reduced-motion:reduce){.rr-hub-panel img{transition:none;}}
+
+/* Generic application main gutters must not inset the illustrated triptych. */
+.app-shell.page-resources > main.rr-hub-page {
+  box-sizing:border-box;
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:0 0 calc(85px + env(safe-area-inset-bottom,0px)) !important;
+}
