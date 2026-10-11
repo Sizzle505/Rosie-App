@@ -43,6 +43,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         const tile = page.locator(".rr-feature-" + section);
         const illustration = tile.locator(".rr-feature-art img");
         assert.equal(await illustration.count(), 1, "missing custom icon markup: " + section);
+        await illustration.scrollIntoViewIfNeeded();
         await illustration.evaluate(async img => { if (!img.complete) await img.decode(); });
         assert(await illustration.evaluate(img => img.naturalWidth === 320), "icon failed: " + section);
         const geom = await tile.evaluate(node => ({
