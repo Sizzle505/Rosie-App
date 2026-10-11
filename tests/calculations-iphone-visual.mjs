@@ -83,6 +83,26 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       const fits=await page.locator(".rac-readout output").evaluate(el=>el.scrollWidth<=el.clientWidth+2);
       assert(fits,"long values clipped in parchment");
       assert.equal(errors.length,0,"console page error(s): "+errors.join(" | "));
+      // Rosie Resources uses the original page artworks as three equal interactive thirds.
+      await page.goto("http://127.0.0.1:5173/#resources",{waitUntil:"networkidle"});
+      await page.locator(".rr-hub-panel").first().waitFor();
+      const triptych=await page.locator(".rr-hub-panel").evaluateAll(elements=>elements.map(el=>{
+        const rect=el.getBoundingClientRect();
+        const img=el.querySelector("img");
+        return {title:el.getAttribute("aria-label"),height:rect.height,width:rect.width,x:rect.x,
+          naturalWidth:img.naturalWidth,loaded:img.complete,src:img.getAttribute("src")};
+      }));
+      assert.equal(triptych.length,3,"Resources needs exactly three resource panels");
+      assert(triptych.every(x=>x.loaded&&x.naturalWidth>0),"Resources imagery is missing");
+      assert(triptych.every(x=>Math.abs(x.width-width)<2&&Math.abs(x.x)<2),"Resources panels inset from viewport");
+      assert(Math.max(...triptych.map(x=>x.height))-Math.min(...triptych.map(x=>x.height))<=1,
+        "Resources panels are not equal thirds");
+      await page.screenshot({path:output+"/"+name+"-resources.png",fullPage:true});
+      for(const [index,hash] of [[0,"reminders"],[1,"calculations"],[2,"timekeeper"]]){
+        await page.locator(".rr-hub-panel").nth(index).click();
+        await page.waitForURL("**/#"+hash);
+        await page.goto("http://127.0.0.1:5173/#resources",{waitUntil:"networkidle"});
+      }
       results.push({engine,width,height,headerNatural:[geometry.nativeWidth,geometry.nativeHeight],seam:geometry.frame.top-geometry.hero.bottom,displayInset:geometry.display.right-geometry.value.right,passed:true});
       await context.close();
       console.log("PASS",name,JSON.stringify(results.at(-1)));
