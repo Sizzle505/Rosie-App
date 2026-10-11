@@ -12,14 +12,14 @@ Branch: `work/rosies-reminders-organizer-20261011`
 - Data stored in `localStorage` under `rosieverse.reminders.v1`; **single-browser only**. No sign-in system, cross-device sync, or background push notifications in this branch.
 - No seed/demo items baked into interface or persistent data.
 
-## Required art package (not committed to this branch)
-Extract `Rosie_Reminders_Implementation_Assets_20261011.zip` supplied in the ChatGPT handoff to the repository root, preserving:
+## Installed artwork (committed to this branch)
+The approved binary assets are committed at these paths (the ZIP is an optional backup):
 - `public/rosieverse/reminders/hero-mobile.webp` - the approved user-supplied hero including title.
 - `public/rosieverse/reminders/hero-desktop.webp` - optimized desktop copy.
 - `public/rosieverse/reminders/cards/{tasks,shopping,appointments,notes,goals}.webp` - text-free decorative crops.
 - `public/rosieverse/reminders/textures/parchment.webp` - seamless texture.
 
-The page has CSS/typography fallbacks when art is absent, but should not be accepted as visually complete until those files are added. The shopping vignette has dog treats, toys, food and accessories. The fifth section is **Goals & Gratitude**, not Habits & Goals.
+The page has graceful CSS fallbacks if assets are unavailable. The shopping vignette includes dog treats, toys, food and accessories. Both hero sizes are selected responsively. The fifth section is **Goals & Gratitude**, not Habits & Goals.
 
 ## Manual mobile acceptance checklist
 1. Open `/#reminders` on a 320px iPhone viewport and a modern 390px iPhone viewport. Hero shows original Rosie without duplicate titles. Date panel and feature tiles fit without horizontal overflow.
@@ -34,5 +34,5 @@ The page has CSS/typography fallbacks when art is absent, but should not be acce
 ## Integration notes
 - Live text and dynamic rows use React and CSS, not baked-in image buttons.
 - Frontend-only V1 stores everything on the current browser. Connect to account-scoped storage when the separate PIN/login work is ready, with explicit migration from localStorage.
-- The GitHub commit status reports **Vercel: success** for the preview build. Direct Vercel project inspection returned 403 in this session, so screenshot/layout and actual iPhone interaction remain unverified.
+- The Vercel preview deployment is **READY** and builds successfully with all Rosie Reminders asset paths resolving, verified from build logs. The remaining `/captain2-hero.webp` build-time warning predates this feature and is outside its scope. Preview protection requires Vercel SSO, and no interactive iPhone/browser QA has been performed. Do not merge until that testing passes.
 - This is a review branch, not a production deployment.
