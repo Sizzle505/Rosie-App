@@ -265,6 +265,10 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       const ask = page.locator(".ask-button");
       const fortuneText = page.locator("#question");
       assert.equal(await fortuneText.inputValue(),"","Fortune should start with an empty input");
+      // Safari's sticky cabinet and persistent bottom nav otherwise overlap a
+      // center-of-viewport test tap. A visitor can scroll the form into clear view.
+      await ask.evaluate(el => el.scrollIntoView({block:"center",behavior:"instant"}));
+      await page.waitForTimeout(110);
       await ask.click();
       const autoQuestion=await fortuneText.inputValue();
       assert(autoQuestion.length>15 && autoQuestion.endsWith("?"),
