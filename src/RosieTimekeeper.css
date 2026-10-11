@@ -131,3 +131,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-time {font-size:30px;}
 }
 @media(prefers-reduced-motion:reduce){.rtk-controls button{transition:none;}}
+
+/* Fit hour-long stopwatch readings without allowing digits outside the locked bezel. */
+.rtk-time.is-hours {font-size:clamp(22px,6.1vw,47px);letter-spacing:-.055em;}
+@media(max-width:355px){.rtk-time.is-hours{font-size:22px;}}
