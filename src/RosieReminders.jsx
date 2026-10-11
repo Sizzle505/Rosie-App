@@ -223,13 +223,15 @@ export default function RosieReminders() {
           onClick={() => { setTab("calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
       </div>
       <section className="rr-paper" aria-label="Reminders organizer">
-        <div className="rr-panel-head">
-          <span className="rr-emblem" aria-hidden="true">♛</span>
-          <div><h2>{section === "today" ? (tab === "calendar" ? "Your Calendar" : "Today at a Glance")
-            : CATEGORIES.find(x => x.id === section)?.title}</h2>
-            <p>{section === "today" ? "Your day, beautifully organized. Small steps make a brighter tomorrow."
-              : CATEGORIES.find(x => x.id === section)?.detail}</p></div>
-        </div>
+        {!(section === "today" && tab === "calendar") && (
+          <div className="rr-panel-head">
+            <span className="rr-emblem" aria-hidden="true">♛</span>
+            <div><h2>{section === "today" ? "Today at a Glance"
+              : CATEGORIES.find(x => x.id === section)?.title}</h2>
+              <p>{section === "today" ? "Your day, beautifully organized. Small steps make a brighter tomorrow."
+                : CATEGORIES.find(x => x.id === section)?.detail}</p></div>
+          </div>
+        )}
         {storageError && <p className="rr-warning" role="alert">{storageError}</p>}
 
         {section === "today" && <>
