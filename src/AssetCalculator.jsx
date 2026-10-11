@@ -52,6 +52,7 @@ export default function AssetCalculator({ calc, send }) {
         <button type="button" className="rac-backspace" aria-label="Backspace" aria-keyshortcuts="Backspace" onClick={() => send("DEL")}>
           <span className="rac-sr-only">Backspace</span>
         </button>
+        <button type="button" className="rac-all-clear" aria-label="Clear all" onClick={() => send("AC")}>AC</button>
       </div>
       <div className="rac-memory-keys" aria-label="Memory and quick operations">
         {MEMORY_KEYS.map(value => <Key key={value} value={value} send={send} small disabled={(["MC", "MR"].includes(value) && !calc.hasMemory)} />)}
@@ -59,7 +60,6 @@ export default function AssetCalculator({ calc, send }) {
       <div className="rac-digit-keys" aria-label="Digits and operations">
         {NUMERIC_ROWS.flat().map(value => <Key key={value} value={value} send={send} wide={value === "0"} />)}
       </div>
-      <button type="button" className="rac-all-clear" onClick={() => send("AC")}>AC · Clear all</button>
     </section>
   );
 }
