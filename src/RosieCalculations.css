@@ -173,6 +173,8 @@
 /* Keep the entire ORIGINAL high-resolution Rosie banner pinned as it touches
    the top of the viewport. No cropped illustration and no substitute text bar. */
 .app-shell.page-calculations main.rc-page > header.rc-hero {
+  /* Decorative art stays pinned, but must never intercept interactive controls beneath. */
+  pointer-events: none;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
