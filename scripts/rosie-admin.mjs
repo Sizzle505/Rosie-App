@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Admin-only CLI: run on a trusted machine with SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY set.
+// Admin-only CLI: run on a trusted machine with SUPABASE_URL and a server-side SUPABASE_SECRET_KEY set.
 // Never give this script or the service-role key to the browser.
 import { db, hashPin } from "../api/_lib/core.js";
 
@@ -9,8 +9,8 @@ if (!["create", "reset", "disable", "enable", "unlock"].includes(action) || !/^[
   console.error('Usage: node scripts/rosie-admin.mjs create|reset|disable|enable|unlock USERNAME ["Display Name"]');
   process.exit(2);
 }
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY (server/admin environment only).");
+if (!process.env.SUPABASE_URL || !(process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)) {
+  console.error("Missing SUPABASE_URL or SUPABASE_SECRET_KEY (legacy SUPABASE_SERVICE_ROLE_KEY also supported; server/admin only).");
   process.exit(2);
 }
 async function promptPin() {
