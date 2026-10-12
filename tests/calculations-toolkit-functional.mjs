@@ -115,6 +115,9 @@ try {
       await page.locator(".rc-tool-card").nth(index).click();
       const panel=page.locator(".rc-device");
       await panel.waitFor();
+      await panel.locator(".rc-device-original-art").evaluate(async image => {
+        if (!image.complete || image.naturalWidth===0) await image.decode();
+      });
       const artwork=await panel.evaluate(el=>{
         const frame=el.querySelector(".rc-device-original-art");
         return {
