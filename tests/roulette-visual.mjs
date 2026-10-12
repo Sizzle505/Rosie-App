@@ -90,7 +90,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
             `${engine} ${width}: fixed artwork moved (${i}, ${field})`);
         }
       }
-      const countLabels = async () => salon.locator('[class*="wheelLabel"] b').count();
+      const countLabels = async () => salon.locator('[class*="wheelLabel"] [class*="wheelLabelInner"]').count();
       assert.equal(await countLabels(), 6);
       for (let n = 6; n > 2; n--) {
         await salon.locator('button[aria-label^="Remove "]').first().click();
@@ -101,8 +101,26 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       const firstChoice = salon.locator('input[aria-label="Wheel choice 1"]');
       await firstChoice.fill("A Fine Choice");
       await firstChoice.blur();
-      assert((await salon.locator('[class*="wheelLabel"] b').allTextContents()).includes("A Fine Choice"),
-        "edited label must remain live DOM text");
+      const firstLabel = salon.locator('[class*="wheelLabel"]').first();
+      assert.deepEqual(await firstLabel.locator('[class*="wheelLabelWord"]').allTextContents(),
+        ["A", "Fine", "Choice"], "each edited word must be a separate live line");
+      assert.equal(await firstLabel.getAttribute("aria-label"), "A Fine Choice");
+      const typography = await firstLabel.locator('[class*="wheelLabelWord"]').first().evaluate(node => {
+        const style = getComputedStyle(node);
+        const inner = getComputedStyle(node.parentElement);
+        return {
+          family: style.fontFamily,
+          metallic: style.backgroundImage.includes("linear-gradient"),
+          textFill: style.webkitTextFillColor,
+          innerTransform: inner.transform
+        };
+      });
+      assert(typography.family.includes("Cinzel") || typography.family.includes("Baskerville"));
+      assert(typography.metallic, "the word must have a metallic silver gradient");
+      // matrix(-1, 0, 0, -1, 0, 0): glyph TOP faces the center at every segment angle.
+      const transformValues = typography.innerTransform.match(/matrix\(([^)]+)\)/)?.[1]?.split(',').map(Number);
+      assert(transformValues && transformValues[0] < -.99 && transformValues[3] < -.99,
+        "radial label text must point its top inward");
       for (let n = 2; n < 10; n++) {
         await salon.locator('input[id="rosie-wheel-choice"]').fill(`Choice ${n + 1}`);
         await salon.getByRole("button", { name: "ADD", exact: true }).click();
