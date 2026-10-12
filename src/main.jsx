@@ -36,6 +36,7 @@ import RosieReminders from "./RosieReminders.jsx";
 import RosieCalculations from "./RosieCalculations.jsx";
 import RosieTimekeeper from "./RosieTimekeeper.jsx";
 import RosieResources from "./RosieResources.jsx";
+import MadameRosieLayered from "./MadameRosieLayered.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
@@ -368,6 +369,7 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
 
 function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst }) {
   const manifesting = revealStage === "manifesting";
+  const layeredPreview = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("rosieLayers") === "1";
   const stageRef = useRef(null);
   const stageArtRef = useRef(null);
 
@@ -439,13 +441,23 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
           <p>SEER OF TREATS · KNOWER OF THINGS</p>
         </div>
 
-        <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
-          <img
-            ref={stageArtRef}
-            className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
-            src="/rosie-fortune-stage.webp"
-            alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
-          />
+        <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""} ${layeredPreview ? "madame-layered-active" : ""}`}>
+          {layeredPreview ? (
+            <MadameRosieLayered
+              artRef={stageArtRef}
+              consulting={consulting}
+              manifesting={manifesting}
+              flipped={flipped}
+              turning={turning}
+            />
+          ) : (
+            <img
+              ref={stageArtRef}
+              className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
+              src="/rosie-fortune-stage.webp"
+              alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
+            />
+          )}
 
           <div className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
 
