@@ -335,27 +335,42 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           controls:rect(".rtk-controls"),utility:rect(".rtk-utility"),
           modeInDial:scene.querySelector(".rtk-dial .rtk-mode-switch")!==null,
           controlsInDial:scene.querySelector(".rtk-dial .rtk-controls")!==null,
+          modeInPanel:scene.querySelector(".rtk-utility > .rtk-mode-switch")!==null,
+          modeInActionDeck:scene.querySelector(".rtk-action-deck .rtk-mode-switch")!==null,
+          sceneWidth:scene.getBoundingClientRect().width,sceneHeight:scene.getBoundingClientRect().height,
           viewport:innerWidth};
       });
-      assert(!clockLayout.modeInDial && !clockLayout.controlsInDial,
-        "Clock modes and buttons must be outside the circular dial");
+      assert(!clockLayout.modeInDial && !clockLayout.controlsInDial &&
+        clockLayout.modeInPanel && !clockLayout.modeInActionDeck,
+        "Stopwatch/Timer must be inside the utility panel; circular controls must stay outside the dial");
       assert(Math.abs(clockLayout.readout.centerX-clockLayout.dial.centerX)<3 &&
         Math.abs(clockLayout.readout.centerY-clockLayout.dial.centerY)<6,
         "Timekeeper numerals must be geometrically centered in the clock: "+JSON.stringify(clockLayout));
-      assert(clockLayout.deck.top>clockLayout.dial.bottom+5 &&
-        clockLayout.utility.top>=clockLayout.deck.bottom-3,
-        "Clock controls overlap the bezel or laps panel: "+JSON.stringify(clockLayout));
-      assert(clockLayout.utility.width<clockLayout.viewport*.79 &&
-        clockLayout.utility.height>=95,
-        "Laps and Quick Timers panel must be narrower and deeper: "+JSON.stringify(clockLayout));
+      assert(clockLayout.deck.top>=clockLayout.dial.bottom+4 &&
+        clockLayout.deck.top<=clockLayout.dial.bottom+25 &&
+        clockLayout.utility.top>=clockLayout.controls.bottom+2,
+        "Circular Timekeeper buttons must hug the bezel without overlapping it or the panel: "+JSON.stringify(clockLayout));
+      assert(clockLayout.utility.width>=clockLayout.sceneWidth*.79 &&
+        clockLayout.utility.width<=clockLayout.sceneWidth*.90 &&
+        clockLayout.utility.height<=clockLayout.sceneHeight*.195,
+        "Timekeeper panel must be wider and shallower without exceeding its scene: "+JSON.stringify(clockLayout));
       await page.screenshot({path:dir+"/"+name+"-timekeeper-stopwatch.png",fullPage:true});
       const start=page.getByRole("button",{name:"Start",exact:true});
       await start.click();
       await page.waitForTimeout(120);
       await page.getByRole("button",{name:"Record lap"}).click();
       assert.equal(await page.locator(".rtk-laps li").count(),1,"lap recording must still work");
-      await page.getByRole("button",{name:"Timer",exact:true}).click();
+      await page.locator(".rtk-utility").getByRole("button",{name:"Timer",exact:true}).click();
       assert.equal(await page.locator(".rtk-presets button").count(),4,"Quick Timers missing");
+      const timerGeometry=await page.locator(".rtk-utility").evaluate(panel=>{
+        const timerButtons=[...panel.querySelectorAll(".rtk-presets button")];
+        const bounds=timerButtons.map(button=>button.getBoundingClientRect());
+        return {sameRow:bounds.every(r=>Math.abs(r.top-bounds[0].top)<2),
+          panelWidth:panel.getBoundingClientRect().width,
+          rowWidth:bounds.at(-1).right-bounds[0].left};
+      });
+      assert(timerGeometry.sameRow&&timerGeometry.rowWidth<=timerGeometry.panelWidth,
+        "Four quick timers should fit in a single shallow row: "+JSON.stringify(timerGeometry));
       const preset=page.getByRole("button",{name:"5 min",exact:true});
       await preset.click();
       assert((await page.locator(".rtk-time").innerText()).includes("05:00"),
