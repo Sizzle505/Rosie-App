@@ -197,7 +197,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
 
       await page.getByRole("button", {name:"Open Shopping List"}).click();
       await page.getByRole("textbox", {name:"Grocery list items"}).fill("Rosie cheese treats, bananas, eggs");
-      await page.getByRole("button", {name:/Add to Grocery List/i}).click();
+      await page.getByRole("button", {name:/Add Items/i}).click();
       assert.equal(await page.locator(".rr-simple-row").count(),3,
         "Bulk grocery paste should create three individual rows");
       assert.equal(await page.locator(".rr-grocery-group").count(),0,
