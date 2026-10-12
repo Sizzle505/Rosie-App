@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1650" viewBox="0 0 900 1650">
+<defs>
+ <radialGradient id="midnight"><stop stop-color="#162b55"/><stop offset=".48" stop-color="#091a36"/><stop offset="1" stop-color="#040a1a"/></radialGradient>
+ <linearGradient id="silk" x1="0" y1="0" x2="1" y2=".6"><stop stop-color="#183c65" stop-opacity=".27"/><stop offset=".33" stop-color="#060b22" stop-opacity=".08"/><stop offset=".55" stop-color="#40619a" stop-opacity=".12"/><stop offset="1" stop-color="#000414" stop-opacity=".55"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2=".2"><stop stop-color="#875023"/><stop offset=".18" stop-color="#ffd996"/><stop offset=".48" stop-color="#c78e41"/><stop offset=".7" stop-color="#fff0bb"/><stop offset="1" stop-color="#a36a2d"/></linearGradient>
+ <radialGradient id="star"><stop stop-color="#fff8e3"/><stop offset=".13" stop-color="#ffe9a4"/><stop offset=".36" stop-color="#ebb36f" stop-opacity=".6"/><stop offset="1" stop-color="#ebb36f" stop-opacity="0"/></radialGradient>
+ <pattern id="weave" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M0 0 9 9M-4 5 4 13" fill="none" stroke="#d5b483" opacity=".027" stroke-width=".65"/><path d="M9 0 0 9" stroke="#020818" stroke-width=".8" opacity=".3"/></pattern>
+ <pattern id="damask" width="275" height="346" patternUnits="userSpaceOnUse"><g fill="none" stroke="#8aa1bd" stroke-width="2" opacity=".105">
+ <path d="M137 14Q72 74 119 124Q159 157 137 174Q115 157 155 124Q202 74 137 14"/>
+ <path d="M137 331Q72 271 119 221Q159 188 137 174Q115 188 155 221Q202 271 137 331"/>
+ <path d="M137 62C89 55 45 96 61 146c12 37 40 46 53 25 9-16-8-28-21-18M137 62c48-7 92 34 76 84-12 37-40 46-53 25-9-16 8-28 21-18"/>
+ <path d="M137 282c-48 7-92-34-76-84 12-37 40-46 53-25 9 16-8 28-21 18m44 91c48 7 92-34 76-84-12-37-40-46-53-25-9 16 8 28 21 18"/>
+ <path d="M0 172C65 119 91 141 97 172c-6 31-32 53-97 0m275 0c-65-53-91-31-97 0 6 31 32 53 97 0"/>
+ </g><g fill="#a8b8cf" opacity=".055"><circle cx="137" cy="173" r="7"/><path d="M137 86l-10 29 10-8 10 8zm0 173-10-29 10 8 10-8z"/></g></pattern>
+ <g id="spark" stroke="url(#gold)" stroke-width="1.5"><path d="M0-15 3-3 15 0 3 3 0 15-3 3-15 0-3-3z" fill="#ffe4aa"/></g>
+ <g id="compass" stroke="url(#gold)" fill="none"><circle r="60" stroke-width="1.4"/><circle r="49" stroke-width=".9" stroke-dasharray="2 8"/><circle r="7"/><path d="M0-85V85M-85 0H85" stroke-width="1.2" opacity=".7"/><path d="M0-48 9-9 48 0 9 9 0 48-9 9-48 0-9-9z" fill="#e5b875" fill-opacity=".83"/><path d="M0-33 6-6 33 0 6 6 0 33-6 6-33 0-6-6z" fill="#21375e"/><circle r="2.5" fill="#fff2c2"/></g>
+ <g id="flourish" fill="none" stroke="url(#gold)" stroke-width="2.2" stroke-linecap="round">
+ <path d="M0 180C0 60 11 22 88 22c45 0 69 23 60 50-9 28-48 21-42-5 3-14 19-17 25-7M11 122c47-25 75-1 66 27-9 26-37 20-39 2M41 48c18 36 2 53-16 54M88 27c5 36 27 44 50 43"/>
+ <path d="M12 70c43-12 46-34 44-47M23 164c19-39 33-41 54-38M121 23c-24 22-33 9-42-7"/>
+ <path d="M24 83c15 9 22 0 28-10m-22 49c17-8 23-3 27 8M79 29c8 18 19 17 27 5" stroke-width="1.3"/>
+ <path d="M0 160C19 105 38 103 63 97M9 49C40 55 54 38 60 15" opacity=".5"/>
+ </g>
+</defs>
+<rect width="900" height="1650" fill="url(#midnight)"/><rect width="900" height="1650" fill="url(#silk)"/><rect width="900" height="1650" fill="url(#weave)"/><rect width="900" height="1650" fill="url(#damask)"/>
+<g stroke="url(#gold)" fill="none" opacity=".93"><path d="M27 202V1450M873 202V1450" stroke-width="1.7"/><path d="M41 248V1405M859 248V1405" opacity=".35"/><path d="M208 26H692M208 1624H692" stroke-width="1.6"/><path d="M93 53H807M93 1597H807" opacity=".36"/></g>
+<use href="#flourish" x="16" y="15"/><use href="#flourish" transform="translate(884 15) scale(-1 1)"/>
+<use href="#flourish" transform="translate(16 1635) scale(1 -1)"/><use href="#flourish" transform="translate(884 1635) scale(-1 -1)"/>
+<use href="#compass" transform="translate(85 135) scale(.67)"/><use href="#compass" transform="translate(815 135) scale(.67)"/><use href="#compass" transform="translate(85 1515) scale(.67)"/><use href="#compass" transform="translate(815 1515) scale(.67)"/>
+<g opacity=".78"><use href="#spark" x="450" y="32"/><use href="#spark" x="450" y="1618"/><use href="#spark" x="27" y="825"/><use href="#spark" x="873" y="825"/><use href="#spark" x="35" y="440" transform="rotate(30 35 440) scale(.7)"/><use href="#spark" x="865" y="445"/><use href="#spark" x="38" y="1210"/><use href="#spark" x="862" y="1205"/></g>
+<g fill="url(#star)" opacity=".74"><circle cx="28" cy="388" r="45"/><circle cx="862" cy="398" r="45"/><circle cx="58" cy="1150" r="45"/><circle cx="846" cy="1166" r="38"/><circle cx="144" cy="52" r="28"/><circle cx="743" cy="1586" r="22"/></g>
+<g fill="#f9d995" opacity=".63"><circle cx="88" cy="414" r="2"/><circle cx="798" cy="555" r="2"/><circle cx="112" cy="940" r="1.8"/><circle cx="787" cy="1013" r="2"/><circle cx="173" cy="117" r="1.5"/><circle cx="703" cy="1540" r="2"/></g>
+</svg>

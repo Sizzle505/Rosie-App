@@ -239,3 +239,153 @@
 .rr-tabs { margin:3px auto 18px; max-width:720px; gap:9px; }
 .rr-tabs button { border-radius:14px; min-height:51px; }
 .app-shell.page-reminders { background-color:#0b101d; }
+
+
+/* Midnight-blue luxury renovation - composable SVG material and gold UI.
+   Art remains separate from live labels, input controls and local storage. */
+.app-shell.page-reminders {background-color:#071226;}
+.app-shell.page-reminders .rr-page {
+  background-color:#071226;
+  background-image:
+    linear-gradient(180deg,rgba(2,8,24,.10),rgba(3,8,20,.07) 48%,rgba(1,5,15,.1)),
+    url("/rosieverse/reminders/textures/blue-generated-material-overlay.svg"),
+    url("/rosieverse/reminders/textures/blue-celestial-luxury.svg"),
+    url("/rosieverse/reminders/textures/blue-velvet-material.svg");
+  background-position:center top,center top,center top,center center;
+  background-repeat:no-repeat,no-repeat,no-repeat,repeat;
+  background-size:100% 100%,100% 100%,100% 100%,min(98vw,760px) auto;
+}
+.app-shell.page-reminders .rr-content {position:relative;padding-bottom:10px;}
+/* Existing Rosie hero and five approved picture-buttons deliberately stay untouched. */
+.rr-page .rr-feature-grid {position:relative;z-index:1;}
+.rr-page .rr-feature {filter:drop-shadow(0 6px 9px rgba(0,0,0,.7));}
+.rr-page .rr-feature.selected {filter:drop-shadow(0 5px 10px rgba(240,197,108,.54)) brightness(1.07);}
+
+/* The produced Today/Calendar pieces are resizable empty-shell SVGs.
+   Their labels remain accessible, dynamic HTML buttons. */
+.rr-page .rr-tabs {
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  margin:8px auto 18px;
+  gap:clamp(6px,1.7vw,13px);
+  max-width:720px;
+}
+.rr-page .rr-tabs button {
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(4px,1.25vw,12px);min-width:0;
+  min-height:clamp(55px,11.2vw,77px);
+  padding:7px 8px 9px;
+  border:0;border-radius:30px;color:#ffebc3;
+  background-color:transparent;
+  background-image:url("/rosieverse/reminders/tabs/today-burgundy.svg");
+  background-size:100% 100%;background-repeat:no-repeat;
+  box-shadow:none;
+  font:600 clamp(18px,4.35vw,28px)/1.05 Georgia,serif;
+  text-shadow:0 2px 3px rgba(1,3,10,.95),0 0 9px rgba(244,189,95,.25);
+  filter:drop-shadow(0 4px 5px rgba(0,0,0,.55));
+  transition:filter .16s ease,transform .16s ease;
+}
+.rr-page .rr-tabs button:nth-child(2) {
+  background-image:url("/rosieverse/reminders/tabs/calendar-midnight.svg");
+}
+.rr-page .rr-tabs button::before {
+  content:"♛";font-size:clamp(16px,3.5vw,25px);
+  color:#f1c57d;line-height:1;
+  text-shadow:0 1px 3px #160a0b;
+  flex:none;
+}
+.rr-page .rr-tabs button:nth-child(2)::before {
+  content:"▦";font-family:Georgia,serif;
+  font-size:clamp(17px,3.6vw,25px);
+}
+.rr-page .rr-tabs button.active {
+  color:#fff7d9;filter:brightness(1.18) drop-shadow(0 3px 8px #e5b55d5c);
+  background-color:transparent;border:0;
+}
+.rr-page .rr-tabs button:focus-visible {outline:3px solid #fff0bf;outline-offset:3px;}
+.rr-page .rr-tabs button:active {transform:scale(.985);}
+@media(hover:hover){.rr-page .rr-tabs button:hover{filter:brightness(1.10) drop-shadow(0 5px 8px #0008);}}
+
+/* Refined working parchment sheet - gold frame, quiet writable surface. */
+.rr-page .rr-paper {
+  position:relative;isolation:isolate;
+  border:3px solid #bd8b41;
+  border-radius:clamp(17px,4vw,25px);
+  color:#301d26;
+  background:
+    linear-gradient(160deg,rgba(255,248,226,.93),rgba(250,228,185,.91) 52%,rgba(234,201,150,.93)),
+    url("/rosieverse/reminders/textures/parchment.webp") center / 320px repeat;
+  box-shadow:0 0 0 1px #f9dd9a,0 0 0 5px #5b371b85,
+    inset 0 0 0 3px #fff3d6,inset 0 0 0 5px #c99b59,
+    inset 0 0 38px #b27e3e38,0 12px 27px rgba(0,0,0,.62);
+  padding:clamp(19px,4.6vw,34px) clamp(16px,4vw,30px);
+  overflow:hidden;
+}
+.rr-page .rr-paper::before {
+  content:"";position:absolute;inset:8px;z-index:-1;
+  border:1px solid #bd8c4780;border-radius:13px;pointer-events:none;
+  background:
+    radial-gradient(circle at top left,#f4cb7f5e 0,transparent 42px),
+    radial-gradient(circle at top right,#f4cb7f5e 0,transparent 42px),
+    radial-gradient(circle at bottom left,#f4cb7f5e 0,transparent 42px),
+    radial-gradient(circle at bottom right,#f4cb7f5e 0,transparent 42px);
+}
+.rr-page .rr-panel-head {gap:12px;border-bottom:1px solid #be9159;padding-bottom:17px;}
+.rr-page .rr-panel-head h2 {font-family:Baskerville,"Iowan Old Style",Georgia,serif;color:#442031;}
+.rr-page .rr-emblem {
+  background:radial-gradient(circle at 35% 25%,#a43450,#5b1029 64%,#350e20);
+  color:#f6d390;
+  border:3px double #e2b967;
+  box-shadow:inset 0 2px 6px #270811b0,0 1px 4px #70432299;
+}
+/* The goals sheet gets a separate burgundy masthead, like the approved planner. */
+.rr-page .rr-paper:has(.rr-goals) .rr-panel-head {
+  margin:-4px -1px 14px;padding:12px 12px 16px;
+  border:2px solid #bf8d47;border-radius:13px;
+  background:linear-gradient(122deg,#6d102a,#37091b 75%);
+  box-shadow:inset 0 0 0 2px #efc47c50,0 5px 12px #3b10203d;
+}
+.rr-page .rr-paper:has(.rr-goals) .rr-panel-head h2 {color:#fff0cb;text-shadow:0 2px 4px #180310;}
+.rr-page .rr-paper:has(.rr-goals) .rr-panel-head p {color:#e8cb9a;}
+.rr-page .rr-goals h3 {
+  display:flex;align-items:center;gap:12px;
+  margin:16px 0 12px;padding-bottom:9px;
+  border-bottom:1px solid #b48d536e;
+  color:#4c2633;
+  font-family:Baskerville,"Iowan Old Style",Georgia,serif;
+}
+.rr-page .rr-goals h3::before {content:"✦";font-size:16px;color:#b07b34;}
+/* Gold-trimmed, fully live Add / Save controls - no image with baked-in input text. */
+.rr-page .rr-inline-add button,
+.rr-page .rr-task-input-row button,
+.rr-page .rr-groceries-input > button,
+.rr-page .rr-side-head > button,
+.rr-page .rr-primary,
+.rr-page .rr-save {
+  background:linear-gradient(160deg,#9d2944 0%,#69132e 39%,#380a1a 100%);
+  color:#fff0c8!important;
+  border:2px solid #c99c54;
+  border-radius:12px;
+  box-shadow:inset 0 1px 0 #ffe4a588,inset 0 0 0 2px #541729,0 3px 7px #3e193455;
+  text-shadow:0 1px 2px #270914;
+}
+.rr-page .rr-inline-add button {min-height:43px;min-width:70px;padding:7px 12px;}
+.rr-page .rr-primary,.rr-page .rr-save {border-radius:22px;}
+.rr-page .rr-goal button {
+  border:1px solid #caa66b;border-radius:9px;
+  background:#691932;color:#fff1ca;
+}
+.rr-page .rr-calendar-grid button.picked {
+  background:linear-gradient(150deg,#1a3d69,#081a33);
+  box-shadow:inset 0 0 0 1px #f0cd83;
+  color:#fff4ca;
+}
+@media(max-width:390px) {
+ .rr-page .rr-tabs {gap:5px;}
+ .rr-page .rr-tabs button {padding:7px 3px 8px;gap:5px;font-size:clamp(16px,4.5vw,19px);}
+ .rr-page .rr-paper {padding:20px 15px;}
+ .rr-page .rr-panel-head {gap:10px;}
+ .rr-page .rr-panel-head h2 {font-size:clamp(23px,6.3vw,31px);}
+}
+@media(prefers-reduced-motion:reduce){
+ .rr-page .rr-tabs button {transition:none;}
+}

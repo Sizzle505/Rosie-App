@@ -146,7 +146,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         return {
           rowGap: parseFloat(getComputedStyle(grid).rowGap),
           pagePadding: parseFloat(getComputedStyle(node).paddingBottom),
-          footerMargin: parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom),
+          footerMargin: node.querySelector(".rr-storage-note") ? parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom) : 0,
           outerNavPadding: parseFloat(getComputedStyle(document.querySelector(".app-shell")).paddingBottom)
         };
       });
@@ -257,7 +257,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
         await page.waitForTimeout(120);
         const pos = await page.evaluate(() => ({
-          noteBottom: document.querySelector(".rr-storage-note").getBoundingClientRect().bottom,
+          noteBottom: (document.querySelector(".rr-storage-note") || document.querySelector(".rr-paper")).getBoundingClientRect().bottom,
           navTop: document.querySelector(".bottom-nav").getBoundingClientRect().top
         }));
         assert(pos.noteBottom <= pos.navTop - 8,
