@@ -59,7 +59,7 @@ const FX_FALLBACK_CURRENCIES = [
   ["HKD","Hong Kong Dollar"],["INR","Indian Rupee"],["JPY","Japanese Yen"],
   ["MXN","Mexican Peso"],["NZD","New Zealand Dollar"],["SGD","Singapore Dollar"],
   ["USD","United States Dollar"],["ZAR","South African Rand"]
-].map(([value,name]) => ({value, label: value === "USD" ? "United States $" : value + " · " + name}))
+].map(([value,name]) => ({value, label: value === "USD" ? "USD - USA Dollar" : value + " · " + name}))
   .sort((a,b)=>a.value==="USD" ? -1 : b.value==="USD" ? 1 : a.label.localeCompare(b.label));
 const fxCacheKey = (base, quote) => "rosie.fx.v2." + base + "." + quote;
 function cachedFxRate(base, quote) {
@@ -110,7 +110,8 @@ function toolOutput(id, v, fxRate, fxState) {
     const base = n(v.base), rate = n(v.percent) / 100;
     const amount = base * rate;
     const output = v.percentMode === "discount" ? base - amount : v.percentMode === "increase" ? base + amount : amount;
-    return { main: fmt(output, 2), lines: [v.percentMode === "discount" ? "Savings: " + fmt(amount, 2) : v.percentMode === "increase" ? "Increase: " + fmt(amount, 2) : fmt(v.percent) + "% of " + fmt(base)] };
+    return { main: money(output), lines: v.percentMode === "of" ? []
+      : [v.percentMode === "discount" ? "Savings: " + money(amount) : "Increase: " + money(amount)] };
   }
   if (id === "loan") {
     if (!valid(v.principal, v.annual, v.months) || n(v.principal) < 0 || n(v.annual) < 0 || n(v.months) < 1) return "Enter a principal, nonnegative rate and term.";
@@ -283,7 +284,7 @@ export default function RosieCalculations() {
         if(!Array.isArray(rows)) throw new Error("Invalid currency list");
         const options = rows.filter(row => /^[A-Z]{3}$/.test(row.iso_code || ""))
           .map(row => ({value:row.iso_code,
-            label:row.iso_code === "USD" ? "United States $" :
+            label:row.iso_code === "USD" ? "USD - USA Dollar" :
               row.iso_code + " · " + (row.name || row.iso_code)}))
           .sort((a,b) => a.value==="USD" ? -1 : b.value==="USD" ? 1 :
             a.label.localeCompare(b.label));
