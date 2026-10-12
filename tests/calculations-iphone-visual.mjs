@@ -85,22 +85,41 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert(toolkitLayout.headingMargin<=14 && toolkitLayout.rowGap===0 && toolkitLayout.cardMargin<=-4,
         "Pocket Toolkit dead space was not reduced: "+JSON.stringify(toolkitLayout));
       await page.locator(".rc-tool-card").first().click();
-      const burgundyBg=await page.locator(".rc-page").evaluate(el=>getComputedStyle(el).backgroundImage);
-      assert(burgundyBg.includes("/randomizers/rosie-salon-burgundy-texture.svg"),
-        "Calculations must reuse approved burgundy Randomizers background artwork");
       if(width<=600) {
-        await page.waitForTimeout(450);
-        const alignment=await page.evaluate(()=>{
+        await page.waitForTimeout(480);
+        const alignment=await page.evaluate(async ()=>{
           const panel=document.querySelector(".rc-device").getBoundingClientRect();
+          const stage=document.querySelector(".rc-active-tool-viewport").getBoundingClientRect();
+          const overlay=document.querySelector(".rc-active-tool-overlay");
+          const backdrop=getComputedStyle(overlay);
           const nav=document.querySelector(".bottom-nav").getBoundingClientRect();
-          return {
+          const image=new Image();
+          image.src="/rosieverse/calculations/burgundy-satin.png";
+          await image.decode();
+          return {panel:{top:panel.top,bottom:panel.bottom,left:panel.left,right:panel.right},
+            stage:{top:stage.top,bottom:stage.bottom},
+            width:innerWidth,height:innerHeight,navTop:nav.top,
+            overlayTop:overlay.getBoundingClientRect().top,
+            overlayBottom:overlay.getBoundingClientRect().bottom,
             toolMid:(panel.top+panel.bottom)/2,
-            windowMid:(8+Math.min(innerHeight,nav.top-8))/2,
-            panelHeight:panel.height,viewportHeight:innerHeight,scrollY:window.scrollY
+            usableMid:(stage.top+stage.bottom)/2,
+            background:backdrop.backgroundImage,
+            repeat:backdrop.backgroundRepeat,
+            backgroundSize:backdrop.backgroundSize,
+            naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight
           };
         });
-        assert(Math.abs(alignment.toolMid-alignment.windowMid)<27,
-          "Selected tool must automatically center above iPhone navigation: "+JSON.stringify(alignment));
+        assert(alignment.background.includes("/rosieverse/calculations/burgundy-satin.png") &&
+          alignment.repeat==="no-repeat" && alignment.backgroundSize==="cover" &&
+          alignment.naturalWidth>=900 && alignment.naturalHeight>=1600,
+          "Original full-resolution satin artwork must fill one full viewport without tiling: "+JSON.stringify(alignment));
+        assert(Math.abs(alignment.overlayTop)<=1 && Math.abs(alignment.overlayBottom-alignment.height)<=2,
+          "Satin must cover original header from top to bottom of iPhone: "+JSON.stringify(alignment));
+        assert(Math.abs(alignment.toolMid-alignment.usableMid)<17 &&
+          alignment.panel.top>=alignment.stage.top-3 &&
+          alignment.panel.bottom<=alignment.navTop-6 &&
+          alignment.panel.left>=-1 && alignment.panel.right<=alignment.width+1,
+          "Entire scaled gold tool must fit centered above navigation: "+JSON.stringify(alignment));
       }
       const layers=await page.evaluate(()=>({
         hero:Number(getComputedStyle(document.querySelector(".rc-hero")).zIndex),
@@ -112,7 +131,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert(layers.gold>layers.hero && layers.hero>layers.normal &&
         layers.hero>layers.selectors && layers.workspace==="auto",
         "Calculations header must cover selector buttons, while only the gold tool is above it: "+JSON.stringify(layers));
-      await page.locator(".rc-tool-card").first().click();
+      await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
       const name=engine+"-"+width+"x"+height;
       await page.screenshot({path:output+"/"+name+"-full.png",fullPage:true});
       await hero.screenshot({path:output+"/"+name+"-header.png"});
@@ -259,9 +278,9 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           "RosieVerse header should be another 8% larger: "+JSON.stringify(homeFit));
         assert(homeFit.titleOffset>=3 && homeFit.titleOffset<=9,
           "RosieVerse header must rise 8px from previous position: "+JSON.stringify(homeFit));
-        assert(homeFit.vaultLift==="-10px" && homeFit.resourcesLift==="-15px" &&
+        assert(homeFit.vaultLift==="-18px" && homeFit.resourcesLift==="-23px" &&
           homeFit.cheeseLift==="-3px" && homeFit.cheeseRight==="6px" &&
-          homeFit.captainLift==="-2px" && Number(homeFit.resourcesZ)<Number(homeFit.vaultZ),
+          homeFit.captainLift==="-6px" && Number(homeFit.resourcesZ)<Number(homeFit.vaultZ),
           "Landing card nudges and Resources-behind layering incorrect: "+JSON.stringify(homeFit));
       }
       await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
