@@ -78,7 +78,7 @@ export default function RosieTimekeeper() {
       frame = window.requestAnimationFrame(() => {
         const panel = utilityRef.current;
         const nav = document.querySelector(".resources-bottom-nav");
-        const controls = document.querySelector(".rtk-action-deck .rtk-controls");
+        const controls = document.querySelector(".rtk-action-deck");
         if (!panel || !nav || !controls) return;
         panel.style.setProperty("--rtk-nav-lift", "0px");
         const panelRect = panel.getBoundingClientRect();
