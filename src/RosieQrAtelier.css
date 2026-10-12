@@ -217,3 +217,21 @@
 @media(prefers-reduced-motion:reduce) {
   .qa-save {transition:none;}
 }
+
+/* Printing uses the browser's native PDF/AirPrint flow, no upload or print service. */
+.qa-print-sheet {display:none;}
+@media print {
+  @page {margin:12mm;}
+  body * {visibility:hidden!important;}
+  body,.app-shell,.qa-page,.qa-scene {background:#fff!important;overflow:visible!important;}
+  .app-shell.page-qr-atelier {min-height:0!important;padding:0!important;}
+  .app-shell.page-qr-atelier > main.qa-page {padding:0!important;}
+  .qa-print-sheet,.qa-print-sheet * {visibility:visible!important;}
+  .qa-print-sheet {position:fixed;inset:0;z-index:999999;display:flex!important;align-items:center;justify-content:flex-start;
+    flex-direction:column;background:#fff!important;color:#161616!important;padding:24mm 10mm 0;text-align:center;}
+  .qa-print-brand {font:22px Georgia,serif;letter-spacing:.16em;margin:0 0 12mm;color:#5a4223!important;}
+  .qa-print-sheet h2 {font:normal 32px Georgia,serif;margin:0 0 8mm;}
+  .qa-print-code,.qa-print-code svg {width:85mm!important;height:85mm!important;display:block;background:#fff!important;}
+  .qa-print-sheet h3 {font:normal 23px Georgia,serif;margin:12mm 0 0;max-width:135mm;overflow-wrap:anywhere;}
+  .qa-print-sheet p:last-child {font:16px Georgia,serif;margin-top:6mm;}
+}
