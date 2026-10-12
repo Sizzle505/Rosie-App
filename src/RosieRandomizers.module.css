@@ -1191,3 +1191,32 @@
 
 /* Start the Randomizers hero 18px sooner without changing its internal art. */
 .page { padding-top: 2px; }
+
+/* Refined salon masthead: editorial hierarchy rather than automatic word wrapping. */
+.heroCopy h1 {
+  font-family:"Iowan Old Style","Baskerville","Palatino Linotype",Georgia,serif;
+  font-weight:500;
+  letter-spacing:-.046em;
+  text-wrap:balance;
+}
+.heroTitleLead { font-style:italic; font-weight:400; }
+.heroTitleMain { font-style:normal; font-weight:600; }
+.heroCopy > p {
+  font-family:"Iowan Old Style","Baskerville",Georgia,serif;
+  font-style:italic;
+  line-height:1.38;
+  border-left:1px solid rgba(214,174,97,.73);
+  padding-left:11px;
+}
+@media(max-width:680px) {
+  .heroCopy h1 { margin:10px 0 15px; line-height:.99; letter-spacing:-.036em; overflow-wrap:normal; }
+  .heroTitleLead { display:block; font-size:clamp(38px,10.2vw,48px); line-height:1; }
+  .heroTitleMain { display:block; font-size:clamp(25px,6.5vw,32px); line-height:1.1; letter-spacing:-.044em; }
+  .heroCopy > p { font-size:clamp(11px,2.8vw,13px); max-width:230px; }
+  .kicker { letter-spacing:.13em; }
+  .houseRule { padding-top:10px; border-top:1px solid rgba(213,168,92,.38); }
+}
+@media(max-width:350px) {
+  .heroTitleLead { font-size:34px; }
+  .heroTitleMain { font-size:23px; }
+}

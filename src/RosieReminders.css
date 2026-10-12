@@ -1,5 +1,16 @@
 /* Rosie’s Reminders: decorative imagery never owns interactive text or data. */
-.rr-page { min-height:0; color:#f9e8bb; padding:0; background:radial-gradient(ellipse at 50% 5%,#44304a 0,#111323 48%,#080d19 100%); }
+.rr-page {
+  min-height:0;
+  color:#f9e8bb;
+  padding:0;
+  background-color:#0b101d;
+  background-image:
+    linear-gradient(180deg,rgba(6,10,23,.09),rgba(8,9,20,.20)),
+    url("/rosieverse/reminders/textures/midnight-brocade.svg");
+  background-position:center top,center top;
+  background-size:cover,cover;
+  background-repeat:no-repeat,no-repeat;
+}
 .rr-screen-reader {position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
 .rr-page button, .rr-page input, .rr-page textarea, .rr-page select {font:inherit;}
 .rr-page button {touch-action:manipulation;cursor:pointer;}
@@ -223,3 +234,8 @@
   position: relative;
   transform: translateY(-18px);
 }
+
+/* The two organizer views finish the illustrated menu, above the persistent navigation. */
+.rr-tabs { margin:3px auto 18px; max-width:720px; gap:9px; }
+.rr-tabs button { border-radius:14px; min-height:51px; }
+.app-shell.page-reminders { background-color:#0b101d; }
