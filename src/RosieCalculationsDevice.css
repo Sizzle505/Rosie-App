@@ -674,3 +674,38 @@
   .rc-page .rc-device--tip .rc-tool-result,
   .rc-page .rc-device--split .rc-tool-result {min-height:192px;}
 }
+
+/* Golden device: respect the real scarlet column endpoints in the approved
+   single-piece frame. The columns begin about 11% below the image's top and
+   end about 90% down; keep a minimum 6px title and 5px receipt safety gap.
+   Width-based vertical padding tracks the stretched frame on narrow phones. */
+@media (max-width:739px) {
+  .rc-page .rc-tool-panel.rc-device {
+    padding-top:clamp(97px,26vw,154px);
+    padding-bottom:clamp(102px,27vw,170px);
+  }
+}
+.rc-page .rc-device .rc-tool-result {
+  overflow-wrap:anywhere;
+}
+/* Currency labels and full currency names require complete rows, unlike short
+   percentage/people inputs. Avoid the legacy 2-column currency treatment. */
+.rc-page .rc-device--currency .rc-form-grid {
+  grid-template-columns:minmax(0,1fr);
+  row-gap:10px;
+}
+.rc-page .rc-device--currency .rc-form-grid > .rc-field {
+  grid-column:1 / -1;
+  width:100%;
+}
+.rc-page .rc-device--currency .rc-form-grid > .rc-field select,
+.rc-page .rc-device--currency .rc-form-grid > .rc-field:has(select) select {
+  width:100%;
+  max-width:100%;
+  min-height:44px;
+  padding-right:32px;
+  text-overflow:ellipsis;
+}
+.rc-page .rc-device--currency .rc-tool-result {
+  min-height:166px;
+}
