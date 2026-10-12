@@ -5,6 +5,7 @@ on:
       - work/qr-atelier-foundation-20261012
     paths:
       - '.github/workflows/qr-atelier-visual-check.yml'
+      - 'scripts/qrAtelierBrowserCheck.mjs'
   workflow_dispatch:
 permissions:
   contents: read
