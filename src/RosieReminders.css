@@ -167,3 +167,53 @@
 .rr-simple-edit input{width:100%;padding:7px;border:1px solid #b9986b;border-radius:5px;background:#fffdf6;color:#351d23;font:18px Georgia,serif;}
 .rr-quick-empty {text-align:center;margin:16px 0;font:italic 15px Georgia,serif;color:#806457;}
 @media(max-width:385px){.rr-simple-row>span{font-size:16px}.rr-quick-list-form{padding:10px}.rr-simple-row{gap:8px}}
+
+/* One continuous gilded shopping sheet — no artificial grocery categories. */
+.rr-page .rr-groceries-input {
+  margin-bottom:12px;
+  border:1px solid #ba945f;
+  background:linear-gradient(155deg,#fff1d8ee,#f3dfbbd9);
+  box-shadow:inset 0 1px #fff9e3,0 3px 12px #4d281627;
+}
+.rr-page .rr-groceries-input > label {
+  font-family:"Baskerville","Iowan Old Style",Georgia,serif;
+  letter-spacing:.045em;
+  color:#53263a;
+}
+.rr-page .rr-groceries-input > textarea{
+  min-height:104px;
+  background:linear-gradient(#fffaf0,#fff7e9);
+  line-height:1.55;
+}
+.rr-page .rr-grocery-rows {
+  display:block;
+  padding:7px 15px 12px;
+  margin:0 0 14px;
+  border:1px solid #b98e56;
+  border-radius:13px;
+  background:
+    linear-gradient(90deg,transparent 35px,#b9866660 36px,#b9866600 38px),
+    repeating-linear-gradient(to bottom,transparent 0 55px,#b9936431 55px 56px),
+    linear-gradient(155deg,#fff7e7,#efd6aa);
+  box-shadow:inset 0 0 0 3px #ffefcf75,inset 0 2px 10px #b3844b20,0 6px 15px #42261a25;
+}
+.rr-page .rr-grocery-row {
+  min-height:55px;
+  border-bottom:1px solid #b68f6040;
+  padding:9px 3px;
+}
+.rr-page .rr-grocery-row:last-child{border-bottom:0;}
+.rr-page .rr-grocery-row > span {
+  font:500 clamp(17px,4.2vw,21px)/1.35 "Baskerville","Iowan Old Style",Georgia,serif;
+  color:#4a2a31;
+}
+.rr-page .rr-grocery-row .rr-simple-check{
+  width:29px;height:29px;
+  border-radius:5px;
+  border-color:#a97d47;
+  box-shadow:inset 0 1px 3px #633e1c20;
+}
+@media(max-width:370px){
+  .rr-page .rr-grocery-rows{padding:6px 9px 10px;}
+  .rr-page .rr-grocery-row{gap:8px;}
+}
