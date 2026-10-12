@@ -197,13 +197,16 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
 
       await page.getByRole("button", {name:"Open Shopping List"}).click();
       await page.getByRole("textbox", {name:"Grocery list items"}).fill("Rosie cheese treats, bananas, eggs");
-      await page.getByRole("button", {name:/Add to Grocery List/i}).click();
+      await page.getByRole("button", {name:/Add Items/i}).click();
       assert.equal(await page.locator(".rr-simple-row").count(),3,
         "Bulk grocery paste should create three individual rows");
-      assert((await page.getByRole("region", {name:"Produce"}).innerText()).includes("Bananas"),
-        "Produce item should have a neat category heading");
-      assert((await page.getByRole("region", {name:"Dairy & Eggs"}).innerText()).includes("Eggs"),
-        "Dairy item should be organized by category");
+      assert.equal(await page.locator(".rr-grocery-group").count(),0,
+        "Groceries must not be divided into invented categories");
+      assert.equal(await page.locator(".rr-grocery-rows").count(),1,
+        "Shopping items should appear on one continuous list");
+      const groceryOrder=await page.locator(".rr-grocery-rows .rr-grocery-row > span").allTextContents();
+      assert.deepEqual(groceryOrder,["Rosie cheese treats","Bananas","Eggs"],
+        "Bulk-pasted grocery items must keep the entered order");
       assert((await page.locator(".rr-simple-rows").allInnerTexts()).join(" ").includes("Rosie cheese treats"),
         "First grocery item lost");
       await page.getByRole("button", {name:"Complete: Bananas"}).click();
@@ -298,14 +301,15 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         const nav=document.querySelector(".bottom-nav").getBoundingClientRect();
         return {
           horizontalOffset:Math.abs((toggle.left+toggle.right)/2-(nav.left+nav.right)/2),
-          bottomOffset:Math.abs(toggle.bottom-nav.bottom),
-          inBottomHalf:toggle.top>nav.top+nav.height/2,
-          toggleAboveNavBottom:toggle.bottom<=nav.bottom+2
+          aboveBarBottom:nav.bottom-toggle.top,
+          hangingBelowBar:toggle.bottom-nav.bottom,
+          visibleBottom:window.innerHeight-toggle.bottom,
         };
       });
-      assert(position.horizontalOffset<4 && position.bottomOffset<7
-        && position.inBottomHalf && position.toggleAboveNavBottom,
-        "Games/Tools switch should be centered at bottom of nav row: "+JSON.stringify(position));
+      assert(position.horizontalOffset<4 && position.aboveBarBottom>=4
+        && position.aboveBarBottom<=18 && position.hangingBelowBar>=10
+        && position.hangingBelowBar<=21 && position.visibleBottom>=3,
+        "Games/Tools toggle must hang directly beneath the nav row: "+JSON.stringify(position));
       await navToggle.click();
       assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
         "Resources nav should expose the three utility destinations");
@@ -319,6 +323,9 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.waitForURL("**/#resources");
       assert.equal(await page.locator(".rr-hub-button").count(),3,
         "Resources shortcut did not open the illustrated Resources hub");
+      await page.goto(base + "/#timekeeper",{waitUntil:"networkidle"});
+      const offset=await page.locator("main.rtk-page").evaluate(node=>getComputedStyle(node).marginTop);
+      assert.equal(offset,"15px","Timekeeper scene should be lowered by 15px without distorting its artwork");
       assert.equal(errors.length,0,"Browser errors: "+errors.join(" | "));
       results.push({engine,width,height,hero:displayedHero.split("/").at(-1),errors:0});
       await context.close();

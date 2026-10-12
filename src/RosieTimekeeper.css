@@ -153,3 +153,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
 .rtk-dial > .rtk-time.is-hours {font-weight:800;font-size:clamp(25px,7vw,47px);}
 @media(max-width:520px){.rtk-dial>.rtk-time:not(.is-hours){font-size:clamp(33px,9.55vw,50px);}}
 @media(max-width:355px){.rtk-dial>.rtk-time:not(.is-hours){font-size:32px;}}
+
+/* Move the ENTIRE illustrated Timekeeper page down by 15 physical CSS pixels,
+   preserving every relationship between Rosie, gold bezel, dial and controls. */
+.app-shell.page-timekeeper main.rtk-page { margin-top:15px !important; }
