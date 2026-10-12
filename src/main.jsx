@@ -881,6 +881,7 @@ function CheeseMemoryGame() {
   const pendingFlipRef = useRef(null);
   const graduationTimerRef = useRef(null);
   const testWinTapsRef = useRef(0);
+  const gridRef = useRef(null);
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
@@ -1029,6 +1030,11 @@ function CheeseMemoryGame() {
     previewDeadlineRef.current = Date.now() + CHEESE_PREVIEW_MS;
     setChallengePhase("preview");
     applyReaction("focused", "Study the entire board. You have three seconds.");
+    // Position all sixteen cards below the sticky examiner on iPhones.
+    // Without this, players spend their three study seconds scrolling.
+    window.requestAnimationFrame(() => {
+      gridRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    });
   }
 
   function expireChallenge() {
@@ -1242,7 +1248,7 @@ function CheeseMemoryGame() {
             </div>
           )}
 
-          <div className="cheese-grid">
+          <div className="cheese-grid" ref={gridRef}>
             {deck.map((cheese, index) => {
               const faceUp = (gameMode === "sprint" && challengePhase === "preview") || openCards.includes(index) || matched.includes(cheese.id);
               const isMatched = matched.includes(cheese.id);
