@@ -21,84 +21,44 @@
 .rc-page .rc-workspace .rc-tool-card:active {transform:translateY(2px);}
 .rc-page .rc-workspace .rc-tool-card:focus-visible {outline:3px solid #ffe093;outline-offset:2px;border-radius:10px;}
 
-/* The housing is assembled from seven sections sliced from the actual approved image.
-   The top/bottom gyroscopes and the canine medallions retain original proportions,
-   while the center and gold helix rails may extend for different form lengths. */
+/* Original approved gold/sextant frame is ONE image, never tiled or mirrored.
+   Stretching the open gold work area to the form's height is preferable to
+   visible splices across the scarlet helixes, medallions, and frame ornaments. */
 .rc-page .rc-tool-panel.rc-device {
-  box-sizing:border-box;isolation:isolate;
-  position:relative;overflow:visible;
-  width:min(100%,650px);min-height:700px;
+  box-sizing:border-box;
+  isolation:isolate;
+  position:relative;
+  overflow:visible;
+  width:min(100%,650px);
+  min-height:700px;
   margin:32px auto 26px;
-  padding:clamp(105px,30vw,182px) 18.5% clamp(109px,31vw,186px);
-  color:#441e0b;background:none!important;
-  background-color:transparent!important;
-  border:none;border-radius:0;outline:none;
+  padding:clamp(142px,39vw,212px) 18.5% clamp(115px,33vw,184px);
+  color:#441e0b;
+  background:transparent!important;
+  border:0;
+  border-radius:0;
+  outline:0;
   box-shadow:none;
 }
-.rc-page .rc-device::before,.rc-page .rc-device::after {content:none!important;display:none!important;}
-.rc-page .rc-device-housing {position:absolute;inset:0;z-index:1;pointer-events:none;}
-.rc-page .rc-device-housing > i {position:absolute;display:block;pointer-events:none;background-repeat:no-repeat;}
-.rc-page .rc-device-housing .rc-housing-core {
-  z-index:0;
-  left:16.8%;right:16.8%;
-  top:clamp(99px,30vw,195px);bottom:clamp(98px,30vw,195px);
-  background:
-    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat,
-    linear-gradient(115deg,#c18b35 0%,#f6d181 30%,#d6a44c 60%,#ecc674 100%);
-  border-radius:clamp(12px,4vw,29px);
-  box-shadow:0 0 12px #6c350f80;
-}
-
-.rc-page .rc-device-housing .rc-housing-top {
-  left:0;top:0;width:100%;aspect-ratio:1122 / 353;
-  background-image:url("/rosieverse/calculations/toolkit/housing-top.webp");
-  background-size:100% 100%;z-index:3;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 98%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 98%,transparent 100%);
-}
-.rc-page .rc-device-housing .rc-housing-bottom {
-  left:0;bottom:0;width:100%;aspect-ratio:1122 / 357;
-  background-image:url("/rosieverse/calculations/toolkit/housing-bottom.webp");
-  background-size:100% 100%;z-index:3;
-  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 98%,transparent 100%);
-  mask-image:linear-gradient(to top,#000 0%,#000 98%,transparent 100%);
-}
-.rc-page .rc-device-housing .rc-housing-left,
-.rc-page .rc-device-housing .rc-housing-right {
-  top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
-  display:flex!important;flex-direction:column;
-  width:16.94%;background:none!important;
+.rc-page .rc-device::before,
+.rc-page .rc-device::after {content:none!important;display:none!important;}
+.rc-page .rc-device-housing {
+  position:absolute;
+  inset:0;
   z-index:1;
+  pointer-events:none;
 }
-.rc-page .rc-device-housing .rc-housing-left {left:0;}
-.rc-page .rc-device-housing .rc-housing-right {right:0;}
-/* Alternating upright/mirrored segments from the APPROVED original image
-   make the ornamental helix continuous without stretching it into a straight stripe. */
-.rc-page .rc-device-housing .rc-housing-left > b,
-.rc-page .rc-device-housing .rc-housing-right > b {
-  position:relative;display:block;flex:1;min-height:0;width:100%;
-  background-repeat:no-repeat;background-position:center;background-size:100% 100%;
-}
-.rc-page .rc-device-housing .rc-housing-left > b {
-  background-image:url("/rosieverse/calculations/toolkit/housing-rail-left.webp");
-}
-.rc-page .rc-device-housing .rc-housing-right > b {
-  background-image:url("/rosieverse/calculations/toolkit/housing-rail-right.webp");
-}
-.rc-page .rc-device-housing .rc-housing-left > b:nth-child(even),
-.rc-page .rc-device-housing .rc-housing-right > b:nth-child(even) {
-  transform:scaleY(-1);
-}
-.rc-page .rc-device-housing .rc-housing-cheese,
-.rc-page .rc-device-housing .rc-housing-shiba {
-  top:50%;transform:translateY(-50%);width:18.72%;
-  aspect-ratio:210 / 219;background-size:100% 100%;z-index:2;
-}
-.rc-page .rc-device-housing .rc-housing-cheese {
-  left:0;background-image:url("/rosieverse/calculations/toolkit/housing-cheese.webp");
-}
-.rc-page .rc-device-housing .rc-housing-shiba {
-  right:0;background-image:url("/rosieverse/calculations/toolkit/housing-shiba.webp");
+.rc-page .rc-device-housing .rc-device-original-art {
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:none;
+  object-fit:fill;
+  opacity:1;
+  border:0;
+  filter:none;
+  user-select:none;
+  -webkit-user-drag:none;
 }
 .rc-page .rc-device-surface {
   position:relative;z-index:4;min-width:0;
