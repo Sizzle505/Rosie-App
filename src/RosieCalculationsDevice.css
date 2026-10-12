@@ -317,3 +317,64 @@
     padding-right: 36px;
   }
 }
+
+
+/* Compact short numeric controls side by side. Keep long numbers,
+   descriptive selectors and all dates on full-width rows on phones. */
+.rc-page .rc-device--tip .rc-form-grid,
+.rc-page .rc-device--split .rc-form-grid,
+.rc-page .rc-device--units .rc-form-grid,
+.rc-page .rc-device--loan .rc-form-grid,
+.rc-page .rc-device--currency .rc-form-grid {
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  column-gap: 10px;
+  row-gap: 11px;
+}
+/* Full-width fields first; the trailing two fields share a single row. */
+.rc-page .rc-device--tip .rc-form-grid > .rc-field:first-child,
+.rc-page .rc-device--loan .rc-form-grid > .rc-field:first-child,
+.rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(-n+2),
+.rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2),
+.rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(-n+2) {
+  grid-column: 1 / -1;
+}
+/* Undo the legacy desktop rule which made the third (odd) field full-width. */
+.rc-page .rc-device--tip .rc-form-grid > .rc-field:last-child,
+.rc-page .rc-device--loan .rc-form-grid > .rc-field:last-child {
+  grid-column: auto;
+}
+.rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) input,
+.rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) input,
+.rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) input,
+.rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select,
+.rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) input {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
+  padding-right: 33px;
+}
+.rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) > span,
+.rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+.rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span,
+.rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) > span,
+.rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) > span {
+  width: 100%;
+  margin: 0;
+  font-size: clamp(12px, 3.2vw, 15px);
+}
+@media (max-width: 380px) {
+  .rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) input,
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) input,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) input,
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select,
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) input {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
+    padding-right: 28px;
+  }
+}
