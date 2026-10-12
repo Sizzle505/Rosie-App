@@ -110,6 +110,7 @@ try {
     });
     assert(currencyGeometry.wide>=currencyGeometry.regular*1.8,
       "Currency illustration must span both columns: "+JSON.stringify(currencyGeometry));
+    const deviceHeights=[];
     for (let index=0;index<labels.length;index++) {
       if(index>0) await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
       await page.locator(".rc-tool-card").nth(index).click();
@@ -122,7 +123,9 @@ try {
         const frame=el.querySelector(".rc-device-original-art");
         return {
           count:el.querySelectorAll(".rc-device-housing img").length,
-          pieces:el.querySelectorAll(".rc-device-housing i, .rc-device-housing b").length,
+          pieces:el.querySelectorAll(".rc-device-housing i:not(.rc-device-gleam), .rc-device-housing b").length,
+          gleams:el.querySelectorAll(".rc-device-gleam").length,
+          gleamDuration:getComputedStyle(el.querySelector(".rc-device-gleam")).animationDuration,
           frameLoaded:frame?.complete&&frame?.naturalWidth===1122,
           frameSource:frame?.getAttribute("src"),
           fullHeight:Math.abs(frame.getBoundingClientRect().height-el.getBoundingClientRect().height)<1,
@@ -131,7 +134,8 @@ try {
           result:getComputedStyle(el.querySelector(".rc-tool-result")).backgroundImage
         };
       });
-      assert(artwork.count===1&&artwork.pieces===0&&artwork.frameLoaded&&artwork.fullHeight,
+      assert(artwork.count===1&&artwork.pieces===0&&artwork.frameLoaded&&artwork.fullHeight &&
+        artwork.gleams===4 && artwork.gleamDuration==="0s",
         "Device must render as one continuous original gold image: "+JSON.stringify(artwork));
       assert([artwork.frameSource,artwork.result]
         .every(v=>v.includes("/rosieverse/calculations/toolkit/")),
@@ -180,6 +184,7 @@ try {
           scrollWidth:document.documentElement.scrollWidth
         };
       });
+      deviceHeights.push(geometry.frame.height);
       assert(geometry.frame.x>=-1 && geometry.frame.right<=width+1,
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.surface.x>=geometry.frame.x+geometry.frame.width*.245 &&
@@ -216,8 +221,8 @@ try {
         "Title must begin at least 6px below red columns' upper edge: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.result.bottom<=geometry.redBottom-5+1,
         "Result receipt must end 5px above red columns' lower edge: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.result.height>=120 && geometry.result.height<=245,
-        "Result panel must fit multi-line calculations without occupying the entire device: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.result.height >= ([1,4].includes(index) ? 79 : 99) && geometry.result.height <= ([1,4].includes(index) ? 120 : 220),
+        "Result panel should be proportionate to its actual content: "+labels[index]+" "+JSON.stringify(geometry));
       const resultTextFits=await panel.locator(".rc-tool-result").evaluate(el=>{
         const boundary=el.getBoundingClientRect();
         const descendants=[...el.querySelectorAll("strong,span,p")];
@@ -225,6 +230,10 @@ try {
           node.getBoundingClientRect().top >= boundary.top+5);
       });
       assert(resultTextFits,"Gold device receipt text is clipped by its decorative rim: "+labels[index]);
+      if (index === 2) {
+        assert(geometry.inputs[0].width<=165 && geometry.inputs[1].width<=165,
+          "Dates should occupy modest bubbles, not full-width ivory trays: "+JSON.stringify(geometry.inputs));
+      }
       if (index === 4) {
         assert(geometry.inputs[0].width<=155 && geometry.inputs[1].width<=105 &&
           geometry.inputs[2].width<=203,
@@ -246,6 +255,8 @@ try {
         await page.evaluate(()=>document.querySelector(".rc-hero").style.removeProperty("position"));
       }
     }
+    assert(Math.max(...deviceHeights)-Math.min(...deviceHeights)<2,
+      "All seven gold devices must be exactly the same height as Percentages: "+deviceHeights);
     // Change tools through the gold instrument title, not just the illustrated grid.
     await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").nth(4).click(); // percent
@@ -259,7 +270,7 @@ try {
     await tip.getByLabel("Bill before tip ($)").fill("84.5");
     await tip.getByLabel("Tip (%)").fill("20");
     await tip.getByLabel("People").fill("3");
-    assert((await tip.locator(".rc-tool-result").innerText()).includes("$33.8"),
+    assert((await tip.locator(".rc-tool-result").innerText()).includes("$33.80"),
       "Live tip-per-person calculation stopped updating");
     await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").nth(5).click();
@@ -291,6 +302,22 @@ try {
     assert.equal(errors.length,0,errors.join("\n"));
     await page.close();
   }
+  // The golden instrument glints from a different corner every 30s when
+  // motion is allowed (four corners over a 120-second animation cycle).
+  const gleamPage=await browser.newPage({
+    viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:"no-preference"
+  });
+  await gleamPage.goto("http://127.0.0.1:5173/#calculations",{waitUntil:"networkidle"});
+  await gleamPage.locator(".loading-screen-hidden").waitFor({state:"attached"});
+  await gleamPage.locator(".rc-tool-card").first().click();
+  const glints=await gleamPage.locator(".rc-device-gleam").evaluateAll(nodes=>
+    nodes.map(el=>({duration:getComputedStyle(el).animationDuration,
+      delay:getComputedStyle(el).animationDelay,play:getComputedStyle(el).animationPlayState})));
+  assert.deepEqual(glints.map(v=>v.duration),["120s","120s","120s","120s"],
+    "Four corner highlights should complete one 120-second rotation");
+  assert.deepEqual(glints.map(v=>v.delay),["0s","-30s","-60s","-90s"],
+    "A different corner should gleam every 30 seconds");
+  await gleamPage.close();
 } finally {
   await browser.close();
 }

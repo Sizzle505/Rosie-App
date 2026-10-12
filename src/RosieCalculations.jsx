@@ -13,6 +13,15 @@ const TOOLS = [
   { id: "loan", title: "Loan & Interest", detail: "Payments and total interest", mark: "◈" },
   { id: "currency", title: "Currency Converter", detail: "Automatically updated reference rates", mark: "¤" }
 ];
+const UNIT_DISPLAY = {
+  m:"M",km:"Km",mi:"Mi",ft:"Ft",in:"In",cm:"Cm",yd:"Yd",
+  kg:"Kg",g:"G",lb:"Lb",oz:"Oz",L:"L",mL:"mL",
+  "US gal":"US Gal","US fl oz":"US Fl Oz","US cup":"US Cup",
+  "sq m":"Sq M","sq ft":"Sq Ft",acre:"Acre",hectare:"Hectare",
+  sec:"Sec",min:"Min",hr:"Hr",day:"Day",
+  "°C":"°C","°F":"°F",K:"K"
+};
+const unitLabel = (key) => UNIT_DISPLAY[key] || key;
 const UNIT_SETS = {
   Length: { m: 1, km: 1000, mi: 1609.344, ft: .3048, in: .0254, cm: .01, yd: .9144 },
   Weight: { kg: 1, g: .001, lb: .45359237, oz: .028349523125 },
@@ -33,7 +42,10 @@ const n = (x) => Number(x);
 const valid = (...values) => values.every((x) => x !== "" && Number.isFinite(Number(x)));
 const fmt = (value, digits = 4) => Number.isFinite(value)
   ? new Intl.NumberFormat("en-US", { maximumFractionDigits: digits }).format(Number(value.toPrecision(12))) : "Invalid result";
-const money = (value) => Number.isFinite(value) ? "$" + fmt(value, 2) : "Invalid result";
+const money = (value) => Number.isFinite(value)
+  ? new Intl.NumberFormat("en-US", { style:"currency", currency:"USD",
+      minimumFractionDigits:2, maximumFractionDigits:2 }).format(value)
+  : "Invalid result";
 const dateUTC = (s) => Date.parse(s + "T00:00:00Z");
 const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
 
@@ -82,7 +94,8 @@ function toolOutput(id, v, fxRate, fxState) {
       const group = UNIT_SETS[v.unitCategory];
       result = x * group[v.unitFrom] / group[v.unitTo];
     }
-    return { main: fmt(result, 8) + " " + v.unitTo, lines: [fmt(x) + " " + v.unitFrom + " equals"] };
+    return { main: fmt(result, 8) + " " + unitLabel(v.unitTo),
+      lines: [fmt(x) + " " + unitLabel(v.unitFrom) + " equals"] };
   }
   if (id === "date") {
     const start = dateUTC(v.start);
@@ -137,7 +150,7 @@ function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState, o
   const fields = {
     tip: <><NumberField label="Bill before tip ($)" value={values.bill} onChange={changed("bill")} min="0"/><NumberField label="Tip (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
     split: <><NumberField label="Subtotal ($)" value={values.splitAmount} onChange={changed("splitAmount")} min="0"/><NumberField label="Tax ($)" value={values.tax} onChange={changed("tax")} min="0"/><NumberField label="Tip on subtotal (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
-    units: <><NumberField label="Amount" value={values.amount} onChange={changed("amount")}/><Selection label="Measurement" size="standard" value={values.unitCategory} options={Object.keys(UNIT_SETS)} onChange={(v) => { const names=Object.keys(UNIT_SETS[v]);update("unitCategory",v);update("unitFrom",names[0]);update("unitTo",names[1]); }}/><Selection label="From" value={values.unitFrom} options={Object.keys(UNIT_SETS[values.unitCategory])} onChange={changed("unitFrom")}/><Selection label="To" value={values.unitTo} options={Object.keys(UNIT_SETS[values.unitCategory])} onChange={changed("unitTo")}/></>,
+    units: <><NumberField label="Amount" value={values.amount} onChange={changed("amount")}/><Selection label="Measurement" size="standard" value={values.unitCategory} options={Object.keys(UNIT_SETS)} onChange={(v) => { const names=Object.keys(UNIT_SETS[v]);update("unitCategory",v);update("unitFrom",names[0]);update("unitTo",names[1]); }}/><Selection label="From" value={values.unitFrom} options={Object.keys(UNIT_SETS[values.unitCategory]).map(value=>({value,label:unitLabel(value)}))} onChange={changed("unitFrom")}/><Selection label="To" value={values.unitTo} options={Object.keys(UNIT_SETS[values.unitCategory]).map(value=>({value,label:unitLabel(value)}))} onChange={changed("unitTo")}/></>,
     date: <><NumberField label="Start date" type="date" value={values.start} onChange={changed("start")}/><NumberField label="End date" type="date" value={values.end} onChange={changed("end")}/><NumberField label="Days to add / subtract" size="compact" value={values.shift} onChange={changed("shift")} step="1"/></>,
     percent: <><NumberField label="Starting amount" value={values.base} onChange={changed("base")}/><NumberField label="Percent (%)" size="compact" value={values.percent} onChange={changed("percent")}/><Selection label="Calculation" size="standard" value={values.percentMode} onChange={changed("percentMode")} options={[{value:"discount",label:"After discount"},{value:"increase",label:"After increase"},{value:"of",label:"Percent of amount"}]}/></>,
     loan: <><NumberField label="Principal ($)" value={values.principal} onChange={changed("principal")} min="0"/><NumberField label="Annual interest (%)" size="compact" value={values.annual} onChange={changed("annual")} min="0"/><NumberField label="Term (months)" size="compact" value={values.months} onChange={changed("months")} min="1" step="1"/></>,
@@ -145,7 +158,11 @@ function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState, o
   };
   const output = toolOutput(active, values, fxRate, fxState);
   return <section ref={panelRef} className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
-    <div className="rc-device-housing" aria-hidden="true"><img className="rc-device-original-art" src="/rosieverse/calculations/toolkit/gold-device.webp" alt="" decoding="async" draggable="false" /></div>
+    <div className="rc-device-housing" aria-hidden="true">
+      <img className="rc-device-original-art" src="/rosieverse/calculations/toolkit/gold-device.webp" alt="" decoding="async" draggable="false" />
+      <i className="rc-device-gleam rc-device-gleam--tl"/><i className="rc-device-gleam rc-device-gleam--tr"/>
+      <i className="rc-device-gleam rc-device-gleam--br"/><i className="rc-device-gleam rc-device-gleam--bl"/>
+    </div>
     <div className="rc-device-surface">
       <div className="rc-device-title-wrap" onKeyDown={event => { if (event.key === "Escape") setMenuOpen(false); }}>
         <h2 className="rc-device-heading">
