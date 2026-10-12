@@ -936,7 +936,7 @@ function CheeseMemoryGame() {
   useEffect(() => () => {
     window.clearTimeout(pendingFlipRef.current);
     window.clearTimeout(graduationTimerRef.current);
-    boardFocusTimersRef.current.forEach(window.clearTimeout);
+    boardFocusTimersRef.current.forEach((timer) => window.clearTimeout(timer));
     boardFocusTimersRef.current = [];
     previewDeadlineRef.current = 0;
     challengeDeadlineRef.current = 0;
@@ -976,7 +976,7 @@ function CheeseMemoryGame() {
   }
 
   function scheduleBoardFocus() {
-    boardFocusTimersRef.current.forEach(window.clearTimeout);
+    boardFocusTimersRef.current.forEach((timer) => window.clearTimeout(timer));
     setBoardFocusRequest((request) => request + 1);
     boardFocusTimersRef.current = [
       window.setTimeout(alignBoardForPhone, 70),
