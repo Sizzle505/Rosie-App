@@ -84,6 +84,49 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
 
       await page.goto(base + "/#cheese", { waitUntil: "networkidle" });
       await page.locator("button.cheese-card").first().waitFor();
+      const cheeseActions = page.locator(".cheese-exam-actions");
+      assert.equal(await cheeseActions.locator("button").count(), 3, "expected one Classic / Flash Fromage / Reset row");
+      const actionsBeforeScores = await page.evaluate(() => {
+        const row = document.querySelector(".cheese-exam-actions");
+        const figures = document.querySelector(".cheese-header-status");
+        return Boolean(row && figures && (row.compareDocumentPosition(figures) & Node.DOCUMENT_POSITION_FOLLOWING));
+      });
+      assert(actionsBeforeScores, "mode controls must precede scoring panels");
+      if (narrow) {
+        const readCheeseViewport = async () => page.evaluate(() => {
+          const grid = document.querySelector(".cheese-grid").getBoundingClientRect();
+          const nav = document.querySelector(".bottom-nav").getBoundingClientRect();
+          const examiner = document.querySelector(".cheese-examiner-rail").getBoundingClientRect();
+          const gridElement = document.querySelector(".cheese-grid");
+          return {
+            gridTop: grid.top, gridBottom: grid.bottom, navTop: nav.top, examinerBottom: examiner.bottom,
+            scrollY: window.scrollY,
+            rootScrollHeight: document.scrollingElement?.scrollHeight,
+            bodyScrollHeight: document.body.scrollHeight,
+            viewportHeight: window.innerHeight,
+            boardCap: gridElement.style.getPropertyValue("--flash-board-cap"),
+            boardMargin: gridElement.style.scrollMarginTop,
+            boardActive: document.querySelector(".cheese-game-page")?.className,
+            scrollRoot: document.scrollingElement?.tagName
+          };
+        });
+        const assertFits = (pos, mode) => {
+          assert(pos.gridBottom < pos.navTop - 3, mode + " bottom row under navigation: " + JSON.stringify(pos));
+          assert(pos.gridTop >= pos.examinerBottom - 4, mode + " board hidden under Doctor Rosie: " + JSON.stringify(pos));
+        };
+        await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).click();
+        await page.waitForTimeout(360);
+        assertFits(await readCheeseViewport(), "Classic");
+        await cheeseActions.getByRole("button", { name: "FLASH FROMAGE" }).click();
+        await page.waitForTimeout(360);
+        assertFits(await readCheeseViewport(), "Flash Fromage");
+        await cheeseActions.getByRole("button", { name: "RESET" }).click();
+        await page.waitForTimeout(360);
+        assertFits(await readCheeseViewport(), "Reset");
+        await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).click();
+        await page.waitForTimeout(360);
+        assertFits(await readCheeseViewport(), "Return to Classic");
+      }
       const pairIndices = await page.locator("button.cheese-card").evaluateAll(cards => {
         const groups = new Map();
         cards.forEach((card, index) => {

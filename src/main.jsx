@@ -882,6 +882,9 @@ function CheeseMemoryGame() {
   const graduationTimerRef = useRef(null);
   const testWinTapsRef = useRef(0);
   const gridRef = useRef(null);
+  const examinerRef = useRef(null);
+  const [boardFocusRequest, setBoardFocusRequest] = useState(0);
+  const boardFocusTimersRef = useRef([]);
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
@@ -933,6 +936,8 @@ function CheeseMemoryGame() {
   useEffect(() => () => {
     window.clearTimeout(pendingFlipRef.current);
     window.clearTimeout(graduationTimerRef.current);
+    boardFocusTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    boardFocusTimersRef.current = [];
     previewDeadlineRef.current = 0;
     challengeDeadlineRef.current = 0;
   }, []);
@@ -948,6 +953,50 @@ function CheeseMemoryGame() {
     });
     return () => window.cancelAnimationFrame(frame);
   }, [ceremonyVisible]);
+
+  // Align to the live height of Doctor Rosie and the raised navigation.
+  // A direct post-click call is needed on iOS WebKit: moving a focused mode
+  // button can otherwise restore the old scroll offset after layout effects.
+  function alignBoardForPhone() {
+    const board = gridRef.current;
+    const examiner = examinerRef.current;
+    if (!board || !examiner || window.innerWidth > 720) return;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const nav = document.querySelector(".bottom-nav");
+    const navTop = nav ? nav.getBoundingClientRect().top : viewportHeight - 90;
+    const examinerHeight = examiner.getBoundingClientRect().height;
+    const stickyOffset = Math.max(6, parseFloat(window.getComputedStyle(examiner).top) || 6);
+    const boardTop = stickyOffset + examinerHeight + 10;
+    const availableHeight = Math.max(140, Math.floor(navTop - boardTop - 12));
+    board.style.setProperty("--flash-board-cap", `${availableHeight}px`);
+    board.style.scrollMarginTop = `${boardTop}px`;
+    board.scrollIntoView({ block: "start", behavior: "auto" });
+    const offset = window.scrollY + board.getBoundingClientRect().top - boardTop;
+    window.scrollTo({ top: Math.max(0, offset), behavior: "auto" });
+  }
+
+  function scheduleBoardFocus() {
+    boardFocusTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    setBoardFocusRequest((request) => request + 1);
+    boardFocusTimersRef.current = [
+      window.setTimeout(alignBoardForPhone, 70),
+      window.setTimeout(alignBoardForPhone, 180),
+      window.setTimeout(alignBoardForPhone, 330)
+    ];
+  }
+
+  useLayoutEffect(() => {
+    if (!boardFocusRequest) return undefined;
+    const frame = window.requestAnimationFrame(alignBoardForPhone);
+    const handleResize = () => window.requestAnimationFrame(alignBoardForPhone);
+    window.addEventListener("resize", handleResize);
+    window.visualViewport?.addEventListener("resize", handleResize);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("resize", handleResize);
+    };
+  }, [boardFocusRequest, gameMode, challengePhase]);
 
   function recentlyUsed(reaction) {
     return reactionHistory.slice(-2).includes(reaction);
@@ -993,6 +1042,11 @@ function CheeseMemoryGame() {
     }[reaction];
   }
 
+  function selectBoardMode(mode) {
+    resetGame(mode);
+    scheduleBoardFocus();
+  }
+
   function resetGame(requestedMode) {
     const nextMode = typeof requestedMode === "string" ? requestedMode : gameMode;
     window.clearTimeout(pendingFlipRef.current);
@@ -1030,11 +1084,7 @@ function CheeseMemoryGame() {
     previewDeadlineRef.current = Date.now() + CHEESE_PREVIEW_MS;
     setChallengePhase("preview");
     applyReaction("focused", "Study the entire board. You have three seconds.");
-    // Position all sixteen cards below the sticky examiner on iPhones.
-    // Without this, players spend their three study seconds scrolling.
-    window.requestAnimationFrame(() => {
-      gridRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
-    });
+    scheduleBoardFocus();
   }
 
   function expireChallenge() {
@@ -1179,7 +1229,7 @@ function CheeseMemoryGame() {
   }
 
   return (
-    <main className="cheese-game-page">
+    <main className={"cheese-game-page" + (gameMode === "sprint" ? " is-flash-fromage" : "") + (boardFocusRequest ? " is-board-active" : "")}>
       <section className="cheese-desktop-layout">
         <aside className="cheese-left-rail">
           <section className="cheese-exam-header" aria-labelledby="cheese-exam-title">
@@ -1205,6 +1255,12 @@ function CheeseMemoryGame() {
               <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
               <p>A memory examination for serious cheese scholars.</p>
 
+              <div className="cheese-exam-actions" role="group" aria-label="Cheese exam controls">
+                <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("classic"); }}>CLASSIC EXAM</button>
+                <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("sprint"); }}>FLASH FROMAGE</button>
+                <button type="button" className="cheese-action-reset" onClick={(event) => { event.currentTarget.blur(); selectBoardMode(gameMode); }}><span aria-hidden="true">↻</span> RESET</button>
+              </div>
+
               <div className="cheese-header-status" aria-label="Current exam status">
                 <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
                 <div><span>MOVES</span><strong>{moves}</strong></div>
@@ -1213,41 +1269,17 @@ function CheeseMemoryGame() {
               </div>
             </div>
 
-            <button type="button" className="cheese-reset-button cheese-reset-left" onClick={resetGame}>
-              <span aria-hidden="true">↻</span>
-              NEW BOARD
-            </button>
           </section>
         </aside>
 
         <section className="cheese-game-frame" aria-label="Cheese matching board">
-          <div className="cheese-mode-selector" role="group" aria-label="Cheese memory game mode">
-            <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={() => resetGame("classic")}>CLASSIC EXAM</button>
-            <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={() => resetGame("sprint")}>3s STUDY / 30s SPRINT</button>
-          </div>
           <div className="cheese-game-heading">
             <div>
-              <span>{gameMode === "sprint" ? "CHALLENGE TWO · RAPID RECALL" : "BOARD ONE · PRACTICAL MEMORY"}</span>
-              <h2>{gameMode === "sprint" ? "Rosie's Memory Sprint" : "Pair the Fromage"}</h2>
+              <span>{gameMode === "sprint" ? "FLASH FROMAGE · MEMORY CHALLENGE" : "BOARD ONE · PRACTICAL MEMORY"}</span>
+              <h2>{gameMode === "sprint" ? "Flash Fromage" : "Pair the Fromage"}</h2>
             </div>
             <p>{gameMode === "sprint" ? "Study all sixteen cards for 3 seconds. Then match eight pairs within 30 seconds." : "Eight cheeses. Sixteen cards. Doctor Rosie is recording the results."}</p>
           </div>
-          {gameMode === "sprint" && (
-            <div className={"cheese-sprint-banner phase-" + challengePhase} role="status">
-              <div className="cheese-sprint-copy">
-                <span>{challengePhase === "preview" ? "MEMORIZE THE BOARD" : challengePhase === "playing" ? "THE CLOCK IS RUNNING" : challengePhase === "expired" ? "EXAMINATION TIME EXPIRED" : challengePhase === "won" ? "BOARD COMPLETED" : "THREE SECONDS TO STUDY"}</span>
-                <strong>{challengePhase === "preview" ? "Remember where the cheeses are!" : challengePhase === "playing" ? "Find all eight pairs before time runs out." : challengePhase === "expired" ? `You found ${matched.length} of 8 pairs. Rosie will allow a rematch.` : challengePhase === "won" ? "Splendid recall. Rosie is preparing your diploma." : "When you are ready, reveal the board and memorize every cheese."}</strong>
-              </div>
-              {challengePhase === "ready" ? (
-                <button type="button" className="cheese-sprint-start" onClick={startSprint}>REVEAL & START</button>
-              ) : (
-                <output className="cheese-sprint-clock" aria-label={challengePhase === "preview" ? "Study seconds remaining" : "Challenge seconds remaining"}>
-                  {challengePhase === "preview" ? previewSeconds : `0:${String(secondsRemaining).padStart(2, "0")}`}
-                </output>
-              )}
-            </div>
-          )}
-
           <div className="cheese-grid" ref={gridRef}>
             {deck.map((cheese, index) => {
               const faceUp = (gameMode === "sprint" && challengePhase === "preview") || openCards.includes(index) || matched.includes(cheese.id);
@@ -1281,16 +1313,9 @@ function CheeseMemoryGame() {
               );
             })}
           </div>
-          {gameMode === "sprint" && challengePhase === "expired" && (
-            <div className="cheese-sprint-result" role="status">
-              <strong>TIME'S UP · {matched.length} / 8 PAIRS</strong>
-              <span>Doctor Rosie has authorized another attempt.</span>
-              <button type="button" onClick={startSprint}>TRY AGAIN · 3 SECOND PREVIEW</button>
-            </div>
-          )}
         </section>
 
-        <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
+        <aside className="cheese-examiner-rail" ref={examinerRef} aria-label="Doctor Rosie's live reaction">
           <div className={"rosie-reaction mood-" + rosieMood} aria-live="polite">
             <div className="reaction-effects" aria-hidden="true"><b /><b /><b /><b /><b /></div>
             <div className="rosie-reaction-portrait">
@@ -1301,15 +1326,35 @@ function CheeseMemoryGame() {
               />
             </div>
             <div className="reaction-copy">
-              <span>DOCTOR ROSIE'S FIELD NOTES · {currentReaction.label}</span>
+              <span className="reaction-status-pill">
+                {gameMode === "sprint"
+                  ? challengePhase === "preview" ? "STUDYING"
+                    : challengePhase === "expired" ? "TIME"
+                      : challengePhase === "won" ? "COMPLETE" : "FLASH FROMAGE"
+                  : currentReaction.label}
+              </span>
               <strong>{message}</strong>
+              <span className="reaction-subcopy">
+                {gameMode !== "sprint" ? "DOCTOR ROSIE'S FIELD NOTES"
+                  : challengePhase === "ready" ? "Three seconds to study. Thirty seconds to finish."
+                    : challengePhase === "preview" ? "Memorize every cheese."
+                      : challengePhase === "playing" ? "Match all eight pairs before time expires."
+                        : challengePhase === "expired" ? `${matched.length} of eight pairs. Rosie permits another attempt.`
+                          : "Rosie is preparing your diploma."}
+              </span>
+              {gameMode === "sprint" && (challengePhase === "ready" || challengePhase === "expired") && (
+                <button type="button" className="reaction-start-button" onClick={startSprint}>
+                  {challengePhase === "ready" ? "START FLASH FROMAGE" : "TRY FLASH FROMAGE AGAIN"}
+                </button>
+              )}
+              {gameMode === "sprint" && (challengePhase === "preview" || challengePhase === "playing") && (
+                <output className="reaction-timer" aria-label={challengePhase === "preview" ? "Study seconds remaining" : "Challenge seconds remaining"}>
+                  {challengePhase === "preview" ? previewSeconds : `0:${String(secondsRemaining).padStart(2, "0")}`}
+                </output>
+              )}
             </div>
             <i aria-hidden="true">{currentReaction.icon}</i>
           </div>
-          <button type="button" className="cheese-reset-button cheese-reset-mobile" onClick={resetGame}>
-            <span aria-hidden="true">↻</span>
-            NEW BOARD
-          </button>
         </aside>
       </section>
     </main>

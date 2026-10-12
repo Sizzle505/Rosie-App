@@ -1,180 +1,286 @@
-/* The examiner's reaction text is the content, not a tiny caption. */
+/* Flash Fromage's controls belong to Rosie's examiner panel, not the board.
+   The reaction is live HTML over the existing approved honey-maple artwork. */
 .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy {
+  position: relative;
+  z-index: 2;
   min-width: 0;
-  padding: 8px 5px 8px 0;
-  align-self: center;
+  width: 100%;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 7px 10px 0;
+  text-align: center;
+  overflow: visible;
 }
-.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy span {
-  font-size: clamp(10px, .98vw, 13px);
-  line-height: 1.3;
-  font-weight: 700;
-  letter-spacing: .075em;
-  color: #633414;
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 29px;
+  padding: 5px 14px;
+  border: 1px solid rgba(245, 207, 135, .74);
+  border-radius: 999px;
+  background: linear-gradient(145deg, #922d4b, #532036);
+  color: #fff1d3;
+  box-shadow: inset 0 1px rgba(255,255,255,.2), 0 3px 9px rgba(66,25,35,.24);
+  font: 700 clamp(10px, 1vw, 13px)/1.12 Georgia, "Palatino Linotype", serif;
+  letter-spacing: .105em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px rgba(0,0,0,.25);
+  overflow-wrap: anywhere;
 }
+
 .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
-  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
-  font-size: clamp(21px, 2.05vw, 28px);
-  line-height: 1.16;
+  display: block;
+  width: 100%;
+  max-width: 31ch;
+  margin: 0;
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: clamp(21px, 2.05vw, 29px);
   font-weight: 700;
-  letter-spacing: -.018em;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: -.022em;
   text-wrap: pretty;
   overflow-wrap: break-word;
-  color: #27180f;
-  text-shadow: 0 1px 0 rgba(255,238,198,.5);
-}
-@media(max-width:720px) {
-  .page-cheese .cheese-examiner-rail .rosie-reaction {
-    min-height: 166px;
-    grid-template-columns: minmax(118px, 38%) minmax(0, 1fr);
-    gap: 12px;
-    padding: 10px;
-    height: auto;
-    align-items: stretch;
-  }
-  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
-    height: clamp(160px, 42vw, 190px);
-    min-height: 0;
-    width: 100%;
-    object-fit: cover;
-  }
-  .page-cheese .cheese-examiner-rail .reaction-copy {
-    padding: 8px 3px 8px 0;
-  }
-  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy span {
-    font-size: clamp(9px, 2.55vw, 11px);
-    line-height: 1.28;
-    letter-spacing: .045em;
-  }
-  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
-    font-size: clamp(17px, 4.65vw, 22px);
-    line-height: 1.19;
-    margin-top: 7px;
-  }
-}
-@media(max-width:360px) {
-  .page-cheese .cheese-examiner-rail .rosie-reaction {
-    grid-template-columns: minmax(105px, 35%) minmax(0,1fr);
-    gap: 9px;
-  }
-  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 154px; }
-  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong { font-size: 16px; }
+  color: #2b190f;
+  text-shadow: 0 1px 0 rgba(255,241,206,.47);
 }
 
-/* Classic and sprint are separate states using the same live sixteen cards. */
-.page-cheese .cheese-mode-selector {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 7px;
-  padding: 4px;
-  margin: 0 0 14px;
-  border: 1px solid rgba(224,176,97,.52);
-  background: linear-gradient(135deg,#301522,#170e14);
-  border-radius: 13px;
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-subcopy {
+  display: block;
+  width: 100%;
+  max-width: 34ch;
+  font: 500 clamp(12px, .95vw, 15px)/1.25 "Iowan Old Style", Palatino, Georgia, serif;
+  letter-spacing: .01em;
+  color: #643c23;
+  text-wrap: pretty;
 }
-.page-cheese .cheese-mode-selector button {
-  min-width: 0;
-  min-height: 44px;
-  padding: 9px 8px;
-  border: 1px solid transparent;
-  border-radius: 9px;
-  color: #d3b78d;
-  background: transparent;
-  font: 700 clamp(9px,1.13vw,12px)/1.2 Georgia,serif;
-  letter-spacing: .075em;
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 245px;
+  min-height: 43px;
+  padding: 9px 10px;
+  margin: 1px auto 0;
+  border: 1px solid #ecc47e;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ac3658, #70253f);
+  box-shadow: inset 0 1px rgba(255,237,202,.24), 0 5px 11px rgba(55,23,26,.25);
+  color: #fff1d0;
+  font: 700 clamp(10px, .95vw, 12px)/1.2 Georgia, serif;
+  letter-spacing: .045em;
+  text-align: center;
   cursor: pointer;
 }
-.page-cheese .cheese-mode-selector button.is-selected {
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button:focus-visible,
+.page-cheese .cheese-exam-actions button:focus-visible {
+  outline: 3px solid #f6cf77;
+  outline-offset: 3px;
+}
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button:active {
+  transform: translateY(1px);
+}
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-timer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 40px;
+  padding: 6px 14px;
+  margin: 1px auto 0;
+  border: 1px solid rgba(111,61,29,.45);
+  border-radius: 11px;
+  background: linear-gradient(160deg, #fae4b7, #d3a166);
+  box-shadow: inset 0 1px rgba(255,250,223,.72), 0 3px 8px rgba(52,24,17,.12);
+  color: #43221b;
+  font: 700 clamp(21px, 2.1vw, 30px)/1 Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* One restrained row directly over the four scoring figures. This is
+   intentionally kept in the Barkbridge dossier, outside the live board. */
+.page-cheese .cheese-exam-title .cheese-exam-actions {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, .65fr);
+  gap: 5px;
+  margin: 11px 0 9px;
+  padding: 4px;
+  border: 1px solid #905627;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(57,25,38,.94), rgba(26,15,23,.94));
+  box-shadow: inset 0 1px rgba(252,217,151,.24), 0 3px 8px rgba(63,28,21,.2);
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 39px;
+  margin: 0;
+  padding: 7px 3px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #e6c895;
+  font: 700 clamp(8px,.92vw,11px)/1.13 Georgia, "Palatino Linotype",serif;
+  letter-spacing: .018em;
+  text-align: center;
+  white-space: normal;
+  cursor: pointer;
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button.is-selected {
   border-color: #e8bd69;
-  color: #311c11;
   background: linear-gradient(155deg,#fff0c7,#d4a363 75%,#a8763d);
+  color: #311c11;
   box-shadow: inset 0 1px rgba(255,249,221,.6), 0 2px 8px rgba(0,0,0,.3);
 }
-.page-cheese .cheese-mode-selector button:focus-visible,
-.page-cheese .cheese-sprint-start:focus-visible,
-.page-cheese .cheese-sprint-result button:focus-visible {
-  outline: 3px solid #f6cf77;
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset {
+  border-color: rgba(215,173,110,.32);
+  color: #f4e2ba;
+  background: linear-gradient(145deg,#854057,#502538);
+  letter-spacing: .025em;
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button:focus-visible {
+  outline: 2px solid #fff2cb;
   outline-offset: 2px;
 }
-.page-cheese .cheese-sprint-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 82px;
-  margin: 12px 0 15px;
-  padding: 13px 15px;
-  border: 1px solid #ba8c49;
-  border-radius: 15px;
-  color: #f5ddac;
-  background: linear-gradient(120deg,#371424,#230f19 63%,#1b1017);
-  box-shadow: inset 0 1px rgba(255,244,202,.09), 0 6px 15px rgba(0,0,0,.23);
+.page-cheese .cheese-exam-title .cheese-exam-actions button:active {
+  transform: translateY(1px);
 }
-.page-cheese .cheese-sprint-copy { flex: 1; min-width: 0; }
-.page-cheese .cheese-sprint-copy span {
-  display: block;
-  color: #cda76b;
-  font: 700 10px/1.25 Georgia,serif;
-  letter-spacing: .11em;
-}
-.page-cheese .cheese-sprint-copy strong {
-  display: block;
-  margin-top: 5px;
-  font: 600 clamp(13px,1.5vw,18px)/1.24 Georgia,serif;
-}
-.page-cheese .cheese-sprint-start,
-.page-cheese .cheese-sprint-result button {
-  flex: none;
-  padding: 12px 15px;
-  min-height: 44px;
-  border: 1px solid #e5bf7a;
-  border-radius: 10px;
-  background: linear-gradient(135deg,#a82f4c,#5c1d34);
-  color: #fff0c4;
-  font: 700 11px/1.2 Georgia,serif;
-  letter-spacing: .055em;
-  cursor: pointer;
-}
-.page-cheese .cheese-sprint-clock {
-  display: block;
-  min-width: 68px;
-  text-align: center;
-  font: 700 clamp(25px,3vw,36px)/1 Georgia,serif;
-  color: #ffdda0;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 2px 7px rgba(0,0,0,.6);
-}
-.page-cheese .phase-preview .cheese-sprint-clock { color: #fff3ce; font-size: 42px; }
-.page-cheese .phase-playing .cheese-sprint-clock { color: #f1c66b; }
-.page-cheese .phase-playing:has(.cheese-sprint-clock) { border-color: #d2a257; }
-.page-cheese .cheese-sprint-result {
-  margin-top: 13px;
-  padding: 18px;
-  border: 1px solid #bd8d52;
-  border-radius: 14px;
-  background: linear-gradient(140deg,#3a1929,#170f16);
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  text-align: center;
-}
-.page-cheese .cheese-sprint-result strong {
-  font: 700 clamp(19px,2vw,24px)/1.2 Georgia,serif;
-  color: #f8d39a;
-}
-.page-cheese .cheese-sprint-result span { font: 14px/1.3 Georgia,serif; color: #e5ceb0; }
 .page-cheese .cheese-card:disabled { cursor: default; }
 .page-cheese .cheese-card:disabled:hover { transform: none; filter: none; }
-@media(max-width:720px) {
-  .page-cheese .cheese-mode-selector { margin-bottom: 11px; }
-  .page-cheese .cheese-mode-selector button { min-height: 47px; font-size: clamp(9px,2.35vw,11px); letter-spacing: .025em; }
-  .page-cheese .cheese-sprint-banner { padding: 11px; min-height: 88px; gap: 8px; }
-  .page-cheese .cheese-sprint-copy span { font-size: 9px; }
-  .page-cheese .cheese-sprint-copy strong { font-size: 12px; }
-  .page-cheese .cheese-sprint-start { max-width: 40%; padding: 8px 7px; font-size: 10px; }
-  .page-cheese .cheese-sprint-clock { min-width: 54px; font-size: 27px; }
-}
 
-/* Place the study board beneath the persistent examiner when the reveal starts. */
-@media(max-width:720px) {
-  .page-cheese .cheese-grid { scroll-margin-top: calc(182px + env(safe-area-inset-top,0px)); }
+/* Compact square mobile cards let all sixteen faces remain in the usable
+   viewport after accounting for Rosie's sticky panel and bottom navigation. */
+@media (max-width: 720px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    height: auto;
+    min-height: 170px;
+    grid-template-columns: minmax(108px, 37%) minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+    padding: 9px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    height: clamp(159px, 42vw, 188px);
+    min-height: 0;
+    width: 100%;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy {
+    gap: 7px;
+    padding: 6px 3px 6px 0;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-status-pill {
+    min-height: 25px;
+    padding: 5px 10px;
+    font-size: clamp(9px, 2.6vw, 11px);
+    letter-spacing: .055em;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    margin: 0;
+    font-size: clamp(17px, 4.5vw, 22px);
+    line-height: 1.14;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-subcopy {
+    font-size: clamp(10px, 2.7vw, 12px);
+    line-height: 1.2;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button {
+    min-height: 39px;
+    padding: 8px 5px;
+    font-size: clamp(9px, 2.45vw, 11px);
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-timer {
+    min-height: 34px;
+    min-width: 61px;
+    font-size: 22px;
+    padding: 5px 9px;
+  }
+  .page-cheese .cheese-exam-title .cheese-exam-actions {
+    grid-template-columns: minmax(0,1fr) minmax(0,1.18fr) minmax(0,.63fr);
+    gap: 5px;
+    margin: 9px 0 10px;
+    padding: 4px;
+  }
+  .page-cheese .cheese-exam-title .cheese-exam-actions button {
+    min-height: 39px;
+    padding: 8px 2px;
+    font-size: clamp(8.5px, 2.45vw, 11px);
+    letter-spacing: -.005em;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-grid {
+    max-width: min(100%, var(--flash-board-cap, 100%));
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 5px;
+    margin-inline: auto;
+    scroll-margin-top: 210px;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card-front {
+    padding: 3px 2px;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card-front strong {
+    font-size: clamp(8px, 2.35vw, 11px);
+    line-height: 1.02;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card-front > small {
+    display: none;
+  }
+  /* An understated frosted curtain makes the material receding above
+     Doctor Rosie unreadable during play. Controls and score remain crisp. */
+  .page-cheese .cheese-game-page.is-board-active .cheese-examiner-rail::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% - 2px);
+    left: -10px;
+    right: -10px;
+    height: 105px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(17,11,17,0), rgba(19,12,18,.78));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 75%);
+    mask-image: linear-gradient(to bottom, transparent, black 75%);
+  }
+  .page-cheese .cheese-game-page.is-board-active .barkbridge-ident strong,
+  .page-cheese .cheese-game-page.is-board-active .barkbridge-ident small,
+  .page-cheese .cheese-game-page.is-board-active .cheese-exam-title h1,
+  .page-cheese .cheese-game-page.is-board-active .cheese-exam-title > p,
+  .page-cheese .cheese-game-page.is-board-active .cheese-exam-title .cheese-eyebrow {
+    filter: blur(2.2px);
+    opacity: .66;
+    transition: filter .25s ease, opacity .25s ease;
+  }
+  /* The scrollable tail lets the grid align below the sticky panel even when
+     the grid is the last substantive content on a short iPhone display. */
+  .page-cheese .cheese-game-page.is-board-active .cheese-desktop-layout {
+    padding-bottom: max(175px, 26dvh);
+  }
+}
+@media (max-width: 360px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: minmax(98px, 34%) minmax(0,1fr);
+    gap: 8px;
+    padding: 7px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 148px; }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong { font-size: 16px; }
 }
