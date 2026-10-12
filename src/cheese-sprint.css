@@ -156,6 +156,20 @@
   letter-spacing: .025em;
 }
 /* Invite the first move, then retire the glow once play has begun. */
+/* Vector icons avoid the blue system emoji glyph on iPhone Safari. */
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset .cheese-action-symbol {
+  display:block;
+  flex:none;
+  width:15px;
+  height:15px;
+  fill:currentColor;
+  color:#f8d58f;
+  filter:drop-shadow(0 1px 2px rgba(30,12,17,.7));
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready .cheese-action-symbol {
+  color:#ffdf9d;
+  filter:drop-shadow(0 0 4px rgba(251,204,116,.55));
+}
 .page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready {
   color: #fff2c8;
   border-color: #f5d18b;

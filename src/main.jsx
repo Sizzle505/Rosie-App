@@ -1274,7 +1274,14 @@ function CheeseMemoryGame() {
               <div className="cheese-exam-actions" role="group" aria-label="Cheese exam controls">
                 <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("classic"); }}>CLASSIC EXAM</button>
                 <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("sprint"); }}>FLASH FROMAGE</button>
-                <button type="button" className={"cheese-action-reset" + (!hasBegun ? " is-ready" : "")} onClick={(event) => { event.currentTarget.blur(); startOrResetSelectedBoard(); }}><span aria-hidden="true">{hasBegun ? "↻" : "▶"}</span> {hasBegun ? "RESET" : "START"}</button>
+                <button type="button" className={"cheese-action-reset" + (!hasBegun ? " is-ready" : "")} onClick={(event) => { event.currentTarget.blur(); startOrResetSelectedBoard(); }}>
+                  <svg className="cheese-action-symbol" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    {hasBegun
+                      ? <path d="M20.4 6.8V2.9l-2.2 2.2A9 9 0 1 0 21 12h-2.3a6.7 6.7 0 1 1-2-4.8l-2.7 2.7h6.4V6.8z" />
+                      : <path d="M8.1 4.5c0-.9 1-1.4 1.7-.9l10 7.4a1.2 1.2 0 0 1 0 2l-10 7.4c-.7.5-1.7 0-1.7-.9v-15z" />}
+                  </svg>
+                  <span>{hasBegun ? "RESET" : "START"}</span>
+                </button>
               </div>
 
               <div className="cheese-header-status" aria-label="Current exam status">

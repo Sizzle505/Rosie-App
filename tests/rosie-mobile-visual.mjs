@@ -27,9 +27,41 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
       const title = browserName + "-" + width;
 
+      if (width <= 600) {
+        await page.goto(base + "/#home", { waitUntil: "networkidle" });
+        await page.locator(".loading-screen-hidden").waitFor({ state: "attached" });
+        const home = page.locator("main[aria-label^='RosieVerse - discover']");
+        const homeFit = await home.evaluate(root => {
+          const rect = el => el.getBoundingClientRect();
+          const banner = root.querySelector("header");
+          const titleImage = banner.querySelector("img");
+          const hero = root.querySelector("section[aria-label^='Rosie standing']");
+          const destinations = root.querySelector("nav[aria-label='RosieVerse destinations']");
+          return {
+            homeBottom: rect(root).bottom,
+            viewportHeight: window.innerHeight,
+            titleRatio: rect(banner).width / (rect(root).width - parseFloat(getComputedStyle(root).paddingLeft) - parseFloat(getComputedStyle(root).paddingRight)),
+            titleMarginTop: parseFloat(getComputedStyle(banner).marginTop),
+            heroHeight: rect(hero).height,
+            destinationBottom: rect(destinations).bottom,
+            lastDestinationBottom: rect(destinations.lastElementChild).bottom,
+            titleArtOk: titleImage.complete && titleImage.naturalWidth > 1000,
+            sceneryAligned: getComputedStyle(root).backgroundPositionY === "100%"
+          };
+        });
+        assert(Math.abs(homeFit.homeBottom - height) < 3, "Salon artwork must terminate at viewport edge: " + JSON.stringify(homeFit));
+        assert(homeFit.titleRatio > .67 && homeFit.titleRatio < .74, "RosieVerse header should be exactly 30% smaller: " + JSON.stringify(homeFit));
+        assert.equal(homeFit.titleMarginTop, 20, "RosieVerse header should move down 20px");
+        assert(homeFit.titleArtOk, "Original RosieVerse illustrated title must stay intact");
+        assert(homeFit.sceneryAligned, "Salon background must anchor at bottom of phone");
+        assert(homeFit.heroHeight >= 100, "Salon portrait must remain visible");
+        assert(homeFit.lastDestinationBottom <= homeFit.viewportHeight + 3, "Salon destination artwork must fit within the visible iPhone screen: " + JSON.stringify(homeFit));
+        await page.screenshot({ path: output + "/" + title + "-home-fit.png" });
+      }
+
       await page.goto(base + "/#randomizers", { waitUntil: "networkidle" });
       await page.locator("section[aria-label='Quick randomizers'] article").first().waitFor();
-      await page.locator(".loading-screen-hidden").waitFor();
+      await page.locator(".loading-screen-hidden").waitFor({ state: "attached" });
       await page.waitForTimeout(650);
       const panels = await page.locator("section[aria-label='Quick randomizers'] article").evaluateAll(nodes =>
         nodes.map(node => {
@@ -96,6 +128,8 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       assert.match(await startReset.innerText(), /START/, "initial Classic board must invite Start");
       assert.equal(await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).getAttribute("aria-pressed"), "true", "Classic must be selected by default");
       assert(await startReset.evaluate(el => el.classList.contains("is-ready")), "Start button should glow before beginning");
+      assert(await startReset.locator("svg.cheese-action-symbol path").count() === 1, "Start icon must be a vector, not a blue iPhone emoji");
+      assert(!(await startReset.innerText()).includes("▶"), "Start label must not render the system play emoji");
       assert(await page.locator("button.cheese-card").first().isDisabled(), "Classic cards must be locked until Start");
       assert.equal(await page.locator(".cheese-examiner-rail .reaction-start-button").count(), 1, "Rosie's sticky reaction must offer Start when selector scrolls offscreen");
       if (narrow) {
