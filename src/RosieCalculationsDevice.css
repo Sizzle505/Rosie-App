@@ -709,3 +709,131 @@
 .rc-page .rc-device--currency .rc-tool-result {
   min-height:166px;
 }
+
+/* October 12: proportional pocket-instrument controls. Keep the approved
+   one-piece red-helix/sextant image intact; tighten only the live gold inset. */
+.rc-page {
+  background-color:#3a0c1c;
+  background-image:
+    linear-gradient(180deg,rgba(30,3,14,.16),rgba(36,4,15,.12)),
+    url("/randomizers/rosie-salon-burgundy-texture.svg");
+  background-size:cover, min(100vw,720px) auto;
+  background-position:center top, center top;
+  background-repeat:no-repeat,repeat;
+}
+.app-shell.page-calculations {background-color:#3a0c1c;}
+.rc-page .rc-device-title-wrap {position:relative;z-index:30;min-width:0;}
+.rc-page .rc-device-heading {padding:0;overflow:visible;}
+.rc-page .rc-device-title-trigger {
+  display:flex;align-items:center;justify-content:center;
+  gap:7px;width:100%;min-height:44px;padding:6px 19px 7px;
+  border:0;background:transparent;color:inherit;
+  font:inherit;text-shadow:inherit;line-height:inherit;
+  border-radius:inherit;cursor:pointer;box-sizing:border-box;
+  text-align:center;
+}
+.rc-page .rc-device-title-trigger > span:first-child {min-width:0;}
+.rc-page .rc-device-title-trigger:focus-visible {
+  outline:3px solid #ffe1a3;outline-offset:2px;
+}
+.rc-page .rc-device-title-chevron {
+  display:block;flex:none;width:9px;height:9px;
+  border-right:2px solid #ffdc93;border-bottom:2px solid #ffdc93;
+  transform:translateY(-3px) rotate(45deg);
+  transition:transform .18s ease;
+}
+.rc-page .rc-device-title-chevron.is-open {
+  transform:translateY(2px) rotate(225deg);
+}
+.rc-page .rc-device-tool-menu {
+  position:absolute;z-index:50;left:1%;right:1%;top:calc(100% + 4px);
+  display:grid;gap:3px;padding:7px;
+  max-height:min(50dvh,345px);overflow-y:auto;
+  border:2px solid #dfb768;border-radius:13px;
+  background:linear-gradient(160deg,#601328,#380916 73%,#260911);
+  box-shadow:0 12px 23px #1908059c,inset 0 0 0 1px #ffdf925e;
+}
+.rc-page .rc-device-tool-menu button {
+  min-width:0;min-height:40px;padding:8px 10px;
+  border:1px solid #d7aa6563;border-radius:8px;
+  background:linear-gradient(170deg,#82243b,#4e1228);
+  color:#ffebc1;font:normal clamp(13px,3.3vw,16px)/1.13 Georgia,serif;
+  text-align:center;cursor:pointer;
+}
+.rc-page .rc-device-tool-menu button:focus-visible,
+.rc-page .rc-device-tool-menu button:hover {border-color:#ffe1a3;background:#94364e;}
+@media (max-width:739px) {
+  .rc-page .rc-tool-panel.rc-device {
+    min-height:0;
+    padding-top:clamp(94px,25vw,145px);
+    padding-bottom:clamp(94px,25vw,149px);
+    margin:10px auto 12px;
+  }
+  .rc-page .rc-device-surface {gap:6px;}
+  .rc-page .rc-device-heading {margin:0;padding:0;font-size:clamp(18px,4vw,24px);}
+  .rc-page .rc-device .rc-form-grid {
+    row-gap:6px;column-gap:8px;
+  }
+  .rc-page .rc-device .rc-form-grid > .rc-field {gap:3px;}
+  .rc-page .rc-device .rc-form-grid > .rc-field > span {
+    font-size:clamp(12px,3.2vw,14px);line-height:1.15;
+    margin-inline:auto;max-width:100%;min-height:0;
+  }
+  .rc-page .rc-device .rc-form-grid > .rc-field input,
+  .rc-page .rc-device .rc-form-grid > .rc-field select,
+  .rc-page .rc-device .rc-form-grid > .rc-field:has(select) select,
+  .rc-page .rc-device .rc-form-grid > .rc-field:has(input[type="date"]) input {
+    min-height:44px;height:44px;
+    padding:7px 10px;
+    margin-left:auto;margin-right:auto;
+  }
+  /* A few digits need a compact ivory recess, not a full-width tray. */
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--standard input {
+    width:min(100%,150px);max-width:100%;
+    text-align:center;
+  }
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--compact input {
+    width:min(100%,94px);max-width:100%;
+    text-align:center;
+  }
+  /* Category/operation selectors have more letters than digits. */
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--standard select,
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--standard:has(select) select {
+    width:min(100%,195px);max-width:100%;
+    padding-right:28px;
+  }
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--wide input,
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--wide select,
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--wide:has(select) select,
+  .rc-page .rc-device .rc-form-grid > .rc-field.rc-field--wide:has(input[type="date"]) input {
+    width:min(100%,235px);max-width:100%;
+  }
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field select,
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field:has(select) select {
+    width:100%;max-width:100%;
+  }
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
+    width:min(100%,124px);max-width:100%;
+  }
+  /* Fit each receipt to the actual number of lines, rather than imposing
+     an oversized blank 160-200px slab on a single-line calculation. */
+  .rc-page .rc-device .rc-tool-result {
+    min-height:128px;max-height:none;
+    margin-top:1px;padding:16px 14px 19px;gap:4px;
+  }
+  .rc-page .rc-device--tip .rc-tool-result,
+  .rc-page .rc-device--split .rc-tool-result {
+    min-height:151px;
+  }
+  .rc-page .rc-device--currency .rc-tool-result {min-height:142px;}
+  .rc-page .rc-device .rc-tool-result strong {
+    font-size:clamp(20px,4.7vw,28px);line-height:1.12;
+  }
+  .rc-page .rc-device .rc-tool-result span {
+    font-size:clamp(12px,3.05vw,14px);line-height:1.2;
+  }
+  .rc-page .rc-device .rc-tool-result span + span {padding-top:3px;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .rc-page .rc-device-title-chevron {transition:none;}
+}
