@@ -17,14 +17,14 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install image utility
-        run: python -m pip install --quiet Pillow
+        run: python -m pip install --quiet Pillow numpy
       - name: Fetch approved assets byte for byte from Rosie-App-Transfer
         env:
-          SRC_DEVICE: "https://ucbb314098376a7ed4a7b403a132.dl.dropboxusercontent.com/cd/0/get/DJ3qw0Mx4FuRhvkLGeRUt6oDEM95ByxCrh5m4qh-wpgIlqPmgsHIQbepQi7EgR_Tph_d4jNvo8a_5wKxmg5NT3kPHAVgp1Ct8bOCOTcrTH-IZfVwMDlbgnRkXoH6zJluPfDEidyzDcyzqRg9LxR-mQz-arJj1YM7Oe1T4USh0jtfiQ/file?c_luid=667ded1d"
-          SRC_BUTTONS: "https://uca326ab8825924f851f01d6c2aa.dl.dropboxusercontent.com/cd/0/get/DJ0RQtKtWiDFv5hoBNjIBhRdZipyZErL4xzKtCGzDwHoBNgRXB_g4uvOfBc3hE-l38hFaH4Ol3gzfogDB2ECp2oYMBMzbxirnQ-nj-WFBAgy6Noo0BYCxjGO6FYyaW2w0tYRycFGzSfu04XW0VXi_VPrGpgfHSRRwGJdrcBonP_zZQ/file?c_luid=667ded1d"
-          SRC_FIELD: "https://uc04e7eef580fb991a7cb6427f7c.dl.dropboxusercontent.com/cd/0/get/DJ3EEeM6uP2TtI2ku9Z9Fl_ml9Z1gbGPpK-l2fXjYbXLQYj2fzjJ_-S_4NUCu615EIpnCzSPGk57nGKLB-Pu7J5xcyQ10tmm_2jDpsXW6PyI4IVwevjMrJ3ZwQGJhAS6U5oyXd-XJo5IVf-P2InlnHiWseJkDY45FcU78Rf8fcpGJA/file?c_luid=667ded1d"
-          SRC_SELECT: "https://uccbc731f71dffbb6671bb4ad08c.dl.dropboxusercontent.com/cd/0/get/DJ2HzEmHYZccIkVsIPPzlCLK1j2IFUhCTDDbzKHkRCkfVi89FK0dis18RqiezkRz-6BJv2Ln0stsIbCg_MP8DxzvzqTHmopxqPSuGSVBYmTqJhykkVXrK2Z2QjfWfoO383Qi75U9C9DVHbo5nE7zYMWTXk39iiJoze_KKr0ammG8dw/file?c_luid=667ded1d"
-          SRC_RESULT: "https://uca518c34a50d84c862da04a22cc.dl.dropboxusercontent.com/cd/0/get/DJ0s450ttfp1idzKy2Km2Hi4E1io-q0qGwgiLfj_JEOdfP94nmUNRVasJe8tLRS95KmKadJAwqdJAG6em-B-vJ4TOeb5Efopua3dLh-3BPfFruQ_y_u4WPOCB7IyQbg9bijYDT-ejORtQVE4f5HAFdJzTNHwZx24EYz0GwSKQlywxg/file?c_luid=667ded1d"
+          SRC_DEVICE: "https://ucfa438777772fffa820aa287ae1.dl.dropboxusercontent.com/cd/0/get/DJ1InrKK5r941vX07b0YSuz-5yJTnLNYZY8ZRHdplkT08d_-lHOvWbt1jSpES0b0XqmFO5xfCZ68ZlAYDDN6PWQ4TluqXqe95uWRIsLFYdh1jJHnEXh_GRK8uPMPli4fGH1p8kHmfA8Ejus1wF4EsnlvaqPGR0rkhD8RcGzSqDzwrw/file?c_luid=667ded1d"
+          SRC_BUTTONS: "https://uc34994edd042c5cd351d09c1abe.dl.dropboxusercontent.com/cd/0/get/DJ39z4UTetY3PnB9d87slt-x_d565jPxvTClFpk1lrWS3Af26j21ew3xymfoA3XHnvhkd1XunQIOqM6Z-L5KQuhyjZaSfoVa38-sPz6MyfSrVZ2dTgpiceJnMKGZTQlpXrsdkfSleQyvDqNyeTxlVcrgVku1rhR7PTpwuCiOArDePg/file?c_luid=667ded1d"
+          SRC_FIELD: "https://ucd4656d9251c79ac2276e984111.dl.dropboxusercontent.com/cd/0/get/DJ2SobTae7t8tp3LRzr6fxbX5xCTiFlH2QwD7hh-sdbY7udI1hvbCe10yuMH-NVeB_h6dj28eF3ZrkujU0yNbSWhqoMU7Kd72r-ebFRGKTeOuy_mjcqRNfc8mUZRtTiS5nTR2MGiTpevtFC01VMzawPIliH6CFu6vtJeosJUCxn8tA/file?c_luid=667ded1d"
+          SRC_SELECT: "https://ucd5a33392a3aae47c2bba8a4f3b.dl.dropboxusercontent.com/cd/0/get/DJ3pxI9lM34Q-LQh6U9j9JKTQ-Li8BmXLw8sEMDvyw03p_Di1k3x-iHxOVBKX8zQy9vo-kFsRsYiOc9mgEfSH7wTC2S7Y1DphkLwNy__cmE9jlm-qkybDkdSgouQv4Lvx9c9lINXCJdyFB4W3nwaFRqLj-EfftG6F9ie69bQtsbOIA/file?c_luid=667ded1d"
+          SRC_RESULT: "https://ucde86ccce586a76dab4de4c0c7c.dl.dropboxusercontent.com/cd/0/get/DJ13VXvcBET5-BQhysU3HajMEAKqE36P66NB8Dpwkf5l2a051r6Jgu0VZRPOrsEd8zoktDJNJpQLVzgbRW4zIlhgjWuFjPaqstxGQJFdRYxITnX_EiCl0Bicxbz0RZtbIQdrRhQHjIw-G3GZWQM3Hrts9i7ueCwkqUfd_eMi3y5mCQ/file?c_luid=667ded1d"
         run: |
           mkdir -p /tmp/rosie-calculation-art
           curl -fLsS --retry 2 -o /tmp/rosie-calculation-art/device.png "$SRC_DEVICE"
