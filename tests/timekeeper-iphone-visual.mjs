@@ -77,7 +77,7 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       await page.getByRole("button", { name: "Start", exact: true }).click();
       await page.waitForTimeout(650);
       assert(await page.locator(".rtk-squirrel-asset").count() === 1, "Original running squirrel image must lead the ring");
-      assert((await page.locator(".rtk-time").innerText()).match(/\.\d{3}$/),
+      assert((await page.locator(".rtk-time").innerText()).replace(/\s/g,"").match(/\.\d{3}$/),
         "Stopwatch must display three millisecond digits, not hundredths");
       await page.getByRole("button", { name: "Record lap" }).click();
       assert(await page.locator(".rtk-laps li").count() === 1, "Lap recording failed");
