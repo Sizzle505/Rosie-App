@@ -60,5 +60,7 @@ jobs:
         if: always()
         with:
           name: rosie-calculations-iphone-screenshots
-          path: artifacts/calculations-iphone/
+          path: |
+            artifacts/calculations-iphone/
+            artifacts/calculations-instruments/
           retention-days: 14
