@@ -260,3 +260,11 @@
 .qa-start-fresh {margin-top:4px;min-height:36px;padding:7px 13px;border:1px solid #b99764;
  border-radius:999px;background:#f8ead2;color:#6a3c26;font:12px Georgia,serif!important;}
 .qa-start-fresh:hover {background:#fff4df;}
+
+/* Screenshot review: gold title must remain legible above the busy workbench. */
+.qa-title {isolation:isolate;}
+.qa-title::before {content:"";position:absolute;z-index:-1;inset:-17px -9px -15px;
+  background:radial-gradient(ellipse at 58% 42%,rgba(0,15,13,.88),rgba(0,13,9,.48) 54%,transparent 79%);pointer-events:none;}
+.qa-title h1 {background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  color:#ffe4a1!important;filter:none;text-shadow:0 2px 2px #000,0 0 13px #000b,0 0 8px #ae7238;}
+.qa-title p {color:#ffe1a9;text-shadow:0 2px 4px #000,0 0 10px #000;}
