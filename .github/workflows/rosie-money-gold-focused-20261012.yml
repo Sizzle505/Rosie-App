@@ -3,6 +3,7 @@ on:
   push:
     branches: [work/gold-even-spacing-money-controls-20261012]
     paths: [.github/workflows/rosie-money-gold-focused-20261012.yml]
+  # Retest native date input readability and formatted USD fields
 jobs:
   verify-money-and-layout:
     runs-on: ubuntu-latest
