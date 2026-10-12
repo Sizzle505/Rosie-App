@@ -11,7 +11,7 @@ const TOOLS = [
   { id: "split", title: "Split Bill", detail: "Divide a check fairly", mark: "♧" },
   { id: "percent", title: "Percentages & Discounts", detail: "Savings, increases and portions", mark: "%" },
   { id: "loan", title: "Loan & Interest", detail: "Payments and total interest", mark: "◈" },
-  { id: "currency", title: "Currency Converter", detail: "Use your own exchange rate", mark: "¤" }
+  { id: "currency", title: "Currency Converter", detail: "Automatically updated reference rates", mark: "¤" }
 ];
 const UNIT_SETS = {
   Length: { m: 1, km: 1000, mi: 1609.344, ft: .3048, in: .0254, cm: .01, yd: .9144 },
@@ -27,7 +27,7 @@ const DEFAULTS = {
   start: new Date().toISOString().slice(0, 10), end: new Date().toISOString().slice(0, 10), shift: "30",
   base: "200", percent: "15", percentMode: "discount",
   principal: "10000", annual: "6", months: "36",
-  currencyAmount: "100", currencyRate: "1", source: "USD", target: "EUR"
+  currencyAmount: "100", source: "USD", target: "EUR"
 };
 const n = (x) => Number(x);
 const valid = (...values) => values.every((x) => x !== "" && Number.isFinite(Number(x)));
@@ -37,7 +37,31 @@ const money = (value) => Number.isFinite(value) ? "$" + fmt(value, 2) : "Invalid
 const dateUTC = (s) => Date.parse(s + "T00:00:00Z");
 const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
 
-function toolOutput(id, v) {
+/* Frankfurter v2 blends current published central-bank reference rates.
+   These are dated reference rates, not guaranteed real-time bank quotes. */
+const FX_API = "https://api.frankfurter.dev/v2";
+const FX_REFRESH_MS = 4 * 60 * 60 * 1000;
+const FX_FALLBACK_CURRENCIES = [
+  ["AUD","Australian Dollar"],["CAD","Canadian Dollar"],["CHF","Swiss Franc"],
+  ["CNY","Chinese Yuan"],["EUR","Euro"],["GBP","British Pound"],
+  ["HKD","Hong Kong Dollar"],["INR","Indian Rupee"],["JPY","Japanese Yen"],
+  ["MXN","Mexican Peso"],["NZD","New Zealand Dollar"],["SGD","Singapore Dollar"],
+  ["USD","United States Dollar"],["ZAR","South African Rand"]
+].map(([value,name]) => ({value, label: value + " · " + name}));
+const fxCacheKey = (base, quote) => "rosie.fx.v2." + base + "." + quote;
+function cachedFxRate(base, quote) {
+  try {
+    const record = JSON.parse(localStorage.getItem(fxCacheKey(base, quote)) || "null");
+    if (record?.base === base && record?.quote === quote &&
+        Number.isFinite(record.rate) && record.rate > 0 &&
+        /^\d{4}-\d{2}-\d{2}$/.test(record.date) &&
+        Number.isFinite(record.fetchedAt) &&
+        Date.now() - record.fetchedAt < 7 * 86400000) return record;
+  } catch { /* Storage can be disabled in private browsing. */ }
+  return null;
+}
+
+function toolOutput(id, v, fxRate, fxState) {
   if (id === "tip" || id === "split") {
     const bill = id === "tip" ? n(v.bill) : n(v.splitAmount);
     if (!valid(id === "tip" ? v.bill : v.splitAmount, v.tip, v.people) || bill < 0 || n(v.tip) < 0 || n(v.people) < 1) return "Enter a nonnegative bill and at least one person.";
@@ -82,8 +106,19 @@ function toolOutput(id, v) {
     return { main: money(monthly) + " / month", lines: ["Total interest: " + money(monthly * periods - n(v.principal)), "Total paid: " + money(monthly * periods)] };
   }
   if (id === "currency") {
-    if (!valid(v.currencyAmount, v.currencyRate) || n(v.currencyRate) <= 0) return "Enter an amount and a positive exchange rate.";
-    return { main: fmt(n(v.currencyAmount) * n(v.currencyRate), 4) + " " + v.target.toUpperCase(), lines: ["1 " + v.source.toUpperCase() + " = " + fmt(n(v.currencyRate), 6) + " " + v.target.toUpperCase(), "Manually supplied rate - not a live quote"] };
+    if (!valid(v.currencyAmount)) return "Enter a valid amount to convert.";
+    const base = v.source.toUpperCase(), quote = v.target.toUpperCase();
+    const currentPair = fxRate?.base === base && fxRate?.quote === quote &&
+      Number.isFinite(fxRate.rate) && fxRate.rate > 0;
+    if (!currentPair) return fxState === "error"
+      ? "Exchange rate unavailable. Connect to the internet and reopen Currency Converter."
+      : "Fetching the latest published exchange rate…";
+    const note = fxState === "live" ? "Reference rate · " + fxRate.date + " · Frankfurter"
+      : fxState === "same" ? "Same currency · 1:1 conversion"
+      : fxState === "error" ? "Offline cached rate from " + fxRate.date + " · may be outdated"
+      : "Cached rate from " + fxRate.date + " · checking for updates";
+    return { main: fmt(n(v.currencyAmount) * fxRate.rate, 4) + " " + quote,
+      lines: ["1 " + base + " = " + fmt(fxRate.rate, 8) + " " + quote, note] };
   }
   return "";
 }
@@ -95,7 +130,7 @@ function Selection({ label, value, options, onChange, size = "wide" }) {
   return <label className={"rc-field rc-field--" + size}><span>{label}</span><select value={value} onChange={(e) => onChange(e.target.value)}>{options.map(x => <option key={x.value || x} value={x.value || x}>{x.label || x}</option>)}</select></label>;
 }
 
-function ToolPanel({ active, values, update }) {
+function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState }) {
   const changed = (field) => (next) => update(field, next);
   const fields = {
     tip: <><NumberField label="Bill before tip ($)" value={values.bill} onChange={changed("bill")} min="0"/><NumberField label="Tip (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
@@ -104,9 +139,9 @@ function ToolPanel({ active, values, update }) {
     date: <><NumberField label="Start date" type="date" value={values.start} onChange={changed("start")}/><NumberField label="End date" type="date" value={values.end} onChange={changed("end")}/><NumberField label="Days to add / subtract" size="compact" value={values.shift} onChange={changed("shift")} step="1"/></>,
     percent: <><NumberField label="Starting amount" value={values.base} onChange={changed("base")}/><NumberField label="Percent (%)" size="compact" value={values.percent} onChange={changed("percent")}/><Selection label="Calculation" value={values.percentMode} onChange={changed("percentMode")} options={[{value:"discount",label:"After discount"},{value:"increase",label:"After increase"},{value:"of",label:"Percent of amount"}]}/></>,
     loan: <><NumberField label="Principal ($)" value={values.principal} onChange={changed("principal")} min="0"/><NumberField label="Annual interest (%)" size="compact" value={values.annual} onChange={changed("annual")} min="0"/><NumberField label="Term (months)" size="compact" value={values.months} onChange={changed("months")} min="1" step="1"/></>,
-    currency: <><NumberField label="Amount" value={values.currencyAmount} onChange={changed("currencyAmount")}/><NumberField label="Rate (units of target per 1 source)" size="wide" value={values.currencyRate} onChange={changed("currencyRate")} min="0"/><label className="rc-field"><span>From currency</span><input maxLength="8" value={values.source} onChange={e=>update("source",e.target.value)}/></label><label className="rc-field"><span>To currency</span><input maxLength="8" value={values.target} onChange={e=>update("target",e.target.value)}/></label></>
+    currency: <><NumberField label="Amount" value={values.currencyAmount} onChange={changed("currencyAmount")}/><Selection label="From currency" value={values.source} onChange={changed("source")} options={currencyOptions}/><Selection label="To currency" value={values.target} onChange={changed("target")} options={currencyOptions}/></>
   };
-  const output = toolOutput(active, values);
+  const output = toolOutput(active, values, fxRate, fxState);
   return <section className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
     <div className="rc-device-housing" aria-hidden="true"><img className="rc-device-original-art" src="/rosieverse/calculations/toolkit/gold-device.webp" alt="" decoding="async" draggable="false" /></div>
     <div className="rc-device-surface">
@@ -123,7 +158,80 @@ export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
   const [tool, setTool] = useState(null);
   const [values, setValues] = useState(DEFAULTS);
+  const [currencyOptions, setCurrencyOptions] = useState(FX_FALLBACK_CURRENCIES);
+  const [fxRate, setFxRate] = useState(null);
+  const [fxState, setFxState] = useState("loading");
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
+  // The dropdown list refreshes from the provider each time the tool opens.
+  useEffect(() => {
+    if (tool !== "currency") return undefined;
+    const controller = new AbortController();
+    fetch(FX_API + "/currencies", {signal:controller.signal})
+      .then(response => {if(!response.ok) throw new Error("Currency list unavailable");return response.json();})
+      .then(rows => {
+        if(!Array.isArray(rows)) throw new Error("Invalid currency list");
+        const options = rows.filter(row => /^[A-Z]{3}$/.test(row.iso_code || ""))
+          .map(row => ({value:row.iso_code, label:row.iso_code + " · " + (row.name || row.iso_code)}))
+          .sort((a,b) => a.value.localeCompare(b.value));
+        if(options.length) setCurrencyOptions(options);
+      }).catch(() => { /* Keep accessible major-currency dropdowns offline. */ });
+    return () => controller.abort();
+  }, [tool]);
+  // Refresh on opening, pair changes, four-hour intervals, and after the app
+  // returns to the foreground. Never silently substitute yesterday's rate.
+  useEffect(() => {
+    if (tool !== "currency") return undefined;
+    const base = values.source.toUpperCase(), quote = values.target.toUpperCase();
+    if (base === quote) {
+      setFxRate({base, quote, rate:1, date:iso(Date.now()), fetchedAt:Date.now()});
+      setFxState("same");
+      return undefined;
+    }
+    let alive = true, inFlight = null, lastAttempt = 0;
+    const cached = cachedFxRate(base, quote);
+    setFxRate(cached);
+    setFxState("loading");
+    const refresh = async () => {
+      if(!alive) return;
+      if(inFlight) inFlight.abort();
+      const controller = new AbortController();
+      inFlight = controller;
+      lastAttempt = Date.now();
+      try {
+        const response = await fetch(FX_API + "/rate/" + encodeURIComponent(base.toLowerCase()) +
+          "/" + encodeURIComponent(quote.toLowerCase()), {signal:controller.signal,cache:"no-store"});
+        if(!response.ok) throw new Error("Rate provider returned " + response.status);
+        const data = await response.json();
+        const rate = Number(data.rate);
+        if(!Number.isFinite(rate) || rate <= 0 || !/^\d{4}-\d{2}-\d{2}$/.test(data.date))
+          throw new Error("Invalid exchange-rate response");
+        if(!alive || controller.signal.aborted) return;
+        const current = {base, quote, rate, date:data.date, fetchedAt:Date.now()};
+        setFxRate(current); setFxState("live");
+        try {localStorage.setItem(fxCacheKey(base, quote), JSON.stringify(current));} catch {}
+      } catch (error) {
+        if(!alive || controller.signal.aborted) return;
+        setFxState("error");
+      } finally {
+        if(inFlight === controller) inFlight = null;
+      }
+    };
+    const foregroundRefresh = () => {
+      if(document.visibilityState === "visible" &&
+          Date.now() - lastAttempt > 30 * 60 * 1000) refresh();
+    };
+    refresh();
+    const timer = window.setInterval(refresh, FX_REFRESH_MS);
+    window.addEventListener("focus", foregroundRefresh);
+    document.addEventListener("visibilitychange", foregroundRefresh);
+    return () => {
+      alive = false;
+      window.clearInterval(timer);
+      window.removeEventListener("focus", foregroundRefresh);
+      document.removeEventListener("visibilitychange", foregroundRefresh);
+      inFlight?.abort();
+    };
+  }, [tool, values.source, values.target]);
   useEffect(() => {
     const onKey = (event) => {
       if (event.metaKey || event.ctrlKey || event.altKey ||
@@ -150,7 +258,7 @@ export default function RosieCalculations() {
     <div className="rc-workspace">
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
       <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card rc-tool-card--"+item.id+(tool===item.id?" active":"")} aria-label={item.title} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><img className="rc-tool-art" src={"/rosieverse/calculations/toolkit/button-"+item.id+".webp"} alt="" loading="lazy" draggable="false"/></button>)}</div>
-      {tool && <ToolPanel active={tool} values={values} update={update}/>}
+      {tool && <ToolPanel active={tool} values={values} update={update} currencyOptions={currencyOptions} fxRate={fxRate} fxState={fxState}/>} 
       <p className="rc-footer-note">Crafted in Rosie’s study · Numbers with a little extra charm</p>
     </div>
   </main>;

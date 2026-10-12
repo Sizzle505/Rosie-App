@@ -152,8 +152,8 @@
 
 /* iPhone Grand Salon: one full-height illustrated stage, not a tall column
    that pushes the painted shoreline beneath Safari's visible screen.
-   The heading is now 15% larger than the preceding 70% treatment and
-   begins 10px higher; the hero is
+   The heading is now a further 8% larger than the 80.5% treatment and
+   begins another 8px higher; the hero is
    the flexible spacer; the real image-backed destination buttons keep their
    natural aspect ratios and sit above the visible bottom of the screen. */
 @media (max-width: 600px) {
@@ -175,9 +175,9 @@
   }
   .banner {
     flex: none;
-    width: 80.5%;
-    max-width: 80.5%;
-    margin: 10px auto 0;
+    width: 86.94%;
+    max-width: 86.94%;
+    margin: 2px auto 0;
   }
   .hero {
     flex: 1 1 auto;
@@ -192,10 +192,13 @@
   }
   /* Independent visual nudges; retain their original grid slots and
      ornamental-image sizing without pulling the other buttons around. */
-  .world[aria-label="Open Card Vault"],
-  .world.resourcesWorld {
-    top: -7px;
-  }
+  .world[aria-label="Open Card Vault"] { top: -10px; }
+  .world[aria-label="Open Cheese Board Exam"] { top: -3px; left: 6px; }
+  .world[aria-label="Open Captain Rosie"] { top: -2px; }
+  .world.resourcesWorld { top: -15px; z-index: 0; }
+  /* Resources tucks behind the other illustrated destination buttons,
+     preserving their normal tappable area and gold-frame overlap. */
+  .world:not(.resourcesWorld) { z-index: 2; }
 }
 @media (max-width: 600px) and (max-height: 700px) {
   .hero { min-height: 105px; max-height: 28dvh; }

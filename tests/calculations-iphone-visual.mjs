@@ -229,16 +229,23 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
             titleWidth:titleRect.width,contentWidth:home.clientWidth,
             titleOffset:titleRect.top-homeRect.top,
             vaultLift:getComputedStyle(home.querySelector('[aria-label="Open Card Vault"]')).top,
-            resourcesLift:getComputedStyle(home.querySelector('[aria-label="Open Rosie’s Resources"]')).top};
+            resourcesLift:getComputedStyle(home.querySelector('[aria-label="Open Rosie’s Resources"]')).top,
+            cheeseLift:getComputedStyle(home.querySelector('[aria-label="Open Cheese Board Exam"]')).top,
+            cheeseRight:getComputedStyle(home.querySelector('[aria-label="Open Cheese Board Exam"]')).left,
+            captainLift:getComputedStyle(home.querySelector('[aria-label="Open Captain Rosie"]')).top,
+            resourcesZ:getComputedStyle(home.querySelector('[aria-label="Open Rosie’s Resources"]')).zIndex,
+            vaultZ:getComputedStyle(home.querySelector('[aria-label="Open Card Vault"]')).zIndex};
         });
         assert(Math.abs(homeFit.bottom-homeFit.viewport)<=2 && Math.abs(homeFit.height-homeFit.viewport)<=2,
           "Grand Salon scenery must end at the iPhone viewport, not below it: "+JSON.stringify(homeFit));
-        assert(homeFit.titleWidth<=homeFit.contentWidth*.80 && homeFit.titleWidth>=homeFit.contentWidth*.75,
-          "RosieVerse title should be 15% larger than the former 70% width: "+JSON.stringify(homeFit));
-        assert(homeFit.titleOffset>=9 && homeFit.titleOffset<=16,
-          "RosieVerse title must be raised 10px from the prior 20px margin: "+JSON.stringify(homeFit));
-        assert(homeFit.vaultLift==="-7px" && homeFit.resourcesLift==="-7px",
-          "Card Vault and Rosie’s Resources must rise 7px independently: "+JSON.stringify(homeFit));
+        assert(homeFit.titleWidth<=homeFit.contentWidth*.87 && homeFit.titleWidth>=homeFit.contentWidth*.81,
+          "RosieVerse header should be another 8% larger: "+JSON.stringify(homeFit));
+        assert(homeFit.titleOffset>=3 && homeFit.titleOffset<=9,
+          "RosieVerse header must rise 8px from previous position: "+JSON.stringify(homeFit));
+        assert(homeFit.vaultLift==="-10px" && homeFit.resourcesLift==="-15px" &&
+          homeFit.cheeseLift==="-3px" && homeFit.cheeseRight==="6px" &&
+          homeFit.captainLift==="-2px" && Number(homeFit.resourcesZ)<Number(homeFit.vaultZ),
+          "Landing card nudges and Resources-behind layering incorrect: "+JSON.stringify(homeFit));
       }
       await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
 
@@ -261,6 +268,8 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert.equal(randomPadding,2,"Randomizers page must begin 18px higher than its original 20px inset");
       await page.screenshot({path:output+"/"+name+"-randomizers.png",fullPage:true});
       await page.goto("http://127.0.0.1:5173/#fortune",{waitUntil:"networkidle"});
+      const fortuneOffset=await page.locator("main.fortune-page").evaluate(el=>getComputedStyle(el).top);
+      assert.equal(fortuneOffset,"-8px","Fortune Teller must start 8px higher");
       assert.equal(await page.getByRole("button",{name:"Open Cheese Board Exam"}).count(),1,
         "ordinary entertainment nav changed");
       await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).click();
