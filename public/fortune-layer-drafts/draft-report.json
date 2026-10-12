@@ -31,10 +31,17 @@
   "backplate": "Painted midnight-velvet continuation; provisional unseen areas",
   "boundary_type": "source-registered polygons with U2NetP original-head alpha when enabled",
   "head_refined_diagnostic_only": true,
+  "paw_alpha_only_fur": true,
+  "hidden_glass_reconstructed_pixels": 2394,
+  "fixed_globe_layers": [
+    "orb/glass-back.webp",
+    "orb/front-reflections.webp"
+  ],
+  "paw_globe_independent": true,
   "smart_source_head_used": true,
   "head_left_candidate_from_existing_app_portrait": true,
-  "static_composite_mean_abs_error": 0.598008,
-  "fraction_pixels_changed_gt_24": 0.00926,
+  "static_composite_mean_abs_error": 0.585241,
+  "fraction_pixels_changed_gt_24": 0.009225,
   "empty_plate_approved": false,
   "motion_approved": false,
   "integration_approved": false
