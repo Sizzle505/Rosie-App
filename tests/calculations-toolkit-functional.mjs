@@ -56,7 +56,6 @@ try {
       assert(await panel.locator("input,select").count()>=3);
       if(width===390) await panel.screenshot({path:dir+"/"+(index+1)+"-"+labels[index].replace(/[^a-z]+/gi,"-").toLowerCase()+".png"});
     }
-    await page.locator(".rc-tool-card").first().click(); // close the seventh tool
     await page.locator(".rc-tool-card").first().click(); // open tip
     const tip=page.locator(".rc-device");
     await tip.getByLabel("Bill before tip ($)").fill("84.5");
