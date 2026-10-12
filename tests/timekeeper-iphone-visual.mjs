@@ -19,7 +19,9 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       page.on("pageerror", err => failures.push(String(err)));
       await page.goto(base, { waitUntil: "networkidle" });
       await page.locator(".rtk-utility").waitFor();
-      await page.waitForTimeout(550);
+      await page.locator(".app-shell-visible").waitFor();
+      await page.locator(".loading-screen-hidden").waitFor();
+      await page.waitForTimeout(900);
       const geometry = await page.evaluate(() => {
         const rect = selector => {
           const r = document.querySelector(selector).getBoundingClientRect();
