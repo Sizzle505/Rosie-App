@@ -59,6 +59,7 @@ export default function RosieTimekeeper() {
   const [customHours, setCustomHours] = useState("0");
   const [customMinutes, setCustomMinutes] = useState("25");
   const [customSeconds, setCustomSeconds] = useState("00");
+  const [timerEntry, setTimerEntry] = useState("presets");
   const [restored, setRestored] = useState(false);
   const lastSavedAt = useRef(0);
   const [message, setMessage] = useState("");
@@ -100,7 +101,7 @@ export default function RosieTimekeeper() {
       window.removeEventListener("resize", fitTray);
       window.removeEventListener("orientationchange", fitTray);
     };
-  }, [mode, laps.length]);
+  }, [mode, laps.length, timerEntry]);
 
   // Resume after reload using wall time only for time spent outside this page.
   // While open, performance.now() remains the high-precision source.
@@ -311,7 +312,7 @@ export default function RosieTimekeeper() {
         <div className="rtk-action-deck" aria-label="Timekeeper controls">
           <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
             <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
           </div>
           <div className="rtk-controls">
             <button type="button" className="rtk-secondary-action rtk-lap-action"
@@ -353,13 +354,19 @@ export default function RosieTimekeeper() {
             </>
           ) : (
             <>
-              <div className="rtk-utility-heading"><span>Quick Timers</span><span>Set a countdown</span></div>
-              <div className="rtk-presets">
+              <div className="rtk-utility-heading">
+                <span>{timerEntry === "custom" ? "Custom Timer" : "Quick Timers"}</span>
+                <button type="button" className="rtk-timer-view-toggle"
+                  onClick={() => setTimerEntry(previous => previous === "presets" ? "custom" : "presets")}
+                  aria-label={timerEntry === "presets" ? "Set a custom duration" : "Show quick timer presets"}>
+                  {timerEntry === "presets" ? "Custom ›" : "‹ Presets"}
+                </button>
+              </div>
+              {timerEntry === "presets" ? <div className="rtk-presets">
                 {PRESETS.map((preset) => (
                   <button type="button" key={preset.ms} className={duration === preset.ms ? "chosen" : ""} onClick={() => pickPreset(preset.ms)} aria-pressed={duration === preset.ms}>{preset.label}</button>
                 ))}
-              </div>
-              <div className="rtk-custom-timer" aria-label="Custom countdown duration">
+              </div> : <div className="rtk-custom-timer" aria-label="Custom countdown duration">
                 <label>Hours<input inputMode="numeric" type="number" min="0" max="99" value={customHours}
                   onChange={e => setCustomHours(e.target.value)} aria-label="Hours" /></label>
                 <span className="rtk-time-separator">:</span>
@@ -369,8 +376,8 @@ export default function RosieTimekeeper() {
                 <label>Sec<input inputMode="numeric" type="number" min="0" max="59" value={customSeconds}
                   onChange={e => setCustomSeconds(e.target.value)} aria-label="Seconds" /></label>
                 <button type="button" onClick={applyCustomDuration}>Set</button>
-              </div>
-              <p className="rtk-timer-note">Sounds work while this page is open; background alarms aren't guaranteed.</p>
+              </div>}
+              {/* Only the active input set occupies the instrument face. */}
             </>
           )}
           </div>
