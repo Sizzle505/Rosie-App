@@ -118,8 +118,12 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         const m=getComputedStyle(el).transform.match(/^matrix\(([^)]+)\)$/);
         return m ? Number(m[1].split(",")[5]) : NaN;
       });
-      assert(Math.abs(navOffset-19)<=0.5,
-        "Calculations Games/Tools pendant must be 5px lower than previous 14px setting: "+navOffset);
+      assert(Math.abs(navOffset-14)<=0.5,
+        "Calculations pendant's safe-area placement should remain stable: "+navOffset);
+      const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first()
+        .evaluate(el=>getComputedStyle(el).top);
+      assert.equal(raisedNavContent,"-5px",
+        "bottom navigation content should be 5px above the Games/Tools pendant");
 
       const digit=n=>page.getByRole("button",{name:String(n),exact:true});
       await digit(7).click();
