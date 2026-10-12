@@ -8,11 +8,11 @@ export default function RosieRouletteFace({ count }) {
   return (
     <svg className={styles.wheelFace} viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
       <defs>
-        <pattern id="rosie-roulette-crimson" patternUnits="userSpaceOnUse" width="136" height="136">
-          <image href="/randomizers/roulette/crimson-brocade.svg" width="136" height="136" />
+        <pattern id="rosie-roulette-crimson" patternUnits="userSpaceOnUse" width="292" height="292">
+          <image href="/randomizers/roulette/slice-texture-crimson.webp" width="292" height="292" />
         </pattern>
-        <pattern id="rosie-roulette-onyx" patternUnits="userSpaceOnUse" width="136" height="136">
-          <image href="/randomizers/roulette/onyx-brocade.svg" width="136" height="136" />
+        <pattern id="rosie-roulette-onyx" patternUnits="userSpaceOnUse" width="292" height="292">
+          <image href="/randomizers/roulette/slice-texture-onyx.webp" width="292" height="292" />
         </pattern>
         <radialGradient id="rosie-roulette-light" cx=".28" cy=".2" r=".84">
           <stop stopColor="#fff0c9" stopOpacity=".19" />
