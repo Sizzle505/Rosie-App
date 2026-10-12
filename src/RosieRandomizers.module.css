@@ -1073,3 +1073,39 @@
   .wheel { transition-duration: .01ms; will-change: auto; }
   .wheelHub { transition: none; }
 }
+
+/* Approved Randomizers panel texture integration - October 2026. */
+/* Only background layers change. Borders, spacing, coin/dice animation,
+   and the editable/spinning wheel remain independent DOM/SVG elements. */
+.hero {
+  background-image:
+    linear-gradient(90deg, rgba(6, 6, 10, .22), rgba(6, 6, 10, .04)),
+    url("/randomizers/rosie-salon-burgundy-texture.svg");
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+}
+.wheelSalon {
+  background-image:
+    linear-gradient(120deg, rgba(7, 5, 10, .48), rgba(7, 5, 10, .18)),
+    url("/randomizers/rosie-salon-burgundy-texture.svg");
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+}
+.ivoryCard {
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 248, .20), rgba(255, 253, 248, .11)),
+    url("/randomizers/rosie-ivory-gold-marble-texture.svg");
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+}
+.wheelEditor {
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 247, .44), rgba(255, 253, 247, .28)),
+    url("/randomizers/rosie-ivory-gold-marble-texture.svg");
+  background-position: center, center;
+  background-repeat: no-repeat;
+  background-size: cover, cover;
+}
