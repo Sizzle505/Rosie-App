@@ -1,0 +1,21 @@
+name: Focused centered gold tray QA
+on:
+  push:
+    branches: [work/satin-remove-underlay-seams-gold-safe-margins-20261012]
+    paths: [.github/workflows/rosie-safe-tray-focus-20261012.yml]
+jobs:
+  seven-gold-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Verify seven instruments, margins, results, and paired label alignment
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/safe-tray-dev.log 2>&1 &
+          sleep 8
+          node tests/calculations-toolkit-functional.mjs
