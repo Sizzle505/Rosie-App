@@ -256,3 +256,7 @@
   box-shadow:inset 0 1px #fff4d729,0 2px 5px #33210d5c;font-weight:600!important;}
 .qa-save:disabled,.qa-actions button:disabled {opacity:.42;}
 @media(max-width:390px){.qa-panel-inner{padding:8px 5px 13px;}}
+
+.qa-start-fresh {margin-top:4px;min-height:36px;padding:7px 13px;border:1px solid #b99764;
+ border-radius:999px;background:#f8ead2;color:#6a3c26;font:12px Georgia,serif!important;}
+.qa-start-fresh:hover {background:#fff4df;}
