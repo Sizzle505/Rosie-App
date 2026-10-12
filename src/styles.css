@@ -7777,5 +7777,5 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* BEGIN ROSIE CALCULATIONS COMPACT HANDOFF 2026-10-11 */
 /* All non-home pages: lower Games/Tools pendant 6px relative to navigation. */
-.app-shell .nav-family-toggle { transform: translate(-50%, 6px); }
+.app-shell .nav-family-toggle { transform: translate(-50%, 11px); }
 /* END ROSIE CALCULATIONS COMPACT HANDOFF */
