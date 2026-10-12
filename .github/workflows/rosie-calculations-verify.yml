@@ -5,6 +5,7 @@ on:
       - 'src/RosieCalculations.jsx'
       - 'src/RosieCalculations.css'
       - 'src/RosieCalculationsDevice.css'
+      - 'public/rosieverse/calculations/toolkit/**'
       - 'src/AssetCalculator.jsx'
       - 'src/AssetCalculator.css'
       - 'tests/calculations-iphone-visual.mjs'
