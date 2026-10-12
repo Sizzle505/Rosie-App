@@ -231,10 +231,12 @@ try {
       });
       assert(resultTextFits,"Gold device receipt text is clipped by its decorative rim: "+labels[index]);
       if (index === 2) {
-        assert(geometry.inputs[0].width<=165 && geometry.inputs[1].width<=165,
+        assert(geometry.inputs[0].width<=145 && geometry.inputs[1].width<=145,
           "Dates should occupy modest bubbles, not full-width ivory trays: "+JSON.stringify(geometry.inputs));
       }
       if (index === 4) {
+        assert.equal(await panel.getByLabel("Starting amount").inputValue(),"$200.00",
+          "Money inputs should show default USD cents rather than unformatted numbers");
         assert(geometry.inputs[0].width<=155 && geometry.inputs[1].width<=105 &&
           geometry.inputs[2].width<=203,
           "Percent bubbles and choice selector should be content-sized: "+JSON.stringify(geometry.inputs));
@@ -267,9 +269,13 @@ try {
     await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").first().click(); // open tip
     const tip=page.locator(".rc-device");
+    assert.equal(await tip.getByLabel("Bill before tip ($)").inputValue(),"$100.00",
+      "Dollar fields should open displaying $X.XX by default");
     await tip.getByLabel("Bill before tip ($)").fill("84.5");
     await tip.getByLabel("Tip (%)").fill("20");
     await tip.getByLabel("People").fill("3");
+    assert.equal(await tip.getByLabel("Bill before tip ($)").inputValue(),"$84.50",
+      "Edited money fields must automatically regain currency format on blur");
     assert((await tip.locator(".rc-tool-result").innerText()).includes("$33.80"),
       "Live tip-per-person calculation stopped updating");
     await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
@@ -281,6 +287,12 @@ try {
     await page.locator(".rc-tool-card").nth(6).click();
     const currency=page.locator(".rc-device");
     const fromCurrency=currency.getByLabel("From currency");
+    await page.waitForFunction(() => document.querySelectorAll(
+      ".rc-device--currency select option").length >= 4);
+    assert.equal(await fromCurrency.locator("option").first().textContent(),"United States $",
+      "USD must be first in the country-alphabetical menu with the short United States $ label");
+    assert.equal(await currency.getByLabel("Amount").inputValue(),"$100.00",
+      "USD currency amounts need native dollars-and-cents input display");
     const toCurrency=currency.getByLabel("To currency");
     assert.equal(await fromCurrency.evaluate(el=>el.tagName),"SELECT");
     assert.equal(await toCurrency.evaluate(el=>el.tagName),"SELECT");
@@ -299,6 +311,20 @@ try {
     await toCurrency.selectOption("EUR");
     assert((await currency.locator(".rc-tool-result").innerText()).includes("100 EUR"),
       "Same-currency conversion should be 1:1 without calling a provider");
+    await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
+    await page.waitForTimeout(240);
+    const exit=await page.evaluate(()=>{
+      const root=document.scrollingElement||document.documentElement;
+      const w=document.querySelector(".rc-workspace");
+      return {position:window.scrollY,bottom:Math.max(0,root.scrollHeight-innerHeight),
+        toolkitBackground:getComputedStyle(w).backgroundImage,
+        toolkitHeight:w.getBoundingClientRect().height,viewport:innerHeight};
+    });
+    assert(Math.abs(exit.position-exit.bottom)<4,
+      "X Tools must land at the bottom of Calculations: "+JSON.stringify(exit));
+    assert(exit.toolkitHeight>=exit.viewport &&
+      exit.toolkitBackground.includes("rosie-salon-burgundy-texture.svg"),
+      "Pocket Toolkit background must continue through the entire iPhone viewport: "+JSON.stringify(exit));
     assert.equal(errors.length,0,errors.join("\n"));
     await page.close();
   }
