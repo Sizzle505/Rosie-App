@@ -1,0 +1,46 @@
+name: Prepare Tall Rosie Instrument Housing
+on:
+  push:
+    paths:
+      - '.github/workflows/prepare-calculations-housing.yml'
+permissions:
+  contents: write
+jobs:
+  slice:
+    if: github.ref == 'refs/heads/work/calculations-mythic-functional-devices-20261011'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --quiet Pillow
+      - name: Slice the authentic approved mechanical frame without redrawing
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          directory=Path('public/rosieverse/calculations/toolkit')
+          frame=Image.open(directory/'gold-device.webp').convert('RGBA')
+          assert frame.size==(1122,1402),f'Unexpected original dimensions: {frame.size}'
+          crops={
+            'housing-top.webp':(0,0,1122,353),
+            'housing-bottom.webp':(0,1045,1122,1402),
+            'housing-center.webp':(180,318,942,1076),
+            'housing-rail-left.webp':(0,345,190,520),
+            'housing-rail-right.webp':(932,345,1122,520),
+            'housing-cheese.webp':(0,553,210,772),
+            'housing-shiba.webp':(912,553,1122,772)
+          }
+          for name,box in crops.items():
+            piece=frame.crop(box)
+            piece.save(directory/name,'WEBP',quality=96,method=6)
+            print(name,piece.size)
+          PY
+      - name: Commit authentic resizeable image components
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/rosieverse/calculations/toolkit
+          git commit -m "Slice authentic device housing for nondistorting tall responsive layouts" || exit 0
+          git push origin HEAD:work/calculations-mythic-functional-devices-20261011
