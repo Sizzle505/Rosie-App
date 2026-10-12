@@ -29,8 +29,8 @@ jobs:
       - name: Capture mobile viewport and scroll
         run: |
           mkdir -p qa-screenshots
-          npx --yes playwright@1.56.1 screenshot --browser chromium --viewport-size "393,852" --wait-for-timeout=1200 "http://127.0.0.1:4173/#qr-atelier" qa-screenshots/qr-atelier-iphone-top.png
-          npx --yes playwright@1.56.1 screenshot --browser chromium --viewport-size "393,852" --full-page --wait-for-timeout=1200 "http://127.0.0.1:4173/#qr-atelier" qa-screenshots/qr-atelier-iphone-full.png
+          npx --yes playwright@1.56.1 screenshot --browser chromium --viewport-size "393,852" --wait-for-timeout=4500 "http://127.0.0.1:4173/#qr-atelier" qa-screenshots/qr-atelier-iphone-top.png
+          npx --yes playwright@1.56.1 screenshot --browser chromium --viewport-size "393,852" --full-page --wait-for-timeout=4500 "http://127.0.0.1:4173/#qr-atelier" qa-screenshots/qr-atelier-iphone-full.png
       - uses: actions/upload-artifact@v4
         with:
           name: qr-atelier-iphone-visual
