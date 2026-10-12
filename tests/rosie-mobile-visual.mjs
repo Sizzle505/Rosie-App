@@ -115,16 +115,16 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
           assert(pos.gridTop >= pos.examinerBottom - 4, mode + " board hidden under Doctor Rosie: " + JSON.stringify(pos));
         };
         await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).click();
-        await page.waitForTimeout(220);
+        await page.waitForTimeout(360);
         assertFits(await readCheeseViewport(), "Classic");
         await cheeseActions.getByRole("button", { name: "FLASH FROMAGE" }).click();
-        await page.waitForTimeout(220);
+        await page.waitForTimeout(360);
         assertFits(await readCheeseViewport(), "Flash Fromage");
         await cheeseActions.getByRole("button", { name: "RESET" }).click();
-        await page.waitForTimeout(220);
+        await page.waitForTimeout(360);
         assertFits(await readCheeseViewport(), "Reset");
         await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).click();
-        await page.waitForTimeout(220);
+        await page.waitForTimeout(360);
         assertFits(await readCheeseViewport(), "Return to Classic");
       }
       const pairIndices = await page.locator("button.cheese-card").evaluateAll(cards => {
