@@ -817,8 +817,11 @@
   .rc-page .rc-device--currency .rc-form-grid > .rc-field:has(select) select {
     width:100%;max-width:100%;
   }
-  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
+  /* Override the older .rc-field--wide:has(select) rule explicitly. */
+  .rc-page .rc-device--units .rc-form-grid > .rc-field.rc-field--wide:nth-child(n+3):has(select) select {
     width:min(100%,96px);max-width:100%;
+    padding-left:9px;padding-right:25px;
+    font-size:14px;
   }
   /* Fit each receipt to the actual number of lines, rather than imposing
      an oversized blank 160-200px slab on a single-line calculation. */
