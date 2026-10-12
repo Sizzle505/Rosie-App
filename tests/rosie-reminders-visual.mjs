@@ -257,7 +257,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
         await page.waitForTimeout(120);
         const pos = await page.evaluate(() => ({
-          noteBottom: document.querySelector(".rr-storage-note").getBoundingClientRect().bottom,
+          noteBottom: (document.querySelector(".rr-storage-note") || document.querySelector(".rr-paper")).getBoundingClientRect().bottom,
           navTop: document.querySelector(".bottom-nav").getBoundingClientRect().top
         }));
         assert(pos.noteBottom <= pos.navTop - 8,
