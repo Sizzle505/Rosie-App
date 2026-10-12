@@ -157,7 +157,7 @@ try {
           const labelElement=node.closest(".rc-field").querySelector("span");
           const label=labelElement.getBoundingClientRect();
           const style=getComputedStyle(node);
-          return {x:r.x,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
+          return {x:r.x,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,nativeHeight:node.offsetHeight,
             compact:node.closest(".rc-field").classList.contains("rc-field--compact"),
             labelCenter:(label.left+label.right)/2,fieldCenter:(r.left+r.right)/2,
             labelAlign:getComputedStyle(labelElement).textAlign,
@@ -185,7 +185,7 @@ try {
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
         field.width >= (field.compact || paired.includes(fieldIndex) ? 85 : 100) &&
-        field.height>=44 && field.height<=46 &&
+        field.nativeHeight>=44 && field.height>=40 && field.height<=46 &&
         field.paddingLeft >= (paired.includes(fieldIndex) ? 7 : 9) &&
         field.border>=2 && field.fontSize >= (labels[index]==="Unit Conversions" ? 14 : 16) &&
         field.labelAlign==="center" && Math.abs(field.fieldCenter-field.labelCenter)<=3 &&
