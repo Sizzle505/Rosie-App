@@ -279,7 +279,7 @@ export default function RosieReminders() {
             <label htmlFor="rr-groceries-input">Grocery List</label>
             <textarea id="rr-groceries-input" aria-label="Grocery list items"
               rows={4} value={groceryDraft} onChange={e => setGroceryDraft(e.target.value)}
-              placeholder={"Milk, eggs, cheese\\nAvocados, bananas\\nCoffee"} />
+              placeholder={"Milk, eggs, cheese\nAvocados, bananas\nCoffee"} />
             <button type="submit" disabled={!groceryDraft.trim()}>＋ Add Items</button>
           </form>
           {shown.length > 0 && <div className="rr-simple-rows rr-grocery-rows" role="list" aria-label="Grocery checklist">
