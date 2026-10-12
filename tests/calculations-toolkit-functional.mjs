@@ -35,9 +35,13 @@ try {
     assert.equal(art.length,7);
     assert(art.every(img=>img.loaded&&img.width>0),
       "Approved selector images missing: "+JSON.stringify(art));
-    assert(await page.locator(".rc-tool-card--currency").evaluate(el=>
-      getComputedStyle(el).gridColumnEnd==="span 2"),
-      "Currency illustration must span both columns");
+    const currencyGeometry=await page.evaluate(()=>{
+      const regular=document.querySelector(".rc-tool-card--tip").getBoundingClientRect();
+      const wide=document.querySelector(".rc-tool-card--currency").getBoundingClientRect();
+      return {regular:regular.width,wide:wide.width};
+    });
+    assert(currencyGeometry.wide>=currencyGeometry.regular*1.8,
+      "Currency illustration must span both columns: "+JSON.stringify(currencyGeometry));
     for (let index=0;index<labels.length;index++) {
       await page.locator(".rc-tool-card").nth(index).click();
       const panel=page.locator(".rc-device");
