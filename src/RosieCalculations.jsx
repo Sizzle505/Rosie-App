@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { calculatorReducer, initialCalculator, keyFromKeyboard } from "./calculationsEngine.js";
 import AssetCalculator from "./AssetCalculator.jsx";
 import "./RosieCalculations.css";
@@ -130,22 +130,38 @@ function Selection({ label, value, options, onChange, size = "wide" }) {
   return <label className={"rc-field rc-field--" + size}><span>{label}</span><select value={value} onChange={(e) => onChange(e.target.value)}>{options.map(x => <option key={x.value || x} value={x.value || x}>{x.label || x}</option>)}</select></label>;
 }
 
-function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState }) {
+function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState, onSelectTool, panelRef }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const changed = (field) => (next) => update(field, next);
+  useEffect(() => setMenuOpen(false), [active]);
   const fields = {
     tip: <><NumberField label="Bill before tip ($)" value={values.bill} onChange={changed("bill")} min="0"/><NumberField label="Tip (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
     split: <><NumberField label="Subtotal ($)" value={values.splitAmount} onChange={changed("splitAmount")} min="0"/><NumberField label="Tax ($)" value={values.tax} onChange={changed("tax")} min="0"/><NumberField label="Tip on subtotal (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
-    units: <><NumberField label="Amount" value={values.amount} onChange={changed("amount")}/><Selection label="Measurement" value={values.unitCategory} options={Object.keys(UNIT_SETS)} onChange={(v) => { const names=Object.keys(UNIT_SETS[v]);update("unitCategory",v);update("unitFrom",names[0]);update("unitTo",names[1]); }}/><Selection label="From" value={values.unitFrom} options={Object.keys(UNIT_SETS[values.unitCategory])} onChange={changed("unitFrom")}/><Selection label="To" value={values.unitTo} options={Object.keys(UNIT_SETS[values.unitCategory])} onChange={changed("unitTo")}/></>,
+    units: <><NumberField label="Amount" value={values.amount} onChange={changed("amount")}/><Selection label="Measurement" size="standard" value={values.unitCategory} options={Object.keys(UNIT_SETS)} onChange={(v) => { const names=Object.keys(UNIT_SETS[v]);update("unitCategory",v);update("unitFrom",names[0]);update("unitTo",names[1]); }}/><Selection label="From" value={values.unitFrom} options={Object.keys(UNIT_SETS[values.unitCategory])} onChange={changed("unitFrom")}/><Selection label="To" value={values.unitTo} options={Object.keys(UNIT_SETS[values.unitCategory])} onChange={changed("unitTo")}/></>,
     date: <><NumberField label="Start date" type="date" value={values.start} onChange={changed("start")}/><NumberField label="End date" type="date" value={values.end} onChange={changed("end")}/><NumberField label="Days to add / subtract" size="compact" value={values.shift} onChange={changed("shift")} step="1"/></>,
-    percent: <><NumberField label="Starting amount" value={values.base} onChange={changed("base")}/><NumberField label="Percent (%)" size="compact" value={values.percent} onChange={changed("percent")}/><Selection label="Calculation" value={values.percentMode} onChange={changed("percentMode")} options={[{value:"discount",label:"After discount"},{value:"increase",label:"After increase"},{value:"of",label:"Percent of amount"}]}/></>,
+    percent: <><NumberField label="Starting amount" value={values.base} onChange={changed("base")}/><NumberField label="Percent (%)" size="compact" value={values.percent} onChange={changed("percent")}/><Selection label="Calculation" size="standard" value={values.percentMode} onChange={changed("percentMode")} options={[{value:"discount",label:"After discount"},{value:"increase",label:"After increase"},{value:"of",label:"Percent of amount"}]}/></>,
     loan: <><NumberField label="Principal ($)" value={values.principal} onChange={changed("principal")} min="0"/><NumberField label="Annual interest (%)" size="compact" value={values.annual} onChange={changed("annual")} min="0"/><NumberField label="Term (months)" size="compact" value={values.months} onChange={changed("months")} min="1" step="1"/></>,
     currency: <><NumberField label="Amount" value={values.currencyAmount} onChange={changed("currencyAmount")}/><Selection label="From currency" value={values.source} onChange={changed("source")} options={currencyOptions}/><Selection label="To currency" value={values.target} onChange={changed("target")} options={currencyOptions}/></>
   };
   const output = toolOutput(active, values, fxRate, fxState);
-  return <section className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
+  return <section ref={panelRef} className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
     <div className="rc-device-housing" aria-hidden="true"><img className="rc-device-original-art" src="/rosieverse/calculations/toolkit/gold-device.webp" alt="" decoding="async" draggable="false" /></div>
     <div className="rc-device-surface">
-      <h2 className="rc-device-heading">{TOOLS.find(t=>t.id===active)?.title}</h2>
+      <div className="rc-device-title-wrap" onKeyDown={event => { if (event.key === "Escape") setMenuOpen(false); }}>
+        <h2 className="rc-device-heading">
+          <button type="button" className="rc-device-title-trigger" aria-haspopup="menu" aria-expanded={menuOpen}
+            aria-label={"Switch calculator tool: " + TOOLS.find(t=>t.id===active)?.title}
+            onClick={() => setMenuOpen(previous => !previous)}>
+            <span>{TOOLS.find(t=>t.id===active)?.title}</span>
+            <span className={"rc-device-title-chevron" + (menuOpen ? " is-open" : "")} aria-hidden="true" />
+          </button>
+        </h2>
+        {menuOpen && <div className="rc-device-tool-menu" role="menu" aria-label="Choose another calculator tool">
+          {TOOLS.filter(item => item.id !== active).map(item =>
+            <button type="button" role="menuitem" key={item.id}
+              onClick={() => { setMenuOpen(false); onSelectTool(item.id); }}>{item.title}</button>)}
+        </div>}
+      </div>
       <div className="rc-form-grid">{fields[active]}</div>
       <div className="rc-tool-result" aria-live="polite">
         {typeof output === "string" ? <p>{output}</p> : <><strong>{output.main}</strong>{output.lines.map((line, i)=><span key={i}>{line}</span>)}</>}
@@ -157,11 +173,39 @@ function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState })
 export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
   const [tool, setTool] = useState(null);
+  const toolRef = useRef(null);
   const [values, setValues] = useState(DEFAULTS);
   const [currencyOptions, setCurrencyOptions] = useState(FX_FALLBACK_CURRENCIES);
   const [fxRate, setFxRate] = useState(null);
   const [fxState, setFxState] = useState("loading");
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
+  // Align the chosen gold instrument with the centre of the usable iPhone
+  // viewport (above its fixed nav). The title selector and illustrated cards
+  // take the same path. Normal document scrolling remains available.
+  useLayoutEffect(() => {
+    if (!tool || window.matchMedia("(min-width: 740px)").matches) return undefined;
+    let active = true;
+    let pending = 0;
+    const centerTool = () => {
+      if (!active || !toolRef.current) return;
+      const panel = toolRef.current.getBoundingClientRect();
+      const nav = document.querySelector(".bottom-nav")?.getBoundingClientRect();
+      const visibleTop = Math.max(8, window.visualViewport?.offsetTop || 0);
+      const visibleBottom = nav ? Math.min(window.innerHeight, nav.top - 8) : window.innerHeight - 18;
+      const targetMid = (visibleTop + visibleBottom) / 2;
+      const shift = panel.top + panel.height / 2 - targetMid;
+      if (Math.abs(shift) > 1) window.scrollBy({top:shift,behavior:"instant"});
+    };
+    pending = window.requestAnimationFrame(centerTool);
+    const settle = window.setTimeout(centerTool, 170);
+    const late = window.setTimeout(centerTool, 370);
+    return () => {
+      active = false;
+      window.cancelAnimationFrame(pending);
+      window.clearTimeout(settle);
+      window.clearTimeout(late);
+    };
+  }, [tool]);
   // The dropdown list refreshes from the provider each time the tool opens.
   useEffect(() => {
     if (tool !== "currency") return undefined;
@@ -258,7 +302,7 @@ export default function RosieCalculations() {
     <div className="rc-workspace">
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
       <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card rc-tool-card--"+item.id+(tool===item.id?" active":"")} aria-label={item.title} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><img className="rc-tool-art" src={"/rosieverse/calculations/toolkit/button-"+item.id+".webp"} alt="" loading="lazy" draggable="false"/></button>)}</div>
-      {tool && <ToolPanel active={tool} values={values} update={update} currencyOptions={currencyOptions} fxRate={fxRate} fxState={fxState}/>} 
+      {tool && <ToolPanel active={tool} values={values} update={update} currencyOptions={currencyOptions} fxRate={fxRate} fxState={fxState} onSelectTool={setTool} panelRef={toolRef}/>} 
       <p className="rc-footer-note">Crafted in Rosie’s study · Numbers with a little extra charm</p>
     </div>
   </main>;
