@@ -82,6 +82,7 @@ async function exportKeepsake(svg,type,values,style){
     type==="event"?values.title:type==="instagram"?"@"+values.handle:
     itemName(type,values);
   ctx.font="53px Georgia,serif";drawWrapped(ctx,main,120,460,770,65,3);
+  if(type==="calling" && values.tagline){ctx.fillStyle=theme.light;ctx.font="italic 28px Georgia,serif";drawWrapped(ctx,values.tagline,120,755,760,34,2);}
   if(type==="calling"||type==="contact"){
     ctx.fillStyle=theme.accent;ctx.font="34px Georgia,serif";
     drawWrapped(ctx,[values.title,values.organization].filter(Boolean).join("  ·  "),120,620,750,47,2);
@@ -98,11 +99,27 @@ function Field({label,value,onChange,type="text",placeholder="",autoComplete="of
     <input type={type} value={value||""} onChange={e=>onChange(e.target.value)}
       placeholder={placeholder} autoComplete={autoComplete} inputMode={inputMode} required={required}/></label>;
 }
+function TypeIcon({id}) {
+  const s={viewBox:"0 0 24 24",width:30,height:30,fill:"none",stroke:"currentColor",strokeWidth:1.75,
+    strokeLinecap:"round",strokeLinejoin:"round","aria-hidden":"true"};
+  const paths={
+    wifi:<><path d="M2 8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></>,
+    contact:<><rect x="2.5" y="4" width="19" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M5.8 16c.8-2.5 5.6-2.5 6.4 0M15 9h4M15 13h4M15 17h3"/></>,
+    website:<><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-6 6-6 12 0 18M12 3c6 6 6 12 0 18"/></>,
+    zoom:<><rect x="2.5" y="6" width="13.5" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></>,
+    event:<><rect x="3" y="5.5" width="18" height="16" rx="2"/><path d="M7 2.5v6M17 2.5v6M3 10.5h18M8 15h3M8 18h7"/></>,
+    payment:<><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="M2.5 10h19M6 15.5h5"/></>,
+    instagram:<><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1" fill="currentColor"/></>,
+    calling:<><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="10" r="2"/><path d="M4.7 16c1-3 6.7-3 7.7 0M14 9h5M14 12.5h5M14 16h4"/></>
+  };
+  return <svg {...s}>{paths[id]||paths.website}</svg>;
+}
+
 function QRTypeSelector({current,onSelect}){
   return <div className="qa-formats" role="group" aria-label="Choose QR code type">
     {QR_TYPES.map(t=><button type="button" key={t.id} className={"qa-type"+(current===t.id?" selected":"")}
       onClick={()=>onSelect(t.id)} aria-pressed={current===t.id} title={t.hint}>
-      <span className="qa-type-symbol" aria-hidden="true">{t.mark}</span><span>{t.label}</span>
+      <span className="qa-type-symbol" aria-hidden="true"><TypeIcon id={t.id}/></span><span>{t.label}</span>
     </button>)}
   </div>;
 }
@@ -229,7 +246,7 @@ export default function RosieQrAtelier(){
     withDownload(async()=>{
       if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
       else if(kind==="png")download(await exportQR(output.svg),fileBase+".png");
-      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-calling-card.png");
+      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+(type==="calling"?"-calling-card.png":"-designed-card.png"));
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
       toastMessage("Download prepared.");
     });
