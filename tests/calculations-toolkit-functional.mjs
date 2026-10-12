@@ -52,7 +52,7 @@ try {
         ])
       });
       const parts=url.pathname.split("/");
-      const quote=parts.at(-1),base=parts.at(-2);
+      const quote=parts.at(-1).toUpperCase(),base=parts.at(-2).toUpperCase();
       const rate=base==="USD"&&quote==="EUR" ? .92
         : base==="EUR"&&quote==="USD" ? 1.08 : .75;
       return route.fulfill({status:200,contentType:"application/json",
