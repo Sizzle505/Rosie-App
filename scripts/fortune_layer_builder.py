@@ -19,12 +19,13 @@ W, H = 1522, 1430
 # Shapes are intentionally conservative. Each boundary needs hand review.
 SHAPES = {
  "set/curtain-left": [
-  [(0,0),(420,0),(400,98),(345,170),(305,230),(234,345),(130,470),
-   (165,720),(211,948),(174,1430),(0,1430)]
+  [(15,97),(417,98),(385,160),(332,234),(270,315),(169,450),
+   (178,647),(201,901),(0,901),(0,139)]
  ],
  "set/curtain-right": [
-  [(1113,0),(1522,0),(1522,1430),(1375,1430),(1345,910),
-   (1358,704),(1390,484),(1327,443),(1245,337),(1187,235),(1125,140)]
+  [(1117,104),(1488,95),(1522,145),(1522,963),(1371,965),
+   (1342,849),(1360,704),(1387,478),(1324,443),
+   (1245,337),(1187,231)]
  ],
  "set/lantern-left": [
   [(354,125),(383,125),(379,214),(397,259),(433,300),(447,362),
@@ -81,6 +82,12 @@ def clip_to_known_occlusion(masks):
     # Preserve the foreground book stack. These pixels are not Rosie.
     for name in ("rosie/torso",):
         masks[name][899:1410, :423] = 0
+    # Keep immobile foreground props in the base plate; they must not move
+    # along with Rosie's chest breathing. These exclusions also prevent
+    # contamination from the armillary, treat bowl and orb pedestal.
+    masks["rosie/torso"][1277:, 415:1115] = 0
+    masks["rosie/torso"][1178:, 1100:] = 0
+    masks["rosie/torso"][783:1089, 1140:1335] = 0
     # The celestial and lamp parts remain behind Rosie, and the orb in front
     # of her torso. Assign every pixel to exactly one native RGB cutout.
     ordering = [
@@ -95,6 +102,28 @@ def clip_to_known_occlusion(masks):
         owned[name] = cv2.bitwise_and(masks[name],cv2.bitwise_not(assigned))
         assigned = cv2.bitwise_or(assigned,masks[name])
     return ordering,owned,assigned
+
+def candidate_head_refinement(rgb, rough):
+    # Trial matte only. Keep canonical source polygons unchanged until manual
+    # review of the candidate at 100%: turban ornaments and black fur are easy
+    # to lose against the dark velvet background.
+    trimap=np.full((H,W),cv2.GC_BGD,np.uint8)
+    kernel_outer=cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(45,45))
+    kernel_inner=cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(23,23))
+    outer=cv2.dilate(rough,kernel_outer)
+    inner=cv2.erode(rough,kernel_inner)
+    trimap[outer>0]=cv2.GC_PR_BGD
+    trimap[rough>0]=cv2.GC_PR_FGD
+    trimap[inner>0]=cv2.GC_FGD
+    bgmodel=np.zeros((1,65),np.float64)
+    fgmodel=np.zeros((1,65),np.float64)
+    try:
+        cv2.grabCut(cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR),trimap,None,
+                    bgmodel,fgmodel,5,cv2.GC_INIT_WITH_MASK)
+        return np.where((trimap==cv2.GC_FGD)|
+                        (trimap==cv2.GC_PR_FGD),255,0).astype(np.uint8)
+    except cv2.error:
+        return rough.copy()
 
 def save_rgba(path, rgb, alpha):
     path.parent.mkdir(parents=True,exist_ok=True)
@@ -166,6 +195,8 @@ def main():
     rgb=np.array(source)
     masks={name:poly_mask(parts) for name,parts in SHAPES.items()}
     order,owned,union=clip_to_known_occlusion(masks)
+    refined_head=candidate_head_refinement(rgb,masks["rosie/head-front"])
+    save_rgba(args.out/"rosie/head-grabcut-CANDIDATE.webp",rgb,refined_head)
     empty=make_background(rgb,union)
     Image.fromarray(empty).save(args.out/"empty-plate-DRAFT.webp",
                                     "WEBP",lossless=True,method=5)
@@ -188,6 +219,7 @@ def main():
                      "pedestal","top-border","crystals","tassels"],
       "backplate":"Painted midnight-velvet continuation; provisional unseen areas",
       "boundary_type":"manual source-registered polygon; needs feather/hair matte QA",
+      "head_refined_diagnostic_only":True,
       "static_composite_mean_abs_error":round(float(err.mean()),6),
       "fraction_pixels_changed_gt_24":round(float((err.max(2)>24).mean()),6),
       "empty_plate_approved":False,"motion_approved":False,
