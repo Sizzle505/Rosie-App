@@ -268,3 +268,7 @@
 .qa-title h1 {background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
   color:#ffe4a1!important;filter:none;text-shadow:0 2px 2px #000,0 0 13px #000b,0 0 8px #ae7238;}
 .qa-title p {color:#ffe1a9;text-shadow:0 2px 4px #000,0 0 10px #000;}
+
+/* Center dynamic status text inside the separate gold nameplate, not beneath it. */
+.qa-ring-caption {bottom:13.4%!important;line-height:1.05;font-size:clamp(13px,2.8vw,19px);
+ color:#4a2c11;text-shadow:0 1px 1px #fff8e6;}
