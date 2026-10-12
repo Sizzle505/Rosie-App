@@ -28,10 +28,10 @@
     "crystals",
     "tassels"
   ],
-  "backplate": "OpenCV inpainting only, visually provisional",
+  "backplate": "Painted midnight-velvet continuation; provisional unseen areas",
   "boundary_type": "manual source-registered polygon; needs feather/hair matte QA",
-  "static_composite_mean_abs_error": 0.257828,
-  "fraction_pixels_changed_gt_24": 0.004531,
+  "static_composite_mean_abs_error": 0.0,
+  "fraction_pixels_changed_gt_24": 0.0,
   "empty_plate_approved": false,
   "motion_approved": false,
   "integration_approved": false
