@@ -264,3 +264,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-action-deck { top:60.2%; gap:4px; }
   .rtk-utility { top:73.5%; width:76%; }
 }
+
+/* The utility cabinet gets more vertical room, never the former shallow band. */
+.rtk-utility { max-height:24%; min-height:clamp(120px,15vw,155px); }
+@media(max-width:520px) { .rtk-utility { max-height:24%; min-height:115px; } }
