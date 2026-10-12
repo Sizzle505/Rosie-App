@@ -3,6 +3,7 @@ import "./RosieTimekeeper.css";
 import TimekeeperClockwork from "./TimekeeperClockwork.jsx";
 
 const ART = "/rosieverse/timekeeper/grand-clockwork-hall.jpg";
+const SQUIRREL = "/rosieverse/timekeeper/running-squirrel.webp";
 const STORAGE_KEY = "rosie-timekeeper-v2";
 function cueComplete() {
   // Best effort in the foreground only; iOS does not guarantee background alarms.
@@ -34,14 +35,14 @@ const PRESETS = [
 ];
 
 function formatClock(ms, fractions = false) {
-  const units = Math.max(0, Math.floor(ms / (fractions ? 10 : 1000)));
-  const seconds = fractions ? Math.floor(units / 100) : units;
+  const units = Math.max(0, Math.floor(ms / (fractions ? 1 : 1000)));
+  const seconds = fractions ? Math.floor(units / 1000) : units;
   const hh = Math.floor(seconds / 3600);
   const mm = Math.floor((seconds % 3600) / 60);
   const ss = seconds % 60;
   const pad = (value) => String(value).padStart(2, "0");
   const head = hh ? pad(hh) + ":" + pad(mm) + ":" + pad(ss) : pad(mm) + ":" + pad(ss);
-  return fractions ? head + "." + pad(units % 100) : head;
+  return fractions ? head + "." + String(units % 1000).padStart(3, "0") : head;
 }
 
 /**
@@ -77,7 +78,7 @@ export default function RosieTimekeeper() {
       frame = window.requestAnimationFrame(() => {
         const panel = utilityRef.current;
         const nav = document.querySelector(".resources-bottom-nav");
-        const controls = document.querySelector(".rtk-action-deck .rtk-controls");
+        const controls = document.querySelector(".rtk-action-deck");
         if (!panel || !nav || !controls) return;
         panel.style.setProperty("--rtk-nav-lift", "0px");
         const panelRect = panel.getBoundingClientRect();
@@ -158,7 +159,7 @@ export default function RosieTimekeeper() {
       }
     };
     tick();
-    const timer = window.setInterval(tick, 40);
+    const timer = window.setInterval(tick, 16);
     document.addEventListener("visibilitychange", tick);
     return () => {
       window.clearInterval(timer);
@@ -239,14 +240,14 @@ export default function RosieTimekeeper() {
     ? (duration > 0 ? Math.min(1, elapsed / duration) : 0)
     : ((elapsed % 60_000) / 60_000);
   const circumference = 2 * Math.PI * 43;
-  const leadingAngle = dialProgress * Math.PI * 2;
+  const leadingAngle = (mode === "countdown" ? -1 : 1) * dialProgress * Math.PI * 2;
   const markerX = 50 + 43 * Math.sin(leadingAngle);
   const markerY = 50 - 43 * Math.cos(leadingAngle);
   const showMarker = running || elapsed > 0;
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining);
-  const [wholeTime, centiseconds] = mode === "stopwatch" ? shown.split(".") : [shown, null];
+  const [wholeTime, milliseconds] = mode === "stopwatch" ? shown.split(".") : [shown, null];
   const status = (mode === "countdown" && finished.current && elapsed >= duration)
     ? "COMPLETE"
     : message || (running ? "RUNNING" : elapsed > 0 ? "PAUSED" :
@@ -268,9 +269,10 @@ export default function RosieTimekeeper() {
             The Timekeeper artwork must be installed at {ART}.
           </p>
         )}
-        <section className={"rtk-dial" + (running ? " is-running" : "")} aria-label="Working stopwatch and countdown">
+        <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
           <TimekeeperClockwork />
-          <svg className={"rtk-progress-ring" + (running ? " is-animating" : "")}
+          <div className="rtk-ornate-track" aria-hidden="true" />
+          <svg className={"rtk-progress-ring" + (running ? " is-animating" : "") + (mode === "countdown" ? " is-reverse" : "")}
             viewBox="0 0 100 100" aria-hidden="true" focusable="false">
             <defs>
               <linearGradient id="rtk-running-gold" x1="3%" y1="0%" x2="100%" y2="100%">
@@ -300,36 +302,25 @@ export default function RosieTimekeeper() {
               strokeDashoffset={circumference * (1 - dialProgress)} />
             {showMarker && (
               <g className="rtk-progress-charm" transform={`translate(${markerX} ${markerY})`}>
-                <circle className="rtk-squirrel-halo" r="4.5"/>
-                <circle className="rtk-squirrel-medallion" r="3.62" />
-                <g className="rtk-squirrel-figure">
-                  {/* A tiny, readable squirrel: curled plume, alert ear, muzzle and paws. */}
-                  <path d="M-1.38 1.45C-3.6 1.27-4.29-.36-3.34-1.55c.44-.56 1.26-.56 1.72-.12.41.38.32 1.02-.15 1.28-.28.16-.59.08-.77-.1-.08.66.6 1.2 1.27 1.13Z" fill="#fff0ba" stroke="#7a341f" strokeWidth=".26" strokeLinejoin="round"/>
-                  <path d="M-.98 1.72C-1.2.8-.49-.36.46-.54l.55-1.26.62.75.65-.44.05 1.27c.91.39 1.04 1.16.49 1.64l-1.1.1-.05.56H.86l-.11-.55c-.69.44-1.35.5-1.73.19Z" fill="#fff6d7" stroke="#7d4627" strokeWidth=".24" strokeLinejoin="round"/>
-                  <circle cx="1.44" cy=".04" r=".22" fill="#67233b" />
-                  <circle cx="2.48" cy=".56" r=".18" fill="#9a4a3c" />
-                </g>
-                <path className="rtk-squirrel-star" d="M0 -6L.46 -4.8L1.72 -4.25L.46 -3.73L0 -2.5L-.46 -3.73L-1.72 -4.25L-.46 -4.8Z"/>
+                <circle className="rtk-squirrel-aura" r="6.6" />
+                <image className="rtk-squirrel-asset" href={SQUIRREL}
+                  x="-7" y="-7" width="14" height="14" preserveAspectRatio="xMidYMid meet" />
               </g>
             )}
           </svg>
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
-            {centiseconds !== null && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{centiseconds}</span>}
+            {milliseconds !== null && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{milliseconds}</span>}
           </output>
           <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
         </section>
         <div className="rtk-action-deck" aria-label="Timekeeper controls">
-          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
-            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
-          </div>
           <div className="rtk-controls">
             <button type="button" className="rtk-secondary-action rtk-lap-action"
               onClick={mode === "stopwatch" ? lap : repeatCountdown}
               disabled={mode === "stopwatch" && !running}
               aria-label={mode === "stopwatch" ? "Record lap" : "Restart countdown"}>
-              {mode === "stopwatch" ? "Lap" : "Repeat"}
+              <span className="rtk-action-word">{mode === "stopwatch" ? "Lap" : "Repeat"}</span>
             </button>
             <button type="button" className="rtk-primary-action" onClick={startOrPause}
               aria-label={running ? "Pause" : "Start"}>
@@ -338,15 +329,19 @@ export default function RosieTimekeeper() {
             </button>
             <button type="button" className="rtk-secondary-action rtk-reset-action"
               onClick={stopAndReset} aria-label="Reset stopwatch or countdown">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4.3 12a7.7 7.7 0 1 0 2.5-5.7L4 9" /><path d="M4 3.8V9h5.2" /></svg>
+              <span className="rtk-action-word">Reset</span>
             </button>
+          </div>
+          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
+            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
           </div>
         </div>
         <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
           <div className="rtk-utility-inner">
           {mode === "stopwatch" ? (
             <>
-              <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "1/100-second precision"}</span></div>
+              <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "Milliseconds"}</span></div>
               {laps.length ? (
                 <ol className="rtk-laps">
                   {laps.map((entry, index) => (
