@@ -53,16 +53,22 @@
   left:0;top:0;width:100%;aspect-ratio:1122 / 353;
   background-image:url("/rosieverse/calculations/toolkit/housing-top.webp");
   background-size:100% 100%;z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 91%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 91%,transparent 100%);
 }
 .rc-page .rc-device-housing .rc-housing-bottom {
   left:0;bottom:0;width:100%;aspect-ratio:1122 / 357;
   background-image:url("/rosieverse/calculations/toolkit/housing-bottom.webp");
   background-size:100% 100%;z-index:3;
+  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 91%,transparent 100%);
+  mask-image:linear-gradient(to top,#000 0%,#000 91%,transparent 100%);
 }
 .rc-page .rc-device-housing .rc-housing-left,
 .rc-page .rc-device-housing .rc-housing-right {
   top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
-  width:16.94%;background-repeat:repeat-y;background-size:100% 27%;
+  width:16.94%;background-repeat:no-repeat;background-size:100% 100%;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 5%,#000 95%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 5%,#000 95%,transparent 100%);
   z-index:1;
 }
 .rc-page .rc-device-housing .rc-housing-left {
