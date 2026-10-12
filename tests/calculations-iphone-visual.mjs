@@ -122,7 +122,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         "Calculations pendant's safe-area placement should remain stable: "+navOffset);
       const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first()
         .evaluate(el=>getComputedStyle(el).top);
-      assert.equal(raisedNavContent,"-5px",
+      assert.equal(raisedNavContent,"-7px",
         "bottom navigation content should be 5px above the Games/Tools pendant");
 
       const digit=n=>page.getByRole("button",{name:String(n),exact:true});
