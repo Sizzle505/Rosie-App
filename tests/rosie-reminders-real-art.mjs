@@ -5,6 +5,7 @@ import { chromium } from "playwright";
 const base = "http://127.0.0.1:5173";
 const imagePaths = [
   "midnight-celestial-full.webp",
+  "midnight-celestial-seamless.webp",
   "midnight-velvet-tile.webp",
   "today-art.webp",
   "calendar-art.webp",
@@ -40,7 +41,12 @@ try {
         imgWidth:img.width,imgHeight:img.height,naturalW:picture.naturalWidth,naturalH:picture.naturalHeight,
         position:getComputedStyle(hero).position,contentTop:content.getBoundingClientRect().top,
         contentTexture:getComputedStyle(content).backgroundImage,
-        celestial:getComputedStyle(content,"::before").backgroundImage,
+        backdropRepeat:getComputedStyle(content).backgroundRepeat,
+        backdropPosition:getComputedStyle(content).backgroundPosition,
+        oldMask:getComputedStyle(content,"::before").display,
+        appBackground:getComputedStyle(document.querySelector(".app-shell")).backgroundImage,
+        rootBackground:getComputedStyle(document.documentElement).backgroundImage,
+        wallpaperOffset:getComputedStyle(document.documentElement).getPropertyValue("--rr-wallpaper-offset"),
         pagePadding:getComputedStyle(main).paddingTop };
     });
     assert(Math.abs(placement.top)<2 && Math.abs(placement.left)<2, "Rosie must start at the page origin: " + JSON.stringify(placement));
@@ -49,9 +55,15 @@ try {
       "Rosie's artwork was distorted: "+JSON.stringify(placement));
     assert(placement.position==="relative","Full hero must scroll out rather than stick");
     assert(Math.abs(placement.contentTop-placement.imgHeight)<3,"Celestial begins at wrong vertical position");
-    assert(placement.celestial.includes("midnight-celestial-full.webp"),"Real generated celestial art missing");
-    assert(placement.contentTexture.includes("midnight-velvet-tile.webp"),"Velvet repeat background missing");
-    assert(!placement.celestial.includes("blue-celestial-luxury.svg"),"SVG substitute still loaded");
+    assert(placement.contentTexture.includes("midnight-celestial-seamless.webp"),"Celestial source must begin at the hero bottom");
+    assert(placement.backdropRepeat === "repeat-y", "Celestial artwork must repeat vertically rather than fading");
+    assert(placement.backdropPosition === "50% 0%", "Wallpaper begins below hero without a dead gap");
+    assert(placement.oldMask === "none", "Previous 68% celestial fade must be removed");
+    assert(placement.appBackground.includes("midnight-celestial-seamless.webp") &&
+       placement.rootBackground.includes("midnight-celestial-seamless.webp"),
+      "Celestial artwork must continue behind document and iOS viewport");
+    assert(Math.abs(parseFloat(placement.wallpaperOffset) - placement.imgHeight)<2,
+      "Page fallback wallpaper not aligned to the hero's bottom");
     assert.equal(await page.locator(".rr-compact-header").count(),0,
       "Do not substitute a new header for the approved original Rosie illustration");
     const heroFull = await page.locator(".rr-hero").evaluate(el => el.getBoundingClientRect().height);
@@ -91,12 +103,15 @@ try {
     const clearance = await page.locator(".rr-content").evaluate(el=>({
       padding:parseFloat(getComputedStyle(el).paddingBottom),
       background:getComputedStyle(el).backgroundImage,
-      celestialHeight:parseFloat(getComputedStyle(el,"::before").height),
-      contentHeight:el.getBoundingClientRect().height
+      repeat:getComputedStyle(el).backgroundRepeat,
+      firstPixel:el.getBoundingClientRect().top,
+      heroBottom:document.querySelector(".rr-hero").getBoundingClientRect().bottom,
+      height:el.getBoundingClientRect().height
     }));
-    assert(clearance.padding<150,"No unnecessary blank 325px footer beneath celestial page: "+JSON.stringify(clearance));
-    assert(Math.abs(clearance.celestialHeight-clearance.contentHeight)<3,
-      "Celestial backdrop must extend to end of content, without a blank cutoff");
+    assert(clearance.padding<150,"Remove artificial 325px blank footer: "+JSON.stringify(clearance));
+    assert(clearance.repeat==="repeat-y" && clearance.background.includes("midnight-celestial-seamless.webp"),
+      "Celestial art must cover content and trailing scroll clearance");
+    assert(Math.abs(clearance.firstPixel-clearance.heroBottom)<2,"Celestial start must touch original Rosie image");
     for (const filename of imagePaths) {
       const response = await page.request.get(base + "/rosieverse/reminders/approved-art/" + filename);
       assert.equal(response.status(), 200, "Missing genuine asset: " + filename);
@@ -129,11 +144,19 @@ try {
     await page.waitForTimeout(170);
     const panel = await page.locator(".rr-paper").evaluate(node => ({
       top:node.getBoundingClientRect().top,
+      bottom:node.getBoundingClientRect().bottom,
+      height:node.getBoundingClientRect().height,
       navTop:document.querySelector(".bottom-nav").getBoundingClientRect().top,
     }));
     const pinnedBottom = await page.locator(".rr-hero-pin").evaluate(el => el.getBoundingClientRect().bottom);
-    assert(panel.top >= pinnedBottom-3 && panel.top <= pinnedBottom + 65,
-      "Calendar should scroll below pinned middle Rosie artwork: "+JSON.stringify({panel,pinnedBottom}));
+    assert(panel.top >= pinnedBottom-4,
+      "Calendar must remain below pinned middle Rosie artwork: "+JSON.stringify({panel,pinnedBottom}));
+    if (panel.height <= panel.navTop - pinnedBottom - 10) {
+      assert(panel.bottom <= panel.navTop-6,
+        "Short calendar must be entirely usable above fixed bottom navigation: "+JSON.stringify({panel,pinnedBottom}));
+    }
+    const reserve = await page.locator(".rr-content").evaluate(node=>parseFloat(getComputedStyle(node).paddingBottom));
+    assert(reserve <= 155, "Short panel must not append a vast blank celestial region: "+reserve);
     await page.getByRole("tab",{name:"Today"}).click();
     await page.getByRole("button",{name:/Open Goals & Gratitude/}).click();
     await page.locator(".rr-goals").waitFor();
@@ -153,6 +176,9 @@ try {
     assert(overflow.doc <= overflow.viewport + 3,"Page overflows mobile viewport: "+JSON.stringify(overflow));
     assert.equal(consoleErrors.length,0,consoleErrors.join(" | "));
     await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + ".png",fullPage:true});
+    await page.evaluate(() => scrollTo({top:document.documentElement.scrollHeight,behavior:"instant"}));
+    await page.waitForTimeout(150);
+    await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + "-bottom.png"});
     await context.close();
     console.log("PASS original-art Reminders at",width);
   }

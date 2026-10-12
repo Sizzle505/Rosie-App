@@ -186,6 +186,9 @@ export default function RosieReminders() {
         const rect = heroRef.current?.getBoundingClientRect();
         if (!rect || rect.height <= 0) return;
         const nextHeight = rect.height;
+        // Align the document-wide wallpaper precisely with the hero's lower edge.
+        // This also fills iOS safe-area / overscroll space with the same source.
+        document.documentElement.style.setProperty("--rr-wallpaper-offset", nextHeight + "px");
         const nextPinned = rect.top <= -(nextHeight * 0.15);
         setHeroHeight(previous => Math.abs(previous - nextHeight) > 0.5 ? nextHeight : previous);
         setHeroPinned(previous => previous === nextPinned ? previous : nextPinned);
@@ -199,6 +202,7 @@ export default function RosieReminders() {
     return () => {
       cancelAnimationFrame(frame);
       resizeObserver?.disconnect();
+      document.documentElement.style.removeProperty("--rr-wallpaper-offset");
       window.removeEventListener("scroll", measure);
       window.removeEventListener("resize", measure);
     };
@@ -222,7 +226,7 @@ export default function RosieReminders() {
       const node = organizerRef.current;
       if (!node) return;
       const height = heroRef.current?.getBoundingClientRect().height || heroHeight;
-      const pinnedBottom = height * .7 + 14;
+      const pinnedBottom = height * .7 + 3;
       const target = node.getBoundingClientRect().top + window.scrollY - pinnedBottom;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       window.scrollTo({top:Math.max(0,target),behavior:reduced?"auto":"smooth"});

@@ -607,3 +607,53 @@ body:has(.app-shell.page-reminders),
 .app-shell.page-reminders .rr-paper {
   scroll-margin-top:calc(var(--rr-hero-middle-height, 215px) + 14px);
 }
+
+
+/* The last two visible gaps were not additional content: the previous CSS
+   deliberately faded the celestial source to bare velvet at 68% of the page,
+   and the app/background fallback did not share the same hero-bottom origin.
+   This is an actual 941px-wide derivation of the approved blue artwork,
+   mirrored vertically with matching top/bottom seam pixels - not SVG art. */
+html:has(.app-shell.page-reminders),
+body:has(.app-shell.page-reminders),
+#root:has(.app-shell.page-reminders),
+.app-shell.page-reminders {
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp");
+  background-repeat:repeat-y;
+  background-size:100% auto;
+  background-position:center var(--rr-wallpaper-offset, 0px);
+}
+.app-shell.page-reminders > main.rr-page {
+  padding:0 !important;
+  margin:0;
+  border:0;
+}
+/* The first pixel of the celestial artwork follows the bottom pixel of
+   the undistorted, original Rosie hero. There is no 5px gap or masking. */
+.app-shell.page-reminders .rr-content {
+  padding-top:0;
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp");
+  background-position:center top;
+  background-repeat:repeat-y;
+  background-size:100% auto;
+}
+.app-shell.page-reminders .rr-content::before {
+  display:none;
+  content:none;
+  -webkit-mask-image:none;
+  mask-image:none;
+}
+/* Keep only the minimum nav clearance and 15/70/15 hero-scroll travel.
+   Never append an artificial second screen of empty velvet. */
+.app-shell.page-reminders .rr-content:not(:has(> .rr-paper)) {
+  padding-bottom:calc(90px + env(safe-area-inset-bottom));
+}
+.app-shell.page-reminders .rr-content:has(> .rr-paper) {
+  /* The old viewport-minus-panel formula created hundreds of pixels of
+     unnecessary wallpaper after short panels. Fixed nav clearance suffices;
+     native scrolling clamps the panel to a usable visible position. */
+  padding-bottom:calc(104px + env(safe-area-inset-bottom));
+}
+.app-shell.page-reminders .rr-feature-grid { margin-top:0; }
