@@ -151,3 +151,49 @@
   .rc-page .rc-device .rc-field input,.rc-page .rc-device .rc-field select {font-size:16px;}
 }
 @media(prefers-reduced-motion:reduce){.rc-device *{transition:none!important;animation:none!important;}}
+
+
+/* The selector cards echo the embossed jewel-tone plaques used throughout RosieVerse. */
+.rc-page .rc-workspace .rc-tool-card {
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:102px;padding:12px 10px;gap:8px;
+  border:2px solid #dba85a;border-radius:19px;
+  background:radial-gradient(circle at 20% 4%,#344457 0%,#111928 54%,#080d15 100%);
+  box-shadow:inset 0 0 0 3px #603b1c,inset 0 0 0 4px #f8dd9e75,
+    inset 0 12px 26px #ffffff09,0 4px 12px #0008;
+  color:#fff2dc;
+}
+.rc-page .rc-workspace .rc-tool-card:nth-child(3n + 2) {
+  background:radial-gradient(circle at 18% 0%,#782f3f 0%,#410a19 52%,#220710 100%);
+}
+.rc-page .rc-workspace .rc-tool-card:nth-child(3n) {
+  background:radial-gradient(circle at 18% 0%,#245e49 0%,#092b24 55%,#061612 100%);
+}
+.rc-page .rc-workspace .rc-tool-card.active {
+  border-color:#ffe9a2;box-shadow:inset 0 0 0 3px #a46b32,
+    inset 0 0 0 4px #fbe8bc,0 0 17px #f2c77275;
+}
+.rc-page .rc-workspace .rc-tool-mark {
+  border:3px ridge #e9b967;width:43px;height:43px;border-radius:50%;
+  background:radial-gradient(circle at 30% 17%,#a77429,#321909 74%);
+  box-shadow:inset 0 0 0 2px #e2ab54,0 1px 4px #0008;
+  color:#ffe2a1;flex:0 0 43px;font-size:clamp(22px,4vw,27px);
+  text-shadow:0 2px 2px #31180d;
+}
+.rc-page .rc-workspace .rc-tool-copy strong {
+  font:normal clamp(13px,2.9vw,19px)/1.12 Georgia,serif;
+  text-shadow:0 1px 1px #0009;
+}
+.rc-page .rc-workspace .rc-tool-copy small {
+  display:block;color:#decaa2;font:normal clamp(10px,2.15vw,12px)/1.15 Georgia,serif;
+}
+.rc-page .rc-workspace .rc-chevron {
+  margin-left:auto;font-size:28px;flex:0 0 auto;
+  color:#f8ca73;text-shadow:0 2px 1px #4c2710;
+}
+@media(max-width:370px){
+  .rc-page .rc-workspace .rc-tool-card {min-height:100px;padding:9px 6px;gap:6px;}
+  .rc-page .rc-workspace .rc-tool-mark {width:31px;height:32px;flex-basis:31px;font-size:19px;}
+  .rc-page .rc-workspace .rc-tool-copy small {font-size:9px;}
+  .rc-page .rc-workspace .rc-chevron {font-size:21px;}
+}
