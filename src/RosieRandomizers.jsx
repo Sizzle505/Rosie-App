@@ -64,6 +64,10 @@ function DiceFace({ value, rolling }) {
   );
 }
 
+function splitWheelLabelWords(value) {
+  return String(value ?? "").trim().split(/\s+/).filter(Boolean);
+}
+
 export default function RosieRandomizers() {
   const [coin, setCoin] = useState("Heads");
   const [coinFlip, setCoinFlip] = useState(false);
@@ -268,11 +272,17 @@ export default function RosieRandomizers() {
                   <span
                     key={`${entry}-${index}`}
                     className={styles.wheelLabel}
+                    role="img"
+                    aria-label={entry.trim() || `Choice ${index + 1}`}
                     style={{
                       "--label-angle": `${index * step}deg`
                     }}
                   >
-                    <b>{entry}</b>
+                    <span className={styles.wheelLabelInner} aria-hidden="true">
+                      {splitWheelLabelWords(entry).map((word, wordIndex) => (
+                        <b className={styles.wheelLabelWord} key={wordIndex}>{word}</b>
+                      ))}
+                    </span>
                   </span>
                 );
               })}
