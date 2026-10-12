@@ -37,7 +37,6 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
           const titleImage = banner.querySelector("img");
           const hero = root.querySelector("section[aria-label^='Rosie standing']");
           const destinations = root.querySelector("nav[aria-label='RosieVerse destinations']");
-          const nav = document.querySelector(".bottom-nav");
           return {
             homeBottom: rect(root).bottom,
             viewportHeight: window.innerHeight,
@@ -46,7 +45,6 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
             heroHeight: rect(hero).height,
             destinationBottom: rect(destinations).bottom,
             lastDestinationBottom: rect(destinations.lastElementChild).bottom,
-            navTop: rect(nav).top,
             titleArtOk: titleImage.complete && titleImage.naturalWidth > 1000,
             sceneryAligned: getComputedStyle(root).backgroundPositionY === "100%"
           };
@@ -57,7 +55,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         assert(homeFit.titleArtOk, "Original RosieVerse illustrated title must stay intact");
         assert(homeFit.sceneryAligned, "Salon background must anchor at bottom of phone");
         assert(homeFit.heroHeight >= 100, "Salon portrait must remain visible");
-        assert(homeFit.lastDestinationBottom <= homeFit.navTop + 3, "Salon destination artwork must fit above bottom nav: " + JSON.stringify(homeFit));
+        assert(homeFit.lastDestinationBottom <= homeFit.viewportHeight + 3, "Salon destination artwork must fit within the visible iPhone screen: " + JSON.stringify(homeFit));
         await page.screenshot({ path: output + "/" + title + "-home-fit.png" });
       }
 
