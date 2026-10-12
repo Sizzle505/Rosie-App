@@ -1,259 +1,334 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {useEffect,useMemo,useRef,useState} from "react";
 import qrcode from "qrcode-generator";
+import {
+  QR_TYPES,QR_STYLES,initialValues,qrPayload,qrByteString,itemName,
+  eventIcs
+} from "./qrAtelierLogic.js";
 import "./RosieQrAtelier.css";
 
-const ART = "/qr-atelier/";
-const STORE_KEY = "rosieverse.qr-atelier.collection.v1";
-const TYPES = [
-  {id:"wifi",label:"Wi-Fi",glyph:"⌁"},
-  {id:"contact",label:"Contact",glyph:"♙"},
-  {id:"website",label:"Website",glyph:"◎"},
-  {id:"zoom",label:"Zoom",glyph:"▣"},
-  {id:"event",label:"Event",glyph:"▦"},
-  {id:"payment",label:"Payment",glyph:"◇"},
-  {id:"instagram",label:"Instagram",glyph:"◉"},
-  {id:"calling",label:"Calling Card",glyph:"▤"}
-];
-const STYLES = [
-  {id:"obsidian",label:"Obsidian & Gold"},
-  {id:"emerald",label:"Emerald & Gold"},
-  {id:"burgundy",label:"Burgundy & Ivory"}
-];
-const EMPTY = {
-  wifi:{ssid:"",password:"",security:"WPA",hidden:false},
-  contact:{name:"",phone:"",email:"",organization:"",website:""},
-  website:{url:""},
-  zoom:{url:""},
-  event:{title:"",start:"",end:"",location:"",details:"",timezone:Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"},
-  payment:{url:""},
-  instagram:{handle:""},
-  calling:{name:"",title:"",organization:"",phone:"",email:"",website:""}
-};
-function getSaved() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(STORE_KEY) || "[]");
-    return Array.isArray(parsed) ? parsed.filter(x=>TYPES.some(t=>t.id===x.type) && x.values && typeof x.values==="object").slice(0,35) : [];
-  } catch { return []; }
+const ART="/qr-atelier/";
+const STORAGE="rosieverse.qr-atelier.collection.v1";
+const validType=type=>QR_TYPES.some(x=>x.id===type);
+const clampSaved=data=>Array.isArray(data)?data.filter(x=>x && validType(x.type) && x.values && typeof x.values==="object").slice(0,40):[];
+function readCollection(){
+  try{return clampSaved(JSON.parse(localStorage.getItem(STORAGE)||"[]"));}
+  catch{return [];}
 }
-function escapeWifi(value) { return String(value || "").replace(/([\\;,:"])/g,"\\$1"); }
-function escapeVcard(value) { return String(value || "").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;"); }
-function validLink(value) {
-  try {
-    const u = new URL(String(value||"").trim());
-    if (!["https:","http:"].includes(u.protocol) || !u.hostname.includes(".")) throw Error();
-    return u.href;
-  } catch { throw Error("Enter a complete http:// or https:// link."); }
-}
-function makeVcard(v) {
-  const name = (v.name||"").trim();
-  if (!name) throw Error("Enter a name.");
-  const lines = ["BEGIN:VCARD","VERSION:3.0","FN:"+escapeVcard(name)];
-  if (v.organization) lines.push("ORG:"+escapeVcard(v.organization));
-  if (v.title) lines.push("TITLE:"+escapeVcard(v.title));
-  if (v.phone) lines.push("TEL;TYPE=CELL:"+v.phone.trim());
-  if (v.email) lines.push("EMAIL:"+v.email.trim());
-  if (v.website) lines.push("URL:"+validLink(v.website));
-  lines.push("END:VCARD");
-  return lines.join("\r\n");
-}
-function formatCalendarDate(value) { return value.replace(/[-:]/g,"").replace("T","T")+"00"; }
-function createPayload(type,v) {
-  if (type==="wifi") {
-    if (!v.ssid.trim()) throw Error("Enter the Wi-Fi network name.");
-    return "WIFI:T:"+v.security+";S:"+escapeWifi(v.ssid)+";P:"+(v.security==="nopass"?"":escapeWifi(v.password))+";H:"+(v.hidden?"true":"false")+";;";
-  }
-  if (type==="contact"||type==="calling") return makeVcard(v);
-  if (type==="website"||type==="payment") return validLink(v.url);
-  if (type==="zoom") {
-    const link=validLink(v.url), hostname=new URL(link).hostname;
-    if (!["zoom.us","zoom.com","zoomgov.com"].some(base => hostname === base || hostname.endsWith("."+base))) throw Error("Enter an official Zoom meeting invitation URL.");
-    return link;
-  }
-  if (type==="instagram") {
-    const name=v.handle.trim().replace(/^@/,"");
-    if (!/^[A-Za-z0-9._]{1,30}$/.test(name)) throw Error("Enter a valid Instagram username.");
-    return "https://www.instagram.com/"+name+"/";
-  }
-  if (type==="event") {
-    if (!v.title.trim()||!v.start||!v.end) throw Error("Enter an event name, start, and end.");
-    if (v.end<=v.start) throw Error("The event must end after it starts.");
-    const q=new URLSearchParams({action:"TEMPLATE",text:v.title.trim(),dates:formatCalendarDate(v.start)+"/"+formatCalendarDate(v.end),details:v.details,location:v.location,ctz:v.timezone||"UTC"});
-    return "https://calendar.google.com/calendar/render?"+q.toString();
-  }
-  throw Error("Choose a QR format.");
-}
-function safeFields(type,values) { return {...EMPTY[type],...values}; }
-function getQrSvg(payload) {
+function makeQr(payload){
   const qr=qrcode(0,"M");
-  qr.addData(payload,"Byte");
+  qr.addData(qrByteString(payload),"Byte");
   qr.make();
-  return qr.createSvgTag({cellSize:7,margin:28,scalable:true});
+  return {svg:qr.createSvgTag({cellSize:8,margin:32,scalable:true}),modules:qr.getModuleCount()};
 }
-function downloadBlob(blob,filename) {
-  const href=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=href;a.download=filename;document.body.appendChild(a);a.click();a.remove();
-  window.setTimeout(()=>URL.revokeObjectURL(href),2000);
+function safeName(text){
+  return String(text||"qr").toLowerCase().normalize("NFKD").replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48)||"qr";
 }
-async function imageFromSvg(svg) {
-  const blob=new Blob([svg],{type:"image/svg+xml;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  try {
+function download(blob,name){
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  window.setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+function svgBlob(svg){return new Blob([svg],{type:"image/svg+xml;charset=utf-8"});}
+async function qrImage(svg){
+  const url=URL.createObjectURL(svgBlob(svg));
+  try{
     const img=new Image();
-    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url;});
-    const canvas=document.createElement("canvas");canvas.width=1200;canvas.height=1200;
-    const ctx=canvas.getContext("2d");
-    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,1200,1200);
-    ctx.drawImage(img,0,0,1200,1200);
-    return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error("Export unavailable.")),"image/png"));
-  } finally { URL.revokeObjectURL(url); }
+    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error("QR artwork could not be rendered."));img.src=url;});
+    return img;
+  }finally{URL.revokeObjectURL(url);}
 }
-function Field({label,value,onChange,type="text",placeholder="",required=false}) {
-  return <label className="qa-field"><span>{label}</span><input type={type} value={value||""} onChange={e=>onChange(e.target.value)} placeholder={placeholder} required={required}/></label>;
+async function canvasBlob(canvas){
+  return new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(Error("Could not export this image.")),"image/png"));
 }
-
-export default function RosieQrAtelier() {
+async function exportQR(svg){
+  const img=await qrImage(svg);
+  const canvas=document.createElement("canvas");canvas.width=1600;canvas.height=1600;
+  const ctx=canvas.getContext("2d");
+  ctx.fillStyle="#ffffff";ctx.fillRect(0,0,1600,1600);
+  ctx.imageSmoothingEnabled=false;ctx.drawImage(img,0,0,1600,1600);
+  return canvasBlob(canvas);
+}
+function drawWrapped(ctx,value,x,y,maxWidth,lineHeight,maxLines=3){
+  const words=String(value||"").split(/\s+/);
+  let line="",written=0;
+  for(const word of words){
+    const candidate=line?line+" "+word:word;
+    if(ctx.measureText(candidate).width>maxWidth&&line){
+      ctx.fillText(line,x,y+written*lineHeight);written++;line=word;
+      if(written>=maxLines-1)break;
+    }else line=candidate;
+  }
+  if(line&&written<maxLines)ctx.fillText(line,x,y+written*lineHeight);
+}
+async function exportKeepsake(svg,type,values,style){
+  const theme=QR_STYLES.find(x=>x.id===style)||QR_STYLES[0];
+  const canvas=document.createElement("canvas");
+  canvas.width=1800;canvas.height=1080;
+  const ctx=canvas.getContext("2d");
+  const bg=ctx.createLinearGradient(0,0,1800,1080);bg.addColorStop(0,theme.dark);
+  bg.addColorStop(.6,theme.dark);bg.addColorStop(1,"#020e0e");
+  ctx.fillStyle=bg;ctx.fillRect(0,0,1800,1080);
+  ctx.lineWidth=10;ctx.strokeStyle=theme.accent;ctx.strokeRect(32,32,1736,1016);
+  ctx.lineWidth=2;ctx.strokeStyle="#f6e9c3";ctx.strokeRect(54,54,1692,972);
+  for(const [x,y] of [[68,68],[1732,68],[68,1012],[1732,1012]]){
+    ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);ctx.strokeStyle=theme.accent;ctx.lineWidth=5;ctx.strokeRect(-13,-13,26,26);ctx.restore();
+  }
+  ctx.fillStyle=theme.accent;ctx.font="40px Georgia,serif";ctx.fillText("✦  R O S I E  ·  Q R  A T E L I E R  ✦",120,157);
+  ctx.fillStyle=theme.light;ctx.font="bold 78px Georgia,serif";
+  const title=type==="calling"?"Calling Card":QR_TYPES.find(x=>x.id===type)?.label||"QR Code";
+  ctx.fillText(title,120,320,775);
+  ctx.strokeStyle=theme.accent;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(120,353);ctx.lineTo(850,353);ctx.stroke();
+  const main=type==="calling"||type==="contact"?values.name:type==="wifi"?values.ssid:
+    type==="event"?values.title:type==="instagram"?"@"+values.handle:
+    itemName(type,values);
+  ctx.font="53px Georgia,serif";drawWrapped(ctx,main,120,460,770,65,3);
+  if(type==="calling"||type==="contact"){
+    ctx.fillStyle=theme.accent;ctx.font="34px Georgia,serif";
+    drawWrapped(ctx,[values.title,values.organization].filter(Boolean).join("  ·  "),120,620,750,47,2);
+  }
+  ctx.fillStyle=theme.light;ctx.font="31px Georgia,serif";
+  ctx.fillText("SCAN TO CONNECT",120,887);
+  const img=await qrImage(svg);
+  ctx.fillStyle="#fff";ctx.fillRect(995,235,700,700);
+  ctx.imageSmoothingEnabled=false;ctx.drawImage(img,1024,264,642,642);
+  return canvasBlob(canvas);
+}
+function Field({label,value,onChange,type="text",placeholder="",autoComplete="off",inputMode,required=false}){
+  return <label className="qa-field"><span>{label}{required&&<em> *</em>}</span>
+    <input type={type} value={value||""} onChange={e=>onChange(e.target.value)}
+      placeholder={placeholder} autoComplete={autoComplete} inputMode={inputMode} required={required}/></label>;
+}
+function QRTypeSelector({current,onSelect}){
+  return <div className="qa-formats" role="group" aria-label="Choose QR code type">
+    {QR_TYPES.map(t=><button type="button" key={t.id} className={"qa-type"+(current===t.id?" selected":"")}
+      onClick={()=>onSelect(t.id)} aria-pressed={current===t.id} title={t.hint}>
+      <span className="qa-type-symbol" aria-hidden="true">{t.mark}</span><span>{t.label}</span>
+    </button>)}
+  </div>;
+}
+function Details({type,v,put,showPassword,setShowPassword,wifiConsent,setWifiConsent}){
+  switch(type){
+    case "wifi":return <>
+      <Field label="Network name (SSID)" required value={v.ssid} onChange={x=>put("ssid",x)} placeholder="Guest Wi-Fi"/>
+      <label className="qa-field"><span>Security</span><select value={v.security} onChange={e=>put("security",e.target.value)}>
+        <option value="WPA">WPA2 / WPA3 (most networks)</option><option value="WEP">WEP (legacy)</option>
+        <option value="nopass">Open (no password)</option></select></label>
+      {v.security!=="nopass"&&<div className="qa-password-row">
+        <Field label="Wi-Fi password" value={v.password} required onChange={x=>put("password",x)}
+          type={showPassword?"text":"password"} placeholder="Network password" autoComplete="new-password"/>
+        <button type="button" className="qa-toggle-password" onClick={()=>setShowPassword(x=>!x)} aria-label={showPassword?"Hide Wi-Fi password":"Show Wi-Fi password"}>{showPassword?"Hide":"Show"}</button>
+      </div>}
+      <label className="qa-check"><input type="checkbox" checked={v.hidden} onChange={e=>put("hidden",e.target.checked)}/> Hidden network</label>
+      <label className="qa-check qa-sensitive"><input type="checkbox" checked={wifiConsent} onChange={e=>setWifiConsent(e.target.checked)}/>
+        Allow this device to save the Wi-Fi password in my collection.</label>
+      <p className="qa-hint">Scanning shares the network credentials. Display this code only to people you trust.</p>
+    </>;
+    case "contact":case "calling":return <>
+      <Field label="Full name" required value={v.name} onChange={x=>put("name",x)} placeholder="Name"/>
+      <div className="qa-duo"><Field label="Position / title" value={v.title} onChange={x=>put("title",x)}/>
+        <Field label="Company" value={v.organization} onChange={x=>put("organization",x)}/></div>
+      <Field label="Mobile number" type="tel" inputMode="tel" value={v.phone} onChange={x=>put("phone",x)} placeholder="+1 555 123 4567"/>
+      <Field label="Email" type="email" inputMode="email" value={v.email} onChange={x=>put("email",x)} placeholder="name@example.com"/>
+      <Field label="Website" type="url" inputMode="url" value={v.website} onChange={x=>put("website",x)} placeholder="yourwebsite.com"/>
+      <Field label="Business address (optional)" value={v.address} onChange={x=>put("address",x)}/>
+      {type==="calling"&&<><Field label="Optional card motto" value={v.tagline} onChange={x=>put("tagline",x)} placeholder="Excellence, by design"/>
+        <p className="qa-hint">The Calling Card export is a designed, printable card with a separate QR for saving contact details.</p></>}
+      <p className="qa-hint">Add a name and at least one way to reach you.</p>
+    </>;
+    case "website":return <Field label="Website address" type="url" required inputMode="url" value={v.url} onChange={x=>put("url",x)} placeholder="https://example.com"/>;
+    case "zoom":return <label className="qa-field"><span>Meeting link or copied invitation</span>
+      <textarea rows="3" value={v.url} placeholder="Paste your Zoom join URL or invitation here" onChange={e=>put("url",e.target.value)}/><small>The meeting link is extracted automatically. No Zoom account connection needed.</small></label>;
+    case "event":return <>
+      <Field label="Event title" required value={v.title} onChange={x=>put("title",x)} placeholder="Rosie's Grand Opening"/>
+      <div className="qa-duo"><Field label="Start" type="datetime-local" required value={v.start} onChange={x=>put("start",x)}/>
+        <Field label="End" type="datetime-local" required value={v.end} onChange={x=>put("end",x)}/></div>
+      <Field label="Time zone (IANA)" value={v.timezone} onChange={x=>put("timezone",x)} placeholder="America/New_York"/>
+      <Field label="Location" value={v.location} onChange={x=>put("location",x)} placeholder="Place or address"/>
+      <label className="qa-field"><span>Description</span><textarea rows="3" value={v.details} onChange={e=>put("details",e.target.value)} placeholder="Optional details"/></label>
+      <p className="qa-hint">The QR opens a pre-filled Google Calendar event. An optional .ics invitation can also be downloaded.</p>
+    </>;
+    case "payment":return <>
+      <label className="qa-field"><span>Payment platform</span><select value={v.provider||"other"} onChange={e=>put("provider",e.target.value)}>
+        <option value="other">Any payment URL</option><option value="paypal">PayPal / PayPal.Me</option>
+        <option value="venmo">Venmo</option><option value="cashapp">Cash App</option><option value="zelle">Zelle - provided link only</option>
+      </select></label>
+      <Field label="Your payment link" required type="url" value={v.url} onChange={x=>put("url",x)} placeholder="https://your-provider.com/…"/>
+      <p className="qa-hint">Use a real payment URL from your provider. Rosie never charges, processes, or verifies payments.</p>
+    </>;
+    case "instagram":return <Field label="Instagram username or profile URL" required value={v.handle} onChange={x=>put("handle",x)} placeholder="@yourhandle"/>;
+    default:return null;
+  }
+}
+export default function RosieQrAtelier(){
   const [type,setType]=useState("website");
-  const [form,setForm]=useState(EMPTY);
+  const [forms,setForms]=useState(initialValues);
   const [style,setStyle]=useState("emerald");
-  const [collection,setCollection]=useState(getSaved);
-  const [allowWifiSave,setAllowWifiSave]=useState(false);
+  const [saved,setSaved]=useState(readCollection);
+  const [wifiConsent,setWifiConsent]=useState(false);
+  const [showPassword,setShowPassword]=useState(false);
   const [fullScreen,setFullScreen]=useState(false);
+  const [label,setLabel]=useState("");
+  const [loadedId,setLoadedId]=useState(null);
+  const [filter,setFilter]=useState("");
   const [toast,setToast]=useState("");
-  const [assetFailed,setAssetFailed]=useState({});
-  const v=form[type];
-  const put=(key,value)=>setForm(old=>({...old,[type]:{...old[type],[key]:value}}));
-  const calculated=useMemo(()=>{
-    try { const payload=createPayload(type,v);return {payload,svg:getQrSvg(payload),error:""}; }
-    catch(e) { return {payload:"",svg:"",error:e.message||"Please check these fields."}; }
+  const [working,setWorking]=useState(false);
+  const previewRef=useRef(null),timerRef=useRef(null);
+  const v=forms[type];
+  const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
+  const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setWifiConsent(false);setShowPassword(false);};
+  const output=useMemo(()=>{
+    try{const payload=qrPayload(type,v),data=makeQr(payload);return {...data,payload,error:""};}
+    catch(e){return {payload:"",svg:"",modules:0,error:e.message||"Please review your details."};}
   },[type,v]);
-  const svg=calculated.svg;
-  const valid=Boolean(svg);
+  const ready=Boolean(output.svg);
+  const toastMessage=text=>{setToast(text);window.clearTimeout(timerRef.current);timerRef.current=window.setTimeout(()=>setToast(""),4000);};
+  useEffect(()=>()=>window.clearTimeout(timerRef.current),[]);
   useEffect(()=>{
-    try { localStorage.setItem(STORE_KEY,JSON.stringify(collection)); }
-    catch { setToast("Local storage is unavailable on this device."); }
-  },[collection]);
-  const message=(value)=>{setToast(value);window.setTimeout(()=>setToast(""),3600);};
-  const itemTitle=()=>{
-    if(type==="wifi")return v.ssid;
-    if(type==="contact"||type==="calling")return v.name;
-    if(type==="event")return v.title;
-    if(type==="instagram")return "@"+v.handle.replace(/^@/,"");
-    return v.url.replace("https://","").replace("http://","").slice(0,55);
-  };
-  function save() {
-    if(!valid)return message(calculated.error);
-    if(type==="wifi"&&!allowWifiSave)return message("Select the Wi-Fi credential storage checkbox first.");
-    setCollection(list=>[{id:crypto.randomUUID?.()||String(Date.now()),type,values:{...v},style,label:itemTitle()||TYPES.find(t=>t.id===type).label},...list].slice(0,35));
-    message("Saved to this device.");
+    try{localStorage.setItem(STORAGE,JSON.stringify(saved));}
+    catch{toastMessage("This browser cannot save your collection. Downloads still work.");}
+  },[saved]);
+  useEffect(()=>{
+    if(!fullScreen)return;
+    const key=e=>{if(e.key==="Escape")setFullScreen(false);};
+    document.addEventListener("keydown",key);
+    const old=document.body.style.overflow;document.body.style.overflow="hidden";
+    return ()=>{document.removeEventListener("keydown",key);document.body.style.overflow=old;};
+  },[fullScreen]);
+  function save(){
+    if(!ready)return toastMessage(output.error);
+    if(type==="wifi"&&v.security!=="nopass"&&!wifiConsent)return toastMessage("Tick the password-storage permission before saving this Wi-Fi code.");
+    const name=label.trim()||itemName(type,v);
+    const record={id:loadedId||((globalThis.crypto?.randomUUID?.())||Date.now().toString(36)),type,
+      values:{...v},label:name,style,savedAt:new Date().toISOString()};
+    setSaved(list=>[record,...list.filter(x=>x.id!==record.id)].slice(0,40));
+    setLoadedId(record.id);setLabel(name);toastMessage("Saved in My Collection on this device.");
   }
-  async function download(fmt) {
-    if(!valid)return message(calculated.error);
-    try {
-      const name="rosie-qr-"+type;
-      if(fmt==="svg")downloadBlob(new Blob([svg],{type:"image/svg+xml;charset=utf-8"}),name+".svg");
-      else downloadBlob(await imageFromSvg(svg),name+".png");
-      message("Your QR is ready to download.");
-    } catch(e){message(e.message||"Export failed.");}
+  function openRecord(item){
+    setType(item.type);
+    setForms(previous=>({...previous,[item.type]:{...initialValues()[item.type],...item.values}}));
+    setStyle(QR_STYLES.some(s=>s.id===item.style)?item.style:"emerald");
+    setLoadedId(item.id);setLabel(item.label||"");
+    setWifiConsent(false);setShowPassword(false);
+    window.scrollTo({top:0,behavior:"smooth"});
   }
-  async function share() {
-    if(!valid)return message(calculated.error);
-    try {
-      const blob=await imageFromSvg(svg), file=new File([blob],"rosie-qr.png",{type:"image/png"});
-      if(navigator.share&&navigator.canShare?.({files:[file]}))await navigator.share({files:[file],title:"QR Atelier"});
-      else {downloadBlob(blob,"rosie-qr.png");message("Downloaded PNG to share.");}
-    } catch(e){if(e.name!=="AbortError")message("Sharing is unavailable. Please download instead.");}
+  function removeRecord(item){
+    if(!window.confirm("Delete \""+item.label+"\" from this device?"))return;
+    setSaved(list=>list.filter(x=>x.id!==item.id));
+    if(loadedId===item.id){setLoadedId(null);setLabel("");}
+    toastMessage("Removed from your collection.");
   }
-  function loadSaved(item) {
-    setType(item.type);setForm(old=>({...old,[item.type]:safeFields(item.type,item.values)}));
-    setStyle(item.style||"emerald");setAllowWifiSave(false);message("Loaded "+item.label+".");
-    document.querySelector(".qa-hero")?.scrollIntoView({behavior:"smooth"});
+  async function withDownload(action){
+    if(!ready)return toastMessage(output.error);
+    if(working)return;
+    setWorking(true);
+    try{await action();}catch(e){if(e?.name!=="AbortError")toastMessage(e?.message||"That export is unavailable.");}
+    finally{setWorking(false);}
   }
-  const fields=()=>{
-    switch(type) {
-      case "wifi":return <>
-        <Field label="Network name (SSID)" value={v.ssid} onChange={x=>put("ssid",x)} placeholder="Your network"/>
-        <label className="qa-field"><span>Security</span><select value={v.security} onChange={e=>put("security",e.target.value)}><option value="WPA">WPA / WPA2 / WPA3</option><option value="WEP">WEP</option><option value="nopass">Open network</option></select></label>
-        {v.security!=="nopass"&&<Field label="Password" type="text" value={v.password} onChange={x=>put("password",x)} placeholder="Network password"/>}
-        <label className="qa-check"><input type="checkbox" checked={v.hidden} onChange={e=>put("hidden",e.target.checked)}/> Hidden network</label>
-        <label className="qa-check"><input type="checkbox" checked={allowWifiSave} onChange={e=>setAllowWifiSave(e.target.checked)}/> Allow saving Wi-Fi credentials locally on this device</label>
-      </>;
-      case "contact": case "calling": return <>
-        <Field label="Full name" value={v.name} onChange={x=>put("name",x)} placeholder="First and last name"/>
-        {type==="calling"&&<Field label="Professional title" value={v.title} onChange={x=>put("title",x)} placeholder="Your title"/>}
-        <Field label="Company" value={v.organization} onChange={x=>put("organization",x)}/>
-        <Field label="Phone" type="tel" value={v.phone} onChange={x=>put("phone",x)}/>
-        <Field label="Email" type="email" value={v.email} onChange={x=>put("email",x)}/>
-        <Field label="Website (optional)" value={v.website} onChange={x=>put("website",x)} placeholder="https://"/>
-        {type==="calling"&&<p className="qa-hint">Calling Card uses an enhanced display and the same interoperable vCard QR format.</p>}
-      </>;
-      case "event":return <>
-        <Field label="Event title" value={v.title} onChange={x=>put("title",x)} placeholder="Event name"/>
-        <div className="qa-duo">
-          <Field label="Starts" type="datetime-local" value={v.start} onChange={x=>put("start",x)}/>
-          <Field label="Ends" type="datetime-local" value={v.end} onChange={x=>put("end",x)}/>
-        </div>
-        <Field label="Time zone" value={v.timezone} onChange={x=>put("timezone",x)} placeholder="America/New_York"/>
-        <Field label="Location" value={v.location} onChange={x=>put("location",x)}/>
-        <label className="qa-field"><span>Details</span><textarea rows="3" value={v.details} onChange={e=>put("details",e.target.value)} placeholder="Optional event description"/></label>
-        <p className="qa-hint">Opens a prefilled Google Calendar invitation. The recipient reviews and adds the event.</p>
-      </>;
-      case "instagram":return <Field label="Instagram username" value={v.handle} onChange={x=>put("handle",x)} placeholder="@rosie"/>;
-      case "zoom":return <Field label="Zoom meeting invitation link" value={v.url} onChange={x=>put("url",x)} placeholder="https://us02web.zoom.us/j/..."/>;
-      case "payment":return <><Field label="Payment link" value={v.url} onChange={x=>put("url",x)} placeholder="https://"/><p className="qa-hint">Paste a valid payment URL supplied by your payment provider. Rosie never processes payments.</p></>;
-      default:return <Field label="Website URL" value={v.url} onChange={x=>put("url",x)} placeholder="https://example.com"/>;
-    }
-  };
+  const fileBase="rosie-"+safeName(label||itemName(type,v));
+  function exportFile(kind){
+    withDownload(async()=>{
+      if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
+      else if(kind==="png")download(await exportQR(output.svg),fileBase+".png");
+      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-calling-card.png");
+      else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
+      toastMessage("Download prepared.");
+    });
+  }
+  function share(){
+    withDownload(async()=>{
+      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg);
+      const file=new File([blob],fileBase+".png",{type:"image/png"});
+      if(navigator.share&&navigator.canShare?.({files:[file]})){
+        await navigator.share({files:[file],title:"Rosie's QR Atelier"});
+      }else{download(blob,file.name);toastMessage("Your QR image was downloaded to share.");}
+    });
+  }
+  function copyPayload(){
+    if(!ready)return;
+    if(!navigator.clipboard?.writeText)return toastMessage("Clipboard unavailable here.");
+    navigator.clipboard.writeText(output.payload).then(()=>toastMessage("QR destination copied."),()=>toastMessage("Clipboard permission was denied."));
+  }
+  const matching=saved.filter(x=>(x.label||"").toLowerCase().includes(filter.trim().toLowerCase())||
+    QR_TYPES.find(t=>t.id===x.type)?.label.toLowerCase().includes(filter.trim().toLowerCase()));
   return <main className={"qa-page qa-style-"+style} aria-label="Rosie's QR Atelier">
     <div className="qa-scene">
-      <header className="qa-hero">
-        <div className="qa-title"><span className="qa-title-flourish">✦</span><h1>QR Atelier</h1><p>Crafted Connections</p></div>
+      <header className="qa-hero" aria-label="Rosie works at her QR atelier">
+        <div className="qa-title"><span className="qa-title-flourish">✦</span>
+          <h1>QR Atelier</h1><p>Small Codes. Beautiful Connections.</p></div>
       </header>
-      <section className="qa-preview-stage" aria-label="Your live QR code">
-        <div className="qa-ring">
-          {!assetFailed.frame&&<img className="qa-ring-art" src={ART+"qr-frame.webp"} onError={()=>setAssetFailed(a=>({...a,frame:true}))} alt=""/>}
-          <div className="qa-code-shell">
-            {valid?<div className="qa-svg" dangerouslySetInnerHTML={{__html:svg}} aria-label="Generated QR code"/>:<div className="qa-waiting"><span className="qa-waiting-mark">✧</span><span>Your code will appear here</span></div>}
-          </div>
-          <div className="qa-ring-caption">{valid?"Ready to Scan":"Awaiting Your Details"}</div>
+      <section className="qa-preview-stage" ref={previewRef} aria-label="Live QR preview">
+        <div className="qa-ring" aria-label={ready?"QR artwork, ready to scan":"Empty QR frame"}>
+          <div className="qa-code-shell">{ready?<div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}} role="img" aria-label="Scannable QR code"/>
+            :<div className="qa-waiting"><span className="qa-waiting-mark">✧</span><span>Awaiting your creation</span></div>}</div>
+          <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" aria-hidden="true" draggable="false"/>
+          <div className="qa-ring-caption">{ready?"Ready to Share":"Create a Code"}</div>
         </div>
-        <button type="button" className="qa-zoom" onClick={()=>setFullScreen(true)} disabled={!valid}>Enlarge QR for scanning ↗</button>
+        <div className="qa-preview-actions">
+          <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready}>⛶ Full-screen QR</button>
+          <button type="button" onClick={copyPayload} disabled={!ready}>⧉ Copy destination</button>
+        </div>
       </section>
-      <section className="qa-panel" aria-label="QR design and creation controls">
+      <section className="qa-panel" aria-label="QR code settings">
         <div className="qa-panel-inner">
-          <h2>Compose Your Code</h2>
-          <div className="qa-formats" role="group" aria-label="QR code types">
-            {TYPES.map(t=><button key={t.id} type="button" className={"qa-type "+(type===t.id?"selected":"")} onClick={()=>setType(t.id)} aria-pressed={type===t.id}><span className="qa-type-symbol" aria-hidden="true">{t.glyph}</span><span>{t.label}</span></button>)}
+          <div className="qa-panel-heading"><span>Rosie's Workbench</span><h2>Choose Your Creation</h2></div>
+          <QRTypeSelector current={type} onSelect={changeType}/>
+          <div className="qa-details-heading"><h3>{QR_TYPES.find(t=>t.id===type).label} Details</h3>
+            <span>{QR_TYPES.find(t=>t.id===type).hint}</span></div>
+          <div className="qa-inputs" key={type}>
+            <Details type={type} v={v} put={put} showPassword={showPassword} setShowPassword={setShowPassword}
+              wifiConsent={wifiConsent} setWifiConsent={setWifiConsent}/>
           </div>
-          <div className="qa-inputs">{fields()}</div>
-          <div className="qa-validation" aria-live="polite">{valid?"QR code updates automatically as you type. High-contrast QR artwork is preserved for reliable scanning.":calculated.error}</div>
-          <h3>Design Style</h3>
-          <div className="qa-palettes" role="group" aria-label="QR presentation styles">
-            {STYLES.map(s=><button key={s.id} type="button" className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)} aria-pressed={style===s.id}><span className="qa-swatch"/>{s.label}</button>)}
+          <p className={"qa-validation"+(ready?" qa-valid":"")} role="status">{ready?
+            (output.modules>85?"Detailed code. Use Full-screen QR for easier scanning.":"Your QR updates instantly as you type."):
+            output.error}</p>
+          <div className="qa-section-separator"/>
+          <h3 className="qa-design-heading">Atelier Finish</h3>
+          <div className="qa-palettes" role="group" aria-label="Presentation finish">
+            {QR_STYLES.map(s=><button key={s.id} type="button" aria-pressed={style===s.id}
+              className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
+              <span className="qa-swatch"/><span>{s.label}</span></button>)}
           </div>
-          <button type="button" className="qa-save" onClick={save} disabled={!valid}>Save to Collection</button>
+          <p className="qa-hint qa-contrast-note">The QR modules stay black on white for dependable scanning. Finishes decorate the surrounding stationery.</p>
+          <div className="qa-save-block">
+            <Field label="Save as (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
+            <button className="qa-save" type="button" disabled={!ready||working} onClick={save}>
+              {loadedId?"Update Saved Code":"Save to Collection"}</button>
+          </div>
           <div className="qa-actions">
-            <button type="button" onClick={share} disabled={!valid}>Share</button>
-            <button type="button" onClick={()=>download("png")} disabled={!valid}>Download PNG</button>
-            <button type="button" onClick={()=>download("svg")} disabled={!valid}>SVG</button>
+            <button type="button" disabled={!ready||working} onClick={share}>Share</button>
+            <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>PNG</button>
+            <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>SVG</button>
+          </div>
+          <div className="qa-extra-exports">
+            <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>
+              Download {type==="calling"?"Calling Card":"Designed Card"}</button>
+            {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
           </div>
         </div>
       </section>
       <section className="qa-collection" aria-label="Saved QR collection">
-        <div className="qa-collection-heading"><h2>My Collection</h2><span>{collection.length} saved</span></div>
-        {collection.length===0?<p>Your saved codes will appear here, on this device.</p>:
-        <div className="qa-saved-grid">{collection.map(item=><div className="qa-saved" key={item.id}>
-          <button type="button" onClick={()=>loadSaved(item)}><span>{TYPES.find(t=>t.id===item.type)?.label}</span><strong>{item.label}</strong></button>
-          <button type="button" className="qa-remove" aria-label={"Delete "+item.label} onClick={()=>setCollection(c=>c.filter(x=>x.id!==item.id))}>×</button>
-        </div>)}</div>}
+        <div className="qa-collection-heading"><h2>My Collection</h2><span>{saved.length} / 40 saved</span></div>
+        <p>Stored on this device only. Nothing is uploaded to RosieVerse.</p>
+        {saved.length>3&&<label className="qa-search"><span>Find a code</span><input value={filter} onChange={e=>setFilter(e.target.value)} placeholder="Search names or types"/></label>}
+        {saved.length===0?<p className="qa-empty">Your personal collection begins with the first code you save.</p>:
+        <div className="qa-saved-grid">
+          {matching.map(item=><div className="qa-saved" key={item.id}>
+            <button type="button" onClick={()=>openRecord(item)}>
+              <span>{QR_TYPES.find(t=>t.id===item.type)?.label||"QR"}</span>
+              <strong>{item.label}</strong>
+              <small>{item.savedAt?new Date(item.savedAt).toLocaleDateString():"Saved"}</small>
+            </button>
+            <button type="button" className="qa-remove" aria-label={"Delete "+item.label} onClick={()=>removeRecord(item)}>×</button>
+          </div>)}
+          {matching.length===0&&<p>No matching codes.</p>}
+        </div>}
       </section>
-      <div className="qa-scanner-note"><strong>Document Scanner</strong><span>Coming soon · jscanify-powered capture</span></div>
       <p className="qa-status" role="status" aria-live="polite">{toast}</p>
     </div>
-    {fullScreen&&valid&&<div className="qa-fullscreen" role="dialog" aria-modal="true" aria-label="Enlarged QR code">
+    {fullScreen&&ready&&<div className="qa-fullscreen" role="dialog" aria-modal="true" aria-label="Full-screen scannable QR code">
       <button type="button" className="qa-close" onClick={()=>setFullScreen(false)}>Close ×</button>
-      <div dangerouslySetInnerHTML={{__html:svg}} className="qa-fullscreen-qr"/>
-      <span>Scan with your phone's camera</span>
+      <div className="qa-fullscreen-qr" dangerouslySetInnerHTML={{__html:output.svg}} aria-label="Full-screen QR code"/>
+      <span>{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
     </div>}
   </main>;
 }
