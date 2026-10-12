@@ -1298,9 +1298,9 @@
   }
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) input {
     width:min(100%,139px);
-    height:42px;
-    min-height:42px;
-    max-height:42px;
+    height:44px;
+    min-height:44px;
+    max-height:44px;
     padding:6px 8px;
     font-size:15px;
   }
