@@ -763,6 +763,11 @@
 .rc-page .rc-device-tool-menu button:focus-visible,
 .rc-page .rc-device-tool-menu button:hover {border-color:#ffe1a3;background:#94364e;}
 @media (max-width:739px) {
+  /* Scroll runway appears only while a tool is open, letting the whole
+     instrument reach the visible viewport centre on tall iPhones. */
+  .rc-page .rc-workspace:has(.rc-device) {
+    padding-bottom:clamp(165px,24dvh,235px);
+  }
   .rc-page .rc-tool-panel.rc-device {
     min-height:0;
     padding-top:clamp(94px,25vw,145px);
