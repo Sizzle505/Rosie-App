@@ -302,6 +302,22 @@ try {
     assert.equal(errors.length,0,errors.join("\n"));
     await page.close();
   }
+  // The golden instrument glints from a different corner every 30s when
+  // motion is allowed (four corners over a 120-second animation cycle).
+  const gleamPage=await browser.newPage({
+    viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:"no-preference"
+  });
+  await gleamPage.goto("http://127.0.0.1:5173/#calculations",{waitUntil:"networkidle"});
+  await gleamPage.locator(".loading-screen-hidden").waitFor({state:"attached"});
+  await gleamPage.locator(".rc-tool-card").first().click();
+  const glints=await gleamPage.locator(".rc-device-gleam").evaluateAll(nodes=>
+    nodes.map(el=>({duration:getComputedStyle(el).animationDuration,
+      delay:getComputedStyle(el).animationDelay,play:getComputedStyle(el).animationPlayState})));
+  assert.deepEqual(glints.map(v=>v.duration),["120s","120s","120s","120s"],
+    "Four corner highlights should complete one 120-second rotation");
+  assert.deepEqual(glints.map(v=>v.delay),["0s","-30s","-60s","-90s"],
+    "A different corner should gleam every 30 seconds");
+  await gleamPage.close();
 } finally {
   await browser.close();
 }
