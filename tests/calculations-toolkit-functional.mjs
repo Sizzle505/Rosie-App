@@ -121,10 +121,13 @@ try {
         const housing=getComputedStyle(el);
         const inputs=[...el.querySelectorAll(".rc-field input,.rc-field select")].map(node => {
           const r=node.getBoundingClientRect();
-          const label=node.closest(".rc-field").querySelector("span").getBoundingClientRect();
+          const labelElement=node.closest(".rc-field").querySelector("span");
+          const label=labelElement.getBoundingClientRect();
           const style=getComputedStyle(node);
           return {x:r.x,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
-            labelLeft:label.left,paddingLeft:parseFloat(style.paddingLeft),
+            labelCenter:(label.left+label.right)/2,fieldCenter:(r.left+r.right)/2,
+            labelAlign:getComputedStyle(labelElement).textAlign,
+            paddingLeft:parseFloat(style.paddingLeft),
             border:parseFloat(style.borderLeftWidth),fontSize:parseFloat(style.fontSize)};
         });
         return {
@@ -141,13 +144,13 @@ try {
         "Tool surface invades ornamental rails: "+labels[index]);
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
-        field.width >= (paired.includes(fieldIndex) ? 85 : 120) &&
+        field.width >= (paired.includes(fieldIndex) ? 85 : 100) &&
         field.height>=44 && field.height<=46 &&
-        field.paddingLeft >= (paired.includes(fieldIndex) ? 9 : 10) &&
+        field.paddingLeft >= (paired.includes(fieldIndex) ? 7 : 9) &&
         field.border>=2 && field.fontSize >= (labels[index]==="Unit Conversions" ? 14 : 16) &&
-        Math.abs(field.x-field.labelLeft)<=2 &&
+        field.labelAlign==="center" && Math.abs(field.fieldCenter-field.labelCenter)<=3 &&
         field.x>=geometry.surface.x-1 && field.right<=geometry.surface.right+1),
-        "Input controls must have full-height light recesses, padded values and aligned labels: "+labels[index]+" "+JSON.stringify(geometry));
+        "Input fields need centered labels, appropriately sized bubbles and 44px minimum hit targets: "+labels[index]+" "+JSON.stringify(geometry));
       if (paired.length) {
         const [left,right]=paired.map(fieldIndex=>geometry.inputs[fieldIndex]);
         assert(Math.abs(left.top-right.top)<=2 && left.right<right.x &&
@@ -164,8 +167,15 @@ try {
         "Results overlap the last input: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.result.bottom<=geometry.frame.bottom-35,
         "Result extends into or beyond the gold frame footer: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.result.height<=180,
-        "Result panel retains excessive vertical height: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.result.height>=155 && geometry.result.height<=245,
+        "Result panel must fit multi-line calculations without occupying the entire device: "+labels[index]+" "+JSON.stringify(geometry));
+      const resultTextFits=await panel.locator(".rc-tool-result").evaluate(el=>{
+        const boundary=el.getBoundingClientRect();
+        const descendants=[...el.querySelectorAll("strong,span,p")];
+        return descendants.every(node=>node.getBoundingClientRect().bottom <= boundary.bottom-8 &&
+          node.getBoundingClientRect().top >= boundary.top+5);
+      });
+      assert(resultTextFits,"Gold device receipt text is clipped by its decorative rim: "+labels[index]);
       if (index === 0) {
         assert(geometry.frame.height < 620,
           "Tip calculator tray remains unnecessarily tall: "+JSON.stringify(geometry));
