@@ -153,7 +153,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       });
       assert(spacing.rowGap >= 8 && spacing.rowGap <= 14, "Illustrated rows need even, deliberate spacing: "+JSON.stringify(spacing));
       assert(spacing.pagePadding <= 32 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
-      assert(spacing.wallpaperPadding >= 280, "Writable panel needs celestial-backed navigation clearance");
+      assert(spacing.wallpaperPadding >= 100, "Wallpaper must extend past fixed navigation without unnecessary dead space");
       // The complete APPROVED image banner, not a text-only replacement,
       // must remain visible and fixed at the viewport top during scrolling.
       assert.equal(await page.locator(".rr-sticky-dock").count(),0,
@@ -183,9 +183,9 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(scrolled.scroll>100,"Reminders must scroll naturally");
       assert.equal(scrolled.position,"relative","Full hero must not be pinned while scrolling");
       assert(scrolled.top<-100,"Large hero should move offscreen: "+JSON.stringify(scrolled));
-      assert.equal(await page.locator(".rr-compact-header.is-visible").count(),1,
-        "Compact Rosie header should replace the hero after 70% scroll");
-      await page.screenshot({path:dir + "/" + name + "-compact.png"});
+      assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),1,
+        "Middle 70% of original Rosie artwork should stay pinned after the top 15% scrolls away");
+      await page.screenshot({path:dir + "/" + name + "-pinned-rosie.png"});
       await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
       await page.waitForTimeout(130);
 

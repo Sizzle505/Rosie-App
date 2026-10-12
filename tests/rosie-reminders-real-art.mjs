@@ -28,6 +28,8 @@ try {
     page.on("pageerror", error => consoleErrors.push(error.message));
     await page.goto(base + "/#reminders", { waitUntil: "networkidle" });
     await page.locator(".rr-feature-grid").waitFor();
+    await page.locator(".loading-screen-hidden").waitFor();
+    await page.waitForTimeout(850); // Allow loading-screen fade before capturing actual artwork.
     assert.equal(await page.locator(".rr-hero img").count(), 1, "Original Rosie hero missing");
     const placement = await page.evaluate(() => {
       const hero = document.querySelector(".rr-hero"), picture = hero.querySelector("img");
@@ -50,14 +52,51 @@ try {
     assert(placement.celestial.includes("midnight-celestial-full.webp"),"Real generated celestial art missing");
     assert(placement.contentTexture.includes("midnight-velvet-tile.webp"),"Velvet repeat background missing");
     assert(!placement.celestial.includes("blue-celestial-luxury.svg"),"SVG substitute still loaded");
-    await page.evaluate(() => scrollTo(0,Math.ceil(document.querySelector(".rr-hero").getBoundingClientRect().height*.75)));
-    await page.waitForTimeout(180);
-    assert(await page.locator(".rr-compact-header.is-visible").count()===1,
-      "Compact header should appear at 70% of full hero scroll");
-    await page.evaluate(() => scrollTo(0,0));
+    assert.equal(await page.locator(".rr-compact-header").count(),0,
+      "Do not substitute a new header for the approved original Rosie illustration");
+    const heroFull = await page.locator(".rr-hero").evaluate(el => el.getBoundingClientRect().height);
+    await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + "-entry.png"});
+    await page.evaluate(h => scrollTo({top:Math.floor(h * .14),behavior:"instant"}),heroFull);
     await page.waitForTimeout(120);
-    assert.equal(await page.locator(".rr-compact-header.is-visible").count(),0,
-      "Large Rosie should return without a compact header at the top");
+    assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),0,
+      "Top 15% must move away naturally before the center pins");
+    await page.evaluate(h => scrollTo({top:Math.ceil(h * .16),behavior:"instant"}),heroFull);
+    await page.waitForTimeout(140);
+    const pinned = await page.locator(".rr-hero-pin").evaluate(el => {
+      const rect=el.getBoundingClientRect(),img=el.querySelector("img");
+      return {top:rect.top,height:rect.height,viewport:innerWidth,
+        actualHeight:document.querySelector(".rr-hero").getBoundingClientRect().height,
+        imageWidth:img.getBoundingClientRect().width,naturalWidth:img.naturalWidth,
+        source:img.currentSrc,shift:getComputedStyle(img).transform,
+        visible:getComputedStyle(el).visibility};
+    });
+    const thresholdState = await page.evaluate(() => {
+      const hero=document.querySelector(".rr-hero").getBoundingClientRect();
+      const pinned=document.querySelector(".rr-hero-pin");
+      return {scroll:window.scrollY,top:hero.top,height:hero.height,threshold:hero.height*.15,
+        pinClass:pinned.className,visibility:getComputedStyle(pinned).visibility};
+    });
+    assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),1,
+      "Existing Rosie middle should stick after the first 15% scrolls away: "+JSON.stringify(thresholdState));
+    assert(Math.abs(pinned.top) < 2 && Math.abs(pinned.height - pinned.actualHeight * .7) < 2,
+      "Pinned image must show exactly the middle 70% at the top: "+JSON.stringify(pinned));
+    assert(pinned.visible==="visible" && pinned.source.includes(width>=760?"hero-desktop":"hero-mobile"),
+      "Pinned header must use the preexisting Rosie image, not a new illustration");
+    assert(!pinned.shift.includes("none"),"Pinned image crop must remove original upper 15%");
+    await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + "-pinned.png"});
+    await page.evaluate(() => scrollTo({top:0,behavior:"instant"}));
+    await page.waitForTimeout(120);
+    assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),0,
+      "Returning to top restores the complete original Rosie image");
+    const clearance = await page.locator(".rr-content").evaluate(el=>({
+      padding:parseFloat(getComputedStyle(el).paddingBottom),
+      background:getComputedStyle(el).backgroundImage,
+      celestialHeight:parseFloat(getComputedStyle(el,"::before").height),
+      contentHeight:el.getBoundingClientRect().height
+    }));
+    assert(clearance.padding<150,"No unnecessary blank 325px footer beneath celestial page: "+JSON.stringify(clearance));
+    assert(Math.abs(clearance.celestialHeight-clearance.contentHeight)<3,
+      "Celestial backdrop must extend to end of content, without a blank cutoff");
     for (const filename of imagePaths) {
       const response = await page.request.get(base + "/rosieverse/reminders/approved-art/" + filename);
       assert.equal(response.status(), 200, "Missing genuine asset: " + filename);
@@ -92,7 +131,9 @@ try {
       top:node.getBoundingClientRect().top,
       navTop:document.querySelector(".bottom-nav").getBoundingClientRect().top,
     }));
-    assert(panel.top>=65 && panel.top<=108, "Calendar should navigate immediately below compact header: "+JSON.stringify(panel));
+    const pinnedBottom = await page.locator(".rr-hero-pin").evaluate(el => el.getBoundingClientRect().bottom);
+    assert(panel.top >= pinnedBottom-3 && panel.top <= pinnedBottom + 65,
+      "Calendar should scroll below pinned middle Rosie artwork: "+JSON.stringify({panel,pinnedBottom}));
     await page.getByRole("tab",{name:"Today"}).click();
     await page.getByRole("button",{name:/Open Goals & Gratitude/}).click();
     await page.locator(".rr-goals").waitFor();
