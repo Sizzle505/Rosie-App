@@ -7,7 +7,7 @@ import "./AssetCalculator.css";
  * Props use the EXISTING calculator reducer; never replace the arithmetic engine.
  * Place this file under src/ next to calculationsEngine.js.
  */
-const QUICK_KEYS = ["DEL", "AC", "M+", "M−", "%", "±", "÷"];
+const QUICK_KEYS = ["AC", "M+", "M−", "%", "±", "÷", "DEL"];
 const NUMERIC_ROWS = [
   ["7", "8", "9", "×"],
   ["4", "5", "6", "−"],
