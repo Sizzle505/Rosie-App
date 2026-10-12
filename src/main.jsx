@@ -883,6 +883,7 @@ function CheeseMemoryGame() {
   const testWinTapsRef = useRef(0);
   const gridRef = useRef(null);
   const examinerRef = useRef(null);
+  const [boardFocusRequest, setBoardFocusRequest] = useState(0);
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
@@ -950,33 +951,42 @@ function CheeseMemoryGame() {
     return () => window.cancelAnimationFrame(frame);
   }, [ceremonyVisible]);
 
-  // On iPhone, fit all four card rows between the sticky examiner and bottom
-  // navigation before the three-second reveal begins. Refit on viewport changes.
-  useEffect(() => {
-    if (gameMode !== "sprint" || !["preview", "playing"].includes(challengePhase)) return undefined;
+  // Both game modes use one viewport-aware board placement. Measure the
+  // actual raised bottom navigation so the fourth row clears it on iPhone.
+  // Run again after preview transitions, rotations, or browser chrome resizes.
+  useLayoutEffect(() => {
+    if (!boardFocusRequest) return undefined;
     let measureFrame = 0;
     let scrollFrame = 0;
-    const fitBoard = (bringIntoView) => {
+    const fitBoard = (scrollToBoard) => {
       window.cancelAnimationFrame(measureFrame);
       measureFrame = window.requestAnimationFrame(() => {
         const board = gridRef.current;
-        if (!board || window.innerWidth > 720) return;
+        const examiner = examinerRef.current;
+        if (!board || !examiner || window.innerWidth > 720) return;
         const viewportHeight = window.visualViewport?.height || window.innerHeight;
-        const examinerHeight = examinerRef.current?.getBoundingClientRect().height || 0;
-        const bottomNav = document.querySelector(".bottom-nav");
-        const navHeight = bottomNav ? bottomNav.getBoundingClientRect().height : 0;
-        const availableBoardHeight = Math.max(155, Math.floor(viewportHeight - examinerHeight - navHeight - 26));
-        board.style.setProperty("--flash-board-cap", `${availableBoardHeight}px`);
-        board.style.scrollMarginTop = `${Math.ceil(examinerHeight + 14)}px`;
-        if (bringIntoView) {
+        const nav = document.querySelector(".bottom-nav");
+        const navTop = nav ? nav.getBoundingClientRect().top : viewportHeight - 90;
+        const examinerHeight = examiner.getBoundingClientRect().height;
+        const stickyOffset = Math.max(6, parseFloat(getComputedStyle(examiner).top) || 6);
+        const boardTop = stickyOffset + examinerHeight + 10;
+        const availableHeight = Math.max(140, Math.floor(navTop - boardTop - 12));
+        board.style.setProperty("--flash-board-cap", `${availableHeight}px`);
+        board.style.scrollMarginTop = `${boardTop}px`;
+        if (scrollToBoard) {
           window.cancelAnimationFrame(scrollFrame);
           scrollFrame = window.requestAnimationFrame(() => {
-            gridRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+            const actualBoard = gridRef.current;
+            if (!actualBoard) return;
+            // Set the grid just beneath the sticky reaction panel; ensure the
+            // entire fourth row remains above the fixed navigation.
+            const target = window.scrollY + actualBoard.getBoundingClientRect().top - boardTop;
+            window.scrollTo({ top: Math.max(0, target), behavior: "instant" });
           });
         }
       });
     };
-    fitBoard(challengePhase === "preview");
+    fitBoard(true);
     const handleResize = () => fitBoard(false);
     window.addEventListener("resize", handleResize);
     window.visualViewport?.addEventListener("resize", handleResize);
@@ -986,7 +996,7 @@ function CheeseMemoryGame() {
       window.removeEventListener("resize", handleResize);
       window.visualViewport?.removeEventListener("resize", handleResize);
     };
-  }, [gameMode, challengePhase]);
+  }, [boardFocusRequest, gameMode, challengePhase]);
 
   function recentlyUsed(reaction) {
     return reactionHistory.slice(-2).includes(reaction);
@@ -1032,6 +1042,11 @@ function CheeseMemoryGame() {
     }[reaction];
   }
 
+  function selectBoardMode(mode) {
+    resetGame(mode);
+    setBoardFocusRequest((request) => request + 1);
+  }
+
   function resetGame(requestedMode) {
     const nextMode = typeof requestedMode === "string" ? requestedMode : gameMode;
     window.clearTimeout(pendingFlipRef.current);
@@ -1069,6 +1084,7 @@ function CheeseMemoryGame() {
     previewDeadlineRef.current = Date.now() + CHEESE_PREVIEW_MS;
     setChallengePhase("preview");
     applyReaction("focused", "Study the entire board. You have three seconds.");
+    setBoardFocusRequest((request) => request + 1);
   }
 
   function expireChallenge() {
@@ -1213,7 +1229,7 @@ function CheeseMemoryGame() {
   }
 
   return (
-    <main className={"cheese-game-page" + (gameMode === "sprint" ? " is-flash-fromage" : "")}>
+    <main className={"cheese-game-page" + (gameMode === "sprint" ? " is-flash-fromage" : "") + (boardFocusRequest ? " is-board-active" : "")}>
       <section className="cheese-desktop-layout">
         <aside className="cheese-left-rail">
           <section className="cheese-exam-header" aria-labelledby="cheese-exam-title">
@@ -1239,6 +1255,12 @@ function CheeseMemoryGame() {
               <h1 id="cheese-exam-title">ROSIE'S CHEESE BOARD EXAM</h1>
               <p>A memory examination for serious cheese scholars.</p>
 
+              <div className="cheese-exam-actions" role="group" aria-label="Cheese exam controls">
+                <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={() => selectBoardMode("classic")}>CLASSIC EXAM</button>
+                <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={() => selectBoardMode("sprint")}>FLASH FROMAGE</button>
+                <button type="button" className="cheese-action-reset" onClick={() => selectBoardMode(gameMode)}><span aria-hidden="true">↻</span> RESET</button>
+              </div>
+
               <div className="cheese-header-status" aria-label="Current exam status">
                 <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
                 <div><span>MOVES</span><strong>{moves}</strong></div>
@@ -1247,18 +1269,10 @@ function CheeseMemoryGame() {
               </div>
             </div>
 
-            <button type="button" className="cheese-reset-button cheese-reset-left" onClick={resetGame}>
-              <span aria-hidden="true">↻</span>
-              NEW BOARD
-            </button>
           </section>
         </aside>
 
         <section className="cheese-game-frame" aria-label="Cheese matching board">
-          <div className="cheese-mode-selector" role="group" aria-label="Cheese memory game mode">
-            <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={() => resetGame("classic")}>CLASSIC EXAM</button>
-            <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={() => resetGame("sprint")}>FLASH FROMAGE</button>
-          </div>
           <div className="cheese-game-heading">
             <div>
               <span>{gameMode === "sprint" ? "FLASH FROMAGE · MEMORY CHALLENGE" : "BOARD ONE · PRACTICAL MEMORY"}</span>
@@ -1341,10 +1355,6 @@ function CheeseMemoryGame() {
             </div>
             <i aria-hidden="true">{currentReaction.icon}</i>
           </div>
-          <button type="button" className="cheese-reset-button cheese-reset-mobile" onClick={resetGame}>
-            <span aria-hidden="true">↻</span>
-            NEW BOARD
-          </button>
         </aside>
       </section>
     </main>
