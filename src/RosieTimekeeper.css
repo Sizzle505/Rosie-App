@@ -150,7 +150,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
 }
 .rtk-dial > .rtk-time .rtk-time-whole {font-weight:800;}
 .rtk-dial > .rtk-time .rtk-time-fraction {font-size:.57em;font-weight:800;color:#fbdca7;}
-.rtk-dial > .rtk-time.is-hours {font-weight:800;font-size:clamp(25px,7vw,47px);}
+.rtk-page .rtk-dial > .rtk-time.is-hours {font-weight:800;font-size:clamp(25px,7vw,47px);}
 @media(max-width:520px){.rtk-dial>.rtk-time:not(.is-hours){font-size:clamp(33px,9.55vw,50px);}}
 @media(max-width:355px){.rtk-dial>.rtk-time:not(.is-hours){font-size:32px;}}
 
@@ -165,8 +165,8 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   z-index:3;
   /* Preserve the artwork's calibrated dial position and one-piece clockwork. */
 }
-.rtk-dial > .rtk-time,
-.rtk-dial > .rtk-time:not(.is-hours),
+.rtk-page .rtk-dial > .rtk-time,
+.rtk-page .rtk-dial > .rtk-time:not(.is-hours),
 .rtk-dial > .rtk-time.is-hours {
   position:absolute;
   z-index:3;
@@ -183,7 +183,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   padding:0;
   text-align:center;
 }
-.rtk-dial > .rtk-caption {
+.rtk-page .rtk-dial > .rtk-caption {
   position:absolute;
   z-index:3;
   left:50%;
@@ -257,7 +257,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-action-deck .rtk-mode-switch button { min-height:28px; min-width:79px; padding:4px 8px; font-size:12px; }
   .rtk-action-deck .rtk-controls button { width:44px; height:44px; }
   .rtk-utility { top:73.5%; width:74%; min-height:103px; max-height:21%; padding:10px 12px; }
-  .rtk-dial > .rtk-time:not(.is-hours) { font-size:clamp(31px,9vw,43px); }
+  .rtk-page .rtk-dial > .rtk-time:not(.is-hours) { font-size:clamp(31px,9vw,43px); }
   .rtk-dial > .rtk-time.is-hours { font-size:clamp(23px,6vw,30px); }
 }
 @media(max-width:355px) {
