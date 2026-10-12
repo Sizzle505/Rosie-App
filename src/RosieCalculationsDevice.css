@@ -492,3 +492,73 @@
     min-height: 2.3em;
   }
 }
+
+/* October 12: keep the live gold instrument above the sticky Rosie header. */
+.rc-page .rc-workspace:has(.rc-device) {
+  z-index: 84;
+}
+
+/* Tighten the Pocket Toolkit without cropping any original button artwork. */
+.rc-page .rc-tools-heading { margin: 13px 0 2px; }
+.rc-page .rc-tool-grid { row-gap: 0; padding-top: 0; padding-bottom: 0; }
+.rc-page .rc-workspace .rc-tool-grid .rc-tool-card { margin-block: -4px; }
+
+@media (max-width: 739px) {
+  /* Gold input bubbles are intentionally less wide; keep a 44px touch height. */
+  .rc-page .rc-device .rc-field > span {
+    width: 82%;
+  }
+  .rc-page .rc-device .rc-field input,
+  .rc-page .rc-device .rc-field select,
+  .rc-page .rc-device .rc-field:has(select) select,
+  .rc-page .rc-device .rc-field:has(input[type="date"]) input {
+    width: 82%;
+    max-width: 82%;
+  }
+  /* Short paired numeric values should not occupy almost their entire column. */
+  .rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) input,
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) input,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) input,
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) input {
+    width: clamp(86px, 77%, 126px);
+    max-width: 100%;
+  }
+  .rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    width: clamp(86px, 77%, 126px);
+    max-width: 100%;
+  }
+  /* Unit names may be longer than numeric inputs: preserve full selector widths. */
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select,
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 739px) {
+  /* Wrapped labels need the entire column, while their input remains compact. */
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) input,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) input {
+    margin-left: 0;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 739px) {
+  /* Measurement category names need more width than 1-3 digit controls. */
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2) input,
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2) select,
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2) > span {
+    width: 95%;
+    max-width: 95%;
+  }
+}

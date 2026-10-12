@@ -52,7 +52,10 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert(Math.abs(geometry.image.width-width)<=1.5,"header must span entire viewport");
       assert(Math.abs(geometry.image.height-geometry.image.width*geometry.nativeHeight/geometry.nativeWidth)<=1.5,
         "header natural aspect ratio was distorted");
-      assert(Math.abs(geometry.hero.bottom-geometry.frame.top)<=1.5,"calculator must touch header seam");
+      assert(Math.abs(geometry.hero.bottom-geometry.frame.top-18)<=1.5,"calculator must start 18px above header seam");
+      assert(await page.locator(".rc-calculator-stage").evaluate(el=>Number(getComputedStyle(el).zIndex)) >
+        await page.locator(".rc-hero").evaluate(el=>Number(getComputedStyle(el).zIndex)),
+        "raised normal calculator must display in front of the hero seam");
       assert(Math.abs(geometry.frame.width-width)<=1.5,"calculator must fill viewport");
       assert(Math.abs(geometry.frame.left)<=1.5,"calculator left edge offset");
       assert(geometry.scrollWidth<=width+2,"horizontal overflow");
@@ -70,8 +73,17 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert.equal(await page.locator(".rc-tool-card").count(),7,"pocket tools removed");
       assert.equal(await page.locator(".rac-command-keys").count(),0,"obsolete separate clear row remains");
       assert.deepEqual(await page.locator(".rac-memory-keys button").evaluateAll(nodes=>nodes.map(n=>n.getAttribute("aria-label"))),
-        ["Backspace","Clear all","Add to memory","Subtract from memory","Percent","Change sign","Divide"],
-        "quick row must start with Backspace and AC in place of MC/MR");
+        ["Clear all","Add to memory","Subtract from memory","Percent","Change sign","Divide","Backspace"],
+        "quick row must start with AC and end with Backspace");
+      const toolkitLayout=await page.evaluate(()=>{
+        const heading=document.querySelector(".rc-tools-heading");
+        const grid=document.querySelector(".rc-tool-grid");
+        return {headingMargin:parseFloat(getComputedStyle(heading).marginTop),
+          rowGap:parseFloat(getComputedStyle(grid).rowGap),
+          cardMargin:parseFloat(getComputedStyle(grid.querySelector("button")).marginTop)};
+      });
+      assert(toolkitLayout.headingMargin<=14 && toolkitLayout.rowGap===0 && toolkitLayout.cardMargin<=-4,
+        "Pocket Toolkit dead space was not reduced: "+JSON.stringify(toolkitLayout));
       const name=engine+"-"+width+"x"+height;
       await page.screenshot({path:output+"/"+name+"-full.png",fullPage:true});
       await hero.screenshot({path:output+"/"+name+"-header.png"});
@@ -102,6 +114,16 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       await page.screenshot({path:output+"/"+name+"-pinned-banner.png"});
       await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
       await page.waitForTimeout(130);
+      const navOffset=await page.locator(".nav-family-toggle").evaluate(el=>{
+        const m=getComputedStyle(el).transform.match(/^matrix\(([^)]+)\)$/);
+        return m ? Number(m[1].split(",")[5]) : NaN;
+      });
+      assert(Math.abs(navOffset-14)<=0.5,
+        "Calculations pendant's safe-area placement should remain stable: "+navOffset);
+      const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first()
+        .evaluate(el=>getComputedStyle(el).top);
+      assert.equal(raisedNavContent,"-7px",
+        "bottom navigation content should be 5px above the Games/Tools pendant");
 
       const digit=n=>page.getByRole("button",{name:String(n),exact:true});
       await digit(7).click();
@@ -184,6 +206,8 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         "Resources button is still a tiny two-column tile: "+JSON.stringify(tileGeometry));
       assert(tileGeometry.left>=-1 && tileGeometry.right<=width+1,
         "full-width Resources tile overflows iPhone");
+      const homeNavLift=await salonNav.evaluate(el=>parseFloat(getComputedStyle(el).marginTop));
+      assert.equal(homeNavLift,-36,"all illustrated Grand Salon navigation buttons must rise 36px");
       await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
 
       await resourceTile.click();
@@ -200,6 +224,10 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         "Entertainment nav leaked into Timekeepers");
       await page.getByRole("button",{name:"Open Rosie’s Resources hub"}).click();
       await page.waitForURL("**/#resources");
+      await page.goto("http://127.0.0.1:5173/#randomizers",{waitUntil:"networkidle"});
+      const randomPadding=await page.locator("main").first().evaluate(el=>parseFloat(getComputedStyle(el).paddingTop));
+      assert.equal(randomPadding,2,"Randomizers page must begin 18px higher than its original 20px inset");
+      await page.screenshot({path:output+"/"+name+"-randomizers.png",fullPage:true});
       await page.goto("http://127.0.0.1:5173/#fortune",{waitUntil:"networkidle"});
       assert.equal(await page.getByRole("button",{name:"Open Cheese Board Exam"}).count(),1,
         "ordinary entertainment nav changed");
