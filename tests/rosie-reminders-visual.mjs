@@ -304,12 +304,14 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           aboveBarBottom:nav.bottom-toggle.top,
           hangingBelowBar:toggle.bottom-nav.bottom,
           visibleBottom:window.innerHeight-toggle.bottom,
+          offsetY: Number(new DOMMatrixReadOnly(getComputedStyle(element).transform).m42.toFixed(1)),
         };
       });
-      assert(position.horizontalOffset<4 && position.aboveBarBottom>=4
-        && position.aboveBarBottom<=18 && position.hangingBelowBar>=10
-        && position.hangingBelowBar<=21 && position.visibleBottom>=3,
-        "Games/Tools toggle must hang directly beneath the nav row: "+JSON.stringify(position));
+      assert(position.horizontalOffset<4 && position.offsetY===14
+        && position.aboveBarBottom>=-6 && position.aboveBarBottom<=12
+        && position.hangingBelowBar>=15 && position.hangingBelowBar<=33
+        && position.visibleBottom>=-1,
+        "Games/Tools toggle must hang 8px lower without clipping the viewport: "+JSON.stringify(position));
       await navToggle.click();
       assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
         "Resources nav should expose the three utility destinations");
