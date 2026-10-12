@@ -1274,7 +1274,7 @@ function CheeseMemoryGame() {
               <div className="cheese-exam-actions" role="group" aria-label="Cheese exam controls">
                 <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("classic"); }}>CLASSIC EXAM</button>
                 <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("sprint"); }}>FLASH FROMAGE</button>
-                <button type="button" className={"cheese-action-reset" + (!hasBegun ? " is-ready" : "")} onClick={(event) => { event.currentTarget.blur(); startOrResetSelectedBoard(); }}><span aria-hidden="true">{hasBegun ? "↻" : "▶"}</span> {hasBegun ? "RESET" : "START"}</button>
+                <button type="button" className={"cheese-action-reset" + (!hasBegun ? " is-ready" : "")} onClick={(event) => { event.currentTarget.blur(); startOrResetSelectedBoard(); }}><span className={hasBegun ? "cheese-reset-symbol" : "cheese-start-symbol"} aria-hidden="true">{hasBegun ? "↻" : ""}</span> {hasBegun ? "RESET" : "START"}</button>
               </div>
 
               <div className="cheese-header-status" aria-label="Current exam status">
