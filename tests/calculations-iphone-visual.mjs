@@ -96,8 +96,8 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       }));
       assert(pinnedHero.scroll>90, "Calculations does not scroll past the full banner");
       assert.equal(pinnedHero.position,"sticky","The Rosie Calculations artwork stopped being sticky");
-      assert(pinnedHero.top>=-1 && pinnedHero.top<=90,
-        "Full Calculations image did not remain pinned: "+JSON.stringify(pinnedHero));
+      assert(pinnedHero.top>=-26 && pinnedHero.top<=-24,
+        "Full Calculations image should slide up 25px before pinning: "+JSON.stringify(pinnedHero));
       assert(pinnedHero.imgHeight>90,"Pinned Rosie Calculations picture was hidden");
       await page.screenshot({path:output+"/"+name+"-pinned-banner.png"});
       await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
