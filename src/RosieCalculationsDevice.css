@@ -537,3 +537,18 @@
     max-width: 100%;
   }
 }
+
+@media (max-width: 739px) {
+  /* Wrapped labels need the entire column, while their input remains compact. */
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) input,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) input {
+    margin-left: 0;
+    margin-right: auto;
+  }
+}
