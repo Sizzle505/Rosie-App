@@ -1206,6 +1206,29 @@
     font-size:clamp(11px,2.9vw,13px);
   }
 }
+/* Split Bill is the densest layout. Compress its internal parchment spacing,
+   not its outer gold frame, to protect the bottom decorative clearance. */
+@media (max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-device-surface {
+    gap:2px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid {
+    row-gap:2px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    min-height:24px;
+    line-height:1.07;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result {
+    min-height:103px;
+    margin-top:0;
+    padding:9px 12px 12px;
+    gap:1px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result span + span {
+    padding-top:1px;
+  }
+}
 /* A different corner of the intact golden instrument catches lamplight every
    ~30 seconds. No image strip is overlaid across the readable gold tray. */
 .rc-page .rc-device-housing {overflow:visible;}
