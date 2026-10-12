@@ -85,6 +85,23 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert(toolkitLayout.headingMargin<=14 && toolkitLayout.rowGap===0 && toolkitLayout.cardMargin<=-4,
         "Pocket Toolkit dead space was not reduced: "+JSON.stringify(toolkitLayout));
       await page.locator(".rc-tool-card").first().click();
+      const burgundyBg=await page.locator(".rc-page").evaluate(el=>getComputedStyle(el).backgroundImage);
+      assert(burgundyBg.includes("/randomizers/rosie-salon-burgundy-texture.svg"),
+        "Calculations must reuse approved burgundy Randomizers background artwork");
+      if(width<=600) {
+        await page.waitForTimeout(450);
+        const alignment=await page.evaluate(()=>{
+          const panel=document.querySelector(".rc-device").getBoundingClientRect();
+          const nav=document.querySelector(".bottom-nav").getBoundingClientRect();
+          return {
+            toolMid:(panel.top+panel.bottom)/2,
+            windowMid:(8+Math.min(innerHeight,nav.top-8))/2,
+            panelHeight:panel.height,viewportHeight:innerHeight,scrollY:window.scrollY
+          };
+        });
+        assert(Math.abs(alignment.toolMid-alignment.windowMid)<27,
+          "Selected tool must automatically center above iPhone navigation: "+JSON.stringify(alignment));
+      }
       const layers=await page.evaluate(()=>({
         hero:Number(getComputedStyle(document.querySelector(".rc-hero")).zIndex),
         normal:Number(getComputedStyle(document.querySelector(".rc-calculator-stage")).zIndex),
