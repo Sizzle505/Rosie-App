@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { chromium } from "playwright";
 
 const labels = [
@@ -11,6 +12,18 @@ const labels = [
   "Loan & Interest",
   "Currency Converter"
 ];
+// Protect the specifically approved gilded background from destructive
+// dark-pixel thresholding or lossy re-exports.
+const expectedGoldHashes = {
+  "gold-device.webp":"dd92d9e191f6e6ec0e4c15f57715743d56193d351c90c2b100a6b62cdd1760b9",
+  "housing-top.webp":"8dfbdebc3324dafac36366706f29ee142a9d54c8391423ad75d3db7fbd3f49ad",
+  "housing-center.webp":"2a893aaa37954a6f2a175f6c59a276db5d1fe8350d3088ede40979cba2e21e81"
+};
+for (const [name,hash] of Object.entries(expectedGoldHashes)) {
+  const bytes=await fs.readFile("public/rosieverse/calculations/toolkit/"+name);
+  assert.equal(createHash("sha256").update(bytes).digest("hex"),hash,
+    "Approved gold device artwork was replaced or damaged: "+name);
+}
 const dir = "artifacts/calculations-instruments";
 await fs.mkdir(dir, { recursive:true });
 const browser = await chromium.launch({headless:true});
