@@ -8,6 +8,7 @@ on:
       - "src/rouletteGeometry.js"
       - "public/randomizers/roulette/**"
       - "tests/roulette-geometry.test.mjs"
+      - "tests/roulette-visual.mjs"
       - ".github/workflows/roulette-check.yml"
   workflow_dispatch:
 jobs:
@@ -22,3 +23,22 @@ jobs:
       - run: npm ci
       - run: node --test tests/roulette-geometry.test.mjs
       - run: npm run build
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Start and await Vite
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-roulette-vite.log 2>&1 &
+          for attempt in {1..40}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-roulette-vite.log
+          exit 1
+      - run: node tests/roulette-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: roulette-iphone-webkit-chromium
+          path: artifacts/roulette/
+          retention-days: 14
