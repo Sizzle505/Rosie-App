@@ -41,14 +41,14 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
           return {
             homeBottom: rect(root).bottom,
             viewportHeight: window.innerHeight,
-            titleRatio: rect(banner).width / rect(root).width,
+            titleRatio: rect(banner).width / (rect(root).width - parseFloat(getComputedStyle(root).paddingLeft) - parseFloat(getComputedStyle(root).paddingRight)),
             titleMarginTop: parseFloat(getComputedStyle(banner).marginTop),
             heroHeight: rect(hero).height,
             destinationBottom: rect(destinations).bottom,
             lastDestinationBottom: rect(destinations.lastElementChild).bottom,
             navTop: rect(nav).top,
             titleArtOk: titleImage.complete && titleImage.naturalWidth > 1000,
-            sceneryAligned: getComputedStyle(root).backgroundPosition.includes("bottom")
+            sceneryAligned: getComputedStyle(root).backgroundPositionY === "100%"
           };
         });
         assert(Math.abs(homeFit.homeBottom - height) < 3, "Salon artwork must terminate at viewport edge: " + JSON.stringify(homeFit));
