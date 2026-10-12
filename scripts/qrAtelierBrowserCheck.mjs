@@ -74,6 +74,17 @@ try {
   const dl=await downloadWait;
   assert.ok(dl.suggestedFilename().endsWith(".png"));
   console.log("PASS PNG download:",dl.suggestedFilename());
+  const cardWait=page.waitForEvent("download",{timeout:12000});
+  await page.getByRole("button",{name:"Download Calling Card",exact:true}).click();
+  const card=await cardWait;
+  assert.ok(card.suggestedFilename().endsWith("-calling-card.png"));
+  console.log("PASS designed Calling Card image:",card.suggestedFilename());
+  const vcfWait=page.waitForEvent("download",{timeout:12000});
+  await page.getByRole("button",{name:"Download Contact (.vcf)"}).click();
+  const vcf=await vcfWait;
+  assert.ok(vcf.suggestedFilename().endsWith(".vcf"));
+  console.log("PASS contact file export:",vcf.suggestedFilename());
+
   await page.screenshot({path:"qa-screenshots/qr-atelier-calling-card.png",fullPage:true});
 } catch(e){failures.push("SMOKE "+e.stack);console.error("FAIL",e);}
 finally {await browser.close();}
