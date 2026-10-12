@@ -42,11 +42,15 @@ try {
     assert.equal(await page.locator(".rc-tool-card").count(),7);
     const art=await page.locator(".rc-tool-art").evaluateAll(nodes=>nodes.map(img=>({
       name:img.src.split("/").pop(),loaded:img.complete&&img.naturalWidth>0,
-      width:img.getBoundingClientRect().width
+      width:img.getBoundingClientRect().width,
+      height:img.getBoundingClientRect().height,
+      nativeWidth:img.naturalWidth,nativeHeight:img.naturalHeight,
+      fit:getComputedStyle(img).objectFit
     })));
     assert.equal(art.length,7);
-    assert(art.every(img=>img.loaded&&img.width>0),
-      "Approved selector images missing: "+JSON.stringify(art));
+    assert(art.every(img=>img.loaded&&img.width>0&&img.height>0&&img.fit==="contain"&&
+      Math.abs(img.height-img.width*img.nativeHeight/img.nativeWidth)<2),
+      "Approved selector artwork must be complete, unstretched and uncropped: "+JSON.stringify(art));
     if(width===390) {
       const filenames=[
         "gold-device.webp","gold-input.webp","gold-select.webp","gold-result.webp",
@@ -119,7 +123,7 @@ try {
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.surface.x>=geometry.frame.x+20 && geometry.surface.right<=geometry.frame.right-20,
         "Tool surface invades ornamental rails: "+labels[index]);
-      assert(geometry.inputs.every(field => field.width>=120 && field.height>=43 &&
+      assert(geometry.inputs.every(field => field.width>=120 && field.height>=44 &&
         field.x>=geometry.surface.x-1 && field.right<=geometry.surface.right+1),
         "Input fields overflow frame: "+labels[index]);
       assert(geometry.scrollWidth<=width+2,
