@@ -96,6 +96,8 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       assert.match(await startReset.innerText(), /START/, "initial Classic board must invite Start");
       assert.equal(await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).getAttribute("aria-pressed"), "true", "Classic must be selected by default");
       assert(await startReset.evaluate(el => el.classList.contains("is-ready")), "Start button should glow before beginning");
+      assert(await page.locator("button.cheese-card").first().isDisabled(), "Classic cards must be locked until Start");
+      assert.equal(await page.locator(".cheese-examiner-rail .reaction-start-button").count(), 1, "Rosie's sticky reaction must offer Start when selector scrolls offscreen");
       if (narrow) {
         const readCheeseViewport = async () => page.evaluate(() => {
           const grid = document.querySelector(".cheese-grid").getBoundingClientRect();
@@ -122,6 +124,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         await page.waitForTimeout(360);
         assertFits(await readCheeseViewport(), "Classic selected");
         assert.match(await startReset.innerText(), /START/, "selecting Classic should leave a Start button");
+        assert(await page.locator("button.cheese-card").first().isDisabled(), "Mode selection alone must not start Classic");
 
         await cheeseActions.getByRole("button", { name: "FLASH FROMAGE" }).click();
         await page.waitForTimeout(360);
@@ -143,8 +146,16 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         assertFits(await readCheeseViewport(), "Return to Classic");
         assert.match(await startReset.innerText(), /START/, "switching to Classic should expose Start");
       }
-      // Classic can also be started explicitly; the initial click begins its timer.
-      await startReset.click();
+      // The starter inside the sticky Rosie panel remains usable even when
+      // scrolling the board has moved the upper toolbar out of view.
+      if (narrow) {
+        await page.locator(".cheese-examiner-rail .reaction-start-button").click();
+      } else {
+        await startReset.click();
+      }
+      assert(await page.locator("button.cheese-card").first().isEnabled(), "Start must unlock the Classic matching board");
+      assert.match(await page.locator(".cheese-examiner-rail .reaction-copy strong").innerText(), /exam is underway/i, "Rosie must visibly acknowledge the started Classic exam");
+      assert.equal(await page.locator(".cheese-examiner-rail .reaction-start-button").count(), 0, "Started Classic exam must not show a duplicate Start");
       if (narrow) {
         await page.waitForTimeout(360);
         const readCheeseViewport = async () => page.evaluate(() => ({
