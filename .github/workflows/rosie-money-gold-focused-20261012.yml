@@ -4,6 +4,7 @@ on:
     branches: [work/gold-even-spacing-money-controls-20261012]
     paths: [.github/workflows/rosie-money-gold-focused-20261012.yml]
   # Retest native date input readability and formatted USD fields
+  # Rerun controlled USD focus and replacement editing
 jobs:
   verify-money-and-layout:
     runs-on: ubuntu-latest
