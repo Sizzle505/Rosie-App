@@ -69,7 +69,8 @@ export default function RosieReminders() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [form, setForm] = useState(() => blankItem("tasks"));
   const [heroLoaded, setHeroLoaded] = useState(false);
-  const [compactHeader, setCompactHeader] = useState(false);
+  const [heroPinned, setHeroPinned] = useState(false);
+  const [heroHeight, setHeroHeight] = useState(0);
   const heroRef = useRef(null);
   const organizerRef = useRef(null);
   const [storageError, setStorageError] = useState("");
@@ -173,36 +174,45 @@ export default function RosieReminders() {
   };
   const moveDay = (delta) => setSelectedDate(prev => dateKey(new Date(dateObj(prev).getFullYear(), dateObj(prev).getMonth(), dateObj(prev).getDate() + delta)));
 
-  // Rosie occupies the full width at rest. Once the page passes 70% of
-  // the large illustrated hero, a small fixed identity bar replaces it.
+  // The ORIGINAL illustrated Rosie hero is shown in full at page entry.
+  // After its first 15% scrolls offscreen, pin its original middle 70%.
+  // The last 15% continues moving behind that pinned middle section.
   useEffect(() => {
     let frame = 0;
     const measure = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const rect = heroRef.current?.getBoundingClientRect();
-        setCompactHeader(Boolean(rect && rect.top <= -rect.height * 0.7));
+        if (!rect || rect.height <= 0) return;
+        const nextHeight = rect.height;
+        const nextPinned = rect.top <= -(nextHeight * 0.15);
+        setHeroHeight(previous => Math.abs(previous - nextHeight) > 0.5 ? nextHeight : previous);
+        setHeroPinned(previous => previous === nextPinned ? previous : nextPinned);
       });
     };
+    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(measure);
+    if (heroRef.current) resizeObserver?.observe(heroRef.current);
     measure();
-    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("scroll", measure, {passive:true});
     window.addEventListener("resize", measure);
     return () => {
       cancelAnimationFrame(frame);
+      resizeObserver?.disconnect();
       window.removeEventListener("scroll", measure);
       window.removeEventListener("resize", measure);
     };
   }, []);
 
   const scrollToOrganizer = () => {
-    // Two frames permit React to mount the panel after changing the section.
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const node = organizerRef.current;
       if (!node) return;
-      const compactHeight = document.querySelector(".rr-compact-header")?.getBoundingClientRect().height || 61;
-      const top = node.getBoundingClientRect().top + window.scrollY - compactHeight - 14;
+      const height = heroRef.current?.getBoundingClientRect().height || heroHeight;
+      const safeInset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rr-top-safe")) || 0;
+      const pinnedBottom = height * .7 + safeInset + 14;
+      const target = node.getBoundingClientRect().top + window.scrollY - pinnedBottom;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: Math.max(0, top), behavior: reduced ? "auto" : "smooth" });
+      window.scrollTo({top:Math.max(0,target),behavior:reduced?"auto":"smooth"});
     }));
   };
   const chooseSection = (id) => {
@@ -264,13 +274,14 @@ export default function RosieReminders() {
   }, [editorOpen]);
 
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
-    <header className={"rr-compact-header" + (compactHeader ? " is-visible" : "")} aria-hidden={!compactHeader}>
-      <img src="/rosieverse/reminders/hero-mobile.webp" alt="" draggable="false" />
-      <div><strong>Rosie’s Reminders</strong><small>Personal Organizer</small></div>
-      <button type="button" tabIndex={compactHeader ? 0 : -1}
-        aria-label="Return to top of Rosie's Reminders"
-        onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>↑</button>
-    </header>
+    <div className={"rr-hero-pin"+(heroPinned ? " is-pinned" : "")}
+      style={{height:heroHeight ? heroHeight * .7 : 0}}
+      aria-hidden="true">
+      <picture>
+        <source media="(min-width: 760px)" srcSet="/rosieverse/reminders/hero-desktop.webp" />
+        <img src="/rosieverse/reminders/hero-mobile.webp" alt="" draggable="false" />
+      </picture>
+    </div>
     <header className="rr-hero" ref={heroRef}>
       {!heroLoaded && <div className="rr-hero-fallback"><small>ROSIEVERSE</small><h1>Rosie’s Reminders</h1><p>Personal Organizer</p></div>}
       <picture>
