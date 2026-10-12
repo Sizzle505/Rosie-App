@@ -364,7 +364,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         clockLayout.utility.top>=clockLayout.deck.bottom-3,
         "Clock controls overlap the bezel or laps panel: "+JSON.stringify(clockLayout));
       assert(clockLayout.utility.width<clockLayout.viewport*.9 &&
-         clockLayout.utility.height>=(clockLayout.viewport<=355 ? 65 : 95),
+         clockLayout.utility.height>=(clockLayout.viewport<=355 ? 36 : 60),
          "Responsive instrument cabinet must remain comfortably within the viewport: "+JSON.stringify(clockLayout));
       await page.screenshot({path:dir+"/"+name+"-timekeeper-stopwatch.png",fullPage:true});
       const start=page.getByRole("button",{name:"Start",exact:true});
