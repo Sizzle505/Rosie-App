@@ -19,6 +19,7 @@ import "./aesthetic-polish.css";
 import "./requested-polish.css";
 import "./barkbridge-premium-crests.css";
 import "./barkbridge-option-one.css";
+import "./cheese-honeywood.css";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
