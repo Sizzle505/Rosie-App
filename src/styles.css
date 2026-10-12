@@ -7644,7 +7644,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* Rosie Resources: isolated 3-destination bar across the hub and its utility pages. */
 .app-shell .bottom-nav.resources-bottom-nav {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 }
 .resources-bottom-nav .nav-icon-wrap {
   display: flex;
