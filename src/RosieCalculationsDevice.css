@@ -1216,7 +1216,7 @@
     row-gap:2px;
   }
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span {
-    min-height:24px;
+    min-height:28px;
     line-height:1.07;
   }
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result {
