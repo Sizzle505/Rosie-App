@@ -845,3 +845,162 @@
 @media (prefers-reduced-motion:reduce) {
   .rc-page .rc-device-title-chevron {transition:none;}
 }
+
+/* SATIN SALON — A dedicated, image-backed gold tool view on iPhone.
+   Never tile the fabric, never leave the Calculations header peeking through,
+   and never let live fields sit inside the frame's decorative helix columns. */
+@media (max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay {
+    position:fixed;
+    inset:0;
+    z-index:86;
+    width:100%;
+    height:100dvh;
+    isolation:isolate;
+    overflow:hidden;
+    background-color:#4f0719;
+    background-image:url("/rosieverse/calculations/burgundy-satin.svg");
+    background-position:center center;
+    background-size:cover;
+    background-repeat:no-repeat;
+  }
+  .app-shell.page-calculations .rc-active-tool-viewport {
+    position:absolute;
+    inset:max(8px,env(safe-area-inset-top)) 0
+      calc(107px + env(safe-area-inset-bottom)) 0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-sizing:border-box;
+    padding:0 3px;
+    overflow:visible;
+  }
+  .app-shell.page-calculations .rc-active-tool-fit {
+    flex:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    transform:scale(var(--rc-tool-scale,1));
+    transform-origin:center center;
+    will-change:transform;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-panel.rc-device {
+    width:min(100%,480px);
+    min-height:0;
+    box-sizing:border-box;
+    margin:0 auto;
+    padding:clamp(94px,25vw,137px) 21.5% clamp(108px,29vw,160px);
+    flex:none;
+    z-index:90;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-surface {
+    width:100%;min-width:0;gap:5px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-heading {
+    margin:0;padding:0;
+    font-size:clamp(17px,3.85vw,23px);
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-title-trigger {
+    min-height:43px;
+    padding:5px 8px 6px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid {
+    row-gap:6px;
+    column-gap:7px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-field {
+    gap:2px;
+    min-width:0;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field > span {
+    width:100%;max-width:100%;
+    font-size:clamp(11.5px,3.15vw,14px);
+    line-height:1.15;
+    text-align:center;
+    margin:0 auto;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field input,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field select {
+    box-sizing:border-box;
+    height:44px;min-height:44px;max-height:44px;
+    max-width:100%;margin:0 auto;
+    padding:7px 10px;font-size:16px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field.rc-field--compact input {
+    width:min(100%,89px);
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field.rc-field--standard input {
+    width:min(100%,139px);
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field.rc-field--wide input,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field.rc-field--wide select,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field.rc-field--standard select {
+    width:min(100%,205px);
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field select {
+    padding-right:29px;
+    text-overflow:ellipsis;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
+    width:min(100%,100px);padding-left:7px;padding-right:23px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-form-grid > .rc-field select {
+    width:100%;max-width:100%;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
+    box-sizing:border-box;
+    min-height:127px;
+    margin-top:3px;
+    padding:18px 11px 20px;
+    gap:5px;
+    max-width:100%;
+    overflow:visible;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result {
+    min-height:152px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result strong {
+    font-size:clamp(19px,4.35vw,27px);line-height:1.13;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result span {
+    font-size:clamp(11.5px,3.1vw,14px);line-height:1.19;
+  }
+  .app-shell.page-calculations .rc-active-tool-close {
+    position:absolute;
+    top:calc(max(10px,env(safe-area-inset-top)) + 5px);
+    right:12px;
+    z-index:120;
+    display:flex;gap:6px;align-items:center;
+    min-height:38px;padding:6px 10px;
+    border:1px solid #f5d38c;border-radius:999px;
+    color:#fff0cf;
+    background:linear-gradient(125deg,#66132b,#370617);
+    box-shadow:0 3px 13px #150307a8;
+    font:normal 13px Georgia,serif;
+    cursor:pointer;
+  }
+  .app-shell.page-calculations .rc-active-tool-close span:first-child {font-size:23px;line-height:.8;}
+  .app-shell.page-calculations .rc-active-tool-close:focus-visible {
+    outline:3px solid #ffe6b0;outline-offset:2px;
+  }
+}
+@media (min-width:740px) {
+  .rc-page .rc-active-tool-overlay {position:relative;}
+  .rc-page .rc-active-tool-viewport {display:block;}
+  .rc-page .rc-active-tool-fit {transform:none;}
+  .rc-page .rc-active-tool-close {
+    display:block;
+    margin:0 auto 15px;
+    padding:9px 15px;
+    border:1px solid #e4b976;
+    background:#58132b;
+    color:#fff0d5;
+    border-radius:999px;
+    cursor:pointer;
+  }
+}
