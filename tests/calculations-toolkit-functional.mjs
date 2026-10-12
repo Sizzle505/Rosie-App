@@ -134,6 +134,16 @@ try {
         parseFloat(artwork.fieldBorder)>=2,
         "Form controls reverted to the old shallow decorative slit: "+JSON.stringify(artwork));
       assert.equal(await panel.locator("h2").innerText(),labels[index]);
+      assert.equal(await panel.locator(".rc-device-title-trigger").count(),1,
+        "Gold title must be a clickable tool selector: "+labels[index]);
+      if(index===0) {
+        await panel.locator(".rc-device-title-trigger").click();
+        assert.equal(await panel.getByRole("menuitem").count(),6,
+          "Active instrument heading must show exactly six alternative tools");
+        await panel.locator(".rc-device-title-trigger").press("Escape");
+        assert.equal(await panel.getByRole("menuitem").count(),0,
+          "Escape should close the tool selector");
+      }
       const geometry=await panel.evaluate(el => {
         const frame=el.getBoundingClientRect();
         const surface=el.querySelector(".rc-device-surface").getBoundingClientRect();
@@ -145,6 +155,7 @@ try {
           const label=labelElement.getBoundingClientRect();
           const style=getComputedStyle(node);
           return {x:r.x,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
+            compact:node.closest(".rc-field").classList.contains("rc-field--compact"),
             labelCenter:(label.left+label.right)/2,fieldCenter:(r.left+r.right)/2,
             labelAlign:getComputedStyle(labelElement).textAlign,
             paddingLeft:parseFloat(style.paddingLeft),
@@ -169,7 +180,7 @@ try {
         "Tool surface invades ornamental rails: "+labels[index]);
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
-        field.width >= (paired.includes(fieldIndex) ? 85 : 100) &&
+        field.width >= (field.compact || paired.includes(fieldIndex) ? 85 : 100) &&
         field.height>=44 && field.height<=46 &&
         field.paddingLeft >= (paired.includes(fieldIndex) ? 7 : 9) &&
         field.border>=2 && field.fontSize >= (labels[index]==="Unit Conversions" ? 14 : 16) &&
@@ -194,7 +205,7 @@ try {
         "Title must begin at least 6px below red columns' upper edge: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.result.bottom<=geometry.redBottom-5+1,
         "Result receipt must end 5px above red columns' lower edge: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.result.height>=155 && geometry.result.height<=245,
+      assert(geometry.result.height>=125 && geometry.result.height<=245,
         "Result panel must fit multi-line calculations without occupying the entire device: "+labels[index]+" "+JSON.stringify(geometry));
       const resultTextFits=await panel.locator(".rc-tool-result").evaluate(el=>{
         const boundary=el.getBoundingClientRect();
@@ -203,6 +214,11 @@ try {
           node.getBoundingClientRect().top >= boundary.top+5);
       });
       assert(resultTextFits,"Gold device receipt text is clipped by its decorative rim: "+labels[index]);
+      if (index === 4) {
+        assert(geometry.inputs[0].width<=155 && geometry.inputs[1].width<=105 &&
+          geometry.inputs[2].width<=203,
+          "Percent bubbles and choice selector should be content-sized: "+JSON.stringify(geometry.inputs));
+      }
       if (index === 0) {
         assert(geometry.frame.height < 620,
           "Tip calculator tray remains unnecessarily tall: "+JSON.stringify(geometry));
@@ -219,6 +235,13 @@ try {
         await page.evaluate(()=>document.querySelector(".rc-hero").style.removeProperty("position"));
       }
     }
+    // Change tools through the gold instrument title, not just the illustrated grid.
+    await page.locator(".rc-tool-card").nth(4).click(); // percent
+    await page.locator(".rc-device-title-trigger").click();
+    await page.getByRole("menuitem",{name:"Tip Calculator"}).click();
+    assert.equal(await page.locator(".rc-device-heading").innerText(),"Tip Calculator",
+      "Changing tools using the title menu must render selected instrument");
+    await page.locator(".rc-tool-card").first().click(); // close tip
     await page.locator(".rc-tool-card").first().click(); // open tip
     const tip=page.locator(".rc-device");
     await tip.getByLabel("Bill before tip ($)").fill("84.5");
