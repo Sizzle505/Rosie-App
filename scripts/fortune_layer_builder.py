@@ -127,7 +127,10 @@ def candidate_head_refinement(rgb, rough):
 
 def save_rgba(path, rgb, alpha):
     path.parent.mkdir(parents=True,exist_ok=True)
-    rgba = np.dstack((rgb,alpha))
+    # Transparent pixels must be true black, not RGB fragments from source.
+    # Prevents fringes in WebP viewers and materially reduces asset size.
+    clean_rgb = np.where(alpha[:,:,None]>0, rgb, np.zeros_like(rgb))
+    rgba = np.dstack((clean_rgb,alpha))
     img = Image.fromarray(rgba,"RGBA")
     img.save(path, "WEBP", lossless=True, method=5)
 
