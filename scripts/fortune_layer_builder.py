@@ -186,9 +186,33 @@ def make_background(rgb,mask):
     # source-owned sprites still overwrite that seam at rest.
     return empty
 
+def extract_existing_side_head(side_path,out):
+    # Candidate from the app's actual existing side portrait, not AI-generated
+    # or horizontally mirrored. Pose/collar edge still requires visual QA.
+    if not side_path.exists():
+        return False
+    side=Image.open(side_path).convert("RGBA")
+    arr=np.array(side)
+    rows=np.arange(arr.shape[0],dtype=np.float32)
+    fade=np.clip((482-rows)/42,0,1)[:,None]
+    arr[:,:,3]=np.uint8(arr[:,:,3].astype(np.float32)*fade)
+    arr[:,:,:3]=np.where(arr[:,:,3,None]>0,arr[:,:,:3],0)
+    subject=Image.fromarray(arr,"RGBA")
+    rescale=1.40
+    subject=subject.resize((round(side.width*rescale),
+                            round(side.height*rescale)),Image.Resampling.LANCZOS)
+    frame=Image.new("RGBA",(W,H),(0,0,0,0))
+    frame.alpha_composite(subject,(365,112))
+    target=out/"rosie/head-left-existing-CANDIDATE.webp"
+    target.parent.mkdir(parents=True,exist_ok=True)
+    frame.save(target,"WEBP",lossless=True,method=5)
+    return True
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--source",type=Path,required=True)
+    p.add_argument("--side-source",type=Path,
+                   default=Path("public/rosie-fortune-turn-side.webp"))
     p.add_argument("--out",type=Path,required=True)
     args=p.parse_args()
     source=Image.open(args.source).convert("RGB")
@@ -198,6 +222,7 @@ def main():
     rgb=np.array(source)
     masks={name:poly_mask(parts) for name,parts in SHAPES.items()}
     order,owned,union=clip_to_known_occlusion(masks)
+    side_candidate=extract_existing_side_head(args.side_source,args.out)
     refined_head=candidate_head_refinement(rgb,masks["rosie/head-front"])
     save_rgba(args.out/"rosie/head-grabcut-CANDIDATE.webp",rgb,refined_head)
     empty=make_background(rgb,union)
@@ -223,6 +248,7 @@ def main():
       "backplate":"Painted midnight-velvet continuation; provisional unseen areas",
       "boundary_type":"manual source-registered polygon; needs feather/hair matte QA",
       "head_refined_diagnostic_only":True,
+      "head_left_candidate_from_existing_app_portrait":side_candidate,
       "static_composite_mean_abs_error":round(float(err.mean()),6),
       "fraction_pixels_changed_gt_24":round(float((err.max(2)>24).mean()),6),
       "empty_plate_approved":False,"motion_approved":False,
