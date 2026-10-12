@@ -1109,3 +1109,82 @@
   background-repeat: no-repeat;
   background-size: cover, cover;
 }
+
+
+/* Rosie roulette radial metallic silver labels - handoff */
+/* Preserve the existing radial positioning and live rotation. Typography is
+   independent of the dynamically generated sector textures and stationary rim. */
+.wheelLabel {
+  width: 92px;
+  min-height: 0;
+  color: #e3e7ed;
+  font-family: "Cinzel", "Baskerville", "Iowan Old Style", Georgia, serif;
+  font-size: 11px;
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: none;
+  pointer-events: none;
+}
+.wheelLabelInner {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  /* At every wheel angle, the TOP of the lettering points toward the hub. */
+  transform: rotate(180deg);
+  transform-origin: center center;
+}
+.wheelLabel .wheelLabelWord {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  white-space: normal;
+  overflow-wrap: anywhere; /* only affects unusually long single words */
+  word-break: normal;
+  hyphens: none;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: inherit;
+  text-align: center;
+  text-overflow: clip;
+  overflow: visible;
+  transform: none; /* cancel the former screen-horizontal counter-rotation */
+  color: #e7edf2; /* fallback in browsers without text-gradient clipping */
+  text-shadow: none;
+  background-image: linear-gradient(180deg,
+    #ffffff 0%,
+    #e9f0f4 18%,
+    #bbc4ce 38%,
+    #f5f8fa 52%,
+    #9ba5af 77%,
+    #e1e6eb 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Shadows follow the glyph silhouette rather than painting over silver fill. */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .9))
+          drop-shadow(0 0 2px rgba(2, 2, 5, .65));
+}
+/* 8-10 editable wedges get narrower at the label radius. */
+.wheelWrap[data-crowded="true"] .wheelLabel {
+  width: 59px;
+  font-size: 8.8px;
+  letter-spacing: 0.005em;
+}
+.wheelWrap[data-crowded="true"] .wheelLabel .wheelLabelWord {
+  max-width: 59px;
+}
+@media (max-width: 680px) {
+  .wheelLabel { width: 82px; font-size: 10px; letter-spacing: 0.012em; }
+  .wheelLabel .wheelLabelWord { max-width: 82px; }
+  .wheelWrap[data-crowded="true"] .wheelLabel { width: 51px; font-size: 8px; }
+  .wheelWrap[data-crowded="true"] .wheelLabel .wheelLabelWord { max-width: 51px; }
+}
