@@ -31,7 +31,9 @@
   margin:32px auto 26px;
   padding:clamp(105px,30vw,182px) 18.5% clamp(109px,31vw,186px);
   color:#441e0b;background:
-    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat;
+    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat,
+    linear-gradient(108deg,#ad7225 0%,#ecc675 17%,#d7a245 51%,#efcc7e 82%,#ac6d22 100%);
+  background-color:#d4a34d;
   border:none;border-radius:0;outline:none;
   box-shadow:none;
 }
@@ -150,3 +152,16 @@
   .rc-page .rc-device .rc-tool-result {padding-inline:13px;}
 }
 @media(prefers-reduced-motion:reduce){.rc-page .rc-tool-card{transition:none!important;}}
+
+/* Keep the working center solid gold even if a browser delays a texture image. */
+.rc-page .rc-device .rc-device-surface {
+  background:linear-gradient(115deg,rgba(246,212,130,.15),rgba(184,112,34,.07) 53%,rgba(255,237,173,.13));
+  border-radius:12px;
+}
+.rc-page .rc-device--tip .rc-tool-result,
+.rc-page .rc-device--split .rc-tool-result {
+  min-height:184px;
+  padding-top:23px;
+  padding-bottom:31px;
+}
+.rc-page .rc-device .rc-tool-result {padding-bottom:max(26px,3vw);}
