@@ -3,6 +3,7 @@ on:
   push:
     branches: [work/satin-remove-underlay-seams-gold-safe-margins-20261012]
     paths: [.github/workflows/rosie-safe-tray-focus-20261012.yml]
+  # asset-decode rerun
 jobs:
   seven-gold-tools:
     runs-on: ubuntu-latest
