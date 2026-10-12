@@ -20,6 +20,8 @@ import "./requested-polish.css";
 import "./barkbridge-premium-crests.css";
 import "./barkbridge-option-one.css";
 import "./cheese-honeywood.css";
+import "./cheese-sprint.css";
+import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
@@ -868,6 +870,14 @@ function CheeseMemoryGame() {
   const [previousResolvedResult, setPreviousResolvedResult] = useState(null);
   const [reactionHistory, setReactionHistory] = useState(["watching"]);
   const [ceremonyVisible, setCeremonyVisible] = useState(false);
+  const [gameMode, setGameMode] = useState("classic");
+  const [challengePhase, setChallengePhase] = useState("ready");
+  const [previewSeconds, setPreviewSeconds] = useState(3);
+  const [secondsRemaining, setSecondsRemaining] = useState(30);
+  const previewDeadlineRef = useRef(0);
+  const challengeDeadlineRef = useRef(0);
+  const challengeStartedRef = useRef(0);
+  const challengeFinishingRef = useRef(false);
   const pendingFlipRef = useRef(null);
   const graduationTimerRef = useRef(null);
   const testWinTapsRef = useRef(0);
@@ -879,14 +889,51 @@ function CheeseMemoryGame() {
   const accuracyPercentage = resolvedAttempts ? Math.round((matched.length / resolvedAttempts) * 100) : null;
 
   useEffect(() => {
-    if (!started || complete) return undefined;
+    if (gameMode !== "classic" || !started || complete) return undefined;
     const timer = window.setInterval(() => setElapsed((value) => value + 1), 1000);
     return () => window.clearInterval(timer);
-  }, [started, complete]);
+  }, [gameMode, started, complete]);
+
+  // The study phase is an actual, noninteractive reveal. Wall-clock deadlines
+  // prevent background-tab throttling from gifting extra study or play time.
+  useEffect(() => {
+    if (gameMode !== "sprint" || challengePhase !== "preview") return undefined;
+    const timer = window.setInterval(() => {
+      const now = Date.now();
+      setPreviewSeconds(secondsUntilDeadline(previewDeadlineRef.current, now));
+      if (now < previewDeadlineRef.current) return;
+      window.clearInterval(timer);
+      challengeStartedRef.current = now;
+      challengeDeadlineRef.current = now + CHEESE_SPRINT_MS;
+      setSecondsRemaining(30);
+      setElapsed(0);
+      setChallengePhase("playing");
+      applyReaction("watching", "The board is hidden. Thirty seconds to earn your degree.");
+    }, 50);
+    return () => window.clearInterval(timer);
+  }, [gameMode, challengePhase]);
+
+  // The sprint clock is independent of card-flip animation and stops on a
+  // completed last pair, rather than penalizing the 360ms reveal animation.
+  useEffect(() => {
+    if (gameMode !== "sprint" || challengePhase !== "playing") return undefined;
+    const tick = () => {
+      if (challengeFinishingRef.current) return;
+      const now = Date.now();
+      setSecondsRemaining(secondsUntilDeadline(challengeDeadlineRef.current, now));
+      setElapsed(Math.min(30, Math.floor((now - challengeStartedRef.current) / 1000)));
+      if (!beforeDeadline(challengeDeadlineRef.current, now)) expireChallenge();
+    };
+    const timer = window.setInterval(tick, 80);
+    tick();
+    return () => window.clearInterval(timer);
+  }, [gameMode, challengePhase]);
 
   useEffect(() => () => {
     window.clearTimeout(pendingFlipRef.current);
     window.clearTimeout(graduationTimerRef.current);
+    previewDeadlineRef.current = 0;
+    challengeDeadlineRef.current = 0;
   }, []);
 
   // Completing the board replaces a tall scrolled layout. Reset both document
@@ -945,11 +992,20 @@ function CheeseMemoryGame() {
     }[reaction];
   }
 
-  function resetGame() {
+  function resetGame(requestedMode) {
+    const nextMode = typeof requestedMode === "string" ? requestedMode : gameMode;
     window.clearTimeout(pendingFlipRef.current);
     window.clearTimeout(graduationTimerRef.current);
     pendingFlipRef.current = null;
     graduationTimerRef.current = null;
+    previewDeadlineRef.current = 0;
+    challengeDeadlineRef.current = 0;
+    challengeStartedRef.current = 0;
+    challengeFinishingRef.current = false;
+    setGameMode(nextMode);
+    setChallengePhase("ready");
+    setPreviewSeconds(3);
+    setSecondsRemaining(30);
     setDeck(shuffleCheeseDeck());
     setOpenCards([]);
     setMatched([]);
@@ -965,6 +1021,28 @@ function CheeseMemoryGame() {
     setRosieMood("watching");
     setMessage("Doctor Rosie is ready. Show her what you remember.");
     testWinTapsRef.current = 0;
+  }
+
+  function startSprint() {
+    // An explicit start gives the player time to be ready before memorization.
+    resetGame("sprint");
+    previewDeadlineRef.current = Date.now() + CHEESE_PREVIEW_MS;
+    setChallengePhase("preview");
+    applyReaction("focused", "Study the entire board. You have three seconds.");
+  }
+
+  function expireChallenge() {
+    if (challengeFinishingRef.current || !challengeDeadlineRef.current) return;
+    challengeDeadlineRef.current = 0;
+    window.clearTimeout(pendingFlipRef.current);
+    window.clearTimeout(graduationTimerRef.current);
+    pendingFlipRef.current = null;
+    setOpenCards([]);
+    setLocked(true);
+    setSecondsRemaining(0);
+    setElapsed(30);
+    setChallengePhase("expired");
+    applyReaction("unimpressed", "Time! Doctor Rosie recommends more focused cheese scholarship.");
   }
 
   function chooseMatchReaction(progress, finishing) {
@@ -993,9 +1071,16 @@ function CheeseMemoryGame() {
   }
 
   function chooseCard(index) {
-    // Deliberately hidden test shortcut: tap the penultimate card five times
-    // consecutively to review the completed ceremony without playing a round.
-    if (index === deck.length - 2) {
+    // Preview cards cannot be selected; the clock always begins after the reveal.
+    if (gameMode === "sprint") {
+      if (challengePhase !== "playing") return;
+      if (!beforeDeadline(challengeDeadlineRef.current)) {
+        expireChallenge();
+        return;
+      }
+    }
+    // Preserve the legacy ceremony preview shortcut in standard mode only.
+    if (gameMode === "classic" && index === deck.length - 2) {
       testWinTapsRef.current += 1;
       if (testWinTapsRef.current >= 5) {
         window.clearTimeout(pendingFlipRef.current);
@@ -1035,6 +1120,14 @@ function CheeseMemoryGame() {
     const second = deck[index];
 
     if (first.id === second.id) {
+      // A correctly selected final pair before the deadline wins immediately,
+      // although its card animation and diploma transition still finish.
+      if (gameMode === "sprint" && matched.length + 1 === CHEESES.length) {
+        challengeFinishingRef.current = true;
+        setChallengePhase("won");
+        setSecondsRemaining(secondsUntilDeadline(challengeDeadlineRef.current));
+        setElapsed(Math.min(30, Math.ceil((Date.now() - challengeStartedRef.current) / 1000)));
+      }
       pendingFlipRef.current = window.setTimeout(() => {
         const nextPairsFound = matched.length + 1;
         const progress = nextPairsFound / CHEESES.length;
@@ -1109,7 +1202,7 @@ function CheeseMemoryGame() {
               <div className="cheese-header-status" aria-label="Current exam status">
                 <div><span>PAIRS</span><strong>{matched.length}/{CHEESES.length}</strong></div>
                 <div><span>MOVES</span><strong>{moves}</strong></div>
-                <div><span>TIME</span><strong>{formatGameTime(elapsed)}</strong></div>
+                <div><span>{gameMode === "sprint" ? "LEFT" : "TIME"}</span><strong>{gameMode === "sprint" ? `0:${String(secondsRemaining).padStart(2, "0")}` : formatGameTime(elapsed)}</strong></div>
                 <div title="Matched pairs divided by completed attempts"><span>ACCURACY</span><strong>{accuracyPercentage === null ? "—" : `${accuracyPercentage}%`}</strong></div>
               </div>
             </div>
@@ -1122,17 +1215,36 @@ function CheeseMemoryGame() {
         </aside>
 
         <section className="cheese-game-frame" aria-label="Cheese matching board">
+          <div className="cheese-mode-selector" role="group" aria-label="Cheese memory game mode">
+            <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={() => resetGame("classic")}>CLASSIC EXAM</button>
+            <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={() => resetGame("sprint")}>3s STUDY / 30s SPRINT</button>
+          </div>
           <div className="cheese-game-heading">
             <div>
-              <span>BOARD ONE · PRACTICAL MEMORY</span>
-              <h2>Pair the Fromage</h2>
+              <span>{gameMode === "sprint" ? "CHALLENGE TWO · RAPID RECALL" : "BOARD ONE · PRACTICAL MEMORY"}</span>
+              <h2>{gameMode === "sprint" ? "Rosie's Memory Sprint" : "Pair the Fromage"}</h2>
             </div>
-            <p>Eight cheeses. Sixteen cards. Doctor Rosie is recording the results.</p>
+            <p>{gameMode === "sprint" ? "Study all sixteen cards for 3 seconds. Then match eight pairs within 30 seconds." : "Eight cheeses. Sixteen cards. Doctor Rosie is recording the results."}</p>
           </div>
+          {gameMode === "sprint" && (
+            <div className={"cheese-sprint-banner phase-" + challengePhase} role="status">
+              <div className="cheese-sprint-copy">
+                <span>{challengePhase === "preview" ? "MEMORIZE THE BOARD" : challengePhase === "playing" ? "THE CLOCK IS RUNNING" : challengePhase === "expired" ? "EXAMINATION TIME EXPIRED" : challengePhase === "won" ? "BOARD COMPLETED" : "THREE SECONDS TO STUDY"}</span>
+                <strong>{challengePhase === "preview" ? "Remember where the cheeses are!" : challengePhase === "playing" ? "Find all eight pairs before time runs out." : challengePhase === "expired" ? `You found ${matched.length} of 8 pairs. Rosie will allow a rematch.` : challengePhase === "won" ? "Splendid recall. Rosie is preparing your diploma." : "When you are ready, reveal the board and memorize every cheese."}</strong>
+              </div>
+              {challengePhase === "ready" ? (
+                <button type="button" className="cheese-sprint-start" onClick={startSprint}>REVEAL & START</button>
+              ) : (
+                <output className="cheese-sprint-clock" aria-label={challengePhase === "preview" ? "Study seconds remaining" : "Challenge seconds remaining"}>
+                  {challengePhase === "preview" ? previewSeconds : `0:${String(secondsRemaining).padStart(2, "0")}`}
+                </output>
+              )}
+            </div>
+          )}
 
           <div className="cheese-grid">
             {deck.map((cheese, index) => {
-              const faceUp = openCards.includes(index) || matched.includes(cheese.id);
+              const faceUp = (gameMode === "sprint" && challengePhase === "preview") || openCards.includes(index) || matched.includes(cheese.id);
               const isMatched = matched.includes(cheese.id);
               return (
                 <button
@@ -1140,6 +1252,7 @@ function CheeseMemoryGame() {
                   className={"cheese-card" + (faceUp ? " is-flipped" : "") + (isMatched ? " is-matched" : "")}
                   key={cheese.cardId}
                   onClick={() => chooseCard(index)}
+                  disabled={gameMode === "sprint" && challengePhase !== "playing"}
                   aria-label={faceUp ? cheese.name : "Face-down cheese card"}
                 >
                   <span className="cheese-card-inner">
@@ -1162,6 +1275,13 @@ function CheeseMemoryGame() {
               );
             })}
           </div>
+          {gameMode === "sprint" && challengePhase === "expired" && (
+            <div className="cheese-sprint-result" role="status">
+              <strong>TIME'S UP · {matched.length} / 8 PAIRS</strong>
+              <span>Doctor Rosie has authorized another attempt.</span>
+              <button type="button" onClick={startSprint}>TRY AGAIN · 3 SECOND PREVIEW</button>
+            </div>
+          )}
         </section>
 
         <aside className="cheese-examiner-rail" aria-label="Doctor Rosie's live reaction">
