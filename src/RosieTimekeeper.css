@@ -837,3 +837,110 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-page .rtk-custom-timer button {min-height:26px;padding:3px 5px;font-size:11px;}
   .rtk-page .rtk-utility .rtk-timer-view-toggle {font-size:9px;}
 }
+
+/* Instrument finishing: the golden progress hugs the clock's interior bezel,
+   while the smaller sculpted squirrel stays at the arc's leading point. */
+.rtk-page .rtk-progress-ring {
+  inset:auto;
+  top:50%;
+  left:50%;
+  right:auto;
+  bottom:auto;
+  width:121%;
+  height:121%;
+  transform:translate(-50%,-50%);
+  overflow:visible;
+}
+.rtk-page .rtk-progress-track {
+  stroke:#d7a457;
+  stroke-width:.9;
+  opacity:.55;
+  filter:drop-shadow(0 0 .8px #eec47d);
+}
+.rtk-page .rtk-progress-dotted {
+  stroke:#ffe4aa;
+  stroke-width:.52;
+  stroke-dasharray:.5 3.2;
+  opacity:.83;
+}
+.rtk-page .rtk-progress-bloom {
+  stroke:#f9b645;
+  stroke-width:3.5;
+  opacity:.78;
+  filter:blur(.9px) drop-shadow(0 0 2.1px #d24e65);
+}
+.rtk-page .rtk-progress-ruby {
+  fill:none;
+  stroke:#bd3d5b;
+  stroke-width:2.65;
+  opacity:.83;
+  stroke-linecap:round;
+  transform:rotate(-90deg);
+  transform-origin:50% 50%;
+  filter:drop-shadow(0 0 1.6px #db5a71);
+  transition:stroke-dashoffset .08s linear;
+}
+.rtk-page .rtk-progress-live {
+  stroke:url(#rtk-running-gold);
+  stroke-width:1.65;
+  opacity:1;
+  filter:drop-shadow(0 0 1.2px #fff6d4) drop-shadow(0 0 3.2px #f6a33a);
+}
+.rtk-page .rtk-progress-charm {
+  filter:drop-shadow(0 0 1.8px #ffedc3) drop-shadow(0 0 2.4px #bf5373);
+}
+.rtk-page .rtk-squirrel-halo {
+  fill:#ffda76;
+  opacity:.36;
+  filter:blur(1.1px);
+}
+.rtk-page .rtk-squirrel-medallion {
+  fill:#5b1732;
+  stroke:url(#rtk-charm-brass);
+  stroke-width:.9;
+}
+.rtk-page .rtk-squirrel-star {fill:#fff7d9;stroke:#f3ba69;stroke-width:.15;}
+.rtk-page .rtk-progress-ring.is-animating .rtk-progress-charm {
+  animation:rtk-squirrel-light 1.05s ease-in-out infinite alternate;
+}
+@keyframes rtk-squirrel-light {
+  from {filter:drop-shadow(0 0 1px #ffc96d);}
+  to {filter:drop-shadow(0 0 2.5px #fff2ba) drop-shadow(0 0 3px #cf5a72);}
+}
+/* Lower the complete selector/control assembly exactly 15px on standard
+   devices; on compact devices protect the tray and sticky navigation. */
+@media (min-width:521px), (min-height:701px) {
+  .rtk-page .rtk-action-deck {top:calc(53.8% + 15px);}
+}
+@media (max-width:520px) and (max-height:700px) {
+  .rtk-page .rtk-action-deck {top:calc(55% - 9px);}
+  .rtk-page .rtk-utility,.rtk-page .rtk-utility.is-empty,
+  .rtk-page .rtk-utility.is-timer {top:calc(69.7% - 5px);}
+}
+/* Text no longer crowds the filigree side rails or the central ruby jewel. */
+.rtk-page .rtk-utility-inner {
+  left:16%;
+  right:16%;
+  top:25%;
+  bottom:9%;
+}
+.rtk-page .rtk-utility-heading {
+  gap:5px;
+  padding-bottom:8px;
+  margin-bottom:5px;
+}
+.rtk-page .rtk-utility.is-empty .rtk-empty {max-width:100%;margin:5px auto 0;}
+.rtk-page .rtk-presets {gap:5px;}
+.rtk-page .rtk-presets button {
+  min-width:0;
+  flex:1 1 0;
+  max-width:none;
+  padding-inline:2px;
+}
+@media(max-width:520px) and (max-height:700px) {
+  .rtk-page .rtk-utility-inner {left:14%;right:14%;top:20%;bottom:6%;}
+  .rtk-page .rtk-utility-heading {margin-bottom:1px;padding-bottom:5px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .rtk-page .rtk-progress-charm {animation:none!important;}
+}

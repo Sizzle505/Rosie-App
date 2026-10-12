@@ -1399,3 +1399,28 @@
     top:-3px;
   }
 }
+
+/* Date calculator: shorten only the two native date plaques and keep the
+   entire date input/receipt stack optically centered in the golden frame. */
+@media(max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-device-surface {
+    justify-content:center;
+    gap:10px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid {
+    row-gap:8px;
+    align-content:center;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) {
+    align-items:center;
+    justify-content:center;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) input {
+    height:36px;
+    min-height:36px;
+    max-height:36px;
+    padding-top:3px;
+    padding-bottom:3px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-tool-result {margin-top:0;}
+}
