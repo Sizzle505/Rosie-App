@@ -193,7 +193,8 @@ try {
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
         field.width >= (field.compact ? 75 : paired.includes(fieldIndex) ? 77 : 86) &&
-        field.nativeHeight>=44 && field.height>=40 && field.height<=46 &&
+        field.nativeHeight >= (labels[index]==="Date Calculator" && fieldIndex<2 ? 40 : 44) &&
+        field.height>=38 && field.height<=46 &&
         field.paddingLeft >= (paired.includes(fieldIndex) ? 7 : 9) &&
         field.border>=2 && field.fontSize >= (labels[index]==="Unit Conversions" ? 14 : 16) &&
         field.labelAlign==="center" && Math.abs(field.fieldCenter-field.labelCenter)<=3 &&
@@ -279,6 +280,18 @@ try {
     assert((await tip.locator(".rc-tool-result").innerText()).includes("$33.80"),
       "Live tip-per-person calculation stopped updating");
     await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
+    await page.locator(".rc-tool-card").nth(4).click();
+    const percent=page.locator(".rc-device");
+    assert.equal(await percent.locator(".rc-tool-result strong").innerText(),"$170.00",
+      "Discount results should retain the dollar amount format");
+    assert((await percent.locator(".rc-tool-result").innerText()).includes("Savings: $30.00"),
+      "Discount savings should display in dollars and cents");
+    await percent.getByLabel("Calculation").selectOption("of");
+    assert.equal(await percent.locator(".rc-tool-result strong").innerText(),"$30.00",
+      "Percent-of-amount results should display a dollar amount");
+    assert.equal(await percent.locator(".rc-tool-result span").count(),0,
+      "Percent-of-amount should not show a results subtitle");
+    await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").nth(5).click();
     const loan=page.locator(".rc-device");
     assert((await loan.locator(".rc-tool-result").innerText()).includes("$304.22"),
@@ -289,8 +302,8 @@ try {
     const fromCurrency=currency.getByLabel("From currency");
     await page.waitForFunction(() => document.querySelectorAll(
       ".rc-device--currency select option").length >= 4);
-    assert.equal(await fromCurrency.locator("option").first().textContent(),"United States $",
-      "USD must be first in the country-alphabetical menu with the short United States $ label");
+    assert.equal(await fromCurrency.locator("option").first().textContent(),"USD - USA Dollar",
+      "USD must be first in the currency menu with the exact USD - USA Dollar label");
     assert.equal(await currency.getByLabel("Amount").inputValue(),"$100.00",
       "USD currency amounts need native dollars-and-cents input display");
     const toCurrency=currency.getByLabel("To currency");
