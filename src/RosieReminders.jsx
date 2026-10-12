@@ -226,7 +226,7 @@ export default function RosieReminders() {
       const node = organizerRef.current;
       if (!node) return;
       const height = heroRef.current?.getBoundingClientRect().height || heroHeight;
-      const pinnedBottom = height * .7 + 14;
+      const pinnedBottom = height * .7 + 3;
       const target = node.getBoundingClientRect().top + window.scrollY - pinnedBottom;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       window.scrollTo({top:Math.max(0,target),behavior:reduced?"auto":"smooth"});
