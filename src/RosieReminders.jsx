@@ -199,7 +199,8 @@ export default function RosieReminders() {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const node = organizerRef.current;
       if (!node) return;
-      const top = node.getBoundingClientRect().top + window.scrollY - 77;
+      const compactHeight = document.querySelector(".rr-compact-header")?.getBoundingClientRect().height || 61;
+      const top = node.getBoundingClientRect().top + window.scrollY - compactHeight - 14;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       window.scrollTo({ top: Math.max(0, top), behavior: reduced ? "auto" : "smooth" });
     }));
