@@ -100,21 +100,29 @@ try {
           frameSource:frame?.getAttribute("src"),
           fullHeight:Math.abs(frame.getBoundingClientRect().height-el.getBoundingClientRect().height)<1,
           field:getComputedStyle(el.querySelector("input")).backgroundImage,
+          fieldBorder:getComputedStyle(el.querySelector("input")).borderLeftWidth,
           result:getComputedStyle(el.querySelector(".rc-tool-result")).backgroundImage
         };
       });
       assert(artwork.count===1&&artwork.pieces===0&&artwork.frameLoaded&&artwork.fullHeight,
         "Device must render as one continuous original gold image: "+JSON.stringify(artwork));
-      assert([artwork.frameSource,artwork.field,artwork.result]
+      assert([artwork.frameSource,artwork.result]
         .every(v=>v.includes("/rosieverse/calculations/toolkit/")),
-        "Approved art missing from functional device: "+JSON.stringify(artwork));
+        "Approved frame and result art missing from device: "+JSON.stringify(artwork));
+      assert(artwork.field.includes("linear-gradient") && !artwork.field.includes("gold-input.webp") &&
+        parseFloat(artwork.fieldBorder)>=2,
+        "Form controls reverted to the old shallow decorative slit: "+JSON.stringify(artwork));
       assert.equal(await panel.locator("h2").innerText(),labels[index]);
       const geometry=await panel.evaluate(el => {
         const frame=el.getBoundingClientRect();
         const surface=el.querySelector(".rc-device-surface").getBoundingClientRect();
-        const inputs=[...el.querySelectorAll("input,select")].map(node => {
+        const inputs=[...el.querySelectorAll(".rc-field input,.rc-field select")].map(node => {
           const r=node.getBoundingClientRect();
-          return {x:r.x,right:r.right,width:r.width,height:r.height};
+          const label=node.closest(".rc-field").querySelector("span").getBoundingClientRect();
+          const style=getComputedStyle(node);
+          return {x:r.x,right:r.right,width:r.width,height:r.height,
+            labelLeft:label.left,paddingLeft:parseFloat(style.paddingLeft),
+            border:parseFloat(style.borderLeftWidth),fontSize:parseFloat(style.fontSize)};
         });
         return {frame:{x:frame.x,right:frame.right,width:frame.width},surface:{x:surface.x,right:surface.right,width:surface.width},inputs,
           scrollWidth:document.documentElement.scrollWidth};
@@ -123,9 +131,11 @@ try {
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.surface.x>=geometry.frame.x+20 && geometry.surface.right<=geometry.frame.right-20,
         "Tool surface invades ornamental rails: "+labels[index]);
-      assert(geometry.inputs.every(field => field.width>=120 && field.height>=44 &&
+      assert(geometry.inputs.every(field => field.width>=120 && field.height>=52 &&
+        field.paddingLeft>=14 && field.border>=2 && field.fontSize>=17 &&
+        Math.abs(field.x-field.labelLeft)<=2 &&
         field.x>=geometry.surface.x-1 && field.right<=geometry.surface.right+1),
-        "Input fields overflow frame: "+labels[index]);
+        "Input controls must have full-height light recesses, padded values and aligned labels: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.scrollWidth<=width+2,
         "Page has horizontal overflow: "+labels[index]+" "+geometry.scrollWidth);
       assert(await panel.locator(".rc-tool-result").count()===1);
