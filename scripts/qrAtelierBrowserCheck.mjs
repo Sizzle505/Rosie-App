@@ -77,7 +77,7 @@ try {
   const cardWait=page.waitForEvent("download",{timeout:12000});
   await page.getByRole("button",{name:"Download Calling Card",exact:true}).click();
   const card=await cardWait;
-  assert.ok(card.suggestedFilename().endsWith("-calling-card.png"));
+  assert.ok(card.suggestedFilename().endsWith("-printable.png"));
   console.log("PASS designed Calling Card image:",card.suggestedFilename());
   const vcfWait=page.waitForEvent("download",{timeout:12000});
   await page.getByRole("button",{name:"Download Contact (.vcf)"}).click();
