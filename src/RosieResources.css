@@ -120,4 +120,4 @@
 }
 
 /* Align the complete observatory header/button composition 12px lower. */
-.rr-hub-content { transform:translateY(12px); }
+.rr-hub-content { transform:translateY(16px); }
