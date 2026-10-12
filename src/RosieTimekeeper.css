@@ -970,3 +970,8 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-page .rtk-utility.is-timer .rtk-utility-heading {padding-bottom:4px;margin-bottom:0;}
   .rtk-page .rtk-utility.is-timer .rtk-custom-timer input {min-height:25px;}
 }
+
+/* Tablet calibration: the selector stays below the bezel, not directly on its rim. */
+@media(min-width:521px) and (max-width:900px){
+  .rtk-page .rtk-action-deck {top:calc(53.8% + 21px);}
+}
