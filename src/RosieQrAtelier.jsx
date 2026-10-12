@@ -87,7 +87,7 @@ function getQrSvg(payload) {
   const qr=qrcode(0,"M");
   qr.addData(payload,"Byte");
   qr.make();
-  return qr.createSvgTag({cellSize:7,margin:4,scalable:true});
+  return qr.createSvgTag({cellSize:7,margin:28,scalable:true});
 }
 function downloadBlob(blob,filename) {
   const href=URL.createObjectURL(blob);
@@ -226,7 +226,7 @@ export default function RosieQrAtelier() {
             {TYPES.map(t=><button key={t.id} type="button" className={"qa-type "+(type===t.id?"selected":"")} onClick={()=>setType(t.id)} aria-pressed={type===t.id}><span className="qa-type-symbol" aria-hidden="true">{t.glyph}</span><span>{t.label}</span></button>)}
           </div>
           <div className="qa-inputs">{fields()}</div>
-          <div className="qa-validation" aria-live="polite">{valid?"QR code updates automatically as you type.":calculated.error}</div>
+          <div className="qa-validation" aria-live="polite">{valid?"QR code updates automatically as you type. High-contrast QR artwork is preserved for reliable scanning.":calculated.error}</div>
           <h3>Design Style</h3>
           <div className="qa-palettes" role="group" aria-label="QR presentation styles">
             {STYLES.map(s=><button key={s.id} type="button" className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)} aria-pressed={style===s.id}><span className="qa-swatch"/>{s.label}</button>)}
