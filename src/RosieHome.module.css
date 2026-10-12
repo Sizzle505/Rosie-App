@@ -154,7 +154,7 @@
    that pushes the painted shoreline beneath Safari's visible screen.
    The heading is 30% smaller, and begins exactly 20px lower. The hero is
    the flexible spacer; the real image-backed destination buttons keep their
-   natural aspect ratios and remain above the raised navigation bar. */
+   natural aspect ratios and sit above the visible bottom of the screen. */
 @media (max-width: 600px) {
   :global(.app-shell.page-home) {
     height: 100dvh;
@@ -168,7 +168,7 @@
     max-height: 100dvh;
     gap: 3px;
     padding: max(4px, env(safe-area-inset-top)) 8px
-      calc(74px + env(safe-area-inset-bottom));
+      max(8px, env(safe-area-inset-bottom));
     background-position: center bottom;
     overflow: hidden;
   }
