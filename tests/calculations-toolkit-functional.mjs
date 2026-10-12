@@ -35,6 +35,20 @@ try {
     assert.equal(art.length,7);
     assert(art.every(img=>img.loaded&&img.width>0),
       "Approved selector images missing: "+JSON.stringify(art));
+    if(width===390) {
+      const filenames=[
+        "gold-device.webp","gold-input.webp","gold-select.webp","gold-result.webp",
+        "housing-top.webp","housing-bottom.webp","housing-center.webp",
+        "housing-rail-left.webp","housing-rail-right.webp","housing-cheese.webp","housing-shiba.webp",
+        ...["tip","units","date","split","percent","loan","currency"].map(id=>"button-"+id+".webp")
+      ];
+      const images=await page.evaluate(async files=>Promise.all(files.map(async name=>{
+        const response=await fetch("/rosieverse/calculations/toolkit/"+name);
+        return {name,status:response.status,type:response.headers.get("content-type")};
+      })),filenames);
+      assert(images.every(x=>x.status===200&&x.type?.startsWith("image/")),
+        "An approved artwork file was not served: "+JSON.stringify(images));
+    }
     const currencyGeometry=await page.evaluate(()=>{
       const regular=document.querySelector(".rc-tool-card--tip").getBoundingClientRect();
       const wide=document.querySelector(".rc-tool-card--currency").getBoundingClientRect();
@@ -77,7 +91,13 @@ try {
         "Page has horizontal overflow: "+labels[index]+" "+geometry.scrollWidth);
       assert(await panel.locator(".rc-tool-result").count()===1);
       assert(await panel.locator("input,select").count()>=3);
-      if(width===390) await panel.screenshot({path:dir+"/"+(index+1)+"-"+labels[index].replace(/[^a-z]+/gi,"-").toLowerCase()+".png"});
+      if(width===390) {
+        // The approved full-height hero is sticky in normal use. Temporarily
+        // unstick it for a diagnostic screenshot of the entire device housing.
+        await page.evaluate(()=>document.querySelector(".rc-hero").style.setProperty("position","relative","important"));
+        await panel.screenshot({path:dir+"/"+(index+1)+"-"+labels[index].replace(/[^a-z]+/gi,"-").toLowerCase()+".png"});
+        await page.evaluate(()=>document.querySelector(".rc-hero").style.removeProperty("position"));
+      }
     }
     await page.locator(".rc-tool-card").first().click(); // open tip
     const tip=page.locator(".rc-device");
