@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+"""Source-registered draft alpha layers. Never modifies the production stage.
+
+All cutout RGB pixels come from the checked-in original painting. Backfill is a
+temporary draft produced by inpainting; it is NOT a polished empty-plate asset.
+"""
+from __future__ import annotations
+import argparse
+import json
+from pathlib import Path
+import cv2
+import numpy as np
+from PIL import Image, ImageChops, ImageStat
+
+W, H = 1522, 1430
+
+# Native source coordinates, traced against original painting, not the iPhone crop.
+# Shapes are intentionally conservative. Each boundary needs hand review.
+SHAPES = {
+ "set/curtain-left": [
+  [(0,0),(420,0),(400,98),(345,170),(305,230),(234,345),(130,470),
+   (165,720),(211,948),(174,1430),(0,1430)]
+ ],
+ "set/curtain-right": [
+  [(1113,0),(1522,0),(1522,1430),(1375,1430),(1345,910),
+   (1358,704),(1390,484),(1327,443),(1245,337),(1187,235),(1125,140)]
+ ],
+ "set/lantern-left": [
+  [(354,125),(383,125),(379,214),(397,259),(433,300),(447,362),
+   (450,541),(416,597),(391,639),(385,695),(382,792),
+   (347,793),(347,689),(323,646),(277,605),(265,535),
+   (268,373),(286,303),(320,267),(346,236)]
+ ],
+ "set/lantern-right": [
+  [(1230,179),(1266,186),(1259,290),(1284,319),(1334,361),
+   (1345,405),(1348,559),(1331,615),(1302,654),(1284,706),
+   (1276,789),(1252,789),(1242,695),(1206,655),(1176,597),
+   (1165,425),(1180,359),(1218,308)]
+ ],
+ "rosie/torso": [
+  [(573,622),(631,592),(710,605),(805,629),(916,634),
+   (1009,656),(1093,706),(1167,808),(1225,938),
+   (1289,1115),(1330,1248),(1360,1430),(313,1430),
+   (337,1207),(339,1046),(354,938),(389,828),(457,734),(506,680)]
+ ],
+ "rosie/head-front": [
+  [(704,107),(734,127),(757,168),(783,236),(790,253),
+   (824,194),(885,163),(966,143),(1020,167),(1075,183),
+   (1110,229),(1115,322),(1140,323),(1192,308),
+   (1251,325),(1253,377),(1216,448),(1167,495),
+   (1125,514),(1110,570),(1095,639),(1053,706),
+   (1007,752),(935,786),(861,807),(778,810),
+   (702,783),(626,738),(586,680),(563,605),
+   (557,519),(581,443),(627,374),(663,329),(651,264),
+   (663,180),(687,130)]
+ ],
+ "orb/glass-assembled": [
+  [(766,834),(867,851),(943,893),(1008,966),(1046,1050),
+   (1060,1134),(1047,1210),(1024,1280),(1007,1308),
+   (518,1308),(496,1281),(480,1205),(474,1112),(494,1023),
+   (545,926),(628,859),(699,840)]
+ ],
+ "rosie/raised-paw": [
+  [(489,783),(514,749),(544,732),(587,728),(623,743),
+   (655,765),(681,775),(704,798),(721,836),(704,870),
+   (679,891),(620,905),(551,903),(503,873),(472,841)]
+ ],
+}
+# Props and fixtures that remain baked into the static background for this
+# first alpha-extraction pass: books, moon, orb pedestal, crystals, armillary,
+# and treats. Later drafts must isolate these without erasing their source detail.
+
+def poly_mask(polygons):
+    mask = np.zeros((H,W),np.uint8)
+    for polygon in polygons:
+        cv2.fillPoly(mask,[np.array(polygon,np.int32)],255)
+    return mask
+
+def clip_to_known_occlusion(masks):
+    # Preserve the foreground book stack. These pixels are not Rosie.
+    for name in ("rosie/torso",):
+        masks[name][899:1410, :423] = 0
+    # The celestial and lamp parts remain behind Rosie, and the orb in front
+    # of her torso. Assign every pixel to exactly one native RGB cutout.
+    ordering = [
+       "set/curtain-left","set/curtain-right",
+       "set/lantern-left","set/lantern-right",
+       "rosie/torso","rosie/head-front",
+       "orb/glass-assembled","rosie/raised-paw",
+    ]
+    assigned = np.zeros((H,W),np.uint8)
+    owned = {}
+    for name in reversed(ordering):
+        owned[name] = cv2.bitwise_and(masks[name],cv2.bitwise_not(assigned))
+        assigned = cv2.bitwise_or(assigned,masks[name])
+    return ordering,owned,assigned
+
+def save_rgba(path, rgb, alpha):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    rgba = np.dstack((rgb,alpha))
+    img = Image.fromarray(rgba,"RGBA")
+    img.save(path, "WEBP", lossless=True, method=5)
+
+def preview_contact(source, empty, composite, alpha_total, output):
+    from PIL import ImageDraw
+    scale=0.36
+    w,h=round(W*scale),round(H*scale)
+    tiles=[("ORIGINAL",Image.fromarray(source)),
+           ("DRAFT EMPTY PLATE",Image.fromarray(empty)),
+           ("RESTACKED",Image.fromarray(composite)),
+           ("EXTRACTION COVERAGE",Image.fromarray(
+               cv2.cvtColor(alpha_total,cv2.COLOR_GRAY2RGB)))]
+    canvas=Image.new("RGB",(w*2,h*2+68),(18,13,24))
+    draw=ImageDraw.Draw(canvas)
+    for i,(name,img) in enumerate(tiles):
+        x=(i%2)*w;y=(i//2)*(h+34)
+        canvas.paste(img.resize((w,h),Image.Resampling.LANCZOS),(x,y+30))
+        draw.text((x+12,y+8),name,fill=(240,204,137))
+    canvas.save(output,quality=92,subsampling=0)
+
+def make_background(rgb,mask):
+    # Repairs covered backdrop using nearby existing pixels, retaining
+    # absolutely original RGB everywhere outside the silhouette masks.
+    # This is a provisional inpaint only; front character edges are what
+    # should be evaluated in this pass, not the invented hidden scenery.
+    grown=cv2.dilate(mask,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9)))
+    bgr=cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR)
+    fill=cv2.inpaint(bgr,grown,9,cv2.INPAINT_TELEA)
+    return cv2.cvtColor(fill,cv2.COLOR_BGR2RGB)
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument("--source",type=Path,required=True)
+    p.add_argument("--out",type=Path,required=True)
+    args=p.parse_args()
+    source=Image.open(args.source).convert("RGB")
+    if source.size != (W,H):
+        raise RuntimeError(f"Expected native source {W}x{H}, got {source.size}")
+    args.out.mkdir(parents=True,exist_ok=True)
+    rgb=np.array(source)
+    masks={name:poly_mask(parts) for name,parts in SHAPES.items()}
+    order,owned,union=clip_to_known_occlusion(masks)
+    empty=make_background(rgb,union)
+    Image.fromarray(empty).save(args.out/"empty-plate-DRAFT.webp",
+                                    "WEBP",quality=94,method=5)
+    for name in order:
+        save_rgba(args.out/(name+".webp"),rgb,owned[name])
+    composite=empty.copy()
+    for name in order:
+        alpha=owned[name].astype(np.float32)[...,None]/255
+        composite=(rgb*alpha+composite*(1-alpha)).astype(np.uint8)
+    Image.fromarray(composite).save(args.out/"static-composite-DRAFT.webp",
+                                    "WEBP",quality=95,method=5)
+    preview_contact(rgb,empty,composite,union,args.out/"inspection-contact-sheet.jpg")
+    err=np.abs(rgb.astype(np.int16)-composite.astype(np.int16))
+    report={
+      "source":"public/rosie-fortune-stage.webp","native_canvas":[W,H],
+      "stage":"INITIAL DRAFT - NO PRODUCTION USE", "source_repainted":False,
+      "source_matched_rgb_cutouts":len(order),
+      "draft_layers":order,
+      "still_baked":["moon","sky","books","treat-bowl","armillary",
+                     "pedestal","top-border","crystals","tassels"],
+      "backplate":"OpenCV inpainting only, visually provisional",
+      "boundary_type":"manual source-registered polygon; needs feather/hair matte QA",
+      "static_composite_mean_abs_error":round(float(err.mean()),6),
+      "fraction_pixels_changed_gt_24":round(float((err.max(2)>24).mean()),6),
+      "empty_plate_approved":False,"motion_approved":False,
+      "integration_approved":False
+    }
+    (args.out/"draft-report.json").write_text(json.dumps(report,indent=2)+"\n")
+    print(json.dumps(report,indent=2))
+if __name__=="__main__":
+    main()
