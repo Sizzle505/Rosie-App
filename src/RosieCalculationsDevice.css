@@ -552,3 +552,13 @@
     margin-right: auto;
   }
 }
+
+@media (max-width: 739px) {
+  /* Measurement category names need more width than 1-3 digit controls. */
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2) input,
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2) select,
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(-n+2) > span {
+    width: 95%;
+    max-width: 95%;
+  }
+}
