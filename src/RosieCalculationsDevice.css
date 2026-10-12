@@ -1343,3 +1343,13 @@
   background-repeat:no-repeat;
   background-size:100% 100%;
 }
+
+/* The original single-piece gold artwork was visibly tall/narrow. Gently
+   widen ONLY its ornament image to the iPhone glass edges: never the live
+   inputs, title, receipt, height, or frame's layout box. */
+@media (max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-housing .rc-device-original-art {
+    transform:scaleX(1.035);
+    transform-origin:50% 50%;
+  }
+}
