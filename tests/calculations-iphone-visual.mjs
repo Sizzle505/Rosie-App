@@ -20,7 +20,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       const errors = [];
       page.on("pageerror", error => errors.push(String(error)));
       await page.goto(base,{waitUntil:"networkidle"});
-      await page.locator(".loading-screen-hidden").waitFor();
+      await page.locator(".loading-screen-hidden").waitFor({state:"attached"});
       const hero=page.locator(".rc-custom-hero");
       await hero.evaluate(async img => {if(!img.complete) await img.decode();});
       const frame=page.locator(".rac-frame");
