@@ -243,12 +243,13 @@ export default function RosieQrAtelier(){
     try{await action();}catch(e){if(e?.name!=="AbortError")toastMessage(e?.message||"That export is unavailable.");}
     finally{setWorking(false);}
   }
-  const fileBase="rosie-"+safeName(label||itemName(type,v));
+  const slug=safeName(label||itemName(type,v));
+  const fileBase=slug.startsWith("rosie-")?slug:"rosie-"+slug;
   function exportFile(kind){
     withDownload(async()=>{
       if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
       else if(kind==="png")download(await exportQR(output.svg),fileBase+".png");
-      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+(type==="calling"?"-calling-card.png":"-designed-card.png"));
+      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-printable.png");
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
       else if(kind==="vcf")download(new Blob([output.payload],{type:"text/vcard;charset=utf-8"}),fileBase+".vcf");
       toastMessage("Download prepared.");
