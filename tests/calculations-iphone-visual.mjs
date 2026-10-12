@@ -88,10 +88,13 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       const layers=await page.evaluate(()=>({
         hero:Number(getComputedStyle(document.querySelector(".rc-hero")).zIndex),
         normal:Number(getComputedStyle(document.querySelector(".rc-calculator-stage")).zIndex),
-        gold:Number(getComputedStyle(document.querySelector(".rc-workspace")).zIndex)
+        gold:Number(getComputedStyle(document.querySelector(".rc-tool-panel.rc-device")).zIndex),
+        selectors:Number(getComputedStyle(document.querySelector(".rc-tool-grid")).zIndex),
+        workspace:getComputedStyle(document.querySelector(".rc-workspace")).zIndex
       }));
-      assert(layers.gold>layers.hero && layers.hero>layers.normal,
-        "Only the active gold tool should be in front of the Calculations header: "+JSON.stringify(layers));
+      assert(layers.gold>layers.hero && layers.hero>layers.normal &&
+        layers.hero>layers.selectors && layers.workspace==="auto",
+        "Calculations header must cover selector buttons, while only the gold tool is above it: "+JSON.stringify(layers));
       await page.locator(".rc-tool-card").first().click();
       const name=engine+"-"+width+"x"+height;
       await page.screenshot({path:output+"/"+name+"-full.png",fullPage:true});
@@ -127,8 +130,8 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         const m=getComputedStyle(el).transform.match(/^matrix\(([^)]+)\)$/);
         return m ? Number(m[1].split(",")[5]) : NaN;
       });
-      assert(Math.abs(navOffset-14)<=0.5,
-        "Calculations pendant's safe-area placement should remain stable: "+navOffset);
+      assert(Math.abs(navOffset-10)<=0.5,
+        "Calculations pendant must be raised 4px from the previous 14px offset: "+navOffset);
       const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first()
         .evaluate(el=>getComputedStyle(el).top);
       assert.equal(raisedNavContent,"-7px",
@@ -217,6 +220,21 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         "full-width Resources tile overflows iPhone");
       const homeNavLift=await salonNav.evaluate(el=>parseFloat(getComputedStyle(el).marginTop));
       assert.equal(homeNavLift,-36,"all illustrated Grand Salon navigation buttons must rise 36px");
+      if (width<=600) {
+        const homeFit=await page.locator("main[aria-label=\"RosieVerse - discover Rosie's worlds\"]").evaluate(home=>{
+          const title=home.querySelector("header");
+          const homeRect=home.getBoundingClientRect();
+          const titleRect=title.getBoundingClientRect();
+          return {bottom:homeRect.bottom,height:homeRect.height,viewport:window.innerHeight,
+            titleWidth:titleRect.width,contentWidth:home.clientWidth,
+            titleOffset:titleRect.top-homeRect.top};
+        });
+        assert(Math.abs(homeFit.bottom-homeFit.viewport)<=2 && Math.abs(homeFit.height-homeFit.viewport)<=2,
+          "Grand Salon scenery must end at the iPhone viewport, not below it: "+JSON.stringify(homeFit));
+        assert(homeFit.titleWidth<=homeFit.contentWidth*.72 && homeFit.titleWidth>=homeFit.contentWidth*.64,
+          "RosieVerse title needs a 30% size reduction: "+JSON.stringify(homeFit));
+        assert(homeFit.titleOffset>=19,"RosieVerse title should be lowered 20px: "+JSON.stringify(homeFit));
+      }
       await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
 
       await resourceTile.click();
