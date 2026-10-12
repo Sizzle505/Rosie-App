@@ -1,0 +1,51 @@
+name: Import approved roulette PNG assets
+on:
+  push:
+    branches: [work/roulette-original-art-dropbox-20261011]
+    paths: ['.github/workflows/roulette-import-approved.yml']
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and verify original asset package from Dropbox
+        env:
+          APPROVED_ZIP_URL: 'https://uc819f006f5b45eb2a1491e3683b.dl.dropboxusercontent.com/cd/0/get/DJ0GbBBABos8BAPyhzz2u6WVUehcn5cn4jjlxn4pIT_OuEmbGxZPN9QWib43AfxS-p-vth2dRTQFwNgdTGPGXmcPRrS-WJja758U9m5q5_rU-yNPg9YqB-fsZ1d0mCgOWbsbNE1nEGi-Ufqe9diKOG7c28o0Y1_gxQJuEm5u0iv0Mg/file?c_luid=667ded1d'
+        run: |
+          curl --fail --location --silent --show-error --retry 2 "$APPROVED_ZIP_URL" --output /tmp/roulette-original.zip
+          echo "d81e13b0b0ac2ea74d8f7e3231ee497f00ef3d633bfa0bc6b555d2374e341488  /tmp/roulette-original.zip" | sha256sum -c -
+          mkdir -p /tmp/roulette-original public/randomizers/roulette/originals
+          unzip -j /tmp/roulette-original.zip 'wheel-frame-stationary.png' 'pointer-stationary.png' 'slice-texture-crimson.png' 'slice-texture-onyx.png' -d /tmp/roulette-original
+          echo '98d6d55f2c28b2bb3d0cff978e0ee14bee2540122bbeb3238fddcb36a944738b  /tmp/roulette-original/wheel-frame-stationary.png' | sha256sum -c -
+          echo 'ff3cc3d16fb93f77416a780b6ac5acb43b439a77523ee7c09057b72c27abda14  /tmp/roulette-original/pointer-stationary.png' | sha256sum -c -
+          echo '1be6ed5d526d959d6e59ced8579b4c2e1beaa9f1e93884e935aa36c4e77560fc  /tmp/roulette-original/slice-texture-crimson.png' | sha256sum -c -
+          echo 'aca87e7ba7a1b22e7fba71f9e11604bcecbc41c04c8378e6ad59d4e9ab2a2ee6  /tmp/roulette-original/slice-texture-onyx.png' | sha256sum -c -
+          cp /tmp/roulette-original/*.png public/randomizers/roulette/originals/
+      - name: Create performant display versions from approved PNG masters
+        run: |
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          source=Path("public/randomizers/roulette/originals")
+          out=source.parent
+          for filename in ("wheel-frame-stationary","pointer-stationary","slice-texture-crimson","slice-texture-onyx"):
+              im=Image.open(source/(filename+".png"))
+              if filename.startswith("slice-texture"):
+                  im=im.resize((512,512),Image.Resampling.LANCZOS)
+              im.save(out/(filename+".webp"),format="WEBP",lossless=(filename=="pointer-stationary"),quality=90,method=6)
+              print(filename,Image.open(out/(filename+".webp")).size,(out/(filename+".webp")).stat().st_size)
+          PY
+      - name: Commit only the approved image files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/randomizers/roulette/originals/*.png public/randomizers/roulette/*.webp
+          git diff --cached --check
+          git commit -m "Install byte-verified approved roulette PNG masters and optimized WebP derivatives"
+          git push origin HEAD:work/roulette-original-art-dropbox-20261011
