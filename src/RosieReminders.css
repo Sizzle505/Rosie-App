@@ -218,5 +218,8 @@
   .rr-page .rr-grocery-row{gap:8px;}
 }
 
-/* Preserve clearance for the slightly higher family navigation bar. */
-.app-shell.page-reminders main.rr-page { padding-bottom: 14px !important; }
+/* Keep the save-status footer above the raised family navigation bar. */
+.app-shell.page-reminders .rr-storage-note {
+  position: relative;
+  transform: translateY(-18px);
+}
