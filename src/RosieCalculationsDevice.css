@@ -1078,6 +1078,19 @@
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
     min-height:164px;
   }
+  /* Paired compact fields must share the same input baseline even if one
+     label wraps to two lines (e.g. "Tip on subtotal (%)" versus "People"). */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    min-height:34px;
+    box-sizing:border-box;
+    text-align:center;
+  }
   /* When a receipt needs extra lines, its height expands normally and the
      ResizeObserver recomputes the scale so the full frame still fits. */
   .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result strong {
