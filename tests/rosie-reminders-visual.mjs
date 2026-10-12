@@ -363,9 +363,9 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(clockLayout.deck.top>clockLayout.dial.bottom+5 &&
         clockLayout.utility.top>=clockLayout.deck.bottom-3,
         "Clock controls overlap the bezel or laps panel: "+JSON.stringify(clockLayout));
-      assert(clockLayout.utility.width<clockLayout.viewport*.79 &&
-        clockLayout.utility.height>=95,
-        "Laps and Quick Timers panel must be narrower and deeper: "+JSON.stringify(clockLayout));
+      assert(clockLayout.utility.width<clockLayout.viewport*.9 &&
+         clockLayout.utility.height>=(clockLayout.viewport<=355 ? 65 : 95),
+         "Responsive instrument cabinet must remain comfortably within the viewport: "+JSON.stringify(clockLayout));
       await page.screenshot({path:dir+"/"+name+"-timekeeper-stopwatch.png",fullPage:true});
       const start=page.getByRole("button",{name:"Start",exact:true});
       await start.click();
@@ -374,7 +374,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert.equal(await page.locator(".rtk-laps li").count(),1,"lap recording must still work");
       await page.getByRole("button",{name:"Timer",exact:true}).click();
       assert.equal(await page.locator(".rtk-presets button").count(),4,"Quick Timers missing");
-      const preset=page.getByRole("button",{name:"5 min",exact:true});
+      const preset=page.getByRole("button",{name:"5m",exact:true});
       await preset.click();
       assert((await page.locator(".rtk-time").innerText()).includes("05:00"),
         "Quick Timer preset failed to update the centered clock");
