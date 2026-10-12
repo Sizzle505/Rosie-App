@@ -1,0 +1,118 @@
+/* PREVIEW ONLY - linked by ?rosieLayers=1, keeps production untouched.
+   All source pixels share the exact native 1522 x 1430 coordinate system.
+   Whole-canvas transforms preserve registration regardless of object-fit. */
+.stage.madame-layered-active {
+  isolation: isolate;
+}
+.stage.madame-layered-active > .madame-layered-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.madame-layered-stage > .madame-backdrop,
+.madame-layered-stage > .madame-sprite {
+  position: absolute !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  pointer-events: none !important;
+  backface-visibility: hidden;
+  transform-style: flat;
+  filter: none !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  clip-path: none !important;
+  animation: none;
+}
+.madame-layered-stage > .madame-backdrop {
+  z-index: 0 !important;
+  animation: none !important;
+  transform: none !important;
+}
+.madame-sprite-curtain-left { z-index: 1; transform-origin: 12% 12%; animation: madameCurtainLeft 8s ease-in-out infinite !important; }
+.madame-sprite-curtain-right { z-index: 2; transform-origin: 88% 12%; animation: madameCurtainRight 9.5s ease-in-out infinite !important; }
+.madame-sprite-lamp-left { z-index: 3; transform-origin: 24% 16%; animation: madameLampLeft 5.8s ease-in-out infinite !important; }
+.madame-sprite-lamp-right { z-index: 4; transform-origin: 83% 19%; animation: madameLampRight 6.7s ease-in-out infinite -1.1s !important; }
+.madame-sprite-torso { z-index: 5; transform-origin: 54% 72%; animation: madameBreathe 4.8s ease-in-out infinite !important; }
+.madame-sprite-head-front { z-index: 6; transform-origin: 55% 45%; animation: madameHeadIdle 5.3s ease-in-out infinite !important; opacity: 1; transition: opacity .12s linear; }
+.madame-sprite-head-left { z-index: 7; transform-origin: 56% 38%; opacity: 0; transform: translate3d(0,5px,0) rotate(2deg) !important; transition: transform .58s cubic-bezier(.2,.78,.24,1),opacity .12s linear; }
+.madame-sprite-orb-back { z-index: 8; animation: none !important; transform: none !important; }
+.madame-sprite-paw {
+  z-index: 9;
+  /* Paw remains registered to the source painting: moving its whole sprite
+     revealed the non-existent original glass behind Rosie's toes. */
+  transform: none !important;
+  animation: none !important;
+}
+.madame-sprite-orb-front { z-index: 10; transform: none !important; animation: none !important; }
+.madame-listening > .madame-sprite-head-front {
+  opacity: 0 !important;
+  animation: none !important;
+}
+.madame-listening > .madame-sprite-head-left {
+  opacity: 1 !important;
+  transform: translate3d(0,-2px,0) rotate(-1deg) !important;
+}
+.madame-consulting > .madame-sprite-head-front {
+  animation: madameConsult 1.6s ease-in-out infinite !important;
+}
+.madame-revealing > .madame-sprite-head-front {
+  animation: madameAnswerGlance 1.35s cubic-bezier(.2,.7,.1,1) 1 !important;
+}
+.madame-layered-active > .rosie-turn-layer,
+.madame-layered-active > .turn-seam-haze,
+.madame-layered-active > .rosie-turn-backdrop,
+.madame-layered-active > .crystal-ball-shield {
+  display: none !important;
+}
+@keyframes madameCurtainLeft {
+  0%,100% {transform:translate3d(0,0,0) rotate(-.1deg);}
+  45% {transform:translate3d(2px,0,0) rotate(.35deg);}
+}
+@keyframes madameCurtainRight {
+  0%,100% {transform:translate3d(0,0,0) rotate(.1deg);}
+  50% {transform:translate3d(-1.8px,0,0) rotate(-.35deg);}
+}
+@keyframes madameLampLeft {
+  0%,100% {transform:rotate(-.65deg);}
+  50% {transform:rotate(.95deg);}
+}
+@keyframes madameLampRight {
+  0%,100% {transform:rotate(.85deg);}
+  50% {transform:rotate(-.8deg);}
+}
+@keyframes madameBreathe {
+  0%,100% {transform:translate3d(0,0,0) scale(1);}
+  50% {transform:translate3d(0,-1.5px,0) scale(1.003);}
+}
+@keyframes madameHeadIdle {
+  0%,100% {transform:translate3d(0,0,0) rotate(0deg);}
+  50% {transform:translate3d(0,-1.4px,0) rotate(.1deg);}
+}
+@keyframes madamePawBreathe {
+  0%,100% {transform:translate3d(0,0,0);}
+  50% {transform:translate3d(0,-1.2px,0);}
+}
+@keyframes madameConsult {
+  0%,100% {transform:translate3d(0,1px,0) rotate(.1deg);}
+  50% {transform:translate3d(0,5px,0) rotate(.75deg);}
+}
+@keyframes madameAnswerGlance {
+  0% {transform:translate3d(0,4px,0) rotate(.5deg);}
+  65% {transform:translate3d(0,-3px,0) rotate(-.4deg);}
+  100% {transform:translate3d(0,0,0) rotate(0);}
+}
+@media (prefers-reduced-motion: reduce) {
+  .madame-layered-stage > .madame-sprite {animation:none !important;transition:none !important;}
+  .madame-layered-stage .madame-sprite-head-left {transform:none !important;}
+}
