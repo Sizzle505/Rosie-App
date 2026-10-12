@@ -144,11 +144,19 @@ try {
     await page.waitForTimeout(170);
     const panel = await page.locator(".rr-paper").evaluate(node => ({
       top:node.getBoundingClientRect().top,
+      bottom:node.getBoundingClientRect().bottom,
+      height:node.getBoundingClientRect().height,
       navTop:document.querySelector(".bottom-nav").getBoundingClientRect().top,
     }));
     const pinnedBottom = await page.locator(".rr-hero-pin").evaluate(el => el.getBoundingClientRect().bottom);
-    assert(panel.top >= pinnedBottom-3 && panel.top <= pinnedBottom + 65,
-      "Calendar should scroll below pinned middle Rosie artwork: "+JSON.stringify({panel,pinnedBottom}));
+    assert(panel.top >= pinnedBottom-4,
+      "Calendar must remain below pinned middle Rosie artwork: "+JSON.stringify({panel,pinnedBottom}));
+    if (panel.height <= panel.navTop - pinnedBottom - 10) {
+      assert(panel.bottom <= panel.navTop-6,
+        "Short calendar must be entirely usable above fixed bottom navigation: "+JSON.stringify({panel,pinnedBottom}));
+    }
+    const reserve = await page.locator(".rr-content").evaluate(node=>parseFloat(getComputedStyle(node).paddingBottom));
+    assert(reserve <= 155, "Short panel must not append a vast blank celestial region: "+reserve);
     await page.getByRole("tab",{name:"Today"}).click();
     await page.getByRole("button",{name:/Open Goals & Gratitude/}).click();
     await page.locator(".rr-goals").waitFor();
