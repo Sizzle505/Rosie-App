@@ -1301,8 +1301,8 @@
     height:44px;
     min-height:44px;
     max-height:44px;
-    padding:6px 8px;
-    font-size:15px;
+    padding:6px 10px;
+    font-size:16px;
   }
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-tool-result {
     margin-top:0;
