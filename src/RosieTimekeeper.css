@@ -264,3 +264,93 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-action-deck { top:60.2%; gap:4px; }
   .rtk-utility { top:73.5%; width:76%; }
 }
+
+
+/* October 12 refinement: circular transport keys hug the dial, while
+   Stopwatch/Timer tabs live INSIDE a wider and shallower utility cabinet. */
+.rtk-action-deck {
+  top:56%;
+  width:min(78%,440px);
+  gap:0;
+}
+.rtk-action-deck .rtk-controls { gap:clamp(10px,2.7vw,21px); }
+.rtk-utility {
+  top:63%;
+  width:min(86%,700px);
+  min-height:0;
+  max-height:19%;
+  padding:clamp(8px,1.4vw,13px) clamp(10px,2vw,17px);
+}
+.rtk-utility > .rtk-mode-switch {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  gap:clamp(8px,2vw,16px);
+  margin:0 0 7px;
+  padding:0 0 7px;
+  border-bottom:1px solid #bd955474;
+}
+.rtk-utility > .rtk-mode-switch button {
+  flex:1 1 0;
+  max-width:190px;
+  min-width:0;
+  min-height:30px;
+  padding:5px 8px;
+  font-size:clamp(11px,1.8vw,15px);
+}
+.rtk-utility-heading {
+  padding-bottom:5px;
+  font-size:clamp(13px,2vw,19px);
+}
+.rtk-utility .rtk-laps {
+  max-height:92px;
+  margin:2px 0;
+}
+.rtk-utility .rtk-laps li {padding-block:3px;}
+.rtk-utility .rtk-empty {margin:6px 0;line-height:1.25;}
+.rtk-utility .rtk-shortcut {
+  flex-wrap:nowrap;
+  gap:6px;
+  justify-content:center;
+  padding-top:5px;
+}
+.rtk-utility .rtk-shortcut span {
+  flex:0 1 auto;
+  margin-right:auto;
+  text-align:left;
+}
+.rtk-utility .rtk-shortcut button {
+  flex:0 0 auto;
+  min-width:46px;
+  min-height:33px;
+  padding:5px 8px;
+}
+.rtk-utility .rtk-presets {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+  margin-top:7px;
+}
+.rtk-utility .rtk-presets button {
+  min-width:0;
+  min-height:36px;
+  padding:5px 2px;
+}
+@media(max-width:520px) {
+  .rtk-action-deck {top:56%;width:85%;}
+  .rtk-action-deck .rtk-controls button {width:44px;height:44px;}
+  .rtk-utility {
+    top:63.2%;
+    width:87%;
+    max-height:19%;
+    padding:8px 10px;
+  }
+  .rtk-utility > .rtk-mode-switch button {min-height:28px;}
+  .rtk-utility .rtk-shortcut button {min-height:32px;}
+}
+@media(max-width:355px) {
+  .rtk-action-deck {top:56%;width:89%;}
+  .rtk-utility {top:63.2%;width:89%;padding:7px 8px;}
+  .rtk-utility .rtk-shortcut {gap:4px;}
+  .rtk-utility .rtk-shortcut button {min-width:43px;padding-inline:5px;}
+}
