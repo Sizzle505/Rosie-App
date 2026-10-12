@@ -66,6 +66,41 @@ export default function RosieTimekeeper() {
   const anchor = useRef(0);
   const accumulated = useRef(0);
   const finished = useRef(false);
+  const utilityRef = useRef(null);
+
+  // The shared Resources navigation is fixed to the viewport. Preserve room
+  // between the control deck and the cabinet while keeping the tray above it.
+  useEffect(() => {
+    let frame = 0;
+    const fitTray = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const panel = utilityRef.current;
+        const nav = document.querySelector(".resources-bottom-nav");
+        const controls = document.querySelector(".rtk-action-deck .rtk-controls");
+        if (!panel || !nav || !controls) return;
+        panel.style.setProperty("--rtk-nav-lift", "0px");
+        const panelRect = panel.getBoundingClientRect();
+        const navTop = nav.getBoundingClientRect().top;
+        const controlsBottom = controls.getBoundingClientRect().bottom;
+        const overlap = Math.max(0, panelRect.bottom - navTop + 13);
+        const freeSpace = Math.max(0, panelRect.top - controlsBottom - 7);
+        panel.style.setProperty("--rtk-nav-lift", Math.ceil(Math.min(overlap, freeSpace)) + "px");
+      });
+    };
+    fitTray();
+    window.addEventListener("resize", fitTray);
+    window.addEventListener("orientationchange", fitTray);
+    const nav = document.querySelector(".resources-bottom-nav");
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fitTray) : null;
+    if (observer && nav) observer.observe(nav);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer?.disconnect();
+      window.removeEventListener("resize", fitTray);
+      window.removeEventListener("orientationchange", fitTray);
+    };
+  }, [mode, laps.length]);
 
   // Resume after reload using wall time only for time spent outside this page.
   // While open, performance.now() remains the high-precision source.
@@ -203,12 +238,19 @@ export default function RosieTimekeeper() {
   const dialProgress = mode === "countdown"
     ? (duration > 0 ? Math.min(1, elapsed / duration) : 0)
     : ((elapsed % 60_000) / 60_000);
+  const circumference = 2 * Math.PI * 43;
+  const leadingAngle = dialProgress * Math.PI * 2;
+  const markerX = 50 + 43 * Math.sin(leadingAngle);
+  const markerY = 50 - 43 * Math.cos(leadingAngle);
+  const showMarker = running || elapsed > 0;
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining);
   const [wholeTime, centiseconds] = mode === "stopwatch" ? shown.split(".") : [shown, null];
-  const status = message || (running ? "RUNNING" : elapsed > 0 ? "PAUSED" :
-    mode === "stopwatch" ? (laps.length ? laps.length + " LAPS RECORDED" : "READY TO BEGIN") : "COUNTDOWN READY");
+  const status = (mode === "countdown" && finished.current && elapsed >= duration)
+    ? "COMPLETE"
+    : message || (running ? "RUNNING" : elapsed > 0 ? "PAUSED" :
+      mode === "stopwatch" ? (laps.length ? laps.length + " LAPS RECORDED" : "READY TO BEGIN") : "COUNTDOWN READY");
 
   return (
     <main className="rtk-page" aria-label="Rosie's Timekeeper">
@@ -228,10 +270,37 @@ export default function RosieTimekeeper() {
         )}
         <section className={"rtk-dial" + (running ? " is-running" : "")} aria-label="Working stopwatch and countdown">
           <TimekeeperClockwork />
-          <svg className="rtk-progress-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-            <circle className="rtk-progress-track" cx="50" cy="50" r="44" />
-            <circle className="rtk-progress-live" cx="50" cy="50" r="44"
-              strokeDasharray="276.46" strokeDashoffset={276.46 * (1 - dialProgress)} />
+          <svg className={"rtk-progress-ring" + (running ? " is-animating" : "")}
+            viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="rtk-running-gold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#fff7ca" />
+                <stop offset="28%" stopColor="#ffe27b" />
+                <stop offset="52%" stopColor="#f1a73d" />
+                <stop offset="72%" stopColor="#fff3b4" />
+                <stop offset="100%" stopColor="#fc5b82" />
+              </linearGradient>
+            </defs>
+            <circle className="rtk-progress-track" cx="50" cy="50" r="43" />
+            <circle className="rtk-progress-dotted" cx="50" cy="50" r="43" />
+            <circle className="rtk-progress-bloom" cx="50" cy="50" r="43"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference * (1 - dialProgress)} />
+            <circle className="rtk-progress-live" cx="50" cy="50" r="43"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference * (1 - dialProgress)} />
+            {showMarker && (
+              <g className="rtk-progress-charm" transform={`translate(${markerX} ${markerY})`}>
+                <path className="rtk-charm-sparkle" d="M0 -6.7L.7 -4.8L2.6 -4L.7 -3.3L0 -1.4L-.7 -3.3L-2.6 -4L-.7 -4.8Z" />
+                <circle className="rtk-charm-edge" r="3.9" />
+                <circle className="rtk-charm-core" r="3.1" />
+                <ellipse cx="-1.55" cy="-1.12" rx=".53" ry=".72" fill="#fff2c9" />
+                <ellipse cx="-.43" cy="-1.81" rx=".5" ry=".64" fill="#fff2c9" />
+                <ellipse cx=".78" cy="-1.7" rx=".5" ry=".64" fill="#fff2c9" />
+                <ellipse cx="1.73" cy="-.86" rx=".45" ry=".66" fill="#fff2c9" />
+                <path d="M-1.8 .92Q-1.45 .15-.7 .34Q0 -.18 .65 .35Q1.7 .13 1.8 1.04Q1.77 2.14 .58 1.93Q0 1.63-.53 1.92Q-1.76 2.12-1.8 .92Z" fill="#ffe9b0" />
+              </g>
+            )}
           </svg>
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
@@ -262,7 +331,8 @@ export default function RosieTimekeeper() {
             </button>
           </div>
         </div>
-        <section className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "")} aria-label="Timekeeper settings and splits">
+        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
+          <div className="rtk-utility-inner">
           {mode === "stopwatch" ? (
             <>
               <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "1/100-second precision"}</span></div>
@@ -275,11 +345,11 @@ export default function RosieTimekeeper() {
                   ))}
                 </ol>
               ) : <p className="rtk-empty">Start the stopwatch and tap Lap to mark a split.</p>}
-              <div className="rtk-shortcut">
+              {laps.length > 0 && <div className="rtk-shortcut">
                 <span>Quick countdown</span>
                 <button type="button" onClick={() => pickPreset(5 * 60_000)}>5m</button>
                 <button type="button" onClick={() => pickPreset(25 * 60_000)}>25m</button>
-              </div>
+              </div>}
             </>
           ) : (
             <>
@@ -300,9 +370,10 @@ export default function RosieTimekeeper() {
                   onChange={e => setCustomSeconds(e.target.value)} aria-label="Seconds" /></label>
                 <button type="button" onClick={applyCustomDuration}>Set</button>
               </div>
-              <p className="rtk-timer-note">Completion sounds play when this page is active. iPhone background alarms are not guaranteed.</p>
+              <p className="rtk-timer-note">Sounds work while this page is open; background alarms aren't guaranteed.</p>
             </>
           )}
+          </div>
         </section>
       </div>
     </main>

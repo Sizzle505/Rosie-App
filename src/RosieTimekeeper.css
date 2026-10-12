@@ -596,3 +596,217 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-action-deck .rtk-controls button {width:42px;height:42px;}
   .rtk-action-deck .rtk-controls .rtk-primary-action {width:52px;height:52px;}
 }
+
+/* 2026-10-12 Timekeeper implementation corrections - assets remain unchanged.
+   Final positioning rules intentionally override earlier renovation passes. */
+.rtk-page .rtk-action-deck {
+  top:55%;
+  gap:2px;
+  width:min(82%,410px);
+}
+.rtk-page .rtk-action-deck .rtk-mode-switch {
+  height:clamp(39px,10.6vw,47px);
+  min-height:0;
+  padding:5px 9px;
+}
+.rtk-page .rtk-action-deck .rtk-controls {gap:clamp(9px,2.3vw,19px);}
+.rtk-page .rtk-action-deck .rtk-controls button {
+  width:clamp(42px,11.7vw,57px);
+  height:clamp(42px,11.7vw,57px);
+  font-size:clamp(11px,2.8vw,15px);
+}
+.rtk-page .rtk-action-deck .rtk-controls .rtk-primary-action {
+  width:clamp(49px,13.8vw,68px);
+  height:clamp(49px,13.8vw,68px);
+}
+/* Disabled is an interaction state, NEVER a nearly invisible control. */
+.rtk-page .rtk-action-deck .rtk-controls .rtk-lap-action,
+.rtk-page .rtk-action-deck .rtk-controls .rtk-lap-action:disabled {
+  opacity:1 !important;
+  filter:none !important;
+  color:#fff0d1;
+  text-shadow:0 1px 3px #150712,0 0 4px #edb76f88;
+}
+.rtk-page .rtk-action-deck .rtk-controls .rtk-lap-action:disabled {
+  cursor:default;
+}
+.rtk-page .rtk-utility,
+.rtk-page .rtk-utility.is-empty,
+.rtk-page .rtk-utility.is-timer {
+  top:69.7%;
+  width:min(78%,490px);
+  aspect-ratio:3/1;
+  height:auto;
+  min-height:0;
+  max-height:none;
+  padding:0;
+  margin:0;
+  overflow:hidden;
+  border:0;
+  border-radius:0;
+  background-color:transparent;
+  background-image:url("/rosieverse/timekeeper/luxury-instrument-tray.webp");
+  background-position:center;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  box-shadow:none;
+  transform:translate(-50%,calc(-1 * var(--rtk-nav-lift,0px)));
+}
+.rtk-page .rtk-utility.is-empty {width:min(76%,460px);}
+.rtk-page .rtk-utility.is-timer {width:min(81%,500px);}
+.rtk-page .rtk-utility-inner {
+  position:absolute;
+  top:24%;
+  right:12.5%;
+  bottom:9%;
+  left:12.5%;
+  display:block;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:#aa7847 transparent;
+  text-align:center;
+}
+.rtk-page .rtk-utility-heading {
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:5px;
+  margin:0 0 4px;
+  padding:0 0 9px;
+  background:url("/rosieverse/timekeeper/luxury-filigree-divider.webp") center bottom / 100% 8px no-repeat;
+  font-size:clamp(10px,1.75vw,14px);
+  text-align:left;
+}
+.rtk-page .rtk-utility-heading span {white-space:nowrap;}
+.rtk-page .rtk-utility-heading span:last-child {
+  font-size:clamp(8px,1.28vw,11px);
+  white-space:nowrap;
+}
+.rtk-page .rtk-utility.is-empty .rtk-empty {
+  margin:6px auto 0;
+  max-width:95%;
+  color:#ffebc6;
+  line-height:1.3;
+  font-size:clamp(10px,1.65vw,13px);
+}
+.rtk-page .rtk-laps {
+  max-height:none;
+  overflow:visible;
+  margin:0;
+}
+.rtk-page .rtk-laps li {padding:4px 0;font-size:clamp(10px,1.75vw,14px);}
+.rtk-page .rtk-shortcut {margin-top:5px;padding-top:5px;gap:4px;}
+.rtk-page .rtk-shortcut span {flex-basis:auto;font-size:10px;}
+.rtk-page .rtk-shortcut button {min-height:26px;min-width:39px;padding:3px 5px;}
+.rtk-page .rtk-presets {margin:2px 0 4px;gap:3px;flex-wrap:nowrap;}
+.rtk-page .rtk-presets button {
+  min-width:0;
+  flex:1 1 0;
+  max-width:none;
+  min-height:28px;
+  padding:4px 2px;
+  font-size:clamp(9px,1.5vw,12px);
+}
+.rtk-page .rtk-custom-timer {
+  margin-top:3px;
+  gap:3px;
+  justify-content:center;
+}
+.rtk-page .rtk-custom-timer label {font-size:9px;gap:1px;}
+.rtk-page .rtk-custom-timer input {min-height:28px;width:clamp(30px,6vw,42px);}
+.rtk-page .rtk-custom-timer button {min-height:28px;}
+.rtk-page .rtk-timer-note {margin-top:5px;font-size:9px;}
+/* A clockwork progress halo with a jeweled paw charm at the advancing tip. */
+.rtk-page .rtk-progress-ring {
+  position:absolute;
+  z-index:2;
+  top:50%;
+  left:50%;
+  inset:auto;
+  width:105%;
+  height:105%;
+  overflow:visible;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  isolation:isolate;
+}
+.rtk-page .rtk-progress-track,
+.rtk-page .rtk-progress-dotted,
+.rtk-page .rtk-progress-bloom,
+.rtk-page .rtk-progress-live {
+  fill:none;
+  transform:rotate(-90deg);
+  transform-origin:50% 50%;
+  stroke-linecap:round;
+}
+.rtk-page .rtk-progress-track {
+  stroke:#fbd489;
+  stroke-width:1.45;
+  opacity:.67;
+  filter:drop-shadow(0 0 1.25px #f5aa37);
+}
+.rtk-page .rtk-progress-dotted {
+  stroke:#fff3b1;
+  stroke-width:.55;
+  stroke-dasharray:.5 4.4;
+  opacity:.81;
+  filter:drop-shadow(0 0 1px #ffaf37);
+}
+.rtk-page .rtk-progress-bloom {
+  stroke:#ffaf39;
+  stroke-width:4.0;
+  opacity:.77;
+  filter:blur(1.25px) drop-shadow(0 0 2.2px #f65d51);
+  transition:stroke-dashoffset .08s linear;
+}
+.rtk-page .rtk-progress-live {
+  stroke:url("#rtk-running-gold");
+  stroke-width:2.05;
+  opacity:1;
+  filter:drop-shadow(0 0 1.8px #ffe598) drop-shadow(0 0 2.5px #ff9b31);
+  transition:stroke-dashoffset .08s linear;
+}
+.rtk-page .rtk-progress-ring.is-animating .rtk-progress-track {
+  animation:rtk-halo-shimmer 1.45s ease-in-out infinite alternate;
+}
+.rtk-page .rtk-progress-ring.is-animating .rtk-progress-dotted {
+  animation:rtk-tick-shimmer 3s linear infinite;
+}
+.rtk-page .rtk-progress-charm {
+  filter:drop-shadow(0 0 1px #ffecac) drop-shadow(0 0 2px #ff8c51);
+}
+.rtk-page .rtk-charm-sparkle {fill:#fff7ce;stroke:#ffce75;stroke-width:.18;}
+.rtk-page .rtk-charm-edge {fill:#dba24c;stroke:#fff0b3;stroke-width:.8;}
+.rtk-page .rtk-charm-core {fill:#8b173a;stroke:#ffcc7b;stroke-width:.37;}
+.rtk-page .rtk-progress-ring.is-animating .rtk-progress-charm {
+  animation:rtk-paw-bounce .85s ease-in-out infinite alternate;
+  transform-box:fill-box;
+  transform-origin:center;
+}
+@keyframes rtk-halo-shimmer {from{opacity:.45;filter:drop-shadow(0 0 .7px #edab45)}to{opacity:1;filter:drop-shadow(0 0 2.2px #ffe5a7)}}
+@keyframes rtk-tick-shimmer {0%{stroke-dashoffset:0}100%{stroke-dashoffset:-39}}
+@keyframes rtk-paw-bounce {from{filter:drop-shadow(0 0 1px #ffecac)}to{filter:drop-shadow(0 0 3px #fff5c7) drop-shadow(0 0 3px #fe5b61)}}
+@media(max-width:520px) {
+  .rtk-page .rtk-action-deck {top:55%;gap:2px;}
+  .rtk-page .rtk-action-deck .rtk-mode-switch {height:clamp(38px,10.7vw,43px);min-height:0;}
+  .rtk-page .rtk-action-deck .rtk-controls button {width:clamp(42px,11.5vw,47px);height:clamp(42px,11.5vw,47px);}
+  .rtk-page .rtk-action-deck .rtk-controls .rtk-primary-action {width:clamp(49px,13.6vw,56px);height:clamp(49px,13.6vw,56px);}
+  .rtk-page .rtk-utility, .rtk-page .rtk-utility.is-empty, .rtk-page .rtk-utility.is-timer {top:69.7%;}
+  .rtk-page .rtk-utility-heading {font-size:clamp(10px,2.8vw,12px);}
+  .rtk-page .rtk-utility-heading span:last-child {font-size:clamp(8px,2.1vw,10px);}
+}
+@media(max-width:355px) {
+  .rtk-page .rtk-action-deck {top:54.8%;}
+  .rtk-page .rtk-utility, .rtk-page .rtk-utility.is-empty, .rtk-page .rtk-utility.is-timer {top:69.8%;}
+  .rtk-page .rtk-utility-heading {font-size:10px;}
+  .rtk-page .rtk-utility-heading span:last-child {font-size:8px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .rtk-page .rtk-progress-ring *,
+  .rtk-page .rtk-action-deck * {
+    animation:none !important;
+    transition:none !important;
+  }
+}
