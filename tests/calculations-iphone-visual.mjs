@@ -89,6 +89,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         await page.waitForTimeout(480);
         const alignment=await page.evaluate(async ()=>{
           const panel=document.querySelector(".rc-device").getBoundingClientRect();
+          const art=document.querySelector(".rc-device-original-art").getBoundingClientRect();
           const stage=document.querySelector(".rc-active-tool-viewport").getBoundingClientRect();
           const overlay=document.querySelector(".rc-active-tool-overlay");
           const backdrop=getComputedStyle(overlay);
@@ -97,6 +98,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           image.src="/rosieverse/calculations/burgundy-satin.png";
           await image.decode();
           return {panel:{top:panel.top,bottom:panel.bottom,left:panel.left,right:panel.right},
+            art:{left:art.left,right:art.right,top:art.top,bottom:art.bottom,width:art.width},
             stage:{top:stage.top,bottom:stage.bottom},
             width:innerWidth,height:innerHeight,navTop:nav.top,
             overlayTop:overlay.getBoundingClientRect().top,
@@ -128,6 +130,11 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           alignment.panel.bottom<=alignment.navTop-6 &&
           alignment.panel.left>=-1 && alignment.panel.right<=alignment.width+1,
           "Entire scaled gold tool must fit centered above navigation: "+JSON.stringify(alignment));
+        assert(alignment.art.width > (alignment.panel.right-alignment.panel.left)*1.027 &&
+          alignment.art.left>=-3 && alignment.art.right<=alignment.width+3 &&
+          Math.abs(alignment.art.top-alignment.panel.top)<1 &&
+          Math.abs(alignment.art.bottom-alignment.panel.bottom)<1,
+          "Gold ART alone should kiss iPhone edges horizontally without changing frame height: "+JSON.stringify(alignment));
       }
       const layers=await page.evaluate(()=>({
         hero:Number(getComputedStyle(document.querySelector(".rc-hero")).zIndex),

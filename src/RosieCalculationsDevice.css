@@ -1262,3 +1262,94 @@
 @media (prefers-reduced-motion:reduce) {
   .rc-page .rc-device-gleam {animation:none!important;opacity:0!important;}
 }
+
+/* October 12: balanced gold instrument composition, without altering its
+   single-image outer frame, fixed footprint or red-column safe margins. */
+@media (max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-surface {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:stretch;
+    gap:9px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid {
+    row-gap:9px;
+    column-gap:8px;
+    margin:0;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field {
+    gap:4px;
+    justify-content:flex-start;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
+    margin-top:0;
+  }
+  /* Dates are a compact pair of standard-sized iOS date picker targets.
+     Moving the receipt upward is a composition change, not a resized frame. */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-device-surface {
+    gap:8px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid {
+    row-gap:7px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) input {
+    width:min(100%,139px);
+    height:44px;
+    min-height:44px;
+    max-height:44px;
+    padding:6px 10px;
+    font-size:16px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-tool-result {
+    margin-top:0;
+    min-height:104px;
+    padding-top:11px;
+    padding-bottom:13px;
+  }
+  /* The four-input Split Bill instrument remains tight enough to retain its
+     ornamental bottom clearance, with even 4px field-to-field spacing. */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-device-surface {
+    justify-content:center;
+    gap:5px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid {
+    row-gap:4px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid > .rc-field {
+    gap:3px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result {
+    margin-top:0;
+    min-height:103px;
+    padding:9px 12px 12px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--units .rc-device-surface,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--percent .rc-device-surface {
+    gap:10px;
+  }
+}
+/* The Pocket Toolkit has one continuous burgundy background below its cards
+   and through the footer/nav safe area, rather than an abruptly ending panel. */
+.app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-workspace {
+  min-height:100dvh;
+  padding-bottom:calc(185px + env(safe-area-inset-bottom,0px));
+  background-color:#380c20;
+  background-image:url("/randomizers/rosie-salon-burgundy-texture.svg");
+  background-position:center top;
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+}
+
+/* The original single-piece gold artwork was visibly tall/narrow. Gently
+   widen ONLY its ornament image to the iPhone glass edges: never the live
+   inputs, title, receipt, height, or frame's layout box. */
+@media (max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-housing .rc-device-original-art {
+    transform:scaleX(1.035);
+    transform-origin:50% 50%;
+  }
+}

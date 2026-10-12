@@ -59,7 +59,8 @@ const FX_FALLBACK_CURRENCIES = [
   ["HKD","Hong Kong Dollar"],["INR","Indian Rupee"],["JPY","Japanese Yen"],
   ["MXN","Mexican Peso"],["NZD","New Zealand Dollar"],["SGD","Singapore Dollar"],
   ["USD","United States Dollar"],["ZAR","South African Rand"]
-].map(([value,name]) => ({value, label: value + " · " + name}));
+].map(([value,name]) => ({value, label: value === "USD" ? "United States $" : value + " · " + name}))
+  .sort((a,b)=>a.value==="USD" ? -1 : b.value==="USD" ? 1 : a.label.localeCompare(b.label));
 const fxCacheKey = (base, quote) => "rosie.fx.v2." + base + "." + quote;
 function cachedFxRate(base, quote) {
   try {
@@ -136,8 +137,29 @@ function toolOutput(id, v, fxRate, fxState) {
   return "";
 }
 
-function NumberField({ label, value, onChange, min, step = "any", type = "number", size = "standard" }) {
-  return <label className={"rc-field rc-field--" + (type === "date" ? "wide" : size)}><span>{label}</span><input type={type} value={value} onChange={(e) => onChange(e.target.value)} min={min} step={type === "number" ? step : undefined} inputMode={type === "number" ? "decimal" : undefined} /></label>;
+function NumberField({ label, value, onChange, min, step = "any", type = "number", size = "standard", dollars = false }) {
+  const [editingMoney, setEditingMoney] = useState(false);
+  const formatted = dollars && !editingMoney && value !== "" && Number.isFinite(Number(value))
+    ? money(Number(value)) : value;
+  return <label className={"rc-field rc-field--" + (type === "date" ? "wide" : size)}>
+    <span>{label}</span>
+    <input type={dollars ? "text" : type} value={formatted}
+      onFocus={dollars ? e => e.currentTarget.select() : undefined}
+      onChange={e => {
+        if (dollars) setEditingMoney(true);
+        onChange(dollars ? e.target.value.replace(/[$,\s]/g, "").replace(/,/g, "") : e.target.value);
+      }}
+      onBlur={dollars ? e => {
+        const raw = e.target.value.replace(/[$,\s]/g, "").replace(/,/g, "");
+        if (raw !== "" && Number.isFinite(Number(raw))) onChange(Number(raw).toFixed(2));
+        setEditingMoney(false);
+      } : undefined}
+      min={dollars ? undefined : min}
+      step={!dollars && type === "number" ? step : undefined}
+      inputMode={dollars || type === "number" ? "decimal" : undefined}
+      autoComplete="off"
+    />
+  </label>;
 }
 function Selection({ label, value, options, onChange, size = "wide" }) {
   return <label className={"rc-field rc-field--" + size}><span>{label}</span><select value={value} onChange={(e) => onChange(e.target.value)}>{options.map(x => <option key={x.value || x} value={x.value || x}>{x.label || x}</option>)}</select></label>;
@@ -148,13 +170,13 @@ function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState, o
   const changed = (field) => (next) => update(field, next);
   useEffect(() => setMenuOpen(false), [active]);
   const fields = {
-    tip: <><NumberField label="Bill before tip ($)" value={values.bill} onChange={changed("bill")} min="0"/><NumberField label="Tip (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
-    split: <><NumberField label="Subtotal ($)" value={values.splitAmount} onChange={changed("splitAmount")} min="0"/><NumberField label="Tax ($)" value={values.tax} onChange={changed("tax")} min="0"/><NumberField label="Tip on subtotal (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
+    tip: <><NumberField label="Bill before tip ($)" dollars value={values.bill} onChange={changed("bill")} min="0"/><NumberField label="Tip (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
+    split: <><NumberField label="Subtotal ($)" dollars value={values.splitAmount} onChange={changed("splitAmount")} min="0"/><NumberField label="Tax ($)" dollars value={values.tax} onChange={changed("tax")} min="0"/><NumberField label="Tip on subtotal (%)" size="compact" value={values.tip} onChange={changed("tip")} min="0"/><NumberField label="People" size="compact" value={values.people} onChange={changed("people")} min="1" step="1"/></>,
     units: <><NumberField label="Amount" value={values.amount} onChange={changed("amount")}/><Selection label="Measurement" size="standard" value={values.unitCategory} options={Object.keys(UNIT_SETS)} onChange={(v) => { const names=Object.keys(UNIT_SETS[v]);update("unitCategory",v);update("unitFrom",names[0]);update("unitTo",names[1]); }}/><Selection label="From" value={values.unitFrom} options={Object.keys(UNIT_SETS[values.unitCategory]).map(value=>({value,label:unitLabel(value)}))} onChange={changed("unitFrom")}/><Selection label="To" value={values.unitTo} options={Object.keys(UNIT_SETS[values.unitCategory]).map(value=>({value,label:unitLabel(value)}))} onChange={changed("unitTo")}/></>,
     date: <><NumberField label="Start date" type="date" value={values.start} onChange={changed("start")}/><NumberField label="End date" type="date" value={values.end} onChange={changed("end")}/><NumberField label="Days to add / subtract" size="compact" value={values.shift} onChange={changed("shift")} step="1"/></>,
-    percent: <><NumberField label="Starting amount" value={values.base} onChange={changed("base")}/><NumberField label="Percent (%)" size="compact" value={values.percent} onChange={changed("percent")}/><Selection label="Calculation" size="standard" value={values.percentMode} onChange={changed("percentMode")} options={[{value:"discount",label:"After discount"},{value:"increase",label:"After increase"},{value:"of",label:"Percent of amount"}]}/></>,
-    loan: <><NumberField label="Principal ($)" value={values.principal} onChange={changed("principal")} min="0"/><NumberField label="Annual interest (%)" size="compact" value={values.annual} onChange={changed("annual")} min="0"/><NumberField label="Term (months)" size="compact" value={values.months} onChange={changed("months")} min="1" step="1"/></>,
-    currency: <><NumberField label="Amount" value={values.currencyAmount} onChange={changed("currencyAmount")}/><Selection label="From currency" value={values.source} onChange={changed("source")} options={currencyOptions}/><Selection label="To currency" value={values.target} onChange={changed("target")} options={currencyOptions}/></>
+    percent: <><NumberField label="Starting amount" dollars value={values.base} onChange={changed("base")}/><NumberField label="Percent (%)" size="compact" value={values.percent} onChange={changed("percent")}/><Selection label="Calculation" size="standard" value={values.percentMode} onChange={changed("percentMode")} options={[{value:"discount",label:"After discount"},{value:"increase",label:"After increase"},{value:"of",label:"Percent of amount"}]}/></>,
+    loan: <><NumberField label="Principal ($)" dollars value={values.principal} onChange={changed("principal")} min="0"/><NumberField label="Annual interest (%)" size="compact" value={values.annual} onChange={changed("annual")} min="0"/><NumberField label="Term (months)" size="compact" value={values.months} onChange={changed("months")} min="1" step="1"/></>,
+    currency: <><NumberField label="Amount" dollars={values.source === "USD"} value={values.currencyAmount} onChange={changed("currencyAmount")}/><Selection label="From currency" value={values.source} onChange={changed("source")} options={currencyOptions}/><Selection label="To currency" value={values.target} onChange={changed("target")} options={currencyOptions}/></>
   };
   const output = toolOutput(active, values, fxRate, fxState);
   return <section ref={panelRef} className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
@@ -192,12 +214,24 @@ export default function RosieCalculations() {
   const [tool, setTool] = useState(null);
   const toolRef = useRef(null);
   const toolStageRef = useRef(null);
+  const scrollToolkitBottomRef = useRef(false);
   const [toolScale, setToolScale] = useState(1);
   const [values, setValues] = useState(DEFAULTS);
   const [currencyOptions, setCurrencyOptions] = useState(FX_FALLBACK_CURRENCIES);
   const [fxRate, setFxRate] = useState(null);
   const [fxState, setFxState] = useState("loading");
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
+  useLayoutEffect(() => {
+    if (tool || !scrollToolkitBottomRef.current) return undefined;
+    scrollToolkitBottomRef.current = false;
+    const scrollToBottom = () => {
+      const root = document.scrollingElement || document.documentElement;
+      window.scrollTo({top:Math.max(0, root.scrollHeight-window.innerHeight), behavior:"instant"});
+    };
+    const frame = requestAnimationFrame(scrollToBottom);
+    const settle = window.setTimeout(scrollToBottom, 140);
+    return () => {cancelAnimationFrame(frame);window.clearTimeout(settle);};
+  }, [tool]);
   // A dedicated iPhone tool stage covers the page header. Scale the WHOLE
   // approved one-piece gold frame (not its contents independently) to fit
   // inside the actual phone viewport above the persistent bottom navigation.
@@ -248,8 +282,11 @@ export default function RosieCalculations() {
       .then(rows => {
         if(!Array.isArray(rows)) throw new Error("Invalid currency list");
         const options = rows.filter(row => /^[A-Z]{3}$/.test(row.iso_code || ""))
-          .map(row => ({value:row.iso_code, label:row.iso_code + " · " + (row.name || row.iso_code)}))
-          .sort((a,b) => a.value.localeCompare(b.value));
+          .map(row => ({value:row.iso_code,
+            label:row.iso_code === "USD" ? "United States $" :
+              row.iso_code + " · " + (row.name || row.iso_code)}))
+          .sort((a,b) => a.value==="USD" ? -1 : b.value==="USD" ? 1 :
+            a.label.localeCompare(b.label));
         if(options.length) setCurrencyOptions(options);
       }).catch(() => { /* Keep accessible major-currency dropdowns offline. */ });
     return () => controller.abort();
@@ -341,7 +378,7 @@ export default function RosieCalculations() {
             <ToolPanel active={tool} values={values} update={update} currencyOptions={currencyOptions} fxRate={fxRate} fxState={fxState} onSelectTool={setTool} panelRef={toolRef}/>
           </div>
         </div>
-        <button type="button" className="rc-active-tool-close" onClick={() => { setTool(null); setToolScale(1); }}
+        <button type="button" className="rc-active-tool-close" onClick={() => { scrollToolkitBottomRef.current = true; setTool(null); setToolScale(1); }}
           aria-label="Close gold tool and return to calculator choices">
           <span aria-hidden="true">×</span><span>Tools</span>
         </button>
