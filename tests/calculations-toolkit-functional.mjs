@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { chromium } from "playwright";
 
-const pairedFieldIndices = { 0:[1,2], 1:[2,3], 3:[2,3], 5:[1,2], 6:[2,3] };
+const pairedFieldIndices = { 0:[1,2], 1:[2,3], 3:[2,3], 5:[1,2] };
 const labels = [
   "Tip Calculator",
   "Unit Conversions",
@@ -38,6 +38,26 @@ try {
     });
     const errors = [];
     page.on("pageerror", error => errors.push(String(error)));
+    // Simulate a dated provider response to test automatic conversion without
+    // relying on public-network availability in CI.
+    await page.route("https://api.frankfurter.dev/v2/**", async route=>{
+      const url=new URL(route.request().url());
+      if(url.pathname.endsWith("/currencies")) return route.fulfill({
+        status:200,contentType:"application/json",
+        body:JSON.stringify([
+          {iso_code:"USD",name:"United States Dollar"},
+          {iso_code:"EUR",name:"Euro"},
+          {iso_code:"GBP",name:"British Pound"},
+          {iso_code:"JPY",name:"Japanese Yen"}
+        ])
+      });
+      const parts=url.pathname.split("/");
+      const quote=parts.at(-1),base=parts.at(-2);
+      const rate=base==="USD"&&quote==="EUR" ? .92
+        : base==="EUR"&&quote==="USD" ? 1.08 : .75;
+      return route.fulfill({status:200,contentType:"application/json",
+        body:JSON.stringify({base,quote,date:"2026-10-12",rate})});
+    });
     await page.goto("http://127.0.0.1:5173/#calculations",{waitUntil:"networkidle"});
     await page.locator(".loading-screen-hidden").waitFor();
     assert.equal(await page.locator(".rc-tool-card").count(),7);
@@ -134,6 +154,11 @@ try {
           frame:{x:frame.x,right:frame.right,top:frame.top,bottom:frame.bottom,width:frame.width,height:frame.height},
           surface:{x:surface.x,right:surface.right,width:surface.width},
           result:{top:result.top,bottom:result.bottom,height:result.height},
+          headingTop:el.querySelector(".rc-device-heading").getBoundingClientRect().top,
+          // Conservative approximations of the painted red column endpoints
+          // on the stretched, original 1122px gold frame.
+          redTop:frame.top+frame.height*.11,
+          redBottom:frame.bottom-frame.height*.10,
           bottomPadding:parseFloat(housing.paddingBottom),inputs,
           scrollWidth:document.documentElement.scrollWidth
         };
@@ -165,8 +190,10 @@ try {
         "Page has horizontal overflow: "+labels[index]+" "+geometry.scrollWidth);
       assert(geometry.result.top>geometry.inputs.at(-1).bottom,
         "Results overlap the last input: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.result.bottom<=geometry.frame.bottom-35,
-        "Result extends into or beyond the gold frame footer: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.headingTop>=geometry.redTop+6-1,
+        "Title must begin at least 6px below red columns' upper edge: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.result.bottom<=geometry.redBottom-5+1,
+        "Result receipt must end 5px above red columns' lower edge: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.result.height>=155 && geometry.result.height<=245,
         "Result panel must fit multi-line calculations without occupying the entire device: "+labels[index]+" "+JSON.stringify(geometry));
       const resultTextFits=await panel.locator(".rc-tool-result").evaluate(el=>{
@@ -205,9 +232,25 @@ try {
       "Loan amortization changed unexpectedly");
     await page.locator(".rc-tool-card").nth(6).click();
     const currency=page.locator(".rc-device");
-    await currency.getByLabel("Rate (units of target per 1 source)").fill("0.92");
-    assert((await currency.locator(".rc-tool-result").innerText()).includes("92 EUR"),
-      "Currency conversion no longer responds to rate input");
+    const fromCurrency=currency.getByLabel("From currency");
+    const toCurrency=currency.getByLabel("To currency");
+    assert.equal(await fromCurrency.evaluate(el=>el.tagName),"SELECT");
+    assert.equal(await toCurrency.evaluate(el=>el.tagName),"SELECT");
+    assert.equal(await currency.getByLabel("Rate (units of target per 1 source)").count(),0,
+      "Obsolete manual-rate field must be removed");
+    await page.waitForFunction(()=>
+      document.querySelector(".rc-device--currency .rc-tool-result")?.textContent.includes("92 EUR"));
+    assert((await currency.locator(".rc-tool-result").innerText()).includes("2026-10-12"),
+      "Exchange-rate date must be visible to users");
+    await fromCurrency.selectOption("EUR");
+    await toCurrency.selectOption("USD");
+    await page.waitForFunction(()=>
+      document.querySelector(".rc-device--currency .rc-tool-result")?.textContent.includes("108 USD"));
+    assert((await currency.locator(".rc-tool-result").innerText()).includes("1 EUR = 1.08 USD"),
+      "Dropdown pair changes must fetch new reference rates");
+    await toCurrency.selectOption("EUR");
+    assert((await currency.locator(".rc-tool-result").innerText()).includes("100 EUR"),
+      "Same-currency conversion should be 1:1 without calling a provider");
     assert.equal(errors.length,0,errors.join("\n"));
     await page.close();
   }
