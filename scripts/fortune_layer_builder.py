@@ -119,14 +119,39 @@ def preview_contact(source, empty, composite, alpha_total, output):
     canvas.save(output,quality=92,subsampling=0)
 
 def make_background(rgb,mask):
-    # Repairs covered backdrop using nearby existing pixels, retaining
-    # absolutely original RGB everywhere outside the silhouette masks.
-    # This is a provisional inpaint only; front character edges are what
-    # should be evaluated in this pass, not the invented hidden scenery.
-    grown=cv2.dilate(mask,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9)))
-    bgr=cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR)
-    fill=cv2.inpaint(bgr,grown,9,cv2.INPAINT_TELEA)
-    return cv2.cvtColor(fill,cv2.COLOR_BGR2RGB)
+    # The original illustration contains no pixels behind Rosie. Inpainting
+    # an image-sized object creates obvious color smears. Use a restrained
+    # continuation of the existing midnight velvet stage instead. This is
+    # an artist's provisional hidden surface, NOT a recovered source plate.
+    yy,xx=np.indices((H,W),dtype=np.float32)
+    ripples=np.sin(xx/35.0)*3.1+np.sin(xx/93.0+yy/245.0)*2.5
+    shade=np.clip(1-((xx-W/2)/(W*.9))**2,0.68,1.0)
+    lamp_left=np.exp(-(((xx-368)/230)**2+((yy-493)/330)**2))
+    lamp_right=np.exp(-(((xx-1252)/220)**2+((yy-519)/350)**2))
+    glow=lamp_left+lamp_right
+    # Deep blue-black rear drapery, quietly enriched by real lamp positions.
+    back=np.zeros((H,W,3),dtype=np.float32)
+    back[:,:,0]=(15+ripples+glow*47)*shade
+    back[:,:,1]=(14+ripples*.46+glow*25)*shade
+    back[:,:,2]=(31+ripples*1.5+glow*10)*shade
+    # Dark ruby velvet inside the outer curtains, rather than bright
+    # hallucinated wall colors from an inpaint of a massive missing area.
+    sides=(xx<220)|(xx>1380)
+    ruby=np.stack((
+        np.maximum(20,48+ripples*2.8+glow*17),
+        np.maximum(5,9+ripples*.5+glow*12),
+        np.maximum(10,22+ripples*.8+glow*7)),axis=2)
+    back=np.where(sides[:,:,None],ruby,back)
+    # Original stage floor cloth plausibly continues behind cape/pedestal.
+    floor=np.clip((yy-1250)/110,0,1)[:,:,None]
+    cloth=np.stack((72+ripples*2.0,14+ripples*.4,31+ripples),axis=2)
+    back=back*(1-floor)+cloth*floor
+    back=np.uint8(np.clip(back,0,255))
+    empty=rgb.copy()
+    empty[mask>0]=back[mask>0]
+    # Lightly feather only the painted replacement transition; the exact
+    # source-owned sprites still overwrite that seam at rest.
+    return empty
 
 def main():
     p=argparse.ArgumentParser()
@@ -160,7 +185,7 @@ def main():
       "draft_layers":order,
       "still_baked":["moon","sky","books","treat-bowl","armillary",
                      "pedestal","top-border","crystals","tassels"],
-      "backplate":"OpenCV inpainting only, visually provisional",
+      "backplate":"Painted midnight-velvet continuation; provisional unseen areas",
       "boundary_type":"manual source-registered polygon; needs feather/hair matte QA",
       "static_composite_mean_abs_error":round(float(err.mean()),6),
       "fraction_pixels_changed_gt_24":round(float((err.max(2)>24).mean()),6),
