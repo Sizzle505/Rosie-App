@@ -12,23 +12,6 @@ const CATEGORIES = [
 ];
 
 // The quick lists reuse the original v1 item storage, retaining all saved data.
-const GROCERY_GROUPS = [
-  ["produce", "Produce"], ["dairy", "Dairy & Eggs"], ["meat", "Meat & Seafood"],
-  ["bakery", "Bakery"], ["frozen", "Frozen"], ["pantry", "Pantry"],
-  ["household", "Household"], ["other", "Other Essentials"]
-];
-const GROCERY_MATCHERS = [
-  ["produce", /\b(apple|banana|berries|berry|lettuce|spinach|kale|tomato|carrot|onion|potato|cucumber|avocado|lemon|lime|grape|orange|pepper|mushroom|broccoli|celery|garlic|salad|melon|pear|fruit|vegetable|herb)s?\b/i],
-  ["dairy", /\b(milk|egg|cheese|butter|yogurt|cream|cottage cheese)s?\b/i],
-  ["meat", /\b(chicken|beef|pork|turkey|fish|salmon|shrimp|steak|bacon|tuna|sausage)s?\b/i],
-  ["bakery", /\b(bread|bagel|croissant|bun|roll|muffin|tortilla|pita)s?\b/i],
-  ["frozen", /\b(frozen|ice cream|popsicle|sorbet)s?\b/i],
-  ["household", /\b(soap|detergent|paper towel|toilet paper|tissue|trash bag|sponge|shampoo|dishwash)s?\b/i],
-  ["pantry", /\b(rice|pasta|oil|salt|sugar|flour|coffee|tea|cereal|sauce|beans|peanut butter|jam|vinegar|spice|honey|chips|crackers)s?\b/i]
-];
-function groceryGroup(title) {
-  return GROCERY_MATCHERS.find(([, match]) => match.test(title))?.[0] || "other";
-}
 function cleanListItem(raw) {
   const entry = raw.trim().replace(/^(?:[•*]\s*|[-–]\s+|\d+[.)]\s+)/, "").replace(/\s+/g, " ");
   return entry ? entry.charAt(0).toUpperCase() + entry.slice(1) : "";
@@ -105,6 +88,7 @@ export default function RosieReminders() {
   const shown = useMemo(() => {
     const source = section === "today" ? store.items.filter(x => isScheduled(x, selectedDate))
       : store.items.filter(x => x.category === section);
+    if (section === "shopping") return source; // Keep exactly the input order: no automatic categorization.
     return [...source].sort((a, b) =>
       Number(isDone(a, selectedDate)) - Number(isDone(b, selectedDate)) ||
       (a.date || "9999").localeCompare(b.date || "9999") ||
@@ -292,32 +276,28 @@ export default function RosieReminders() {
         </>}
         {section === "shopping" && <>
           <form className="rr-quick-list-form rr-groceries-input" onSubmit={addGroceries}>
-            <label htmlFor="rr-groceries-input">Your grocery list</label>
-            <p>Write or paste your list all at once. Use a new line or a comma between items.</p>
+            <label htmlFor="rr-groceries-input">Grocery List</label>
             <textarea id="rr-groceries-input" aria-label="Grocery list items"
               rows={4} value={groceryDraft} onChange={e => setGroceryDraft(e.target.value)}
               placeholder={"Milk, eggs, cheese\\nAvocados, bananas\\nCoffee"} />
-            <button type="submit" disabled={!groceryDraft.trim()}>＋ Add to Grocery List</button>
+            <button type="submit" disabled={!groceryDraft.trim()}>＋ Add Items</button>
           </form>
-          {GROCERY_GROUPS.map(([id, label]) => {
-            const groupItems = shown.filter(item => groceryGroup(item.title) === id);
-            return groupItems.length ? <section key={id} className="rr-grocery-group" aria-label={label}>
-              <h3>{label}</h3>
-              <div className="rr-simple-rows">{groupItems.map(item => <div key={item.id}
-                className={"rr-simple-row"+(isDone(item, selectedDate) ? " is-done" : "")}>
-                <button type="button" className="rr-simple-check" aria-label={(isDone(item, selectedDate) ? "Mark incomplete: " : "Complete: ") + item.title}
-                  aria-pressed={isDone(item, selectedDate)} onClick={() => toggleDone(item)}>{isDone(item, selectedDate) ? "✓" : ""}</button>
-                {editingQuickId === item.id ? <form className="rr-simple-edit" onSubmit={saveQuickEdit}>
-                  <input autoFocus value={editingQuickTitle} onChange={e=>setEditingQuickTitle(e.target.value)}
-                    aria-label={"Rename "+item.title} onBlur={saveQuickEdit} maxLength={140} />
-                </form> : <span onClick={()=>startQuickEdit(item)}>{item.title}</span>}
-                <button type="button" className="rr-simple-remove" aria-label={"Remove "+item.title}
-                  onClick={()=>setStore(prev=>({...prev,items:prev.items.filter(x=>x.id!==item.id)}))}>×</button>
-              </div>)}</div>
-            </section> : null;
-          })}
-          {!shown.length && <p className="rr-quick-empty">Your list is ready for its first treat-worthy errand.</p>}
+          {shown.length > 0 && <div className="rr-simple-rows rr-grocery-rows" role="list" aria-label="Grocery checklist">
+            {shown.map(item => <div key={item.id} role="listitem"
+              className={"rr-simple-row rr-grocery-row"+(isDone(item, selectedDate) ? " is-done" : "")}>
+              <button type="button" className="rr-simple-check" aria-label={(isDone(item, selectedDate) ? "Mark incomplete: " : "Complete: ") + item.title}
+                aria-pressed={isDone(item, selectedDate)} onClick={() => toggleDone(item)}>{isDone(item, selectedDate) ? "✓" : ""}</button>
+              {editingQuickId === item.id ? <form className="rr-simple-edit" onSubmit={saveQuickEdit}>
+                <input autoFocus value={editingQuickTitle} onChange={e => setEditingQuickTitle(e.target.value)}
+                  aria-label={"Rename "+item.title} onBlur={saveQuickEdit} maxLength={140} />
+              </form> : <span onClick={() => startQuickEdit(item)}>{item.title}</span>}
+              <button type="button" className="rr-simple-remove" aria-label={"Remove "+item.title}
+                onClick={() => setStore(prev => ({...prev, items:prev.items.filter(x => x.id !== item.id)}))}>×</button>
+            </div>)}
+          </div>}
+          {!shown.length && <p className="rr-quick-empty">Your grocery list is empty.</p>}
         </>}
+
         {section === "tasks" && <>
           <form className="rr-quick-list-form rr-task-entry" onSubmit={addQuickTask}>
             <label htmlFor="rr-task-input">Things to do</label>
