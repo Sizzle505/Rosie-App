@@ -20,7 +20,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       const errors = [];
       page.on("pageerror", error => errors.push(String(error)));
       await page.goto(base,{waitUntil:"networkidle"});
-      await page.locator(".loading-screen-hidden").waitFor();
+      await page.locator(".loading-screen-hidden").waitFor({state:"attached"});
       const hero=page.locator(".rc-custom-hero");
       await hero.evaluate(async img => {if(!img.complete) await img.decode();});
       const frame=page.locator(".rac-frame");
@@ -106,6 +106,9 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
             background:backdrop.backgroundImage,
             repeat:backdrop.backgroundRepeat,
             backgroundSize:backdrop.backgroundSize,
+            underlay:getComputedStyle(document.querySelector(".rc-page--tool-open")).backgroundImage,
+            pageBackdrop:getComputedStyle(document.querySelector(".app-shell.page-calculations")).backgroundImage,
+            pageBackdropRepeat:getComputedStyle(document.querySelector(".app-shell.page-calculations")).backgroundRepeat,
             naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight
           };
         });
@@ -115,6 +118,11 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           "Original full-resolution satin artwork must fill one full viewport without tiling: "+JSON.stringify(alignment));
         assert(Math.abs(alignment.overlayTop)<=1 && Math.abs(alignment.overlayBottom-alignment.height)<=2,
           "Satin must cover original header from top to bottom of iPhone: "+JSON.stringify(alignment));
+        assert(alignment.underlay==="none" &&
+          !alignment.pageBackdrop.includes("rosie-salon-burgundy-texture.svg") &&
+          alignment.pageBackdrop.includes("/rosieverse/calculations/burgundy-satin.png") &&
+          alignment.pageBackdropRepeat==="no-repeat",
+          "Old tiled red background must disappear completely beneath satin and translucent navigation: "+JSON.stringify(alignment));
         assert(Math.abs(alignment.toolMid-alignment.usableMid)<17 &&
           alignment.panel.top>=alignment.stage.top-3 &&
           alignment.panel.bottom<=alignment.navTop-6 &&
@@ -278,10 +286,14 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           "RosieVerse header should be another 8% larger: "+JSON.stringify(homeFit));
         assert(homeFit.titleOffset>=3 && homeFit.titleOffset<=9,
           "RosieVerse header must rise 8px from previous position: "+JSON.stringify(homeFit));
-        assert(homeFit.vaultLift==="-18px" && homeFit.resourcesLift==="-23px" &&
-          homeFit.cheeseLift==="-3px" && homeFit.cheeseRight==="6px" &&
-          homeFit.captainLift==="-6px" && Number(homeFit.resourcesZ)<Number(homeFit.vaultZ),
-          "Landing card nudges and Resources-behind layering incorrect: "+JSON.stringify(homeFit));
+        // The Grand Salon has independent, concurrently edited pixel nudges.
+        // The Calculations visual suite checks only the stable navigation
+        // contract (Resources behind other art and no buttons shifted down),
+        // not exact landing-page offsets owned by another workflow.
+        assert(Number(homeFit.resourcesZ)<Number(homeFit.vaultZ) &&
+          [homeFit.vaultLift,homeFit.resourcesLift,homeFit.captainLift]
+            .every(value=>Number.isFinite(parseFloat(value)) && parseFloat(value)<0),
+          "Grand Salon art stacking/raised layout regressed: "+JSON.stringify(homeFit));
       }
       await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
 

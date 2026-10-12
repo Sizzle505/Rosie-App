@@ -1001,3 +1001,104 @@
     cursor:pointer;
   }
 }
+
+/* 2026-10-12: single satin salon, not the older repeating burgundy toolkit
+   texture visible through translucent browser/nav layers. Keep the ordinary
+   toolkit page unchanged when no golden instrument is selected. */
+@media (max-width:739px) {
+  .app-shell.page-calculations:has(.rc-page--tool-open) {
+    background-color:#4a071b !important;
+    background-image:url("/rosieverse/calculations/burgundy-satin.png") !important;
+    background-size:cover !important;
+    background-repeat:no-repeat !important;
+    background-position:center center !important;
+    background-attachment:fixed !important;
+  }
+  .app-shell.page-calculations .rc-page--tool-open,
+  .app-shell.page-calculations .rc-page--tool-open .rc-workspace {
+    background-image:none !important;
+    background-color:transparent !important;
+    background-repeat:no-repeat !important;
+  }
+  /* The viewport-fitted satin is the only painted surface behind the active
+     frame. The app-shell uses the same image solely for transparent nav bleed. */
+  .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-overlay {
+    inset:0;
+    width:100vw;
+    height:100dvh;
+    background:url("/rosieverse/calculations/burgundy-satin.png") center center / cover no-repeat #4a071b;
+    background-attachment:fixed;
+  }
+
+  /* Reserve the outer ~25% of the one-piece gold image for its real engraved
+     rails, helixes and ornamental shoulders, not text or editable bubbles.
+     Stretch the full original frame vertically, without repeating any pieces,
+     to make room for long dates, currency names, and multi-line receipts. */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-panel.rc-device {
+    padding-top:clamp(115px,30.7vw,172px);
+    padding-right:25%;
+    padding-bottom:clamp(152px,40.5vw,223px);
+    padding-left:25%;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-surface {
+    box-sizing:border-box;
+    width:100%;
+    max-width:100%;
+    gap:7px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-title-wrap,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result {
+    box-sizing:border-box;
+    min-width:0;
+    max-width:100%;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid {
+    row-gap:9px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field input,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field select {
+    max-width:100%;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
+    width:100%;
+    min-height:153px;
+    padding:20px 15px 23px;
+    margin-top:7px;
+    gap:6px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result {
+    min-height:175px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
+    min-height:164px;
+  }
+  /* Paired compact fields must share the same input baseline even if one
+     label wraps to two lines (e.g. "Tip on subtotal (%)" versus "People"). */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    min-height:34px;
+    box-sizing:border-box;
+    text-align:center;
+  }
+  /* When a receipt needs extra lines, its height expands normally and the
+     ResizeObserver recomputes the scale so the full frame still fits. */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result strong {
+    font-size:clamp(18px,4.1vw,25px);
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result span {
+    font-size:clamp(11.5px,3vw,13px);
+    line-height:1.25;
+    overflow-wrap:anywhere;
+  }
+}
