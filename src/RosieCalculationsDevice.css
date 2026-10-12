@@ -378,3 +378,14 @@
     padding-right: 28px;
   }
 }
+
+/* Long paired captions may wrap on a 375px iPhone; align controls by their
+   bottoms so a wrapped "Tip on subtotal" or "Annual interest" stays neat. */
+@media (max-width: 500px) {
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span {
+    display: flex;
+    align-items: flex-end;
+    min-height: 2.55em;
+  }
+}
