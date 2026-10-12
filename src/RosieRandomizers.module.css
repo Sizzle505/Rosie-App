@@ -1188,3 +1188,6 @@
   .wheelWrap[data-crowded="true"] .wheelLabel { width: 51px; font-size: 8px; }
   .wheelWrap[data-crowded="true"] .wheelLabel .wheelLabelWord { max-width: 51px; }
 }
+
+/* Start the Randomizers hero 18px sooner without changing its internal art. */
+.page { padding-top: 2px; }

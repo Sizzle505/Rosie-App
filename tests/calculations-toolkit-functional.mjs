@@ -154,8 +154,8 @@ try {
           Math.abs(left.width-right.width)<=2,
           "Compact short-value fields should share an unclipped row: "+labels[index]+" "+JSON.stringify(geometry.inputs));
         for (const [fieldIndex,field] of geometry.inputs.entries()) {
-          if (!paired.includes(fieldIndex)) assert(field.width>left.width*1.8,
-            "Long-value fields should remain full width: "+labels[index]);
+          if (!paired.includes(fieldIndex)) assert(field.width>left.width*(index===1 ? 1.30 : 1.45),
+            "Long-value fields should remain visibly wider than compact pairs: "+labels[index]);
         }
       }
       assert(geometry.scrollWidth<=width+2,

@@ -150,10 +150,207 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
 }
 .rtk-dial > .rtk-time .rtk-time-whole {font-weight:800;}
 .rtk-dial > .rtk-time .rtk-time-fraction {font-size:.57em;font-weight:800;color:#fbdca7;}
-.rtk-dial > .rtk-time.is-hours {font-weight:800;font-size:clamp(25px,7vw,47px);}
+.rtk-page .rtk-dial > .rtk-time.is-hours {font-weight:800;font-size:clamp(25px,7vw,47px);}
 @media(max-width:520px){.rtk-dial>.rtk-time:not(.is-hours){font-size:clamp(33px,9.55vw,50px);}}
 @media(max-width:355px){.rtk-dial>.rtk-time:not(.is-hours){font-size:32px;}}
 
 /* Move the ENTIRE illustrated Timekeeper page down by 15 physical CSS pixels,
    preserving every relationship between Rosie, gold bezel, dial and controls. */
 .app-shell.page-timekeeper main.rtk-page { margin-top:15px !important; }
+
+/* Timekeeper instrument renovation - numerals belong inside the circular dial.
+   All interactive buttons are moved to the floor below the illustrated bezel. */
+.rtk-dial {
+  display:block;
+  z-index:3;
+  /* Preserve the artwork's calibrated dial position and one-piece clockwork. */
+}
+.rtk-page .rtk-dial > .rtk-time,
+.rtk-page .rtk-dial > .rtk-time:not(.is-hours),
+.rtk-dial > .rtk-time.is-hours {
+  position:absolute;
+  z-index:3;
+  left:50%;
+  top:49%;
+  transform:translate(-50%,-50%);
+  display:flex;
+  justify-content:center;
+  align-items:baseline;
+  width:97%;
+  max-width:97%;
+  min-height:1.12em;
+  margin:0;
+  padding:0;
+  text-align:center;
+}
+.rtk-page .rtk-dial > .rtk-caption {
+  position:absolute;
+  z-index:3;
+  left:50%;
+  top:65%;
+  transform:translateX(-50%);
+  width:96%;
+  margin:0;
+  text-align:center;
+}
+.rtk-action-deck {
+  position:absolute;
+  z-index:4;
+  left:50%;
+  top:60.6%;
+  transform:translateX(-50%);
+  width:min(73%,420px);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:clamp(5px,.8vw,9px);
+  text-align:center;
+  font-family:Georgia,"Times New Roman",serif;
+  color:#ffebc5;
+  text-shadow:0 1px 4px #000d;
+}
+.rtk-action-deck .rtk-mode-switch {
+  width:auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+}
+.rtk-action-deck .rtk-mode-switch button {
+  min-height:30px;
+  min-width:90px;
+  padding:5px 13px;
+  font-size:clamp(12px,1.8vw,15px);
+}
+.rtk-action-deck .rtk-controls {
+  width:auto;
+  justify-content:center;
+  gap:clamp(12px,3vw,23px);
+}
+.rtk-action-deck .rtk-controls button {
+  width:clamp(44px,7.5vw,56px);
+  height:clamp(44px,7.5vw,56px);
+}
+/* Lower, narrower, deeper utility cabinet - no edge-to-edge shallow strip. */
+.rtk-utility {
+  top:73%;
+  width:min(68%,450px);
+  min-height:clamp(96px,14vw,148px);
+  max-height:21%;
+  padding:clamp(11px,1.8vw,17px);
+  overflow:auto;
+}
+.rtk-utility-heading { gap:6px; }
+.rtk-laps li { padding-block:6px; }
+.rtk-presets { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.rtk-presets button {
+  min-height:38px;
+  padding:8px 6px;
+  font-size:clamp(12px,2vw,15px);
+}
+.rtk-shortcut { gap:8px; flex-wrap:wrap; padding-top:9px; }
+.rtk-shortcut span { flex-basis:100%; text-align:center; margin:0; }
+.rtk-shortcut button { min-height:36px; min-width:62px; padding:7px 10px; }
+@media(max-width:520px) {
+  .rtk-action-deck { top:60.4%; width:81%; gap:5px; }
+  .rtk-action-deck .rtk-mode-switch button { min-height:28px; min-width:79px; padding:4px 8px; font-size:12px; }
+  .rtk-action-deck .rtk-controls button { width:44px; height:44px; }
+  .rtk-utility { top:73.5%; width:74%; min-height:103px; max-height:21%; padding:10px 12px; }
+  .rtk-page .rtk-dial > .rtk-time:not(.is-hours) { font-size:clamp(31px,9vw,43px); }
+  .rtk-dial > .rtk-time.is-hours { font-size:clamp(23px,6vw,30px); }
+}
+@media(max-width:355px) {
+  .rtk-action-deck { top:60.2%; gap:4px; }
+  .rtk-utility { top:73.5%; width:76%; }
+}
+
+
+/* October 12 refinement: circular transport keys hug the dial, while
+   Stopwatch/Timer tabs live INSIDE a wider and shallower utility cabinet. */
+.rtk-action-deck {
+  top:56%;
+  width:min(78%,440px);
+  gap:0;
+}
+.rtk-action-deck .rtk-controls { gap:clamp(10px,2.7vw,21px); }
+.rtk-utility {
+  top:63%;
+  width:min(86%,700px);
+  min-height:0;
+  max-height:19%;
+  padding:clamp(8px,1.4vw,13px) clamp(10px,2vw,17px);
+}
+.rtk-utility > .rtk-mode-switch {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  gap:clamp(8px,2vw,16px);
+  margin:0 0 7px;
+  padding:0 0 7px;
+  border-bottom:1px solid #bd955474;
+}
+.rtk-utility > .rtk-mode-switch button {
+  flex:1 1 0;
+  max-width:190px;
+  min-width:0;
+  min-height:30px;
+  padding:5px 8px;
+  font-size:clamp(11px,1.8vw,15px);
+}
+.rtk-utility-heading {
+  padding-bottom:5px;
+  font-size:clamp(13px,2vw,19px);
+}
+.rtk-utility .rtk-laps {
+  max-height:92px;
+  margin:2px 0;
+}
+.rtk-utility .rtk-laps li {padding-block:3px;}
+.rtk-utility .rtk-empty {margin:6px 0;line-height:1.25;}
+.rtk-utility .rtk-shortcut {
+  flex-wrap:nowrap;
+  gap:6px;
+  justify-content:center;
+  padding-top:5px;
+}
+.rtk-utility .rtk-shortcut span {
+  flex:0 1 auto;
+  margin-right:auto;
+  text-align:left;
+}
+.rtk-utility .rtk-shortcut button {
+  flex:0 0 auto;
+  min-width:46px;
+  min-height:33px;
+  padding:5px 8px;
+}
+.rtk-utility .rtk-presets {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+  margin-top:7px;
+}
+.rtk-utility .rtk-presets button {
+  min-width:0;
+  min-height:36px;
+  padding:5px 2px;
+}
+@media(max-width:520px) {
+  .rtk-action-deck {top:56%;width:85%;}
+  .rtk-action-deck .rtk-controls button {width:44px;height:44px;}
+  .rtk-utility {
+    top:63.2%;
+    width:87%;
+    max-height:19%;
+    padding:8px 10px;
+  }
+  .rtk-utility > .rtk-mode-switch button {min-height:28px;}
+  .rtk-utility .rtk-shortcut button {min-height:32px;}
+}
+@media(max-width:355px) {
+  .rtk-action-deck {top:56%;width:89%;}
+  .rtk-utility {top:64%;width:89%;padding:7px 8px;}
+  .rtk-utility .rtk-shortcut {gap:4px;}
+  .rtk-utility .rtk-shortcut button {min-width:43px;padding-inline:5px;}
+}

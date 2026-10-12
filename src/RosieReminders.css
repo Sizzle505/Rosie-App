@@ -217,3 +217,9 @@
   .rr-page .rr-grocery-rows{padding:6px 9px 10px;}
   .rr-page .rr-grocery-row{gap:8px;}
 }
+
+/* Keep the save-status footer visibly clear of the raised navigation bar. */
+.app-shell.page-reminders .rr-storage-note {
+  position: relative;
+  transform: translateY(-18px);
+}

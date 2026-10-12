@@ -306,10 +306,12 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           visibleBottom:window.innerHeight-toggle.bottom,
         };
       });
-      assert(position.horizontalOffset<4 && position.aboveBarBottom>=4
-        && position.aboveBarBottom<=18 && position.hangingBelowBar>=10
-        && position.hangingBelowBar<=21 && position.visibleBottom>=3,
+      assert(position.horizontalOffset<4 && position.aboveBarBottom>=-2
+        && position.aboveBarBottom<=18 && position.hangingBelowBar>=20
+        && position.hangingBelowBar<=28 && position.visibleBottom>=2,
         "Games/Tools toggle must hang directly beneath the nav row: "+JSON.stringify(position));
+      const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first().evaluate(el=>getComputedStyle(el).top);
+      assert.equal(raisedNavContent,"-7px","navigation content should sit 5px above the pendant's unchanged safe-area position");
       await navToggle.click();
       assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
         "Resources nav should expose the three utility destinations");
@@ -326,6 +328,54 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.goto(base + "/#timekeeper",{waitUntil:"networkidle"});
       const offset=await page.locator("main.rtk-page").evaluate(node=>getComputedStyle(node).marginTop);
       assert.equal(offset,"15px","Timekeeper scene should be lowered by 15px without distorting its artwork");
+      const clockLayout=await page.locator(".rtk-scene").evaluate(scene=>{
+        const rect=sel=>{const r=scene.querySelector(sel).getBoundingClientRect();
+          return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,centerX:(r.left+r.right)/2,centerY:(r.top+r.bottom)/2,width:r.width,height:r.height};};
+        return {dial:rect(".rtk-dial"),readout:rect(".rtk-time"),deck:rect(".rtk-action-deck"),
+          controls:rect(".rtk-controls"),utility:rect(".rtk-utility"),
+          modeInDial:scene.querySelector(".rtk-dial .rtk-mode-switch")!==null,
+          controlsInDial:scene.querySelector(".rtk-dial .rtk-controls")!==null,
+          modeInPanel:scene.querySelector(".rtk-utility > .rtk-mode-switch")!==null,
+          modeInActionDeck:scene.querySelector(".rtk-action-deck .rtk-mode-switch")!==null,
+          sceneWidth:scene.getBoundingClientRect().width,sceneHeight:scene.getBoundingClientRect().height,
+          viewport:innerWidth};
+      });
+      assert(!clockLayout.modeInDial && !clockLayout.controlsInDial &&
+        clockLayout.modeInPanel && !clockLayout.modeInActionDeck,
+        "Stopwatch/Timer must be inside the utility panel; circular controls must stay outside the dial");
+      assert(Math.abs(clockLayout.readout.centerX-clockLayout.dial.centerX)<3 &&
+        Math.abs(clockLayout.readout.centerY-clockLayout.dial.centerY)<6,
+        "Timekeeper numerals must be geometrically centered in the clock: "+JSON.stringify(clockLayout));
+      assert(clockLayout.deck.top>=clockLayout.dial.bottom+4 &&
+        clockLayout.deck.top<=clockLayout.dial.bottom+25 &&
+        clockLayout.utility.top>=clockLayout.controls.bottom+2,
+        "Circular Timekeeper buttons must hug the bezel without overlapping it or the panel: "+JSON.stringify(clockLayout));
+      assert(clockLayout.utility.width>=clockLayout.sceneWidth*.79 &&
+        clockLayout.utility.width<=clockLayout.sceneWidth*.90 &&
+        clockLayout.utility.height<=clockLayout.sceneHeight*.195,
+        "Timekeeper panel must be wider and shallower without exceeding its scene: "+JSON.stringify(clockLayout));
+      await page.screenshot({path:dir+"/"+name+"-timekeeper-stopwatch.png",fullPage:true});
+      const start=page.getByRole("button",{name:"Start",exact:true});
+      await start.click();
+      await page.waitForTimeout(120);
+      await page.getByRole("button",{name:"Record lap"}).click();
+      assert.equal(await page.locator(".rtk-laps li").count(),1,"lap recording must still work");
+      await page.locator(".rtk-utility").getByRole("button",{name:"Timer",exact:true}).click();
+      assert.equal(await page.locator(".rtk-presets button").count(),4,"Quick Timers missing");
+      const timerGeometry=await page.locator(".rtk-utility").evaluate(panel=>{
+        const timerButtons=[...panel.querySelectorAll(".rtk-presets button")];
+        const bounds=timerButtons.map(button=>button.getBoundingClientRect());
+        return {sameRow:bounds.every(r=>Math.abs(r.top-bounds[0].top)<2),
+          panelWidth:panel.getBoundingClientRect().width,
+          rowWidth:bounds.at(-1).right-bounds[0].left};
+      });
+      assert(timerGeometry.sameRow&&timerGeometry.rowWidth<=timerGeometry.panelWidth,
+        "Four quick timers should fit in a single shallow row: "+JSON.stringify(timerGeometry));
+      const preset=page.getByRole("button",{name:"5 min",exact:true});
+      await preset.click();
+      assert((await page.locator(".rtk-time").innerText()).includes("05:00"),
+        "Quick Timer preset failed to update the centered clock");
+      await page.screenshot({path:dir+"/"+name+"-timekeeper-timer.png",fullPage:true});
       assert.equal(errors.length,0,"Browser errors: "+errors.join(" | "));
       results.push({engine,width,height,hero:displayedHero.split("/").at(-1),errors:0});
       await context.close();
