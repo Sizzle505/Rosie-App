@@ -958,3 +958,15 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-page .rtk-utility.is-timer {width:min(70%,490px);}
   .rtk-page .rtk-utility-inner {left:12%;right:12%;}
 }
+
+/* Preserve ornamental frame while fitting the entire custom time form. */
+.rtk-page .rtk-utility.is-timer .rtk-utility-inner {top:23%;bottom:7%;}
+.rtk-page .rtk-utility.is-timer .rtk-utility-heading {padding-bottom:6px;margin-bottom:2px;}
+.rtk-page .rtk-utility.is-timer .rtk-custom-timer {margin-top:2px;}
+.rtk-page .rtk-utility.is-timer .rtk-custom-timer label {font-size:9px;}
+.rtk-page .rtk-utility.is-timer .rtk-custom-timer input {min-height:30px;}
+@media(max-width:520px) and (max-height:700px) {
+  .rtk-page .rtk-utility.is-timer .rtk-utility-inner {top:16%;bottom:4%;}
+  .rtk-page .rtk-utility.is-timer .rtk-utility-heading {padding-bottom:4px;margin-bottom:0;}
+  .rtk-page .rtk-utility.is-timer .rtk-custom-timer input {min-height:25px;}
+}

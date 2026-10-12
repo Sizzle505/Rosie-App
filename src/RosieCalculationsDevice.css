@@ -1424,3 +1424,19 @@
   }
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-tool-result {margin-top:0;}
 }
+
+/* Keep an accessible 44px native hit target while its visually painted
+   gold date bubble is only 36px tall; centered in the field without scaling
+   or distorting the surrounding original frame. */
+@media(max-width:739px) {
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) input {
+    height:44px;
+    min-height:44px;
+    max-height:44px;
+    background-size:100% 36px;
+    background-position:center;
+    background-repeat:no-repeat;
+    padding-top:6px;
+    padding-bottom:6px;
+  }
+}
