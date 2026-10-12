@@ -106,6 +106,9 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
             background:backdrop.backgroundImage,
             repeat:backdrop.backgroundRepeat,
             backgroundSize:backdrop.backgroundSize,
+            underlay:getComputedStyle(document.querySelector(".rc-page--tool-open")).backgroundImage,
+            pageBackdrop:getComputedStyle(document.querySelector(".app-shell.page-calculations")).backgroundImage,
+            pageBackdropRepeat:getComputedStyle(document.querySelector(".app-shell.page-calculations")).backgroundRepeat,
             naturalWidth:image.naturalWidth,naturalHeight:image.naturalHeight
           };
         });
@@ -115,6 +118,11 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           "Original full-resolution satin artwork must fill one full viewport without tiling: "+JSON.stringify(alignment));
         assert(Math.abs(alignment.overlayTop)<=1 && Math.abs(alignment.overlayBottom-alignment.height)<=2,
           "Satin must cover original header from top to bottom of iPhone: "+JSON.stringify(alignment));
+        assert(alignment.underlay==="none" &&
+          !alignment.pageBackdrop.includes("rosie-salon-burgundy-texture.svg") &&
+          alignment.pageBackdrop.includes("/rosieverse/calculations/burgundy-satin.png") &&
+          alignment.pageBackdropRepeat==="no-repeat",
+          "Old tiled red background must disappear completely beneath satin and translucent navigation: "+JSON.stringify(alignment));
         assert(Math.abs(alignment.toolMid-alignment.usableMid)<17 &&
           alignment.panel.top>=alignment.stage.top-3 &&
           alignment.panel.bottom<=alignment.navTop-6 &&
