@@ -53,9 +53,9 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       assert(Math.abs(geometry.image.height-geometry.image.width*geometry.nativeHeight/geometry.nativeWidth)<=1.5,
         "header natural aspect ratio was distorted");
       assert(Math.abs(geometry.hero.bottom-geometry.frame.top-18)<=1.5,"calculator must start 18px above header seam");
-      assert(await page.locator(".rc-calculator-stage").evaluate(el=>Number(getComputedStyle(el).zIndex)) >
+      assert(await page.locator(".rc-calculator-stage").evaluate(el=>Number(getComputedStyle(el).zIndex)) <
         await page.locator(".rc-hero").evaluate(el=>Number(getComputedStyle(el).zIndex)),
-        "raised normal calculator must display in front of the hero seam");
+        "the Calculations header must be in front of the raised normal calculator");
       assert(Math.abs(geometry.frame.width-width)<=1.5,"calculator must fill viewport");
       assert(Math.abs(geometry.frame.left)<=1.5,"calculator left edge offset");
       assert(geometry.scrollWidth<=width+2,"horizontal overflow");
@@ -84,6 +84,15 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       });
       assert(toolkitLayout.headingMargin<=14 && toolkitLayout.rowGap===0 && toolkitLayout.cardMargin<=-4,
         "Pocket Toolkit dead space was not reduced: "+JSON.stringify(toolkitLayout));
+      await page.locator(".rc-tool-card").first().click();
+      const layers=await page.evaluate(()=>({
+        hero:Number(getComputedStyle(document.querySelector(".rc-hero")).zIndex),
+        normal:Number(getComputedStyle(document.querySelector(".rc-calculator-stage")).zIndex),
+        gold:Number(getComputedStyle(document.querySelector(".rc-workspace")).zIndex)
+      }));
+      assert(layers.gold>layers.hero && layers.hero>layers.normal,
+        "Only the active gold tool should be in front of the Calculations header: "+JSON.stringify(layers));
+      await page.locator(".rc-tool-card").first().click();
       const name=engine+"-"+width+"x"+height;
       await page.screenshot({path:output+"/"+name+"-full.png",fullPage:true});
       await hero.screenshot({path:output+"/"+name+"-header.png"});
