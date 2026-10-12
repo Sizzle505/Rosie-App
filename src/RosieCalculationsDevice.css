@@ -1102,3 +1102,140 @@
     overflow-wrap:anywhere;
   }
 }
+
+/* Unified luxury gold instrument — its outer artwork has ONE iPhone footprint.
+   Smaller forms make a smaller receipt, NEVER a smaller or stretched frame.
+   The layout is measured before the whole instrument is viewport-fitted. */
+@media (max-width:739px) {
+  .app-shell.page-calculations:has(.rc-page--tool-open) {
+    background-size:100vw 100dvh !important;
+    background-position:center top !important;
+    background-repeat:no-repeat !important;
+    background-attachment:fixed !important;
+  }
+  .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-overlay {
+    /* Unlike cover on a long scrolled page, this presents the entire
+       original silk composition from top to bottom, with zero seams/crop. */
+    background-size:100% 100% !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-attachment:scroll !important;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-panel.rc-device {
+    /* All seven tools share Percentages' footprint at the same screen width.
+       The ornate medallions no longer stretch as form lengths change. */
+    height:clamp(640px,calc(292px + 101vw),740px);
+    min-height:0;
+    max-height:none;
+    padding-top:calc(clamp(115px,30.7vw,172px) + 40px);
+    padding-bottom:calc(clamp(152px,40.5vw,223px) + 12px);
+    padding-left:25%;
+    padding-right:25%;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device-surface {
+    min-height:0;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    justify-content:space-between;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid {
+    flex:0 0 auto;
+    row-gap:5px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field {
+    gap:2px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field input,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field select {
+    min-height:42px;
+    height:42px;
+    max-height:42px;
+  }
+  /* Date controls are short dates, not oversized full-width gold plaques. */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) input {
+    width:min(100%,151px);
+    max-width:100%;
+    height:42px;
+    min-height:42px;
+    padding:6px 8px;
+    font-size:14px;
+    text-align:center;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) {
+    align-items:center;
+  }
+  /* All receipts may expand if their content genuinely needs it. The two
+     shortest results should not reserve empty space for multiple paragraphs. */
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
+    flex:0 0 auto;
+    height:auto;
+    min-height:105px;
+    padding:13px 12px 16px;
+    gap:3px;
+    margin:3px 0 0;
+    justify-content:center;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--tip .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--split .rc-tool-result {
+    min-height:123px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--currency .rc-tool-result {
+    min-height:115px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--units .rc-tool-result,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--percent .rc-tool-result {
+    min-height:87px;
+    padding:12px 11px 13px;
+    gap:2px;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result strong {
+    font-size:clamp(18px,3.9vw,24px);
+    line-height:1.1;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-tool-result span {
+    line-height:1.18;
+  }
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--units .rc-tool-result span,
+  .app-shell.page-calculations .rc-active-tool-overlay .rc-device--percent .rc-tool-result span {
+    font-size:clamp(11px,2.9vw,13px);
+  }
+}
+/* A different corner of the intact golden instrument catches lamplight every
+   ~30 seconds. No image strip is overlaid across the readable gold tray. */
+.rc-page .rc-device-housing {overflow:visible;}
+.rc-page .rc-device-gleam {
+  position:absolute;
+  z-index:5;
+  width:33px;height:33px;
+  pointer-events:none;
+  opacity:0;
+  border-radius:50%;
+  background:radial-gradient(circle,#fffcee 0%,#ffe7ad 13%,#eeb64e55 26%,transparent 68%);
+  filter:drop-shadow(0 0 5px #ffefb9c7);
+  animation:rosie-device-corner-gleam 120s ease-in-out infinite;
+}
+.rc-page .rc-device-gleam::before,
+.rc-page .rc-device-gleam::after {
+  content:"";
+  position:absolute;
+  background:linear-gradient(90deg,transparent,#fffbe7 44%,#fffbe7 56%,transparent);
+  left:-19px;right:-19px;top:calc(50% - 1px);height:2px;
+}
+.rc-page .rc-device-gleam::after {transform:rotate(90deg);}
+.rc-page .rc-device-gleam--tl {left:11%;top:17%;}
+.rc-page .rc-device-gleam--tr {right:11%;top:17%;animation-delay:-30s;}
+.rc-page .rc-device-gleam--br {right:11%;bottom:18%;animation-delay:-60s;}
+.rc-page .rc-device-gleam--bl {left:11%;bottom:18%;animation-delay:-90s;}
+@keyframes rosie-device-corner-gleam {
+  0%,3.3%,100% {opacity:0;transform:scale(.5) rotate(-15deg);}
+  1.35% {opacity:.87;transform:scale(1.16) rotate(18deg);}
+}
+@media (prefers-reduced-motion:reduce) {
+  .rc-page .rc-device-gleam {animation:none!important;opacity:0!important;}
+}
