@@ -103,6 +103,26 @@ def clip_to_known_occlusion(masks):
         assigned = cv2.bitwise_or(assigned,masks[name])
     return ordering,owned,assigned
 
+def segment_original_rosie_head(rgb):
+    """Extract the source head and jeweled turban, not a substitute dog."""
+    from rembg import new_session, remove
+    x0,y0,x1,y1=490,88,1280,830
+    image=Image.fromarray(rgb).crop((x0,y0,x1,y1))
+    cutout=remove(image, session=new_session("u2netp"), alpha_matting=False)
+    alpha=np.array(cutout.getchannel("A"))
+    count,labels=cv2.connectedComponents((alpha>70).astype(np.uint8))
+    if count>1:
+        counts=np.bincount(labels.flatten())
+        counts[0]=0
+        alpha[labels!=counts.argmax()]=0
+    yy=np.arange(y0,y1)[:,None]
+    taper=np.clip((788-yy)/35.0,0,1)
+    alpha=np.uint8(alpha.astype(np.float32)*taper)
+    alpha=cv2.GaussianBlur(alpha,(3,3),0.6)
+    full=np.zeros((H,W),np.uint8)
+    full[y0:y1,x0:x1]=alpha
+    return full
+
 def candidate_head_refinement(rgb, rough):
     # Trial matte only. Keep canonical source polygons unchanged until manual
     # review of the candidate at 100%: turban ornaments and black fur are easy
@@ -211,6 +231,8 @@ def extract_existing_side_head(side_path,out):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--source",type=Path,required=True)
+    p.add_argument("--smart-head",action="store_true",
+                   help="Use source-trained foreground model for Rosie head")
     p.add_argument("--side-source",type=Path,
                    default=Path("public/rosie-fortune-turn-side.webp"))
     p.add_argument("--out",type=Path,required=True)
@@ -221,7 +243,13 @@ def main():
     args.out.mkdir(parents=True,exist_ok=True)
     rgb=np.array(source)
     masks={name:poly_mask(parts) for name,parts in SHAPES.items()}
+    smart_alpha=segment_original_rosie_head(rgb) if args.smart_head else None
+    if smart_alpha is not None:
+        masks["rosie/head-front"]=np.where(smart_alpha>18,255,0).astype(np.uint8)
+        masks["rosie/torso"][smart_alpha>18]=0
     order,owned,union=clip_to_known_occlusion(masks)
+    if smart_alpha is not None:
+        owned["rosie/head-front"]=np.minimum(owned["rosie/head-front"],smart_alpha)
     side_candidate=extract_existing_side_head(args.side_source,args.out)
     refined_head=candidate_head_refinement(rgb,masks["rosie/head-front"])
     save_rgba(args.out/"rosie/head-grabcut-CANDIDATE.webp",rgb,refined_head)
@@ -246,8 +274,9 @@ def main():
       "still_baked":["moon","sky","books","treat-bowl","armillary",
                      "pedestal","top-border","crystals","tassels"],
       "backplate":"Painted midnight-velvet continuation; provisional unseen areas",
-      "boundary_type":"manual source-registered polygon; needs feather/hair matte QA",
+      "boundary_type":"source-registered polygons with U2NetP original-head alpha when enabled",
       "head_refined_diagnostic_only":True,
+      "smart_source_head_used":bool(args.smart_head),
       "head_left_candidate_from_existing_app_portrait":side_candidate,
       "static_composite_mean_abs_error":round(float(err.mean()),6),
       "fraction_pixels_changed_gt_24":round(float((err.max(2)>24).mean()),6),
