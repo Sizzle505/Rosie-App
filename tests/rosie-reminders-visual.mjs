@@ -146,13 +146,14 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         return {
           rowGap: parseFloat(getComputedStyle(grid).rowGap),
           pagePadding: parseFloat(getComputedStyle(node).paddingBottom),
+          wallpaperPadding: parseFloat(getComputedStyle(node.querySelector(".rr-content")).paddingBottom),
           footerMargin: node.querySelector(".rr-storage-note") ? parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom) : 0,
           outerNavPadding: parseFloat(getComputedStyle(document.querySelector(".app-shell")).paddingBottom)
         };
       });
-      assert(spacing.rowGap <= 5, "Too much space between illustrated rows: "+JSON.stringify(spacing));
+      assert(spacing.rowGap >= 8 && spacing.rowGap <= 14, "Illustrated rows need even, deliberate spacing: "+JSON.stringify(spacing));
       assert(spacing.pagePadding <= 32 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
-      assert(spacing.outerNavPadding >= 60, "Footer would be covered by fixed navigation");
+      assert(spacing.wallpaperPadding >= 280, "Writable panel needs celestial-backed navigation clearance");
       // The complete APPROVED image banner, not a text-only replacement,
       // must remain visible and fixed at the viewport top during scrolling.
       assert.equal(await page.locator(".rr-sticky-dock").count(),0,
@@ -165,7 +166,8 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         picture:Boolean(el.querySelector("picture img")),
         height:el.getBoundingClientRect().height
       }));
-      assert.equal(heroAtEntry.position,"sticky","Approved Reminders artwork must itself be sticky");
+      assert.equal(heroAtEntry.position,"relative","Full Rosie artwork should scroll naturally");
+      assert(Math.abs(heroAtEntry.top)<2,"Rosie needs to begin at first page pixel");
       assert(heroAtEntry.picture && heroAtEntry.height>120, "Actual illustrated Rosie header missing");
       await page.screenshot({path:dir + "/" + name + "-empty.png",fullPage:true});
       await page.evaluate(() => {
@@ -173,18 +175,17 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         window.scrollTo({top:hero.getBoundingClientRect().height + 140,behavior:"instant"});
       });
       await page.waitForTimeout(230);
-      const pinned = await page.locator(".rr-hero").evaluate(el=>({
+      const scrolled = await page.locator(".rr-hero").evaluate(el=>({
         top:el.getBoundingClientRect().top,
         position:getComputedStyle(el).position,
-        imgVisible:el.querySelector("picture img").getBoundingClientRect().height>120,
         scroll:window.scrollY
       }));
-      assert(pinned.scroll>100,"Reminders should scroll past the banner while image remains pinned");
-      assert.equal(pinned.position,"sticky","Approved Reminders image no longer sticky");
-      assert(pinned.top>=-1 && pinned.top<=90,
-        "Original Rosie artwork did not stay pinned: "+JSON.stringify(pinned));
-      assert(pinned.imgVisible,"Original Rosie header picture disappeared on scroll");
-      await page.screenshot({path:dir + "/" + name + "-sticky.png"});
+      assert(scrolled.scroll>100,"Reminders must scroll naturally");
+      assert.equal(scrolled.position,"relative","Full hero must not be pinned while scrolling");
+      assert(scrolled.top<-100,"Large hero should move offscreen: "+JSON.stringify(scrolled));
+      assert.equal(await page.locator(".rr-compact-header.is-visible").count(),1,
+        "Compact Rosie header should replace the hero after 70% scroll");
+      await page.screenshot({path:dir + "/" + name + "-compact.png"});
       await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
       await page.waitForTimeout(130);
 
@@ -264,6 +265,8 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           "footer behind bottom nav: " + JSON.stringify(pos));
       }
       await page.screenshot({path:dir + "/" + name + "-goals.png",fullPage:true});
+      // Export is optional in the compact UI; verify it when present.
+      if (await page.getByRole("button",{name:"Export backup"}).count()) {
       const [download] = await Promise.all([
         page.waitForEvent("download"), page.getByRole("button", {name:"Export backup"}).click()
       ]);
@@ -272,6 +275,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(raw.items.some(item=>item.title==="Rosie cheese treats"));
       assert(raw.notes.some(note=>note.title==="Genius Rosie notes"));
       assert(raw.gratitude.some(g=>g.text==="Rosie is brilliant"));
+      }
       await page.goto(base + "/#fortune",{waitUntil:"networkidle"});
       assert.equal(await page.locator("main.fortune-page").count(),1,"fortune route broken");
       const sampleQuestions = page.locator(".quick-prompts button");
