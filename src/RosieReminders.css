@@ -466,7 +466,9 @@
   isolation:isolate;
   position:relative;
   width:100%;max-width:none;
-  min-height:0;
+  /* Exactly enough document travel for both 15% edges to roll away on
+     narrow phones - no forced 325px blank footer or extra full viewport. */
+  min-height:calc(100dvh - var(--rr-hero-middle-height, 215px) + 8px);
   margin:0;
   padding:5px 0 calc(108px + env(safe-area-inset-bottom));
   background-color:#071225;
