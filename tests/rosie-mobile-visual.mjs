@@ -97,7 +97,18 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
           const grid = document.querySelector(".cheese-grid").getBoundingClientRect();
           const nav = document.querySelector(".bottom-nav").getBoundingClientRect();
           const examiner = document.querySelector(".cheese-examiner-rail").getBoundingClientRect();
-          return { gridTop: grid.top, gridBottom: grid.bottom, navTop: nav.top, examinerBottom: examiner.bottom };
+          const gridElement = document.querySelector(".cheese-grid");
+          return {
+            gridTop: grid.top, gridBottom: grid.bottom, navTop: nav.top, examinerBottom: examiner.bottom,
+            scrollY: window.scrollY,
+            rootScrollHeight: document.scrollingElement?.scrollHeight,
+            bodyScrollHeight: document.body.scrollHeight,
+            viewportHeight: window.innerHeight,
+            boardCap: gridElement.style.getPropertyValue("--flash-board-cap"),
+            boardMargin: gridElement.style.scrollMarginTop,
+            boardActive: document.querySelector(".cheese-game-page")?.className,
+            scrollRoot: document.scrollingElement?.tagName
+          };
         });
         const assertFits = (pos, mode) => {
           assert(pos.gridBottom < pos.navTop - 3, mode + " bottom row under navigation: " + JSON.stringify(pos));
