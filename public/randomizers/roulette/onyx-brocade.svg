@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+ <defs>
+ <radialGradient id="velvet"><stop stop-color="#24242a" offset="0"/><stop stop-color="#13151b" offset=".48"/><stop stop-color="#020305" offset=".86"/><stop stop-color="#050507" offset="1"/></radialGradient>
+ <pattern id="threads" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-22)"><path d="M0 0V9" stroke="#fff4e4" stroke-opacity=".065" stroke-width=".7"/><path d="M4 0V9" stroke="#000" stroke-opacity=".23" stroke-width=".6"/></pattern>
+ <g id="damask" fill="none" stroke="#63636a" stroke-linecap="round" stroke-linejoin="round">
+ <path stroke-width="2.3" d="M128 10 C121 37 107 48 90 51 C61 57 52 35 66 29 C77 25 88 37 77 42 M128 10 C135 37 149 48 166 51 C195 57 204 35 190 29 C179 25 168 37 179 42 M128 239 C122 216 109 205 95 198 C69 186 58 211 73 217 C84 222 91 206 81 205 M128 239 C134 216 147 205 161 198 C187 186 198 211 183 217 C172 222 165 206 175 205"/>
+ <path stroke-width="1.8" d="M128 40 C114 70 95 71 85 92 C71 117 91 140 108 125 C121 111 113 98 103 103 C94 106 96 116 101 116 M128 40 C142 70 161 71 171 92 C185 117 165 140 148 125 C135 111 143 98 153 103 C162 106 160 116 155 116 M128 220 C114 192 93 183 83 163 C70 141 90 133 100 144 C108 153 101 161 96 157 M128 220 C142 192 163 183 173 163 C186 141 166 133 156 144 C148 153 155 161 160 157"/>
+ <path stroke-width="1.5" d="M128 57 C115 76 114 89 123 100 M128 57 C141 76 142 89 133 100 M128 198 C115 180 110 164 120 146 M128 198 C141 180 146 164 136 146 M35 112 C57 105 64 116 55 128 C40 150 16 134 26 120 M221 112 C199 105 192 116 201 128 C216 150 240 134 230 120"/>
+ <path stroke-width="1.7" d="M128 100 C113 108 107 122 128 140 C149 122 143 108 128 100Z"/>
+ </g></defs>
+ <rect width="256" height="256" fill="url(#velvet)"/>
+ <rect width="256" height="256" fill="url(#threads)"/>
+ <use href="#damask" opacity=".3"/>
+ <g fill="#918475" opacity=".15"><path d="M128 71 C107 88 117 105 128 107 C139 105 149 88 128 71Z M125 138 C114 154 123 176 128 180 C133 176 142 154 131 138Z M128 123 L119 114 L113 126 L128 139 L143 126 L137 114Z M67 82 C71 101 82 108 97 108 C92 93 84 87 67 82Z M189 82 C185 101 174 108 159 108 C164 93 172 87 189 82Z M67 173 C72 157 85 152 97 153 C92 165 82 170 67 173Z M189 173 C184 157 171 152 159 153 C164 165 174 170 189 173Z"/></g>
+ <path d="M0 0H256V256H0Z" fill="none" stroke="#fff" opacity=".025"/>
+ </svg>

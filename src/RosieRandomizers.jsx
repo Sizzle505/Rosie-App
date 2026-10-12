@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./RosieRandomizers.module.css";
+import RosieRouletteFace from "./RosieRouletteFace.jsx";
 
 const DEFAULT_WHEEL = [
   "Go Out",
@@ -63,36 +64,6 @@ function DiceFace({ value, rolling }) {
   );
 }
 
-function makeWheelGradient(count) {
-  if (!count) return "#08090B";
-  const step = 360 / count;
-  const slices = [];
-
-  for (let index = 0; index < count; index += 1) {
-    const start = index * step;
-    const end = (index + 1) * step;
-    const isLastOddSlice = count % 2 === 1 && index === count - 1;
-    const color = isLastOddSlice
-      ? "#C29A43"
-      : index % 2 === 0
-        ? "#7B1023"
-        : "#111216";
-
-    slices.push(`${color} ${start}deg ${Math.max(start, end - 1.35)}deg`);
-    slices.push(`#D9BB68 ${Math.max(start, end - 1.35)}deg ${end}deg`);
-  }
-
-  return [
-    "radial-gradient(circle at 34% 24%, rgba(255,255,255,.16), transparent 25%)",
-    "radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,.18) 68%, rgba(0,0,0,.58) 100%)",
-    `conic-gradient(from ${-step / 2}deg, ${slices.join(", ")})`
-  ].join(", ");
-}
-
-function wheelLabelColor(index, count) {
-  return count % 2 === 1 && index === count - 1 ? "#2C1C0A" : "#FFF7DF";
-}
-
 export default function RosieRandomizers() {
   const [coin, setCoin] = useState("Heads");
   const [coinFlip, setCoinFlip] = useState(false);
@@ -110,10 +81,6 @@ export default function RosieRandomizers() {
   const sectors = useMemo(
     () => entries.map((entry, index) => ({ entry, index })),
     [entries]
-  );
-  const wheelBackground = useMemo(
-    () => makeWheelGradient(entries.length),
-    [entries.length]
   );
 
   function flipCoin() {
@@ -282,15 +249,12 @@ export default function RosieRandomizers() {
             <p>Rosie spins. Everyone lives with it.</p>
           </div>
 
-          <div className={styles.wheelWrap}>
-            <div className={styles.pointer} aria-hidden="true"><i /></div>
+          <div className={styles.wheelWrap} data-crowded={sectors.length >= 8}>
             <div
               className={styles.wheel}
-              style={{
-                "--rotation": `${angle}deg`,
-                background: wheelBackground
-              }}
+              style={{ "--rotation": `${angle}deg` }}
             >
+              <RosieRouletteFace count={sectors.length} />
               {sectors.map(({ entry, index }) => {
                 const step = 360 / sectors.length;
                 return (
@@ -298,17 +262,20 @@ export default function RosieRandomizers() {
                     key={`${entry}-${index}`}
                     className={styles.wheelLabel}
                     style={{
-                      "--label-angle": `${index * step}deg`,
-                      color: wheelLabelColor(index, sectors.length)
+                      "--label-angle": `${index * step}deg`
                     }}
                   >
                     <b>{entry}</b>
                   </span>
                 );
               })}
-              <div className={styles.wheelHub}>
-                <img src="/randomizers/rosie-signet.webp" alt="" aria-hidden="true" />
-              </div>
+            </div>
+            <img className={styles.wheelFrame} src="/randomizers/roulette/frame.svg" alt="" aria-hidden="true" draggable="false" />
+            <div className={styles.wheelHub} aria-hidden="true">
+              <img src="/randomizers/rosie-signet.webp" alt="" draggable="false" />
+            </div>
+            <div className={styles.pointer} aria-hidden="true">
+              <img src="/randomizers/roulette/pointer.svg" alt="" draggable="false" />
             </div>
             <div className={styles.wheelBase} aria-hidden="true" />
           </div>

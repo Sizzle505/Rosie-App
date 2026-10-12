@@ -957,3 +957,119 @@
   .hero h1 { font-size:27px; }
   .heroSignet { width:63px; }
 }
+
+
+/* Modular roulette V2: textured vector wedges rotate; frame, Rosie crest and
+   pointer are independent, non-interactive and stationary. No fixed wedge art. */
+.wheelWrap {
+  --roulette-label-radius: 104px;
+  isolation: isolate;
+}
+.wheel {
+  width: 79%;
+  height: 79%;
+  box-sizing: border-box;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  background: #09090d;
+  box-shadow:
+    inset 0 0 34px rgba(0, 0, 0, .66),
+    0 15px 30px rgba(0, 0, 0, .48);
+  transform: rotate(var(--rotation));
+  transition: transform 2.25s cubic-bezier(.12, .67, .08, 1);
+  will-change: transform;
+}
+.wheel::before, .wheel::after { display: none; }
+.wheelFace {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.wheelFrame {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 9px 9px rgba(0,0,0,.43));
+}
+.pointer {
+  position: absolute;
+  z-index: 9;
+  top: -6px;
+  left: 50%;
+  width: 42px;
+  height: 56px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 5px 5px rgba(0,0,0,.82));
+}
+.pointer::before, .pointer i { display: none; }
+.pointer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.wheelHub {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: none;
+  pointer-events: none;
+  user-select: none;
+  background: radial-gradient(circle at 33% 24%, #3e2b19, #08090b 60%);
+  box-shadow:
+    0 0 0 2px #fff0b4,
+    0 0 0 5px #60360e,
+    0 0 0 8px #eac36b,
+    0 0 0 10px #341708,
+    0 9px 20px rgba(0,0,0,.6);
+}
+.wheelHub img { display: block; }
+.wheelLabel {
+  z-index: 5;
+  color: #fff5db;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--label-angle))
+    translateY(calc(-1 * var(--roulette-label-radius)));
+  text-shadow: 0 2px 4px #000, 0 0 10px rgba(0,0,0,.9);
+}
+.wheelWrap[data-crowded="true"] .wheelLabel {
+  width: 75px;
+  font-size: 8px;
+  letter-spacing: 0;
+}
+.wheelWrap[data-crowded="true"] .wheelLabel b { max-width: 72px; }
+@media (max-width: 680px) {
+  .wheelWrap { --roulette-label-radius: 85px; }
+  .wheel { width: 79%; height: 79%; }
+  .wheelFrame { inset: 0; }
+  .pointer { top: -4px; width: 36px; height: 47px; }
+  .wheelLabel { width: 93px; font-size: 8px; }
+  .wheelLabel b { max-width: 89px; }
+  .wheelWrap[data-crowded="true"] .wheelLabel {
+    width: 57px;
+    font-size: 7px;
+  }
+  .wheelWrap[data-crowded="true"] .wheelLabel b { max-width: 54px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wheel { transition-duration: .01ms; will-change: auto; }
+  .wheelHub { transition: none; }
+}
