@@ -306,8 +306,6 @@ export default function RosieTimekeeper() {
                 <image className="rtk-squirrel-asset" href={SQUIRREL}
                   x="-7" y="-7" width="14" height="14" preserveAspectRatio="xMidYMid meet" />
               </g>
-                <path className="rtk-squirrel-star" d="M0 -6L.46 -4.8L1.72 -4.25L.46 -3.73L0 -2.5L-.46 -3.73L-1.72 -4.25L-.46 -4.8Z"/>
-              </g>
             )}
           </svg>
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
@@ -331,21 +329,7 @@ export default function RosieTimekeeper() {
             </button>
             <button type="button" className="rtk-secondary-action rtk-reset-action"
               onClick={stopAndReset} aria-label="Reset stopwatch or countdown">
-              <span className="rtk-action-word">Reset</span>sName="rtk-controls">
-            <button type="button" className="rtk-secondary-action rtk-lap-action"
-              onClick={mode === "stopwatch" ? lap : repeatCountdown}
-              disabled={mode === "stopwatch" && !running}
-              aria-label={mode === "stopwatch" ? "Record lap" : "Restart countdown"}>
-              <span className="rtk-action-word">{mode === "stopwatch" ? "Lap" : "Repeat"}</span>
-            </button>
-            <button type="button" className="rtk-primary-action" onClick={startOrPause}
-              aria-label={running ? "Pause" : "Start"}>
-              {running ? <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx=".8" /><rect x="14" y="4" width="5" height="16" rx=".8" /></svg>
-                : <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.3a1.3 1.3 0 0 1 2-.98l12 7.65a1.25 1.25 0 0 1 0 2.1L9 20.72a1.3 1.3 0 0 1-2-.99Z" /></svg>}
-            </button>
-            <button type="button" className="rtk-secondary-action rtk-reset-action"
-              onClick={stopAndReset} aria-label="Reset stopwatch or countdown">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4.3 12a7.7 7.7 0 1 0 2.5-5.7L4 9" /><path d="M4 3.8V9h5.2" /></svg>
+              <span className="rtk-action-word">Reset</span>
             </button>
           </div>
           <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
