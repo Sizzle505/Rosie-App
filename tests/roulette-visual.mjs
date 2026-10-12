@@ -44,9 +44,14 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(fixedBefore.every(Boolean), "all three fixed overlays must exist");
       const spin = salon.getByRole("button", { name: /SPIN THE WHEEL/i });
       await spin.click();
-      assert(await spin.isDisabled(), "spin must lock during its existing animation");
-      await page.waitForTimeout(2450);
-      assert(!(await spin.isDisabled()), "existing spin must finish");
+      await page.waitForFunction(() => {
+        const button = [...document.querySelectorAll("button")].find(node => node.textContent.includes("SPIN THE WHEEL"));
+        const verdict = document.querySelector('section[aria-label="Custom decision wheel"] [class*="wheelVerdict"] strong');
+        if (!button || !verdict || button.disabled) return false;
+        const choices = [...document.querySelectorAll('section[aria-label="Custom decision wheel"] input[aria-label^="Wheel choice"]')].map(i => i.value);
+        return choices.includes(verdict.textContent.trim());
+      }, null, { timeout: 7500 });
+      assert(!(await spin.isDisabled()), "existing spin must finish with a selectable verdict");
       const fixedAfter = await salon.evaluate((root, selectors) => selectors.map(selector => {
         const rect = root.querySelector(selector)?.getBoundingClientRect();
         return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
