@@ -174,39 +174,55 @@ export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
   const [tool, setTool] = useState(null);
   const toolRef = useRef(null);
+  const toolStageRef = useRef(null);
+  const [toolScale, setToolScale] = useState(1);
   const [values, setValues] = useState(DEFAULTS);
   const [currencyOptions, setCurrencyOptions] = useState(FX_FALLBACK_CURRENCIES);
   const [fxRate, setFxRate] = useState(null);
   const [fxState, setFxState] = useState("loading");
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
-  // Align the chosen gold instrument with the centre of the usable iPhone
-  // viewport (above its fixed nav). The title selector and illustrated cards
-  // take the same path. Normal document scrolling remains available.
+  // A dedicated iPhone tool stage covers the page header. Scale the WHOLE
+  // approved one-piece gold frame (not its contents independently) to fit
+  // inside the actual phone viewport above the persistent bottom navigation.
   useLayoutEffect(() => {
-    if (!tool || window.matchMedia("(min-width: 740px)").matches) return undefined;
+    if (!tool) return undefined;
     let active = true;
     let pending = 0;
-    const centerTool = () => {
-      if (!active || !toolRef.current) return;
-      const panel = toolRef.current.getBoundingClientRect();
-      const nav = document.querySelector(".bottom-nav")?.getBoundingClientRect();
-      const visibleTop = Math.max(8, window.visualViewport?.offsetTop || 0);
-      const visibleBottom = nav ? Math.min(window.innerHeight, nav.top - 8) : window.innerHeight - 18;
-      const targetMid = (visibleTop + visibleBottom) / 2;
-      const shift = panel.top + panel.height / 2 - targetMid;
-      if (Math.abs(shift) > 1) window.scrollBy({top:shift,behavior:"instant"});
+    const fitInstrument = () => {
+      if (!active || !toolStageRef.current || !toolRef.current) return;
+      if (window.matchMedia("(min-width: 740px)").matches) {
+        setToolScale(1);
+        return;
+      }
+      const stage = toolStageRef.current.getBoundingClientRect();
+      const panel = toolRef.current;
+      const naturalHeight = panel.offsetHeight;
+      const naturalWidth = panel.offsetWidth;
+      if (!naturalHeight || !naturalWidth) return;
+      const scale = Math.max(.48, Math.min(1, (stage.height - 14) / naturalHeight,
+        (stage.width - 14) / naturalWidth));
+      setToolScale(prev => Math.abs(prev - scale) > .004 ? scale : prev);
     };
-    pending = window.requestAnimationFrame(centerTool);
-    const settle = window.setTimeout(centerTool, 170);
-    const late = window.setTimeout(centerTool, 370);
+    const resize = new ResizeObserver(fitInstrument);
+    if (toolRef.current) resize.observe(toolRef.current);
+    if (toolStageRef.current) resize.observe(toolStageRef.current);
+    pending = requestAnimationFrame(fitInstrument);
+    const settle = window.setTimeout(fitInstrument, 160);
+    const late = window.setTimeout(fitInstrument, 350);
+    window.addEventListener("resize", fitInstrument);
+    window.visualViewport?.addEventListener("resize", fitInstrument);
     return () => {
       active = false;
-      window.cancelAnimationFrame(pending);
-      window.clearTimeout(settle);
-      window.clearTimeout(late);
+      cancelAnimationFrame(pending);
+      clearTimeout(settle);
+      clearTimeout(late);
+      resize.disconnect();
+      window.removeEventListener("resize", fitInstrument);
+      window.visualViewport?.removeEventListener("resize", fitInstrument);
     };
   }, [tool]);
   // The dropdown list refreshes from the provider each time the tool opens.
+
   useEffect(() => {
     if (tool !== "currency") return undefined;
     const controller = new AbortController();
@@ -286,7 +302,7 @@ export default function RosieCalculations() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [tool]);
-  return <main className="rc-page">
+  return <main className={"rc-page" + (tool ? " rc-page--tool-open" : "")}>
     <header className="rc-hero">
       <img
         className="rc-custom-hero"
@@ -302,7 +318,17 @@ export default function RosieCalculations() {
     <div className="rc-workspace">
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
       <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card rc-tool-card--"+item.id+(tool===item.id?" active":"")} aria-label={item.title} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><img className="rc-tool-art" src={"/rosieverse/calculations/toolkit/button-"+item.id+".webp"} alt="" loading="lazy" draggable="false"/></button>)}</div>
-      {tool && <ToolPanel active={tool} values={values} update={update} currencyOptions={currencyOptions} fxRate={fxRate} fxState={fxState} onSelectTool={setTool} panelRef={toolRef}/>} 
+      {tool && <div className="rc-active-tool-overlay" aria-label="Gold calculator instrument">
+        <div className="rc-active-tool-viewport" ref={toolStageRef}>
+          <div className="rc-active-tool-fit" style={{ "--rc-tool-scale": toolScale }}>
+            <ToolPanel active={tool} values={values} update={update} currencyOptions={currencyOptions} fxRate={fxRate} fxState={fxState} onSelectTool={setTool} panelRef={toolRef}/>
+          </div>
+        </div>
+        <button type="button" className="rc-active-tool-close" onClick={() => { setTool(null); setToolScale(1); }}
+          aria-label="Close gold tool and return to calculator choices">
+          <span aria-hidden="true">×</span><span>Tools</span>
+        </button>
+      </div>}
       <p className="rc-footer-note">Crafted in Rosie’s study · Numbers with a little extra charm</p>
     </div>
   </main>;
