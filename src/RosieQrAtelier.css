@@ -107,3 +107,12 @@
  .qa-title {right:8%;}
 }
 @media(prefers-reduced-motion:reduce){.qa-page *{scroll-behavior:auto!important;transition:none!important;}}
+
+/* Presentation presets leave the QR payload black on white for scanner reliability. */
+.qa-style-obsidian .qa-ring-art {filter:saturate(.8) hue-rotate(4deg) brightness(.9);}
+.qa-style-obsidian .qa-panel {border-color:#ad9d7c;box-shadow:0 0 0 4px #0a151baa,0 15px 32px #000b;}
+.qa-style-obsidian .qa-save {background-color:#12141e;}
+.qa-style-burgundy .qa-ring-art {filter:hue-rotate(310deg) saturate(.83);}
+.qa-style-burgundy .qa-panel {border-color:#a97362;box-shadow:0 0 0 4px #2b0914ae,0 15px 32px #000b;}
+.qa-style-burgundy .qa-type.selected {background:linear-gradient(145deg,#7d1a38,#430d24);}
+.qa-style-burgundy .qa-collection {background:#2b0e1be8;}
