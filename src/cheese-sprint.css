@@ -155,6 +155,33 @@
   background: linear-gradient(145deg,#854057,#502538);
   letter-spacing: .025em;
 }
+/* Invite the first move, then retire the glow once play has begun. */
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready {
+  color: #fff2c8;
+  border-color: #f5d18b;
+  background: linear-gradient(145deg, #a54c55, #71243c 85%);
+  box-shadow: 0 0 0 1px rgba(253,214,133,.38),
+              0 0 13px rgba(249,195,93,.62),
+              inset 0 1px 0 rgba(255,241,200,.48);
+  animation: cheeseStartGlow 2.2s ease-in-out infinite;
+}
+@keyframes cheeseStartGlow {
+  0%,100% {
+    box-shadow: 0 0 0 1px rgba(253,214,133,.38),
+                0 0 10px rgba(249,195,93,.48),
+                inset 0 1px 0 rgba(255,241,200,.48);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(253,214,133,.66),
+                0 0 21px rgba(249,195,93,.88),
+                inset 0 1px 0 rgba(255,241,200,.55);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready {
+    animation: none;
+  }
+}
 .page-cheese .cheese-exam-title .cheese-exam-actions button:focus-visible {
   outline: 2px solid #fff2cb;
   outline-offset: 2px;
@@ -260,15 +287,9 @@
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 75%);
     mask-image: linear-gradient(to bottom, transparent, black 75%);
   }
-  .page-cheese .cheese-game-page.is-board-active .barkbridge-ident strong,
-  .page-cheese .cheese-game-page.is-board-active .barkbridge-ident small,
-  .page-cheese .cheese-game-page.is-board-active .cheese-exam-title h1,
-  .page-cheese .cheese-game-page.is-board-active .cheese-exam-title > p,
-  .page-cheese .cheese-game-page.is-board-active .cheese-exam-title .cheese-eyebrow {
-    filter: blur(2.2px);
-    opacity: .66;
-    transition: filter .25s ease, opacity .25s ease;
-  }
+  /* Text is not blurred directly: the frosted strip only softens content
+     physically passing ABOVE the sticky examiner. Pulling the page back down
+     restores crisp type immediately, without changing the text itself. */
   /* The scrollable tail lets the grid align below the sticky panel even when
      the grid is the last substantive content on a short iPhone display. */
   .page-cheese .cheese-game-page.is-board-active .cheese-desktop-layout {
