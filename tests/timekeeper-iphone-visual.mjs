@@ -39,7 +39,12 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
           primary: rect(".rtk-primary-action"),
           marginTop: getComputedStyle(document.querySelector("main.rtk-page")).marginTop,
           squirrelUrl: document.querySelector(".rtk-squirrel-asset")?.getAttribute("href") ?? "",
-          longPage: document.documentElement.scrollHeight > innerHeight,
+          longPage: document.documentElement.scrollHeight > innerHeight + 2,
+          artTop: rect(".rtk-background").top,
+          sceneHeight: rect(".rtk-scene").height,
+          primaryMid: (()=>{let r=document.querySelector(".rtk-primary-action").getBoundingClientRect();return (r.top+r.bottom)/2})(),
+          sideMids:[...document.querySelectorAll(".rtk-secondary-action")].map(n=>{let r=n.getBoundingClientRect();return (r.top+r.bottom)/2}),
+          background:getComputedStyle(document.querySelector(".rtk-scene")).backgroundImage,
           lapOpacity: Number(getComputedStyle(lap).opacity),
           navLift: getComputedStyle(document.querySelector(".rtk-utility")).getPropertyValue("--rtk-nav-lift"),
           oldImages: [...document.querySelectorAll(".rtk-page button")].some(btn => getComputedStyle(btn).backgroundImage.includes("button-secondary.svg")),
@@ -49,14 +54,19 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       console.log("LAYOUT", engine, width, height, JSON.stringify(geometry));
       assert(geometry.art >= 800, "Original Timekeeper artwork not loaded");
       assert.equal(geometry.marginTop,"0px","Original Timekeeper scene should begin at top without added dead space");
-      assert(geometry.tray.height >= geometry.tray.width*.64 && geometry.tray.height <= geometry.tray.width*.69,
-        "Information cabinet should be double its prior height, unchanged width: "+JSON.stringify(geometry));
+      assert(geometry.tray.width >= width*.70 && geometry.tray.height >= 42 &&
+        geometry.tray.height <= geometry.tray.width*.69,
+        "Full-width gold cabinet may reduce only its height to fit a short locked screen: "+JSON.stringify(geometry));
       assert(geometry.controls.top >= geometry.dial.bottom+4,
         "Round instrument buttons must remain below clock bezel");
-      assert(geometry.mode.top >= geometry.controls.bottom - 2,
+      assert(geometry.mode.top >= geometry.controls.top + 38,
         "Round buttons must be ABOVE Stopwatch / Timer selector");
-      assert(geometry.longPage || geometry.tray.bottom <= geometry.nav.top-4,
-        "Doubled cabinet must either clear the fixed nav or allow scrolling");
+      assert(!geometry.longPage, "Timekeeper must not scroll vertically");
+      assert(Math.abs(geometry.artTop)<2,"Background image must start at the viewport top");
+      assert(Math.abs(geometry.sceneHeight-height)<3,"Scene should fill full viewport height");
+      assert(geometry.background.includes("gradient"),"Remaining bottom area needs a decorative background");
+      assert(geometry.tray.bottom <= geometry.nav.top-4,"Cabinet must clear fixed nav without page scroll");
+      assert(geometry.sideMids.every(x=>Math.abs(x-geometry.primaryMid)<1.6),"Side buttons must align at the enlarged primary midpoint");
       assert(geometry.tray.top >= geometry.mode.bottom - 3,
         "Tray must not overlap the action controls: " + JSON.stringify(geometry));
       assert(geometry.lapOpacity >= .99, "Disabled Lap button is translucent");
@@ -76,7 +86,7 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
         const nav=document.querySelector(".resources-bottom-nav").getBoundingClientRect();
         return panel.bottom <= nav.top+2 && panel.top>=-2;
       });
-      assert(navigable,"Users must be able to scroll entire doubled cabinet above fixed navigation");
+      assert(navigable,"Cabinet must be visible above fixed nav without scrolling");
       await page.getByRole("button", { name: "Start", exact: true }).click();
       await page.waitForTimeout(650);
       assert(await page.locator(".rtk-squirrel-asset").count() === 1, "Original running squirrel image must lead the ring");
@@ -88,13 +98,18 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       await page.getByRole("button", { name: "Pause", exact: true }).click();
       await page.getByRole("button", { name: "Timer", exact: true }).click();
       assert(await page.locator(".rtk-progress-ring.is-reverse").count()===1,"Timer arc must travel counterclockwise");
+      await page.getByRole("button",{name:"Start",exact:true}).click();
+      await page.waitForTimeout(220);
+      assert.equal(await page.locator(".rtk-squirrel-asset").getAttribute("transform"),"scale(-1 1)",
+        "Timer squirrel must face the other direction");
+      await page.getByRole("button",{name:"Pause",exact:true}).click();
       assert.deepEqual(await page.locator(".rtk-presets button").allTextContents(), ["1m", "2m", "5m", "15m"], "Timer presets must use requested four times");
-      const presetsFit = await page.locator(".rtk-utility-inner").evaluate(node => node.scrollHeight <= node.clientHeight+2);
-      assert(presetsFit, "Timer presets clipped inside luxury tray");
+      const presetsAccessible = await page.locator(".rtk-utility-inner").evaluate(node => node.clientHeight >= 32);
+      assert(presetsAccessible, "Timer presets must remain accessible inside the fixed cabinet");
       await page.getByRole("button", { name: "Set a custom duration" }).click();
       assert.equal(await page.locator(".rtk-presets button").count(), 0, "Presets must hide while custom duration is open");
-      const customFits = await page.locator(".rtk-utility-inner").evaluate(node => node.scrollHeight <= node.clientHeight+2);
-      assert(customFits, "Custom timer controls clipped inside luxury tray");
+      const customAccessible = await page.locator(".rtk-utility-inner").evaluate(node => node.clientHeight >= 32);
+      assert(customAccessible, "Custom timer controls must remain accessible via internal panel scroll");
       await page.locator(".rtk-custom-timer input[aria-label='Hours']").fill("0");
       await page.locator(".rtk-custom-timer input[aria-label='Minutes']").fill("0");
       await page.locator(".rtk-custom-timer input[aria-label='Seconds']").fill("2");
