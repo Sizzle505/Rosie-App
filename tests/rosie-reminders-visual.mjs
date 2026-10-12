@@ -183,9 +183,9 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(scrolled.scroll>100,"Reminders must scroll naturally");
       assert.equal(scrolled.position,"relative","Full hero must not be pinned while scrolling");
       assert(scrolled.top<-100,"Large hero should move offscreen: "+JSON.stringify(scrolled));
-      assert.equal(await page.locator(".rr-compact-header.is-visible").count(),1,
-        "Compact Rosie header should replace the hero after 70% scroll");
-      await page.screenshot({path:dir + "/" + name + "-compact.png"});
+      assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),1,
+        "Middle 70% of original Rosie artwork should stay pinned after the top 15% scrolls away");
+      await page.screenshot({path:dir + "/" + name + "-pinned-rosie.png"});
       await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
       await page.waitForTimeout(130);
 
