@@ -7,6 +7,8 @@ const page=await browser.newPage({
  isMobile:true,hasTouch:true,acceptDownloads:true
 });
 let failures=[];
+page.setDefaultTimeout(8000);
+page.on("pageerror",error=>failures.push("Browser error: "+error.message));
 async function checkType(label,fill){
   try{
     await page.getByRole("button",{name:label,exact:true}).first().click();
@@ -42,7 +44,7 @@ try {
   await page.waitForTimeout(50);
   assert.ok(await page.getByText(/Tick the password-storage permission/).count()===1);
   await checkType("Contact",async()=>{
-    await page.getByPlaceholder("Name").fill("Rosie Artisan");
+    await page.getByPlaceholder("Name",{exact:true}).fill("Rosie Artisan");
     await page.getByPlaceholder("+1 555 123 4567").fill("+15551234567");
   });
   await checkType("Zoom",async()=>{
@@ -60,7 +62,7 @@ try {
     await page.getByPlaceholder("@yourhandle").fill("@rosieexample");
   });
   await checkType("Calling Card",async()=>{
-    await page.getByPlaceholder("Name").fill("Rosie Artisan");
+    await page.getByPlaceholder("Name",{exact:true}).fill("Rosie Artisan");
     await page.getByPlaceholder("+1 555 123 4567").fill("+15551234567");
   });
   await page.locator(".qa-save-block input").fill("Rosie's Calling Card");
@@ -73,8 +75,6 @@ try {
   assert.ok(dl.suggestedFilename().endsWith(".png"));
   console.log("PASS PNG download:",dl.suggestedFilename());
   await page.screenshot({path:"qa-screenshots/qr-atelier-calling-card.png",fullPage:true});
-  const consoleErrors=await page.evaluate(()=>window.__qrAppErrors||[]);
-  assert.equal(consoleErrors.length,0);
 } catch(e){failures.push("SMOKE "+e.stack);console.error("FAIL",e);}
 finally {await browser.close();}
 if(failures.length){console.error("FAILED CHECKS:\n"+failures.join("\n"));process.exit(1);}
