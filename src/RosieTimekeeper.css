@@ -1508,3 +1508,49 @@ body:has(.app-shell.page-timekeeper),
   .rtk-page .rtk-progress-ring .rtk-progress-live,
   .rtk-page .rtk-progress-ring .rtk-progress-ruby {animation:none!important;}
 }
+
+/* Very short, 320-355px-wide iPhones: retain the frame width and keep both
+   lines of cabinet text legible while the fixed viewport cannot grow. */
+@media(max-width:520px) and (max-height:700px) {
+  .rtk-page .rtk-utility-inner,
+  .rtk-page .rtk-utility.is-timer .rtk-utility-inner {
+    top:clamp(10px,1.8vh,13px);
+    bottom:clamp(7px,1.2vh,10px);
+    left:13%;
+    right:13%;
+  }
+  .rtk-page .rtk-utility-heading,
+  .rtk-page .rtk-utility.is-timer .rtk-utility-heading {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 0 4px;
+    margin:0 0 3px;
+    gap:3px;
+    font-size:clamp(10px,2.7vw,12px);
+    min-height:15px;
+    line-height:1.05;
+    background-size:100% 4px;
+  }
+  .rtk-page .rtk-utility-heading span:last-child {
+    font-size:8px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .rtk-page .rtk-utility.is-empty .rtk-empty {
+    padding:0;
+    margin:1px 0 0;
+    font-size:clamp(10px,2.55vw,12px);
+    line-height:1.14;
+  }
+  .rtk-page .rtk-presets {margin-top:1px;gap:3px;}
+  .rtk-page .rtk-presets button {
+    min-height:24px;
+    border-radius:6px;
+    padding:2px 1px;
+    font-size:10px;
+  }
+  .rtk-page .rtk-custom-timer {margin-top:1px;gap:2px;}
+  .rtk-page .rtk-custom-timer label {font-size:9px;}
+  .rtk-page .rtk-custom-timer input {min-height:24px;max-height:27px;}
+}
