@@ -108,7 +108,7 @@ function ToolPanel({ active, values, update }) {
   };
   const output = toolOutput(active, values);
   return <section className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
-    <div className="rc-device-housing" aria-hidden="true"><i className="rc-housing-core"/><i className="rc-housing-top"/><i className="rc-housing-left"><b/><b/><b/><b/></i><i className="rc-housing-right"><b/><b/><b/><b/></i><i className="rc-housing-cheese"/><i className="rc-housing-shiba"/><i className="rc-housing-bottom"/></div>
+    <div className="rc-device-housing" aria-hidden="true"><img className="rc-device-original-art" src="/rosieverse/calculations/toolkit/gold-device.webp" alt="" decoding="async" draggable="false" /></div>
     <div className="rc-device-surface">
       <h2 className="rc-device-heading">{TOOLS.find(t=>t.id===active)?.title}</h2>
       <div className="rc-form-grid">{fields[active]}</div>
