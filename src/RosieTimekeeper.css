@@ -268,3 +268,331 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
 /* The utility cabinet gets more vertical room, never the former shallow band. */
 .rtk-utility { max-height:24%; min-height:clamp(120px,15vw,155px); }
 @media(max-width:520px) { .rtk-utility { max-height:24%; min-height:115px; } }
+
+/* Timekeeper enamel instrument set (individual transparent SVG assets).
+   Preserve the original grand-clockwork-hall artwork and gear atlas. */
+.rtk-action-deck .rtk-mode-switch {
+  position:relative;
+  width:min(88%,260px);
+  min-height:49px;
+  padding:6px 8px;
+  gap:2px;
+  background: url("/rosieverse/timekeeper/mode-selector.svg") center / 100% 100% no-repeat;
+}
+.rtk-action-deck .rtk-mode-switch button,
+.rtk-action-deck .rtk-mode-switch button.chosen {
+  flex:1 1 0;
+  min-width:0;
+  min-height:35px;
+  border:1px solid transparent;
+  border-radius:22px;
+  padding:5px 7px;
+  font-size:clamp(11px,1.8vw,14px);
+  line-height:1.1;
+  background:transparent;
+  box-shadow:none;
+  color:#e1c699;
+  text-shadow:0 1px 2px #000;
+  transition:background-color .15s ease,filter .15s ease;
+}
+.rtk-action-deck .rtk-mode-switch button.chosen {
+  border-color:#f5d18b9c;
+  color:#fff1ca;
+  background:linear-gradient(155deg,#a63c60,#5a1a37 70%,#311326);
+  box-shadow:inset 0 1px 2px #ffe1a471,0 1px 5px #0008;
+}
+.rtk-action-deck .rtk-controls {
+  gap:clamp(9px,2.3vw,22px);
+}
+.rtk-action-deck .rtk-controls button,
+.rtk-action-deck .rtk-controls .rtk-primary-action {
+  flex:none;
+  border:0;
+  border-radius:50%;
+  width:clamp(47px,8.4vw,61px);
+  height:clamp(47px,8.4vw,61px);
+  padding:0;
+  background: url("/rosieverse/timekeeper/button-secondary.svg") center / 100% 100% no-repeat;
+  box-shadow:none;
+  color:#ffe8bd;
+  text-shadow:0 2px 3px #09050b,0 0 4px #000;
+  font-weight:700;
+  font-size:clamp(11px,2.4vw,17px);
+  transition:transform .12s ease,filter .15s ease;
+}
+.rtk-action-deck .rtk-controls .rtk-primary-action {
+  width:clamp(55px,9.6vw,72px);
+  height:clamp(55px,9.6vw,72px);
+  background-image:url("/rosieverse/timekeeper/button-primary.svg");
+}
+.rtk-action-deck .rtk-controls button:not(:disabled):active {transform:translateY(2px) scale(.955);filter:brightness(1.14);}
+.rtk-action-deck .rtk-controls button:disabled {opacity:.57;filter:saturate(.65);}
+.rtk-action-deck .rtk-controls .rtk-primary-action svg {width:31%;height:31%;}
+.rtk-action-deck .rtk-controls .rtk-reset-action svg {width:37%;height:37%;}
+.rtk-utility {
+  width:min(75%,490px);
+  top:72.5%;
+  min-height:127px;
+  max-height:24%;
+  padding:clamp(18px,2.8vw,26px) clamp(18px,2.8vw,27px);
+  border:0;
+  border-radius:19px;
+  background:#14101e url("/rosieverse/timekeeper/instrument-tray.svg") center / 100% 100% no-repeat;
+  box-shadow:0 9px 25px #0008;
+  color:#fce7c2;
+  scrollbar-width:thin;
+  scrollbar-color:#af8347 transparent;
+}
+.rtk-utility.is-empty {min-height:124px;}
+.rtk-utility-heading {
+  position:relative;
+  border:0;
+  padding:0 0 15px;
+  margin-bottom:5px;
+  background:url("/rosieverse/timekeeper/filigree-rule.svg") center bottom / 100% 12px no-repeat;
+  font-size:clamp(13px,2.2vw,19px);
+}
+.rtk-utility-heading span:last-child {font-size:clamp(9px,1.45vw,12px);}
+.rtk-empty {margin:8px 0;font-size:clamp(11px,1.6vw,14px);}
+.rtk-laps {max-height:115px;}
+.rtk-laps li {padding:6px 0;border-bottom-color:#ac784648;}
+.rtk-laps li.rtk-fastest-lap strong {color:#ffdf9b;text-shadow:0 0 8px #b5813f8c;}
+.rtk-laps li.rtk-slowest-lap strong {color:#ecabaf;}
+.rtk-shortcut {gap:7px;padding-top:8px;border-top:1px solid #b78a4c54;}
+.rtk-shortcut button,.rtk-presets button {
+  min-height:34px;
+  border:1px solid #d3a35d;
+  border-radius:9px;
+  background:linear-gradient(165deg,#3e293d,#18121f);
+  color:#ffe5b9;
+  box-shadow:inset 0 1px #f9da9a36,0 2px 3px #0007;
+}
+.rtk-shortcut button:active,.rtk-presets button:active {filter:brightness(1.18);transform:translateY(1px);}
+.rtk-presets {grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;}
+.rtk-presets button {min-height:37px;font-size:clamp(9px,1.5vw,13px);padding:6px 2px;}
+.rtk-presets button.chosen {background:linear-gradient(160deg,#973b55,#43132d);border-color:#ffda94;}
+.rtk-progress-ring {
+  position:absolute;z-index:2;inset:0;
+  width:100%;height:100%;overflow:visible;
+  transform:rotate(-90deg);
+  pointer-events:none;
+}
+.rtk-progress-track,.rtk-progress-live {
+  fill:none;stroke-width:.82;stroke-linecap:round;
+}
+.rtk-progress-track {stroke:#dca864;opacity:.25;}
+.rtk-progress-live {stroke:#ffe0a0;filter:drop-shadow(0 0 1.3px #ffc875);opacity:.95;transition:stroke-dashoffset .07s linear;}
+@media(max-width:520px){
+  .rtk-action-deck {top:60.1%;gap:4px;}
+  .rtk-action-deck .rtk-mode-switch {min-height:42px;width:min(83%,244px);padding:5px 7px;}
+  .rtk-action-deck .rtk-mode-switch button,.rtk-action-deck .rtk-mode-switch button.chosen {min-height:31px;font-size:11px;}
+  .rtk-action-deck .rtk-controls button {width:46px;height:46px;}
+  .rtk-action-deck .rtk-controls .rtk-primary-action {width:56px;height:56px;}
+  .rtk-utility {top:73.4%;width:78%;min-height:125px;max-height:23%;padding:18px 17px;}
+  .rtk-utility-heading {font-size:13px;}
+  .rtk-presets button {font-size:10px;min-height:35px;}
+}
+@media(max-width:355px){
+  .rtk-action-deck .rtk-mode-switch {min-height:39px;}
+  .rtk-action-deck .rtk-controls button {width:41px;height:41px;}
+  .rtk-action-deck .rtk-controls .rtk-primary-action {width:51px;height:51px;}
+  .rtk-utility {top:73.7%;width:82%;padding:16px 14px;}
+  .rtk-presets button {font-size:9px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .rtk-progress-live,.rtk-action-deck .rtk-controls button,
+  .rtk-action-deck .rtk-mode-switch button {transition:none;}
+}
+
+
+/* Authentic image-generated Timekeeper artwork imported from Dropbox on 2026-10-12.
+   The earlier handmade SVGs are no longer referenced by the UI. */
+.rtk-action-deck {
+  top:58.8%;
+  gap:2px;
+  width:min(83%,420px);
+}
+.rtk-action-deck .rtk-mode-switch {
+  width:clamp(170px,55vw,245px);
+  height:clamp(43px,11.7vw,61px);
+  min-height:0;
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:0;
+  padding:6px 10px;
+  background:none;
+  border:0;
+  isolation:isolate;
+}
+.rtk-action-deck .rtk-mode-switch::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:url("/rosieverse/timekeeper/luxury-mode-selector.webp") center / 100% 100% no-repeat;
+  pointer-events:none;
+}
+.rtk-action-deck .rtk-mode-switch[data-active="countdown"]::before {
+  transform:scaleX(-1);
+}
+.rtk-action-deck .rtk-mode-switch button,
+.rtk-action-deck .rtk-mode-switch button.chosen {
+  flex:1 1 0;
+  min-width:0;
+  min-height:0;
+  height:100%;
+  padding:1px 4px;
+  background:none;
+  box-shadow:none;
+  border:0;
+  border-radius:22px;
+  font:700 clamp(11px,1.8vw,14px)/1.1 Georgia,serif;
+  text-shadow:0 2px 4px #000,0 0 7px #000;
+  color:#f8e1bd;
+}
+.rtk-action-deck .rtk-mode-switch button.chosen {
+  color:#fff5dd;
+  text-shadow:0 0 5px #ffd692,0 2px 3px #250b17;
+}
+.rtk-action-deck .rtk-mode-switch button:focus-visible {outline-offset:-3px;}
+.rtk-action-deck .rtk-controls {gap:clamp(7px,2.1vw,17px);}
+.rtk-action-deck .rtk-controls button,
+.rtk-action-deck .rtk-controls .rtk-primary-action {
+  width:clamp(44px,8.2vw,61px);
+  height:clamp(44px,8.2vw,61px);
+  border:0;
+  background: url("/rosieverse/timekeeper/luxury-button-secondary.webp") center / 100% 100% no-repeat;
+  box-shadow:none;
+  color:#f8e7c8;
+  text-shadow:0 1px 2px #000;
+  font:700 clamp(10px,2vw,14px)/1 Georgia,serif;
+  -webkit-tap-highlight-color:transparent;
+}
+.rtk-action-deck .rtk-controls .rtk-primary-action {
+  width:clamp(53px,9.5vw,72px);
+  height:clamp(53px,9.5vw,72px);
+  background-image:url("/rosieverse/timekeeper/luxury-button-primary.webp");
+}
+.rtk-action-deck .rtk-controls button:not(:disabled):active {
+  transform:translateY(2px) scale(.95);
+  filter:brightness(1.16);
+}
+.rtk-utility {
+  top:75.0%;
+  width:min(82%,500px);
+  min-height:126px;
+  max-height:24%;
+  padding:clamp(23px,4.1vw,35px) clamp(25px,5.5vw,47px) clamp(18px,3.4vw,30px);
+  border:0;
+  border-radius:0;
+  background: url("/rosieverse/timekeeper/luxury-instrument-tray.webp") center / 100% 100% no-repeat;
+  box-shadow:none;
+  overflow:auto;
+}
+.rtk-utility.is-empty {min-height:142px;}
+.rtk-utility-heading {
+  padding-bottom:12px;
+  margin-bottom:3px;
+  background:url("/rosieverse/timekeeper/luxury-filigree-divider.webp") center bottom / 100% 11px no-repeat;
+  font-size:clamp(12px,2.0vw,18px);
+}
+.rtk-utility-heading span:last-child {font-size:clamp(8px,1.35vw,11px);}
+.rtk-shortcut {padding-top:7px;gap:5px;}
+.rtk-shortcut button {
+  min-height:31px;
+  min-width:57px;
+  padding:4px 6px;
+}
+.rtk-presets {display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.rtk-presets button {
+  flex:1 1 31px;
+  min-width:31px;
+  max-width:72px;
+  min-height:32px;
+  padding:5px 2px;
+  font-size:clamp(9px,1.55vw,12px);
+}
+.rtk-custom-timer {
+  display:flex;
+  gap:3px;
+  align-items:flex-end;
+  justify-content:center;
+  margin-top:8px;
+  padding:0;
+}
+.rtk-custom-timer label {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  font:10px/1.2 Georgia,serif;
+  color:#ecd0a1;
+}
+.rtk-custom-timer input {
+  box-sizing:border-box;
+  width:clamp(31px,5.7vw,44px);
+  min-height:31px;
+  padding:4px 2px;
+  text-align:center;
+  font:700 13px/1.2 Georgia,serif;
+  color:#fff0d3;
+  background:#1c1223ed;
+  border:1px solid #ce9d5d;
+  border-radius:6px;
+  box-shadow:inset 0 1px 3px #000b;
+  appearance:textfield;
+  -moz-appearance:textfield;
+}
+.rtk-custom-timer input::-webkit-inner-spin-button,
+.rtk-custom-timer input::-webkit-outer-spin-button {appearance:none;margin:0;}
+.rtk-time-separator {align-self:flex-end;padding:4px 0 8px;color:#f1d39c;}
+.rtk-custom-timer button {
+  min-height:31px;
+  padding:5px 8px;
+  border:1px solid #e1b979;
+  border-radius:6px;
+  background:linear-gradient(#76314c,#3c152d);
+  font:700 12px Georgia,serif;
+  color:#fff0d4;
+}
+.rtk-timer-note {
+  margin:8px 0 0;
+  text-align:center;
+  color:#c7ad88;
+  font:10px/1.3 Georgia,serif;
+}
+.rtk-dial .rtk-time {
+  font-variant-numeric:tabular-nums lining-nums;
+}
+@media(max-width:520px) {
+  .rtk-action-deck {top:58.7%;width:84%;gap:2px;}
+  .rtk-action-deck .rtk-mode-switch {
+    width:clamp(173px,54vw,229px);
+    height:clamp(42px,12vw,53px);
+    min-height:0;
+    padding:5px 8px;
+  }
+  .rtk-action-deck .rtk-mode-switch button,
+  .rtk-action-deck .rtk-mode-switch button.chosen {font-size:clamp(10px,2.8vw,12px);height:100%;}
+  .rtk-action-deck .rtk-controls button {width:45px;height:45px;}
+  .rtk-action-deck .rtk-controls .rtk-primary-action {width:55px;height:55px;}
+  .rtk-utility {
+    top:74.7%;
+    width:84%;
+    min-height:143px;
+    max-height:25%;
+    padding:23px 26px 17px;
+  }
+  .rtk-utility.is-empty {min-height:145px;}
+  .rtk-utility-heading {font-size:12px;}
+  .rtk-utility-heading span:last-child {font-size:9px;}
+  .rtk-empty {font-size:11px;}
+}
+@media(max-width:355px) {
+  .rtk-action-deck {top:58.8%;}
+  .rtk-utility {top:74.8%;width:87%;padding:22px 24px 15px;}
+  .rtk-action-deck .rtk-mode-switch {width:177px;height:43px;}
+  .rtk-action-deck .rtk-controls button {width:42px;height:42px;}
+  .rtk-action-deck .rtk-controls .rtk-primary-action {width:52px;height:52px;}
+}

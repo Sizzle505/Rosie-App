@@ -79,3 +79,7 @@
 @media (prefers-reduced-motion: reduce) {
   .rtk-rotating-wheel { animation: none; will-change: auto; }
 }
+
+/* Gears respond to the actual running state; independent ratios and original sprites preserved. */
+.rtk-dial .rtk-rotating-wheel {animation-play-state:paused;}
+.rtk-dial.is-running .rtk-rotating-wheel {animation-play-state:running;}
