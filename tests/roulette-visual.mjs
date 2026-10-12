@@ -37,9 +37,11 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         '[class*="wheelHub"] img[src="/randomizers/rosie-signet.webp"]'
       ];
       const fixedBefore = await salon.evaluate((root, selectors) => selectors.map(selector => {
+        const wheelRect = root.querySelector('[class*="wheelWrap"]')?.getBoundingClientRect();
         const rect = root.querySelector(selector)?.getBoundingClientRect();
-        if (!rect) return null;
-        return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+        if (!rect || !wheelRect) return null;
+        // Use wheel-local coordinates; clicking Spin may scroll the mobile viewport.
+        return { x: rect.x - wheelRect.x, y: rect.y - wheelRect.y, width: rect.width, height: rect.height };
       }), fixedSelectors);
       assert(fixedBefore.every(Boolean), "all three fixed overlays must exist");
       const spin = salon.getByRole("button", { name: /SPIN THE WHEEL/i });
@@ -53,8 +55,11 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       }, null, { timeout: 7500 });
       assert(!(await spin.isDisabled()), "existing spin must finish with a selectable verdict");
       const fixedAfter = await salon.evaluate((root, selectors) => selectors.map(selector => {
+        const wheelRect = root.querySelector('[class*="wheelWrap"]')?.getBoundingClientRect();
         const rect = root.querySelector(selector)?.getBoundingClientRect();
-        return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+        if (!rect || !wheelRect) return null;
+        // Use wheel-local coordinates; clicking Spin may scroll the mobile viewport.
+        return { x: rect.x - wheelRect.x, y: rect.y - wheelRect.y, width: rect.width, height: rect.height };
       }), fixedSelectors);
       for (let i = 0; i < fixedBefore.length; i++) {
         for (const field of ["x", "y", "width", "height"]) {
