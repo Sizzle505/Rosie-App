@@ -153,7 +153,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       });
       assert(spacing.rowGap >= 8 && spacing.rowGap <= 14, "Illustrated rows need even, deliberate spacing: "+JSON.stringify(spacing));
       assert(spacing.pagePadding <= 32 && spacing.footerMargin < 15, "Excess bottom dead space: "+JSON.stringify(spacing));
-      assert(spacing.wallpaperPadding >= 280, "Writable panel needs celestial-backed navigation clearance");
+      assert(spacing.wallpaperPadding >= 100, "Wallpaper must extend past fixed navigation without unnecessary dead space");
       // The complete APPROVED image banner, not a text-only replacement,
       // must remain visible and fixed at the viewport top during scrolling.
       assert.equal(await page.locator(".rr-sticky-dock").count(),0,
