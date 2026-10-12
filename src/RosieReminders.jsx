@@ -246,9 +246,9 @@ export default function RosieReminders() {
       </div>
       <div className="rr-tabs" role="tablist" aria-label="Organizer view">
         <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}>Today</button>
+          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}><img className="rr-tab-art" src="/rosieverse/reminders/approved-art/today-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Today</span></button>
         <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
+          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}><img className="rr-tab-art" src="/rosieverse/reminders/approved-art/calendar-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Calendar</span></button>
       </div>
       {(section !== "today" || tab !== null) && <section className="rr-paper" aria-label="Reminders organizer">
         {!(section === "today" && tab === "calendar") && (
@@ -365,7 +365,7 @@ export default function RosieReminders() {
 
         {section === "goals" && <div className="rr-goals">
           <h3>Goals</h3>
-          <form className="rr-inline-add" onSubmit={addGoal}><input aria-label="New goal" placeholder="A goal worth pursuing" value={goalInput} onChange={e => setGoalInput(e.target.value)} maxLength={140}/><button type="submit">Add</button></form>
+          <form className="rr-inline-add" onSubmit={addGoal}><input aria-label="New goal" placeholder="A goal worth pursuing" value={goalInput} onChange={e => setGoalInput(e.target.value)} maxLength={140}/><button type="submit" className="rr-art-add"><img className="rr-action-art" src="/rosieverse/reminders/approved-art/add-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Add</span></button></form>
           {store.goals.map(goal => <div className="rr-goal" key={goal.id}>
             <strong>{goal.title}</strong><span>{goal.progress}%</span>
             <div className="rr-progress" role="progressbar" aria-valuenow={goal.progress} aria-valuemin={0} aria-valuemax={100}><i style={{width:goal.progress+"%"}}/></div>
@@ -373,7 +373,7 @@ export default function RosieReminders() {
             <button type="button" onClick={() => setStore(prev => ({...prev, goals:prev.goals.filter(g=>g.id !== goal.id)}))} aria-label={"Remove goal "+goal.title}>Remove</button>
           </div>)}
           <h3>Gratitude Journal</h3>
-          <form className="rr-inline-add" onSubmit={addGratitude}><input aria-label="Gratitude entry" placeholder="Something good about today…" value={gratitudeInput} onChange={e=>setGratitudeInput(e.target.value)} maxLength={300}/><button type="submit">Add</button></form>
+          <form className="rr-inline-add" onSubmit={addGratitude}><input aria-label="Gratitude entry" placeholder="Something good about today…" value={gratitudeInput} onChange={e=>setGratitudeInput(e.target.value)} maxLength={300}/><button type="submit" className="rr-art-add"><img className="rr-action-art" src="/rosieverse/reminders/approved-art/add-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Add</span></button></form>
           {store.gratitude.map(g => <div className="rr-gratitude" key={g.id}><span><b>{pretty(g.date,{month:"short",day:"numeric"})}</b> {g.text}</span><button type="button" aria-label="Remove gratitude entry" onClick={() => setStore(prev=>({...prev,gratitude:prev.gratitude.filter(x=>x.id!==g.id)}))}>×</button></div>)}
           {!store.gratitude.length && !store.goals.length && <p className="rr-empty">A brighter day begins with one small step.</p>}
         </div>}
@@ -396,7 +396,7 @@ export default function RosieReminders() {
             <option value="normal">Normal</option><option value="high">High</option>
           </select></label></div>
           <div className="rr-modal-actions">{form.id && <button type="button" className="rr-danger" onClick={()=>removeItem(form.id)}>Delete</button>}
-            <button type="button" onClick={()=>setEditorOpen(false)}>Cancel</button><button className="rr-save" type="submit">Save Reminder</button></div>
+            <button type="button" onClick={()=>setEditorOpen(false)}>Cancel</button><button className="rr-save rr-art-save" type="submit"><img className="rr-action-art" src="/rosieverse/reminders/approved-art/save-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Save Reminder</span></button></div>
         </form>
       </section>
     </div>}
