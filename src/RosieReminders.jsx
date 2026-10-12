@@ -69,6 +69,9 @@ export default function RosieReminders() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [form, setForm] = useState(() => blankItem("tasks"));
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [compactHeader, setCompactHeader] = useState(false);
+  const heroRef = useRef(null);
+  const organizerRef = useRef(null);
   const [storageError, setStorageError] = useState("");
   const [gratitudeInput, setGratitudeInput] = useState("");
   const [goalInput, setGoalInput] = useState("");
@@ -169,7 +172,43 @@ export default function RosieReminders() {
     }) }));
   };
   const moveDay = (delta) => setSelectedDate(prev => dateKey(new Date(dateObj(prev).getFullYear(), dateObj(prev).getMonth(), dateObj(prev).getDate() + delta)));
-  const chooseSection = (id) => { setSection(id); if (id === "today") setTab("today"); };
+
+  // Rosie occupies the full width at rest. Once the page passes 70% of
+  // the large illustrated hero, a small fixed identity bar replaces it.
+  useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const rect = heroRef.current?.getBoundingClientRect();
+        setCompactHeader(Boolean(rect && rect.top <= -rect.height * 0.7));
+      });
+    };
+    measure();
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const scrollToOrganizer = () => {
+    // Two frames permit React to mount the panel after changing the section.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const node = organizerRef.current;
+      if (!node) return;
+      const top = node.getBoundingClientRect().top + window.scrollY - 77;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: Math.max(0, top), behavior: reduced ? "auto" : "smooth" });
+    }));
+  };
+  const chooseSection = (id) => {
+    setSection(id);
+    if (id === "today") setTab("today");
+    scrollToOrganizer();
+  };
   const addNote = () => {
     const id = makeId();
     setStore(prev => ({ ...prev, notes: [{ id, title: "Untitled note", body: "", updatedAt: Date.now() }, ...prev.notes] }));
@@ -224,7 +263,14 @@ export default function RosieReminders() {
   }, [editorOpen]);
 
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
-    <header className="rr-hero">
+    <header className={"rr-compact-header" + (compactHeader ? " is-visible" : "")} aria-hidden={!compactHeader}>
+      <img src="/rosieverse/reminders/hero-mobile.webp" alt="" draggable="false" />
+      <div><strong>Rosie’s Reminders</strong><small>Personal Organizer</small></div>
+      <button type="button" tabIndex={compactHeader ? 0 : -1}
+        aria-label="Return to top of Rosie's Reminders"
+        onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>↑</button>
+    </header>
+    <header className="rr-hero" ref={heroRef}>
       {!heroLoaded && <div className="rr-hero-fallback"><small>ROSIEVERSE</small><h1>Rosie’s Reminders</h1><p>Personal Organizer</p></div>}
       <picture>
         <source media="(min-width: 760px)" srcSet="/rosieverse/reminders/hero-desktop.webp" />
@@ -245,12 +291,24 @@ export default function RosieReminders() {
         </button>)}
       </div>
       <div className="rr-tabs" role="tablist" aria-label="Organizer view">
-        <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}><img className="rr-tab-art" src="/rosieverse/reminders/approved-art/today-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Today</span></button>
-        <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}><img className="rr-tab-art" src="/rosieverse/reminders/approved-art/calendar-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Calendar</span></button>
+        <img className="rr-tabs-continuous-art" src="/rosieverse/reminders/approved-art/today-calendar-continuous.webp"
+          alt="" aria-hidden="true" draggable="false" />
+        <button type="button" role="tab" aria-label="Today" aria-selected={tab === "today"}
+          className={tab === "today" ? "active" : ""}
+          onClick={() => {
+            const next = section === "today" && tab === "today" ? null : "today";
+            setTab(next); setSection("today");
+            if (next) scrollToOrganizer();
+          }}><span className="rr-screen-reader">Today</span></button>
+        <button type="button" role="tab" aria-label="Calendar" aria-selected={tab === "calendar"}
+          className={tab === "calendar" ? "active" : ""}
+          onClick={() => {
+            const next = section === "today" && tab === "calendar" ? null : "calendar";
+            setTab(next); setSection("today"); setMonth(dateObj(selectedDate));
+            if (next) scrollToOrganizer();
+          }}><span className="rr-screen-reader">Calendar</span></button>
       </div>
-      {(section !== "today" || tab !== null) && <section className="rr-paper" aria-label="Reminders organizer">
+      {(section !== "today" || tab !== null) && <section className="rr-paper" ref={organizerRef} aria-label="Reminders organizer">
         {!(section === "today" && tab === "calendar") && (
           <div className="rr-panel-head">
             <span className="rr-emblem" aria-hidden="true">♛</span>
