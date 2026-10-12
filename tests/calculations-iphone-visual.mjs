@@ -227,13 +227,18 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           const titleRect=title.getBoundingClientRect();
           return {bottom:homeRect.bottom,height:homeRect.height,viewport:window.innerHeight,
             titleWidth:titleRect.width,contentWidth:home.clientWidth,
-            titleOffset:titleRect.top-homeRect.top};
+            titleOffset:titleRect.top-homeRect.top,
+            vaultLift:getComputedStyle(home.querySelector('[aria-label="Open Card Vault"]')).top,
+            resourcesLift:getComputedStyle(home.querySelector('[aria-label="Open Rosie’s Resources"]')).top};
         });
         assert(Math.abs(homeFit.bottom-homeFit.viewport)<=2 && Math.abs(homeFit.height-homeFit.viewport)<=2,
           "Grand Salon scenery must end at the iPhone viewport, not below it: "+JSON.stringify(homeFit));
-        assert(homeFit.titleWidth<=homeFit.contentWidth*.72 && homeFit.titleWidth>=homeFit.contentWidth*.64,
-          "RosieVerse title needs a 30% size reduction: "+JSON.stringify(homeFit));
-        assert(homeFit.titleOffset>=19,"RosieVerse title should be lowered 20px: "+JSON.stringify(homeFit));
+        assert(homeFit.titleWidth<=homeFit.contentWidth*.82 && homeFit.titleWidth>=homeFit.contentWidth*.78,
+          "RosieVerse title should be 15% larger than the former 70% width: "+JSON.stringify(homeFit));
+        assert(homeFit.titleOffset>=9 && homeFit.titleOffset<=16,
+          "RosieVerse title must be raised 10px from the prior 20px margin: "+JSON.stringify(homeFit));
+        assert(homeFit.vaultLift==="-7px" && homeFit.resourcesLift==="-7px",
+          "Card Vault and Rosie’s Resources must rise 7px independently: "+JSON.stringify(homeFit));
       }
       await page.screenshot({path:output+"/"+name+"-grand-salon.png",fullPage:true});
 
