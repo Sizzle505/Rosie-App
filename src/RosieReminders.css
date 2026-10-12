@@ -599,3 +599,19 @@
 @media (prefers-reduced-motion:reduce) {
   .app-shell.page-reminders .rr-compact-header {transition:none;}
 }
+
+
+/* On iOS in-app browsers the document can extend beyond the app-shell after
+   dynamic viewport changes. Continue the SAME real velvet artwork there. */
+html:has(.app-shell.page-reminders),
+body:has(.app-shell.page-reminders),
+#root:has(.app-shell.page-reminders) {
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp");
+  background-repeat:repeat;
+  background-position:center top;
+  background-size:min(100%,760px) auto;
+}
+.app-shell.page-reminders .rr-paper {
+  scroll-margin-top:calc(77px + env(safe-area-inset-top));
+}
