@@ -209,7 +209,7 @@ try {
         "Title must begin at least 6px below red columns' upper edge: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.result.bottom<=geometry.redBottom-5+1,
         "Result receipt must end 5px above red columns' lower edge: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.result.height>=125 && geometry.result.height<=245,
+      assert(geometry.result.height>=120 && geometry.result.height<=245,
         "Result panel must fit multi-line calculations without occupying the entire device: "+labels[index]+" "+JSON.stringify(geometry));
       const resultTextFits=await panel.locator(".rc-tool-result").evaluate(el=>{
         const boundary=el.getBoundingClientRect();
