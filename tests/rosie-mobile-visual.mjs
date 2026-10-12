@@ -96,6 +96,15 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       assert.match(await startReset.innerText(), /START/, "initial Classic board must invite Start");
       assert.equal(await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).getAttribute("aria-pressed"), "true", "Classic must be selected by default");
       assert(await startReset.evaluate(el => el.classList.contains("is-ready")), "Start button should glow before beginning");
+      assert.equal(await startReset.locator(".cheese-start-symbol").count(),1,
+        "Start must use a gold illustrated play symbol, not a blue platform emoji");
+      const playGlyph=await startReset.locator(".cheese-start-symbol").evaluate(el=>({
+        triangle:getComputedStyle(el,"::before").borderLeftStyle,
+        color:getComputedStyle(el,"::before").borderLeftColor,
+        text:el.textContent.trim()
+      }));
+      assert(playGlyph.triangle==="solid" && playGlyph.color==="rgb(255, 226, 161)" && playGlyph.text==="",
+        "Start must render a real gold CSS triangle: "+JSON.stringify(playGlyph));
       assert(await page.locator("button.cheese-card").first().isDisabled(), "Classic cards must be locked until Start");
       assert.equal(await page.locator(".cheese-examiner-rail .reaction-start-button").count(), 1, "Rosie's sticky reaction must offer Start when selector scrolls offscreen");
       if (narrow) {
