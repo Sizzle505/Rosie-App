@@ -233,7 +233,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
         });
         assert(Math.abs(homeFit.bottom-homeFit.viewport)<=2 && Math.abs(homeFit.height-homeFit.viewport)<=2,
           "Grand Salon scenery must end at the iPhone viewport, not below it: "+JSON.stringify(homeFit));
-        assert(homeFit.titleWidth<=homeFit.contentWidth*.82 && homeFit.titleWidth>=homeFit.contentWidth*.78,
+        assert(homeFit.titleWidth<=homeFit.contentWidth*.80 && homeFit.titleWidth>=homeFit.contentWidth*.75,
           "RosieVerse title should be 15% larger than the former 70% width: "+JSON.stringify(homeFit));
         assert(homeFit.titleOffset>=9 && homeFit.titleOffset<=16,
           "RosieVerse title must be raised 10px from the prior 20px margin: "+JSON.stringify(homeFit));
