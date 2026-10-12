@@ -115,7 +115,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
       await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
       await page.waitForTimeout(130);
       const navOffset=await page.locator(".nav-family-toggle").evaluate(el=>{
-        const m=getComputedStyle(el).transform.match(/^matrix\\(([^)]+)\\)$/);
+        const m=getComputedStyle(el).transform.match(/^matrix\(([^)]+)\)$/);
         return m ? Number(m[1].split(",")[5]) : NaN;
       });
       assert(Math.abs(navOffset-19)<=0.5,
