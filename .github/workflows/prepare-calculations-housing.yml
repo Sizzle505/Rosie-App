@@ -22,7 +22,7 @@ jobs:
           from pathlib import Path
           directory=Path('public/rosieverse/calculations/toolkit')
           frame=Image.open(directory/'gold-device.webp').convert('RGBA')
-          assert frame.size==(1122,1402),f'Unexpected original dimensions: {frame.size}'
+          assert frame.width>=1050 and frame.height>=1300,f'Unexpected source dimensions: {frame.size}'
           crops={
             'housing-top.webp':(0,0,1122,353),
             'housing-bottom.webp':(0,1045,1122,1402),
@@ -33,7 +33,10 @@ jobs:
             'housing-shiba.webp':(912,553,1122,772)
           }
           for name,box in crops.items():
-            piece=frame.crop(box)
+            x0,y0,x1,y1=box
+            scale_x=frame.width/1122
+            scale_y=frame.height/1402
+            piece=frame.crop((round(x0*scale_x),round(y0*scale_y),round(x1*scale_x),round(y1*scale_y)))
             piece.save(directory/name,'WEBP',quality=96,method=6)
             print(name,piece.size)
           PY
