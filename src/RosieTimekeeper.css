@@ -674,3 +674,166 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
     transition:none !important;
   }
 }
+
+/* Instrument fit revision: keep genuine image-generated pieces proportional,
+   enlarge the composition, and bind the animated progress to the dial itself. */
+.rtk-page .rtk-progress-ring {
+  /* Never use "inset:auto" after top/left: it reset those coordinates,
+     leaving the arc displaced above the clock and across Rosie. */
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  width: 108%;
+  height: 108%;
+  transform: translate(-50%,-50%);
+  transform-origin: center;
+  pointer-events: none;
+}
+.rtk-page .rtk-progress-track { opacity: .49; stroke-width: 1.4; }
+.rtk-page .rtk-progress-live {
+  stroke-width: 2.3;
+  filter: drop-shadow(0 0 1.4px #fff0b5) drop-shadow(0 0 3px #ffa134);
+}
+.rtk-page .rtk-progress-bloom {
+  stroke-width: 3.6;
+  filter: blur(1.0px) drop-shadow(0 0 2.1px #f06a51);
+}
+.rtk-page .rtk-action-deck {
+  top: 53.8%;
+  gap: clamp(4px,1.15vw,8px);
+  width: min(90%,455px);
+}
+.rtk-page .rtk-action-deck .rtk-mode-switch {
+  width: clamp(210px,65vw,282px);
+  height: clamp(46px,12.8vw,61px);
+  min-height: 0;
+  padding: 5px 11px;
+}
+.rtk-page .rtk-action-deck .rtk-mode-switch button,
+.rtk-page .rtk-action-deck .rtk-mode-switch button.chosen {
+  font-size: clamp(12px,2.8vw,16px);
+}
+.rtk-page .rtk-action-deck .rtk-controls { gap:clamp(13px,4vw,26px); }
+.rtk-page .rtk-action-deck .rtk-controls button {
+  width: clamp(49px,13.5vw,69px);
+  height: clamp(49px,13.5vw,69px);
+  font-size: clamp(12px,2.65vw,16px);
+}
+.rtk-page .rtk-action-deck .rtk-controls .rtk-primary-action {
+  width: clamp(60px,16vw,79px);
+  height: clamp(60px,16vw,79px);
+}
+.rtk-page .rtk-utility,
+.rtk-page .rtk-utility.is-empty,
+.rtk-page .rtk-utility.is-timer {
+  top: 72%;
+  width: min(88%,545px);
+  aspect-ratio: 3 / 1;
+  height: auto;
+  padding: 0;
+  min-height: 0;
+  max-height: none;
+}
+.rtk-page .rtk-utility.is-empty { width: min(84%,510px); }
+.rtk-page .rtk-utility.is-timer { width: min(88%,545px); }
+.rtk-page .rtk-utility-inner {
+  top: 21%;
+  left: 12%;
+  right: 12%;
+  bottom: 7%;
+}
+.rtk-page .rtk-utility-heading {
+  margin-bottom: 3px;
+  padding-bottom: 9px;
+  font-size: clamp(12px,2.9vw,17px);
+}
+.rtk-page .rtk-utility-heading span:last-child {font-size:clamp(9px,1.9vw,12px);}
+.rtk-page .rtk-utility.is-empty .rtk-empty {
+  margin-top: 7px;
+  font-size: clamp(11px,2.65vw,14px);
+}
+.rtk-page .rtk-presets { margin-top:3px; gap:4px; }
+.rtk-page .rtk-presets button {
+  min-height:clamp(30px,8vw,38px);
+  font-size:clamp(10px,2.4vw,13px);
+}
+.rtk-page .rtk-custom-timer {
+  margin-top: 4px;
+  gap: 5px;
+}
+.rtk-page .rtk-custom-timer label {font-size:clamp(10px,2.25vw,12px);}
+.rtk-page .rtk-custom-timer input {
+  min-height:32px;
+  width: clamp(38px,9vw,51px);
+  font-size:clamp(13px,2.8vw,16px);
+}
+.rtk-page .rtk-custom-timer button {
+  min-height:32px;
+  padding:5px 11px;
+  font-size:clamp(12px,2.6vw,14px);
+}
+.rtk-page .rtk-utility .rtk-timer-view-toggle {
+  flex:none;
+  border:0;
+  border-radius:4px;
+  padding:1px 2px;
+  min-height:18px;
+  background:none;
+  box-shadow:none;
+  color:#ffdfaa;
+  font:700 clamp(10px,2.3vw,13px)/1.15 Georgia,serif;
+  text-shadow:0 1px 2px #000,0 0 4px #a66e33;
+  white-space:nowrap;
+}
+.rtk-page .rtk-utility .rtk-timer-view-toggle:focus-visible {
+  outline:2px solid #ffe1ac;
+  outline-offset:1px;
+}
+@media (max-width:520px) and (min-height:701px) {
+  .rtk-page .rtk-action-deck {top:53.8%;gap:4px;}
+  .rtk-page .rtk-action-deck .rtk-mode-switch {
+    width:clamp(207px,65vw,278px);
+    height:clamp(46px,12.8vw,58px);
+  }
+  .rtk-page .rtk-utility,.rtk-page .rtk-utility.is-empty,
+  .rtk-page .rtk-utility.is-timer {top:72%;}
+}
+@media (max-width:520px) and (max-height:700px) {
+  /* A 353x650 viewport has only ~90px between controls and fixed nav.
+     Keep fully accessible compact variants rather than clipping controls. */
+  .rtk-page .rtk-action-deck {top:55%;gap:2px;}
+  .rtk-page .rtk-action-deck .rtk-mode-switch {
+    width:clamp(173px,50vw,218px);
+    height:clamp(38px,10.8vw,43px);
+    padding:4px 7px;
+  }
+  .rtk-page .rtk-action-deck .rtk-mode-switch button,
+  .rtk-page .rtk-action-deck .rtk-mode-switch button.chosen {font-size:11px;}
+  .rtk-page .rtk-action-deck .rtk-controls {gap:clamp(8px,2.4vw,15px);}
+  .rtk-page .rtk-action-deck .rtk-controls button {width:clamp(42px,11.5vw,47px);height:clamp(42px,11.5vw,47px);}
+  .rtk-page .rtk-action-deck .rtk-controls .rtk-primary-action {
+    width:clamp(49px,13.6vw,56px);
+    height:clamp(49px,13.6vw,56px);
+  }
+  .rtk-page .rtk-utility,.rtk-page .rtk-utility.is-empty,
+  .rtk-page .rtk-utility.is-timer {top:69.7%;}
+  .rtk-page .rtk-utility.is-empty {width:min(70%,440px);}
+  .rtk-page .rtk-utility.is-timer {width:min(75%,490px);}
+  .rtk-page .rtk-utility-inner {top:20%;bottom:6%;}
+  .rtk-page .rtk-utility-heading {
+    font-size:clamp(10px,2.8vw,12px);
+    margin-bottom:1px;
+    padding-bottom:5px;
+    background-size:100% 6px;
+  }
+  .rtk-page .rtk-utility-heading span:last-child {font-size:clamp(8px,2vw,10px);}
+  .rtk-page .rtk-presets {margin-top:1px;gap:3px;}
+  .rtk-page .rtk-presets button {min-height:28px;font-size:9px;}
+  .rtk-page .rtk-custom-timer {margin-top:1px;gap:2px;}
+  .rtk-page .rtk-custom-timer label {font-size:9px;}
+  .rtk-page .rtk-custom-timer input {min-height:26px;width:30px;font-size:12px;}
+  .rtk-page .rtk-custom-timer button {min-height:26px;padding:3px 5px;font-size:11px;}
+  .rtk-page .rtk-utility .rtk-timer-view-toggle {font-size:9px;}
+}
