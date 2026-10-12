@@ -63,9 +63,12 @@ SHAPES = {
    (545,926),(628,859),(699,840)]
  ],
  "rosie/raised-paw": [
-  [(489,783),(514,749),(544,732),(587,728),(623,743),
-   (655,765),(681,775),(704,798),(721,836),(704,870),
-   (679,891),(620,905),(551,903),(503,873),(472,841)]
+  # Tight paw outline traced against the native 1522x1430 source.
+  [(466,783),(491,760),(522,746),(553,733),(584,727),(616,735),
+   (643,750),(673,772),(695,785),(713,806),(718,829),
+   (705,851),(685,869),(663,882),(644,894),(618,892),
+   (597,899),(573,895),(544,887),(524,877),(503,874),
+   (483,859),(466,834)]
  ],
 }
 # Props and fixtures that remain baked into the static background for this
@@ -77,6 +80,36 @@ def poly_mask(polygons):
     for polygon in polygons:
         cv2.fillPoly(mask,[np.array(polygon,np.int32)],255)
     return mask
+
+def isolate_fur_paw(rgb, shape):
+    """Reject purple glass pixels inside traced paw; retain cream fur and claws."""
+    col=rgb.astype(np.int16)
+    r,g,b=col[:,:,0],col[:,:,1],col[:,:,2]
+    fur=((r-b>19)&(g-b>4)&(r>90)&(r>=g-3))
+    fur=np.uint8(fur&(shape>0))*255
+    fur=cv2.morphologyEx(fur,cv2.MORPH_CLOSE,
+                         cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(15,15)))
+    count,labels,stats,_=cv2.connectedComponentsWithStats((fur>0).astype(np.uint8),8)
+    if count>1:
+        largest=1+int(np.argmax(stats[1:,cv2.CC_STAT_AREA]))
+        fur=np.uint8(labels==largest)*255
+    fur=cv2.dilate(fur,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5)))
+    return cv2.bitwise_and(fur,shape)
+
+def split_globe_and_reconstruct_hidden_glass(rgb,globe_mask,paw_mask,dest):
+    """Independent stationary glass base and source-aligned surface reflections."""
+    hidden=cv2.bitwise_and(globe_mask,cv2.dilate(
+        paw_mask,cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7,7))))
+    inpainted=cv2.cvtColor(cv2.inpaint(
+        cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR),hidden,8,cv2.INPAINT_TELEA),
+        cv2.COLOR_BGR2RGB)
+    save_rgba(dest/"orb/glass-back.webp",inpainted,globe_mask)
+    lum=rgb.astype(np.int16).mean(axis=2)
+    highlights=np.uint8(np.where((globe_mask>0)&(paw_mask==0)&(lum>150),95,0))
+    highlights=cv2.GaussianBlur(highlights,(5,5),0.7)
+    highlights=cv2.bitwise_and(highlights,globe_mask)
+    save_rgba(dest/"orb/front-reflections.webp",rgb,highlights)
+    return int(np.count_nonzero(hidden))
 
 def clip_to_known_occlusion(masks):
     # Preserve the foreground book stack. These pixels are not Rosie.
@@ -243,6 +276,8 @@ def main():
     args.out.mkdir(parents=True,exist_ok=True)
     rgb=np.array(source)
     masks={name:poly_mask(parts) for name,parts in SHAPES.items()}
+    masks["rosie/raised-paw"]=isolate_fur_paw(
+        rgb,masks["rosie/raised-paw"])
     smart_alpha=segment_original_rosie_head(rgb) if args.smart_head else None
     if smart_alpha is not None:
         masks["rosie/head-front"]=np.where(smart_alpha>18,255,0).astype(np.uint8)
@@ -258,6 +293,8 @@ def main():
                                     "WEBP",lossless=True,method=5)
     for name in order:
         save_rgba(args.out/(name+".webp"),rgb,owned[name])
+    hidden_glass_pixels=split_globe_and_reconstruct_hidden_glass(
+        rgb,masks["orb/glass-assembled"],owned["rosie/raised-paw"],args.out)
     composite=empty.copy()
     for name in order:
         alpha=owned[name].astype(np.float32)[...,None]/255
@@ -276,6 +313,10 @@ def main():
       "backplate":"Painted midnight-velvet continuation; provisional unseen areas",
       "boundary_type":"source-registered polygons with U2NetP original-head alpha when enabled",
       "head_refined_diagnostic_only":True,
+      "paw_alpha_only_fur":True,
+      "hidden_glass_reconstructed_pixels":hidden_glass_pixels,
+      "fixed_globe_layers":["orb/glass-back.webp","orb/front-reflections.webp"],
+      "paw_globe_independent":True,
       "smart_source_head_used":bool(args.smart_head),
       "head_left_candidate_from_existing_app_portrait":side_candidate,
       "static_composite_mean_abs_error":round(float(err.mean()),6),
