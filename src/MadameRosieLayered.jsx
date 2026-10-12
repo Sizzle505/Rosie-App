@@ -16,7 +16,8 @@ const sprites = {
   front: ROOT + "/rosie/head-front.webp",
   left: ROOT + "/rosie/head-left-existing-CANDIDATE.webp",
   paw: ROOT + "/rosie/raised-paw.webp",
-  glass: ROOT + "/orb/glass-assembled.webp",
+  glassBack: ROOT + "/orb/glass-back.webp",
+  glassFront: ROOT + "/orb/front-reflections.webp",
 };
 
 function Sprite({ name, type, className = "" }) {
@@ -53,7 +54,9 @@ export default function MadameRosieLayered({ artRef, consulting, manifesting, fl
     <Sprite name="torso" type="torso" />
     <Sprite name="front" type="head-front" />
     <Sprite name="left" type="head-left" />
-    <Sprite name="glass" type="orb" />
+    {/* The globe is stationary; it never travels with the paw. */}
+    <Sprite name="glassBack" type="orb-back" />
     <Sprite name="paw" type="paw" />
+    <Sprite name="glassFront" type="orb-front" />
   </div>;
 }
