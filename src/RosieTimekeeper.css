@@ -350,7 +350,7 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
 }
 @media(max-width:355px) {
   .rtk-action-deck {top:56%;width:89%;}
-  .rtk-utility {top:63.2%;width:89%;padding:7px 8px;}
+  .rtk-utility {top:64%;width:89%;padding:7px 8px;}
   .rtk-utility .rtk-shortcut {gap:4px;}
   .rtk-utility .rtk-shortcut button {min-width:43px;padding-inline:5px;}
 }
