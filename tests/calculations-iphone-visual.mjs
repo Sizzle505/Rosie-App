@@ -113,7 +113,7 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           };
         });
         assert(alignment.background.includes("/rosieverse/calculations/burgundy-satin.png") &&
-          alignment.repeat==="no-repeat" && alignment.backgroundSize==="cover" &&
+          alignment.repeat==="no-repeat" && alignment.backgroundSize==="100% 100%" &&
           alignment.naturalWidth>=900 && alignment.naturalHeight>=1600,
           "Original full-resolution satin artwork must fill one full viewport without tiling: "+JSON.stringify(alignment));
         assert(Math.abs(alignment.overlayTop)<=1 && Math.abs(alignment.overlayBottom-alignment.height)<=2,
