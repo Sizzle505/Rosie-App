@@ -195,7 +195,9 @@ export default function RosieQrAtelier(){
   const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setWifiConsent(false);setShowPassword(false);};
   const output=useMemo(()=>{
     try{const payload=qrPayload(type,v),data=makeQr(payload);return {...data,payload,error:""};}
-    catch(e){return {payload:"",svg:"",modules:0,error:e.message||"Please review your details."};}
+    catch(e){const error=/code length overflow|data too long|overflow/i.test(e?.message||"")
+      ?"That QR contains too much data. Shorten the details or website address.":e.message||"Please review your details.";
+      return {payload:"",svg:"",modules:0,error};}
   },[type,v]);
   const ready=Boolean(output.svg);
   const toastMessage=text=>{setToast(text);window.clearTimeout(timerRef.current);timerRef.current=window.setTimeout(()=>setToast(""),4000);};
@@ -248,6 +250,7 @@ export default function RosieQrAtelier(){
       else if(kind==="png")download(await exportQR(output.svg),fileBase+".png");
       else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+(type==="calling"?"-calling-card.png":"-designed-card.png"));
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
+      else if(kind==="vcf")download(new Blob([output.payload],{type:"text/vcard;charset=utf-8"}),fileBase+".vcf");
       toastMessage("Download prepared.");
     });
   }
@@ -290,7 +293,13 @@ export default function RosieQrAtelier(){
           <div className="qa-panel-heading"><span>Rosie's Workbench</span><h2>Choose Your Creation</h2></div>
           <QRTypeSelector current={type} onSelect={changeType}/>
           <div className="qa-details-heading"><h3>{QR_TYPES.find(t=>t.id===type).label} Details</h3>
-            <span>{QR_TYPES.find(t=>t.id===type).hint}</span></div>
+            <span>{QR_TYPES.find(t=>t.id===type).hint}</span>
+            <button type="button" className="qa-start-fresh" onClick={()=>{
+              if(ready && !window.confirm("Clear these "+QR_TYPES.find(t=>t.id===type).label+" fields and start again?"))return;
+              setForms(all=>({...all,[type]:initialValues()[type]}));setLabel("");setLoadedId(null);
+              setWifiConsent(false);setShowPassword(false);
+              toastMessage("Fresh workspace ready.");
+            }}>Clear this form</button></div>
           <div className="qa-inputs" key={type}>
             <Details type={type} v={v} put={put} showPassword={showPassword} setShowPassword={setShowPassword}
               wifiConsent={wifiConsent} setWifiConsent={setWifiConsent}/>
@@ -320,6 +329,7 @@ export default function RosieQrAtelier(){
             <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>
               Download {type==="calling"?"Calling Card":"Designed Card"}</button>
             {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
+            {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
             <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
           </div>
         </div>
