@@ -146,7 +146,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         return {
           rowGap: parseFloat(getComputedStyle(grid).rowGap),
           pagePadding: parseFloat(getComputedStyle(node).paddingBottom),
-          footerMargin: parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom),
+          footerMargin: node.querySelector(".rr-storage-note") ? parseFloat(getComputedStyle(node.querySelector(".rr-storage-note")).marginBottom) : 0,
           outerNavPadding: parseFloat(getComputedStyle(document.querySelector(".app-shell")).paddingBottom)
         };
       });
