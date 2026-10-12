@@ -3,6 +3,7 @@ on:
   push:
     branches: [work/gold-constant-frame-satin-gleam-20261012]
     paths: [.github/workflows/gold-frame-focused-20261012.yml]
+  # rerun after denser Split Bill spacing
 jobs:
   fixed-frame:
     runs-on: ubuntu-latest
