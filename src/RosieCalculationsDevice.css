@@ -212,7 +212,7 @@
   top: -25px!important;
 }
 .app-shell.page-calculations .bottom-nav {
-  bottom: calc(max(6px, env(safe-area-inset-bottom)) + 8px)!important;
+  bottom: calc(max(6px, env(safe-area-inset-bottom)) + 14px)!important;
 }
 .app-shell.page-calculations .nav-family-toggle {
   transform: translate(-50%, 14px);
