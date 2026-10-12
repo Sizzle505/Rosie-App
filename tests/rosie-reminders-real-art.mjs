@@ -29,7 +29,7 @@ try {
     page.on("pageerror", error => consoleErrors.push(error.message));
     await page.goto(base + "/#reminders", { waitUntil: "networkidle" });
     await page.locator(".rr-feature-grid").waitFor();
-    await page.locator(".loading-screen-hidden").waitFor();
+    await page.locator(".loading-screen-hidden").waitFor({state:"attached"});
     await page.waitForTimeout(850); // Allow loading-screen fade before capturing actual artwork.
     assert.equal(await page.locator(".rr-hero img").count(), 1, "Original Rosie hero missing");
     const placement = await page.evaluate(() => {
