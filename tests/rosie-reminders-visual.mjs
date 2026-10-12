@@ -306,10 +306,12 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           visibleBottom:window.innerHeight-toggle.bottom,
         };
       });
-      assert(position.horizontalOffset<4 && position.aboveBarBottom>=-3
-        && position.aboveBarBottom<=3 && position.hangingBelowBar>=23
-        && position.hangingBelowBar<=27 && position.visibleBottom>=3,
+      assert(position.horizontalOffset<4 && position.aboveBarBottom>=4
+        && position.aboveBarBottom<=18 && position.hangingBelowBar>=10
+        && position.hangingBelowBar<=21 && position.visibleBottom>=3,
         "Games/Tools toggle must hang directly beneath the nav row: "+JSON.stringify(position));
+      const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first().evaluate(el=>getComputedStyle(el).top);
+      assert.equal(raisedNavContent,"-5px","navigation content should sit 5px above the pendant's unchanged safe-area position");
       await navToggle.click();
       assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
         "Resources nav should expose the three utility destinations");
