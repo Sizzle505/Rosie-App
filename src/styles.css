@@ -7732,7 +7732,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   z-index:92;
   left:50%;
   right:auto;
-  bottom:calc(max(8px,env(safe-area-inset-bottom)) + 2px);
+  bottom:calc(max(8px,env(safe-area-inset-bottom)) + 4px);
   transform:translateX(-50%);
   display:flex;
   align-items:center;
@@ -7767,7 +7767,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     bottom:calc(max(6px,env(safe-area-inset-bottom)) + 16px) !important;
   }
   .app-shell .nav-family-toggle {
-    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 2px);
+    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 4px);
     min-width:79px;min-height:24px;
     padding:3px 9px;
     font-size:9px;
@@ -7785,5 +7785,5 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .app-shell .bottom-nav > button .nav-icon-wrap,
 .app-shell .bottom-nav > button small {
   position: relative;
-  top: -5px;
+  top: -7px;
 }
