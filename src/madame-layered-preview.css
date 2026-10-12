@@ -44,10 +44,17 @@
 .madame-sprite-lamp-left { z-index: 3; transform-origin: 24% 16%; animation: madameLampLeft 5.8s ease-in-out infinite !important; }
 .madame-sprite-lamp-right { z-index: 4; transform-origin: 83% 19%; animation: madameLampRight 6.7s ease-in-out infinite -1.1s !important; }
 .madame-sprite-torso { z-index: 5; transform-origin: 54% 72%; animation: madameBreathe 4.8s ease-in-out infinite !important; }
-.madame-sprite-head-front { z-index: 6; transform-origin: 55% 45%; animation: madameHeadIdle 5.3s ease-in-out infinite !important; opacity: 1; transition: opacity .3s ease; }
-.madame-sprite-head-left { z-index: 7; transform-origin: 56% 38%; opacity: 0; transform: translate3d(0,5px,0) rotate(2deg) !important; transition: transform .58s cubic-bezier(.2,.78,.24,1),opacity .22s linear; }
-.madame-sprite-orb { z-index: 8; }
-.madame-sprite-paw { z-index: 9; animation: madamePawBreathe 4.8s ease-in-out infinite !important; transform-origin: 39% 63%; }
+.madame-sprite-head-front { z-index: 6; transform-origin: 55% 45%; animation: madameHeadIdle 5.3s ease-in-out infinite !important; opacity: 1; transition: opacity .12s linear; }
+.madame-sprite-head-left { z-index: 7; transform-origin: 56% 38%; opacity: 0; transform: translate3d(0,5px,0) rotate(2deg) !important; transition: transform .58s cubic-bezier(.2,.78,.24,1),opacity .12s linear; }
+.madame-sprite-orb-back { z-index: 8; animation: none !important; transform: none !important; }
+.madame-sprite-paw {
+  z-index: 9;
+  /* Paw remains registered to the source painting: moving its whole sprite
+     revealed the non-existent original glass behind Rosie's toes. */
+  transform: none !important;
+  animation: none !important;
+}
+.madame-sprite-orb-front { z-index: 10; transform: none !important; animation: none !important; }
 .madame-listening > .madame-sprite-head-front {
   opacity: 0 !important;
   animation: none !important;
