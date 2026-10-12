@@ -7,6 +7,7 @@ temporary draft produced by inpainting; it is NOT a polished empty-plate asset.
 from __future__ import annotations
 import argparse
 import json
+from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 import cv2
 import numpy as np
@@ -167,7 +168,7 @@ def main():
     order,owned,union=clip_to_known_occlusion(masks)
     empty=make_background(rgb,union)
     Image.fromarray(empty).save(args.out/"empty-plate-DRAFT.webp",
-                                    "WEBP",quality=94,method=5)
+                                    "WEBP",lossless=True,method=5)
     for name in order:
         save_rgba(args.out/(name+".webp"),rgb,owned[name])
     composite=empty.copy()
@@ -175,7 +176,7 @@ def main():
         alpha=owned[name].astype(np.float32)[...,None]/255
         composite=(rgb*alpha+composite*(1-alpha)).astype(np.uint8)
     Image.fromarray(composite).save(args.out/"static-composite-DRAFT.webp",
-                                    "WEBP",quality=95,method=5)
+                                    "WEBP",lossless=True,method=5)
     preview_contact(rgb,empty,composite,union,args.out/"inspection-contact-sheet.jpg")
     err=np.abs(rgb.astype(np.int16)-composite.astype(np.int16))
     report={
@@ -192,7 +193,18 @@ def main():
       "empty_plate_approved":False,"motion_approved":False,
       "integration_approved":False
     }
-    (args.out/"draft-report.json").write_text(json.dumps(report,indent=2)+"\n")
+    (args.out/"draft-report.json").write_text(json.dumps(report,indent=2)+"\\n")
+    (args.out/"DRAFT_ONLY_README.txt").write_text(
+        "MADAME ROSIE - UNAPPROVED SOURCE REGISTERED DRAFTS\\n"
+        "All transparent cutouts are native 1522x1430 original painting pixels.\\n"
+        "WARNING: mask boundaries are conservative polygons and need hand QA.\\n"
+        "The empty plate is a generated velvet continuation, NOT true recovered art.\\n"
+        "The exact static composite is NOT motion approval. Do not deploy these.\\n"
+        "Use the connected GitHub branch's source generator for repeatable changes.\\n")
+    with ZipFile(args.out/"madame-rosie-draft-layers.zip","w",ZIP_DEFLATED,compresslevel=6) as z:
+        for file in sorted(args.out.rglob("*")):
+            if file.is_file() and file.name!="madame-rosie-draft-layers.zip":
+                z.write(file,file.relative_to(args.out).as_posix())
     print(json.dumps(report,indent=2))
 if __name__=="__main__":
     main()
