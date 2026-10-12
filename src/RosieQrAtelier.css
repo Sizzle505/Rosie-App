@@ -235,3 +235,24 @@
   .qa-print-sheet h3 {font:normal 23px Georgia,serif;margin:12mm 0 0;max-width:135mm;overflow-wrap:anywhere;}
   .qa-print-sheet p:last-child {font:16px Georgia,serif;margin-top:6mm;}
 }
+
+/* Screenshot-driven correction: preserve filigree edge only, never the baked faux input. */
+.qa-panel {border:22px solid transparent;
+  border-image-source:url("/qr-atelier/form-panel.webp");
+  border-image-slice:115 104 115 104;
+  border-image-width:1;
+  border-image-repeat:stretch;
+  background:linear-gradient(170deg,#fff3d8 0%,#f9e9ca 44%,#f3dcb4 100%);
+  box-shadow:0 8px 25px #00120ba8,inset 0 0 8px #a6752b12;}
+.qa-panel-inner {padding:8px 6px 16px;}
+.qa-panel-heading {min-height:56px;margin:1px 0 18px;}
+.qa-panel h2 {text-shadow:0 1px #fff5db;}
+.qa-save {position:relative;
+  border:2px solid #e2b66f;outline:1px solid #916b37;outline-offset:-6px;
+  border-radius:10px;background:linear-gradient(160deg,#801e3d,#5e0b2a 60%,#2f071a);
+  box-shadow:inset 0 2px #ffe9b557,inset 0 -3px #1d0412,0 4px 8px #2e0e1480;
+  color:#ffedbe;font-weight:600!important;}
+.qa-actions button {border:1.5px solid #cfa661;border-radius:10px;background:linear-gradient(155deg,#182b34,#09141f 55%,#050e15);
+  box-shadow:inset 0 1px #fff4d729,0 2px 5px #33210d5c;font-weight:600!important;}
+.qa-save:disabled,.qa-actions button:disabled {opacity:.42;}
+@media(max-width:390px){.qa-panel-inner{padding:8px 5px 13px;}}
