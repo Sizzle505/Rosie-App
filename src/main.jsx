@@ -746,14 +746,20 @@ function BarkbridgeDiploma({ recipient, awardDate }) {
 function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   const diplomaDialogRef = useRef(null);
   const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
-  const defaultDiplomaName = efficiency >= 85 ? "Gouda Laude"
-    : efficiency >= 60 ? "Cheez Whiz" : "Brie-ly Passed";
+  // Doctor of Cheese honorifics, ranked from a perfect exam to a leisurely finish.
+  const defaultDiplomaName = efficiency >= 90 ? "The Grate Gatsby"
+    : efficiency >= 75 ? "Sharp as Cheddar"
+    : efficiency >= 60 ? "Cheez Whiz"
+    : efficiency >= 45 ? "Provolone Ranger"
+    : "Feta Late Than Never";
   const [graduateName, setGraduateName] = useState(() => {
     try {
       const saved = localStorage.getItem("barkbridgeGraduateName")?.trim() || "";
       // Names from older releases were automatic defaults, not player customizations.
       return !saved || saved.toLowerCase() === "the graduate"
-        || ["Cheez Whiz", "Gouda Laude", "Brie-ly Passed"].includes(saved) ? "" : saved;
+        || ["The Grate Gatsby", "Sharp as Cheddar", "Cheez Whiz",
+            "Provolone Ranger", "Feta Late Than Never",
+            "Gouda Laude", "Brie-ly Passed"].includes(saved) ? "" : saved;
     } catch { return ""; }
   });
   const awardDate = useMemo(

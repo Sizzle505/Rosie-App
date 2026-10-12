@@ -7800,3 +7800,25 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 /* The Fortune Teller page content starts 8px higher; persistent navigation
    and the crystal-ball animation's internal coordinate system stay intact. */
 .app-shell.page-fortune > main.fortune-page {position:relative;top:-8px;}
+
+/* Match side-rail controls across pages, exactly 7px below their former positions. */
+.app-shell .house-return {
+  top: calc(max(9px, env(safe-area-inset-top)) + 7px);
+}
+.app-shell .resources-return {
+  top: calc(max(9px, env(safe-area-inset-top)) + 62px);
+}
+.app-shell .resources-return--home {
+  top: calc(max(9px, env(safe-area-inset-top)) + 7px);
+}
+@media(max-width:680px) {
+  .app-shell .house-return {
+    top: calc(max(5px, env(safe-area-inset-top)) + 7px);
+  }
+  .app-shell .resources-return {
+    top: calc(max(5px, env(safe-area-inset-top)) + 46px);
+  }
+  .app-shell .resources-return--home {
+    top: calc(max(5px, env(safe-area-inset-top)) + 7px);
+  }
+}

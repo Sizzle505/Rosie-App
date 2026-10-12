@@ -192,15 +192,24 @@
   }
   /* Independent visual nudges; retain their original grid slots and
      ornamental-image sizing without pulling the other buttons around. */
-  .world[aria-label="Open Card Vault"] { top: -18px; }
-  .world[aria-label="Open Cheese Board Exam"] { top: -3px; left: 6px; }
-  .world[aria-label="Open Captain Rosie"] { top: -6px; }
-  .world[aria-label="Open Randomizers"] { top: -6px; }
-  .world.resourcesWorld { top: -23px; z-index: 0; }
+  .world[aria-label="Open Card Vault"] { top: -20px; }
+  .world[aria-label="Open Cheese Board Exam"] { top: -4px; left: 4px; }
+  .world[aria-label="Open Captain Rosie"] { top: -9px; }
+  .world[aria-label="Open Randomizers"] { top: -9px; }
+  .world.resourcesWorld { top: -30px; }
   /* Resources tucks behind the other illustrated destination buttons,
      preserving their normal tappable area and gold-frame overlap. */
-  .world:not(.resourcesWorld) { z-index: 2; }
+  /* Specific priority rules below supersede the previous shared z-index. */
 }
 @media (max-width: 600px) and (max-height: 700px) {
   .hero { min-height: 105px; max-height: 28dvh; }
 }
+
+/* Explicit Grand Salon ornament stacking, top to bottom (all viewport widths).
+   Interactive button artwork stays inside its own stacking context. */
+.world[aria-label="Open Card Vault"] { z-index: 6; }
+.world[aria-label="Open Fortune Teller"] { z-index: 5; }
+.world[aria-label="Open Cheese Board Exam"] { z-index: 4; }
+.world[aria-label="Open Captain Rosie"] { z-index: 3; }
+.world[aria-label="Open Randomizers"] { z-index: 2; }
+.world.resourcesWorld { z-index: 1; }

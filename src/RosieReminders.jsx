@@ -234,6 +234,22 @@ export default function RosieReminders() {
       <h1 className="rr-screen-reader">Rosie’s Reminders - Personal Organizer</h1>
     </header>
     <section className="rr-content">
+      <div className="rr-feature-grid" aria-label="Organizer tools">
+        {CATEGORIES.map(c => <button type="button" key={c.id}
+          className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
+          onClick={() => chooseSection(c.id)}
+          aria-label={"Open "+c.title+(counts[c.id] ? ", "+counts[c.id]+" entries" : "")}
+          aria-pressed={section === c.id}>
+          <img className="rr-button-image" src={"/rosieverse/reminders/buttons/"+c.id+".webp"}
+            alt="" draggable="false" loading="lazy" />
+        </button>)}
+      </div>
+      <div className="rr-tabs" role="tablist" aria-label="Organizer view">
+        <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
+          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}>Today</button>
+        <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
+          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
+      </div>
       {(section !== "today" || tab !== null) && <section className="rr-paper" aria-label="Reminders organizer">
         {!(section === "today" && tab === "calendar") && (
           <div className="rr-panel-head">
@@ -362,22 +378,6 @@ export default function RosieReminders() {
           {!store.gratitude.length && !store.goals.length && <p className="rr-empty">A brighter day begins with one small step.</p>}
         </div>}
       </section>}
-      <div className="rr-feature-grid" aria-label="Organizer tools">
-        {CATEGORIES.map(c => <button type="button" key={c.id}
-          className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
-          onClick={() => chooseSection(c.id)}
-          aria-label={"Open "+c.title+(counts[c.id] ? ", "+counts[c.id]+" entries" : "")}
-          aria-pressed={section === c.id}>
-          <img className="rr-button-image" src={"/rosieverse/reminders/buttons/"+c.id+".webp"}
-            alt="" draggable="false" loading="lazy" />
-        </button>)}
-      </div>
-      <div className="rr-tabs" role="tablist" aria-label="Organizer view">
-        <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}>Today</button>
-        <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
-      </div>
     </section>
     {editorOpen && <div className="rr-modal-cover" onMouseDown={e => { if(e.target===e.currentTarget) setEditorOpen(false); }}>
       <section role="dialog" aria-modal="true" aria-labelledby="rr-modal-title" className="rr-modal">
