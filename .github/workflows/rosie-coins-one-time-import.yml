@@ -1,0 +1,49 @@
+name: Import approved HD Rosie coin art
+on:
+  push:
+    branches:
+      - work/rosie-hd-coins-20261011
+permissions:
+  contents: write
+jobs:
+  import-coins:
+    if: "!contains(github.event.head_commit.message, '[hd-coins-imported]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install image codec
+        run: python3 -m pip install --quiet pillow
+      - name: Retrieve and verify the uploaded coin package
+        env:
+          ARCHIVE_URL_B64: 'aHR0cHM6Ly91YzIxNzMxYmNhODExY2I1YTAzODZiNGEwMDVjLmRsLmRyb3Bib3h1c2VyY29udGVudC5jb20vY2QvMC9nZXQvREoyMkM3elhMdnp5VGJza05CdTUwZnloYXZLV3RiY1R1dkJTRWl0bC05UVZGaXBoSDZyVGR4Mk40RU1qMndIRFlETC1OcVItSjZub093bWMxa01lcmY4V2Y1Z3N2RDVHQ3NXclZnZlZzTXpTd2VCcFFIZFVSdjNtQVlZX0FIS3I0OVhpS3B2bkp3d29sa0hvSE8zT2VyWGRQd3lkTjNTVUU0Y0ROaE4xOW1PdlZBL2ZpbGU/Y19sdWlkPTY2N2RlZDFk'
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, io, os, pathlib, urllib.request, zipfile
+          from PIL import Image
+          url = base64.b64decode(os.environ["ARCHIVE_URL_B64"]).decode()
+          with urllib.request.urlopen(url, timeout=120) as response:
+              data = response.read()
+          targets = {
+              "heads": ("85ead01795d4f1be71b86061bbf44c2bfabdbdc08119242ba7c7193480ed259b", "public/randomizers/rosie-coin-heads-hd.webp"),
+              "tails": ("22eac5461812237c9cdcd25f1b58b043edace4e2adf9196843faedcc7ddc05f4", "public/randomizers/rosie-coin-tails-hd.webp"),
+          }
+          with zipfile.ZipFile(io.BytesIO(data)) as archive:
+              for face, (expected_sha, target) in targets.items():
+                  image_bytes = archive.read(f"coin_assets_handoff/rosie_coin_{face}_hd.png")
+                  assert hashlib.sha256(image_bytes).hexdigest() == expected_sha, f"{face} source mismatch"
+                  image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+                  assert image.size == (1254, 1254), f"{face} source size mismatch"
+                  target_path = pathlib.Path(target)
+                  target_path.parent.mkdir(parents=True, exist_ok=True)
+                  image.save(target_path, "WEBP", quality=94, method=6, exact=True)
+                  verify = Image.open(target_path)
+                  assert verify.size == (1254, 1254) and verify.mode == "RGBA"
+                  print(f"{face}: {verify.size}, {target_path.stat().st_size} bytes")
+          PY
+      - name: Commit high-resolution coin faces
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/randomizers/rosie-coin-heads-hd.webp public/randomizers/rosie-coin-tails-hd.webp
+          git commit -m "Import source-verified HD Rosie coin faces [hd-coins-imported]"
+          git push origin HEAD:work/rosie-hd-coins-20261011
