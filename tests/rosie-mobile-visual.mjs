@@ -146,8 +146,13 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         assertFits(await readCheeseViewport(), "Return to Classic");
         assert.match(await startReset.innerText(), /START/, "switching to Classic should expose Start");
       }
-      // Classic can also be started explicitly; the initial click begins its timer.
-      await startReset.click();
+      // The starter inside the sticky Rosie panel remains usable even when
+      // scrolling the board has moved the upper toolbar out of view.
+      if (narrow) {
+        await page.locator(".cheese-examiner-rail .reaction-start-button").click();
+      } else {
+        await startReset.click();
+      }
       assert(await page.locator("button.cheese-card").first().isEnabled(), "Start must unlock the Classic matching board");
       assert.match(await page.locator(".cheese-examiner-rail .reaction-copy strong").innerText(), /exam is underway/i, "Rosie must visibly acknowledge the started Classic exam");
       assert.equal(await page.locator(".cheese-examiner-rail .reaction-start-button").count(), 0, "Started Classic exam must not show a duplicate Start");
