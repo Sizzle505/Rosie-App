@@ -179,12 +179,12 @@ try {
       });
       assert(geometry.frame.x>=-1 && geometry.frame.right<=width+1,
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.surface.x>=geometry.frame.x+geometry.frame.width*.205 &&
-        geometry.surface.right<=geometry.frame.right-geometry.frame.width*.205,
+      assert(geometry.surface.x>=geometry.frame.x+geometry.frame.width*.245 &&
+        geometry.surface.right<=geometry.frame.right-geometry.frame.width*.245,
         "Gold instrument content must stay inset inside its safe centre, clear of decorative rails: "+labels[index]+" "+JSON.stringify(geometry));
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
-        field.width >= (field.compact || paired.includes(fieldIndex) ? 85 : 100) &&
+        field.width >= (field.compact ? 75 : paired.includes(fieldIndex) ? 77 : 86) &&
         field.nativeHeight>=44 && field.height>=40 && field.height<=46 &&
         field.paddingLeft >= (paired.includes(fieldIndex) ? 7 : 9) &&
         field.border>=2 && field.fontSize >= (labels[index]==="Unit Conversions" ? 14 : 16) &&
@@ -205,6 +205,10 @@ try {
         "Page has horizontal overflow: "+labels[index]+" "+geometry.scrollWidth);
       assert(geometry.result.top>geometry.inputs.at(-1).bottom,
         "Results overlap the last input: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.headingTop>=geometry.frame.top+geometry.frame.height*.155,
+        "Gold frame needs more breathing space above its title: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.frame.bottom-geometry.result.bottom>=geometry.frame.height*.19,
+        "Gold frame needs substantial clear ornament space below its receipt: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.headingTop>=geometry.redTop+6-1,
         "Title must begin at least 6px below red columns' upper edge: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.result.bottom<=geometry.redBottom-5+1,
@@ -224,7 +228,7 @@ try {
           "Percent bubbles and choice selector should be content-sized: "+JSON.stringify(geometry.inputs));
       }
       if (index === 0) {
-        assert(geometry.frame.height < 620,
+        assert(geometry.frame.height < 760,
           "Tip calculator tray remains unnecessarily tall: "+JSON.stringify(geometry));
         assert(geometry.inputs[1].width < geometry.inputs[0].width*.65,
           "Short tip and people fields are not visually compact");
