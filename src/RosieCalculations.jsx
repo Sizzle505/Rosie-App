@@ -198,8 +198,8 @@ export default function RosieCalculations() {
       inFlight = controller;
       lastAttempt = Date.now();
       try {
-        const response = await fetch(FX_API + "/rate/" + encodeURIComponent(base) +
-          "/" + encodeURIComponent(quote), {signal:controller.signal,cache:"no-store"});
+        const response = await fetch(FX_API + "/rate/" + encodeURIComponent(base.toLowerCase()) +
+          "/" + encodeURIComponent(quote.toLowerCase()), {signal:controller.signal,cache:"no-store"});
         if(!response.ok) throw new Error("Rate provider returned " + response.status);
         const data = await response.json();
         const rate = Number(data.rate);
