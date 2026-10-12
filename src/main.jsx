@@ -887,6 +887,7 @@ function CheeseMemoryGame() {
   const boardFocusTimersRef = useRef([]);
 
   const complete = matched.length === CHEESES.length;
+  const hasBegun = started || (gameMode === "sprint" && challengePhase !== "ready");
   const currentReaction = ROSIE_REACTIONS[rosieMood];
   // Accuracy is based on resolved two-card attempts, not an unresolved flip.
   const resolvedAttempts = matched.length + totalMisses;
@@ -1044,6 +1045,18 @@ function CheeseMemoryGame() {
 
   function selectBoardMode(mode) {
     resetGame(mode);
+    scheduleBoardFocus();
+  }
+
+  function startOrResetSelectedBoard() {
+    if (gameMode === "sprint") {
+      startSprint();
+      return;
+    }
+    // Classic starts on the selected board; tapping Reset later shuffles and
+    // starts a fresh classic examination without changing the chosen mode.
+    resetGame("classic");
+    setStarted(true);
     scheduleBoardFocus();
   }
 
@@ -1258,7 +1271,7 @@ function CheeseMemoryGame() {
               <div className="cheese-exam-actions" role="group" aria-label="Cheese exam controls">
                 <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("classic"); }}>CLASSIC EXAM</button>
                 <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("sprint"); }}>FLASH FROMAGE</button>
-                <button type="button" className="cheese-action-reset" onClick={(event) => { event.currentTarget.blur(); selectBoardMode(gameMode); }}><span aria-hidden="true">↻</span> RESET</button>
+                <button type="button" className={"cheese-action-reset" + (!hasBegun ? " is-ready" : "")} onClick={(event) => { event.currentTarget.blur(); startOrResetSelectedBoard(); }}><span aria-hidden="true">{hasBegun ? "↻" : "▶"}</span> {hasBegun ? "RESET" : "START"}</button>
               </div>
 
               <div className="cheese-header-status" aria-label="Current exam status">

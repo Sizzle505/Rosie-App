@@ -29,7 +29,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
 
       await page.goto(base + "/#randomizers", { waitUntil: "networkidle" });
       await page.locator("section[aria-label='Quick randomizers'] article").first().waitFor();
-      // The hidden loading marker is deliberately display:none on desktop; wait for class attachment, not visibility.
+      // Wait for the hidden CSS marker to exist; it is intentionally not visible on desktop.
       await page.locator(".loading-screen-hidden").waitFor({state:"attached"});
       await page.waitForTimeout(650);
       const panels = await page.locator("section[aria-label='Quick randomizers'] article").evaluateAll(nodes =>
@@ -93,6 +93,10 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         return Boolean(row && figures && (row.compareDocumentPosition(figures) & Node.DOCUMENT_POSITION_FOLLOWING));
       });
       assert(actionsBeforeScores, "mode controls must precede scoring panels");
+      const startReset = cheeseActions.locator(".cheese-action-reset");
+      assert.match(await startReset.innerText(), /START/, "initial Classic board must invite Start");
+      assert.equal(await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).getAttribute("aria-pressed"), "true", "Classic must be selected by default");
+      assert(await startReset.evaluate(el => el.classList.contains("is-ready")), "Start button should glow before beginning");
       if (narrow) {
         const readCheeseViewport = async () => page.evaluate(() => {
           const grid = document.querySelector(".cheese-grid").getBoundingClientRect();
@@ -117,17 +121,52 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
         };
         await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).click();
         await page.waitForTimeout(360);
-        assertFits(await readCheeseViewport(), "Classic");
+        assertFits(await readCheeseViewport(), "Classic selected");
+        assert.match(await startReset.innerText(), /START/, "selecting Classic should leave a Start button");
+
         await cheeseActions.getByRole("button", { name: "FLASH FROMAGE" }).click();
         await page.waitForTimeout(360);
-        assertFits(await readCheeseViewport(), "Flash Fromage");
-        await cheeseActions.getByRole("button", { name: "RESET" }).click();
+        assertFits(await readCheeseViewport(), "Flash Fromage selected");
+        assert.match(await startReset.innerText(), /START/, "Flash Fromage should await Start");
+        await startReset.click();
         await page.waitForTimeout(360);
-        assertFits(await readCheeseViewport(), "Reset");
+        assertFits(await readCheeseViewport(), "Flash Fromage started");
+        assert.match(await startReset.innerText(), /RESET/, "Start must become Reset during Flash Fromage");
+        assert(await page.locator(".cheese-game-page").evaluate(el => el.classList.contains("is-flash-fromage")), "Start must preserve selected Flash Fromage mode");
+
+        await startReset.click();
+        await page.waitForTimeout(360);
+        assertFits(await readCheeseViewport(), "Flash Fromage reset");
+        assert.match(await startReset.innerText(), /RESET/, "Reset should restart Flash Fromage");
+
         await cheeseActions.getByRole("button", { name: "CLASSIC EXAM" }).click();
         await page.waitForTimeout(360);
         assertFits(await readCheeseViewport(), "Return to Classic");
+        assert.match(await startReset.innerText(), /START/, "switching to Classic should expose Start");
       }
+      // Classic can also be started explicitly; the initial click begins its timer.
+      await startReset.click();
+      if (narrow) {
+        await page.waitForTimeout(360);
+        const readCheeseViewport = async () => page.evaluate(() => ({
+          gridTop: document.querySelector(".cheese-grid").getBoundingClientRect().top,
+          gridBottom: document.querySelector(".cheese-grid").getBoundingClientRect().bottom,
+          navTop: document.querySelector(".bottom-nav").getBoundingClientRect().top,
+          examinerBottom: document.querySelector(".cheese-examiner-rail").getBoundingClientRect().bottom
+        }));
+        const pos = await readCheeseViewport();
+        assert(pos.gridBottom < pos.navTop - 3 && pos.gridTop >= pos.examinerBottom - 4, "Classic started must clear navigation: " + JSON.stringify(pos));
+        // Previously this text stayed blurred permanently after returning to the top.
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: "auto" }));
+        await page.waitForTimeout(80);
+        const style = await page.locator(".cheese-exam-title h1").evaluate(el => ({
+          filter: getComputedStyle(el).filter,
+          opacity: getComputedStyle(el).opacity
+        }));
+        assert.equal(style.filter, "none", "Barkbridge heading must be sharp when pulled back below Rosie");
+        assert.equal(style.opacity, "1", "Barkbridge heading must retain full opacity when pulled down");
+      }
+      assert.match(await startReset.innerText(), /RESET/, "Classic Start must become Reset");
       const pairIndices = await page.locator("button.cheese-card").evaluateAll(cards => {
         const groups = new Map();
         cards.forEach((card, index) => {
