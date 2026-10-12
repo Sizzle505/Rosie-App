@@ -19,8 +19,8 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       page.on("pageerror", error => errors.push(String(error)));
       await page.goto(base, { waitUntil: "networkidle" });
       const salon = page.locator('section[aria-label="Custom decision wheel"]');
-      const frame = salon.locator('img[src="/randomizers/roulette/frame.svg"]');
-      const pointer = salon.locator('img[src="/randomizers/roulette/pointer.svg"]');
+      const frame = salon.locator('img[src="/randomizers/roulette/wheel-frame-stationary.webp"]');
+      const pointer = salon.locator('img[src="/randomizers/roulette/pointer-stationary.webp"]');
       const crest = salon.locator('[class*="wheelHub"] img[src="/randomizers/rosie-signet.webp"]');
       const face = salon.locator('[class*="wheelFace"]');
       const sectorPaths = face.locator('path[d^="M 200 200 L "]');
@@ -30,10 +30,33 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert.equal(await pointer.count(), 1);
       assert.equal(await crest.count(), 1);
       assert.equal(await sectorPaths.count(), 6);
+      // Confirm real decoded artwork instead of merely validating <img> DOM nodes.
+      for (const img of [frame, pointer, crest]) {
+        await img.evaluate(element => element.decode());
+        assert(await img.evaluate(element => element.naturalWidth > 0 && element.naturalHeight > 0),
+          "approved image must decode with nonzero dimensions");
+      }
+      assert.equal(await frame.evaluate(el => el.naturalWidth), 1024);
+      assert.equal(await pointer.evaluate(el => el.naturalWidth), 150);
+      const patterns = await face.evaluate(el => [...el.querySelectorAll('pattern image')].map(node => node.getAttribute('href')));
+      assert.deepEqual(patterns, [
+        "/randomizers/roulette/slice-texture-crimson.webp",
+        "/randomizers/roulette/slice-texture-onyx.webp"
+      ]);
+      await page.waitForFunction(async () => {
+        const paths = [
+          "/randomizers/roulette/slice-texture-crimson.webp",
+          "/randomizers/roulette/slice-texture-onyx.webp"
+        ];
+        return (await Promise.all(paths.map(async path => {
+          const response = await fetch(path);
+          return response.ok && response.headers.get("content-type")?.includes("image");
+        }))).every(Boolean);
+      });
       await page.screenshot({ path: `artifacts/roulette/${engine}-${width}-six.png`, fullPage: true });
       const fixedSelectors = [
-        'img[src="/randomizers/roulette/frame.svg"]',
-        'img[src="/randomizers/roulette/pointer.svg"]',
+        'img[src="/randomizers/roulette/wheel-frame-stationary.webp"]',
+        'img[src="/randomizers/roulette/pointer-stationary.webp"]',
         '[class*="wheelHub"] img[src="/randomizers/rosie-signet.webp"]'
       ];
       const fixedBefore = await salon.evaluate((root, selectors) => selectors.map(selector => {
@@ -89,7 +112,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       await page.screenshot({ path: `artifacts/roulette/${engine}-${width}-ten.png`, fullPage: true });
       const widths = await salon.evaluate(root => {
         const e = root.querySelector('[class*="wheelWrap"]');
-        const ring = root.querySelector('img[src="/randomizers/roulette/frame.svg"]');
+        const ring = root.querySelector('img[src="/randomizers/roulette/wheel-frame-stationary.webp"]');
         const disc = root.querySelector('[class*="wheelFace"]');
         return [e?.getBoundingClientRect().width, ring?.getBoundingClientRect().width, disc?.getBoundingClientRect().width];
       });
