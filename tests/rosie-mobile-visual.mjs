@@ -29,7 +29,8 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
 
       await page.goto(base + "/#randomizers", { waitUntil: "networkidle" });
       await page.locator("section[aria-label='Quick randomizers'] article").first().waitFor();
-      await page.locator(".loading-screen-hidden").waitFor();
+      // The hidden loading marker is deliberately display:none on desktop; wait for class attachment, not visibility.
+      await page.locator(".loading-screen-hidden").waitFor({state:"attached"});
       await page.waitForTimeout(650);
       const panels = await page.locator("section[aria-label='Quick randomizers'] article").evaluateAll(nodes =>
         nodes.map(node => {
