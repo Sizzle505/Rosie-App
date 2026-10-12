@@ -27,7 +27,7 @@
   display: block;
   pointer-events: none;
   border: 1px solid rgba(128,73,26,.6);
-  border-radius: max(7px, calc(inherit - 7px));
+  border-radius: 10px;
   background: none;
 }
 .page-cheese .cheese-exam-header::after {
