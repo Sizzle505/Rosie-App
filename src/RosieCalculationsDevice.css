@@ -53,29 +53,41 @@
   left:0;top:0;width:100%;aspect-ratio:1122 / 353;
   background-image:url("/rosieverse/calculations/toolkit/housing-top.webp");
   background-size:100% 100%;z-index:3;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 91%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 91%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 98%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 98%,transparent 100%);
 }
 .rc-page .rc-device-housing .rc-housing-bottom {
   left:0;bottom:0;width:100%;aspect-ratio:1122 / 357;
   background-image:url("/rosieverse/calculations/toolkit/housing-bottom.webp");
   background-size:100% 100%;z-index:3;
-  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 91%,transparent 100%);
-  mask-image:linear-gradient(to top,#000 0%,#000 91%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 98%,transparent 100%);
+  mask-image:linear-gradient(to top,#000 0%,#000 98%,transparent 100%);
 }
 .rc-page .rc-device-housing .rc-housing-left,
 .rc-page .rc-device-housing .rc-housing-right {
   top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
-  width:16.94%;background-repeat:no-repeat;background-size:100% 100%;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 5%,#000 95%,transparent 100%);
-  mask-image:linear-gradient(to bottom,transparent 0%,#000 5%,#000 95%,transparent 100%);
+  display:flex!important;flex-direction:column;
+  width:16.94%;background:none!important;
   z-index:1;
 }
-.rc-page .rc-device-housing .rc-housing-left {
-  left:0;background-image:url("/rosieverse/calculations/toolkit/housing-rail-left.webp");
+.rc-page .rc-device-housing .rc-housing-left {left:0;}
+.rc-page .rc-device-housing .rc-housing-right {right:0;}
+/* Alternating upright/mirrored segments from the APPROVED original image
+   make the ornamental helix continuous without stretching it into a straight stripe. */
+.rc-page .rc-device-housing .rc-housing-left > b,
+.rc-page .rc-device-housing .rc-housing-right > b {
+  position:relative;display:block;flex:1;min-height:0;width:100%;
+  background-repeat:no-repeat;background-position:center;background-size:100% 100%;
 }
-.rc-page .rc-device-housing .rc-housing-right {
-  right:0;background-image:url("/rosieverse/calculations/toolkit/housing-rail-right.webp");
+.rc-page .rc-device-housing .rc-housing-left > b {
+  background-image:url("/rosieverse/calculations/toolkit/housing-rail-left.webp");
+}
+.rc-page .rc-device-housing .rc-housing-right > b {
+  background-image:url("/rosieverse/calculations/toolkit/housing-rail-right.webp");
+}
+.rc-page .rc-device-housing .rc-housing-left > b:nth-child(even),
+.rc-page .rc-device-housing .rc-housing-right > b:nth-child(even) {
+  transform:scaleY(-1);
 }
 .rc-page .rc-device-housing .rc-housing-cheese,
 .rc-page .rc-device-housing .rc-housing-shiba {
