@@ -24,6 +24,8 @@ for (const [name,minBytes] of requiredGoldAssets) {
   const stat=await fs.stat("public/rosieverse/calculations/toolkit/"+name);
   assert(stat.size>=minBytes, "Approved gold source detail missing: "+name);
 }
+const satin = await fs.stat("public/rosieverse/calculations/burgundy-satin.png");
+assert(satin.size >= 1800000, "Full-resolution original satin background must ship with Rosie App");
 const dir = "artifacts/calculations-instruments";
 await fs.mkdir(dir, { recursive:true });
 const browser = await chromium.launch({headless:true});
@@ -109,6 +111,7 @@ try {
     assert(currencyGeometry.wide>=currencyGeometry.regular*1.8,
       "Currency illustration must span both columns: "+JSON.stringify(currencyGeometry));
     for (let index=0;index<labels.length;index++) {
+      if(index>0) await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
       await page.locator(".rc-tool-card").nth(index).click();
       const panel=page.locator(".rc-device");
       await panel.waitFor();
@@ -176,8 +179,9 @@ try {
       });
       assert(geometry.frame.x>=-1 && geometry.frame.right<=width+1,
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
-      assert(geometry.surface.x>=geometry.frame.x+20 && geometry.surface.right<=geometry.frame.right-20,
-        "Tool surface invades ornamental rails: "+labels[index]);
+      assert(geometry.surface.x>=geometry.frame.x+geometry.frame.width*.205 &&
+        geometry.surface.right<=geometry.frame.right-geometry.frame.width*.205,
+        "Gold instrument content must stay inset inside its safe centre, clear of decorative rails: "+labels[index]+" "+JSON.stringify(geometry));
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
         field.width >= (field.compact || paired.includes(fieldIndex) ? 85 : 100) &&
@@ -236,12 +240,13 @@ try {
       }
     }
     // Change tools through the gold instrument title, not just the illustrated grid.
+    await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").nth(4).click(); // percent
     await page.locator(".rc-device-title-trigger").click();
     await page.getByRole("menuitem",{name:"Tip Calculator"}).click();
     assert.equal(await page.locator(".rc-device-heading").innerText(),"Tip Calculator",
       "Changing tools using the title menu must render selected instrument");
-    await page.locator(".rc-tool-card").first().click(); // close tip
+    await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").first().click(); // open tip
     const tip=page.locator(".rc-device");
     await tip.getByLabel("Bill before tip ($)").fill("84.5");
@@ -249,10 +254,12 @@ try {
     await tip.getByLabel("People").fill("3");
     assert((await tip.locator(".rc-tool-result").innerText()).includes("$33.8"),
       "Live tip-per-person calculation stopped updating");
+    await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").nth(5).click();
     const loan=page.locator(".rc-device");
     assert((await loan.locator(".rc-tool-result").innerText()).includes("$304.22"),
       "Loan amortization changed unexpectedly");
+    await page.getByRole("button",{name:"Close gold tool and return to calculator choices"}).click();
     await page.locator(".rc-tool-card").nth(6).click();
     const currency=page.locator(".rc-device");
     const fromCurrency=currency.getByLabel("From currency");
