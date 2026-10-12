@@ -7787,3 +7787,12 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   position: relative;
   top: -7px;
 }
+
+/* Clear the home indicator while keeping Games/Tools five pixels lower
+   relative to the tab bar; both elements rise together by six pixels. */
+.app-shell:not(.page-home) .bottom-nav {
+  bottom: calc(max(6px, env(safe-area-inset-bottom)) + 22px) !important;
+}
+.app-shell:not(.page-home) .nav-family-toggle {
+  bottom: calc(max(6px, env(safe-area-inset-bottom)) + 8px);
+}
