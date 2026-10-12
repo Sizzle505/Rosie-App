@@ -63,7 +63,7 @@ function calendarDays(month) {
 export default function RosieReminders() {
   const [store, setStore] = useState(readStore);
   const [section, setSection] = useState("today");
-  const [tab, setTab] = useState("calendar");
+  const [tab, setTab] = useState(null);
   const [selectedDate, setSelectedDate] = useState(dateKey);
   const [month, setMonth] = useState(() => dateObj(dateKey()));
   const [editorOpen, setEditorOpen] = useState(false);
@@ -236,11 +236,11 @@ export default function RosieReminders() {
     <section className="rr-content">
       <div className="rr-tabs" role="tablist" aria-label="Organizer view">
         <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
-          onClick={() => { setTab("today"); setSection("today"); }}>Today</button>
+          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}>Today</button>
         <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
-          onClick={() => { setTab("calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
+          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
       </div>
-      <section className="rr-paper" aria-label="Reminders organizer">
+      {(section !== "today" || tab !== null) && <section className="rr-paper" aria-label="Reminders organizer">
         {!(section === "today" && tab === "calendar") && (
           <div className="rr-panel-head">
             <span className="rr-emblem" aria-hidden="true">♛</span>
@@ -367,7 +367,7 @@ export default function RosieReminders() {
           {store.gratitude.map(g => <div className="rr-gratitude" key={g.id}><span><b>{pretty(g.date,{month:"short",day:"numeric"})}</b> {g.text}</span><button type="button" aria-label="Remove gratitude entry" onClick={() => setStore(prev=>({...prev,gratitude:prev.gratitude.filter(x=>x.id!==g.id)}))}>×</button></div>)}
           {!store.gratitude.length && !store.goals.length && <p className="rr-empty">A brighter day begins with one small step.</p>}
         </div>}
-      </section>
+      </section>}
       <div className="rr-feature-grid" aria-label="Organizer tools">
         {CATEGORIES.map(c => <button type="button" key={c.id}
           className={"rr-feature rr-feature-"+c.id+(section === c.id ? " selected" : "")}
