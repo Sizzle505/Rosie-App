@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import { calculatorReducer, initialCalculator, keyFromKeyboard } from "./calculationsEngine.js";
 import AssetCalculator from "./AssetCalculator.jsx";
 import "./RosieCalculations.css";
+import "./RosieCalculationsDevice.css";
 
 const TOOLS = [
   { id: "tip", title: "Tip Calculator", detail: "Tips, totals and per-person shares", mark: "♜" },
@@ -93,6 +94,7 @@ function NumberField({ label, value, onChange, min, step = "any", type = "number
 function Selection({ label, value, options, onChange }) {
   return <label className="rc-field"><span>{label}</span><select value={value} onChange={(e) => onChange(e.target.value)}>{options.map(x => <option key={x.value || x} value={x.value || x}>{x.label || x}</option>)}</select></label>;
 }
+
 function ToolPanel({ active, values, update }) {
   const changed = (field) => (next) => update(field, next);
   const fields = {
@@ -105,7 +107,16 @@ function ToolPanel({ active, values, update }) {
     currency: <><NumberField label="Amount" value={values.currencyAmount} onChange={changed("currencyAmount")}/><NumberField label="Rate (units of target per 1 source)" value={values.currencyRate} onChange={changed("currencyRate")} min="0"/><label className="rc-field"><span>From currency</span><input maxLength="8" value={values.source} onChange={e=>update("source",e.target.value)}/></label><label className="rc-field"><span>To currency</span><input maxLength="8" value={values.target} onChange={e=>update("target",e.target.value)}/></label></>
   };
   const output = toolOutput(active, values);
-  return <section className="rc-tool-panel" aria-label={TOOLS.find(t=>t.id===active)?.title}><h2>{TOOLS.find(t=>t.id===active)?.title}</h2><div className="rc-form-grid">{fields[active]}</div><div className="rc-tool-result" aria-live="polite">{typeof output === "string" ? <p>{output}</p> : <><strong>{output.main}</strong>{output.lines.map((line, i)=><span key={i}>{line}</span>)}</>}</div></section>;
+  return <section className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
+    <div className="rc-device-housing" aria-hidden="true"><i className="rc-housing-core"/><i className="rc-housing-top"/><i className="rc-housing-left"><b/><b/><b/><b/></i><i className="rc-housing-right"><b/><b/><b/><b/></i><i className="rc-housing-cheese"/><i className="rc-housing-shiba"/><i className="rc-housing-bottom"/></div>
+    <div className="rc-device-surface">
+      <h2 className="rc-device-heading">{TOOLS.find(t=>t.id===active)?.title}</h2>
+      <div className="rc-form-grid">{fields[active]}</div>
+      <div className="rc-tool-result" aria-live="polite">
+        {typeof output === "string" ? <p>{output}</p> : <><strong>{output.main}</strong>{output.lines.map((line, i)=><span key={i}>{line}</span>)}</>}
+      </div>
+    </div>
+  </section>;
 }
 
 export default function RosieCalculations() {
@@ -138,7 +149,7 @@ export default function RosieCalculations() {
     </div>
     <div className="rc-workspace">
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
-      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card "+(tool===item.id?"active":"")} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><span className="rc-tool-mark" aria-hidden="true">{item.mark}</span><span className="rc-tool-copy"><strong>{item.title}</strong><small>{item.detail}</small></span><span className="rc-chevron" aria-hidden="true">›</span></button>)}</div>
+      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card rc-tool-card--"+item.id+(tool===item.id?" active":"")} aria-label={item.title} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><img className="rc-tool-art" src={"/rosieverse/calculations/toolkit/button-"+item.id+".webp"} alt="" loading="lazy" draggable="false"/></button>)}</div>
       {tool && <ToolPanel active={tool} values={values} update={update}/>}
       <p className="rc-footer-note">Crafted in Rosie’s study · Numbers with a little extra charm</p>
     </div>

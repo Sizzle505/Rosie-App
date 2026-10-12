@@ -1,0 +1,194 @@
+/* Authentic approved Rosie Calculations artwork; all labels, form fields and results remain live DOM. */
+.rc-page .rc-tool-grid {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(6px,1.5vw,12px);align-items:stretch;
+}
+.rc-page .rc-workspace .rc-tool-card,
+.rc-page .rc-workspace .rc-tool-card:nth-child(n) {
+  display:block;position:relative;overflow:visible;
+  min-width:0;min-height:0;aspect-ratio:538 / 246;
+  padding:0;margin:0;border:0;border-radius:0;
+  background:none;box-shadow:none;
+  cursor:pointer;transform:none;
+  transition:filter .18s,transform .18s;
+}
+.rc-page .rc-tool-card img.rc-tool-art {
+  display:block;width:100%;height:100%;object-fit:fill;
+  pointer-events:none;user-select:none;-webkit-user-drag:none;
+}
+.rc-page .rc-tool-card--currency {grid-column:span 2;aspect-ratio:1085 / 246!important;}
+.rc-page .rc-workspace .rc-tool-card:is(:hover,.active) {filter:brightness(1.13) drop-shadow(0 0 7px #e5b34f8a);}
+.rc-page .rc-workspace .rc-tool-card:active {transform:translateY(2px);}
+.rc-page .rc-workspace .rc-tool-card:focus-visible {outline:3px solid #ffe093;outline-offset:2px;border-radius:10px;}
+
+/* The housing is assembled from seven sections sliced from the actual approved image.
+   The top/bottom gyroscopes and the canine medallions retain original proportions,
+   while the center and gold helix rails may extend for different form lengths. */
+.rc-page .rc-tool-panel.rc-device {
+  box-sizing:border-box;isolation:isolate;
+  position:relative;overflow:visible;
+  width:min(100%,650px);min-height:700px;
+  margin:32px auto 26px;
+  padding:clamp(105px,30vw,182px) 18.5% clamp(109px,31vw,186px);
+  color:#441e0b;background:none!important;
+  background-color:transparent!important;
+  border:none;border-radius:0;outline:none;
+  box-shadow:none;
+}
+.rc-page .rc-device::before,.rc-page .rc-device::after {content:none!important;display:none!important;}
+.rc-page .rc-device-housing {position:absolute;inset:0;z-index:1;pointer-events:none;}
+.rc-page .rc-device-housing > i {position:absolute;display:block;pointer-events:none;background-repeat:no-repeat;}
+.rc-page .rc-device-housing .rc-housing-core {
+  z-index:0;
+  left:16.8%;right:16.8%;
+  top:clamp(99px,30vw,195px);bottom:clamp(98px,30vw,195px);
+  background:
+    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat,
+    linear-gradient(115deg,#c18b35 0%,#f6d181 30%,#d6a44c 60%,#ecc674 100%);
+  border-radius:clamp(12px,4vw,29px);
+  box-shadow:0 0 12px #6c350f80;
+}
+
+.rc-page .rc-device-housing .rc-housing-top {
+  left:0;top:0;width:100%;aspect-ratio:1122 / 353;
+  background-image:url("/rosieverse/calculations/toolkit/housing-top.webp");
+  background-size:100% 100%;z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 98%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 98%,transparent 100%);
+}
+.rc-page .rc-device-housing .rc-housing-bottom {
+  left:0;bottom:0;width:100%;aspect-ratio:1122 / 357;
+  background-image:url("/rosieverse/calculations/toolkit/housing-bottom.webp");
+  background-size:100% 100%;z-index:3;
+  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 98%,transparent 100%);
+  mask-image:linear-gradient(to top,#000 0%,#000 98%,transparent 100%);
+}
+.rc-page .rc-device-housing .rc-housing-left,
+.rc-page .rc-device-housing .rc-housing-right {
+  top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
+  display:flex!important;flex-direction:column;
+  width:16.94%;background:none!important;
+  z-index:1;
+}
+.rc-page .rc-device-housing .rc-housing-left {left:0;}
+.rc-page .rc-device-housing .rc-housing-right {right:0;}
+/* Alternating upright/mirrored segments from the APPROVED original image
+   make the ornamental helix continuous without stretching it into a straight stripe. */
+.rc-page .rc-device-housing .rc-housing-left > b,
+.rc-page .rc-device-housing .rc-housing-right > b {
+  position:relative;display:block;flex:1;min-height:0;width:100%;
+  background-repeat:no-repeat;background-position:center;background-size:100% 100%;
+}
+.rc-page .rc-device-housing .rc-housing-left > b {
+  background-image:url("/rosieverse/calculations/toolkit/housing-rail-left.webp");
+}
+.rc-page .rc-device-housing .rc-housing-right > b {
+  background-image:url("/rosieverse/calculations/toolkit/housing-rail-right.webp");
+}
+.rc-page .rc-device-housing .rc-housing-left > b:nth-child(even),
+.rc-page .rc-device-housing .rc-housing-right > b:nth-child(even) {
+  transform:scaleY(-1);
+}
+.rc-page .rc-device-housing .rc-housing-cheese,
+.rc-page .rc-device-housing .rc-housing-shiba {
+  top:50%;transform:translateY(-50%);width:18.72%;
+  aspect-ratio:210 / 219;background-size:100% 100%;z-index:2;
+}
+.rc-page .rc-device-housing .rc-housing-cheese {
+  left:0;background-image:url("/rosieverse/calculations/toolkit/housing-cheese.webp");
+}
+.rc-page .rc-device-housing .rc-housing-shiba {
+  right:0;background-image:url("/rosieverse/calculations/toolkit/housing-shiba.webp");
+}
+.rc-page .rc-device-surface {
+  position:relative;z-index:4;min-width:0;
+  display:flex;flex-direction:column;gap:13px;
+  width:100%;
+}
+.rc-page .rc-device-heading {
+  width:100%;margin:0 0 9px;padding:9px 6px 10px;
+  border:2px solid #f7d28b;border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0,#9e2c37,#630d1c 60%,#38040d 100%);
+  box-shadow:inset 0 0 0 2px #ab6e2d,inset 0 3px 5px #ffd4844f,0 4px 8px #7042198a;
+  color:#ffe9b5;font:normal clamp(20px,4.7vw,34px)/1.08 Georgia,"Times New Roman",serif;
+  text-shadow:0 1px 2px #280508,0 0 5px #f6bd5a85;
+  text-align:center;overflow-wrap:normal;
+}
+.rc-page .rc-device .rc-form-grid {
+  display:grid;grid-template-columns:minmax(0,1fr);gap:12px;min-width:0;
+}
+.rc-page .rc-device .rc-field {
+  min-width:0;display:flex;flex-direction:column;gap:4px;
+}
+.rc-page .rc-device .rc-field > span {
+  font:normal 15px/1.2 Georgia,serif;
+  color:#552a0d;text-shadow:0 1px 1px #ffe3a0;
+}
+.rc-page .rc-device .rc-field input,
+.rc-page .rc-device .rc-field select {
+  display:block;width:100%;min-width:0;height:52px;min-height:52px;
+  border:0!important;border-radius:14px;
+  padding:8px 16px;background:transparent
+    url("/rosieverse/calculations/toolkit/gold-input.webp") center / 100% 100% no-repeat;
+  box-shadow:none!important;color:#3b1e0a;
+  font:normal 18px/1.2 Georgia,"Times New Roman",serif;
+  text-overflow:ellipsis;font-variant-numeric:tabular-nums;
+}
+.rc-page .rc-device .rc-field select {
+  cursor:pointer;padding-right:19px;
+  background-image:url("/rosieverse/calculations/toolkit/gold-select.webp");
+  -webkit-appearance:none;appearance:none;
+}
+.rc-page .rc-device .rc-field input:focus-visible,
+.rc-page .rc-device .rc-field select:focus-visible {
+  outline:3px solid #730f25;outline-offset:1px;
+}
+.rc-page .rc-device .rc-tool-result {
+  display:flex;flex-direction:column;gap:7px;justify-content:center;align-items:stretch;
+  min-width:0;min-height:123px;
+  padding:22px clamp(17px,4vw,28px);
+  margin:6px 0 0;border:0!important;border-radius:0;
+  background:transparent url("/rosieverse/calculations/toolkit/gold-result.webp") center / 100% 100% no-repeat;
+  box-shadow:none!important;color:#4a210d;
+}
+.rc-page .rc-device .rc-tool-result strong {
+  display:block;text-align:center;
+  font:normal clamp(23px,5vw,37px)/1.13 Georgia,serif;
+  color:#661429;text-shadow:0 1px 1px #fffae9;
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere;
+}
+.rc-page .rc-device .rc-tool-result span {
+  font:normal clamp(12px,2.9vw,16px)/1.25 Georgia,serif;
+  color:#4e260f;overflow-wrap:anywhere;
+}
+.rc-page .rc-device .rc-tool-result span + span {
+  padding-top:5px;border-top:1px solid #ab792e77;
+}
+.rc-page .rc-device .rc-tool-result p {font-size:14px;line-height:1.3;margin:0;}
+@media(min-width:740px) {
+  .rc-page .rc-device .rc-form-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .rc-page .rc-device .rc-field:last-child:nth-child(odd) {grid-column:span 2;}
+  .rc-page .rc-device .rc-tool-panel {min-height:550px;}
+}
+@media(max-width:380px){
+  .rc-page .rc-tool-panel.rc-device {padding-left:18.7%;padding-right:18.7%;}
+  .rc-page .rc-device-heading {font-size:clamp(18px,5vw,22px);}
+  .rc-page .rc-device .rc-field input,.rc-page .rc-device .rc-field select {
+    height:49px;min-height:49px;padding-inline:12px;font-size:17px;
+  }
+  .rc-page .rc-device .rc-tool-result {padding-inline:13px;}
+}
+@media(prefers-reduced-motion:reduce){.rc-page .rc-tool-card{transition:none!important;}}
+
+/* Keep the working center solid gold even if a browser delays a texture image. */
+.rc-page .rc-device .rc-device-surface {
+  background:linear-gradient(115deg,rgba(246,212,130,.15),rgba(184,112,34,.07) 53%,rgba(255,237,173,.13));
+  border-radius:12px;
+}
+.rc-page .rc-device--tip .rc-tool-result,
+.rc-page .rc-device--split .rc-tool-result {
+  min-height:184px;
+  padding-top:23px;
+  padding-bottom:31px;
+}
+.rc-page .rc-device .rc-tool-result {padding-bottom:max(26px,3vw);}

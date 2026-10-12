@@ -4,9 +4,12 @@ on:
     paths:
       - 'src/RosieCalculations.jsx'
       - 'src/RosieCalculations.css'
+      - 'src/RosieCalculationsDevice.css'
+      - 'public/rosieverse/calculations/toolkit/**'
       - 'src/AssetCalculator.jsx'
       - 'src/AssetCalculator.css'
       - 'tests/calculations-iphone-visual.mjs'
+      - 'tests/calculations-toolkit-functional.mjs'
       - '.github/workflows/rosie-calculations-verify.yml'
       - 'src/calculationsEngine.js'
       - 'tests/calculations-engine.test.mjs'
@@ -53,9 +56,12 @@ jobs:
           cat /tmp/rosie-calculations-vite.log
           exit 1
       - run: node tests/calculations-iphone-visual.mjs
+      - run: node tests/calculations-toolkit-functional.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: rosie-calculations-iphone-screenshots
-          path: artifacts/calculations-iphone/
+          path: |
+            artifacts/calculations-iphone/
+            artifacts/calculations-instruments/
           retention-days: 14
