@@ -1,199 +1,152 @@
-/* RosieVerse | Functional mythic pocket instruments.
-   Common housing for all seven tools; no numbers, labels or controls embedded in art. */
+/* Authentic approved Rosie Calculations artwork; all labels, form fields and results remain live DOM. */
+.rc-page .rc-tool-grid {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(6px,1.5vw,12px);align-items:stretch;
+}
+.rc-page .rc-workspace .rc-tool-card,
+.rc-page .rc-workspace .rc-tool-card:nth-child(n) {
+  display:block;position:relative;overflow:visible;
+  min-width:0;min-height:0;aspect-ratio:538 / 246;
+  padding:0;margin:0;border:0;border-radius:0;
+  background:none;box-shadow:none;
+  cursor:pointer;transform:none;
+  transition:filter .18s,transform .18s;
+}
+.rc-page .rc-tool-card img.rc-tool-art {
+  display:block;width:100%;height:100%;object-fit:fill;
+  pointer-events:none;user-select:none;-webkit-user-drag:none;
+}
+.rc-page .rc-tool-card--currency {grid-column:span 2;aspect-ratio:1085 / 246!important;}
+.rc-page .rc-workspace .rc-tool-card:is(:hover,.active) {filter:brightness(1.13) drop-shadow(0 0 7px #e5b34f8a);}
+.rc-page .rc-workspace .rc-tool-card:active {transform:translateY(2px);}
+.rc-page .rc-workspace .rc-tool-card:focus-visible {outline:3px solid #ffe093;outline-offset:2px;border-radius:10px;}
+
+/* The housing is assembled from seven sections sliced from the actual approved image.
+   The top/bottom gyroscopes and the canine medallions retain original proportions,
+   while the center and gold helix rails may extend for different form lengths. */
 .rc-page .rc-tool-panel.rc-device {
-  --rc-gold:#c1872e;
-  --rc-light:#ffe5a2;
-  --rc-ruby:#590514;
-  box-sizing:border-box;
-  position:relative;
-  isolation:isolate;
-  width:min(100%,690px);
-  min-height:620px;
-  margin:28px auto 25px;
-  padding:clamp(77px,14vw,108px) clamp(44px,10.3vw,91px) clamp(74px,11vw,105px);
-  border:8px ridge #d3a14c;
-  border-radius:clamp(37px,8vw,78px);
-  outline:2px solid #845016;
-  outline-offset:-15px;
-  background:
-    radial-gradient(ellipse at 50% 13%,rgba(255,249,190,.6),transparent 36%),
-    radial-gradient(ellipse at 10% 85%,rgba(157,81,21,.3),transparent 40%),
-    radial-gradient(ellipse at 92% 77%,rgba(121,63,9,.26),transparent 42%),
-    repeating-linear-gradient(92deg,#fff4ab12 0 1px, transparent 1px 4px),
-    linear-gradient(114deg,#996321 0%,#c89238 9%,#f3cf71 24%,#e8af50 45%,#fcda84 54%,#cd8c36 86%,#9c5e1b 100%);
-  box-shadow:inset 0 0 0 5px #fce39e,inset 0 0 0 10px #794511,
-    inset 0 0 28px #82431265,0 18px 38px #000b,0 0 22px #d3a45826;
-  color:#381a0a;
-  overflow:visible;
+  box-sizing:border-box;isolation:isolate;
+  position:relative;overflow:visible;
+  width:min(100%,650px);min-height:700px;
+  margin:32px auto 26px;
+  padding:clamp(105px,30vw,182px) 18.5% clamp(109px,31vw,186px);
+  color:#441e0b;background:
+    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat;
+  border:none;border-radius:0;outline:none;
+  box-shadow:none;
 }
-.rc-page .rc-device::before {
-  content:"";position:absolute;inset:13px;border:2px solid #875011;
-  border-radius:clamp(25px,6vw,61px);pointer-events:none;
-  box-shadow:inset 0 2px 2px #fff8be9e,0 1px 2px #4f240f99;
+.rc-page .rc-device::before,.rc-page .rc-device::after {content:none!important;display:none!important;}
+.rc-page .rc-device-housing {position:absolute;inset:0;z-index:1;pointer-events:none;}
+.rc-page .rc-device-housing > i {position:absolute;display:block;pointer-events:none;background-repeat:no-repeat;}
+.rc-page .rc-device-housing .rc-housing-top {
+  left:0;top:0;width:100%;aspect-ratio:1122 / 353;
+  background-image:url("/rosieverse/calculations/toolkit/housing-top.webp");
+  background-size:100% 100%;z-index:3;
 }
-.rc-page .rc-device::after {
-  content:"";position:absolute;inset:21px;border:1px solid #ffebb6aa;
-  border-radius:clamp(23px,5.8vw,56px);pointer-events:none;
+.rc-page .rc-device-housing .rc-housing-bottom {
+  left:0;bottom:0;width:100%;aspect-ratio:1122 / 357;
+  background-image:url("/rosieverse/calculations/toolkit/housing-bottom.webp");
+  background-size:100% 100%;z-index:3;
 }
-.rc-page .rc-device-surface {position:relative;z-index:2;min-width:0;display:flex;flex-direction:column;gap:13px;}
+.rc-page .rc-device-housing .rc-housing-left,
+.rc-page .rc-device-housing .rc-housing-right {
+  top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
+  width:16.94%;background-repeat:repeat-y;background-size:100% auto;
+  z-index:1;
+}
+.rc-page .rc-device-housing .rc-housing-left {
+  left:0;background-image:url("/rosieverse/calculations/toolkit/housing-rail-left.webp");
+}
+.rc-page .rc-device-housing .rc-housing-right {
+  right:0;background-image:url("/rosieverse/calculations/toolkit/housing-rail-right.webp");
+}
+.rc-page .rc-device-housing .rc-housing-cheese,
+.rc-page .rc-device-housing .rc-housing-shiba {
+  top:50%;transform:translateY(-50%);width:18.72%;
+  aspect-ratio:210 / 219;background-size:100% 100%;z-index:2;
+}
+.rc-page .rc-device-housing .rc-housing-cheese {
+  left:0;background-image:url("/rosieverse/calculations/toolkit/housing-cheese.webp");
+}
+.rc-page .rc-device-housing .rc-housing-shiba {
+  right:0;background-image:url("/rosieverse/calculations/toolkit/housing-shiba.webp");
+}
+.rc-page .rc-device-surface {
+  position:relative;z-index:4;min-width:0;
+  display:flex;flex-direction:column;gap:13px;
+  width:100%;
+}
 .rc-page .rc-device-heading {
-  position:relative;
-  min-width:0;
-  margin:0 0 5px;
-  padding:9px 8px 12px;
-  border:2px solid #ffda77;
-  border-radius:22px;
-  background:radial-gradient(ellipse at 50% 0%,#9c2636 0%,#650c1e 60%,#36060f 100%);
-  color:#ffeab3;
-  font:normal clamp(20px,4.7vw,34px)/1.08 Georgia,"Times New Roman",serif;
-  text-align:center;
-  text-shadow:0 2px 1px #200006,0 0 6px #ffc56b8a;
-  box-shadow:inset 0 0 0 2px #7f310e,inset 0 3px 6px #fff2ab38,0 4px 8px #5b230a65;
+  width:100%;margin:0 0 9px;padding:9px 6px 10px;
+  border:2px solid #f7d28b;border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0,#9e2c37,#630d1c 60%,#38040d 100%);
+  box-shadow:inset 0 0 0 2px #ab6e2d,inset 0 3px 5px #ffd4844f,0 4px 8px #7042198a;
+  color:#ffe9b5;font:normal clamp(20px,4.7vw,34px)/1.08 Georgia,"Times New Roman",serif;
+  text-shadow:0 1px 2px #280508,0 0 5px #f6bd5a85;
+  text-align:center;overflow-wrap:normal;
 }
-.rc-page .rc-device-heading::after {content:"◆";position:absolute;bottom:-13px;left:calc(50% - 10px);
-  width:20px;height:19px;color:#a5631a;font-size:13px;text-shadow:0 1px #fff4c2;}
-.rc-page .rc-device-top-gyroscope {
-  position:absolute;z-index:4;left:50%;top:-34px;transform:translateX(-50%);
-  width:112px;height:107px;border:8px ridge #dfa54d;border-radius:50%;
-  background:radial-gradient(circle at 50% 45%,#edbd56 0 7%,#4b0715 9% 25%,#a85c1c 27%,#8d4818 31%,#4f0913 36% 54%,#ce993f 56% 60%,transparent 63%);
-  box-shadow:inset 0 0 8px #25120f,0 3px 9px #4a190c;
-  pointer-events:none;
+.rc-page .rc-device .rc-form-grid {
+  display:grid;grid-template-columns:minmax(0,1fr);gap:12px;min-width:0;
 }
-.rc-page .rc-device-orbit {position:absolute;inset:4px 12px;border:5px solid #f8d16f;
-  border-radius:50%;box-shadow:inset 1px 1px 2px #79370b,1px 1px 1px #502012;}
-.rc-page .rc-device-orbit--one {transform:rotate(63deg) scaleX(.65);}
-.rc-page .rc-device-orbit--two {transform:rotate(-63deg) scaleX(.65);}
-.rc-page .rc-device-emblem {position:absolute;inset:26px;display:grid;place-items:center;
-  background:radial-gradient(circle at 34% 30%,#8e2733,#480b17);
-  border:3px solid #f5c66b;border-radius:50%;color:#fbd27d;
-  box-shadow:0 1px 4px #230c04;}
-.rc-page .rc-device-emblem svg {width:27px;height:27px;fill:currentColor;filter:drop-shadow(0 2px 1px #7c351b);}
-.rc-page .rc-device-side {
-  position:absolute;z-index:3;top:75px;bottom:60px;width:clamp(32px,7.2vw,50px);
-  border:3px solid #e7b65d;border-radius:23px;
-  background:linear-gradient(90deg,#37020b,#900e21 33%,#5c0816 60%,#32020a 100%);
-  box-shadow:inset 0 0 0 3px #9b5c23,0 0 4px #f6d280aa;
-  pointer-events:none;
+.rc-page .rc-device .rc-field {
+  min-width:0;display:flex;flex-direction:column;gap:4px;
 }
-.rc-page .rc-device-side--left {left:-8px;}
-.rc-page .rc-device-side--right {right:-8px;}
-.rc-page .rc-device-helix {
-  position:absolute;inset:4px;
-  border-radius:20px;
-  background:
-    repeating-linear-gradient(152deg,transparent 0 30px,#e8b650 32px,#fbe5a2 35px,#a65b16 42px,transparent 45px 79px);
-  box-shadow:inset 0 0 8px #240306a0;
-}
-.rc-page .rc-device-side--right .rc-device-helix {background:
-    repeating-linear-gradient(28deg,transparent 0 30px,#e8b650 32px,#fbe5a2 35px,#a65b16 42px,transparent 45px 79px);}
-.rc-page .rc-device-medallion {
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  display:grid;place-items:center;width:clamp(45px,9.3vw,72px);height:clamp(45px,9.3vw,72px);
-  border-radius:50%;border:5px ridge #f3bd5b;
-  color:#f6cb69;background:radial-gradient(circle at 35% 23%,#ae2e39,#4e0716 70%);
-  box-shadow:inset 0 0 0 3px #c08a37,0 0 8px #411206;
-}
-.rc-page .rc-device-medallion svg {width:68%;height:68%;fill:#efc16c;filter:drop-shadow(0 2px 1px #6e310c);}
-.rc-page .rc-device-foot {pointer-events:none;position:absolute;bottom:-20px;left:50%;
-  transform:translateX(-50%);width:104px;height:70px;border:6px ridge #d39b45;
-  border-radius:50% 50% 43% 43%;display:grid;place-items:center;
-  background:radial-gradient(circle at 50% 50%,#590b1a,#39030b 57%,#9b531f 65%);
-  box-shadow:0 5px 7px #200a06;z-index:4;}
-.rc-page .rc-device-foot-medallion {display:grid;place-items:center;width:50px;height:50px;
-  border:4px ridge #f4c779;border-radius:50%;color:#ffe09a;background:#650919;}
-.rc-page .rc-device-foot-medallion svg {width:30px;height:30px;fill:none;filter:drop-shadow(0 2px 1px #431308);}
-.rc-page .rc-device .rc-form-grid {display:grid;grid-template-columns:minmax(0,1fr);gap:12px;}
-.rc-page .rc-device .rc-field {display:flex;flex-direction:column;gap:5px;min-width:0;}
 .rc-page .rc-device .rc-field > span {
-  color:#57240e;font:bold clamp(13px,2.8vw,16px)/1.2 Georgia,serif;
-  text-shadow:0 1px #fff1bc;margin-left:4px;
+  font:normal 15px/1.2 Georgia,serif;
+  color:#552a0d;text-shadow:0 1px 1px #ffe3a0;
 }
 .rc-page .rc-device .rc-field input,
 .rc-page .rc-device .rc-field select {
-  display:block;width:100%;height:49px;min-height:49px;
-  border:3px ridge #b27625;border-radius:16px;
-  padding:7px 12px;color:#39150e;
-  background:
-    radial-gradient(ellipse at 46% 0%,#fffef0 6%,#fff2d0 55%,#f2d89b 100%);
-  font:normal 19px/1.2 Georgia,serif;box-shadow:inset 0 3px 6px #85501935,
-    inset 0 0 0 2px #fbe1a3,0 3px 5px #76401166;
-  text-overflow:ellipsis;
-  font-variant-numeric:tabular-nums;
+  display:block;width:100%;min-width:0;height:52px;min-height:52px;
+  border:0!important;border-radius:14px;
+  padding:8px 16px;background:transparent
+    url("/rosieverse/calculations/toolkit/gold-input.webp") center / 100% 100% no-repeat;
+  box-shadow:none!important;color:#3b1e0a;
+  font:normal 18px/1.2 Georgia,"Times New Roman",serif;
+  text-overflow:ellipsis;font-variant-numeric:tabular-nums;
 }
-.rc-page .rc-device .rc-field select {cursor:pointer;padding-right:19px;}
+.rc-page .rc-device .rc-field select {
+  cursor:pointer;padding-right:19px;
+  background-image:url("/rosieverse/calculations/toolkit/gold-select.webp");
+  -webkit-appearance:none;appearance:none;
+}
 .rc-page .rc-device .rc-field input:focus-visible,
-.rc-page .rc-device .rc-field select:focus-visible {outline:3px solid #6e1223;outline-offset:1px;}
+.rc-page .rc-device .rc-field select:focus-visible {
+  outline:3px solid #730f25;outline-offset:1px;
+}
 .rc-page .rc-device .rc-tool-result {
-  display:flex;flex-direction:column;align-items:stretch;gap:8px;
-  margin-top:6px;padding:19px clamp(15px,3vw,26px);
-  border:5px ridge #e8b460;border-radius:22px;
-  background:radial-gradient(ellipse at 45% 0%,#fffdf0 0%,#fff1cf 57%,#ecc886 100%);
-  box-shadow:inset 0 2px 6px #6b401c45,inset 0 0 0 3px #fff3cf,0 4px 8px #80420e6b;
-  color:#3d160a;min-width:0;
+  display:flex;flex-direction:column;gap:7px;justify-content:center;align-items:stretch;
+  min-width:0;min-height:123px;
+  padding:22px clamp(17px,4vw,28px);
+  margin:6px 0 0;border:0!important;border-radius:0;
+  background:transparent url("/rosieverse/calculations/toolkit/gold-result.webp") center / 100% 100% no-repeat;
+  box-shadow:none!important;color:#4a210d;
 }
-.rc-page .rc-device .rc-tool-result strong {display:block;font:normal clamp(22px,5.2vw,37px)/1.14 Georgia,serif;
-  color:#510817;text-align:center;text-shadow:0 1px #fff5d7;overflow-wrap:anywhere;
-  font-variant-numeric:tabular-nums;}
-.rc-page .rc-device .rc-tool-result span {font:normal clamp(13px,3.2vw,17px)/1.3 Georgia,serif;
-  overflow-wrap:anywhere;color:#432511;}
-.rc-page .rc-device .rc-tool-result span + span {border-top:1px solid #c5913f80;padding-top:6px;}
-.rc-page .rc-device .rc-tool-result p {font-size:15px;line-height:1.35;}
-@media(min-width:740px){
-  .rc-page .rc-tool-panel.rc-device {padding-left:96px;padding-right:96px;}
+.rc-page .rc-device .rc-tool-result strong {
+  display:block;text-align:center;
+  font:normal clamp(23px,5vw,37px)/1.13 Georgia,serif;
+  color:#661429;text-shadow:0 1px 1px #fffae9;
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere;
+}
+.rc-page .rc-device .rc-tool-result span {
+  font:normal clamp(12px,2.9vw,16px)/1.25 Georgia,serif;
+  color:#4e260f;overflow-wrap:anywhere;
+}
+.rc-page .rc-device .rc-tool-result span + span {
+  padding-top:5px;border-top:1px solid #ab792e77;
+}
+.rc-page .rc-device .rc-tool-result p {font-size:14px;line-height:1.3;margin:0;}
+@media(min-width:740px) {
   .rc-page .rc-device .rc-form-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
-  .rc-page .rc-device--units .rc-form-grid,
-  .rc-page .rc-device--currency .rc-form-grid,
-  .rc-page .rc-device--split .rc-form-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .rc-page .rc-device .rc-field:last-child:nth-child(odd) {grid-column:span 2;}
+  .rc-page .rc-device .rc-tool-panel {min-height:550px;}
 }
-@media(max-width:390px){
-  .rc-page .rc-tool-panel.rc-device {padding-left:40px;padding-right:40px;}
-  .rc-page .rc-device .rc-tool-result {padding:14px 10px;}
-  .rc-page .rc-device .rc-field input,.rc-page .rc-device .rc-field select {font-size:16px;}
+@media(max-width:380px){
+  .rc-page .rc-tool-panel.rc-device {padding-left:18.7%;padding-right:18.7%;}
+  .rc-page .rc-device-heading {font-size:clamp(18px,5vw,22px);}
+  .rc-page .rc-device .rc-field input,.rc-page .rc-device .rc-field select {
+    height:49px;min-height:49px;padding-inline:12px;font-size:17px;
+  }
+  .rc-page .rc-device .rc-tool-result {padding-inline:13px;}
 }
-@media(prefers-reduced-motion:reduce){.rc-device *{transition:none!important;animation:none!important;}}
-
-
-/* The selector cards echo the embossed jewel-tone plaques used throughout RosieVerse. */
-.rc-page .rc-workspace .rc-tool-card {
-  position:relative;isolation:isolate;overflow:hidden;
-  min-height:102px;padding:12px 10px;gap:8px;
-  border:2px solid #dba85a;border-radius:19px;
-  background:radial-gradient(circle at 20% 4%,#344457 0%,#111928 54%,#080d15 100%);
-  box-shadow:inset 0 0 0 3px #603b1c,inset 0 0 0 4px #f8dd9e75,
-    inset 0 12px 26px #ffffff09,0 4px 12px #0008;
-  color:#fff2dc;
-}
-.rc-page .rc-workspace .rc-tool-card:nth-child(3n + 2) {
-  background:radial-gradient(circle at 18% 0%,#782f3f 0%,#410a19 52%,#220710 100%);
-}
-.rc-page .rc-workspace .rc-tool-card:nth-child(3n) {
-  background:radial-gradient(circle at 18% 0%,#245e49 0%,#092b24 55%,#061612 100%);
-}
-.rc-page .rc-workspace .rc-tool-card.active {
-  border-color:#ffe9a2;box-shadow:inset 0 0 0 3px #a46b32,
-    inset 0 0 0 4px #fbe8bc,0 0 17px #f2c77275;
-}
-.rc-page .rc-workspace .rc-tool-mark {
-  border:3px ridge #e9b967;width:43px;height:43px;border-radius:50%;
-  background:radial-gradient(circle at 30% 17%,#a77429,#321909 74%);
-  box-shadow:inset 0 0 0 2px #e2ab54,0 1px 4px #0008;
-  color:#ffe2a1;flex:0 0 43px;font-size:clamp(22px,4vw,27px);
-  text-shadow:0 2px 2px #31180d;
-}
-.rc-page .rc-workspace .rc-tool-copy strong {
-  font:normal clamp(13px,2.9vw,19px)/1.12 Georgia,serif;
-  text-shadow:0 1px 1px #0009;
-}
-.rc-page .rc-workspace .rc-tool-copy small {
-  display:block;color:#decaa2;font:normal clamp(10px,2.15vw,12px)/1.15 Georgia,serif;
-}
-.rc-page .rc-workspace .rc-chevron {
-  margin-left:auto;font-size:28px;flex:0 0 auto;
-  color:#f8ca73;text-shadow:0 2px 1px #4c2710;
-}
-@media(max-width:370px){
-  .rc-page .rc-workspace .rc-tool-card {min-height:100px;padding:9px 6px;gap:6px;}
-  .rc-page .rc-workspace .rc-tool-mark {width:31px;height:32px;flex-basis:31px;font-size:19px;}
-  .rc-page .rc-workspace .rc-tool-copy small {font-size:9px;}
-  .rc-page .rc-workspace .rc-chevron {font-size:21px;}
-}
+@media(prefers-reduced-motion:reduce){.rc-page .rc-tool-card{transition:none!important;}}
