@@ -87,13 +87,21 @@ try {
       await page.locator(".rc-tool-card").nth(index).click();
       const panel=page.locator(".rc-device");
       await panel.waitFor();
-      const artwork=await panel.evaluate(el=>({
-        core:getComputedStyle(el.querySelector(".rc-housing-core")).backgroundImage,
-        top:getComputedStyle(el.querySelector(".rc-housing-top")).backgroundImage,
-        field:getComputedStyle(el.querySelector("input")).backgroundImage,
-        result:getComputedStyle(el.querySelector(".rc-tool-result")).backgroundImage
-      }));
-      assert([artwork.core,artwork.top,artwork.field,artwork.result]
+      const artwork=await panel.evaluate(el=>{
+        const frame=el.querySelector(".rc-device-original-art");
+        return {
+          count:el.querySelectorAll(".rc-device-housing img").length,
+          pieces:el.querySelectorAll(".rc-device-housing i, .rc-device-housing b").length,
+          frameLoaded:frame?.complete&&frame?.naturalWidth===1122,
+          frameSource:frame?.getAttribute("src"),
+          fullHeight:Math.abs(frame.getBoundingClientRect().height-el.getBoundingClientRect().height)<1,
+          field:getComputedStyle(el.querySelector("input")).backgroundImage,
+          result:getComputedStyle(el.querySelector(".rc-tool-result")).backgroundImage
+        };
+      });
+      assert(artwork.count===1&&artwork.pieces===0&&artwork.frameLoaded&&artwork.fullHeight,
+        "Device must render as one continuous original gold image: "+JSON.stringify(artwork));
+      assert([artwork.frameSource,artwork.field,artwork.result]
         .every(v=>v.includes("/rosieverse/calculations/toolkit/")),
         "Approved art missing from functional device: "+JSON.stringify(artwork));
       assert.equal(await panel.locator("h2").innerText(),labels[index]);
