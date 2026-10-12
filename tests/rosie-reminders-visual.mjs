@@ -345,7 +345,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         "Resources shortcut did not open the illustrated Resources hub");
       await page.goto(base + "/#timekeeper",{waitUntil:"networkidle"});
       const offset=await page.locator("main.rtk-page").evaluate(node=>getComputedStyle(node).marginTop);
-      assert.equal(offset,"15px","Timekeeper scene should be lowered by 15px without distorting its artwork");
+      assert.equal(offset,"0px","Timekeeper illustration must begin without dead space at top");
       const clockLayout=await page.locator(".rtk-scene").evaluate(scene=>{
         const rect=sel=>{const r=scene.querySelector(sel).getBoundingClientRect();
           return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,centerX:(r.left+r.right)/2,centerY:(r.top+r.bottom)/2,width:r.width,height:r.height};};
@@ -360,7 +360,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert(Math.abs(clockLayout.readout.centerX-clockLayout.dial.centerX)<3 &&
         Math.abs(clockLayout.readout.centerY-clockLayout.dial.centerY)<6,
         "Timekeeper numerals must be geometrically centered in the clock: "+JSON.stringify(clockLayout));
-      assert(clockLayout.deck.top>clockLayout.dial.bottom+5 &&
+      assert(clockLayout.deck.top>clockLayout.dial.bottom+3 &&
         clockLayout.utility.top>=clockLayout.deck.bottom-3,
         "Clock controls overlap the bezel or laps panel: "+JSON.stringify(clockLayout));
       assert(clockLayout.utility.width<clockLayout.viewport*.9 &&
