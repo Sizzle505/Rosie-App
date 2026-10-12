@@ -61,7 +61,7 @@ try {
       const panel=page.locator(".rc-device");
       await panel.waitFor();
       const artwork=await panel.evaluate(el=>({
-        core:getComputedStyle(el).backgroundImage,
+        core:getComputedStyle(el.querySelector(".rc-housing-core")).backgroundImage,
         top:getComputedStyle(el.querySelector(".rc-housing-top")).backgroundImage,
         field:getComputedStyle(el.querySelector("input")).backgroundImage,
         result:getComputedStyle(el.querySelector(".rc-tool-result")).backgroundImage
