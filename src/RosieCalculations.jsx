@@ -145,9 +145,9 @@ function NumberField({ label, value, onChange, min, step = "any", type = "number
     <span>{label}</span>
     <input type={dollars ? "text" : type} value={formatted}
       onFocus={dollars ? () => setEditingMoney(true) : undefined}
-      onChange={e => onChange(dollars ? e.target.value.replace(/[$,\\s]/g, "").replace(/,/g, "") : e.target.value)}
+      onChange={e => onChange(dollars ? e.target.value.replace(/[$,\s]/g, "").replace(/,/g, "") : e.target.value)}
       onBlur={dollars ? e => {
-        const raw = e.target.value.replace(/[$,\\s]/g, "").replace(/,/g, "");
+        const raw = e.target.value.replace(/[$,\s]/g, "").replace(/,/g, "");
         if (raw !== "" && Number.isFinite(Number(raw))) onChange(Number(raw).toFixed(2));
         setEditingMoney(false);
       } : undefined}
