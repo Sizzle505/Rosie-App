@@ -818,7 +818,7 @@
     width:100%;max-width:100%;
   }
   .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
-    width:min(100%,108px);max-width:100%;
+    width:min(100%,96px);max-width:100%;
   }
   /* Fit each receipt to the actual number of lines, rather than imposing
      an oversized blank 160-200px slab on a single-line calculation. */
