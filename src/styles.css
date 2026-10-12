@@ -7796,3 +7796,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .app-shell:not(.page-home) .nav-family-toggle {
   bottom: calc(max(6px, env(safe-area-inset-bottom)) + 8px);
 }
+
+/* The Fortune Teller page content starts 8px higher; persistent navigation
+   and the crystal-ball animation's internal coordinate system stay intact. */
+.app-shell.page-fortune > main.fortune-page {position:relative;top:-8px;}
