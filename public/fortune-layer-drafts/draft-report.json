@@ -1,0 +1,38 @@
+{
+  "source": "public/rosie-fortune-stage.webp",
+  "native_canvas": [
+    1522,
+    1430
+  ],
+  "stage": "INITIAL DRAFT - NO PRODUCTION USE",
+  "source_repainted": false,
+  "source_matched_rgb_cutouts": 8,
+  "draft_layers": [
+    "set/curtain-left",
+    "set/curtain-right",
+    "set/lantern-left",
+    "set/lantern-right",
+    "rosie/torso",
+    "rosie/head-front",
+    "orb/glass-assembled",
+    "rosie/raised-paw"
+  ],
+  "still_baked": [
+    "moon",
+    "sky",
+    "books",
+    "treat-bowl",
+    "armillary",
+    "pedestal",
+    "top-border",
+    "crystals",
+    "tassels"
+  ],
+  "backplate": "OpenCV inpainting only, visually provisional",
+  "boundary_type": "manual source-registered polygon; needs feather/hair matte QA",
+  "static_composite_mean_abs_error": 0.257828,
+  "fraction_pixels_changed_gt_24": 0.004531,
+  "empty_plate_approved": false,
+  "motion_approved": false,
+  "integration_approved": false
+}
