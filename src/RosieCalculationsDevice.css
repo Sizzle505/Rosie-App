@@ -30,16 +30,25 @@
   width:min(100%,650px);min-height:700px;
   margin:32px auto 26px;
   padding:clamp(105px,30vw,182px) 18.5% clamp(109px,31vw,186px);
-  color:#441e0b;background:
-    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat,
-    linear-gradient(108deg,#ad7225 0%,#ecc675 17%,#d7a245 51%,#efcc7e 82%,#ac6d22 100%);
-  background-color:#d4a34d;
+  color:#441e0b;background:none!important;
+  background-color:transparent!important;
   border:none;border-radius:0;outline:none;
   box-shadow:none;
 }
 .rc-page .rc-device::before,.rc-page .rc-device::after {content:none!important;display:none!important;}
 .rc-page .rc-device-housing {position:absolute;inset:0;z-index:1;pointer-events:none;}
 .rc-page .rc-device-housing > i {position:absolute;display:block;pointer-events:none;background-repeat:no-repeat;}
+.rc-page .rc-device-housing .rc-housing-core {
+  z-index:0;
+  left:16.8%;right:16.8%;
+  top:clamp(99px,30vw,195px);bottom:clamp(98px,30vw,195px);
+  background:
+    url("/rosieverse/calculations/toolkit/housing-center.webp") center / 100% 100% no-repeat,
+    linear-gradient(115deg,#c18b35 0%,#f6d181 30%,#d6a44c 60%,#ecc674 100%);
+  border-radius:clamp(12px,4vw,29px);
+  box-shadow:0 0 12px #6c350f80;
+}
+
 .rc-page .rc-device-housing .rc-housing-top {
   left:0;top:0;width:100%;aspect-ratio:1122 / 353;
   background-image:url("/rosieverse/calculations/toolkit/housing-top.webp");
@@ -53,7 +62,7 @@
 .rc-page .rc-device-housing .rc-housing-left,
 .rc-page .rc-device-housing .rc-housing-right {
   top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
-  width:16.94%;background-repeat:repeat-y;background-size:100% 34%;
+  width:16.94%;background-repeat:repeat-y;background-size:100% 27%;
   z-index:1;
 }
 .rc-page .rc-device-housing .rc-housing-left {
