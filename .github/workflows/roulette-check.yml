@@ -1,0 +1,24 @@
+name: Roulette geometry and build
+on:
+  pull_request:
+    paths:
+      - "src/RosieRandomizers.jsx"
+      - "src/RosieRandomizers.module.css"
+      - "src/RosieRouletteFace.jsx"
+      - "src/rouletteGeometry.js"
+      - "public/randomizers/roulette/**"
+      - "tests/roulette-geometry.test.mjs"
+      - ".github/workflows/roulette-check.yml"
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/roulette-geometry.test.mjs
+      - run: npm run build
