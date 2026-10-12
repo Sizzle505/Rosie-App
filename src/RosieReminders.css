@@ -490,7 +490,7 @@
   width:100%;max-width:none;
   min-height:100dvh;
   margin:0;
-  padding:5px 0 calc(178px + env(safe-area-inset-bottom));
+  padding:5px 0 calc(325px + env(safe-area-inset-bottom));
   background-color:#071225;
   background-image:url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp");
   background-size:min(100%,760px) auto;
