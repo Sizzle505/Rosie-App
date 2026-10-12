@@ -282,7 +282,7 @@ export default function RosieQrAtelier(){
         </div>
         <div className="qa-preview-actions">
           <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready}>⛶ Full-screen QR</button>
-          <button type="button" onClick={copyPayload} disabled={!ready}>⧉ Copy destination</button>
+          {type!=="wifi"&&<button type="button" onClick={copyPayload} disabled={!ready}>⧉ Copy QR data</button>}
         </div>
       </section>
       <section className="qa-panel" aria-label="QR code settings">
@@ -320,6 +320,7 @@ export default function RosieQrAtelier(){
             <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>
               Download {type==="calling"?"Calling Card":"Designed Card"}</button>
             {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
+            <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
           </div>
         </div>
       </section>
@@ -340,6 +341,13 @@ export default function RosieQrAtelier(){
           {matching.length===0&&<p>No matching codes.</p>}
         </div>}
       </section>
+      {ready&&<section className="qa-print-sheet" aria-label="QR Atelier printable card">
+        <p className="qa-print-brand">ROSIE'S QR ATELIER</p>
+        <h2>{QR_TYPES.find(t=>t.id===type)?.label}</h2>
+        <div className="qa-print-code" dangerouslySetInnerHTML={{__html:output.svg}}/>
+        <h3>{label||itemName(type,v)}</h3>
+        <p>Scan to connect</p>
+      </section>}
       <p className="qa-status" role="status" aria-live="polite">{toast}</p>
     </div>
     {fullScreen&&ready&&<div className="qa-fullscreen" role="dialog" aria-modal="true" aria-label="Full-screen scannable QR code">
