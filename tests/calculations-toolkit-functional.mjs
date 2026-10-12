@@ -117,6 +117,8 @@ try {
       const geometry=await panel.evaluate(el => {
         const frame=el.getBoundingClientRect();
         const surface=el.querySelector(".rc-device-surface").getBoundingClientRect();
+        const result=el.querySelector(".rc-tool-result").getBoundingClientRect();
+        const housing=getComputedStyle(el);
         const inputs=[...el.querySelectorAll(".rc-field input,.rc-field select")].map(node => {
           const r=node.getBoundingClientRect();
           const label=node.closest(".rc-field").querySelector("span").getBoundingClientRect();
@@ -125,8 +127,13 @@ try {
             labelLeft:label.left,paddingLeft:parseFloat(style.paddingLeft),
             border:parseFloat(style.borderLeftWidth),fontSize:parseFloat(style.fontSize)};
         });
-        return {frame:{x:frame.x,right:frame.right,width:frame.width},surface:{x:surface.x,right:surface.right,width:surface.width},inputs,
-          scrollWidth:document.documentElement.scrollWidth};
+        return {
+          frame:{x:frame.x,right:frame.right,top:frame.top,bottom:frame.bottom,width:frame.width,height:frame.height},
+          surface:{x:surface.x,right:surface.right,width:surface.width},
+          result:{top:result.top,bottom:result.bottom,height:result.height},
+          bottomPadding:parseFloat(housing.paddingBottom),inputs,
+          scrollWidth:document.documentElement.scrollWidth
+        };
       });
       assert(geometry.frame.x>=-1 && geometry.frame.right<=width+1,
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
@@ -135,9 +142,9 @@ try {
       const paired = pairedFieldIndices[index] || [];
       assert(geometry.inputs.every((field,fieldIndex) =>
         field.width >= (paired.includes(fieldIndex) ? 85 : 120) &&
-        field.height>=52 &&
-        field.paddingLeft >= (paired.includes(fieldIndex) ? 10 : 14) &&
-        field.border>=2 && field.fontSize>=17 &&
+        field.height>=44 && field.height<=46 &&
+        field.paddingLeft >= (paired.includes(fieldIndex) ? 9 : 10) &&
+        field.border>=2 && field.fontSize >= (labels[index]==="Unit Conversions" ? 14 : 16) &&
         Math.abs(field.x-field.labelLeft)<=2 &&
         field.x>=geometry.surface.x-1 && field.right<=geometry.surface.right+1),
         "Input controls must have full-height light recesses, padded values and aligned labels: "+labels[index]+" "+JSON.stringify(geometry));
@@ -153,6 +160,18 @@ try {
       }
       assert(geometry.scrollWidth<=width+2,
         "Page has horizontal overflow: "+labels[index]+" "+geometry.scrollWidth);
+      assert(geometry.result.top>geometry.inputs.at(-1).bottom,
+        "Results overlap the last input: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.result.bottom<=geometry.frame.bottom-35,
+        "Result extends into or beyond the gold frame footer: "+labels[index]+" "+JSON.stringify(geometry));
+      assert(geometry.result.height<=180,
+        "Result panel retains excessive vertical height: "+labels[index]+" "+JSON.stringify(geometry));
+      if (index === 0) {
+        assert(geometry.frame.height < 620,
+          "Tip calculator tray remains unnecessarily tall: "+JSON.stringify(geometry));
+        assert(geometry.inputs[1].width < geometry.inputs[0].width*.65,
+          "Short tip and people fields are not visually compact");
+      }
       assert(await panel.locator(".rc-tool-result").count()===1);
       assert(await panel.locator("input,select").count()>=3);
       if(width===390) {
