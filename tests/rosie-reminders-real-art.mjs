@@ -54,11 +54,11 @@ try {
       "Do not substitute a new header for the approved original Rosie illustration");
     const heroFull = await page.locator(".rr-hero").evaluate(el => el.getBoundingClientRect().height);
     await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + "-entry.png"});
-    await page.evaluate(h => scrollTo(0,Math.floor(h * .14)),heroFull);
+    await page.evaluate(h => scrollTo({top:Math.floor(h * .14),behavior:"instant"}),heroFull);
     await page.waitForTimeout(120);
     assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),0,
       "Top 15% must move away naturally before the center pins");
-    await page.evaluate(h => scrollTo(0,Math.ceil(h * .16)),heroFull);
+    await page.evaluate(h => scrollTo({top:Math.ceil(h * .16),behavior:"instant"}),heroFull);
     await page.waitForTimeout(140);
     const pinned = await page.locator(".rr-hero-pin").evaluate(el => {
       const rect=el.getBoundingClientRect(),img=el.querySelector("img");
@@ -68,15 +68,21 @@ try {
         source:img.currentSrc,shift:getComputedStyle(img).transform,
         visible:getComputedStyle(el).visibility};
     });
+    const thresholdState = await page.evaluate(() => {
+      const hero=document.querySelector(".rr-hero").getBoundingClientRect();
+      const pinned=document.querySelector(".rr-hero-pin");
+      return {scroll:window.scrollY,top:hero.top,height:hero.height,threshold:hero.height*.15,
+        pinClass:pinned.className,visibility:getComputedStyle(pinned).visibility};
+    });
     assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),1,
-      "Existing Rosie middle should stick after the first 15% scrolls away");
+      "Existing Rosie middle should stick after the first 15% scrolls away: "+JSON.stringify(thresholdState));
     assert(Math.abs(pinned.top) < 2 && Math.abs(pinned.height - pinned.actualHeight * .7) < 2,
       "Pinned image must show exactly the middle 70% at the top: "+JSON.stringify(pinned));
     assert(pinned.visible==="visible" && pinned.source.includes(width>=760?"hero-desktop":"hero-mobile"),
       "Pinned header must use the preexisting Rosie image, not a new illustration");
     assert(!pinned.shift.includes("none"),"Pinned image crop must remove original upper 15%");
     await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + "-pinned.png"});
-    await page.evaluate(() => scrollTo(0,0));
+    await page.evaluate(() => scrollTo({top:0,behavior:"instant"}));
     await page.waitForTimeout(120);
     assert.equal(await page.locator(".rr-hero-pin.is-pinned").count(),0,
       "Returning to top restores the complete original Rosie image");
