@@ -30,6 +30,7 @@
   ],
   "backplate": "Painted midnight-velvet continuation; provisional unseen areas",
   "boundary_type": "manual source-registered polygon; needs feather/hair matte QA",
+  "head_refined_diagnostic_only": true,
   "static_composite_mean_abs_error": 0.0,
   "fraction_pixels_changed_gt_24": 0.0,
   "empty_plate_approved": false,
