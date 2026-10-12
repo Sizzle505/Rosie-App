@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import { calculatorReducer, initialCalculator, keyFromKeyboard } from "./calculationsEngine.js";
 import AssetCalculator from "./AssetCalculator.jsx";
 import "./RosieCalculations.css";
+import "./RosieCalculationsDevice.css";
 
 const TOOLS = [
   { id: "tip", title: "Tip Calculator", detail: "Tips, totals and per-person shares", mark: "♜" },
@@ -93,6 +94,15 @@ function NumberField({ label, value, onChange, min, step = "any", type = "number
 function Selection({ label, value, options, onChange }) {
   return <label className="rc-field"><span>{label}</span><select value={value} onChange={(e) => onChange(e.target.value)}>{options.map(x => <option key={x.value || x} value={x.value || x}>{x.label || x}</option>)}</select></label>;
 }
+
+/* Metalwork is decorative only; the actual values stay native interactive controls. */
+function InstrumentSymbol({kind}) {
+  if(kind === "paw") return <svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="9" cy="12" rx="4" ry="5"/><ellipse cx="19" cy="8" rx="4" ry="6"/><ellipse cx="30" cy="12" rx="4" ry="5"/><ellipse cx="35" cy="22" rx="3" ry="4"/><path d="M20 18c-7 0-12 7-12 12 0 4 3 5 6 4l6-2 6 2c3 1 6 0 6-4 0-5-5-12-12-12z"/></svg>;
+  if(kind === "cheese") return <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 17 29 6 36 13 35 33 5 33z" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinejoin="round"/><path d="M5 17 35 17" stroke="currentColor" strokeWidth="2.6"/><circle cx="17" cy="24" r="3"/><circle cx="28" cy="26" r="2.5"/><circle cx="29" cy="12" r="2"/></svg>;
+  if(kind === "shiba") return <svg viewBox="0 0 40 40" aria-hidden="true"><path d="m9 17 4-11 7 7 8-7 4 11 2 8-6 6-1 6H13l-1-6-6-6z" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinejoin="round"/><path d="m15 22 1 1m9-1-1 1M17 28l3 2 3-2" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg>;
+  return <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" strokeWidth="3"/><path d="M9 10c9 5 12 13 9 24M31 10c-9 5-12 13-9 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>;
+}
+
 function ToolPanel({ active, values, update }) {
   const changed = (field) => (next) => update(field, next);
   const fields = {
@@ -105,7 +115,19 @@ function ToolPanel({ active, values, update }) {
     currency: <><NumberField label="Amount" value={values.currencyAmount} onChange={changed("currencyAmount")}/><NumberField label="Rate (units of target per 1 source)" value={values.currencyRate} onChange={changed("currencyRate")} min="0"/><label className="rc-field"><span>From currency</span><input maxLength="8" value={values.source} onChange={e=>update("source",e.target.value)}/></label><label className="rc-field"><span>To currency</span><input maxLength="8" value={values.target} onChange={e=>update("target",e.target.value)}/></label></>
   };
   const output = toolOutput(active, values);
-  return <section className="rc-tool-panel" aria-label={TOOLS.find(t=>t.id===active)?.title}><h2>{TOOLS.find(t=>t.id===active)?.title}</h2><div className="rc-form-grid">{fields[active]}</div><div className="rc-tool-result" aria-live="polite">{typeof output === "string" ? <p>{output}</p> : <><strong>{output.main}</strong>{output.lines.map((line, i)=><span key={i}>{line}</span>)}</>}</div></section>;
+  return <section className={"rc-tool-panel rc-device rc-device--" + active} aria-label={TOOLS.find(t=>t.id===active)?.title}>
+    <div className="rc-device-top-gyroscope" aria-hidden="true"><span className="rc-device-orbit rc-device-orbit--one"/><span className="rc-device-orbit rc-device-orbit--two"/><span className="rc-device-emblem"><InstrumentSymbol kind="paw"/></span></div>
+    <div className="rc-device-side rc-device-side--left" aria-hidden="true"><span className="rc-device-helix"/><span className="rc-device-medallion"><InstrumentSymbol kind="cheese"/></span></div>
+    <div className="rc-device-side rc-device-side--right" aria-hidden="true"><span className="rc-device-helix"/><span className="rc-device-medallion"><InstrumentSymbol kind="shiba"/></span></div>
+    <div className="rc-device-surface">
+      <h2 className="rc-device-heading">{TOOLS.find(t=>t.id===active)?.title}</h2>
+      <div className="rc-form-grid">{fields[active]}</div>
+      <div className="rc-tool-result" aria-live="polite">
+        {typeof output === "string" ? <p>{output}</p> : <><strong>{output.main}</strong>{output.lines.map((line, i)=><span key={i}>{line}</span>)}</>}
+      </div>
+    </div>
+    <div className="rc-device-foot" aria-hidden="true"><span className="rc-device-foot-medallion"><InstrumentSymbol kind="tennis"/></span></div>
+  </section>;
 }
 
 export default function RosieCalculations() {
