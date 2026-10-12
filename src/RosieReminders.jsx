@@ -291,7 +291,10 @@ export default function RosieReminders() {
   }, [editorOpen]);
 
   return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer"
-    style={{"--rr-hero-middle-height":heroHeight * .7 + "px","--rr-panel-height":organizerHeight + "px"}}>
+    style={{"--rr-hero-middle-height":heroHeight * .7 + "px",
+      "--rr-hero-height":heroHeight + "px",
+      "--rr-hero-fifteen-height":heroHeight * .15 + "px",
+      "--rr-panel-height":organizerHeight + "px"}}>
     <div className={"rr-hero-pin"+(heroPinned ? " is-pinned" : "")}
       style={{height:heroHeight ? heroHeight * .7 : 0}}
       aria-hidden="true">

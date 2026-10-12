@@ -29,7 +29,7 @@ try {
     page.on("pageerror", error => consoleErrors.push(error.message));
     await page.goto(base + "/#reminders", { waitUntil: "networkidle" });
     await page.locator(".rr-feature-grid").waitFor();
-    await page.locator(".loading-screen-hidden").waitFor();
+    await page.locator(".loading-screen-hidden").waitFor({state:"attached"});
     await page.waitForTimeout(850); // Allow loading-screen fade before capturing actual artwork.
     assert.equal(await page.locator(".rr-hero img").count(), 1, "Original Rosie hero missing");
     const placement = await page.evaluate(() => {
@@ -66,6 +66,17 @@ try {
       "Page fallback wallpaper not aligned to the hero's bottom");
     assert.equal(await page.locator(".rr-compact-header").count(),0,
       "Do not substitute a new header for the approved original Rosie illustration");
+    const introSpace = await page.evaluate(() => ({
+      heroHeight:document.querySelector(".rr-hero").getBoundingClientRect().height,
+      maxScroll:document.documentElement.scrollHeight-innerHeight,
+      marginBelowTabs:parseFloat(getComputedStyle(document.querySelector(".rr-tabs")).marginBottom),
+      emptyFooter:parseFloat(getComputedStyle(document.querySelector(".rr-content")).paddingBottom),
+      celestialBackground:getComputedStyle(document.querySelector(".rr-content")).backgroundImage
+    }));
+    if (width<=390) assert(introSpace.maxScroll <= introSpace.heroHeight*.15+9,
+      "The collapsed organizer must not reserve a second 15% of unnecessary blank scrolling: "+JSON.stringify(introSpace));
+    assert(introSpace.emptyFooter<50 && introSpace.marginBelowTabs<12,
+      "Remove large empty area after lowest Today/Calendar buttons: "+JSON.stringify(introSpace));
     const heroFull = await page.locator(".rr-hero").evaluate(el => el.getBoundingClientRect().height);
     await page.screenshot({path:"artifacts/rosie-reminders-real-art/" + width + "-entry.png"});
     await page.evaluate(h => scrollTo({top:Math.floor(h * .14),behavior:"instant"}),heroFull);
