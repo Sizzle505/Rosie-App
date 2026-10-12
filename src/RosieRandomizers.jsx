@@ -270,12 +270,12 @@ export default function RosieRandomizers() {
                 );
               })}
             </div>
-            <img className={styles.wheelFrame} src="/randomizers/roulette/frame.svg" alt="" aria-hidden="true" draggable="false" />
+            <img className={styles.wheelFrame} src="/randomizers/roulette/wheel-frame-stationary.webp" alt="" aria-hidden="true" draggable="false" />
             <div className={styles.wheelHub} aria-hidden="true">
               <img src="/randomizers/rosie-signet.webp" alt="" draggable="false" />
             </div>
             <div className={styles.pointer} aria-hidden="true">
-              <img src="/randomizers/roulette/pointer.svg" alt="" draggable="false" />
+              <img src="/randomizers/roulette/pointer-stationary.webp" alt="" draggable="false" />
             </div>
             <div className={styles.wheelBase} aria-hidden="true" />
           </div>
