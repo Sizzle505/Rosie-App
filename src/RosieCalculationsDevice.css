@@ -1149,16 +1149,16 @@
   }
   .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field input,
   .app-shell.page-calculations .rc-active-tool-overlay .rc-form-grid > .rc-field select {
-    min-height:42px;
-    height:42px;
-    max-height:42px;
+    min-height:44px;
+    height:44px;
+    max-height:44px;
   }
   /* Date controls are short dates, not oversized full-width gold plaques. */
   .app-shell.page-calculations .rc-active-tool-overlay .rc-device--date .rc-form-grid > .rc-field:has(input[type="date"]) input {
     width:min(100%,151px);
     max-width:100%;
-    height:42px;
-    min-height:42px;
+    height:44px;
+    min-height:44px;
     padding:6px 8px;
     font-size:14px;
     text-align:center;
