@@ -884,6 +884,7 @@ function CheeseMemoryGame() {
   const gridRef = useRef(null);
   const examinerRef = useRef(null);
   const [boardFocusRequest, setBoardFocusRequest] = useState(0);
+  const boardFocusTimersRef = useRef([]);
 
   const complete = matched.length === CHEESES.length;
   const currentReaction = ROSIE_REACTIONS[rosieMood];
@@ -935,6 +936,8 @@ function CheeseMemoryGame() {
   useEffect(() => () => {
     window.clearTimeout(pendingFlipRef.current);
     window.clearTimeout(graduationTimerRef.current);
+    boardFocusTimersRef.current.forEach(window.clearTimeout);
+    boardFocusTimersRef.current = [];
     previewDeadlineRef.current = 0;
     challengeDeadlineRef.current = 0;
   }, []);
@@ -951,57 +954,45 @@ function CheeseMemoryGame() {
     return () => window.cancelAnimationFrame(frame);
   }, [ceremonyVisible]);
 
-  // Both game modes use one viewport-aware board placement. Measure the
-  // actual raised bottom navigation so the fourth row clears it on iPhone.
-  // Run again after preview transitions, rotations, or browser chrome resizes.
+  // Align to the live height of Doctor Rosie and the raised navigation.
+  // A direct post-click call is needed on iOS WebKit: moving a focused mode
+  // button can otherwise restore the old scroll offset after layout effects.
+  function alignBoardForPhone() {
+    const board = gridRef.current;
+    const examiner = examinerRef.current;
+    if (!board || !examiner || window.innerWidth > 720) return;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const nav = document.querySelector(".bottom-nav");
+    const navTop = nav ? nav.getBoundingClientRect().top : viewportHeight - 90;
+    const examinerHeight = examiner.getBoundingClientRect().height;
+    const stickyOffset = Math.max(6, parseFloat(window.getComputedStyle(examiner).top) || 6);
+    const boardTop = stickyOffset + examinerHeight + 10;
+    const availableHeight = Math.max(140, Math.floor(navTop - boardTop - 12));
+    board.style.setProperty("--flash-board-cap", `${availableHeight}px`);
+    board.style.scrollMarginTop = `${boardTop}px`;
+    board.scrollIntoView({ block: "start", behavior: "auto" });
+    const offset = window.scrollY + board.getBoundingClientRect().top - boardTop;
+    window.scrollTo({ top: Math.max(0, offset), behavior: "auto" });
+  }
+
+  function scheduleBoardFocus() {
+    boardFocusTimersRef.current.forEach(window.clearTimeout);
+    setBoardFocusRequest((request) => request + 1);
+    boardFocusTimersRef.current = [
+      window.setTimeout(alignBoardForPhone, 70),
+      window.setTimeout(alignBoardForPhone, 180),
+      window.setTimeout(alignBoardForPhone, 330)
+    ];
+  }
+
   useLayoutEffect(() => {
     if (!boardFocusRequest) return undefined;
-    let measureFrame = 0;
-    let scrollFrame = 0;
-    const fitBoard = (scrollToBoard) => {
-      window.cancelAnimationFrame(measureFrame);
-      measureFrame = window.requestAnimationFrame(() => {
-        const board = gridRef.current;
-        const examiner = examinerRef.current;
-        if (!board || !examiner || window.innerWidth > 720) return;
-        const viewportHeight = window.visualViewport?.height || window.innerHeight;
-        const nav = document.querySelector(".bottom-nav");
-        const navTop = nav ? nav.getBoundingClientRect().top : viewportHeight - 90;
-        const examinerHeight = examiner.getBoundingClientRect().height;
-        const stickyOffset = Math.max(6, parseFloat(getComputedStyle(examiner).top) || 6);
-        const boardTop = stickyOffset + examinerHeight + 10;
-        const availableHeight = Math.max(140, Math.floor(navTop - boardTop - 12));
-        board.style.setProperty("--flash-board-cap", `${availableHeight}px`);
-        board.style.scrollMarginTop = `${boardTop}px`;
-        if (scrollToBoard) {
-          window.cancelAnimationFrame(scrollFrame);
-          scrollFrame = window.requestAnimationFrame(() => {
-            const actualBoard = gridRef.current;
-            if (!actualBoard) return;
-            // Set the grid just beneath the sticky reaction panel; ensure the
-            // entire fourth row remains above the fixed navigation.
-            // "auto" is supported by iOS WebKit. The former "instant"
-            // option silently left the board unmoved on some Safari versions.
-            actualBoard.scrollIntoView({ block: "start", inline: "nearest", behavior: "auto" });
-            const target = window.scrollY + actualBoard.getBoundingClientRect().top - boardTop;
-            window.scrollTo({ top: Math.max(0, target), behavior: "auto" });
-          });
-        }
-      });
-    };
-    fitBoard(true);
-    // iOS Safari can restore focus/scroll after a tapped mode button is
-    // replaced by its selected state. Reapply the alignment after that pass.
-    const settleScroll = window.setTimeout(() => fitBoard(true), 85);
-    const finalScroll = window.setTimeout(() => fitBoard(true), 220);
-    const handleResize = () => fitBoard(false);
+    const frame = window.requestAnimationFrame(alignBoardForPhone);
+    const handleResize = () => window.requestAnimationFrame(alignBoardForPhone);
     window.addEventListener("resize", handleResize);
     window.visualViewport?.addEventListener("resize", handleResize);
     return () => {
-      window.cancelAnimationFrame(measureFrame);
-      window.cancelAnimationFrame(scrollFrame);
-      window.clearTimeout(settleScroll);
-      window.clearTimeout(finalScroll);
+      window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", handleResize);
       window.visualViewport?.removeEventListener("resize", handleResize);
     };
@@ -1053,7 +1044,7 @@ function CheeseMemoryGame() {
 
   function selectBoardMode(mode) {
     resetGame(mode);
-    setBoardFocusRequest((request) => request + 1);
+    scheduleBoardFocus();
   }
 
   function resetGame(requestedMode) {
@@ -1093,7 +1084,7 @@ function CheeseMemoryGame() {
     previewDeadlineRef.current = Date.now() + CHEESE_PREVIEW_MS;
     setChallengePhase("preview");
     applyReaction("focused", "Study the entire board. You have three seconds.");
-    setBoardFocusRequest((request) => request + 1);
+    scheduleBoardFocus();
   }
 
   function expireChallenge() {
