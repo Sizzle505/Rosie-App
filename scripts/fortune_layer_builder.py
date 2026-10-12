@@ -247,7 +247,7 @@ def extract_existing_side_head(side_path,out):
     side=Image.open(side_path).convert("RGBA")
     arr=np.array(side)
     rows=np.arange(arr.shape[0],dtype=np.float32)
-    fade=np.clip((482-rows)/42,0,1)[:,None]
+    fade=np.clip((445-rows)/42,0,1)[:,None]
     arr[:,:,3]=np.uint8(arr[:,:,3].astype(np.float32)*fade)
     arr[:,:,:3]=np.where(arr[:,:,3,None]>0,arr[:,:,:3],0)
     subject=Image.fromarray(arr,"RGBA")
