@@ -173,3 +173,8 @@
   .page-cheese .cheese-sprint-start { max-width: 40%; padding: 8px 7px; font-size: 10px; }
   .page-cheese .cheese-sprint-clock { min-width: 54px; font-size: 27px; }
 }
+
+/* Place the study board beneath the persistent examiner when the reveal starts. */
+@media(max-width:720px) {
+  .page-cheese .cheese-grid { scroll-margin-top: calc(182px + env(safe-area-inset-top,0px)); }
+}
