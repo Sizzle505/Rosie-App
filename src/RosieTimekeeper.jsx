@@ -134,15 +134,17 @@ export default function RosieTimekeeper() {
         )}
         <section className="rtk-dial" aria-label="Working stopwatch and countdown">
           <TimekeeperClockwork />
-          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode">
-            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
-          </div>
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
             {centiseconds !== null && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{centiseconds}</span>}
           </output>
           <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
+        </section>
+        <div className="rtk-action-deck" aria-label="Timekeeper controls">
+          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode">
+            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
+          </div>
           <div className="rtk-controls">
             <button type="button" className="rtk-secondary-action rtk-lap-action"
               onClick={mode === "stopwatch" ? lap : stopAndReset}
@@ -160,7 +162,7 @@ export default function RosieTimekeeper() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4.3 12a7.7 7.7 0 1 0 2.5-5.7L4 9" /><path d="M4 3.8V9h5.2" /></svg>
             </button>
           </div>
-        </section>
+        </div>
         <section className="rtk-utility" aria-label="Timekeeper settings and splits">
           {mode === "stopwatch" ? (
             <>
