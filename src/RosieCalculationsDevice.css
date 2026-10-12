@@ -152,3 +152,75 @@
   padding-bottom:31px;
 }
 .rc-page .rc-device .rc-tool-result {padding-bottom:max(26px,3vw);}
+
+/* BEGIN ROSIE CALCULATIONS COMPACT HANDOFF 2026-10-11 */
+/* Keep the approved one-piece frame; adjust only instrument geometry. */
+.rc-page .rc-tool-panel.rc-device {
+  min-height: min(790px, 112vw);
+  margin: 20px auto 14px;
+  padding: clamp(101px, 28vw, 166px) 18.5% clamp(84px, 23vw, 142px);
+}
+.rc-page .rc-device-surface { gap: 9px; }
+.rc-page .rc-device-heading { margin-bottom: 4px; }
+.rc-page .rc-device .rc-form-grid { gap: 9px; }
+.rc-page .rc-device .rc-field { gap: 3px; }
+.rc-page .rc-device .rc-field input,
+.rc-page .rc-device .rc-field select {
+  height: 44px;
+  min-height: 44px;
+  width: 90%;
+  max-width: 90%;
+  margin-inline: auto;
+  padding: 5px 12px;
+  font-size: 16px;
+  background-size: 100% 100%;
+}
+.rc-page .rc-device .rc-field:has(select) select,
+.rc-page .rc-device .rc-field:has(input[type="date"]) input { width: 96%; max-width: 96%; }
+.rc-page .rc-device .rc-tool-result {
+  min-height: 108px;
+  gap: 5px;
+  padding: 16px 16px 20px;
+  margin-top: 3px;
+}
+.rc-page .rc-device--tip .rc-tool-result,
+.rc-page .rc-device--split .rc-tool-result {
+  min-height: 145px;
+  padding: 19px 16px 24px;
+}
+/* Revised assets must be installed before merging. Display them uncropped. */
+.rc-page .rc-tool-grid { gap: 7px 5px; padding: 6px 3px 3px; overflow: visible; }
+.rc-page .rc-workspace .rc-tool-card,
+.rc-page .rc-workspace .rc-tool-card:nth-child(n) {
+  aspect-ratio: auto!important;
+  overflow: visible;
+  height: auto;
+}
+.rc-page .rc-tool-card img.rc-tool-art {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  object-position: center;
+  overflow: visible;
+}
+.rc-page .rc-tool-card--currency { grid-column: span 2; aspect-ratio: auto!important; }
+.rc-page .rc-device-housing .rc-device-original-art {
+  width: 100%; height: 100%; object-fit: fill;
+}
+.app-shell.page-calculations main.rc-page > header.rc-hero {
+  top: -25px!important;
+}
+.app-shell.page-calculations .bottom-nav {
+  bottom: calc(max(6px, env(safe-area-inset-bottom)) + 8px)!important;
+}
+.app-shell.page-calculations .nav-family-toggle {
+  transform: translate(-50%, 14px);
+}
+@media (max-width:380px) {
+  .rc-page .rc-device .rc-field input,
+  .rc-page .rc-device .rc-field select {
+    height: 44px; min-height: 44px; font-size: 16px;
+  }
+}
+/* END ROSIE CALCULATIONS COMPACT HANDOFF */
