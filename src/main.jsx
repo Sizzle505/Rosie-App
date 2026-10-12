@@ -2255,6 +2255,38 @@ function App() {
   const [navFamily, setNavFamily] = useState(() =>
     RESOURCE_PAGE_IDS.has(pageFromLocation()) ? "resources" : "salon");
 
+  // Normal iPhone Safari has expanding browser chrome. Size the app to its
+  // usable visual viewport while keeping standalone Home Screen mode intact.
+  useEffect(() => {
+    if (!/iPhone|iPad|iPod/.test(navigator.userAgent)) return undefined;
+    const root = document.documentElement;
+    const syncViewport = () => {
+      if (window.innerWidth > 600) {
+        root.style.removeProperty("--rosie-visible-height");
+        return;
+      }
+      const viewport = window.visualViewport;
+      if (!viewport || Math.abs(viewport.scale - 1) > 0.02) return;
+      if (document.activeElement?.matches?.("input, textarea, select, [contenteditable='true']")) return;
+      const height = Math.round(viewport.height);
+      if (Number.isFinite(height) && height >= 320) {
+        root.style.setProperty("--rosie-visible-height", height + "px");
+      }
+    };
+    syncViewport();
+    window.addEventListener("resize", syncViewport);
+    window.addEventListener("orientationchange", syncViewport);
+    window.visualViewport?.addEventListener("resize", syncViewport);
+    document.addEventListener("focusout", syncViewport);
+    return () => {
+      window.removeEventListener("resize", syncViewport);
+      window.removeEventListener("orientationchange", syncViewport);
+      window.visualViewport?.removeEventListener("resize", syncViewport);
+      document.removeEventListener("focusout", syncViewport);
+      root.style.removeProperty("--rosie-visible-height");
+    };
+  }, []);
+
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);

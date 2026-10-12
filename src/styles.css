@@ -7803,22 +7803,27 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* Match side-rail controls across pages, exactly 7px below their former positions. */
 .app-shell .house-return {
-  top: calc(max(9px, env(safe-area-inset-top)) + 7px);
+  top: calc(max(9px, env(safe-area-inset-top)) + 43px);
 }
 .app-shell .resources-return {
-  top: calc(max(9px, env(safe-area-inset-top)) + 62px);
+  top: calc(max(9px, env(safe-area-inset-top)) + 98px);
 }
 .app-shell .resources-return--home {
-  top: calc(max(9px, env(safe-area-inset-top)) + 7px);
+  top: calc(max(9px, env(safe-area-inset-top)) + 43px);
 }
 @media(max-width:680px) {
   .app-shell .house-return {
-    top: calc(max(5px, env(safe-area-inset-top)) + 7px);
+    top: calc(max(5px, env(safe-area-inset-top)) + 43px);
   }
   .app-shell .resources-return {
-    top: calc(max(5px, env(safe-area-inset-top)) + 46px);
+    top: calc(max(5px, env(safe-area-inset-top)) + 82px);
   }
   .app-shell .resources-return--home {
-    top: calc(max(5px, env(safe-area-inset-top)) + 7px);
+    top: calc(max(5px, env(safe-area-inset-top)) + 43px);
   }
 }
+
+/* Dynamic-height Safari viewport: scrollable pages retain their overflow. */
+:root { --rosie-visible-height: 100vh; }
+@supports (height: 100dvh) { :root { --rosie-visible-height: 100dvh; } }
+html, body, #root, .app-shell { min-height:var(--rosie-visible-height,100vh); }
