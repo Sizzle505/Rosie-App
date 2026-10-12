@@ -1209,3 +1209,9 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-page .rtk-utility.is-empty,
   .rtk-page .rtk-utility.is-timer {top:calc(74.5% - 17px);}
 }
+
+/* QA screenshot polish: do not paint a rectangular mat outside the
+   gilded 9-slice rails. The imported cabinet's center supplies its enamel. */
+.rtk-page .rtk-utility,
+.rtk-page .rtk-utility.is-empty,
+.rtk-page .rtk-utility.is-timer {background:transparent;}
