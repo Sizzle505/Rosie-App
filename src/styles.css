@@ -7732,7 +7732,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   z-index:92;
   left:50%;
   right:auto;
-  bottom:calc(max(8px,env(safe-area-inset-bottom)) + 2px);
+  bottom:max(14px, calc(max(8px,env(safe-area-inset-bottom)) + 2px));
   transform:translateX(-50%);
   display:flex;
   align-items:center;
@@ -7767,7 +7767,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     bottom:calc(max(6px,env(safe-area-inset-bottom)) + 16px) !important;
   }
   .app-shell .nav-family-toggle {
-    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 2px);
+    bottom:max(14px, calc(max(6px,env(safe-area-inset-bottom)) + 2px));
     min-width:79px;min-height:24px;
     padding:3px 9px;
     font-size:9px;
@@ -7776,6 +7776,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 }
 
 /* BEGIN ROSIE CALCULATIONS COMPACT HANDOFF 2026-10-11 */
-/* All non-home pages: lower Games/Tools pendant 6px relative to navigation. */
-.app-shell .nav-family-toggle { transform: translate(-50%, 6px); }
+/* Lower Games/Tools 8px relative to its prior placement (6px -> 14px).
+   The bottom constraint above prevents clipping on 320px safe-area-less screens. */
+.app-shell .nav-family-toggle { transform: translate(-50%, 14px); }
 /* END ROSIE CALCULATIONS COMPACT HANDOFF */
