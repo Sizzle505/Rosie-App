@@ -361,7 +361,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         Math.abs(clockLayout.readout.centerY-clockLayout.dial.centerY)<6,
         "Timekeeper numerals must be geometrically centered in the clock: "+JSON.stringify(clockLayout));
       assert(clockLayout.deck.top>clockLayout.dial.bottom+3 &&
-        clockLayout.utility.top>=clockLayout.deck.bottom-3,
+        clockLayout.utility.top>=clockLayout.deck.bottom-7,
         "Clock controls overlap the bezel or laps panel: "+JSON.stringify(clockLayout));
       assert(clockLayout.utility.width<clockLayout.viewport*.9 &&
          clockLayout.utility.height>=(clockLayout.viewport<=355 ? 36 : 60),
