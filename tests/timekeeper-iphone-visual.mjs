@@ -55,7 +55,8 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
         "Round instrument buttons must remain below clock bezel");
       assert(geometry.mode.top >= geometry.controls.bottom - 2,
         "Round buttons must be ABOVE Stopwatch / Timer selector");
-      assert(geometry.longPage,"A doubled cabinet needs scroll clearance on short screens");
+      assert(geometry.longPage || geometry.tray.bottom <= geometry.nav.top-4,
+        "Doubled cabinet must either clear the fixed nav or allow scrolling");
       assert(geometry.tray.top >= geometry.mode.bottom - 3,
         "Tray must not overlap the action controls: " + JSON.stringify(geometry));
       assert(geometry.lapOpacity >= .99, "Disabled Lap button is translucent");

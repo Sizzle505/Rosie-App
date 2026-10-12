@@ -1200,3 +1200,12 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
 @media(prefers-reduced-motion:reduce){
   .rtk-page .rtk-progress-charm {animation:none!important;}
 }
+
+/* Standard iPhone fit: recover 17px vertically above the cabinet so the
+   genuine twice-tall art clears bottom navigation without blank padding. */
+@media(min-width:365px) and (max-width:520px) and (min-height:701px){
+  .rtk-page .rtk-action-deck {top:calc(57% - 8px);}
+  .rtk-page .rtk-utility,
+  .rtk-page .rtk-utility.is-empty,
+  .rtk-page .rtk-utility.is-timer {top:calc(74.5% - 17px);}
+}
