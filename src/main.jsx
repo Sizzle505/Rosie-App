@@ -745,26 +745,30 @@ function BarkbridgeDiploma({ recipient, awardDate }) {
 
 function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   const diplomaDialogRef = useRef(null);
+  const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
+  const defaultDiplomaName = efficiency >= 85 ? "Gouda Laude"
+    : efficiency >= 60 ? "Cheez Whiz" : "Brie-ly Passed";
   const [graduateName, setGraduateName] = useState(() => {
     try {
-      const saved = localStorage.getItem("barkbridgeGraduateName");
-      const next = !saved?.trim() || saved.trim().toLowerCase() === "the graduate"
-        ? "Cheez Whiz" : saved;
-      if (next !== saved) localStorage.setItem("barkbridgeGraduateName", next);
-      return next;
-    } catch { return "Cheez Whiz"; }
+      const saved = localStorage.getItem("barkbridgeGraduateName")?.trim() || "";
+      // Names from older releases were automatic defaults, not player customizations.
+      return !saved || saved.toLowerCase() === "the graduate"
+        || ["Cheez Whiz", "Gouda Laude", "Brie-ly Passed"].includes(saved) ? "" : saved;
+    } catch { return ""; }
   });
   const awardDate = useMemo(
     () => new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }),
     []
   );
-  const recipient = graduateName.trim() || "Cheez Whiz";
+  const recipient = graduateName.trim() || defaultDiplomaName;
   function personalizeDiploma(value) {
     const next = value.slice(0, 42);
     setGraduateName(next);
-    try { localStorage.setItem("barkbridgeGraduateName", next); } catch {}
+    try {
+      if (next.trim()) localStorage.setItem("barkbridgeGraduateName", next);
+      else localStorage.removeItem("barkbridgeGraduateName");
+    } catch {}
   }
-  const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
   const confetti = Array.from({ length: 34 }, (_, index) => {
     const left = (index * 37 + 11) % 98;
     const delay = ((index * 17) % 16) / 100;
@@ -822,7 +826,8 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
             maxLength={42}
             aria-label="Name on diploma"
             placeholder="Enter the graduate's name"
-            value={graduateName}
+            value={graduateName || defaultDiplomaName}
+            onFocus={(event) => { if (!graduateName) event.target.select(); }}
             onChange={(event) => personalizeDiploma(event.target.value)}
           />
           <small>Your name appears on both the diploma and its enlarged view.</small>

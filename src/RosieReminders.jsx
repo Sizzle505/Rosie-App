@@ -234,12 +234,6 @@ export default function RosieReminders() {
       <h1 className="rr-screen-reader">Rosie’s Reminders - Personal Organizer</h1>
     </header>
     <section className="rr-content">
-      <div className="rr-tabs" role="tablist" aria-label="Organizer view">
-        <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}>Today</button>
-        <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
-          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
-      </div>
       {(section !== "today" || tab !== null) && <section className="rr-paper" aria-label="Reminders organizer">
         {!(section === "today" && tab === "calendar") && (
           <div className="rr-panel-head">
@@ -378,10 +372,12 @@ export default function RosieReminders() {
             alt="" draggable="false" loading="lazy" />
         </button>)}
       </div>
-      <div className="rr-tools"><button type="button" onClick={exportData}>Export backup</button>
-        <button type="button" onClick={() => importRef.current?.click()}>Import backup</button>
-        <input ref={importRef} type="file" accept=".json,application/json" onChange={importData} hidden aria-label="Import backup file"/></div>
-      <p className="rr-storage-note">Saved on this device. Account synchronization and background notifications are not enabled yet.</p>
+      <div className="rr-tabs" role="tablist" aria-label="Organizer view">
+        <button type="button" role="tab" aria-selected={tab === "today"} className={tab === "today" ? "active" : ""}
+          onClick={() => { setTab(previous => section === "today" && previous === "today" ? null : "today"); setSection("today"); }}>Today</button>
+        <button type="button" role="tab" aria-selected={tab === "calendar"} className={tab === "calendar" ? "active" : ""}
+          onClick={() => { setTab(previous => section === "today" && previous === "calendar" ? null : "calendar"); setSection("today"); setMonth(dateObj(selectedDate)); }}>Calendar</button>
+      </div>
     </section>
     {editorOpen && <div className="rr-modal-cover" onMouseDown={e => { if(e.target===e.currentTarget) setEditorOpen(false); }}>
       <section role="dialog" aria-modal="true" aria-labelledby="rr-modal-title" className="rr-modal">

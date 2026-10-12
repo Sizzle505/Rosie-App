@@ -118,3 +118,6 @@
 @media (prefers-reduced-motion: reduce) {
   .rr-hub-button { transition: none; }
 }
+
+/* Align the complete observatory header/button composition 12px lower. */
+.rr-hub-content { transform:translateY(12px); }

@@ -192,10 +192,11 @@
   }
   /* Independent visual nudges; retain their original grid slots and
      ornamental-image sizing without pulling the other buttons around. */
-  .world[aria-label="Open Card Vault"] { top: -10px; }
+  .world[aria-label="Open Card Vault"] { top: -18px; }
   .world[aria-label="Open Cheese Board Exam"] { top: -3px; left: 6px; }
-  .world[aria-label="Open Captain Rosie"] { top: -2px; }
-  .world.resourcesWorld { top: -15px; z-index: 0; }
+  .world[aria-label="Open Captain Rosie"] { top: -6px; }
+  .world[aria-label="Open Randomizers"] { top: -6px; }
+  .world.resourcesWorld { top: -23px; z-index: 0; }
   /* Resources tucks behind the other illustrated destination buttons,
      preserving their normal tappable area and gold-frame overlap. */
   .world:not(.resourcesWorld) { z-index: 2; }

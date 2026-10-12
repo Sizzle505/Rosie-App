@@ -185,7 +185,7 @@ export default function RosieRandomizers() {
       <header className={styles.hero}>
         <div className={styles.heroCopy}>
           <div className={styles.kicker}><span /> ROSIE'S PRIVATE SALON <span /></div>
-          <h1>Rosie’s Randomizers</h1>
+          <h1><span className={styles.heroTitleLead}>Rosie’s</span>{" "}<span className={styles.heroTitleMain}>Randomizers</span></h1>
           <p>For decisions too important to leave to humans.</p>
           <div className={styles.houseRule}>Decisive · impartial · occasionally snack-motivated</div>
         </div>
