@@ -990,12 +990,18 @@ function CheeseMemoryGame() {
       });
     };
     fitBoard(true);
+    // iOS Safari can restore focus/scroll after a tapped mode button is
+    // replaced by its selected state. Reapply the alignment after that pass.
+    const settleScroll = window.setTimeout(() => fitBoard(true), 85);
+    const finalScroll = window.setTimeout(() => fitBoard(true), 220);
     const handleResize = () => fitBoard(false);
     window.addEventListener("resize", handleResize);
     window.visualViewport?.addEventListener("resize", handleResize);
     return () => {
       window.cancelAnimationFrame(measureFrame);
       window.cancelAnimationFrame(scrollFrame);
+      window.clearTimeout(settleScroll);
+      window.clearTimeout(finalScroll);
       window.removeEventListener("resize", handleResize);
       window.visualViewport?.removeEventListener("resize", handleResize);
     };
@@ -1259,9 +1265,9 @@ function CheeseMemoryGame() {
               <p>A memory examination for serious cheese scholars.</p>
 
               <div className="cheese-exam-actions" role="group" aria-label="Cheese exam controls">
-                <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={() => selectBoardMode("classic")}>CLASSIC EXAM</button>
-                <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={() => selectBoardMode("sprint")}>FLASH FROMAGE</button>
-                <button type="button" className="cheese-action-reset" onClick={() => selectBoardMode(gameMode)}><span aria-hidden="true">↻</span> RESET</button>
+                <button type="button" aria-pressed={gameMode === "classic"} className={gameMode === "classic" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("classic"); }}>CLASSIC EXAM</button>
+                <button type="button" aria-pressed={gameMode === "sprint"} className={gameMode === "sprint" ? "is-selected" : ""} onClick={(event) => { event.currentTarget.blur(); selectBoardMode("sprint"); }}>FLASH FROMAGE</button>
+                <button type="button" className="cheese-action-reset" onClick={(event) => { event.currentTarget.blur(); selectBoardMode(gameMode); }}><span aria-hidden="true">↻</span> RESET</button>
               </div>
 
               <div className="cheese-header-status" aria-label="Current exam status">
