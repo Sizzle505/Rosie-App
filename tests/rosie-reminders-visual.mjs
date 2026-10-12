@@ -307,11 +307,11 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           transformY: Math.round(new DOMMatrixReadOnly(getComputedStyle(element).transform).m42),
         };
       });
-      assert(position.horizontalOffset<4 && position.transformY===14
-        && position.aboveBarBottom>=-10 && position.aboveBarBottom<=10
-        && position.hangingBelowBar>=26 && position.hangingBelowBar<=40
+      assert(position.horizontalOffset<4 && position.transformY===10
+        && position.aboveBarBottom>=-6 && position.aboveBarBottom<=14
+        && position.hangingBelowBar>=22 && position.hangingBelowBar<=36
         && position.visibleBottom>=-1,
-        "Games/Tools toggle must sit 8px lower than before without clipping: "+JSON.stringify(position));
+        "Games/Tools toggle must sit 4px higher without clipping: "+JSON.stringify(position));
       const raisedNavContent=await page.locator(".bottom-nav .nav-icon-wrap").first().evaluate(el=>getComputedStyle(el).top);
       assert.equal(raisedNavContent,"-7px","navigation content should sit 5px above the pendant's unchanged safe-area position");
       await navToggle.click();
