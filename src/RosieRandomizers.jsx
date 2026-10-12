@@ -206,7 +206,14 @@ export default function RosieRandomizers() {
               aria-label={`Coin shows ${coinFlip ? "flipping" : coin}`}
             >
               <img
-                src={coinVisual === "Heads" ? "/randomizers/rosie-coin.webp" : "/randomizers/rosie-coin-tail.webp"}
+                src={coinVisual === "Heads" ? "/randomizers/rosie-coin-retina.svg" : "/randomizers/rosie-coin-tail-retina.svg"}
+                onError={(event) => {
+                  // Preserve the original approved faces if a browser cannot decode SVG filters.
+                  event.currentTarget.onerror = null;
+                  event.currentTarget.src = coinVisual === "Heads"
+                    ? "/randomizers/rosie-coin.webp"
+                    : "/randomizers/rosie-coin-tail.webp";
+                }}
                 alt={coinVisual === "Heads" ? "Rosie cameo - heads" : "Rosie tail - tails"}
               />
             </div>
