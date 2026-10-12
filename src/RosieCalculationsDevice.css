@@ -389,3 +389,106 @@
     min-height: 2.55em;
   }
 }
+
+
+/* Small-screen instrument fit, October 12: retain 44px touch targets while
+   replacing oversized porcelain bubbles. Keep result INSIDE the same frame. */
+@media (max-width: 739px) {
+  .rc-page .rc-tool-panel.rc-device {
+    margin-top: 13px;
+    margin-bottom: 13px;
+    padding-top: clamp(91px, 26vw, 151px);
+    padding-bottom: clamp(78px, 21vw, 125px);
+  }
+  .rc-page .rc-device-surface { gap: 7px; }
+  .rc-page .rc-device-heading {
+    padding-top: 7px;
+    padding-bottom: 8px;
+    margin-bottom: 0;
+    font-size: clamp(19px, 4.3vw, 27px);
+  }
+  .rc-page .rc-device .rc-form-grid {
+    column-gap: 8px;
+    row-gap: 7px;
+  }
+  .rc-page .rc-device .rc-field { gap: 3px; }
+  .rc-page .rc-device .rc-field > span {
+    width: 88%;
+    margin-inline: auto;
+    font-size: clamp(12.5px, 3.4vw, 14px);
+    line-height: 1.2;
+  }
+  .rc-page .rc-device .rc-field input,
+  .rc-page .rc-device .rc-field select,
+  .rc-page .rc-device .rc-field:has(select) select,
+  .rc-page .rc-device .rc-field:has(input[type="date"]) input {
+    width: 88%;
+    max-width: 88%;
+    height: 44px;
+    min-height: 44px;
+    margin-inline: auto;
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 10px;
+    box-shadow:
+      0 0 0 1px #c89748,
+      inset 0 0 0 1px #fff0c4,
+      inset 0 2px 5px #88633233,
+      0 2px 4px #3d1a0a40 !important;
+  }
+  .rc-page .rc-device .rc-field select,
+  .rc-page .rc-device .rc-field:has(select) select {
+    padding-right: 33px;
+  }
+  /* Full-width long values are smaller than before, but comfortably editable. */
+  .rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) input,
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) input,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) input,
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) input {
+    width: 88%;
+    max-width: 88%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .rc-page .rc-device--tip .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span,
+  .rc-page .rc-device--currency .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    width: 88%;
+    margin-inline: auto;
+    font-size: clamp(12px, 3.3vw, 14px);
+  }
+  /* Conversion selectors may contain multiword measurements. */
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) select {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 9px;
+    padding-right: 28px;
+    font-size: 14px;
+  }
+  .rc-page .rc-device--units .rc-form-grid > .rc-field:nth-child(n+3) > span {
+    width: 100%;
+    margin-inline: 0;
+  }
+  .rc-page .rc-device--tip .rc-tool-result,
+  .rc-page .rc-device--split .rc-tool-result,
+  .rc-page .rc-device .rc-tool-result {
+    margin-top: 2px;
+    min-height: 0;
+    padding: 14px 16px 17px;
+    gap: 4px;
+  }
+  .rc-page .rc-device .rc-tool-result strong {
+    font-size: clamp(21px, 5vw, 28px);
+    line-height: 1.1;
+  }
+  .rc-page .rc-device .rc-tool-result span {
+    font-size: clamp(12px, 3.2vw, 14px);
+    line-height: 1.2;
+  }
+  .rc-page .rc-device .rc-tool-result span + span { padding-top: 4px; }
+  .rc-page .rc-device--split .rc-form-grid > .rc-field:nth-child(n+3) > span,
+  .rc-page .rc-device--loan .rc-form-grid > .rc-field:nth-child(n+2) > span {
+    min-height: 2.3em;
+  }
+}
