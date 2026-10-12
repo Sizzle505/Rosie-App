@@ -50,8 +50,10 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       assert(geometry.lapOpacity >= .99, "Disabled Lap button is translucent");
       assert(Math.abs((geometry.dial.top + geometry.dial.height/2) - (geometry.ring.top + geometry.ring.height/2)) <= 2,
         "Progress halo is floating outside the clock: " + JSON.stringify(geometry));
-      assert(geometry.ring.top >= geometry.dial.top - geometry.dial.height*.075,
-        "Progress halo crosses Rosie instead of following the clock rim");
+      assert(geometry.ring.top >= geometry.dial.top - geometry.dial.height*.112 &&
+        geometry.ring.width >= geometry.dial.width*1.18 &&
+        geometry.ring.width <= geometry.dial.width*1.225,
+        "Progress halo should hug the enlarged bezel without escaping the illustrated clock: " + JSON.stringify(geometry));
       assert(!geometry.oldImages, "Procedural stand-in button assets are still referenced");
       assert(!geometry.horizontalOverflow, "Unexpected horizontal scrolling");
       await page.screenshot({ path: output + "/" + engine + "-" + width + "x" + height + "-stopwatch.png" });
