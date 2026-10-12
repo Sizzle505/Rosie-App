@@ -141,10 +141,6 @@ export default function RosieTimekeeper() {
           <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
         </section>
         <div className="rtk-action-deck" aria-label="Timekeeper controls">
-          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode">
-            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
-          </div>
           <div className="rtk-controls">
             <button type="button" className="rtk-secondary-action rtk-lap-action"
               onClick={mode === "stopwatch" ? lap : stopAndReset}
@@ -164,6 +160,10 @@ export default function RosieTimekeeper() {
           </div>
         </div>
         <section className="rtk-utility" aria-label="Timekeeper settings and splits">
+          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode">
+            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => pickMode("countdown")}>Timer</button>
+          </div>
           {mode === "stopwatch" ? (
             <>
               <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "1/100-second precision"}</span></div>
