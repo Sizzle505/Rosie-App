@@ -682,7 +682,7 @@
 @media (max-width:739px) {
   .rc-page .rc-tool-panel.rc-device {
     padding-top:clamp(97px,26vw,154px);
-    padding-bottom:clamp(102px,27vw,170px);
+    padding-bottom:clamp(100px,26vw,167px);
   }
 }
 .rc-page .rc-device .rc-tool-result {
