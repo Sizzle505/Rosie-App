@@ -429,57 +429,35 @@
   object-position:center;
   margin:0;
 }
-.app-shell.page-reminders .rr-compact-header {
-  position:fixed;
-  inset:0 0 auto;
-  width:100%;
-  height:calc(61px + env(safe-area-inset-top));
-  padding:calc(4px + env(safe-area-inset-top)) 16px 5px max(50px,env(safe-area-inset-left));
-  display:flex;align-items:center;justify-content:center;gap:11px;
-  z-index:82;
-  color:#ffeac0;
-  border-bottom:1px solid #d4a35f;
-  background:
-    linear-gradient(105deg,rgba(9,22,48,.98),rgba(21,33,58,.98) 55%,rgba(8,16,34,.98));
-  box-shadow:0 4px 20px #000a,inset 0 -2px 0 #77522d91;
-  opacity:0;
-  transform:translateY(-105%);
-  visibility:hidden;
+/* It is literally the middle 70% of Rosie's original illustration.
+   At 15% scroll it matches the full hero pixel-for-pixel, then remains pinned.
+   The top and bottom 15% belong to the normally scrolling original hero. */
+.app-shell.page-reminders .rr-hero-pin {
+  position:fixed;top:0;left:0;right:0;
+  display:block;width:100%;margin:0;padding:0;
+  z-index:81;
   pointer-events:none;
-  transition:opacity .2s ease, transform .2s ease, visibility .2s;
+  overflow:hidden;
+  visibility:hidden;
+  opacity:0;
+  background:transparent;
 }
-.app-shell.page-reminders .rr-compact-header.is-visible {
-  visibility:visible;opacity:1;transform:translateY(0);pointer-events:auto;
+.app-shell.page-reminders .rr-hero-pin.is-pinned {
+  visibility:visible;
+  opacity:1;
 }
-.app-shell.page-reminders .rr-compact-header > img {
-  width:46px;height:46px;flex:none;
-  border-radius:50%;border:2px solid #cfab6a;
-  object-fit:cover;
-  object-position:50% 36%;
-  background:#221a21;
-  box-shadow:0 2px 8px #000a;
+.app-shell.page-reminders .rr-hero-pin picture,
+.app-shell.page-reminders .rr-hero-pin img {
+  display:block;
+  width:100%;max-width:none;
+  height:auto;min-height:0;
+  margin:0;
+  object-fit:contain;
 }
-.app-shell.page-reminders .rr-compact-header > div {
-  display:flex;flex-direction:column;gap:2px;
-  min-width:0;text-align:center;
+.app-shell.page-reminders .rr-hero-pin img {
+  transform:translateY(-15%);
+  transform-origin:top center;
 }
-.app-shell.page-reminders .rr-compact-header strong {
-  font:600 clamp(17px,4.8vw,24px)/1 "Iowan Old Style",Georgia,serif;
-  white-space:nowrap;text-shadow:0 2px 5px #000b;
-}
-.app-shell.page-reminders .rr-compact-header small {
-  font:italic 11px/1.1 Georgia,serif;
-  color:#f4d59a;
-}
-.app-shell.page-reminders .rr-compact-header button {
-  position:absolute;right:12px;top:calc(15px + env(safe-area-inset-top));
-  width:31px;height:31px;
-  display:grid;place-items:center;
-  border:1px solid #d0a66c;border-radius:50%;
-  background:#101b32;color:#eccc86;
-  padding:0;font:23px/1 Georgia,serif;
-}
-.app-shell.page-reminders .rr-compact-header button:focus-visible {outline:3px solid #fae0ac;outline-offset:3px;}
 
 /* Background starts EXACTLY at the lower edge of the full Rosie hero.
    The original celestial art sits at the top, dissolving into the genuine
@@ -488,9 +466,9 @@
   isolation:isolate;
   position:relative;
   width:100%;max-width:none;
-  min-height:100dvh;
+  min-height:0;
   margin:0;
-  padding:5px 0 calc(325px + env(safe-area-inset-bottom));
+  padding:5px 0 calc(108px + env(safe-area-inset-bottom));
   background-color:#071225;
   background-image:url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp");
   background-size:min(100%,760px) auto;
@@ -503,13 +481,13 @@
   z-index:0;
   inset:0 0 auto 0;
   width:100%;
-  height:min(calc(100vw * 1672 / 941),1700px);
+  height:100%;
   background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-full.webp");
   background-position:center top;
   background-size:100% auto;
-  background-repeat:no-repeat;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 54%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 54%,transparent 100%);
+  background-repeat:repeat-y;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%);
   pointer-events:none;
 }
 .app-shell.page-reminders .rr-feature-grid,
@@ -593,11 +571,9 @@
   scroll-margin-bottom:calc(135px + env(safe-area-inset-bottom));
 }
 @media (min-width:850px) {
-  .app-shell.page-reminders .rr-compact-header {height:67px;}
   .app-shell.page-reminders .rr-feature-goals {max-width:600px;}
 }
 @media (prefers-reduced-motion:reduce) {
-  .app-shell.page-reminders .rr-compact-header {transition:none;}
 }
 
 
@@ -614,4 +590,18 @@ body:has(.app-shell.page-reminders),
 }
 .app-shell.page-reminders .rr-paper {
   scroll-margin-top:calc(77px + env(safe-area-inset-top));
+}
+
+
+/* No forced viewport of empty velvet below the last picture-buttons.
+   When an editable panel is open, give just enough scroll reserve to lift
+   even a short panel above the pinned original hero and global bottom nav. */
+.app-shell.page-reminders .rr-content:has(> .rr-paper) {
+  padding-bottom:max(
+    calc(115px + env(safe-area-inset-bottom)),
+    calc(100dvh - var(--rr-hero-middle-height, 215px) - var(--rr-panel-height, 220px) + 20px)
+  );
+}
+.app-shell.page-reminders .rr-paper {
+  scroll-margin-top:calc(var(--rr-hero-middle-height, 215px) + 14px);
 }
