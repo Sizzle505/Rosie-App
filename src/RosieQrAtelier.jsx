@@ -66,7 +66,7 @@ function createPayload(type,v) {
   if (type==="website"||type==="payment") return validLink(v.url);
   if (type==="zoom") {
     const link=validLink(v.url), hostname=new URL(link).hostname;
-    if (!/(^|\\.)(zoom\\.us|zoomgov\\.com|zoom\\.com)$/i.test(hostname)) throw Error("Enter an official Zoom meeting invitation URL.");
+    if (!["zoom.us","zoom.com","zoomgov.com"].some(base => hostname === base || hostname.endsWith("."+base))) throw Error("Enter an official Zoom meeting invitation URL.");
     return link;
   }
   if (type==="instagram") {
@@ -139,7 +139,7 @@ export default function RosieQrAtelier() {
     if(type==="contact"||type==="calling")return v.name;
     if(type==="event")return v.title;
     if(type==="instagram")return "@"+v.handle.replace(/^@/,"");
-    return v.url.replace(/^https?:\\/\\//,"").slice(0,55);
+    return v.url.replace("https://","").replace("http://","").slice(0,55);
   };
   function save() {
     if(!valid)return message(calculated.error);
