@@ -651,9 +651,9 @@ body:has(.app-shell.page-reminders),
   padding-bottom:calc(90px + env(safe-area-inset-bottom));
 }
 .app-shell.page-reminders .rr-content:has(> .rr-paper) {
-  padding-bottom:max(
-    calc(100px + env(safe-area-inset-bottom)),
-    calc(100dvh - var(--rr-hero-middle-height, 215px) - var(--rr-panel-height, 220px) + 20px)
-  );
+  /* The old viewport-minus-panel formula created hundreds of pixels of
+     unnecessary wallpaper after short panels. Fixed nav clearance suffices;
+     native scrolling clamps the panel to a usable visible position. */
+  padding-bottom:calc(104px + env(safe-area-inset-bottom));
 }
 .app-shell.page-reminders .rr-feature-grid { margin-top:0; }
