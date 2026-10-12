@@ -78,15 +78,25 @@ export default function RosieTimekeeper() {
       frame = window.requestAnimationFrame(() => {
         const panel = utilityRef.current;
         const nav = document.querySelector(".resources-bottom-nav");
-        const controls = document.querySelector(".rtk-action-deck");
-        if (!panel || !nav || !controls) return;
+        const modeSwitch = document.querySelector(".rtk-action-deck .rtk-mode-switch");
+        const scene = document.querySelector(".rtk-scene");
+        if (!panel || !nav || !modeSwitch || !scene) return;
+        // Keep the page itself fixed. The cabinet adapts to the actual space
+        // between the gold selector and the fixed Resources navigation.
+        panel.style.removeProperty("width");
+        panel.style.removeProperty("top");
         panel.style.setProperty("--rtk-nav-lift", "0px");
-        const panelRect = panel.getBoundingClientRect();
+        const sceneRect = scene.getBoundingClientRect();
+        const modeBottom = modeSwitch.getBoundingClientRect().bottom;
         const navTop = nav.getBoundingClientRect().top;
-        const controlsBottom = controls.getBoundingClientRect().bottom;
-        const overlap = Math.max(0, panelRect.bottom - navTop + 13);
-        const freeSpace = Math.max(0, panelRect.top - controlsBottom - 7);
-        panel.style.setProperty("--rtk-nav-lift", Math.ceil(Math.min(overlap, freeSpace)) + "px");
+        const natural = panel.getBoundingClientRect();
+        const targetTop = Math.max(modeBottom + 4, natural.top - 8);
+        const available = Math.max(44, navTop - 8 - targetTop);
+        const shrink = Math.min(1, available / natural.height);
+        if (shrink < 0.999) {
+          panel.style.width = Math.max(124, Math.floor(natural.width * shrink)) + "px";
+        }
+        panel.style.top = Math.max(0, targetTop - sceneRect.top) + "px";
       });
     };
     fitTray();
@@ -256,6 +266,7 @@ export default function RosieTimekeeper() {
   return (
     <main className="rtk-page" aria-label="Rosie's Timekeeper">
       <div className="rtk-scene">
+        <div className="rtk-art-stage">
         <img
           className="rtk-background"
           src={ART}
@@ -291,6 +302,13 @@ export default function RosieTimekeeper() {
             </defs>
             <circle className="rtk-progress-track" cx="50" cy="50" r="43" />
             <circle className="rtk-progress-dotted" cx="50" cy="50" r="43" />
+            <circle className="rtk-progress-twilight" cx="50" cy="50" r="43" />
+            <g className="rtk-energy-sparks">
+              <path d="M50 3l.46 1.55L52 5l-1.54.46L50 7l-.46-1.54L48 5l1.54-.45Z"/>
+              <path d="M94 48l.38 1.15L95.5 49.5l-1.12.35L94 51l-.38-1.15-1.12-.35 1.12-.35Z"/>
+              <path d="M6 48l.38 1.15L7.5 49.5l-1.12.35L6 51l-.38-1.15-1.12-.35 1.12-.35Z"/>
+              <path d="M50 93l.38 1.15L51.5 94.5l-1.12.35L50 96l-.38-1.15-1.12-.35 1.12-.35Z"/>
+            </g>
             <circle className="rtk-progress-bloom" cx="50" cy="50" r="43"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
@@ -304,7 +322,8 @@ export default function RosieTimekeeper() {
               <g className="rtk-progress-charm" transform={`translate(${markerX} ${markerY})`}>
                 <circle className="rtk-squirrel-aura" r="6.6" />
                 <image className="rtk-squirrel-asset" href={SQUIRREL}
-                  x="-7" y="-7" width="14" height="14" preserveAspectRatio="xMidYMid meet" />
+                  x="-7" y="-7" width="14" height="14" preserveAspectRatio="xMidYMid meet"
+                  transform={mode === "countdown" ? "scale(-1 1)" : undefined} />
               </g>
             )}
           </svg>
@@ -383,6 +402,7 @@ export default function RosieTimekeeper() {
           )}
           </div>
         </section>
+        </div>
       </div>
     </main>
   );
