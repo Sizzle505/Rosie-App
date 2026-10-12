@@ -980,8 +980,11 @@ function CheeseMemoryGame() {
             if (!actualBoard) return;
             // Set the grid just beneath the sticky reaction panel; ensure the
             // entire fourth row remains above the fixed navigation.
+            // "auto" is supported by iOS WebKit. The former "instant"
+            // option silently left the board unmoved on some Safari versions.
+            actualBoard.scrollIntoView({ block: "start", inline: "nearest", behavior: "auto" });
             const target = window.scrollY + actualBoard.getBoundingClientRect().top - boardTop;
-            window.scrollTo({ top: Math.max(0, target), behavior: "instant" });
+            window.scrollTo({ top: Math.max(0, target), behavior: "auto" });
           });
         }
       });
