@@ -7722,7 +7722,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
    centered on its border. Lift the row slightly to allow its drop without
    colliding with the safe-area/home indicator. */
 .app-shell .bottom-nav {
-  bottom: calc(max(8px,env(safe-area-inset-bottom)) + 16px) !important;
+  bottom: calc(max(8px,env(safe-area-inset-bottom)) + 24px) !important;
 }
 .app-shell .bottom-nav > button {
   padding-bottom: 0 !important;
@@ -7732,7 +7732,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   z-index:92;
   left:50%;
   right:auto;
-  bottom:calc(max(8px,env(safe-area-inset-bottom)) + 2px);
+  bottom:calc(max(8px,env(safe-area-inset-bottom)) + 10px);
   transform:translateX(-50%);
   display:flex;
   align-items:center;
@@ -7764,10 +7764,10 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .resources-return--home {top:max(9px,env(safe-area-inset-top));}
 @media(max-width:680px){
   .app-shell .bottom-nav {
-    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 16px) !important;
+    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 24px) !important;
   }
   .app-shell .nav-family-toggle {
-    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 2px);
+    bottom:calc(max(6px,env(safe-area-inset-bottom)) + 10px);
     min-width:79px;min-height:24px;
     padding:3px 9px;
     font-size:9px;
