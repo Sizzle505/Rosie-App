@@ -233,3 +233,8 @@
 }
 .world[aria-label="Open Fortune Teller"] {left:2px;}
 .world[aria-label="Open Cheese Board Exam"] {left:-2px;}
+
+/* October 12: lower only Rosie's Resources by precisely 13px.
+   Preserve all other Grand Salon button positions and stacking priorities. */
+@media(max-width:600px){.world.resourcesWorld {top:-27px;}}
+@media(min-width:601px){.world.resourcesWorld {top:3px;}}

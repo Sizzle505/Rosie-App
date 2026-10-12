@@ -50,19 +50,22 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       assert(geometry.lapOpacity >= .99, "Disabled Lap button is translucent");
       assert(Math.abs((geometry.dial.top + geometry.dial.height/2) - (geometry.ring.top + geometry.ring.height/2)) <= 2,
         "Progress halo is floating outside the clock: " + JSON.stringify(geometry));
-      assert(geometry.ring.top >= geometry.dial.top - geometry.dial.height*.075,
-        "Progress halo crosses Rosie instead of following the clock rim");
+      assert(geometry.ring.top >= geometry.dial.top - geometry.dial.height*.112 &&
+        geometry.ring.width >= geometry.dial.width*1.18 &&
+        geometry.ring.width <= geometry.dial.width*1.225,
+        "Progress halo should hug the enlarged bezel without escaping the illustrated clock: " + JSON.stringify(geometry));
       assert(!geometry.oldImages, "Procedural stand-in button assets are still referenced");
       assert(!geometry.horizontalOverflow, "Unexpected horizontal scrolling");
       await page.screenshot({ path: output + "/" + engine + "-" + width + "x" + height + "-stopwatch.png" });
       await page.getByRole("button", { name: "Start", exact: true }).click();
       await page.waitForTimeout(650);
-      assert(await page.locator(".rtk-progress-charm").count() === 1, "Leading paw must follow the live progress");
+      assert(await page.locator(".rtk-progress-charm .rtk-squirrel-figure").count() === 1, "Tiny squirrel must lead the ring");
       await page.getByRole("button", { name: "Record lap" }).click();
       assert(await page.locator(".rtk-laps li").count() === 1, "Lap recording failed");
+      assert.equal(await page.locator(".rtk-shortcut").count(), 0, "Stopwatch cannot contain countdown shortcuts");
       await page.getByRole("button", { name: "Pause", exact: true }).click();
       await page.getByRole("button", { name: "Timer", exact: true }).click();
-      assert.equal(await page.locator(".rtk-presets button").count(), 5, "Quick timer options must fit as a single row");
+      assert.deepEqual(await page.locator(".rtk-presets button").allTextContents(), ["1m", "2m", "5m", "15m"], "Timer presets must use requested four times");
       const presetsFit = await page.locator(".rtk-utility-inner").evaluate(node => node.scrollHeight <= node.clientHeight+2);
       assert(presetsFit, "Timer presets clipped inside luxury tray");
       await page.getByRole("button", { name: "Set a custom duration" }).click();
@@ -78,7 +81,7 @@ for (const [engine, type] of [["webkit", webkit], ["chromium", chromium]]) {
       assert.equal((await page.locator(".rtk-caption").textContent()).trim(), "COMPLETE");
       await page.screenshot({ path: output + "/" + engine + "-" + width + "x" + height + "-timer.png" });
       await page.getByRole("button", { name: "Show quick timer presets" }).click();
-      assert.equal(await page.locator(".rtk-presets button").count(), 5, "Return to timer presets must work");
+      assert.equal(await page.locator(".rtk-presets button").count(), 4, "Return to timer presets must work");
       assert.equal(failures.length, 0, "Browser errors: " + failures.join(" | "));
       await context.close();
     }

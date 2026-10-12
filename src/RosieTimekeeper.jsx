@@ -27,11 +27,10 @@ function cueComplete() {
   } catch {}
 }
 const PRESETS = [
-  { label: "1 min", ms: 60_000 },
-  { label: "5 min", ms: 5 * 60_000 },
-  { label: "10 min", ms: 10 * 60_000 },
-  { label: "25 min", ms: 25 * 60_000 },
-  { label: "60 min", ms: 60 * 60_000 }
+  { label: "1m", ms: 60_000 },
+  { label: "2m", ms: 2 * 60_000 },
+  { label: "5m", ms: 5 * 60_000 },
+  { label: "15m", ms: 15 * 60_000 }
 ];
 
 function formatClock(ms, fractions = false) {
@@ -274,12 +273,18 @@ export default function RosieTimekeeper() {
           <svg className={"rtk-progress-ring" + (running ? " is-animating" : "")}
             viewBox="0 0 100 100" aria-hidden="true" focusable="false">
             <defs>
-              <linearGradient id="rtk-running-gold" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#fff7ca" />
-                <stop offset="28%" stopColor="#ffe27b" />
-                <stop offset="52%" stopColor="#f1a73d" />
-                <stop offset="72%" stopColor="#fff3b4" />
-                <stop offset="100%" stopColor="#fc5b82" />
+              <linearGradient id="rtk-running-gold" x1="3%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fffbe0" />
+                <stop offset="19%" stopColor="#ffe9a8" />
+                <stop offset="43%" stopColor="#e8ad43" />
+                <stop offset="66%" stopColor="#fff3bc" />
+                <stop offset="83%" stopColor="#d24e65" />
+                <stop offset="100%" stopColor="#fff0a5" />
+              </linearGradient>
+              <linearGradient id="rtk-charm-brass" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fff2c0" />
+                <stop offset="43%" stopColor="#c98b34" />
+                <stop offset="100%" stopColor="#81501f" />
               </linearGradient>
             </defs>
             <circle className="rtk-progress-track" cx="50" cy="50" r="43" />
@@ -287,19 +292,24 @@ export default function RosieTimekeeper() {
             <circle className="rtk-progress-bloom" cx="50" cy="50" r="43"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
+            <circle className="rtk-progress-ruby" cx="50" cy="50" r="43"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference * (1 - dialProgress)} />
             <circle className="rtk-progress-live" cx="50" cy="50" r="43"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
             {showMarker && (
               <g className="rtk-progress-charm" transform={`translate(${markerX} ${markerY})`}>
-                <path className="rtk-charm-sparkle" d="M0 -6.7L.7 -4.8L2.6 -4L.7 -3.3L0 -1.4L-.7 -3.3L-2.6 -4L-.7 -4.8Z" />
-                <circle className="rtk-charm-edge" r="3.9" />
-                <circle className="rtk-charm-core" r="3.1" />
-                <ellipse cx="-1.55" cy="-1.12" rx=".53" ry=".72" fill="#fff2c9" />
-                <ellipse cx="-.43" cy="-1.81" rx=".5" ry=".64" fill="#fff2c9" />
-                <ellipse cx=".78" cy="-1.7" rx=".5" ry=".64" fill="#fff2c9" />
-                <ellipse cx="1.73" cy="-.86" rx=".45" ry=".66" fill="#fff2c9" />
-                <path d="M-1.8 .92Q-1.45 .15-.7 .34Q0 -.18 .65 .35Q1.7 .13 1.8 1.04Q1.77 2.14 .58 1.93Q0 1.63-.53 1.92Q-1.76 2.12-1.8 .92Z" fill="#ffe9b0" />
+                <circle className="rtk-squirrel-halo" r="4.5"/>
+                <circle className="rtk-squirrel-medallion" r="3.62" />
+                <g className="rtk-squirrel-figure">
+                  {/* A tiny, readable squirrel: curled plume, alert ear, muzzle and paws. */}
+                  <path d="M-1.38 1.45C-3.6 1.27-4.29-.36-3.34-1.55c.44-.56 1.26-.56 1.72-.12.41.38.32 1.02-.15 1.28-.28.16-.59.08-.77-.1-.08.66.6 1.2 1.27 1.13Z" fill="#fff0ba" stroke="#7a341f" strokeWidth=".26" strokeLinejoin="round"/>
+                  <path d="M-.98 1.72C-1.2.8-.49-.36.46-.54l.55-1.26.62.75.65-.44.05 1.27c.91.39 1.04 1.16.49 1.64l-1.1.1-.05.56H.86l-.11-.55c-.69.44-1.35.5-1.73.19Z" fill="#fff6d7" stroke="#7d4627" strokeWidth=".24" strokeLinejoin="round"/>
+                  <circle cx="1.44" cy=".04" r=".22" fill="#67233b" />
+                  <circle cx="2.48" cy=".56" r=".18" fill="#9a4a3c" />
+                </g>
+                <path className="rtk-squirrel-star" d="M0 -6L.46 -4.8L1.72 -4.25L.46 -3.73L0 -2.5L-.46 -3.73L-1.72 -4.25L-.46 -4.8Z"/>
               </g>
             )}
           </svg>
@@ -345,12 +355,8 @@ export default function RosieTimekeeper() {
                     </li>
                   ))}
                 </ol>
-              ) : <p className="rtk-empty">Start the stopwatch and tap Lap to mark a split.</p>}
-              {laps.length > 0 && <div className="rtk-shortcut">
-                <span>Quick countdown</span>
-                <button type="button" onClick={() => pickPreset(5 * 60_000)}>5m</button>
-                <button type="button" onClick={() => pickPreset(25 * 60_000)}>25m</button>
-              </div>}
+              ) : <p className="rtk-empty">{running ? "Tap Lap to record your first split." : elapsed > 0 ? "Resume the stopwatch or reset for a new run." : "Tap Start to begin timing."}</p>}
+
             </>
           ) : (
             <>
