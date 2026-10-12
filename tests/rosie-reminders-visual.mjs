@@ -261,6 +261,18 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert.equal(await page.locator("main.fortune-page").count(),1,"fortune route broken");
       const sampleQuestions = page.locator(".quick-prompts button");
       assert.equal(await sampleQuestions.count(),4,"Fortune should offer four whimsical sample questions");
+      // The original approved 28-question pool is the only source of samples.
+      const questionSource = await fs.readFile("src/main.jsx","utf8");
+      const questionArray = questionSource.match(/const QUICK_QUESTIONS = (\[[\s\S]*?\]);/);
+      assert(questionArray, "Fortune sample pool must exist in source");
+      const approvedPool = JSON.parse(questionArray[1]);
+      assert.equal(approvedPool.length,28,"Exactly 28 approved Fortune samples should remain");
+      assert.equal(new Set(approvedPool).size,28,"Fortune questions should not be duplicated");
+      assert.equal(approvedPool[0],"Would this problem improve after a walk and a snack?");
+      assert.equal(approvedPool[27],"Should I follow the sensible route, or the one with better snacks?");
+      for (const text of await sampleQuestions.allTextContents()) {
+        assert(approvedPool.includes(text.trim()),"Unapproved Fortune prompt surfaced: "+text);
+      }
       assert.equal(await page.locator(".fortune-sample-heading").count(),1,"Sample questions label missing");
       const ask = page.locator(".ask-button");
       const fortuneText = page.locator("#question");
@@ -281,6 +293,19 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
         "Second Ask should submit selected question");
       const navToggle=page.getByRole("button",{name:"Switch bottom buttons to Rosie’s Resources"});
       assert.equal(await navToggle.count(),1,"Navigation family switch missing");
+      const position = await navToggle.evaluate(element => {
+        const toggle=element.getBoundingClientRect();
+        const nav=document.querySelector(".bottom-nav").getBoundingClientRect();
+        return {
+          horizontalOffset:Math.abs((toggle.left+toggle.right)/2-(nav.left+nav.right)/2),
+          bottomOffset:Math.abs(toggle.bottom-nav.bottom),
+          inBottomHalf:toggle.top>nav.top+nav.height/2,
+          toggleAboveNavBottom:toggle.bottom<=nav.bottom+2
+        };
+      });
+      assert(position.horizontalOffset<4 && position.bottomOffset<7
+        && position.inBottomHalf && position.toggleAboveNavBottom,
+        "Games/Tools switch should be centered at bottom of nav row: "+JSON.stringify(position));
       await navToggle.click();
       assert.equal(await page.locator("nav.resources-bottom-nav button").count(),3,
         "Resources nav should expose the three utility destinations");
