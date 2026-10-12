@@ -1053,10 +1053,11 @@ function CheeseMemoryGame() {
       startSprint();
       return;
     }
-    // Classic starts on the selected board; tapping Reset later shuffles and
-    // starts a fresh classic examination without changing the chosen mode.
+    // A Classic examination must actually start before any card is playable.
+    // A conspicuous change in Rosie's field notes confirms the button worked.
     resetGame("classic");
     setStarted(true);
+    applyReaction("intrigued", "The exam is underway! Match eight pairs to impress Doctor Rosie.");
     scheduleBoardFocus();
   }
 
@@ -1140,6 +1141,8 @@ function CheeseMemoryGame() {
   }
 
   function chooseCard(index) {
+    // Cards must remain inert until Start launches the selected exam.
+    if (gameMode === "classic" && !started) return;
     // Preview cards cannot be selected; the clock always begins after the reveal.
     if (gameMode === "sprint") {
       if (challengePhase !== "playing") return;
@@ -1303,7 +1306,7 @@ function CheeseMemoryGame() {
                   className={"cheese-card" + (faceUp ? " is-flipped" : "") + (isMatched ? " is-matched" : "")}
                   key={cheese.cardId}
                   onClick={() => chooseCard(index)}
-                  disabled={gameMode === "sprint" && challengePhase !== "playing"}
+                  disabled={gameMode === "sprint" ? challengePhase !== "playing" : !started}
                   aria-label={faceUp ? cheese.name : "Face-down cheese card"}
                 >
                   <span className="cheese-card-inner">
@@ -1355,9 +1358,11 @@ function CheeseMemoryGame() {
                         : challengePhase === "expired" ? `${matched.length} of eight pairs. Rosie permits another attempt.`
                           : "Rosie is preparing your diploma."}
               </span>
-              {gameMode === "sprint" && (challengePhase === "ready" || challengePhase === "expired") && (
-                <button type="button" className="reaction-start-button" onClick={startSprint}>
-                  {challengePhase === "ready" ? "START FLASH FROMAGE" : "TRY FLASH FROMAGE AGAIN"}
+              {(!hasBegun || (gameMode === "sprint" && challengePhase === "expired")) && (
+                <button type="button" className="reaction-start-button" onClick={startOrResetSelectedBoard}>
+                  {gameMode === "sprint"
+                    ? challengePhase === "expired" ? "TRY FLASH FROMAGE AGAIN" : "START FLASH FROMAGE"
+                    : "START CLASSIC EXAM"}
                 </button>
               )}
               {gameMode === "sprint" && (challengePhase === "preview" || challengePhase === "playing") && (
