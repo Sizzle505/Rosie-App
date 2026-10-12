@@ -83,7 +83,8 @@ export default function RosieTimekeeper() {
         if (!panel || !nav || !modeSwitch || !scene) return;
         // Keep the page itself fixed. The cabinet adapts to the actual space
         // between the gold selector and the fixed Resources navigation.
-        panel.style.removeProperty("width");
+        panel.style.removeProperty("height");
+        panel.style.removeProperty("aspect-ratio");
         panel.style.removeProperty("top");
         panel.style.setProperty("--rtk-nav-lift", "0px");
         const sceneRect = scene.getBoundingClientRect();
@@ -92,9 +93,11 @@ export default function RosieTimekeeper() {
         const natural = panel.getBoundingClientRect();
         const targetTop = Math.max(modeBottom + 4, natural.top - 8);
         const available = Math.max(44, navTop - 8 - targetTop);
-        const shrink = Math.min(1, available / natural.height);
-        if (shrink < 0.999) {
-          panel.style.width = Math.max(124, Math.floor(natural.width * shrink)) + "px";
+        // Preserve the illustrated panel width. On shorter iPhones, reduce
+        // only its height and allow the inset lap/timer area to scroll.
+        if (available < natural.height - 1) {
+          panel.style.height = Math.floor(Math.max(44, available)) + "px";
+          panel.style.aspectRatio = "auto";
         }
         panel.style.top = Math.max(0, targetTop - sceneRect.top) + "px";
       });
