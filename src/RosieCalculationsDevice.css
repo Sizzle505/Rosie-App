@@ -53,7 +53,7 @@
 .rc-page .rc-device-housing .rc-housing-left,
 .rc-page .rc-device-housing .rc-housing-right {
   top:clamp(99px,30.5vw,199px);bottom:clamp(100px,31vw,201px);
-  width:16.94%;background-repeat:repeat-y;background-size:100% auto;
+  width:16.94%;background-repeat:repeat-y;background-size:100% 34%;
   z-index:1;
 }
 .rc-page .rc-device-housing .rc-housing-left {
