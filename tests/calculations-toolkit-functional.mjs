@@ -61,6 +61,21 @@ try {
       })),filenames);
       assert(images.every(x=>x.status===200&&x.type?.startsWith("image/")),
         "An approved artwork file was not served: "+JSON.stringify(images));
+      // The original golden image contains very dark engraved relief details.
+      // A global black-to-alpha mask erased that metalwork in an earlier build.
+      const originalFrameShadow=await page.evaluate(async()=>{
+        const img=new Image();
+        img.src="/rosieverse/calculations/toolkit/gold-device.webp";
+        await img.decode();
+        const canvas=document.createElement("canvas");
+        canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
+        const ctx=canvas.getContext("2d",{willReadFrequently:true});
+        ctx.drawImage(img,0,0);
+        const sample=ctx.getImageData(569,300,1,1).data;
+        return {alpha:sample[3],red:sample[0],width:img.naturalWidth};
+      });
+      assert(originalFrameShadow.width===1122&&originalFrameShadow.alpha>=245,
+        "Original approved metallic shadows are becoming transparent: "+JSON.stringify(originalFrameShadow));
     }
     const currencyGeometry=await page.evaluate(()=>{
       const regular=document.querySelector(".rc-tool-card--tip").getBoundingClientRect();
