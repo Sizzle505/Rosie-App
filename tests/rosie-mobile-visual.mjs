@@ -30,7 +30,7 @@ for (const [browserName, browserType] of [["webkit", webkit], ["chromium", chrom
       if (width <= 600) {
         await page.goto(base + "/#home", { waitUntil: "networkidle" });
         await page.locator(".loading-screen-hidden").waitFor();
-        const home = page.locator("main[aria-label='RosieVerse - discover Rosie's worlds']");
+        const home = page.locator("main[aria-label^='RosieVerse - discover']");
         const homeFit = await home.evaluate(root => {
           const rect = el => el.getBoundingClientRect();
           const banner = root.querySelector("header");
