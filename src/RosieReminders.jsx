@@ -71,6 +71,7 @@ export default function RosieReminders() {
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [heroPinned, setHeroPinned] = useState(false);
   const [heroHeight, setHeroHeight] = useState(0);
+  const [organizerHeight, setOrganizerHeight] = useState(220);
   const heroRef = useRef(null);
   const organizerRef = useRef(null);
   const [storageError, setStorageError] = useState("");
@@ -203,13 +204,25 @@ export default function RosieReminders() {
     };
   }, []);
 
+  useEffect(() => {
+    const node = organizerRef.current;
+    if (!node) return undefined;
+    const measure = () => {
+      const next = node.getBoundingClientRect().height;
+      setOrganizerHeight(previous => Math.abs(next - previous) > 0.5 ? next : previous);
+    };
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(measure);
+    observer?.observe(node);
+    measure();
+    return () => observer?.disconnect();
+  }, [section, tab]);
+
   const scrollToOrganizer = () => {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       const node = organizerRef.current;
       if (!node) return;
       const height = heroRef.current?.getBoundingClientRect().height || heroHeight;
-      const safeInset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rr-top-safe")) || 0;
-      const pinnedBottom = height * .7 + safeInset + 14;
+      const pinnedBottom = height * .7 + 14;
       const target = node.getBoundingClientRect().top + window.scrollY - pinnedBottom;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       window.scrollTo({top:Math.max(0,target),behavior:reduced?"auto":"smooth"});
@@ -273,7 +286,8 @@ export default function RosieReminders() {
     return () => document.removeEventListener("keydown", onEscape);
   }, [editorOpen]);
 
-  return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer">
+  return <main className="rr-page" aria-label="Rosie's Reminders - Personal Organizer"
+    style={{"--rr-hero-middle-height":heroHeight * .7 + "px","--rr-panel-height":organizerHeight + "px"}}>
     <div className={"rr-hero-pin"+(heroPinned ? " is-pinned" : "")}
       style={{height:heroHeight ? heroHeight * .7 : 0}}
       aria-hidden="true">
