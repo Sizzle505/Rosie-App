@@ -186,6 +186,9 @@ export default function RosieReminders() {
         const rect = heroRef.current?.getBoundingClientRect();
         if (!rect || rect.height <= 0) return;
         const nextHeight = rect.height;
+        // Align the document-wide wallpaper precisely with the hero's lower edge.
+        // This also fills iOS safe-area / overscroll space with the same source.
+        document.documentElement.style.setProperty("--rr-wallpaper-offset", nextHeight + "px");
         const nextPinned = rect.top <= -(nextHeight * 0.15);
         setHeroHeight(previous => Math.abs(previous - nextHeight) > 0.5 ? nextHeight : previous);
         setHeroPinned(previous => previous === nextPinned ? previous : nextPinned);
@@ -199,6 +202,7 @@ export default function RosieReminders() {
     return () => {
       cancelAnimationFrame(frame);
       resizeObserver?.disconnect();
+      document.documentElement.style.removeProperty("--rr-wallpaper-offset");
       window.removeEventListener("scroll", measure);
       window.removeEventListener("resize", measure);
     };
