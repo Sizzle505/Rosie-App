@@ -195,5 +195,5 @@
 /* October 12 placement - normal calculator starts 18px within the banner seam. */
 .rc-page .rc-calculator-stage {
   margin-top: -18px;
-  z-index: 82; /* expose all 18px rather than hiding it behind the sticky illustration */
+  z-index: 3; /* starts 18px higher, but remains BELOW the sticky Rosie header */
 }
