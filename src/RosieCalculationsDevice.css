@@ -224,3 +224,96 @@
   }
 }
 /* END ROSIE CALCULATIONS COMPACT HANDOFF */
+
+
+/* Rosie Calculations - readable, full-height instrument fields.
+   The earlier image background contained a narrow decorative slit even when
+   the actual input was 44px tall. Draw the live controls as genuine inset
+   ivory enamel recesses rather than stretching that shallow slit. */
+.rc-page .rc-device .rc-field {
+  width: 100%;
+  min-width: 0;
+  align-items: stretch;
+  gap: 6px;
+}
+.rc-page .rc-device .rc-field > span {
+  display: block;
+  width: 94%;
+  margin-inline: auto;
+  font: normal clamp(14px, 3.7vw, 16px)/1.26 Georgia, "Times New Roman", serif;
+  color: #4a2511;
+  text-shadow: 0 1px 1px #ffefd0;
+}
+.rc-page .rc-device .rc-form-grid {
+  gap: 12px;
+}
+.rc-page .rc-device .rc-field input,
+.rc-page .rc-device .rc-field select,
+.rc-page .rc-device .rc-field:has(select) select,
+.rc-page .rc-device .rc-field:has(input[type="date"]) input {
+  box-sizing: border-box;
+  display: block;
+  width: 94%;
+  max-width: 94%;
+  height: 54px;
+  min-height: 54px;
+  margin: 0 auto;
+  padding: 9px 18px;
+  border: 2px solid #946222 !important;
+  border-radius: 12px;
+  background: linear-gradient(180deg,#fff8e2 0%,#fff1ce 44%,#e9cb91 100%) !important;
+  box-shadow:
+    0 0 0 2px #d4a14f,
+    inset 0 0 0 2px #fff0c4,
+    inset 0 3px 7px #88633233,
+    0 3px 6px #3d1a0a50 !important;
+  color: #311a0d;
+  font: normal 18px/1.22 Georgia, "Times New Roman", serif;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  -webkit-text-fill-color: #311a0d;
+}
+.rc-page .rc-device .rc-field select,
+.rc-page .rc-device .rc-field:has(select) select {
+  padding-right: 38px;
+  cursor: pointer;
+  background-image:
+    linear-gradient(45deg,transparent 50%,#764717 50%),
+    linear-gradient(135deg,#764717 50%,transparent 50%),
+    linear-gradient(180deg,#fff8e2 0%,#fff1ce 44%,#e9cb91 100%) !important;
+  background-position: calc(100% - 23px) 50%, calc(100% - 17px) 50%, center !important;
+  background-size: 6px 6px, 6px 6px, 100% 100% !important;
+  background-repeat: no-repeat !important;
+}
+.rc-page .rc-device .rc-field input:focus-visible,
+.rc-page .rc-device .rc-field select:focus-visible {
+  outline: 3px solid #791731;
+  outline-offset: 4px;
+}
+.rc-page .rc-device .rc-tool-result {
+  margin-top: 9px;
+  min-height: 132px;
+  padding: 22px 18px 26px;
+  gap: 7px;
+}
+.rc-page .rc-device--tip .rc-tool-result,
+.rc-page .rc-device--split .rc-tool-result {
+  min-height: 172px;
+  padding: 22px 18px 30px;
+}
+@media (max-width: 380px) {
+  .rc-page .rc-device .rc-field input,
+  .rc-page .rc-device .rc-field select,
+  .rc-page .rc-device .rc-field:has(select) select,
+  .rc-page .rc-device .rc-field:has(input[type="date"]) input {
+    height: 52px;
+    min-height: 52px;
+    font-size: 17px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .rc-page .rc-device .rc-field select,
+  .rc-page .rc-device .rc-field:has(select) select {
+    padding-right: 36px;
+  }
+}
