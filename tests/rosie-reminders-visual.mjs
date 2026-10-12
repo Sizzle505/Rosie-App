@@ -263,7 +263,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
       assert.equal(await sampleQuestions.count(),4,"Fortune should offer four whimsical sample questions");
       // The original approved 28-question pool is the only source of samples.
       const questionSource = await fs.readFile("src/main.jsx","utf8");
-      const questionArray = questionSource.match(/const QUICK_QUESTIONS = (\\[[\\s\\S]*?\\]);/);
+      const questionArray = questionSource.match(/const QUICK_QUESTIONS = (\[[\s\S]*?\]);/);
       assert(questionArray, "Fortune sample pool must exist in source");
       const approvedPool = JSON.parse(questionArray[1]);
       assert.equal(approvedPool.length,28,"Exactly 28 approved Fortune samples should remain");
