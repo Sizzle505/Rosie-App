@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { chromium } from "playwright";
 
+const pairedFieldIndices = { 0:[1,2], 1:[2,3], 3:[2,3], 5:[1,2], 6:[2,3] };
 const labels = [
   "Tip Calculator",
   "Unit Conversions",
@@ -120,7 +121,7 @@ try {
           const r=node.getBoundingClientRect();
           const label=node.closest(".rc-field").querySelector("span").getBoundingClientRect();
           const style=getComputedStyle(node);
-          return {x:r.x,right:r.right,width:r.width,height:r.height,
+          return {x:r.x,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
             labelLeft:label.left,paddingLeft:parseFloat(style.paddingLeft),
             border:parseFloat(style.borderLeftWidth),fontSize:parseFloat(style.fontSize)};
         });
@@ -131,11 +132,25 @@ try {
         "Device frame horizontally clipped: "+labels[index]+" "+JSON.stringify(geometry));
       assert(geometry.surface.x>=geometry.frame.x+20 && geometry.surface.right<=geometry.frame.right-20,
         "Tool surface invades ornamental rails: "+labels[index]);
-      assert(geometry.inputs.every(field => field.width>=120 && field.height>=52 &&
-        field.paddingLeft>=14 && field.border>=2 && field.fontSize>=17 &&
+      const paired = pairedFieldIndices[index] || [];
+      assert(geometry.inputs.every((field,fieldIndex) =>
+        field.width >= (paired.includes(fieldIndex) ? 85 : 120) &&
+        field.height>=52 &&
+        field.paddingLeft >= (paired.includes(fieldIndex) ? 10 : 14) &&
+        field.border>=2 && field.fontSize>=17 &&
         Math.abs(field.x-field.labelLeft)<=2 &&
         field.x>=geometry.surface.x-1 && field.right<=geometry.surface.right+1),
         "Input controls must have full-height light recesses, padded values and aligned labels: "+labels[index]+" "+JSON.stringify(geometry));
+      if (paired.length) {
+        const [left,right]=paired.map(fieldIndex=>geometry.inputs[fieldIndex]);
+        assert(Math.abs(left.top-right.top)<=2 && left.right<right.x &&
+          Math.abs(left.width-right.width)<=2,
+          "Compact short-value fields should share an unclipped row: "+labels[index]+" "+JSON.stringify(geometry.inputs));
+        for (const [fieldIndex,field] of geometry.inputs.entries()) {
+          if (!paired.includes(fieldIndex)) assert(field.width>left.width*1.8,
+            "Long-value fields should remain full width: "+labels[index]);
+        }
+      }
       assert(geometry.scrollWidth<=width+2,
         "Page has horizontal overflow: "+labels[index]+" "+geometry.scrollWidth);
       assert(await panel.locator(".rc-tool-result").count()===1);
