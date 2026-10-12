@@ -148,3 +148,48 @@
 
 /* Grand Salon: raise every illustrated destination as a single group. */
 .worldGrid { margin-top: -36px; }
+
+
+/* iPhone Grand Salon: one full-height illustrated stage, not a tall column
+   that pushes the painted shoreline beneath Safari's visible screen.
+   The heading is 30% smaller, and begins exactly 20px lower. The hero is
+   the flexible spacer; the real image-backed destination buttons keep their
+   natural aspect ratios and remain above the raised navigation bar. */
+@media (max-width: 600px) {
+  :global(.app-shell.page-home) {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+  .home {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    gap: 3px;
+    padding: max(4px, env(safe-area-inset-top)) 8px
+      calc(74px + env(safe-area-inset-bottom));
+    background-position: center bottom;
+    overflow: hidden;
+  }
+  .banner {
+    flex: none;
+    width: 70%;
+    max-width: 70%;
+    margin: 20px auto 0;
+  }
+  .hero {
+    flex: 1 1 auto;
+    height: min(31dvh, 310px);
+    min-height: 124px;
+    max-height: min(36dvh, 370px);
+    margin: 0 0 2px;
+  }
+  .worldGrid {
+    flex: none;
+    margin-top: -36px;
+  }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  .hero { min-height: 105px; max-height: 28dvh; }
+}
