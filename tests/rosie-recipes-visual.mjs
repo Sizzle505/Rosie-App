@@ -16,7 +16,7 @@ for(const [name,browserType,viewport] of [
  await page.goto(origin+"/#recipes",{waitUntil:"networkidle"});
  await page.locator(".recipes-grid .recipes-card").first().waitFor();
  await page.locator(".app-shell.app-shell-visible").waitFor();
- await page.waitForTimeout(200);
+ await page.locator(".loading-screen").waitFor({state:"hidden",timeout:10000});
  await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
  assert.equal(await page.locator(".recipes-grid .recipes-card").count(),25,`${name}: 25 cards`);
  for(const file of assets){
@@ -29,6 +29,9 @@ for(const [name,browserType,viewport] of [
  assert.ok(await page.locator(".recipes-top-scene").evaluate(el=>getComputedStyle(el).backgroundImage.includes("recipes-hero.webp")));
  assert.ok(await page.locator(".recipes-card").first().evaluate(el=>getComputedStyle(el).backgroundImage.includes("recipes-card-frame.webp")));
  await page.screenshot({path:`artifacts/rosie-recipes/${name}-collection.png`,fullPage:false});
+ await page.locator(".recipes-grid .recipes-card").first().scrollIntoViewIfNeeded();
+ await page.waitForTimeout(200);
+ await page.screenshot({path:`artifacts/rosie-recipes/${name}-cards.png`,fullPage:false});
  await page.getByPlaceholder("Find a recipe…").fill("Pawsta");
  assert.equal(await page.locator(".recipes-grid .recipes-card").count(),1,`${name}: search`);
  await page.getByPlaceholder("Find a recipe…").fill("");
