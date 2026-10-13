@@ -60,7 +60,7 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
         <strong>{recipe.category}</strong>
       </div>
       <div className="recipes-parchment-stats">
-        <span title="Total time">{recipe.timeLabel || "—"}</span>
+        <span title={recipe.timeLabel}>{recipe.totalMinutes != null ? `${recipe.totalMinutes}m${recipe.timeLabel.includes("chilling") ? " + chill" : ""}` : "—"}</span>
         <span title="Yield">{recipe.servingsLabel || "—"}</span>
         <span title="Difficulty">{recipe.difficulty || "—"}</span>
       </div>
