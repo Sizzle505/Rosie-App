@@ -42,6 +42,14 @@ function flourish(kind,size,accent){
 function isFinder(row,col,n){
   return (row<8 && col<8)||(row<8 && col>=n-8)||(row>=n-8 && col<8);
 }
+function isFinderCore(row,col,n){
+  return (row<7 && col<7)||(row<7 && col>=n-7)||(row>=n-7 && col<7);
+}
+function softFinder(x,y,ink){
+  return `<rect x="${x}" y="${y}" width="7" height="7" rx=".9" fill="${ink.dark}"/>`+
+    `<rect x="${x+1}" y="${y+1}" width="5" height="5" rx=".65" fill="${ink.light}"/>`+
+    `<rect x="${x+2}" y="${y+2}" width="3" height="3" rx=".5" fill="${ink.dark}"/>`;
+}
 function pawCenter(n,offset,ink){
   const x=fmt(offset+n/2), y=fmt(offset+n/2);
   const r=fmt(Math.min(3.7,n*.068)),k=fmt(r*.55),p=fmt(r*.27);
@@ -64,6 +72,8 @@ export function makeRosieQr(payload,{style="emerald",design="royal",rounded=fals
   for(let row=0;row<n;row++)for(let col=0;col<n;col++){
     if(!qr.isDark(row,col))continue;
     const x=col+o,y=row+o;
+    // Retain the full 7x7 finder geometry, rendered as a rounded nested eye.
+    if(rounded&&isFinderCore(row,col,n))continue;
     if(rounded&&!isFinder(row,col,n)){
       pieces.push(`<rect x="${x}" y="${y}" width="1" height="1" rx=".17" fill="${ink.dark}"/>`);
     }else{
@@ -71,6 +81,7 @@ export function makeRosieQr(payload,{style="emerald",design="royal",rounded=fals
     }
   }
   pieces.push(`<path fill="${ink.dark}" d="${squares}"/>`);
+  if(rounded)pieces.push(softFinder(o,o,ink)+softFinder(o+n-7,o,ink)+softFinder(o,o+n-7,ink));
   // Optional central crest is deliberately small. Even with H correction, test on a phone.
   if(centerPaw && n<=61)pieces.push(pawCenter(n,o,ink.dark));
   pieces.push("</svg>");
