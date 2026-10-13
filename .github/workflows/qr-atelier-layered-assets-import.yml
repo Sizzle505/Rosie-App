@@ -1,0 +1,71 @@
+name: QR Atelier layered assets import
+on:
+  push:
+    branches:
+      - work/qr-atelier-foundation-20261012
+    paths:
+      - .github/workflows/qr-atelier-layered-assets-import.yml
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download approved originals from Dropbox
+        shell: bash
+        env:
+          URL_HEADER_SIGN: "https://uce552ecceef98d68c58645fed91.dl.dropboxusercontent.com/cd/0/get/DJ4K7d1SoGvDWfdNGmN4TiroMCGUD0czBbwLHjuQa9u0je2iJxeqhgaJM0Lr7zAFplPDo8rnAUKYV31_DdDF5cr_cNALAA7L7jTteEVjDpcYjPnMTR-x0IqlnJSM2nhCylDT9bEX6eqH2-84RM-rp8zYTQw4I7H90Q5_2mhVhzV6Sw/file?c_luid=667ded1d"
+          URL_WORKBENCH_FRAME: "https://ucb1f7bb8b662ecbb6c9c80ec0b2.dl.dropboxusercontent.com/cd/0/get/DJ7boT7MqTIWzYjWA5eHR7KVOZFqBx26uNSvihNiawt_CsMjTAyjBoKiBNx-rm7uirwLXXrqN9pZq_yeAPQGYLVRtKZe9xsHrJYA6hXXpU_ekmK6IuXDtsfQ9ga775pe9wcMLDWn0jtQq-VW33R4o49BpCUR1IBr__Uc_97ZXw1zog/file?c_luid=667ded1d"
+          URL_TILE_IVORY: "https://uc5c4bb67b94c2f0a7d71d2a7be1.dl.dropboxusercontent.com/cd/0/get/DJ4nbqedTlOTsQ3cGmMydVaJI_GpCFfpV3kSo4Y2I1hjhrftHDISe9wkR7NCX3ZY49CUG6Ybkb77hsGIgHUlhFP18Rd6CHFIYRbttbgnhxpWtY7h59_426fbVUX7-m_GFbJXMG76C2W8RZDO0LP1iaIVe7EJ1yzQzNOZ_JG41YobJw/file?c_luid=667ded1d"
+          URL_TILE_EMERALD: "https://uca8f48237fb270bec49f86f280b.dl.dropboxusercontent.com/cd/0/get/DJ4NG7xuYyvAC8ZK0kddXE1ddSJ7hOGu8Jpk0F29Ecf40QY-CktTFd4JsFUSr7YZL-RhscXJN6Pphn68Arebnq90nPVu0jNl6V5sm-Jsxr7TcXJ4K2JmXylDjSndm1pVdpSOIe0EqMzi11ZVjvluozzftzde3d_Hg9iSrArS32Avgw/file?c_luid=667ded1d"
+          URL_BUTTON_BURGUNDY: "https://uc9d9131183664ba07911f4a120e.dl.dropboxusercontent.com/cd/0/get/DJ4EVP9nVvcYMZG-DnEsxgqGzbE74RdZvvuRTnb81brTJ3r5-WH9kv1B985jS4oC9ireL2Jx6MtFIbZFtw7gey3vlXXAbTvoBC3_S6qnbJCMgsz-k1YhZFPiIgJ_QSzE-r8brUizJJWJ06SiSHoWL37bujBauMcqHkhg2DZSgp8XLg/file?c_luid=667ded1d"
+          URL_BUTTON_OBSIDIAN: "https://ucc756717d9fff736e99dc3e0d63.dl.dropboxusercontent.com/cd/0/get/DJ7t4w8pySAbv4H7baX6Ceyt9pV63R7adTf6orxkzdG3BBnDdy5uJYn7UaRuFsaVPlRLxCcPltSZ1XD-88wr1fTq7M3k28EsSna0Vgo-wveU0pRrfO8rVZH_omy6f-MndRSEYxNRA0XqjglrxSNWdEC5avVrqJqpvkDifbF0Ynjw_w/file?c_luid=667ded1d"
+          URL_IDLE_PAW: "https://uce58e1aebd68ac742e973b549e6.dl.dropboxusercontent.com/cd/0/get/DJ5m6tk4UmyXBDfxDw0dqsNFUCFYHMP57URzov4rU7Zxnee-9JLYn8-lCMB2Riss7p6F8ex_67J10k3fpIGa2nnECRDfeCI4Wg-SH4rCaDrgZtZpe6uG5Z-Pc02D1aRp7hzGZsU87yfxeJ9bl4sPCCX4bWlvRBOT74hqKo7u62LnhA/file?c_luid=667ded1d"
+          URL_COLLECTION_FRAME: "https://uc3b614998757b7d3dafbf49a1e5.dl.dropboxusercontent.com/cd/0/get/DJ7Gky6BtBS8sxvxt9XctaiBdWu2J9TsA-DvMi9U-92CNhShqPBb2xS05HE38rvoAQ-vt1sVt-iLQ82_-Zl16I5jygylJZp-xWBeEPGVcq4hi3CXarKhqC_YmKP2JpyRHHtPngWxQji40paJCkxlLpDHh3Nqsi2Pwy_q2D2uJUA52A/file?c_luid=667ded1d"
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/qr-atelier-approved
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/header-sign.png" "$URL_HEADER_SIGN"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/workbench-frame.png" "$URL_WORKBENCH_FRAME"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/tile-ivory.png" "$URL_TILE_IVORY"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/tile-emerald.png" "$URL_TILE_EMERALD"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/button-burgundy.png" "$URL_BUTTON_BURGUNDY"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/button-obsidian.png" "$URL_BUTTON_OBSIDIAN"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/idle-paw.png" "$URL_IDLE_PAW"
+          curl -fsSL --retry 2 --max-time 110 -o "/tmp/qr-atelier-approved/collection-frame.png" "$URL_COLLECTION_FRAME"
+          python3 -m pip install --quiet Pillow
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          base=Path("/tmp/qr-atelier-approved")
+          dest=Path("public/qr-atelier")
+          dest.mkdir(parents=True,exist_ok=True)
+          dimensions={"header-sign":1200,"workbench-frame":1024,"tile-ivory":360,"tile-emerald":360,"button-burgundy":1250,"button-obsidian":1250,"idle-paw":360,"collection-frame":1200}
+          for key,max_width in dimensions.items():
+              img=Image.open(base/(key+".png")).convert("RGBA")
+              alpha=img.getchannel("A")
+              extent=alpha.point(lambda a:255 if a>=16 else 0).getbbox()
+              if extent is None: raise ValueError("Asset has no visible pixels: "+key)
+              pad=8
+              extent=(max(0,extent[0]-pad),max(0,extent[1]-pad),min(img.width,extent[2]+pad),min(img.height,extent[3]+pad))
+              img=img.crop(extent)
+              if img.width > max_width:
+                  ratio=max_width/img.width
+                  img=img.resize((max_width,max(1,round(img.height*ratio))),Image.Resampling.LANCZOS)
+              img.save(dest/(key+".webp"),"WEBP",quality=90,method=6,exact=True)
+              print(key,img.size,(dest/(key+".webp")).stat().st_size)
+          PY
+      - name: Commit optimized individual WebP files
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/qr-atelier/*.webp
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(qr): import transparent Atelier layers from Dropbox"
+            git push origin "HEAD:work/qr-atelier-foundation-20261012"
+          fi
