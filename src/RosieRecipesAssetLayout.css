@@ -1,0 +1,148 @@
+/* Purpose-built overlays for the real Recipes artwork.
+   Hero 821x1916, title/controls 2172x724, card 1086x1448, parchment 977x1610. */
+.app-shell.page-recipes > .recipes-page {overflow-x:clip;background:linear-gradient(#64300c,#b66c21 65%,#70300a)}
+.recipes-page::before {background-image:url("/rosieverse/recipes/recipes-continuation.webp");background-position:center 460px;background-size:min(100%,700px) auto;background-repeat:repeat-y;opacity:.92}
+.recipes-top-scene {width:min(100%,700px);aspect-ratio:821/1916}
+.recipes-heading {padding-top:clamp(348px,97vw,690px)}
+.recipes-crest {width:min(100%,620px);min-height:0;height:auto}
+.recipes-crest.has-art>img {width:100%;height:auto;filter:drop-shadow(0 4px 8px #591700a8)}
+.recipes-heading>p {margin:2px auto 18px;padding:0 20px;font-size:clamp(12px,2.4vw,16px);line-height:1.45}
+.recipes-index {background:linear-gradient(120deg,#f4d8a9f5,#fff3d3f9 52%,#f2d5a3f5);border-color:#d29740;box-shadow:inset 0 0 0 2px #ffe9b0,inset 0 0 0 5px #dbad63,0 12px 34px #4e1c0780;padding-top:16px}
+.recipes-index-header {padding:7px 5px 3px}
+.recipes-index h2 {margin:1px 0 5px;line-height:1.08}
+.recipes-index-header p {font-size:clamp(12px,2.6vw,14px)}
+/* The top third of the actual UI asset is the decorative search shell. */
+.recipes-search-row {display:block;position:relative;width:100%;height:auto;aspect-ratio:2172/320;margin:12px 0 0;background:url("/rosieverse/recipes/recipes-controls.webp") center top/100% auto no-repeat}
+.recipes-search {position:absolute;top:19%;bottom:19%;left:23%;width:64%;min-width:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none}
+.recipes-search>span:not(.recipes-visually-hidden){display:none}
+.recipes-search input {height:100%;min-height:0;width:100%;padding:0;font-size:clamp(13px,3vw,17px);color:#492509;outline:0}
+.recipes-sort {position:absolute;top:calc(100% + 4px);right:0;width:min(48%,190px);height:38px;max-width:none;background:linear-gradient(#fffae8,#edc383);border:1px solid #ca8b31;border-radius:20px}
+.recipes-sort select {height:100%;min-height:0;padding:0 7px;font-size:12px}
+.recipes-category-tabs {margin-top:45px;gap:6px}
+.recipes-category-tabs button {white-space:nowrap;min-height:37px;border-width:2px;box-shadow:inset 0 0 0 1px #fff1c7,0 2px 4px #66350b38}
+.recipes-category-tabs button.is-active {box-shadow:inset 0 0 0 1px #ffd27a,0 3px 6px #66350b61}
+.recipes-count {margin:3px 0 12px}
+.recipes-grid {gap:clamp(7px,2.4vw,18px)}
+.recipes-card {aspect-ratio:1086/1448;border:0;border-radius:0;overflow:visible;background:url("/rosieverse/recipes/recipes-card-frame.webp") center/100% 100% no-repeat;filter:drop-shadow(0 3px 5px #57301358)}
+.recipes-card-image {left:20.3%;right:20.3%;top:13.6%;height:39.8%;gap:1px;border:0;border-radius:10px;background:radial-gradient(circle at 28% 20%,#fff9dbb7,transparent 61%),linear-gradient(145deg,#c58b46,#f6db9d 55%,#b07530)}
+.recipes-card-image--desserts {background:radial-gradient(circle at 28% 20%,#fff0d4a1,transparent 64%),linear-gradient(130deg,#bd7248,#f0bd95 56%,#97432c)}
+.recipes-card-image--breakfast {background:radial-gradient(circle at 28% 20%,#fff9d3be,transparent 64%),linear-gradient(130deg,#ca852c,#ffe4a2 56%,#a9682f)}
+.recipes-card-image--small-bites {background:radial-gradient(circle at 28% 20%,#fff7d9be,transparent 64%),linear-gradient(130deg,#baa06c,#f8e6ba 56%,#ba7e37)}
+.recipes-dish-symbol {font-size:clamp(24px,7vw,68px);color:#87531f;text-shadow:0 1px 3px #fff3d3}
+.recipes-card-image small {font-size:clamp(5px,1.1vw,9px);letter-spacing:.09em}
+.recipes-card-copy {left:14%;right:14%;top:58%;height:13.9%;gap:2px}
+.recipes-card-copy strong {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:clamp(12px,3.1vw,23px);line-height:1.05;overflow-wrap:break-word;max-width:100%}
+.recipes-card-copy small {font-size:clamp(8px,1.8vw,13px)}
+.recipes-card-metrics {position:absolute;top:80.3%;left:10%;right:10%;height:7%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;justify-items:center;gap:5%;color:#774617;font-size:clamp(9px,2.2vw,14px);font-weight:700}
+.recipes-favorite {top:13%;right:10%;width:clamp(26px,7.5vw,36px);height:clamp(26px,7.5vw,36px)}
+/* Show the complete scroll-safe parchment at its true aspect ratio. */
+.recipes-detail {margin:8px auto 0;padding:0;border:0;background:transparent;box-shadow:none;width:100%;max-width:610px}
+.recipes-detail::before {display:none}
+.recipes-detail-actions {margin:0 auto 10px;width:94%}
+.recipes-detail-actions button {border:2px solid #dfad55;background:linear-gradient(#fff5d8,#e8c28d)}
+.recipes-parchment-art {position:relative;width:100%;aspect-ratio:977/1610}
+.recipes-parchment-art>img {display:block;width:100%;height:100%;object-fit:contain;user-select:none;pointer-events:none}
+.recipes-parchment-title {position:absolute;top:9.2%;left:21%;width:58%;height:8.4%;display:flex;align-items:center;justify-content:center}
+.recipes-parchment-title h2 {margin:0;color:#6c3511;text-align:center;font-variant:small-caps;font-size:clamp(14px,3.85vw,31px);line-height:1.05;overflow-wrap:break-word}
+.recipes-parchment-display {position:absolute;left:15%;right:15%;top:21%;height:17.5%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;background:radial-gradient(ellipse at center,#edcf939c,transparent 70%);color:#844910}
+.recipes-parchment-display .recipes-dish-symbol {font-size:clamp(32px,10vw,77px)}
+.recipes-parchment-display>span:not(.recipes-dish-symbol){font-size:clamp(8px,1.7vw,13px);letter-spacing:.1em}
+.recipes-parchment-display strong {font-size:clamp(12px,2.8vw,19px);font-variant:small-caps}
+.recipes-parchment-stats {position:absolute;top:41.65%;left:13%;width:74%;height:5%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;justify-items:center;gap:2%;color:#68380f;font-size:clamp(10px,2.1vw,15px)}
+.recipes-parchment-message {position:absolute;left:17%;right:17%;top:51%;bottom:10%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#6b421d}
+.recipes-parchment-message h3 {font-size:clamp(17px,4.7vw,29px);font-variant:small-caps;margin:5px 0 10px}
+.recipes-parchment-message p {margin:0;font-size:clamp(12px,2.6vw,17px);line-height:1.55}
+.recipes-parchment-message>span {font-size:clamp(10px,2.4vw,14px);margin-top:20px;color:#9b632b}
+.recipes-written-method {margin:7px auto 0;width:88%;padding:20px clamp(18px,5vw,40px);background:linear-gradient(120deg,#f8e4b9,#fff5df 45%,#f8deae);border:2px solid #bc822c;box-shadow:inset 0 0 0 3px #feeac2,0 4px 14px #4b1c0750;border-radius:16px;color:#592c0b}
+.recipes-written-method h3 {font-variant:small-caps;font-size:23px;margin:24px 0 10px}
+.recipes-written-method .recipes-eyebrow {text-align:center}
+@media(max-width:600px){.recipes-body{padding-inline:6px}.recipes-heading{padding-top:95vw}.recipes-index{margin-inline:4px;padding:13px 10px 28px}.recipes-crest{width:100%}.recipes-heading>p{font-size:12px;padding:0 25px;margin:1px auto 12px}.recipes-index-header h2{font-size:25px}.recipes-grid{gap:6px}.recipes-detail{max-width:100%}.recipes-parchment-message{left:19%;right:19%}}
+@media(max-width:360px){.recipes-card-copy strong{font-size:11px}.recipes-card-metrics{font-size:9px}.recipes-heading{padding-top:96vw}}
+@media print{.recipes-detail{width:100%!important;max-width:700px!important}.recipes-parchment-art{break-inside:avoid;max-width:480px;margin:auto}.recipes-written-method{border:0;box-shadow:none;background:white;width:100%}}
+
+/* Native iOS Safari select styling must not override the ivory-gold UI. */
+.recipes-sort {position:absolute;isolation:isolate;color-scheme:light}
+.recipes-sort select {position:relative;display:block;width:100%;height:100%;max-width:100%;
+  -webkit-appearance:none;appearance:none;border:none;border-radius:inherit;
+  outline:0;background:transparent!important;color:#60320e!important;
+  -webkit-text-fill-color:#60320e;text-align:center;text-align-last:center;
+  font:600 clamp(11px,2.5vw,14px)/1 Georgia,serif;
+  padding:0 22px 0 9px;box-shadow:none;cursor:pointer}
+.recipes-sort:after {content:"▾";position:absolute;z-index:1;right:10px;top:50%;transform:translateY(-54%);
+  font-size:15px;color:#8b4b12;pointer-events:none}
+.recipes-sort select option {color:#60320e;background:#fff2d6}
+
+
+/* The Founding Cookbook: real source content and legible copy. */
+.recipes-heading .recipes-human-warning {margin-top:-7px;margin-bottom:18px;font-size:clamp(11px,2.3vw,14px);
+  letter-spacing:.012em;max-width:520px;color:#fff6df}
+.recipes-index-header {padding-bottom:6px}
+.recipes-card-copy small {overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%;color:#8c5524}
+.recipes-parchment-stats span {display:block;max-width:100%;white-space:nowrap;font-size:clamp(8px,2vw,14px);
+  line-height:1.2;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.recipes-parchment-message h3 {max-width:100%;font-size:clamp(15px,4vw,25px);
+  line-height:1.08;margin:4px 0 8px;overflow-wrap:break-word}
+.recipes-parchment-message p {font-size:clamp(11px,2.5vw,16px);line-height:1.4}
+.recipes-parchment-message>span {margin-top:12px}
+.recipes-written-method {line-height:1.55;overflow-wrap:break-word}
+.recipes-written-method .recipes-subtitle {font-size:clamp(19px,4.8vw,29px);
+  text-align:center;line-height:1.22;margin:13px auto 10px;color:#593010;max-width:570px}
+.recipes-written-method .recipes-detail-description {font-style:italic;font-size:clamp(14px,3vw,17px);
+  line-height:1.5;color:#76491d;margin:12px 0 15px}
+.recipes-overview-meta {text-align:center;padding:10px 4px;margin:8px 0 14px;
+  border-block:1px solid #dbb77b;font-size:clamp(12px,2.4vw,14px);line-height:1.9}
+.recipes-overview-meta span {padding-inline:4px;color:#aa7a32}
+.recipes-written-method h3:not(.recipes-subtitle) {font-size:clamp(23px,5vw,29px);color:#673911}
+.recipes-ingredient-list {font-size:clamp(15px,3vw,17px)}
+.recipes-ingredient-list label {padding-block:10px}
+.recipes-steps {font-size:clamp(15px,3vw,17px);line-height:1.65}
+.recipes-steps li {padding-bottom:14px;padding-left:4px}
+.recipes-steps li::marker {color:#a16b23;font-weight:bold}
+.recipes-note {margin-top:20px;background:linear-gradient(115deg,#f9dca9,#fff0cf);
+  border-left:4px solid #b57923;border-radius:9px}
+.recipes-note strong {font-size:17px;font-variant:small-caps;color:#6e3712}
+.recipes-human-only {margin:23px 0 3px;padding:9px 0 0;border-top:1px solid #dfbb7b;
+  font-size:12px;line-height:1.45;text-align:center;font-style:italic;color:#75502e}
+@media(max-width:600px){
+  .recipes-parchment-message {left:18.5%;right:18.5%;top:49.8%;bottom:9.2%}
+  .recipes-parchment-message h3 {font-size:clamp(14px,3.85vw,19px)}
+  .recipes-parchment-message p {font-size:clamp(10.5px,2.7vw,13px)}
+  .recipes-heading .recipes-human-warning {padding-inline:18px;margin-top:-7px}
+}
+@media print {.recipes-human-warning,.recipes-overview-meta {color:#111!important}
+  .recipes-parchment-art>img {display:none!important}.recipes-parchment-art {display:none}
+  .recipes-written-method {width:100%;margin:0;border:0!important;background:#fff!important;box-shadow:none!important}
+  .recipes-written-method h3 {break-after:avoid}.recipes-steps li{break-inside:avoid}
+  .recipes-human-only {color:#333}}
+
+
+/* Place functional text clear of the ornaments already engraved into the artwork. */
+.recipes-card-metrics {top:84.2%;height:4.9%;line-height:1.05;font-size:clamp(9px,2.15vw,13px)}
+.recipes-parchment-stats {top:47.7%;height:3.3%;left:15.5%;width:69%;
+  border-radius:7px;background:rgba(255,244,217,.48)}
+.recipes-parchment-stats span {line-height:1.1;font-weight:700;overflow:visible;text-overflow:clip}
+.recipes-parchment-message {top:51.5%;bottom:9.5%}
+@media(max-width:600px){
+  .recipes-card-metrics {top:84.1%;height:5.1%}
+  .recipes-parchment-stats {top:47.8%;height:3.4%}
+  .recipes-parchment-message {top:51.2%;bottom:9.2%}
+}
+
+
+/* Proven mobile layout: functional metadata has its own readable satin strip.
+   The parchment's engraved row stays purely ornamental - no competing text. */
+.recipes-summary-strip {display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.85fr) minmax(0,.85fr);
+  gap:4px;align-items:stretch;margin:0 4% 9px;padding:5px 4px;
+  border:1.5px solid #dbad62;border-radius:14px;
+  background:linear-gradient(100deg,#fff0cbf2,#ffe1a9ed 55%,#fff0cbf2);
+  box-shadow:inset 0 1px 3px #fff9e7,0 3px 8px #59250855;color:#68330e}
+.recipes-summary-strip div {min-width:0;padding:2px 4px;text-align:center}
+.recipes-summary-strip div+div {border-left:1px solid #d7aa64}
+.recipes-summary-strip dt {font:700 clamp(9px,2vw,12px)/1.25 Georgia,serif;letter-spacing:.09em;
+  font-variant:small-caps;color:#995d1f}
+.recipes-summary-strip dd {margin:4px 0 0;font:700 clamp(10px,2.3vw,13px)/1.32 Georgia,serif;
+  color:#67340f;overflow-wrap:break-word}
+.recipes-parchment-stats {display:none!important}
+@media(max-width:380px){.recipes-summary-strip {margin-inline:3%;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.8fr));gap:1px}
+  .recipes-summary-strip div {padding-inline:2px}.recipes-summary-strip dd{font-size:10px}}
+@media print {.recipes-summary-strip {border:0;box-shadow:none;margin:0 0 15px;background:white}}
