@@ -127,3 +127,22 @@
   .recipes-parchment-stats {top:47.8%;height:3.4%}
   .recipes-parchment-message {top:51.2%;bottom:9.2%}
 }
+
+
+/* Proven mobile layout: functional metadata has its own readable satin strip.
+   The parchment's engraved row stays purely ornamental - no competing text. */
+.recipes-summary-strip {display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.85fr) minmax(0,.85fr);
+  gap:4px;align-items:stretch;margin:0 4% 9px;padding:5px 4px;
+  border:1.5px solid #dbad62;border-radius:14px;
+  background:linear-gradient(100deg,#fff0cbf2,#ffe1a9ed 55%,#fff0cbf2);
+  box-shadow:inset 0 1px 3px #fff9e7,0 3px 8px #59250855;color:#68330e}
+.recipes-summary-strip div {min-width:0;padding:2px 4px;text-align:center}
+.recipes-summary-strip div+div {border-left:1px solid #d7aa64}
+.recipes-summary-strip dt {font:700 clamp(9px,2vw,12px)/1.25 Georgia,serif;letter-spacing:.09em;
+  font-variant:small-caps;color:#995d1f}
+.recipes-summary-strip dd {margin:4px 0 0;font:700 clamp(10px,2.3vw,13px)/1.32 Georgia,serif;
+  color:#67340f;overflow-wrap:break-word}
+.recipes-parchment-stats {display:none!important}
+@media(max-width:380px){.recipes-summary-strip {margin-inline:3%;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.8fr));gap:1px}
+  .recipes-summary-strip div {padding-inline:2px}.recipes-summary-strip dd{font-size:10px}}
+@media print {.recipes-summary-strip {border:0;box-shadow:none;margin:0 0 15px;background:white}}
