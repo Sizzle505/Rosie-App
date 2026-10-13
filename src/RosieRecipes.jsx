@@ -5,7 +5,15 @@ import "./RosieRecipesAssetLayout.css";
 
 const ROOT = "/rosieverse/recipes/";
 const FAVORITES_KEY = "rosie-recipes-favorites-v1";
-const icons = { Breakfast: "☼", "Small Bites": "✧", "Main Courses": "♛", Desserts: "✿" };
+const recipeArt = (recipe) => `${ROOT}dishes/${recipe.id}.webp`;
+function shuffleRecipes(recipes) {
+  const shuffled = [...recipes];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 function loadFavorites() {
   try {
     const parsed = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
@@ -17,20 +25,18 @@ function hasInstructions(recipe) {
 }
 function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
   return <article className="recipes-tile">
-    <button type="button" className="recipes-card" onClick={() => onOpen(recipe.id)}
+    <button type="button" className={`recipes-card recipes-card--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} onClick={() => onOpen(recipe.id)}
       aria-label={`View ${recipe.title}`}>
       <span className={`recipes-card-image recipes-card-image--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} aria-hidden="true">
-        <span className="recipes-dish-symbol">{icons[recipe.category] || "✦"}</span>
-        <small>THE FOUNDING COOKBOOK</small>
+        <img src={recipeArt(recipe)} alt="" loading="lazy" draggable="false" />
       </span>
       <span className="recipes-card-copy">
         <strong>{recipe.title}</strong>
-        <small>{COOKBOOK.labels[recipe.category] || recipe.category}</small>
       </span>
-      <span className="recipes-card-metrics" aria-hidden="true">
-        <span>{recipe.totalMinutes != null ? `${recipe.totalMinutes}m${recipe.timeLabel?.includes("chilling") ? "+" : ""}` : "✦"}</span>
-        <span>{recipe.difficulty || "✦"}</span>
-        <span>{recipe.servings != null ? `${recipe.servings}` : "✦"}</span>
+      <span className="recipes-card-metrics">
+        <span><b>Time</b><em>{recipe.timeLabel || "—"}</em></span>
+        <span><b>Level</b><em>{recipe.difficulty || "—"}</em></span>
+        <span><b>Serves</b><em>{recipe.servingsLabel || "—"}</em></span>
       </span>
     </button>
     <button type="button" className={`recipes-favorite ${favorite ? "is-favorite" : ""}`}
@@ -49,30 +55,20 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
       <button type="button" onClick={() => onFavorite(recipe.id)}
         aria-pressed={favorite}>{favorite ? "♥ Saved" : "♡ Save"}</button>
     </div>
+    <section className="recipes-detail-cover" aria-label={`${recipe.title} overview`}>
+      <div className="recipes-detail-photo"><img src={recipeArt(recipe)} alt="" /></div>
+      <div className="recipes-detail-intro">
+        <p className="recipes-detail-category">{COOKBOOK.labels[recipe.category] || recipe.category}</p>
+        <h2>{recipe.title}</h2>
+        <p>{ready ? recipe.subtitle : "A place reserved in Rosie’s Royal Cookbook."}</p>
+      </div>
+    </section>
     <dl className="recipes-summary-strip">
       <div><dt>Time</dt><dd>{recipe.timeLabel}</dd></div>
       <div><dt>Yield</dt><dd>{recipe.servingsLabel}</dd></div>
       <div><dt>Difficulty</dt><dd>{recipe.difficulty}</dd></div>
     </dl>
-    <div className="recipes-parchment-art">
-      <img src={ROOT + "recipes-parchment.webp"} alt="" loading="eager" draggable="false" />
-      <div className="recipes-parchment-title">
-        <h2>{recipe.title}</h2>
-      </div>
-      <div className="recipes-parchment-display">
-        <span className="recipes-dish-symbol" aria-hidden="true">{icons[recipe.category] || "✦"}</span>
-        <span>{COOKBOOK.labels[recipe.category] || recipe.category}</span>
-        <strong>{recipe.category}</strong>
-      </div>
-      <div className="recipes-parchment-message">
-        {ready
-          ? <><h3>{recipe.subtitle}</h3><p>{recipe.description}</p><span>Ingredients and method ↓</span></>
-          : <><h3>Rosie's Recipe Collection</h3><p>The original ingredients and instructions for this dish will be placed here when the complete cookbook is imported.</p><span>✦ Reserved for the original recipe ✦</span></>}
-      </div>
-    </div>
     {ready && <div className="recipes-written-method">
-      <p className="recipes-eyebrow">{COOKBOOK.labels[recipe.category]?.toUpperCase() || recipe.category.toUpperCase()}</p>
-      <h3 className="recipes-subtitle">{recipe.subtitle}</h3>
       <p className="recipes-detail-description">{recipe.description}</p>
       <p className="recipes-overview-meta"><strong>Total time:</strong> {recipe.timeLabel} <span aria-hidden="true">·</span> <strong>Yield:</strong> {recipe.servingsLabel} <span aria-hidden="true">·</span> <strong>Difficulty:</strong> {recipe.difficulty}</p>
       <h3>Ingredients</h3>
@@ -86,29 +82,34 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
       <p className="recipes-human-only">{COOKBOOK.humanOnly}</p>
       <button type="button" className="recipes-print" onClick={() => window.print()}>Print Recipe</button>
     </div>}
+    {!ready && <div className="recipes-awaiting-copy"><span>✦</span><h3>Rosie’s Recipe Collection</h3><p>The original ingredients and instructions for this dish will be placed here when the complete cookbook is imported.</p></div>}
   </section>;
 }
 export default function RosieRecipes() {
   const [query, setQuery] = useState("");
   const [crestReady, setCrestReady] = useState(false);
   const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("collection");
+  const [recipeOrder] = useState(() => shuffleRecipes(RECIPE_CATALOG));
   const [favorites, setFavorites] = useState(loadFavorites);
   const [selectedId, setSelectedId] = useState(null);
   const searchRef = useRef(null);
   useEffect(() => {
     try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites)); } catch {}
   }, [favorites]);
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 400));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
   const filtered = useMemo(() => {
     const normalized = query.toLocaleLowerCase().trim();
-    const matches = RECIPE_CATALOG.filter((recipe) => {
+    const matches = recipeOrder.filter((recipe) => {
       const categoryMatch = category === "All" || category === recipe.category ||
         (category === "Favorites" && favorites.includes(recipe.id));
       const words = `${recipe.title} ${recipe.subtitle} ${recipe.category} ${recipe.description || ""} ${recipe.ingredientsText}`.toLocaleLowerCase();
       return categoryMatch && (!normalized || words.includes(normalized));
     });
-    return sort === "name" ? [...matches].sort((a,b) => a.title.localeCompare(b.title)) : matches;
-  }, [query, category, sort, favorites]);
+    return matches;
+  }, [query, category, favorites, recipeOrder]);
   const selected = RECIPE_CATALOG.find((recipe) => recipe.id === selectedId);
   const toggleFavorite = (id) => setFavorites((previous) =>
     previous.includes(id) ? previous.filter((item) => item !== id) : [...previous, id]);
@@ -129,35 +130,17 @@ export default function RosieRecipes() {
           <img src={ROOT + "recipes-title.webp"} alt="" onLoad={() => setCrestReady(true)} onError={() => setCrestReady(false)} />
           <span>Rosie’s Recipes</span><small>THE ROYAL COOKBOOK</small>
         </div>
-        <p>The Founding Cookbook - 25 Recipes for Rosie’s Favorite Humans</p>
-        <p className="recipes-human-warning">Delicious human food, with a little of Rosie’s personality in every dish. Not for sharing with Rosie.</p>
       </header>
       {!selected && <section className="recipes-index" aria-label="The recipe collection" ref={searchRef}>
-        <div className="recipes-index-header">
-          <span className="recipes-eyebrow">FROM THE ROYAL KITCHEN</span>
-          <h2>The Founding Cookbook</h2>
-          <p>Four chapters of thoroughly delicious recipes, from breakfast to dessert.</p>
-        </div>
-        <div className="recipes-search-row">
-          <label className="recipes-search"><span className="recipes-visually-hidden">Search recipes</span>
-            <span aria-hidden="true">⌕</span>
-            <input type="search" value={query} onChange={(event) => setQuery(event.target.value)}
-              placeholder="Find a recipe…" autoComplete="off"/>
-          </label>
-          <label className="recipes-sort">
-            <span className="recipes-visually-hidden">Sort recipes</span>
-            <select value={sort} onChange={e => setSort(e.target.value)}>
-              <option value="collection">Cookbook order</option>
-              <option value="name">Name A–Z</option>
-            </select>
-          </label>
-        </div>
-        <div className="recipes-category-tabs" aria-label="Filter recipes by category">
+        <nav className="recipes-meal-filters" aria-label="Browse recipes by meal">
           {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
             className={category===cat?"is-active":""} aria-pressed={category===cat}
-            onClick={() => {setCategory(cat);setSelectedId(null);}}>{COOKBOOK.labels[cat] || cat}</button>)}
-        </div>
-        <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"} in the collection</p>
+            onClick={() => setCategory(cat)}>{cat === "All" ? "Random" : cat === "Favorites" ? "Favorites" : COOKBOOK.labels[cat] || cat}</button>)}
+        </nav>
+        <label className="recipes-inline-search"><span aria-hidden="true">⌕</span><span className="recipes-visually-hidden">Find a recipe</span>
+          <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a recipe…" autoComplete="off"/>
+        </label>
+        {(query || category !== "All") && <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"}</p>}
         {filtered.length
           ? <div className="recipes-grid">{filtered.map((recipe) => <RecipeCard key={recipe.id}
             recipe={recipe} favorite={favorites.includes(recipe.id)}
