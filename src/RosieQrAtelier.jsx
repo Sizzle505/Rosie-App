@@ -115,12 +115,17 @@ function TypeIcon({id}) {
   return <svg {...s}>{paths[id]||paths.website}</svg>;
 }
 
-function QRTypeSelector({current,onSelect}){
+const PRIMARY_QR_TYPES=["website","wifi","contact","event"];
+function QRTypeSelector({current,onSelect,expanded,onToggle}){
+  const types=expanded?QR_TYPES:QR_TYPES.filter(t=>PRIMARY_QR_TYPES.includes(t.id));
   return <div className="qa-formats" role="group" aria-label="Choose QR code type">
-    {QR_TYPES.map(t=><button type="button" key={t.id} className={"qa-type"+(current===t.id?" selected":"")}
+    {types.map(t=><button type="button" key={t.id} className={"qa-type"+(current===t.id?" selected":"")}
       onClick={()=>onSelect(t.id)} aria-pressed={current===t.id} title={t.hint}>
       <span className="qa-type-symbol" aria-hidden="true"><TypeIcon id={t.id}/></span><span>{t.label}</span>
     </button>)}
+    <button type="button" className="qa-more-types" onClick={onToggle} aria-expanded={expanded}>
+      {expanded?"Fewer formats":"More formats"}
+    </button>
   </div>;
 }
 function Details({type,v,put,showPassword,setShowPassword,wifiConsent,setWifiConsent}){
@@ -187,6 +192,7 @@ export default function RosieQrAtelier(){
   const [label,setLabel]=useState("");
   const [loadedId,setLoadedId]=useState(null);
   const [filter,setFilter]=useState("");
+  const [showMoreTypes,setShowMoreTypes]=useState(false);
   const [toast,setToast]=useState("");
   const [working,setWorking]=useState(false);
   const previewRef=useRef(null),timerRef=useRef(null);
@@ -271,6 +277,7 @@ export default function RosieQrAtelier(){
   }
   const matching=saved.filter(x=>(x.label||"").toLowerCase().includes(filter.trim().toLowerCase())||
     QR_TYPES.find(t=>t.id===x.type)?.label.toLowerCase().includes(filter.trim().toLowerCase()));
+  const typePickerExpanded=showMoreTypes||!PRIMARY_QR_TYPES.includes(type);
   return <main className={"qa-page qa-style-"+style} aria-label="Rosie's QR Atelier">
     <div className="qa-scene">
       <header className="qa-hero" aria-label="Rosie works at her QR atelier">
@@ -294,8 +301,9 @@ export default function RosieQrAtelier(){
       </section>
       <section className="qa-panel" aria-label="QR code settings">
         <div className="qa-panel-inner">
-          <div className="qa-panel-heading"><span>Rosie's Workbench</span><h2>Choose Your Creation</h2></div>
-          <QRTypeSelector current={type} onSelect={changeType}/>
+          <div className="qa-panel-heading"><span>Rosie's Workbench</span><h2>Where shall your code lead?</h2></div>
+          <QRTypeSelector current={type} onSelect={changeType} expanded={typePickerExpanded}
+            onToggle={()=>setShowMoreTypes(open=>!open)}/>
           <div className="qa-details-heading"><h3>{QR_TYPES.find(t=>t.id===type).label} Details</h3>
             <span>{QR_TYPES.find(t=>t.id===type).hint}</span>
             <button type="button" className="qa-start-fresh" onClick={()=>{
