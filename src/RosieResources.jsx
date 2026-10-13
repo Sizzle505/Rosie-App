@@ -7,6 +7,7 @@ const destinations = [
   { id: "reminders", title: "Rosie’s Reminders", image: "reminders.webp" },
   { id: "timekeeper", title: "Rosie’s Timekeeper", image: "timekeeper.webp" },
   { id: "calculations", title: "Rosie’s Calculations", image: "calculations.webp" },
+  { id: "recipes", title: "Rosie’s Recipes", image: null },
 ];
 
 /**
@@ -37,12 +38,16 @@ export default function RosieResources({ onNavigate }) {
               aria-label={`Open ${title}`}
               onClick={() => onNavigate(id)}
             >
-              <img
+              {image ? <img
                 src={`${ASSETS}${image}`}
                 alt=""
                 draggable="false"
                 loading="eager"
-              />
+              /> : <span className="rr-recipes-button-art" aria-hidden="true">
+                <span className="rr-recipes-ornament">✦</span>
+                <span className="rr-recipes-name">Rosie’s Recipes</span>
+                <small>THE ROYAL COOKBOOK</small>
+              </span>}
               <span className="rr-visually-hidden">{title}</span>
             </button>
           ))}
