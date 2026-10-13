@@ -929,3 +929,62 @@
 @media print {
   .qa-ring {transform:none;}
 }
+
+
+/* QR precision alignment - preserve previous sizes and layout. */
+.qa-title {transform:translateY(27px);} /* +7px relative to approved 20px offset */
+.qa-preview-actions {top:-9px;} /* 5px above prior -4px registration */
+.qa-creation-heading {transform:translateY(2px);}
+.qa-finish-heading .qa-design-heading {transform:translateX(12px);}
+
+/* View and Copy are opaque, including while the QR isn't ready.
+   Disabled controls retain a dimmed label but never fade their entire surface. */
+.qa-page .qa-preview-actions button,
+.qa-page .qa-preview-actions button:disabled {
+  opacity:1!important;
+  background:#09251f linear-gradient(160deg,#214b3d 0%,#0b3028 47%,#071a1e 100%)!important;
+  border:1px solid #b9965d!important;
+  box-shadow:inset 0 1px 0 #fcf1c62e,0 3px 8px #010f0a91!important;
+  color:#f9e6c0;
+}
+.qa-page .qa-preview-actions button:disabled {
+  color:#b4aa92!important;
+  cursor:not-allowed;
+}
+
+/* Save opens in its own full-width folio BELOW the complete workbench.
+   It no longer floats over the finish selector or obstructs Done. */
+.qa-page .qa-save-drawer {
+  position:relative;
+  z-index:7;
+  width:min(93%,630px);
+  margin:9px auto 14px;
+  padding:11px;
+  border:1px solid #c3a16a;
+  border-radius:13px;
+  background:linear-gradient(155deg,#fff8e6,#f2dfbc 60%,#e6c896);
+  box-shadow:inset 0 1px 0 #fff9e6,0 8px 22px #010b0870;
+  scroll-margin-bottom:calc(104px + env(safe-area-inset-bottom,0px));
+}
+.qa-page .qa-save-drawer .qa-save-options {
+  position:static!important;
+  display:grid;
+  width:100%;
+  max-width:none;
+  max-height:none;
+  margin:0;
+  overflow:visible;
+  padding:7px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  box-shadow:none;
+  border-color:#c39b64;
+  background:#fff0d5;
+}
+.qa-page .qa-save-drawer .qa-save-options .qa-field {grid-column:1/-1;}
+.qa-page .qa-save-drawer .qa-save-options button {min-width:0;}
+.qa-page .qa-save-drawer + .qa-collection {margin-top:8px;}
+@media(max-width:390px) {
+  .qa-page .qa-save-drawer {width:94%;padding:8px;margin-top:7px;}
+  .qa-page .qa-save-drawer .qa-save-options {gap:6px;padding:6px;}
+}
