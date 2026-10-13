@@ -79,6 +79,7 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
 }
 export default function RosieRecipes() {
   const [query, setQuery] = useState("");
+  const [crestReady, setCrestReady] = useState(false);
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("collection");
   const [favorites, setFavorites] = useState(loadFavorites);
@@ -114,7 +115,8 @@ export default function RosieRecipes() {
     <div className="recipes-body">
       <header className="recipes-heading">
         <h1 className="recipes-visually-hidden">Rosie’s Recipes</h1>
-        <div className="recipes-crest" role="img" aria-label="Rosie’s Recipes - The Royal Cookbook">
+        <div className={`recipes-crest ${crestReady ? "has-art" : ""}`} role="img" aria-label="Rosie’s Recipes - The Royal Cookbook">
+          <img src={ROOT + "recipes-title.webp"} alt="" onLoad={() => setCrestReady(true)} onError={() => setCrestReady(false)} />
           <span>Rosie’s Recipes</span><small>THE ROYAL COOKBOOK</small>
         </div>
         <p>Twenty-five delicious human recipes, approved by the most discerning Shiba in the kingdom.</p>
