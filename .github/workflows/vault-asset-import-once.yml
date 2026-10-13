@@ -20,8 +20,8 @@ jobs:
           python-version: '3.12'
       - name: Fetch verified original art from Dropbox
         env:
-          HEADER_URL: "https://ucd8da1bf3219dc8399bf0bc187c.dl.dropboxusercontent.com/cd/0/get/DJ5sahFn9rU1zOKR3vfcE7oCsKeA1xFqrWizfi-PpdpqC_1rPG2neUEjun35-Y9jzwKb3R8UhS36UqF7BgOpErb7y87IZOJvNwYW2CobTe0dFqPhUR98dT4WgQYJtqi6MY58eYxa9Mup6jCZLJ4E9CE0V93xw2DRApTm8yDCdsZ-Ow/file?c_luid=667ded1d"
-          TILE_URL: "https://ucbc5ade4af5816d959881239ab1.dl.dropboxusercontent.com/cd/0/get/DJ5k_8-J1wJ38iAP7nsVnX8Fab16_-yLOb2T08D6xxIhmcXSc-0xiuVYfLA5GUNDDEyiAmN_ytb9-tOo3719h9yObbtrT4WPdZs9NP5AXPmgzBlGKpKflTRUiPNHwVV-N4oSG_ryVrsEI8PHod7sa2hTOX3ugexLAeFGilZR2HFRxg/file?c_luid=667ded1d"
+          HEADER_URL: "https://ucc95bebbf53c6022f063fc027cf.dl.dropboxusercontent.com/cd/0/get/DJ5XKbCitwnxdrP4XziKKczzPlLxWZCNNP_XULHx0QC5ryejrblU7nTnedICwhcuMEOfQPtJ4QYTlBupITMuQRrI-qy5CSz3YXbhVJeZU9ylExlLUnLuIK9DZ8B9yo88zBwpIE8yNzJCDS389B5NEVqVp0nDofWLIM1jTmmvfxa1xA/file?c_luid=667ded1d"
+          TILE_URL: "https://ucfdb01c542af4c4d51e0f43d93a.dl.dropboxusercontent.com/cd/0/get/DJ6ah62UBhcPr4hXX0YppVN2P7Djopow84A2v8T5zGFROhh8XZTlccfTR91Vs-494yk2kXJBuBK3IF3ePKHBtbID-TcBnRfRQ0OPNX0tlh1AC99yyr5OVATMnn_a9sKRX3BmyXYlx1UxbD1DizpzVo3ovrndQ3R0xrIMjR7uB9APBQ/file?c_luid=667ded1d"
         run: |
           set -euo pipefail
           curl -fsSL --retry 2 --retry-delay 1 "$HEADER_URL" -o /tmp/vault-header.png
@@ -30,7 +30,7 @@ jobs:
           echo 'd13939cfff029a2d7a62e094ea7b42a12a13b9c9ad7e6d8818a9926a8bd65bb9  /tmp/vault-metal.png' | sha256sum --check
       - name: Convert original images to optimized high-quality WebP
         run: |
-          python -m pip install Pillow
+          python -m pip install Pillow numpy
           mkdir -p public/card-vault
           python - <<'PY'
           from PIL import Image
