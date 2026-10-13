@@ -425,7 +425,6 @@
  .qa-header-sign,.qa-idle-emblem {display:none!important;}
 }
 
-
 /* QR Atelier refinement - retain the original theatre, simplify the workbench.
    The source scene carries continuously through the whole phone canvas, while
    the interactive objects stay deliberately calm and easy to scan. */
@@ -537,8 +536,66 @@
   .qa-panel-inner {padding:11px 8px 17px;}
   .qa-type > span:last-child {font-size:10.5px;}
 }
+
 @media(min-width:701px) {
   .qa-hero {height:610px;}
   .qa-ring {width:min(114%,800px);}
   .qa-panel {margin-top:10px;}
+}
+
+/* Compact mobile workbench - preserve the deliberate dark breathing room after
+   the workshop art instead of extending the illustration indefinitely. */
+.qa-scene {min-height:0;background:#04160f;}
+.qa-scene::before {
+  inset:0 auto auto 0;
+  width:100%;
+  min-height:0;
+  height:auto;
+  aspect-ratio:821 / 1916;
+  background-repeat:no-repeat;
+  background-size:100% auto;
+  mask-image:linear-gradient(#000 0 83%,transparent 100%);
+  -webkit-mask-image:linear-gradient(#000 0 83%,transparent 100%);
+}
+/* Lift the illustrated field twenty-two pixels while retaining the sign's
+   independent, lower visual registration. */
+.qa-hero {height:calc(clamp(356px,102vw,620px) - 22px);}
+.qa-title {transform:translateY(10px);}
+.qa-preview-stage {margin-top:calc(clamp(-38px,-8vw,-17px) - 10px);}
+.qa-ring {width:min(114%,680px);}
+.qa-ring-caption {display:none;}
+.qa-preview-actions {margin:-94px 12px 40px;}
+
+.qa-panel {margin-top:0;}
+.qa-panel-heading {margin-bottom:12px;}
+.qa-inputs {gap:9px;}
+.qa-section-separator {margin-top:14px;}
+.qa-design-heading {margin:11px 0 7px!important;}
+.qa-palettes {gap:4px;}
+.qa-palette {padding:5px 3px;gap:3px;}
+.qa-swatch {width:clamp(34px,9vw,48px);height:clamp(34px,9vw,48px);}
+
+.qa-save-menu {position:relative;margin:13px auto 0;text-align:center;}
+.qa-save-toggle,.qa-collection-toggle {
+  min-height:36px;padding:7px 14px;border:1px solid #b88b4d;border-radius:999px;
+  background:linear-gradient(180deg,#fff8e9,#e9cf9e);box-shadow:inset 0 1px #fff,0 1px 2px #6c4a2b45;
+  color:#59391d;font:600 13px/1 Georgia,serif!important;
+}
+.qa-save-toggle span,.qa-collection-toggle b {margin-left:5px;font-size:15px;line-height:0;}
+.qa-collection-toggle span {display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:6px;border-radius:50%;background:#174c38;color:#ffecbd;font-size:11px;}
+.qa-save-options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px;padding:9px;border:1px solid #c09a62;border-radius:10px;background:#f9ead1;box-shadow:0 4px 12px #6a431c2b;text-align:left;}
+.qa-save-options .qa-field {grid-column:1 / -1;font-size:12px;}
+.qa-save-options .qa-field input {min-height:41px!important;font-size:15px!important;}
+.qa-save-options button:not(.qa-toggle-password) {min-height:39px;border:1px solid #b48a50;border-radius:8px;background:linear-gradient(160deg,#143d30,#071c18);color:#fce9bd;font:600 12px/1.1 Georgia,serif!important;}
+.qa-save-options button:disabled {opacity:.46;}
+
+.qa-collection {width:auto;margin:12px auto 36px;padding:0;border:0;background:none;box-shadow:none;text-align:center;}
+.qa-collection-toggle {background:linear-gradient(180deg,#153c2d,#071d18);border-color:#9b7d48;color:#f6dfad;}
+.qa-saved-grid,.qa-search {width:min(93%,590px);margin-left:auto;margin-right:auto;text-align:left;}
+.qa-saved-grid {margin-top:9px;}
+
+@media(max-width:390px) {
+  .qa-hero {height:calc(clamp(344px,102vw,398px) - 22px);}
+  .qa-ring {width:117%;}
+  .qa-preview-actions {margin-top:-87px;margin-bottom:35px;}
 }
