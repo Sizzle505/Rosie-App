@@ -131,3 +131,15 @@
 .rr-qr-arrow {font:normal 34px Georgia,serif;}
 .rr-hub-buttons {gap:clamp(4px,1.1svh,13px);}
 @media(max-width:600px){.rr-hub-button--qr-atelier{margin-top:-3px}.rr-qr-banner{min-height:72px}}
+
+/* Fifth hub destination, matching the actual gold-and-satin Recipes environment. */
+.rr-hub-button--recipes {height:auto;aspect-ratio:3/1;border:2px solid #eac278;
+  overflow:hidden;box-shadow:0 8px 14px #06091388,inset 0 0 0 3px #763e19;
+  background:linear-gradient(128deg,#7b3817,#c98a31 45%,#6d3017 100%);}
+.rr-recipes-button-art {height:100%;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;border:3px double #f8d38699;border-radius:16px;
+  background:radial-gradient(ellipse at center,#ffdc8c44,transparent 74%);}
+.rr-recipes-ornament {font-size:18px;color:#ffe7a7}
+.rr-recipes-name {font-size:clamp(25px,5vw,40px);font-variant:small-caps;font-weight:700;color:#fff0c0;text-shadow:0 3px 3px #43110a;}
+.rr-recipes-button-art small {font-size:9px;letter-spacing:.14em;color:#fff2cf}
+@media(max-width:390px){.rr-recipes-button-art small{font-size:8px}.rr-recipes-name{font-size:26px}}
