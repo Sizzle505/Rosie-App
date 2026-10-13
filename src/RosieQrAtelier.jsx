@@ -189,7 +189,7 @@ export default function RosieQrAtelier(){
   const [filter,setFilter]=useState("");
   const [toast,setToast]=useState("");
   const [working,setWorking]=useState(false);
-  const previewRef=useRef(null),timerRef=useRef(null);
+  const previewRef=useRef(null),ringRef=useRef(null),timerRef=useRef(null);
   const v=forms[type];
   const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
   const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setWifiConsent(false);setShowPassword(false);};
@@ -264,10 +264,34 @@ export default function RosieQrAtelier(){
       }else{download(blob,file.name);toastMessage("Your QR image was downloaded to share.");}
     });
   }
-  function copyPayload(){
-    if(!ready)return;
-    if(!navigator.clipboard?.writeText)return toastMessage("Clipboard unavailable here.");
-    navigator.clipboard.writeText(output.payload).then(()=>toastMessage("QR destination copied."),()=>toastMessage("Clipboard permission was denied."));
+  async function copyQR(){
+    if(!ready||working)return;
+    if(!navigator.clipboard?.write||typeof ClipboardItem==="undefined"){
+      toastMessage("This browser cannot copy QR images. Use PNG export instead.");
+      return;
+    }
+    setWorking(true);
+    try{
+      // Supply ClipboardItem with its image promise synchronously for iOS Safari.
+      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg)})]);
+      toastMessage("QR image copied. Paste it wherever you like.");
+    }catch{toastMessage("Could not copy the QR image. Use PNG export instead.");}
+    finally{setWorking(false);}
+  }
+  function showFinishedQR(){
+    const active=document.activeElement;
+    if(active instanceof HTMLElement)active.blur();
+    const alignToNavigation=()=>{
+      const ring=ringRef.current;
+      if(!ring)return;
+      const navigation=document.querySelector(".app-shell .bottom-nav");
+      const navTop=navigation?.getBoundingClientRect().top ??
+        (window.visualViewport?.height||window.innerHeight)-95;
+      const bottom=ring.getBoundingClientRect().bottom;
+      window.scrollBy({top:bottom-navTop+8,behavior:"smooth"});
+    };
+    // Allow the iPhone keyboard to retract before positioning the frame.
+    window.setTimeout(alignToNavigation,180);
   }
   const matching=saved.filter(x=>(x.label||"").toLowerCase().includes(filter.trim().toLowerCase())||
     QR_TYPES.find(t=>t.id===x.type)?.label.toLowerCase().includes(filter.trim().toLowerCase()));
@@ -281,20 +305,23 @@ export default function RosieQrAtelier(){
         </div>
       </header>
       <section className="qa-preview-stage" ref={previewRef} aria-label="Live QR preview">
-        <div className="qa-ring" aria-label={ready?"QR artwork, ready to scan":"Empty QR frame"}>
+        <div className="qa-ring" ref={ringRef} aria-label={ready?"QR artwork, ready to scan":"Empty QR frame"}>
           <div className="qa-code-shell">{ready?<div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}} role="img" aria-label="Scannable QR code"/>
             :<div className="qa-waiting"><img className="qa-idle-emblem" src={ART+"idle-paw.webp"} alt="" /><span>Awaiting your creation</span></div>}</div>
           <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" aria-hidden="true" draggable="false"/>
-          <div className="qa-ring-caption">{ready?"Ready to Share":"Create a Code"}</div>
+          {ready&&<div className="qa-ring-caption">Ready to Share</div>}
         </div>
-        <div className="qa-preview-actions">
-          <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready}>⛶ Full-screen QR</button>
-          {type!=="wifi"&&<button type="button" onClick={copyPayload} disabled={!ready}>⧉ Copy QR data</button>}
+        <div className="qa-preview-actions" role="group" aria-label="QR preview actions">
+          <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready} aria-label="View QR full screen">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4"/><rect x="8" y="8" width="8" height="8" rx="1.5"/></svg><span>View</span>
+          </button>
+          <button type="button" onClick={copyQR} disabled={!ready||working} aria-label="Copy QR image">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span>Copy</span>
+          </button>
         </div>
       </section>
       <section className="qa-panel" aria-label="QR code settings">
         <div className="qa-panel-inner">
-          <div className="qa-panel-heading"><span>Rosie's Workbench</span><h2>Choose Your Creation</h2></div>
           <QRTypeSelector current={type} onSelect={changeType}/>
           <div className="qa-details-heading"><h3>{QR_TYPES.find(t=>t.id===type).label} Details</h3>
             <span>{QR_TYPES.find(t=>t.id===type).hint}</span>
@@ -312,13 +339,16 @@ export default function RosieQrAtelier(){
             (output.modules>85?"Detailed code. Use Full-screen QR for easier scanning.":"Your QR updates instantly as you type."):
             output.error}</p>
           <div className="qa-section-separator"/>
-          <h3 className="qa-design-heading">Atelier Finish</h3>
+          <div className="qa-finish-heading">
+            <h3 className="qa-design-heading">Finish</h3>
+            <button className="qa-done" type="button" onClick={showFinishedQR}>Done <span aria-hidden="true">↑</span></button>
+          </div>
           <div className="qa-palettes" role="group" aria-label="Presentation finish">
             {QR_STYLES.map(s=><button key={s.id} type="button" aria-pressed={style===s.id}
               className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
               <span className="qa-swatch"/><span>{s.label}</span></button>)}
           </div>
-          <p className="qa-hint qa-contrast-note">The QR modules stay black on white for dependable scanning. Finishes decorate the surrounding stationery.</p>
+          <p className="qa-hint qa-contrast-note">The scannable code stays black on white.</p>
           <div className="qa-save-block">
             <Field label="Save as (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
             <button className="qa-save" type="button" disabled={!ready||working} onClick={save}>

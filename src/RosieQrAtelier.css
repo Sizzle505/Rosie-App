@@ -424,3 +424,172 @@
 @media print {
  .qa-header-sign,.qa-idle-emblem {display:none!important;}
 }
+
+
+/* October 13: compact QR workbench and intentional mobile geometry.
+   Lift the illustrated page, while lowering and reducing ONLY its title asset. */
+.app-shell.page-qr-atelier > main.qa-page {
+  margin-top:-18px;
+}
+.qa-title {
+  top:clamp(22px,calc(1.6vw + 18px),34px);
+  width:min(68.85%,476px);
+  right:4%;
+}
+.qa-ring {
+  width:min(121.6%,741px);
+}
+.qa-preview-actions {
+  width:100%;
+  margin:-4px auto 8px;
+  gap:8px;
+  justify-content:center;
+  align-items:center;
+}
+.qa-preview-actions button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  flex:none;
+  width:84px;
+  min-width:0;
+  min-height:34px;
+  padding:6px 9px;
+  border-radius:9px;
+  font-size:12px!important;
+  line-height:1;
+}
+.qa-preview-actions button svg {width:15px;height:15px;flex:none;display:block;}
+/* The workbench opens immediately with all eight choices and no secondary
+   expansion/collapse controls or oversized masthead. */
+.qa-panel {margin-top:4px;}
+.qa-panel-inner {padding-top:4px;padding-bottom:12px;}
+.qa-formats {grid-template-columns:repeat(4,minmax(0,1fr));gap:5px 7px;}
+.qa-type,.qa-type:hover {
+  min-height:clamp(64px,15.5vw,80px);
+  gap:3px;
+  padding:7px 2px;
+}
+.qa-type-symbol {min-height:26px;}
+.qa-type-symbol svg {width:clamp(23px,5vw,30px);height:clamp(23px,5vw,30px);}
+.qa-details-heading {margin:11px 0 10px;gap:3px;}
+.qa-details-heading h3 {font-size:clamp(18px,4vw,25px);}
+.qa-details-heading > span {display:none;}
+.qa-inputs {gap:9px;}
+.qa-section-separator {margin-top:14px;}
+.qa-validation {margin-top:10px;padding:8px 10px;}
+.qa-finish-heading {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  margin:12px auto 9px;
+}
+.qa-finish-heading .qa-design-heading {
+  width:auto;
+  margin:0!important;
+  font-size:clamp(19px,4.3vw,25px);
+  line-height:1.1;
+}
+.qa-done {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-width:76px;
+  min-height:34px;
+  padding:6px 13px;
+  border:1px solid #b1894c;
+  border-radius:999px;
+  background:linear-gradient(150deg,#164f3c,#073428 65%,#06231d);
+  color:#f9e8ba;
+  box-shadow:inset 0 1px 0 #fcf4d04b,0 3px 8px #2b211c45;
+  font:600 13px/1 Georgia,serif!important;
+  white-space:nowrap;
+}
+.qa-done span {font:normal 17px/1 Georgia,serif;}
+.qa-palettes {gap:8px;}
+.qa-palette {padding:6px 4px 8px;gap:5px;}
+.qa-palette.chosen {border-color:#a98b56;background:#fff8e9ad;box-shadow:inset 0 0 0 1px #faf0d3;}
+.qa-swatch {width:clamp(42px,10vw,58px);height:clamp(42px,10vw,58px);border-radius:50%;position:relative;
+  border:3px solid #e9c576;box-shadow:0 0 0 1px #78521c,inset 0 1px 6px #0009,0 3px 7px #24160f5b;overflow:hidden;}
+.qa-swatch::after {content:"";position:absolute;inset:4px;border-radius:50%;
+  background:linear-gradient(128deg,#ffffff80,transparent 37% 58%,#ffffff27 85%,transparent);
+  box-shadow:inset 0 0 0 1px #fff8d44f;pointer-events:none;}
+.qa-palette-emerald .qa-swatch {
+  background:radial-gradient(ellipse at 34% 21%,#2ec39b 0%,#157052 19%,transparent 46%),
+    conic-gradient(from 36deg,#073627,#0d6246,#04281e,#ceb86f,#073427,#11553e,#073627);
+}
+.qa-palette-obsidian .qa-swatch {
+  background:radial-gradient(ellipse at 27% 16%,#b6c6d2 0%,#586473 15%,transparent 38%),
+    conic-gradient(from 35deg,#0a1019,#424b57,#03060d,#9eabb4,#10141a,#59636b,#0b111b);
+  border-color:#cbd3d8;box-shadow:0 0 0 1px #4f5e69,inset 0 1px 8px #000,0 3px 7px #24160f5b;
+}
+.qa-palette-burgundy .qa-swatch {
+  background:radial-gradient(ellipse at 30% 18%,#f0949f 0%,#b9445b 17%,transparent 42%),
+    conic-gradient(from 35deg,#4b0a24,#af2245,#2f0415,#e2a76c,#610920,#971936,#41071d);
+  border-color:#f4c98a;box-shadow:0 0 0 1px #9f653e,inset 0 1px 7px #2f031d,0 3px 7px #24160f5b;
+}
+.qa-contrast-note {font-size:11px;text-align:center;margin:8px auto 0;}
+
+/* Bespoke materials: preserve bright gold detailing in the approved ring art.
+   No blanket hue-rotation, which made the other presets muddy. */
+.qa-style-obsidian.qa-page .qa-scene {
+  background:radial-gradient(ellipse at 51% 34%,#26313b 0%,#111a24 51%,#060b12 100%);
+}
+.qa-style-obsidian .qa-ring::before,.qa-style-burgundy .qa-ring::before {
+  content:"";position:absolute;z-index:0;inset:12%;border-radius:50%;pointer-events:none;
+}
+.qa-style-obsidian .qa-ring::before {
+  background:radial-gradient(ellipse at 28% 22%,#8496a37d 0%,#26343ad9 22%,#080b13e6 63%,#c8d5d64d 85%,transparent 95%);
+  box-shadow:inset 0 0 19px 5px #050912,0 0 45px #a8afbd20;
+}
+.qa-style-obsidian .qa-ring-art {
+  filter:saturate(.9) contrast(1.10) brightness(1.06) drop-shadow(0 6px 18px #02070cc2)!important;
+}
+.qa-style-obsidian .qa-panel {
+  background:linear-gradient(145deg,#f7f4ed,#e5e7e6 54%,#d6d9d7);
+}
+.qa-style-obsidian .qa-type.selected,.qa-style-obsidian .qa-type.selected:hover {
+  background:linear-gradient(135deg,#747f88 0%,#232f38 32%,#111823 68%,#444f58 100%)!important;
+  color:#fff4d9;box-shadow:inset 0 1px #ffffff9c,inset 0 0 0 2px #c5cbd680,0 2px 5px #0a15285a!important;
+  border:1px solid #93a4ac!important;
+}
+.qa-style-obsidian .qa-type.selected .qa-type-symbol {color:#e0c78e;}
+.qa-style-obsidian .qa-done {background:linear-gradient(145deg,#3b4753,#0b1722 65%,#070e16);border-color:#c0b58e;}
+.qa-style-burgundy.qa-page .qa-scene {
+  background:radial-gradient(ellipse at 51% 34%,#63253d 0%,#330c23 49%,#190912 100%);
+}
+.qa-style-burgundy .qa-ring::before {
+  background:radial-gradient(ellipse at 28% 21%,#f0a1aa70 0%,#831e42dc 25%,#2e071eea 66%,#a73e5e83 88%,transparent 96%);
+  box-shadow:inset 0 0 19px 5px #1f0614,0 0 45px #aa2a502e;
+}
+.qa-style-burgundy .qa-ring-art {
+  filter:saturate(1.10) contrast(1.05) brightness(1.08) drop-shadow(0 7px 18px #240616a8)!important;
+}
+.qa-style-burgundy .qa-panel {
+  background:linear-gradient(145deg,#fff1df,#f3dfd4 55%,#efd0c5);
+}
+.qa-style-burgundy .qa-type.selected,.qa-style-burgundy .qa-type.selected:hover {
+  background:linear-gradient(137deg,#c44c70,#8c203f 35%,#4d0b29 68%,#a83b5d)!important;
+  color:#fff1d5;box-shadow:inset 0 1px #fff2b38c,inset 0 0 0 2px #eaba997a,0 2px 5px #2b0c205c!important;
+  border:1px solid #f0bd8b!important;
+}
+.qa-style-burgundy .qa-type.selected .qa-type-symbol {color:#ffe1a8;}
+.qa-style-burgundy .qa-done {background:linear-gradient(145deg,#aa3e60,#6e1538 65%,#3d0c25);border-color:#e9b37c;}
+
+@media(max-width:390px) {
+  .qa-title {top:22px;right:4%;width:69.7%;}
+  .qa-ring {width:125.4%;}
+  .qa-panel-inner {padding-top:4px;}
+  .qa-type {min-height:64px;padding:7px 1px;}
+  .qa-type-symbol svg {width:23px;height:23px;}
+}
+@media(min-width:701px) {
+  .qa-title {width:min(60.35%,442px);top:27px;right:4%;}
+  .qa-ring {width:min(107.35%,741px);}
+}
+@media print {
+  .app-shell.page-qr-atelier > main.qa-page {margin-top:0;}
+}
