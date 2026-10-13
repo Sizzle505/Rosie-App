@@ -182,18 +182,18 @@ export default function RosieRandomizers() {
 
   return (
     <main className={styles.page}>
-      <header className={styles.hero}>
-        <div className={styles.heroCopy}>
-          <div className={styles.kicker}><span /> ROSIE'S PRIVATE SALON <span /></div>
-          <h1><span className={styles.heroTitleLead}>Rosie’s</span>{" "}<span className={styles.heroTitleMain}>Randomizers</span></h1>
-          <p>For decisions too important to leave to humans.</p>
-          <div className={styles.houseRule}>Decisive · impartial · occasionally snack-motivated</div>
-        </div>
-        <div className={styles.hostPortrait} aria-label="Rosie, your casino host">
-          <img src="/randomizers/rosie-casino.webp" alt="Rosie dressed as an elegant casino host" />
-          <span className={styles.portraitGlow} />
-        </div>
-        <img className={styles.heroSignet} src="/randomizers/rosie-signet.webp" alt="" aria-hidden="true" />
+      <header className={styles.illustratedHero}>
+        <h1 className={styles.heroAccessibleTitle}>Rosie’s Randomizers</h1>
+        <img
+          className={styles.approvedHeaderArt}
+          src="/randomizers/rosie-randomizers-casino-header.webp"
+          alt="Rosie’s Randomizers casino salon - Rosie presides over her winnings, with gilded dice, a commemorative coin and roulette wheel. For decisions too important to leave to humans."
+          width="1368"
+          height="900"
+          decoding="async"
+          fetchPriority="high"
+        />
+
       </header>
 
       <section className={styles.ivoryRow} aria-label="Quick randomizers">
