@@ -560,56 +560,56 @@ const CHEESES = [
     id: "brie",
     name: "Brie",
     note: "Soft-ripened royalty",
-    image: "https://upload.wikimedia.org/wikipedia/commons/a/a7/Brie_de_Meaux.jpg",
+    image: "/rosieverse/cheese/cards/brie.webp",
     objectPosition: "50% 52%"
   },
   {
     id: "swiss",
     name: "Swiss",
     note: "The hole truth",
-    image: "https://upload.wikimedia.org/wikipedia/commons/e/ec/NCI_swiss_cheese.jpg",
+    image: "/rosieverse/cheese/cards/swiss.webp",
     objectPosition: "50% 50%"
   },
   {
     id: "cheddar",
     name: "Cheddar",
     note: "Sharp and distinguished",
-    image: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Montgomerys_cheddar_cheese.jpg",
+    image: "/rosieverse/cheese/cards/cheddar.webp",
     objectPosition: "52% 52%"
   },
   {
     id: "blue",
     name: "Blue",
     note: "Veined with greatness",
-    image: "https://upload.wikimedia.org/wikipedia/commons/1/1d/Shropshire_blue_cheese.jpg",
+    image: "/rosieverse/cheese/cards/blue.webp",
     objectPosition: "50% 50%"
   },
   {
     id: "gouda",
     name: "Gouda",
     note: "Wheel of good decisions",
-    image: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Aged_Gouda_cheese.jpg",
+    image: "/rosieverse/cheese/cards/gouda.webp",
     objectPosition: "55% 48%"
   },
   {
     id: "parmesan",
     name: "Parmesan",
     note: "Aged with authority",
-    image: "https://upload.wikimedia.org/wikipedia/commons/9/96/Parmigiano_Reggiano_cheese.jpg",
+    image: "/rosieverse/cheese/cards/parmesan.webp",
     objectPosition: "54% 48%"
   },
   {
     id: "mozzarella",
     name: "Mozzarella",
     note: "Fresh little clouds",
-    image: "https://upload.wikimedia.org/wikipedia/commons/5/50/Mozzarella_cheese.jpg",
+    image: "/rosieverse/cheese/cards/mozzarella.webp",
     objectPosition: "48% 50%"
   },
   {
     id: "goat",
     name: "Goat Cheese",
     note: "Tangy academic excellence",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Goat_cheese_from_Belgium_2025-02-20_01.jpg/960px-Goat_cheese_from_Belgium_2025-02-20_01.jpg",
+    image: "/rosieverse/cheese/cards/goat.webp",
     objectPosition: "50% 50%"
   }
 ];
