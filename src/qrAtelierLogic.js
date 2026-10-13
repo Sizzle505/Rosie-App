@@ -18,7 +18,7 @@ export function initialValues() {
   return {
     wifi:{ssid:"",password:"",security:"WPA",hidden:false},
     contact:{name:"",phone:"",email:"",organization:"",website:"",title:"",address:""},
-    website:{url:""},zoom:{url:""},
+    website:{url:"https://"},zoom:{url:""},
     event:{title:"",start:"",end:"",location:"",details:"",timezone: Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"},
     payment:{url:"",provider:"other"},
     instagram:{handle:""},
@@ -27,7 +27,7 @@ export function initialValues() {
 }
 export function cleanUrl(input, {allowBare=true}={}) {
   const text=String(input||"").trim();
-  if(!text)throw Error("Enter a link.");
+  if(!text||text==="https://")throw Error("Add a website address.");
   if(/[\s<>]/.test(text))throw Error("Enter one valid web address without spaces.");
   if(/^[a-z][a-z0-9+.-]*:/i.test(text)&& !/^https?:\/\//i.test(text))
     throw Error("Only http and https links are supported.");
