@@ -1554,3 +1554,11 @@ body:has(.app-shell.page-timekeeper),
   .rtk-page .rtk-custom-timer label {font-size:9px;}
   .rtk-page .rtk-custom-timer input {min-height:24px;max-height:27px;}
 }
+
+
+/* Show two tabular hundredths digits for stopwatch and countdown. */
+.rtk-page .rtk-dial .rtk-time-fraction {font-variant-numeric:tabular-nums;white-space:nowrap;}
+.rtk-page .rtk-action-deck .rtk-controls .rtk-repeat-icon {
+  display:block;width:40%;height:40%;margin:auto;color:#f9dda6;
+  stroke:currentColor;filter:drop-shadow(0 1px 2px #120710);
+}
