@@ -426,7 +426,7 @@
 
 @media (max-width: 720px) {
   .page { padding-left: 5px; padding-right: 5px; padding-bottom: 78px; }
-  .header { min-height: 100px; gap: 0; padding: max(22px, calc(env(safe-area-inset-top) + 12px)) 58px 12px 6px; }
+  .header { min-height: 90px; gap: 0; padding: max(22px, calc(env(safe-area-inset-top) + 12px)) 58px 12px 6px; }
   .headerRule { display: none; }
   .headerMark { min-width: 0; width: 100%; padding: 9px 8px; }
   .eyebrow { margin-bottom: 5px; font-size: 5.5px; letter-spacing: .18em; white-space: nowrap; }
