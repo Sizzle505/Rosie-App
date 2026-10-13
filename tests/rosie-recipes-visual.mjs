@@ -1,6 +1,17 @@
 import { chromium, webkit } from "playwright";
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
+import { COOKBOOK, RECIPE_CATALOG } from "../src/rosieRecipesData.js";
+assert.equal(RECIPE_CATALOG.length,25,"all 25 supplied recipes loaded");
+assert.deepEqual(Object.fromEntries(["Breakfast","Small Bites","Main Courses","Desserts"].map(c=>[c,RECIPE_CATALOG.filter(x=>x.category===c).length])),{"Breakfast":5,"Small Bites":5,"Main Courses":10,"Desserts":5});
+for(const recipe of RECIPE_CATALOG){
+ assert.ok(recipe.subtitle && recipe.description && recipe.note,"complete editorial matter for "+recipe.title);
+ assert.ok(recipe.ingredients.length>=7 && recipe.steps.length>=3,"complete recipe method and measured ingredients: "+recipe.title);
+ assert.ok(recipe.totalMinutes>=10 && recipe.difficulty && recipe.servingsLabel,"exact metadata: "+recipe.title);
+}
+assert.match(COOKBOOK.humanOnly,/not for sharing with Rosie/);
+assert.match(RECIPE_CATALOG[23].timeLabel,/1 hour chilling/);
+assert.match(RECIPE_CATALOG[24].timeLabel,/4 hours chilling/);
 const origin = "http://127.0.0.1:5173";
 const assets = ["recipes-hero.webp","recipes-title.webp","recipes-card-frame.webp","recipes-parchment.webp","recipes-controls.webp","recipes-continuation.webp"];
 await mkdir("artifacts/rosie-recipes/", {recursive:true});
@@ -35,14 +46,23 @@ for(const [name,browserType,viewport] of [
  await page.getByPlaceholder("Find a recipe…").fill("Pawsta");
  assert.equal(await page.locator(".recipes-grid .recipes-card").count(),1,`${name}: search`);
  await page.getByPlaceholder("Find a recipe…").fill("");
- await page.getByRole("button",{name:"Desserts",exact:true}).click();
+ await page.getByRole("button",{name:"Sweet Dreams & Puppy Eyes",exact:true}).click();
  assert.equal(await page.locator(".recipes-grid .recipes-card").count(),5,`${name}: desserts`);
  await page.getByRole("button",{name:"All",exact:true}).click();
  await page.locator(".recipes-card").first().click();
  await page.locator("#recipes-detail").waitFor();
  assert.equal(await page.locator(".recipes-grid").count(),0,`${name}: detail replaces grid`);
  assert.ok(await page.locator(".recipes-parchment-art img").evaluate(img=>img.complete && img.naturalWidth>900),`${name}: parchment loaded`);
+ assert.equal(await page.locator(".recipes-written-method .recipes-ingredient-list li").count(),10,`${name}: original Barkfast ingredients`);
+ assert.ok(await page.locator(".recipes-steps li").count()>=5,`${name}: original method steps`);
+ assert.match(await page.locator(".recipes-note").innerText(),/Toast the buns cut-side down/);
+ assert.match(await page.locator(".recipes-overview-meta").innerText(),/20 min/);
  await page.screenshot({path:`artifacts/rosie-recipes/${name}-detail.png`,fullPage:false});
+ await page.locator(".recipes-written-method").scrollIntoViewIfNeeded();
+ await page.screenshot({path:`artifacts/rosie-recipes/${name}-method.png`,fullPage:false});
+ const checklist=page.locator(".recipes-ingredient-list input").first();
+ await checklist.check();
+ assert.equal(await checklist.isChecked(),true,`${name}: interactive ingredient checklist`);
  await page.getByRole("button",{name:/The Collection/}).click();
  await page.locator(".recipes-grid").waitFor();
  const favorite=page.locator(".recipes-favorite").first();
