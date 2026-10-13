@@ -5,13 +5,7 @@ import "./RosieRecipesAssetLayout.css";
 
 const ROOT = "/rosieverse/recipes/";
 const FAVORITES_KEY = "rosie-recipes-favorites-v1";
-const RECIPE_ART = {
-  Breakfast: ROOT + "card-breakfast-20261013.webp",
-  "Small Bites": ROOT + "card-small-bites-20261013.webp",
-  "Main Courses": ROOT + "card-main-courses-20261013.webp",
-  Desserts: ROOT + "card-desserts-20261013.webp",
-};
-const recipeArt = (recipe) => RECIPE_ART[recipe.category] || RECIPE_ART.Breakfast;
+const recipeArt = (recipe) => `${ROOT}dishes/${recipe.id}.webp`;
 function loadFavorites() {
   try {
     const parsed = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
