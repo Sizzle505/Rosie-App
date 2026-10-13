@@ -12,7 +12,9 @@ export const QR_TYPES = [
 export const QR_STYLES = [
   {id:"emerald",label:"Emerald",dark:"#072b23",accent:"#cfad64",light:"#f7eddb"},
   {id:"obsidian",label:"Obsidian",dark:"#101a24",accent:"#c9a35e",light:"#faf0db"},
-  {id:"burgundy",label:"Burgundy",dark:"#4e102a",accent:"#d7b57c",light:"#fff0dd"}
+  {id:"burgundy",label:"Burgundy",dark:"#4e102a",accent:"#d7b57c",light:"#fff0dd"},
+  {id:"champagne",label:"Champagne",dark:"#514126",accent:"#f5d48c",light:"#fff8e8"},
+  {id:"sapphire",label:"Sapphire",dark:"#071a41",accent:"#a6ccf4",light:"#f0f8ff"}
 ];
 export function initialValues() {
   return {
