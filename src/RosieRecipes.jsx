@@ -34,9 +34,9 @@ function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
         <strong>{recipe.title}</strong>
       </span>
       <span className="recipes-card-metrics">
-        <span><b>◷ Time</b>{recipe.timeLabel || "—"}</span>
-        <span><b>✦ Level</b>{recipe.difficulty || "—"}</span>
-        <span><b>♟ Serves</b>{recipe.servingsLabel || "—"}</span>
+        <span><b>Time</b><em>{recipe.timeLabel || "—"}</em></span>
+        <span><b>Level</b><em>{recipe.difficulty || "—"}</em></span>
+        <span><b>Serves</b><em>{recipe.servingsLabel || "—"}</em></span>
       </span>
     </button>
     <button type="button" className={`recipes-favorite ${favorite ? "is-favorite" : ""}`}
@@ -135,7 +135,7 @@ export default function RosieRecipes() {
         <nav className="recipes-meal-filters" aria-label="Browse recipes by meal">
           {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
             className={category===cat?"is-active":""} aria-pressed={category===cat}
-            onClick={() => setCategory(cat)}>{cat === "All" ? "Random" : cat === "Favorites" ? "Saved" : COOKBOOK.labels[cat] || cat}</button>)}
+            onClick={() => setCategory(cat)}>{cat === "All" ? "Random" : cat === "Favorites" ? "Favorites" : COOKBOOK.labels[cat] || cat}</button>)}
         </nav>
         <label className="recipes-inline-search"><span aria-hidden="true">⌕</span><span className="recipes-visually-hidden">Find a recipe</span>
           <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a recipe…" autoComplete="off"/>
