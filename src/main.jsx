@@ -751,10 +751,11 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
   const diplomaDialogRef = useRef(null);
   const efficiency = moves ? Math.min(100, Math.round((CHEESES.length / moves) * 100)) : 100;
   // Doctor of Cheese honorifics, ranked from a perfect exam to a leisurely finish.
-  const defaultDiplomaName = efficiency >= 90 ? "The Grate Gatsby"
-    : efficiency >= 75 ? "Sharp as Cheddar"
-    : efficiency >= 60 ? "Cheez Whiz"
-    : efficiency >= 45 ? "Provolone Ranger"
+  // Each score requirement is 5% easier than before (ceil to whole-percent display).
+  const defaultDiplomaName = efficiency >= Math.ceil(90 * 0.95) ? "The Grate Gatsby"
+    : efficiency >= Math.ceil(75 * 0.95) ? "Sharp as Cheddar"
+    : efficiency >= Math.ceil(60 * 0.95) ? "Cheez Whiz"
+    : efficiency >= Math.ceil(45 * 0.95) ? "Provolone Ranger"
     : "Feta Late Than Never";
   const [graduateName, setGraduateName] = useState(() => {
     try {
