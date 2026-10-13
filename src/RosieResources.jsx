@@ -5,9 +5,10 @@ const ASSETS = "/rosieverse/resources/";
 
 const destinations = [
   { id: "reminders", title: "Rosie’s Reminders", image: "reminders.webp" },
-  { id: "timekeeper", title: "Rosie’s Timekeeper", image: "timekeeper.webp" },
-  { id: "calculations", title: "Rosie’s Calculations", image: "calculations.webp" },
   { id: "qr-atelier", title: "Rosie’s QR Atelier", image: null },
+  { id: "calculations", title: "Rosie’s Calculations", image: "calculations.webp" },
+  { id: "recipes", title: "Rosie’s Recipes", image: null },
+  { id: "timekeeper", title: "Rosie’s Timekeeper", image: "timekeeper.webp" },
 ];
 
 /**
@@ -43,7 +44,8 @@ export default function RosieResources({ onNavigate }) {
                 alt=""
                 draggable="false"
                 loading="eager"
-              /> : <span className="rr-qr-banner" aria-hidden="true"><span className="rr-qr-glyph">▦</span><span className="rr-qr-text">QR Atelier<small>Craft · Create · Share</small></span><span className="rr-qr-arrow">›</span></span>}
+              /> : id === "qr-atelier" ? <span className="rr-qr-banner" aria-hidden="true"><span className="rr-qr-glyph">▦</span><span className="rr-qr-text">QR Atelier<small>Craft · Create · Share</small></span><span className="rr-qr-arrow">›</span></span> :
+                <span className="rr-recipes-button-art" aria-hidden="true"><span className="rr-recipes-ornament">✦</span><span className="rr-recipes-name">Rosie’s Recipes</span><small>THE ROYAL COOKBOOK</small></span>}
               <span className="rr-visually-hidden">{title}</span>
             </button>
           ))}
