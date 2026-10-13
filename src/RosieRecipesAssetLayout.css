@@ -59,3 +59,15 @@
 @media(max-width:600px){.recipes-body{padding-inline:6px}.recipes-heading{padding-top:95vw}.recipes-index{margin-inline:4px;padding:13px 10px 28px}.recipes-crest{width:100%}.recipes-heading>p{font-size:12px;padding:0 25px;margin:1px auto 12px}.recipes-index-header h2{font-size:25px}.recipes-grid{gap:6px}.recipes-detail{max-width:100%}.recipes-parchment-message{left:19%;right:19%}}
 @media(max-width:360px){.recipes-card-copy strong{font-size:11px}.recipes-card-metrics{font-size:9px}.recipes-heading{padding-top:96vw}}
 @media print{.recipes-detail{width:100%!important;max-width:700px!important}.recipes-parchment-art{break-inside:avoid;max-width:480px;margin:auto}.recipes-written-method{border:0;box-shadow:none;background:white;width:100%}}
+
+/* Native iOS Safari select styling must not override the ivory-gold UI. */
+.recipes-sort {position:absolute;isolation:isolate;color-scheme:light}
+.recipes-sort select {position:relative;display:block;width:100%;height:100%;max-width:100%;
+  -webkit-appearance:none;appearance:none;border:none;border-radius:inherit;
+  outline:0;background:transparent!important;color:#60320e!important;
+  -webkit-text-fill-color:#60320e;text-align:center;text-align-last:center;
+  font:600 clamp(11px,2.5vw,14px)/1 Georgia,serif;
+  padding:0 22px 0 9px;box-shadow:none;cursor:pointer}
+.recipes-sort:after {content:"▾";position:absolute;z-index:1;right:10px;top:50%;transform:translateY(-54%);
+  font-size:15px;color:#8b4b12;pointer-events:none}
+.recipes-sort select option {color:#60320e;background:#fff2d6}
