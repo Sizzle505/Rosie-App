@@ -11,7 +11,11 @@ page.setDefaultTimeout(8000);
 page.on("pageerror",error=>failures.push("Browser error: "+error.message));
 async function checkType(label,fill){
   try{
-    await page.getByRole("button",{name:label,exact:true}).first().click();
+    const choice=page.getByRole("button",{name:label,exact:true}).first();
+    if(!await choice.isVisible()){
+      await page.getByRole("button",{name:/More formats/}).click();
+    }
+    await choice.click();
     await fill();
     await page.waitForFunction(()=>Boolean(document.querySelector(".qa-code-shell svg")),null,{timeout:4500});
     const html=await page.locator(".qa-code-shell svg").first().innerHTML();
@@ -41,7 +45,8 @@ try {
   assert.ok(await page.locator(".qa-idle-emblem").isVisible());
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
   assert.ok(overflow<=4,"unexpected horizontal scrolling: "+overflow);
-  assert.equal(await page.locator(".qa-type").count(),8);
+  assert.equal(await page.locator(".qa-type").count(),4,"four primary formats keep the opening workbench focused");
+  assert.equal(await page.getByRole("button",{name:/More formats/}).count(),1);
   assert.equal(await page.locator(".qa-scanner-note").count(),0,"Scanner should remain excluded");
   await checkType("Website",async()=>{
     await page.locator(".qa-inputs input").first().fill("https://rosie.example.com");
@@ -49,7 +54,7 @@ try {
   await page.screenshot({path:"qa-screenshots/qr-atelier-with-code.png",fullPage:true});
   const frame=await page.locator(".qa-ring").boundingBox();
   const code=await page.locator(".qa-code-shell").boundingBox();
-  assert.ok(frame&&code&&code.width<frame.width*.4,"QR does not fit inside frame");
+  assert.ok(frame&&code&&code.width<frame.width*.5&&code.width>frame.width*.34,"QR does not sit cleanly inside its frame");
   await page.getByRole("button",{name:/Full-screen QR/}).click();
   assert.equal(await page.getByRole("dialog",{name:/Full-screen/}).count(),1);
   await page.screenshot({path:"qa-screenshots/qr-atelier-zoom.png"});
