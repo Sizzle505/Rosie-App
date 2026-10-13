@@ -34,15 +34,17 @@ const PRESETS = [
   { label: "15m", ms: 15 * 60_000 }
 ];
 
-function formatClock(ms, fractions = false) {
-  const units = Math.max(0, Math.floor(ms / (fractions ? 1 : 1000)));
-  const seconds = fractions ? Math.floor(units / 1000) : units;
+function formatClock(ms, fractions = false, countingDown = false) {
+  // Display hundredths for both modes. Countdown rounds up to avoid
+  // showing zero before the timer actually completes.
+  const hundredths = Math.max(0, countingDown ? Math.ceil(ms / 10) : Math.floor(ms / 10));
+  const seconds = Math.floor(hundredths / 100);
   const hh = Math.floor(seconds / 3600);
   const mm = Math.floor((seconds % 3600) / 60);
   const ss = seconds % 60;
   const pad = (value) => String(value).padStart(2, "0");
   const head = hh ? pad(hh) + ":" + pad(mm) + ":" + pad(ss) : pad(mm) + ":" + pad(ss);
-  return fractions ? head + "." + String(units % 1000).padStart(3, "0") : head;
+  return fractions ? head + "." + pad(hundredths % 100) : head;
 }
 
 /**
@@ -259,8 +261,8 @@ export default function RosieTimekeeper() {
   const showMarker = running || elapsed > 0;
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
-  const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining);
-  const [wholeTime, milliseconds] = mode === "stopwatch" ? shown.split(".") : [shown, null];
+  const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
+  const [wholeTime, hundredths] = shown.split(".");
   const status = (mode === "countdown" && finished.current && elapsed >= duration)
     ? "COMPLETE"
     : message || (running ? "RUNNING" : elapsed > 0 ? "PAUSED" :
@@ -332,7 +334,7 @@ export default function RosieTimekeeper() {
           </svg>
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
-            {milliseconds !== null && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{milliseconds}</span>}
+            <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{hundredths}</span>
           </output>
           <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
         </section>
@@ -342,7 +344,13 @@ export default function RosieTimekeeper() {
               onClick={mode === "stopwatch" ? lap : repeatCountdown}
               disabled={mode === "stopwatch" && !running}
               aria-label={mode === "stopwatch" ? "Record lap" : "Restart countdown"}>
-              <span className="rtk-action-word">{mode === "stopwatch" ? "Lap" : "Repeat"}</span>
+              {mode === "stopwatch" ? <span className="rtk-action-word">Lap</span> : (
+                <svg className="rtk-repeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                  <path d="m17 2 4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15" />
+                  <path d="m7 22-4-4 4-4" /><path d="M21 13v2a3 3 0 0 1-3 3H3" />
+                </svg>
+              )}
             </button>
             <button type="button" className="rtk-primary-action" onClick={startOrPause}
               aria-label={running ? "Pause" : "Start"}>
@@ -363,7 +371,7 @@ export default function RosieTimekeeper() {
           <div className="rtk-utility-inner">
           {mode === "stopwatch" ? (
             <>
-              <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "Milliseconds"}</span></div>
+              <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "Hundredths"}</span></div>
               {laps.length ? (
                 <ol className="rtk-laps">
                   {laps.map((entry, index) => (
