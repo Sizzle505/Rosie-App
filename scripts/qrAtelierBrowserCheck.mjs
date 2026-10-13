@@ -22,6 +22,25 @@ async function checkType(label,fill){
 try {
   await page.goto("http://127.0.0.1:4173/#qr-atelier",{waitUntil:"networkidle",timeout:35000});
   await page.waitForTimeout(2200);
+  const assets=["header-sign","workbench-frame","tile-ivory","tile-emerald",
+    "button-burgundy","button-obsidian","idle-paw","collection-frame"];
+  for(const name of assets){
+    const result=await page.evaluate(async(name)=>{
+      const res=await fetch("/qr-atelier/"+name+".webp");
+      const blob=await res.blob();
+      return {status:res.status,type:blob.type,bytes:blob.size};
+    },name);
+    assert.equal(result.status,200,name+" missing");
+    assert.ok(result.type.includes("webp"),name+" is not a WebP");
+    assert.ok(result.bytes>8000,name+" too small to contain proper artwork");
+    console.log("PASS visual asset",name,result.bytes);
+  }
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll(".qa-header-sign,.qa-idle-emblem"))
+    .every(im=>im.complete&&im.naturalWidth>0),null,{timeout:9000});
+  assert.ok(await page.locator(".qa-header-sign").isVisible());
+  assert.ok(await page.locator(".qa-idle-emblem").isVisible());
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
+  assert.ok(overflow<=4,"unexpected horizontal scrolling: "+overflow);
   assert.equal(await page.locator(".qa-type").count(),8);
   assert.equal(await page.locator(".qa-scanner-note").count(),0,"Scanner should remain excluded");
   await checkType("Website",async()=>{

@@ -315,13 +315,16 @@ export default function RosieQrAtelier(){
   return <main className={"qa-page qa-style-"+style} aria-label="Rosie's QR Atelier">
     <div className="qa-scene">
       <header className="qa-hero" aria-label="Rosie works at her QR atelier">
-        <div className="qa-title"><span className="qa-title-flourish">✦</span>
-          <h1>QR Atelier</h1><p>Small Codes. Beautiful Connections.</p></div>
+        <div className="qa-title">
+          <h1 className="qa-accessible-title">QR Atelier</h1>
+          <img className="qa-header-sign" src={ART+"header-sign.webp"}
+            alt="Small Codes. Beautiful Connections." draggable="false" />
+        </div>
       </header>
       <section className="qa-preview-stage" ref={previewRef} aria-label="Live QR preview">
         <div className="qa-ring" aria-label={ready?"QR artwork, ready to scan":"Empty QR frame"}>
           <div className="qa-code-shell">{ready?<div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}} role="img" aria-label="Scannable QR code"/>
-            :<div className="qa-waiting"><span className="qa-waiting-mark">✧</span><span>Awaiting your creation</span></div>}</div>
+            :<div className="qa-waiting"><img className="qa-idle-emblem" src={ART+"idle-paw.webp"} alt="" /><span>Awaiting your creation</span></div>}</div>
           <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" aria-hidden="true" draggable="false"/>
           <div className="qa-ring-caption">{ready?"Ready to Share":"Create a Code"}</div>
         </div>
