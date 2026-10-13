@@ -187,7 +187,7 @@ export default function RosieQrAtelier(){
   const [collectionOpen,setCollectionOpen]=useState(false);
   const [toast,setToast]=useState("");
   const [working,setWorking]=useState(false);
-  const previewRef=useRef(null),ringRef=useRef(null),timerRef=useRef(null);
+  const previewRef=useRef(null),ringRef=useRef(null),saveDrawerRef=useRef(null),timerRef=useRef(null);
   const v=forms[type];
   const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
   const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setShowPassword(false);};
@@ -204,6 +204,13 @@ export default function RosieQrAtelier(){
     try{localStorage.setItem(STORAGE,JSON.stringify(saved));}
     catch{toastMessage("This browser cannot save your collection. Downloads still work.");}
   },[saved]);
+  useEffect(()=>{
+    if(!showSaveMenu)return;
+    // The save drawer is in normal document flow beneath the workbench.
+    // Scroll it into view rather than obscuring the five finish choices.
+    const frame=window.requestAnimationFrame(()=>saveDrawerRef.current?.scrollIntoView({behavior:"smooth",block:"nearest"}));
+    return ()=>window.cancelAnimationFrame(frame);
+  },[showSaveMenu]);
   useEffect(()=>{
     if(!fullScreen)return;
     const key=e=>{if(e.key==="Escape")setFullScreen(false);};
@@ -329,19 +336,9 @@ export default function RosieQrAtelier(){
             <h3 className="qa-design-heading">Atelier Finish</h3>
             <div className="qa-finish-controls">
               <div className="qa-save-menu">
-                <button className="qa-save-toggle" type="button" aria-expanded={showSaveMenu} onClick={()=>setShowSaveMenu(open=>!open)}>
+                <button className="qa-save-toggle" type="button" aria-expanded={showSaveMenu} aria-controls="qa-save-details" onClick={()=>setShowSaveMenu(open=>!open)}>
                   Save <span aria-hidden="true">⌄</span></button>
-                {showSaveMenu&&<div className="qa-save-options">
-                  <Field label="Name (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
-                  <button type="button" disabled={!ready||working} onClick={save}>{loadedId?"Update Collection":"Save to My Collection"}</button>
-                  <button type="button" disabled={!ready||working} onClick={share}>Share</button>
-                  <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>Download PNG</button>
-                  <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>Download SVG</button>
-                  <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>Designed Card</button>
-                  {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
-                  {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
-                  <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
-                </div>}
+
               </div>
               <button className="qa-done" type="button" onClick={showFinishedQR}>Done <span aria-hidden="true">↑</span></button>
             </div>
@@ -354,6 +351,19 @@ export default function RosieQrAtelier(){
 
         </div>
       </section>
+      {showSaveMenu&&<section id="qa-save-details" ref={saveDrawerRef} className="qa-save-drawer" aria-label="Save and export QR code">
+        <div className="qa-save-options">
+          <Field label="Name (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
+          <button type="button" disabled={!ready||working} onClick={save}>{loadedId?"Update Collection":"Save to My Collection"}</button>
+          <button type="button" disabled={!ready||working} onClick={share}>Share</button>
+          <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>Download PNG</button>
+          <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>Download SVG</button>
+          <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>Designed Card</button>
+          {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
+          {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
+          <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
+        </div>
+      </section>}
       <section className="qa-collection" aria-label="Saved QR collection">
         <button className="qa-collection-toggle" type="button" aria-expanded={collectionOpen} onClick={()=>setCollectionOpen(open=>!open)}>
           My Collection <span>{saved.length}</span> <b aria-hidden="true">⌄</b></button>
