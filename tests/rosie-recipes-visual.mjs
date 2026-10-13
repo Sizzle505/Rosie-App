@@ -15,6 +15,9 @@ for(const [name,browserType,viewport] of [
  page.on("pageerror",err=>errors.push(err.message));
  await page.goto(origin+"/#recipes",{waitUntil:"networkidle"});
  await page.locator(".recipes-grid .recipes-card").first().waitFor();
+ await page.locator(".app-shell.app-shell-visible").waitFor();
+ await page.waitForTimeout(200);
+ await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
  assert.equal(await page.locator(".recipes-grid .recipes-card").count(),25,`${name}: 25 cards`);
  for(const file of assets){
   const result=await page.request.get(origin+"/rosieverse/recipes/"+file);
