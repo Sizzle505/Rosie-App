@@ -1274,3 +1274,10 @@
   .illustratedHero { width:min(104%,calc(100% + 14px)); }
   .ivoryRow { margin-top:1px; }
 }
+
+/* 2026-10-13: Randomizers hero requested size and vertical alignment. */
+.illustratedHero {
+  transform: translate(-50%, -15px) scale(1.08);
+  transform-origin: center top;
+  margin-bottom: -25px;
+}
