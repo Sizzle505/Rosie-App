@@ -1,0 +1,48 @@
+name: Integrated Resources mobile QA
+on:
+  push:
+    branches: [work/resources-qr-recipes-integration-20261012]
+    paths:
+      - src/main.jsx
+      - src/styles.css
+      - src/RosieResources.css
+      - src/RosieResources.jsx
+      - src/RosieCalculations.css
+      - src/RosieCalculationsDevice.css
+      - src/RosieRecipes*
+      - tests/resources-integration.mjs
+      - .github/workflows/resources-integration-qa.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run build
+      - name: Serve
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-resources.log 2>&1 &
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-resources.log
+          exit 1
+      - name: Verify five-tab navigation and measure Calculations end space
+        run: node tests/resources-integration.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resources-integration-screens
+          path: artifacts/resources-integration/
+          retention-days: 14
