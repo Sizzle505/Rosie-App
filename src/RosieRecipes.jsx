@@ -6,6 +6,14 @@ import "./RosieRecipesAssetLayout.css";
 const ROOT = "/rosieverse/recipes/";
 const FAVORITES_KEY = "rosie-recipes-favorites-v1";
 const recipeArt = (recipe) => `${ROOT}dishes/${recipe.id}.webp`;
+function shuffleRecipes(recipes) {
+  const shuffled = [...recipes];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 function loadFavorites() {
   try {
     const parsed = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
@@ -81,23 +89,27 @@ export default function RosieRecipes() {
   const [query, setQuery] = useState("");
   const [crestReady, setCrestReady] = useState(false);
   const [category, setCategory] = useState("All");
-  const [browseOpen, setBrowseOpen] = useState(false);
+  const [recipeOrder] = useState(() => shuffleRecipes(RECIPE_CATALOG));
   const [favorites, setFavorites] = useState(loadFavorites);
   const [selectedId, setSelectedId] = useState(null);
   const searchRef = useRef(null);
   useEffect(() => {
     try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites)); } catch {}
   }, [favorites]);
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 400));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
   const filtered = useMemo(() => {
     const normalized = query.toLocaleLowerCase().trim();
-    const matches = RECIPE_CATALOG.filter((recipe) => {
+    const matches = recipeOrder.filter((recipe) => {
       const categoryMatch = category === "All" || category === recipe.category ||
         (category === "Favorites" && favorites.includes(recipe.id));
       const words = `${recipe.title} ${recipe.subtitle} ${recipe.category} ${recipe.description || ""} ${recipe.ingredientsText}`.toLocaleLowerCase();
       return categoryMatch && (!normalized || words.includes(normalized));
     });
     return matches;
-  }, [query, category, favorites]);
+  }, [query, category, favorites, recipeOrder]);
   const selected = RECIPE_CATALOG.find((recipe) => recipe.id === selectedId);
   const toggleFavorite = (id) => setFavorites((previous) =>
     previous.includes(id) ? previous.filter((item) => item !== id) : [...previous, id]);
@@ -118,29 +130,17 @@ export default function RosieRecipes() {
           <img src={ROOT + "recipes-title.webp"} alt="" onLoad={() => setCrestReady(true)} onError={() => setCrestReady(false)} />
           <span>Rosie’s Recipes</span><small>THE ROYAL COOKBOOK</small>
         </div>
-        <p>The Founding Cookbook - 25 Recipes for Rosie’s Favorite Humans</p>
-        <p className="recipes-human-warning">Delicious human food, with a little of Rosie’s personality in every dish. Not for sharing with Rosie.</p>
       </header>
       {!selected && <section className="recipes-index" aria-label="The recipe collection" ref={searchRef}>
-        <div className="recipes-browse">
-          <button type="button" className="recipes-browse-trigger" aria-expanded={browseOpen}
-            onClick={() => setBrowseOpen(open => !open)}>
-            <span>Browse recipes</span><small>{category === "All" ? "25 recipes" : COOKBOOK.labels[category] || category}</small><b aria-hidden="true">⌄</b>
-          </button>
-          {browseOpen && <div className="recipes-browse-menu">
-            <label className="recipes-search"><span className="recipes-visually-hidden">Search recipes</span>
-              <span aria-hidden="true">⌕</span>
-              <input type="search" value={query} onChange={(event) => setQuery(event.target.value)}
-                placeholder="Find a recipe…" autoComplete="off"/>
-            </label>
-            <div className="recipes-category-tabs" aria-label="Filter recipes by category">
-              {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
-                className={category===cat?"is-active":""} aria-pressed={category===cat}
-                onClick={() => {setCategory(cat);setBrowseOpen(false);}}>{COOKBOOK.labels[cat] || cat}</button>)}
-            </div>
-            {(query || category !== "All") && <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"}</p>}
-          </div>}
-        </div>
+        <nav className="recipes-meal-filters" aria-label="Browse recipes by meal">
+          {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
+            className={category===cat?"is-active":""} aria-pressed={category===cat}
+            onClick={() => setCategory(cat)}>{cat === "All" ? "Random" : cat === "Favorites" ? "Saved" : COOKBOOK.labels[cat] || cat}</button>)}
+        </nav>
+        <label className="recipes-inline-search"><span aria-hidden="true">⌕</span><span className="recipes-visually-hidden">Find a recipe</span>
+          <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a recipe…" autoComplete="off"/>
+        </label>
+        {(query || category !== "All") && <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"}</p>}
         {filtered.length
           ? <div className="recipes-grid">{filtered.map((recipe) => <RecipeCard key={recipe.id}
             recipe={recipe} favorite={favorites.includes(recipe.id)}
