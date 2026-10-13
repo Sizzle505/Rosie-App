@@ -97,7 +97,11 @@ export default function RosieRecipes() {
     try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites)); } catch {}
   }, [favorites]);
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 400));
+    const isMobile = window.matchMedia("(max-width: 680px)").matches;
+    if (isMobile) window.scrollTo(0, 0);
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo(0, isMobile ? 0 : 400);
+    });
     return () => window.cancelAnimationFrame(frame);
   }, []);
   const filtered = useMemo(() => {
