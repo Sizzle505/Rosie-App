@@ -309,7 +309,7 @@ export default function RosieQrAtelier(){
           <div className="qa-code-shell">{ready?<div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}} role="img" aria-label="Scannable QR code"/>
             :<div className="qa-waiting"><img className="qa-idle-emblem" src={ART+"idle-paw.webp"} alt="" /><span>Awaiting your creation</span></div>}</div>
           <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" aria-hidden="true" draggable="false"/>
-          <div className="qa-ring-caption">{ready?"Ready to Share":"Create a Code"}</div>
+          {ready&&<div className="qa-ring-caption">Ready to Share</div>}
         </div>
         <div className="qa-preview-actions" role="group" aria-label="QR preview actions">
           <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready} aria-label="View QR full screen">
