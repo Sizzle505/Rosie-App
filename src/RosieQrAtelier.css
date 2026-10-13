@@ -425,6 +425,181 @@
  .qa-header-sign,.qa-idle-emblem {display:none!important;}
 }
 
+/* QR Atelier refinement - retain the original theatre, simplify the workbench.
+   The source scene carries continuously through the whole phone canvas, while
+   the interactive objects stay deliberately calm and easy to scan. */
+.qa-page {background:#03140e;}
+.qa-scene {
+  width:100%;
+  max-width:760px;
+  min-height:100svh;
+  background:
+    radial-gradient(ellipse at 50% 43%,rgba(10,58,40,.44),rgba(2,17,12,.92) 68%),
+    #03140e;
+}
+.qa-scene::before {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:auto;
+  min-height:100%;
+  aspect-ratio:auto;
+  background-size:100% auto;
+  background-repeat:repeat-y;
+  background-position:top center;
+  mask-image:none;
+  -webkit-mask-image:none;
+  opacity:1;
+}
+.qa-hero {height:clamp(356px,102vw,620px);}
+.qa-title {top:clamp(7px,2vw,20px);right:1.5%;width:min(77%,545px);}
+.qa-header-sign {filter:drop-shadow(0 6px 11px #000d) drop-shadow(0 0 13px #b77c2755);}
+
+/* The QR becomes the first triumphant physical object in the workshop. */
+.qa-preview-stage {margin-top:clamp(-38px,-8vw,-17px);}
+.qa-ring {width:min(134%,800px);filter:drop-shadow(0 10px 28px #000c);}
+.qa-code-shell {
+  left:28.5%;
+  top:29.5%;
+  width:43%;
+  box-shadow:0 0 0 7px #fffef7,0 0 0 11px #b17e36,0 0 28px #f3c76577,0 12px 28px #000a;
+}
+.qa-ring-caption {bottom:12.2%!important;left:24%;right:24%;font-size:clamp(12px,2.7vw,18px);}
+.qa-preview-actions {margin:-17px 12px 12px;}
+
+/* A quieter vellum desk surface lets the original illustration do the talking. */
+.qa-panel {
+  width:min(93%,630px);
+  margin:4px auto 18px;
+  border:15px solid transparent;
+  border-image-source:url("/qr-atelier/workbench-frame.webp");
+  border-image-slice:160 135 168 135 fill;
+  border-image-width:17px 16px 18px 16px;
+  background:linear-gradient(160deg,rgba(255,247,223,.985),rgba(249,229,191,.985));
+  box-shadow:0 13px 33px #000b,0 0 0 1px #f8d99a99;
+}
+.qa-panel-inner {padding:12px 10px 20px;}
+.qa-panel-heading {min-height:0;margin:2px 0 16px;padding:4px 0 0;gap:3px;}
+.qa-panel-heading > span {font-size:11px;letter-spacing:.18em;color:#876039;}
+.qa-panel-heading h2 {font-size:clamp(23px,5.4vw,32px);letter-spacing:-.025em;}
+
+/* Four familiar first choices - specialized formats are available without
+   turning the opening screen into a dense options catalogue. */
+.qa-formats {grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
+.qa-type,.qa-type:hover {min-height:clamp(76px,20vw,96px);padding:10px 2px;}
+.qa-more-types {
+  grid-column:1 / -1;
+  justify-self:center;
+  margin:3px 0 -2px;
+  min-height:34px;
+  padding:6px 15px;
+  border:1px solid #b78b4d;
+  border-radius:999px;
+  background:linear-gradient(180deg,#fff7e6,#ecd4aa);
+  box-shadow:inset 0 1px #fff,0 1px 2px #6c4a2b45;
+  color:#5b3c20;
+  font:600 12px/1 Georgia,serif!important;
+}
+.qa-more-types:active {transform:translateY(1px);}
+.qa-details-heading {margin:17px 0 12px;}
+.qa-details-heading h3 {font-size:clamp(20px,4.8vw,27px);}
+.qa-details-heading > span {max-width:30ch;}
+.qa-start-fresh {min-height:32px;padding:5px 11px;}
+.qa-inputs .qa-field input,.qa-inputs .qa-field select,.qa-inputs .qa-field textarea {min-height:50px;font-size:17px!important;}
+.qa-validation {margin:12px 0 0;padding:8px 10px;}
+.qa-section-separator {margin-top:18px;}
+.qa-design-heading {margin:13px 0 9px!important;}
+.qa-contrast-note {font-size:11px;line-height:1.25;margin-top:7px;}
+
+/* Finish and hand-off actions are present but visually subordinate to making
+   the code.  They do not compete with the destination field. */
+.qa-save-block {margin-top:14px;gap:5px;}
+.qa-save-block .qa-field {font-size:12px;}
+.qa-save {min-height:52px;}
+.qa-actions {grid-template-columns:repeat(3,1fr);gap:6px;}
+.qa-actions button {min-height:44px;font-size:12px!important;}
+.qa-extra-exports {margin-top:7px;gap:6px;}
+.qa-extra-exports button {min-height:40px;font-size:12px!important;}
+
+/* The empty collection reads as a compact folio rather than another large
+   panel.  It can still grow naturally when the user begins saving codes. */
+.qa-collection {width:min(93%,630px);margin:15px auto 38px;padding:13px 15px 15px;}
+.qa-collection-heading h2 {font-size:clamp(19px,4.5vw,25px);}
+.qa-collection > p {margin:6px 0;font-size:12px;}
+.qa-empty {padding-top:10px;}
+
+@media(max-width:390px) {
+  .qa-hero {height:clamp(344px,102vw,398px);}
+  .qa-ring {width:138%;}
+  .qa-code-shell {left:28.5%;top:29.5%;width:43%;}
+  .qa-panel {width:95%;}
+  .qa-panel-inner {padding:11px 8px 17px;}
+  .qa-type > span:last-child {font-size:10.5px;}
+}
+
+@media(min-width:701px) {
+  .qa-hero {height:610px;}
+  .qa-ring {width:min(114%,800px);}
+  .qa-panel {margin-top:10px;}
+}
+
+/* Compact mobile workbench - preserve the deliberate dark breathing room after
+   the workshop art instead of extending the illustration indefinitely. */
+.qa-scene {min-height:0;background:#04160f;}
+.qa-scene::before {
+  inset:0 auto auto 0;
+  width:100%;
+  min-height:0;
+  height:auto;
+  aspect-ratio:821 / 1916;
+  background-repeat:no-repeat;
+  background-size:100% auto;
+  mask-image:linear-gradient(#000 0 83%,transparent 100%);
+  -webkit-mask-image:linear-gradient(#000 0 83%,transparent 100%);
+}
+/* Lift the illustrated field twenty-two pixels while retaining the sign's
+   independent, lower visual registration. */
+.qa-hero {height:calc(clamp(356px,102vw,620px) - 22px);}
+.qa-title {transform:translateY(10px);}
+.qa-preview-stage {margin-top:calc(clamp(-38px,-8vw,-17px) - 10px);}
+.qa-ring {width:min(114%,680px);}
+.qa-ring-caption {display:none;}
+.qa-preview-actions {margin:-94px 12px 40px;}
+
+.qa-panel {margin-top:0;}
+.qa-panel-heading {margin-bottom:12px;}
+.qa-inputs {gap:9px;}
+.qa-section-separator {margin-top:14px;}
+.qa-design-heading {margin:11px 0 7px!important;}
+.qa-palettes {gap:4px;}
+.qa-palette {padding:5px 3px;gap:3px;}
+.qa-swatch {width:clamp(34px,9vw,48px);height:clamp(34px,9vw,48px);}
+
+.qa-save-menu {position:relative;margin:13px auto 0;text-align:center;}
+.qa-save-toggle,.qa-collection-toggle {
+  min-height:36px;padding:7px 14px;border:1px solid #b88b4d;border-radius:999px;
+  background:linear-gradient(180deg,#fff8e9,#e9cf9e);box-shadow:inset 0 1px #fff,0 1px 2px #6c4a2b45;
+  color:#59391d;font:600 13px/1 Georgia,serif!important;
+}
+.qa-save-toggle span,.qa-collection-toggle b {margin-left:5px;font-size:15px;line-height:0;}
+.qa-collection-toggle span {display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:6px;border-radius:50%;background:#174c38;color:#ffecbd;font-size:11px;}
+.qa-save-options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px;padding:9px;border:1px solid #c09a62;border-radius:10px;background:#f9ead1;box-shadow:0 4px 12px #6a431c2b;text-align:left;}
+.qa-save-options .qa-field {grid-column:1 / -1;font-size:12px;}
+.qa-save-options .qa-field input {min-height:41px!important;font-size:15px!important;}
+.qa-save-options button:not(.qa-toggle-password) {min-height:39px;border:1px solid #b48a50;border-radius:8px;background:linear-gradient(160deg,#143d30,#071c18);color:#fce9bd;font:600 12px/1.1 Georgia,serif!important;}
+.qa-save-options button:disabled {opacity:.46;}
+
+.qa-collection {width:auto;margin:12px auto 36px;padding:0;border:0;background:none;box-shadow:none;text-align:center;}
+.qa-collection-toggle {background:linear-gradient(180deg,#153c2d,#071d18);border-color:#9b7d48;color:#f6dfad;}
+.qa-saved-grid,.qa-search {width:min(93%,590px);margin-left:auto;margin-right:auto;text-align:left;}
+.qa-saved-grid {margin-top:9px;}
+
+@media(max-width:390px) {
+  .qa-hero {height:calc(clamp(344px,102vw,398px) - 22px);}
+  .qa-ring {width:117%;}
+  .qa-preview-actions {margin-top:-87px;margin-bottom:35px;}
+}
+
 
 /* October 13: compact QR workbench and intentional mobile geometry.
    Lift the illustrated page, while lowering and reducing ONLY its title asset. */
@@ -437,11 +612,11 @@
   right:4%;
 }
 .qa-ring {
-  width:min(121.6%,741px);
+  width:min(108.3%,646px); /* 5% smaller than restored prior approved 114% ring */
 }
 .qa-preview-actions {
   width:100%;
-  margin:-4px auto 8px;
+  margin:-82px auto 36px; /* restore original overlay position above workbench */
   gap:8px;
   justify-content:center;
   align-items:center;
@@ -581,7 +756,7 @@
 
 @media(max-width:390px) {
   .qa-title {top:22px;right:4%;width:69.7%;}
-  .qa-ring {width:125.4%;}
+  .qa-ring {width:111.15%;} /* 5% smaller than prior 117% mobile setting */
   .qa-panel-inner {padding-top:4px;}
   .qa-type {min-height:64px;padding:7px 1px;}
   .qa-type-symbol svg {width:23px;height:23px;}
@@ -592,4 +767,16 @@
 }
 @media print {
   .app-shell.page-qr-atelier > main.qa-page {margin-top:0;}
+}
+
+/* Keep the earlier approved artisan workbench's compact atmospheric spacing. */
+.qa-hero {height:calc(clamp(356px,102vw,620px) - 22px);}
+.qa-preview-stage {margin-top:calc(clamp(-38px,-8vw,-17px) - 10px);}
+.qa-scene {min-height:0;background:#04160f;}
+.qa-save-menu {margin-top:12px;}
+.qa-collection {width:auto;margin:12px auto 36px;padding:0;border:0;background:none;box-shadow:none;text-align:center;}
+.qa-collection-toggle {background:linear-gradient(180deg,#153c2d,#071d18);border-color:#9b7d48;color:#f6dfad;}
+@media(max-width:390px) {
+  .qa-hero {height:calc(clamp(344px,102vw,398px) - 22px);}
+  .qa-preview-actions {margin-top:-79px;margin-bottom:33px;}
 }
