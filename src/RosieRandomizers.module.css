@@ -1260,3 +1260,17 @@
   .page { padding-top: calc(env(safe-area-inset-top, 0px) + 12px); }
   .illustratedHero { border-radius: 0; box-shadow: none; }
 }
+
+/* Enlarge the approved casino artwork by 4% while keeping it horizontally centered.
+   Limit the increase to available page gutters, preventing horizontal clipping. */
+.illustratedHero {
+  width:min(104%,calc(100% + 36px));
+  max-width:none;
+  left:50%;
+  transform:translateX(-50%);
+}
+.ivoryRow { margin-top:8px; } /* 8px less whitespace below the masthead */
+@media(max-width:680px) {
+  .illustratedHero { width:min(104%,calc(100% + 14px)); }
+  .ivoryRow { margin-top:1px; }
+}
