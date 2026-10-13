@@ -31,6 +31,14 @@ for(const [name,browserType,width,height] of [
  await page.screenshot({path:`artifacts/resources-integration/${name}-qr.png`,fullPage:false});
  await page.goto(origin+"/#calculations",{waitUntil:"networkidle"});
  await page.locator(".rc-tool-grid .rc-tool-card").last().waitFor();
+ await page.locator(".rc-tool-grid").scrollIntoViewIfNeeded();
+ await page.locator(".rc-tool-art").evaluateAll(async (images) => {
+   await Promise.all(images.map(async image => {
+     image.loading = "eager";
+     try { await image.decode(); } catch (err) { throw new Error("Calculator artwork did not load: "+ image.src); }
+   }));
+ });
+ await page.waitForTimeout(130);
  const measurement=await page.evaluate(()=>{
    const selectors=[".app-shell",".rc-page",".rc-hero",".rc-calculator-stage",".rc-workspace",".rc-tools-heading",".rc-tool-grid",".rc-tool-card--currency",".rc-footer-note"];
    const parts=Object.fromEntries(selectors.map(s=>{const el=document.querySelector(s);const rect=el.getBoundingClientRect();const cs=getComputedStyle(el);return [s,{top:Math.round(rect.top+window.scrollY),bottom:Math.round(rect.bottom+window.scrollY),height:Math.round(rect.height),paddingBottom:cs.paddingBottom,marginBottom:cs.marginBottom,minHeight:cs.minHeight}];}));
@@ -40,6 +48,7 @@ for(const [name,browserType,width,height] of [
  console.log("CALCULATIONS_METRICS "+name+" "+JSON.stringify(measurement));
  await page.locator(".rc-footer-note").scrollIntoViewIfNeeded();
  await page.screenshot({path:`artifacts/resources-integration/${name}-calculations-bottom.png`,fullPage:false});
+ assert.ok(measurement.extra<480, name+": Calculations has excessive trailing gap "+measurement.extra);
  assert.deepEqual(errors,[],name+": no runtime errors");
  await browser.close();
 }
