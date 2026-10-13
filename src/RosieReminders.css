@@ -658,4 +658,4 @@ body:has(.app-shell.page-reminders),
      native scrolling clamps the panel to a usable visible position. */
   padding-bottom:calc(104px + env(safe-area-inset-bottom));
 }
-.app-shell.page-reminders .rr-feature-grid { margin-top:0; }
+.app-shell.page-reminders .rr-feature-grid { margin-top:5px; } /* lower all five image buttons 5px without changing their hit areas */
