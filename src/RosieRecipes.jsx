@@ -5,7 +5,13 @@ import "./RosieRecipesAssetLayout.css";
 
 const ROOT = "/rosieverse/recipes/";
 const FAVORITES_KEY = "rosie-recipes-favorites-v1";
-const icons = { Breakfast: "☼", "Small Bites": "✧", "Main Courses": "♛", Desserts: "✿" };
+const RECIPE_ART = {
+  Breakfast: ROOT + "card-breakfast-20261013.webp",
+  "Small Bites": ROOT + "card-small-bites-20261013.webp",
+  "Main Courses": ROOT + "card-main-courses-20261013.webp",
+  Desserts: ROOT + "card-desserts-20261013.webp",
+};
+const recipeArt = (recipe) => RECIPE_ART[recipe.category] || RECIPE_ART.Breakfast;
 function loadFavorites() {
   try {
     const parsed = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
@@ -20,15 +26,15 @@ function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
     <button type="button" className={`recipes-card recipes-card--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} onClick={() => onOpen(recipe.id)}
       aria-label={`View ${recipe.title}`}>
       <span className={`recipes-card-image recipes-card-image--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} aria-hidden="true">
-        <span className="recipes-dish-symbol">{icons[recipe.category] || "✦"}</span>
+        <img src={recipeArt(recipe)} alt="" loading="lazy" draggable="false" />
       </span>
       <span className="recipes-card-copy">
         <strong>{recipe.title}</strong>
       </span>
-      <span className="recipes-card-metrics" aria-hidden="true">
-        <span><b>Time</b>{recipe.timeLabel || "—"}</span>
-        <span><b>Level</b>{recipe.difficulty || "—"}</span>
-        <span><b>Serves</b>{recipe.servingsLabel || "—"}</span>
+      <span className="recipes-card-metrics">
+        <span><b>◷ Time</b>{recipe.timeLabel || "—"}</span>
+        <span><b>✦ Level</b>{recipe.difficulty || "—"}</span>
+        <span><b>♟ Serves</b>{recipe.servingsLabel || "—"}</span>
       </span>
     </button>
     <button type="button" className={`recipes-favorite ${favorite ? "is-favorite" : ""}`}
@@ -47,30 +53,20 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
       <button type="button" onClick={() => onFavorite(recipe.id)}
         aria-pressed={favorite}>{favorite ? "♥ Saved" : "♡ Save"}</button>
     </div>
+    <section className="recipes-detail-cover" aria-label={`${recipe.title} overview`}>
+      <div className="recipes-detail-photo"><img src={recipeArt(recipe)} alt="" /></div>
+      <div className="recipes-detail-intro">
+        <p className="recipes-detail-category">{COOKBOOK.labels[recipe.category] || recipe.category}</p>
+        <h2>{recipe.title}</h2>
+        <p>{ready ? recipe.subtitle : "A place reserved in Rosie’s Royal Cookbook."}</p>
+      </div>
+    </section>
     <dl className="recipes-summary-strip">
       <div><dt>Time</dt><dd>{recipe.timeLabel}</dd></div>
       <div><dt>Yield</dt><dd>{recipe.servingsLabel}</dd></div>
       <div><dt>Difficulty</dt><dd>{recipe.difficulty}</dd></div>
     </dl>
-    <div className="recipes-parchment-art">
-      <img src={ROOT + "recipes-parchment.webp"} alt="" loading="eager" draggable="false" />
-      <div className="recipes-parchment-title">
-        <h2>{recipe.title}</h2>
-      </div>
-      <div className="recipes-parchment-display">
-        <span className="recipes-dish-symbol" aria-hidden="true">{icons[recipe.category] || "✦"}</span>
-        <span>{COOKBOOK.labels[recipe.category] || recipe.category}</span>
-        <strong>{recipe.category}</strong>
-      </div>
-      <div className="recipes-parchment-message">
-        {ready
-          ? <><h3>{recipe.subtitle}</h3><p>{recipe.description}</p><span>Ingredients and method ↓</span></>
-          : <><h3>Rosie's Recipe Collection</h3><p>The original ingredients and instructions for this dish will be placed here when the complete cookbook is imported.</p><span>✦ Reserved for the original recipe ✦</span></>}
-      </div>
-    </div>
     {ready && <div className="recipes-written-method">
-      <p className="recipes-eyebrow">{COOKBOOK.labels[recipe.category]?.toUpperCase() || recipe.category.toUpperCase()}</p>
-      <h3 className="recipes-subtitle">{recipe.subtitle}</h3>
       <p className="recipes-detail-description">{recipe.description}</p>
       <p className="recipes-overview-meta"><strong>Total time:</strong> {recipe.timeLabel} <span aria-hidden="true">·</span> <strong>Yield:</strong> {recipe.servingsLabel} <span aria-hidden="true">·</span> <strong>Difficulty:</strong> {recipe.difficulty}</p>
       <h3>Ingredients</h3>
@@ -84,6 +80,7 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
       <p className="recipes-human-only">{COOKBOOK.humanOnly}</p>
       <button type="button" className="recipes-print" onClick={() => window.print()}>Print Recipe</button>
     </div>}
+    {!ready && <div className="recipes-awaiting-copy"><span>✦</span><h3>Rosie’s Recipe Collection</h3><p>The original ingredients and instructions for this dish will be placed here when the complete cookbook is imported.</p></div>}
   </section>;
 }
 export default function RosieRecipes() {
