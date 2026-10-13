@@ -1000,7 +1000,7 @@
   position:relative;
   z-index:3;
   width:min(94%,630px);
-  margin:-8px auto 10px;
+  margin:-15px auto 17px; /* raise finishes 7px; keep creation panel in place */
   padding:0;
 }
 .qa-finish-strip .qa-palettes {
@@ -1016,7 +1016,8 @@
   padding:6px 1px 4px;
   border:1px solid transparent;
   border-radius:12px;
-  background:linear-gradient(155deg,#17362d85,#061a18b8);
+  background:transparent; /* only the selected finish has a surrounding tile */
+  box-shadow:none;
   color:#f5e2bc;
   text-shadow:0 1px 3px #000b;
   font-size:clamp(9px,2.3vw,12px)!important;
@@ -1073,7 +1074,7 @@
   padding:5px 10px;
 }
 @media(max-width:390px) {
-  .qa-finish-strip {width:96%;margin-top:-8px;margin-bottom:8px;}
+  .qa-finish-strip {width:96%;margin-top:-15px;margin-bottom:15px;}
   .qa-finish-strip .qa-palettes {gap:2px;}
   .qa-finish-strip .qa-palette {min-height:60px;font-size:9px!important;}
   .qa-instruction-copy {font-size:11px;}
