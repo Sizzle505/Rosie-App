@@ -193,6 +193,8 @@ export default function RosieQrAtelier(){
   const [loadedId,setLoadedId]=useState(null);
   const [filter,setFilter]=useState("");
   const [showMoreTypes,setShowMoreTypes]=useState(false);
+  const [showSaveMenu,setShowSaveMenu]=useState(false);
+  const [collectionOpen,setCollectionOpen]=useState(false);
   const [toast,setToast]=useState("");
   const [working,setWorking]=useState(false);
   const previewRef=useRef(null),timerRef=useRef(null);
@@ -292,7 +294,6 @@ export default function RosieQrAtelier(){
           <div className="qa-code-shell">{ready?<div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}} role="img" aria-label="Scannable QR code"/>
             :<div className="qa-waiting"><img className="qa-idle-emblem" src={ART+"idle-paw.webp"} alt="" /><span>Awaiting your creation</span></div>}</div>
           <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" aria-hidden="true" draggable="false"/>
-          <div className="qa-ring-caption">{ready?"Ready to Share":"Create a Code"}</div>
         </div>
         <div className="qa-preview-actions">
           <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready}>⛶ Full-screen QR</button>
@@ -304,21 +305,11 @@ export default function RosieQrAtelier(){
           <div className="qa-panel-heading"><span>Rosie's Workbench</span><h2>Where shall your code lead?</h2></div>
           <QRTypeSelector current={type} onSelect={changeType} expanded={typePickerExpanded}
             onToggle={()=>setShowMoreTypes(open=>!open)}/>
-          <div className="qa-details-heading"><h3>{QR_TYPES.find(t=>t.id===type).label} Details</h3>
-            <span>{QR_TYPES.find(t=>t.id===type).hint}</span>
-            <button type="button" className="qa-start-fresh" onClick={()=>{
-              if(ready && !window.confirm("Clear these "+QR_TYPES.find(t=>t.id===type).label+" fields and start again?"))return;
-              setForms(all=>({...all,[type]:initialValues()[type]}));setLabel("");setLoadedId(null);
-              setWifiConsent(false);setShowPassword(false);
-              toastMessage("Fresh workspace ready.");
-            }}>Clear this form</button></div>
           <div className="qa-inputs" key={type}>
             <Details type={type} v={v} put={put} showPassword={showPassword} setShowPassword={setShowPassword}
               wifiConsent={wifiConsent} setWifiConsent={setWifiConsent}/>
           </div>
-          <p className={"qa-validation"+(ready?" qa-valid":"")} role="status">{ready?
-            (output.modules>85?"Detailed code. Use Full-screen QR for easier scanning.":"Your QR updates instantly as you type."):
-            output.error}</p>
+          {!ready&&<p className="qa-validation" role="status">{output.error}</p>}
           <div className="qa-section-separator"/>
           <h3 className="qa-design-heading">Atelier Finish</h3>
           <div className="qa-palettes" role="group" aria-label="Presentation finish">
@@ -326,31 +317,28 @@ export default function RosieQrAtelier(){
               className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
               <span className="qa-swatch"/><span>{s.label}</span></button>)}
           </div>
-          <p className="qa-hint qa-contrast-note">The QR modules stay black on white for dependable scanning. Finishes decorate the surrounding stationery.</p>
-          <div className="qa-save-block">
-            <Field label="Save as (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
-            <button className="qa-save" type="button" disabled={!ready||working} onClick={save}>
-              {loadedId?"Update Saved Code":"Save to Collection"}</button>
-          </div>
-          <div className="qa-actions">
-            <button type="button" disabled={!ready||working} onClick={share}>Share</button>
-            <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>PNG</button>
-            <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>SVG</button>
-          </div>
-          <div className="qa-extra-exports">
-            <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>
-              Download {type==="calling"?"Calling Card":"Designed Card"}</button>
-            {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
-            {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
-            <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
+          <div className="qa-save-menu">
+            <button className="qa-save-toggle" type="button" aria-expanded={showSaveMenu} onClick={()=>setShowSaveMenu(open=>!open)}>
+              Save <span aria-hidden="true">⌄</span></button>
+            {showSaveMenu&&<div className="qa-save-options">
+              <Field label="Name (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
+              <button type="button" disabled={!ready||working} onClick={save}>{loadedId?"Update Collection":"Save to My Collection"}</button>
+              <button type="button" disabled={!ready||working} onClick={share}>Share</button>
+              <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>Download PNG</button>
+              <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>Download SVG</button>
+              <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>Designed Card</button>
+              {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
+              {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
+              <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
+            </div>}
           </div>
         </div>
       </section>
       <section className="qa-collection" aria-label="Saved QR collection">
-        <div className="qa-collection-heading"><h2>My Collection</h2><span>{saved.length} / 40 saved</span></div>
-        <p>Stored on this device only. Nothing is uploaded to RosieVerse.</p>
+        <button className="qa-collection-toggle" type="button" aria-expanded={collectionOpen} onClick={()=>setCollectionOpen(open=>!open)}>
+          My Collection <span>{saved.length}</span> <b aria-hidden="true">⌄</b></button>
+        {collectionOpen&&saved.length>0&&<>
         {saved.length>3&&<label className="qa-search"><span>Find a code</span><input value={filter} onChange={e=>setFilter(e.target.value)} placeholder="Search names or types"/></label>}
-        {saved.length===0?<p className="qa-empty">Your personal collection begins with the first code you save.</p>:
         <div className="qa-saved-grid">
           {matching.map(item=><div className="qa-saved" key={item.id}>
             <button type="button" onClick={()=>openRecord(item)}>
@@ -361,7 +349,7 @@ export default function RosieQrAtelier(){
             <button type="button" className="qa-remove" aria-label={"Delete "+item.label} onClick={()=>removeRecord(item)}>×</button>
           </div>)}
           {matching.length===0&&<p>No matching codes.</p>}
-        </div>}
+        </div></>}
       </section>
       {ready&&<section className="qa-print-sheet" aria-label="QR Atelier printable card">
         <p className="qa-print-brand">ROSIE'S QR ATELIER</p>
