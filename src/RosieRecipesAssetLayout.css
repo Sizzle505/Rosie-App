@@ -243,7 +243,7 @@
 /* Collection landing: title and work surface sit higher in the kitchen, while
    meal choices are immediately usable rather than hidden behind a menu. */
 .recipes-heading {position:relative;z-index:3;padding-top:calc(clamp(348px,97vw,690px) - 46px)!important;}
-.recipes-index {position:relative;z-index:2;top:-30px;margin-bottom:-30px!important;}
+.recipes-index {position:relative;z-index:2;top:-15px;margin-bottom:-15px!important;}
 .recipes-meal-filters {display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:0 auto 10px;padding:2px 0 1px;max-width:610px;}
 .recipes-meal-filters button {min-height:33px;padding:6px 11px;border:1px solid #c18a35;border-radius:999px;
   background:linear-gradient(160deg,#fffaf0,#f2d49a);box-shadow:inset 0 1px 0 #fffdf4,0 2px 4px #63310b30;
@@ -263,9 +263,14 @@
 .recipes-card-copy {top:calc(51% + 8px)!important;height:21%!important;padding:3px 5px!important;}
 .recipes-card-copy::before {content:"";position:absolute;inset:2px 0 0;border-block:1px solid #d8ad68;opacity:.85;}
 .recipes-card-copy strong {position:relative;padding:2px 3px;font:700 clamp(14px,3.45vw,20px)/1.09 Georgia,serif!important;letter-spacing:.002em;color:#4d2408!important;text-shadow:0 1px 0 #fff8e7;}
-.recipes-card-metrics {bottom:8px!important;height:17%!important;padding:3px 0 0;border-top:0!important;}
-.recipes-card-metrics span {gap:3px;font:700 clamp(9px,2.05vw,11px)/1.08 Georgia,serif!important;color:#67330e!important;letter-spacing:.005em;white-space:normal!important;overflow:visible!important;}
+.recipes-card-metrics {bottom:8px!important;height:17%!important;padding:3px 2px 2px!important;border:1px solid #dfb672!important;border-radius:8px;background:linear-gradient(105deg,#fff8e9cc,#f5dca9d9 50%,#fff8e9cc);box-shadow:inset 0 1px 1px #fffdf3;}
+.recipes-card-metrics span {gap:3px;padding:1px 2px;font:700 clamp(9px,2.05vw,11px)/1.08 Georgia,serif!important;color:#67330e!important;letter-spacing:.005em;white-space:normal!important;overflow:hidden!important;}
 .recipes-card-metrics span+span {border-left:1px solid #d9b06b;}
-.recipes-card-metrics b {font:700 clamp(6.5px,1.55vw,8px)/1 Georgia,serif!important;letter-spacing:.09em;color:#a06420!important;}
-.recipes-card-metrics em {display:block;max-width:100%;font:700 clamp(8.5px,2vw,11px)/1.16 Georgia,serif;font-style:normal;color:#59300e;overflow:hidden;text-align:center;text-wrap:balance;}
+.recipes-card-metrics b {font:700 clamp(6.5px,1.55vw,8px)/1 Georgia,serif!important;letter-spacing:.1em;color:#9d5c1a!important;}
+.recipes-card-metrics em {display:-webkit-box;max-width:100%;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;font:700 clamp(8.5px,2vw,11px)/1.14 Georgia,serif;font-style:normal;color:#59300e;text-align:center;text-wrap:balance;}
+/* A tiny heart locket is easier to spot and sweeter than the earlier plain circle. */
+.recipes-favorite {display:grid!important;place-items:center;border:1px solid #b77b35!important;background:radial-gradient(circle at 32% 25%,#fffdf2,#f6dfb5 52%,#d4994c)!important;box-shadow:inset 0 0 0 2px #fff4d4,0 2px 5px #5c290a66!important;font-size:0!important;}
+.recipes-favorite::before {content:"♡";font:normal 25px/1 Georgia,serif;color:#9a3d38;text-shadow:0 1px 0 #fff7dd;transform:translateY(-1px);}
+.recipes-favorite::after {content:"";position:absolute;width:8px;height:8px;right:3px;bottom:3px;border-radius:50%;background:radial-gradient(circle,#fff6d0 0 22%,#c47d2d 24% 47%,#6a2e16 50%);box-shadow:0 1px 2px #5c270980;}
+.recipes-favorite.is-favorite::before {content:"♥";color:#a53336;}
 @media(max-width:420px){.recipes-card-copy{top:calc(51% + 8px)!important;height:21%!important}.recipes-card-copy strong{font-size:clamp(13px,3.6vw,17px)!important}.recipes-card-metrics{bottom:8px!important;height:17%!important}.recipes-card-metrics span{font-size:clamp(8px,2.05vw,10px)!important}.recipes-card-metrics b{font-size:clamp(6px,1.55vw,7.5px)!important}.recipes-card-metrics em{font-size:clamp(7.5px,1.95vw,9.5px)}}
