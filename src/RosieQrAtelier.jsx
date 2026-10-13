@@ -323,6 +323,13 @@ export default function RosieQrAtelier(){
           </button>
         </div>
       </section>
+      <section className="qa-finish-strip" aria-label="QR frame finishes">
+          <div className="qa-palettes" role="group" aria-label="Presentation finish">
+            {QR_STYLES.map(s=><button key={s.id} type="button" aria-pressed={style===s.id}
+              className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
+              <span className="qa-swatch"/><span>{s.label}</span></button>)}
+          </div>
+      </section>
       <section className="qa-panel" aria-label="QR code settings">
         <div className="qa-panel-inner">
           <h2 className="qa-creation-heading">Choose Your Creation</h2>
@@ -330,23 +337,17 @@ export default function RosieQrAtelier(){
           <div className="qa-inputs" key={type}>
             <Details type={type} v={v} put={put} showPassword={showPassword} setShowPassword={setShowPassword}/>
           </div>
-          {!ready&&<p className="qa-validation" role="status">{output.error}</p>}
-          <div className="qa-section-separator"/>
-          <div className="qa-finish-heading">
-            <h3 className="qa-design-heading">Atelier Finish</h3>
+          <div className="qa-instruction-row">
+            <p className={"qa-instruction-copy"+(ready?" qa-valid":"")} role="status" aria-live="polite">
+              {ready?"Ready to share":output.error}
+            </p>
             <div className="qa-finish-controls">
               <div className="qa-save-menu">
                 <button className="qa-save-toggle" type="button" aria-expanded={showSaveMenu} aria-controls="qa-save-details" onClick={()=>setShowSaveMenu(open=>!open)}>
                   Save <span aria-hidden="true">⌄</span></button>
-
               </div>
               <button className="qa-done" type="button" onClick={showFinishedQR}>Done <span aria-hidden="true">↑</span></button>
             </div>
-          </div>
-          <div className="qa-palettes" role="group" aria-label="Presentation finish">
-            {QR_STYLES.map(s=><button key={s.id} type="button" aria-pressed={style===s.id}
-              className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
-              <span className="qa-swatch"/><span>{s.label}</span></button>)}
           </div>
 
         </div>
