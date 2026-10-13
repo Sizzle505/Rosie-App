@@ -1,0 +1,30 @@
+name: Combine QR Signature and complete Rosie Recipes
+on:
+  push:
+    branches: [work/resources-qr-recipes-integration-20261012]
+    paths: [.github/workflows/rosie-integrate-recipes.yml]
+permissions:
+  contents: write
+jobs:
+  combine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/resources-qr-recipes-integration-20261012
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Preserve complete source branches and combine asset histories
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin work/rosies-recipes-foundation-20261012
+          git merge --no-ff -X ours -m "Integrate complete Recipes into latest QR Signature Designs" origin/work/rosies-recipes-foundation-20261012
+          for f in public/rosieverse/recipes/recipes-hero.webp public/rosieverse/recipes/recipes-title.webp public/qr-atelier/workshop.webp src/RosieRecipes.jsx src/RosieQrAtelier.jsx; do
+            test -s "$f"
+          done
+          git rm .github/workflows/rosie-integrate-recipes.yml
+          git commit -m "Remove completed one-time integration workflow"
+          git push origin HEAD:work/resources-qr-recipes-integration-20261012
