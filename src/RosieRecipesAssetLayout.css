@@ -71,3 +71,46 @@
 .recipes-sort:after {content:"▾";position:absolute;z-index:1;right:10px;top:50%;transform:translateY(-54%);
   font-size:15px;color:#8b4b12;pointer-events:none}
 .recipes-sort select option {color:#60320e;background:#fff2d6}
+
+
+/* The Founding Cookbook: real source content and legible copy. */
+.recipes-heading .recipes-human-warning {margin-top:-7px;margin-bottom:18px;font-size:clamp(11px,2.3vw,14px);
+  letter-spacing:.012em;max-width:520px;color:#fff6df}
+.recipes-index-header {padding-bottom:6px}
+.recipes-card-copy small {overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%;color:#8c5524}
+.recipes-parchment-stats span {display:block;max-width:100%;white-space:nowrap;font-size:clamp(8px,2vw,14px);
+  line-height:1.2;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.recipes-parchment-message h3 {max-width:100%;font-size:clamp(15px,4vw,25px);
+  line-height:1.08;margin:4px 0 8px;overflow-wrap:break-word}
+.recipes-parchment-message p {font-size:clamp(11px,2.5vw,16px);line-height:1.4}
+.recipes-parchment-message>span {margin-top:12px}
+.recipes-written-method {line-height:1.55;overflow-wrap:break-word}
+.recipes-written-method .recipes-subtitle {font-size:clamp(19px,4.8vw,29px);
+  text-align:center;line-height:1.22;margin:13px auto 10px;color:#593010;max-width:570px}
+.recipes-written-method .recipes-detail-description {font-style:italic;font-size:clamp(14px,3vw,17px);
+  line-height:1.5;color:#76491d;margin:12px 0 15px}
+.recipes-overview-meta {text-align:center;padding:10px 4px;margin:8px 0 14px;
+  border-block:1px solid #dbb77b;font-size:clamp(12px,2.4vw,14px);line-height:1.9}
+.recipes-overview-meta span {padding-inline:4px;color:#aa7a32}
+.recipes-written-method h3:not(.recipes-subtitle) {font-size:clamp(23px,5vw,29px);color:#673911}
+.recipes-ingredient-list {font-size:clamp(15px,3vw,17px)}
+.recipes-ingredient-list label {padding-block:10px}
+.recipes-steps {font-size:clamp(15px,3vw,17px);line-height:1.65}
+.recipes-steps li {padding-bottom:14px;padding-left:4px}
+.recipes-steps li::marker {color:#a16b23;font-weight:bold}
+.recipes-note {margin-top:20px;background:linear-gradient(115deg,#f9dca9,#fff0cf);
+  border-left:4px solid #b57923;border-radius:9px}
+.recipes-note strong {font-size:17px;font-variant:small-caps;color:#6e3712}
+.recipes-human-only {margin:23px 0 3px;padding:9px 0 0;border-top:1px solid #dfbb7b;
+  font-size:12px;line-height:1.45;text-align:center;font-style:italic;color:#75502e}
+@media(max-width:600px){
+  .recipes-parchment-message {left:18.5%;right:18.5%;top:49.8%;bottom:9.2%}
+  .recipes-parchment-message h3 {font-size:clamp(14px,3.85vw,19px)}
+  .recipes-parchment-message p {font-size:clamp(10.5px,2.7vw,13px)}
+  .recipes-heading .recipes-human-warning {padding-inline:18px;margin-top:-7px}
+}
+@media print {.recipes-human-warning,.recipes-overview-meta {color:#111!important}
+  .recipes-parchment-art>img {display:none!important}.recipes-parchment-art {display:none}
+  .recipes-written-method {width:100%;margin:0;border:0!important;background:#fff!important;box-shadow:none!important}
+  .recipes-written-method h3 {break-after:avoid}.recipes-steps li{break-inside:avoid}
+  .recipes-human-only {color:#333}}
