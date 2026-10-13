@@ -146,3 +146,23 @@
 @media(max-width:380px){.recipes-summary-strip {margin-inline:3%;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.8fr));gap:1px}
   .recipes-summary-strip div {padding-inline:2px}.recipes-summary-strip dd{font-size:10px}}
 @media print {.recipes-summary-strip {border:0;box-shadow:none;margin:0 0 15px;background:white}}
+
+/* Compact cookbook menu: the kitchen and existing title art stay untouched;
+   discovery tools appear only when the reader asks for them. */
+.recipes-index {padding-top:10px!important;}
+.recipes-browse {position:relative;margin:0 auto 10px;max-width:610px;}
+.recipes-browse-trigger {display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:9px;width:100%;min-height:45px;padding:8px 14px;
+  border:2px solid #c38c38;border-radius:13px;background:linear-gradient(100deg,#fffaf0,#ffe7bc 50%,#f4cf91);color:#64330e;
+  box-shadow:inset 0 1px 2px #fffdf4,0 3px 7px #66350b35;text-align:left;}
+.recipes-browse-trigger span {font:700 clamp(15px,3.4vw,19px)/1.1 Georgia,serif;}
+.recipes-browse-trigger small {font:600 11px/1 Georgia,serif;color:#956020;white-space:nowrap;}
+.recipes-browse-trigger b {font:20px/1 Georgia,serif;color:#914d0b;}
+.recipes-browse-menu {margin-top:7px;padding:9px;border:1px solid #d09a43;border-radius:12px;background:#fff1d2e8;box-shadow:0 5px 14px #63310b33;}
+.recipes-browse-menu .recipes-search {position:relative;top:auto;bottom:auto;left:auto;width:100%;display:flex;align-items:center;gap:8px;min-height:42px;padding:0 11px;
+  background:linear-gradient(#fffaf0,#ffebc9);border:1.5px solid #c38c38;border-radius:10px;box-shadow:none;}
+.recipes-browse-menu .recipes-search>span:not(.recipes-visually-hidden) {display:block;font-size:23px;color:#8c5108;line-height:1;}
+.recipes-browse-menu .recipes-search input {height:40px;min-height:0;width:100%;padding:0;border:0;background:transparent;color:#492509;font:normal 16px Georgia,serif;outline:0;}
+.recipes-browse-menu .recipes-category-tabs {margin:8px 0 0;padding:0 1px 2px;gap:6px;}
+.recipes-browse-menu .recipes-category-tabs button {min-height:32px;padding:6px 10px;font-size:12px;}
+.recipes-browse-menu .recipes-count {margin:8px 2px 0;text-align:center;font-size:12px;}
+.recipes-index>.recipes-grid {margin-top:0;}
