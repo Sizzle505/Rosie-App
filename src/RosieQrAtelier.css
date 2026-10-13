@@ -780,3 +780,152 @@
   .qa-hero {height:calc(clamp(344px,102vw,398px) - 22px);}
   .qa-preview-actions {margin-top:-79px;margin-bottom:33px;}
 }
+
+
+/* QR finishing-room refinements - five intentionally distinct, luxurious materials.
+   Preserve the user's existing hand-drawn workshop artwork and scannable QR SVG. */
+.qa-ring {
+  width:min(105.051%,626.62px); /* exactly 3% smaller than 108.3% / 646px */
+  transform:translateY(-3px);
+}
+.qa-title {transform:translateY(20px);} /* 10px lower than the prior registration */
+.qa-preview-actions {gap:12px;top:-4px;position:relative;} /* 2px farther outward per button */
+.qa-creation-heading {
+  margin:2px 0 12px!important;
+  font:normal clamp(17px,3.9vw,23px)/1.15 Georgia,serif!important;
+  text-align:center;
+  color:#644525;
+  letter-spacing:.015em;
+  text-shadow:0 1px #fff8e3;
+}
+.qa-finish-heading {
+  justify-content:space-between;
+  gap:8px;
+  margin:12px 1px 9px;
+  position:relative;
+  z-index:8;
+}
+.qa-finish-heading .qa-design-heading {
+  font-size:clamp(17px,3.8vw,23px);
+  text-align:left;
+  white-space:nowrap;
+  flex:1 1 auto;
+}
+.qa-finish-controls {display:flex;align-items:center;justify-content:flex-end;gap:7px;flex:0 0 auto;}
+.qa-finish-controls .qa-save-menu {margin:0;position:relative;z-index:12;}
+.qa-finish-controls .qa-save-toggle,.qa-finish-controls .qa-done {
+  min-width:67px;
+  min-height:34px;
+  height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px 10px;
+  gap:3px;
+  font:600 12px/1 Georgia,serif!important;
+}
+.qa-finish-controls .qa-save-toggle {background:linear-gradient(155deg,#fff8e7,#ead1a2 65%,#d5ac6d);}
+.qa-finish-controls .qa-save-toggle span {margin-left:3px;font-size:14px;}
+.qa-finish-controls .qa-done span {font-size:15px;}
+.qa-finish-controls .qa-save-options {
+  position:absolute;
+  top:calc(100% + 7px);
+  right:0;
+  margin:0;
+  width:min(316px,calc(100vw - 65px));
+  max-width:none;
+  max-height:min(65dvh,520px);
+  overflow-y:auto;
+  z-index:25;
+  box-shadow:0 13px 35px #23150d7a,inset 0 1px #fff9e0;
+}
+.qa-palettes {grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;}
+.qa-palette {
+  min-width:0;
+  padding:7px 0 8px;
+  gap:5px;
+  font-size:clamp(9px,1.95vw,12px)!important;
+  line-height:1.1;
+}
+.qa-palette > span:last-child {white-space:nowrap;}
+.qa-swatch {width:clamp(33px,8.2vw,50px);height:clamp(33px,8.2vw,50px);}
+.qa-palette.chosen {border-color:#c29e63;background:#fff8e7ad;}
+.qa-palette-champagne .qa-swatch {
+  background:
+    radial-gradient(circle at 29% 21%,#fffdf1 0%,#fff1ba 12%,transparent 39%),
+    conic-gradient(from 30deg,#e5b969,#fff2c6,#ad7a35,#fff6df,#d3a658,#fff6d8,#b78944,#e5b969);
+  border-color:#f4dc9e;
+  box-shadow:0 0 0 1px #a57f43,inset 0 1px 5px #9c692477,0 2px 8px #ad873f54;
+}
+.qa-palette-sapphire .qa-swatch {
+  background:
+    radial-gradient(ellipse at 27% 15%,#cae6ff 0%,#5495e5 13%,transparent 40%),
+    conic-gradient(from 30deg,#071339,#2358ac,#07153e,#8dc6f8,#101e51,#396fb8,#051637,#071339);
+  border-color:#becfdf;
+  box-shadow:0 0 0 1px #42658e,inset 0 1px 5px #061338bb,0 2px 8px #2f61a65c;
+}
+/* Champagne: pearly ivory, reflective warm gilding, and a lighter gold rim. */
+.qa-style-champagne.qa-page {background:#221a11;}
+.qa-style-champagne .qa-scene {
+  background:
+    radial-gradient(ellipse at 52% 35%,#76603e 0%,#35291b 49%,#17120d 100%);
+}
+.qa-style-champagne .qa-ring::before {
+  content:"";position:absolute;z-index:0;pointer-events:none;inset:11%;border-radius:50%;
+  background:radial-gradient(ellipse at 27% 19%,#fff9d6ba 0%,#d2b274a8 26%,#7450217a 69%,#ffe7a266 87%,transparent 97%);
+  box-shadow:inset 0 0 21px #ac7e3b7a,0 0 32px #ffeab12e;
+}
+.qa-style-champagne .qa-ring-art {
+  filter:brightness(1.13) contrast(1.055) saturate(.93) drop-shadow(0 9px 23px #291a0c9f)!important;
+}
+.qa-style-champagne .qa-panel {
+  background:linear-gradient(145deg,#fffbec 0%,#f9e8c6 49%,#e9cca2 100%);
+}
+.qa-style-champagne .qa-type.selected,.qa-style-champagne .qa-type.selected:hover {
+  background:linear-gradient(145deg,#fce5b3,#d7aa60 35%,#b68034 70%,#f1d394)!important;
+  color:#302215!important;
+  border:1px solid #a6793c!important;
+  box-shadow:inset 0 1px #fff9e5,inset 0 0 0 2px #fdf0c683,0 2px 5px #734b1d50!important;
+}
+.qa-style-champagne .qa-type.selected .qa-type-symbol {color:#483015;}
+.qa-style-champagne .qa-done {background:linear-gradient(150deg,#b9884b,#7b5127 65%,#54361c);border-color:#e4c98c;}
+.qa-style-champagne .qa-save-toggle {background:linear-gradient(155deg,#fff9e9,#edd9a6 67%,#cfaa67);}
+/* Sapphire: cut midnight blue jewel with cool silver/champagne accents. */
+.qa-style-sapphire.qa-page {background:#080e23;}
+.qa-style-sapphire .qa-scene {
+  background:radial-gradient(ellipse at 51% 34%,#203f79 0%,#091a44 49%,#070c21 100%);
+}
+.qa-style-sapphire .qa-ring::before {
+  content:"";position:absolute;z-index:0;pointer-events:none;inset:11%;border-radius:50%;
+  background:radial-gradient(ellipse at 28% 20%,#9fd0ff9c 0%,#396bae9e 25%,#081444c9 65%,#729dd889 88%,transparent 98%);
+  box-shadow:inset 0 0 23px #05102c,0 0 35px #4a9cff39;
+}
+.qa-style-sapphire .qa-ring-art {
+  filter:brightness(1.09) contrast(1.11) saturate(.97) drop-shadow(0 8px 22px #060c35c2)!important;
+}
+.qa-style-sapphire .qa-panel {
+  background:linear-gradient(145deg,#f6f8fc 0%,#dbe8f2 47%,#bacadd 100%);
+}
+.qa-style-sapphire .qa-type.selected,.qa-style-sapphire .qa-type.selected:hover {
+  background:linear-gradient(140deg,#5e97d2,#153e81 32%,#081f56 68%,#396bac)!important;
+  color:#fff8e6!important;
+  border:1px solid #a6c8e8!important;
+  box-shadow:inset 0 1px #e8f6ffac,inset 0 0 0 2px #78b7ef7d,0 2px 7px #061a4b62!important;
+}
+.qa-style-sapphire .qa-type.selected .qa-type-symbol {color:#d6e8ff;}
+.qa-style-sapphire .qa-done {background:linear-gradient(150deg,#507fb5,#153e7c 65%,#081c46);border-color:#a8cae8;}
+.qa-style-sapphire .qa-save-toggle {background:linear-gradient(155deg,#fbfdff,#d8e6f5 67%,#a8c4df);}
+@media(max-width:390px) {
+  .qa-ring {width:107.8155%;} /* 3% smaller than 111.15% */
+  .qa-palettes {gap:2px;}
+  .qa-palette {font-size:9px!important;}
+  .qa-finish-controls {gap:5px;}
+  .qa-finish-controls .qa-save-toggle,.qa-finish-controls .qa-done {min-width:63px;padding-inline:8px;}
+  .qa-creation-heading {font-size:18px;}
+}
+@media(min-width:701px) {
+  .qa-ring {width:min(104.1295%,718.77px);}
+}
+@media print {
+  .qa-ring {transform:none;}
+}
