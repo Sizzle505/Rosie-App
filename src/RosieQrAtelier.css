@@ -321,3 +321,9 @@
  .qa-design-card {min-height:98px;}
  .qa-design-emblem {height:35px;width:35px;font-size:22px;}
 }
+
+
+.qa-design-emblem svg {width:27px;height:27px;display:block;}
+.qa-design-selected .qa-design-emblem svg {filter:drop-shadow(0 0 2px #ecd49a7a);}
+.qa-design-card:focus-visible,.qa-dot-options button:focus-visible,.qa-art-toggle:focus-within,
+.qa-palette:focus-visible {outline:3px solid #856531;outline-offset:3px;}
