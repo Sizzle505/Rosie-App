@@ -1,7 +1,7 @@
 import React, {useEffect,useMemo,useRef,useState} from "react";
-import qrcode from "qrcode-generator";
+import {makeRosieQr,QR_DESIGNS} from "./qrAtelierDesign.js";
 import {
-  QR_TYPES,QR_STYLES,initialValues,qrPayload,qrByteString,itemName,
+  QR_TYPES,QR_STYLES,initialValues,qrPayload,itemName,
   eventIcs
 } from "./qrAtelierLogic.js";
 import "./RosieQrAtelier.css";
@@ -13,12 +13,6 @@ const clampSaved=data=>Array.isArray(data)?data.filter(x=>x && validType(x.type)
 function readCollection(){
   try{return clampSaved(JSON.parse(localStorage.getItem(STORAGE)||"[]"));}
   catch{return [];}
-}
-function makeQr(payload){
-  const qr=qrcode(0,"M");
-  qr.addData(qrByteString(payload),"Byte");
-  qr.make();
-  return {svg:qr.createSvgTag({cellSize:8,margin:32,scalable:true}),modules:qr.getModuleCount()};
 }
 function safeName(text){
   return String(text||"qr").toLowerCase().normalize("NFKD").replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48)||"qr";
@@ -180,6 +174,10 @@ export default function RosieQrAtelier(){
   const [type,setType]=useState("website");
   const [forms,setForms]=useState(initialValues);
   const [style,setStyle]=useState("emerald");
+  const [design,setDesign]=useState("royal");
+  const [rounded,setRounded]=useState(false);
+  const [centerPaw,setCenterPaw]=useState(false);
+  const [scanState,setScanState]=useState("idle");
   const [saved,setSaved]=useState(readCollection);
   const [wifiConsent,setWifiConsent]=useState(false);
   const [showPassword,setShowPassword]=useState(false);
@@ -194,12 +192,33 @@ export default function RosieQrAtelier(){
   const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
   const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setWifiConsent(false);setShowPassword(false);};
   const output=useMemo(()=>{
-    try{const payload=qrPayload(type,v),data=makeQr(payload);return {...data,payload,error:""};}
+    try{const payload=qrPayload(type,v),data=makeRosieQr(payload,{style,design,rounded,centerPaw});return {...data,payload,error:""};}
     catch(e){const error=/code length overflow|data too long|overflow/i.test(e?.message||"")
       ?"That QR contains too much data. Shorten the details or website address.":e.message||"Please review your details.";
       return {payload:"",svg:"",modules:0,error};}
-  },[type,v]);
+  },[type,v,style,design,rounded,centerPaw]);
   const ready=Boolean(output.svg);
+  // Browser BarcodeDetector is an additional digital check, not a promise of
+  // reliable scanning at every printed size or with every phone camera.
+  useEffect(()=>{
+    if(!ready){setScanState("idle");return;}
+    if(typeof window.BarcodeDetector!=="function"){setScanState("manual");return;}
+    let canceled=false;
+    setScanState("checking");
+    const timeout=window.setTimeout(async()=>{
+      try{
+        const img=await qrImage(output.svg);
+        const canvas=document.createElement("canvas");canvas.width=768;canvas.height=768;
+        const ctx=canvas.getContext("2d");if(!ctx)throw Error("Canvas unavailable.");
+        ctx.fillStyle="#fff";ctx.fillRect(0,0,768,768);
+        ctx.imageSmoothingEnabled=false;ctx.drawImage(img,0,0,768,768);
+        const detector=new window.BarcodeDetector({formats:["qr_code"]});
+        const found=await detector.detect(canvas);
+        if(!canceled)setScanState(found.some(x=>x.rawValue===output.payload)?"verified":"warning");
+      }catch{if(!canceled)setScanState("manual");}
+    },300);
+    return ()=>{canceled=true;window.clearTimeout(timeout);};
+  },[ready,output.svg,output.payload]);
   const toastMessage=text=>{setToast(text);window.clearTimeout(timerRef.current);timerRef.current=window.setTimeout(()=>setToast(""),4000);};
   useEffect(()=>()=>window.clearTimeout(timerRef.current),[]);
   useEffect(()=>{
@@ -218,7 +237,7 @@ export default function RosieQrAtelier(){
     if(type==="wifi"&&v.security!=="nopass"&&!wifiConsent)return toastMessage("Tick the password-storage permission before saving this Wi-Fi code.");
     const name=label.trim()||itemName(type,v);
     const record={id:loadedId||((globalThis.crypto?.randomUUID?.())||Date.now().toString(36)),type,
-      values:{...v},label:name,style,savedAt:new Date().toISOString()};
+      values:{...v},label:name,style,design,rounded,centerPaw,savedAt:new Date().toISOString()};
     setSaved(list=>[record,...list.filter(x=>x.id!==record.id)].slice(0,40));
     setLoadedId(record.id);setLabel(name);toastMessage("Saved in My Collection on this device.");
   }
@@ -226,6 +245,8 @@ export default function RosieQrAtelier(){
     setType(item.type);
     setForms(previous=>({...previous,[item.type]:{...initialValues()[item.type],...item.values}}));
     setStyle(QR_STYLES.some(s=>s.id===item.style)?item.style:"emerald");
+    setDesign(QR_DESIGNS.some(s=>s.id===item.design)?item.design:"classic");
+    setRounded(Boolean(item.rounded));setCenterPaw(Boolean(item.centerPaw));
     setLoadedId(item.id);setLabel(item.label||"");
     setWifiConsent(false);setShowPassword(false);
     window.scrollTo({top:0,behavior:"smooth"});
@@ -315,7 +336,34 @@ export default function RosieQrAtelier(){
               className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
               <span className="qa-swatch"/><span>{s.label}</span></button>)}
           </div>
-          <p className="qa-hint qa-contrast-note">The QR modules stay black on white for dependable scanning. Finishes decorate the surrounding stationery.</p>
+          <div className="qa-design-chooser">
+            <h3 className="qa-design-subheading">Rosie's Signature Designs</h3>
+            <p className="qa-hint qa-design-instruction">Choose a motif. Ornaments stay outside the protected scanning area.</p>
+            <div className="qa-design-grid" role="group" aria-label="QR artistic motif">
+              {QR_DESIGNS.map(d=><button type="button" key={d.id}
+                className={"qa-design-card"+(design===d.id?" qa-design-selected":"")}
+                aria-pressed={design===d.id} onClick={()=>setDesign(d.id)}>
+                <span className={"qa-design-emblem qa-design-emblem-"+d.id} aria-hidden="true">{d.mark}</span>
+                <span className="qa-design-name">{d.label}</span><small>{d.note}</small>
+              </button>)}
+            </div>
+            <div className="qa-dot-options" role="group" aria-label="QR module shape">
+              <button type="button" className={!rounded?"active":""} aria-pressed={!rounded} onClick={()=>setRounded(false)}>Square modules</button>
+              <button type="button" className={rounded?"active":""} aria-pressed={rounded} onClick={()=>setRounded(true)}>Softly rounded</button>
+            </div>
+            <label className="qa-art-toggle"><input type="checkbox" checked={centerPaw} onChange={e=>setCenterPaw(e.target.checked)}/>
+              <span><strong>Place Rosie's miniature paw at the center</strong>
+                <small>Uses stronger error correction. May reduce compatibility; test before printing.</small></span>
+            </label>
+            {centerPaw&&ready&&!output.centerApplied&&<p className="qa-art-warning">This code is too detailed for a centered paw. The motif has been omitted to protect readability.</p>}
+            <p className={"qa-scan-check qa-scan-"+scanState} role="status">
+              {scanState==="verified"?"Digital QR decode passed. Still test with a phone before printing.":
+               scanState==="checking"?"Checking QR readability in this browser…":
+               scanState==="warning"?"The rendered QR did not decode. Use Classic, square modules, or remove the center paw.":
+               "Scan this finished design with a phone before printing or distributing."}
+            </p>
+          </div>
+          <p className="qa-hint qa-contrast-note">Rosie's deep-color inks stay high-contrast on ivory. All motifs reserve an unobstructed quiet zone.</p>
           <div className="qa-save-block">
             <Field label="Save as (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
             <button className="qa-save" type="button" disabled={!ready||working} onClick={save}>
