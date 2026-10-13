@@ -1220,3 +1220,40 @@
   .heroTitleLead { font-size:34px; }
   .heroTitleMain { font-size:23px; }
 }
+
+
+/* The approved original casino illustration is a single intentional hero composition.
+   Keep its typography, winnings, dice, crest and Rosie together; no redundant HTML
+   artwork or overlays. All working randomizer widgets below remain unchanged. */
+.illustratedHero {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 1180px;
+  aspect-ratio: 1368 / 900;
+  overflow: hidden;
+  border-radius: clamp(15px, 2.3vw, 26px);
+  margin: 0 auto;
+  background: #17060c;
+  box-shadow: 0 11px 35px rgba(0, 0, 0, .35);
+}
+.approvedHeaderArt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.heroAccessibleTitle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+@media (max-width: 680px) {
+  .illustratedHero { border-radius: 13px; box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+}
