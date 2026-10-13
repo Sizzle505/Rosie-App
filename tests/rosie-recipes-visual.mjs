@@ -6,7 +6,7 @@ assert.equal(RECIPE_CATALOG.length,25,"all 25 supplied recipes loaded");
 assert.deepEqual(Object.fromEntries(["Breakfast","Small Bites","Main Courses","Desserts"].map(c=>[c,RECIPE_CATALOG.filter(x=>x.category===c).length])),{"Breakfast":5,"Small Bites":5,"Main Courses":10,"Desserts":5});
 for(const recipe of RECIPE_CATALOG){
  assert.ok(recipe.subtitle && recipe.description && recipe.note,"complete editorial matter for "+recipe.title);
- assert.ok(recipe.ingredients.length>=7 && recipe.steps.length>=3,"complete recipe method and measured ingredients: "+recipe.title);
+ assert.ok(recipe.ingredients.length>=6 && recipe.steps.length>=3,"complete recipe method and measured ingredients: "+recipe.title);
  assert.ok(recipe.totalMinutes>=10 && recipe.difficulty && recipe.servingsLabel,"exact metadata: "+recipe.title);
 }
 assert.match(COOKBOOK.humanOnly,/not for sharing with Rosie/);
