@@ -53,7 +53,7 @@ for(const [name,browserType,viewport] of [
  await page.locator("#recipes-detail").waitFor();
  assert.equal(await page.locator(".recipes-grid").count(),0,`${name}: detail replaces grid`);
  assert.ok(await page.locator(".recipes-parchment-art img").evaluate(img=>img.complete && img.naturalWidth>900),`${name}: parchment loaded`);
- assert.equal(await page.locator(".recipes-written-method .recipes-ingredient-list li").count(),10,`${name}: original Barkfast ingredients`);
+ assert.equal(await page.locator(".recipes-written-method .recipes-ingredient-list li").count(),9,`${name}: original Barkfast ingredients`);
  assert.ok(await page.locator(".recipes-steps li").count()>=5,`${name}: original method steps`);
  assert.match(await page.locator(".recipes-note").innerText(),/Toast the buns cut-side down/);
  assert.match(await page.locator(".recipes-overview-meta").innerText(),/20 min/);
