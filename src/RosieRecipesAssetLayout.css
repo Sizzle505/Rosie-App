@@ -114,3 +114,16 @@
   .recipes-written-method {width:100%;margin:0;border:0!important;background:#fff!important;box-shadow:none!important}
   .recipes-written-method h3 {break-after:avoid}.recipes-steps li{break-inside:avoid}
   .recipes-human-only {color:#333}}
+
+
+/* Place functional text clear of the ornaments already engraved into the artwork. */
+.recipes-card-metrics {top:84.2%;height:4.9%;line-height:1.05;font-size:clamp(9px,2.15vw,13px)}
+.recipes-parchment-stats {top:47.7%;height:3.3%;left:15.5%;width:69%;
+  border-radius:7px;background:rgba(255,244,217,.48)}
+.recipes-parchment-stats span {line-height:1.1;font-weight:700;overflow:visible;text-overflow:clip}
+.recipes-parchment-message {top:51.5%;bottom:9.5%}
+@media(max-width:600px){
+  .recipes-card-metrics {top:84.1%;height:5.1%}
+  .recipes-parchment-stats {top:47.8%;height:3.4%}
+  .recipes-parchment-message {top:51.2%;bottom:9.2%}
+}
