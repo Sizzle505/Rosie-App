@@ -49,6 +49,11 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
       <button type="button" onClick={() => onFavorite(recipe.id)}
         aria-pressed={favorite}>{favorite ? "♥ Saved" : "♡ Save"}</button>
     </div>
+    <dl className="recipes-summary-strip">
+      <div><dt>Time</dt><dd>{recipe.timeLabel}</dd></div>
+      <div><dt>Yield</dt><dd>{recipe.servingsLabel}</dd></div>
+      <div><dt>Difficulty</dt><dd>{recipe.difficulty}</dd></div>
+    </dl>
     <div className="recipes-parchment-art">
       <img src={ROOT + "recipes-parchment.webp"} alt="" loading="eager" draggable="false" />
       <div className="recipes-parchment-title">
@@ -58,11 +63,6 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
         <span className="recipes-dish-symbol" aria-hidden="true">{icons[recipe.category] || "✦"}</span>
         <span>{COOKBOOK.labels[recipe.category] || recipe.category}</span>
         <strong>{recipe.category}</strong>
-      </div>
-      <div className="recipes-parchment-stats">
-        <span title={recipe.timeLabel}>{recipe.totalMinutes != null ? `${recipe.totalMinutes}m${recipe.timeLabel.includes("chilling") ? " + chill" : ""}` : "—"}</span>
-        <span title="Yield">{recipe.servingsLabel || "—"}</span>
-        <span title="Difficulty">{recipe.difficulty || "—"}</span>
       </div>
       <div className="recipes-parchment-message">
         {ready
