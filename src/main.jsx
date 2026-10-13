@@ -37,12 +37,13 @@ import RosieCalculations from "./RosieCalculations.jsx";
 import RosieTimekeeper from "./RosieTimekeeper.jsx";
 import RosieResources from "./RosieResources.jsx";
 import RosieQrAtelier from "./RosieQrAtelier.jsx";
+import RosieRecipes from "./RosieRecipes.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
-// The three utility pages and their landing hub form a separate navigation family.
-const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "timekeeper", "calculations", "qr-atelier"]);
+// The five utility pages and their landing hub share the Resources navigation family.
+const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calculations", "recipes", "timekeeper"]);
 
 function ResourceNavIcon({ type }) {
   const common = { viewBox: "0 0 32 32", fill: "none", stroke: "currentColor",
@@ -52,6 +53,7 @@ function ResourceNavIcon({ type }) {
     <rect x="8" y="5" width="16" height="23" rx="2"/><path d="M12 4v3M20 4v3M12 13h8M12 18h8M12 23h4"/>
   </svg>;
   if (type === "qr-atelier") return <svg {...common}><rect x="5" y="5" width="8" height="8"/><rect x="19" y="5" width="8" height="8"/><rect x="5" y="19" width="8" height="8"/><path d="M19 19h3v3h-3zM25 19v3M19 25h3M25 25h2"/></svg>;
+  if (type === "recipes") return <svg {...common}><path d="M5 8c4-2 8-2 11 0 3-2 7-2 11 0v19c-4-2-8-2-11 0-3-2-7-2-11 0z"/><path d="M16 8v19M8 12h5M8 16h5M19 12h5M19 16h5"/></svg>;
   if (type === "timekeeper") return <svg {...common}>
     <circle cx="16" cy="17" r="10"/><path d="M16 10v7l4 2M12 3h8M16 3v4"/>
   </svg>;
@@ -2245,7 +2247,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "qr-atelier"];
+  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "qr-atelier", "recipes"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "home";
@@ -2997,6 +2999,8 @@ function App() {
           <RosieTimekeeper />
         ) : page === "qr-atelier" ? (
           <RosieQrAtelier />
+        ) : page === "recipes" ? (
+          <RosieRecipes />
         ) : page === "resources" ? (
           <RosieResources onNavigate={navigateTo} />
         ) : (
@@ -3018,9 +3022,10 @@ function App() {
           {navFamily === "resources" ?
           <nav className="bottom-nav resources-bottom-nav" aria-label="Rosie’s Resources">
             <button type="button" aria-label="Open Rosie’s Reminders" className={page === "reminders" ? "active" : ""} aria-current={page === "reminders" ? "page" : undefined} onClick={() => navigateTo("reminders")}><span className="nav-icon-wrap"><ResourceNavIcon type="reminders" /></span><small>Reminders</small></button>
-            <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
+            <button type="button" aria-label="Open QR" className={page === "qr-atelier" ? "active" : ""} aria-current={page === "qr-atelier" ? "page" : undefined} onClick={() => navigateTo("qr-atelier")}><span className="nav-icon-wrap"><ResourceNavIcon type="qr-atelier" /></span><small>QR</small></button>
             <button type="button" aria-label="Open Rosie’s Calculations" className={page === "calculations" ? "active" : ""} aria-current={page === "calculations" ? "page" : undefined} onClick={() => navigateTo("calculations")}><span className="nav-icon-wrap"><ResourceNavIcon type="calculations" /></span><small>Calculations</small></button>
-            <button type="button" aria-label="Open QR Atelier" className={page === "qr-atelier" ? "active" : ""} aria-current={page === "qr-atelier" ? "page" : undefined} onClick={() => navigateTo("qr-atelier")}><span className="nav-icon-wrap"><ResourceNavIcon type="qr-atelier" /></span><small>QR Atelier</small></button>
+            <button type="button" aria-label="Open Rosie’s Recipes" className={page === "recipes" ? "active" : ""} aria-current={page === "recipes" ? "page" : undefined} onClick={() => navigateTo("recipes")}><span className="nav-icon-wrap"><ResourceNavIcon type="recipes" /></span><small>Recipes</small></button>
+            <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
           </nav> :
           <nav className="bottom-nav" aria-label="RosieVerse destinations">
             <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
