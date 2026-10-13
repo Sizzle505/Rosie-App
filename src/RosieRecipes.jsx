@@ -92,7 +92,7 @@ export default function RosieRecipes() {
   const [query, setQuery] = useState("");
   const [crestReady, setCrestReady] = useState(false);
   const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("collection");
+  const [browseOpen, setBrowseOpen] = useState(false);
   const [favorites, setFavorites] = useState(loadFavorites);
   const [selectedId, setSelectedId] = useState(null);
   const searchRef = useRef(null);
@@ -107,8 +107,8 @@ export default function RosieRecipes() {
       const words = `${recipe.title} ${recipe.subtitle} ${recipe.category} ${recipe.description || ""} ${recipe.ingredientsText}`.toLocaleLowerCase();
       return categoryMatch && (!normalized || words.includes(normalized));
     });
-    return sort === "name" ? [...matches].sort((a,b) => a.title.localeCompare(b.title)) : matches;
-  }, [query, category, sort, favorites]);
+    return matches;
+  }, [query, category, favorites]);
   const selected = RECIPE_CATALOG.find((recipe) => recipe.id === selectedId);
   const toggleFavorite = (id) => setFavorites((previous) =>
     previous.includes(id) ? previous.filter((item) => item !== id) : [...previous, id]);
@@ -133,31 +133,25 @@ export default function RosieRecipes() {
         <p className="recipes-human-warning">Delicious human food, with a little of Rosie’s personality in every dish. Not for sharing with Rosie.</p>
       </header>
       {!selected && <section className="recipes-index" aria-label="The recipe collection" ref={searchRef}>
-        <div className="recipes-index-header">
-          <span className="recipes-eyebrow">FROM THE ROYAL KITCHEN</span>
-          <h2>The Founding Cookbook</h2>
-          <p>Four chapters of thoroughly delicious recipes, from breakfast to dessert.</p>
+        <div className="recipes-browse">
+          <button type="button" className="recipes-browse-trigger" aria-expanded={browseOpen}
+            onClick={() => setBrowseOpen(open => !open)}>
+            <span>Browse recipes</span><small>{category === "All" ? "25 recipes" : COOKBOOK.labels[category] || category}</small><b aria-hidden="true">⌄</b>
+          </button>
+          {browseOpen && <div className="recipes-browse-menu">
+            <label className="recipes-search"><span className="recipes-visually-hidden">Search recipes</span>
+              <span aria-hidden="true">⌕</span>
+              <input type="search" value={query} onChange={(event) => setQuery(event.target.value)}
+                placeholder="Find a recipe…" autoComplete="off"/>
+            </label>
+            <div className="recipes-category-tabs" aria-label="Filter recipes by category">
+              {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
+                className={category===cat?"is-active":""} aria-pressed={category===cat}
+                onClick={() => {setCategory(cat);setBrowseOpen(false);}}>{COOKBOOK.labels[cat] || cat}</button>)}
+            </div>
+            {(query || category !== "All") && <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"}</p>}
+          </div>}
         </div>
-        <div className="recipes-search-row">
-          <label className="recipes-search"><span className="recipes-visually-hidden">Search recipes</span>
-            <span aria-hidden="true">⌕</span>
-            <input type="search" value={query} onChange={(event) => setQuery(event.target.value)}
-              placeholder="Find a recipe…" autoComplete="off"/>
-          </label>
-          <label className="recipes-sort">
-            <span className="recipes-visually-hidden">Sort recipes</span>
-            <select value={sort} onChange={e => setSort(e.target.value)}>
-              <option value="collection">Cookbook order</option>
-              <option value="name">Name A–Z</option>
-            </select>
-          </label>
-        </div>
-        <div className="recipes-category-tabs" aria-label="Filter recipes by category">
-          {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
-            className={category===cat?"is-active":""} aria-pressed={category===cat}
-            onClick={() => {setCategory(cat);setSelectedId(null);}}>{COOKBOOK.labels[cat] || cat}</button>)}
-        </div>
-        <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"} in the collection</p>
         {filtered.length
           ? <div className="recipes-grid">{filtered.map((recipe) => <RecipeCard key={recipe.id}
             recipe={recipe} favorite={favorites.includes(recipe.id)}
