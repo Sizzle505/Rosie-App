@@ -1,12 +1,12 @@
 /* Portable, server-free QR payloads. Keep all user data on-device. */
 export const QR_TYPES = [
-  { id:"wifi", label:"Wi-Fi", mark:"⌁", hint:"Instant guest-network access" },
-  { id:"contact", label:"Contact", mark:"♙", hint:"Save details to Contacts" },
   { id:"website", label:"Website", mark:"◎", hint:"Open any website" },
+  { id:"wifi", label:"Wi-Fi", mark:"⌁", hint:"Instant guest-network access" },
+  { id:"instagram", label:"Instagram", mark:"◉", hint:"Visit an Instagram profile" },
   { id:"zoom", label:"Zoom", mark:"▣", hint:"Join a Zoom meeting" },
+  { id:"contact", label:"Contact", mark:"♙", hint:"Save details to Contacts" },
   { id:"event", label:"Event", mark:"▦", hint:"Add an event to a calendar" },
   { id:"payment", label:"Payment", mark:"◇", hint:"Open a payment link" },
-  { id:"instagram", label:"Instagram", mark:"◉", hint:"Visit an Instagram profile" },
   { id:"calling", label:"Calling Card", mark:"▤", hint:"Share your professional identity" }
 ];
 export const QR_STYLES = [
