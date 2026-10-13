@@ -7642,9 +7642,9 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 }
 
 
-/* Rosie Resources: isolated 3-destination bar across the hub and its utility pages. */
+/* Rosie Resources: four destinations including the Royal Cookbook. */
 .app-shell .bottom-nav.resources-bottom-nav {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
 }
 .resources-bottom-nav .nav-icon-wrap {
   display: flex;
@@ -7827,3 +7827,11 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 :root { --rosie-visible-height: 100vh; }
 @supports (height: 100dvh) { :root { --rosie-visible-height: 100dvh; } }
 html, body, #root, .app-shell { min-height:var(--rosie-visible-height,100vh); }
+
+/* Five equally-sized Resources buttons, ordered in the JSX, with iPhone-safe hit targets. */
+.app-shell .bottom-nav.resources-bottom-nav { grid-template-columns:repeat(5,minmax(0,1fr)) !important; }
+.resources-bottom-nav button {padding-inline:1px;overflow:hidden;}
+.resources-bottom-nav .nav-icon-wrap {width:24px;height:24px;}
+.resources-bottom-nav .rosie-nav-icon {width:23px;height:23px;}
+.resources-bottom-nav button small {font-size:clamp(8px,2.45vw,10px);letter-spacing:0;white-space:nowrap;}
+@media(max-width:360px) {.resources-bottom-nav button small{font-size:8px;}}

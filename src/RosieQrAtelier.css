@@ -1,0 +1,426 @@
+/* QR Atelier - illustrated emerald-and-gold workstation; artwork never contains live controls. */
+.app-shell.page-qr-atelier { padding-bottom:0; background:#04160f; }
+.app-shell.page-qr-atelier > main.qa-page { width:100%;max-width:none;margin:0;padding:0 0 calc(100px + env(safe-area-inset-bottom,0px))!important; }
+.qa-page { isolation:isolate; min-height:100dvh; color:#2b2011; background:#04160f; font-family:"Iowan Old Style","Baskerville",Georgia,serif; }
+.qa-page * { box-sizing:border-box; }
+.qa-page button,.qa-page input,.qa-page select,.qa-page textarea { font:inherit; }
+.qa-page button { cursor:pointer; touch-action:manipulation; }
+.qa-page button:focus-visible,.qa-page input:focus-visible,.qa-page select:focus-visible,.qa-page textarea:focus-visible {outline:3px solid #ecd083;outline-offset:3px;}
+.qa-scene {position:relative; width:min(100%,720px); margin:0 auto; isolation:isolate; overflow:hidden;
+ background:linear-gradient(180deg,#0a2118 0%,#06291c 58%,#04140f 100%);}
+.qa-scene::before {position:absolute;content:"";z-index:-1;top:0;left:0;right:0;aspect-ratio:821/1916;pointer-events:none;
+ background:url("/qr-atelier/workshop.webp") top center/100% auto no-repeat;
+ -webkit-mask-image:linear-gradient(#000 0 84%, transparent 100%);mask-image:linear-gradient(#000 0 84%, transparent 100%);}
+.qa-hero {height:clamp(315px,90vw,620px);position:relative;}
+.qa-title {position:absolute;top:clamp(22px,5vw,46px);right:3%;width:50%;text-align:center;
+ text-shadow:0 2px 8px #00100de0,0 2px 16px #000; color:#fff0c0;}
+.qa-title-flourish {display:block;font-size:clamp(15px,3vw,26px);color:#e8bc65;line-height:1}
+.qa-title h1 {font-weight:normal;font-size:clamp(28px,7vw,55px);line-height:1.1;letter-spacing:-.03em;margin:3px 0 2px;white-space:nowrap;
+ background:linear-gradient(180deg,#ffefb6,#e5b654 58%,#fff3d4);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 1px #26140c);}
+.qa-title p {font-size:clamp(11px,2.5vw,21px);margin:6px 0 0;color:#f0d8a0;font-variant:small-caps;letter-spacing:.12em;}
+.qa-preview-stage {position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center;margin-top:clamp(-18px,-3.8vw,-8px);}
+.qa-ring {position:relative;width:min(109%,685px);max-width:none;aspect-ratio:1;flex:none;filter:drop-shadow(0 9px 25px #010802b8);}
+.qa-ring-art {position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;}
+.qa-code-shell {position:absolute;left:23%;top:28%;width:54%;aspect-ratio:1;display:grid;place-items:center;
+ border-radius:2px;background:#fffef8;box-shadow:0 0 0 4px #fffef8,0 0 18px #060f0b4a;overflow:hidden;}
+.qa-svg,.qa-svg svg {display:block;width:100%;height:100%;max-width:100%;max-height:100%;}
+.qa-svg svg {background:#fff;}
+.qa-waiting {display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:10px;
+ color:#6d5b36;font:clamp(11px,2vw,16px)/1.3 Georgia,serif;}
+.qa-waiting-mark {font-size:clamp(24px,5vw,40px);color:#af9259;}
+.qa-ring-caption {position:absolute;left:24%;right:24%;bottom:6.3%;display:grid;place-items:center;text-align:center;
+ color:#513319;font:600 clamp(11px,2.8vw,18px) Georgia,serif;white-space:nowrap;text-shadow:0 1px #fff9e5;}
+.qa-zoom {position:relative;margin:-8px auto 9px;z-index:2;border:1px solid #d2ad62;border-radius:999px;background:#061b15ed;
+ color:#f8ddb1;padding:9px 18px;box-shadow:0 3px 15px #0009;font-size:clamp(11px,2.2vw,14px)!important;}
+.qa-zoom:disabled {opacity:.6;cursor:not-allowed;}
+.qa-panel {position:relative;z-index:2;width:min(95%,660px);margin:12px auto 15px;
+ background:#f2ddad url("/qr-atelier/form-panel.webp") center/100% 100% no-repeat;
+ border:3px solid #ca9b4e;border-radius:23px;
+ box-shadow:0 0 0 4px #071a1499,0 13px 30px #000a,inset 0 0 22px #ba85461f;}
+.qa-panel-inner {padding:clamp(23px,5vw,40px) clamp(16px,4.4vw,32px) clamp(22px,4.5vw,40px);}
+.qa-panel h2,.qa-panel h3 {font:normal clamp(21px,4.9vw,30px)/1.12 Georgia,serif;text-align:center;margin:2px 0 15px;color:#3b2819;}
+.qa-panel h3 {margin:22px 0 12px;font-size:clamp(19px,4.2vw,25px);}
+.qa-formats {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(5px,1.6vw,12px);}
+.qa-type {min-width:0;min-height:clamp(66px,17vw,87px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:7px 2px;
+ border:1.5px solid #c8a26d;border-radius:12px;background:linear-gradient(140deg,#fff7e6,#f2e0bd 65%,#e0bf83);color:#32251b;box-shadow:inset 0 1px 2px #fff,0 2px 3px #79562347;font-size:clamp(10px,2.1vw,14px)!important;}
+.qa-type.selected {background:linear-gradient(145deg,#07543b,#073322 55%,#051c1b);color:#ffedc6;border-color:#f1c47d;box-shadow:inset 0 1px #ffffff55,0 0 10px #96743d88;}
+.qa-type-symbol {font:normal clamp(25px,5.9vw,39px)/1 Georgia,serif;min-height:1em;color:#87652e;}
+.qa-type.selected .qa-type-symbol {color:#f0d18f;}
+.qa-inputs {display:grid;grid-template-columns:1fr;gap:11px;margin-top:21px;}
+.qa-field {display:flex;flex-direction:column;gap:5px;min-width:0;color:#4b301e;font-size:clamp(12px,2.5vw,15px);}
+.qa-field span {padding-left:2px;font-weight:bold;}
+.qa-field input,.qa-field select,.qa-field textarea {width:100%;min-width:0;border:1px solid #bc9457;border-radius:9px;padding:10px 12px;min-height:43px;
+ background:#fff8ed;color:#2c221b;font:normal clamp(16px,2.9vw,19px) Georgia,serif;box-shadow:inset 0 1px 2px #634b2518;}
+.qa-field textarea {resize:vertical;}
+.qa-field input::placeholder,.qa-field textarea::placeholder {color:#98846c;}
+.qa-duo {display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.qa-check {display:flex;align-items:flex-start;gap:8px;font:clamp(12px,2.5vw,15px)/1.3 Georgia,serif;color:#4c3724;}
+.qa-check input {width:17px;height:17px;accent-color:#17684a;}
+.qa-validation {min-height:18px;color:#735e45;font-size:clamp(11px,2.35vw,14px);margin-top:10px;line-height:1.25;}
+.qa-hint {font:clamp(12px,2.5vw,14px)/1.35 Georgia,serif;margin:0;color:#80623e;}
+.qa-palettes {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+.qa-palette {display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;border:1px solid transparent;border-radius:12px;padding:8px 4px;background:transparent;
+ color:#4c301d;text-align:center;font-size:clamp(10px,2.25vw,13px)!important;}
+.qa-palette.chosen {border-color:#b18b52;background:#fdf3d991;}
+.qa-swatch {display:block;width:clamp(38px,10vw,58px);height:clamp(38px,10vw,58px);border:4px double #d7b060;border-radius:50%;box-shadow:0 3px 7px #0006,inset 0 2px 4px #ffffff30;}
+.qa-palette-obsidian .qa-swatch {background:conic-gradient(#081320,#243b42,#090e15,#c59e5b,#07141d);}
+.qa-palette-emerald .qa-swatch {background:conic-gradient(#072c23,#13664d,#063022,#ccad63,#092218);}
+.qa-palette-burgundy .qa-swatch {background:conic-gradient(#410519,#a02844,#390619,#ecd09b,#510620);}
+.qa-save {display:block;width:100%;margin-top:18px;min-height:50px;border:2px solid #dfb770;border-radius:10px;color:#ffedb9;background:
+ url("/qr-atelier/primary-button.webp") center/100% 100% no-repeat,linear-gradient(160deg,#740f2a,#350719);text-shadow:0 1px 2px #22000a;font-size:clamp(16px,3.1vw,19px)!important;letter-spacing:.025em;box-shadow:0 3px 7px #0008;}
+.qa-actions {display:grid;grid-template-columns:1fr 1.5fr .65fr;gap:8px;margin-top:9px;}
+.qa-actions button {min-width:0;min-height:46px;border:1.5px solid #d6a960;border-radius:10px;color:#f7dcad;background:
+ url("/qr-atelier/secondary-buttons.webp") center/100% 100% no-repeat,linear-gradient(160deg,#172739,#061016);font-size:clamp(12px,2.6vw,16px)!important;}
+.qa-actions button:disabled,.qa-save:disabled {opacity:.48;cursor:not-allowed;}
+.qa-collection {position:relative;z-index:1;width:min(95%,660px);margin:14px auto;border:1px solid #bc9857;border-radius:14px;background:#041b13e8;
+ padding:18px;color:#e9d1a6;box-shadow:0 4px 22px #0009;}
+.qa-collection-heading {display:flex;justify-content:space-between;align-items:baseline;gap:9px;}
+.qa-collection h2 {font-size:clamp(20px,3.6vw,26px);font-weight:normal;margin:0;}
+.qa-collection span,.qa-collection p {font-size:12px;margin:8px 0;color:#ddc39a;}
+.qa-saved-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:11px;}
+.qa-saved {display:flex;align-items:stretch;min-width:0;border:1px solid #a6875d;border-radius:8px;overflow:hidden;}
+.qa-saved button {border:0;background:#0d2a22;color:#ffebcc;min-width:0;padding:9px;}
+.qa-saved button:first-child {display:flex;flex-direction:column;align-items:flex-start;flex:1;text-align:left;}
+.qa-saved strong {font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;font-weight:normal;}
+.qa-saved .qa-remove {font:22px Georgia,serif;background:#321a1a;border-left:1px solid #a6875d;}
+.qa-scanner-note {width:min(95%,660px);margin:16px auto 35px;border:1px solid #94723f70;border-radius:10px;
+ background:#041a13dc;padding:14px;text-align:center;color:#a99b85;display:flex;flex-direction:column;gap:3px;opacity:.82;}
+.qa-scanner-note strong {font-size:18px;font-weight:normal;color:#f1d5aa;}
+.qa-scanner-note span {font-size:12px;}
+.qa-status:empty {display:none;}
+.qa-status {position:fixed;z-index:15;bottom:calc(95px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:min(91vw,440px);
+ pointer-events:none;text-align:center;color:#fff5d9;background:#143426ed;border:1px solid #dfba72;border-radius:12px;padding:10px;}
+.qa-fullscreen {position:fixed;z-index:1000;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:#081511f5;color:#fff6d7;padding:25px;}
+.qa-fullscreen-qr {width:min(92vw,75vh,640px);aspect-ratio:1;background:#fff;padding:10px;}
+.qa-fullscreen-qr svg {width:100%;height:100%;display:block;}
+.qa-close {border:1px solid #d9b36d;border-radius:8px;background:#153e30;padding:9px 20px;color:#ffe9af;font-size:17px!important;}
+@media(max-width:360px) {
+ .qa-title {right:3%;width:52%;}
+ .qa-title h1 {font-size:27px;}
+ .qa-panel-inner {padding-inline:13px;}
+ .qa-type {font-size:10px!important;}
+ .qa-duo {grid-template-columns:1fr;}
+}
+@media(min-width:700px) {
+ .qa-hero {height:510px;}
+ .qa-preview-stage {margin-top:-32px;}
+ .qa-title {right:8%;}
+}
+@media(prefers-reduced-motion:reduce){.qa-page *{scroll-behavior:auto!important;transition:none!important;}}
+
+/* Presentation presets leave the QR payload black on white for scanner reliability. */
+.qa-style-obsidian .qa-ring-art {filter:saturate(.8) hue-rotate(4deg) brightness(.9);}
+.qa-style-obsidian .qa-panel {border-color:#ad9d7c;box-shadow:0 0 0 4px #0a151baa,0 15px 32px #000b;}
+.qa-style-obsidian .qa-save {background-color:#12141e;}
+.qa-style-burgundy .qa-ring-art {filter:hue-rotate(310deg) saturate(.83);}
+.qa-style-burgundy .qa-panel {border-color:#a97362;box-shadow:0 0 0 4px #2b0914ae,0 15px 32px #000b;}
+.qa-style-burgundy .qa-type.selected {background:linear-gradient(145deg,#7d1a38,#430d24);}
+.qa-style-burgundy .qa-collection {background:#2b0e1be8;}
+
+/* Atelier v2: registration to the source image and separate ornament layers. */
+.qa-scene {
+  background:radial-gradient(ellipse at 50% 36%,#17402c 0%,#06251c 52%,#03120e 100%);
+  min-height:100vh;
+}
+.qa-scene::before {aspect-ratio:821 / 1916;mask-image:linear-gradient(#000 0 91%, transparent 100%);
+  -webkit-mask-image:linear-gradient(#000 0 91%, transparent 100%);}
+.qa-hero {height:clamp(308px,86vw,620px);}
+.qa-title {top:clamp(14px,3vw,28px);right:3%;width:48%;}
+.qa-title h1 {font-size:clamp(28px,7vw,54px);}
+.qa-title p {font-size:clamp(9px,1.9vw,15px);line-height:1.25;letter-spacing:.075em;}
+.qa-preview-stage {margin-top:clamp(-18px,-3vw,-9px);scroll-margin-top:15px;}
+.qa-ring {width:min(128%,780px);aspect-ratio:1;max-width:none;}
+/* The asset's circular opening is approximately x=24..76%, y=25..77%.
+   A 36% square centered at 50/51% is mathematically inside the ring. */
+.qa-code-shell {left:32%;top:33%;width:36%;height:auto;aspect-ratio:1;border-radius:0;
+  box-shadow:0 0 0 6px #fff,0 0 25px #050b0780;z-index:1;overflow:hidden;}
+.qa-ring-art {z-index:2;}
+.qa-ring-caption {z-index:3;bottom:6.7%;left:26%;right:26%;font-size:clamp(12px,2.6vw,18px);}
+.qa-preview-actions {position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:9px;margin:-8px 12px 13px;}
+.qa-preview-actions button {border:1.4px solid #c5a267;border-radius:12px;padding:11px 12px;min-height:44px;
+  background:linear-gradient(145deg,#123b2d,#041c19);color:#f7dfae;
+  box-shadow:inset 0 1px #fff2cc2a,0 3px 7px #0009;font:600 clamp(12px,2.4vw,15px) Georgia,serif;}
+.qa-preview-actions button:disabled {opacity:.5;cursor:not-allowed;}
+.qa-panel {margin:7px auto 18px;width:min(96%,660px);border:0;border-radius:8px;
+  background:linear-gradient(150deg,#fff3cf,#f5e2bf);
+  border-image-source:url("/qr-atelier/form-panel.webp");border-image-slice:115 93 115 93 fill;
+  border-image-width:29px 25px 29px 25px;border-image-outset:0;
+  box-shadow:0 5px 21px #010c08b8;
+}
+.qa-panel-inner {padding:20px clamp(22px,6vw,40px) 27px;}
+.qa-panel-heading {text-align:center;border-radius:20px;min-height:70px;display:flex;flex-direction:column;
+  justify-content:center;gap:2px;margin:2px 5px 19px;color:#52351b;}
+.qa-panel-heading > span {font-size:clamp(10px,2vw,13px);font-variant:small-caps;letter-spacing:.14em;color:#81623c;}
+.qa-panel-heading h2 {margin:0;font:normal clamp(22px,5vw,31px) Georgia,serif;}
+.qa-type {min-height:clamp(72px,17vw,88px);gap:5px;box-shadow:inset 0 1px #fff,0 1px 2px #8a643a42;}
+.qa-type-symbol {display:grid;place-items:center;min-height:30px;font-size:0;}
+.qa-type-symbol svg {width:clamp(23px,5.5vw,33px);height:clamp(23px,5.5vw,33px);stroke-width:1.65;}
+.qa-details-heading {display:flex;flex-direction:column;gap:4px;align-items:center;margin:22px 0 14px;color:#3a2917;text-align:center;}
+.qa-details-heading h3 {font:normal clamp(20px,4.6vw,28px) Georgia,serif;margin:0;}
+.qa-details-heading > span {font-size:clamp(12px,2.35vw,15px);color:#80603b;}
+.qa-inputs {margin-top:0;gap:12px;}
+.qa-inputs .qa-field input,.qa-inputs .qa-field select,.qa-inputs .qa-field textarea,
+.qa-save-block .qa-field input {font-size:16px!important;min-height:46px;border-radius:8px;
+  background:linear-gradient(#fffaf1,#fef4e4);border:1px solid #b99457;box-shadow:inset 0 1px 2px #66513325;}
+.qa-field small {font-size:12px;line-height:1.35;color:#745839;}
+.qa-field em {font-style:normal;color:#8d3f27;}
+.qa-duo {gap:8px;}
+.qa-check {align-items:flex-start;line-height:1.35;}
+.qa-check input {flex:none;margin-top:1px;}
+.qa-sensitive {background:#fff4d27f;padding:9px;border:1px solid #c8a467;border-radius:9px;}
+.qa-password-row {position:relative;}
+.qa-password-row .qa-field input {padding-right:70px;}
+.qa-toggle-password {position:absolute;right:7px;bottom:6px;min-width:52px;min-height:33px;border:1px solid #aa8a55;
+ border-radius:6px;background:#f1e1c3;color:#47301d;font-size:12px!important;}
+.qa-validation {border-radius:8px;padding:10px 11px;background:#f9ead599;
+ border:1px solid #be9a67;color:#76371f;font-size:clamp(12px,2.2vw,14px);margin:15px 0 0;}
+.qa-validation.qa-valid {background:#e8ead7;border-color:#8eae80;color:#264b36;}
+.qa-section-separator {height:1px;background:linear-gradient(90deg,transparent,#9e743a,transparent);margin:21px 0 0;}
+.qa-design-heading {margin:16px 0 12px!important;}
+.qa-contrast-note {text-align:center;margin:10px auto 1px;max-width:430px;}
+.qa-save-block {display:flex;flex-direction:column;gap:7px;margin-top:17px;}
+.qa-save-block .qa-field {text-align:left;}
+.qa-save {min-height:54px;margin:5px 0 0;transition:filter .15s ease, transform .15s ease;}
+.qa-save:active,.qa-actions button:active,.qa-extra-exports button:active {transform:translateY(1px);filter:brightness(1.14);}
+.qa-actions {grid-template-columns:1fr 1fr 1fr;margin-top:8px;gap:6px;}
+.qa-actions button {min-height:47px;}
+.qa-extra-exports {display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+.qa-extra-exports button {flex:1;min-width:130px;min-height:42px;border:1.5px solid #986b3e;
+  border-radius:10px;background:linear-gradient(#f8eed7,#ddc08c);color:#3e2818;
+  box-shadow:inset 0 1px #fff7e1;font-size:clamp(12px,2.4vw,15px)!important;}
+.qa-extra-exports button:disabled {opacity:.45;cursor:not-allowed;}
+.qa-collection {margin-top:24px;background:linear-gradient(160deg,#0d3025ed,#061a17ef);padding:20px;}
+.qa-collection > p {font-size:13px;line-height:1.3;color:#ddc6a0;}
+.qa-empty {border-top:1px solid #ad96503e;padding-top:13px;}
+.qa-saved {min-width:0;}
+.qa-saved button:first-child {gap:3px;}
+.qa-saved small {font-size:10px;color:#c5a57d;}
+.qa-search {display:flex;flex-direction:column;gap:5px;font-size:13px;margin:13px 0;}
+.qa-search input {background:#fdf3dc;border:1px solid #b99960;border-radius:7px;padding:10px;min-height:44px;font-size:16px;}
+.qa-fullscreen {overscroll-behavior:contain;padding:calc(20px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px));}
+.qa-fullscreen-qr {width:min(93vw,75dvh,600px);padding:0;box-shadow:0 0 0 8px #fff,0 9px 32px #000c;}
+.qa-fullscreen-qr svg {background:#fff;}
+.qa-close {min-height:44px;}
+@media(max-width:390px) {
+  .qa-hero {height:clamp(298px,88vw,350px);}
+  .qa-formats {gap:5px;}
+  .qa-type {padding-inline:1px;font-size:10px!important;}
+  .qa-panel-inner {padding-inline:21px;}
+  .qa-ring {width:132%;}
+}
+@media(min-width:701px) {
+  .qa-hero {height:540px;}
+  .qa-ring {width:min(113%,780px);}
+  .qa-panel {margin-top:15px;}
+  .qa-title {right:7%;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .qa-save {transition:none;}
+}
+
+/* Printing uses the browser's native PDF/AirPrint flow, no upload or print service. */
+.qa-print-sheet {display:none;}
+@media print {
+  @page {margin:12mm;}
+  body * {visibility:hidden!important;}
+  body,.app-shell,.qa-page,.qa-scene {background:#fff!important;overflow:visible!important;}
+  .app-shell.page-qr-atelier {min-height:0!important;padding:0!important;}
+  .app-shell.page-qr-atelier > main.qa-page {padding:0!important;}
+  .qa-print-sheet,.qa-print-sheet * {visibility:visible!important;}
+  .qa-print-sheet {position:fixed;inset:0;z-index:999999;display:flex!important;align-items:center;justify-content:flex-start;
+    flex-direction:column;background:#fff!important;color:#161616!important;padding:24mm 10mm 0;text-align:center;}
+  .qa-print-brand {font:22px Georgia,serif;letter-spacing:.16em;margin:0 0 12mm;color:#5a4223!important;}
+  .qa-print-sheet h2 {font:normal 32px Georgia,serif;margin:0 0 8mm;}
+  .qa-print-code,.qa-print-code svg {width:85mm!important;height:85mm!important;display:block;background:#fff!important;}
+  .qa-print-sheet h3 {font:normal 23px Georgia,serif;margin:12mm 0 0;max-width:135mm;overflow-wrap:anywhere;}
+  .qa-print-sheet p:last-child {font:16px Georgia,serif;margin-top:6mm;}
+}
+
+/* Screenshot-driven correction: preserve filigree edge only, never the baked faux input. */
+.qa-panel {border:22px solid transparent;
+  border-image-source:url("/qr-atelier/form-panel.webp");
+  border-image-slice:115 104 115 104;
+  border-image-width:1;
+  border-image-repeat:stretch;
+  background:linear-gradient(170deg,#fff3d8 0%,#f9e9ca 44%,#f3dcb4 100%);
+  box-shadow:0 8px 25px #00120ba8,inset 0 0 8px #a6752b12;}
+.qa-panel-inner {padding:8px 6px 16px;}
+.qa-panel-heading {min-height:56px;margin:1px 0 18px;}
+.qa-panel h2 {text-shadow:0 1px #fff5db;}
+.qa-save {position:relative;
+  border:2px solid #e2b66f;outline:1px solid #916b37;outline-offset:-6px;
+  border-radius:10px;background:linear-gradient(160deg,#801e3d,#5e0b2a 60%,#2f071a);
+  box-shadow:inset 0 2px #ffe9b557,inset 0 -3px #1d0412,0 4px 8px #2e0e1480;
+  color:#ffedbe;font-weight:600!important;}
+.qa-actions button {border:1.5px solid #cfa661;border-radius:10px;background:linear-gradient(155deg,#182b34,#09141f 55%,#050e15);
+  box-shadow:inset 0 1px #fff4d729,0 2px 5px #33210d5c;font-weight:600!important;}
+.qa-save:disabled,.qa-actions button:disabled {opacity:.42;}
+@media(max-width:390px){.qa-panel-inner{padding:8px 5px 13px;}}
+
+.qa-start-fresh {margin-top:4px;min-height:36px;padding:7px 13px;border:1px solid #b99764;
+ border-radius:999px;background:#f8ead2;color:#6a3c26;font:12px Georgia,serif!important;}
+.qa-start-fresh:hover {background:#fff4df;}
+
+/* Screenshot review: gold title must remain legible above the busy workbench. */
+.qa-title {isolation:isolate;}
+.qa-title::before {content:"";position:absolute;z-index:-1;inset:-17px -9px -15px;
+  background:radial-gradient(ellipse at 58% 42%,rgba(0,15,13,.88),rgba(0,13,9,.48) 54%,transparent 79%);pointer-events:none;}
+.qa-title h1 {background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  color:#ffe4a1!important;filter:none;text-shadow:0 2px 2px #000,0 0 13px #000b,0 0 8px #ae7238;}
+.qa-title p {color:#ffe1a9;text-shadow:0 2px 4px #000,0 0 10px #000;}
+
+/* Center dynamic status text inside the separate gold nameplate, not beneath it. */
+.qa-ring-caption {bottom:13.4%!important;line-height:1.05;font-size:clamp(13px,2.8vw,19px);
+ color:#4a2c11;text-shadow:0 1px 1px #fff8e6;}
+
+/* QR Atelier design system v3 - eight dedicated transparent, optimized art layers.
+   Artwork never supplies functional text, hit targets, or scannable QR modules. */
+
+/* Top sign floats above the workshop but ends well before Rosie's head. */
+.qa-title {
+  top:clamp(4px,1.6vw,16px);
+  right:1.2%;
+  width:min(81%,560px);
+  z-index:5;
+}
+.qa-title::before {display:none;}
+.qa-header-sign {
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 5px 11px #01120caa);
+  pointer-events:none;
+  user-select:none;
+}
+.qa-accessible-title {
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+.qa-idle-emblem {
+  display:block;
+  width:min(69%,100px);
+  height:auto;
+  max-height:95px;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 4px #a78a4260);
+}
+.qa-waiting {gap:5px;padding:7px;}
+.qa-waiting > span {font-size:clamp(10px,2vw,13px);line-height:1.12;color:#7b6038;}
+
+/* Clean long-form parchment, rebuilt as a nine-slice asset so corners never stretch. */
+.qa-panel {
+  border:24px solid transparent;
+  border-image-source:url("/qr-atelier/workbench-frame.webp");
+  border-image-slice:160 135 168 135 fill;
+  border-image-width:24px 23px 25px 23px;
+  border-image-repeat:stretch;
+  border-image-outset:0;
+  background:#f8e6c4;
+  box-shadow:0 11px 31px #0008;
+}
+.qa-panel-inner {padding:10px 7px 18px;}
+.qa-panel-heading {margin-top:1px;}
+
+/* Individually functional gold/ivory and gold/emerald keycaps, no baked labels. */
+.qa-type,
+.qa-type:hover {
+  border:0;
+  background:#ead7af url("/qr-atelier/tile-ivory.webp") center center/100% 100% no-repeat;
+  box-shadow:none;
+  color:#41301e;
+  border-radius:13px;
+  min-height:clamp(78px,19vw,96px);
+  padding:12px 3px;
+}
+.qa-type.selected,.qa-type.selected:hover,
+.qa-style-burgundy .qa-type.selected,
+.qa-style-obsidian .qa-type.selected {
+  background:#053b31 url("/qr-atelier/tile-emerald.webp") center center/100% 100% no-repeat;
+  border:0;
+  box-shadow:none;
+  color:#fff0c5;
+}
+.qa-type-symbol {color:#81612f;}
+.qa-type.selected .qa-type-symbol {color:#ffe3a1;}
+.qa-type.selected:focus-visible,.qa-type:focus-visible {outline-offset:0;}
+.qa-type:active {filter:brightness(1.08);}
+
+/* Artisan action keys. Functional labels stay real HTML; ornate surfaces are art. */
+.qa-save {
+  background:#590a28 url("/qr-atelier/button-burgundy.webp") center/100% 100% no-repeat!important;
+  border:0!important;
+  outline:none!important;
+  border-radius:11px;
+  box-shadow:0 3px 7px #1d100d7a!important;
+  color:#fff0c3;
+  text-shadow:0 2px 3px #260516;
+}
+.qa-actions button,
+.qa-preview-actions button {
+  background:#081925 url("/qr-atelier/button-obsidian.webp") center/100% 100% no-repeat!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:11px;
+  color:#f7e4bc;
+  text-shadow:0 1px 2px #020308;
+}
+.qa-extra-exports button {
+  background:#081925 url("/qr-atelier/button-obsidian.webp") center/100% 100% no-repeat;
+  border:0;
+  box-shadow:none;
+  color:#f7e4bc;
+  border-radius:11px;
+  min-height:45px;
+}
+.qa-save:disabled,
+.qa-actions button:disabled,
+.qa-preview-actions button:disabled,
+.qa-extra-exports button:disabled {opacity:.46;filter:grayscale(.2);}
+.qa-actions button:focus-visible,
+.qa-save:focus-visible,
+.qa-extra-exports button:focus-visible,
+.qa-preview-actions button:focus-visible {outline:3px solid #e9c174;outline-offset:2px;}
+
+/* Gold-bordered emerald collection frame grows with saved content without distorting corners. */
+.qa-collection {
+  width:min(96%,660px);
+  border:20px solid transparent;
+  border-image-source:url("/qr-atelier/collection-frame.webp");
+  border-image-slice:116 140 112 140 fill;
+  border-image-width:21px 21px 21px 21px;
+  border-image-repeat:stretch;
+  background:#052c24;
+  border-radius:0;
+  padding:16px 16px 19px;
+  box-shadow:0 8px 22px #0009;
+}
+.qa-collection h2 {color:#f5dcad;}
+.qa-collection > p {color:#ead8b4;}
+
+/* Keep the generous iPhone art, scroll and large QR scan target intact. */
+@media(max-width:390px) {
+ .qa-title {width:82%;top:4px;right:1%;}
+ .qa-panel-inner {padding-inline:5px;}
+ .qa-type {min-height:75px;padding:9px 1px;}
+ .qa-type-symbol svg {width:24px;height:24px;}
+ .qa-type > span:last-child {font-size:10.5px;}
+ .qa-collection {padding-inline:12px;}
+}
+@media(min-width:701px) {
+ .qa-title {width:71%;max-width:520px;right:1.5%;top:9px;}
+}
+@media(prefers-reduced-motion:no-preference) {
+ .qa-save:not(:disabled):hover, .qa-actions button:not(:disabled):hover,
+ .qa-extra-exports button:not(:disabled):hover {filter:brightness(1.1);}
+}
+@media print {
+ .qa-header-sign,.qa-idle-emblem {display:none!important;}
+}

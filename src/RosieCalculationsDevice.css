@@ -1440,3 +1440,21 @@
     padding-bottom:6px;
   }
 }
+
+
+/* Resources integration: remove the oversized trailing Calculations void on
+   iPhone without altering the hero, physical calculator, toolkit art or active
+   gold instrument. The previous 100dvh workspace minimum forced several
+   hundred pixels of unused space beyond the final currency tool. */
+@media(max-width:739px) {
+ .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-workspace {
+   min-height:0 !important;
+   padding-bottom:clamp(72px,10svh,90px) !important;
+ }
+ .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
+   padding-bottom:12px;
+ }
+ .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-footer-note {
+   margin-bottom:8px;
+ }
+}

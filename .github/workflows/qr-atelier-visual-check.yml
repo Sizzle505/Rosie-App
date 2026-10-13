@@ -1,0 +1,43 @@
+name: QR Atelier iPhone visual inspection
+on:
+  push:
+    branches:
+      - work/qr-atelier-foundation-20261012
+    paths:
+      - '.github/workflows/qr-atelier-visual-check.yml'
+      - 'scripts/qrAtelierBrowserCheck.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Install browser test runner
+        run: npm install --no-save --no-package-lock playwright@1.56.1
+      - name: Install Chromium browser
+        run: npx playwright install --with-deps chromium
+      - name: Run local preview
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/qa-vite.log 2>&1 &
+          sleep 7
+          curl -fsS http://127.0.0.1:4173/ > /dev/null
+      - name: Capture mobile viewport and scroll
+        run: |
+          mkdir -p qa-screenshots
+          npx --yes playwright@1.56.1 screenshot --browser chromium --viewport-size "393,852" --wait-for-timeout=4500 "http://127.0.0.1:4173/#qr-atelier" qa-screenshots/qr-atelier-iphone-top.png
+          npx --yes playwright@1.56.1 screenshot --browser chromium --viewport-size "393,852" --full-page --wait-for-timeout=4500 "http://127.0.0.1:4173/#qr-atelier" qa-screenshots/qr-atelier-iphone-full.png
+      - name: Exercise real QR creation, saving, sharing and downloads
+        run: node scripts/qrAtelierBrowserCheck.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qr-atelier-iphone-visual
+          path: qa-screenshots/*.png
+          retention-days: 3
