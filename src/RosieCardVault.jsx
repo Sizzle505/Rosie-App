@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import rosieCards from './rosieCards.js';
 import styles from './RosieCardVault.module.css';
 import revealStyles from './RosieCardVaultReveal.module.css';
+import './RosieCardVaultCollector.css';
 
 function parsePosition(value, fallbackX) {
   const match = String(value || '').trim().match(/^(-?\d+(?:\.\d+)?)%\s+(-?\d+(?:\.\d+)?)%$/);
@@ -547,9 +548,9 @@ function RosieCardVaultWall() {
 
   const speedLabel = speed === 0 ? '0' : `${speed > 0 ? '↓' : '↑'} ${Math.abs(speed).toFixed(Math.abs(speed) % 1 ? 2 : 0)}×`;
 
-  if (!pool.length) return <main className={styles.page}><div className={styles.empty}>Add Rosie cards to <code>data/rosieCards.js</code>.</div></main>;
+  if (!pool.length) return <main className={`${styles.page} vault-collector-page`}><div className={styles.empty}>Add Rosie cards to <code>data/rosieCards.js</code>.</div></main>;
 
-  return <main className={styles.page}>
+  return <main className={`${styles.page} vault-collector-page`}>
     <aside
       className={`${styles.driftControl} ${isBraked ? styles.driftControlBraked : ''} ${mobileDriftExpanded ? styles.driftControlExpanded : ''}`}
       aria-label="Ambient card drift speed and direction"
@@ -580,29 +581,20 @@ function RosieCardVaultWall() {
       >{mobileDriftExpanded ? '×' : `${Math.abs(speed).toFixed(1)}×`}</button>
     </aside>
 
-    <header className={styles.header}>
-      <div className={styles.headerRule} aria-hidden="true"/>
-      <div className={styles.headerMark}>
-        <div className={styles.eyebrow}>THE HOUSE OF ROSIE · PRIVATE COLLECTION</div>
-        <div className={styles.titleLine}>
-          <svg className={styles.pawTitleIcon} viewBox="0 0 64 64" aria-hidden="true">
-            <ellipse cx="32" cy="40" rx="15" ry="12"/>
-            <ellipse cx="15" cy="25" rx="7" ry="9" transform="rotate(-24 15 25)"/>
-            <ellipse cx="27" cy="18" rx="7" ry="9" transform="rotate(-8 27 18)"/>
-            <ellipse cx="39" cy="18" rx="7" ry="9" transform="rotate(8 39 18)"/>
-            <ellipse cx="51" cy="25" rx="7" ry="9" transform="rotate(24 51 25)"/>
-          </svg>
-          <h1 data-vault-title>
-            <span data-vault-layer="base">Card Vault</span>
-            <span data-vault-layer="gleam" aria-hidden="true">Card Vault</span>
-          </h1>
+    <header className={`${styles.header} vault-collector-header`}>
+      <div className="vault-collector-plaque">
+        <img className="vault-collector-image" src="/card-vault/vault-collector-header.webp" alt="" aria-hidden="true" draggable="false" fetchPriority="high" />
+        <div className="vault-collector-light-mask" aria-hidden="true">
+          <span className="vault-collector-beam" />
+          <span className="vault-collector-spark vault-collector-spark--left" />
+          <span className="vault-collector-spark vault-collector-spark--right" />
+          <span className="vault-collector-spark vault-collector-spark--crest" />
         </div>
-        <div className={styles.headerMeta}><span>CURATED ARCHIVE</span><i/><span>ONE OF ONE</span><i/><span>EST. 2016</span></div>
       </div>
-      <div className={styles.headerRule} aria-hidden="true"/>
+      <h1 className="vault-collector-sr">Card Vault</h1>
     </header>
 
-    <section className={styles.galleryShell} aria-label="Rosie archive display">
+    <section className={`${styles.galleryShell} vault-collector-gallery`} aria-label="Rosie archive display">
       <div className={styles.archiveToolbar}>
         <div className={styles.archiveIntro}>
           <span>THE COMPLETE COLLECTION</span>
@@ -659,15 +651,6 @@ function RosieCardVaultWall() {
 
 export default function RosieCardVault() {
   return <>
-    <TitleGleamAnimator
-      selector={'h1[data-vault-title] [data-vault-layer="gleam"]'}
-      duration={4400}
-      delay={2800}
-      hold={0.05}
-      travelEnd={0.80}
-      startPosition="155% 50%"
-      endPosition="-55% 50%"
-    />
     <RosieCardVaultWall />
   </>;
 }
