@@ -242,8 +242,8 @@
 
 /* Collection landing: title and work surface sit higher in the kitchen, while
    meal choices are immediately usable rather than hidden behind a menu. */
-.recipes-heading {padding-top:calc(clamp(348px,97vw,690px) - 20px)!important;}
-.recipes-index {position:relative;top:-30px;margin-bottom:-30px!important;}
+.recipes-heading {position:relative;z-index:3;padding-top:calc(clamp(348px,97vw,690px) - 28px)!important;}
+.recipes-index {position:relative;z-index:2;top:-30px;margin-bottom:-30px!important;}
 .recipes-meal-filters {display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:0 auto 10px;padding:2px 0 1px;max-width:610px;}
 .recipes-meal-filters button {min-height:33px;padding:6px 11px;border:1px solid #c18a35;border-radius:999px;
   background:linear-gradient(160deg,#fffaf0,#f2d49a);box-shadow:inset 0 1px 0 #fffdf4,0 2px 4px #63310b30;
@@ -255,5 +255,16 @@
 .recipes-inline-search input {width:100%;min-width:0;height:36px;border:0;outline:0;background:transparent;color:#4d280d;font:normal 15px/1.2 Georgia,serif;}
 .recipes-inline-search input::placeholder {color:#9f7446;opacity:1;}
 .recipes-index>.recipes-count {margin:0 0 8px;text-align:center;color:#82501d;font:700 12px/1.3 Georgia,serif;}
-@media(max-width:600px){.recipes-heading {padding-top:calc(95vw - 20px)!important;}.recipes-meal-filters{gap:6px}.recipes-meal-filters button{min-height:31px;padding:5px 9px;font-size:11px}.recipes-inline-search{min-height:36px;margin-bottom:7px}.recipes-inline-search input{height:34px;font-size:14px}}
-@media(max-width:360px){.recipes-heading {padding-top:calc(96vw - 20px)!important;}.recipes-meal-filters{gap:5px}.recipes-meal-filters button{padding-inline:7px;font-size:10px}}
+@media(max-width:600px){.recipes-heading {padding-top:calc(95vw - 28px)!important;}.recipes-meal-filters{gap:6px}.recipes-meal-filters button{min-height:31px;padding:5px 9px;font-size:11px}.recipes-inline-search{min-height:36px;margin-bottom:7px}.recipes-inline-search input{height:34px;font-size:14px}}
+@media(max-width:360px){.recipes-heading {padding-top:calc(96vw - 28px)!important;}.recipes-meal-filters{gap:5px}.recipes-meal-filters button{padding-inline:7px;font-size:10px}}
+
+/* Cards read like small menu folios: an editorial title block above a quiet,
+   scan-friendly strip of practical facts. */
+.recipes-card-copy {top:calc(51% + 9px)!important;height:25%!important;padding:4px 4px 2px!important;}
+.recipes-card-copy::before {content:"";position:absolute;inset:2px 0 0;border-block:1px solid #d8ad68;opacity:.85;}
+.recipes-card-copy strong {position:relative;padding:3px 3px 2px;font:700 clamp(14px,3.55vw,21px)/1.11 Georgia,serif!important;letter-spacing:.005em;color:#4d2408!important;text-shadow:0 1px 0 #fff8e7;}
+.recipes-card-metrics {bottom:9px!important;height:13.5%!important;padding-top:1px;border-top:0!important;}
+.recipes-card-metrics span {gap:3px;font:700 clamp(9px,2.05vw,11px)/1.08 Georgia,serif!important;color:#67330e!important;letter-spacing:.005em;}
+.recipes-card-metrics span+span {border-left:1px solid #d9b06b;}
+.recipes-card-metrics b {font:700 clamp(6.5px,1.55vw,8px)/1 Georgia,serif!important;letter-spacing:.09em;color:#a06420!important;}
+@media(max-width:420px){.recipes-card-copy{top:calc(51% + 8px)!important;height:25%!important}.recipes-card-copy strong{font-size:clamp(13px,3.75vw,17px)!important}.recipes-card-metrics{bottom:8px!important;height:13.8%!important}.recipes-card-metrics span{font-size:clamp(8px,2.05vw,10px)!important}.recipes-card-metrics b{font-size:clamp(6px,1.55vw,7.5px)!important}}
