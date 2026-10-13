@@ -186,10 +186,10 @@ export default function RosieRandomizers() {
         <h1 className={styles.heroAccessibleTitle}>Rosie’s Randomizers</h1>
         <img
           className={styles.approvedHeaderArt}
-          src="/randomizers/rosie-randomizers-casino-header.webp"
+          src="/randomizers/rosie-randomizers-casino-header-safe-fit.webp"
           alt="Rosie’s Randomizers casino salon - Rosie presides over her winnings, with gilded dice, a commemorative coin and roulette wheel. For decisions too important to leave to humans."
-          width="1368"
-          height="900"
+          width="1448"
+          height="1086"
           decoding="async"
           fetchPriority="high"
         />
