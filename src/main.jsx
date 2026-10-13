@@ -36,12 +36,13 @@ import RosieReminders from "./RosieReminders.jsx";
 import RosieCalculations from "./RosieCalculations.jsx";
 import RosieTimekeeper from "./RosieTimekeeper.jsx";
 import RosieResources from "./RosieResources.jsx";
+import RosieRecipes from "./RosieRecipes.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
 // The three utility pages and their landing hub form a separate navigation family.
-const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "timekeeper", "calculations"]);
+const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "timekeeper", "calculations", "recipes"]);
 
 function ResourceNavIcon({ type }) {
   const common = { viewBox: "0 0 32 32", fill: "none", stroke: "currentColor",
@@ -50,6 +51,7 @@ function ResourceNavIcon({ type }) {
   if (type === "reminders") return <svg {...common}>
     <rect x="8" y="5" width="16" height="23" rx="2"/><path d="M12 4v3M20 4v3M12 13h8M12 18h8M12 23h4"/>
   </svg>;
+  if (type === "recipes") return <svg {...common}><path d="M6 8c3-2 7-2 10 0 3-2 7-2 10 0v18c-3-2-7-2-10 0-3-2-7-2-10 0Z"/><path d="M16 8v18M9 12h4M9 16h4M19 12h4M19 16h4"/></svg>;
   if (type === "timekeeper") return <svg {...common}>
     <circle cx="16" cy="17" r="10"/><path d="M16 10v7l4 2M12 3h8M16 3v4"/>
   </svg>;
@@ -2243,7 +2245,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources"];
+  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "recipes"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "home";
@@ -2993,6 +2995,8 @@ function App() {
           <RosieCalculations />
         ) : page === "timekeeper" ? (
           <RosieTimekeeper />
+        ) : page === "recipes" ? (
+          <RosieRecipes />
         ) : page === "resources" ? (
           <RosieResources onNavigate={navigateTo} />
         ) : (
@@ -3016,6 +3020,7 @@ function App() {
             <button type="button" aria-label="Open Rosie’s Reminders" className={page === "reminders" ? "active" : ""} aria-current={page === "reminders" ? "page" : undefined} onClick={() => navigateTo("reminders")}><span className="nav-icon-wrap"><ResourceNavIcon type="reminders" /></span><small>Reminders</small></button>
             <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
             <button type="button" aria-label="Open Rosie’s Calculations" className={page === "calculations" ? "active" : ""} aria-current={page === "calculations" ? "page" : undefined} onClick={() => navigateTo("calculations")}><span className="nav-icon-wrap"><ResourceNavIcon type="calculations" /></span><small>Calculations</small></button>
+            <button type="button" aria-label="Open Rosie’s Recipes" className={page === "recipes" ? "active" : ""} aria-current={page === "recipes" ? "page" : undefined} onClick={() => navigateTo("recipes")}><span className="nav-icon-wrap"><ResourceNavIcon type="recipes" /></span><small>Recipes</small></button>
           </nav> :
           <nav className="bottom-nav" aria-label="RosieVerse destinations">
             <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
