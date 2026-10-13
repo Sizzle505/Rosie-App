@@ -2815,7 +2815,7 @@ function App() {
         {page === "captain" && <CaptainOuterAtmosphere />}
 
         {page !== "home" && <>
-          <button type="button" className="house-return" aria-label="Return to the RosieVerse Grand Salon" title="RosieVerse Home" onClick={() => navigateTo("home")}>⌂<span>HOME</span></button>
+          <button type="button" className="house-return" aria-label="Return to the RosieVerse Grand Salon" title="RosieVerse Home" onClick={() => navigateTo("home")}>⌂</button>
           <button type="button"
             className={`resources-return ${RESOURCE_PAGE_IDS.has(page) ? "resources-return--active" : ""}`}
             aria-label="Open Rosie’s Resources hub"

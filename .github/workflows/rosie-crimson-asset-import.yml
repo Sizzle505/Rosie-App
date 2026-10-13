@@ -1,0 +1,26 @@
+name: Import Rosie Crimson QR Artwork
+on:
+  push:
+    branches:
+      - work/rosie-crimson-qr-ui-20261013
+permissions:
+  contents: write
+jobs:
+  import-art:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
+      - name: Fetch verified QR artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 4 --retry-delay 2 --max-time 120 "https://sb-5fkmnkkngx96.vercel.run/qr-atelier.png" --output "public/rosieverse/resources/qr-atelier.png"
+          echo "5a4536747c289fe9a5d02450e66e8152fba60f1a32afe616be0696bc7dfe0e97  public/rosieverse/resources/qr-atelier.png" | sha256sum --check
+          git add "public/rosieverse/resources/qr-atelier.png"
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Import verified crimson QR Atelier artwork"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

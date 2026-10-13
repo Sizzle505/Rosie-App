@@ -1277,7 +1277,7 @@
 
 /* 2026-10-13: Randomizers hero requested size and vertical alignment. */
 .illustratedHero {
-  transform: translate(-50%, -15px) scale(1.08);
+  transform: translate(-50%, -15px) scale(1.0044);
   transform-origin: center top;
   margin-bottom: -25px;
 }
