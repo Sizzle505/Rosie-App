@@ -1,5 +1,5 @@
 /* Rosie’s Calculations: isolated luxury-black-marble theme and responsive real controls. */
-.rc-page { width:100%;max-width:none;margin:0;padding:0 0 calc(125px + env(safe-area-inset-bottom,0px));min-height:100dvh;
+.rc-page { width:100%;max-width:none;margin:0;padding:0 0 env(safe-area-inset-bottom,0px);min-height:100dvh;
   color:#f6e4b8;background:radial-gradient(ellipse at 50% 5%,#332535 0%,#0d111d 43%,#07080b 100%);font-family:Georgia,"Times New Roman",serif;}
 .rc-page * {box-sizing:border-box;}
 .rc-page button,.rc-page input,.rc-page select {font:inherit;}
@@ -23,7 +23,7 @@
 .rc-equations {color:#cda868;font-size:clamp(9px,1.6vw,15px);}
 .rc-hero h1 {margin:4px 0 2px;font-size:clamp(23px,4vw,45px);line-height:.96;font-weight:normal;color:#fff6dc;}
 .rc-hero p {margin:9px 0 0;font-size:clamp(12px,2vw,21px);color:#f9d38c;}
-.rc-workspace {max-width:825px;margin:0 auto;padding:12px clamp(9px,2.5vw,24px) 32px;scroll-margin-top:10px;}
+.rc-workspace {max-width:825px;margin:0 auto;padding:12px clamp(9px,2.5vw,24px) 7px;scroll-margin-top:10px;}
 .rc-mode-tabs {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:4px;gap:4px;border:1px solid #ac7f33;border-radius:18px;background:#080f1a;
   box-shadow:0 4px 22px #000a,inset 0 0 0 2px #161b23;}
 .rc-mode-tabs button {min-height:41px;border-radius:14px;border:1px solid transparent;background:transparent;color:#d6b971;font-size:clamp(15px,2.2vw,18px);}
