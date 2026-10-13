@@ -123,22 +123,19 @@ function QRTypeSelector({current,onSelect}){
     </button>)}
   </div>;
 }
-function Details({type,v,put,showPassword,setShowPassword,wifiConsent,setWifiConsent}){
+function Details({type,v,put,showPassword,setShowPassword}){
   switch(type){
     case "wifi":return <>
       <Field label="Network name (SSID)" required value={v.ssid} onChange={x=>put("ssid",x)} placeholder="Guest Wi-Fi"/>
-      <label className="qa-field"><span>Security</span><select value={v.security} onChange={e=>put("security",e.target.value)}>
-        <option value="WPA">WPA2 / WPA3 (most networks)</option><option value="WEP">WEP (legacy)</option>
-        <option value="nopass">Open (no password)</option></select></label>
       {v.security!=="nopass"&&<div className="qa-password-row">
         <Field label="Wi-Fi password" value={v.password} required onChange={x=>put("password",x)}
           type={showPassword?"text":"password"} placeholder="Network password" autoComplete="new-password"/>
         <button type="button" className="qa-toggle-password" onClick={()=>setShowPassword(x=>!x)} aria-label={showPassword?"Hide Wi-Fi password":"Show Wi-Fi password"}>{showPassword?"Hide":"Show"}</button>
       </div>}
+      <label className="qa-field"><span>Security</span><select value={v.security} onChange={e=>put("security",e.target.value)}>
+        <option value="WPA">WPA2 / WPA3 (most networks)</option><option value="WEP">WEP (legacy)</option>
+        <option value="nopass">Open (no password)</option></select></label>
       <label className="qa-check"><input type="checkbox" checked={v.hidden} onChange={e=>put("hidden",e.target.checked)}/> Hidden network</label>
-      <label className="qa-check qa-sensitive"><input type="checkbox" checked={wifiConsent} onChange={e=>setWifiConsent(e.target.checked)}/>
-        Allow this device to save the Wi-Fi password in my collection.</label>
-      <p className="qa-hint">Scanning shares the network credentials. Display this code only to people you trust.</p>
     </>;
     case "contact":case "calling":return <>
       <Field label="Full name" required value={v.name} onChange={x=>put("name",x)} placeholder="Name"/>
@@ -181,7 +178,6 @@ export default function RosieQrAtelier(){
   const [forms,setForms]=useState(initialValues);
   const [style,setStyle]=useState("emerald");
   const [saved,setSaved]=useState(readCollection);
-  const [wifiConsent,setWifiConsent]=useState(false);
   const [showPassword,setShowPassword]=useState(false);
   const [fullScreen,setFullScreen]=useState(false);
   const [label,setLabel]=useState("");
@@ -194,7 +190,7 @@ export default function RosieQrAtelier(){
   const previewRef=useRef(null),ringRef=useRef(null),timerRef=useRef(null);
   const v=forms[type];
   const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
-  const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setWifiConsent(false);setShowPassword(false);};
+  const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setShowPassword(false);};
   const output=useMemo(()=>{
     try{const payload=qrPayload(type,v),data=makeQr(payload);return {...data,payload,error:""};}
     catch(e){const error=/code length overflow|data too long|overflow/i.test(e?.message||"")
@@ -217,19 +213,18 @@ export default function RosieQrAtelier(){
   },[fullScreen]);
   function save(){
     if(!ready)return toastMessage(output.error);
-    if(type==="wifi"&&v.security!=="nopass"&&!wifiConsent)return toastMessage("Tick the password-storage permission before saving this Wi-Fi code.");
     const name=label.trim()||itemName(type,v);
     const record={id:loadedId||((globalThis.crypto?.randomUUID?.())||Date.now().toString(36)),type,
       values:{...v},label:name,style,savedAt:new Date().toISOString()};
     setSaved(list=>[record,...list.filter(x=>x.id!==record.id)].slice(0,40));
-    setLoadedId(record.id);setLabel(name);toastMessage("Saved in My Collection on this device.");
+    setLoadedId(record.id);setLabel(name);setShowSaveMenu(false);toastMessage("Saved in My Collection on this device.");
   }
   function openRecord(item){
     setType(item.type);
     setForms(previous=>({...previous,[item.type]:{...initialValues()[item.type],...item.values}}));
     setStyle(QR_STYLES.some(s=>s.id===item.style)?item.style:"emerald");
     setLoadedId(item.id);setLabel(item.label||"");
-    setWifiConsent(false);setShowPassword(false);
+    setShowPassword(false);setShowSaveMenu(false);
     window.scrollTo({top:0,behavior:"smooth"});
   }
   function removeRecord(item){
@@ -323,37 +318,40 @@ export default function RosieQrAtelier(){
       </section>
       <section className="qa-panel" aria-label="QR code settings">
         <div className="qa-panel-inner">
+          <h2 className="qa-creation-heading">Choose Your Creation</h2>
           <QRTypeSelector current={type} onSelect={changeType}/>
           <div className="qa-inputs" key={type}>
-            <Details type={type} v={v} put={put} showPassword={showPassword} setShowPassword={setShowPassword}
-              wifiConsent={wifiConsent} setWifiConsent={setWifiConsent}/>
+            <Details type={type} v={v} put={put} showPassword={showPassword} setShowPassword={setShowPassword}/>
           </div>
           {!ready&&<p className="qa-validation" role="status">{output.error}</p>}
           <div className="qa-section-separator"/>
           <div className="qa-finish-heading">
-            <h3 className="qa-design-heading">Finish</h3>
-            <button className="qa-done" type="button" onClick={showFinishedQR}>Done <span aria-hidden="true">↑</span></button>
+            <h3 className="qa-design-heading">Atelier Finish</h3>
+            <div className="qa-finish-controls">
+              <div className="qa-save-menu">
+                <button className="qa-save-toggle" type="button" aria-expanded={showSaveMenu} onClick={()=>setShowSaveMenu(open=>!open)}>
+                  Save <span aria-hidden="true">⌄</span></button>
+                {showSaveMenu&&<div className="qa-save-options">
+                  <Field label="Name (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
+                  <button type="button" disabled={!ready||working} onClick={save}>{loadedId?"Update Collection":"Save to My Collection"}</button>
+                  <button type="button" disabled={!ready||working} onClick={share}>Share</button>
+                  <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>Download PNG</button>
+                  <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>Download SVG</button>
+                  <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>Designed Card</button>
+                  {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
+                  {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
+                  <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
+                </div>}
+              </div>
+              <button className="qa-done" type="button" onClick={showFinishedQR}>Done <span aria-hidden="true">↑</span></button>
+            </div>
           </div>
           <div className="qa-palettes" role="group" aria-label="Presentation finish">
             {QR_STYLES.map(s=><button key={s.id} type="button" aria-pressed={style===s.id}
               className={"qa-palette qa-palette-"+s.id+(style===s.id?" chosen":"")} onClick={()=>setStyle(s.id)}>
               <span className="qa-swatch"/><span>{s.label}</span></button>)}
           </div>
-          <div className="qa-save-menu">
-            <button className="qa-save-toggle" type="button" aria-expanded={showSaveMenu} onClick={()=>setShowSaveMenu(open=>!open)}>
-              Save <span aria-hidden="true">⌄</span></button>
-            {showSaveMenu&&<div className="qa-save-options">
-              <Field label="Name (optional)" value={label} onChange={setLabel} placeholder={itemName(type,v)}/>
-              <button type="button" disabled={!ready||working} onClick={save}>{loadedId?"Update Collection":"Save to My Collection"}</button>
-              <button type="button" disabled={!ready||working} onClick={share}>Share</button>
-              <button type="button" disabled={!ready||working} onClick={()=>exportFile("png")}>Download PNG</button>
-              <button type="button" disabled={!ready||working} onClick={()=>exportFile("svg")}>Download SVG</button>
-              <button type="button" disabled={!ready||working} onClick={()=>exportFile("card")}>Designed Card</button>
-              {type==="event"&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("ics")}>Download .ics Invite</button>}
-              {(type==="contact"||type==="calling")&&<button type="button" disabled={!ready||working} onClick={()=>exportFile("vcf")}>Download Contact (.vcf)</button>}
-              <button type="button" disabled={!ready} onClick={()=>window.print()}>Print / Save PDF</button>
-            </div>}
-          </div>
+
         </div>
       </section>
       <section className="qa-collection" aria-label="Saved QR collection">
