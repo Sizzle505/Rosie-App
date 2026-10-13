@@ -659,3 +659,32 @@ body:has(.app-shell.page-reminders),
   padding-bottom:calc(104px + env(safe-area-inset-bottom));
 }
 .app-shell.page-reminders .rr-feature-grid { margin-top:5px; } /* lower all five image buttons 5px without changing their hit areas */
+
+
+/* 2026-10-13 - Moonlit control alcove and enhanced Notes stationery. */
+.app-shell.page-reminders .rr-feature-grid {
+  position:relative;isolation:isolate;width:min(calc(100% - 14px),842px);
+  margin-top:9px;margin-bottom:15px;
+  padding:clamp(10px,2.8vw,18px) clamp(7px,2vw,14px) clamp(13px,3vw,19px);
+  border:1px solid rgba(238,199,113,.46);border-radius:23px;
+  background:linear-gradient(180deg,rgba(4,13,36,.36),rgba(3,10,28,.68)),
+    url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") center / 470px auto repeat;
+  box-shadow:inset 0 0 0 1px rgba(255,237,177,.12),inset 0 12px 22px rgba(4,6,22,.42),0 10px 20px rgba(1,4,16,.34);
+}
+.app-shell.page-reminders .rr-feature-grid::before {content:"";position:absolute;z-index:-1;inset:5px;border:1px solid rgba(247,218,151,.23);border-radius:18px;pointer-events:none;}
+.app-shell.page-reminders .rr-feature-goals {width:87%;}
+.app-shell.page-reminders .rr-tabs {margin-top:16px;}
+.rr-page .rr-notes {padding-top:2px;}
+.rr-page .rr-notes .rr-side-head {margin:13px 0 11px;padding:9px 11px 10px;border-bottom:1px solid rgba(125,68,64,.28);}
+.rr-page .rr-notes .rr-side-head strong {color:#57243a;font:600 clamp(23px,5.6vw,30px)/1 Baskerville,"Iowan Old Style",Georgia,serif;letter-spacing:.015em;}
+.rr-page .rr-notes .rr-side-head button {border:1px solid #b8894e;border-radius:999px;padding:9px 13px;background:linear-gradient(#7b1837,#4c1027);box-shadow:inset 0 1px #f7d99766,0 2px 5px #5320364d;color:#ffe8b6;font:600 14px Georgia,serif;}
+.rr-page .rr-notes .rr-note-picker {padding:0 5px 12px;gap:7px;}
+.rr-page .rr-notes .rr-note-picker button {box-shadow:0 2px 4px #47232b26;}
+.rr-page .rr-note-editor {position:relative;isolation:isolate;overflow:hidden;min-height:292px;padding:clamp(33px,8vw,45px) clamp(22px,6vw,33px) 21px;border:1px solid #b98a48;border-radius:19px;background:linear-gradient(145deg,rgba(255,251,236,.97),rgba(249,226,184,.95));box-shadow:inset 0 0 0 2px #fff2ce,inset 0 0 28px #b9844540,0 8px 17px #4d241c2e;}
+.rr-page .rr-note-editor::before {content:"";position:absolute;z-index:-1;inset:0;background:url("/rosieverse/reminders/20261013/note-panel-filigree.webp") center / 100% 100% no-repeat;opacity:.96;pointer-events:none;}
+.rr-page .rr-note-editor input,.rr-page .rr-note-editor textarea {border-color:#c29b63;border-radius:10px;background:rgba(255,253,244,.83);box-shadow:inset 0 1px 5px #6f40131c;}
+.rr-page .rr-note-editor input {padding:11px 13px;color:#4a2335;}
+.rr-page .rr-note-editor textarea {min-height:172px;padding:13px 14px;color:#442832;font:18px/1.58 "Iowan Old Style",Baskerville,Georgia,serif;background-image:repeating-linear-gradient(to bottom,transparent 0 29px,rgba(167,115,76,.16) 29px 30px);}
+.rr-page .rr-note-footer {padding:9px 4px 0;color:#795d58;}
+.rr-page .rr-note-footer button {color:#7c1f3e;font-weight:600;}
+@media(max-width:390px) {.app-shell.page-reminders .rr-feature-grid {border-radius:19px;padding-inline:6px}.rr-page .rr-note-editor {padding:33px 17px 17px}.rr-page .rr-notes .rr-side-head {padding-inline:5px}}
