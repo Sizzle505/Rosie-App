@@ -17,20 +17,18 @@ function hasInstructions(recipe) {
 }
 function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
   return <article className="recipes-tile">
-    <button type="button" className="recipes-card" onClick={() => onOpen(recipe.id)}
+    <button type="button" className={`recipes-card recipes-card--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} onClick={() => onOpen(recipe.id)}
       aria-label={`View ${recipe.title}`}>
       <span className={`recipes-card-image recipes-card-image--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} aria-hidden="true">
         <span className="recipes-dish-symbol">{icons[recipe.category] || "✦"}</span>
-        <small>THE FOUNDING COOKBOOK</small>
       </span>
       <span className="recipes-card-copy">
         <strong>{recipe.title}</strong>
-        <small>{COOKBOOK.labels[recipe.category] || recipe.category}</small>
       </span>
       <span className="recipes-card-metrics" aria-hidden="true">
-        <span>{recipe.totalMinutes != null ? `${recipe.totalMinutes}m${recipe.timeLabel?.includes("chilling") ? "+" : ""}` : "✦"}</span>
-        <span>{recipe.difficulty || "✦"}</span>
-        <span>{recipe.servings != null ? `${recipe.servings}` : "✦"}</span>
+        <span><b>Time</b>{recipe.timeLabel || "—"}</span>
+        <span><b>Level</b>{recipe.difficulty || "—"}</span>
+        <span><b>Serves</b>{recipe.servingsLabel || "—"}</span>
       </span>
     </button>
     <button type="button" className={`recipes-favorite ${favorite ? "is-favorite" : ""}`}
