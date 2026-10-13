@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { RECIPE_CATALOG, RECIPE_CATEGORIES } from "./rosieRecipesData.js";
 import "./RosieRecipes.css";
+import "./RosieRecipesAssetLayout.css";
 
 const ROOT = "/rosieverse/recipes/";
 const FAVORITES_KEY = "rosie-recipes-favorites-v1";
