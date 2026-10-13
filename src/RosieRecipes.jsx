@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { RECIPE_CATALOG, RECIPE_CATEGORIES } from "./rosieRecipesData.js";
+import { COOKBOOK, RECIPE_CATALOG, RECIPE_CATEGORIES } from "./rosieRecipesData.js";
 import "./RosieRecipes.css";
 import "./RosieRecipesAssetLayout.css";
 
@@ -21,14 +21,14 @@ function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
       aria-label={`View ${recipe.title}`}>
       <span className={`recipes-card-image recipes-card-image--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} aria-hidden="true">
         <span className="recipes-dish-symbol">{icons[recipe.category] || "✦"}</span>
-        <small>ROSIE’S TABLE</small>
+        <small>THE FOUNDING COOKBOOK</small>
       </span>
       <span className="recipes-card-copy">
         <strong>{recipe.title}</strong>
-        <small>{recipe.category}</small>
+        <small>{COOKBOOK.labels[recipe.category] || recipe.category}</small>
       </span>
       <span className="recipes-card-metrics" aria-hidden="true">
-        <span>{recipe.prepMinutes != null ? `${recipe.prepMinutes}m` : "✦"}</span>
+        <span>{recipe.totalMinutes != null ? `${recipe.totalMinutes}m${recipe.timeLabel?.includes("chilling") ? "+" : ""}` : "✦"}</span>
         <span>{recipe.difficulty || "✦"}</span>
         <span>{recipe.servings != null ? `${recipe.servings}` : "✦"}</span>
       </span>
@@ -56,23 +56,25 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
       </div>
       <div className="recipes-parchment-display">
         <span className="recipes-dish-symbol" aria-hidden="true">{icons[recipe.category] || "✦"}</span>
-        <span>FROM THE ROYAL KITCHEN</span>
+        <span>{COOKBOOK.labels[recipe.category] || recipe.category}</span>
         <strong>{recipe.category}</strong>
       </div>
       <div className="recipes-parchment-stats">
-        <span>{recipe.prepMinutes != null ? `${recipe.prepMinutes} min` : "—"}</span>
-        <span>{recipe.servings != null ? recipe.servings : "—"}</span>
-        <span>{recipe.cookMinutes != null ? `${recipe.cookMinutes} min` : "—"}</span>
+        <span title="Total time">{recipe.timeLabel || "—"}</span>
+        <span title="Yield">{recipe.servingsLabel || "—"}</span>
+        <span title="Difficulty">{recipe.difficulty || "—"}</span>
       </div>
       <div className="recipes-parchment-message">
         {ready
-          ? <><h3>From Rosie's Table</h3><p>{recipe.description || "An original Rosie’s Recipes creation."}</p><span>Full recipe follows below ↓</span></>
+          ? <><h3>{recipe.subtitle}</h3><p>{recipe.description}</p><span>Ingredients and method ↓</span></>
           : <><h3>Rosie's Recipe Collection</h3><p>The original ingredients and instructions for this dish will be placed here when the complete cookbook is imported.</p><span>✦ Reserved for the original recipe ✦</span></>}
       </div>
     </div>
     {ready && <div className="recipes-written-method">
-      <p className="recipes-eyebrow">{recipe.category.toUpperCase()}</p>
-      {recipe.description && <p className="recipes-detail-description">{recipe.description}</p>}
+      <p className="recipes-eyebrow">{COOKBOOK.labels[recipe.category]?.toUpperCase() || recipe.category.toUpperCase()}</p>
+      <h3 className="recipes-subtitle">{recipe.subtitle}</h3>
+      <p className="recipes-detail-description">{recipe.description}</p>
+      <p className="recipes-overview-meta"><strong>Total time:</strong> {recipe.timeLabel} <span aria-hidden="true">·</span> <strong>Yield:</strong> {recipe.servingsLabel} <span aria-hidden="true">·</span> <strong>Difficulty:</strong> {recipe.difficulty}</p>
       <h3>Ingredients</h3>
       <ul className="recipes-ingredient-list">{recipe.ingredients.map((ingredient, i) =>
         <li key={i}><label><input type="checkbox" checked={checked.includes(i)}
@@ -80,7 +82,8 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
           <span>{ingredient}</span></label></li>)}</ul>
       <h3>Method</h3>
       <ol className="recipes-steps">{recipe.steps.map((step, i) => <li key={i}>{step}</li>)}</ol>
-      {recipe.note && <aside className="recipes-note"><strong>Rosie’s Note</strong><p>{recipe.note}</p></aside>}
+      {recipe.note && <aside className="recipes-note"><strong>Rosie’s Tip</strong><p>{recipe.note}</p></aside>}
+      <p className="recipes-human-only">{COOKBOOK.humanOnly}</p>
       <button type="button" className="recipes-print" onClick={() => window.print()}>Print Recipe</button>
     </div>}
   </section>;
@@ -101,7 +104,7 @@ export default function RosieRecipes() {
     const matches = RECIPE_CATALOG.filter((recipe) => {
       const categoryMatch = category === "All" || category === recipe.category ||
         (category === "Favorites" && favorites.includes(recipe.id));
-      const words = `${recipe.title} ${recipe.category} ${recipe.description || ""}`.toLocaleLowerCase();
+      const words = `${recipe.title} ${recipe.subtitle} ${recipe.category} ${recipe.description || ""} ${recipe.ingredientsText}`.toLocaleLowerCase();
       return categoryMatch && (!normalized || words.includes(normalized));
     });
     return sort === "name" ? [...matches].sort((a,b) => a.title.localeCompare(b.title)) : matches;
@@ -126,13 +129,14 @@ export default function RosieRecipes() {
           <img src={ROOT + "recipes-title.webp"} alt="" onLoad={() => setCrestReady(true)} onError={() => setCrestReady(false)} />
           <span>Rosie’s Recipes</span><small>THE ROYAL COOKBOOK</small>
         </div>
-        <p>Twenty-five delicious human recipes, approved by the most discerning Shiba in the kingdom.</p>
+        <p>The Founding Cookbook - 25 Recipes for Rosie’s Favorite Humans</p>
+        <p className="recipes-human-warning">Delicious human food, with a little of Rosie’s personality in every dish. Not for sharing with Rosie.</p>
       </header>
       {!selected && <section className="recipes-index" aria-label="The recipe collection" ref={searchRef}>
         <div className="recipes-index-header">
           <span className="recipes-eyebrow">FROM THE ROYAL KITCHEN</span>
-          <h2>The Recipe Collection</h2>
-          <p>Discover breakfast favorites, irresistible bites, exceptional mains and splendid desserts.</p>
+          <h2>The Founding Cookbook</h2>
+          <p>Four chapters of thoroughly delicious recipes, from breakfast to dessert.</p>
         </div>
         <div className="recipes-search-row">
           <label className="recipes-search"><span className="recipes-visually-hidden">Search recipes</span>
@@ -151,7 +155,7 @@ export default function RosieRecipes() {
         <div className="recipes-category-tabs" aria-label="Filter recipes by category">
           {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button"
             className={category===cat?"is-active":""} aria-pressed={category===cat}
-            onClick={() => {setCategory(cat);setSelectedId(null);}}>{cat}</button>)}
+            onClick={() => {setCategory(cat);setSelectedId(null);}}>{COOKBOOK.labels[cat] || cat}</button>)}
         </div>
         <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"} in the collection</p>
         {filtered.length
