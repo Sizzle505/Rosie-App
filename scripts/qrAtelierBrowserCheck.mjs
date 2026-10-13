@@ -64,6 +64,7 @@ try {
     await page.getByPlaceholder("Network password").fill("test-Pa$$:123");
   });
   assert.ok(await page.getByText(/Tick the password-storage permission/).count()===0);
+  await page.getByRole("button",{name:/^Save/}).click();
   await page.getByRole("button",{name:"Save to Collection"}).click();
   await page.waitForTimeout(50);
   assert.ok(await page.getByText(/Tick the password-storage permission/).count()===1);
@@ -89,8 +90,9 @@ try {
     await page.getByPlaceholder("Name",{exact:true}).fill("Rosie Artisan");
     await page.getByPlaceholder("+1 555 123 4567").fill("+15551234567");
   });
-  await page.locator(".qa-save-block input").fill("Rosie's Calling Card");
-  await page.getByRole("button",{name:"Save to Collection"}).click();
+  await page.getByRole("button",{name:/^Save/}).click();
+  await page.locator(".qa-save-options input").fill("Rosie's Calling Card");
+  await page.getByRole("button",{name:"Save to My Collection"}).click();
   await page.waitForTimeout(100);
   assert.ok((await page.locator(".qa-saved").count())>=1);
   const downloadWait=page.waitForEvent("download",{timeout:12000});
@@ -99,7 +101,7 @@ try {
   assert.ok(dl.suggestedFilename().endsWith(".png"));
   console.log("PASS PNG download:",dl.suggestedFilename());
   const cardWait=page.waitForEvent("download",{timeout:12000});
-  await page.getByRole("button",{name:"Download Calling Card",exact:true}).click();
+  await page.getByRole("button",{name:"Designed Card",exact:true}).click();
   const card=await cardWait;
   assert.ok(card.suggestedFilename().endsWith("-printable.png"));
   console.log("PASS designed Calling Card image:",card.suggestedFilename());
