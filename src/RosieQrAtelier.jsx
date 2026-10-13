@@ -54,7 +54,7 @@ function drawWrapped(ctx,value,x,y,maxWidth,lineHeight,maxLines=3){
   }
   if(line&&written<maxLines)ctx.fillText(line,x,y+written*lineHeight);
 }
-async function exportKeepsake(svg,type,values,style){
+async function exportKeepsake(svg,type,values,style,design){
   const theme=QR_STYLES.find(x=>x.id===style)||QR_STYLES[0];
   const canvas=document.createElement("canvas");
   canvas.width=1800;canvas.height=1080;
@@ -68,6 +68,9 @@ async function exportKeepsake(svg,type,values,style){
     ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);ctx.strokeStyle=theme.accent;ctx.lineWidth=5;ctx.strokeRect(-13,-13,26,26);ctx.restore();
   }
   ctx.fillStyle=theme.accent;ctx.font="40px Georgia,serif";ctx.fillText("✦  R O S I E  ·  Q R  A T E L I E R  ✦",120,157);
+  const ornament=QR_DESIGNS.find(x=>x.id===design)?.label||"Classic";
+  ctx.fillStyle=theme.accent;ctx.font="italic 28px Georgia,serif";
+  ctx.fillText(ornament,120,222,800);
   ctx.fillStyle=theme.light;ctx.font="bold 78px Georgia,serif";
   const title=type==="calling"?"Calling Card":QR_TYPES.find(x=>x.id===type)?.label||"QR Code";
   ctx.fillText(title,120,320,775);
@@ -287,7 +290,7 @@ export default function RosieQrAtelier(){
     withDownload(async()=>{
       if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
       else if(kind==="png")download(await exportQR(output.svg),fileBase+".png");
-      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-printable.png");
+      else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style,design),fileBase+"-printable.png");
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
       else if(kind==="vcf")download(new Blob([output.payload],{type:"text/vcard;charset=utf-8"}),fileBase+".vcf");
       toastMessage("Download prepared.");
@@ -295,7 +298,7 @@ export default function RosieQrAtelier(){
   }
   function share(){
     withDownload(async()=>{
-      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg);
+      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style,design):await exportQR(output.svg);
       const file=new File([blob],fileBase+".png",{type:"image/png"});
       if(navigator.share&&navigator.canShare?.({files:[file]})){
         await navigator.share({files:[file],title:"Rosie's QR Atelier"});
