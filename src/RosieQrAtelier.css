@@ -273,57 +273,154 @@
 .qa-ring-caption {bottom:13.4%!important;line-height:1.05;font-size:clamp(13px,2.8vw,19px);
  color:#4a2c11;text-shadow:0 1px 1px #fff8e6;}
 
+/* QR Atelier design system v3 - eight dedicated transparent, optimized art layers.
+   Artwork never supplies functional text, hit targets, or scannable QR modules. */
 
-/* Signature QR design controls - framed as workbench specimens, not a second page. */
-.qa-design-chooser {margin:16px 0 0;padding:0 1px;color:#412a19;}
-.qa-panel .qa-design-subheading {margin:0 0 5px;font-size:clamp(19px,4.4vw,25px);}
-.qa-design-instruction {text-align:center;margin:0 auto 12px;max-width:430px;}
-.qa-design-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
-.qa-design-card {position:relative;min-height:106px;padding:12px 7px 9px;display:flex;align-items:center;justify-content:center;
- flex-direction:column;gap:3px;color:#4a311c;border:1.5px solid #c49d63;border-radius:13px;
- background:linear-gradient(145deg,#fff8e7,#f2deb8 75%,#e9cc94);
- box-shadow:inset 0 1px #fff,0 2px 5px #80603e36;text-align:center;}
-.qa-design-card.qa-design-selected {background:linear-gradient(155deg,#064333,#082b25 75%,#071c1a);
- color:#ffecc4;border-color:#ceac6e;box-shadow:0 0 0 2px #d9b66d88,inset 0 1px #fff4ca49,0 3px 8px #3a321f60;}
-.qa-design-emblem {display:flex;justify-content:center;align-items:center;
- width:39px;height:39px;border:1.5px solid #b89458;border-radius:50%;color:#9c743e;
- background:radial-gradient(circle at 40% 32%,#fff3d4,#e5c994 70%,#b48b49);
- box-shadow:inset 0 1px #fff7dd,0 2px 6px #876a3d55;
- font:24px Georgia,serif;line-height:1;}
-.qa-design-selected .qa-design-emblem {border-color:#e7c68d;color:#f6dfa8;background:radial-gradient(circle at 40% 30%,#245944,#082d23 73%);}
-.qa-design-emblem-paw {font-size:27px;}
-.qa-design-name {font:bold clamp(12px,2.6vw,15px)/1.13 Georgia,serif;}
-.qa-design-card small {font:clamp(10px,2.1vw,12px)/1.25 Georgia,serif;opacity:.85;}
-.qa-dot-options {display:flex;gap:7px;margin:13px 0 10px;}
-.qa-dot-options button {flex:1;min-width:0;min-height:42px;padding:7px 5px;
- color:#55351f;background:#f8ebd4;border:1px solid #b99866;border-radius:9px;
- font:clamp(12px,2.6vw,14px) Georgia,serif;}
-.qa-dot-options button.active {color:#fff0cc;background:linear-gradient(150deg,#0b4d37,#0b3028);border-color:#b99656;}
-.qa-art-toggle {display:flex;align-items:flex-start;gap:10px;padding:12px 10px;border:1px solid #c5a571;
- border-radius:11px;background:linear-gradient(145deg,#fff6ddcc,#e8d3ab80);cursor:pointer;}
-.qa-art-toggle input {flex:none;width:18px;height:18px;margin:3px 0 0;accent-color:#0d5c41;}
-.qa-art-toggle span {display:flex;flex-direction:column;gap:3px;min-width:0;}
-.qa-art-toggle strong {font:600 clamp(13px,2.7vw,15px)/1.25 Georgia,serif;}
-.qa-art-toggle small {font:clamp(11px,2.2vw,13px)/1.35 Georgia,serif;color:#765d3c;}
-.qa-art-warning {color:#8b421b;background:#fff0d4;border-radius:8px;border:1px solid #d1a35f;
- padding:9px;font-size:12px;line-height:1.35;margin:8px 0 0;}
-.qa-scan-check {margin:10px 0 4px;padding:9px 11px;text-align:center;font:clamp(11px,2.3vw,13px)/1.35 Georgia,serif;
- border:1px solid #ac986e;border-radius:9px;background:#f4e7c7;color:#5c482e;}
-.qa-scan-verified {border-color:#729e7c;color:#205539;background:#e9f0dd;}
-.qa-scan-warning {border-color:#c57d56;color:#84321e;background:#fff0de;}
-.qa-contrast-note {margin-top:12px;}
-.qa-svg svg {background:#fffef9;}
-@media(min-width:550px) {
-  .qa-design-grid {grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;}
-  .qa-design-card {min-height:125px;padding-inline:4px;}
+/* Top sign floats above the workshop but ends well before Rosie's head. */
+.qa-title {
+  top:clamp(4px,1.6vw,16px);
+  right:1.2%;
+  width:min(81%,560px);
+  z-index:5;
 }
-@media(max-width:380px) {
- .qa-design-card {min-height:98px;}
- .qa-design-emblem {height:35px;width:35px;font-size:22px;}
+.qa-title::before {display:none;}
+.qa-header-sign {
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 5px 11px #01120caa);
+  pointer-events:none;
+  user-select:none;
 }
+.qa-accessible-title {
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+.qa-idle-emblem {
+  display:block;
+  width:min(69%,100px);
+  height:auto;
+  max-height:95px;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 4px #a78a4260);
+}
+.qa-waiting {gap:5px;padding:7px;}
+.qa-waiting > span {font-size:clamp(10px,2vw,13px);line-height:1.12;color:#7b6038;}
 
+/* Clean long-form parchment, rebuilt as a nine-slice asset so corners never stretch. */
+.qa-panel {
+  border:24px solid transparent;
+  border-image-source:url("/qr-atelier/workbench-frame.webp");
+  border-image-slice:160 135 168 135 fill;
+  border-image-width:24px 23px 25px 23px;
+  border-image-repeat:stretch;
+  border-image-outset:0;
+  background:#f8e6c4;
+  box-shadow:0 11px 31px #0008;
+}
+.qa-panel-inner {padding:10px 7px 18px;}
+.qa-panel-heading {margin-top:1px;}
 
-.qa-design-emblem svg {width:27px;height:27px;display:block;}
-.qa-design-selected .qa-design-emblem svg {filter:drop-shadow(0 0 2px #ecd49a7a);}
-.qa-design-card:focus-visible,.qa-dot-options button:focus-visible,.qa-art-toggle:focus-within,
-.qa-palette:focus-visible {outline:3px solid #856531;outline-offset:3px;}
+/* Individually functional gold/ivory and gold/emerald keycaps, no baked labels. */
+.qa-type,
+.qa-type:hover {
+  border:0;
+  background:#ead7af url("/qr-atelier/tile-ivory.webp") center center/100% 100% no-repeat;
+  box-shadow:none;
+  color:#41301e;
+  border-radius:13px;
+  min-height:clamp(78px,19vw,96px);
+  padding:12px 3px;
+}
+.qa-type.selected,.qa-type.selected:hover,
+.qa-style-burgundy .qa-type.selected,
+.qa-style-obsidian .qa-type.selected {
+  background:#053b31 url("/qr-atelier/tile-emerald.webp") center center/100% 100% no-repeat;
+  border:0;
+  box-shadow:none;
+  color:#fff0c5;
+}
+.qa-type-symbol {color:#81612f;}
+.qa-type.selected .qa-type-symbol {color:#ffe3a1;}
+.qa-type.selected:focus-visible,.qa-type:focus-visible {outline-offset:0;}
+.qa-type:active {filter:brightness(1.08);}
+
+/* Artisan action keys. Functional labels stay real HTML; ornate surfaces are art. */
+.qa-save {
+  background:#590a28 url("/qr-atelier/button-burgundy.webp") center/100% 100% no-repeat!important;
+  border:0!important;
+  outline:none!important;
+  border-radius:11px;
+  box-shadow:0 3px 7px #1d100d7a!important;
+  color:#fff0c3;
+  text-shadow:0 2px 3px #260516;
+}
+.qa-actions button,
+.qa-preview-actions button {
+  background:#081925 url("/qr-atelier/button-obsidian.webp") center/100% 100% no-repeat!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:11px;
+  color:#f7e4bc;
+  text-shadow:0 1px 2px #020308;
+}
+.qa-extra-exports button {
+  background:#081925 url("/qr-atelier/button-obsidian.webp") center/100% 100% no-repeat;
+  border:0;
+  box-shadow:none;
+  color:#f7e4bc;
+  border-radius:11px;
+  min-height:45px;
+}
+.qa-save:disabled,
+.qa-actions button:disabled,
+.qa-preview-actions button:disabled,
+.qa-extra-exports button:disabled {opacity:.46;filter:grayscale(.2);}
+.qa-actions button:focus-visible,
+.qa-save:focus-visible,
+.qa-extra-exports button:focus-visible,
+.qa-preview-actions button:focus-visible {outline:3px solid #e9c174;outline-offset:2px;}
+
+/* Gold-bordered emerald collection frame grows with saved content without distorting corners. */
+.qa-collection {
+  width:min(96%,660px);
+  border:20px solid transparent;
+  border-image-source:url("/qr-atelier/collection-frame.webp");
+  border-image-slice:116 140 112 140 fill;
+  border-image-width:21px 21px 21px 21px;
+  border-image-repeat:stretch;
+  background:#052c24;
+  border-radius:0;
+  padding:16px 16px 19px;
+  box-shadow:0 8px 22px #0009;
+}
+.qa-collection h2 {color:#f5dcad;}
+.qa-collection > p {color:#ead8b4;}
+
+/* Keep the generous iPhone art, scroll and large QR scan target intact. */
+@media(max-width:390px) {
+ .qa-title {width:82%;top:4px;right:1%;}
+ .qa-panel-inner {padding-inline:5px;}
+ .qa-type {min-height:75px;padding:9px 1px;}
+ .qa-type-symbol svg {width:24px;height:24px;}
+ .qa-type > span:last-child {font-size:10.5px;}
+ .qa-collection {padding-inline:12px;}
+}
+@media(min-width:701px) {
+ .qa-title {width:71%;max-width:520px;right:1.5%;top:9px;}
+}
+@media(prefers-reduced-motion:no-preference) {
+ .qa-save:not(:disabled):hover, .qa-actions button:not(:disabled):hover,
+ .qa-extra-exports button:not(:disabled):hover {filter:brightness(1.1);}
+}
+@media print {
+ .qa-header-sign,.qa-idle-emblem {display:none!important;}
+}
