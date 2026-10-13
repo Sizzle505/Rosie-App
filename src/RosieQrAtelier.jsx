@@ -109,6 +109,23 @@ function TypeIcon({id}) {
   return <svg {...s}>{paths[id]||paths.website}</svg>;
 }
 
+function DesignEmblem({id}){
+  const attrs={viewBox:"0 0 32 32",width:30,height:30,stroke:"currentColor",fill:"none",
+    strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round","aria-hidden":true};
+  if(id==="royal")return <svg {...attrs}><path d="M5 23 3.5 9.5 10.3 15 16 6l5.7 9 6.8-5.5L27 23Z"/>
+    <path d="M5 26h22M6.5 22.7h19M16 3.5v2M3.5 7.5v1.5M28.5 7.5v1.5"/>
+    <circle cx="16" cy="17" r="2.2"/></svg>;
+  if(id==="paw")return <svg {...attrs}><ellipse cx="9" cy="10.5" rx="2.5" ry="3.4"/>
+    <ellipse cx="15" cy="8" rx="2.5" ry="3.4"/><ellipse cx="21.2" cy="9.6" rx="2.5" ry="3.4"/>
+    <ellipse cx="26" cy="15.1" rx="2.3" ry="3.1"/><path d="M10 20c2-2 2.1-5.5 6.1-5.5s4.5 3.5 6.4 5.5c3 3.4.8 7.4-3.5 7-2-.2-4-.2-6 0-4.5.3-6.1-3.6-3-7Z"/></svg>;
+  if(id==="bone")return <svg {...attrs}><path d="M8 8.5C4.4 4.2.9 9.2 5.4 12c-2.2 3.4 1.8 6.2 5 4l6.1 6.1c-2.3 3.1.6 7.1 4 5 2.8 4.5 7.8 1 3.5-2.6-1-1.7-2.7-2.1-4.1-1.3l-6.4-6.4c.8-1.4.5-3.1-1.2-4.3C19.1 3.7 15 5.7 15 8c-2 1.3-4.7 1.3-7-.5Z"/></svg>;
+  if(id==="atelier")return <svg {...attrs}><circle cx="16" cy="16" r="10.5"/>
+    <circle cx="16" cy="16" r="5.5"/><path d="M16 1.8v7M16 23.2v7M1.8 16h7M23.2 16h7M6 6l5 5M21 21l5 5M26 6l-5 5M11 21l-5 5"/>
+    <path d="m16 12 .9 3.1L20 16l-3.1.9L16 20l-.9-3.1L12 16l3.1-.9Z"/></svg>;
+  return <svg {...attrs}><path d="M3.5 3.5h10v10h-10zM18.5 3.5h10v10h-10zM3.5 18.5h10v10h-10z"/>
+    <path d="M7 7h3v3H7zM22 7h3v3h-3zM7 22h3v3H7zM19 18v4h4v-4M26 19v9M19 26h5"/></svg>;
+}
+
 function QRTypeSelector({current,onSelect}){
   return <div className="qa-formats" role="group" aria-label="Choose QR code type">
     {QR_TYPES.map(t=><button type="button" key={t.id} className={"qa-type"+(current===t.id?" selected":"")}
@@ -343,7 +360,7 @@ export default function RosieQrAtelier(){
               {QR_DESIGNS.map(d=><button type="button" key={d.id}
                 className={"qa-design-card"+(design===d.id?" qa-design-selected":"")}
                 aria-pressed={design===d.id} onClick={()=>setDesign(d.id)}>
-                <span className={"qa-design-emblem qa-design-emblem-"+d.id} aria-hidden="true">{d.mark}</span>
+                <span className={"qa-design-emblem qa-design-emblem-"+d.id} aria-hidden="true"><DesignEmblem id={d.id}/></span>
                 <span className="qa-design-name">{d.label}</span><small>{d.note}</small>
               </button>)}
             </div>
