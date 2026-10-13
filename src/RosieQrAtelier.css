@@ -272,3 +272,155 @@
 /* Center dynamic status text inside the separate gold nameplate, not beneath it. */
 .qa-ring-caption {bottom:13.4%!important;line-height:1.05;font-size:clamp(13px,2.8vw,19px);
  color:#4a2c11;text-shadow:0 1px 1px #fff8e6;}
+
+/* QR Atelier design system v3 - eight dedicated transparent, optimized art layers.
+   Artwork never supplies functional text, hit targets, or scannable QR modules. */
+
+/* Top sign floats above the workshop but ends well before Rosie's head. */
+.qa-title {
+  top:clamp(4px,1.6vw,16px);
+  right:1.2%;
+  width:min(81%,560px);
+  z-index:5;
+}
+.qa-title::before {display:none;}
+.qa-header-sign {
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 5px 11px #01120caa);
+  pointer-events:none;
+  user-select:none;
+}
+.qa-accessible-title {
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+.qa-idle-emblem {
+  display:block;
+  width:min(69%,100px);
+  height:auto;
+  max-height:95px;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 4px #a78a4260);
+}
+.qa-waiting {gap:5px;padding:7px;}
+.qa-waiting > span {font-size:clamp(10px,2vw,13px);line-height:1.12;color:#7b6038;}
+
+/* Clean long-form parchment, rebuilt as a nine-slice asset so corners never stretch. */
+.qa-panel {
+  border:24px solid transparent;
+  border-image-source:url("/qr-atelier/workbench-frame.webp");
+  border-image-slice:160 135 168 135 fill;
+  border-image-width:24px 23px 25px 23px;
+  border-image-repeat:stretch;
+  border-image-outset:0;
+  background:#f8e6c4;
+  box-shadow:0 11px 31px #0008;
+}
+.qa-panel-inner {padding:10px 7px 18px;}
+.qa-panel-heading {margin-top:1px;}
+
+/* Individually functional gold/ivory and gold/emerald keycaps, no baked labels. */
+.qa-type,
+.qa-type:hover {
+  border:0;
+  background:#ead7af url("/qr-atelier/tile-ivory.webp") center center/100% 100% no-repeat;
+  box-shadow:none;
+  color:#41301e;
+  border-radius:13px;
+  min-height:clamp(78px,19vw,96px);
+  padding:12px 3px;
+}
+.qa-type.selected,.qa-type.selected:hover,
+.qa-style-burgundy .qa-type.selected,
+.qa-style-obsidian .qa-type.selected {
+  background:#053b31 url("/qr-atelier/tile-emerald.webp") center center/100% 100% no-repeat;
+  border:0;
+  box-shadow:none;
+  color:#fff0c5;
+}
+.qa-type-symbol {color:#81612f;}
+.qa-type.selected .qa-type-symbol {color:#ffe3a1;}
+.qa-type.selected:focus-visible,.qa-type:focus-visible {outline-offset:0;}
+.qa-type:active {filter:brightness(1.08);}
+
+/* Artisan action keys. Functional labels stay real HTML; ornate surfaces are art. */
+.qa-save {
+  background:#590a28 url("/qr-atelier/button-burgundy.webp") center/100% 100% no-repeat!important;
+  border:0!important;
+  outline:none!important;
+  border-radius:11px;
+  box-shadow:0 3px 7px #1d100d7a!important;
+  color:#fff0c3;
+  text-shadow:0 2px 3px #260516;
+}
+.qa-actions button,
+.qa-preview-actions button {
+  background:#081925 url("/qr-atelier/button-obsidian.webp") center/100% 100% no-repeat!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:11px;
+  color:#f7e4bc;
+  text-shadow:0 1px 2px #020308;
+}
+.qa-extra-exports button {
+  background:#081925 url("/qr-atelier/button-obsidian.webp") center/100% 100% no-repeat;
+  border:0;
+  box-shadow:none;
+  color:#f7e4bc;
+  border-radius:11px;
+  min-height:45px;
+}
+.qa-save:disabled,
+.qa-actions button:disabled,
+.qa-preview-actions button:disabled,
+.qa-extra-exports button:disabled {opacity:.46;filter:grayscale(.2);}
+.qa-actions button:focus-visible,
+.qa-save:focus-visible,
+.qa-extra-exports button:focus-visible,
+.qa-preview-actions button:focus-visible {outline:3px solid #e9c174;outline-offset:2px;}
+
+/* Gold-bordered emerald collection frame grows with saved content without distorting corners. */
+.qa-collection {
+  width:min(96%,660px);
+  border:20px solid transparent;
+  border-image-source:url("/qr-atelier/collection-frame.webp");
+  border-image-slice:116 140 112 140 fill;
+  border-image-width:21px 21px 21px 21px;
+  border-image-repeat:stretch;
+  background:#052c24;
+  border-radius:0;
+  padding:16px 16px 19px;
+  box-shadow:0 8px 22px #0009;
+}
+.qa-collection h2 {color:#f5dcad;}
+.qa-collection > p {color:#ead8b4;}
+
+/* Keep the generous iPhone art, scroll and large QR scan target intact. */
+@media(max-width:390px) {
+ .qa-title {width:82%;top:4px;right:1%;}
+ .qa-panel-inner {padding-inline:5px;}
+ .qa-type {min-height:75px;padding:9px 1px;}
+ .qa-type-symbol svg {width:24px;height:24px;}
+ .qa-type > span:last-child {font-size:10.5px;}
+ .qa-collection {padding-inline:12px;}
+}
+@media(min-width:701px) {
+ .qa-title {width:71%;max-width:520px;right:1.5%;top:9px;}
+}
+@media(prefers-reduced-motion:no-preference) {
+ .qa-save:not(:disabled):hover, .qa-actions button:not(:disabled):hover,
+ .qa-extra-exports button:not(:disabled):hover {filter:brightness(1.1);}
+}
+@media print {
+ .qa-header-sign,.qa-idle-emblem {display:none!important;}
+}
