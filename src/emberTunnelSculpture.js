@@ -17,8 +17,8 @@ function thetaAt(world,side){
   return Math.atan2(worldSurface(world+d,side)-worldSurface(world-d,side),2*d);
 }
 function alphaCorridorClip(c,s,side){
-  // The collision edge remains authoritative; only soft fine tips may reach
-  // 133 px into the corridor. No floating ceilings or invisible hard corners.
+  // Full-size original root and crystal silhouettes project prominently into
+  // the playable airspace; collision cores are smaller than painted edges.
   c.beginPath();
   if(side<0){
     c.moveTo(-24,-80);c.lineTo(W+24,-80);
@@ -26,7 +26,7 @@ function alphaCorridorClip(c,s,side){
     c.moveTo(-24,H+80);c.lineTo(W+24,H+80);
   }
   for(let x=W+24;x>=-24;x-=7){
-    const y=worldSurface(s.scroll+x,side)-side*133;
+    const y=worldSurface(s.scroll+x,side)-side*258;
     c.lineTo(x,y);
   }
   c.closePath();c.clip();
@@ -48,9 +48,9 @@ export function paintSculpturalTunnel(c,s,assets={}){
       c.translate(screenX,worldSurface(item.at,side));
       c.rotate(thetaAt(item.at,side));
       c.globalAlpha=item.alpha;
-      c.shadowBlur=item.obstacle?16:9;
-      c.shadowColor=item.obstacle?"rgba(255,179,89,.43)":"rgba(8,6,13,.72)";
-      c.filter="contrast(1.10) saturate(1.08)";
+      c.shadowBlur=item.obstacle?21:10;
+      c.shadowColor=item.obstacle?"rgba(12,6,12,.84)":"rgba(8,6,13,.72)";
+      c.filter=item.obstacle?"contrast(1.22) saturate(1.12)":"contrast(1.07) saturate(1.04)";
       // Top: preserved roots hang DOWN, floor: crystal relief rises UP.
       // This is an illustrated *formation*, NOT a wallpaper panel.
       if(side<0)c.drawImage(sprite,-item.width/2,-height+intrusion,item.width,height);
