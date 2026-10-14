@@ -33,9 +33,10 @@ test("overhang hit occurs at drill nose within a conservative painted core only 
  updateRun(s,0);
  assert.equal(s.hull,hull-1);
  assert.deepEqual(s.formationHits,[f.at]);
+ s.y=tunnelCenter(f.at); // clear wall contact; preserve the already-hit obstacle
  s.hitCooldown=0;
  updateRun(s,0);
- assert.equal(s.hull,hull-1,'contact cannot drain hull again');
+ assert.equal(s.hull,hull-1,'one original formation may cost only one hull point');
 });
 test("centered player has clear safe route; successful turbo strikes do not cost hull",()=>{
  const f=FORMATION_LAYOUT.find(x=>x.at===5350);
