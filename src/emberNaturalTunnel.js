@@ -108,6 +108,45 @@ function drawEarth(c,s,side,assets,stage,points){
   }
   c.restore();
 }
+function drawFracturedFace(c,s,side,stage,points){
+  // Continuous, shallow exposed rock face: a narrow geological layer on the
+  // exterior side of the true silhouette. No repeated illustration panels.
+  const outer=points.map(([x,y])=>[x,y+side*(
+    27+4.8*Math.sin((s.scroll+x)/54+side)
+      +3*Math.sin((s.scroll+x)/21-.7)
+  )]);
+  c.save();
+  earthPath(c,points,side);c.clip();
+  c.beginPath();
+  points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));
+  for(let i=outer.length-1;i>=0;i--)c.lineTo(...outer[i]);
+  c.closePath();
+  c.globalAlpha=.44;c.fillStyle=stage.current.edge;c.fill();
+  c.globalAlpha=1;
+  // Inset shadow establishes an undercut, without a bright continuous border.
+  edgePath(c,outer);
+  c.strokeStyle="rgba(13,8,11,.27)";
+  c.lineJoin="round";c.lineWidth=9;c.stroke();
+  // Short, irregular strata glints and faceted faults, attached to the wall.
+  for(let i=3;i<points.length-2;i+=5){
+    const [x,y]=points[i], depth=side*(13+hash(Math.floor((s.scroll+x)/23))*9);
+    const width=12+hash(Math.floor((s.scroll+x)/37))*17;
+    c.beginPath();
+    c.moveTo(x-width*.55,y+depth*.55);
+    c.lineTo(x-width*.12,y+depth*1.12);
+    c.lineTo(x+width*.54,y+depth*.60);
+    c.lineTo(x+width*.18,y+depth*.28);
+    c.closePath();
+    c.fillStyle=i%3===0?"rgba(227,167,94,.18)":"rgba(24,14,15,.18)";
+    c.fill();
+    if(i%3===0){
+      c.beginPath();c.moveTo(x-width*.38,y+depth*.46);
+      c.lineTo(x+width*.33,y+depth*.38);
+      c.strokeStyle="rgba(235,172,98,.17)";c.lineWidth=1;c.stroke();
+    }
+  }
+  c.restore();
+}
 function drawExposedRidge(c,s,side,stage){
   // Multiple irregular, interlocked chips produce the illusion of broken rock
   // without recycling painted cliffs as rectangular collage pieces.
@@ -167,6 +206,7 @@ export function paintNaturalTunnel(c,s,assets={}) {
     const points=[];
     for(let x=-STEP;x<=W+STEP;x+=STEP)points.push([x,surface(s.scroll+x,side)]);
     drawEarth(c,s,side,assets,stage,points);
+    drawFracturedFace(c,s,side,stage,points);
     // Stone fragments must remain inside the solid geology except tiny
     // attached roots and chips; the corridor silhouette stays authoritative.
     c.save();earthPath(c,points,side);c.clip();
