@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {DRILL_ANCHOR,DRILL_TIP_OFFSET,newRun,updateRun,tunnelCenter,tunnelRadius,intersectsSculpture} from "../src/emberDrillEngine.js";
+import {DRILL_ANCHOR,DRILL_TIP_OFFSET,newRun,courseLaneOffset,updateRun,tunnelCenter,tunnelRadius,intersectsSculpture} from "../src/emberDrillEngine.js";
 import {FORMATION_LAYOUT,formationIntrusion,formationClearance} from "../src/emberTunnelLayout.js";
 
 test("corridor expands for sculpted rock and still remains safely inside gameplay canvas",()=>{
@@ -74,4 +74,25 @@ test("the drill tip point advances and tilts exactly with the rendered auger",()
  assert.ok(frontX<f.at && frontX>f.at-12);
  const frontY=s.y+DRILL_TIP_OFFSET*Math.sin(s.pitch);
  assert.ok(frontY<s.y-50);
+});
+
+test("collectibles guide players around the same painted obstacles as collision",()=>{
+ for(const f of FORMATION_LAYOUT.filter(x=>x.obstacle)){
+  const lane=courseLaneOffset(f.at,0);
+  assert.ok(lane*f.side<0,"The treasure path should shift away from the obstructed side at "+f.at);
+  const treasureY=tunnelCenter(f.at)+lane;
+  assert.equal(intersectsSculpture(f,f.at,treasureY),false,"Treasure path cannot lead into rock at "+f.at);
+ }
+});
+test("an anticipatory steering strategy can complete all 75 seconds with three hull",()=>{
+ const s=newRun();s.objects=[];
+ for(let step=0;step<5200&&!s.ended;step++){
+  const front=s.scroll+DRILL_ANCHOR+DRILL_TIP_OFFSET;
+  const approaching=FORMATION_LAYOUT.find(f=>f.obstacle && f.at>=front-60&&f.at<=front+550);
+  const target=tunnelCenter(front)+(approaching?-approaching.side*91:0);
+  const up=s.y>target+9, down=s.y<target-9;
+  updateRun(s,.016,up,down);
+ }
+ assert.equal(s.result,"complete","All illustrated formations must leave navigable dodge opportunities");
+ assert.equal(s.hull,3,"A readable steering route must not require damage or Turbo");
 });
