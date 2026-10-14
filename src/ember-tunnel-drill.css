@@ -137,3 +137,28 @@
    box-shadow:0 3px 15px rgba(0,0,0,.56),0 0 0 3px rgba(11,28,41,.8);
  }
 }
+
+/* A live boost is a celebratory active state, never a dim disabled button. */
+.ember-controls .ember-boost.is-boosting,
+.ember-controls .ember-boost.is-boosting:disabled{
+ opacity:1;
+ border-color:#ffdf8c;
+ color:#fff0bd;
+ background:linear-gradient(120deg,#70401f,#a05b22 45%,#563923);
+ box-shadow:0 0 19px rgba(247,166,49,.48),inset 0 0 17px rgba(255,218,104,.16);
+}
+.ember-controls .ember-boost.is-boosting .ember-boost-symbol{
+ color:#fff6cb;
+ border-color:#fff0ad;
+ box-shadow:0 0 11px rgba(255,214,112,.62);
+ animation:ember-boost-heartbeat .4s ease-in-out infinite alternate;
+}
+.ember-controls .ember-boost.is-boosting .ember-charge>i{
+ background:linear-gradient(90deg,#ff9b36,#ffda65,#fff8cf);
+ box-shadow:0 0 16px rgba(255,231,127,.95);
+}
+.ember-controls .ember-boost.is-boosting small{color:#fff0c6}
+@keyframes ember-boost-heartbeat{
+ from{transform:scale(.94);filter:brightness(.93)}
+ to{transform:scale(1.09);filter:brightness(1.24)}
+}
