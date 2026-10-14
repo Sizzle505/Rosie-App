@@ -44,9 +44,22 @@ export function paintOriginalAuger(c,s,assets){
   // Engine/chassis native art ends at x=+68. This collar is anchored at
   // x=+63 while the ORIGINAL drill tip ends at x=+170.
   // Source sprites were composed as 500x410 isolated auger frames.
-  c.drawImage(img,frame.sx,frame.sy,frame.sw,frame.sh,52,-50,118,100);
+  // REINSTATE the full painted mechanical auger from the original, uncut
+  // 1448x1086 vehicle master. The directional Rosie/chassis poses deliberately
+  // OMIT this region (x >= 948), so this precisely fills their missing nose.
+  // Source native registration: x=-168 + (948/1448)*336 = +52.
+  if(ready(assets?.body)){
+    c.drawImage(assets.body,948,0,500,1086,52,-125,116,252);
+  }
   c.save();
   nosePath(c);c.clip();
+  // The independently illustrated 8-frame source adds changing rotational
+  // surface markings; never use it as the ONLY structural nose.
+  c.globalCompositeOperation="overlay";
+  c.globalAlpha=.52;
+  c.drawImage(img,frame.sx,frame.sy,frame.sw,frame.sh,52,-50,118,100);
+  c.globalAlpha=1;
+  c.globalCompositeOperation="source-over";
   const turn=s.time*(turbo?34:23);
   // The supplied 8-frame original changes primarily around its rear ribs.
   // Amplify *that same physical motion* throughout the visible length of the
