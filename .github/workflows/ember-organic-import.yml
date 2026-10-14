@@ -44,4 +44,6 @@ jobs:
           git config user.email "rosie-art-importer@users.noreply.github.com"
           git add public/ember-drill/terrain-*.webp public/ember-drill/*organic-passage.webp
           git diff --cached --quiet || git commit -m "Use organic continuous rock material and rail-free temple panoramas"
+          git fetch origin work/ember-drill-barkroot-ruby-milestone
+          git rebase origin/work/ember-drill-barkroot-ruby-milestone
           git push origin HEAD:work/ember-drill-barkroot-ruby-milestone
