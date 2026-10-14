@@ -131,6 +131,34 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       total+=Math.abs(ordinary[i]-turbo[i])+Math.abs(ordinary[i+1]-turbo[i+1])+Math.abs(ordinary[i+2]-turbo[i+2]);
       count+=3;
     }
+
+    // Confirm the excavating tip is actually visible and attached to the drill,
+    // not a decorative static flash. It must disappear when the run stops.
+    state.time=17;state.scroll=6200;state.y=410;state.pitch=-.26;state.objects=[];
+    state.boostTime=0;state.running=false;
+    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    const noCut=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
+    state.running=true;
+    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    const yesCut=c.getImageData(0,0,690,820).data;
+    const xTip=210+Math.cos(state.pitch)*166,yTip=state.y+Math.sin(state.pitch)*166;
+    let contactChange=0,contactSamples=0;
+    for(let yy=Math.floor(yTip-55);yy<yTip+55;yy+=3){
+      for(let xx=Math.floor(xTip-70);xx<xTip+35;xx+=3){
+        if(xx<0||xx>=690||yy<0||yy>=820)continue;
+        const i=(yy*690+xx)*4;
+        contactChange+=Math.abs(noCut[i]-yesCut[i])
+          +Math.abs(noCut[i+1]-yesCut[i+1])
+          +Math.abs(noCut[i+2]-yesCut[i+2]);
+        contactSamples+=3;
+      }
+    }
+    const contactDifference=contactChange/contactSamples;
+    if(contactDifference<1.0)
+      throw new Error("Excavation effects not visible at angled auger tip: "+contactDifference);
+    window.__emberContactCapture=c.canvas.toDataURL("image/png");
+    state.running=false;
+
     // Regression against loading unused art: demand actual drawImage calls
     // at the feature's world position and each of seven passage panoramas.
     const sceneFrames=[[3,1100],[13,3300],[24,7300],[35,11100],
@@ -230,7 +258,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     state.boostTime=3.5;
     window.EmberPainter.paintDrill(c,state,portrait,[],assets);
     const missing=required.filter(name=>!drawn.has(name));
-    return {pixelDifference:total/count,loaded:Object.keys(assets).length,
+    return {contactDifference,pixelDifference:total/count,loaded:Object.keys(assets).length,
       drawnArt:drawn.size,missingVisualAssets:missing,brokenSidingDrawn:banned.length,materialDiffs};
   });
   if(turboResult.pixelDifference<4.0)throw new Error("Boost effect is visually imperceptible: "+JSON.stringify(turboResult));
@@ -250,6 +278,13 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     },terrain);
     await page.locator("#ember-material-"+terrain).screenshot({path:"artifacts/ember-drill/"+name+"-"+terrain+".png"});
   }
+  await page.evaluate(()=>{
+    const im=new Image();im.src=window.__emberContactCapture;
+    im.id="ember-contact-qa";
+    im.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100015;pointer-events:none";
+    document.body.appendChild(im);
+  });
+  await page.locator("#ember-contact-qa").screenshot({path:"artifacts/ember-drill/"+name+"-cutting.png"});
   await page.locator("#ember-qa-turbo").screenshot({path:"artifacts/ember-drill/"+name+"-turbo.png"});
   console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult));
   await context.close();await browser.close();
