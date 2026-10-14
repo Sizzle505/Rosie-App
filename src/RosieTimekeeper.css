@@ -1812,8 +1812,24 @@ body:has(.app-shell.page-timekeeper),
   .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck { top:52%; width:70%; height:9%; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer { top:62.2%; width:84%; height:13.7%; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch { top:12%; height:19%; width:51%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer { top:62.2%; width:84%; height:17%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch { top:11%; height:15%; width:51%; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility-inner,
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner { top:38%; bottom:11%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner { top:31%; bottom:11%; }
+}
+
+/* The blue arc is deliberately code-driven: it reveals only the elapsed or
+   remaining portion of the timer.  Keeping this last prevents legacy visual
+   treatments from turning it back into a static illustration. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
+  display:block;
+  z-index:8;
+  inset:-8%;
+  width:116%;
+  height:116%;
+  transform:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  animation:none !important;
 }

@@ -20,7 +20,9 @@ const GEARS = [
   { x: 12, y: 72, size: 21, sprite: 1, opacity: .86 },
 ].map((gear, index) => ({
   ...gear,
-  cycle: 112 * gear.size / 45,
+  // A visible, mechanical pace while Rosie is working—not an imperceptibly
+  // slow decorative spin. Adjacent wheels counter-rotate like a gear train.
+  cycle: 17 * gear.size / 24,
   direction: index % 2 ? "reverse" : "normal",
 }));
 
