@@ -5,6 +5,9 @@ on:
     paths:
       - "src/emberTunnelRibbons.js"
       - "src/emberDrillPainter.js"
+      - "src/emberAugerFX.js"
+      - "tests/ember-auger-turbo.test.mjs"
+      - "scripts/verify-ember-auger-turbo.mjs"
       - "src/EmberTunnelDrill.jsx"
       - "scripts/verify-ember-og-prototype.mjs"
       - "scripts/verify-ember-header-and-obstacles.mjs"
@@ -29,7 +32,7 @@ jobs:
       - name: Build actual committed 36-source-derived Canvas game
         run: |
           npm ci
-          node --test tests/ember-drill-engine.test.mjs tests/ember-tunnel-formations.test.mjs
+          node --test tests/ember-drill-engine.test.mjs tests/ember-tunnel-formations.test.mjs tests/ember-auger-turbo.test.mjs
           npm run build
       - name: Install iPhone-sized browser engine
         run: |
@@ -44,6 +47,7 @@ jobs:
           done
           node scripts/verify-ember-og-prototype.mjs
           node scripts/verify-ember-header-and-obstacles.mjs
+          node scripts/verify-ember-auger-turbo.mjs
       - name: Keep unmodified gameplay evidence and exact sprite manifest
         if: always()
         uses: actions/upload-artifact@v4
@@ -52,6 +56,7 @@ jobs:
           path: |
             artifacts/ember-og-prototype/
             artifacts/ember-og-header-audit/
+            artifacts/ember-auger-turbo-iphone/
             public/ember-drill/edge/edge-assets.json
           retention-days: 14
           if-no-files-found: ignore
