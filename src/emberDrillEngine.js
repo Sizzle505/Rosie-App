@@ -1,9 +1,11 @@
-import { FORMATION_LAYOUT, formationClearance } from "./emberTunnelLayout.js";
+import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunnelLayout.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
 export const DRILL_HEIGHT = 820;
 export const DRILL_ANCHOR = 210;
+// The physical drill tip is 170px ahead of the vehicle rotation origin.
+export const DRILL_TIP_OFFSET = 170;
 export const RUN_DURATION = 75;
 export const TURBO_DURATION = 4.8;
 
@@ -37,7 +39,7 @@ export function makeCourse(seed = 1467) {
       const pos = x + 425;
       // Sculpted original rocks replace nearby generic hazards, not stack
       // two untelegraphed collision volumes on the same screen.
-      if (FORMATION_LAYOUT.some(f=>f.obstacle && Math.abs(f.at-pos)<f.width*.42)) continue;
+      if (nearFormation(pos,300)) continue;
       const side = rand() < 0.5 ? -1 : 1;
       objects.push({ id: ++id, kind: motif === 5 ? "spike" : "rock", x: pos,
         y: clamp(tunnelCenter(pos) + side * 112, 90, 720), radius: motif === 5 ? 37 : 42, taken: false });
@@ -93,28 +95,32 @@ export function updateRun(s, dt, up = false, down = false) {
   // Collision follows the SAME world-anchored illustrated overhangs/floor rises.
   // A smaller elliptical core, not the full rectangular transparent image,
   // creates fair dodges. Check toward the real drill nose, not the cockpit.
-  const tipWorldX = worldX + 105;
+  const tipWorldX = worldX + DRILL_TIP_OFFSET*Math.cos(s.pitch);
+  const tipY = s.y + DRILL_TIP_OFFSET*Math.sin(s.pitch);
   for (const formation of FORMATION_LAYOUT) {
     if (!formation.obstacle || s.formationHits.includes(formation.at)) continue;
-    if (!intersectsSculpture(formation, tipWorldX, s.y)) continue;
+    if (!intersectsSculpture(formation, tipWorldX, tipY)) continue;
     s.formationHits.push(formation.at); // One contact per geological obstacle.
     if (boosted) {
       s.score += 125;
-      s.events.push({type:"shatter",x:DRILL_ANCHOR+105,y:s.y});
+      s.events.push({type:"shatter",x:DRILL_ANCHOR+DRILL_TIP_OFFSET*Math.cos(s.pitch),y:tipY});
     } else if (s.hitCooldown<=0) takeHit(s);
   }
   for (let i = 0; i < s.objects.length; i++) {
     const obj = s.objects[i];
-    if (obj.taken || obj.x < worldX - 95 || obj.x > worldX + 85) continue;
-    const deltaX = obj.x - worldX;
-    const deltaY = obj.y - s.y;
+    const rock = obj.kind === "rock" || obj.kind === "spike";
+    const collisionX = rock ? tipWorldX : worldX;
+    const collisionY = rock ? tipY : s.y;
+    if (obj.taken || obj.x < collisionX - 95 || obj.x > collisionX + 85) continue;
+    const deltaX = obj.x - collisionX;
+    const deltaY = obj.y - collisionY;
     const distance = Math.hypot(deltaX * 0.78, deltaY);
     if (distance >= obj.radius + (obj.kind === "spike" ? 32 : 30)) continue;
     obj.taken = true;
     if (obj.kind === "rock" || obj.kind === "spike") {
       if (boosted) {
         s.score += 125;
-        s.events.push({ type: "shatter", x: DRILL_ANCHOR + deltaX, y: obj.y });
+        s.events.push({ type: "shatter", x: (rock ? DRILL_ANCHOR + DRILL_TIP_OFFSET * Math.cos(s.pitch) : DRILL_ANCHOR) + deltaX, y: obj.y });
       } else if (s.hitCooldown <= 0) takeHit(s);
       continue;
     }
