@@ -262,7 +262,13 @@ function vehicle(c,s,portrait,assets={}) {
       const phase=Math.floor(s.time*20),radius=2+noise(i+phase)*6;
       circle(c,-145-noise(i*17+phase)*80,(noise(i+phase*11)-.5)*72,radius,i%2?'rgba(255,183,91,.59)':'rgba(138,94,58,.57)');
     }
-    drawImageTrim(c,assets.body,-168,-125,336,252);
+    // Crossfade between separately illustrated Rosie-body steering poses.
+    // Keep their registered bounds identical so the cockpit does not jump.
+    const neutral=artReady(assets.turnNeutral)?assets.turnNeutral:assets.body;
+    const directed=s.pitch<0?assets.turnUp:assets.turnDown;
+    const turnMix=clamp((Math.abs(s.pitch)-.045)/.37,0,1);
+    if(artReady(neutral))drawImageTrim(c,neutral,-168,-125,336,252,artReady(directed)?1-turnMix:1);
+    if(artReady(directed)&&turnMix>.001)drawImageTrim(c,directed,-168,-125,336,252,turnMix);
     if(artReady(assets.auger)){
       const fps=s.boostTime>0?34:19,frame=Math.floor(s.time*fps)%8;
       c.drawImage(assets.auger,(frame%4)*500,Math.floor(frame/4)*410,500,410,
@@ -366,8 +372,8 @@ function vehicle(c,s,portrait,assets={}) {
 export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
-  paintNaturalTunnel(c,s);
   paintRecoveredWalls(c,s,assets);
+  paintNaturalTunnel(c,s);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
