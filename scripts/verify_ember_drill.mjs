@@ -17,6 +17,18 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await page.waitForTimeout(1800);
   const title=await page.locator(".ember-header").innerText();
   if(!title.includes("CAPTAIN ROSIE"))throw new Error("Header title absent");
+  // Guard against the exact cropped-title defect seen on the real iPhone.
+  await page.evaluate(()=>document.fonts.ready);
+  const banner=await page.evaluate(()=>{
+    const header=document.querySelector(".ember-header");
+    const h2=header.querySelector(".ember-header-copy h2");
+    const copy=header.querySelector(".ember-header-copy");
+    const range=document.createRange();range.selectNodeContents(h2);
+    const text=range.getBoundingClientRect(),outer=header.getBoundingClientRect();
+    return {textLeft:text.left,textRight:text.right,headerRight:outer.right,headerLeft:outer.left,opacity:getComputedStyle(copy).opacity};
+  });
+  if(banner.opacity!=="1"||banner.textRight>banner.headerRight-2||banner.textLeft<banner.headerLeft)
+    throw new Error("Cropped or invisible Captain title: "+JSON.stringify(banner));
   const artwork=await page.evaluate(()=>{
     const canvas=document.querySelector(".ember-canvas");
     const context=canvas?.getContext("2d");
