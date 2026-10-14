@@ -47,6 +47,7 @@ const DRILL_ART = {
   rubyLoop:"ruby-loop.webp",
   crystalOverlay:"feature-crystaloverlay.webp",
   turbo:"turbo-animation.webp",
+  turboAtlas:"turbo-head-frames.webp",
   barkroot:"barkroot-loop.webp",
   rubyOrganic:"ruby-organic-passage.webp",
   templeOrganic:"temple-organic-passage.webp",
