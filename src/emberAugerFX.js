@@ -1,8 +1,7 @@
 /**
  * Original-source Ember drill FX.
  * auger-spin.png: genuine 4x2 animation sheet, each 500x410 frame.
- * turbo-animation.webp: orange-gold original artwork; cropped and screened
- * INSIDE the nose mask so it cannot produce a second (ghost) drill.
+ * turbo-head-frames.webp: all TEN original animated WebP frames extracted\n * into a deterministic 5x2 Canvas atlas. Screened INSIDE the nose mask.
  * feature-boosttrail.webp: true original-source energy trail, horizontally
  * mirrored so exhaust extends backwards from Rosie's engine.
  */
@@ -22,6 +21,15 @@ function nosePath(c){
 export function augerFrameIndex(seconds, turbo=false){
   if (!Number.isFinite(seconds)) return 0;
   return Math.floor(Math.max(0,seconds) * (turbo?39:23)) % 8;
+}
+export const TURBO_ATLAS=Object.freeze({columns:5,rows:2,frameWidth:308,frameHeight:126,frames:10,frameMs:60});
+export function turboFrameIndex(remainingSeconds){
+  const seconds=Math.max(0,4.8-(Number.isFinite(remainingSeconds)?remainingSeconds:4.8));
+  return Math.floor(seconds*1000/TURBO_ATLAS.frameMs)%TURBO_ATLAS.frames;
+}
+export function turboFrameRect(remainingSeconds){
+  const i=turboFrameIndex(remainingSeconds);
+  return {sx:(i%5)*308,sy:Math.floor(i/5)*126,sw:308,sh:126};
 }
 export function augerFrameRect(index){
   const i=((Math.trunc(index)%8)+8)%8;
@@ -69,10 +77,17 @@ export function paintOriginalAuger(c,s,assets){
   if(boosted){
     // NOTE the turbo artwork includes a nose. Use it as light *within the
     // existing nose only*; never place a whole second vehicle on Canvas.
-    if(ready(assets?.turbo)){
+    if(ready(assets?.turboAtlas)){
+      const frame=turboFrameRect(s.boostTime);
       c.globalCompositeOperation="screen";
       c.globalAlpha=.26+.13*Math.sin(s.time*31)**2;
-      c.drawImage(assets.turbo,391,77,569,232,53,-48,116,96);
+      c.drawImage(assets.turboAtlas,frame.sx,frame.sy,frame.sw,frame.sh,53,-48,116,96);
+      c.globalAlpha=1;
+    } else if(ready(assets?.turbo)){
+      // Last-resort fallback if an atlas asset is not yet cached.
+      c.globalCompositeOperation="screen";
+      c.globalAlpha=.26;
+      c.drawImage(assets.turbo,344,67,616,252,53,-48,116,96);
       c.globalAlpha=1;
     }
     const beam=c.createLinearGradient(72,0,171,0);
