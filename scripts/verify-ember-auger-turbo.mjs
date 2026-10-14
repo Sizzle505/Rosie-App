@@ -23,7 +23,7 @@ await page.addScriptTag({content:out.outputFiles[0].text});
 await page.evaluate(async map=>{
  const assets={};await Promise.all(Object.entries(map).map(async([key,filename])=>{
   const img=new Image();img.src="/ember-drill/"+filename;
-  try{await img.decode();assets[key]=img}catch(e){if(["auger","body","turbo","turboAtlas","boosttrail"].includes(key))throw new Error(key+" not loaded")}
+  try{await img.decode();assets[key]=img}catch(e){if(["auger","body","turboAtlas","boosttrail"].includes(key))throw new Error(key+" not loaded")}
  }));
  window.__drillArtQA=assets;window.__drillCanvasQA=document.createElement("canvas");
  const canvas=window.__drillCanvasQA;canvas.width=690;canvas.height=820;
