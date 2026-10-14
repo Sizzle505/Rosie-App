@@ -44,59 +44,31 @@ export function paintOriginalAuger(c,s,assets){
   // Engine/chassis native art ends at x=+68. This collar is anchored at
   // x=+63 while the ORIGINAL drill tip ends at x=+170.
   // Source sprites were composed as 500x410 isolated auger frames.
-  // REINSTATE the full painted mechanical auger from the original, uncut
-  // 1448x1086 vehicle master. The directional Rosie/chassis poses deliberately
-  // OMIT this region (x >= 948), so this precisely fills their missing nose.
-  // Source native registration: x=-168 + (948/1448)*336 = +52.
-  if(ready(assets?.body)){
-    c.drawImage(assets.body,948,0,500,1086,52,-125,116,252);
-  }
+  // The supplied ORIGINAL eight frames contain the *actual gold cone*.
+  // The vehicle master ends at its engine coupling. Never crop another
+  // fragment of the vehicle master over the spinning cone: that produced the
+  // extra silver/brass ring visible in the rejected screenshots.
+  c.drawImage(img,frame.sx,frame.sy,frame.sw,frame.sh,52,-50,118,100);
   c.save();
   nosePath(c);c.clip();
-  // The independently illustrated 8-frame source adds changing rotational
-  // surface markings; never use it as the ONLY structural nose.
-  c.globalCompositeOperation="overlay";
-  c.globalAlpha=.52;
-  c.drawImage(img,frame.sx,frame.sy,frame.sw,frame.sh,52,-50,118,100);
-  c.globalAlpha=1;
-  c.globalCompositeOperation="source-over";
-  const turn=s.time*(turbo?34:23);
-  // The supplied 8-frame original changes primarily around its rear ribs.
-  // Amplify *that same physical motion* throughout the visible length of the
-  // cone, without repainting or rotating Rosie's body. Metallic spiral
-  // shadows and hard specular seams advance around the tapered drill shaft.
-  for(let rib=0;rib<6;rib++){
-    const along=rib/6;
-    const centerX=70+rib*17.1;
-    const height=41-rib*6.3;
-    const phase=turn-rib*.84;
-    const lateral=Math.sin(phase)*8.5;
+  // Eight ORIGINAL paintings cycle continuously. Narrow rotating optical
+  // glints follow the illustrated five helical ribs, rather than drawing
+  // bright artificial vertical bars that obscure the bronze sculpture.
+  const turn=s.time*(turbo?37:24);
+  for(let i=0;i<5;i++){
+    const x=72+i*20;
+    const half=Math.max(10,38-i*7.0);
+    const phase=turn-i*.95;
+    c.save();
     c.lineCap="round";
-    c.lineWidth=Math.max(3.4,7.6-rib*.6);
-    c.strokeStyle="rgba(42,18,9,"+(.42+.24*(.5+.5*Math.cos(phase))).toFixed(3)+")";
-    c.beginPath();
-    c.moveTo(centerX-lateral*.30,-height);
-    c.bezierCurveTo(centerX-11-lateral,height*-.58,centerX+12+lateral,height*.58,centerX+lateral*.3,height);
-    c.stroke();
-    c.lineWidth=Math.max(2,3.8-rib*.26);
-    c.strokeStyle="rgba(255,236,159,"+(.36+.56*(.5+.5*Math.cos(phase+.28))).toFixed(3)+")";
-    c.beginPath();
-    c.moveTo(centerX-5-lateral*.28,-height);
-    c.bezierCurveTo(centerX-17-lateral,height*-.54,centerX+7+lateral,height*.52,centerX-5+lateral*.28,height);
-    c.stroke();
-    // The opposing spiral face catches its highlight half a turn later.
-    c.lineWidth=1.8;
-    c.strokeStyle="rgba(255,249,196,"+(.14+.32*(.5+.5*Math.cos(phase+Math.PI))).toFixed(3)+")";
-    c.beginPath();
-    c.moveTo(centerX+4,-height*.87);
-    c.quadraticCurveTo(centerX+12*Math.sin(phase),0,centerX+3,height*.86);
-    c.stroke();
+    c.lineWidth=2.25;
+    c.strokeStyle="rgba(255,225,131,"+(.22+.23*Math.max(0,Math.cos(phase))).toFixed(3)+")";
+    c.beginPath();c.ellipse(x,0,5,half,0,phase,phase+Math.PI*.65);c.stroke();
+    c.lineWidth=1.6;
+    c.strokeStyle="rgba(52,24,13,"+(.14+.21*Math.max(0,-Math.cos(phase))).toFixed(3)+")";
+    c.beginPath();c.ellipse(x,0,5,half,0,phase+Math.PI,phase+Math.PI*1.62);c.stroke();
+    c.restore();
   }
-  const specular=c.createLinearGradient(62,-36,167,23);
-  specular.addColorStop(0,"rgba(255,243,173,.10)");
-  specular.addColorStop(.48,"rgba(246,203,118,.015)");
-  specular.addColorStop(1,"rgba(255,250,199,.20)");
-  c.fillStyle=specular;c.fillRect(58,-49,113,100);
   c.restore();
   // Source-defined mechanical seam hides the join at the engine coupling.
   // Two stationary concentric collars, no duplicated mechanical nose.
