@@ -111,3 +111,29 @@
  object-fit:contain;margin:-2px auto 7px;
  filter:drop-shadow(0 0 12px rgba(252,195,94,.40));
 }
+
+/* Keep the finished artwork's dog and vehicle visible instead of darkening
+   half of Rosie's face; the responsive live title stays above the gradient. */
+@media(max-width:620px){
+ .ember-suite .ember-header::before{
+   background:linear-gradient(90deg,rgba(10,25,36,0) 0%,rgba(10,25,36,0) 38%,
+     rgba(10,25,36,.25) 44%,rgba(10,25,36,.93) 53%,#0d2433 62%,#0d2433 100%);
+ }
+ .ember-suite .ember-header .ember-header-copy{left:50.5%;right:2%}
+ .ember-suite .ember-header .ember-header-copy h2{
+   font-size:clamp(18px,4.85vw,28px);
+   letter-spacing:-.058em;
+ }
+ /* Navigation floats above the document; while playing the controls remain
+    safely above it instead of disappearing behind its fixed buttons. */
+ .ember-suite:has(.ember-stage.is-active) .ember-controls{
+   position:sticky;
+   bottom:124px;
+   z-index:35;
+   background:rgba(9,31,45,.96);
+   padding:3px;
+   border:1px solid rgba(230,189,112,.72);
+   border-radius:16px;
+   box-shadow:0 3px 15px rgba(0,0,0,.56),0 0 0 3px rgba(11,28,41,.8);
+ }
+}
