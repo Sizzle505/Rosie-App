@@ -37,24 +37,24 @@ def load(name):
     path = entries[name]
     raw = z.read(path)
     return Image.open(io.BytesIO(raw)).convert("RGBA"),hashlib.sha256(raw).hexdigest()
-def occupied_line(image, side, xlo, xhi):
+def occupied_line(image, side, xlo, xhi, source):
     # Deterministic alpha contour, robust against stray translucent effects.
     a=image.getchannel("A")
     xs=range(xlo+15,min(xhi-15,image.width),12)
     ys=[]
     for x in xs:
         if side=="ceiling":
-            found = [y for y in range(115,min(image.height,520),4)
+            end = 465 if source.startswith("20 - ") else 365\n            found = [y for y in range(25,min(image.height,end),4)
                      if a.getpixel((x,y)) >= 108]
             ys.append(max(found) if found else 195)
         else:
-            found=[y for y in range(145,min(image.height,700),4)
+            begin = 145 if source.startswith("21 - ") else 365\n            found=[y for y in range(begin,min(image.height,700),4)
                    if a.getpixel((x,y)) >= 108]
             ys.append(min(found) if found else 505)
     return int(statistics.median(ys))
 def formation(name, source, side, x0, x1, suffix, max_depth=286):
     image,digest=load(source)
-    bound=occupied_line(image,side,x0,x1)
+    bound=occupied_line(image,side,x0,x1,source)
     # Reserve a short 12-18px native inward extent so actual roots/crystals
     # can project just past the structural cut face; outside stays substantial.
     allowance=26 if side=="ceiling" else 24
