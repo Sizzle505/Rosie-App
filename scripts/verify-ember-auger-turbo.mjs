@@ -33,7 +33,7 @@ async function draw(label,time,boost,pitch=0){
   const canvas=window.__drillCanvasQA,c=canvas.getContext("2d");
   const calls=[];const native=c.drawImage.bind(c);
   c.drawImage=(image,...args)=>{
-   if(image?.src)calls.push({asset:image.src.split("/").pop(),args:args.slice(0,4)});
+   if(image?.src){const m=c.getTransform();calls.push({asset:image.src.split("/").pop(),args:args.slice(),matrix:[m.a,m.b,m.c,m.d,m.e,m.f]});}
    return native(image,...args);
   };
   const scroll=3000;
@@ -42,7 +42,7 @@ async function draw(label,time,boost,pitch=0){
   window.__drillQA.paintDrill(c,s,null,[],window.__drillArtQA);
   const shaft=Array.from(c.getImageData(267,Math.round(s.y)-42,105,84).data);
   const tail=Array.from(c.getImageData(5,Math.round(s.y)-48,150,96).data);
-  return {calls:calls.filter(v=>/auger-spin|turbo-animation|turbo-head-frames|feature-boosttrail/.test(v.asset)),
+  return {calls:calls.filter(v=>/auger-spin|turbo-animation|turbo-head-frames|feature-boosttrail|wall-turn-neutral|wall-turn-up|wall-turn-down|drill-body/.test(v.asset)),
    phase:window.__drillQA.augerFrameIndex(time,boost>0),turboPhase:boost>0?window.__drillQA.turboFrameIndex(boost):null,shaft,tail};
  },{time,boost,pitch});
  const png=await page.evaluate(()=>window.__drillCanvasQA.toDataURL("image/png"));
@@ -66,6 +66,31 @@ assert.ok(turbo.calls.some(x=>x.asset==="feature-boosttrail.webp"),"Original exh
 assert.ok(!next.calls.some(x=>x.asset==="turbo-head-frames.webp"),"No Turbo artwork in normal play");
 assert.ok(!next.calls.some(x=>x.asset==="feature-boosttrail.webp"),"No Turbo exhaust in normal play");
 assert.ok(pitched.calls.some(x=>x.asset==="auger-spin.png"),"Spin must remain attached while steering");
+
+// Real Canvas transform assertions: source nose and body MUST be painted
+// in the same vehicle coordinate system; the original Turbo flame must sit
+// behind the engine, pitch-rotated with Rosie, not near the cone.
+for(const item of [baseline,next,turbo,turboLater,pitched]){
+ const head=item.calls.find(x=>x.asset==="auger-spin.png");
+ const body=item.calls.find(x=>/wall-turn-neutral|drill-body|wall-turn-up|wall-turn-down/.test(x.asset));
+ assert.ok(body,"Preserved Rosie chassis must render with source auger");
+ assert.ok(head,"Original source auger frame not painted");
+ const close=(a,b)=>Math.abs(a-b)<1e-6;
+ for(let i=0;i<6;i++)assert.ok(close(head.matrix[i],body.matrix[i]),"Auger has detached from chassis at transform component "+i);
+ assert.equal(head.args.at(-4),52,"Drill cone must begin at original coupling");
+ assert.equal(head.args.at(-2),118,"Drill cone has original intended length");
+ const ghost=item.calls.filter(x=>x.asset==="drill-body.webp");
+ assert.equal(ghost.length,0,"Do not redraw a duplicated engine collar over the original spinning cone");
+}
+for(const item of [turbo,turboLater,pitched]){
+ const flame=item.calls.find(x=>x.asset==="feature-boosttrail.webp");
+ const head=item.calls.find(x=>x.asset==="auger-spin.png");
+ assert.ok(flame.matrix[0]*head.matrix[0]+flame.matrix[1]*head.matrix[1]<-.5,"Original exhaust must be horizontally mirrored behind engine");
+ const dx=flame.matrix[4]-head.matrix[4],dy=flame.matrix[5]-head.matrix[5];
+ const projection=dx*head.matrix[0]+dy*head.matrix[1];
+ assert.ok(projection<-110&&projection>-123,"Turbo must emit at rear engine outlet, not floating at drill tip: "+projection);
+}
+
 const spinDelta=diff(baseline.shaft,next.shaft),turboHeadDelta=diff(next.shaft,turbo.shaft),
   tailDelta=diff(next.tail,turbo.tail),laterDelta=diff(turbo.shaft,turboLater.shaft);
 console.log("PIXEL AUDIT",JSON.stringify({spinDelta,turboHeadDelta,tailDelta,laterDelta}));
