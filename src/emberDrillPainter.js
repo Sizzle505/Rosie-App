@@ -163,6 +163,48 @@ function ground(c,s,assets={}) {
     else if(i%3===1)drawLantern(c,x,y+side*25,.45);
   }
 }
+
+/**
+ * Decorative world-anchored tunnel accents. Their geometry is independent of
+ * collisions and matches the sloped course, so the vehicle keeps a fair path.
+ * When the two recovered Dropbox images are installed the new art keys take over.
+ */
+function paintTunnelingDecor(c,s,assets={}) {
+  const roots=artReady(assets.hangingRoots)?assets.hangingRoots:assets.roof;
+  const slopeRoof=artReady(assets.descentRoof)?assets.descentRoof:assets.roof;
+  const slopeFloor=artReady(assets.descentFloor)?assets.descentFloor:assets.floor;
+  if(s.time<43 && artReady(roots)){
+    const spacing=1250;
+    const initial=Math.floor((s.scroll-430)/spacing)-1;
+    for(let i=initial;i<initial+4;i++){
+      const world=760+i*spacing, x=world-s.scroll;
+      if(x<-480||x>W+240)continue;
+      const roofY=tunnelCenter(world)-tunnelRadius(world);
+      const opacity=.35+(.1*Math.sin(world*.003));
+      drawImageTrim(c,roots,x-75,roofY-75,400,175,opacity);
+    }
+  }
+  if(!artReady(slopeRoof)||!artReady(slopeFloor))return;
+  const gap=1650;
+  const k0=Math.floor((s.scroll-600)/gap)-1;
+  for(let k=k0;k<k0+4;k++){
+    const world=1300+k*gap;
+    const x=world-s.scroll;
+    if(x<-900||x>W+350)continue;
+    const gradient=(tunnelCenter(world+210)-tunnelCenter(world-210))/420;
+    if(gradient<.11)continue; // descending portions only
+    const center=tunnelCenter(world),radius=tunnelRadius(world);
+    const angle=Math.atan(gradient);
+    c.save();
+    c.translate(x,center);
+    c.rotate(angle);
+    // Render as separate roof/floor layers, retaining an open central tunnel.
+    drawImageTrim(c,slopeRoof,-260,-radius-148,845,151,.29);
+    drawImageTrim(c,slopeFloor,-260,radius-2,845,151,.31);
+    c.restore();
+  }
+}
+
 function pickup(c,o,s,assets={}){
   const img=assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':o.kind==='cache'?'cache':'nonexistent'];
   if(artReady(img) && !o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-60&&x<=W+60){const sz=o.kind==='cache'?67:48; glow(c,x,y,sz*.8,'rgba(255,182,76,.20)');drawImageTrim(c,img,x-sz/2,y-sz/2+Math.sin(s.time*5+o.id)*2,sz,sz);return;}}
@@ -290,6 +332,7 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
   ground(c,s,assets);
+  paintTunnelingDecor(c,s,assets);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s);
