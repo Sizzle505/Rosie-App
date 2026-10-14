@@ -309,3 +309,34 @@
  .ember-suite .ember-header .ember-header-copy h2{font-size:17px}
  .ember-suite .ember-header .ember-header-copy p{font-size:13px}
 }
+
+
+/* Approved 1280x350 single-piece banner: NO CSS art cropping or duplicate live
+   title. Image alone owns the headline, vehicle, Rosie and decorative border.
+   Intrinsic aspect survives all iPhone and desktop widths. */
+.ember-suite .ember-header{
+  display:block!important;
+  position:relative;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:1280 / 350;
+  padding:0!important;
+  background:#161923!important;
+  border:1px solid rgba(244,201,121,.9);
+  overflow:hidden;
+}
+.ember-suite .ember-header::before,
+.ember-suite .ember-header::after{display:none!important}
+.ember-suite .ember-header .ember-header-full-art{
+  display:block;
+  width:100%;height:100%;max-width:none;
+  aspect-ratio:1280 / 350;
+  object-fit:contain;
+  object-position:center center;
+  pointer-events:none;
+  user-select:none;
+}
+@media(max-width:620px){
+ .ember-suite .ember-header{height:auto!important;aspect-ratio:1280 / 350}
+ .ember-suite .ember-header .ember-header-full-art{width:100%;height:100%}
+}
