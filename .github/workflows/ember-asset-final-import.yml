@@ -1,0 +1,47 @@
+name: Ember import two recovered images
+on:
+  push:
+    branches: ["work/ember-drill-barkroot-ruby-milestone"]
+    paths: [".github/workflows/ember-asset-final-import.yml"]
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: "work/ember-drill-barkroot-ruby-milestone"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --quiet pillow
+      - name: Retrieve public-game art from Dropbox and optimize
+        shell: bash
+        run: |
+          python - <<'PY'
+            from PIL import Image
+            import urllib.request,io
+            from pathlib import Path
+            urls=["https://uc04f219e118b89dfe037a5fd0ea.dl.dropboxusercontent.com/cd/0/get/DJ8IBgPlGmzFGkes4ZqnoU1rskLOWvSS1bt4aHm3YyN8xQ_6-fmUO4aZzHzI-KUQzuSaPKR1TMkpRM8C9C33vkj2OJcq2tRPkMx5-Sw0mBAmW4By-zlxjN_APjH6-lWvMYTzXoomYduyDTJTF8n4d7LfyILtGhnMhPS8At9AcFWZVw/file?c_luid=667ded1d","https://uc9ef0b0269f4ed74995bdb8811e.dl.dropboxusercontent.com/cd/0/get/DJ-_ocbbWnpCGhS7cmP7J05wCQ6XTZ14HNliH_5ntjpQrYpgzmMmeq24hk7i59FQzCKx1ucOYK-_kqs-6A5yxLkvi5-5dkt9grevO6jmHfJ3fvgzyEhd_9RgUqq79VM0BPXRaPXWF_G8gN3viLr-zTdvdoyc4VsdWdgW0gfyZvQmFw/file?c_luid=667ded1d"]
+            target=Path("public/ember-drill")
+            target.mkdir(exist_ok=True,parents=True)
+            def load(url):
+              req=urllib.request.Request(url,headers={"User-Agent":"RosieAssetLoader"})
+              with urllib.request.urlopen(req,timeout=90) as r: return Image.open(io.BytesIO(r.read())).convert("RGBA")
+            roots=load(urls[0]).crop((0,190,1448,1000))
+            roots.thumbnail((1280,720),Image.Resampling.LANCZOS)
+            roots.save(target/"barkroot-hanging-roots.webp","WEBP",quality=87,method=6)
+            desc=load(urls[1])
+            for n,rect in [("descending-roof.webp",(0,0,2172,390)),("descending-floor.webp",(0,335,2172,724))]:
+             im=desc.crop(rect);im.thumbnail((1600,400),Image.Resampling.LANCZOS)
+             im.save(target/n,"WEBP",quality=86,method=6)
+            
+          PY
+      - name: Commit derived transparent assets
+        run: |
+          git config user.name "rosie-art-importer[bot]"
+          git config user.email "rosie-art-importer@users.noreply.github.com"
+          git add public/ember-drill/barkroot-hanging-roots.webp public/ember-drill/descending-roof.webp public/ember-drill/descending-floor.webp
+          git commit -m "Integrate recovered Barkroot and descending tunnel artwork"
+          git push origin HEAD:work/ember-drill-barkroot-ruby-milestone
