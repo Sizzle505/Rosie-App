@@ -1,0 +1,36 @@
+name: Ember OG Barkroot prototype - compile and engine safety
+on:
+  push:
+    branches: ["work/ember-og-ribbon-prototype-20261014"]
+    paths:
+      - "src/emberTunnelRibbons.js"
+      - "src/emberDrillPainter.js"
+      - "src/EmberTunnelDrill.jsx"
+      - "scripts/derive-ember-og-edges.py"
+      - "scripts/verify-ember-og-prototype.mjs"
+      - ".github/workflows/ember-og-compile.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m py_compile scripts/derive-ember-og-edges.py
+      - run: npm ci
+      - run: node --test tests/ember-drill-engine.test.mjs
+      - run: npm run build
+      - name: Validate source discipline
+        run: |
+          test -f src/emberTunnelRibbons.js
+          test -f scripts/derive-ember-og-edges.py
+          test ! -e public/ember-drill/edge/barkroot-top.webp || test -e public/ember-drill/edge/edge-assets.json
