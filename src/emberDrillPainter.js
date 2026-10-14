@@ -90,22 +90,32 @@ function drawLantern(c,x,y,scale=1) {
   c.restore();
 }
 function scenery(c,s,assets={}) {
-  const scene=s.time<12?"scenicBarkroot":s.time<25?"scenicLantern":s.time<41?"scenicRoots":s.time<57?"scenicCrystal":"scenicTemple";
   c.fillStyle="#23151d";c.fillRect(0,0,W,H);
-  // Scenic slow-moving art is deliberately separate from the moving collision tunnel.
-  const old=s.time<11?null:s.time<24?"scenicBarkroot":s.time<40?"scenicLantern":s.time<56?"scenicRoots":"scenicCrystal";
-  const cross=(s.time%16)<2.4?(s.time%16)/2.4:1;
-  const primary=assets[scene] || (s.time<32?assets.barkroot:assets.ruby);
-  const painted=artLoop(c,primary,s.scroll*.28,1);
-  if(!painted){
-    const g=c.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,"#211b1f");g.addColorStop(.55,"#5b3129");g.addColorStop(1,"#1a1420");
-    c.fillStyle=g;c.fillRect(0,0,W,H);
+  // Smoothly dissolve between painted panoramas while preserving world scroll.
+  const passages=[
+    [0,"scenicBarkroot"],
+    [13,"scenicLantern"],
+    [27,"scenicRoots"],
+    [43,"scenicCrystal"],
+    [59,"scenicTemple"],
+  ];
+  let current=0;
+  for(let i=1;i<passages.length;i++){
+    if(s.time>=passages[i][0]) current=i;
   }
-  // Keep architectural scenery readable and atmospheric even while crossing into temple rock.
-  if(assets.ruby&&s.time>35){
-    const progress=clamp((s.time-35)/15,0,.38);
-    artLoop(c,assets.ruby,s.scroll*.18,progress);
+  const backdrop=(key)=>assets[key] || (s.time<35?assets.barkroot:assets.ruby);
+  const shift=s.scroll*.29;
+  const currentArt=backdrop(passages[current][1]);
+  if(current===0){
+    artLoop(c,currentArt,shift);
+  }else{
+    const prev=backdrop(passages[current-1][1]);
+    artLoop(c,prev,shift);
+    artLoop(c,currentArt,shift,clamp((s.time-passages[current][0])/3.25,0,1));
+  }
+  if(s.time>=34){
+    const templeOpacity=clamp((s.time-34)/25,0,.18);
+    artLoop(c,assets.ruby,s.scroll*.20,templeOpacity);
   }
   const tint=c.createLinearGradient(0,0,0,H);
   tint.addColorStop(0,"rgba(18,9,18,.20)");
@@ -113,7 +123,7 @@ function scenery(c,s,assets={}) {
   tint.addColorStop(1,"rgba(8,9,15,.26)");
   c.fillStyle=tint;c.fillRect(0,0,W,H);
   for(let k=0;k<32;k++){
-    const x=((k*117 - s.scroll*.12)%(W+80)+W+80)%(W+80)-30;
+    const x=((k*117-s.scroll*.12)%(W+80)+W+80)%(W+80)-30;
     const y=55+noise(k+19)*(H-110);
     circle(c,x,y,noise(k+31)*2.4+.5,k%3?"rgba(246,185,94,.22)":"rgba(119,163,198,.17)");
   }
