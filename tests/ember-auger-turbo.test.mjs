@@ -4,7 +4,7 @@ import {
  newRun,triggerTurbo,updateRun,tunnelCenter,DRILL_ANCHOR,
  TURBO_DURATION
 } from "../src/emberDrillEngine.js";
-import {AUGER_SHEET,augerFrameIndex,augerFrameRect} from "../src/emberAugerFX.js";
+import {AUGER_SHEET,augerFrameIndex,augerFrameRect,TURBO_ATLAS,turboFrameIndex,turboFrameRect} from "../src/emberAugerFX.js";
 
 test("actual original 8-frame drill head advances and is faster during Turbo",()=>{
  assert.deepEqual(AUGER_SHEET,{columns:4,rows:2,frameWidth:500,frameHeight:410});
@@ -15,6 +15,14 @@ test("actual original 8-frame drill head advances and is faster during Turbo",()
  assert.equal(augerFrameIndex(.06,false),1);
  assert.equal(augerFrameIndex(.06,true),2);
  assert.ok(augerFrameIndex(.07,true)!==augerFrameIndex(.07,false));
+});
+test("ten true original Turbo frames repeat precisely at 60ms phase boundaries",()=>{
+ assert.equal(TURBO_ATLAS.frames,10);
+ assert.equal(TURBO_ATLAS.columns,5);
+ assert.deepEqual(turboFrameRect(TURBO_DURATION),{sx:0,sy:0,sw:308,sh:126});
+ assert.equal(turboFrameIndex(TURBO_DURATION-.12),2);
+ assert.deepEqual(turboFrameRect(TURBO_DURATION-.30),{sx:0,sy:126,sw:308,sh:126});
+ assert.equal(turboFrameIndex(TURBO_DURATION-.60),0);
 });
 test("Turbo activation spends a full charge once and accelerates the entire drill",()=>{
  const normal=newRun(),boosted=newRun();
