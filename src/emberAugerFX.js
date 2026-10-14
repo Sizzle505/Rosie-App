@@ -39,59 +39,78 @@ export function augerFrameRect(index){
 export function paintOriginalAuger(c,s,assets){
   const img=assets?.auger;
   if(!ready(img))return false;
-  const boosted=s.boostTime>0;
-  const frame=augerFrameRect(augerFrameIndex(s.time,boosted));
-  c.drawImage(img,frame.sx,frame.sy,frame.sw,frame.sh,
-    NOSE.x,NOSE.y,NOSE.w,NOSE.h);
-  // The source's eight frames have small paint deltas. Make the intended
-  // axial rotation *legible*, with phased helices locked to the tapered cone.
-  // Clip every rib/glint inside the head; nothing crosses the cockpit.
+  const turbo=s.boostTime>0;
+  const frame=augerFrameRect(augerFrameIndex(s.time,turbo));
+  // Engine/chassis native art ends at x=+68. This collar is anchored at
+  // x=+63 while the ORIGINAL drill tip ends at x=+170.
+  // Source sprites were composed as 500x410 isolated auger frames.
+  c.drawImage(img,frame.sx,frame.sy,frame.sw,frame.sh,52,-50,118,100);
   c.save();
   nosePath(c);c.clip();
-  const speed=boosted?53:30;
-  const phase=s.time*speed;
-  for(let i=0;i<6;i++){
-    const x=69+i*17.1;
-    const half=40-i*6.0;
-    const a=phase-i*1.05;
-    const bright=.12+.68*Math.pow((Math.cos(a)+1)/2,2);
-    const dark=.12+.24*Math.pow((Math.cos(a+Math.PI)+1)/2,2);
-    c.lineWidth=5.2-i*.38;
-    c.strokeStyle="rgba(39,19,10,"+dark.toFixed(3)+")";
+  const turn=s.time*(turbo?34:23);
+  // The supplied 8-frame original changes primarily around its rear ribs.
+  // Amplify *that same physical motion* throughout the visible length of the
+  // cone, without repainting or rotating Rosie's body. Metallic spiral
+  // shadows and hard specular seams advance around the tapered drill shaft.
+  for(let rib=0;rib<6;rib++){
+    const along=rib/6;
+    const centerX=70+rib*17.1;
+    const height=41-rib*6.3;
+    const phase=turn-rib*.84;
+    const lateral=Math.sin(phase)*8.5;
+    c.lineCap="round";
+    c.lineWidth=Math.max(3.4,7.6-rib*.6);
+    c.strokeStyle="rgba(42,18,9,"+(.42+.24*(.5+.5*Math.cos(phase))).toFixed(3)+")";
     c.beginPath();
-    c.moveTo(x-7*Math.cos(a),-half);
-    c.bezierCurveTo(x-13*Math.sin(a),-half*.4,x+13*Math.sin(a),half*.4,x+7*Math.cos(a),half);
+    c.moveTo(centerX-lateral*.30,-height);
+    c.bezierCurveTo(centerX-11-lateral,height*-.58,centerX+12+lateral,height*.58,centerX+lateral*.3,height);
     c.stroke();
-    c.strokeStyle="rgba(255,234,151,"+bright.toFixed(3)+")";
-    c.lineWidth=boosted?3.5:2.8;
+    c.lineWidth=Math.max(2,3.8-rib*.26);
+    c.strokeStyle="rgba(255,236,159,"+(.36+.56*(.5+.5*Math.cos(phase+.28))).toFixed(3)+")";
     c.beginPath();
-    c.moveTo(x-5*Math.cos(a+.5),-half);
-    c.bezierCurveTo(x+14*Math.sin(a+.5),-half*.42,x-14*Math.sin(a+.5),half*.42,x+5*Math.cos(a+.5),half);
+    c.moveTo(centerX-5-lateral*.28,-height);
+    c.bezierCurveTo(centerX-17-lateral,height*-.54,centerX+7+lateral,height*.52,centerX-5+lateral*.28,height);
+    c.stroke();
+    // The opposing spiral face catches its highlight half a turn later.
+    c.lineWidth=1.8;
+    c.strokeStyle="rgba(255,249,196,"+(.14+.32*(.5+.5*Math.cos(phase+Math.PI))).toFixed(3)+")";
+    c.beginPath();
+    c.moveTo(centerX+4,-height*.87);
+    c.quadraticCurveTo(centerX+12*Math.sin(phase),0,centerX+3,height*.86);
     c.stroke();
   }
-  // A narrow specular travelling along the rotational axis increases the
-  // perceived speed without rotating the full illustrated vehicle.
-  const flash=.17+.20*(.5+.5*Math.sin(phase*1.7));
-  c.strokeStyle="rgba(255,250,206,"+flash.toFixed(3)+")";
-  c.lineWidth=1.7;c.beginPath();c.moveTo(77,-2);
-  c.quadraticCurveTo(120,1,165,0);c.stroke();
-  if(boosted){
-    // NOTE the turbo artwork includes a nose. Use it as light *within the
-    // existing nose only*; never place a whole second vehicle on Canvas.
-    if(ready(assets?.turboAtlas)){
-      const frame=turboFrameRect(s.boostTime);
-      c.globalCompositeOperation="screen";
-      c.globalAlpha=.26+.13*Math.sin(s.time*31)**2;
-      c.drawImage(assets.turboAtlas,frame.sx,frame.sy,frame.sw,frame.sh,53,-48,116,96);
-      c.globalAlpha=1;
-    }
-    const beam=c.createLinearGradient(72,0,171,0);
-    beam.addColorStop(0,"rgba(255,202,76,.04)");
-    beam.addColorStop(.65,"rgba(255,197,65,.10)");
-    beam.addColorStop(1,"rgba(255,246,153,.37)");
-    c.fillStyle=beam;c.fillRect(53,-48,120,96);
-  }
+  const specular=c.createLinearGradient(62,-36,167,23);
+  specular.addColorStop(0,"rgba(255,243,173,.10)");
+  specular.addColorStop(.48,"rgba(246,203,118,.015)");
+  specular.addColorStop(1,"rgba(255,250,199,.20)");
+  c.fillStyle=specular;c.fillRect(58,-49,113,100);
   c.restore();
+  // Source-defined mechanical seam hides the join at the engine coupling.
+  // Two stationary concentric collars, no duplicated mechanical nose.
+  c.save();
+  c.strokeStyle="rgba(53,26,20,.82)";c.lineWidth=5.2;
+  c.beginPath();c.ellipse(64,0,6.2,40,-.02,-Math.PI/2,Math.PI/2);c.stroke();
+  c.strokeStyle="rgba(255,221,139,.94)";c.lineWidth=2.4;
+  c.beginPath();c.ellipse(65,0,5.5,37,0,-Math.PI/2,Math.PI/2);c.stroke();
+  c.restore();
+  if(turbo){
+    // Extracted original ten Turbo frames are FULL drill paintings. Display
+    // only their changing luminous tip details; never duplicate their shafts.
+    if(ready(assets?.turboAtlas)){
+      const t=turboFrameRect(s.boostTime);
+      c.save();
+      c.beginPath();c.ellipse(158,0,20,30,0,0,PI2);c.clip();
+      c.globalCompositeOperation="screen";
+      c.globalAlpha=.22+.12*(.5+.5*Math.sin(s.time*25));
+      c.drawImage(assets.turboAtlas,t.sx,t.sy,t.sw,t.sh,116,-39,61,78);
+      c.restore();
+    }
+    const beam=c.createRadialGradient(170,0,1,170,0,36);
+    beam.addColorStop(0,"rgba(255,248,192,.66)");
+    beam.addColorStop(.33,"rgba(255,208,90,.24)");
+    beam.addColorStop(1,"rgba(255,151,42,0)");
+    c.fillStyle=beam;c.beginPath();c.arc(170,0,36,0,PI2);c.fill();
+  }
   return true;
 }
 export function paintOriginalBoostExhaust(c,s,assets){
@@ -104,27 +123,27 @@ export function paintOriginalBoostExhaust(c,s,assets){
     // clearly leaves the engine to the left, always behind Rosie.
     c.save();
     c.globalCompositeOperation="screen";
-    c.translate(-113,0);
+    c.translate(-116,4);
     c.scale(-1,1);
     c.globalAlpha=.72*pulse;
-    c.drawImage(assets.boosttrail,1,-49,197,98);
+    c.drawImage(assets.boosttrail,1,-39,139,76);
     c.globalAlpha=.38*pulse;
-    c.drawImage(assets.boosttrail,18,-27,241,54);
+    c.drawImage(assets.boosttrail,13,-28,167,51);
     c.restore();
   }
   for(let i=0;i<13;i++){
-    const xx=-137-((s.time*220+i*47)%154);
+    const xx=-125-((s.time*220+i*47)%115);
     const yy=Math.sin(s.time*16+i*2.4)*(13+i*1.9);
     c.strokeStyle=i%3===0?"rgba(255,244,176,.83)":"rgba(255,158,62,.55)";
     c.lineWidth=1.2+(i%3)*.7;c.beginPath();
     c.moveTo(xx,yy);c.lineTo(xx-31-i*1.2,yy-Math.sin(i)*3);c.stroke();
   }
   // The combustion flash belongs at the tailpipe, NOT in front of the auger.
-  const glow=c.createRadialGradient(-126,0,1,-126,0,64);
+  const glow=c.createRadialGradient(-127,4,1,-127,4,48);
   glow.addColorStop(0,"rgba(255,231,133,.44)");
   glow.addColorStop(.35,"rgba(255,150,62,.19)");
   glow.addColorStop(1,"rgba(255,130,45,0)");
-  c.fillStyle=glow;c.beginPath();c.arc(-126,0,64,0,PI2);c.fill();
+  c.fillStyle=glow;c.beginPath();c.arc(-127,4,48,0,PI2);c.fill();
 }
 export function paintTurboTip(c,s){
   if(!(s.boostTime>0))return;
