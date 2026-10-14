@@ -210,7 +210,7 @@ export default function RosieTimekeeper() {
     ? (duration > 0 ? Math.min(1, Math.max(0, elapsed / duration)) : 0)
     : ((elapsed % 60_000) / 60_000);
   const dialProgress = runnerPhase;
-  const runnerAngle = -Math.PI / 6 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
+  const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
   const runnerX = 50 + 49.5 * Math.cos(runnerAngle);
   const runnerY = 50 + 49.5 * Math.sin(runnerAngle);
   // All three illustrated poses now come from the same full-resolution

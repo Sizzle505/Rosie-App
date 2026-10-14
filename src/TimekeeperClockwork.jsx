@@ -11,22 +11,19 @@ import "./TimekeeperClockwork.css";
 const ART = "/rosieverse/timekeeper/midnight-observatory/gear-atlas.webp";
 const SPRITES = ["0% 0%", "50% 0%", "100% 0%", "0% 100%", "50% 100%", "100% 100%"];
 
-const GEARS = [
-  // Twelve wheels surround the entire perimeter, tucked behind the bezel.
-  // Upper pinions are centered on Rosie's twin lever housings.
-  { x: 36, y: 14, size: 14, sprite: 3, opacity: .90 },
-  { x: 21, y: 25, size: 15, sprite: 0, opacity: .89 },
-  { x: 13, y: 45, size: 17, sprite: 1, opacity: .87 },
-  { x: 16, y: 69, size: 15, sprite: 4, opacity: .88 },
-  { x: 29, y: 82, size: 16, sprite: 2, opacity: .88 },
-  { x: 42, y: 88, size: 13, sprite: 5, opacity: .85 },
-  { x: 58, y: 88, size: 13, sprite: 3, opacity: .85 },
-  { x: 71, y: 82, size: 16, sprite: 4, opacity: .88 },
-  { x: 84, y: 69, size: 15, sprite: 2, opacity: .88 },
-  { x: 87, y: 45, size: 17, sprite: 0, opacity: .87 },
-  { x: 79, y: 25, size: 15, sprite: 1, opacity: .89 },
-  { x: 64, y: 14, size: 14, sprite: 5, opacity: .90 },
-].map((gear, index) => ({
+const GEARS = Array.from({ length: 16 }, (_, index) => {
+  // True annular gear train: wheels mesh along the clock circumference,
+  // with their inner halves naturally hidden behind the dial and bezel.
+  const angle = (-112.5 + index * 22.5) * Math.PI / 180;
+  const radius = 33.15;
+  return {
+    x: 50 + radius * Math.cos(angle),
+    y: 50 + radius * Math.sin(angle),
+    size: [14.0, 14.6, 13.9, 14.7, 14.2, 14.4, 14.8, 14.1][index % 8],
+    sprite: [3, 1, 5, 0, 2, 4, 1, 3, 5, 0, 4, 2, 1, 3, 5, 0][index],
+    opacity: index % 4 === 0 ? .93 : .88,
+  };
+}).map((gear, index) => ({
   ...gear,
   // A visible, mechanical pace while Rosie is working—not an imperceptibly
   // slow decorative spin. Adjacent wheels counter-rotate like a gear train.
