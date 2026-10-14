@@ -2267,3 +2267,41 @@ body:has(.app-shell.page-timekeeper),
  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {top:66%;height:27%;}
  .app-shell.page-timekeeper .rtk-observatory .rtk-selection-note {display:none;}
 }
+
+/* Final viewport-fit: the permanent Resources bar never covers Custom Timer. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+ top:64.3%;height:31.2%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+ top:34%;bottom:7%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+ padding-bottom:6px;margin-bottom:6px;min-height:21px;
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:61.7%;height:25.5%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {top:8%;height:24%;padding:2px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {top:34%;bottom:4%;left:12%;right:12%;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  min-height:17px;margin:0 0 3px;padding:0 0 4px;font-size:11px;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-timer-view-toggle {min-height:20px;padding:2px 6px;font-size:10px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-presets {gap:4px;margin-top:5px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-presets button {min-height:33px;font-size:12px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:4px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {gap:2px;font-size:9px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:29px;min-height:29px;font-size:15px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-time-separator {padding-bottom:6px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:27px;font-size:11px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-empty {font-size:11px;margin-top:5px;}
+}
