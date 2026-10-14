@@ -162,3 +162,28 @@
  from{transform:scale(.94);filter:brightness(.93)}
  to{transform:scale(1.09);filter:brightness(1.24)}
 }
+
+/* Ember iPhone registration corrections: controls stay in document flow. */
+@media(max-width:620px){
+ .ember-suite:has(.ember-stage.is-active) .ember-controls{
+   position:relative;bottom:auto;z-index:2;margin-top:6px;
+ }
+ .ember-suite .ember-header{display:grid;grid-template-columns:47% 53%;align-items:center}
+ .ember-suite .ember-header .ember-header-portrait{grid-column:1;width:100%;max-width:none;height:100%;border-right:0}
+ .ember-suite .ember-header .ember-header-copy{
+   position:relative;grid-column:2;left:auto;right:auto;top:auto;bottom:auto;
+   width:100%;padding:8px 9px 8px 3px;transform:none;text-align:left
+ }
+ .ember-suite .ember-header .ember-header-copy h2{
+   font-size:clamp(17px,4.55vw,25px);white-space:normal;line-height:1.04;margin:7px 0 4px
+ }
+ .ember-suite .ember-header .ember-header-copy p{
+   font-size:clamp(14px,3.8vw,19px);line-height:1.12
+ }
+ .ember-suite .ember-header .ember-header-copy>span{
+   font-size:6px;line-height:1.25;white-space:normal
+ }
+ .ember-suite .ember-controls{align-items:stretch}
+ .ember-suite .ember-controls .ember-boost{min-height:70px}
+ .ember-suite .ember-controls .ember-boost>span:last-child{justify-content:center}
+}

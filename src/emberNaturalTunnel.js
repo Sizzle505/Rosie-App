@@ -80,6 +80,27 @@ function drawEarth(c,s,side,assets,stage,points){
   // paintings contain non-tileable landmarks and cause visible rectangles.
   c.restore();
 }
+// Surface-attached illustrated geology. Sample source texture by world X,
+// and follow the collision contour per column. No rectangular texture bands.
+function drawRegisteredEdge(c,s,side,assets,stage,points){
+  const img=assets[stage.current.key];
+  if(!ready(img))return;
+  const depth=68,iw=img.naturalWidth,ih=img.naturalHeight;
+  c.save();
+  earthPath(c,points,side);c.clip();
+  for(let x=-STEP;x<W+STEP;x+=5){
+    const world=s.scroll+x;
+    const y=surface(world,side);
+    const u=((Math.floor(world*.75)%iw)+iw)%iw;
+    const sw=Math.min(5,iw-u);
+    const sy=Math.max(0,Math.min(ih-1,Math.floor(ih*.30)));
+    const sh=Math.max(1,Math.min(depth,ih-sy));
+    // Material extends OUT from the playable corridor on either side.
+    c.globalAlpha=.83;
+    c.drawImage(img,u,sy,sw,sh,x,side<0?y-depth:y,5.7,depth);
+  }
+  c.restore();
+}
 function drawFracturedFace(c,s,side,stage,points){
   // Only isolated stones and fractures, NEVER a second continuous ribbon
   // laid along the course. Prior versions made the edge look artificially
@@ -183,6 +204,7 @@ export function paintNaturalTunnel(c,s,assets={}) {
     const points=[];
     for(let x=-STEP;x<=W+STEP;x+=STEP)points.push([x,surface(s.scroll+x,side)]);
     drawEarth(c,s,side,assets,stage,points);
+    drawRegisteredEdge(c,s,side,assets,stage,points);
     drawFracturedFace(c,s,side,stage,points);
     // Stone fragments must remain inside the solid geology except tiny
     // attached roots and chips; the corridor silhouette stays authoritative.
