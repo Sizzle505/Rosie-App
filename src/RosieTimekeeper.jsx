@@ -3,34 +3,39 @@ import "./RosieTimekeeper.css";
 import TimekeeperClockwork from "./TimekeeperClockwork.jsx";
 
 const ART = "/rosieverse/timekeeper/midnight-observatory/hall-plate.webp";
-const STORAGE_KEY = "rosie-timekeeper-v2";
-function cueComplete() {
-  // Best effort in the foreground only; iOS does not guarantee background alarms.
-  try {
-    window.navigator?.vibrate?.([65, 45, 110]);
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext || document.hidden) return;
-    const ctx = new AudioContext();
-    for (const [offset, frequency] of [[0, 660], [.17, 880], [.34, 1046]]) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = frequency;
-      gain.gain.setValueAtTime(.0001, ctx.currentTime + offset);
-      gain.gain.exponentialRampToValueAtTime(.095, ctx.currentTime + offset + .018);
-      gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + offset + .22);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(ctx.currentTime + offset);
-      osc.stop(ctx.currentTime + offset + .23);
-    }
-    window.setTimeout(() => ctx.close().catch(() => {}), 1100);
-  } catch {}
+const STORAGE_KEY = "rosie-timekeeper-v3";
+let timekeeperAudio=null;
+function primeTimekeeperAudio(){
+ try {const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
+  if(!timekeeperAudio||timekeeperAudio.state==="closed")timekeeperAudio=new Audio();
+  if(timekeeperAudio.state==="suspended")void timekeeperAudio.resume().catch(()=>{});
+ }catch{}
+}
+function cueComplete(){
+ try {navigator.vibrate?.([50,45,100]);if(document.hidden||!timekeeperAudio||timekeeperAudio.state!=="running")return;
+  const ctx=timekeeperAudio,t0=ctx.currentTime+.025;
+  for(const off of [0,.205]){
+   const t=t0+off,o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();
+   o.type="sawtooth";o.frequency.setValueAtTime(205,t);o.frequency.exponentialRampToValueAtTime(115,t+.16);
+   f.type="lowpass";f.frequency.setValueAtTime(850,t);f.frequency.exponentialRampToValueAtTime(370,t+.17);
+   g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.085,t+.025);g.gain.exponentialRampToValueAtTime(.0001,t+.17);
+   o.connect(f).connect(g).connect(ctx.destination);o.start(t);o.stop(t+.18);
+  }
+  for(const [off,hz] of [[.42,784],[.59,987.77],[.78,1318.5]]){
+   for(const [harmonic,volume] of [[1,.057],[2.01,.015]]){
+    const t=t0+off,o=ctx.createOscillator(),g=ctx.createGain();
+    o.type="sine";o.frequency.value=hz*harmonic;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+.60);
+    o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+.62);
+   }
+  }
+ }catch{}
 }
 const PRESETS = [
-  { label: "1m", ms: 60_000 },
-  { label: "2m", ms: 2 * 60_000 },
-  { label: "5m", ms: 5 * 60_000 },
-  { label: "15m", ms: 15 * 60_000 }
+  { label:"30s", ms:30_000 },
+  { label:"1m", ms:60_000 },
+  { label:"5m", ms:300_000 },
+  { label:"10m", ms:600_000 }
 ];
 
 function formatClock(ms, fractions = false, countingDown = false) {
@@ -55,10 +60,10 @@ export default function RosieTimekeeper() {
   const [mode, setMode] = useState("stopwatch");
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const [duration, setDuration] = useState(25 * 60_000);
+  const [duration, setDuration] = useState(60_000);
   const [laps, setLaps] = useState([]);
   const [customHours, setCustomHours] = useState("0");
-  const [customMinutes, setCustomMinutes] = useState("25");
+  const [customMinutes, setCustomMinutes] = useState("1");
   const [customSeconds, setCustomSeconds] = useState("00");
   const [timerEntry, setTimerEntry] = useState("presets");
   const [restored, setRestored] = useState(false);
@@ -77,7 +82,7 @@ export default function RosieTimekeeper() {
       const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "null");
       if (saved && (saved.mode === "stopwatch" || saved.mode === "countdown")) {
         const restoredMode = saved.mode;
-        const restoredDuration = Number.isFinite(saved.duration) && saved.duration > 0 ? saved.duration : 25 * 60_000;
+        const restoredDuration = Number.isFinite(saved.duration) && saved.duration > 0 ? saved.duration : 60_000;
         const extra = saved.running ? Math.max(0, Date.now() - (Number(saved.savedAt) || Date.now())) : 0;
         const newElapsed = Math.max(0, (Number(saved.elapsed) || 0) + extra);
         const expired = restoredMode === "countdown" && newElapsed >= restoredDuration;
@@ -151,6 +156,7 @@ export default function RosieTimekeeper() {
   }
 
   function repeatCountdown() {
+    primeTimekeeperAudio();
     stopAndReset();
     anchor.current = performance.now();
     setMode("countdown");
@@ -178,6 +184,7 @@ export default function RosieTimekeeper() {
   }
 
   function startOrPause() {
+    primeTimekeeperAudio();
     if (running) {
       const ms = accumulated.current + performance.now() - anchor.current;
       accumulated.current = Math.min(mode === "countdown" ? duration : Infinity, ms);
@@ -215,7 +222,7 @@ export default function RosieTimekeeper() {
   const runnerY = 50 + 49.5 * Math.sin(runnerAngle);
   // All three illustrated poses now come from the same full-resolution
   // Dropbox master, so the working pose can return without looking soft.
-  const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
+  const rosieState = running ? (Math.floor(elapsed / 8500) % 2 ? "pull" : "working") : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
@@ -301,7 +308,7 @@ export default function RosieTimekeeper() {
             <button type="button" className="rtk-secondary-action rtk-lap-action"
               onClick={mode === "stopwatch" ? lap : repeatCountdown}
               disabled={mode === "stopwatch" && !running}
-              aria-label={mode === "stopwatch" ? "Record lap" : "Restart countdown"}>
+              title={mode === "stopwatch" ? "Lap" : "Repeat countdown"} aria-label={mode === "stopwatch" ? "Record lap" : "Repeat countdown"}>
               {mode === "stopwatch" ? <span className="rtk-action-word">Lap</span> : (
                 <svg className="rtk-repeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -310,13 +317,13 @@ export default function RosieTimekeeper() {
                 </svg>
               )}
             </button>
-            <button type="button" className="rtk-primary-action" onClick={startOrPause}
-              aria-label={running ? "Pause" : "Start"}>
+            <button type="button" className={"rtk-primary-action" + (running ? " is-playing" : "")} onClick={startOrPause}
+              title={running ? "Pause" : "Play"} aria-label={running ? "Pause" : "Play"}>
               {running ? <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx=".8" /><rect x="14" y="4" width="5" height="16" rx=".8" /></svg>
                 : <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.3a1.3 1.3 0 0 1 2-.98l12 7.65a1.25 1.25 0 0 1 0 2.1L9 20.72a1.3 1.3 0 0 1-2-.99Z" /></svg>}
             </button>
             <button type="button" className="rtk-secondary-action rtk-reset-action"
-              onClick={stopAndReset} aria-label="Reset stopwatch or countdown">
+              onClick={stopAndReset} title="Reset" aria-label="Reset stopwatch or countdown">
               <span className="rtk-action-word">Reset</span>
             </button>
           </div>
@@ -348,23 +355,25 @@ export default function RosieTimekeeper() {
                 <button type="button" className="rtk-timer-view-toggle"
                   onClick={() => setTimerEntry(previous => previous === "presets" ? "custom" : "presets")}
                   aria-label={timerEntry === "presets" ? "Set a custom duration" : "Show quick timer presets"}>
-                  {timerEntry === "presets" ? "Custom ›" : "‹ Presets"}
+                  {timerEntry === "presets" ? "Custom ›" : "‹ Quick Timers"}
                 </button>
               </div>
-              {timerEntry === "presets" ? <div className="rtk-presets">
-                {PRESETS.map((preset) => (
-                  <button type="button" key={preset.ms} className={duration === preset.ms ? "chosen" : ""} onClick={() => pickPreset(preset.ms)} aria-pressed={duration === preset.ms}>{preset.label}</button>
-                ))}
-              </div> : <div className="rtk-custom-timer" aria-label="Custom countdown duration">
-                <label>Hours<input inputMode="numeric" type="number" min="0" max="99" value={customHours}
-                  onChange={e => setCustomHours(e.target.value)} aria-label="Hours" /></label>
-                <span className="rtk-time-separator">:</span>
-                <label>Min<input inputMode="numeric" type="number" min="0" max="59" value={customMinutes}
-                  onChange={e => setCustomMinutes(e.target.value)} aria-label="Minutes" /></label>
-                <span className="rtk-time-separator">:</span>
-                <label>Sec<input inputMode="numeric" type="number" min="0" max="59" value={customSeconds}
-                  onChange={e => setCustomSeconds(e.target.value)} aria-label="Seconds" /></label>
-                <button type="button" onClick={applyCustomDuration}>Set</button>
+              {timerEntry === "presets" ? <>
+                <div className="rtk-presets" aria-label="Quick timer durations">
+                  {PRESETS.map(preset => <button type="button" key={preset.ms}
+                    className={duration===preset.ms?"chosen":""} onClick={()=>pickPreset(preset.ms)}
+                    aria-pressed={duration===preset.ms}>{preset.label}</button>)}
+                </div>
+                <p className="rtk-selection-note">Select a duration, then press the ruby play button.</p>
+              </> : <div className="rtk-custom-composer">
+                <div className="rtk-custom-timer" aria-label="Custom countdown duration">
+                  <label>Hours<input inputMode="numeric" type="number" min="0" max="99" value={customHours} onChange={e=>setCustomHours(e.target.value)} aria-label="Hours"/></label>
+                  <span className="rtk-time-separator" aria-hidden="true">:</span>
+                  <label>Minutes<input inputMode="numeric" type="number" min="0" max="59" value={customMinutes} onChange={e=>setCustomMinutes(e.target.value)} aria-label="Minutes"/></label>
+                  <span className="rtk-time-separator" aria-hidden="true">:</span>
+                  <label>Seconds<input inputMode="numeric" type="number" min="0" max="59" value={customSeconds} onChange={e=>setCustomSeconds(e.target.value)} aria-label="Seconds"/></label>
+                </div>
+                <button type="button" className="rtk-set-timer" onClick={applyCustomDuration}>Set Custom Timer</button>
               </div>}
               {/* Only the active input set occupies the instrument face. */}
             </>
