@@ -34,6 +34,9 @@ export function makeCourse(seed = 1467) {
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
     if (x > 1900 && motif % 2 === 1) {
       const pos = x + 425;
+      // Sculpted original rocks replace nearby generic hazards, not stack
+      // two untelegraphed collision volumes on the same screen.
+      if (FORMATION_LAYOUT.some(f=>f.obstacle && Math.abs(f.at-pos)<f.width*.42)) continue;
       const side = rand() < 0.5 ? -1 : 1;
       objects.push({ id: ++id, kind: motif === 5 ? "spike" : "rock", x: pos,
         y: clamp(tunnelCenter(pos) + side * 112, 90, 720), radius: motif === 5 ? 37 : 42, taken: false });
