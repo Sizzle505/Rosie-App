@@ -125,11 +125,17 @@ function scenicFeatures(c,s,assets){
         drawImageTrim(c,img,x-29,y-71,58,137,.88);
       }
     } else if(feature.kind==="crystaloverlay"){
-      const img=assets.crystaloverlay;
+      // The supplied giant panel contains a rectangular painted backdrop.
+      // Replace it with standalone illustrated crystal pieces embedded in rock.
+      const img=assets.gem;
       if(!artReady(img))continue;
-      const y=mid+r-63;
-      glow(c,x,y,95,"rgba(237,87,124,.16)");
-      drawImageTrim(c,img,x-185,y-65,370,124,.68);
+      const y=mid+r-23;
+      for(let k=0;k<5;k++){
+        const offset=(k-2)*24;
+        const h=27+(k%3)*9;
+        glow(c,x+offset,y-h*.35,17,"rgba(249,92,125,.15)");
+        drawImageTrim(c,img,x+offset-10,y-h,20,h,.62);
+      }
     }
   }
 }
