@@ -1681,3 +1681,27 @@ body:has(.app-shell.page-timekeeper),
 .app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
   transform:none;
 }
+
+
+/* Phone composition: Rosie works the levers from above the bezel instead of
+   obscuring the time face. The dial and control rail are then spaced as one
+   vertical stack, leaving a usable cabinet above the permanent navigation. */
+@media (max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers {
+    left:34.5%;
+    top:.5%;
+    width:31%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-dial {
+    top:43%;
+    width:61%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck {
+    top:62.5%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:75.8%;
+  }
+}
