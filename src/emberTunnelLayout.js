@@ -100,7 +100,7 @@ const BEATS=[
     "ogRichRoofA",
     468,
     115,
-    0
+    1
   ],
   [
     6320,
@@ -156,7 +156,7 @@ const BEATS=[
     "ogRichFloorA",
     458,
     98,
-    0
+    1
   ],
   [
     10060,
@@ -212,7 +212,7 @@ const BEATS=[
     "ogSlopeRoofA",
     468,
     106,
-    0
+    1
   ],
   [
     13860,
@@ -284,7 +284,7 @@ const BEATS=[
     "ogRichFloorB",
     474,
     112,
-    0
+    1
   ],
   [
     18770,
