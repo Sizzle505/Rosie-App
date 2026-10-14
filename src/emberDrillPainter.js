@@ -20,15 +20,15 @@ function paintEdge(c,s,image,side) {
   const strip=24, srcW=image.naturalWidth, srcH=image.naturalHeight;
   const sy=side<0?Math.floor(srcH*.30):Math.floor(srcH*.48);
   const sh=Math.min(srcH-sy,Math.floor(srcH*(side<0?.43:.48)));
-  const shDest=side<0?105:100;
+  const shDest=side<0?36:34;
   c.save();
-  c.globalAlpha=side<0?.75:.69;
+  c.globalAlpha=side<0?.44:.42;
   for(let x=-strip;x<W+strip;x+=strip){
     const worldX=x+s.scroll;
     const boundary=tunnelCenter(worldX)+side*tunnelRadius(worldX);
     const frac=((worldX/1650)%1+1)%1;
     const sx=Math.floor(frac*srcW),sw=Math.max(1,Math.min(srcW-sx,Math.ceil(srcW*strip/1650)+1));
-    const destY=side<0?boundary-83:boundary-17;
+    const destY=side<0?boundary-31:boundary-5;
     c.drawImage(image,sx,sy,sw,sh,x,destY,strip+.7,shDest);
   }
   c.restore();
@@ -309,15 +309,15 @@ function vehicle(c,s,portrait,assets={}) {
     }
     c.restore();
     if(boosted){
-      // Source art has large transparent margins. Crop to the actual fiery auger,
-      // align its pointed tip with the mechanical drill rather than covering Rosie.
-      const flare=assets.turbo;
-      if(artReady(flare)){
-        c.save();
-        c.globalCompositeOperation="screen";
-        c.globalAlpha=.58+.12*Math.sin(s.time*23);
-        c.drawImage(flare,391,75,569,235,18,-64,190,127);
-        c.restore();
+      // Keep the illustrated auger itself visible. The supplied turbo overlay
+      // depicts a complete second drill, so layering it produces a ghost nose.
+      // Use attached exhaust, rings and sparks instead of duplicating geometry.
+      glow(c,146,0,90,"rgba(255,205,72,.30)");
+      for(let i=0;i<18;i++){
+        const a=s.time*31+i*2.39;
+        const r=14+(i%5)*8;
+        const dx=143+Math.cos(a)*r,dy=Math.sin(a)*r;
+        circle(c,dx,dy,1.4+(i%4)*.55,"rgba(255,224,117,.84)");
       }
       // Spinning concentric light and sparks stay attached to the drill tip.
       const spin=s.time*29;
