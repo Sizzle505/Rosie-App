@@ -83,7 +83,10 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       roof:"roof-roots.webp",floor:"floor-ruby.webp",hangingRoots:"barkroot-hanging-roots.webp",
       descentRoof:"descending-roof.webp",descentFloor:"descending-floor.webp",
       cache:"collect-cache.webp",gem:"collect-gem.webp",bone:"collect-bone.webp",cheese:"collect-cheese.webp",
-      spike:"hazard-spike.webp",rock:"hazard-rock.webp",hazardPulse:"hazard-pulse.webp"};
+      spike:"hazard-spike.webp",rock:"hazard-rock.webp",hazardPulse:"hazard-pulse.webp",
+      gate:"feature-gate.webp",lantern:"feature-lantern.webp",
+      chest:"feature-chest.webp",coin:"feature-coin.webp",rockburst:"feature-rockburst.webp",
+      boosttrail:"feature-boosttrail.webp",crystaloverlay:"feature-crystaloverlay.webp"};
     const assets={};
     await Promise.all(Object.entries(names).map(async ([key,file])=>{
       const img=new Image();img.src="/ember-drill/"+file;await img.decode();assets[key]=img;
@@ -93,6 +96,12 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     canvas.style.cssText="display:block;width:340px;height:405px;position:absolute;top:5px;left:5px;z-index:100000;pointer-events:none";
     document.body.appendChild(canvas);
     const c=canvas.getContext("2d");
+    const drawn=new Set();
+    const originalDraw=c.drawImage.bind(c);
+    c.drawImage=(im,...args)=>{
+      if(im?.src)drawn.add(im.src.split("/").pop());
+      return originalDraw(im,...args);
+    };
     const state={scroll:12000,time:50.0,y:408,pitch:0,hitCooldown:0,shock:0,objects:[],boostTime:0};
     const portrait=null;
     window.EmberPainter.paintDrill(c,state,portrait,[],assets);
@@ -106,9 +115,40 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       total+=Math.abs(ordinary[i]-turbo[i])+Math.abs(ordinary[i+1]-turbo[i+1])+Math.abs(ordinary[i+2]-turbo[i+2]);
       count+=3;
     }
-    return {pixelDifference:total/count,loaded:Object.keys(assets).length};
+    // Regression against loading unused art: demand actual drawImage calls
+    // at the feature's world position and each of seven passage panoramas.
+    const sceneFrames=[[3,1100],[13,3300],[24,7300],[35,11100],
+      [46,14400],[58,18500],[69,22200]];
+    for(const [time,scroll] of sceneFrames){
+      state.time=time;state.scroll=scroll;state.y=410;state.boostTime=0;
+      state.objects=[
+        {id:8,kind:"cache",x:scroll+360,y:390,taken:false,radius:20},
+        {id:7,kind:"gem",x:scroll+425,y:398,taken:false,radius:20},
+      ];
+      window.EmberPainter.paintDrill(c,state,portrait,[{
+        type:"rock-burst",x:235,y:410,vx:0,vy:0,r:0,color:"#efbd75",life:.40,max:.54
+      }],assets);
+    }
+    // Force the specific environmental set pieces fully onscreen.
+    for(const [time,world] of [[7,1150],[11,3150],[38,10780],[48,15300],[59,17700],[68,20800]]){
+      state.time=time;state.scroll=world-350;
+      window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    }
+    const required=["feature-gate.webp","feature-lantern.webp","feature-chest.webp",
+      "feature-coin.webp","feature-rockburst.webp","feature-boosttrail.webp",
+      "feature-crystaloverlay.webp","scenic-barkroot.webp","scenic-roots.webp",
+      "scenic-lantern.webp","ruby-loop.webp","scenic-crystal.webp",
+      "scenic-temple.webp","barkroot-loop.webp"];
+    // Explicitly run a boosted frame for the rearward exhaust overlay.
+    state.boostTime=3.5;
+    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    const missing=required.filter(name=>!drawn.has(name));
+    return {pixelDifference:total/count,loaded:Object.keys(assets).length,
+      drawnArt:drawn.size,missingVisualAssets:missing};
   });
   if(turboResult.pixelDifference<4.0)throw new Error("Boost effect is visually imperceptible: "+JSON.stringify(turboResult));
+  if(turboResult.missingVisualAssets.length)
+    throw new Error("Imported art was loaded but not drawn: "+turboResult.missingVisualAssets.join(", "));
   await page.locator("#ember-qa-turbo").screenshot({path:"artifacts/ember-drill/"+name+"-turbo.png"});
   console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult));
   await context.close();await browser.close();
