@@ -28,12 +28,16 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await suite.screenshot({path:"artifacts/ember-drill/"+name+"-idle.png"});
   await page.getByRole("button",{name:"START DIGGING"}).click();
   await page.waitForTimeout(400);
-  await page.getByRole("button",{name:"Angle the drill upward"}).dispatchEvent("pointerdown",{pointerId:1,pointerType:"touch"});
-  await page.waitForTimeout(340);
-  await page.getByRole("button",{name:"Angle the drill upward"}).dispatchEvent("pointerup",{pointerId:1,pointerType:"touch"});
-  await page.getByRole("button",{name:"Angle the drill downward"}).dispatchEvent("pointerdown",{pointerId:2,pointerType:"touch"});
-  await page.waitForTimeout(240);
-  await page.getByRole("button",{name:"Angle the drill downward"}).dispatchEvent("pointerup",{pointerId:2,pointerType:"touch"});
+  for (const [label,delay] of [["Angle the drill upward",340],["Angle the drill downward",240]]) {
+    const control=page.getByRole("button",{name:label});
+    await control.scrollIntoViewIfNeeded();
+    const bounds=await control.boundingBox();
+    if(!bounds)throw new Error("Missing "+label+" button bounds");
+    await page.mouse.move(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
+    await page.mouse.down();
+    await page.waitForTimeout(delay);
+    await page.mouse.up();
+  }
   const remaining=(await suite.locator(".ember-stats").innerText()).match(/\b7[0-5]s\b/);
   if(!remaining)throw new Error("75-second timer not visible: "+await suite.locator(".ember-stats").innerText());
   await suite.screenshot({path:"artifacts/ember-drill/"+name+"-running.png"});
