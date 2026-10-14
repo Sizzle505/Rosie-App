@@ -2,7 +2,7 @@
 // Fail if original-source edge sprites merely load but are never DRAWN.
 import { chromium } from "playwright";
 import { build } from "esbuild";
-import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { readFile, mkdir, writeFile, copyFile } from "node:fs/promises";
 
 const dir="artifacts/ember-og-prototype";
 await mkdir(dir,{recursive:true});
@@ -81,5 +81,5 @@ if(errors.length||missing.length)throw Error(JSON.stringify({errors,missing}));
 const video=await page.video().path();
 await context.close();
 await browser.close();
-await writeFile(dir+"/browser-video-path.txt",video+"\n");
+await copyFile(video,dir+"/actual-iphone-gameplay.webm");
 console.log("PASS: original-derived structural edge DRAWN in 4 browser-rendered samples; actual controls/video captured; "+loaded+" game assets decoded.");
