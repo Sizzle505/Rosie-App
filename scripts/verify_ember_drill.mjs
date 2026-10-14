@@ -31,13 +31,21 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   });
   if(banner.opacity!=="1"||banner.textRight>banner.headerRight-2||banner.textLeft<banner.headerLeft)
     throw new Error("Cropped or invisible Captain title: "+JSON.stringify(banner));
+  // The game intentionally suspends rendering when its canvas is outside the
+  // viewport. Bring the stage itself into view and wait for a painted pixel;
+  // this avoids a false negative from WebKit lazy/offscreen scheduling.
+  await page.locator(".ember-stage").scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>{
+    const c=document.querySelector(".ember-canvas");
+    if(!c||!c.width||!c.height)return false;
+    return c.getContext("2d")?.getImageData(Math.min(200,c.width-1),Math.min(410,c.height-1),1,1).data[3]>0;
+  },{timeout:12000});
   const artwork=await page.evaluate(()=>{
     const canvas=document.querySelector(".ember-canvas");
     const context=canvas?.getContext("2d");
     const pix=context?.getImageData(200,410,1,1).data;
     return {canvasWidth:canvas?.width,canvasHeight:canvas?.height,pixel:[...(pix||[])],imageRequestCount:performance.getEntriesByType("resource").filter(x=>x.name.includes("/ember-drill/")).length};
   });
-  if(!artwork.pixel[3])throw new Error("Canvas is empty");
   if(artwork.imageRequestCount<15)throw new Error("Too few artwork requests: "+artwork.imageRequestCount);
   await suite.screenshot({path:"artifacts/ember-drill/"+name+"-idle.png"});
   await page.getByRole("button",{name:"START DIGGING"}).click();
