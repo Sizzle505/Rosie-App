@@ -1,0 +1,31 @@
+name: Import Ember feature art (one time)
+on:
+  push:
+    branches: ["work/ember-drill-barkroot-ruby-milestone"]
+    paths:
+      - ".github/workflows/ember-feature-import.yml"
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: "work/ember-drill-barkroot-ruby-milestone"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --quiet pillow
+      - name: Fetch and optimize seven missing illustrations
+        env:
+          EMBER_FEATURE_URLS: '[["gate","https://ucfe83301da97c68e6c34fe7ed3e.dl.dropboxusercontent.com/cd/0/get/DJ9WHmiUKujWSoswZyc_h5kTJbaFUDnR9nrZp95WlrKuGNLTeCDgdOMeP3U4nZsAUWOlvcc04sMdmjRIB95fGqF1uPwOfXxpfYVJX4bV1YpGN3fNMJ-w_Uha4Ajg29MkFQfGnOL6hlaunZRT30Uo5NKhy4Opu5Q6sZYndHctpwsyCg/file?c_luid=667ded1d"],["lantern","https://uc26254d61a16f2e64529ec572ae.dl.dropboxusercontent.com/cd/0/get/DJ9zEOW-qkiwLxrt43HhnnEsgOcoiq4prKme6Se7-v90ifNvQieC0wHIZP1Jn__V2xQT2C8N0oIvBRZbMwf_a8eGtd8r3c0K2dwCsvvKomDztwW648L14usEcSM1qyaNOwVx8j5nz7gbDphuNm1T-Bbn-m4iWe_M0Ijsap3m10HUqQ/file?c_luid=667ded1d"],["chest","https://ucd4efecf3d3f2b7ad15a694d594.dl.dropboxusercontent.com/cd/0/get/DJ99kIK9Grzrjyvc57gmMK7AxT147pxG1CjfTZIa2lKtkZktcCALZdPxnCi_UZpMvum0Gx2oFgcXKpUTGe0aSNt7WIPMyrS6Yye0G3YXBuC6BQmN6fm1VkgiO24q2-kDkdVpnFMCvw3Khd3EGciv2h-A6MsIIcdQMFY8yxTIewVbGQ/file?c_luid=667ded1d"],["coin","https://uc9090ae12909a613e1f24e2f66b.dl.dropboxusercontent.com/cd/0/get/DJ9yTLRhB2_nNnRNEN25UabP8FQCgpFzY8r-0cvNmLOG4iLytSlg9WECvJx5jed370_ODwNamuNlQuE5NCv5SmL2zn-jOw_zi65Zi-C6hlj7YmuHe29YTNOlCI4ydhoJzbE_FhXltsv6RhdSwsPoYpi-3YMNE6dc_1I84BGMRgD76Q/file?c_luid=667ded1d"],["rockburst","https://ucfd5fdde94b26db7279184a6438.dl.dropboxusercontent.com/cd/0/get/DJ8pPGkRQ8s1QuGNchc1UGAgVMquuHxV0OkXkLsGsl_UgBdLTiQXJttgeOdyrxLqIqGbAXqQaV0hP4MwXnr8nbdNq-xg56Ce5iozNzhBAUquAr6-9mfJmyoADeu7JIv4Uy9SgQewn7fF92Qf56Gyq8dSq4Ll1f2-DPtY5wIp8dfQHg/file?c_luid=667ded1d"],["boosttrail","https://uc0512e61c17cd2e895983e9570a.dl.dropboxusercontent.com/cd/0/get/DJ_vDxDEM_kpzWCwWzyVvEEgtF1zUjf4G2gJKyOXHAmLnT91Wx57xCgFyTKM72HsdGxS1qrGDTIrgpuRVMJsAUB_IMpBmyal6noB7RcRX98Wno_xMPXaft6htvI8H5hp3OTM5FXMDtvGTGqMQcW1MThHX5WA3inbatAutQiMKhDe1A/file?c_luid=667ded1d"],["crystaloverlay","https://ucb2f2a3147ac62f805ec740a461.dl.dropboxusercontent.com/cd/0/get/DJ8MRmzsPeR_8J1zMKoPgO2QwhFLvoGxp4rzZIOOyoxJMftOALqfMZ9Yj7u8LWX5IEDJ7c4vL9pQCfutsjw6e6c-GP9KYamSUppBiFK5HTsOtQBH4GpOEppfgGLt-kf51dbZtA16J7FQnQODZJOoXCcLcvhHjWwb7ZbG1AjrLWPqiQ/file?c_luid=667ded1d"]]'
+        run: python scripts/import_ember_feature_art.py
+      - name: Commit game artwork
+        run: |
+          git config user.name "rosie-art-importer[bot]"
+          git config user.email "rosie-art-importer@users.noreply.github.com"
+          git add public/ember-drill/feature-*.webp public/ember-drill/feature-manifest.json
+          git diff --cached --quiet || git commit -m "Integrate seven missing Ember temple and effect assets"
+          git push origin HEAD:work/ember-drill-barkroot-ruby-milestone
