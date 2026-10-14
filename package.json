@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "node scripts/generate-rosieverse-icons.mjs && vite build",
     "preview": "vite preview",
-    "icons:generate": "node scripts/generate-rosieverse-icons.mjs"
+    "icons:generate": "node scripts/generate-rosieverse-icons.mjs",
+    "prebuild": "node scripts/prepare-ember-og-preview.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.4",
