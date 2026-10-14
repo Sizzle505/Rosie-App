@@ -209,9 +209,9 @@ export default function RosieTimekeeper() {
   const circumference = 2 * Math.PI * 43;
   // The runner follows the physical rail above the dial rather than an
   // arbitrary circular halo around the numerals.
-  const runnerX = 18 + 64 * dialProgress;
-  const runnerY = 34 - 10 * Math.sin(Math.PI * dialProgress);
-  const showMarker = running || elapsed > 0;
+  const railProgress = running || elapsed > 0 ? dialProgress : .78;
+  const runnerX = 18 + 64 * railProgress;
+  const runnerY = 34 - 10 * Math.sin(Math.PI * railProgress);
   const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
@@ -243,8 +243,8 @@ export default function RosieTimekeeper() {
           <span className={"rtk-hourglass " + (running ? "is-running" : "")} />
           <span className={"rtk-rosie-levers is-" + rosieState} />
           <span className="rtk-upper-progress-rail" />
-          {showMarker && <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
-            style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />}
+          <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
+            style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />
         </div>
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
