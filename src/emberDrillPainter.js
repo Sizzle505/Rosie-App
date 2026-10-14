@@ -1,6 +1,5 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, DRILL_ANCHOR, tunnelCenter, tunnelRadius, clamp } from "./emberDrillEngine.js";
 import { paintNaturalTunnel } from "./emberNaturalTunnel.js";
-import { paintRecoveredWalls } from "./emberRecoveredWalls.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -372,7 +371,6 @@ function vehicle(c,s,portrait,assets={}) {
 export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
-  paintRecoveredWalls(c,s,assets);
   paintNaturalTunnel(c,s);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
