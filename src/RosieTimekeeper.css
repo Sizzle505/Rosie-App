@@ -2010,3 +2010,48 @@ body:has(.app-shell.page-timekeeper),
     animation:none!important;
   }
 }
+/* Rosie and both jeweled control stations are now one artwork per pose:
+   assembled directly from the actual master atlases, with all three poses
+   sharing the same receiving shafts. There are no floating rods/handles. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  top:1.6%;
+  left:28%;
+  width:44%;
+  aspect-ratio:900 / 870;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-integrated-levers.webp");
+  background-size:300% 100%;
+  background-repeat:no-repeat;
+  image-rendering:auto;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.76)) saturate(.96) brightness(.96);
+}
+/* Exact Dropbox blue-and-gold instrument cabinet replaces the older plum one. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/information-cabinet-blue.webp");
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  background:rgba(6,22,62,.83);
+  border-color:#ddbb7b;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button.chosen {
+  background:linear-gradient(145deg,#245f9d,#102d61);
+  color:#fff2d1;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner {
+  transition:left 105ms linear,top 105ms linear;
+}
+@media(max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+    left:28%;
+    top:1.6%;
+    width:44%;
+  }
+}

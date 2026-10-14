@@ -12,16 +12,20 @@ const ART = "/rosieverse/timekeeper/midnight-observatory/gear-atlas.webp";
 const SPRITES = ["0% 0%", "50% 0%", "100% 0%", "0% 100%", "50% 100%", "100% 100%"];
 
 const GEARS = [
-  // Twin mirrored external trains: the small upper pinions meet the lever
-  // stations; larger wheels gradually follow the clock's shoulders and rim.
-  { x: 28, y: 18, size: 17, sprite: 3, opacity: .98 },
-  { x: 15, y: 29, size: 20, sprite: 0, opacity: .96 },
-  { x: 11, y: 47, size: 22, sprite: 1, opacity: .94 },
-  { x: 18, y: 67, size: 19, sprite: 4, opacity: .94 },
-  { x: 72, y: 18, size: 17, sprite: 5, opacity: .98 },
-  { x: 85, y: 29, size: 20, sprite: 2, opacity: .96 },
-  { x: 89, y: 47, size: 22, sprite: 0, opacity: .94 },
-  { x: 82, y: 67, size: 19, sprite: 4, opacity: .94 },
+  // Twelve wheels surround the entire perimeter, tucked behind the bezel.
+  // Upper pinions are centered on Rosie's twin lever housings.
+  { x: 36, y: 14, size: 14, sprite: 3, opacity: .90 },
+  { x: 21, y: 25, size: 15, sprite: 0, opacity: .89 },
+  { x: 13, y: 45, size: 17, sprite: 1, opacity: .87 },
+  { x: 16, y: 69, size: 15, sprite: 4, opacity: .88 },
+  { x: 29, y: 82, size: 16, sprite: 2, opacity: .88 },
+  { x: 42, y: 88, size: 13, sprite: 5, opacity: .85 },
+  { x: 58, y: 88, size: 13, sprite: 3, opacity: .85 },
+  { x: 71, y: 82, size: 16, sprite: 4, opacity: .88 },
+  { x: 84, y: 69, size: 15, sprite: 2, opacity: .88 },
+  { x: 87, y: 45, size: 17, sprite: 0, opacity: .87 },
+  { x: 79, y: 25, size: 15, sprite: 1, opacity: .89 },
+  { x: 64, y: 14, size: 14, sprite: 5, opacity: .90 },
 ].map((gear, index) => ({
   ...gear,
   // A visible, mechanical pace while Rosie is working—not an imperceptibly

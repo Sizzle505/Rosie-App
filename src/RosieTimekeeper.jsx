@@ -204,14 +204,11 @@ export default function RosieTimekeeper() {
 
   const remaining = Math.max(0, duration - elapsed);
   const circumference = 2 * Math.PI * 43;
-  // Every moving mechanism derives from this same phase: the blue energy
-  // circle and squirrel tell time, while Rosie, gears, pendulums and sand run.
-  // A stopwatch has no natural finish, so Rosie’s squirrel makes one calm
-  // circuit per 25 minutes instead of racing around the rim every minute.
-  // A countdown still maps precisely to its selected duration.
+  // Stopwatch advances clockwise every minute. A countdown runs one
+  // counterclockwise revolution, ending precisely when its duration ends.
   const runnerPhase = mode === "countdown"
-    ? dialProgress
-    : ((elapsed % (25 * 60 * 1000)) / (25 * 60 * 1000));
+    ? (duration > 0 ? Math.min(1, Math.max(0, elapsed / duration)) : 0)
+    : ((elapsed % 60_000) / 60_000);
   const dialProgress = runnerPhase;
   const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
   const runnerX = 50 + 49.5 * Math.cos(runnerAngle);
@@ -247,8 +244,6 @@ export default function RosieTimekeeper() {
         )}
         <div className={"rtk-observatory-props" + (running ? " is-running" : "")} aria-hidden="true">
           <span className={"rtk-rosie-levers is-" + rosieState} />
-          <span className="rtk-twin-lever rtk-twin-lever-left" />
-          <span className="rtk-twin-lever rtk-twin-lever-right" />
         </div>
         <div className={"rtk-exterior-gearwork" + (running ? " is-running" : "")} aria-hidden="true">
           <TimekeeperClockwork />
