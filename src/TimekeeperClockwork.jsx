@@ -16,13 +16,10 @@ const SPRITES = ["0% 0%", "50% 0%", "100% 0%", "0% 100%", "50% 100%", "100% 100%
 // Follow the horseshoe clockwise. Successive center distances are within
 // ~1 percentage point of the sum of their pitch radii.
 const GEARS = [
-  { x: 21, y: 28, size: 31, sprite: 0, opacity: .95 },
-  { x: 37, y: 14, size: 23, sprite: 1, opacity: .90 },
-  { x: 65, y: 15, size: 27, sprite: 2, opacity: .94 },
-  { x: 83, y: 31, size: 22, sprite: 3, opacity: .89 },
-  { x: 83, y: 66, size: 29, sprite: 4, opacity: .94 },
-  { x: 61, y: 84, size: 24, sprite: 5, opacity: .91 },
-  { x: 29, y: 79, size: 30, sprite: 0, opacity: .93 },
+  { x: 22, y: 24, size: 27, sprite: 0, opacity: .82 },
+  { x: 73, y: 22, size: 25, sprite: 2, opacity: .83 },
+  { x: 76, y: 70, size: 26, sprite: 4, opacity: .82 },
+  { x: 25, y: 72, size: 27, sprite: 0, opacity: .81 },
 ].map((gear, index) => ({
   ...gear,
   cycle: 112 * gear.size / 45,

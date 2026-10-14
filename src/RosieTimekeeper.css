@@ -1494,13 +1494,13 @@ body:has(.app-shell.page-timekeeper),
 .rtk-observatory .rtk-background { width:100%; height:auto; }
 .rtk-observatory .rtk-observatory-props { position:absolute; inset:0; z-index:4; pointer-events:none; }
 .rtk-observatory .rtk-rosie-levers {
-  position:absolute; left:2.5%; top:1%; width:95%; aspect-ratio:3 / 1;
-  background:url("/rosieverse/timekeeper/midnight-observatory/rosie-twin-lever-states.webp") 0 50% / 300% 100% no-repeat;
+  position:absolute; left:22%; top:.8%; width:56%; aspect-ratio:1 / 1;
+  background:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-ready.webp") center / contain no-repeat;
   filter:drop-shadow(0 7px 9px rgba(0,0,0,.42));
   transform-origin:50% 70%; transition:transform .35s ease,filter .35s ease;
 }
-.rtk-observatory .rtk-rosie-levers.is-pull { background-position:50% 50%; transform:translateY(2px) scale(1.012); }
-.rtk-observatory .rtk-rosie-levers.is-working { background-position:100% 50%; animation:rtk-rosie-working 1.35s ease-in-out infinite alternate; }
+.rtk-observatory .rtk-rosie-levers.is-pull { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp"); transform:translateY(2px) scale(1.012); }
+.rtk-observatory .rtk-rosie-levers.is-working { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-working.webp"); animation:rtk-rosie-working 1.35s ease-in-out infinite alternate; }
 .rtk-observatory .rtk-pendulum {
   position:absolute; top:35%; width:15%; aspect-ratio:3 / 4;
   background-image:url("/rosieverse/timekeeper/midnight-observatory/pendulum-atlas.webp");
