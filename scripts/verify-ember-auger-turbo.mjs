@@ -9,7 +9,7 @@ const match=jsx.match(/const DRILL_ART = \{([\s\S]*?)\n\};/);
 assert.ok(match,"Original DRILL_ART asset registry present");
 const art=Object.fromEntries([...match[1].matchAll(/(\w+):"([^"]+)"/g)].map(m=>[m[1],m[2]]));
 const out=await build({stdin:{
-  contents:`import{paintDrill}from './src/emberDrillPainter.js';import{tunnelCenter}from './src/emberDrillEngine.js';import{augerFrameIndex}from './src/emberAugerFX.js';window.__drillQA={paintDrill,tunnelCenter,augerFrameIndex}`,
+  contents:`import{paintDrill}from './src/emberDrillPainter.js';import{tunnelCenter}from './src/emberDrillEngine.js';import{augerFrameIndex,turboFrameIndex}from './src/emberAugerFX.js';window.__drillQA={paintDrill,tunnelCenter,augerFrameIndex}`,
   resolveDir:process.cwd(),sourcefile:"auger-QA-entry.js",loader:"js"},
   bundle:true,format:"iife",platform:"browser",write:false,logLevel:"silent"});
 const browser=await chromium.launch({headless:true});
@@ -43,11 +43,11 @@ async function draw(label,time,boost,pitch=0){
   const shaft=Array.from(c.getImageData(267,Math.round(s.y)-42,105,84).data);
   const tail=Array.from(c.getImageData(5,Math.round(s.y)-48,150,96).data);
   return {calls:calls.filter(v=>/auger-spin|turbo-animation|feature-boosttrail/.test(v.asset)),
-   phase:window.__drillQA.augerFrameIndex(time,boost>0),shaft,tail};
+   phase:window.__drillQA.augerFrameIndex(time,boost>0),turboPhase:boost>0?window.__drillQA.turboFrameIndex(boost):null,shaft,tail};
  },{time,boost,pitch});
  const png=await page.evaluate(()=>window.__drillCanvasQA.toDataURL("image/png"));
  await writeFile(`${dir}/${label}.png`,Buffer.from(png.split(",")[1],"base64"));
- console.log("PAINT",label,JSON.stringify({phase:data.phase,draws:data.calls}));
+ console.log("PAINT",label,JSON.stringify({phase:data.phase,turboPhase:data.turboPhase,draws:data.calls}));
  return data;
 }
 const baseline=await draw("normal-first-frame",3.0,0);
@@ -59,9 +59,11 @@ const diff=(x,y)=>{let sum=0;for(let i=0;i<x.length;i+=4)sum+=Math.abs(x[i]-y[i]
 assert.notEqual(baseline.phase,next.phase,"Original sprite frames must actually advance");
 assert.ok(baseline.calls.some(x=>x.asset==="auger-spin.png"));
 assert.ok(next.calls.some(x=>x.asset==="auger-spin.png"));
-assert.ok(turbo.calls.some(x=>x.asset==="turbo-animation.webp"),"Source Turbo animation must be drawn");
+assert.ok(turbo.calls.some(x=>x.asset==="turbo-head-frames.webp"),"Ten-frame source-derived Turbo atlas must be drawn");
+assert.notEqual(turbo.turboPhase,turboLater.turboPhase,"Turbo animation must advance every 60ms");
+assert.notDeepEqual(turbo.calls.find(x=>x.asset==="turbo-head-frames.webp").args,turboLater.calls.find(x=>x.asset==="turbo-head-frames.webp").args,"Canvas must actually select different original Turbo atlas frames");
 assert.ok(turbo.calls.some(x=>x.asset==="feature-boosttrail.webp"),"Original exhaust must be drawn");
-assert.ok(!next.calls.some(x=>x.asset==="turbo-animation.webp"),"No Turbo artwork in normal play");
+assert.ok(!next.calls.some(x=>x.asset==="turbo-head-frames.webp"),"No Turbo artwork in normal play");
 assert.ok(!next.calls.some(x=>x.asset==="feature-boosttrail.webp"),"No Turbo exhaust in normal play");
 assert.ok(pitched.calls.some(x=>x.asset==="auger-spin.png"),"Spin must remain attached while steering");
 const spinDelta=diff(baseline.shaft,next.shaft),turboHeadDelta=diff(next.shaft,turbo.shaft),
