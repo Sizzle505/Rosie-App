@@ -371,7 +371,7 @@ function vehicle(c,s,portrait,assets={}) {
 export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
-  paintNaturalTunnel(c,s);
+  paintNaturalTunnel(c,s,assets);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
