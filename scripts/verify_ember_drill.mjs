@@ -1,8 +1,10 @@
 import { chromium, webkit } from "playwright";
 import { mkdir } from "node:fs/promises";
+import { build } from "esbuild";
 
 const url="http://127.0.0.1:4173/#captain";
 await mkdir("artifacts/ember-drill",{recursive:true});
+const painterBundle=await build({entryPoints:["src/emberDrillPainter.js"],bundle:true,format:"iife",globalName:"EmberPainter",platform:"browser",write:false,logLevel:"silent"});
 for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   const browser=await browserType.launch({headless:true});
   const context=await browser.newContext({viewport:{width:393,height:852},isMobile:true,hasTouch:true,deviceScaleFactor:2});
@@ -62,6 +64,44 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await suite.screenshot({path:"artifacts/ember-drill/"+name+"-running.png"});
   if(errors.length)throw new Error("Page errors: "+errors.join(" | "));
   if(failed.length)throw new Error("Missing assets: "+JSON.stringify(failed));
-  console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0]);
+  // Independent visual exercise of Burrow Turbo. Paint the exact production
+  // renderer with synthetic fully-charged run state and its real PNG/WebP assets.
+  await page.addScriptTag({content:painterBundle.outputFiles[0].text});
+  const turboResult=await page.evaluate(async ()=>{
+    const names={body:"drill-body.webp",auger:"auger-spin.png",turbo:"turbo-animation.webp",
+      scenicBarkroot:"scenic-barkroot.webp",scenicLantern:"scenic-lantern.webp",
+      scenicRoots:"scenic-roots.webp",scenicCrystal:"scenic-crystal.webp",
+      scenicTemple:"scenic-temple.webp",barkroot:"barkroot-loop.webp",ruby:"ruby-loop.webp",
+      roof:"roof-roots.webp",floor:"floor-ruby.webp",hangingRoots:"barkroot-hanging-roots.webp",
+      descentRoof:"descending-roof.webp",descentFloor:"descending-floor.webp",
+      cache:"collect-cache.webp",gem:"collect-gem.webp",bone:"collect-bone.webp",cheese:"collect-cheese.webp",
+      spike:"hazard-spike.webp",rock:"hazard-rock.webp",hazardPulse:"hazard-pulse.webp"};
+    const assets={};
+    await Promise.all(Object.entries(names).map(async ([key,file])=>{
+      const img=new Image();img.src="/ember-drill/"+file;await img.decode();assets[key]=img;
+    }));
+    const canvas=document.createElement("canvas");
+    canvas.id="ember-qa-turbo";canvas.width=690;canvas.height=820;
+    canvas.style.cssText="display:block;width:340px;height:405px;position:absolute;top:5px;left:5px;z-index:100000;pointer-events:none";
+    document.body.appendChild(canvas);
+    const c=canvas.getContext("2d");
+    const state={scroll:12000,time:50.0,y:408,pitch:0,hitCooldown:0,shock:0,objects:[],boostTime:0};
+    const portrait=null;
+    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    const ordinary=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
+    state.boostTime=3.5;
+    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    const turbo=c.getImageData(0,0,690,820).data;
+    let total=0,count=0;
+    for(let y=290;y<525;y+=3)for(let x=65;x<425;x+=3){
+      const i=(y*690+x)*4;
+      total+=Math.abs(ordinary[i]-turbo[i])+Math.abs(ordinary[i+1]-turbo[i+1])+Math.abs(ordinary[i+2]-turbo[i+2]);
+      count+=3;
+    }
+    return {pixelDifference:total/count,loaded:Object.keys(assets).length};
+  });
+  if(turboResult.pixelDifference<4.0)throw new Error("Boost effect is visually imperceptible: "+JSON.stringify(turboResult));
+  await page.locator("#ember-qa-turbo").screenshot({path:"artifacts/ember-drill/"+name+"-turbo.png"});
+  console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult));
   await context.close();await browser.close();
 }
