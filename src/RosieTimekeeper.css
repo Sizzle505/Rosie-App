@@ -2055,3 +2055,16 @@ body:has(.app-shell.page-timekeeper),
     width:44%;
   }
 }
+
+/* The squirrel begins at the visible upper-right shoulder, not underneath
+   Rosie's body. The gold/blue ring and running marker share this origin. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  transform:rotate(-30deg);
+  transform-origin:50% 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-live {
+  transform:rotate(150deg) scaleX(-1);
+  transform-origin:50% 50%;
+}
