@@ -136,7 +136,7 @@ def main():
         material = make_strip(source, contour, kind)
         tag = "top" if kind == "ceiling" else "bottom"
         output = OUT / f"barkroot-{tag}.webp"
-        material.save(output, "WEBP", quality=94, method=6, exact=True)
+        material.save(output, "WEBP", lossless=True, method=6, exact=True)
         records.append(manifest_for(material, kind, (min(contour),max(contour))))
         print(output, output.stat().st_size, records[-1]["tileTest"],
               "air contact alpha", records[-1]["alphaAtV0Mean"],
