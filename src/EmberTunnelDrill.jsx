@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
+import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import "./ember-tunnel-drill.css";
 
@@ -125,7 +125,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     frame.current=next;particles.current=[];
     pressed.current.up=false;pressed.current.down=false;
     modeRef.current="running";setMode("running");setHud(snapshot(next));
-    playSound(audio(),"turbo");
+    playSound(audio(),"start");
   }
   function turbo() {
     const s=frame.current;
@@ -277,11 +277,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           aria-label="Angle the drill upward"><span>▲</span><small>ANGLE UP</small></button>
         <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
           disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
-          aria-label="Activate Burrow Turbo when charged">
+          aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <span className="ember-boost-symbol">✦</span>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
-            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/4.8*100):hud.charge)+"%"}} /></i>
-            <small>COLLECT TREASURE TO CHARGE</small></span>
+            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
+            <small>{hud.boost>0?hud.boost.toFixed(1)+"s OF TURBO LEFT":hud.charge>=100?"FULLY CHARGED - TAP TO IGNITE":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}
