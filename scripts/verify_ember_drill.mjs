@@ -134,6 +134,26 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       state.time=time;state.scroll=world-350;
       window.EmberPainter.paintDrill(c,state,portrait,[],assets);
     }
+    // Test the real collision sprites at known screen coordinates. Merely
+    // loading hazard-spike.webp is not enough: earlier builds accidentally
+    // omitted the assets argument and silently drew a placeholder circle.
+    state.time=37;
+    state.scroll=12500;
+    state.boostTime=0;
+    state.objects=[
+      {id:9001,kind:"spike",x:12850,y:390,taken:false,radius:37},
+      {id:9002,kind:"rock",x:13000,y:505,taken:false,radius:42},
+    ];
+    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    const wheelVisible=drawn.has("hazard-spike.webp");
+    const boulderVisible=drawn.has("hazard-rock.webp");
+    const pulseVisible=drawn.has("hazard-pulse.webp");
+    if(!wheelVisible||!boulderVisible||!pulseVisible)
+      throw new Error("Real hazard artwork not painted: "+JSON.stringify({wheelVisible,boulderVisible,pulseVisible}));
+    // Capture a mid-run temple image with both the ornate spinning wheel
+    // and an actual stone hazard to inspect physical scale and layering.
+    window.__emberHazardCapture=c.canvas.toDataURL("image/png");
+
     const required=["feature-gate.webp","feature-lantern.webp","feature-chest.webp",
       "feature-coin.webp","feature-rockburst.webp","feature-boosttrail.webp",
       "feature-crystaloverlay.webp","scenic-barkroot.webp","scenic-roots.webp",
@@ -149,6 +169,9 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   if(turboResult.pixelDifference<4.0)throw new Error("Boost effect is visually imperceptible: "+JSON.stringify(turboResult));
   if(turboResult.missingVisualAssets.length)
     throw new Error("Imported art was loaded but not drawn: "+turboResult.missingVisualAssets.join(", "));
+  // Also retain a separate objective screenshot of the rendered spike wheel.
+  await page.evaluate(()=>{const img=new Image();img.src=window.__emberHazardCapture;img.id="ember-wheel-proof";img.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100001;pointer-events:none";document.body.appendChild(img)});
+  await page.locator("#ember-wheel-proof").screenshot({path:"artifacts/ember-drill/"+name+"-hazards.png"});
   await page.locator("#ember-qa-turbo").screenshot({path:"artifacts/ember-drill/"+name+"-turbo.png"});
   console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult));
   await context.close();await browser.close();
