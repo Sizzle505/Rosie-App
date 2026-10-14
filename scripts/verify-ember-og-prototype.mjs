@@ -49,6 +49,9 @@ const proof=async (label,scroll,pitch,time)=>{
   if(needed.some(x=>!drawn.has(x)))throw Error("Original edge images loaded but not DRAWN: "+[...drawn].join(","));
   const formations=[...drawn].filter(x=>x.startsWith("formation/"));
   if(!formations.length)throw Error("Real OG ceiling/floor formations NOT DRAWN in "+label);
+  const exact=label==="original-hanging-roots"?"formation/original-roots-1.webp":
+    label==="rising-floor-crystals"?"formation/rising-crystal-c.webp":null;
+  if(exact&&!drawn.has(exact))throw Error("Specified original designed art not drawn: "+exact);
   const before=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
   const artless={...window.__ogAssets};
   for(const key of Object.keys(artless))if(key.startsWith("og"))delete artless[key];
@@ -75,6 +78,8 @@ await proof("barkroot-level",520,0,5);
 await proof("barkroot-climb",4600,-.54,14);
 await proof("barkroot-dive",7000,.54,23);
 await proof("barkroot-level-to-climb",5400,-.35,18);
+await proof("original-hanging-roots",1250,0,7);
+await proof("rising-floor-crystals",5780,.32,20);
 // True gameplay recording, not static mockups.
 await page.getByRole("button",{name:"START DIGGING"}).click();
 await stage.scrollIntoViewIfNeeded();
