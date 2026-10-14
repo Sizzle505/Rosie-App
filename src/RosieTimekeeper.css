@@ -1770,11 +1770,18 @@ body:has(.app-shell.page-timekeeper),
 .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading { font-size:clamp(11px,2vw,15px); padding-bottom:4px; }
 .app-shell.page-timekeeper .rtk-observatory .rtk-empty { margin:6px 0 0; font-size:clamp(10px,1.8vw,13px); }
 @media (max-width:520px) {
-  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers { left:30%; top:2.1%; width:40%; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-dial { top:43.2%; width:64%; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-upper-progress-rail { top:27%; left:12%; width:76%; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck { top:62.2%; width:76%; height:10.7%; }
+  /* The fixed Resources rail begins above Safari's bottom controls. Keep
+     every Timekeeper control and the full cabinet in the exposed window. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers { left:32.5%; top:1.6%; width:35%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-dial { top:37%; width:62%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-clockwork { width:122%; height:122%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-upper-progress-rail { top:22.8%; left:14%; width:72%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-hourglass { top:43.5%; width:8.5%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck { top:52%; width:70%; height:9%; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer { top:73.7%; width:86%; height:22.1%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer { top:62.2%; width:84%; height:13.7%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch { top:12%; height:19%; width:51%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner { top:38%; bottom:11%; }
 }

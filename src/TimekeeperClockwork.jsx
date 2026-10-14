@@ -12,15 +12,12 @@ const ART = "/rosieverse/timekeeper/midnight-observatory/gear-atlas.webp";
 const SPRITES = ["0% 0%", "50% 0%", "100% 0%", "0% 100%", "50% 100%", "100% 100%"];
 
 const GEARS = [
-  { x: 4, y: 28, size: 29, sprite: 0, opacity: .94 },
-  { x: 14, y: 11, size: 22, sprite: 3, opacity: .9 },
-  { x: 43, y: 3, size: 19, sprite: 2, opacity: .88 },
-  { x: 77, y: 12, size: 23, sprite: 5, opacity: .9 },
-  { x: 96, y: 31, size: 29, sprite: 1, opacity: .94 },
-  { x: 94, y: 69, size: 26, sprite: 4, opacity: .92 },
-  { x: 72, y: 93, size: 24, sprite: 2, opacity: .89 },
-  { x: 24, y: 93, size: 25, sprite: 5, opacity: .89 },
-  { x: 5, y: 70, size: 27, sprite: 1, opacity: .93 },
+  { x: 7, y: 30, size: 24, sprite: 0, opacity: .9 },
+  { x: 18, y: 12, size: 18, sprite: 3, opacity: .84 },
+  { x: 82, y: 12, size: 18, sprite: 5, opacity: .84 },
+  { x: 94, y: 31, size: 24, sprite: 1, opacity: .9 },
+  { x: 89, y: 72, size: 21, sprite: 4, opacity: .86 },
+  { x: 12, y: 72, size: 21, sprite: 1, opacity: .86 },
 ].map((gear, index) => ({
   ...gear,
   cycle: 112 * gear.size / 45,
