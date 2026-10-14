@@ -4,6 +4,31 @@ import { paintDrill } from "./emberDrillPainter.js";
 import "./ember-tunnel-drill.css";
 
 const LABELS = ["Barkroot Passage", "Ruby Temple Galleries"];
+const DRILL_ART = {
+  body:"drill-body.webp",
+  auger:"auger-spin.png",
+  turbo:"turbo-animation.webp",
+  barkroot:"barkroot-loop.webp",
+  ruby:"ruby-loop.webp",
+  roof:"roof-roots.webp",
+  floor:"floor-ruby.webp",
+  cacheBurst:"cache-burst.webp",
+  hazardPulse:"hazard-pulse.webp",
+  goldenBone:"golden-bone.webp",
+  header:"drill-header.webp",
+  scenicBarkroot:"scenic-barkroot.webp",
+  scenicLantern:"scenic-lantern.webp",
+  scenicRoots:"scenic-roots.webp",
+  scenicCrystal:"scenic-crystal.webp",
+  scenicTemple:"scenic-temple.webp",
+  bone:"collect-bone.webp",
+  cheese:"collect-cheese.webp",
+  gem:"collect-gem.webp",
+  cache:"collect-cache.webp",
+  rock:"hazard-rock.webp",
+  spike:"hazard-spike.webp",
+};
+
 const formatTime = t => Math.max(0, Math.ceil(RUN_DURATION - t)) + "s";
 function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
@@ -26,6 +51,7 @@ function playSound(context,kind) {
 }
 export default function EmberTunnelDrill({ soundOn=true }) {
   const canvas=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
+        artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467);
   const [mode,setMode]=useState("idle");
@@ -62,6 +88,16 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   function resetHold(){pressed.current.up=false;pressed.current.down=false}
   useEffect(()=>{
     const img=new Image();img.src="/captain-rosie-illustrated.webp";portrait.current=img;
+    const art={};
+    for(const [key,file] of Object.entries(DRILL_ART)){
+      const item=new Image();
+      item.decoding="async";item.src="/ember-drill/"+file;art[key]=item;
+    }
+    artRef.current=art;
+    const observer=new IntersectionObserver(entries=>{
+      onscreen.current=Boolean(entries[0]?.isIntersecting);
+    },{rootMargin:"150px"});
+    if(canvas.current)observer.observe(canvas.current);
     const onKeys=e=>{
       if(modeRef.current!=="running")return;
       const key=e.key.toLowerCase();
@@ -78,6 +114,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     const render=(ts)=>{
       if(!alive)return;
       const delta=last?Math.min((ts-last)/1000,.045):0;last=ts;
+      if(!onscreen.current||document.hidden){raf=requestAnimationFrame(render);return;}
       const s=frame.current;
       if(modeRef.current==="running"&&!document.hidden){
         updateRun(s,delta,pressed.current.up,pressed.current.down);
@@ -119,7 +156,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         const context=el.getContext("2d");
         if(context){
           context.setTransform(el.width/DRILL_WIDTH,0,0,el.height/DRILL_HEIGHT,0,0);
-          paintDrill(context,s,portrait.current,particles.current);
+          paintDrill(context,s,portrait.current,particles.current,artRef.current);
         }
       }
       raf=requestAnimationFrame(render);
@@ -133,7 +170,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     const obs=new ResizeObserver(resize);
     if(canvas.current)obs.observe(canvas.current);
     resize();raf=requestAnimationFrame(render);
-    return ()=>{alive=false;cancelAnimationFrame(raf);obs.disconnect();
+    return ()=>{alive=false;cancelAnimationFrame(raf);obs.disconnect();observer.disconnect();
       document.removeEventListener("keydown",onKeys);document.removeEventListener("keyup",onKeys);
       window.removeEventListener("blur",onBlur);sound.current?.close?.();
     };
