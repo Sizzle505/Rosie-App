@@ -32,7 +32,7 @@ const loaded=await page.evaluate(async map=>{
  canvas.id="ember-og-proof";canvas.style.cssText="display:block;width:100%;height:auto";
  window.__ogCanvas=canvas;return Object.keys(assets).length;
 },art);
-if(!loaded||loaded<35)throw new Error("Missing game art: "+loaded);
+if(!loaded||loaded<71)throw new Error("Full original formation set not decoded: "+loaded);
 const proof=async (label,scroll,pitch,time)=>{
  const result=await page.evaluate(({label,scroll,pitch,time})=>{
   const c=window.__ogCanvas.getContext("2d");
@@ -47,7 +47,9 @@ const proof=async (label,scroll,pitch,time)=>{
   window.__og.paintDrill(c,s,null,[],window.__ogAssets);
   const needed=["edge/barkroot-top.webp","edge/barkroot-bottom.webp"];
   if(needed.some(x=>!drawn.has(x)))throw Error("Original edge images loaded but not DRAWN: "+[...drawn].join(","));
-  return {label,scroll,pitch,time,drawn:[...drawn].filter(x=>x.startsWith("edge/")),
+  const formations=[...drawn].filter(x=>x.startsWith("formation/"));
+  if(!formations.length)throw Error("Real OG ceiling/floor formations NOT DRAWN in "+label);
+  return {label,scroll,pitch,time,drawn:[...drawn].filter(x=>x.startsWith("edge/")||x.startsWith("formation/")),
     pixel:c.getImageData(210,410,1,1).data[3]};
  },{label,scroll,pitch,time});
  const image=await page.evaluate(()=>window.__ogCanvas.toDataURL("image/png"));
