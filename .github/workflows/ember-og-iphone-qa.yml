@@ -7,6 +7,10 @@ on:
       - "src/emberDrillPainter.js"
       - "src/EmberTunnelDrill.jsx"
       - "scripts/verify-ember-og-prototype.mjs"
+      - "scripts/verify-ember-header-and-obstacles.mjs"
+      - "src/emberTunnelLayout.js"
+      - "tests/ember-tunnel-formations.test.mjs"
+      - "src/emberTunnelSculpture.js"
       - "public/ember-drill/edge/**"
       - ".github/workflows/ember-og-iphone-qa.yml"
   workflow_dispatch:
@@ -25,7 +29,7 @@ jobs:
       - name: Build actual committed 36-source-derived Canvas game
         run: |
           npm ci
-          node --test tests/ember-drill-engine.test.mjs
+          node --test tests/ember-drill-engine.test.mjs tests/ember-tunnel-formations.test.mjs
           npm run build
       - name: Install iPhone-sized browser engine
         run: |
@@ -39,6 +43,7 @@ jobs:
             sleep 1
           done
           node scripts/verify-ember-og-prototype.mjs
+          node scripts/verify-ember-header-and-obstacles.mjs
       - name: Keep unmodified gameplay evidence and exact sprite manifest
         if: always()
         uses: actions/upload-artifact@v4
@@ -46,6 +51,7 @@ jobs:
           name: ember-original-Barkroot-iPhone-visual-evidence
           path: |
             artifacts/ember-og-prototype/
+            artifacts/ember-og-header-audit/
             public/ember-drill/edge/edge-assets.json
           retention-days: 14
           if-no-files-found: ignore
