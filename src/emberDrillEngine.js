@@ -16,6 +16,23 @@ export function tunnelCenter(x) {
 export function tunnelRadius(x) {
   return 233 + 12 * Math.sin(x / 1050 + 1.1);
 }
+// Reward trails describe the safe S-curve between alternating OG overhangs
+// and crystal rises. Weighted overlap creates a smooth transition at the
+// midpoint, instead of an abrupt lane flip between adjacent obstacles.
+export function courseLaneOffset(worldX,fallback=0){
+ let weighted=0,total=0;
+ for(const rock of FORMATION_LAYOUT){
+  if(!rock.obstacle)continue;
+  const d=Math.abs(rock.at-worldX);
+  if(d>620)continue;
+  const w=(1-d/620)**2;
+  weighted+=(-rock.side*112)*w;
+  total+=w;
+ }
+ if(total<=0)return fallback;
+ const blend=clamp(total*1.5,0,1);
+ return fallback*(1-blend)+(weighted/total)*blend;
+}
 function randomGenerator(seed) {
   let value = seed >>> 0;
   return function () { value = (value * 1664525 + 1013904223) >>> 0; return value / 4294967296; };
@@ -31,7 +48,8 @@ export function makeCourse(seed = 1467) {
     const kind = motif === 0 ? "bone" : motif === 3 ? "cheese" : "gem";
     for (let j = 0; j < 5; j++) {
       const pos = x + j * 68;
-      const y = clamp(tunnelCenter(pos) + offset + Math.sin(j / 4 * Math.PI) * (motif % 2 ? 24 : -24), 95, 725);
+      const lane=courseLaneOffset(pos,offset);
+      const y = clamp(tunnelCenter(pos) + lane + Math.sin(j / 4 * Math.PI) * (motif % 2 ? 13 : -13), 95, 725);
       objects.push({ id: ++id, kind: j === 4 && motif === 3 ? "cache" : kind, x: pos, y, radius: 20, taken: false });
     }
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
