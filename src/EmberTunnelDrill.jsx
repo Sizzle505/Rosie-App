@@ -122,6 +122,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       if(modeRef.current==="running"&&!document.hidden){
         updateRun(s,delta,pressed.current.up,pressed.current.down);
         for(const event of s.events){
+          if(event.type==="pickup"&&event.kind==="cache"){
+            particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
+          }
           if(event.type==="pickup"||event.type==="shatter"){
             const color=event.kind==="gem"?"#fb537a":event.kind==="cheese"?"#ffe68c":"#ffd182";
             for(let i=0;i<11;i++){
@@ -213,6 +216,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
+            {mode==="ended"&&hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />}
             {mode==="ended"&&<div className="ember-results"><span><b>{hud.score.toLocaleString()}</b> POINTS</span><span><b>{hud.gems}</b> GEMS</span><span><b>{best.toLocaleString()}</b> BEST</span></div>}
             <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
             <small>Hold ▲ or ▼ to steer. Release to level out.</small>
