@@ -62,50 +62,28 @@ function pattern(c,image,scroll) {
 function fillStratum(c,s,stage,alpha){
   if(alpha<=0)return;
   const img=pattern(c,s.assets[stage.key],s.scroll);
-  c.globalAlpha=alpha;
-  c.fillStyle=stage.base;
-  c.fillRect(0,0,W,H);
-  if(img){
-    c.globalAlpha=alpha*.91;
-    c.fillStyle=img;
-    c.fillRect(0,0,W,H);
-  }
-  c.globalAlpha=1;
+  c.save();c.globalAlpha=alpha*.12;c.fillStyle=stage.base;c.fillRect(0,0,W,H);
+  if(img){c.globalAlpha=alpha*.17;c.fillStyle=img;c.fillRect(0,0,W,H);}
+  c.restore();
 }
 function drawEarth(c,s,side,assets,stage,points){
-  c.save();
-  earthPath(c,points,side);c.clip();
+  c.save();earthPath(c,points,side);c.clip();
   const prepared={scroll:s.scroll,assets};
-  // The rock is solid, unlike the former .37-opacity wash. Color first,
-  // then the fully registered diffuse texture; neither shows scene art through.
   fillStratum(c,prepared,stage.previous,1);
-  if(stage.fade>0&&stage.current!==stage.previous){
-    fillStratum(c,prepared,stage.current,stage.fade);
-  }
-  // Darker outer depths keep the cave moody without obscuring the cut face.
-  const depth=c.createLinearGradient(0,0,0,H);
-  if(side<0){
-    depth.addColorStop(0,"rgba(8,6,10,.23)");
-    depth.addColorStop(.65,"rgba(12,7,9,.01)");
-    depth.addColorStop(1,"rgba(12,7,9,0)");
-  }else{
-    depth.addColorStop(0,"rgba(10,6,9,0)");
-    depth.addColorStop(.4,"rgba(10,6,9,.01)");
-    depth.addColorStop(1,"rgba(7,6,9,.25)");
-  }
-  c.fillStyle=depth;c.fillRect(0,0,W,H);
+  if(stage.current!==stage.previous)fillStratum(c,prepared,stage.current,stage.fade);
   c.restore();
-
-  // Soft erosion/contact-shadow BELOW/ABOVE the exposed soil line; never a
-  // bold straight stripe. Stroke is continuous and follows the engine path.
-  c.save();c.lineJoin="round";c.lineCap="round";
-  for(const [width,color] of [
-    [35,"rgba(14,8,12,.16)"],
-    [20,"rgba(20,11,12,.14)"],
-    [8,"rgba(42,24,17,.18)"]
-  ]){
-    edgePath(c,points);c.lineWidth=width;c.strokeStyle=color;c.stroke();
-  }
+}
+// Temporary Barkroot proof: continuous world-registered edge texture, not
+// individually rotated scenic slices. The illustrated panorama stays visible.
+function drawEdgeBand(c,s,side,assets,stage,points){
+  const thickness=78;
+  c.save();c.beginPath();
+  points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));
+  for(let i=points.length-1;i>=0;i--){const [x,y]=points[i];c.lineTo(x,y+side*thickness);}
+  c.closePath();c.clip();
+  const img=pattern(c,assets[stage.current.key],s.scroll);
+  if(img){c.globalAlpha=.72;c.fillStyle=img;c.fillRect(0,0,W,H);}
+  else{c.globalAlpha=.54;c.fillStyle=stage.current.base;c.fillRect(0,0,W,H);}
   c.restore();
 }
 function drawFracturedFace(c,s,side,stage,points){
@@ -211,6 +189,7 @@ export function paintNaturalTunnel(c,s,assets={}) {
     const points=[];
     for(let x=-STEP;x<=W+STEP;x+=STEP)points.push([x,surface(s.scroll+x,side)]);
     drawEarth(c,s,side,assets,stage,points);
+    drawEdgeBand(c,s,side,assets,stage,points);
     drawFracturedFace(c,s,side,stage,points);
     // Stone fragments must remain inside the solid geology except tiny
     // attached roots and chips; the corridor silhouette stays authoritative.
