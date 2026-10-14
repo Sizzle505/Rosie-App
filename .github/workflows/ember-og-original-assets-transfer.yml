@@ -1,0 +1,50 @@
+name: One-time Ember OG32 verified atlas import
+on:
+  push:
+    branches: ["work/ember-og-ribbon-prototype-20261014"]
+    paths:
+      - ".github/workflows/ember-og-original-assets-transfer.yml"
+permissions:
+  contents: write
+jobs:
+  import-original-derived:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Import only original-derived edge atlases and provenance from temporary asset forge
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/ember-drill/edge
+          ROOT="https://sb-461m096ybemu.vercel.run"
+          curl --fail --location --retry 3 --retry-delay 2 --max-time 60 "$ROOT/barkroot-top.webp" -o public/ember-drill/edge/barkroot-top.webp
+          curl --fail --location --retry 3 --retry-delay 2 --max-time 60 "$ROOT/barkroot-bottom.webp" -o public/ember-drill/edge/barkroot-bottom.webp
+          curl --fail --location --retry 3 --retry-delay 2 --max-time 60 "$ROOT/edge-assets.json" -o public/ember-drill/edge/edge-assets.json
+          (
+            cd public/ember-drill/edge
+            echo "2221ddf042f518d49426f4607227434b1010d13f5742d73961f3176b070fed85  barkroot-top.webp" | sha256sum -c -
+            echo "dd52f51d60e0a47a0e3fc24c67800079905efe81542c94bbac2d993450ea4c43  barkroot-bottom.webp" | sha256sum -c -
+            echo "5b7cab7217a21a1045d4f527b0bf72e52357e9416cacd0378d71923ff84396f5  edge-assets.json" | sha256sum -c -
+          )
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('public/ember-drill/edge/edge-assets.json').read_text())
+          assert d['original']=='32 - Dynamic Tunnel Edge A.png'
+          assert len(d['assets'])==2
+          assert all(a['sourceSha256']=='62a2bf9091e2f134a617dac59f571c29fd93d233fc539d64136a414639fd3726' for a in d['assets'])
+          assert all(a['seamError']==0 for a in d['assets'])
+          print('OG original, source SHA, seamless endpoints and two sprites validated')
+          PY
+      - name: Commit permanent atlas binaries to FEATURE branch only
+        run: |
+          git config user.name "Ember OG Original Asset Import"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/ember-drill/edge/barkroot-top.webp public/ember-drill/edge/barkroot-bottom.webp public/ember-drill/edge/edge-assets.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Integrate SHA-proven original #32 Barkroot wall edge atlases [skip ci]"
+            git push origin HEAD:work/ember-og-ribbon-prototype-20261014
+          fi
