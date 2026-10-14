@@ -103,3 +103,11 @@
  .ember-suite .ember-header .ember-header-copy h2{font-size:19px}
  .ember-suite .ember-header .ember-header-copy p{font-size:13px}
 }
+
+/* Only the Golden Bone reveal expands the result panel; it stays out of play. */
+.ember-relic-reveal{
+ display:block;
+ width:clamp(70px,19vw,98px);height:clamp(70px,19vw,98px);
+ object-fit:contain;margin:-2px auto 7px;
+ filter:drop-shadow(0 0 12px rgba(252,195,94,.40));
+}
