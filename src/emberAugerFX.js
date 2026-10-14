@@ -84,12 +84,6 @@ export function paintOriginalAuger(c,s,assets){
       c.globalAlpha=.26+.13*Math.sin(s.time*31)**2;
       c.drawImage(assets.turboAtlas,frame.sx,frame.sy,frame.sw,frame.sh,53,-48,116,96);
       c.globalAlpha=1;
-    } else if(ready(assets?.turbo)){
-      // Last-resort fallback if an atlas asset is not yet cached.
-      c.globalCompositeOperation="screen";
-      c.globalAlpha=.26;
-      c.drawImage(assets.turbo,344,67,616,252,53,-48,116,96);
-      c.globalAlpha=1;
     }
     const beam=c.createLinearGradient(72,0,171,0);
     beam.addColorStop(0,"rgba(255,202,76,.04)");
