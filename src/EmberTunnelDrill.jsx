@@ -17,6 +17,13 @@ const DRILL_ART = {
   descentFloor:"descending-floor.webp",
   cacheBurst:"cache-burst.webp",
   hazardPulse:"hazard-pulse.webp",
+  gate:"feature-gate.webp",
+  lantern:"feature-lantern.webp",
+  chest:"feature-chest.webp",
+  coin:"feature-coin.webp",
+  rockburst:"feature-rockburst.webp",
+  boosttrail:"feature-boosttrail.webp",
+  crystaloverlay:"feature-crystaloverlay.webp",
   goldenBone:"golden-bone.webp",
   header:"drill-header.webp",
   scenicBarkroot:"scenic-barkroot.webp",
@@ -124,6 +131,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         for(const event of s.events){
           if(event.type==="pickup"&&event.kind==="cache"){
             particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
+          }
+          if(event.type==="hit"||event.type==="shatter"){
+            particles.current.push({type:event.type==="hit"?"hit-burst":"rock-burst",
+              x:event.x,y:event.y,vx:0,vy:0,life:.54,max:.54,r:0,color:"#efbd75"});
           }
           if(event.type==="pickup"||event.type==="shatter"){
             const color=event.kind==="gem"?"#fb537a":event.kind==="cheese"?"#ffe68c":"#ffd182";
