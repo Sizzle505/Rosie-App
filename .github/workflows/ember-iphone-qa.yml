@@ -9,6 +9,7 @@ on:
       - src/EmberTunnelDrill.jsx
       - src/emberDrillPainter.js
       - src/emberNaturalTunnel.js
+      - src/emberExcavationFX.js
       - src/emberRecoveredWalls.js
       - src/emberDrillEngine.js
       - src/ember-tunnel-drill.css
