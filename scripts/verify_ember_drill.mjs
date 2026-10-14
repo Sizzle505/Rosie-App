@@ -198,7 +198,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     // and an actual stone hazard to inspect physical scale and layering.
     window.__emberHazardCapture=c.canvas.toDataURL("image/png");
 
-    // Verify the actual material is applied by Canvas, not merely downloaded.
+    // Verify the geological material is actually drawn as boundary-attached atlas\n    // quads (not forced through the obsolete full-screen createPattern path).
     const materialFrames=[
       {time:8,key:"terrainEarth",file:"terrain-barkroot-earth.webp"},
       {time:27,key:"terrainRoots",file:"terrain-deep-rootstone.webp"},
@@ -223,7 +223,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
         samples+=3;
       }
       materialDiffs[frame.key]=change/samples;
-      if(!patterned.has(frame.file) || materialDiffs[frame.key]<.70)
+      if(!drawn.has(frame.file) || materialDiffs[frame.key]<.70)
         throw new Error("Continuous wall material missing or visually invisible: "
           +frame.file+" "+materialDiffs[frame.key]);
       if(frame.key==="terrainEarth" || frame.key==="terrainRuby"){
