@@ -17,7 +17,7 @@ const path="/tmp/rosie-ember-og-"+process.pid+".zip";
 await writeFile(path,data);
 await mkdir("public/ember-drill/edge",{recursive:true});
 const py=process.env.PYTHON||"python3";
-let p=spawnSync(py,["-m","pip","install","--quiet","Pillow==11.3.0"],{stdio:"inherit"});
+let p=spawnSync(py,["-m","pip","install","--quiet","--break-system-packages","Pillow==11.3.0"],{stdio:"inherit"});
 if(p.status!==0)throw Error("Python Pillow unavailable on branch-scoped Vercel build: "+p.status);
 p=spawnSync(py,["scripts/derive-ember-og-edges.py",path],{stdio:"inherit"});
 if(p.status!==0)throw Error("Original source extraction failed: "+p.status);
