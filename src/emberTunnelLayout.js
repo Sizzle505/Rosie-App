@@ -9,7 +9,7 @@ const SIZES={
  ogSlopeFloorA:[660,153],ogSlopeFloorB:[660,161],
  ogRootsOne:[385,480],ogRootsTwo:[368,480]
 };
-const HAZARDS=new Set([1890,2690,3900,5350,6830,8760,9430,10980,11630]);
+const HAZARDS=new Set([1890,2690,3900,5350,6830,8760,9430,10980,11630,14340,15730,17160,18620,20020,21520,22940,24380]);
 export const FORMATION_LAYOUT = [
   // Handplaced, world-locked ceiling overhangs, roots and floor strata.
   {at:520, side:-1, key:"ogCanopyA", width:465, alpha:.99},
@@ -32,7 +32,25 @@ export const FORMATION_LAYOUT = [
   {at:11630,side:1,key:"ogCrystalC",width:450,alpha:.98},
   {at:12240,side:-1,key:"ogCanopyB",width:445,alpha:1},
   {at:12960,side:1,key:"ogRichFloorA",width:435,alpha:1},
-  // Later scenery is deliberately untouched until the Ruby visual gate.
+  // Continue prominent, original-sourced silhouettes through Ruby/Temple
+  // rather than reverting to a flat mural halfway through the 75-second run.
+  {at:13720,side:-1,key:"ogRichRoofA",width:438,alpha:.96},
+  {at:14340,side:1,key:"ogCrystalB",width:455,alpha:1},
+  {at:15080,side:-1,key:"ogRootsOne",width:239,alpha:1},
+  {at:15730,side:1,key:"ogSlopeFloorA",width:440,alpha:.99},
+  {at:16480,side:-1,key:"ogCanopyC",width:458,alpha:1},
+  {at:17160,side:1,key:"ogCrystalC",width:469,alpha:1},
+  {at:17940,side:-1,key:"ogSlopeRoofB",width:446,alpha:.98},
+  {at:18620,side:1,key:"ogRichFloorB",width:459,alpha:1},
+  {at:19340,side:-1,key:"ogRootsTwo",width:237,alpha:1},
+  {at:20020,side:1,key:"ogCrystalA",width:472,alpha:.98},
+  {at:20770,side:-1,key:"ogCanopyB",width:465,alpha:1},
+  {at:21520,side:1,key:"ogSlopeFloorB",width:457,alpha:1},
+  {at:22240,side:-1,key:"ogRichRoofB",width:476,alpha:.98},
+  {at:22940,side:1,key:"ogCrystalB",width:471,alpha:1},
+  {at:23640,side:-1,key:"ogCanopyA",width:478,alpha:1},
+  {at:24380,side:1,key:"ogRichFloorA",width:465,alpha:1},
+
 ].map(f=>({...f, obstacle:HAZARDS.has(f.at)}));
 export function formationIntrusion(f){
  const [w,h]=SIZES[f.key];
