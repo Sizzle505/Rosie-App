@@ -87,11 +87,11 @@ function panorama(c,img,progress,opacity=1){
 const CAVERN_SCENES=[
   {at:0,key:"barkroot"},
   {at:10,key:"scenicBarkroot"},
-  {at:21,key:"scenicRoots"},
-  {at:32,key:"scenicLantern"},
-  {at:43,key:"ruby"},
-  {at:54,key:"scenicCrystal"},
-  {at:65,key:"scenicTemple"},
+  {at:21,key:"scenicLantern"},
+  {at:32,key:"scenicCrystal"},
+  {at:43,key:"rubyOrganic"},
+  {at:54,key:"templeOrganic"},
+  {at:65,key:"scenicRoots"},
 ];
 // These are world-anchored scenic set pieces, NOT collectible markers.
 // Actual cheese, gems, bones and treasure caches are drawn separately.
