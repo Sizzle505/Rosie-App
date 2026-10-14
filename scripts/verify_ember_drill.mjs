@@ -79,7 +79,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     const names={body:"drill-body.webp",auger:"auger-spin.png",turbo:"turbo-animation.webp",
       scenicBarkroot:"scenic-barkroot.webp",scenicLantern:"scenic-lantern.webp",
       scenicRoots:"scenic-roots.webp",scenicCrystal:"scenic-crystal.webp",
-      scenicTemple:"scenic-temple.webp",barkroot:"barkroot-loop.webp",rubyOrganic:"ruby-organic-passage.webp",templeOrganic:"temple-organic-passage.webp",
+      scenicTemple:"scenic-temple.webp",barkroot:"barkroot-loop.webp",rubyLoop:"ruby-loop.webp",crystalOverlay:"feature-crystaloverlay.webp",rubyOrganic:"ruby-organic-passage.webp",templeOrganic:"temple-organic-passage.webp",
       roof:"roof-roots.webp",floor:"floor-ruby.webp",hangingRoots:"barkroot-hanging-roots.webp",
       terrainEarth:"terrain-barkroot-earth.webp",terrainRoots:"terrain-deep-rootstone.webp",
       terrainRuby:"terrain-ruby-crystal-rock.webp",terrainTemple:"terrain-temple-basalt.webp",
@@ -161,7 +161,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
 
     // Regression against loading unused art: demand actual drawImage calls
     // at the feature's world position and each of seven passage panoramas.
-    const sceneFrames=[[3,1100],[13,3300],[24,7300],[35,11100],
+    const sceneFrames=[[3,1100],[13,3300],[24,7300],[35,11100],[40,13000],
       [46,14400],[58,18500],[69,22200]];
     for(const [time,scroll] of sceneFrames){
       state.time=time;state.scroll=scroll;state.y=410;state.boostTime=0;
@@ -232,15 +232,28 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       }
     }
 
-    // Regression: the old twelve cliff fragments caused a visible horizontal
-    // pasted-on band and must never be drawn over gameplay. Keep the illustrations
-    // in the art library, but not in the active game renderer.
-    state.time=16;state.scroll=5600;state.y=405;state.boostTime=0;state.objects=[];
-    window.EmberPainter.paintDrill(c,state,portrait,[],assets);
-    window.__emberWallsCapture=c.canvas.toDataURL("image/png");
-    const banned=[...drawn].filter(name=>/^wall-(?!turn-)/.test(name));
-    if(banned.length)
-      throw new Error("Broken siding was painted: "+banned.join(", "));
+    // Recovered illustrations now appear as isolated art attached to the
+    // collision curve, not wallpaper. Removing one must change visible pixels.
+    const accentFrames=[["wallAmberCeiling",5,150],["wallLanternCeiling",14,5100],
+      ["wallRubyCeiling",42,10900],["crystalOverlay",53,16700]];
+    const accentDiffs={};
+    for(const [key,time,scroll] of accentFrames){
+      state.time=time;state.scroll=scroll;state.y=410;state.pitch=0;
+      state.boostTime=0;state.objects=[];
+      window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+      const before=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
+      if(key==="wallLanternCeiling")window.__emberWallsCapture=c.canvas.toDataURL("image/png");
+      if(key==="crystalOverlay")window.__emberCrystalCapture=c.canvas.toDataURL("image/png");
+      window.EmberPainter.paintDrill(c,state,portrait,[],{...assets,[key]:null});
+      const after=c.getImageData(0,0,690,820).data;
+      let sum=0,n=0;
+      for(let y=80;y<760;y+=9)for(let x=30;x<665;x+=9){
+        const i=(y*690+x)*4;
+        sum+=Math.abs(before[i]-after[i])+Math.abs(before[i+1]-after[i+1])+Math.abs(before[i+2]-after[i+2]);n+=3;
+      }
+      accentDiffs[key]=sum/n;
+      if(accentDiffs[key]<.12)throw new Error("Recovered wall art not visible: "+key+" "+accentDiffs[key]);
+    }
     for(const angle of [-.54,0,.54]){
       state.pitch=angle;state.scroll=6800;state.y=405;state.time=20;
       window.EmberPainter.paintDrill(c,state,portrait,[],assets);
@@ -253,13 +266,13 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       "feature-coin.webp","feature-rockburst.webp","feature-boosttrail.webp",
       "scenic-barkroot.webp","scenic-roots.webp",
       "scenic-lantern.webp","ruby-organic-passage.webp","temple-organic-passage.webp","scenic-crystal.webp",
-      "scenic-roots.webp","barkroot-loop.webp"];
+      "scenic-roots.webp","barkroot-loop.webp","ruby-loop.webp"];
     // Explicitly run a boosted frame for the rearward exhaust overlay.
     state.boostTime=3.5;
     window.EmberPainter.paintDrill(c,state,portrait,[],assets);
     const missing=required.filter(name=>!drawn.has(name));
     return {contactDifference,pixelDifference:total/count,loaded:Object.keys(assets).length,
-      drawnArt:drawn.size,missingVisualAssets:missing,brokenSidingDrawn:banned.length,materialDiffs};
+      drawnArt:drawn.size,missingVisualAssets:missing,accentDiffs,materialDiffs};
   });
   if(turboResult.pixelDifference<4.0)throw new Error("Boost effect is visually imperceptible: "+JSON.stringify(turboResult));
   if(turboResult.missingVisualAssets.length)
@@ -269,6 +282,8 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await page.locator("#ember-wheel-proof").screenshot({path:"artifacts/ember-drill/"+name+"-hazards.png"});
   await page.evaluate(()=>{const img=new Image();img.src=window.__emberWallsCapture;img.id="ember-walls-proof";img.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100002;pointer-events:none";document.body.appendChild(img)});
   await page.locator("#ember-walls-proof").screenshot({path:"artifacts/ember-drill/"+name+"-walls.png"});
+  await page.evaluate(()=>{const img=new Image();img.src=window.__emberCrystalCapture;img.id="ember-crystal-proof";img.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100003;pointer-events:none";document.body.appendChild(img)});
+  await page.locator("#ember-crystal-proof").screenshot({path:"artifacts/ember-drill/"+name+"-crystal.png"});
   for(const terrain of ["terrainEarth","terrainRuby"]){
     await page.evaluate(which=>{
       const image=new Image();image.src=window["__emberMaterial"+which];
