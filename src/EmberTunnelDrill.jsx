@@ -227,12 +227,12 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           onPointerDown={e=>hold("up",true,e)} onPointerUp={e=>hold("up",false,e)}
           onPointerCancel={e=>hold("up",false,e)} onLostPointerCapture={e=>hold("up",false,e)}
           aria-label="Angle the drill upward"><span>▲</span><small>ANGLE UP</small></button>
-        <button className={"ember-boost"+(hud.charge>=100?" is-ready":"")} type="button"
+        <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
           disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
           aria-label="Activate Burrow Turbo when charged">
           <span className="ember-boost-symbol">✦</span>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
-            <i className="ember-charge"><i style={{width:hud.charge+"%"}} /></i>
+            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/4.8*100):hud.charge)+"%"}} /></i>
             <small>COLLECT TREASURE TO CHARGE</small></span>
         </button>
         <button className="ember-angle" type="button" disabled={!active}
