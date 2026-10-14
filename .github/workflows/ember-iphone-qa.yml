@@ -6,6 +6,9 @@ on:
     paths:
       - scripts/verify_ember_drill.mjs
       - .github/workflows/ember-iphone-qa.yml
+      - src/EmberTunnelDrill.jsx
+      - src/emberDrillPainter.js
+      - public/ember-drill/**
   workflow_dispatch:
 permissions:
   contents: read
