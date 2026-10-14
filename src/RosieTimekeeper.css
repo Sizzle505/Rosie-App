@@ -1674,3 +1674,10 @@ body:has(.app-shell.page-timekeeper),
     width:min(100%,calc(100dvh * 870 / 1651));
   }
 }
+
+
+/* The timer ring is inset from the dial itself. Do not inherit the legacy
+   centering transform, which moves the SVG off to the left of the clock. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
+  transform:none;
+}
