@@ -273,10 +273,17 @@ function vehicle(c,s,portrait,assets={}) {
   if(artReady(assets.body)){
     c.save();c.translate(DRILL_ANCHOR,s.y);c.rotate(s.pitch);
     if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha=.52;
-    if(s.boostTime>0){
-      glow(c,-68,0,165,'rgba(255,177,49,.34)');
-      drawImageTrim(c,assets.turbo,-225,-110,360,205,.70);
-      for(let i=0;i<9;i++){const yy=(i-4)*14+Math.sin(s.time*21+i)*8;c.strokeStyle=i%2?'rgba(252,214,117,.54)':'rgba(253,125,48,.66)';c.lineWidth=2+(i%3);c.beginPath();c.moveTo(-128,yy);c.lineTo(-250-(i%3)*35,yy-10);c.stroke()}
+    const boosted=s.boostTime>0;
+    if(boosted){
+      // The engine, not Rosie's face, glows. Streaks trail behind the vehicle.
+      glow(c,-95,0,142,'rgba(255,163,47,.27)');
+      for(let i=0;i<11;i++){
+        const yy=(i-5)*17+Math.sin(s.time*27+i*1.8)*6;
+        c.strokeStyle=i%3===0?'rgba(255,247,184,.72)':'rgba(252,154,53,.54)';
+        c.lineWidth=1.5+(i%3);
+        const travel=(s.time*390+i*41)%110;
+        c.beginPath();c.moveTo(-155-travel*.36,yy);c.lineTo(-256-travel,yy-12);c.stroke();
+      }
     }
     for(let i=0;i<10;i++){
       const phase=Math.floor(s.time*20),radius=2+noise(i+phase)*6;
@@ -288,7 +295,45 @@ function vehicle(c,s,portrait,assets={}) {
       c.drawImage(assets.auger,(frame%4)*500,Math.floor(frame/4)*410,500,410,
         -168+948/1448*336,-125+477/1086*252,500/1448*336,410/1086*252);
     }
-    if(s.boostTime>0){glow(c,162,15,44,'rgba(255,238,112,.46)');}
+    // Rotating axial sheen: each spiral rib catches and releases highlights as
+    // the auger turns, while the separately rendered sprite remains registered.
+    c.save();
+    c.globalCompositeOperation="screen";
+    for(let i=0;i<5;i++){
+      const pos=77+i*16,half=40-i*6;
+      const phase=s.time*(boosted?43:23)-i*.75;
+      const sheen=.11+.18*Math.max(0,Math.cos(phase));
+      c.strokeStyle="rgba(255,232,156,"+sheen.toFixed(3)+")";
+      c.lineWidth=2.8;
+      c.beginPath();c.moveTo(pos,-half);c.quadraticCurveTo(pos+4+Math.sin(phase)*3,0,pos,half);c.stroke();
+    }
+    c.restore();
+    if(boosted){
+      // Source art has large transparent margins. Crop to the actual fiery auger,
+      // align its pointed tip with the mechanical drill rather than covering Rosie.
+      const flare=assets.turbo;
+      if(artReady(flare)){
+        c.save();
+        c.globalCompositeOperation="screen";
+        c.globalAlpha=.58+.12*Math.sin(s.time*23);
+        c.drawImage(flare,391,75,569,235,18,-64,190,127);
+        c.restore();
+      }
+      // Spinning concentric light and sparks stay attached to the drill tip.
+      const spin=s.time*29;
+      c.save();c.translate(157,0);
+      glow(c,0,0,68,"rgba(255,222,99,.35)");
+      c.strokeStyle="rgba(255,232,138,.78)";c.lineWidth=3;
+      c.beginPath();c.ellipse(0,0,11+Math.sin(spin)*4,26,0,-spin,-spin+Math.PI*1.16);c.stroke();
+      c.strokeStyle="rgba(255,246,188,.60)";c.lineWidth=2;
+      c.beginPath();c.ellipse(-12,0,12,38,0,spin,spin+Math.PI*.85);c.stroke();
+      for(let i=0;i<13;i++){
+        const a=spin+i*2.399,rad=18+(i%4)*9;
+        const px=Math.cos(a)*rad,py=Math.sin(a)*rad;
+        circle(c,px,py,1.6+(i%3),"rgba(255,212,105,.85)");
+      }
+      c.restore();
+    }
     c.restore();return;
   }
 
