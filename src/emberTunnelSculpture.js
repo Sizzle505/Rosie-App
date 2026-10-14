@@ -1,4 +1,5 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, tunnelCenter, tunnelRadius } from "./emberDrillEngine.js";
+import { FORMATION_LAYOUT, formationIntrusion } from "./emberTunnelLayout.js";
 
 /**
  * Original illustrated, NON-TILED cliff geometry. These are large transparent
@@ -7,30 +8,7 @@ import { DRILL_WIDTH as W, DRILL_HEIGHT as H, tunnelCenter, tunnelRadius } from 
  * The repeatable OG #32 ribbon below them keeps the rock/air contact honest.
  */
 const ready = im => !!(im && im.complete && im.naturalWidth > 0);
-const BARKROOT_FORMATIONS = [
-  // Handplaced, world-locked ceiling overhangs, roots and floor strata.
-  {at:520, side:-1, key:"ogCanopyA", width:465, alpha:.99},
-  {at:820, side:1, key:"ogCrystalA", width:425, alpha:.98},
-  {at:1570,side:-1,key:"ogRootsOne",width:222,alpha:1},
-  {at:1890,side:1,key:"ogRichFloorA",width:425,alpha:1},
-  {at:2690,side:-1,key:"ogSlopeRoofA",width:420,alpha:.96},
-  {at:3220,side:1,key:"ogCrystalB",width:395,alpha:1},
-  {at:3900,side:-1,key:"ogCanopyB",width:445,alpha:1},
-  {at:4660,side:1,key:"ogSlopeFloorA",width:445,alpha:.95},
-  {at:5350,side:-1,key:"ogRichRoofA",width:445,alpha:.98},
-  {at:6090,side:1,key:"ogCrystalC",width:465,alpha:1},
-  {at:6830,side:-1,key:"ogRootsTwo",width:237,alpha:.99},
-  {at:7320,side:1,key:"ogRichFloorB",width:425,alpha:.98},
-  {at:8130,side:-1,key:"ogCanopyC",width:450,alpha:1},
-  {at:8760,side:1,key:"ogSlopeFloorB",width:415,alpha:.97},
-  {at:9430,side:-1,key:"ogRichRoofB",width:450,alpha:1},
-  {at:10190,side:1,key:"ogCrystalA",width:440,alpha:.98},
-  {at:10980,side:-1,key:"ogSlopeRoofB",width:435,alpha:.97},
-  {at:11630,side:1,key:"ogCrystalC",width:450,alpha:.98},
-  {at:12240,side:-1,key:"ogCanopyB",width:445,alpha:1},
-  {at:12960,side:1,key:"ogRichFloorA",width:435,alpha:1},
-  // Later scenery is deliberately untouched until the Ruby visual gate.
-];
+
 function worldSurface(x,side){
   return tunnelCenter(x)+side*tunnelRadius(x);
 }
@@ -40,7 +18,7 @@ function thetaAt(world,side){
 }
 function alphaCorridorClip(c,s,side){
   // The collision edge remains authoritative; only soft fine tips may reach
-  // 13 px into the corridor. No floating ceilings or invisible hard corners.
+  // 133 px into the corridor. No floating ceilings or invisible hard corners.
   c.beginPath();
   if(side<0){
     c.moveTo(-24,-80);c.lineTo(W+24,-80);
@@ -48,7 +26,7 @@ function alphaCorridorClip(c,s,side){
     c.moveTo(-24,H+80);c.lineTo(W+24,H+80);
   }
   for(let x=W+24;x>=-24;x-=7){
-    const y=worldSurface(s.scroll+x,side)-side*13;
+    const y=worldSurface(s.scroll+x,side)-side*133;
     c.lineTo(x,y);
   }
   c.closePath();c.clip();
@@ -58,21 +36,25 @@ export function paintSculpturalTunnel(c,s,assets={}){
   for(const side of [-1,1]){
     c.save();
     alphaCorridorClip(c,s,side);
-    for(const item of BARKROOT_FORMATIONS){
+    for(const item of FORMATION_LAYOUT){
       if(item.side!==side)continue;
       const screenX=item.at-s.scroll;
       if(screenX < -item.width*.55-12 || screenX > W+item.width*.55+12)continue;
       const sprite=assets[item.key];
       if(!ready(sprite))continue;
       const height=item.width*sprite.naturalHeight/sprite.naturalWidth;
+      const intrusion=formationIntrusion(item);
       c.save();
       c.translate(screenX,worldSurface(item.at,side));
       c.rotate(thetaAt(item.at,side));
       c.globalAlpha=item.alpha;
+      c.shadowBlur=item.obstacle?16:9;
+      c.shadowColor=item.obstacle?"rgba(255,179,89,.43)":"rgba(8,6,13,.72)";
+      c.filter="contrast(1.10) saturate(1.08)";
       // Top: preserved roots hang DOWN, floor: crystal relief rises UP.
       // This is an illustrated *formation*, NOT a wallpaper panel.
-      if(side<0)c.drawImage(sprite,-item.width/2,-height+15,item.width,height);
-      else c.drawImage(sprite,-item.width/2,-13,item.width,height);
+      if(side<0)c.drawImage(sprite,-item.width/2,-height+intrusion,item.width,height);
+      else c.drawImage(sprite,-item.width/2,-intrusion,item.width,height);
       c.restore();
       drawn++;
     }
