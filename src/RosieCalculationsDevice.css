@@ -1458,3 +1458,6 @@
    margin-bottom:8px;
  }
 }
+
+/* Extend the approved burgundy silk continuously through the toolkit footer. */
+.app-shell.page-calculations .rc-page:not(.rc-page--tool-open){background-color:#380c20;background-image:url('/randomizers/rosie-salon-burgundy-texture.svg');background-size:100% 100%;background-repeat:no-repeat;background-position:center top}

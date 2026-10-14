@@ -188,7 +188,7 @@ const rows = [
     "Rosie’s Sunday Walk",
     "Tender Italian Meatballs with Slow-Simmered Tomato Sauce",
     "A comforting Sunday classic, best enjoyed after a long walk and before a long nap.",
-    "Intermediate",
+    "Medium",
     45,
     4,
     "4 servings",

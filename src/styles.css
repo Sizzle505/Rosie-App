@@ -7848,3 +7848,8 @@ html, body, #root, .app-shell { min-height:var(--rosie-visible-height,100vh); }
 .app-shell.page-recipes .resources-return:not(.resources-return--home){top:calc(max(5px,env(safe-area-inset-top)) + 432px)!important}
 }
 @media(min-width:681px){.app-shell.page-recipes .house-return,.app-shell.page-recipes .resources-return--home{top:calc(max(9px,env(safe-area-inset-top)) + 393px)!important}.app-shell.page-recipes .resources-return:not(.resources-return--home){top:calc(max(9px,env(safe-area-inset-top)) + 448px)!important}}
+
+/* Home and Resources seals flank the Games/Tools switch on every interior page. */
+.app-shell .bottom-side-seal{position:fixed;bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:1004;width:40px;height:36px;display:grid;place-items:center;border:1.5px solid #d3a861;border-radius:13px;background:linear-gradient(145deg,#624124,#24152b);box-shadow:inset 0 0 0 2px #a47c48,0 3px 10px #0009;color:#f6dba2;font:700 23px/1 Georgia,serif;cursor:pointer}
+.app-shell .bottom-side-seal--home{left:calc(50% - 110px)}.app-shell .bottom-side-seal--tools{left:calc(50% + 70px);font-size:21px}
+@media(max-width:680px){.app-shell .bottom-side-seal{bottom:calc(68px + env(safe-area-inset-bottom,0px));width:37px;height:34px}.app-shell .bottom-side-seal--home{left:calc(50% - 105px)}.app-shell .bottom-side-seal--tools{left:calc(50% + 68px)}}

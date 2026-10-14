@@ -334,13 +334,13 @@ function RosieCardVaultWall() {
     let targetY = window.scrollY;
     let appliedY = window.scrollY;
     const drift = now => {
-      const elapsed = Math.min(Math.max(now - last, 0), 48) / 1000;
+      const elapsed = Math.min(Math.max(now - last, 0), 32) / 1000;
       last = now;
       if (!dragging.current && now >= pauseUntil.current && document.visibilityState === 'visible') {
         const actual = window.scrollY;
-        if (Math.abs(actual - appliedY) > 2) targetY = actual;
+        if (Math.abs(actual - appliedY) > 6) targetY = actual;
         targetY = Math.max(0, targetY + BASE_DRIFT_PX_PER_SECOND * speed * elapsed);
-        window.scrollTo(0, targetY);
+        window.scrollTo({ left: 0, top: targetY, behavior: 'instant' });
         appliedY = window.scrollY;
       } else {
         targetY = appliedY = window.scrollY;

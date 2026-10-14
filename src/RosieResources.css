@@ -144,3 +144,6 @@
 @media (max-width: 390px) and (max-height: 730px) {
   .rr-hub-buttons { gap: 8px; }
 }
+
+/* Fit the complete five-button observatory on a short iPhone viewport. */
+@media(max-width:700px){.rr-hub-content{transform:none!important;min-height:0!important;padding-top:4px!important}.rr-hub-header{height:clamp(112px,20svh,172px)!important}.rr-hub-buttons{width:min(88vw,410px)!important;gap:clamp(3px,.65svh,7px)!important;margin-top:3px!important}.rr-hub-button{aspect-ratio:3/1!important}.rr-hub-page{min-height:100svh!important}}

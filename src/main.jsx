@@ -2814,18 +2814,7 @@ function App() {
       <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
         {page === "captain" && <CaptainOuterAtmosphere />}
 
-        {page !== "home" && <>
-          <button type="button" className="house-return" aria-label="Return to the RosieVerse Grand Salon" title="RosieVerse Home" onClick={() => navigateTo("home")}>⌂<span>HOME</span></button>
-          <button type="button"
-            className={`resources-return ${RESOURCE_PAGE_IDS.has(page) ? "resources-return--active" : ""}`}
-            aria-label="Open Rosie’s Resources hub"
-            title="Rosie’s Resources"
-            onClick={() => navigateTo("resources")}
-          >R</button>
-        </>}
-        {page === "home" && <button type="button" className="resources-return resources-return--home"
-          aria-label="Open Rosie’s Resources hub" title="Rosie’s Resources"
-          onClick={() => navigateTo("resources")}>R</button>}
+
         {page === "home" ? (
           <RosieHome onNavigate={navigateTo} />
         ) : page === "fortune" ? (
@@ -3009,6 +2998,8 @@ function App() {
         )}
 
         {page !== "home" && <>
+          <button type="button" className="bottom-side-seal bottom-side-seal--home" aria-label="RosieVerse Home" title="RosieVerse Home" onClick={() => navigateTo("home")}>⌂</button>
+          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" title="Rosie’s Resources" onClick={() => navigateTo("resources")}>R</button>
           <button className={"nav-family-toggle" + (navFamily === "resources" ? " on-resources" : "")}
             type="button"
             aria-label={navFamily === "resources" ? "Switch bottom buttons to RosieVerse games" : "Switch bottom buttons to Rosie’s Resources"}
