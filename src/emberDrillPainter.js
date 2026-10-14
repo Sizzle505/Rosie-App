@@ -1,6 +1,7 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, DRILL_ANCHOR, tunnelCenter, tunnelRadius, clamp } from "./emberDrillEngine.js";
 import { paintNaturalTunnel } from "./emberNaturalTunnel.js";
 import { paintTunnelRibbons } from "./emberTunnelRibbons.js";
+import { paintSculpturalTunnel } from "./emberTunnelSculpture.js";
 import { paintExcavationUnderlay, paintExcavationTip } from "./emberExcavationFX.js";
 
 const TWO_PI = Math.PI * 2;
@@ -379,6 +380,8 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   // Barkroot OG proof gate: real sculpted source-derived, arc-mapped rock.
   // Keep the legacy natural painter as an asset-loading fallback only.
   if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
+  // Large original ceiling/root/floor silhouettes over the continuous rock contact.
+  paintSculpturalTunnel(c,s,assets);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
