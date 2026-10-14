@@ -1,6 +1,8 @@
-// World-locked formations shared by rendering and physics.
-// Source dimensions match public/ember-drill/edge/formation/formations.json.
-const SIZES={
+// Source-authentic formations from the recovered OG #14/#20/#21/#33-36 images.
+// Hand-paced alternate-route layout. Every pressure beat has one side only;
+// neighboring beats leave sufficient steering time at normal/Turbo speeds.
+// All graphics and collision use this same world-space layout.
+export const FORMATION_SIZE = Object.freeze({
  ogCanopyA:[660,279],ogCanopyB:[660,255],ogCanopyC:[660,280],
  ogCrystalA:[660,335],ogCrystalB:[660,228],ogCrystalC:[660,351],
  ogRichRoofA:[660,186],ogRichRoofB:[660,205],
@@ -8,59 +10,413 @@ const SIZES={
  ogSlopeRoofA:[660,168],ogSlopeRoofB:[660,174],
  ogSlopeFloorA:[660,153],ogSlopeFloorB:[660,161],
  ogRootsOne:[385,480],ogRootsTwo:[368,480]
-};
-const HAZARDS=new Set([1890,2690,3900,5350,6830,8760,9430,10980,11630,14340,15730,17160,18620,20020,21520,22940,24380]);
-export const FORMATION_LAYOUT = [
-  // Handplaced, world-locked ceiling overhangs, roots and floor strata.
-  {at:520, side:-1, key:"ogCanopyA", width:465, alpha:.99},
-  {at:820, side:1, key:"ogCrystalA", width:425, alpha:.98},
-  {at:1570,side:-1,key:"ogRootsOne",width:222,alpha:1},
-  {at:1890,side:1,key:"ogRichFloorA",width:425,alpha:1},
-  {at:2690,side:-1,key:"ogSlopeRoofA",width:420,alpha:.96},
-  {at:3220,side:1,key:"ogCrystalB",width:395,alpha:1},
-  {at:3900,side:-1,key:"ogCanopyB",width:445,alpha:1},
-  {at:4660,side:1,key:"ogSlopeFloorA",width:445,alpha:.95},
-  {at:5350,side:-1,key:"ogRichRoofA",width:445,alpha:.98},
-  {at:6090,side:1,key:"ogCrystalC",width:465,alpha:1},
-  {at:6830,side:-1,key:"ogRootsTwo",width:237,alpha:.99},
-  {at:7320,side:1,key:"ogRichFloorB",width:425,alpha:.98},
-  {at:8130,side:-1,key:"ogCanopyC",width:450,alpha:1},
-  {at:8760,side:1,key:"ogSlopeFloorB",width:415,alpha:.97},
-  {at:9430,side:-1,key:"ogRichRoofB",width:450,alpha:1},
-  {at:10190,side:1,key:"ogCrystalA",width:440,alpha:.98},
-  {at:10980,side:-1,key:"ogSlopeRoofB",width:435,alpha:.97},
-  {at:11630,side:1,key:"ogCrystalC",width:450,alpha:.98},
-  {at:12240,side:-1,key:"ogCanopyB",width:445,alpha:1},
-  {at:12960,side:1,key:"ogRichFloorA",width:435,alpha:1},
-  // Continue prominent, original-sourced silhouettes through Ruby/Temple
-  // rather than reverting to a flat mural halfway through the 75-second run.
-  {at:13720,side:-1,key:"ogRichRoofA",width:438,alpha:.96},
-  {at:14340,side:1,key:"ogCrystalB",width:455,alpha:1},
-  {at:15080,side:-1,key:"ogRootsOne",width:239,alpha:1},
-  {at:15730,side:1,key:"ogSlopeFloorA",width:440,alpha:.99},
-  {at:16480,side:-1,key:"ogCanopyC",width:458,alpha:1},
-  {at:17160,side:1,key:"ogCrystalC",width:469,alpha:1},
-  {at:17940,side:-1,key:"ogSlopeRoofB",width:446,alpha:.98},
-  {at:18620,side:1,key:"ogRichFloorB",width:459,alpha:1},
-  {at:19340,side:-1,key:"ogRootsTwo",width:237,alpha:1},
-  {at:20020,side:1,key:"ogCrystalA",width:472,alpha:.98},
-  {at:20770,side:-1,key:"ogCanopyB",width:465,alpha:1},
-  {at:21520,side:1,key:"ogSlopeFloorB",width:457,alpha:1},
-  {at:22240,side:-1,key:"ogRichRoofB",width:476,alpha:.98},
-  {at:22940,side:1,key:"ogCrystalB",width:471,alpha:1},
-  {at:23640,side:-1,key:"ogCanopyA",width:478,alpha:1},
-  {at:24380,side:1,key:"ogRichFloorA",width:465,alpha:1},
-
-].map(f=>({...f, obstacle:HAZARDS.has(f.at)}));
+});
+// at(world x), side(-1 ceiling,+1 floor), original art, drawn width, depth,
+// collision flag; prelude/scenic breaks are kept intentionally non-colliding.
+const BEATS=[
+  [
+    460,
+    -1,
+    "ogCanopyA",
+    475,
+    134,
+    0
+  ],
+  [
+    980,
+    1,
+    "ogCrystalA",
+    475,
+    143,
+    0
+  ],
+  [
+    1530,
+    -1,
+    "ogRootsOne",
+    250,
+    240,
+    1
+  ],
+  [
+    2070,
+    1,
+    "ogCrystalC",
+    478,
+    238,
+    1
+  ],
+  [
+    2610,
+    -1,
+    "ogCanopyB",
+    490,
+    175,
+    1
+  ],
+  [
+    3160,
+    1,
+    "ogCrystalA",
+    477,
+    202,
+    1
+  ],
+  [
+    3680,
+    -1,
+    "ogRootsTwo",
+    242,
+    236,
+    1
+  ],
+  [
+    4200,
+    1,
+    "ogCrystalC",
+    481,
+    234,
+    1
+  ],
+  [
+    4740,
+    -1,
+    "ogCanopyC",
+    478,
+    182,
+    1
+  ],
+  [
+    5270,
+    1,
+    "ogCrystalB",
+    474,
+    152,
+    1
+  ],
+  [
+    5780,
+    -1,
+    "ogRichRoofA",
+    468,
+    115,
+    0
+  ],
+  [
+    6320,
+    1,
+    "ogCrystalC",
+    480,
+    233,
+    1
+  ],
+  [
+    6840,
+    -1,
+    "ogRootsOne",
+    245,
+    239,
+    1
+  ],
+  [
+    7390,
+    1,
+    "ogCrystalA",
+    476,
+    201,
+    1
+  ],
+  [
+    7900,
+    -1,
+    "ogCanopyA",
+    480,
+    179,
+    1
+  ],
+  [
+    8470,
+    1,
+    "ogCrystalC",
+    474,
+    232,
+    1
+  ],
+  [
+    8990,
+    -1,
+    "ogRootsTwo",
+    239,
+    237,
+    1
+  ],
+  [
+    9520,
+    1,
+    "ogRichFloorA",
+    458,
+    98,
+    0
+  ],
+  [
+    10060,
+    -1,
+    "ogCanopyB",
+    481,
+    178,
+    1
+  ],
+  [
+    10600,
+    1,
+    "ogCrystalA",
+    481,
+    204,
+    1
+  ],
+  [
+    11140,
+    -1,
+    "ogRootsOne",
+    244,
+    236,
+    1
+  ],
+  [
+    11680,
+    1,
+    "ogCrystalC",
+    482,
+    233,
+    1
+  ],
+  [
+    12230,
+    -1,
+    "ogCanopyC",
+    480,
+    179,
+    1
+  ],
+  [
+    12780,
+    1,
+    "ogCrystalB",
+    480,
+    156,
+    1
+  ],
+  [
+    13310,
+    -1,
+    "ogSlopeRoofA",
+    468,
+    106,
+    0
+  ],
+  [
+    13860,
+    1,
+    "ogCrystalC",
+    483,
+    238,
+    1
+  ],
+  [
+    14400,
+    -1,
+    "ogRootsTwo",
+    246,
+    241,
+    1
+  ],
+  [
+    14940,
+    1,
+    "ogCrystalA",
+    478,
+    207,
+    1
+  ],
+  [
+    15490,
+    -1,
+    "ogCanopyA",
+    484,
+    183,
+    1
+  ],
+  [
+    16050,
+    1,
+    "ogCrystalC",
+    483,
+    235,
+    1
+  ],
+  [
+    16580,
+    -1,
+    "ogRootsOne",
+    244,
+    240,
+    1
+  ],
+  [
+    17130,
+    1,
+    "ogCrystalA",
+    481,
+    207,
+    1
+  ],
+  [
+    17660,
+    -1,
+    "ogCanopyB",
+    480,
+    183,
+    1
+  ],
+  [
+    18230,
+    1,
+    "ogRichFloorB",
+    474,
+    112,
+    0
+  ],
+  [
+    18770,
+    -1,
+    "ogRootsTwo",
+    248,
+    242,
+    1
+  ],
+  [
+    19310,
+    1,
+    "ogCrystalC",
+    482,
+    237,
+    1
+  ],
+  [
+    19880,
+    -1,
+    "ogCanopyC",
+    488,
+    185,
+    1
+  ],
+  [
+    20420,
+    1,
+    "ogCrystalA",
+    478,
+    204,
+    1
+  ],
+  [
+    20970,
+    -1,
+    "ogRootsOne",
+    244,
+    237,
+    1
+  ],
+  [
+    21510,
+    1,
+    "ogCrystalC",
+    478,
+    233,
+    1
+  ],
+  [
+    22050,
+    -1,
+    "ogCanopyA",
+    484,
+    186,
+    1
+  ],
+  [
+    22600,
+    1,
+    "ogCrystalA",
+    483,
+    208,
+    1
+  ],
+  [
+    23140,
+    -1,
+    "ogRootsTwo",
+    244,
+    238,
+    1
+  ],
+  [
+    23680,
+    1,
+    "ogCrystalC",
+    483,
+    237,
+    1
+  ],
+  [
+    24230,
+    -1,
+    "ogCanopyB",
+    485,
+    180,
+    1
+  ],
+  [
+    24780,
+    1,
+    "ogCrystalA",
+    487,
+    204,
+    1
+  ],
+  [
+    25310,
+    -1,
+    "ogRootsOne",
+    242,
+    240,
+    1
+  ],
+  [
+    25850,
+    1,
+    "ogCrystalC",
+    485,
+    235,
+    1
+  ]
+];
+export const FORMATION_LAYOUT=Object.freeze(BEATS.map(([at,side,key,width,depth,collision],index)=>Object.freeze({
+ at,side,key,width,depth,alpha:1,obstacle:Boolean(collision),index
+})));
 export function formationIntrusion(f){
- const [w,h]=SIZES[f.key];
- // Project at most 60% of the preserved formation into the *expanded*
- // corridor; the remaining rock visibly continues into its parent wall.
- return Math.min(f.key.startsWith("ogRoots")?129:116, f.width*h/w*.61);
+ const dims=FORMATION_SIZE[f.key];
+ if(!dims)return 0;
+ // Do not project beyond the actually illustrated original relief.
+ const physicalHeight=f.width*dims[1]/dims[0];
+ return Math.min(f.depth??physicalHeight*.74,physicalHeight*.94);
 }
-export function formationClearance(f, worldX){
- const distance=Math.abs(worldX-f.at)/(f.width*.30);
- if(distance>=1) return 0;
- // Conservative central collision hull, smaller than the illustrated sprite.
- return formationIntrusion(f)*.73*Math.pow(1-distance*distance,1.15);
+export function formationClearance(f,worldX){
+ if(!f.obstacle)return 0;
+ const d=Math.abs(worldX-f.at)/(f.width*.34);
+ if(d>=1)return 0;
+ // Tight core of the actual painted rock, not its transparent rectangle.
+ const intrude=formationIntrusion(f);
+ return Math.max(0,intrude*.90*Math.pow(1-d*d,1.6));
+}
+export function nearFormation(worldX,reach=250){
+ return FORMATION_LAYOUT.find(f=>f.obstacle && Math.abs(f.at-worldX)<reach);
 }
