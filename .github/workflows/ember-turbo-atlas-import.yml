@@ -42,5 +42,7 @@ jobs:
           git add public/ember-drill/turbo-head-frames.webp public/ember-drill/turbo-head-frames.json
           if ! git diff --cached --quiet; then
             git commit -m "Permanently integrate ten original animated Turbo frames as reproducible sprite atlas"
+            git fetch origin work/ember-og-ribbon-prototype-20261014
+            git rebase origin/work/ember-og-ribbon-prototype-20261014
             git push origin HEAD:work/ember-og-ribbon-prototype-20261014
           fi
