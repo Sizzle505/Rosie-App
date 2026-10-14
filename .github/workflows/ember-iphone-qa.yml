@@ -8,6 +8,7 @@ on:
       - .github/workflows/ember-iphone-qa.yml
       - src/EmberTunnelDrill.jsx
       - src/emberDrillPainter.js
+      - src/ember-tunnel-drill.css
       - public/ember-drill/**
   workflow_dispatch:
 permissions:
