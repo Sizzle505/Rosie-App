@@ -49,7 +49,22 @@ const proof=async (label,scroll,pitch,time)=>{
   if(needed.some(x=>!drawn.has(x)))throw Error("Original edge images loaded but not DRAWN: "+[...drawn].join(","));
   const formations=[...drawn].filter(x=>x.startsWith("formation/"));
   if(!formations.length)throw Error("Real OG ceiling/floor formations NOT DRAWN in "+label);
-  return {label,scroll,pitch,time,drawn:[...drawn].filter(x=>x.startsWith("edge/")||x.startsWith("formation/")),
+  const before=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
+  const artless={...window.__ogAssets};
+  for(const key of Object.keys(artless))if(key.startsWith("og"))delete artless[key];
+  window.__og.paintDrill(c,s,null,[],artless);
+  const after=c.getImageData(0,0,690,820).data;
+  let absolute=0, samples=0;
+  for(let y=40;y<790;y+=11)for(let x=20;x<670;x+=11){
+    const j=(y*690+x)*4;
+    absolute+=Math.abs(before[j]-after[j])+Math.abs(before[j+1]-after[j+1])+Math.abs(before[j+2]-after[j+2]);
+    samples+=3;
+  }
+  const formationDifference=absolute/samples;
+  if(formationDifference<0.75)throw Error("Original ceiling/floor drawn offscreen or visually imperceptible in "+label+": "+formationDifference);
+  // Restore THE REAL version before capturing screenshot.
+  window.__og.paintDrill(c,s,null,[],window.__ogAssets);
+  return {label,scroll,pitch,time,formationDifference,drawn:[...drawn].filter(x=>x.startsWith("edge/")||x.startsWith("formation/")),
     pixel:c.getImageData(210,410,1,1).data[3]};
  },{label,scroll,pitch,time});
  const image=await page.evaluate(()=>window.__ogCanvas.toDataURL("image/png"));
