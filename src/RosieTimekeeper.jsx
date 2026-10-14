@@ -207,11 +207,12 @@ export default function RosieTimekeeper() {
     ? (duration > 0 ? Math.min(1, elapsed / duration) : 0)
     : ((elapsed % 60_000) / 60_000);
   const circumference = 2 * Math.PI * 43;
-  // The runner follows the physical rail above the dial rather than an
-  // arbitrary circular halo around the numerals.
-  const railProgress = running || elapsed > 0 ? dialProgress : .78;
-  const runnerX = 18 + 64 * railProgress;
-  const runnerY = 34 - 10 * Math.sin(Math.PI * railProgress);
+  // Every moving mechanism derives from this same phase: the blue energy
+  // circle and squirrel tell time, while Rosie, gears, pendulums and sand run.
+  const runnerPhase = running || elapsed > 0 ? dialProgress : 0;
+  const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
+  const runnerX = 50 + 52 * Math.cos(runnerAngle);
+  const runnerY = 50 + 52 * Math.sin(runnerAngle);
   const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
@@ -240,11 +241,7 @@ export default function RosieTimekeeper() {
           </p>
         )}
         <div className="rtk-observatory-props" aria-hidden="true">
-          <span className={"rtk-hourglass " + (running ? "is-running" : "")} />
           <span className={"rtk-rosie-levers is-" + rosieState} />
-          <span className="rtk-upper-progress-rail" />
-          <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
-            style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />
         </div>
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
@@ -287,6 +284,8 @@ export default function RosieTimekeeper() {
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
           </svg>
+          <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
+            aria-hidden="true" style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
             <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{hundredths}</span>

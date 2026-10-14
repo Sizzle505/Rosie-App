@@ -1703,6 +1703,38 @@ body:has(.app-shell.page-timekeeper),
   }
 }
 
+/* Live clockwork layer. The illustrated hall remains the full-screen base;
+   only the requested timer mechanics are independently animated. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-upper-progress-rail,
+.app-shell.page-timekeeper .rtk-observatory .rtk-pendulum,
+.app-shell.page-timekeeper .rtk-observatory .rtk-hourglass { display:none!important; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
+  display:block; position:absolute; z-index:8; inset:-8%; width:116%; height:116%; transform:none;
+  overflow:visible; pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-track {
+  display:block; fill:none; stroke:rgba(157,102,35,.72); stroke-width:1.45;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-dotted,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-twilight,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-energy-sparks,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-ruby { display:none; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  display:block; fill:none; stroke-linecap:round; transform:rotate(-90deg); transform-origin:50% 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom { stroke:#0574ff; stroke-width:4.2; opacity:.44; filter:blur(2px) drop-shadow(0 0 5px #0a8cff); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live { stroke:#55dbff; stroke-width:1.45; filter:drop-shadow(0 0 3px #19a7ff); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-live { transform:rotate(-90deg) scaleX(-1); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner {
+  position:absolute; z-index:10; left:var(--rtk-squirrel-x); top:var(--rtk-squirrel-y); width:14%;
+  transform:translate(-50%,-50%); background-position:0 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown { transform:translate(-50%,-50%) scaleX(-1); }
+@media (max-width:520px) {
+}
+
 /* Reference-led Timekeepers composition.  These rules intentionally sit at
    the end of the stylesheet so the illustrated board has one source of truth
    instead of accumulating legacy control treatments. */
