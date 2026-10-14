@@ -15,22 +15,21 @@ function drawImageTrim(c,img,x,y,w,h,alpha=1){
   if(!artReady(img))return false;
   c.save();c.globalAlpha=alpha;c.drawImage(img,x,y,w,h);c.restore();return true;
 }
-function paintEdge(c,s,image,side){
+function paintEdge(c,s,image,side) {
   if(!artReady(image))return;
-  const n=18,srcw=image.naturalWidth, srch=image.naturalHeight;
+  const strip=24, srcW=image.naturalWidth, srcH=image.naturalHeight;
+  const sy=side<0?Math.floor(srcH*.30):Math.floor(srcH*.48);
+  const sh=Math.min(srcH-sy,Math.floor(srcH*(side<0?.43:.48)));
+  const shDest=side<0?105:100;
   c.save();
-  for(let x=-n;x<W+n;x+=n){
+  c.globalAlpha=side<0?.75:.69;
+  for(let x=-strip;x<W+strip;x+=strip){
     const worldX=x+s.scroll;
-    const pos=tunnelCenter(worldX) + side*tunnelRadius(worldX);
-    const sx=((Math.floor((s.scroll*.54+x*.9)*srcw/1850)%srcw)+srcw)%srcw;
-    const sw=Math.min(srcw-sx,Math.max(1,Math.ceil(n*srcw/1850)));
-    const h=270;
-    if(side<0){
-      c.drawImage(image,sx,0,sw,srch,x,pos-h,n,h+2);
-    }else{
-      c.save();c.translate(x,pos+h);c.scale(1,-1);
-      c.drawImage(image,sx,0,sw,srch,0,0,n,h+2);c.restore();
-    }
+    const boundary=tunnelCenter(worldX)+side*tunnelRadius(worldX);
+    const frac=((worldX/1650)%1+1)%1;
+    const sx=Math.floor(frac*srcW),sw=Math.max(1,Math.min(srcW-sx,Math.ceil(srcW*strip/1650)+1));
+    const destY=side<0?boundary-83:boundary-17;
+    c.drawImage(image,sx,sy,sw,sh,x,destY,strip+.7,shDest);
   }
   c.restore();
 }
@@ -129,6 +128,52 @@ function scenery(c,s,assets={}) {
   }
 }
 function ground(c,s,assets={}) {
+  const step=14,top=[],bottom=[];
+  for(let x=-step;x<=W+step;x+=step){
+    const wx=x+s.scroll;
+    top.push([x,tunnelCenter(wx)-tunnelRadius(wx)]);
+    bottom.push([x,tunnelCenter(wx)+tunnelRadius(wx)]);
+  }
+  // The imported cavern paintings ALREADY have gorgeous rocky ceilings and floors.
+  // Do not obscure them with a solid computer-generated wall or repeat full paintings.
+  // A translucent shading mask and shallow textured lips are all we need to mark
+  // the true collision boundaries while allowing architecture to remain visible.
+  for(const side of [-1,1]){
+    const pts=side<0?top:bottom;
+    c.save();
+    c.beginPath();
+    if(side<0){c.moveTo(-24,-24);c.lineTo(W+24,-24);}
+    else{c.moveTo(-24,H+24);c.lineTo(W+24,H+24);}
+    for(let i=pts.length-1;i>=0;i--)c.lineTo(pts[i][0],pts[i][1]);
+    c.closePath();c.clip();
+    const tint=c.createLinearGradient(0,0,0,H);
+    if(side<0){
+      tint.addColorStop(0,"rgba(24,11,16,.46)");
+      tint.addColorStop(.7,"rgba(29,14,20,.09)");
+      tint.addColorStop(1,"rgba(17,11,17,.04)");
+    }else{
+      tint.addColorStop(0,"rgba(17,11,17,.05)");
+      tint.addColorStop(.40,"rgba(24,11,16,.11)");
+      tint.addColorStop(1,"rgba(22,12,18,.48)");
+    }
+    c.fillStyle=tint;c.fillRect(0,0,W,H);
+    paintEdge(c,s,side<0?assets.roof:assets.floor,side);
+    c.restore();
+    // Fine continuous rock boundary, never a diagonal full-width plate.
+    c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));
+    c.lineWidth=4;c.strokeStyle="rgba(65,40,30,.85)";c.stroke();
+    c.lineWidth=1.3;c.strokeStyle="rgba(221,157,93,.54)";c.stroke();
+  }
+  // Small localized scenery accents along the collision edges.
+  for(let i=0;i<6;i++){
+    const world=Math.floor(s.scroll/420)*420+i*420+170;
+    const x=world-s.scroll;if(x<-50||x>W+50)continue;
+    const side=i%2?1:-1;
+    const y=tunnelCenter(world)+side*(tunnelRadius(world)-15);
+    if(i%3===0&&artReady(assets.gem))drawImageTrim(c,assets.gem,x-13,y-14,26,27,.46);
+    else if(i%3===1)drawLantern(c,x,y+side*13,.36);
+  }
+}) {
   const step=17,top=[],bottom=[];
   for(let x=-step;x<=W+step;x+=step){
     const wx=x+s.scroll;
@@ -170,6 +215,42 @@ function ground(c,s,assets={}) {
  * When the two recovered Dropbox images are installed the new art keys take over.
  */
 function paintTunnelingDecor(c,s,assets={}) {
+  // Restrict hanging roots to the nearby roof - never overlay the play lane.
+  const roots=assets.hangingRoots;
+  if(s.time<38&&artReady(roots)){
+    const spacing=1200,start=Math.floor((s.scroll-250)/spacing)-1;
+    for(let i=start;i<start+4;i++){
+      const world=850+i*spacing,x=world-s.scroll;
+      if(x<-330||x>W+60)continue;
+      const roofY=tunnelCenter(world)-tunnelRadius(world);
+      c.save();c.globalAlpha=.50;
+      c.beginPath();c.rect(x-5,roofY-115,230,160);c.clip();
+      c.drawImage(roots,x-10,roofY-101,220,133);
+      c.restore();
+    }
+  }
+  // The recovered descending roof/floor images are local accents, not giant
+  // diagonal sheets. Fit them near the actual sloping boundaries.
+  if(!artReady(assets.descentRoof)||!artReady(assets.descentFloor))return;
+  const gap=1920,start=Math.floor((s.scroll-500)/gap)-1;
+  for(let i=start;i<start+4;i++){
+    const world=1490+i*gap,x=world-s.scroll;
+    if(x<-360||x>W+80)continue;
+    const slope=(tunnelCenter(world+150)-tunnelCenter(world-150))/300;
+    if(slope<.17)continue;
+    const top=tunnelCenter(world)-tunnelRadius(world);
+    const bottom=tunnelCenter(world)+tunnelRadius(world);
+    const w=300,h=64;
+    c.save();c.globalAlpha=.34;
+    c.translate(x,top);c.rotate(Math.atan(slope));
+    c.drawImage(assets.descentRoof,0,0,assets.descentRoof.naturalWidth,assets.descentRoof.naturalHeight,-30,-h+7,w,h);
+    c.restore();
+    c.save();c.globalAlpha=.30;
+    c.translate(x,bottom);c.rotate(Math.atan(slope));
+    c.drawImage(assets.descentFloor,0,0,assets.descentFloor.naturalWidth,assets.descentFloor.naturalHeight,-30,-4,w,h);
+    c.restore();
+  }
+}) {
   const roots=artReady(assets.hangingRoots)?assets.hangingRoots:assets.roof;
   const slopeRoof=artReady(assets.descentRoof)?assets.descentRoof:assets.roof;
   const slopeFloor=artReady(assets.descentFloor)?assets.descentFloor:assets.floor;
