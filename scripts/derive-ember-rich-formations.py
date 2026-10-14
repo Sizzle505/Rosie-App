@@ -44,11 +44,13 @@ def occupied_line(image, side, xlo, xhi, source):
     ys=[]
     for x in xs:
         if side=="ceiling":
-            end = 465 if source.startswith("20 - ") else 365\n            found = [y for y in range(25,min(image.height,end),4)
+            end = 465 if source.startswith("20 - ") else 365
+            found = [y for y in range(25,min(image.height,end),4)
                      if a.getpixel((x,y)) >= 108]
             ys.append(max(found) if found else 195)
         else:
-            begin = 145 if source.startswith("21 - ") else 365\n            found=[y for y in range(begin,min(image.height,700),4)
+            begin = 145 if source.startswith("21 - ") else 365
+            found=[y for y in range(begin,min(image.height,700),4)
                    if a.getpixel((x,y)) >= 108]
             ys.append(min(found) if found else 505)
     return int(statistics.median(ys))
