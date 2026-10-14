@@ -81,6 +81,8 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       scenicRoots:"scenic-roots.webp",scenicCrystal:"scenic-crystal.webp",
       scenicTemple:"scenic-temple.webp",barkroot:"barkroot-loop.webp",ruby:"ruby-loop.webp",
       roof:"roof-roots.webp",floor:"floor-ruby.webp",hangingRoots:"barkroot-hanging-roots.webp",
+      terrainEarth:"terrain-barkroot-earth.webp",terrainRoots:"terrain-deep-rootstone.webp",
+      terrainRuby:"terrain-ruby-crystal-rock.webp",terrainTemple:"terrain-temple-basalt.webp",
       descentRoof:"descending-roof.webp",descentFloor:"descending-floor.webp",
       cache:"collect-cache.webp",gem:"collect-gem.webp",bone:"collect-bone.webp",cheese:"collect-cheese.webp",
       spike:"hazard-spike.webp",rock:"hazard-rock.webp",hazardPulse:"hazard-pulse.webp",
@@ -105,6 +107,12 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     document.body.appendChild(canvas);
     const c=canvas.getContext("2d");
     const drawn=new Set();
+    const patterned=new Set();
+    const nativePattern=c.createPattern.bind(c);
+    c.createPattern=(im,...args)=>{
+      if(im?.src)patterned.add(im.src.split("/").pop());
+      return nativePattern(im,...args);
+    };
     const originalDraw=c.drawImage.bind(c);
     c.drawImage=(im,...args)=>{
       if(im?.src)drawn.add(im.src.split("/").pop());
@@ -162,6 +170,40 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     // and an actual stone hazard to inspect physical scale and layering.
     window.__emberHazardCapture=c.canvas.toDataURL("image/png");
 
+    // Verify the actual material is applied by Canvas, not merely downloaded.
+    const materialFrames=[
+      {time:8,key:"terrainEarth",file:"terrain-barkroot-earth.webp"},
+      {time:27,key:"terrainRoots",file:"terrain-deep-rootstone.webp"},
+      {time:46,key:"terrainRuby",file:"terrain-ruby-crystal-rock.webp"},
+      {time:65,key:"terrainTemple",file:"terrain-temple-basalt.webp"},
+    ];
+    const materialDiffs={};
+    for(const frame of materialFrames){
+      state.time=frame.time;state.scroll=frame.time*320;state.y=410;
+      state.boostTime=0;state.objects=[];
+      window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+      const withTexture=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
+      const withoutTextureAssets={...assets,[frame.key]:null};
+      window.EmberPainter.paintDrill(c,state,portrait,[],withoutTextureAssets);
+      const withoutTexture=c.getImageData(0,0,690,820).data;
+      let change=0,samples=0;
+      for(let y=70;y<765;y+=7)for(let x=25;x<665;x+=7){
+        const i=(y*690+x)*4;
+        change+=Math.abs(withTexture[i]-withoutTexture[i])
+          +Math.abs(withTexture[i+1]-withoutTexture[i+1])
+          +Math.abs(withTexture[i+2]-withoutTexture[i+2]);
+        samples+=3;
+      }
+      materialDiffs[frame.key]=change/samples;
+      if(!patterned.has(frame.file) || materialDiffs[frame.key]<.70)
+        throw new Error("Continuous wall material missing or visually invisible: "
+          +frame.file+" "+materialDiffs[frame.key]);
+      if(frame.key==="terrainEarth" || frame.key==="terrainRuby"){
+        window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+        window["__emberMaterial"+frame.key]=c.canvas.toDataURL("image/png");
+      }
+    }
+
     // Regression: the old twelve cliff fragments caused a visible horizontal
     // pasted-on band and must never be drawn over gameplay. Keep the illustrations
     // in the art library, but not in the active game renderer.
@@ -189,7 +231,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     window.EmberPainter.paintDrill(c,state,portrait,[],assets);
     const missing=required.filter(name=>!drawn.has(name));
     return {pixelDifference:total/count,loaded:Object.keys(assets).length,
-      drawnArt:drawn.size,missingVisualAssets:missing,brokenSidingDrawn:banned.length};
+      drawnArt:drawn.size,missingVisualAssets:missing,brokenSidingDrawn:banned.length,materialDiffs};
   });
   if(turboResult.pixelDifference<4.0)throw new Error("Boost effect is visually imperceptible: "+JSON.stringify(turboResult));
   if(turboResult.missingVisualAssets.length)
@@ -199,6 +241,15 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await page.locator("#ember-wheel-proof").screenshot({path:"artifacts/ember-drill/"+name+"-hazards.png"});
   await page.evaluate(()=>{const img=new Image();img.src=window.__emberWallsCapture;img.id="ember-walls-proof";img.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100002;pointer-events:none";document.body.appendChild(img)});
   await page.locator("#ember-walls-proof").screenshot({path:"artifacts/ember-drill/"+name+"-walls.png"});
+  for(const terrain of ["terrainEarth","terrainRuby"]){
+    await page.evaluate(which=>{
+      const image=new Image();image.src=window["__emberMaterial"+which];
+      image.id="ember-material-"+which;
+      image.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100005;pointer-events:none";
+      document.body.appendChild(image);
+    },terrain);
+    await page.locator("#ember-material-"+terrain).screenshot({path:"artifacts/ember-drill/"+name+"-"+terrain+".png"});
+  }
   await page.locator("#ember-qa-turbo").screenshot({path:"artifacts/ember-drill/"+name+"-turbo.png"});
   console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult));
   await context.close();await browser.close();
