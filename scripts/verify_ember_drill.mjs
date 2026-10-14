@@ -28,12 +28,19 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await suite.screenshot({path:"artifacts/ember-drill/"+name+"-idle.png"});
   await page.getByRole("button",{name:"START DIGGING"}).click();
   await page.waitForTimeout(400);
+  // Fixed app tabs float over page content; scroll to the actual game footer before interacting.
+  await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:"instant"}));
+  await page.waitForTimeout(250);
   for (const [label,delay] of [["Angle the drill upward",340],["Angle the drill downward",240]]) {
     const control=page.getByRole("button",{name:label});
-    await control.scrollIntoViewIfNeeded();
     const bounds=await control.boundingBox();
     if(!bounds)throw new Error("Missing "+label+" button bounds");
-    await page.mouse.move(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
+    const x=bounds.x+bounds.width/2,y=bounds.y+bounds.height/2;
+    const tapTarget=await page.evaluate(([xx,yy])=>{
+      return document.elementFromPoint(xx,yy)?.closest("button")?.getAttribute("aria-label")||"covered";
+    },[x,y]);
+    if(tapTarget!==label)throw new Error("Overlapping navigation: "+label+" hit "+tapTarget);
+    await page.mouse.move(x,y);
     await page.mouse.down();
     await page.waitForTimeout(delay);
     await page.mouse.up();
