@@ -5,6 +5,7 @@ export const DRILL_WIDTH = 690;
 export const DRILL_HEIGHT = 820;
 export const DRILL_ANCHOR = 210;
 export const RUN_DURATION = 75;
+export const TURBO_DURATION = 4.8;
 
 export function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 export function tunnelCenter(x) {
@@ -58,7 +59,7 @@ export function newRun(seed = 1467) {
 }
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
-  s.boostTime = 4.8; s.charge = 0;
+  s.boostTime = TURBO_DURATION; s.charge = 0;
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y });
   return true;
 }
