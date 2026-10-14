@@ -187,3 +187,44 @@
  .ember-suite .ember-controls .ember-boost{min-height:70px}
  .ember-suite .ember-controls .ember-boost>span:last-child{justify-content:center}
 }
+
+/* Single authoritative iPhone header layout; the artwork already includes
+   Rosie and the vehicle. Do not place a second portrait over it. */
+@media(max-width:620px){
+ .ember-suite .ember-header{
+   display:block;
+   height:clamp(138px,36vw,166px);
+   background-size:cover;
+   background-position:36% center;
+ }
+ .ember-suite .ember-header .ember-header-portrait{display:none}
+ .ember-suite .ember-header .ember-header-copy{
+   position:absolute;
+   left:49%;right:3%;top:0;bottom:0;
+   width:auto;height:auto;display:flex;
+   flex-direction:column;justify-content:center;align-items:flex-start;
+   padding:5px 0;transform:none;
+   text-align:left;pointer-events:none
+ }
+ .ember-suite .ember-header .ember-header-copy>span{
+   font-size:clamp(5px,1.45vw,7px);
+   letter-spacing:.02em;line-height:1.3
+ }
+ .ember-suite .ember-header .ember-header-copy h2{
+   font-size:clamp(18px,5vw,27px);
+   margin:7px 0 4px;
+   line-height:1.04;letter-spacing:-.055em;
+   white-space:normal
+ }
+ .ember-suite .ember-header .ember-header-copy p{
+   font-size:clamp(14px,3.85vw,19px);
+   margin:1px 0 0;line-height:1.12;white-space:normal
+ }
+ .ember-suite:has(.ember-stage.is-active) .ember-controls{
+   position:relative;bottom:auto;z-index:2
+ }
+ .ember-suite .ember-turbo-banner{
+   top:13%;font-size:clamp(15px,4.7vw,22px);
+   max-width:90%;text-align:center
+ }
+}

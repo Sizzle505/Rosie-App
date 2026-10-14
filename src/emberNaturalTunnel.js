@@ -85,19 +85,28 @@ function drawEarth(c,s,side,assets,stage,points){
 function drawRegisteredEdge(c,s,side,assets,stage,points){
   const img=assets[stage.current.key];
   if(!ready(img))return;
-  const depth=68,iw=img.naturalWidth,ih=img.naturalHeight;
-  c.save();
-  earthPath(c,points,side);c.clip();
-  for(let x=-STEP;x<W+STEP;x+=5){
+  const depth=80,strip=8,iw=img.naturalWidth,ih=img.naturalHeight;
+  const sourceY=Math.min(ih-1,Math.round(ih*.32));
+  c.save();earthPath(c,points,side);c.clip();
+  for(let x=-strip;x<W+strip;x+=strip){
     const world=s.scroll+x;
     const y=surface(world,side);
-    const u=((Math.floor(world*.75)%iw)+iw)%iw;
-    const sw=Math.min(5,iw-u);
-    const sy=Math.max(0,Math.min(ih-1,Math.floor(ih*.30)));
-    const sh=Math.max(1,Math.min(depth,ih-sy));
-    // Material extends OUT from the playable corridor on either side.
-    c.globalAlpha=.83;
-    c.drawImage(img,u,sy,sw,sh,x,side<0?y-depth:y,5.7,depth);
+    const slope=(surface(world+6,side)-surface(world-6,side))/12;
+    const u=((Math.floor(world*.80)%iw)+iw)%iw;
+    const sw=Math.max(1,Math.min(strip,iw-u));
+    c.save();c.translate(x,y);c.rotate(Math.atan(slope));
+    if(side<0)c.scale(1,-1);
+    // Short world-registered slices of low-frequency SOIL material only.
+    // The recovered illustrated 480px paintings are NOT sliced or tiled.
+    // Each outer band fades to zero rather than ending in a straight seam.
+    for(let v=0;v<depth;v+=8){
+      const t=v/depth;
+      const fade=Math.pow(1-t,1.9);
+      c.globalAlpha=.84*fade;
+      const sy=Math.min(ih-8,sourceY+v);
+      c.drawImage(img,u,sy,sw,8,0,v,strip+.8,8.8);
+    }
+    c.restore();
   }
   c.restore();
 }

@@ -1,5 +1,6 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, DRILL_ANCHOR, tunnelCenter, tunnelRadius, clamp } from "./emberDrillEngine.js";
 import { paintNaturalTunnel } from "./emberNaturalTunnel.js";
+import { paintRecoveredWalls } from "./emberRecoveredWalls.js";
 import { paintExcavationUnderlay, paintExcavationTip } from "./emberExcavationFX.js";
 
 const TWO_PI = Math.PI * 2;
@@ -82,6 +83,7 @@ const CAVERN_SCENES=[
   {at:10,key:"scenicBarkroot"},
   {at:21,key:"scenicLantern"},
   {at:32,key:"scenicCrystal"},
+  {at:38,key:"rubyLoop"},
   {at:43,key:"rubyOrganic"},
   {at:54,key:"templeOrganic"},
   {at:65,key:"scenicRoots"},
@@ -277,12 +279,16 @@ function vehicle(c,s,portrait,assets={}) {
     c.save();
     c.globalCompositeOperation="screen";
     for(let i=0;i<5;i++){
-      const pos=77+i*16,half=40-i*6;
-      const phase=s.time*(boosted?43:23)-i*.75;
-      const sheen=.11+.18*Math.max(0,Math.cos(phase));
-      c.strokeStyle="rgba(255,232,156,"+sheen.toFixed(3)+")";
-      c.lineWidth=2.8;
-      c.beginPath();c.moveTo(pos,-half);c.quadraticCurveTo(pos+4+Math.sin(phase)*3,0,pos,half);c.stroke();
+      const phase=s.time*(boosted?44:26)-i*.87;
+      const pos=71+i*17+Math.sin(phase)*6;
+      const half=Math.max(7,39-i*6);
+      const sheen=.25+.49*Math.max(0,Math.cos(phase));
+      c.strokeStyle="rgba(255,235,161,"+sheen.toFixed(3)+")";
+      c.lineWidth=2.3+(boosted?1.2:0);
+      c.beginPath();
+      c.moveTo(pos,-half);
+      c.quadraticCurveTo(pos+11*Math.cos(phase),0,pos+7*Math.sin(phase),half);
+      c.stroke();
     }
     c.restore();
     if(boosted){
@@ -371,6 +377,7 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
   paintNaturalTunnel(c,s,assets);
+  paintRecoveredWalls(c,s,assets);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
