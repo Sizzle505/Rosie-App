@@ -314,7 +314,11 @@ function pickup(c,o,s,assets={}){
 }
 function hazard(c,o,s,assets={}){
   const img=assets[o.kind==='spike'?'spike':'rock'];
-  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?90:87;glow(c,x,y,57,'rgba(245,77,57,.12)');c.save();c.translate(x,y);if(o.kind==='spike')c.rotate(s.time*1.8);drawImageTrim(c,img,-sz/2,-sz/2,sz,sz);c.restore();return;}}
+  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?90:87;glow(c,x,y,57,'rgba(245,77,57,.12)');
+    if(artReady(assets.hazardPulse)){
+      const pulse=.22+.14*Math.sin(s.time*9+o.id);
+      drawImageTrim(c,assets.hazardPulse,x-62,y-62,124,124,pulse);
+    }c.save();c.translate(x,y);if(o.kind==='spike')c.rotate(s.time*1.8);drawImageTrim(c,img,-sz/2,-sz/2,sz,sz);c.restore();return;}}
 
   const x=o.x-s.scroll,y=o.y;
   if(x<-85||x>W+90||o.taken)return;
@@ -420,7 +424,11 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   vehicle(c,s,portrait,assets);
   for(const p of particles){
     c.save();c.globalAlpha=Math.max(0,p.life/p.max);
-    circle(c,p.x,p.y,p.r,p.color);c.restore();
+    if(p.type==="cache-burst"&&artReady(assets.cacheBurst)){
+      const frame=Math.min(7,Math.floor((1-p.life/p.max)*8)), fw=assets.cacheBurst.naturalWidth/4,fh=assets.cacheBurst.naturalHeight/2;
+      c.drawImage(assets.cacheBurst,(frame%4)*fw,Math.floor(frame/4)*fh,fw,fh,p.x-80,p.y-80,160,160);
+    } else circle(c,p.x,p.y,p.r,p.color);
+    c.restore();
   }
   if(s.shock>0){
     c.fillStyle="rgba(246,67,38,"+(s.shock*.36)+")";c.fillRect(0,0,W,H);
