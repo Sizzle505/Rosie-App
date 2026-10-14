@@ -38,6 +38,12 @@ export function makeCourse(seed = 1467) {
         y: clamp(tunnelCenter(pos) + side * 112, 90, 720), radius: motif === 5 ? 37 : 42, taken: false });
     }
   }
+  // An early, visible temple wheel teaches the player that historic machinery
+  // protrudes from the walls. It leaves the central route clear for new players.
+  const firstWheelX=2280;
+  objects.push({id:++id,kind:"spike",x:firstWheelX,
+    y:tunnelCenter(firstWheelX)-tunnelRadius(firstWheelX)+52,
+    radius:37,taken:false});
   return objects;
 }
 export function newRun(seed = 1467) {
