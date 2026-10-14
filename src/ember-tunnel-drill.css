@@ -21,3 +21,85 @@
   .ember-suite .ember-header{background-position:47% center}
   .ember-suite .ember-controls{margin-bottom:3px}
 }
+
+/* iPhone header repair: preserve the illustrated Rosie/vehicle at native proportions,
+   and typeset the title independently so no letters can be cropped off-screen. */
+.ember-suite .ember-header{
+  background-image:url("/ember-drill/drill-header.webp");
+  background-repeat:no-repeat;
+  background-position:left center;
+  background-size:auto 100%;
+  background-color:#0e2230;
+  isolation:isolate;
+}
+.ember-suite .ember-header::before{
+  content:"";
+  display:block;
+  position:absolute;inset:0;
+  opacity:1;
+  background:linear-gradient(90deg,rgba(10,25,36,0) 32%,rgba(12,29,41,.92) 52%,#0c2333 69%,#102635 100%);
+  pointer-events:none;
+  z-index:1;
+}
+.ember-suite .ember-header .ember-header-portrait{display:none}
+.ember-suite .ember-header .ember-header-copy{
+  position:absolute;
+  z-index:2;
+  left:48%;right:2.5%;top:0;bottom:0;
+  opacity:1;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:7px 0;
+  min-width:0;
+  pointer-events:none;
+  text-align:left;
+  text-shadow:0 2px 6px #000,0 1px 2px #000;
+}
+.ember-suite .ember-header .ember-header-copy>span{
+  font:700 clamp(6px,.76vw,10px)/1.35 Georgia,serif;
+  letter-spacing:.09em;
+  white-space:normal;
+  max-width:100%;
+  color:#e5cb91;
+}
+.ember-suite .ember-header .ember-header-copy h2{
+  display:block;
+  white-space:nowrap;
+  margin:7px 0 3px;
+  font:700 clamp(21px,3.1vw,37px)/1 Georgia,serif;
+  letter-spacing:-.055em;
+}
+.ember-suite .ember-header .ember-header-copy p{
+  margin:4px 0 0;
+  font:italic clamp(15px,2.4vw,27px)/1.2 Georgia,serif;
+  white-space:nowrap;
+}
+.ember-suite .ember-header .ember-header-seal{display:none}
+@media(max-width:620px){
+ .ember-suite .ember-header{
+   background-size:auto 100%;
+   background-position:left center;
+ }
+ .ember-suite .ember-header::before{
+   background:linear-gradient(90deg,rgba(10,25,36,0) 29%,rgba(10,25,36,.86) 43%,#0c2432 57%,#0e2333 100%);
+ }
+ .ember-suite .ember-header .ember-header-copy{
+   left:47%;right:2%;padding:4px 0 4px 0;
+ }
+ .ember-suite .ember-header .ember-header-copy>span{
+   font-size:clamp(5px,1.3vw,7px);
+   letter-spacing:.03em;
+ }
+ .ember-suite .ember-header .ember-header-copy h2{
+   font-size:clamp(20px,5.1vw,29px);
+   letter-spacing:-.064em;
+   margin:6px 0 4px;
+ }
+ .ember-suite .ember-header .ember-header-copy p{
+   font-size:clamp(14px,3.8vw,21px);
+   margin-top:2px;
+ }
+}
+@media(max-width:370px){
+ .ember-suite .ember-header .ember-header-copy h2{font-size:19px}
+ .ember-suite .ember-header .ember-header-copy p{font-size:13px}
+}
