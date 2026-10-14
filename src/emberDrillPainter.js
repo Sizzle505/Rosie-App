@@ -4,14 +4,6 @@ import { paintNaturalTunnel } from "./emberNaturalTunnel.js";
 const TWO_PI = Math.PI * 2;
 
 const artReady = i => Boolean(i && i.complete && i.naturalWidth>0);
-function artLoop(c,img,shift,alpha=1){
-  if(!artReady(img))return false;
-  const w=img.naturalWidth*(H/img.naturalHeight);
-  const off=((shift%w)+w)%w;
-  c.save();c.globalAlpha=alpha;
-  for(let x=-off-w;x<W+w;x+=w)c.drawImage(img,x,0,w,H);
-  c.restore();return true;
-}
 function drawImageTrim(c,img,x,y,w,h,alpha=1){
   if(!artReady(img))return false;
   c.save();c.globalAlpha=alpha;c.drawImage(img,x,y,w,h);c.restore();return true;
