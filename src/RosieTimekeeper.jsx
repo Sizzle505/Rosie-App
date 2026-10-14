@@ -70,53 +70,6 @@ export default function RosieTimekeeper() {
   const finished = useRef(false);
   const utilityRef = useRef(null);
 
-  // The shared Resources navigation is fixed to the viewport. Preserve room
-  // between the control deck and the cabinet while keeping the tray above it.
-  useEffect(() => {
-    let frame = 0;
-    const fitTray = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const panel = utilityRef.current;
-        const nav = document.querySelector(".resources-bottom-nav");
-        const modeSwitch = document.querySelector(".rtk-action-deck .rtk-mode-switch");
-        const scene = document.querySelector(".rtk-scene");
-        if (!panel || !nav || !modeSwitch || !scene) return;
-        // Keep the page itself fixed. The cabinet adapts to the actual space
-        // between the gold selector and the fixed Resources navigation.
-        panel.style.removeProperty("height");
-        panel.style.removeProperty("aspect-ratio");
-        panel.style.removeProperty("top");
-        panel.style.setProperty("--rtk-nav-lift", "0px");
-        const sceneRect = scene.getBoundingClientRect();
-        const modeBottom = modeSwitch.getBoundingClientRect().bottom;
-        const navTop = nav.getBoundingClientRect().top;
-        const natural = panel.getBoundingClientRect();
-        const targetTop = Math.max(modeBottom + 4, natural.top - 8);
-        const available = Math.max(44, navTop - 8 - targetTop);
-        // Preserve the illustrated panel width. On shorter iPhones, reduce
-        // only its height and allow the inset lap/timer area to scroll.
-        if (available < natural.height - 1) {
-          panel.style.height = Math.floor(Math.max(44, available)) + "px";
-          panel.style.aspectRatio = "auto";
-        }
-        panel.style.top = Math.max(0, targetTop - sceneRect.top) + "px";
-      });
-    };
-    fitTray();
-    window.addEventListener("resize", fitTray);
-    window.addEventListener("orientationchange", fitTray);
-    const nav = document.querySelector(".resources-bottom-nav");
-    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fitTray) : null;
-    if (observer && nav) observer.observe(nav);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      observer?.disconnect();
-      window.removeEventListener("resize", fitTray);
-      window.removeEventListener("orientationchange", fitTray);
-    };
-  }, [mode, laps.length, timerEntry]);
-
   // Resume after reload using wall time only for time spent outside this page.
   // While open, performance.now() remains the high-precision source.
   useEffect(() => {
@@ -254,9 +207,10 @@ export default function RosieTimekeeper() {
     ? (duration > 0 ? Math.min(1, elapsed / duration) : 0)
     : ((elapsed % 60_000) / 60_000);
   const circumference = 2 * Math.PI * 43;
-  const leadingAngle = (mode === "countdown" ? -1 : 1) * dialProgress * Math.PI * 2;
-  const markerX = 50 + 43 * Math.sin(leadingAngle);
-  const markerY = 50 - 43 * Math.cos(leadingAngle);
+  // The runner follows the physical rail above the dial rather than an
+  // arbitrary circular halo around the numerals.
+  const runnerX = 18 + 64 * dialProgress;
+  const runnerY = 34 - 10 * Math.sin(Math.PI * dialProgress);
   const showMarker = running || elapsed > 0;
   const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
@@ -286,10 +240,11 @@ export default function RosieTimekeeper() {
           </p>
         )}
         <div className="rtk-observatory-props" aria-hidden="true">
-          <span className="rtk-pendulum rtk-pendulum-left" />
-          <span className="rtk-pendulum rtk-pendulum-right" />
           <span className={"rtk-hourglass " + (running ? "is-running" : "")} />
           <span className={"rtk-rosie-levers is-" + rosieState} />
+          <span className="rtk-upper-progress-rail" />
+          {showMarker && <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
+            style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />}
         </div>
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
@@ -332,8 +287,6 @@ export default function RosieTimekeeper() {
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
           </svg>
-          {showMarker && <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
-            aria-hidden="true" style={{ "--rtk-squirrel-x": markerX + "%", "--rtk-squirrel-y": markerY + "%" }} />}
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
             <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{hundredths}</span>
@@ -364,12 +317,12 @@ export default function RosieTimekeeper() {
               <span className="rtk-action-word">Reset</span>
             </button>
           </div>
+        </div>
+        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
           <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
             <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
           </div>
-        </div>
-        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
           <div className="rtk-utility-inner">
           {mode === "stopwatch" ? (
             <>

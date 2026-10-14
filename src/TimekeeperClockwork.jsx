@@ -2,10 +2,8 @@ import React from "react";
 import "./TimekeeperClockwork.css";
 
 /**
- * A seven-wheel gear train following the inside perimeter of the approved
- * clock. Adjacent pitch circles meet, with opposite angular direction and
- * angular speed inversely proportional to pitch diameter. The open-ended
- * chain avoids the impossible odd-gear closed-loop arrangement.
+ * A visible exterior gear train mounted around the clock bezel. It stays out
+ * of the numerical face and uses the supplied atlas as actual mechanism.
  *
  * Each wheel uses one of the four original illustrated transparent sprites;
  * the mechanical bridges and bearing jewels are stationary.
@@ -13,13 +11,16 @@ import "./TimekeeperClockwork.css";
 const ART = "/rosieverse/timekeeper/midnight-observatory/gear-atlas.webp";
 const SPRITES = ["0% 0%", "50% 0%", "100% 0%", "0% 100%", "50% 100%", "100% 100%"];
 
-// Follow the horseshoe clockwise. Successive center distances are within
-// ~1 percentage point of the sum of their pitch radii.
 const GEARS = [
-  { x: 22, y: 24, size: 27, sprite: 0, opacity: .82 },
-  { x: 73, y: 22, size: 25, sprite: 2, opacity: .83 },
-  { x: 76, y: 70, size: 26, sprite: 4, opacity: .82 },
-  { x: 25, y: 72, size: 27, sprite: 0, opacity: .81 },
+  { x: 4, y: 28, size: 29, sprite: 0, opacity: .94 },
+  { x: 14, y: 11, size: 22, sprite: 3, opacity: .9 },
+  { x: 43, y: 3, size: 19, sprite: 2, opacity: .88 },
+  { x: 77, y: 12, size: 23, sprite: 5, opacity: .9 },
+  { x: 96, y: 31, size: 29, sprite: 1, opacity: .94 },
+  { x: 94, y: 69, size: 26, sprite: 4, opacity: .92 },
+  { x: 72, y: 93, size: 24, sprite: 2, opacity: .89 },
+  { x: 24, y: 93, size: 25, sprite: 5, opacity: .89 },
+  { x: 5, y: 70, size: 27, sprite: 1, opacity: .93 },
 ].map((gear, index) => ({
   ...gear,
   cycle: 112 * gear.size / 45,
