@@ -109,44 +109,49 @@ function drawEarth(c,s,side,assets,stage,points){
   c.restore();
 }
 function drawFracturedFace(c,s,side,stage,points){
-  // Continuous, shallow exposed rock face: a narrow geological layer on the
-  // exterior side of the true silhouette. No repeated illustration panels.
-  const outer=points.map(([x,y])=>[x,y+side*(
-    27+4.8*Math.sin((s.scroll+x)/54+side)
-      +3*Math.sin((s.scroll+x)/21-.7)
-  )]);
+  // Only isolated stones and fractures, NEVER a second continuous ribbon
+  // laid along the course. Prior versions made the edge look artificially
+  // outlined even though the structural earth beneath it was correct.
+  const spacing=119;
+  const lo=Math.floor((s.scroll-130)/spacing);
+  const hi=Math.ceil((s.scroll+W+130)/spacing);
   c.save();
   earthPath(c,points,side);c.clip();
-  c.beginPath();
-  points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));
-  for(let i=outer.length-1;i>=0;i--)c.lineTo(...outer[i]);
-  c.closePath();
-  c.globalAlpha=.44;c.fillStyle=stage.current.edge;c.fill();
-  c.globalAlpha=1;
-  // Inset shadow establishes an undercut, without a bright continuous border.
-  edgePath(c,outer);
-  c.strokeStyle="rgba(13,8,11,.27)";
-  c.lineJoin="round";c.lineWidth=9;c.stroke();
-  // Short, irregular strata glints and faceted faults, attached to the wall.
-  for(let i=3;i<points.length-2;i+=5){
-    const [x,y]=points[i], depth=side*(13+hash(Math.floor((s.scroll+x)/23))*9);
-    const width=12+hash(Math.floor((s.scroll+x)/37))*17;
+  for(let i=lo;i<=hi;i++){
+    const world=i*spacing+(hash(i+311)-.5)*47;
+    const x=world-s.scroll;
+    const y=surface(world,side);
+    const w=21+hash(i+17)*39;
+    const d=side*(11+hash(i+19)*17);
     c.beginPath();
-    c.moveTo(x-width*.55,y+depth*.55);
-    c.lineTo(x-width*.12,y+depth*1.12);
-    c.lineTo(x+width*.54,y+depth*.60);
-    c.lineTo(x+width*.18,y+depth*.28);
+    c.moveTo(x-w*.57,y+side*2);
+    c.lineTo(x-w*.41,y+d*.55);
+    c.lineTo(x-w*.08,y+d*1.21);
+    c.lineTo(x+w*.43,y+d*.87);
+    c.lineTo(x+w*.60,y+side*2);
+    c.lineTo(x+w*.10,y+side*1);
     c.closePath();
-    c.fillStyle=i%3===0?"rgba(227,167,94,.18)":"rgba(24,14,15,.18)";
+    c.fillStyle=i%3===0?"rgba(21,12,14,.26)":"rgba(112,71,48,.18)";
     c.fill();
-    if(i%3===0){
-      c.beginPath();c.moveTo(x-width*.38,y+depth*.46);
-      c.lineTo(x+width*.33,y+depth*.38);
-      c.strokeStyle="rgba(235,172,98,.17)";c.lineWidth=1;c.stroke();
+    c.beginPath();
+    c.moveTo(x-w*.40,y+d*.40);
+    c.lineTo(x+w*.11,y+d*.62);
+    c.lineTo(x+w*.36,y+d*.50);
+    c.strokeStyle="rgba(216,152,92,.15)";
+    c.lineWidth=1.25;c.stroke();
+    // Sparse cracks taper into rock. They cannot create floating props or
+    // uninterrupted stripes when the tunnel bends or scrolls.
+    if(i%3===1){
+      const lx=x+w*.17,ly=y+side*4;
+      c.beginPath();c.moveTo(lx,ly);
+      c.bezierCurveTo(lx-9,ly+side*9,lx+6,ly+side*17,lx-4,ly+side*28);
+      c.strokeStyle="rgba(18,12,14,.29)";
+      c.lineWidth=1.45;c.stroke();
     }
   }
   c.restore();
 }
+
 function drawExposedRidge(c,s,side,stage){
   // Multiple irregular, interlocked chips produce the illusion of broken rock
   // without recycling painted cliffs as rectangular collage pieces.
