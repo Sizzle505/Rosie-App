@@ -1,5 +1,6 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, DRILL_ANCHOR, tunnelCenter, tunnelRadius, clamp } from "./emberDrillEngine.js";
 import { paintNaturalTunnel } from "./emberNaturalTunnel.js";
+import { paintRecoveredWalls } from "./emberRecoveredWalls.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -196,7 +197,23 @@ function pickup(c,o,s,assets={}){
 }
 function hazard(c,o,s,assets={}){
   const img=assets[o.kind==='spike'?'spike':'rock'];
-  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?90:87;glow(c,x,y,57,'rgba(245,77,57,.12)');
+  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?94:92;
+    if(o.kind==='spike'){
+      // The ornate wheel is a temple mechanism, not a floating grey target.
+      const middle=tunnelCenter(o.x),above=o.y<middle;
+      const boundary=middle+(above?-1:1)*(tunnelRadius(o.x)-9);
+      const fixture=above?-1:1;
+      c.save();
+      c.strokeStyle="rgba(45,30,25,.83)";c.lineWidth=12;c.lineCap="round";
+      c.beginPath();c.moveTo(x,boundary);c.lineTo(x,o.y);c.stroke();
+      c.strokeStyle="rgba(213,155,79,.88)";c.lineWidth=3;
+      c.beginPath();c.moveTo(x-2,boundary);c.lineTo(x-2,o.y);c.stroke();
+      circle(c,x,boundary,11,"#4b3025");circle(c,x,boundary,6,"#c99b55");
+      c.restore();
+    }else{
+      glow(c,x,y,57,"rgba(246,123,77,.14)");
+    }
+    glow(c,x,y,57,'rgba(245,77,57,.12)');
     if(artReady(assets.hazardPulse)){
       const pulse=.22+.14*Math.sin(s.time*9+o.id);
       drawImageTrim(c,assets.hazardPulse,x-62,y-62,124,124,pulse);
@@ -350,6 +367,7 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
   paintNaturalTunnel(c,s);
+  paintRecoveredWalls(c,s,assets);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
