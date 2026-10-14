@@ -11,7 +11,7 @@ test("corridor expands for sculpted rock and still remains safely inside gamepla
  }
 });
 test("all placed original formations have visible penetration and valid obstacle profiles",()=>{
- assert.equal(FORMATION_LAYOUT.length,20);
+ assert.equal(FORMATION_LAYOUT.length,36);
  assert.ok(FORMATION_LAYOUT.filter(x=>x.obstacle).length>=7);
  for(const f of FORMATION_LAYOUT){
   const projected=formationIntrusion(f);
