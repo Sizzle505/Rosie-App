@@ -1,3 +1,4 @@
+import { FORMATION_LAYOUT, formationClearance } from "./emberTunnelLayout.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -10,7 +11,7 @@ export function tunnelCenter(x) {
   return 402 + 113 * Math.sin(x / 720 + 0.12) + 48 * Math.sin(x / 1340 + 1.35);
 }
 export function tunnelRadius(x) {
-  return 193 + 17 * Math.sin(x / 1050 + 1.1);
+  return 233 + 12 * Math.sin(x / 1050 + 1.1);
 }
 function randomGenerator(seed) {
   let value = seed >>> 0;
@@ -50,13 +51,20 @@ export function newRun(seed = 1467) {
   return { running: true, ended: false, time: 0, scroll: 0, y: tunnelCenter(DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 3, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
-    objects: makeCourse(seed), events: [], result: null, distance: 0 };
+    objects: makeCourse(seed), formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
   s.boostTime = 4.8; s.charge = 0;
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y });
   return true;
+}
+export function intersectsSculpture(f, worldX, y) {
+  const intrude=formationClearance(f,worldX);
+  if(intrude<=0)return false;
+  const edge=tunnelCenter(worldX)+f.side*tunnelRadius(worldX);
+  // 24px fair hull allowance. Only the central, visibly solid relief hits.
+  return f.side*(y-edge)>-intrude-24;
 }
 export function updateRun(s, dt, up = false, down = false) {
   if (!s.running) return s;
@@ -76,8 +84,21 @@ export function updateRun(s, dt, up = false, down = false) {
   s.passage = clamp(1 + Math.floor(s.time / 15), 1, 5);
   const worldX = s.scroll + DRILL_ANCHOR;
   const routeMid = tunnelCenter(worldX);
-  const outside = Math.abs(s.y - routeMid) > tunnelRadius(worldX) - 15;
+  const outside = Math.abs(s.y - routeMid) > tunnelRadius(worldX) - 43;
   if (outside && s.hitCooldown <= 0 && !boosted) takeHit(s);
+  // Collision follows the SAME world-anchored illustrated overhangs/floor rises.
+  // A smaller elliptical core, not the full rectangular transparent image,
+  // creates fair dodges. Check toward the real drill nose, not the cockpit.
+  const tipWorldX = worldX + 105;
+  for (const formation of FORMATION_LAYOUT) {
+    if (!formation.obstacle || s.formationHits.includes(formation.at)) continue;
+    if (!intersectsSculpture(formation, tipWorldX, s.y)) continue;
+    s.formationHits.push(formation.at); // One contact per geological obstacle.
+    if (boosted) {
+      s.score += 125;
+      s.events.push({type:"shatter",x:DRILL_ANCHOR+105,y:s.y});
+    } else if (s.hitCooldown<=0) takeHit(s);
+  }
   for (let i = 0; i < s.objects.length; i++) {
     const obj = s.objects[i];
     if (obj.taken || obj.x < worldX - 95 || obj.x > worldX + 85) continue;
