@@ -46,7 +46,6 @@ const DRILL_ART = {
   wallSanctumFloor:"wall-sanctum-floor.webp",
   rubyLoop:"ruby-loop.webp",
   crystalOverlay:"feature-crystaloverlay.webp",
-  turbo:"turbo-animation.webp",
   turboAtlas:"turbo-head-frames.webp",
   barkroot:"barkroot-loop.webp",
   rubyOrganic:"ruby-organic-passage.webp",
