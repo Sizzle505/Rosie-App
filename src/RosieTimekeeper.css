@@ -1879,3 +1879,134 @@ body:has(.app-shell.page-timekeeper),
   .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-left { left:35.2%; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-right { right:35.2%; }
 }
+
+
+/* 2026-10-14: Master-asset lever stations and true exterior gearing.
+   This block supersedes the prior procedural rods and in-dial gearing.
+   All positions are relative to the SAME illustrated art board. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  z-index:3;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-original-atlas.webp");
+  background-size:300% 100%;
+  background-repeat:no-repeat;
+  background-position:0% 50%;
+  image-rendering:auto;
+  animation:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull {
+  background-position:50% 50%;
+  transform:translateY(1px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  background-position:100% 50%;
+  animation:rtk-rosie-working 2.8s ease-in-out infinite alternate;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever {
+  position:absolute;
+  z-index:2;
+  top:17.2%;
+  width:17%;
+  aspect-ratio:3 / 2;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.6));
+  pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left { left:25.9%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right { right:25.9%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::before,
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::after {
+  content:"";
+  display:block;
+  position:absolute;
+  inset:0;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/twin-lever-original-atlas.webp");
+  background-size:200% 200%;
+  background-repeat:no-repeat;
+  transition:opacity .42s ease-in-out,transform .55s cubic-bezier(.2,.8,.2,1);
+  transform-origin:50% 85%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::before { opacity:1; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::after { opacity:0; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left::before { background-position:0% 0%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left::after { background-position:100% 100%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right::before { background-position:0% 100%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right::after { background-position:100% 0%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props.is-running .rtk-twin-lever::before { opacity:0; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props.is-running .rtk-twin-lever::after { opacity:1; }
+
+/* Unclipped behind the clock shell, never painted across its interior.
+   The first gear of each train sits directly beneath Rosie's levers. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork {
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:38%;
+  width:90%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  overflow:visible;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-clockwork {
+  display:block;
+  position:absolute;
+  z-index:auto;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  transform:none;
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:none;
+  box-shadow:none;
+  -webkit-mask:none;
+  mask:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount {z-index:1;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+  background-size:300% 200%;
+  background-repeat:no-repeat;
+  opacity:var(--rtk-opacity,.95);
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.64)) saturate(1.07) brightness(1.07);
+  animation-play-state:paused;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork.is-running .rtk-rotating-wheel {
+  animation-play-state:running;
+}
+
+/* Visible single supplied squirrel frame; only its position moves.
+   The ring and squirrel share the same gradual 25-minute stopwatch phase. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-running {
+  display:block;
+  z-index:10;
+  width:15.5%;
+  aspect-ratio:543 / 724;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/squirrel-original-still.webp");
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:1;
+  visibility:visible;
+  animation:none !important;
+  transition:left 240ms linear, top 240ms linear;
+  filter:drop-shadow(0 2px 2px #100609) drop-shadow(0 0 1px #f9cc87);
+  will-change:transform;
+}
+@media(max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork { top:37%; width:90%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever {top:17.1%; width:17.5%;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left {left:25.4%;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right {right:25.4%;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+    animation:none!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+    animation:none!important;
+  }
+}

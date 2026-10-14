@@ -203,9 +203,6 @@ export default function RosieTimekeeper() {
   }
 
   const remaining = Math.max(0, duration - elapsed);
-  const dialProgress = mode === "countdown"
-    ? (duration > 0 ? Math.min(1, elapsed / duration) : 0)
-    : ((elapsed % 60_000) / 60_000);
   const circumference = 2 * Math.PI * 43;
   // Every moving mechanism derives from this same phase: the blue energy
   // circle and squirrel tell time, while Rosie, gears, pendulums and sand run.
@@ -214,13 +211,14 @@ export default function RosieTimekeeper() {
   // A countdown still maps precisely to its selected duration.
   const runnerPhase = mode === "countdown"
     ? dialProgress
-    : Math.min(elapsed / (25 * 60 * 1000), 1);
+    : ((elapsed % (25 * 60 * 1000)) / (25 * 60 * 1000));
+  const dialProgress = runnerPhase;
   const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
-  const runnerX = 50 + 52 * Math.cos(runnerAngle);
-  const runnerY = 50 + 52 * Math.sin(runnerAngle);
-  // The supplied working export is visibly softer than the ready/pull frames.
-  // Keep the crisp pull pose while running, then animate only a subtle tug.
-  const rosieState = running || elapsed > 0 ? "pull" : "ready";
+  const runnerX = 50 + 49.5 * Math.cos(runnerAngle);
+  const runnerY = 50 + 49.5 * Math.sin(runnerAngle);
+  // All three illustrated poses now come from the same full-resolution
+  // Dropbox master, so the working pose can return without looking soft.
+  const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
@@ -249,12 +247,14 @@ export default function RosieTimekeeper() {
         )}
         <div className={"rtk-observatory-props" + (running ? " is-running" : "")} aria-hidden="true">
           <span className={"rtk-rosie-levers is-" + rosieState} />
-          <span className="rtk-lever-drive rtk-lever-drive-left" />
-          <span className="rtk-lever-drive rtk-lever-drive-right" />
+          <span className="rtk-twin-lever rtk-twin-lever-left" />
+          <span className="rtk-twin-lever rtk-twin-lever-right" />
+        </div>
+        <div className={"rtk-exterior-gearwork" + (running ? " is-running" : "")} aria-hidden="true">
+          <TimekeeperClockwork />
         </div>
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
-          <TimekeeperClockwork />
           <span className="rtk-bezel" aria-hidden="true" />
           <div className="rtk-ornate-track" aria-hidden="true" />
           <svg className={"rtk-progress-ring" + (running ? " is-animating" : "") + (mode === "countdown" ? " is-reverse" : "")}
