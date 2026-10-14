@@ -23,7 +23,7 @@ await page.addScriptTag({content:out.outputFiles[0].text});
 await page.evaluate(async map=>{
  const assets={};await Promise.all(Object.entries(map).map(async([key,filename])=>{
   const img=new Image();img.src="/ember-drill/"+filename;
-  try{await img.decode();assets[key]=img}catch(e){if(["auger","body","turbo","boosttrail"].includes(key))throw new Error(key+" not loaded")}
+  try{await img.decode();assets[key]=img}catch(e){if(["auger","body","turbo","turboAtlas","boosttrail"].includes(key))throw new Error(key+" not loaded")}
  }));
  window.__drillArtQA=assets;window.__drillCanvasQA=document.createElement("canvas");
  const canvas=window.__drillCanvasQA;canvas.width=690;canvas.height=820;
@@ -42,7 +42,7 @@ async function draw(label,time,boost,pitch=0){
   window.__drillQA.paintDrill(c,s,null,[],window.__drillArtQA);
   const shaft=Array.from(c.getImageData(267,Math.round(s.y)-42,105,84).data);
   const tail=Array.from(c.getImageData(5,Math.round(s.y)-48,150,96).data);
-  return {calls:calls.filter(v=>/auger-spin|turbo-animation|feature-boosttrail/.test(v.asset)),
+  return {calls:calls.filter(v=>/auger-spin|turbo-animation|turbo-head-frames|feature-boosttrail/.test(v.asset)),
    phase:window.__drillQA.augerFrameIndex(time,boost>0),turboPhase:boost>0?window.__drillQA.turboFrameIndex(boost):null,shaft,tail};
  },{time,boost,pitch});
  const png=await page.evaluate(()=>window.__drillCanvasQA.toDataURL("image/png"));
