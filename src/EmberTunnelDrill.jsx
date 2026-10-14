@@ -5,6 +5,10 @@ import "./ember-tunnel-drill.css";
 
 const LABELS = ["Barkroot Passage", "Ruby Temple Galleries"];
 const DRILL_ART = {
+  terrainEarth:"terrain-barkroot-earth.webp",
+  terrainRoots:"terrain-deep-rootstone.webp",
+  terrainRuby:"terrain-ruby-crystal-rock.webp",
+  terrainTemple:"terrain-temple-basalt.webp",
   body:"drill-body.webp",
   turnUp:"wall-turn-up.webp",
   turnNeutral:"wall-turn-neutral.webp",
