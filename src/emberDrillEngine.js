@@ -1,16 +1,16 @@
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
-export const DRILL_WIDTH = 960;
-export const DRILL_HEIGHT = 690;
-export const DRILL_ANCHOR = 285;
+export const DRILL_WIDTH = 690;
+export const DRILL_HEIGHT = 820;
+export const DRILL_ANCHOR = 210;
 export const RUN_DURATION = 75;
 
 export function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 export function tunnelCenter(x) {
-  return 341 + 87 * Math.sin(x / 720 + 0.12) + 48 * Math.sin(x / 1340 + 1.35);
+  return 402 + 113 * Math.sin(x / 720 + 0.12) + 48 * Math.sin(x / 1340 + 1.35);
 }
 export function tunnelRadius(x) {
-  return 163 + 17 * Math.sin(x / 1050 + 1.1);
+  return 193 + 17 * Math.sin(x / 1050 + 1.1);
 }
 function randomGenerator(seed) {
   let value = seed >>> 0;
@@ -27,7 +27,7 @@ export function makeCourse(seed = 1467) {
     const kind = motif === 0 ? "bone" : motif === 3 ? "cheese" : "gem";
     for (let j = 0; j < 5; j++) {
       const pos = x + j * 68;
-      const y = clamp(tunnelCenter(pos) + offset + Math.sin(j / 4 * Math.PI) * (motif % 2 ? 24 : -24), 95, 605);
+      const y = clamp(tunnelCenter(pos) + offset + Math.sin(j / 4 * Math.PI) * (motif % 2 ? 24 : -24), 95, 725);
       objects.push({ id: ++id, kind: j === 4 && motif === 3 ? "cache" : kind, x: pos, y, radius: 20, taken: false });
     }
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
@@ -35,7 +35,7 @@ export function makeCourse(seed = 1467) {
       const pos = x + 425;
       const side = rand() < 0.5 ? -1 : 1;
       objects.push({ id: ++id, kind: motif === 5 ? "spike" : "rock", x: pos,
-        y: clamp(tunnelCenter(pos) + side * 112, 90, 600), radius: motif === 5 ? 37 : 42, taken: false });
+        y: clamp(tunnelCenter(pos) + side * 112, 90, 720), radius: motif === 5 ? 37 : 42, taken: false });
     }
   }
   return objects;
