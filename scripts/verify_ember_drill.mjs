@@ -86,7 +86,15 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       spike:"hazard-spike.webp",rock:"hazard-rock.webp",hazardPulse:"hazard-pulse.webp",
       gate:"feature-gate.webp",lantern:"feature-lantern.webp",
       chest:"feature-chest.webp",coin:"feature-coin.webp",rockburst:"feature-rockburst.webp",
-      boosttrail:"feature-boosttrail.webp",crystaloverlay:"feature-crystaloverlay.webp"};
+      boosttrail:"feature-boosttrail.webp",crystaloverlay:"feature-crystaloverlay.webp",
+      turnUp:"wall-turn-up.webp",turnNeutral:"wall-turn-neutral.webp",turnDown:"wall-turn-down.webp",
+      wallAmberCeiling:"wall-amber-ceiling.webp",wallAmberFloor:"wall-amber-floor.webp",
+      wallFantasyCeiling:"wall-fantasy-ceiling.webp",wallFantasyFloor:"wall-fantasy-floor.webp",
+      wallLanternCeiling:"wall-lantern-ceiling.webp",
+      wallDescentCeiling:"wall-descent-ceiling.webp",wallDescentFloor:"wall-descent-floor.webp",
+      wallRubyCeiling:"wall-ruby-ceiling.webp",wallRubyFloor:"wall-ruby-floor.webp",
+      wallCrystalFloor:"wall-crystal-floor.webp",
+      wallSanctumCeiling:"wall-sanctum-ceiling.webp",wallSanctumFloor:"wall-sanctum-floor.webp"};
     const assets={};
     await Promise.all(Object.entries(names).map(async ([key,file])=>{
       const img=new Image();img.src="/ember-drill/"+file;await img.decode();assets[key]=img;
@@ -156,11 +164,12 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
 
     // Proof the illustrated walls are actually painted: compare the same
     // passage with and without the original loaded wall source images.
-    state.time=16;state.scroll=5200;state.y=405;state.boostTime=0;state.objects=[];
+    state.time=16;state.scroll=5600;state.y=405;state.boostTime=0;state.objects=[];
     window.EmberPainter.paintDrill(c,state,portrait,[],assets);
     const withWalls=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
     window.__emberWallsCapture=c.canvas.toDataURL("image/png");
-    const noWalls={...assets,roof:null,floor:null,hangingRoots:null,descentRoof:null,descentFloor:null};
+    const noWalls={...assets,roof:null,floor:null,hangingRoots:null,descentRoof:null,descentFloor:null,
+      wallAmberCeiling:null,wallAmberFloor:null,wallFantasyCeiling:null,wallFantasyFloor:null,wallLanternCeiling:null,wallDescentCeiling:null,wallDescentFloor:null,wallRubyCeiling:null,wallRubyFloor:null,wallCrystalFloor:null,wallSanctumCeiling:null,wallSanctumFloor:null};
     window.EmberPainter.paintDrill(c,state,portrait,[],noWalls);
     const withoutWalls=c.getImageData(0,0,690,820).data;
     let wallDiff=0, samples=0;
@@ -173,6 +182,29 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     const recoveredWallDifference=wallDiff/samples;
     if(recoveredWallDifference<.26)
       throw new Error("Illustrated rock and ceiling assets not visibly integrated: "+recoveredWallDifference);
+
+    // Every recovered illustration must actually render in the scrolling
+    // corridor; loading an image alone is not proof of integration.
+    const wallAnchors=[
+      ["wall-amber-ceiling.webp",900],["wall-amber-floor.webp",1850],
+      ["wall-fantasy-ceiling.webp",3100],["wall-fantasy-floor.webp",4350],
+      ["wall-lantern-ceiling.webp",5850],["wall-descent-ceiling.webp",7650],
+      ["wall-descent-floor.webp",8950],["wall-ruby-ceiling.webp",11350],
+      ["wall-ruby-floor.webp",13350],["wall-crystal-floor.webp",15500],
+      ["wall-sanctum-ceiling.webp",18850],["wall-sanctum-floor.webp",22350],
+    ];
+    for(const [file,world] of wallAnchors){
+      state.scroll=world-350;state.time=world/340;state.objects=[];state.boostTime=0;
+      window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+      if(!drawn.has(file))throw new Error("Undrawn original wall segment: "+file);
+    }
+    for(const angle of [-.54,0,.54]){
+      state.pitch=angle;state.scroll=6800;state.y=405;state.time=20;
+      window.EmberPainter.paintDrill(c,state,portrait,[],assets);
+    }
+    const registered=["wall-turn-up.webp","wall-turn-neutral.webp","wall-turn-down.webp"];
+    for(const file of registered)
+      if(!drawn.has(file))throw new Error("Undrawn turning-pose artwork: "+file);
 
     const required=["feature-gate.webp","feature-lantern.webp","feature-chest.webp",
       "feature-coin.webp","feature-rockburst.webp","feature-boosttrail.webp",
@@ -195,6 +227,6 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
   await page.evaluate(()=>{const img=new Image();img.src=window.__emberWallsCapture;img.id="ember-walls-proof";img.style.cssText="position:absolute;top:0;left:0;width:340px;height:405px;z-index:100002;pointer-events:none";document.body.appendChild(img)});
   await page.locator("#ember-walls-proof").screenshot({path:"artifacts/ember-drill/"+name+"-walls.png"});
   await page.locator("#ember-qa-turbo").screenshot({path:"artifacts/ember-drill/"+name+"-turbo.png"});
-  console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult));
+  console.log(name,"PASS",JSON.stringify(artwork),"time",remaining[0],"turbo",JSON.stringify(turboResult),"recovered=15/15");
   await context.close();await browser.close();
 }
