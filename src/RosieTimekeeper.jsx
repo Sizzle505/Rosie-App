@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./RosieTimekeeper.css";
 import TimekeeperClockwork from "./TimekeeperClockwork.jsx";
 
-const ART = "/rosieverse/timekeeper/grand-clockwork-hall.jpg";
-const SQUIRREL = "/rosieverse/timekeeper/running-squirrel.webp";
+const ART = "/rosieverse/timekeeper/midnight-observatory/hall-plate.webp";
 const STORAGE_KEY = "rosie-timekeeper-v2";
 function cueComplete() {
   // Best effort in the foreground only; iOS does not guarantee background alarms.
@@ -259,6 +258,7 @@ export default function RosieTimekeeper() {
   const markerX = 50 + 43 * Math.sin(leadingAngle);
   const markerY = 50 - 43 * Math.cos(leadingAngle);
   const showMarker = running || elapsed > 0;
+  const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
@@ -270,12 +270,12 @@ export default function RosieTimekeeper() {
 
   return (
     <main className="rtk-page" aria-label="Rosie's Timekeeper">
-      <div className="rtk-scene">
+      <div className="rtk-scene rtk-observatory">
         <div className="rtk-art-stage">
         <img
           className="rtk-background"
           src={ART}
-          alt="Rosie operating the grand clockwork hall, with gold gears and an empty timer dial"
+          alt="Rosie's midnight observatory, with clockwork cabinets and a moonlit window"
           draggable="false"
           onError={() => setArtFailed(true)}
           onLoad={() => setArtFailed(false)}
@@ -285,8 +285,16 @@ export default function RosieTimekeeper() {
             The Timekeeper artwork must be installed at {ART}.
           </p>
         )}
+        <div className="rtk-observatory-props" aria-hidden="true">
+          <span className="rtk-pendulum rtk-pendulum-left" />
+          <span className="rtk-pendulum rtk-pendulum-right" />
+          <span className={"rtk-hourglass " + (running ? "is-running" : "")} />
+          <span className={"rtk-rosie-levers is-" + rosieState} />
+        </div>
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
+          <span className="rtk-face-base" aria-hidden="true" />
           <TimekeeperClockwork />
+          <span className="rtk-bezel" aria-hidden="true" />
           <div className="rtk-ornate-track" aria-hidden="true" />
           <svg className={"rtk-progress-ring" + (running ? " is-animating" : "") + (mode === "countdown" ? " is-reverse" : "")}
             viewBox="0 0 100 100" aria-hidden="true" focusable="false">
@@ -323,15 +331,9 @@ export default function RosieTimekeeper() {
             <circle className="rtk-progress-live" cx="50" cy="50" r="43"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
-            {showMarker && (
-              <g className="rtk-progress-charm" transform={`translate(${markerX} ${markerY})`}>
-                <circle className="rtk-squirrel-aura" r="6.6" />
-                <image className="rtk-squirrel-asset" href={SQUIRREL}
-                  x="-7" y="-7" width="14" height="14" preserveAspectRatio="xMidYMid meet"
-                  transform={mode === "countdown" ? "scale(-1 1)" : undefined} />
-              </g>
-            )}
           </svg>
+          {showMarker && <span className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
+            aria-hidden="true" style={{ "--rtk-squirrel-x": markerX + "%", "--rtk-squirrel-y": markerY + "%" }} />}
           <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
             <span className="rtk-time-whole">{wholeTime}</span>
             <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{hundredths}</span>
