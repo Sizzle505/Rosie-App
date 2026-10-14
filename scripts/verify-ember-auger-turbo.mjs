@@ -9,7 +9,7 @@ const match=jsx.match(/const DRILL_ART = \{([\s\S]*?)\n\};/);
 assert.ok(match,"Original DRILL_ART asset registry present");
 const art=Object.fromEntries([...match[1].matchAll(/(\w+):"([^"]+)"/g)].map(m=>[m[1],m[2]]));
 const out=await build({stdin:{
-  contents:`import{paintDrill}from './src/emberDrillPainter.js';import{tunnelCenter}from './src/emberDrillEngine.js';import{augerFrameIndex,turboFrameIndex}from './src/emberAugerFX.js';window.__drillQA={paintDrill,tunnelCenter,augerFrameIndex}`,
+  contents:`import{paintDrill}from './src/emberDrillPainter.js';import{tunnelCenter}from './src/emberDrillEngine.js';import{augerFrameIndex,turboFrameIndex}from './src/emberAugerFX.js';window.__drillQA={paintDrill,tunnelCenter,augerFrameIndex,turboFrameIndex}`,
   resolveDir:process.cwd(),sourcefile:"auger-QA-entry.js",loader:"js"},
   bundle:true,format:"iife",platform:"browser",write:false,logLevel:"silent"});
 const browser=await chromium.launch({headless:true});
