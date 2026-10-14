@@ -7853,3 +7853,9 @@ html, body, #root, .app-shell { min-height:var(--rosie-visible-height,100vh); }
 .app-shell .bottom-side-seal{position:fixed;bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:1004;width:40px;height:36px;display:grid;place-items:center;border:1.5px solid #d3a861;border-radius:13px;background:linear-gradient(145deg,#624124,#24152b);box-shadow:inset 0 0 0 2px #a47c48,0 3px 10px #0009;color:#f6dba2;font:700 23px/1 Georgia,serif;cursor:pointer}
 .app-shell .bottom-side-seal--home{left:calc(50% - 110px)}.app-shell .bottom-side-seal--tools{left:calc(50% + 70px);font-size:21px}
 @media(max-width:680px){.app-shell .bottom-side-seal{bottom:calc(68px + env(safe-area-inset-bottom,0px));width:37px;height:34px}.app-shell .bottom-side-seal--home{left:calc(50% - 105px)}.app-shell .bottom-side-seal--tools{left:calc(50% + 68px)}}
+
+/* Keep both seals directly beside the Games/Tools pendant at precisely its height. */
+.app-shell:not(.page-home) .bottom-side-seal{top:auto!important;bottom:calc(max(6px,env(safe-area-inset-bottom)) + 8px)!important;height:34px!important;width:40px!important;border-radius:11px!important;z-index:1100!important;transform:translateY(10px)!important}
+.app-shell:not(.page-home) .bottom-side-seal--home{left:calc(50% - 166px)!important}
+.app-shell:not(.page-home) .bottom-side-seal--tools{left:calc(50% + 126px)!important}
+@media(max-width:680px){.app-shell:not(.page-home) .bottom-side-seal{height:32px!important;width:36px!important}.app-shell:not(.page-home) .bottom-side-seal--home{left:calc(50% - 150px)!important}.app-shell:not(.page-home) .bottom-side-seal--tools{left:calc(50% + 114px)!important}}

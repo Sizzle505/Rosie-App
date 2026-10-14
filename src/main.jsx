@@ -1157,8 +1157,12 @@ function CheeseMemoryGame() {
   }
 
   function chooseCard(index) {
-    // Cards must remain inert until Start launches the selected exam.
-    if (gameMode === "classic" && !started) return;
+    // The first card tap starts Classic and reveals that very card.
+    if (gameMode === "classic" && !started) {
+      setStarted(true);
+      applyReaction("intrigued", "The exam is underway! Match eight pairs to impress Doctor Rosie.");
+      scheduleBoardFocus();
+    }
     // Preview cards cannot be selected; the clock always begins after the reveal.
     if (gameMode === "sprint") {
       if (challengePhase !== "playing") return;
