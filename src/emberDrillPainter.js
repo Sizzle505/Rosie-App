@@ -88,43 +88,98 @@ function drawLantern(c,x,y,scale=1) {
   c.strokeStyle="#7c4827";c.lineWidth=2;c.beginPath();c.moveTo(0,-15);c.lineTo(0,15);c.moveTo(-11,0);c.lineTo(11,0);c.stroke();
   c.restore();
 }
+// Pan inside each original painted panorama. Never repeat a full illustration
+// edge-to-edge: the previous renderer exposed ugly rectangular image seams.
+function panorama(c,img,progress,opacity=1){
+  if(!artReady(img))return false;
+  const sw=Math.min(img.naturalWidth,img.naturalHeight*W/H);
+  const free=Math.max(0,img.naturalWidth-sw);
+  const t=clamp(progress,0,1);
+  const sx=free*(.04+.92*(t*t*(3-2*t)));
+  c.save();c.globalAlpha=opacity;
+  c.drawImage(img,sx,0,sw,img.naturalHeight,0,0,W,H);
+  c.restore();
+  return true;
+}
+const CAVERN_SCENES=[
+  {at:0,key:"barkroot"},
+  {at:10,key:"scenicBarkroot"},
+  {at:21,key:"scenicRoots"},
+  {at:32,key:"scenicLantern"},
+  {at:43,key:"ruby"},
+  {at:54,key:"scenicCrystal"},
+  {at:65,key:"scenicTemple"},
+];
+// These are world-anchored scenic set pieces, NOT collectible markers.
+// Actual cheese, gems, bones and treasure caches are drawn separately.
+const CAVERN_FEATURES=[
+  {kind:"lantern",world:1150,side:-1},
+  {kind:"crystaloverlay",world:3150,side:1},
+  {kind:"lantern",world:5700,side:-1},
+  {kind:"crystaloverlay",world:7500,side:1},
+  {kind:"gate",world:10780,side:0},
+  {kind:"lantern",world:12500,side:-1},
+  {kind:"gate",world:15300,side:0},
+  {kind:"crystaloverlay",world:17700,side:1},
+  {kind:"gate",world:20800,side:0},
+  {kind:"lantern",world:23400,side:-1},
+];
+function scenicFeatures(c,s,assets){
+  for(const feature of CAVERN_FEATURES){
+    const x=feature.world-s.scroll;
+    if(x<-450||x>W+450)continue;
+    const mid=tunnelCenter(feature.world),r=tunnelRadius(feature.world);
+    if(feature.kind==="gate"){
+      const img=assets.gate;
+      if(!artReady(img))continue;
+      glow(c,x,mid,190,"rgba(243,170,74,.15)");
+      drawImageTrim(c,img,x-195,mid-145,390,290,.83);
+    } else if(feature.kind==="lantern"){
+      const y=mid-r+56;
+      const img=assets.lantern;
+      if(artReady(img)){
+        glow(c,x,y,95,"rgba(244,173,73,.22)");
+        drawImageTrim(c,img,x-29,y-71,58,137,.88);
+      }
+    } else if(feature.kind==="crystaloverlay"){
+      const img=assets.crystaloverlay;
+      if(!artReady(img))continue;
+      const y=mid+r-63;
+      glow(c,x,y,95,"rgba(237,87,124,.16)");
+      drawImageTrim(c,img,x-185,y-65,370,124,.68);
+    }
+  }
+}
 function scenery(c,s,assets={}) {
   c.fillStyle="#23151d";c.fillRect(0,0,W,H);
-  // Smoothly dissolve between painted panoramas while preserving world scroll.
-  const passages=[
-    [0,"scenicBarkroot"],
-    [13,"scenicLantern"],
-    [27,"scenicRoots"],
-    [43,"scenicCrystal"],
-    [59,"scenicTemple"],
-  ];
   let current=0;
-  for(let i=1;i<passages.length;i++){
-    if(s.time>=passages[i][0]) current=i;
+  for(let i=1;i<CAVERN_SCENES.length;i++){
+    if(s.time>=CAVERN_SCENES[i].at)current=i;
   }
-  const backdrop=(key)=>assets[key] || (s.time<35?assets.barkroot:assets.ruby);
-  const shift=s.scroll*.29;
-  const currentArt=backdrop(passages[current][1]);
-  if(current===0){
-    artLoop(c,currentArt,shift);
-  }else{
-    const prev=backdrop(passages[current-1][1]);
-    artLoop(c,prev,shift);
-    artLoop(c,currentArt,shift,clamp((s.time-passages[current][0])/3.25,0,1));
+  const scene=CAVERN_SCENES[current];
+  const nextAt=CAVERN_SCENES[current+1]?.at??75;
+  const duration=Math.max(1,nextAt-scene.at);
+  const local=clamp((s.time-scene.at)/duration,0,1);
+  if(current>0){
+    const prev=CAVERN_SCENES[current-1];
+    const fade=clamp((s.time-scene.at)/2.2,0,1);
+    // Freeze the previous panorama at its final position during a short dissolve.
+    panorama(c,assets[prev.key],1,1);
+    panorama(c,assets[scene.key],local,fade);
+  } else {
+    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
   }
-  if(s.time>=34){
-    const templeOpacity=clamp((s.time-34)/25,0,.18);
-    artLoop(c,assets.ruby,s.scroll*.20,templeOpacity);
-  }
+  // Keep architecture and crystals legible inside the playable corridor.
   const tint=c.createLinearGradient(0,0,0,H);
-  tint.addColorStop(0,"rgba(18,9,18,.20)");
-  tint.addColorStop(.45,"rgba(15,9,18,.05)");
-  tint.addColorStop(1,"rgba(8,9,15,.26)");
+  tint.addColorStop(0,"rgba(17,10,18,.13)");
+  tint.addColorStop(.43,"rgba(12,9,15,.02)");
+  tint.addColorStop(1,"rgba(13,9,15,.17)");
   c.fillStyle=tint;c.fillRect(0,0,W,H);
-  for(let k=0;k<32;k++){
-    const x=((k*117-s.scroll*.12)%(W+80)+W+80)%(W+80)-30;
-    const y=55+noise(k+19)*(H-110);
-    circle(c,x,y,noise(k+31)*2.4+.5,k%3?"rgba(246,185,94,.22)":"rgba(119,163,198,.17)");
+  scenicFeatures(c,s,assets);
+  for(let i=0;i<29;i++){
+    const x=((i*127-s.scroll*.12)%(W+70)+W+70)%(W+70)-30;
+    const y=55+noise(i+19)*(H-110);
+    circle(c,x,y,noise(i+31)*1.9+.3,i%3?"rgba(246,185,94,.19)":"rgba(119,163,198,.15)");
   }
 }
 function ground(c,s,assets={}) {
@@ -219,7 +274,9 @@ function paintTunnelingDecor(c,s,assets={}) {
 }
 
 function pickup(c,o,s,assets={}){
-  const img=assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':o.kind==='cache'?'cache':'nonexistent'];
+  const img=o.kind==='cache'?(assets.chest||assets.cache):
+    o.kind==='gem'&&o.id%7===0?(assets.coin||assets.gem):
+    assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':'nonexistent'];
   if(artReady(img) && !o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-60&&x<=W+60){const sz=o.kind==='cache'?67:48; glow(c,x,y,sz*.8,'rgba(255,182,76,.20)');drawImageTrim(c,img,x-sz/2,y-sz/2+Math.sin(s.time*5+o.id)*2,sz,sz);return;}}
 
   const x=o.x-s.scroll,y=o.y;
@@ -277,6 +334,12 @@ function vehicle(c,s,portrait,assets={}) {
     if(boosted){
       // The engine, not Rosie's face, glows. Streaks trail behind the vehicle.
       glow(c,-95,0,142,'rgba(255,163,47,.27)');
+      // This is a transparent exhaust plume only, behind the actual vehicle.
+      if(artReady(assets.boosttrail)){
+        c.save();c.globalCompositeOperation="screen";
+        drawImageTrim(c,assets.boosttrail,-298,-49,180,98,.56);
+        c.restore();
+      }
       for(let i=0;i<11;i++){
         const yy=(i-5)*17+Math.sin(s.time*27+i*1.8)*6;
         c.strokeStyle=i%3===0?'rgba(255,247,184,.72)':'rgba(252,154,53,.54)';
@@ -401,7 +464,9 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   vehicle(c,s,portrait,assets);
   for(const p of particles){
     c.save();c.globalAlpha=Math.max(0,p.life/p.max);
-    if(p.type==="cache-burst"&&artReady(assets.cacheBurst)){
+    if((p.type==="rock-burst"||p.type==="hit-burst")&&artReady(assets.rockburst)){
+      drawImageTrim(c,assets.rockburst,p.x-77,p.y-57,154,114,Math.min(1,p.life/p.max));
+    } else if(p.type==="cache-burst"&&artReady(assets.cacheBurst)){
       const frame=Math.min(7,Math.floor((1-p.life/p.max)*8)), fw=assets.cacheBurst.naturalWidth/4,fh=assets.cacheBurst.naturalHeight/2;
       c.drawImage(assets.cacheBurst,(frame%4)*fw,Math.floor(frame/4)*fh,fw,fh,p.x-80,p.y-80,160,160);
     } else circle(c,p.x,p.y,p.r,p.color);
