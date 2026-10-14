@@ -42,7 +42,7 @@ function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
     <button type="button" className={`recipes-favorite ${favorite ? "is-favorite" : ""}`}
       aria-pressed={favorite}
       aria-label={favorite ? `Remove ${recipe.title} from favorites` : `Add ${recipe.title} to favorites`}
-      onClick={() => onFavorite(recipe.id)}>{favorite ? "♥" : "♡"}</button>
+      onClick={() => onFavorite(recipe.id)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.3 4.15 12.8C-.1 8.8 5.7 2.3 10.2 6.5L12 8.2l1.8-1.7c4.5-4.2 10.3 2.3 6.05 6.3Z"/></svg></button>
   </article>;
 }
 function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
@@ -97,7 +97,8 @@ export default function RosieRecipes() {
     try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites)); } catch {}
   }, [favorites]);
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => window.scrollTo(0, 400));
+    window.scrollTo({top:0,left:0,behavior:"instant"});
+    const frame = window.requestAnimationFrame(() => window.scrollTo({top:0,left:0,behavior:"instant"}));
     return () => window.cancelAnimationFrame(frame);
   }, []);
   const filtered = useMemo(() => {

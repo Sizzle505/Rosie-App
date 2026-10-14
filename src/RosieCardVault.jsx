@@ -210,7 +210,7 @@ function VaultTitleLaserAnimator() {
 
 
 
-const BASE_DRIFT_PX_PER_SECOND = 26;
+const BASE_DRIFT_PX_PER_SECOND = 39; // 1.5x baseline; all speed multipliers scale proportionally
 const INITIAL_DRIFT_DELAY_MS = 1000;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
