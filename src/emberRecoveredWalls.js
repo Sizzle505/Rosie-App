@@ -1,69 +1,71 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, tunnelCenter, tunnelRadius } from "./emberDrillEngine.js";
 
-// Reuse real illustrated roof, root and crystal art already in the repo.
-// Each piece is cropped once, feathered into transparency and positioned
-// beside the actual tunnel boundary. No narrow tiled strips, repeated rows,
-// solid rectangular backplates, or opaque artificial walls.
-const textureCache = new WeakMap();
-const ready = image => Boolean(image && image.complete && image.naturalWidth > 0);
-
-function fragment(image, floor, variation) {
-  if (!ready(image)) return null;
-  let found=textureCache.get(image);
-  if(!found){ found=new Map();textureCache.set(image,found); }
-  const key=(floor?"floor":"roof")+variation;
-  if(found.has(key))return found.get(key);
-  const canvas=document.createElement("canvas");
-  canvas.width=454;canvas.height=128;
-  const ctx=canvas.getContext("2d",{willReadFrequently:true});
-  if(!ctx)return null;
-  const sw=Math.min(image.naturalWidth,1180);
-  const sh=Math.min(image.naturalHeight,342);
-  const sx=Math.max(0,(image.naturalWidth-sw)*([.03,.53,.28][variation%3]));
-  const sy=floor?image.naturalHeight-sh:0;
-  ctx.clearRect(0,0,454,128);
-  ctx.drawImage(image,sx,sy,sw,sh,0,0,454,128);
-  const data=ctx.getImageData(0,0,454,128), d=data.data;
-  for(let y=0;y<128;y++){
-    // Feather outer edge into the cavern art. The source PNG/WebP's native
-    // roots, rock, lanterns and alpha remain intact at the inner edge.
-    const vy=floor?Math.min(1,(128-y)/24):Math.min(1,y/24);
-    for(let x=0;x<454;x++){
-      const hx=Math.min(1,x/87,(453-x)/87);
-      const fade=Math.max(0,Math.min(1,hx))**1.6*Math.max(0,vy);
-      d[(y*454+x)*4+3]*=fade;
-    }
+// Each recovered painting is a freestanding irregular edge fragment, not a
+// horizontally repeating wall. These hand-positioned scenes create real visual
+// variety while the smooth collision corridor remains wholly unobstructed.
+const WALL_PIECES = [
+  {x:900, side:-1, key:"wallAmberCeiling"},
+  {x:1850,side: 1, key:"wallAmberFloor"},
+  {x:3100,side:-1, key:"wallFantasyCeiling"},
+  {x:4350,side: 1, key:"wallFantasyFloor"},
+  {x:5850,side:-1, key:"wallLanternCeiling"},
+  {x:7650,side:-1, key:"wallDescentCeiling"},
+  {x:8950,side: 1, key:"wallDescentFloor"},
+  {x:11350,side:-1,key:"wallRubyCeiling"},
+  {x:13350,side: 1,key:"wallRubyFloor"},
+  {x:15500,side: 1,key:"wallCrystalFloor"},
+  {x:18850,side:-1,key:"wallSanctumCeiling"},
+  {x:22350,side: 1,key:"wallSanctumFloor"},
+];
+const artReady=image=>Boolean(image?.complete && image.naturalWidth>0);
+const signedDistance=(worldX,side)=>tunnelCenter(worldX)+side*tunnelRadius(worldX);
+function angle(worldX,side){
+  return Math.atan2(signedDistance(worldX+75,side)-signedDistance(worldX-75,side),150);
+}
+function outerTerrainClip(c,s,side){
+  const interval=18;
+  c.beginPath();
+  if(side<0){c.moveTo(-interval,-interval);c.lineTo(W+interval,-interval);}
+  else {c.moveTo(-interval,H+interval);c.lineTo(W+interval,H+interval);}
+  for(let xx=W+interval;xx>=-interval;xx-=interval)
+    c.lineTo(xx,signedDistance(s.scroll+xx,side));
+  c.closePath();c.clip();
+}
+function drawSegment(c,s,img,worldX,side,index){
+  if(!artReady(img))return;
+  const screenX=worldX-s.scroll;
+  if(screenX<-330||screenX>W+330)return;
+  const y=signedDistance(worldX,side);
+  const width=430+(index%3)*15;
+  const height=img.naturalHeight*width/img.naturalWidth;
+  c.save();
+  outerTerrainClip(c,s,side);
+  c.translate(screenX,y);
+  c.rotate(angle(worldX,side));
+  c.globalAlpha=.71;
+  // Fragment is mostly outside the tunnel, with only the fine natural edge
+  // touching the corridor. The clip prevents unnatural rectangular overhangs.
+  c.drawImage(img,-width*.5,side<0?-height+12:-12,width,height);
+  c.restore();
+}
+function fallback(c,s,art){
+  // Earlier accepted artwork still appears sparingly until all recovered images
+  // have decoded. No scaling into thin repeated strips.
+  const roof=art.hangingRoots||art.roof;
+  const floor=art.descentFloor||art.floor;
+  for(let i=0;i<5;i++){
+    const x=1250+i*5000;
+    const img=i%2===0?roof:floor;
+    drawSegment(c,s,img,x,i%2===0?-1:1,i);
   }
-  ctx.putImageData(data,0,0);
-  found.set(key,canvas);return canvas;
 }
-function slopeAt(worldX,side){
-  const a=tunnelCenter(worldX-65)+side*tunnelRadius(worldX-65);
-  const b=tunnelCenter(worldX+65)+side*tunnelRadius(worldX+65);
-  return Math.atan2(b-a,130);
-}
-function piece(ctx,run,image,worldX,side,variety){
-  const screenX=worldX-run.scroll;
-  if(screenX<-270||screenX>W+270)return;
-  const sprite=fragment(image,side>0,variety);
-  if(!sprite)return;
-  const y=tunnelCenter(worldX)+side*tunnelRadius(worldX);
-  ctx.save();ctx.translate(screenX,y);ctx.rotate(slopeAt(worldX,side));
-  ctx.globalAlpha=.70;
-  // The gently textured surfaces lie outside the movement corridor.
-  ctx.drawImage(sprite,-227,side<0?-123:-4,454,128);
-  ctx.restore();
-}
-export function paintRecoveredWalls(ctx,run,art={}){
-  const ceiling=[art.roof,art.descentRoof,art.roof,art.hangingRoots].filter(ready);
-  const floor=[art.floor,art.descentFloor,art.floor].filter(ready);
-  if(!ceiling.length||!floor.length)return;
-  // Offset roof/floor highlights so the corridor is not framed by two
-  // identical perfectly symmetrical decorative ribbons.
-  const spacing=870, first=Math.floor((run.scroll-600)/spacing)-1;
-  for(let i=first;i<first+4;i++){
-    const w=600+i*spacing;
-    piece(ctx,run,ceiling[Math.abs(i)%ceiling.length],w,-1,Math.abs(i)%3);
-    piece(ctx,run,floor[Math.abs(i+1)%floor.length],w+350,1,Math.abs(i+2)%3);
+export function paintRecoveredWalls(c,s,art={}){
+  if(!artReady(art.wallAmberCeiling)||!artReady(art.wallSanctumFloor)){
+    fallback(c,s,art);
+    return;
+  }
+  for(let i=0;i<WALL_PIECES.length;i++){
+    const p=WALL_PIECES[i];
+    drawSegment(c,s,art[p.key],p.x,p.side,i);
   }
 }
