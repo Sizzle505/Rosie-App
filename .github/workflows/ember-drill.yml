@@ -1,0 +1,24 @@
+name: Ember Tunnel Drill milestone
+on:
+  push:
+    branches:
+      - work/ember-drill-barkroot-ruby-milestone
+    paths:
+      - "src/emberDrillEngine.js"
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberDrillPainter.js"
+      - "src/ember-tunnel-drill.css"
+      - "tests/ember-drill-engine.test.mjs"
+      - ".github/workflows/ember-drill.yml"
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: node --test tests/ember-drill-engine.test.mjs
+      - run: npm run build

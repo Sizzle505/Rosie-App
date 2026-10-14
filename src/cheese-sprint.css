@@ -1,0 +1,321 @@
+/* Flash Fromage's controls belong to Rosie's examiner panel, not the board.
+   The reaction is live HTML over the existing approved honey-maple artwork. */
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  width: 100%;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 7px 10px 0;
+  text-align: center;
+  overflow: visible;
+}
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 29px;
+  padding: 5px 14px;
+  border: 1px solid rgba(245, 207, 135, .74);
+  border-radius: 999px;
+  background: linear-gradient(145deg, #922d4b, #532036);
+  color: #fff1d3;
+  box-shadow: inset 0 1px rgba(255,255,255,.2), 0 3px 9px rgba(66,25,35,.24);
+  font: 700 clamp(10px, 1vw, 13px)/1.12 Georgia, "Palatino Linotype", serif;
+  letter-spacing: .105em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px rgba(0,0,0,.25);
+  overflow-wrap: anywhere;
+}
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+  display: block;
+  width: 100%;
+  max-width: 31ch;
+  margin: 0;
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  font-size: clamp(21px, 2.05vw, 29px);
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: -.022em;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+  color: #2b190f;
+  text-shadow: 0 1px 0 rgba(255,241,206,.47);
+}
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-subcopy {
+  display: block;
+  width: 100%;
+  max-width: 34ch;
+  font: 500 clamp(12px, .95vw, 15px)/1.25 "Iowan Old Style", Palatino, Georgia, serif;
+  letter-spacing: .01em;
+  color: #643c23;
+  text-wrap: pretty;
+}
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 245px;
+  min-height: 43px;
+  padding: 9px 10px;
+  margin: 1px auto 0;
+  border: 1px solid #ecc47e;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ac3658, #70253f);
+  box-shadow: inset 0 1px rgba(255,237,202,.24), 0 5px 11px rgba(55,23,26,.25);
+  color: #fff1d0;
+  font: 700 clamp(10px, .95vw, 12px)/1.2 Georgia, serif;
+  letter-spacing: .045em;
+  text-align: center;
+  cursor: pointer;
+}
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button:focus-visible,
+.page-cheese .cheese-exam-actions button:focus-visible {
+  outline: 3px solid #f6cf77;
+  outline-offset: 3px;
+}
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button:active {
+  transform: translateY(1px);
+}
+
+.page-cheese .cheese-examiner-rail .rosie-reaction .reaction-timer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 40px;
+  padding: 6px 14px;
+  margin: 1px auto 0;
+  border: 1px solid rgba(111,61,29,.45);
+  border-radius: 11px;
+  background: linear-gradient(160deg, #fae4b7, #d3a166);
+  box-shadow: inset 0 1px rgba(255,250,223,.72), 0 3px 8px rgba(52,24,17,.12);
+  color: #43221b;
+  font: 700 clamp(21px, 2.1vw, 30px)/1 Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* One restrained row directly over the four scoring figures. This is
+   intentionally kept in the Barkbridge dossier, outside the live board. */
+.page-cheese .cheese-exam-title .cheese-exam-actions {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, .65fr);
+  gap: 5px;
+  margin: 11px 0 9px;
+  padding: 4px;
+  border: 1px solid #905627;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(57,25,38,.94), rgba(26,15,23,.94));
+  box-shadow: inset 0 1px rgba(252,217,151,.24), 0 3px 8px rgba(63,28,21,.2);
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 39px;
+  margin: 0;
+  padding: 7px 3px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #e6c895;
+  font: 700 clamp(8px,.92vw,11px)/1.13 Georgia, "Palatino Linotype",serif;
+  letter-spacing: .018em;
+  text-align: center;
+  white-space: normal;
+  cursor: pointer;
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button.is-selected {
+  border-color: #e8bd69;
+  background: linear-gradient(155deg,#fff0c7,#d4a363 75%,#a8763d);
+  color: #311c11;
+  box-shadow: inset 0 1px rgba(255,249,221,.6), 0 2px 8px rgba(0,0,0,.3);
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset {
+  border-color: rgba(215,173,110,.32);
+  color: #f4e2ba;
+  background: linear-gradient(145deg,#854057,#502538);
+  letter-spacing: .025em;
+}
+/* Invite the first move, then retire the glow once play has begun. */
+/* Vector icons avoid the blue system emoji glyph on iPhone Safari. */
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset .cheese-action-symbol {
+  display:block;
+  flex:none;
+  width:15px;
+  height:15px;
+  fill:currentColor;
+  color:#f8d58f;
+  filter:drop-shadow(0 1px 2px rgba(30,12,17,.7));
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready .cheese-action-symbol {
+  color:#ffdf9d;
+  filter:drop-shadow(0 0 4px rgba(251,204,116,.55));
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready {
+  color: #fff2c8;
+  border-color: #f5d18b;
+  background: linear-gradient(145deg, #a54c55, #71243c 85%);
+  box-shadow: 0 0 0 1px rgba(253,214,133,.38),
+              0 0 13px rgba(249,195,93,.62),
+              inset 0 1px 0 rgba(255,241,200,.48);
+  animation: cheeseStartGlow 2.2s ease-in-out infinite;
+}
+@keyframes cheeseStartGlow {
+  0%,100% {
+    box-shadow: 0 0 0 1px rgba(253,214,133,.38),
+                0 0 10px rgba(249,195,93,.48),
+                inset 0 1px 0 rgba(255,241,200,.48);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(253,214,133,.66),
+                0 0 21px rgba(249,195,93,.88),
+                inset 0 1px 0 rgba(255,241,200,.55);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-cheese .cheese-exam-title .cheese-exam-actions .cheese-action-reset.is-ready {
+    animation: none;
+  }
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button:focus-visible {
+  outline: 2px solid #fff2cb;
+  outline-offset: 2px;
+}
+.page-cheese .cheese-exam-title .cheese-exam-actions button:active {
+  transform: translateY(1px);
+}
+.page-cheese .cheese-card:disabled { cursor: default; }
+.page-cheese .cheese-card:disabled:hover { transform: none; filter: none; }
+
+/* Compact square mobile cards let all sixteen faces remain in the usable
+   viewport after accounting for Rosie's sticky panel and bottom navigation. */
+@media (max-width: 720px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    height: auto;
+    min-height: 170px;
+    grid-template-columns: minmax(108px, 37%) minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+    padding: 9px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    height: clamp(159px, 42vw, 188px);
+    min-height: 0;
+    width: 100%;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy {
+    gap: 7px;
+    padding: 6px 3px 6px 0;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-status-pill {
+    min-height: 25px;
+    padding: 5px 10px;
+    font-size: clamp(9px, 2.6vw, 11px);
+    letter-spacing: .055em;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong {
+    margin: 0;
+    font-size: clamp(17px, 4.5vw, 22px);
+    line-height: 1.14;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy .reaction-subcopy {
+    font-size: clamp(10px, 2.7vw, 12px);
+    line-height: 1.2;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-start-button {
+    min-height: 39px;
+    padding: 8px 5px;
+    font-size: clamp(9px, 2.45vw, 11px);
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-timer {
+    min-height: 34px;
+    min-width: 61px;
+    font-size: 22px;
+    padding: 5px 9px;
+  }
+  .page-cheese .cheese-exam-title .cheese-exam-actions {
+    grid-template-columns: minmax(0,1fr) minmax(0,1.18fr) minmax(0,.63fr);
+    gap: 5px;
+    margin: 9px 0 10px;
+    padding: 4px;
+  }
+  .page-cheese .cheese-exam-title .cheese-exam-actions button {
+    min-height: 39px;
+    padding: 8px 2px;
+    font-size: clamp(8.5px, 2.45vw, 11px);
+    letter-spacing: -.005em;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-grid {
+    max-width: min(100%, var(--flash-board-cap, 100%));
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 5px;
+    margin-inline: auto;
+    scroll-margin-top: 210px;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card-front {
+    padding: 3px 2px;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card-front strong {
+    font-size: clamp(8px, 2.35vw, 11px);
+    line-height: 1.02;
+  }
+  .page-cheese .cheese-game-page.is-board-active .cheese-card-front > small {
+    display: none;
+  }
+  /* An understated frosted curtain makes the material receding above
+     Doctor Rosie unreadable during play. Controls and score remain crisp. */
+  .page-cheese .cheese-game-page.is-board-active .cheese-examiner-rail::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% - 2px);
+    left: -10px;
+    right: -10px;
+    height: 105px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(17,11,17,0), rgba(19,12,18,.78));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 75%);
+    mask-image: linear-gradient(to bottom, transparent, black 75%);
+  }
+  /* Text is not blurred directly: the frosted strip only softens content
+     physically passing ABOVE the sticky examiner. Pulling the page back down
+     restores crisp type immediately, without changing the text itself. */
+  /* The scrollable tail lets the grid align below the sticky panel even when
+     the grid is the last substantive content on a short iPhone display. */
+  .page-cheese .cheese-game-page.is-board-active .cheese-desktop-layout {
+    padding-bottom: max(175px, 26dvh);
+  }
+}
+@media (max-width: 360px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction {
+    grid-template-columns: minmax(98px, 34%) minmax(0,1fr);
+    gap: 8px;
+    padding: 7px;
+  }
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 148px; }
+  .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong { font-size: 16px; }
+}

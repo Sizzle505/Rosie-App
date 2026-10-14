@@ -1,0 +1,49 @@
+name: Rosie Reminders genuine artwork QA
+on:
+  push:
+    branches:
+      - work/reminders-real-dropbox-assets-20261012
+      - main
+    paths:
+      - 'src/RosieReminders.*'
+      - 'public/rosieverse/reminders/approved-art/**'
+      - 'tests/rosie-reminders-real-art.mjs'
+      - '.github/workflows/rosie-reminders-real-art.yml'
+  pull_request:
+    paths:
+      - 'src/RosieReminders.*'
+      - 'public/rosieverse/reminders/approved-art/**'
+      - 'tests/rosie-reminders-real-art.mjs'
+      - '.github/workflows/rosie-reminders-real-art.yml'
+  workflow_dispatch:
+jobs:
+  artwork-and-function:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Start and await Vite
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-reminders-art-vite.log 2>&1 &
+          for attempt in {1..40}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-reminders-art-vite.log
+          exit 1
+      - run: node tests/rosie-reminders-real-art.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rosie-reminders-original-art-screens
+          path: artifacts/rosie-reminders-real-art/
+          retention-days: 7
+          if-no-files-found: ignore

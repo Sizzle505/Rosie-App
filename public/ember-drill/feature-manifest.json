@@ -1,0 +1,65 @@
+{
+  "gate": {
+    "file": "feature-gate.webp",
+    "size": [
+      490,
+      346
+    ],
+    "transparent_source": true,
+    "bytes": 67730
+  },
+  "lantern": {
+    "file": "feature-lantern.webp",
+    "size": [
+      109,
+      250
+    ],
+    "transparent_source": true,
+    "bytes": 15304
+  },
+  "chest": {
+    "file": "feature-chest.webp",
+    "size": [
+      320,
+      256
+    ],
+    "transparent_source": true,
+    "bytes": 46756
+  },
+  "coin": {
+    "file": "feature-coin.webp",
+    "size": [
+      123,
+      130
+    ],
+    "transparent_source": true,
+    "bytes": 12282
+  },
+  "rockburst": {
+    "file": "feature-rockburst.webp",
+    "size": [
+      380,
+      260
+    ],
+    "transparent_source": true,
+    "bytes": 63614
+  },
+  "boosttrail": {
+    "file": "feature-boosttrail.webp",
+    "size": [
+      390,
+      120
+    ],
+    "transparent_source": true,
+    "bytes": 28446
+  },
+  "crystaloverlay": {
+    "file": "feature-crystaloverlay.webp",
+    "size": [
+      530,
+      177
+    ],
+    "transparent_source": true,
+    "bytes": 51448
+  }
+}

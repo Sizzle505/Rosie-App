@@ -1,0 +1,183 @@
+/* Asset-based RosieVerse calculator: the illustration stays static as keys update.
+   Never apply a CSS filter to the entire interactive frame: mobile Safari can
+   re-rasterize its nine-slice border on every live readout update. */
+.rac-frame {
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 16px;
+  padding: 46px clamp(32px, 7.8vw, 56px) 47px;
+  border-radius: 0 0 18px 18px;
+  color: #fff0cc;
+  background: #0b1018 url('/rosieverse/calculations/calculator/marble-inlay.webp') center / cover no-repeat;
+  box-shadow: 0 9px 19px #0009;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+.rac-frame *, .rac-frame *::before, .rac-frame *::after { box-sizing: border-box; }
+/* The gold rail is a separate noninteractive layer BELOW the controls.
+   Its ~29px horizontal inlay cannot conceal the outermost key edges. */
+.rac-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 2px solid transparent;
+  border-image-source: url('/rosieverse/calculations/calculator/frame-outer-nine-slice.webp');
+  border-image-slice: 147 92 168 92;
+  border-image-width: 47px 29px 44px 29px;
+  border-image-repeat: stretch;
+  pointer-events: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.rac-display, .rac-memory-keys, .rac-digit-keys {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+.rac-display {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 62px;
+  gap: 6px;
+  margin: 0 0 9px;
+  padding: 6px clamp(30px, 7.4vw, 46px) 6px 12px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #e9d4aa url('/rosieverse/calculations/calculator/display-parchment-no-fleur.webp') center / 100% 100% no-repeat;
+  color: #23160f;
+}
+.rac-memory-indicator {
+  align-self: flex-start;
+  flex: none;
+  min-width: 12px;
+  font: 15px/1.2 Georgia, serif;
+}
+.rac-readout {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 0;
+  text-align: right;
+}
+.rac-readout small {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #725a3e;
+  font: 12px/1.2 "Baskerville","Iowan Old Style",Georgia,serif;
+  letter-spacing: .01em;
+  text-align: right;
+}
+.rac-readout output {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  font-family: "Baskerville","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  font-size: clamp(23px,6.4vw,43px);
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  color: #2b1a12;
+  text-shadow: 0 1px 0 #fff3d4aa,0 -1px 1px #70502b35;
+}
+.rac-readout--medium output {font-size:clamp(19px,5.2vw,34px);}
+.rac-readout--long output {font-size:clamp(15px,4.15vw,26px);letter-spacing:-.045em;}
+.rac-memory-keys {
+  display: grid;
+  grid-template-columns: repeat(7,minmax(0,1fr));
+  gap: clamp(2px,.65vw,5px);
+  margin: 0 0 9px;
+}
+.rac-digit-keys {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: clamp(5px,1.2vw,8px);
+}
+.rac-key {
+  --key-asset: url('/rosieverse/calculations/keys/key-dark-wide.webp');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  min-height: 44px;
+  height: clamp(48px,12vw,62px);
+  padding: 0;
+  border: 10px solid transparent;
+  border-image-source: var(--key-asset);
+  border-image-slice: 29% fill;
+  border-image-width: 10px;
+  border-image-repeat: stretch;
+  background: transparent;
+  color: #f4dfb0;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: filter .12s,transform .12s;
+}
+.rac-key > span {
+  position: relative;
+  z-index: 1;
+  font-family: "Baskerville","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  font-size: clamp(23px,6.2vw,33px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .012em;
+  text-shadow: 0 1px 0 #fff9e844,0 -1px 1px #070505,0 2px 3px #000b;
+}
+.rac-key--small {--key-asset:url('/rosieverse/calculations/keys/key-dark-small.webp');}
+.rac-key--crimson {--key-asset:url('/rosieverse/calculations/keys/key-crimson.webp'); color:#ffe1a0;}
+.rac-key--crimson > span {font-weight:700;text-shadow:0 1px 0 #fff6d855,0 2px 3px #27050c;}
+.rac-key--gold {--key-asset:url('/rosieverse/calculations/keys/key-gold.webp');color:#271708;}
+.rac-key--gold > span {text-shadow:0 1px 0 #fff5c999,0 -1px 1px #70431544;}
+.rac-key--memory {
+  min-height: 44px;
+  height: 44px;
+  border-width: 8px;
+  border-image-width: 8px;
+}
+.rac-key--memory > span {
+  font-size: clamp(12px,2.85vw,17px);
+  white-space: nowrap;
+}
+.rac-key--memory[aria-label="Backspace"] > span {
+  font-family: "Arial Unicode MS",Arial,sans-serif;
+  font-size: clamp(19px,4.2vw,25px);
+}
+.rac-key--memory[aria-label="Clear all"] > span {
+  font-size: clamp(12px,2.8vw,16px);
+}
+.rac-key--wide {grid-column:span 2;}
+.rac-key:active {transform:translateY(1px);filter:brightness(1.14);}
+.rac-key:disabled {opacity:.47;cursor:default;}
+.rac-key:focus-visible {outline:3px solid #f8c76a;outline-offset:2px;}
+@media(max-width:600px){
+  .rc-page .rac-frame {
+    width:100%;
+    margin:0 0 16px;
+    padding:44px clamp(31px,9vw,41px) 44px;
+    border-radius:0 0 18px 18px;
+  }
+  .rac-memory-keys {gap:2px;margin-bottom:8px;}
+  .rac-digit-keys {gap:clamp(5px,1.2vw,7px);}
+  .rac-key {height:clamp(48px,12vw,56px);}
+}
+@media(max-width:350px){
+  .rc-page .rac-frame {padding-inline:26px;}
+  .rac-memory-keys {gap:1px;}
+  .rac-key--memory > span {font-size:11px;}
+}
+@media(prefers-reduced-motion:reduce){.rac-key{transition:none;}}

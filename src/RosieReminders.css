@@ -1,0 +1,690 @@
+/* Rosie’s Reminders: decorative imagery never owns interactive text or data. */
+.rr-page {
+  min-height:0;
+  color:#f9e8bb;
+  padding:0;
+  background-color:#0b101d;
+  background-image:
+    linear-gradient(180deg,rgba(6,10,23,.09),rgba(8,9,20,.20)),
+    url("/rosieverse/reminders/textures/midnight-brocade.svg");
+  background-position:center top,center top;
+  background-size:cover,cover;
+  background-repeat:no-repeat,no-repeat;
+}
+.rr-screen-reader {position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+.rr-page button, .rr-page input, .rr-page textarea, .rr-page select {font:inherit;}
+.rr-page button {touch-action:manipulation;cursor:pointer;}
+.rr-hero {position:relative;max-width:850px;margin:auto;min-height:180px;background:linear-gradient(150deg,#1b1824,#5a302c 45%,#100e1d);overflow:hidden;}
+.rr-hero img {display:block;width:100%;height:auto;min-height:220px;object-fit:cover;position:relative;z-index:1;}
+.rr-hero-fallback {position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse,#57362e,#171426 75%);}
+.rr-hero-fallback small{letter-spacing:.35em;color:#fad284;}.rr-hero-fallback h1 {font:normal clamp(30px,7vw,54px) Georgia,serif;color:#ffedc6;margin:14px 0 0}.rr-hero-fallback p {margin:8px;color:#ecc27b;}
+.rr-content {max-width:850px;margin:auto;padding:0 clamp(10px,3vw,24px);}
+.rr-tabs {display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;}
+.rr-tabs button {min-height:50px;color:#f8df9d;border:1px solid #a97a39;border-radius:16px 16px 4px 4px;background:linear-gradient(#203047,#081526);box-shadow:inset 0 1px #fae0a158;font:600 clamp(18px,4vw,23px) Georgia,serif;}
+.rr-tabs button.active {background:linear-gradient(#6d0e29,#31081a);color:#ffe9bd;border-color:#efbc60;}
+.rr-paper {background:linear-gradient(155deg,#fff3d6de,#f3d9a9df), url("/rosieverse/reminders/textures/parchment.webp") center / 320px repeat;border:4px double #a87037;border-radius:18px;color:#2c1c19;box-shadow:0 2px 14px #000a,inset 0 0 32px #a6713533;min-height:200px;padding:clamp(13px,3vw,25px);}
+.rr-panel-head {display:flex;gap:16px;align-items:center;padding-bottom:15px;border-bottom:1px solid #ba8a51;}
+.rr-emblem {width:62px;min-width:62px;aspect-ratio:1;display:grid;place-items:center;background:#720f2a;color:#f8ca75;border:3px double #e7b85d;border-radius:50%;font-size:30px;}
+.rr-panel-head h2 {margin:0;font:normal clamp(25px,5.8vw,38px) Georgia,serif;line-height:1.06;}
+.rr-panel-head p {margin:5px 0 0;font:italic clamp(13px,3.2vw,17px) Georgia,serif;}
+.rr-warning {color:#ac123e;font-weight:700;}
+.rr-datebar,.rr-month-head {display:flex;gap:8px;align-items:center;justify-content:space-between;padding:13px 0;}
+.rr-datebar strong,.rr-month-head strong{font:600 clamp(15px,4vw,21px) Georgia,serif;text-align:center;}
+.rr-datebar button,.rr-month-head button {border:1px solid #a67439;background:#fff4dc;border-radius:10px;color:#69203b;min-width:38px;min-height:38px;font-size:25px;}
+.rr-datebar .rr-today-link {font:600 13px Georgia,serif;padding:4px 8px;}
+.rr-calendar {border-bottom:1px solid #c2a278;}
+.rr-calendar-grid {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;padding-bottom:10px;text-align:center;}
+.rr-calendar-grid b {font:600 13px Georgia,serif;color:#62332b;}
+.rr-calendar-grid button {position:relative;height:44px;min-width:0;border:1px solid transparent;background:transparent;border-radius:9px;color:#321c21;font:normal 16px Georgia,serif;}
+.rr-calendar-grid button.current {border-color:#d9ad61;}.rr-calendar-grid button.picked {background:#700f29;color:#ffecb8;}
+.rr-calendar-grid button i {position:absolute;bottom:3px;width:4px;height:4px;left:calc(50% - 2px);border-radius:50%;background:#c38228;}
+.rr-rows {display:grid;gap:5px;margin-top:5px;}
+.rr-entry {display:flex;align-items:center;gap:10px;padding:10px 5px;border-bottom:1px solid #cfaa7b;min-height:55px;}
+.rr-check {width:32px;height:32px;min-width:32px;border:2px solid #986939;border-radius:8px;background:#fff6e6;color:#fff;font-size:24px;font-weight:bold;}
+.rr-entry.is-done .rr-check{background:#6c0e2a;}.rr-entry.is-done strong{text-decoration:line-through;opacity:.65;}
+.rr-entry-content {flex:1;min-width:0;overflow-wrap:anywhere;}.rr-entry-content strong {display:block;font:600 clamp(17px,4vw,21px) Georgia,serif;}.rr-entry-content small{display:block;margin-top:4px;font:italic 13px Georgia,serif;color:#6a4b40;}
+.rr-star {color:#b46b00;}.rr-edit {width:38px;min-width:38px;height:42px;border:0;background:transparent;font-size:34px;color:#864124;}
+.rr-empty {text-align:center;margin:22px 0;padding:14px 0;font:italic 16px Georgia,serif;color:#6b4c3d;}
+.rr-priority {display:flex;align-items:center;gap:12px;margin:15px 0 8px;border:1px solid #c19348;border-radius:13px;padding:10px;background:linear-gradient(95deg,#f9e5ae,#fdf1d3);}
+.rr-priority span{font-size:28px;color:#9a5716;}.rr-priority b{font:600 16px Georgia,serif;}.rr-priority p{margin:3px 0 0;}
+.rr-primary,.rr-save {color:#fff0d1!important;border:2px solid #efc268;border-radius:30px;background:linear-gradient(#820c2c,#3c0b1c);box-shadow:inset 0 1px #f7d69e88,0 2px 6px #23110d88;font:600 20px Georgia,serif!important;padding:11px 24px;min-height:49px;}
+.rr-primary {width:min(100%,520px);display:block;margin:16px auto 0;}
+/* Standalone illustrated icon assets: no baked-in labels or overlapping text. */
+/* Full original artwork is the button: integrated frame/title, no duplicated card or labels. */
+.rr-feature-grid {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:clamp(3px,.9vw,9px);row-gap:clamp(0px,.35vw,4px);
+  margin:6px 0 10px;align-items:start;
+}
+.rr-feature {
+  display:block;position:relative;min-width:0;width:100%;padding:0;margin:0;
+  appearance:none;-webkit-appearance:none;background:transparent;border:0;
+  border-radius:10px;overflow:visible;line-height:0;color:inherit;
+  filter:drop-shadow(0 5px 7px #020512b0);
+  transition:transform .18s ease,filter .18s ease;
+}
+/* Matched visual frame edges on each row.
+   The source banners differ in height (Notes 547, Shopping 620,
+   Appointments 516, Tasks 435 at 1350px width). A small per-row
+   aspect-ratio adjustment aligns the gilded borders without cropping. */
+.rr-feature-notes,
+.rr-feature-shopping { aspect-ratio: 1350 / 577; }
+.rr-feature-appointments,
+.rr-feature-tasks { aspect-ratio: 1350 / 475; }
+.rr-feature .rr-button-image {
+  display:block;width:100%;height:100%;max-width:100%;
+  object-fit:fill;
+  pointer-events:none;user-select:none;-webkit-user-drag:none;
+}
+.rr-feature-goals .rr-button-image { height:auto;object-fit:contain; }
+/* Gold frame rails in the source art sit lower beneath Shopping's basket
+   and the Appointments calendar. Recenter those two illustrations inside
+   their matching row-height hit areas; no clipping or image replacements. */
+.rr-feature-shopping .rr-button-image { transform:translateY(-8%); }
+.rr-feature-appointments .rr-button-image { transform:translateY(-4%); }
+.rr-feature:hover,.rr-feature:focus-visible {
+  filter:drop-shadow(0 5px 13px #e7ab6c8d) brightness(1.07);
+  transform:translateY(-2px);
+}
+.rr-feature:active {transform:scale(.987);}
+.rr-feature:focus-visible {outline:3px solid #ffdc8e;outline-offset:3px;}
+.rr-feature.selected {filter:drop-shadow(0 4px 12px #f0c3758a) brightness(1.055);}
+/* Four compact image-buttons, then the wide fifth button - at iPhone and desktop sizes. */
+.rr-feature-goals {grid-column:1 / -1;width:100%;justify-self:center;}
+@media (min-width:760px) {
+  .rr-feature-grid {column-gap:9px;row-gap:3px;}
+  .rr-feature-goals {width:min(100%,540px);}
+}
+.rr-tools {display:flex;justify-content:center;gap:10px;margin:7px 0 4px;}
+.rr-tools button {border:1px solid #96704c;background:#172238;border-radius:20px;padding:8px 14px;color:#f8dfa7;font:14px Georgia,serif;}
+.rr-storage-note {text-align:center;color:#b8b5b7;font:13px Georgia,serif;margin:6px 0 16px;}
+.rr-side-head {display:flex;align-items:center;justify-content:space-between;gap:8px;margin:14px 0;}.rr-side-head button,.rr-inline-add button,.rr-goal button {border:1px solid #a97b43;background:#71172d;color:#fff0d7;padding:8px 12px;border-radius:9px;}
+.rr-note-picker {display:flex;gap:8px;overflow:auto;padding:3px 0 10px;}
+.rr-note-picker button {white-space:nowrap;border:1px solid #bb9561;background:#f5dfb1;color:#422231;border-radius:10px;padding:8px 14px;}
+.rr-note-picker button.active{background:#7d1833;color:#fff0cc;}
+.rr-note-editor input,.rr-note-editor textarea,.rr-inline-add input {width:100%;box-sizing:border-box;background:#fff9e9;border:1px solid #b78b54;border-radius:9px;color:#241723;padding:10px;resize:vertical;}
+.rr-note-editor input {font:bold 19px Georgia,serif;margin-bottom:10px;}
+.rr-note-footer {display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;margin-top:6px;}
+.rr-note-footer button{background:none;border:0;color:#86223a;text-decoration:underline;}
+.rr-goals h3 {font:normal 24px Georgia,serif;margin:17px 0 10px;}
+.rr-inline-add{display:flex;gap:6px;margin-bottom:13px;}
+.rr-goal {border-bottom:1px solid #bd9360;padding:11px 0;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.rr-goal strong{flex:1;min-width:50%;}.rr-progress {width:100%;height:9px;border-radius:20px;background:#d8bc8d;overflow:hidden;}.rr-progress i {display:block;height:100%;background:linear-gradient(90deg,#8d2945,#d8944c);}
+.rr-gratitude {display:flex;align-items:center;gap:10px;border-bottom:1px solid #ceaf7f;padding:9px 0;}.rr-gratitude span{flex:1;overflow-wrap:anywhere;}.rr-gratitude button{border:0;background:none;color:#8a2444;font-size:22px;}
+.rr-modal-cover {position:fixed;inset:0;background:#03040bd9;z-index:999;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;}
+.rr-modal{width:min(94vw,520px);max-height:90dvh;overflow:auto;background:linear-gradient(#fff3d5,#e9cda2);color:#2b191f;border:3px double #d3a65e;border-radius:18px;box-shadow:0 20px 60px #000c;padding:20px;box-sizing:border-box;}
+.rr-modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.rr-modal h2{font:normal 26px Georgia,serif;margin:0 0 12px;}.rr-modal-head button{background:none;border:none;color:#64213b;font-size:30px;}
+.rr-modal form{display:grid;gap:12px;}.rr-modal label {display:grid;gap:5px;font:600 14px Georgia,serif;min-width:0;}
+.rr-modal input,.rr-modal textarea,.rr-modal select {box-sizing:border-box;width:100%;min-width:0;min-height:42px;background:#fff9ec;color:#35212c;border:1px solid #b48a50;border-radius:8px;padding:9px;}
+.rr-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0;}
+.rr-modal-actions {display:flex;gap:9px;justify-content:flex-end;align-items:center;flex-wrap:wrap;}
+.rr-modal-actions button:not(.rr-save){border:1px solid #a17655;background:#f6e7cf;border-radius:15px;padding:9px 12px;color:#4d2432;}
+.rr-modal-actions .rr-danger{margin-right:auto;color:#a21d39!important;}
+@media(max-width:425px){
+  .rr-content{padding:0 9px}
+  .rr-emblem{width:44px;min-width:44px;font-size:22px}
+  .rr-feature-grid{column-gap:3px;row-gap:0px}
+  .rr-month-head button{min-width:36px}
+  .rr-hero img{min-height:180px}
+  .rr-storage-note{font-size:11px}
+}
+.rr-page{padding-bottom:0;}
+.rr-storage-note{margin:6px auto 0;max-width:550px;padding:0 6px 5px;}
+@media(prefers-reduced-motion:reduce){.rr-page * {scroll-behavior:auto!important;transition:none!important;}}
+
+/* Pin the ACTUAL approved Rosie banner, not a replacement title bar.
+   Sticky stays in the document flow and anchors only after reaching the top. */
+.app-shell.page-reminders main.rr-page > header.rr-hero {
+  /* Decorative art stays pinned, but must never intercept interactive controls beneath. */
+  pointer-events: none;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 81;
+  width: 100%;
+  max-width: 850px;
+  margin-inline: auto;
+  box-shadow: 0 5px 15px rgba(6,5,11,.42);
+}
+.app-shell.page-reminders .rr-hero picture,
+.app-shell.page-reminders .rr-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Rapid lists: clean, legible parchment rows instead of one modal per item. */
+.rr-quick-list-form { margin:16px auto 16px; padding:14px; border:1px solid #c79e67; border-radius:15px; background:#fff4e3b0; }
+.rr-quick-list-form > label {display:block; margin:0 0 7px; font:700 clamp(20px,4.8vw,26px) Georgia,serif; color:#4f2330;}
+.rr-quick-list-form p {font:italic 13px/1.35 Georgia,serif; color:#6e4f45; margin:0 0 10px;}
+.rr-quick-list-form > textarea {display:block;width:100%;min-height:94px; padding:12px 14px; resize:vertical;box-sizing:border-box;border:1px solid #b78b57;border-radius:9px;background:#fffbef;color:#2d1b24;box-shadow:inset 0 1px 4px #51311c15;font:17px/1.45 Georgia,serif;}
+.rr-quick-list-form > button,.rr-task-input-row button {display:block;border:1px solid #c59a5c;background:linear-gradient(#862c45,#4b1329);color:#ffe6b0;min-height:44px;border-radius:10px;font:700 16px Georgia,serif;}
+.rr-groceries-input > button{width:100%;margin-top:10px;}
+.rr-quick-list-form button:disabled{opacity:.55;cursor:not-allowed;}
+.rr-task-input-row {display:flex;gap:7px;align-items:center;}
+.rr-task-input-row input {width:100%;min-width:0;flex:1;min-height:48px;padding:8px 12px;border:1px solid #b78b57;border-radius:9px;color:#2f1b1f;background:#fffbef;font:18px Georgia,serif;}
+.rr-task-input-row button{min-width:49px;min-height:49px;font-size:25px;}
+.rr-task-entry small {display:block;margin-top:9px;color:#6f5044;font:italic 13px Georgia,serif;}
+.rr-grocery-group{margin:15px 0 20px;}
+.rr-grocery-group > h3{border-bottom:1px solid #c89f69;margin:0 0 2px;padding:0 0 7px;font:700 19px Georgia,serif;color:#642b3c;letter-spacing:.025em;}
+.rr-simple-rows {display:grid;gap:0;margin:0 0 6px;}
+.rr-simple-row {display:flex;align-items:center;min-height:48px;gap:11px;border-bottom:1px solid #ccab7d73;padding:7px 1px;}
+.rr-simple-row.is-done > span{text-decoration:line-through;color:#907f71;}
+.rr-simple-check{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:7px;border:2px solid #916537;background:#fff8e8;color:#fff;font:700 21px/1 Arial,sans-serif;}
+.rr-simple-check[aria-pressed="true"]{background:linear-gradient(#892b47,#531329);border-color:#98642e;}
+.rr-simple-row > span{flex:1;min-width:0;overflow-wrap:anywhere;color:#3c2425;font:18px/1.35 Georgia,serif;cursor:text;}
+.rr-simple-remove{display:grid;place-items:center;min-width:34px;width:34px;height:36px;background:none;border:0;color:#925b4f;font:24px Arial,sans-serif;opacity:.75;}
+.rr-simple-edit{min-width:0;flex:1;}
+.rr-simple-edit input{width:100%;padding:7px;border:1px solid #b9986b;border-radius:5px;background:#fffdf6;color:#351d23;font:18px Georgia,serif;}
+.rr-quick-empty {text-align:center;margin:16px 0;font:italic 15px Georgia,serif;color:#806457;}
+@media(max-width:385px){.rr-simple-row>span{font-size:16px}.rr-quick-list-form{padding:10px}.rr-simple-row{gap:8px}}
+
+/* One continuous gilded shopping sheet — no artificial grocery categories. */
+.rr-page .rr-groceries-input {
+  margin-bottom:12px;
+  border:1px solid #ba945f;
+  background:linear-gradient(155deg,#fff1d8ee,#f3dfbbd9);
+  box-shadow:inset 0 1px #fff9e3,0 3px 12px #4d281627;
+}
+.rr-page .rr-groceries-input > label {
+  font-family:"Baskerville","Iowan Old Style",Georgia,serif;
+  letter-spacing:.045em;
+  color:#53263a;
+}
+.rr-page .rr-groceries-input > textarea{
+  min-height:104px;
+  background:linear-gradient(#fffaf0,#fff7e9);
+  line-height:1.55;
+}
+.rr-page .rr-grocery-rows {
+  display:block;
+  padding:7px 15px 12px;
+  margin:0 0 14px;
+  border:1px solid #b98e56;
+  border-radius:13px;
+  background:
+    linear-gradient(90deg,transparent 35px,#b9866660 36px,#b9866600 38px),
+    repeating-linear-gradient(to bottom,transparent 0 55px,#b9936431 55px 56px),
+    linear-gradient(155deg,#fff7e7,#efd6aa);
+  box-shadow:inset 0 0 0 3px #ffefcf75,inset 0 2px 10px #b3844b20,0 6px 15px #42261a25;
+}
+.rr-page .rr-grocery-row {
+  min-height:55px;
+  border-bottom:1px solid #b68f6040;
+  padding:9px 3px;
+}
+.rr-page .rr-grocery-row:last-child{border-bottom:0;}
+.rr-page .rr-grocery-row > span {
+  font:500 clamp(17px,4.2vw,21px)/1.35 "Baskerville","Iowan Old Style",Georgia,serif;
+  color:#4a2a31;
+}
+.rr-page .rr-grocery-row .rr-simple-check{
+  width:29px;height:29px;
+  border-radius:5px;
+  border-color:#a97d47;
+  box-shadow:inset 0 1px 3px #633e1c20;
+}
+@media(max-width:370px){
+  .rr-page .rr-grocery-rows{padding:6px 9px 10px;}
+  .rr-page .rr-grocery-row{gap:8px;}
+}
+
+/* Keep the save-status footer above the raised family navigation bar. */
+.app-shell.page-reminders .rr-storage-note {
+  position: relative;
+  transform: translateY(-18px);
+}
+
+/* The two organizer views finish the illustrated menu, above the persistent navigation. */
+.rr-tabs { margin:3px auto 18px; max-width:720px; gap:9px; }
+.rr-tabs button { border-radius:14px; min-height:51px; }
+.app-shell.page-reminders { background-color:#0b101d; }
+
+
+
+/* REMINDERS: Verified original art transferred through Dropbox on 2026-10-12.
+   The files below are WebP exports of the actual generated art, not drawn SVG substitutes.
+   Every control remains a native button or form with accessible live behavior. */
+.app-shell.page-reminders {background-color:#071225;}
+.app-shell.page-reminders .rr-page {
+  position:relative;
+  background-color:#071225;
+  background-image:
+    linear-gradient(180deg,rgba(2,8,24,.08),rgba(2,6,18,.04) 52%,rgba(2,7,19,.12)),
+    url("/rosieverse/reminders/approved-art/midnight-celestial-full.webp"),
+    url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp");
+  background-repeat:no-repeat,no-repeat,repeat;
+  background-position:center top,center top,center top;
+  background-size:100% 100%,100% auto,min(98vw,760px) auto;
+}
+.app-shell.page-reminders .rr-content {position:relative;padding-bottom:12px;}
+.rr-page .rr-feature {filter:drop-shadow(0 6px 9px rgba(0,0,0,.66));}
+.rr-page .rr-feature.selected {filter:drop-shadow(0 5px 10px rgba(240,197,108,.54)) brightness(1.07);}
+
+/* Fully transparent, independently cropped ORIGINAL Today and Calendar illustrations. */
+.rr-page .rr-tabs {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:center;
+  max-width:720px;
+  gap:clamp(5px,1.5vw,11px);
+  margin:8px auto 20px;
+}
+.rr-page .rr-tabs button,
+.rr-page .rr-tabs button.active {
+  display:grid;place-items:center;
+  position:relative;
+  width:100%;min-width:0;min-height:44px;
+  margin:0;padding:0;
+  border:0;border-radius:0;
+  appearance:none;
+  background:none;
+  box-shadow:none;
+  color:inherit;
+  font-size:0;
+  line-height:0;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.52));
+  transition:filter .18s ease,transform .18s ease;
+}
+.rr-page .rr-tabs .rr-tab-art {
+  display:block;
+  width:100%;height:auto;max-width:100%;
+  object-fit:contain;pointer-events:none;user-select:none;
+}
+.rr-page .rr-tabs button.active {
+  filter:brightness(1.09) drop-shadow(0 4px 10px rgba(239,191,95,.56));
+}
+.rr-page .rr-tabs button:focus-visible {
+  outline:3px solid #ffdf9e;outline-offset:2px;border-radius:12px;
+}
+@media(hover:hover){
+  .rr-page .rr-tabs button:hover {filter:brightness(1.12) drop-shadow(0 5px 9px #0009);}
+}
+.rr-page .rr-tabs button:active {transform:scale(.985);}
+
+/* Real blank parchment extracted from the original golden planner illustration.
+   Live fields, title, events and entries remain browser-rendered and editable. */
+.rr-page .rr-paper {
+  position:relative;isolation:isolate;overflow:hidden;
+  border:3px solid #c2934a;
+  border-radius:clamp(17px,4vw,25px);
+  color:#301d26;
+  background:
+    linear-gradient(155deg,rgba(255,248,231,.83),rgba(250,232,198,.80) 52%,rgba(235,206,159,.86)),
+    url("/rosieverse/reminders/approved-art/planner-parchment.webp") center / 576px 257px repeat;
+  box-shadow:
+    0 0 0 1px #f6dea6,0 0 0 5px #6f451b88,
+    inset 0 0 0 3px #fff5de,inset 0 0 0 5px #bc8745,
+    inset 0 0 38px #b27e3e29,0 12px 25px rgba(0,0,0,.57);
+  padding:clamp(19px,4.6vw,34px) clamp(16px,4vw,30px);
+}
+.rr-page .rr-paper::before {
+  content:"";position:absolute;inset:8px;z-index:-1;
+  border:1px solid #b4864780;border-radius:13px;pointer-events:none;
+  background:
+    radial-gradient(circle at top left,#f6d8984b 0,transparent 42px),
+    radial-gradient(circle at top right,#f6d8984b 0,transparent 42px),
+    radial-gradient(circle at bottom left,#f6d8984b 0,transparent 42px),
+    radial-gradient(circle at bottom right,#f6d8984b 0,transparent 42px);
+}
+.rr-page .rr-panel-head {gap:12px;border-bottom:1px solid #bd905a;padding-bottom:16px;}
+.rr-page .rr-panel-head h2 {font-family:Baskerville,"Iowan Old Style",Georgia,serif;color:#442031;}
+.rr-page .rr-emblem {
+  background:radial-gradient(circle at 35% 25%,#a43450,#5b1029 64%,#350e20);
+  color:#f6d390;border:3px double #e2b967;
+  box-shadow:inset 0 2px 6px #270811b0,0 1px 4px #70432299;
+}
+.rr-page .rr-paper:has(.rr-goals) .rr-panel-head {
+  margin:-4px -1px 14px;padding:12px 12px 16px;
+  border:2px solid #bf8d47;border-radius:13px;
+  background:linear-gradient(122deg,#711329,#36091b 80%);
+  box-shadow:inset 0 0 0 2px #efc47c50,0 5px 12px #3b10203d;
+}
+.rr-page .rr-paper:has(.rr-goals) .rr-panel-head h2 {color:#fff0cb;text-shadow:0 2px 4px #180310;}
+.rr-page .rr-paper:has(.rr-goals) .rr-panel-head p {color:#e8cb9a;}
+.rr-page .rr-goals h3 {
+  display:flex;align-items:center;gap:12px;
+  margin:16px 0 12px;padding-bottom:9px;border-bottom:1px solid #b48d536e;
+  color:#4c2633;font-family:Baskerville,"Iowan Old Style",Georgia,serif;
+}
+.rr-page .rr-goals h3::before {content:"✦";font-size:16px;color:#b07b34;}
+
+/* Original generated Add and Save button illustrations - not CSS recreations. */
+.rr-page .rr-goals .rr-inline-add {
+  display:flex;align-items:center;gap:6px;min-width:0;
+}
+.rr-page .rr-goals .rr-inline-add input {flex:1;min-width:0;width:auto;}
+.rr-page .rr-goals .rr-inline-add .rr-art-add,
+.rr-page .rr-modal .rr-save.rr-art-save {
+  flex:none;display:grid;place-items:center;
+  margin:0;padding:0!important;border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+  color:transparent!important;line-height:0!important;
+  filter:drop-shadow(0 3px 5px #3c162951);
+}
+.rr-page .rr-goals .rr-inline-add .rr-art-add {
+  width:clamp(84px,22vw,113px);min-width:84px;min-height:44px;
+}
+.rr-page .rr-modal .rr-save.rr-art-save {
+  width:clamp(116px,36vw,169px);min-width:116px;min-height:44px;
+}
+.rr-page .rr-action-art {display:block;width:100%;height:auto;object-fit:contain;pointer-events:none;user-select:none;}
+.rr-page .rr-goals .rr-inline-add .rr-art-add:hover,
+.rr-page .rr-modal .rr-save.rr-art-save:hover {filter:brightness(1.1) drop-shadow(0 4px 8px #4d19354d);}
+.rr-page .rr-goals .rr-inline-add .rr-art-add:focus-visible,
+.rr-page .rr-modal .rr-save.rr-art-save:focus-visible {outline:3px solid #7d3c55;outline-offset:1px;border-radius:12px!important;}
+.rr-page .rr-goal button {
+  border:1px solid #caa66b;border-radius:9px;background:#691932;color:#fff1ca;
+}
+.rr-page .rr-calendar-grid button.picked {
+  background:linear-gradient(150deg,#1a3d69,#081a33);
+  box-shadow:inset 0 0 0 1px #f0cd83;color:#fff4ca;
+}
+@media(max-width:390px) {
+  .rr-page .rr-paper {padding:20px 15px;}
+  .rr-page .rr-panel-head {gap:10px;}
+  .rr-page .rr-panel-head h2 {font-size:clamp(23px,6.3vw,31px);}
+}
+@media(prefers-reduced-motion:reduce) {
+  .rr-page .rr-tabs button {transition:none;}
+}
+
+
+/* 2026-10-12 - Full-bleed Rosie, compact scroll header, and continuous menu.
+   No image substitutions: all artwork below comes from the approved assets. */
+.app-shell.page-reminders {
+  padding-top:0;
+  padding-bottom:0;
+  background:#071225 url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp") center top / min(100%,760px) auto repeat;
+}
+.app-shell.page-reminders > main.rr-page {
+  display:block;
+  position:relative;
+  width:100%;max-width:none;
+  min-height:100dvh;
+  margin:0;padding:0 !important;
+  overflow:visible;
+  background:transparent;
+}
+/* Make the original hero start on the first pixel of the app's viewport.
+   A single width:100% and height:auto maintains its intrinsic proportions. */
+.app-shell.page-reminders main.rr-page > header.rr-hero {
+  position:relative;
+  top:auto;left:auto;right:auto;
+  display:block;
+  z-index:1;
+  width:100%;max-width:none;
+  margin:0;padding:0;
+  min-height:0;
+  pointer-events:none;
+  border:0;box-shadow:none;
+  overflow:hidden;
+}
+.app-shell.page-reminders .rr-hero picture,
+.app-shell.page-reminders .rr-hero img {
+  display:block;
+  width:100%;max-width:none;
+  height:auto;min-height:0;
+  object-fit:contain;
+  object-position:center;
+  margin:0;
+}
+/* It is literally the middle 70% of Rosie's original illustration.
+   At 15% scroll it matches the full hero pixel-for-pixel, then remains pinned.
+   The top and bottom 15% belong to the normally scrolling original hero. */
+.app-shell.page-reminders .rr-hero-pin {
+  position:fixed;top:0;left:0;right:0;
+  display:block;width:100%;margin:0;padding:0;
+  z-index:81;
+  pointer-events:none;
+  overflow:hidden;
+  visibility:hidden;
+  opacity:0;
+  background:transparent;
+}
+.app-shell.page-reminders .rr-hero-pin.is-pinned {
+  visibility:visible;
+  opacity:1;
+}
+.app-shell.page-reminders .rr-hero-pin picture,
+.app-shell.page-reminders .rr-hero-pin img {
+  display:block;
+  width:100%;max-width:none;
+  height:auto;min-height:0;
+  margin:0;
+  object-fit:contain;
+}
+.app-shell.page-reminders .rr-hero-pin img {
+  transform:translateY(-15%);
+  transform-origin:top center;
+}
+
+/* Background starts EXACTLY at the lower edge of the full Rosie hero.
+   The original celestial art sits at the top, dissolving into the genuine
+   repeating velvet texture. The texture continues beyond the nav and footer. */
+.app-shell.page-reminders .rr-content {
+  isolation:isolate;
+  position:relative;
+  width:100%;max-width:none;
+  /* Exactly enough document travel for both 15% edges to roll away on
+     narrow phones - no forced 325px blank footer or extra full viewport. */
+  /* Keep only the 15% travel needed to expose and pin the existing hero's middle.
+     Previously 30% left an unnecessary blank strip after Today/Calendar. */
+  min-height:calc(100dvh - var(--rr-hero-height, 334px) + var(--rr-hero-fifteen-height, 50px) + 2px);
+  margin:0;
+  padding:5px 0 calc(108px + env(safe-area-inset-bottom));
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp");
+  background-size:min(100%,760px) auto;
+  background-position:center top;
+  background-repeat:repeat;
+}
+.app-shell.page-reminders .rr-content::before {
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0 0 auto 0;
+  width:100%;
+  height:100%;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-full.webp");
+  background-position:center top;
+  background-size:100% auto;
+  background-repeat:repeat-y;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 68%,transparent 100%);
+  pointer-events:none;
+}
+.app-shell.page-reminders .rr-feature-grid,
+.app-shell.page-reminders .rr-tabs,
+.app-shell.page-reminders .rr-paper {position:relative;z-index:1;}
+
+/* Two matched rows and a deliberately smaller, centered wide fifth button. */
+.app-shell.page-reminders .rr-feature-grid {
+  width:min(calc(100% - 20px),830px);
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:clamp(5px,1.45vw,12px);
+  row-gap:clamp(10px,1.6vw,13px);
+  align-items:center;
+  margin:6px auto 10px;
+}
+.app-shell.page-reminders .rr-feature {align-self:center;}
+.app-shell.page-reminders .rr-feature-shopping .rr-button-image {transform:translateY(-4%);}
+.app-shell.page-reminders .rr-feature-appointments .rr-button-image {transform:translateY(-2%);}
+.app-shell.page-reminders .rr-feature-goals {
+  grid-column:1/-1;
+  width:92%;
+  max-width:530px;
+  margin:0 auto;
+}
+
+/* Today and Calendar are two separate functional buttons over ONE unbroken
+   illustration; no center seam, missing gold rail, or stretched half-images. */
+.app-shell.page-reminders .rr-tabs {
+  display:block;
+  width:min(calc(100% - 24px),720px);
+  max-width:none;
+  margin:10px auto 9px;
+  padding:0;
+  border:0;
+  line-height:0;
+  filter:drop-shadow(0 5px 7px #0008);
+}
+.app-shell.page-reminders .rr-tabs-continuous-art {
+  display:block;
+  width:100%;height:auto;
+  object-fit:contain;
+  pointer-events:none;user-select:none;
+}
+.app-shell.page-reminders .rr-tabs button,
+.app-shell.page-reminders .rr-tabs button.active {
+  position:absolute;
+  top:0;bottom:0;
+  left:0;
+  display:block;
+  width:50%;height:100%;min-height:0;
+  padding:0;margin:0;
+  border:0;border-radius:0;
+  background:transparent!important;box-shadow:none;
+  font-size:0;
+  line-height:0;
+  appearance:none;
+  transform:none;
+  filter:none;
+}
+.app-shell.page-reminders .rr-tabs button:nth-of-type(2) {left:50%;}
+.app-shell.page-reminders .rr-tabs button.active::after {
+  content:"";
+  pointer-events:none;
+  position:absolute;
+  inset:16% 6% 16%;
+  border:1px solid #ffe4acb0;
+  border-radius:999px;
+  box-shadow:inset 0 0 14px #f5ce7040,0 0 12px #e6bc5c58;
+}
+.app-shell.page-reminders .rr-tabs button:focus-visible {
+  outline:3px solid #fff0bd;
+  outline-offset:-5px;
+  border-radius:15px;
+}
+.app-shell.page-reminders .rr-tabs button:active {background:#ffffff16!important;}
+.app-shell.page-reminders .rr-paper {
+  width:min(calc(100% - 28px),810px);
+  max-width:none;
+  margin:0 auto;
+  scroll-margin-top:77px;
+  scroll-margin-bottom:calc(135px + env(safe-area-inset-bottom));
+}
+@media (min-width:850px) {
+  .app-shell.page-reminders .rr-feature-goals {max-width:600px;}
+}
+@media (prefers-reduced-motion:reduce) {
+}
+
+
+/* On iOS in-app browsers the document can extend beyond the app-shell after
+   dynamic viewport changes. Continue the SAME real velvet artwork there. */
+html:has(.app-shell.page-reminders),
+body:has(.app-shell.page-reminders),
+#root:has(.app-shell.page-reminders) {
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp");
+  background-repeat:repeat;
+  background-position:center top;
+  background-size:min(100%,760px) auto;
+}
+.app-shell.page-reminders .rr-paper {
+  scroll-margin-top:calc(77px + env(safe-area-inset-top));
+}
+
+
+/* No forced viewport of empty velvet below the last picture-buttons.
+   When an editable panel is open, give just enough scroll reserve to lift
+   even a short panel above the pinned original hero and global bottom nav. */
+.app-shell.page-reminders .rr-content:has(> .rr-paper) {
+  padding-bottom:max(
+    calc(115px + env(safe-area-inset-bottom)),
+    calc(100dvh - var(--rr-hero-middle-height, 215px) - var(--rr-panel-height, 220px) + 20px)
+  );
+}
+.app-shell.page-reminders .rr-paper {
+  scroll-margin-top:calc(var(--rr-hero-middle-height, 215px) + 14px);
+}
+
+
+/* The last two visible gaps were not additional content: the previous CSS
+   deliberately faded the celestial source to bare velvet at 68% of the page,
+   and the app/background fallback did not share the same hero-bottom origin.
+   This is an actual 941px-wide derivation of the approved blue artwork,
+   mirrored vertically with matching top/bottom seam pixels - not SVG art. */
+html:has(.app-shell.page-reminders),
+body:has(.app-shell.page-reminders),
+#root:has(.app-shell.page-reminders),
+.app-shell.page-reminders {
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp");
+  background-repeat:repeat-y;
+  background-size:100% auto;
+  background-position:center var(--rr-wallpaper-offset, 0px);
+}
+.app-shell.page-reminders > main.rr-page {
+  padding:0 !important;
+  margin:0;
+  border:0;
+}
+/* The first pixel of the celestial artwork follows the bottom pixel of
+   the undistorted, original Rosie hero. There is no 5px gap or masking. */
+.app-shell.page-reminders .rr-content {
+  padding-top:0;
+  background-color:#071225;
+  background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp");
+  background-position:center top;
+  background-repeat:repeat-y;
+  background-size:100% auto;
+}
+.app-shell.page-reminders .rr-content::before {
+  display:none;
+  content:none;
+  -webkit-mask-image:none;
+  mask-image:none;
+}
+/* Keep only the minimum nav clearance and 15/70/15 hero-scroll travel.
+   Never append an artificial second screen of empty velvet. */
+.app-shell.page-reminders .rr-content:not(:has(> .rr-paper)) {
+  padding-bottom:calc(28px + env(safe-area-inset-bottom));
+}
+.app-shell.page-reminders .rr-content:has(> .rr-paper) {
+  /* The old viewport-minus-panel formula created hundreds of pixels of
+     unnecessary wallpaper after short panels. Fixed nav clearance suffices;
+     native scrolling clamps the panel to a usable visible position. */
+  padding-bottom:calc(104px + env(safe-area-inset-bottom));
+}
+.app-shell.page-reminders .rr-feature-grid { margin-top:5px; } /* lower all five image buttons 5px without changing their hit areas */
+
+
+/* 2026-10-13 - Moonlit control alcove and enhanced Notes stationery. */
+.app-shell.page-reminders .rr-feature-grid {
+  position:relative;isolation:isolate;width:min(calc(100% - 14px),842px);
+  margin-top:9px;margin-bottom:15px;
+  padding:clamp(10px,2.8vw,18px) clamp(7px,2vw,14px) clamp(13px,3vw,19px);
+  border:1px solid rgba(238,199,113,.46);border-radius:23px;
+  background:linear-gradient(180deg,rgba(4,13,36,.36),rgba(3,10,28,.68)),
+    url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") center / 470px auto repeat;
+  box-shadow:inset 0 0 0 1px rgba(255,237,177,.12),inset 0 12px 22px rgba(4,6,22,.42),0 10px 20px rgba(1,4,16,.34);
+}
+.app-shell.page-reminders .rr-feature-grid::before {content:"";position:absolute;z-index:-1;inset:5px;border:1px solid rgba(247,218,151,.23);border-radius:18px;pointer-events:none;}
+.app-shell.page-reminders .rr-feature-goals {width:87%;}
+.app-shell.page-reminders .rr-tabs {margin-top:16px;}
+.rr-page .rr-notes {padding-top:2px;}
+.rr-page .rr-notes .rr-side-head {margin:13px 0 11px;padding:9px 11px 10px;border-bottom:1px solid rgba(125,68,64,.28);}
+.rr-page .rr-notes .rr-side-head strong {color:#57243a;font:600 clamp(23px,5.6vw,30px)/1 Baskerville,"Iowan Old Style",Georgia,serif;letter-spacing:.015em;}
+.rr-page .rr-notes .rr-side-head button {border:1px solid #b8894e;border-radius:999px;padding:9px 13px;background:linear-gradient(#7b1837,#4c1027);box-shadow:inset 0 1px #f7d99766,0 2px 5px #5320364d;color:#ffe8b6;font:600 14px Georgia,serif;}
+.rr-page .rr-notes .rr-note-picker {padding:0 5px 12px;gap:7px;}
+.rr-page .rr-notes .rr-note-picker button {box-shadow:0 2px 4px #47232b26;}
+.rr-page .rr-note-editor {position:relative;isolation:isolate;overflow:hidden;min-height:292px;padding:clamp(33px,8vw,45px) clamp(22px,6vw,33px) 21px;border:1px solid #b98a48;border-radius:19px;background:linear-gradient(145deg,rgba(255,251,236,.97),rgba(249,226,184,.95));box-shadow:inset 0 0 0 2px #fff2ce,inset 0 0 28px #b9844540,0 8px 17px #4d241c2e;}
+.rr-page .rr-note-editor::before {content:"";position:absolute;z-index:-1;inset:0;background:url("/rosieverse/reminders/20261013/note-panel-filigree.webp") center / 100% 100% no-repeat;opacity:.96;pointer-events:none;}
+.rr-page .rr-note-editor input,.rr-page .rr-note-editor textarea {border-color:#c29b63;border-radius:10px;background:rgba(255,253,244,.83);box-shadow:inset 0 1px 5px #6f40131c;}
+.rr-page .rr-note-editor input {padding:11px 13px;color:#4a2335;}
+.rr-page .rr-note-editor textarea {min-height:172px;padding:13px 14px;color:#442832;font:18px/1.58 "Iowan Old Style",Baskerville,Georgia,serif;background-image:repeating-linear-gradient(to bottom,transparent 0 29px,rgba(167,115,76,.16) 29px 30px);}
+.rr-page .rr-note-footer {padding:9px 4px 0;color:#795d58;}
+.rr-page .rr-note-footer button {color:#7c1f3e;font-weight:600;}
+@media(max-width:390px) {.app-shell.page-reminders .rr-feature-grid {border-radius:19px;padding-inline:6px}.rr-page .rr-note-editor {padding:33px 17px 17px}.rr-page .rr-notes .rr-side-head {padding-inline:5px}}

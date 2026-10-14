@@ -1,0 +1,126 @@
+/* Five Seas: scenic-only layers, composed behind pickups and Rosie. */
+.page-captain .captain-outer-paint {
+  background-image: var(--captain-active-level-art, url("/captain-sakura-course-portrait.webp"));
+}
+.captain-game-page .captain-level-painting { animation: captainLevelReveal 1.25s ease-out both; }
+.captain-game-page .captain-level-painting img { object-position: center 42%; }
+.captain-game-page .captain-level-effects {
+  position: absolute; z-index: 2; inset: 0;
+  overflow: hidden; contain: paint; pointer-events: none !important;
+  isolation: isolate; user-select: none;
+}
+.captain-game-page .captain-level-effects img {
+  display: block; position: absolute; pointer-events: none !important;
+  max-width: none; -webkit-user-drag: none; user-select: none;
+}
+.captain-game-page .captain-level-wave {
+  inset: 48% -5% -6%; width: 110%; height: 58%; object-fit: cover;
+  opacity: .17; mix-blend-mode: screen; transform-origin: center 68%;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 29%, #000 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 29%, #000 75%, transparent 100%);
+  animation: captainWaveDrift 5.9s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-level-wave.wave-b {
+  inset: 61% -11% -13%; width: 122%; height: 53%; opacity: .115;
+  animation: captainWaveDriftB 7.1s ease-in-out -3.4s infinite alternate;
+}
+.captain-game-page .captain-level-mist {
+  left: -12%; top: 31%; width: 124%; height: 61%; object-fit: cover;
+  opacity: .13; animation: captainLevelMist 18s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-level-petals {
+  inset: -10% -5% auto; width: 110%; height: 66%; object-fit: cover;
+  opacity: .12; animation: captainPetalWind 27s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-level-gold {
+  left: 17%; top: 51%; width: 66%; height: 44%; object-fit: fill;
+  opacity: .20; mix-blend-mode: screen;
+  animation: captainGoldDrift 8.8s ease-in-out infinite alternate;
+}
+.captain-game-page .captain-level-weather {
+  inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: .16; animation: captainStormRain 2.7s linear infinite;
+}
+.captain-game-page .captain-level-lightning {
+  inset: 0; width: 100%; height: 62%; object-fit: cover;
+  opacity: 0; animation: captainRareLightning 18s linear infinite;
+}
+.captain-game-page .captain-level-wake {
+  bottom: -7%; left: 50%; width: 47%; height: 24%; object-fit: cover;
+  opacity: .10; transform: translateX(-50%); mix-blend-mode: screen;
+  animation: captainWakeSurge 2.8s ease-out infinite;
+}
+.captain-game-page .captain-level-effects.is-boosting .captain-level-wake { opacity: .32; animation-duration: 1.4s; }
+.captain-game-page .captain-level-effects.is-boosting .captain-level-wave { animation-duration: 3.1s; opacity: .26; }
+.captain-game-page .climate-moonlit .captain-level-wave { opacity: .14; }
+.captain-game-page .climate-moonlit .captain-level-petals { opacity: .06; }
+.captain-game-page .climate-storm .captain-level-wave { opacity: .27; }
+.captain-game-page .climate-storm .captain-level-mist { opacity: .2; }
+.captain-game-page .climate-storm .captain-level-wake { opacity: .2; }
+.captain-game-page .yacht-course[data-captain-level="moonlight"] .captain-cinematic-water {
+  filter: hue-rotate(15deg) brightness(.77) saturate(.9); opacity: .65;
+}
+.captain-game-page .yacht-course[data-captain-level="tempest"] .captain-cinematic-water {
+  filter: grayscale(.25) brightness(.74) contrast(1.1); opacity: .64;
+}
+.captain-game-page .captain-level-effects ~ .captain-course-motion { pointer-events: none; }
+@keyframes captainLevelReveal { from { opacity: .52; } to { opacity: 1; } }
+@keyframes captainWaveDrift {
+  from { transform: translate3d(-2%, 1%, 0) scale(1.01) rotate(-.5deg); }
+  to { transform: translate3d(2%, -1.4%, 0) scale(1.045) rotate(.65deg); }
+}
+@keyframes captainWaveDriftB {
+  from { transform: translate3d(2%, 2%, 0) scale(.98); }
+  to { transform: translate3d(-2%, -1%, 0) scale(1.065); }
+}
+@keyframes captainLevelMist {
+  from { transform: translate3d(-3%, 1%, 0); opacity: .07; }
+  to { transform: translate3d(3%, -1%, 0); opacity: .16; }
+}
+@keyframes captainPetalWind {
+  from { transform: translate3d(-4%, 0, 0) rotate(-1.5deg); }
+  to { transform: translate3d(5%, 6%, 0) rotate(2deg); }
+}
+@keyframes captainGoldDrift {
+  from { transform: translate3d(-6%, 2%, 0) scaleX(.88); opacity: .09; }
+  to { transform: translate3d(8%, -2%, 0) scaleX(1.12); opacity: .25; }
+}
+@keyframes captainStormRain {
+  from { transform: translate3d(-1%, -1.5%, 0); }
+  to { transform: translate3d(2%, 3%, 0); }
+}
+@keyframes captainRareLightning {
+  0%, 61%, 62%, 63%, 63.5%, 65%, 100% { opacity: 0; }
+  61.7% { opacity: .24; } 62.6% { opacity: .14; } 64% { opacity: .09; }
+}
+@keyframes captainWakeSurge {
+  0% { transform: translate3d(-50%, 4px, 0) scale(.8); opacity: 0; }
+  25% { opacity: .22; }
+  100% { transform: translate3d(-50%, -9px, 0) scale(1.25); opacity: 0; }
+}
+@media (max-width: 380px) {
+  .captain-game-page .captain-level-petals { opacity: .06; }
+  .captain-game-page .captain-level-weather { opacity: .1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .captain-game-page .captain-level-painting,
+  .captain-game-page .captain-level-effects img { animation: none !important; }
+  .captain-game-page .captain-level-lightning { display: none !important; }
+  .captain-game-page .captain-level-weather { opacity: .07; }
+}
+
+/* The original source-registered water video is retained, but blended well
+   below the differing level horizons to prevent a straight scenery seam. */
+.captain-game-page .yacht-course .captain-cinematic-water {
+  opacity: .44;
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0%, transparent 57%,
+    rgba(0,0,0,.08) 66%, rgba(0,0,0,.43) 81%, #000 100%);
+  mask-image: linear-gradient(to bottom,
+    transparent 0%, transparent 57%,
+    rgba(0,0,0,.08) 66%, rgba(0,0,0,.43) 81%, #000 100%);
+}
+.captain-game-page .yacht-course[data-captain-level="moonlight"] .captain-cinematic-water,
+.captain-game-page .yacht-course[data-captain-level="tempest"] .captain-cinematic-water {
+  opacity: .36;
+}

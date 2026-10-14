@@ -1,0 +1,223 @@
+/* Barkbridge photographic asset layer. Five self-hosted original art assets. */
+.barkbridge-graduation .graduation-stage .barkbridge-diploma,
+.barkbridge-graduation .barkbridge-zoom-dialog .barkbridge-diploma {
+  background:
+    url("/barkbridge/diploma/parchment.png") center / 100% 100% no-repeat,
+    #f4ddb0 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.barkbridge-graduation .diploma-photo-crest {
+  position: absolute;
+  top: 5.4%;
+  left: 44.35%;
+  width: 11.3%;
+  height: 14.8%;
+  background: url("/barkbridge/diploma/canine-crest.png") center / contain no-repeat;
+  filter: drop-shadow(0 1px 1px #58311077);
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal {
+  position: relative;
+  background: url("/barkbridge/diploma/wax-seal.png") center / contain no-repeat !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 3px 3px #4f170c55);
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal::after,
+.barkbridge-graduation .barkbridge-diploma .diploma-wax-seal svg {
+  display: none !important;
+}
+.barkbridge-graduation .barkbridge-diploma::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  width: 6%;
+  height: 6%;
+  right: 14.5%;
+  bottom: 17.4%;
+  pointer-events: none;
+  background: url("/barkbridge/diploma/cheese-stamp.png") center / contain no-repeat;
+  opacity: .84;
+}
+.barkbridge-graduation .diploma-exam-name {
+  font-size: var(--recipient-font, clamp(22px, 8.7cqw, 68px)) !important;
+  overflow: visible;
+  white-space: nowrap;
+}
+.barkbridge-graduation .diploma-recipient-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: min(385px, 94%);
+  margin: 2px auto 14px;
+  padding: 13px 15px 10px;
+  border: 1px solid #d9ac6480;
+  border-radius: 12px;
+  background: linear-gradient(150deg, #321825, #1a1017);
+  color: #efd69d;
+  box-shadow: inset 0 1px #f9df8c14;
+}
+.barkbridge-graduation .diploma-recipient-editor > span {
+  font: 700 10px/1.2 Georgia, serif;
+  letter-spacing: .16em;
+  color: #f3d6a0;
+}
+.barkbridge-graduation .diploma-recipient-input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid #a97b38;
+  border-radius: 7px;
+  outline-offset: 3px;
+  background: #f8edda;
+  color: #3d2717;
+  text-align: center;
+  font: 500 17px/1.2 Georgia, serif;
+}
+.barkbridge-graduation .diploma-recipient-editor small {
+  text-align: center;
+  line-height: 1.35;
+  font: italic 10px/1.4 Georgia, serif;
+  color: #d8bd91;
+}
+.barkbridge-graduation .diploma-aftercare {
+  max-width: 760px;
+}
+.barkbridge-graduation .barkbridge-replay {
+  min-height: 49px;
+  margin-bottom: calc(112px + env(safe-area-inset-bottom)) !important;
+}
+@media (max-width: 700px) {
+  .barkbridge-graduation .diploma-recipient-editor {
+    margin: 5px auto 12px;
+    padding: 12px 10px;
+  }
+  .barkbridge-graduation .barkbridge-diploma::after {
+    right: 14.4%;
+    bottom: 16.7%;
+    width: 5.6%;
+  }
+}
+
+/* Cinematic Cheez Whiz ceremony additions. The frame mask confines light to gold. */
+.barkbridge-graduation .barkbridge-certificate-and-reward {
+  width: 100%; max-width: 760px; min-width: 0; display: flex;
+  flex-direction: column; align-items: center; position: relative;
+}
+.barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam {
+  position: absolute; z-index: 20; inset: 0; display: block; pointer-events: none; overflow: hidden;
+  /* The actual frame belongs above the parchment, so the diploma sits inside it. */
+  background:
+    url("/barkbridge/diploma/barkbridge-full-gold-frame-v3.png") center / 100% 100% no-repeat,
+    linear-gradient(106deg, transparent 32%, rgba(255,250,202,.02) 41%, rgba(255,245,191,.78) 50%, rgba(241,179,77,.20) 57%, transparent 68%) 170% 0 / 125% 100% no-repeat;
+
+  /* Keep the frame visible at all times; only its small highlights animate. */
+  animation: none; will-change: auto;
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-inner-border {
+  z-index: 2;
+}
+.barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam i {
+  position: absolute; width: 8%; aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255,255,234,.98) 0 4%, rgba(255,246,181,.88) 8%, rgba(255,199,74,.22) 23%, transparent 62%);
+  opacity: 0; animation: barkbridgeGoldPoint 7.4s ease-in-out infinite;
+}
+.barkbridge-graduation .barkbridge-gold-gleam i:nth-child(1) { left: 2%; top: 3%; animation-delay: .16s; }
+.barkbridge-graduation .barkbridge-gold-gleam i:nth-child(2) { right: 1%; top: 5%; animation-delay: .47s; }
+.barkbridge-graduation .barkbridge-gold-gleam i:nth-child(3) { right: 2%; bottom: 5%; animation-delay: .79s; }
+@keyframes barkbridgeMetalSweep {
+  0%, 5% { background-position: 170% 0; opacity: 0; } 8% { opacity: .9; }
+  26% { background-position: -150% 0; opacity: .85; } 28%, 100% { background-position: -150% 0; opacity: 0; }
+}
+@keyframes barkbridgeGoldPoint {
+  0%, 7%, 26%, 100% { opacity: 0; transform: scale(.4); }
+  13% { opacity: .95; transform: scale(1.12); } 18% { opacity: .15; transform: scale(.7); }
+}
+.barkbridge-graduation .barkbridge-diploma .diploma-exam-name {
+  top: 37.4%; min-height: 10%; max-height: 13%; display: flex !important; align-items: center; justify-content: center;
+  white-space: normal !important; overflow-wrap: anywhere; line-height: 1.02 !important; text-wrap: balance;
+}
+.barkbridge-graduation .barkbridge-cheese-reward {
+  position: relative; isolation: isolate; width: min(100%, 730px); margin: -1.4% auto 0; aspect-ratio: 3 / 1;
+  display: grid; place-items: center; pointer-events: none; opacity: 0; transform: translateY(13px) scale(.95); filter: blur(3px);
+  animation: barkbridgeRewardReveal 1.5s .18s cubic-bezier(.18,.7,.2,1) forwards;
+}
+.barkbridge-graduation .barkbridge-cheese-reward > img { position: relative; z-index: 1; display: block; width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 15px 12px rgba(0,0,0,.28)); }
+.barkbridge-graduation .barkbridge-cheese-halo { position: absolute; z-index: 0; inset: 15% 14% 10%; border-radius: 50%; background: radial-gradient(ellipse, rgba(231,165,55,.35), rgba(244,198,100,.13) 36%, transparent 73%); animation: barkbridgeHaloDissolve 1.4s .3s both; }
+.barkbridge-graduation .barkbridge-cheese-sparkles { position: absolute; inset: 0; z-index: 2; }
+.barkbridge-graduation .barkbridge-cheese-sparkles > i { position: absolute; width: 6%; aspect-ratio: 1; background: radial-gradient(circle, #fff9d6 0 4%, #ffe29e 9%, transparent 54%); opacity: 0; animation: barkbridgeCheeseGlint .85s ease-out both; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(1) { left: 18%; top: 30%; animation-delay: 1s; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(2) { left: 46%; top: 8%; animation-delay: 1.25s; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(3) { right: 23%; top: 28%; animation-delay: 1.5s; }
+.barkbridge-graduation .barkbridge-cheese-sparkles i:nth-child(4) { right: 9%; top: 42%; animation-delay: 1.7s; }
+@keyframes barkbridgeRewardReveal { 0% { opacity: 0; transform: translateY(13px) scale(.95); filter: blur(3px); } 45% { opacity: .8; filter: blur(.9px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+@keyframes barkbridgeHaloDissolve { 0% { opacity: 0; transform: scale(.8); } 44% { opacity: 1; } 100% { opacity: .25; transform: scale(1.13); } }
+@keyframes barkbridgeCheeseGlint { 0%, 100% { opacity: 0; transform: scale(.5); } 44% { opacity: .9; transform: scale(1.12); } }
+.barkbridge-graduation .barkbridge-replay { position: relative; z-index: 8; scroll-margin-block-end: calc(148px + env(safe-area-inset-bottom)); margin-bottom: calc(155px + env(safe-area-inset-bottom)) !important; min-height: 49px; }
+.barkbridge-graduation { overflow-x: clip; }
+@media (max-width: 900px) {
+  .barkbridge-graduation .graduation-stage { align-items: center; }
+  .barkbridge-graduation .barkbridge-certificate-and-reward { width: 100%; }
+  .barkbridge-graduation .barkbridge-cheese-reward { width: 97%; }
+  .barkbridge-graduation .graduate-rosie { position: relative !important; right: auto !important; bottom: auto !important; margin: -10px auto 0 !important; z-index: 4; }
+}
+@media (max-width: 700px) {
+  .barkbridge-graduation .graduation-stage { gap: 0; }
+  .barkbridge-graduation .barkbridge-certificate-and-reward { z-index: 2; }
+  /* Rosie rises from behind the platter: her lower half is deliberately hidden
+     by the tray, while her happy cap-and-paws silhouette clears its top edge. */
+  .barkbridge-graduation .graduate-rosie {
+    width: clamp(128px, 39vw, 166px) !important;
+    margin: -118px auto -12px !important;
+    z-index: 1 !important;
+    transform: translateY(0);
+  }
+
+  /* Preserve the platter’s native 3:1 canvas on phones. Its transparent edges
+     belong inside that canvas; constraining its height cuts the cheeses away. */
+  .barkbridge-graduation .barkbridge-cheese-reward {
+    width: 92%;
+    height: auto;
+    aspect-ratio: 3 / 1;
+    margin: -4px auto -12px;
+    overflow: visible;
+  }
+
+  .barkbridge-graduation .barkbridge-cheese-reward > img {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    transform: none;
+  }
+
+  .barkbridge-graduation .barkbridge-cheese-halo,
+  .barkbridge-graduation .barkbridge-cheese-sparkles {
+    inset: 0;
+  }
+
+  .barkbridge-graduation .barkbridge-replay { margin-bottom: calc(165px + env(safe-area-inset-bottom)) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .barkbridge-graduation .barkbridge-diploma > .barkbridge-gold-gleam, .barkbridge-graduation .barkbridge-gold-gleam i, .barkbridge-graduation .barkbridge-cheese-sparkles > i, .barkbridge-graduation .barkbridge-cheese-halo { animation: none !important; opacity: 0 !important; }
+  .barkbridge-graduation .barkbridge-cheese-reward { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+}
+
+/* Ceremony hierarchy: results belong directly after Rosie, before personalization. */
+@media (max-width: 700px) {
+  .barkbridge-graduation .diploma-aftercare { display: flex; flex-direction: column; }
+  .barkbridge-graduation .diploma-results-strip { order: -1; margin: 8px auto 13px; }
+  .barkbridge-graduation .diploma-recipient-editor { margin-top: 0; }
+}
+
+/* iPhone ceremony staging: Rosie rises behind the foreground tray; the tray sits at her knees. */
+@media (max-width: 700px) {
+  .barkbridge-graduation .barkbridge-cheese-reward { top: 118px; }
+  .barkbridge-graduation .graduate-rosie { margin-bottom: -2px !important; }
+  .cheese-graduation-page { scroll-margin-top: 0; }
+}

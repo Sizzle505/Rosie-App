@@ -1,0 +1,44 @@
+name: Rosie Recipes iPhone verification
+on:
+  push:
+    branches: [work/rosies-recipes-foundation-20261012]
+    paths:
+      - 'src/RosieRecipes*'
+      - 'src/rosieRecipesData.js'
+      - 'public/rosieverse/recipes/**'
+      - 'tests/rosie-recipes-visual.mjs'
+      - '.github/workflows/rosie-recipes-visual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recipes-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run build
+      - name: Start app
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/recipes-vite.log 2>&1 &
+          for attempt in {1..50}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/recipes-vite.log
+          exit 1
+      - name: Verify interactive illustrated Recipes page
+        run: node tests/rosie-recipes-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: recipes-iphone-visuals
+          path: artifacts/rosie-recipes/
+          retention-days: 14
