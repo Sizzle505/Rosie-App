@@ -1500,7 +1500,7 @@ body:has(.app-shell.page-timekeeper),
   transform-origin:50% 70%; transition:transform .35s ease,filter .35s ease;
 }
 .rtk-observatory .rtk-rosie-levers.is-pull { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp"); transform:translateY(2px) scale(1.012); }
-.rtk-observatory .rtk-rosie-levers.is-working { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-working.webp"); animation:rtk-rosie-working 1.35s ease-in-out infinite alternate; }
+.rtk-observatory .rtk-rosie-levers.is-working { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp"); animation:rtk-rosie-working 2.6s ease-in-out infinite alternate; }
 .rtk-observatory .rtk-pendulum {
   position:absolute; top:35%; width:15%; aspect-ratio:3 / 4;
   background-image:url("/rosieverse/timekeeper/midnight-observatory/pendulum-atlas.webp");
@@ -1545,7 +1545,7 @@ body:has(.app-shell.page-timekeeper),
   background:url("/rosieverse/timekeeper/midnight-observatory/squirrel-run.webp") 0 50% / 400% 100% no-repeat;
   filter:drop-shadow(0 2px 2px rgba(0,0,0,.6));
 }
-.rtk-observatory .rtk-squirrel-runner.is-running { animation:rtk-squirrel-stride .4s steps(4,end) infinite; }
+.rtk-observatory .rtk-squirrel-runner.is-running { animation:none; }
 .rtk-observatory .rtk-squirrel-runner.is-countdown { transform:translate(-50%,-50%) scaleX(-1); }
 .rtk-observatory .rtk-action-deck { top:61.5%; z-index:6; }
 .rtk-observatory .rtk-utility,
@@ -1832,4 +1832,50 @@ body:has(.app-shell.page-timekeeper),
 .app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
 .app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
   animation:none !important;
+}
+
+/* Lever-led mechanism: the supplied crisp pull frame is the only animated
+   Rosie state, with two brass drive rods feeding the first outer gears. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp");
+  animation:rtk-rosie-working 2.8s ease-in-out infinite alternate;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp");
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive {
+  position:absolute;
+  z-index:2;
+  top:21%;
+  width:4.3%;
+  height:19%;
+  transform-origin:50% 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#3f210c,#eac16f 27%,#fff1b2 48%,#b66d26 74%,#43210d);
+  box-shadow:0 0 0 1px rgba(47,24,9,.75), 0 2px 5px rgba(0,0,0,.62);
+  opacity:.92;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive::after {
+  content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px;
+  transform:translateX(-50%); border-radius:50%;
+  background:radial-gradient(circle at 36% 28%,#fff4c7 0 13%,#c93f62 16% 39%,#74301d 42% 67%,#f0be63 71% 100%);
+  box-shadow:0 1px 3px #050204;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-left { left:35.8%; transform:rotate(23deg); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-right { right:35.8%; transform:rotate(-23deg); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props.is-running .rtk-lever-drive {
+  filter:brightness(1.15) drop-shadow(0 0 3px rgba(232,179,68,.55));
+}
+/* The squirrel is a calm marker, not a flickering sprite. Its coordinates are
+   fed by timer progress; this transition merely removes frame-to-frame jitter. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-running {
+  animation:none !important;
+  transition:left 900ms linear, top 900ms linear;
+  will-change:left,top;
+}
+@media (max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive { top:20.5%; height:18%; width:4.7%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-left { left:35.2%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-right { right:35.2%; }
 }

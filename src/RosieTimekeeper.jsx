@@ -209,11 +209,18 @@ export default function RosieTimekeeper() {
   const circumference = 2 * Math.PI * 43;
   // Every moving mechanism derives from this same phase: the blue energy
   // circle and squirrel tell time, while Rosie, gears, pendulums and sand run.
-  const runnerPhase = running || elapsed > 0 ? dialProgress : 0;
+  // A stopwatch has no natural finish, so Rosie’s squirrel makes one calm
+  // circuit per 25 minutes instead of racing around the rim every minute.
+  // A countdown still maps precisely to its selected duration.
+  const runnerPhase = mode === "countdown"
+    ? dialProgress
+    : Math.min(elapsed / (25 * 60 * 1000), 1);
   const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
   const runnerX = 50 + 52 * Math.cos(runnerAngle);
   const runnerY = 50 + 52 * Math.sin(runnerAngle);
-  const rosieState = running ? "working" : elapsed > 0 ? "pull" : "ready";
+  // The supplied working export is visibly softer than the ready/pull frames.
+  // Keep the crisp pull pose while running, then animate only a subtle tug.
+  const rosieState = running || elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
   const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
@@ -240,8 +247,10 @@ export default function RosieTimekeeper() {
             The Timekeeper artwork must be installed at {ART}.
           </p>
         )}
-        <div className="rtk-observatory-props" aria-hidden="true">
+        <div className={"rtk-observatory-props" + (running ? " is-running" : "")} aria-hidden="true">
           <span className={"rtk-rosie-levers is-" + rosieState} />
+          <span className="rtk-lever-drive rtk-lever-drive-left" />
+          <span className="rtk-lever-drive rtk-lever-drive-right" />
         </div>
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />

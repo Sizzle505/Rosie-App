@@ -12,12 +12,14 @@ const ART = "/rosieverse/timekeeper/midnight-observatory/gear-atlas.webp";
 const SPRITES = ["0% 0%", "50% 0%", "100% 0%", "0% 100%", "50% 100%", "100% 100%"];
 
 const GEARS = [
-  { x: 7, y: 30, size: 24, sprite: 0, opacity: .9 },
-  { x: 18, y: 12, size: 18, sprite: 3, opacity: .84 },
-  { x: 82, y: 12, size: 18, sprite: 5, opacity: .84 },
-  { x: 94, y: 31, size: 24, sprite: 1, opacity: .9 },
-  { x: 89, y: 72, size: 21, sprite: 4, opacity: .86 },
-  { x: 12, y: 72, size: 21, sprite: 1, opacity: .86 },
+  // Two trains begin directly beneath Rosie’s twin levers, then orbit the
+  // outside of the bezel. Nothing intrudes on the time face itself.
+  { x: 24, y: 12, size: 18, sprite: 3, opacity: .86 },
+  { x: 6, y: 32, size: 23, sprite: 0, opacity: .92 },
+  { x: 12, y: 70, size: 19, sprite: 1, opacity: .86 },
+  { x: 76, y: 12, size: 18, sprite: 5, opacity: .86 },
+  { x: 94, y: 32, size: 23, sprite: 1, opacity: .92 },
+  { x: 88, y: 70, size: 19, sprite: 4, opacity: .86 },
 ].map((gear, index) => ({
   ...gear,
   // A visible, mechanical pace while Rosie is working—not an imperceptibly
