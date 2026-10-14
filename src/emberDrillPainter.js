@@ -1,6 +1,40 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, DRILL_ANCHOR, tunnelCenter, tunnelRadius, clamp } from "./emberDrillEngine.js";
 
 const TWO_PI = Math.PI * 2;
+
+const artReady = i => Boolean(i && i.complete && i.naturalWidth>0);
+function artLoop(c,img,shift,alpha=1){
+  if(!artReady(img))return false;
+  const w=img.naturalWidth*(H/img.naturalHeight);
+  const off=((shift%w)+w)%w;
+  c.save();c.globalAlpha=alpha;
+  for(let x=-off-w;x<W+w;x+=w)c.drawImage(img,x,0,w,H);
+  c.restore();return true;
+}
+function drawImageTrim(c,img,x,y,w,h,alpha=1){
+  if(!artReady(img))return false;
+  c.save();c.globalAlpha=alpha;c.drawImage(img,x,y,w,h);c.restore();return true;
+}
+function paintEdge(c,s,image,side){
+  if(!artReady(image))return;
+  const n=18,srcw=image.naturalWidth, srch=image.naturalHeight;
+  c.save();
+  for(let x=-n;x<W+n;x+=n){
+    const worldX=x+s.scroll;
+    const pos=tunnelCenter(worldX) + side*tunnelRadius(worldX);
+    const sx=((Math.floor((s.scroll*.54+x*.9)*srcw/1850)%srcw)+srcw)%srcw;
+    const sw=Math.min(srcw-sx,Math.max(1,Math.ceil(n*srcw/1850)));
+    const h=270;
+    if(side<0){
+      c.drawImage(image,sx,0,sw,srch,x,pos-h,n,h+2);
+    }else{
+      c.save();c.translate(x,pos+h);c.scale(1,-1);
+      c.drawImage(image,sx,0,sw,srch,0,0,n,h+2);c.restore();
+    }
+  }
+  c.restore();
+}
+
 function noise(n) { const x = Math.sin(n * 137.13 + 6.71) * 43758.5453; return x - Math.floor(x); }
 function circle(c,x,y,r,color) { c.fillStyle=color; c.beginPath(); c.arc(x,y,r,0,TWO_PI);c.fill(); }
 function rounded(c,x,y,w,h,r) { c.beginPath();c.roundRect(x,y,w,h,r); }
@@ -55,108 +89,74 @@ function drawLantern(c,x,y,scale=1) {
   c.strokeStyle="#7c4827";c.lineWidth=2;c.beginPath();c.moveTo(0,-15);c.lineTo(0,15);c.moveTo(-11,0);c.lineTo(11,0);c.stroke();
   c.restore();
 }
-function scenery(c,s) {
-  const ruby = clamp((s.time-19)/19,0,1);
-  const bg=c.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,"#100e1d");bg.addColorStop(.45,ruby>.3?"#26212c":"#25191e");bg.addColorStop(1,ruby>.3?"#462620":"#38261f");
-  c.fillStyle=bg;c.fillRect(0,0,W,H);
-  // Architectural background, warm waterfalls and canine temple reliefs.
-  for(let k=0;k<8;k++){
-    const x=((k*245 - s.scroll*.27)%(W+300)+W+300)%(W+300)-120;
-    const g=c.createLinearGradient(x,0,x+65,0);
-    g.addColorStop(0,"rgba(255,136,42,0)");g.addColorStop(.46,"rgba(255,198,98,"+(ruby*.18)+")");g.addColorStop(.52,"rgba(255,246,161,"+(ruby*.32)+")");g.addColorStop(1,"rgba(255,136,42,0)");
-    c.fillStyle=g;c.fillRect(x,0,75,H);
+function scenery(c,s,assets={}) {
+  const scene=s.time<12?"scenicBarkroot":s.time<25?"scenicLantern":s.time<41?"scenicRoots":s.time<57?"scenicCrystal":"scenicTemple";
+  c.fillStyle="#23151d";c.fillRect(0,0,W,H);
+  // Scenic slow-moving art is deliberately separate from the moving collision tunnel.
+  const old=s.time<11?null:s.time<24?"scenicBarkroot":s.time<40?"scenicLantern":s.time<56?"scenicRoots":"scenicCrystal";
+  const cross=(s.time%16)<2.4?(s.time%16)/2.4:1;
+  const primary=assets[scene] || (s.time<32?assets.barkroot:assets.ruby);
+  const painted=artLoop(c,primary,s.scroll*.28,1);
+  if(!painted){
+    const g=c.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,"#211b1f");g.addColorStop(.55,"#5b3129");g.addColorStop(1,"#1a1420");
+    c.fillStyle=g;c.fillRect(0,0,W,H);
   }
-  for(let i=0;i<6;i++){
-    const px=((i*185-s.scroll*.2)%(W+250)+W+250)%(W+250)-120;
-    glow(c,px,100+noise(i)*600,130,ruby>.2?"rgba(251,161,59,.15)":"rgba(162,89,44,.08)");
+  // Keep architectural scenery readable and atmospheric even while crossing into temple rock.
+  if(assets.ruby&&s.time>35){
+    const progress=clamp((s.time-35)/15,0,.38);
+    artLoop(c,assets.ruby,s.scroll*.18,progress);
   }
-  if(ruby>0.02) {
-    c.save();c.globalAlpha=ruby;
-    for(let k=Math.floor((s.scroll*.4-300)/310);k<Math.ceil((s.scroll*.4+W+300)/310);k++){
-      const x=k*310-s.scroll*.4;
-      drawStoneColumns(c,x,740,.78+noise(k)*.17,k);
-      if(k%2===0)drawLantern(c,x+105,205+noise(k)*100,.65);
-      // Paw sigils and deep crimson banners.
-      if(k%3===0) {
-        polygon(c,[x+85,55,x+140,55,x+140,185,x+112,209,x+85,185],"#7e202c");
-        c.fillStyle="#dfb873";c.font="bold 43px Georgia";c.fillText("✦",x+96,125);
-      }
-    }
-    c.restore();
-  } else {
-    // Buried roots foreshadow Rosie's actual digging habit.
-    for(let k=0;k<10;k++){
-      const x=((k*178-s.scroll*.48)%(W+190)+W+190)%(W+190)-80;
-      c.strokeStyle="#59412c";c.lineWidth=8+noise(k)*4;c.beginPath();c.moveTo(x,-20);c.bezierCurveTo(x-35,63,x+66,108,x+20,160);c.stroke();
-      c.strokeStyle="#886142";c.lineWidth=2;c.beginPath();c.moveTo(x+20,158);c.quadraticCurveTo(x+55,183,x+38,204);c.stroke();
-    }
-    // Comically solemn buried tennis ball relic.
-    const ballX=1600-s.scroll*.77;
-    if(ballX>-80&&ballX<W+60) {
-      glow(c,ballX,70,65,"rgba(237,244,117,.24)");
-      circle(c,ballX,72,33,"#a1ad43");c.strokeStyle="#f6ecb4";c.lineWidth=5;
-      c.beginPath();c.arc(ballX-19,71,20,-1.3,1.3);c.arc(ballX+19,71,20,1.8,4.5);c.stroke();
-    }
-  }
-  // Distant light flecks, static positions across screens to prevent flicker.
-  for(let k=0;k<100;k++){
-    const x=((k*89 - s.scroll*.12)%(W+30)+W+30)%(W+30)-15;
-    const y=noise(k+19)*H;
-    circle(c,x,y,noise(k+31)*2.2+.4,k%3?"rgba(244,185,85,.22)":"rgba(110,156,186,.20)");
+  const tint=c.createLinearGradient(0,0,0,H);
+  tint.addColorStop(0,"rgba(18,9,18,.20)");
+  tint.addColorStop(.45,"rgba(15,9,18,.05)");
+  tint.addColorStop(1,"rgba(8,9,15,.26)");
+  c.fillStyle=tint;c.fillRect(0,0,W,H);
+  for(let k=0;k<32;k++){
+    const x=((k*117 - s.scroll*.12)%(W+80)+W+80)%(W+80)-30;
+    const y=55+noise(k+19)*(H-110);
+    circle(c,x,y,noise(k+31)*2.4+.5,k%3?"rgba(246,185,94,.22)":"rgba(119,163,198,.17)");
   }
 }
-function ground(c,s){
-  const step=24, top=[],bottom=[];
+function ground(c,s,assets={}) {
+  const step=17,top=[],bottom=[];
   for(let x=-step;x<=W+step;x+=step){
     const wx=x+s.scroll;
-    const middle=tunnelCenter(wx),r=tunnelRadius(wx);
-    top.push([x,middle-r]);bottom.push([x,middle+r]);
+    top.push([x,tunnelCenter(wx)-tunnelRadius(wx)]);
+    bottom.push([x,tunnelCenter(wx)+tunnelRadius(wx)]);
   }
-  // Dense earth above and below the traversable corridor.
-  c.beginPath();c.moveTo(-25,0);c.lineTo(W+25,0);
-  for(let i=top.length-1;i>=0;i--)c.lineTo(top[i][0],top[i][1]);
-  c.closePath();
-  const tg=c.createLinearGradient(0,0,0,H*.55);
-  tg.addColorStop(0,"#37261f");tg.addColorStop(1,"#160e16");c.fillStyle=tg;c.fill();
-  c.beginPath();c.moveTo(-25,H);c.lineTo(W+25,H);
-  for(let i=bottom.length-1;i>=0;i--)c.lineTo(bottom[i][0],bottom[i][1]);
-  c.closePath();
-  const bg=c.createLinearGradient(0,H*.45,0,H);
-  bg.addColorStop(0,"#1b1019");bg.addColorStop(1,"#493022");c.fillStyle=bg;c.fill();
-  const rockColor=["#48322a","#513428","#30242a","#6a4330","#3a2a27","#5b3d2d"];
-  for(let k=0;k<100;k++){
-    const worldK=Math.floor(s.scroll/80)+k;
-    const x=worldK*80-s.scroll+(noise(worldK+10)-.5)*57;
-    if(x < -100||x>W+100)continue;
-    const cy=tunnelCenter(worldK*80),rad=tunnelRadius(worldK*80);
-    const up= k%2===0;
-    const y=up ? cy-rad-(12+noise(k+worldK)*130) : cy+rad+(12+noise(k+worldK+12)*130);
-    drawRock(c,x,y,12+noise(worldK)*31,worldK,rockColor[worldK%rockColor.length]);
+  const rockGrad=c.createLinearGradient(0,0,0,H);
+  rockGrad.addColorStop(0,"#37211d");rockGrad.addColorStop(.5,"#23141c");rockGrad.addColorStop(1,"#422820");
+  for(const side of [-1,1]){
+    const points=side<0?top:bottom;
+    c.save();c.beginPath();
+    if(side<0){c.moveTo(-35,-35);c.lineTo(W+35,-35)}
+    else{c.moveTo(-35,H+35);c.lineTo(W+35,H+35)}
+    for(let i=points.length-1;i>=0;i--)c.lineTo(points[i][0],points[i][1]);
+    c.closePath();c.clip();
+    c.fillStyle=rockGrad;c.fillRect(0,0,W,H);
+    const roof=s.time<36?assets.roof:assets.roof;
+    paintEdge(c,s,side<0?roof:(s.time<36?assets.roof:assets.floor),side);
+    c.restore();
+    c.beginPath();
+    points.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));
+    c.lineWidth=7;c.strokeStyle=s.time>36?"#966c4a":"#8a5034";c.stroke();
+    c.lineWidth=2;c.strokeStyle="rgba(250,189,100,.54)";c.stroke();
   }
-  for(const points of [top,bottom]){
-    c.beginPath();points.forEach((p,i)=>i?c.lineTo(...p):c.moveTo(...p));
-    c.lineWidth=10;c.strokeStyle="#8c5532";c.stroke();
-    c.lineWidth=3;c.strokeStyle="#e2a35e";c.stroke();
-    for(let k=1;k<points.length;k+=3) {
-      const x=points[k][0],y=points[k][1],direction=points===top?-1:1;
-      drawRock(c,x,y+direction*11,13+noise(k+x*.1)*15,k+x,"#52362e");
-    }
-  }
-  const amber=s.time>30;
-  for(let k=0;k<10;k++){
-    const wx=(Math.floor(s.scroll/185)+k)*185;
-    const x=wx-s.scroll;
-    const y=tunnelCenter(wx)+(k%2?1:-1)*(tunnelRadius(wx)-38);
-    if(x<0||x>W)continue;
-    if(amber&&k%3===0){
-      glow(c,x,y,67,"rgba(255,70,42,.23)");
-      polygon(c,[x-15,y+26,x-30,y+5,x-7,y-42,x+10,y-58,x+30,y-2,x+8,y+37],"#9c2240");
-      polygon(c,[x-5,y+19,x,y-27,x+11,y-39,x+16,y-2],"#ff6c7a");
-    }else if(k%3===1)drawLantern(c,x,y+(k%2?25:-25),.47);
+  // Selective gems and lanterns along the boundaries, anchored to geometry.
+  for(let i=0;i<6;i++){
+    const world=Math.floor(s.scroll/420)*420+i*420+170;
+    const x=world-s.scroll;if(x<-50||x>W+50)continue;
+    const side=i%2?1:-1;
+    const y=tunnelCenter(world)+side*(tunnelRadius(world)-22);
+    if(i%3===0&&artReady(assets.gem))drawImageTrim(c,assets.gem,x-18,y-19,36,38,.65);
+    else if(i%3===1)drawLantern(c,x,y+side*25,.45);
   }
 }
-function pickup(c,o,s){
+function pickup(c,o,s,assets={}){
+  const img=assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':o.kind==='cache'?'cache':'nonexistent'];
+  if(artReady(img) && !o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-60&&x<=W+60){const sz=o.kind==='cache'?67:48; glow(c,x,y,sz*.8,'rgba(255,182,76,.20)');drawImageTrim(c,img,x-sz/2,y-sz/2+Math.sin(s.time*5+o.id)*2,sz,sz);return;}}
+
   const x=o.x-s.scroll,y=o.y;
   if(x< -80||x>W+90||o.taken)return;
   c.save();c.translate(x,y);const bob=Math.sin(s.time*5+o.id)*3;c.translate(0,bob);
@@ -175,11 +175,14 @@ function pickup(c,o,s){
     polygon(c,[0,-22,17,-9,0,3],"rgba(255,255,255,.55)");
     c.stroke();
   } else if(o.kind==="rock"||o.kind==="spike"){
-    c.restore(); hazard(c,o,s);return;
+    c.restore(); hazard(c,o,s,assets);return;
   }
   c.restore();
 }
-function hazard(c,o,s){
+function hazard(c,o,s,assets={}){
+  const img=assets[o.kind==='spike'?'spike':'rock'];
+  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?90:87;glow(c,x,y,57,'rgba(245,77,57,.12)');c.save();c.translate(x,y);if(o.kind==='spike')c.rotate(s.time*1.8);drawImageTrim(c,img,-sz/2,-sz/2,sz,sz);c.restore();return;}}
+
   const x=o.x-s.scroll,y=o.y;
   if(x<-85||x>W+90||o.taken)return;
   c.save();c.translate(x,y);
@@ -197,7 +200,29 @@ function hazard(c,o,s){
   }
   c.restore();
 }
-function vehicle(c,s,portrait) {
+function vehicle(c,s,portrait,assets={}) {
+  if(artReady(assets.body)){
+    c.save();c.translate(DRILL_ANCHOR,s.y);c.rotate(s.pitch);
+    if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha=.52;
+    if(s.boostTime>0){
+      glow(c,-68,0,165,'rgba(255,177,49,.34)');
+      drawImageTrim(c,assets.turbo,-225,-110,360,205,.70);
+      for(let i=0;i<9;i++){const yy=(i-4)*14+Math.sin(s.time*21+i)*8;c.strokeStyle=i%2?'rgba(252,214,117,.54)':'rgba(253,125,48,.66)';c.lineWidth=2+(i%3);c.beginPath();c.moveTo(-128,yy);c.lineTo(-250-(i%3)*35,yy-10);c.stroke()}
+    }
+    for(let i=0;i<10;i++){
+      const phase=Math.floor(s.time*20),radius=2+noise(i+phase)*6;
+      circle(c,-145-noise(i*17+phase)*80,(noise(i+phase*11)-.5)*72,radius,i%2?'rgba(255,183,91,.59)':'rgba(138,94,58,.57)');
+    }
+    drawImageTrim(c,assets.body,-168,-125,336,252);
+    if(artReady(assets.auger)){
+      const fps=s.boostTime>0?34:19,frame=Math.floor(s.time*fps)%8;
+      c.drawImage(assets.auger,(frame%4)*500,Math.floor(frame/4)*410,500,410,
+        -168+948/1448*336,-125+477/1086*252,500/1448*336,410/1086*252);
+    }
+    if(s.boostTime>0){glow(c,162,15,44,'rgba(255,238,112,.46)');}
+    c.restore();return;
+  }
+
   const x=DRILL_ANCHOR,y=s.y;
   c.save();c.translate(x,y);c.rotate(s.pitch);
   if(s.hitCooldown>0&&Math.floor(s.time*14)%2===1)c.globalAlpha=.42;
@@ -251,14 +276,14 @@ function vehicle(c,s,portrait) {
   }
   c.restore();
 }
-export function paintDrill(c,s,portrait,particles=[]) {
+export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
-  scenery(c,s);
-  ground(c,s);
+  scenery(c,s,assets);
+  ground(c,s,assets);
   // First collectibles, then drill, with hazards on top for readable play.
-  for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s);
+  for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s);
-  vehicle(c,s,portrait);
+  vehicle(c,s,portrait,assets);
   for(const p of particles){
     c.save();c.globalAlpha=Math.max(0,p.life/p.max);
     circle(c,p.x,p.y,p.r,p.color);c.restore();
