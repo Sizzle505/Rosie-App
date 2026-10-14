@@ -1,0 +1,66 @@
+name: Review EmberOG edge art (one-time)
+on:
+  push:
+    branches: ["work/ember-drill-barkroot-ruby-milestone"]
+    paths:
+      - ".github/workflows/ember-og-visual.yml"
+permissions:
+  contents: read
+jobs:
+  render-contact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q pillow
+      - name: Inspect edge alpha and make full contact sheet
+        env:
+          OG_URL: 'https://uc6f826f6a803b661ccf6d082576.dl.dropboxusercontent.com/cd/0/get/DKAiQMgXBvOT5dwzq0kWA19atp088FYsXjsOjxDltgYYAYsPY6b7n3je64aKdsf4vPKo5CiAxfKDLX0mVsBaWIq81ZXhpP5xoxNNYzl6J1y_l2zKT8ofMcdhVTpaPXV9cXkuIW5dB4u7OAD_vUG0BE2abYObFJAkDc7rNeuoxVHp-g/file?c_luid=667ded1d'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os,io,zipfile,urllib.request,json,math
+          from PIL import Image,ImageDraw,ImageFont,ImageOps
+          req=urllib.request.Request(os.environ["OG_URL"],headers={"User-Agent":"RosieOGSheet"})
+          with urllib.request.urlopen(req,timeout=110) as r:data=r.read()
+          out="ember-og-audit"
+          os.makedirs(out,exist_ok=True)
+          with zipfile.ZipFile(io.BytesIO(data)) as z:
+            listing=[x for x in z.namelist() if x.lower().endswith((".png",".jpg",".jpeg",".webp"))]
+            cols=6; cw=274;ch=202;rows=math.ceil(len(listing)/cols)
+            sheet=Image.new("RGB",(cols*cw,rows*ch),(29,29,35))
+            d=ImageDraw.Draw(sheet)
+            summary=[]
+            for i,name in enumerate(listing):
+              im=Image.open(io.BytesIO(z.read(name))).convert("RGBA")
+              al=im.getchannel("A")
+              entry={"file":name,"w":im.width,"h":im.height,"alphaExtrema":al.getextrema()}
+              if "Dynamic Tunnel Edge" in name:
+                strip=(int(im.height*.26),int(im.height*.74))
+                entry["alphaGrid"]=[[al.getpixel((int(im.width*x),int(im.height*y))) for x in (.02,.25,.50,.75,.98)] for y in (.02,.25,.50,.75,.98)]
+                print("EDGE_DETAIL",json.dumps(entry))
+              summary.append(entry)
+              x=(i%cols)*cw;y=(i//cols)*ch
+              bg=Image.new("RGBA",(cw-12,148),(68,65,68,255))
+              thumbs=ImageOps.contain(im,(cw-16,143))
+              bg.alpha_composite(thumbs,((cw-12-thumbs.width)//2,(148-thumbs.height)//2))
+              sheet.paste(bg.convert("RGB"),(x+6,y+7))
+              title=name.rsplit("/",1)[-1]
+              d.text((x+8,y+160),title[:34],fill=(244,227,193))
+              d.text((x+8,y+179),str(im.size)+(" RGBA" if im.getchannel("A").getextrema()[0]<255 else " RGB"),fill=(161,184,203))
+            sheet.save(out+"/contact.jpg",quality=90)
+            open(out+"/summary.json","w").write(json.dumps(summary,indent=2))
+            for file in ("README.txt","Asset Manifest.csv"):
+              if file in z.namelist():
+                content=z.read(file)
+                open(out+"/"+file,"wb").write(content)
+                print(file,"\n",content.decode("utf-8-sig",errors="replace")[:4500])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: EmberOG Full Asset Contact and Manifest
+          path: ember-og-audit/
+          retention-days: 7
