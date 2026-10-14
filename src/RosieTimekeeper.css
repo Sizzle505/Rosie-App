@@ -1494,7 +1494,7 @@ body:has(.app-shell.page-timekeeper),
 .rtk-observatory .rtk-background { width:100%; height:auto; }
 .rtk-observatory .rtk-observatory-props { position:absolute; inset:0; z-index:4; pointer-events:none; }
 .rtk-observatory .rtk-rosie-levers {
-  position:absolute; left:22%; top:.8%; width:56%; aspect-ratio:1 / 1;
+  position:absolute; left:31%; top:.8%; width:38%; aspect-ratio:1 / 1;
   background:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-ready.webp") center / contain no-repeat;
   filter:drop-shadow(0 7px 9px rgba(0,0,0,.42));
   transform-origin:50% 70%; transition:transform .35s ease,filter .35s ease;
@@ -1517,7 +1517,7 @@ body:has(.app-shell.page-timekeeper),
 }
 .rtk-observatory .rtk-hourglass.is-running { animation:rtk-hourglass-flow 1.8s steps(3,end) infinite; }
 .rtk-observatory .rtk-dial {
-  top:31.8%; width:68%; z-index:3; gap:clamp(3px,.7vw,9px);
+  top:38%; width:62%; z-index:3; gap:clamp(3px,.7vw,9px);
   filter:drop-shadow(0 10px 14px rgba(0,0,0,.42));
 }
 .rtk-observatory .rtk-face-base {
@@ -1529,7 +1529,7 @@ body:has(.app-shell.page-timekeeper),
   background:url("/rosieverse/timekeeper/midnight-observatory/bezel.webp") center / 100% 100% no-repeat;
 }
 .rtk-observatory .rtk-clockwork {
-  z-index:1; width:81%; background:transparent; box-shadow:none;
+  z-index:1; width:72%; background:transparent; box-shadow:none;
   -webkit-mask-image:none; mask-image:none; overflow:visible;
 }
 .rtk-observatory .rtk-mechanical-chassis { opacity:.35; }
@@ -1547,7 +1547,7 @@ body:has(.app-shell.page-timekeeper),
 }
 .rtk-observatory .rtk-squirrel-runner.is-running { animation:rtk-squirrel-stride .4s steps(4,end) infinite; }
 .rtk-observatory .rtk-squirrel-runner.is-countdown { transform:translate(-50%,-50%) scaleX(-1); }
-.rtk-observatory .rtk-action-deck { top:58.3%; z-index:6; }
+.rtk-observatory .rtk-action-deck { top:61.5%; z-index:6; }
 .rtk-observatory .rtk-utility,
 .rtk-observatory .rtk-utility.is-empty,
 .rtk-observatory .rtk-utility.is-timer { top:73.8%; z-index:6; }
@@ -1556,8 +1556,8 @@ body:has(.app-shell.page-timekeeper),
 @keyframes rtk-rosie-working { from { transform:translateY(0) scale(1); } to { transform:translateY(2px) scale(1.012); } }
 @keyframes rtk-squirrel-stride { to { background-position:100% 50%; } }
 @media (max-height:700px) {
-  .rtk-observatory .rtk-dial { top:30%; width:63%; }
-  .rtk-observatory .rtk-action-deck { top:56.8%; }
+  .rtk-observatory .rtk-dial { top:36%; width:59%; }
+  .rtk-observatory .rtk-action-deck { top:59.5%; }
   .rtk-observatory .rtk-utility,.rtk-observatory .rtk-utility.is-empty,.rtk-observatory .rtk-utility.is-timer { top:72.6%; }
 }
 @media (prefers-reduced-motion:reduce) {
