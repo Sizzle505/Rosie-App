@@ -26,7 +26,7 @@ export function augerFrameIndex(seconds, turbo=false){
 export const TURBO_ATLAS=Object.freeze({columns:5,rows:2,frameWidth:308,frameHeight:126,frames:10,frameMs:60});
 export function turboFrameIndex(remainingSeconds){
   const seconds=Math.max(0,TURBO_DURATION-(Number.isFinite(remainingSeconds)?remainingSeconds:TURBO_DURATION));
-  return Math.floor(seconds*1000/TURBO_ATLAS.frameMs)%TURBO_ATLAS.frames;
+  return Math.floor(seconds*1000/TURBO_ATLAS.frameMs+1e-7)%TURBO_ATLAS.frames;
 }
 export function turboFrameRect(remainingSeconds){
   const i=turboFrameIndex(remainingSeconds);
