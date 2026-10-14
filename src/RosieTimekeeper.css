@@ -1640,3 +1640,37 @@ body:has(.app-shell.page-timekeeper),
   display:block;width:40%;height:40%;margin:auto;color:#f9dda6;
   stroke:currentColor;filter:drop-shadow(0 1px 2px #120710);
 }
+
+
+/* Midnight Observatory final geometry.
+   The prior Timekeeper revisions positioned pieces against several different
+   stage heights. Keep every overlay on the single illustrated art board: on
+   phones it fills the available width; on wider displays the entire board is
+   scaled to the visible height so controls never disappear behind the shared
+   navigation. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+  width:100%;
+  height:auto;
+  aspect-ratio:870 / 1651;
+  margin:0 auto;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-background {
+  display:block;
+  width:100%;
+  height:auto;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck {
+  top:61.5%;
+  z-index:8;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:73.8%;
+  z-index:8;
+}
+@media (min-width:521px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+    width:min(100%,calc(100dvh * 870 / 1651));
+  }
+}
