@@ -23,7 +23,7 @@ export function makeCourse(seed = 1467) {
   // Curved, spaced, hand-constrained pickup chains rather than impossible random hazards.
   for (let x = 900; x < 30000; x += 610) {
     const motif = Math.floor(x / 610) % 6;
-    const offset = motif === 2 ? -78 : motif === 4 ? 92 : motif === 5 ? -34 : 28;
+    const offset = motif === 2 ? -60 : motif === 4 ? 62 : motif === 5 ? -30 : 20;
     const kind = motif === 0 ? "bone" : motif === 3 ? "cheese" : "gem";
     for (let j = 0; j < 5; j++) {
       const pos = x + j * 68;
