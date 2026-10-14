@@ -79,7 +79,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
     const names={body:"drill-body.webp",auger:"auger-spin.png",turbo:"turbo-animation.webp",
       scenicBarkroot:"scenic-barkroot.webp",scenicLantern:"scenic-lantern.webp",
       scenicRoots:"scenic-roots.webp",scenicCrystal:"scenic-crystal.webp",
-      scenicTemple:"scenic-temple.webp",barkroot:"barkroot-loop.webp",ruby:"ruby-loop.webp",
+      scenicTemple:"scenic-temple.webp",barkroot:"barkroot-loop.webp",rubyOrganic:"ruby-organic-passage.webp",templeOrganic:"temple-organic-passage.webp",
       roof:"roof-roots.webp",floor:"floor-ruby.webp",hangingRoots:"barkroot-hanging-roots.webp",
       terrainEarth:"terrain-barkroot-earth.webp",terrainRoots:"terrain-deep-rootstone.webp",
       terrainRuby:"terrain-ruby-crystal-rock.webp",terrainTemple:"terrain-temple-basalt.webp",
@@ -88,7 +88,7 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
       spike:"hazard-spike.webp",rock:"hazard-rock.webp",hazardPulse:"hazard-pulse.webp",
       gate:"feature-gate.webp",lantern:"feature-lantern.webp",
       chest:"feature-chest.webp",coin:"feature-coin.webp",rockburst:"feature-rockburst.webp",
-      boosttrail:"feature-boosttrail.webp",crystaloverlay:"feature-crystaloverlay.webp",
+      boosttrail:"feature-boosttrail.webp",
       turnUp:"wall-turn-up.webp",turnNeutral:"wall-turn-neutral.webp",turnDown:"wall-turn-down.webp",
       wallAmberCeiling:"wall-amber-ceiling.webp",wallAmberFloor:"wall-amber-floor.webp",
       wallFantasyCeiling:"wall-fantasy-ceiling.webp",wallFantasyFloor:"wall-fantasy-floor.webp",
@@ -223,9 +223,9 @@ for (const [name,browserType] of [["chromium",chromium],["webkit",webkit]]) {
 
     const required=["feature-gate.webp","feature-lantern.webp","feature-chest.webp",
       "feature-coin.webp","feature-rockburst.webp","feature-boosttrail.webp",
-      "feature-crystaloverlay.webp","scenic-barkroot.webp","scenic-roots.webp",
-      "scenic-lantern.webp","ruby-loop.webp","scenic-crystal.webp",
-      "scenic-temple.webp","barkroot-loop.webp"];
+      "scenic-barkroot.webp","scenic-roots.webp",
+      "scenic-lantern.webp","ruby-organic-passage.webp","temple-organic-passage.webp","scenic-crystal.webp",
+      "scenic-roots.webp","barkroot-loop.webp"];
     // Explicitly run a boosted frame for the rearward exhaust overlay.
     state.boostTime=3.5;
     window.EmberPainter.paintDrill(c,state,portrait,[],assets);
