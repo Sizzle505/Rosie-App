@@ -59,31 +59,25 @@ function pattern(c,image,scroll) {
   }
   return p;
 }
-function fillStratum(c,s,stage,alpha){
-  if(alpha<=0)return;
-  const img=pattern(c,s.assets[stage.key],s.scroll);
-  c.save();c.globalAlpha=alpha*.12;c.fillStyle=stage.base;c.fillRect(0,0,W,H);
-  if(img){c.globalAlpha=alpha*.17;c.fillStyle=img;c.fillRect(0,0,W,H);}
-  c.restore();
-}
+// Keep the original illuminated cavern visible. Only the actual exposed
+// rock face receives geological treatment - never a rectangular screen band.
 function drawEarth(c,s,side,assets,stage,points){
-  c.save();earthPath(c,points,side);c.clip();
-  const prepared={scroll:s.scroll,assets};
-  fillStratum(c,prepared,stage.previous,1);
-  if(stage.current!==stage.previous)fillStratum(c,prepared,stage.current,stage.fade);
-  c.restore();
-}
-// Temporary Barkroot proof: continuous world-registered edge texture, not
-// individually rotated scenic slices. The illustrated panorama stays visible.
-function drawEdgeBand(c,s,side,assets,stage,points){
-  const thickness=78;
-  c.save();c.beginPath();
-  points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));
-  for(let i=points.length-1;i>=0;i--){const [x,y]=points[i];c.lineTo(x,y+side*thickness);}
-  c.closePath();c.clip();
-  const img=pattern(c,assets[stage.current.key],s.scroll);
-  if(img){c.globalAlpha=.72;c.fillStyle=img;c.fillRect(0,0,W,H);}
-  else{c.globalAlpha=.54;c.fillStyle=stage.current.base;c.fillRect(0,0,W,H);}
+  c.save();
+  earthPath(c,points,side);c.clip();
+  // Sparse translucent shading on the solid side of the collision contour.
+  // Stroke widths are measured perpendicular to the path by Canvas.
+  edgePath(c,points);
+  c.lineJoin="round";c.lineCap="round";
+  for(const [width,color] of [
+    [108,"rgba(29,17,24,.08)"],
+    [74,"rgba(41,25,25,.12)"],
+    [42,"rgba(54,32,25,.19)"],
+    [17,"rgba(31,19,17,.28)"]
+  ]){
+    c.lineWidth=width;c.strokeStyle=color;c.stroke();
+  }
+  // No createPattern(...,repeat) over the panorama: the source terrain
+  // paintings contain non-tileable landmarks and cause visible rectangles.
   c.restore();
 }
 function drawFracturedFace(c,s,side,stage,points){
@@ -189,7 +183,6 @@ export function paintNaturalTunnel(c,s,assets={}) {
     const points=[];
     for(let x=-STEP;x<=W+STEP;x+=STEP)points.push([x,surface(s.scroll+x,side)]);
     drawEarth(c,s,side,assets,stage,points);
-    drawEdgeBand(c,s,side,assets,stage,points);
     drawFracturedFace(c,s,side,stage,points);
     // Stone fragments must remain inside the solid geology except tiny
     // attached roots and chips; the corridor silhouette stays authoritative.
