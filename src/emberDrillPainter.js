@@ -173,40 +173,6 @@ function ground(c,s,assets={}) {
     if(i%3===0&&artReady(assets.gem))drawImageTrim(c,assets.gem,x-13,y-14,26,27,.46);
     else if(i%3===1)drawLantern(c,x,y+side*13,.36);
   }
-}) {
-  const step=17,top=[],bottom=[];
-  for(let x=-step;x<=W+step;x+=step){
-    const wx=x+s.scroll;
-    top.push([x,tunnelCenter(wx)-tunnelRadius(wx)]);
-    bottom.push([x,tunnelCenter(wx)+tunnelRadius(wx)]);
-  }
-  const rockGrad=c.createLinearGradient(0,0,0,H);
-  rockGrad.addColorStop(0,"#37211d");rockGrad.addColorStop(.5,"#23141c");rockGrad.addColorStop(1,"#422820");
-  for(const side of [-1,1]){
-    const points=side<0?top:bottom;
-    c.save();c.beginPath();
-    if(side<0){c.moveTo(-35,-35);c.lineTo(W+35,-35)}
-    else{c.moveTo(-35,H+35);c.lineTo(W+35,H+35)}
-    for(let i=points.length-1;i>=0;i--)c.lineTo(points[i][0],points[i][1]);
-    c.closePath();c.clip();
-    c.fillStyle=rockGrad;c.fillRect(0,0,W,H);
-    const roof=s.time<36?assets.roof:assets.roof;
-    paintEdge(c,s,side<0?roof:(s.time<36?assets.roof:assets.floor),side);
-    c.restore();
-    c.beginPath();
-    points.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));
-    c.lineWidth=7;c.strokeStyle=s.time>36?"#966c4a":"#8a5034";c.stroke();
-    c.lineWidth=2;c.strokeStyle="rgba(250,189,100,.54)";c.stroke();
-  }
-  // Selective gems and lanterns along the boundaries, anchored to geometry.
-  for(let i=0;i<6;i++){
-    const world=Math.floor(s.scroll/420)*420+i*420+170;
-    const x=world-s.scroll;if(x<-50||x>W+50)continue;
-    const side=i%2?1:-1;
-    const y=tunnelCenter(world)+side*(tunnelRadius(world)-22);
-    if(i%3===0&&artReady(assets.gem))drawImageTrim(c,assets.gem,x-18,y-19,36,38,.65);
-    else if(i%3===1)drawLantern(c,x,y+side*25,.45);
-  }
 }
 
 /**
@@ -248,40 +214,6 @@ function paintTunnelingDecor(c,s,assets={}) {
     c.save();c.globalAlpha=.30;
     c.translate(x,bottom);c.rotate(Math.atan(slope));
     c.drawImage(assets.descentFloor,0,0,assets.descentFloor.naturalWidth,assets.descentFloor.naturalHeight,-30,-4,w,h);
-    c.restore();
-  }
-}) {
-  const roots=artReady(assets.hangingRoots)?assets.hangingRoots:assets.roof;
-  const slopeRoof=artReady(assets.descentRoof)?assets.descentRoof:assets.roof;
-  const slopeFloor=artReady(assets.descentFloor)?assets.descentFloor:assets.floor;
-  if(s.time<43 && artReady(roots)){
-    const spacing=1250;
-    const initial=Math.floor((s.scroll-430)/spacing)-1;
-    for(let i=initial;i<initial+4;i++){
-      const world=760+i*spacing, x=world-s.scroll;
-      if(x<-480||x>W+240)continue;
-      const roofY=tunnelCenter(world)-tunnelRadius(world);
-      const opacity=.35+(.1*Math.sin(world*.003));
-      drawImageTrim(c,roots,x-75,roofY-75,400,175,opacity);
-    }
-  }
-  if(!artReady(slopeRoof)||!artReady(slopeFloor))return;
-  const gap=1650;
-  const k0=Math.floor((s.scroll-600)/gap)-1;
-  for(let k=k0;k<k0+4;k++){
-    const world=1300+k*gap;
-    const x=world-s.scroll;
-    if(x<-900||x>W+350)continue;
-    const gradient=(tunnelCenter(world+210)-tunnelCenter(world-210))/420;
-    if(gradient<.11)continue; // descending portions only
-    const center=tunnelCenter(world),radius=tunnelRadius(world);
-    const angle=Math.atan(gradient);
-    c.save();
-    c.translate(x,center);
-    c.rotate(angle);
-    // Render as separate roof/floor layers, retaining an open central tunnel.
-    drawImageTrim(c,slopeRoof,-260,-radius-148,845,151,.29);
-    drawImageTrim(c,slopeFloor,-260,radius-2,845,151,.31);
     c.restore();
   }
 }
