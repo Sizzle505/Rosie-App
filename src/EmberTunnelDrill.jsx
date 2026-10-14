@@ -243,11 +243,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   return (
     <section className="ember-suite" aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
-      <header className="ember-header">
-        <div className="ember-header-portrait"><img src="/captain-rosie-illustrated.webp" alt="Captain Rosie" /></div>
-        <div className="ember-header-copy"><span>THE HOUSE OF ROSIE · BARKBRIDGE EXPEDITIONS</span>
-          <h2>CAPTAIN ROSIE</h2><p>Ember Tunnel Drill</p></div>
-        <div className="ember-header-seal">✦</div>
+      <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
+        <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
+             alt="Captain Rosie - Ember Tunnel Drill" draggable="false" />
       </header>
       <div className="ember-stats" aria-live="off">
         <div><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
