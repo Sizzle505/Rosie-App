@@ -34,22 +34,27 @@ test("self-service accounts support four and six digit PINs and protect username
    throw Error("unmocked "+p);
  };
  try{
-   const four=await invoke(register,{username:"Poppy",displayName:"Poppy",pin:"0412"});
+   const four=await invoke(register,{username:"PoPpY",pin:"0412"});
    assert.equal(four.statusCode,201,JSON.stringify(four.data));
    assert.equal(four.data.user.username,"poppy");
-   assert.equal(four.data.user.displayName,"Poppy");
+   assert.equal(four.data.user.displayName,"PoPpY");
    assert.match(four.headers["set-cookie"],/HttpOnly/);
    assert.match(four.headers["set-cookie"],/Max-Age=2592000/);
    assert.equal(await verifyPin("0412",accounts[0].pin_hash),true);
    assert.equal(accounts[0].pin_length,4);
    assert.equal(sessions.length,1);
-   const six=await invoke(register,{username:"Willow",pin:"940123"});
+   const six=await invoke(register,{username:"WiLlOw",pin:"940123"});
    assert.equal(six.statusCode,201);
    assert.equal(accounts[1].pin_length,6);
+   assert.equal(six.data.user.username,"willow");
+   assert.equal(six.data.user.displayName,"WiLlOw");
+   assert.equal(accounts[1].display_name,"WiLlOw");
    assert.equal(await verifyPin("940123",accounts[1].pin_hash),true);
    assert.equal((await invoke(register,{username:"willow",pin:"1111"})).statusCode,409);
    assert.equal((await invoke(register,{username:"bad name",pin:"1111"})).statusCode,400);
    assert.equal((await invoke(register,{username:"other",pin:"12345"})).statusCode,400);
-   assert.equal((await invoke(login,{username:"poppy",pin:"0412"})).statusCode,200);
+   const relog=await invoke(login,{username:"POPPY",pin:"0412"});
+   assert.equal(relog.statusCode,200);
+   assert.equal(relog.data.user.displayName,"PoPpY");
  }finally{globalThis.fetch=oldFetch;delete process.env.SUPABASE_URL;delete process.env.SUPABASE_SERVICE_ROLE_KEY;}
 });
