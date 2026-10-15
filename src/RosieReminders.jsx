@@ -123,6 +123,7 @@ export default function RosieReminders() {
         Number(isDone(b, b.occurrenceDate || selectedDate)) ||
       Number(isOverdue(b, selectedDate)) - Number(isOverdue(a, selectedDate)) ||
       (a.occurrenceDate || a.date || "9999").localeCompare(b.occurrenceDate || b.date || "9999") ||
+      Number(b.priority === "high") - Number(a.priority === "high") ||
       (a.time || "99:99").localeCompare(b.time || "99:99") ||
       a.title.localeCompare(b.title));
   }, [section, todayView, store.items, selectedDate, liveDay, searchText, statusFilter]);
@@ -260,6 +261,9 @@ export default function RosieReminders() {
       }) }));
     setNotice(completedHere + " completed items cleared.");
   };
+  const canDefer = item => item.category !== "shopping" && item.date &&
+    item.date <= liveDay && (!item.repeat || item.repeat === "none") &&
+    !isDone(item, selectedDate);
   const deferItem = item => {
     if (item.repeat && item.repeat !== "none") { openEdit(item); return; }
     setUndoSnapshot(store);
@@ -598,7 +602,7 @@ export default function RosieReminders() {
                 onClick={()=>startQuickEdit(item)}>{item.title}
                 {item.date && <small>{item.date === liveDay ? "Today" : pretty(item.date,{month:"short",day:"numeric"})}{item.time ? " · " + item.time : ""}</small>}
               </span>}
-              {isOverdue(item,liveDay) && <button type="button" className="rr-quick-defer"
+              {canDefer(item) && <button type="button" className="rr-quick-defer"
                 onClick={() => deferItem(item)} aria-label={"Move " + item.title + " to tomorrow"}>Tomorrow</button>}
               <button type="button" className="rr-quick-edit" onClick={() => openEdit(item)}
                 aria-label={"Edit details for " + item.title}>Edit</button>
@@ -619,7 +623,7 @@ export default function RosieReminders() {
                     isOverdue(item,liveDay) ? "Overdue · " + pretty(item.date,{month:"short",day:"numeric"}) : "",
                     item.time || "", item.repeat !== "none" ? item.repeat : "", item.detail].filter(Boolean).join(" · ")}</small>}
               </div>{item.priority === "high" && <span className="rr-star" aria-label="High priority">★</span>}
-              {isOverdue(item,liveDay) && <button type="button" className="rr-quick-defer"
+              {canDefer(item) && <button type="button" className="rr-quick-defer"
                 onClick={() => deferItem(item)}>Tomorrow</button>}
               <button type="button" className="rr-edit" onClick={() => openEdit(item)} aria-label={"Edit "+item.title}>›</button>
             </div>)}
