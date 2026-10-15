@@ -25,7 +25,9 @@ export function tunnelCenter(x) {
   return 402 + 113 * Math.sin(x / 720 + 0.12) + 48 * Math.sin(x / 1340 + 1.35);
 }
 export function tunnelRadius(x) {
-  return 233 + 12 * Math.sin(x / 1050 + 1.1);
+  // Give the drill room to breathe. This is a true 10% expansion of the
+  // playable corridor, not merely a visual crop change.
+  return 256 + 13 * Math.sin(x / 1050 + 1.1);
 }
 // Reward trails describe the safe S-curve between alternating OG overhangs
 // and crystal rises. Weighted overlap creates a smooth transition at the
@@ -84,7 +86,7 @@ export function makeCourse(seed = 1467) {
 }
 export function newRun(seed = 1467) {
   return { running: true, ended: false, time: 0, scroll: 0, y: tunnelCenter(DRILL_ANCHOR), pitch: 0,
-    score: 0, hull: 3, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
+    score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
     objects: makeCourse(seed), formationHits: [], events: [], result: null, distance: 0 };
 }

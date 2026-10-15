@@ -308,7 +308,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       <div className="ember-stats" aria-live="off">
         <div><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
         <div><small>TIME</small><strong>{formatTime(hud.time)}</strong></div>
-        <div><small>HULL</small><strong className="ember-hull">{[0,1,2].map(n=><i key={n} className={n<hud.hull?"intact":""}>●</i>)}</strong></div>
+        <div><small>HULL</small><strong className="ember-hull">{Array.from({length:5},(_,n)=><i key={n} className={n<hud.hull?"intact":""}>●</i>)}</strong></div>
         <div><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
       <div className="ember-expedition" aria-label={`Excavation route: passage ${hud.passage+1} of ${PASSAGES.length}`}>

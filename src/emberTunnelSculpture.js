@@ -90,6 +90,30 @@ export function paintSculpturalTunnel(c,s,assets={}){
       if(side<0)c.drawImage(organicSprite,-item.width/2,-height+intrusion,item.width,height);
       else c.drawImage(organicSprite,-item.width/2,-intrusion,item.width,height);
       c.restore();
+      // Every deep obstacle gets existing sloped rock shoulders on its approach
+      // and exit. They are deliberately non-colliding and softly feathered:
+      // their job is to grow the hanging roots/crystal rise out of the same
+      // cave wall, rather than leaving a visibly pasted-on vertical block.
+      if(item.obstacle && intrusion>150){
+        const slopeKey=side<0 ? "newSlopeRoof" : "newSlopeFloor";
+        const slope=assets[slopeKey];
+        if(ready(slope)){
+          const shoulderWidth=Math.min(365,item.width*.72);
+          const shoulderHeight=shoulderWidth*slope.naturalHeight/slope.naturalWidth;
+          for(const direction of [-1,1]){
+            c.save();
+            c.translate(screenX+direction*(item.width*.42),worldSurface(item.at+direction*(item.width*.42),side));
+            c.rotate(thetaAt(item.at+direction*(item.width*.42),side));
+            if(direction>0)c.scale(-1,1);
+            c.globalAlpha=.42;
+            c.filter="contrast(1.08) saturate(1.03)";
+            const shoulder=softenedFormation(slope);
+            if(side<0)c.drawImage(shoulder,-shoulderWidth/2,-shoulderHeight+Math.min(105,intrusion*.43),shoulderWidth,shoulderHeight);
+            else c.drawImage(shoulder,-shoulderWidth/2,-Math.min(105,intrusion*.43),shoulderWidth,shoulderHeight);
+            c.restore();
+          }
+        }
+      }
       drawn++;
     }
     c.restore();

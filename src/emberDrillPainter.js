@@ -96,6 +96,7 @@ const CAVERN_SCENES=[
   {at:54,key:"templeOrganic",accent:"bg08"},
   {at:65,key:"scenicTemple",accent:"bg10"},
 ];
+const SCENE_CROSSFADE_SECONDS=.82;
 // Wide 2:1 studies contain artist-composed dark framing at top and bottom.
 // Never substitute them for our approved cave wall painting: those black
 // margins were responsible for the rectangular "photo pasted into tunnel"
@@ -164,7 +165,7 @@ function scenery(c,s,assets={}) {
   const local=clamp((s.time-scene.at)/duration,0,1);
   if(current>0){
     const prev=CAVERN_SCENES[current-1];
-    const fade=clamp((s.time-scene.at)/2.2,0,1);
+    const fade=clamp((s.time-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
     panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,fade);
     atmosphericAccent(c,assets[prev.accent],1,1-fade);
@@ -221,7 +222,7 @@ function pickup(c,o,s,assets={}){
   const img=o.kind==='cache'?(assets.chest||assets.cache):
     o.kind==='gem'&&o.id%7===0?(assets.coin||assets.gem):
     assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':'nonexistent'];
-  if(artReady(img) && !o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-60&&x<=W+60){const sz=o.kind==='cache'?67:48; glow(c,x,y,sz*.8,'rgba(255,182,76,.20)');drawImageTrim(c,img,x-sz/2,y-sz/2+Math.sin(s.time*5+o.id)*2,sz,sz);return;}}
+  if(artReady(img) && !o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-60&&x<=W+60){const sz=o.kind==='cache'?74:53; glow(c,x,y,sz*.8,'rgba(255,182,76,.20)');drawImageTrim(c,img,x-sz/2,y-sz/2+Math.sin(s.time*5+o.id)*2,sz,sz);return;}}
 
   const x=o.x-s.scroll,y=o.y;
   if(x< -80||x>W+90||o.taken)return;

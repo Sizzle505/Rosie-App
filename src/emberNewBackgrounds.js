@@ -49,7 +49,7 @@ export function paintNewBackgroundParallax(c,s,assets,W,H){
   const u=s.scroll*layer.speed;
   const wrapped=travel?((u%(travel*2)+travel*2)%(travel*2)):0;
   const sx=travel?Math.min(wrapped,2*travel-wrapped):0;
-  const opacity=layer.alpha*smooth((s.time-layer.start)/2.5)*smooth((layer.end-s.time)/3.5);
+  const opacity=layer.alpha*smooth((s.time-layer.start)/.85)*smooth((layer.end-s.time)/1.1);
   if(opacity<.004)continue;
   c.save();c.globalAlpha=opacity;
   if(layer.side===-1){
