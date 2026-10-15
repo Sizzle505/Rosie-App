@@ -4,6 +4,7 @@ import { paintTunnelRibbons } from "./emberTunnelRibbons.js";
 import { paintSculpturalTunnel } from "./emberTunnelSculpture.js";
 import { paintOriginalAuger, paintOriginalBoostExhaust, paintTurboTip, paintTurboWorldStreaks } from "./emberAugerFX.js";
 import { paintExcavationUnderlay, paintExcavationTip } from "./emberExcavationFX.js";
+import { paintNewBackgroundParallax } from "./emberNewBackgrounds.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -80,15 +81,18 @@ function panorama(c,img,progress,opacity=1){
   c.restore();
   return true;
 }
+// Three transitions are preserved from the original game. The seven newly
+// generated soft-focus plates are introduced at coherent story beats.
 const CAVERN_SCENES=[
-  {at:0,key:"barkroot"},
-  {at:10,key:"scenicBarkroot"},
-  {at:21,key:"scenicLantern"},
-  {at:32,key:"scenicCrystal"},
-  {at:38,key:"rubyLoop"},
-  {at:43,key:"rubyOrganic"},
-  {at:54,key:"templeOrganic"},
-  {at:65,key:"scenicRoots"},
+  {at:0,key:"bg01",fallback:"barkroot"},
+  {at:10,key:"scenicBarkroot",fallback:"barkroot"},
+  {at:21,key:"bg03",fallback:"scenicLantern"},
+  {at:30,key:"bg04",fallback:"scenicCrystal"},
+  {at:34,key:"bg05",fallback:"rubyLoop"},
+  {at:39,key:"bg06",fallback:"rubyOrganic"},
+  {at:47,key:"rubyOrganic",fallback:"rubyLoop"},
+  {at:54,key:"bg08",fallback:"templeOrganic"},
+  {at:65,key:"bg10",fallback:"scenicTemple"},
 ];
 // These are world-anchored scenic set pieces, NOT collectible markers.
 // Actual cheese, gems, bones and treasure caches are drawn separately.
@@ -150,11 +154,15 @@ function scenery(c,s,assets={}) {
     const prev=CAVERN_SCENES[current-1];
     const fade=clamp((s.time-scene.at)/2.2,0,1);
     // Freeze the previous panorama at its final position during a short dissolve.
-    panorama(c,assets[prev.key],1,1);
-    panorama(c,assets[scene.key],local,fade);
+    const previous=artReady(assets[prev.key])?assets[prev.key]:assets[prev.fallback];
+    const currentArt=artReady(assets[scene.key])?assets[scene.key]:assets[scene.fallback];
+    panorama(c,previous||assets.scenicBarkroot,1,1);
+    panorama(c,currentArt||assets.scenicBarkroot,local,fade);
   } else {
-    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
+    const currentArt=artReady(assets[scene.key])?assets[scene.key]:assets[scene.fallback];
+    panorama(c,currentArt||assets.scenicBarkroot,local,1);
   }
+  paintNewBackgroundParallax(c,s,assets,W,H);
   // Keep architecture and crystals legible inside the playable corridor.
   const tint=c.createLinearGradient(0,0,0,H);
   tint.addColorStop(0,"rgba(17,10,18,.13)");
