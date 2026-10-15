@@ -84,6 +84,7 @@ export default function RosieReminders() {
   const [undoSnapshot, setUndoSnapshot] = useState(null);
   const [notice, setNotice] = useState("");
   const [liveDay, setLiveDay] = useState(dateKey);
+  const dayRef = useRef(liveDay);
 
   const [focusedNote, setFocusedNote] = useState(null);
   const importRef = useRef(null);
@@ -97,7 +98,7 @@ export default function RosieReminders() {
     let source;
     if (section === "today" && todayView === "upcoming") {
       source = store.items.filter(x => x.category !== "shopping").map(x => {
-        const occurrenceDate = nextOccurrence(x, selectedDate, 14);
+        const occurrenceDate = nextOccurrence(x, selectedDate, 13);
         return occurrenceDate ? { ...x, occurrenceDate } : null;
       }).filter(Boolean);
     } else if (section === "today" && todayView === "overdue") {
@@ -132,9 +133,9 @@ export default function RosieReminders() {
     notes: user ? cloudNoteCount : store.notes.length, goals: store.goals.length
   }), [store, selectedDate, user, cloudNoteCount]);
   const featured = shown.find(x => x.priority === "high" && !isDone(x, x.occurrenceDate || selectedDate));
-  const overdueCount = store.items.filter(x => isOverdue(x, liveDay)).length;
+  const overdueCount = store.items.filter(x => isOverdue(x, selectedDate)).length;
   const upcomingCount = store.items.filter(x => x.category !== "shopping" &&
-    nextOccurrence(x, liveDay, 14)).length;
+    nextOccurrence(x, selectedDate, 13)).length;
   const completedHere = store.items.filter(x => (section === "today"
     ? isScheduled(x, selectedDate) || isOverdue(x, selectedDate) : x.category === section) &&
     isDone(x, selectedDate) && (!x.repeat || x.repeat === "none")).length;
@@ -151,14 +152,20 @@ export default function RosieReminders() {
   useEffect(() => {
     const refreshDay = () => {
       const now = dateKey();
-      setLiveDay(previous => {
-        if (previous !== now) setSelectedDate(current => current === previous ? now : current);
-        return now;
-      });
+      if (dayRef.current !== now) {
+        const before = dayRef.current;
+        dayRef.current = now;
+        setSelectedDate(current => current === before ? now : current);
+        setLiveDay(now);
+      }
     };
     const onStorage = event => {
       if (event.key === KEY && event.newValue) {
-        try { setStore(validateBackup(JSON.parse(event.newValue))); }
+        try {
+          const incoming = validateBackup(JSON.parse(event.newValue));
+          setStore(previous => JSON.stringify(previous) === JSON.stringify(incoming)
+            ? previous : incoming);
+        }
         catch { /* Ignore malformed changes from another tab. */ }
       }
     };
