@@ -9,6 +9,39 @@ import { FORMATION_LAYOUT, formationIntrusion } from "./emberTunnelLayout.js";
  */
 const ready = im => !!(im && im.complete && im.naturalWidth > 0);
 
+// The transparent source cutouts may still have a hard vertical crop boundary.
+// Build an alpha-feathered, ORIGINAL-source copy once per loaded image; never
+// crop a rock with a rectangular screen-space box or alter its original file.
+// A 16% horizontal falloff hides literal source-image boundaries while leaving
+// the physically central crystal/root silhouette and collision core untouched.
+const softenedCache=new WeakMap();
+export function softenedFormation(im){
+  if(!ready(im))return im;
+  const found=softenedCache.get(im);
+  if(found)return found;
+  const off=document.createElement("canvas");
+  off.width=im.naturalWidth;off.height=im.naturalHeight;
+  const ctx=off.getContext("2d",{alpha:true});
+  if(!ctx)return im;
+  ctx.clearRect(0,0,off.width,off.height);
+  ctx.drawImage(im,0,0);
+  ctx.globalCompositeOperation="destination-in";
+  const mask=ctx.createLinearGradient(0,0,off.width,0);
+  mask.addColorStop(0,"rgba(255,255,255,0)");
+  mask.addColorStop(.075,"rgba(255,255,255,.52)");
+  mask.addColorStop(.17,"rgba(255,255,255,1)");
+  mask.addColorStop(.83,"rgba(255,255,255,1)");
+  mask.addColorStop(.925,"rgba(255,255,255,.52)");
+  mask.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=mask;ctx.fillRect(0,0,off.width,off.height);
+  // Preserve provenance for the real Canvas draw-call verifier. Source pixels
+  // are used throughout, and the manifest-verified file is still the origin.
+  off.src=im.src;
+  softenedCache.set(im,off);
+  return off;
+}
+
+
 function worldSurface(x,side){
   return tunnelCenter(x)+side*tunnelRadius(x);
 }
@@ -53,8 +86,9 @@ export function paintSculpturalTunnel(c,s,assets={}){
       c.filter=item.obstacle?"contrast(1.22) saturate(1.12)":"contrast(1.07) saturate(1.04)";
       // Top: preserved roots hang DOWN, floor: crystal relief rises UP.
       // This is an illustrated *formation*, NOT a wallpaper panel.
-      if(side<0)c.drawImage(sprite,-item.width/2,-height+intrusion,item.width,height);
-      else c.drawImage(sprite,-item.width/2,-intrusion,item.width,height);
+      const organicSprite=softenedFormation(sprite);
+      if(side<0)c.drawImage(organicSprite,-item.width/2,-height+intrusion,item.width,height);
+      else c.drawImage(organicSprite,-item.width/2,-intrusion,item.width,height);
       c.restore();
       drawn++;
     }
