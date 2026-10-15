@@ -177,6 +177,35 @@ function scenery(c,s,assets={}) {
   }
 }
 
+// Continuous atmosphere outside the physical corridor; removes the visual
+// impression of two unrelated rectangular photo strips. The darkening is
+// clipped to the SAME curving physics wall as the structural rock ribbons.
+// Original richly-painted panorama texture remains visible underneath.
+function wallDepth(c,s){
+ const step=8;
+ for(const side of [-1,1]){
+  c.save();c.beginPath();
+  if(side<0){c.moveTo(-step,-6);c.lineTo(W+step,-6)}
+  else {c.moveTo(-step,H+6);c.lineTo(W+step,H+6)}
+  for(let x=W+step;x>=-step;x-=step){
+   const world=s.scroll+x;
+   const edge=tunnelCenter(world)+side*tunnelRadius(world);
+   c.lineTo(x,edge);
+  }
+  c.closePath();c.clip();
+  const boundary=tunnelCenter(s.scroll+W*.5)+side*tunnelRadius(s.scroll+W*.5);
+  const shade=c.createLinearGradient(0,side<0?0:boundary,0,side<0?boundary:H);
+  if(side<0){
+   shade.addColorStop(0,"rgba(15,10,12,.57)");
+   shade.addColorStop(1,"rgba(22,11,12,.17)");
+  }else{
+   shade.addColorStop(0,"rgba(22,11,13,.18)");
+   shade.addColorStop(1,"rgba(14,8,12,.56)");
+  }
+  c.fillStyle=shade;c.fillRect(0,0,W,H);
+  c.restore();
+ }
+}
 function pickup(c,o,s,assets={}){
   const img=o.kind==='cache'?(assets.chest||assets.cache):
     o.kind==='gem'&&o.id%7===0?(assets.coin||assets.gem):
@@ -328,6 +357,7 @@ function vehicle(c,s,portrait,assets={}) {
 export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
+  wallDepth(c,s);
   // Barkroot OG proof gate: real sculpted source-derived, arc-mapped rock.
   // Keep the legacy natural painter as an asset-loading fallback only.
   if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
