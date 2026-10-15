@@ -4,7 +4,10 @@ import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import "./ember-tunnel-drill.css";
 
-const LABELS = ["Barkroot Passage", "Ruby Temple Galleries"];
+const PASSAGES = [
+  { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2 },
+  { label: "Ruby Temple Galleries", start: RUN_DURATION / 2, end: RUN_DURATION },
+];
 const DRILL_ART = {
   bg01:"new-assets/background/bg01.webp",
   bg02:"new-assets/background/bg02.webp",
@@ -106,7 +109,8 @@ const DRILL_ART = {
 const formatTime = t => Math.max(0, Math.ceil(RUN_DURATION - t)) + "s";
 function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
-    cheese:s.cheese, combo:s.combo, boost:s.boostTime, passage:s.time<33?0:1, result:s.result };
+    cheese:s.cheese, combo:s.combo, boost:s.boostTime,
+    passage:Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))), result:s.result };
 }
 function playSound(context,kind) {
   if (!context) return;
@@ -127,6 +131,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   const canvas=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
+        gestureStart=useRef(null),
         particles=useRef([]),seed=useRef(1467);
   const [mode,setMode]=useState("idle");
   const [hud,setHud]=useState(()=>snapshot(frame.current));
@@ -159,6 +164,14 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       setHud(snapshot(s));playSound(audio(),"turbo");
       if(navigator.vibrate)navigator.vibrate(25);
     }
+  }
+  function togglePause() {
+    if (modeRef.current !== "running" && modeRef.current !== "paused") return;
+    const next = modeRef.current === "running" ? "paused" : "running";
+    modeRef.current = next;
+    resetHold();
+    setMode(next);
+    if (next === "paused") playSound(audio(), "hit");
   }
   function resetHold(){pressed.current.up=false;pressed.current.down=false}
   useEffect(()=>{
@@ -261,6 +274,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     };
   },[soundOn]);
   const active=mode==="running";
+  const paused=mode==="paused";
   const title=mode==="ended" ? (hud.result==="complete"?"THE DIG IS DONE":"A VALIANT EXCAVATION") : "THE GREAT DIG";
   const subtitle=mode==="ended" ? (hud.result==="complete"?"Rosie has excavated an entirely respectable amount of park.":"Rosie maintains the rocks were poorly positioned.") :
     "Because some dogs dig holes. Rosie digs civilizations.";
@@ -269,6 +283,21 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     if(modeRef.current!=="running")return;
     pressed.current[type]=on;
   };
+  const beginGesture = e => {
+    if (!active) return;
+    const point = e.touches ? e.touches[0] : e;
+    gestureStart.current = { y:point.clientY, x:point.clientX };
+  };
+  const steerGesture = e => {
+    if (!active || !gestureStart.current) return;
+    const point = e.touches ? e.touches[0] : e;
+    const delta = point.clientY - gestureStart.current.y;
+    // A short vertical swipe is intentional steering. Holding steady levels the drill.
+    pressed.current.up = delta < -18;
+    pressed.current.down = delta > 18;
+  };
+  const endGesture = () => { gestureStart.current=null; resetHold(); };
+  const passageProgress = Math.min(100, ((hud.time - PASSAGES[hud.passage].start) / (PASSAGES[hud.passage].end - PASSAGES[hud.passage].start)) * 100);
   return (
     <section className="ember-suite" aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
@@ -282,13 +311,20 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <div><small>HULL</small><strong className="ember-hull">{[0,1,2].map(n=><i key={n} className={n<hud.hull?"intact":""}>●</i>)}</strong></div>
         <div><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
+      <div className="ember-expedition" aria-label={`Excavation route: passage ${hud.passage+1} of ${PASSAGES.length}`}>
+        <span className="ember-route-label">EXCAVATION ROUTE</span>
+        <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / PASSAGES.length) * 100}%`}} /></div>
+        {PASSAGES.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
+      </div>
       <div className={"ember-stage"+(active?" is-active":"")} >
-        <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF 2</small><strong>{LABELS[hud.passage]}</strong></div>
+        <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
-          role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles" />
+          role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Swipe up or down across the tunnel to steer."
+          onPointerDown={beginGesture} onPointerMove={steerGesture} onPointerUp={endGesture} onPointerCancel={endGesture} />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
-        {mode!=="running"&&
+        {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p><button type="button" onClick={togglePause}>RESUME DIG</button></div>}
+        {mode!=="running"&&mode!=="paused"&&
           <div className="ember-start-overlay">
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
@@ -296,7 +332,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             {mode==="ended"&&hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />}
             {mode==="ended"&&<div className="ember-results"><span><b>{hud.score.toLocaleString()}</b> POINTS</span><span><b>{hud.gems}</b> GEMS</span><span><b>{best.toLocaleString()}</b> BEST</span></div>}
             <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
-            <small>Hold ▲ or ▼ to steer. Release to level out.</small>
+            <small>Swipe the tunnel or hold ▲ / ▼ to steer. Space ignites Turbo.</small>
           </div>}
       </div>
       <div className="ember-controls">
@@ -317,6 +353,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           onPointerCancel={e=>hold("down",false,e)} onLostPointerCapture={e=>hold("down",false,e)}
           aria-label="Angle the drill downward"><span>▼</span><small>ANGLE DOWN</small></button>
       </div>
+      {(active||paused)&&<div className="ember-run-actions">
+        <button type="button" onClick={togglePause}>{paused?"RESUME":"PAUSE"}</button>
+        <button type="button" onClick={start}>RESTART RUN</button>
+        <span>{active?"Swipe the tunnel to steer · Space for Turbo":"Your excavation is safely paused."}</span>
+      </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span>
         <span className="ember-best">BEST {best.toLocaleString()}</span></div>
     </section>
