@@ -84,16 +84,28 @@ function panorama(c,img,progress,opacity=1){
 // Three transitions are preserved from the original game. The seven newly
 // generated soft-focus plates are introduced at coherent story beats.
 const CAVERN_SCENES=[
-  {at:0,key:"bg01",fallback:"barkroot"},
-  {at:10,key:"scenicBarkroot",fallback:"barkroot"},
-  {at:21,key:"bg03",fallback:"scenicLantern"},
-  {at:30,key:"bg04",fallback:"scenicCrystal"},
-  {at:34,key:"bg05",fallback:"rubyLoop"},
-  {at:39,key:"bg06",fallback:"rubyOrganic"},
-  {at:47,key:"rubyOrganic",fallback:"rubyLoop"},
-  {at:54,key:"bg08",fallback:"templeOrganic"},
-  {at:65,key:"bg10",fallback:"scenicTemple"},
+  // The native painted cave is the continuous WORLD, not a background cutout.
+  // The newly imported 2:1 panoramas are additive, low-contrast atmosphere.
+  {at:0,key:"scenicBarkroot",accent:"bg01"},
+  {at:10,key:"barkroot",accent:"bg01"},
+  {at:21,key:"scenicLantern",accent:"bg03"},
+  {at:30,key:"scenicCrystal",accent:"bg04"},
+  {at:34,key:"rubyLoop",accent:"bg05"},
+  {at:39,key:"rubyOrganic",accent:"bg06"},
+  {at:47,key:"rubyOrganic",accent:"bg06"},
+  {at:54,key:"templeOrganic",accent:"bg08"},
+  {at:65,key:"scenicTemple",accent:"bg10"},
 ];
+// Wide 2:1 studies contain artist-composed dark framing at top and bottom.
+// Never substitute them for our approved cave wall painting: those black
+// margins were responsible for the rectangular "photo pasted into tunnel"
+// reported on iPhone. SCREEN composite preserves only atmospheric highlights.
+function atmosphericAccent(c,img,progress,opacity){
+ if(!artReady(img)||opacity<.003)return;
+ c.save();c.globalCompositeOperation="screen";
+ panorama(c,img,progress,opacity*.32);
+ c.restore();
+}
 // These are world-anchored scenic set pieces, NOT collectible markers.
 // Actual cheese, gems, bones and treasure caches are drawn separately.
 const CAVERN_FEATURES=[
@@ -153,14 +165,13 @@ function scenery(c,s,assets={}) {
   if(current>0){
     const prev=CAVERN_SCENES[current-1];
     const fade=clamp((s.time-scene.at)/2.2,0,1);
-    // Freeze the previous panorama at its final position during a short dissolve.
-    const previous=artReady(assets[prev.key])?assets[prev.key]:assets[prev.fallback];
-    const currentArt=artReady(assets[scene.key])?assets[scene.key]:assets[scene.fallback];
-    panorama(c,previous||assets.scenicBarkroot,1,1);
-    panorama(c,currentArt||assets.scenicBarkroot,local,fade);
-  } else {
-    const currentArt=artReady(assets[scene.key])?assets[scene.key]:assets[scene.fallback];
-    panorama(c,currentArt||assets.scenicBarkroot,local,1);
+    panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
+    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,fade);
+    atmosphericAccent(c,assets[prev.accent],1,1-fade);
+    atmosphericAccent(c,assets[scene.accent],local,fade);
+  }else{
+    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
+    atmosphericAccent(c,assets[scene.accent],local,1);
   }
   paintNewBackgroundParallax(c,s,assets,W,H);
   // Keep architecture and crystals legible inside the playable corridor.
