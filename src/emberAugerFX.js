@@ -1,4 +1,4 @@
-import { TURBO_DURATION } from "./emberDrillEngine.js";
+import { TURBO_DURATION, DRILL_TIP_OFFSET, DRILL_TIP_VERTICAL_OFFSET } from "./emberDrillEngine.js";
 
 /**
  * Ember Tunnel's registered, source-derived mechanical animation.
@@ -15,8 +15,11 @@ const ready = image => !!(image?.complete && image.naturalWidth > 0);
 const TAU = Math.PI * 2;
 export const AUGER_SHEET = Object.freeze({ columns:4, rows:4, frameWidth:360, frameHeight:300, frames:16 });
 export const DRILL_REGISTRATION = Object.freeze({
-  rootX:63, tipX:170, nozzleX:-116, nozzleY:4,
-  augerX:56, augerY:-55, augerW:120, augerH:110,
+  // Recess the source's rear ribs inside the original approved collar.
+  // The animated master is unscaled and every frame uses this same offset.
+  rootX:51, tipX:DRILL_TIP_OFFSET, tipY:DRILL_TIP_VERTICAL_OFFSET,
+  nozzleX:-116, nozzleY:4,
+  augerX:44, augerY:-52, augerW:120, augerH:110,
 });
 export const JET_SHEET = Object.freeze({ columns:4, rows:2, frames:8, sourceWidth:2172, sourceHeight:724, frameWidth:543, frameHeight:362 });
 export const IMPACT_SHEET = Object.freeze({ columns:4, rows:2, frames:8, sourceWidth:1774, sourceHeight:887, frameWidth:443.5, frameHeight:443.5 });
@@ -84,7 +87,8 @@ export function paintOriginalAuger(c,s,assets) {
   if(!atlas)return false;
   const frame=augerFrameRect(augerFrameIndex(s.time,s.boostTime>0));
   const {augerX,augerY,augerW,augerH}=DRILL_REGISTRATION;
-  // Alpha art starts at x=~63 and finishes x=~170: same as engine collision.
+  // Alpha art starts at x=~51 and finishes x=~158: same as the
+  // actual nose used by collision and excavation effects.
   c.drawImage(atlas,frame.sx,frame.sy,frame.sw,frame.sh,
     augerX,augerY,augerW,augerH);
   return true;
@@ -129,12 +133,12 @@ export function paintOriginalBoostExhaust(c,s,assets) {
  */
 export function paintTurboTip(c,s,assets) {
   if(!(s.boostTime>0))return;
-  const tipX=DRILL_REGISTRATION.tipX;
-  // Subtle constant Turbo charge, kept small so the 16 spinning ribs remain visible.
-  const glow=c.createRadialGradient(tipX,0,1,tipX,0,19);
+  const {tipX,tipY}=DRILL_REGISTRATION;
+  // Subtle constant Turbo charge, centered on the corrected rotating nose.
+  const glow=c.createRadialGradient(tipX,tipY,1,tipX,tipY,19);
   glow.addColorStop(0,"rgba(255,237,166,.25)");
   glow.addColorStop(1,"rgba(255,154,47,0)");
-  c.fillStyle=glow;c.beginPath();c.arc(tipX,0,19,0,TAU);c.fill();
+  c.fillStyle=glow;c.beginPath();c.arc(tipX,tipY,19,0,TAU);c.fill();
 
   if(!Number.isFinite(s.tipBurstAt)||!ready(assets?.impactSheet))return;
   const index=impactFrameIndex(s.time-s.tipBurstAt);
@@ -147,9 +151,9 @@ export function paintTurboTip(c,s,assets) {
   c.save();
   c.globalCompositeOperation="screen";
   c.globalAlpha=.78*(1-(s.time-s.tipBurstAt)/.42);
-  // Painted impact ring is ~22% into each frame; register it to x=170.
-  // The burst travels FORWARD, not as a second, permanent drill.
-  c.drawImage(img,sx,sy,sw,sh,147,-39,104,78);
+  // Keep impact relative to the *same* shifted tip, including local Y.
+  // It must follow the vehicle's existing pitch and never become a ghost cone.
+  c.drawImage(img,sx,sy,sw,sh,tipX-23,tipY-39,104,78);
   c.restore();
 }
 
