@@ -228,3 +228,115 @@
    max-width:90%;text-align:center
  }
 }
+
+
+/* Final measured header layout: one art panel at its native proportions,
+   one independent typography column. The iPhone title never overlays the
+   illustration or exits its cell; there is no cover crop of the full banner. */
+.ember-suite .ember-header{
+  display:grid;
+  grid-template-columns:43% 57%;
+  height:clamp(132px,16vw,198px);
+  min-width:0;
+  background-color:#112b3a;
+  background-image:url("/ember-drill/drill-header.webp");
+  background-repeat:no-repeat;
+  background-size:auto 100%;
+  background-position:left center;
+  overflow:hidden;
+}
+.ember-suite .ember-header::before{
+  content:"";display:block;position:absolute;inset:0;opacity:1;z-index:1;
+  background:linear-gradient(90deg,transparent 0%,rgba(9,26,38,.05) 30%,
+    rgba(10,27,40,.82) 43%,#112a39 55%,#112a39 100%);
+  pointer-events:none;
+}
+.ember-suite .ember-header .ember-header-copy{
+  opacity:1;display:flex;position:relative;grid-column:2;
+  inset:auto;left:auto;right:auto;top:auto;bottom:auto;
+  min-width:0;max-width:100%;width:100%;
+  padding:9px 12px 10px 6px;
+  flex-direction:column;align-items:flex-start;justify-content:center;
+  overflow:hidden;text-align:left;pointer-events:none;
+}
+.ember-suite .ember-header .ember-header-copy>span{
+  font:700 clamp(7px,.83vw,10px)/1.32 Georgia,serif;
+  letter-spacing:.075em;color:#e6c58c;
+  white-space:normal;overflow-wrap:normal;
+}
+.ember-suite .ember-header .ember-header-copy h2{
+  font:700 clamp(20px,2.8vw,36px)/1.05 Georgia,serif;
+  letter-spacing:-.075em;color:#fff0cb;
+  white-space:nowrap;margin:8px 0 3px;max-width:100%;
+}
+.ember-suite .ember-header .ember-header-copy p{
+  font:italic clamp(15px,2.05vw,26px)/1.12 Georgia,serif;
+  white-space:nowrap;letter-spacing:-.025em;
+  margin:2px 0 0;max-width:100%;
+}
+@media(max-width:620px){
+ .ember-suite .ember-header{
+   grid-template-columns:42% 58%;
+   height:137px;
+   background-size:auto 100%;
+   background-position:left center;
+ }
+ .ember-suite .ember-header::before{
+   background:linear-gradient(90deg,transparent 0%,transparent 32%,
+      rgba(10,26,37,.56) 41%,#0e2636 52%,#0e2636 100%);
+ }
+ .ember-suite .ember-header .ember-header-copy{
+   grid-column:2;left:auto;right:auto;top:auto;bottom:auto;
+   padding:7px 11px 7px 3px;justify-content:center;
+ }
+ .ember-suite .ember-header .ember-header-copy>span{
+   font-size:clamp(6px,1.45vw,8px);
+   line-height:1.2;letter-spacing:.025em;
+ }
+ .ember-suite .ember-header .ember-header-copy h2{
+   font-size:clamp(17px,4.6vw,23px);
+   line-height:1.08;letter-spacing:-.08em;
+   margin:7px 0 4px;
+ }
+ .ember-suite .ember-header .ember-header-copy p{
+   font-size:clamp(14px,3.65vw,19px);
+   margin:1px 0 0;
+ }
+}
+@media(max-width:360px){
+ .ember-suite .ember-header{height:126px;grid-template-columns:40% 60%}
+ .ember-suite .ember-header .ember-header-copy{padding-right:5px}
+ .ember-suite .ember-header .ember-header-copy h2{font-size:17px}
+ .ember-suite .ember-header .ember-header-copy p{font-size:13px}
+}
+
+
+/* Approved 1280x350 single-piece banner: NO CSS art cropping or duplicate live
+   title. Image alone owns the headline, vehicle, Rosie and decorative border.
+   Intrinsic aspect survives all iPhone and desktop widths. */
+.ember-suite .ember-header{
+  display:block!important;
+  position:relative;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:1280 / 350;
+  padding:0!important;
+  background:#161923!important;
+  border:1px solid rgba(244,201,121,.9);
+  overflow:hidden;
+}
+.ember-suite .ember-header::before,
+.ember-suite .ember-header::after{display:none!important}
+.ember-suite .ember-header .ember-header-full-art{
+  display:block;
+  width:100%;height:100%;max-width:none;
+  aspect-ratio:1280 / 350;
+  object-fit:contain;
+  object-position:center center;
+  pointer-events:none;
+  user-select:none;
+}
+@media(max-width:620px){
+ .ember-suite .ember-header{height:auto!important;aspect-ratio:1280 / 350}
+ .ember-suite .ember-header .ember-header-full-art{width:100%;height:100%}
+}

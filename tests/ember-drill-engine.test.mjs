@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { DRILL_ANCHOR, DRILL_HEIGHT, RUN_DURATION, makeCourse, newRun, tunnelCenter, triggerTurbo, updateRun } from "../src/emberDrillEngine.js";
+import { DRILL_ANCHOR, DRILL_TIP_OFFSET, DRILL_HEIGHT, RUN_DURATION, makeCourse, newRun, tunnelCenter, triggerTurbo, updateRun } from "../src/emberDrillEngine.js";
 
 test("same seed gives reproducible treasure and hazard placement",()=>{
   assert.deepEqual(makeCourse(15),makeCourse(15));
@@ -46,7 +46,7 @@ test("treasure pickups increase score and turbo charge",()=>{
 test("hazards cost a hull point, with a collision grace period",()=>{
   const s=newRun();
   const x=s.scroll+DRILL_ANCHOR;
-  s.objects=[{id:1,kind:"rock",x:x+5,y:s.y,radius:40,taken:false},{id:2,kind:"spike",x:x+9,y:s.y,radius:35,taken:false}];
+  s.objects=[{id:1,kind:"rock",x:x+DRILL_TIP_OFFSET+5,y:s.y,radius:40,taken:false},{id:2,kind:"spike",x:x+DRILL_TIP_OFFSET+9,y:s.y,radius:35,taken:false}];
   updateRun(s,.016);
   assert.equal(s.hull,2);
   assert.ok(s.hitCooldown>0);
@@ -57,16 +57,21 @@ test("fully charged turbo is triggered by player and smashes hazards safely",()=
   assert.ok(s.boostTime>0);
   assert.equal(s.charge,0);
   const x=s.scroll+DRILL_ANCHOR;
-  s.objects=[{id:1,kind:"spike",x:x+5,y:s.y,radius:35,taken:false}];
+  s.objects=[{id:1,kind:"spike",x:x+DRILL_TIP_OFFSET+5,y:s.y,radius:35,taken:false}];
   updateRun(s,.016);
   assert.equal(s.hull,3);
   assert.ok(s.score>0);
 });
 test("run ends in a win after 75 seconds if hull survives",()=>{
   const s=newRun();s.objects=[];
+  // This test checks the precise 75-second clock, independently of course
+  // difficulty. Invulnerability is intentional rather than claiming a
+  // stationary centerline pilot can dodge the new original-source obstacles.
+  s.hitCooldown=RUN_DURATION+1;
   for(let i=0;i<2500&&!s.ended;i++){
     s.y=tunnelCenter(s.scroll+DRILL_ANCHOR);
     updateRun(s,.04);
+    s.hitCooldown=RUN_DURATION+1;
   }
   assert.equal(s.ended,true);
   assert.equal(s.result,"complete");

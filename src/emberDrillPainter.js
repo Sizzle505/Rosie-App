@@ -1,7 +1,10 @@
 import { DRILL_WIDTH as W, DRILL_HEIGHT as H, DRILL_ANCHOR, tunnelCenter, tunnelRadius, clamp } from "./emberDrillEngine.js";
 import { paintNaturalTunnel } from "./emberNaturalTunnel.js";
-import { paintRecoveredWalls } from "./emberRecoveredWalls.js";
+import { paintTunnelRibbons } from "./emberTunnelRibbons.js";
+import { paintSculpturalTunnel } from "./emberTunnelSculpture.js";
+import { paintOriginalAuger, paintOriginalBoostExhaust, paintTurboTip, paintTurboWorldStreaks } from "./emberAugerFX.js";
 import { paintExcavationUnderlay, paintExcavationTip } from "./emberExcavationFX.js";
+import { paintNewBackgroundParallax } from "./emberNewBackgrounds.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -78,16 +81,31 @@ function panorama(c,img,progress,opacity=1){
   c.restore();
   return true;
 }
+// Three transitions are preserved from the original game. The seven newly
+// generated soft-focus plates are introduced at coherent story beats.
 const CAVERN_SCENES=[
-  {at:0,key:"barkroot"},
-  {at:10,key:"scenicBarkroot"},
-  {at:21,key:"scenicLantern"},
-  {at:32,key:"scenicCrystal"},
-  {at:38,key:"rubyLoop"},
-  {at:43,key:"rubyOrganic"},
-  {at:54,key:"templeOrganic"},
-  {at:65,key:"scenicRoots"},
+  // The native painted cave is the continuous WORLD, not a background cutout.
+  // The newly imported 2:1 panoramas are additive, low-contrast atmosphere.
+  {at:0,key:"scenicBarkroot",accent:"bg01"},
+  {at:10,key:"barkroot",accent:"bg01"},
+  {at:21,key:"scenicLantern",accent:"bg03"},
+  {at:30,key:"scenicCrystal",accent:"bg04"},
+  {at:34,key:"rubyLoop",accent:"bg05"},
+  {at:39,key:"rubyOrganic",accent:"bg06"},
+  {at:47,key:"rubyOrganic",accent:"bg06"},
+  {at:54,key:"templeOrganic",accent:"bg08"},
+  {at:65,key:"scenicTemple",accent:"bg10"},
 ];
+// Wide 2:1 studies contain artist-composed dark framing at top and bottom.
+// Never substitute them for our approved cave wall painting: those black
+// margins were responsible for the rectangular "photo pasted into tunnel"
+// reported on iPhone. SCREEN composite preserves only atmospheric highlights.
+function atmosphericAccent(c,img,progress,opacity){
+ if(!artReady(img)||opacity<.003)return;
+ c.save();c.globalCompositeOperation="screen";
+ panorama(c,img,progress,opacity*.32);
+ c.restore();
+}
 // These are world-anchored scenic set pieces, NOT collectible markers.
 // Actual cheese, gems, bones and treasure caches are drawn separately.
 const CAVERN_FEATURES=[
@@ -147,12 +165,15 @@ function scenery(c,s,assets={}) {
   if(current>0){
     const prev=CAVERN_SCENES[current-1];
     const fade=clamp((s.time-scene.at)/2.2,0,1);
-    // Freeze the previous panorama at its final position during a short dissolve.
-    panorama(c,assets[prev.key],1,1);
-    panorama(c,assets[scene.key],local,fade);
-  } else {
+    panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
+    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,fade);
+    atmosphericAccent(c,assets[prev.accent],1,1-fade);
+    atmosphericAccent(c,assets[scene.accent],local,fade);
+  }else{
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
+    atmosphericAccent(c,assets[scene.accent],local,1);
   }
+  paintNewBackgroundParallax(c,s,assets,W,H);
   // Keep architecture and crystals legible inside the playable corridor.
   const tint=c.createLinearGradient(0,0,0,H);
   tint.addColorStop(0,"rgba(17,10,18,.13)");
@@ -167,6 +188,35 @@ function scenery(c,s,assets={}) {
   }
 }
 
+// Continuous atmosphere outside the physical corridor; removes the visual
+// impression of two unrelated rectangular photo strips. The darkening is
+// clipped to the SAME curving physics wall as the structural rock ribbons.
+// Original richly-painted panorama texture remains visible underneath.
+function wallDepth(c,s){
+ const step=8;
+ for(const side of [-1,1]){
+  c.save();c.beginPath();
+  if(side<0){c.moveTo(-step,-6);c.lineTo(W+step,-6)}
+  else {c.moveTo(-step,H+6);c.lineTo(W+step,H+6)}
+  for(let x=W+step;x>=-step;x-=step){
+   const world=s.scroll+x;
+   const edge=tunnelCenter(world)+side*tunnelRadius(world);
+   c.lineTo(x,edge);
+  }
+  c.closePath();c.clip();
+  const boundary=tunnelCenter(s.scroll+W*.5)+side*tunnelRadius(s.scroll+W*.5);
+  const shade=c.createLinearGradient(0,side<0?0:boundary,0,side<0?boundary:H);
+  if(side<0){
+   shade.addColorStop(0,"rgba(15,10,12,.57)");
+   shade.addColorStop(1,"rgba(22,11,12,.17)");
+  }else{
+   shade.addColorStop(0,"rgba(22,11,13,.18)");
+   shade.addColorStop(1,"rgba(14,8,12,.56)");
+  }
+  c.fillStyle=shade;c.fillRect(0,0,W,H);
+  c.restore();
+ }
+}
 function pickup(c,o,s,assets={}){
   const img=o.kind==='cache'?(assets.chest||assets.cache):
     o.kind==='gem'&&o.id%7===0?(assets.coin||assets.gem):
@@ -241,26 +291,12 @@ function vehicle(c,s,portrait,assets={}) {
     c.save();c.translate(DRILL_ANCHOR,s.y);c.rotate(s.pitch);
     if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha=.52;
     const boosted=s.boostTime>0;
-    if(boosted){
-      // The engine, not Rosie's face, glows. Streaks trail behind the vehicle.
-      glow(c,-95,0,142,'rgba(255,163,47,.27)');
-      // This is a transparent exhaust plume only, behind the actual vehicle.
-      if(artReady(assets.boosttrail)){
-        c.save();c.globalCompositeOperation="screen";
-        drawImageTrim(c,assets.boosttrail,-298,-49,180,98,.56);
-        c.restore();
-      }
-      for(let i=0;i<11;i++){
-        const yy=(i-5)*17+Math.sin(s.time*27+i*1.8)*6;
-        c.strokeStyle=i%3===0?'rgba(255,247,184,.72)':'rgba(252,154,53,.54)';
-        c.lineWidth=1.5+(i%3);
-        const travel=(s.time*390+i*41)%110;
-        c.beginPath();c.moveTo(-155-travel*.36,yy);c.lineTo(-256-travel,yy-12);c.stroke();
-      }
-    }
-    for(let i=0;i<10;i++){
-      const phase=Math.floor(s.time*20),radius=2+noise(i+phase)*6;
-      circle(c,-145-noise(i*17+phase)*80,(noise(i+phase*11)-.5)*72,radius,i%2?'rgba(255,183,91,.59)':'rgba(138,94,58,.57)');
+    // Exhaust and travel streaks live behind the intact Rosie/engine sprite.
+    paintOriginalBoostExhaust(c,s,assets);
+    for(let i=0;i<9;i++){
+      const phase=Math.floor(s.time*22),radius=2+noise(i+phase)*5;
+      circle(c,-145-noise(i*17+phase)*78,(noise(i+phase*11)-.5)*65,
+        radius,i%2?"rgba(255,183,91,.46)":"rgba(138,94,58,.52)");
     }
     // Crossfade between separately illustrated Rosie-body steering poses.
     // Keep their registered bounds identical so the cockpit does not jump.
@@ -269,54 +305,10 @@ function vehicle(c,s,portrait,assets={}) {
     const turnMix=clamp((Math.abs(s.pitch)-.045)/.37,0,1);
     if(artReady(neutral))drawImageTrim(c,neutral,-168,-125,336,252,artReady(directed)?1-turnMix:1);
     if(artReady(directed)&&turnMix>.001)drawImageTrim(c,directed,-168,-125,336,252,turnMix);
-    if(artReady(assets.auger)){
-      const fps=s.boostTime>0?34:19,frame=Math.floor(s.time*fps)%8;
-      c.drawImage(assets.auger,(frame%4)*500,Math.floor(frame/4)*410,500,410,
-        -168+948/1448*336,-125+477/1086*252,500/1448*336,410/1086*252);
-    }
-    // Rotating axial sheen: each spiral rib catches and releases highlights as
-    // the auger turns, while the separately rendered sprite remains registered.
-    c.save();
-    c.globalCompositeOperation="screen";
-    for(let i=0;i<5;i++){
-      const phase=s.time*(boosted?44:26)-i*.87;
-      const pos=71+i*17+Math.sin(phase)*6;
-      const half=Math.max(7,39-i*6);
-      const sheen=.25+.49*Math.max(0,Math.cos(phase));
-      c.strokeStyle="rgba(255,235,161,"+sheen.toFixed(3)+")";
-      c.lineWidth=2.3+(boosted?1.2:0);
-      c.beginPath();
-      c.moveTo(pos,-half);
-      c.quadraticCurveTo(pos+11*Math.cos(phase),0,pos+7*Math.sin(phase),half);
-      c.stroke();
-    }
-    c.restore();
-    if(boosted){
-      // Keep the illustrated auger itself visible. The supplied turbo overlay
-      // depicts a complete second drill, so layering it produces a ghost nose.
-      // Use attached exhaust, rings and sparks instead of duplicating geometry.
-      glow(c,146,0,90,"rgba(255,205,72,.30)");
-      for(let i=0;i<18;i++){
-        const a=s.time*31+i*2.39;
-        const r=14+(i%5)*8;
-        const dx=143+Math.cos(a)*r,dy=Math.sin(a)*r;
-        circle(c,dx,dy,1.4+(i%4)*.55,"rgba(255,224,117,.84)");
-      }
-      // Spinning concentric light and sparks stay attached to the drill tip.
-      const spin=s.time*29;
-      c.save();c.translate(157,0);
-      glow(c,0,0,68,"rgba(255,222,99,.35)");
-      c.strokeStyle="rgba(255,232,138,.78)";c.lineWidth=3;
-      c.beginPath();c.ellipse(0,0,11+Math.sin(spin)*4,26,0,-spin,-spin+Math.PI*1.16);c.stroke();
-      c.strokeStyle="rgba(255,246,188,.60)";c.lineWidth=2;
-      c.beginPath();c.ellipse(-12,0,12,38,0,spin,spin+Math.PI*.85);c.stroke();
-      for(let i=0;i<13;i++){
-        const a=spin+i*2.399,rad=18+(i%4)*9;
-        const px=Math.cos(a)*rad,py=Math.sin(a)*rad;
-        circle(c,px,py,1.6+(i%3),"rgba(255,212,105,.85)");
-      }
-      c.restore();
-    }
+    // Genuine eight-frame auger and high-contrast axial rotation occupy only
+    // the illustrated drill nose. Turbo art is masked to that same silhouette.
+    paintOriginalAuger(c,s,assets);
+    paintTurboTip(c,s);
     c.restore();return;
   }
 
@@ -376,8 +368,14 @@ function vehicle(c,s,portrait,assets={}) {
 export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
-  paintNaturalTunnel(c,s,assets);
-  paintRecoveredWalls(c,s,assets);
+  wallDepth(c,s);
+  // Formations must emerge FROM the rock. Paint their alpha-feathered
+  // interiors first, then lay the world-registered original cut-face/ribbons
+  // over each embedded base. The previous order made square photo cutouts
+  // float in front of the cave, especially on the right-hand floor.
+  paintSculpturalTunnel(c,s,assets);
+  if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
+  paintTurboWorldStreaks(c,s,W,H);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);

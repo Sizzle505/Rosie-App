@@ -1,10 +1,50 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
+import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import "./ember-tunnel-drill.css";
 
 const LABELS = ["Barkroot Passage", "Ruby Temple Galleries"];
 const DRILL_ART = {
+  bg01:"new-assets/background/bg01.webp",
+  bg02:"new-assets/background/bg02.webp",
+  bg03:"new-assets/background/bg03.webp",
+  bg04:"new-assets/background/bg04.webp",
+  bg05:"new-assets/background/bg05.webp",
+  bg06:"new-assets/background/bg06.webp",
+  bg07:"new-assets/background/bg07.webp",
+  bg08:"new-assets/background/bg08.webp",
+  bg09:"new-assets/background/bg09.webp",
+  bg10:"new-assets/background/bg10.webp",
+  newRootShelf:"new-assets/obstacle/newRootShelf.webp",
+  newSlopeRoof:"new-assets/obstacle/newSlopeRoof.webp",
+  newCrystalRoof:"new-assets/obstacle/newCrystalRoof.webp",
+  newRootCurtain:"new-assets/obstacle/newRootCurtain.webp",
+  newCrystalMound:"new-assets/obstacle/newCrystalMound.webp",
+  newRootMound:"new-assets/obstacle/newRootMound.webp",
+  newCrystalTeeth:"new-assets/obstacle/newCrystalTeeth.webp",
+  newCrystalRidge:"new-assets/obstacle/newCrystalRidge.webp",
+  newSlopeFloor:"new-assets/obstacle/newSlopeFloor.webp",
+  newCrystalDrape:"new-assets/obstacle/newCrystalDrape.webp",
+  newBarkrootRoof:"new-assets/obstacle/newBarkrootRoof.webp",
+  newThinRoots:"new-assets/obstacle/newThinRoots.webp",
+  edgeBarkrootTop:"edge/barkroot-top.webp",
+  edgeBarkrootBottom:"edge/barkroot-bottom.webp",
+  ogCanopyA:"edge/formation/hanging-canopy-a.webp",
+  ogCanopyB:"edge/formation/hanging-canopy-b.webp",
+  ogCanopyC:"edge/formation/hanging-canopy-c.webp",
+  ogCrystalA:"edge/formation/rising-crystal-a.webp",
+  ogCrystalB:"edge/formation/rising-crystal-b.webp",
+  ogCrystalC:"edge/formation/rising-crystal-c.webp",
+  ogRichRoofA:"edge/formation/rich-roof-a.webp",
+  ogRichRoofB:"edge/formation/rich-roof-b.webp",
+  ogRichFloorA:"edge/formation/rich-floor-a.webp",
+  ogRichFloorB:"edge/formation/rich-floor-b.webp",
+  ogSlopeRoofA:"edge/formation/slope-roof-a.webp",
+  ogSlopeRoofB:"edge/formation/slope-roof-b.webp",
+  ogSlopeFloorA:"edge/formation/slope-floor-a.webp",
+  ogSlopeFloorB:"edge/formation/slope-floor-b.webp",
+  ogRootsOne:"edge/formation/original-roots-1.webp",
+  ogRootsTwo:"edge/formation/original-roots-2.webp",
   terrainEarth:"terrain-barkroot-earth.webp",
   terrainRoots:"terrain-deep-rootstone.webp",
   terrainRuby:"terrain-ruby-crystal-rock.webp",
@@ -28,7 +68,7 @@ const DRILL_ART = {
   wallSanctumFloor:"wall-sanctum-floor.webp",
   rubyLoop:"ruby-loop.webp",
   crystalOverlay:"feature-crystaloverlay.webp",
-  turbo:"turbo-animation.webp",
+  turboAtlas:"turbo-head-frames.webp",
   barkroot:"barkroot-loop.webp",
   rubyOrganic:"ruby-organic-passage.webp",
   templeOrganic:"temple-organic-passage.webp",
@@ -107,7 +147,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     frame.current=next;particles.current=[];
     pressed.current.up=false;pressed.current.down=false;
     modeRef.current="running";setMode("running");setHud(snapshot(next));
-    playSound(audio(),"turbo");
+    playSound(audio(),"start");
   }
   function turbo() {
     const s=frame.current;
@@ -225,11 +265,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   return (
     <section className="ember-suite" aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
-      <header className="ember-header">
-        <div className="ember-header-portrait"><img src="/captain-rosie-illustrated.webp" alt="Captain Rosie" /></div>
-        <div className="ember-header-copy"><span>THE HOUSE OF ROSIE · BARKBRIDGE EXPEDITIONS</span>
-          <h2>CAPTAIN ROSIE</h2><p>Ember Tunnel Drill</p></div>
-        <div className="ember-header-seal">✦</div>
+      <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
+        <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
+             alt="Captain Rosie - Ember Tunnel Drill" draggable="false" />
       </header>
       <div className="ember-stats" aria-live="off">
         <div><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
@@ -261,11 +299,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           aria-label="Angle the drill upward"><span>▲</span><small>ANGLE UP</small></button>
         <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
           disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
-          aria-label="Activate Burrow Turbo when charged">
+          aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <span className="ember-boost-symbol">✦</span>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
-            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/4.8*100):hud.charge)+"%"}} /></i>
-            <small>COLLECT TREASURE TO CHARGE</small></span>
+            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
+            <small>{hud.boost>0?hud.boost.toFixed(1)+"s OF TURBO LEFT":hud.charge>=100?"FULLY CHARGED - TAP TO IGNITE":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}

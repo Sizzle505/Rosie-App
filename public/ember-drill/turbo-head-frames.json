@@ -1,0 +1,31 @@
+{
+  "source": "turbo-animation.webp",
+  "sourceSha256": "95710297f70b74b18eade5e535146e710606c533b9566b364755a6f258db9868",
+  "sourceFrames": 10,
+  "sourceFrameDurationMs": 60,
+  "sourceDimensions": [
+    960,
+    390
+  ],
+  "crop": [
+    344,
+    67,
+    960,
+    319
+  ],
+  "sheet": "turbo-head-frames.webp",
+  "atlasFrameDimensions": [
+    308,
+    126
+  ],
+  "grid": [
+    5,
+    2
+  ],
+  "fullAtlasDimensions": [
+    1540,
+    252
+  ],
+  "provenance": "All ten original animated WebP frames explicitly extracted, composited and resampled from original source; no external image generation",
+  "render": "Clip to rotating auger silhouette; actual playback phase is since Turbo activation, 60ms/frame"
+}
