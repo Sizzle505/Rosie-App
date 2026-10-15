@@ -6,9 +6,8 @@ import styles from "./AccountPortal.module.css";
 export default function AccountPortal() {
   const { user, checking, connectionError, refresh, login, register, logout } = useRosieAccount();
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState("create");
   const [username, setUsername] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [pinLength, setPinLength] = useState(4);
   const [pin, setPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
@@ -68,7 +67,7 @@ export default function AccountPortal() {
     }
     setBusy(true); setError("");
     try {
-      if (mode === "create") await register(name, displayName.trim() || name, pin);
+      if (mode === "create") await register(name, name, pin);
       else await login(name, pin);
       setPin(""); setConfirmPin(""); setOpen(false);
     } catch (issue) {
@@ -88,14 +87,10 @@ export default function AccountPortal() {
   }
   return <>
     <button ref={trigger} type="button" className={styles.trigger}
-      onClick={() => { setMode("login"); setError(""); setOpen(true); }}
-      aria-label={user ? "Open your RosieVerse account" : "Open RosieVerse account sign-in"}
+      onClick={() => { setMode("create"); setError(""); setOpen(true); }}
+      aria-label={user ? "Open your RosieVerse account" : "Open RosieVerse account"}
       title={user ? "Account" : "Account"}>
-      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <circle cx="16" cy="10.5" r="5.4" stroke="currentColor" strokeWidth="1.65"/>
-        <path d="M6 27c.2-7.2 4.6-10.5 10-10.5S25.8 19.8 26 27" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round"/>
-        <path d="M11 5.6 9.1 2.7M21 5.6l1.9-2.9" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity=".75"/>
-      </svg>
+      <img src="/rosieverse/account/rosie-account-entry.svg" width="44" height="44" alt="" aria-hidden="true" draggable="false" />
       {user && <span className={styles.signed} aria-hidden="true" />}
     </button>
     {open && <div className={styles.backdrop} onPointerDown={(e) => { if (e.target === e.currentTarget) close(); }}>
@@ -125,25 +120,31 @@ export default function AccountPortal() {
               spellCheck={false} autoComplete="username" maxLength={32} required value={username}
               onChange={e => setUsername(e.target.value)} placeholder="Your member name" />
             {mode === "create" && <>
-              <label htmlFor="rosie-acct-name">Display name <span>(optional)</span></label>
-              <input id="rosie-acct-name" type="text" maxLength={80} autoComplete="off"
-                value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="What should Rosie call you?" />
               <fieldset className={styles.pinChoice}><legend>PIN length</legend>
                 {[4, 6].map(length => <button type="button" key={length} aria-pressed={pinLength === length}
                   className={pinLength === length ? styles.active : ""} onClick={() => { setPinLength(length); setPin(""); setConfirmPin(""); }}>{length} digits</button>)}
               </fieldset>
             </>}
-            <label htmlFor="rosie-acct-pin">{mode === "create" ? "Choose a PIN" : "PIN"}</label>
-            <input id="rosie-acct-pin" type="password" inputMode="numeric" pattern={mode === "create" ? (pinLength === 4 ? "[0-9]{4}" : "[0-9]{6}") : "[0-9]{4}([0-9]{2})?"}
-              autoComplete={mode === "create" ? "new-password" : "current-password"} minLength={mode === "create" ? pinLength : 4}
-              maxLength={mode === "create" ? pinLength : 6} required value={pin} onChange={e => setPin(e.target.value.replace(/\D/g,"").slice(0,mode === "create" ? pinLength : 6))}
-              placeholder={mode === "create" && pinLength === 6 ? "••••••" : "••••"} />
-            {mode === "create" && <>
-              <label htmlFor="rosie-acct-confirm">Confirm PIN</label>
-              <input id="rosie-acct-confirm" type="password" inputMode="numeric" autoComplete="new-password"
-                minLength={pinLength} maxLength={pinLength} required value={confirmPin}
-                onChange={e=>setConfirmPin(e.target.value.replace(/\D/g,"").slice(0,pinLength))} placeholder={pinLength === 6 ? "••••••" : "••••"} />
-            </>}
+            <div className={mode === "create" ? styles.pinPair : styles.singlePin}>
+              <div className={styles.pinField}>
+                <label htmlFor="rosie-acct-pin">{mode === "create" ? "Choose a PIN" : "PIN"}</label>
+                <input id="rosie-acct-pin" type="password" inputMode="numeric"
+                  pattern={mode === "create" ? (pinLength === 4 ? "[0-9]{4}" : "[0-9]{6}") : "[0-9]{4}([0-9]{2})?"}
+                  autoComplete={mode === "create" ? "new-password" : "current-password"}
+                  minLength={mode === "create" ? pinLength : 4}
+                  maxLength={mode === "create" ? pinLength : 6} required value={pin}
+                  onChange={e => setPin(e.target.value.replace(/\D/g, "").slice(0, mode === "create" ? pinLength : 6))}
+                  placeholder={mode === "create" && pinLength === 6 ? "••••••" : "••••"} />
+              </div>
+              {mode === "create" && <div className={styles.pinField}>
+                <label htmlFor="rosie-acct-confirm">Confirm PIN</label>
+                <input id="rosie-acct-confirm" type="password" inputMode="numeric"
+                  autoComplete="new-password" pattern={pinLength === 4 ? "[0-9]{4}" : "[0-9]{6}"}
+                  minLength={pinLength} maxLength={pinLength} required value={confirmPin}
+                  onChange={e => setConfirmPin(e.target.value.replace(/\D/g, "").slice(0, pinLength))}
+                  placeholder={pinLength === 6 ? "••••••" : "••••"} />
+              </div>}
+            </div>
             {error && <p className={styles.warning} role="alert">{error}{remaining > 0 ? " Try again in " + Math.floor(remaining/60) + ":" + String(remaining%60).padStart(2,"0") : ""}</p>}
             {!error && connectionError && <p className={styles.warning} role="status">Unable to check previous session. <button type="button" onClick={refresh}>Retry</button></p>}
             <button type="submit" className={styles.mainAction} disabled={busy || remaining > 0 || checking}>
