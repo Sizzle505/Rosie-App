@@ -126,11 +126,24 @@ function eventLines(item) {
     String(endDate.getMinutes()).padStart(2, "0") + "00"
     : "DTEND;VALUE=DATE:" + icsDay(end);
   const rules = {daily:"FREQ=DAILY",weekly:"FREQ=WEEKLY",monthly:"FREQ=MONTHLY",yearly:"FREQ=YEARLY"};
+  let rule = rules[item.repeat] || null;
+  const dayOfMonth = Number(item.date.slice(8));
+  if (item.repeat === "monthly" && dayOfMonth >= 29) {
+    // Importers should mirror the app's "last available day" behavior.
+    rule = dayOfMonth === 31 ? "FREQ=MONTHLY;BYMONTHDAY=-1" :
+      "FREQ=MONTHLY;BYMONTHDAY=" + dayOfMonth + ",-1;BYSETPOS=1";
+  }
+  if (item.repeat === "yearly" && item.date.slice(5) === "02-29") {
+    rule = "FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=28,29;BYSETPOS=-1";
+  }
   return ["BEGIN:VEVENT","UID:" + escapeIcs(item.id) + "@rosieverse.app",
     "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""),
     dtstart,finish,"SUMMARY:" + escapeIcs(item.title),
     ...(item.detail ? ["DESCRIPTION:" + escapeIcs(item.detail)] : []),
-    ...(rules[item.repeat] ? ["RRULE:" + rules[item.repeat]] : []),
+    ...(rule ? ["RRULE:" + rule] : []),
+    ...(timed ? ["BEGIN:VALARM","ACTION:DISPLAY",
+      "DESCRIPTION:" + escapeIcs(item.title),
+      "TRIGGER:-PT10M","END:VALARM"] : []),
     "END:VEVENT"];
 }
 export function calendarIcs(items) {
