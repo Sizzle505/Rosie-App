@@ -369,11 +369,12 @@ export function paintDrill(c,s,portrait,particles=[],assets={}) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
   wallDepth(c,s);
-  // Barkroot OG proof gate: real sculpted source-derived, arc-mapped rock.
-  // Keep the legacy natural painter as an asset-loading fallback only.
-  if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
-  // Large original ceiling/root/floor silhouettes over the continuous rock contact.
+  // Formations must emerge FROM the rock. Paint their alpha-feathered
+  // interiors first, then lay the world-registered original cut-face/ribbons
+  // over each embedded base. The previous order made square photo cutouts
+  // float in front of the cave, especially on the right-hand floor.
   paintSculpturalTunnel(c,s,assets);
+  if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
   paintTurboWorldStreaks(c,s,W,H);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
