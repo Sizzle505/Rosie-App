@@ -31,6 +31,19 @@ function cueComplete(){
   }
  }catch{}
 }
+const DIAL_FRAMES = [
+  { id: "batons", label: "Baton", symbol: "◆" },
+  { id: "roman", label: "Roman", symbol: "Ⅻ" },
+  { id: "chronograph", label: "Chronograph", symbol: "◉" },
+  { id: "celestial", label: "Celestial", symbol: "☾" }
+];
+const DIAL_COLORS = [
+  { id: "sapphire", label: "Sapphire", center: "#185198", edge: "#071a3a" },
+  { id: "emerald", label: "Emerald", center: "#1b6359", edge: "#092624" },
+  { id: "garnet", label: "Garnet", center: "#713451", edge: "#230f29" },
+  { id: "obsidian", label: "Obsidian", center: "#303d59", edge: "#0b0f1e" }
+];
+const DIAL_ASSET_ROOT = "/rosieverse/timekeeper/midnight-observatory/face-overlays/";
 const PRESETS = [
   { label:"30s", ms:30_000 },
   { label:"1m", ms:60_000 },
@@ -66,6 +79,20 @@ export default function RosieTimekeeper() {
   const [customMinutes, setCustomMinutes] = useState("1");
   const [customSeconds, setCustomSeconds] = useState("00");
   const [timerEntry, setTimerEntry] = useState("presets");
+  const [dialFrame, setDialFrame] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem("rosie-timekeeper-dial");
+      return DIAL_FRAMES.some(item => item.id === saved) ? saved : "batons";
+    } catch { return "batons"; }
+  });
+  const [dialColor, setDialColor] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem("rosie-timekeeper-color");
+      return DIAL_COLORS.some(item => item.id === saved) ? saved : "sapphire";
+    } catch { return "sapphire"; }
+  });
+  const [dialPickerOpen, setDialPickerOpen] = useState(false);
+
   const [restored, setRestored] = useState(false);
   const lastSavedAt = useRef(0);
   const [message, setMessage] = useState("");
@@ -74,6 +101,13 @@ export default function RosieTimekeeper() {
   const accumulated = useRef(0);
   const finished = useRef(false);
   const utilityRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("rosie-timekeeper-dial",dialFrame);
+      window.localStorage.setItem("rosie-timekeeper-color",dialColor);
+    } catch {}
+  }, [dialFrame,dialColor]);
 
   // Resume after reload using wall time only for time spent outside this page.
   // While open, performance.now() remains the high-precision source.
@@ -209,6 +243,8 @@ export default function RosieTimekeeper() {
     setLaps((previous) => [{ total, split: total - (previous[0]?.total ?? 0) }, ...previous].slice(0, 99));
   }
 
+  const selectedColor = DIAL_COLORS.find(item => item.id === dialColor) || DIAL_COLORS[0];
+  const selectedFrame = DIAL_FRAMES.find(item => item.id === dialFrame) || DIAL_FRAMES[0];
   const remaining = Math.max(0, duration - elapsed);
   const circumference = 2 * Math.PI * 43;
   // Stopwatch advances clockwise every minute. A countdown runs one
@@ -255,8 +291,11 @@ export default function RosieTimekeeper() {
         <div className={"rtk-exterior-gearwork" + (running ? " is-running" : "")} aria-hidden="true">
           <TimekeeperClockwork />
         </div>
-        <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")} aria-label="Working stopwatch and countdown">
+        <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "")}
+          style={{ "--rtk-face-center": selectedColor.center, "--rtk-face-edge": selectedColor.edge }}
+          aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
+          <span className="rtk-face-overlay" style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.webp")` }} aria-hidden="true" />
           <span className="rtk-bezel" aria-hidden="true" />
           <div className="rtk-ornate-track" aria-hidden="true" />
           <svg className={"rtk-progress-ring" + (running ? " is-animating" : "") + (mode === "countdown" ? " is-reverse" : "")}
@@ -329,10 +368,34 @@ export default function RosieTimekeeper() {
           </div>
         </div>
         <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
+          <button type="button" className="rtk-face-trigger" onClick={() => setDialPickerOpen(open => !open)}
+            aria-label="Choose clock face and color" aria-expanded={dialPickerOpen} title="Clock faces and colors">✦</button>
           <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
             <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
           </div>
+          {dialPickerOpen && <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
+            <div className="rtk-dial-picker-head">
+              <span>Clock faces</span>
+              <button type="button" aria-label="Close clock face chooser" onClick={() => setDialPickerOpen(false)}>×</button>
+            </div>
+            <div className="rtk-frame-choices">
+              {DIAL_FRAMES.map(item => <button type="button" key={item.id}
+                className={dialFrame === item.id ? "chosen" : ""}
+                aria-label={item.label + " clock face"} aria-pressed={dialFrame === item.id}
+                title={item.label} onClick={() => setDialFrame(item.id)}>
+                <span aria-hidden="true">{item.symbol}</span><small>{item.label}</small>
+              </button>)}
+            </div>
+            <div className="rtk-color-choices">
+              <span>Enamel</span>
+              {DIAL_COLORS.map(item => <button type="button" key={item.id}
+                className={dialColor === item.id ? "chosen" : ""} title={item.label}
+                aria-label={item.label + " clock color"} aria-pressed={dialColor === item.id}
+                onClick={() => setDialColor(item.id)}
+                style={{ "--swatch": item.center }} />)}
+            </div>
+          </div>}
           <div className="rtk-utility-inner">
           {mode === "stopwatch" ? (
             <>
