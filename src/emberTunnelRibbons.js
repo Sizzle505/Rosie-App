@@ -7,7 +7,9 @@ import { DRILL_WIDTH, tunnelCenter, tunnelRadius } from "./emberDrillEngine.js";
  * These are NOT the unmodified 2172x724 source panels, nor 480px mural strips.
  */
 const SAMPLES = 10;
-const EDGE_DEPTH = 92;
+// Original source measures 120px high with a designed alpha fade at the outer edge.
+// Preserve near-native aspect. Never stretch the 120px sprite into 390px cliffs.
+export const EDGE_DEPTH = 120;
 const U_SCALE = 0.94;
 const LIMIT = 36000;
 const ARC_STEP = 10;
@@ -91,39 +93,16 @@ function paintRibbon(c, scroll, side, image) {
   return true;
 }
 
-// The OG seam material originally stopped at 92px of depth, exposing the
-// completely unrelated photographic panorama below it as a horizontal band.
-// Extend the SAME real cut-face material outward as low-contrast cave mass,
-// keeping the crisp original 92px collision contact painted on top.
-function paintWallDepthTexture(c,scroll,side,image){
- if(!lit(image))return;
- const stride=20,depth=390,tile=image.naturalWidth;
- c.save();
- c.globalAlpha=.56;
- for(let x=-stride;x<DRILL_WIDTH+stride;x+=stride){
-  const next=Math.min(DRILL_WIDTH+stride,x+stride);
-  const a=sampleTunnelEdge(scroll+x,side),b=sampleTunnelEdge(scroll+next,side);
-  const dx=next-x,dy=b.y-a.y,len=Math.hypot(dx,dy);
-  const tx=dx/len,ty=dy/len,nx=-side*ty,ny=side*tx;
-  const u=arc(scroll+x,side)*U_SCALE;
-  const srcX=((u%tile)+tile)%tile;
-  c.save();c.transform(tx,ty,nx,ny,x,a.y);
-  const span=len*U_SCALE;
-  const first=Math.min(span,tile-srcX);
-  c.drawImage(image,srcX,0,first,image.naturalHeight,0,0,len*first/span+.6,depth);
-  if(first<span)c.drawImage(image,0,0,span-first,image.naturalHeight,
-    len*first/span,0,len*(span-first)/span+.6,depth);
-  c.restore();
- }
- c.restore();
-}
+// Rock mass below/above this 120px source is ALREADY present in the
+// painterly cave background. Its alpha rolls off naturally from about row 85,
+// reaching zero at row 120. Do not scale the source vertically or stack
+// duplicate bands: doing so causes the photographed 390px "stalactite bars".
 export function paintTunnelRibbons(c, s, assets) {
   const top = assets?.edgeBarkrootTop;
   const floor = assets?.edgeBarkrootBottom;
   if (!lit(top) || !lit(floor)) return false;
-  // Keep the collision contact crisp; build the original cut face outward.
-  paintWallDepthTexture(c,s.scroll,-1,top);
-  paintWallDepthTexture(c,s.scroll,+1,floor);
+  // Natural original rock texture smoothly fades into the cave painting.
+  // No stretched or pasted-on ceiling/floor mural rectangles.
   paintRibbon(c,s.scroll,-1,top);
   paintRibbon(c, s.scroll, +1, floor);
   // A subtle interior shadow, NOT a bright painted route outline.
