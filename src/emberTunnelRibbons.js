@@ -121,7 +121,10 @@ export function paintTunnelRibbons(c, s, assets) {
   const top = assets?.edgeBarkrootTop;
   const floor = assets?.edgeBarkrootBottom;
   if (!lit(top) || !lit(floor)) return false;
-  // The rock mass underneath the original-contact ribbon inherits its same\n  // world-space UV, rather than a detached mural strip.\n  paintWallDepthTexture(c,s.scroll,-1,top);\n  paintWallDepthTexture(c,s.scroll,+1,floor);\n  // Exactly the same function used for the collision boundaries.\n  paintRibbon(c, s.scroll, -1, top);
+  // Keep the collision contact crisp; build the original cut face outward.
+  paintWallDepthTexture(c,s.scroll,-1,top);
+  paintWallDepthTexture(c,s.scroll,+1,floor);
+  paintRibbon(c,s.scroll,-1,top);
   paintRibbon(c, s.scroll, +1, floor);
   // A subtle interior shadow, NOT a bright painted route outline.
   for (const side of [-1, 1]) {
