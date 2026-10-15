@@ -182,6 +182,7 @@ export default function RosieReminders() {
       return;
     }
     const next = { ...form, title: form.title.trim(), detail: form.detail.trim() };
+    setUndoSnapshot(null);
     setStore(prev => ({ ...prev, items: next.id
       ? prev.items.map(x => x.id === next.id ? { ...x, ...next } : x)
       : [...prev.items, { ...next, id: makeId(), completedDates: [] }] }));
@@ -195,6 +196,7 @@ export default function RosieReminders() {
     event.preventDefault();
     const title = cleanListItem(quickTask);
     if (!title) return;
+    setUndoSnapshot(null);
     setStore(prev => ({ ...prev, items: [...prev.items, {
       ...blankItem("tasks", selectedDate), id: makeId(), title,
       date: quickDue === "none" ? "" : quickDue === "tomorrow" ? datePlus(liveDay, 1) : liveDay,
@@ -208,6 +210,7 @@ export default function RosieReminders() {
     event.preventDefault();
     const titles = parseGroceryPaste(groceryDraft);
     if (!titles.length) return;
+    setUndoSnapshot(null);
     setStore(prev => ({ ...prev, items: [...prev.items, ...titles.map(title => ({
       ...blankItem("shopping", selectedDate), id: makeId(),
       title, date: "", completedDates: []
@@ -222,41 +225,39 @@ export default function RosieReminders() {
   const saveQuickEdit = (event) => {
     event.preventDefault();
     const title = cleanListItem(editingQuickTitle);
-    if (title && editingQuickId) setStore(prev => ({...prev,
+    if (title && editingQuickId) { setUndoSnapshot(null); setStore(prev => ({...prev,
       items: prev.items.map(x => x.id === editingQuickId ? {...x,title} : x)
-    }));
+    })); }
     setEditingQuickId(null);
   };
   const removeItem = (id) => {
     if (!window.confirm("Delete this reminder?")) return;
-    setStore(prev => { setUndoSnapshot(prev); return { ...prev, items: prev.items.filter(x => x.id !== id) }; });
+    setUndoSnapshot(store);
+    setStore(prev => ({ ...prev, items: prev.items.filter(x => x.id !== id) }));
     setNotice("Reminder deleted. Undo is available below.");
     setEditorOpen(false);
   };
   const removeQuick = id => {
-    setStore(prev => { setUndoSnapshot(prev); return { ...prev, items: prev.items.filter(x => x.id !== id) }; });
+    setUndoSnapshot(store);
+    setStore(prev => ({ ...prev, items: prev.items.filter(x => x.id !== id) }));
     setNotice("Item removed.");
   };
   const clearCompleted = () => {
     if (!completedHere || !window.confirm("Remove " + completedHere + " completed one-time item(s)? Repeating reminders will be kept.")) return;
-    setStore(prev => {
-      setUndoSnapshot(prev);
-      return { ...prev, items: prev.items.filter(x => {
+    setUndoSnapshot(store);
+    setStore(prev => ({ ...prev, items: prev.items.filter(x => {
         if (x.repeat && x.repeat !== "none") return true;
         const inSection = section === "today" ? isScheduled(x, selectedDate) || isOverdue(x, selectedDate)
           : x.category === section;
         return !inSection || !isDone(x, selectedDate);
-      }) };
-    });
+      }) }));
     setNotice(completedHere + " completed items cleared.");
   };
   const deferItem = item => {
     if (item.repeat && item.repeat !== "none") { openEdit(item); return; }
-    setStore(prev => {
-      setUndoSnapshot(prev);
-      return { ...prev, items: prev.items.map(x => x.id === item.id ?
-        { ...x, date: datePlus(liveDay, 1), completedDates: [] } : x) };
-    });
+    setUndoSnapshot(store);
+    setStore(prev => ({ ...prev, items: prev.items.map(x => x.id === item.id ?
+        { ...x, date: datePlus(liveDay, 1), completedDates: [] } : x) }));
     setNotice("Moved to tomorrow.");
   };
   const copyShopping = async () => {
@@ -283,6 +284,7 @@ export default function RosieReminders() {
   };
   const toggleDone = (item) => {
     const marker = doneKey(item, item.occurrenceDate || selectedDate);
+    setUndoSnapshot(null);
     setStore(prev => ({ ...prev, items: prev.items.map(x => {
       if (x.id !== item.id) return x;
       const dates = x.completedDates || [];
@@ -361,16 +363,18 @@ export default function RosieReminders() {
     setSection("notes");
     setNoteScope("device");
   };
-  const updateNote = (id, patch) => setStore(prev => ({ ...prev, notes: prev.notes.map(x => x.id === id ? { ...x, ...patch, updatedAt: Date.now() } : x) }));
+  const updateNote = (id, patch) => { setUndoSnapshot(null); setStore(prev => ({ ...prev, notes: prev.notes.map(x => x.id === id ? { ...x, ...patch, updatedAt: Date.now() } : x) })); };
   const addGoal = (event) => {
     event.preventDefault();
     if (!goalInput.trim()) return;
+    setUndoSnapshot(null);
     setStore(prev => ({ ...prev, goals: [...prev.goals, { id: makeId(), title: goalInput.trim(), progress: 0 }] }));
     setGoalInput("");
   };
   const addGratitude = (event) => {
     event.preventDefault();
     if (!gratitudeInput.trim()) return;
+    setUndoSnapshot(null);
     setStore(prev => ({ ...prev, gratitude: [{ id: makeId(), date: dateKey(), text: gratitudeInput.trim() }, ...prev.gratitude] }));
     setGratitudeInput("");
   };
