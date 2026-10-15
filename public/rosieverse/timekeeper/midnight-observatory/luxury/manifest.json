@@ -1,0 +1,404 @@
+{
+  "title": "RosieVerse Timekeepers - Luxury Dial and World Clock Asset Manifest",
+  "version": "2026-10-15-a",
+  "purpose": "Interchangeable luxury dial textures, 3 registration-safe clock-hand sets and 7 World Clock UI ornaments. Built from ten image-generation masters.",
+  "source_folder": "Dropbox /Rosie-App-Transfer/Timekeepers Asset Pack - Midnight Observatory/",
+  "integration_root": "public/rosieverse/timekeeper/midnight-observatory/luxury/",
+  "dimensions": {
+    "dials": [
+      640,
+      640
+    ],
+    "hands": [
+      512,
+      512
+    ],
+    "pivots": [
+      128,
+      128
+    ]
+  },
+  "notes": [
+    "Dials are circular alpha-clipped with transparent corners; keep bezel separate.",
+    "Clock hands are pre-registered on 512x512 canvases with all three styles pivoting at (256,256).",
+    "Use actual timezone conversion (Intl.DateTimeFormat) for world clock.",
+    "Pearl dial needs dark typography for digital time.",
+    "Generated sheets are source masters; extracted files are the assets for runtime."
+  ],
+  "assets": [
+    {
+      "id": "sapphire",
+      "kind": "dial-texture",
+      "source": "blue_gold_astral_guilloché_medallion.png",
+      "file": "dial-textures/sapphire.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "emerald",
+      "kind": "dial-texture",
+      "source": "emerald_guilloché_circular_dial.png",
+      "file": "dial-textures/emerald.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "onyx",
+      "kind": "dial-texture",
+      "source": "black_and_gold_cosmic_watch_dial.png",
+      "file": "dial-textures/onyx.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "garnet",
+      "kind": "dial-texture",
+      "source": "ruby_guilloché_medallion_dial.png",
+      "file": "dial-textures/garnet.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "amethyst",
+      "kind": "dial-texture",
+      "source": "purple_gold_flecked_sunburst_medallion.png",
+      "file": "dial-textures/amethyst.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "pearl",
+      "kind": "dial-texture",
+      "source": "ivory_pearl_marbled_medallion.png",
+      "file": "dial-textures/pearl.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "teal",
+      "kind": "dial-texture",
+      "source": "teal_iridescent_luxury_dial.png",
+      "file": "dial-textures/teal.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "lapis",
+      "kind": "dial-texture",
+      "source": "celestial_lapis_gold_dial.png",
+      "file": "dial-textures/lapis.webp",
+      "resolution": [
+        640,
+        640
+      ],
+      "center": [
+        320,
+        320
+      ],
+      "alpha": true
+    },
+    {
+      "id": "blued-hour",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/blued-hour.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "blued-minute",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/blued-minute.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "blued-second",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/blued-second.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "blued-pivot",
+      "kind": "pivot",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/blued-pivot.webp",
+      "resolution": [
+        128,
+        128
+      ],
+      "alpha": true
+    },
+    {
+      "id": "dauphine-hour",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/dauphine-hour.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "dauphine-minute",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/dauphine-minute.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "dauphine-second",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/dauphine-second.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "dauphine-pivot",
+      "kind": "pivot",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/dauphine-pivot.webp",
+      "resolution": [
+        128,
+        128
+      ],
+      "alpha": true
+    },
+    {
+      "id": "filigree-hour",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/filigree-hour.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "filigree-minute",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/filigree-minute.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "filigree-second",
+      "kind": "hand",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/filigree-second.webp",
+      "resolution": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "orientation": "12 oclock",
+      "alpha": true
+    },
+    {
+      "id": "filigree-pivot",
+      "kind": "pivot",
+      "source": "luxury_watch_hand_component_sheet.png",
+      "file": "world-clock-hands/filigree-pivot.webp",
+      "resolution": [
+        128,
+        128
+      ],
+      "alpha": true
+    },
+    {
+      "id": "globe",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/globe.webp",
+      "resolution": [
+        242,
+        256
+      ],
+      "alpha": true
+    },
+    {
+      "id": "city-plaque",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/city-plaque.webp",
+      "resolution": [
+        512,
+        152
+      ],
+      "alpha": true
+    },
+    {
+      "id": "sun",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/sun.webp",
+      "resolution": [
+        256,
+        220
+      ],
+      "alpha": true
+    },
+    {
+      "id": "moon",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/moon.webp",
+      "resolution": [
+        256,
+        217
+      ],
+      "alpha": true
+    },
+    {
+      "id": "completion-sparkle",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/completion-sparkle.webp",
+      "resolution": [
+        256,
+        246
+      ],
+      "alpha": true
+    },
+    {
+      "id": "divider",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/divider.webp",
+      "resolution": [
+        400,
+        77
+      ],
+      "alpha": true
+    },
+    {
+      "id": "jewel",
+      "kind": "ui",
+      "source": "sapphire_and_gold_worldclock_ui_assets.png",
+      "file": "world-clock-ui/jewel.webp",
+      "resolution": [
+        176,
+        180
+      ],
+      "alpha": true
+    }
+  ]
+}
