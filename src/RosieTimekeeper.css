@@ -2405,3 +2405,18 @@ body:has(.app-shell.page-timekeeper),
  .app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button {min-height:29px;}
  .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button {width:16px;height:16px;}
 }
+
+/* Compact iPhone safe area: the optional dial chooser and sapphire cabinet
+   must terminate above the immutable Resources navigation rail. */
+@media (max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:61.7%;
+   height:22%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+   top:32%;
+   bottom:3%;
+ }
+}
