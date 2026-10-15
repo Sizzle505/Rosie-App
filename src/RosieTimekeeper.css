@@ -3672,3 +3672,57 @@ body:has(.app-shell.page-timekeeper),
   z-index:3!important;
   pointer-events:none!important;
 }
+
+
+/* 2026-10-15 - revised Lap art, closed-by-default palette, measured jewel / cabinet offsets. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:-15px -80px!important;
+  z-index:28!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -75px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip {
+  display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing {
+  z-index:42!important;
+}
+/* One new illustration replaces the old stop-watch label and obscures the old arrow. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  position:relative!important;
+  overflow:visible!important;
+  isolation:isolate!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  position:absolute!important;
+  left:98%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  translate:none!important;
+  width:clamp(56px,14.4vw,68px)!important;
+  height:clamp(56px,14.4vw,68px)!important;
+  object-fit:contain!important;
+  display:block!important;
+  z-index:4!important;
+  pointer-events:none!important;
+  filter:drop-shadow(0 2px 3px #020816a3);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action:disabled .rtk-new-lap-art {
+  opacity:.74;
+}
+/* The squirrel's SVG image rides the end of the progress stroke at r=43. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-squirrel-tip {
+  pointer-events:none!important;
+  opacity:.96;
+  filter:drop-shadow(0 1px 1.5px #061023a8);
+}
+@media (prefers-reduced-motion:reduce) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-squirrel-tip {
+   transition:none!important;
+ }
+}

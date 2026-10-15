@@ -386,8 +386,9 @@ export default function RosieTimekeeper() {
     : ((elapsed % 60_000) / 60_000);
   const dialProgress = runnerPhase;
   const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
-  const runnerX = 50 + 49.5 * Math.cos(runnerAngle);
-  const runnerY = 50 + 49.5 * Math.sin(runnerAngle);
+  // Match the SVG progress circle's radius, not the outside bezel.
+  const runnerX = 50 + 43 * Math.cos(runnerAngle);
+  const runnerY = 50 + 43 * Math.sin(runnerAngle);
   const squirrelFlipped = mode === "countdown" ? runnerY <= 50 : runnerY > 50;
   // All three illustrated poses now come from the same full-resolution
   // Dropbox master, so the working pose can return without looking soft.
@@ -478,10 +479,13 @@ export default function RosieTimekeeper() {
             <circle className="rtk-progress-live" cx="50" cy="50" r="43"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
+            {mode !== "world" && <image key={runnerEpoch}
+              className="rtk-squirrel-tip"
+              href="/rosieverse/timekeeper/midnight-observatory/squirrel-original-still.webp"
+              x="0" y="0" width="10.5" height="13.9" preserveAspectRatio="xMidYMid meet"
+              transform={`translate(${runnerX} ${runnerY}) scale(${squirrelFlipped ? -1 : 1} 1) translate(-5.25 -6.95)`}
+            />}
           </svg>
-          {mode!=="world" && <span key={runnerEpoch}
-            className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "") + (squirrelFlipped ? " is-flipped" : "")}
-            aria-hidden="true" style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />}
           {mode==="world" ? <div className="rtk-world-readout" aria-label={chosenWorldCity.city+", "+worldDigital}>
              <time className="rtk-world-digital">{worldDigital}</time>
              <strong className="rtk-world-city-name">{chosenWorldCity.city}</strong>
@@ -502,7 +506,9 @@ export default function RosieTimekeeper() {
               onClick={mode === "stopwatch" ? lap : repeatCountdown}
               disabled={mode === "stopwatch" && !running}
               title={mode === "stopwatch" ? "Lap" : "Repeat countdown"} aria-label={mode === "stopwatch" ? "Record lap" : "Repeat countdown"}>
-              {mode === "stopwatch" ? <span className="rtk-action-word">Lap</span> : (
+              {mode === "stopwatch" ? <img className="rtk-new-lap-art"
+                src="/rosieverse/timekeeper/midnight-observatory/panel-controls/lap-medallion.webp"
+                alt="" draggable="false" /> : (
                 <svg className="rtk-repeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
                   <path d="m17 2 4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15" />
@@ -531,12 +537,6 @@ export default function RosieTimekeeper() {
             </button>
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
           </div>
-          {!dialPickerOpen && <div className="rtk-enamel-strip" role="group" aria-label="Clock enamel colors">
-            {DIAL_COLORS.map(item=><button type="button" key={item.id} title={item.label}
-              className={dialColor===item.id?"chosen":""} aria-label={item.label+" clock color"}
-              aria-pressed={dialColor===item.id} style={{"--swatch":item.center}}
-              onClick={()=>setDialColor(item.id)}/>)}
-          </div>}
         </div>
         <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")+(dialPickerOpen?" is-customizing":"")} aria-label="Timekeeper settings and splits">
           {dialPickerOpen && <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
