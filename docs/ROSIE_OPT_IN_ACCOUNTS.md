@@ -18,3 +18,5 @@
 Feature branch: `work/opt-in-account-pin-cloud-notes-20261014`. Copy/move both Vercel Preview environment variables, `SUPABASE_URL` and `SUPABASE_SECRET_KEY`, from the previous account feature branch to this branch without exposing their values. Do not enable the feature on production until two-user live tests succeed.
 
 Verify `npm ci && npm run build`; `node --test tests/private-api.test.mjs`; test create account -> reload -> login -> wrong PIN lock -> logout -> account isolation; iPhone Safari keyboard/open-close behavior; gameplay while signed out. Production main remains untouched.
+
+- Usernames are matched case-insensitively; the display name retains the exact capitalization entered on account creation (e.g., `MyName` -> stored username `myname`, display `MyName`). Existing accounts retain their stored display name.
