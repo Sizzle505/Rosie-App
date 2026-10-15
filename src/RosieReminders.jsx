@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./RosieReminders.css";
+import { useRosieAccount } from "./private/AccountContext.jsx";
+import { PrivateNotes } from "./private/PrivateNotes.jsx";
 
 const KEY = "rosieverse.reminders.v1";
 const EMPTY = { version: 1, items: [], notes: [], goals: [], gratitude: [] };
@@ -61,6 +63,8 @@ function calendarDays(month) {
 }
 
 export default function RosieReminders() {
+  const { user } = useRosieAccount();
+  const [cloudNoteCount, setCloudNoteCount] = useState(0);
   const [store, setStore] = useState(readStore);
   const [section, setSection] = useState("today");
   const [tab, setTab] = useState(null);
@@ -104,8 +108,8 @@ export default function RosieReminders() {
     tasks: store.items.filter(x => x.category === "tasks" && !isDone(x, selectedDate)).length,
     shopping: store.items.filter(x => x.category === "shopping" && !isDone(x, selectedDate)).length,
     appointments: store.items.filter(x => x.category === "appointments" && !isDone(x, selectedDate)).length,
-    notes: store.notes.length, goals: store.goals.length
-  }), [store, selectedDate]);
+    notes: user ? cloudNoteCount : store.notes.length, goals: store.goals.length
+  }), [store, selectedDate, user, cloudNoteCount]);
   const featured = shown.find(x => x.priority === "high" && !isDone(x, selectedDate));
 
   const openNew = (category = section === "today" ? "tasks" : section) => {
@@ -441,7 +445,7 @@ export default function RosieReminders() {
           <button type="button" className="rr-primary" onClick={() => openNew()}>＋ Add {section === "appointments" ? "Appointment" : "Reminder"}</button>
         </>}
 
-        {section === "notes" && <div className="rr-notes">
+        {section === "notes" && (user ? <PrivateNotes onCountChange={setCloudNoteCount} /> : <div className="rr-notes">
           <div className="rr-side-head"><strong>Your Notes</strong><button type="button" onClick={addNote}>＋ New note</button></div>
           <div className="rr-note-picker">{store.notes.map(note => <button key={note.id} type="button"
             className={notesActive?.id === note.id ? "active" : ""} onClick={() => setFocusedNote(note.id)}>{note.title}</button>)}</div>
@@ -452,7 +456,7 @@ export default function RosieReminders() {
             <div className="rr-note-footer"><span>Saved automatically on this device</span>
               <button type="button" onClick={() => { if(window.confirm("Delete this note?")) {setStore(prev => ({...prev, notes:prev.notes.filter(n => n.id !== notesActive.id)})); setFocusedNote(null);}}}>Delete note</button></div>
           </div> : <p className="rr-empty">A fresh page, waiting for an excellent idea.</p>}
-        </div>}
+        </div>)}
 
         {section === "goals" && <div className="rr-goals">
           <h3>Goals</h3>

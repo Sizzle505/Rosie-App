@@ -38,6 +38,8 @@ import RosieTimekeeper from "./RosieTimekeeper.jsx";
 import RosieResources from "./RosieResources.jsx";
 import RosieQrAtelier from "./RosieQrAtelier.jsx";
 import RosieRecipes from "./RosieRecipes.jsx";
+import { AccountProvider } from "./private/AccountContext.jsx";
+import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
@@ -3031,10 +3033,11 @@ function App() {
             <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
           </nav>}
         </>}
+        <AccountPortal />
       </div>
 
       <div className={`toast ${toast ? "toast-visible" : ""}`}>{toast}</div>
     </>
   );
 }
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(<AccountProvider><App /></AccountProvider>);
