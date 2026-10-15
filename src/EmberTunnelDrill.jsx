@@ -131,7 +131,6 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   const canvas=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
-        gestureStart=useRef(null),
         particles=useRef([]),seed=useRef(1467);
   const [mode,setMode]=useState("idle");
   const [hud,setHud]=useState(()=>snapshot(frame.current));
@@ -283,20 +282,6 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     if(modeRef.current!=="running")return;
     pressed.current[type]=on;
   };
-  const beginGesture = e => {
-    if (!active) return;
-    const point = e.touches ? e.touches[0] : e;
-    gestureStart.current = { y:point.clientY, x:point.clientX };
-  };
-  const steerGesture = e => {
-    if (!active || !gestureStart.current) return;
-    const point = e.touches ? e.touches[0] : e;
-    const delta = point.clientY - gestureStart.current.y;
-    // A short vertical swipe is intentional steering. Holding steady levels the drill.
-    pressed.current.up = delta < -18;
-    pressed.current.down = delta > 18;
-  };
-  const endGesture = () => { gestureStart.current=null; resetHold(); };
   const passageProgress = Math.min(100, ((hud.time - PASSAGES[hud.passage].start) / (PASSAGES[hud.passage].end - PASSAGES[hud.passage].start)) * 100);
   return (
     <section className="ember-suite" aria-label="Captain Rosie Ember Tunnel Drill game">
@@ -319,8 +304,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       <div className={"ember-stage"+(active?" is-active":"")} >
         <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
-          role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Swipe up or down across the tunnel to steer."
-          onPointerDown={beginGesture} onPointerMove={steerGesture} onPointerUp={endGesture} onPointerCancel={endGesture} />
+          role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
         {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p><button type="button" onClick={togglePause}>RESUME DIG</button></div>}
@@ -332,7 +316,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             {mode==="ended"&&hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />}
             {mode==="ended"&&<div className="ember-results"><span><b>{hud.score.toLocaleString()}</b> POINTS</span><span><b>{hud.gems}</b> GEMS</span><span><b>{best.toLocaleString()}</b> BEST</span></div>}
             <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
-            <small>Swipe the tunnel or hold ▲ / ▼ to steer. Space ignites Turbo.</small>
+            <small>Hold ▲ / ▼ to steer. Space ignites Turbo.</small>
           </div>}
       </div>
       <div className="ember-controls">
@@ -346,7 +330,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           <span className="ember-boost-symbol">✦</span>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
             <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
-            <small>{hud.boost>0?hud.boost.toFixed(1)+"s OF TURBO LEFT":hud.charge>=100?"FULLY CHARGED - TAP TO IGNITE":"COLLECT TREASURE TO CHARGE"}</small></span>
+            <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}
@@ -356,7 +340,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       {active&&<div className="ember-run-actions">
         <button type="button" onClick={togglePause}>PAUSE</button>
         <button type="button" onClick={start}>RESTART RUN</button>
-        <span>Swipe the tunnel to steer · Space for Turbo</span>
+        <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span>
         <span className="ember-best">BEST {best.toLocaleString()}</span></div>
