@@ -40,6 +40,13 @@ try {
     "Overdue one-time reminders must appear in Today");
   await page.getByRole("button",{name:/Overdue \(/}).click();
   assert.equal(await page.locator(".rr-entry").filter({hasText:"Past Due Check"}).count(),1);
+  await page.locator(".rr-entry").filter({hasText:"Past Due Check"})
+    .getByRole("button",{name:"Tomorrow"}).click();
+  assert.equal(await page.locator(".rr-entry").filter({hasText:"Past Due Check"}).count(),0,
+    "Postponed task must leave the overdue view");
+  await page.getByRole("button",{name:/Undo/}).click();
+  assert.equal(await page.locator(".rr-entry").filter({hasText:"Past Due Check"}).count(),1,
+    "Undo must restore a postponed task");
   await page.getByRole("button",{name:/Next 14 days/}).click();
   assert.equal(await page.locator(".rr-entry").filter({hasText:"Future Call"}).count(),1);
   await page.getByPlaceholder("Search reminders and details…").fill("does not exist");
