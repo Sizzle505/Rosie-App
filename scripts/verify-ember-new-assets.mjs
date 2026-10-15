@@ -54,19 +54,34 @@ for(const [name,time,world,plate,parallax,formation] of scenes){
   const c=window.__newCanvas.getContext("2d");
   const tracked=[],native=c.drawImage.bind(c);
   c.drawImage=(img,...rest)=>{
-   if(img?.src?.includes("/new-assets/"))tracked.push(img.src.split("/").slice(-2).join("/"));
+   if(img?.src?.includes("/new-assets/"))tracked.push({
+    file:img.src.split("/").slice(-2).join("/"),
+    alpha:c.globalAlpha,composite:c.globalCompositeOperation,dest:rest.slice(-4)
+   });
    return native(img,...rest);
   };
   const scroll=world-385;
   const s={scroll,time,pitch:0,y:window.__newAssetQA.tunnelCenter(scroll+210),running:true,
    hitCooldown:0,shock:0,boostTime:0,objects:[]};
   window.__newAssetQA.paintDrill(c,s,null,[],window.__newArt);
-  return {name,drawn:[...new Set(tracked)],alpha:c.getImageData(210,410,1,1).data[3]};
+  return {name,records:tracked,drawn:[...new Set(tracked.map(x=>x.file))],
+    alpha:c.getImageData(210,410,1,1).data[3]};
  },{name,time,world});
  const prefix=id=>[...results.drawn].some(p=>p.endsWith("/"+id+".webp"));
  assert.ok(prefix(plate),name+": scenic plate not actually drawn: "+plate+" "+JSON.stringify(results.drawn));
  assert.ok(prefix(parallax),name+": parallax not actually drawn: "+parallax+" "+JSON.stringify(results.drawn));
  assert.ok(prefix(formation),name+": original new obstacle not painted: "+formation+" "+JSON.stringify(results.drawn));
+ const painting=results.records.filter(x=>x.file==="background/"+plate+".webp");
+ assert.ok(painting.length>0);
+ assert.ok(painting.every(x=>x.composite==="screen"&&x.alpha<=.34),
+  name+": scenic study incorrectly used as opaque full-screen mural "+JSON.stringify(painting));
+ const depth=results.records.filter(x=>x.file==="background/"+parallax+".webp");
+ assert.ok(depth.length>0);
+ assert.ok(depth.every(x=>x.alpha<.58),name+": parallax too opaque");
+ if(parallax==="bg02"){
+  assert.ok(depth.every(x=>x.dest[3]<=350),name+": roots not anchored to cave ceiling");
+ }
+
  assert.ok(results.alpha>0,name+": empty Canvas");
  const data=await page.evaluate(()=>window.__newCanvas.toDataURL("image/png"));
  await writeFile(join(dir,name+".png"),Buffer.from(data.split(",")[1],"base64"));
