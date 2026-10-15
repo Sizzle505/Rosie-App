@@ -9,7 +9,13 @@ export const FORMATION_SIZE = Object.freeze({
  ogRichFloorA:[660,167],ogRichFloorB:[660,201],
  ogSlopeRoofA:[660,168],ogSlopeRoofB:[660,174],
  ogSlopeFloorA:[660,153],ogSlopeFloorB:[660,161],
- ogRootsOne:[385,480],ogRootsTwo:[368,480]
+ ogRootsOne:[385,480],ogRootsTwo:[368,480],
+ newRootShelf:[1024,488],newSlopeRoof:[1024,512],
+ newCrystalRoof:[1024,478],newRootCurtain:[640,800],
+ newCrystalMound:[1024,565],newRootMound:[1024,512],
+ newCrystalTeeth:[1024,488],newCrystalRidge:[1024,510],
+ newSlopeFloor:[1024,516],newCrystalDrape:[1024,495],
+ newBarkrootRoof:[1024,452],newThinRoots:[473,800]
 });
 // at(world x), side(-1 ceiling,+1 floor), original art, drawn width, depth,
 // collision flag; prelude/scenic breaks are kept intentionally non-colliding.
@@ -17,7 +23,7 @@ const BEATS=[
   [
     460,
     -1,
-    "ogCanopyA",
+    "newRootShelf",
     475,
     134,
     0
@@ -33,7 +39,7 @@ const BEATS=[
   [
     1530,
     -1,
-    "ogRootsOne",
+    "newRootCurtain",
     250,
     240,
     1
@@ -41,7 +47,7 @@ const BEATS=[
   [
     2070,
     1,
-    "ogCrystalC",
+    "newCrystalRidge",
     478,
     238,
     1
@@ -81,7 +87,7 @@ const BEATS=[
   [
     4740,
     -1,
-    "ogCanopyC",
+    "newCrystalRoof",
     478,
     182,
     1
@@ -105,7 +111,7 @@ const BEATS=[
   [
     6320,
     1,
-    "ogCrystalC",
+    "newCrystalMound",
     480,
     233,
     1
@@ -129,7 +135,7 @@ const BEATS=[
   [
     7900,
     -1,
-    "ogCanopyA",
+    "newBarkrootRoof",
     480,
     179,
     1
@@ -153,7 +159,7 @@ const BEATS=[
   [
     9520,
     1,
-    "ogRichFloorA",
+    "newRootMound",
     458,
     98,
     1
@@ -169,7 +175,7 @@ const BEATS=[
   [
     10600,
     1,
-    "ogCrystalA",
+    "newCrystalTeeth",
     481,
     204,
     1
@@ -193,7 +199,7 @@ const BEATS=[
   [
     12230,
     -1,
-    "ogCanopyC",
+    "newCrystalDrape",
     480,
     179,
     1
@@ -201,7 +207,7 @@ const BEATS=[
   [
     12780,
     1,
-    "ogCrystalB",
+    "newSlopeFloor",
     480,
     156,
     1
@@ -225,7 +231,7 @@ const BEATS=[
   [
     14400,
     -1,
-    "ogRootsTwo",
+    "newThinRoots",
     246,
     241,
     1
@@ -273,7 +279,7 @@ const BEATS=[
   [
     17660,
     -1,
-    "ogCanopyB",
+    "newSlopeRoof",
     480,
     183,
     1
