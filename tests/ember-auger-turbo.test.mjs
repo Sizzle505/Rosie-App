@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
  newRun,triggerTurbo,updateRun,tunnelCenter,DRILL_ANCHOR,
- DRILL_TIP_OFFSET,TURBO_DURATION
+ DRILL_TIP_OFFSET,DRILL_TIP_VERTICAL_OFFSET,drillTipPosition,TURBO_DURATION
 } from "../src/emberDrillEngine.js";
 import {
  AUGER_SHEET, DRILL_REGISTRATION, JET_SHEET, IMPACT_SHEET,
@@ -24,8 +24,15 @@ test("all SIXTEEN registered original frames have unique source rectangles",()=>
  assert.notEqual(augerFrameIndex(.09,true),augerFrameIndex(.09,false));
 });
 test("the single auger and rear jet have locked vehicle-local geometry",()=>{
- assert.equal(DRILL_REGISTRATION.rootX,63);
+ assert.equal(DRILL_REGISTRATION.rootX,51,"Root is recessed beneath the approved collar");
+ assert.equal(DRILL_REGISTRATION.augerX,44,"Spin atlas shifted left exactly 12px");
+ assert.equal(DRILL_REGISTRATION.augerY,-52,"Spin atlas lowered exactly 3px");
+ assert.equal(DRILL_REGISTRATION.augerW,120,"Spin scale must remain unchanged");
+ assert.equal(DRILL_REGISTRATION.augerH,110,"Spin scale must remain unchanged");
+ assert.equal(DRILL_TIP_OFFSET,158);
+ assert.equal(DRILL_TIP_VERTICAL_OFFSET,3);
  assert.equal(DRILL_REGISTRATION.tipX,DRILL_TIP_OFFSET);
+ assert.equal(DRILL_REGISTRATION.tipY,DRILL_TIP_VERTICAL_OFFSET);
  assert.equal(DRILL_REGISTRATION.nozzleX,-116);
  assert.equal(DRILL_REGISTRATION.nozzleY,4);
  const x=DRILL_REGISTRATION.augerX+345/360*DRILL_REGISTRATION.augerW;
@@ -34,9 +41,10 @@ test("the single auger and rear jet have locked vehicle-local geometry",()=>{
  for(const pitch of [0,-.5,.5]){
   const ship=(x,y)=>({x:DRILL_ANCHOR+x*Math.cos(pitch)-y*Math.sin(pitch),
     y:300+x*Math.sin(pitch)+y*Math.cos(pitch)});
-  const tip=ship(DRILL_REGISTRATION.tipX,0);
-  assert.ok(Math.abs(tip.x-(DRILL_ANCHOR+DRILL_TIP_OFFSET*Math.cos(pitch)))<1e-7);
-  assert.ok(Math.abs(tip.y-(300+DRILL_TIP_OFFSET*Math.sin(pitch)))<1e-7);
+  const tip=ship(DRILL_REGISTRATION.tipX,DRILL_REGISTRATION.tipY);
+  const collision=drillTipPosition({pitch,y:300});
+  assert.ok(Math.abs(tip.x-collision.x)<1e-7,"Collision remains glued to the spinning tip X");
+  assert.ok(Math.abs(tip.y-collision.y)<1e-7,"Collision remains glued to the spinning tip Y");
   const rear=ship(-116,4);
   assert.ok(rear.x<DRILL_ANCHOR-95,"Exhaust remains behind the vehicle");
  }
@@ -64,6 +72,8 @@ test("approved Rosie poses and exact mechanical source files stay registered",()
  ])assert.ok(jsx.includes(name),name);
  assert.ok(painter.includes("c.rect(-168,-125,236,252)"),"Only baked nose area may be excluded");
  assert.ok(painter.includes("c.translate(DRILL_ANCHOR,s.y);c.rotate(s.pitch)"));
+ const excavation=readFileSync(new URL("../src/emberExcavationFX.js",import.meta.url),"utf8");
+ assert.ok(excavation.includes("drillTipPosition(run)"),"Scraping/sparks use the exact shifted tip registration");
  assert.ok(jsx.includes('if(event.type==="shatter"&&s.boostTime>0)s.tipBurstAt=s.time'));
  assert.ok(jsx.includes("s.tipBurstAt=s.time;"));
 });
