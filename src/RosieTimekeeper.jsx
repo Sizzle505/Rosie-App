@@ -34,7 +34,11 @@ function cueComplete(){
 const DIAL_FRAMES = [
   { id: "batons", label: "Baton", symbol: "◆" },
   { id: "roman", label: "Roman", symbol: "Ⅻ" },
-  { id: "chronograph", label: "Chronograph", symbol: "◉" },
+  { id: "sunburst", label: "Sunburst", symbol: "✺" },
+  { id: "deco", label: "Art Deco", symbol: "◆" },
+  { id: "moonlight", label: "Moonlight", symbol: "☽" },
+  { id: "pearl-baroque", label: "Pearl", symbol: "❈" },
+  { id: "emerald-filigree", label: "Emerald", symbol: "✧" },
   { id: "celestial", label: "Celestial", symbol: "☾" }
 ];
 const LUXURY_ASSETS = "/rosieverse/timekeeper/midnight-observatory/luxury/";
@@ -292,6 +296,7 @@ export default function RosieTimekeeper() {
   const chosenWorldCity=WORLD_CITIES.find(c=>c.zone===worldZone)||WORLD_CITIES[0];
   const world=worldTimeParts(worldNow,chosenWorldCity.zone);
   const padWorld=n=>String(n).padStart(2,"0");
+  const worldDigital=((world.hh%12)||12)+":"+padWorld(world.mm)+(world.hh>=12?"pm":"am");
   const worldIsDay=world.hh>=6&&world.hh<18;
   const worldHours=(world.hh%12+world.mm/60+world.ss/3600)*30;
   const worldMinutes=(world.mm+world.ss/60)*6;
@@ -307,12 +312,13 @@ export default function RosieTimekeeper() {
   const runnerAngle = -Math.PI / 2 + (mode === "countdown" ? -1 : 1) * runnerPhase * Math.PI * 2;
   const runnerX = 50 + 49.5 * Math.cos(runnerAngle);
   const runnerY = 50 + 49.5 * Math.sin(runnerAngle);
+  const squirrelFlipped = mode === "countdown" ? runnerY <= 50 : runnerY > 50;
   // All three illustrated poses now come from the same full-resolution
   // Dropbox master, so the working pose can return without looking soft.
   const rosieState = running ? (Math.floor(elapsed / 8500) % 2 ? "pull" : "working") : elapsed > 0 ? "pull" : "ready";
   const fastestLap = laps.length > 1 ? Math.min(...laps.map((entry) => entry.split)) : null;
   const slowestLap = laps.length > 1 ? Math.max(...laps.map((entry) => entry.split)) : null;
-  const shown = mode === "world" ? padWorld(world.hh)+":"+padWorld(world.mm)+":"+padWorld(world.ss) : mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
+  const shown = mode === "stopwatch" ? formatClock(elapsed, true) : formatClock(remaining, true, true);
   const [wholeTime, hundredths] = shown.split(".");
   const status = mode === "world" ? chosenWorldCity.city.toUpperCase()+" · "+world.abbr : (mode === "countdown" && finished.current && elapsed >= duration)
     ? "COMPLETE"
@@ -397,13 +403,18 @@ export default function RosieTimekeeper() {
               strokeDashoffset={circumference * (1 - dialProgress)} />
           </svg>
           {mode!=="world" && <span key={runnerEpoch}
-            className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "") + (runnerY > 50 ? " is-flipped" : "")}
+            className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "") + (squirrelFlipped ? " is-flipped" : "")}
             aria-hidden="true" style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />}
-          <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")+(mode==="world" ? " is-world-time" : "")} aria-label={mode==="world" ? "Local time in "+chosenWorldCity.city : mode === "stopwatch" ? "Elapsed time" : "Time remaining"}>
-            <span className="rtk-time-whole">{wholeTime}</span>
-            {mode!=="world" && <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{hundredths}</span>}
-          </output>
-          <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
+          {mode==="world" ? <div className="rtk-world-readout" aria-label={chosenWorldCity.city+", "+worldDigital}>
+             <strong className="rtk-world-city-name">{chosenWorldCity.city}</strong>
+             <time className="rtk-world-digital">{worldDigital}</time>
+          </div> : <>
+            <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode==="stopwatch"?"Elapsed time":"Time remaining"}>
+              <span className="rtk-time-whole">{wholeTime}</span>
+              <span className="rtk-time-fraction"><span aria-hidden="true">.</span>{hundredths}</span>
+            </output>
+            <div className={"rtk-caption"+(running ? " is-running" : "")}>{status}</div>
+          </>}
           {mode==="countdown" && finished.current && elapsed >= duration &&
             <img className="rtk-completion-flourish" src={LUXURY_ASSETS+"world-clock-ui/completion-sparkle.webp"}
               alt="" aria-hidden="true" draggable="false" />}
@@ -470,6 +481,12 @@ export default function RosieTimekeeper() {
                 style={{ "--swatch": item.center }} />)}
             </div>
           </div>}
+          {!dialPickerOpen && <div className="rtk-enamel-strip" role="group" aria-label="Clock enamel colors">
+            {DIAL_COLORS.map(item=><button type="button" key={item.id} title={item.label}
+              className={dialColor===item.id?"chosen":""} aria-label={item.label+" clock color"}
+              aria-pressed={dialColor===item.id} style={{"--swatch":item.center}}
+              onClick={()=>setDialColor(item.id)}/>)}
+          </div>}
           <div className="rtk-utility-inner">
           {mode === "world" ? (
             <div className="rtk-world-settings">
@@ -479,23 +496,29 @@ export default function RosieTimekeeper() {
                 {WORLD_CITIES.map(item=><option value={item.zone} key={item.zone}>{item.city}</option>)}
               </select>
               <div className="rtk-world-city-plaque">
-                <strong>{chosenWorldCity.city}</strong>
-                <span>{world.day}, {world.month} {world.date} · {world.abbr}</span>
-                <img src={LUXURY_ASSETS+"world-clock-ui/"+(worldIsDay?"sun":"moon")+".webp"} alt={worldIsDay?"Daytime":"Nighttime"} />
+                <strong>{world.day}, {world.month} {world.date}</strong>
+                <span>{world.abbr} · {worldIsDay ? "Daytime" : "Nighttime"}</span>
+              </div>
+              <div className="rtk-world-daynight" aria-label={worldIsDay?"Daytime in selected city":"Nighttime in selected city"}>
+                <span className={worldIsDay?"is-current":""}><img src={LUXURY_ASSETS+"world-clock-ui/sun.webp"} alt="Sun"/>Day</span>
+                <span className={!worldIsDay?"is-current":""}><img src={LUXURY_ASSETS+"world-clock-ui/moon.webp"} alt="Moon"/>Night</span>
               </div>
             </div>
           ) : mode === "stopwatch" ? (
             <>
               <div className="rtk-utility-heading"><span>Laps & Splits</span><span>{laps.length ? laps.length + " recorded" : "Hundredths"}</span></div>
-              {laps.length ? (
+              {laps.length ? (<div className="rtk-lap-table">
+                <div className="rtk-lap-table-head"><span>Lap</span><span>Split</span><span>Total</span></div>
                 <ol className="rtk-laps">
-                  {laps.map((entry, index) => (
-                    <li key={entry.total} className={entry.split === fastestLap ? "rtk-fastest-lap" : entry.split === slowestLap ? "rtk-slowest-lap" : ""}>
-                      <span>Lap {laps.length - index}</span><strong>{formatClock(entry.split, true)}</strong><small>{formatClock(entry.total, true)}</small>
-                    </li>
-                  ))}
+                  {laps.map((entry,index)=><li key={entry.total}
+                    className={entry.split===fastestLap?"rtk-fastest-lap":entry.split===slowestLap?"rtk-slowest-lap":""}>
+                    <span>{laps.length-index}</span>
+                    <strong>{formatClock(entry.split,true)}</strong>
+                    <small>{formatClock(entry.total,true)}</small>
+                  </li>)}
                 </ol>
-              ) : <p className="rtk-empty">{running ? "Tap Lap to record your first split." : elapsed > 0 ? "Resume the stopwatch or reset for a new run." : "Tap Start to begin timing."}</p>}
+              </div>
+              ) : <p className="rtk-empty">{running ? "Tap the left Lap control to record a split." : elapsed > 0 ? "Resume for more laps or reset." : "Press Play to begin timing."}</p>}
 
             </>
           ) : (

@@ -2830,3 +2830,311 @@ body:has(.app-shell.page-timekeeper),
     padding:2px 8px!important;min-height:24px;margin-bottom:3px;
   }
 }
+
+/* 2026-10-15 final Timekeepers geometry: all viewport offsets consolidated. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:calc(64.3% - 60px)!important;
+  overflow:hidden;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  left:50%!important;
+  top:3.5%!important;
+  width:92%!important;
+  height:35%!important;
+  transform:translateX(-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger {
+  top:39%!important;left:8%!important;
+  width:11%!important;height:12%!important;
+  min-width:29px;min-height:22px;
+  z-index:13;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip {
+  position:absolute;z-index:11;left:20%;right:10%;top:40%;
+  height:11%;display:flex;align-items:center;justify-content:space-evenly;
+  gap:clamp(3px,1vw,8px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button {
+  flex:0 0 auto;width:clamp(17px,4.8vw,25px);height:clamp(17px,4.8vw,25px);
+  border:1.5px solid #b9996a;border-radius:50%;padding:0;cursor:pointer;
+  background:radial-gradient(circle at 34% 26%,#ffffff88,var(--swatch) 48%,#030b20 100%);
+  box-shadow:inset 0 1px 1px #fff9,0 1px 3px #031427;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button.chosen {
+  outline:2px solid #fbe0a7;outline-offset:2px;
+  box-shadow:inset 0 0 3px #fff6,0 0 8px #b8dfff;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button:focus-visible {
+  outline:3px solid #fff5bf;outline-offset:3px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:53%!important;bottom:7%!important;
+  left:13%!important;right:13%!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  scrollbar-width:thin;overscroll-behavior:contain;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;width:100%;min-height:28px!important;
+  padding:3px 0 5px!important;margin:0 0 6px!important;
+  background:none!important;border-bottom:1px solid #d7a960b9!important;
+  font:700 clamp(12px,2.9vw,16px)/1.1 "Iowan Old Style",Georgia,serif!important;
+  color:#f9e7bc;letter-spacing:.02em;text-shadow:0 1px 3px #031020;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading span:last-child {
+  font-size:clamp(10px,2.4vw,13px)!important;
+  color:#ebd8b0;white-space:nowrap;text-overflow:clip;overflow:visible;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading .rtk-timer-view-toggle {
+  min-height:25px!important;max-width:48%;white-space:nowrap;
+  padding:3px 8px!important;border:1px solid #d4b478!important;
+  border-radius:999px!important;background:linear-gradient(170deg,#245889,#0a2b58)!important;
+  color:#ffe6b4!important;font:700 clamp(10px,2.45vw,13px)/1 Georgia,serif!important;
+  box-shadow:inset 0 1px 1px #faf2c357,0 2px 3px #06182b60!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets {
+  gap:clamp(3px,1.3vw,8px)!important;margin:4px 0 1px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button {
+  min-height:clamp(35px,9.5vw,50px)!important;
+  font-size:clamp(11px,3vw,16px)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-selection-note {
+  margin:4px 0 0!important;font-size:clamp(9px,2.2vw,11px)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {
+  display:flex;flex-direction:column;gap:6px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer {
+  margin-top:0!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {
+  width:92%!important;margin:0 auto!important;min-height:37px!important;
+  font-size:clamp(11px,2.8vw,15px)!important;
+  flex-shrink:0;cursor:pointer;
+}
+/* Clock-hand atlas frames all share center (256,256). Never offset one style separately. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-hands {
+  position:absolute!important;inset:16%!important;
+  aspect-ratio:1;z-index:8;pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+  position:absolute!important;inset:0!important;
+  width:100%;height:100%;
+  background-size:100% 100%;background-position:50% 50%;
+  transform-origin:50% 50%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+  position:absolute!important;
+  width:11%;height:11%;left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:10;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-readout {
+  position:absolute;left:50%;top:92%;z-index:20;
+  transform:translateX(-50%);
+  width:125%;display:flex;align-items:center;flex-direction:column;
+  gap:1px;white-space:nowrap;pointer-events:none;
+  text-align:center;
+  text-shadow:0 1px 4px #050b1e,0 0 9px #f8c86c8e;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-name {
+  font:700 clamp(14px,3.8vw,21px)/1 "Iowan Old Style",Georgia,serif;
+  letter-spacing:.06em;color:#f8e2a9;
+  filter:drop-shadow(0 0 5px #ffe4a177);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-digital {
+  display:block;color:#fff8e3;font:700 clamp(17px,4.4vw,24px)/1 "Iowan Old Style",Georgia,serif;
+  letter-spacing:.035em;
+}
+/* Real timezone day and night ornaments - both always visible. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {gap:4px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings label {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+  min-height:25px!important;padding:2px 8px!important;gap:0!important;
+  background-size:100% 100%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque strong {font-size:12px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque span {font-size:10px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {
+  display:flex;gap:12px;justify-content:center;align-items:center;min-height:27px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight span {
+  display:flex;align-items:center;gap:4px;color:#e6c99e;opacity:.52;
+  font:700 11px/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight span.is-current {
+  opacity:1;color:#fff3c9;text-shadow:0 0 5px #ead393;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight img {
+  width:25px;height:25px;object-fit:contain;
+  filter:drop-shadow(0 0 3px #edc373);
+}
+/* Lap records are a genuine aligned table; don't print on ornamental finials. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table {width:100%;min-width:0;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head,
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li {
+  display:grid;grid-template-columns:18% 41% 41%;gap:0;
+  align-items:center;padding:4px 2px;box-sizing:border-box;
+  font-size:clamp(10px,2.75vw,14px);line-height:1.15;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head {
+  font:700 clamp(9px,2.2vw,11px)/1 Georgia,serif;
+  color:#e8bd78;border-bottom:1px solid #a57e4980;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps {margin:0!important;padding:0!important;max-height:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head>:nth-child(2),
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head>:nth-child(3),
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li strong,
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li small {text-align:right!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li small {color:#f2d5a0;font-size:inherit;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li.rtk-fastest-lap {color:#f6dc9e;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-empty {text-align:center;line-height:1.35;font-size:clamp(11px,2.7vw,14px)!important;margin:7px auto!important;}
+/* Make the active left control visibly read LAP, rather than the console's reset-looking emblem. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-lap-action {
+  position:relative!important;isolation:isolate;overflow:visible;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-lap-action .rtk-action-word {
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  display:grid;place-items:center;
+  width:48%;height:41%;opacity:1!important;
+  border-radius:50%;border:1px solid #f1cd7b;
+  background:radial-gradient(circle,#1b5594,#041a3b);
+  color:#fff0c4;font:800 clamp(8px,1.85vw,12px)/1 Georgia,serif;
+  text-shadow:0 1px 2px #020812;pointer-events:none;
+  box-shadow:inset 0 1px 2px #fff5c058,0 0 5px #f9d79065;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-lap-action:disabled .rtk-action-word {opacity:.4!important;}
+/* True direction: timer is opposite stopwatch at every angle, turning at 3 and 9. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown.is-flipped {
+  transform:translate(-50%,-50%) scaleX(-1)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown:not(.is-flipped) {
+  transform:translate(-50%,-50%)!important;
+}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px){
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:calc(64.3% - 40px)!important;
+  }
+}
+@media(max-width:520px) and (max-height:700px){
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:calc(61.7% - 35px)!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+    top:2%!important;height:34%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger {
+    top:37%!important;height:14%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip {
+    top:38%;height:14%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button {
+    width:clamp(15px,4.4vw,18px);height:clamp(15px,4.4vw,18px);
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:55%!important;bottom:3%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+    min-height:20px!important;margin-bottom:2px!important;padding:1px 0 2px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:2px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:29px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {min-height:19px;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight img {height:18px;width:18px;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select {min-height:25px;}
+}
+
+/* Final measured mobile collision and composer-fit correction. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  transform:translate(-50%,-22px)!important;
+  z-index:10;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  z-index:15!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:51%!important;
+  bottom:2%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  min-height:23px!important;
+  margin-bottom:3px!important;
+  padding:2px 0 3px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:4px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {gap:2px!important;font-size:clamp(9px,2.2vw,11px)!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:32px!important;min-height:32px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:32px!important;}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px){
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   height:calc(31.2% - 35px)!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:51%!important;bottom:3%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:27px!important;min-height:27px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:28px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {min-height:20px!important;}
+}
+@media(max-width:520px) and (max-height:700px){
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   height:165px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:50%!important;bottom:2%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {min-height:18px!important;margin-bottom:1px!important;padding:0 0 2px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {font-size:9px!important;gap:1px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:26px!important;min-height:26px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:26px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:2px!important;}
+}
+
+/* Fit Custom Timer including its action above cabinet bottom, no hidden CTA. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  height:20px!important;min-height:20px!important;max-height:20px!important;
+  padding:0 0 1px!important;margin:0 0 1px!important;
+  line-height:1.1!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading .rtk-timer-view-toggle {
+  height:19px!important;min-height:19px!important;max-height:19px!important;
+  padding:1px 6px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-composer {gap:2px!important;}
+@media(max-width:520px) and (max-height:785px){
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-timer input {
+   height:24px!important;min-height:24px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-set-timer {
+   min-height:25px!important;
+ }
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-timer input {
+   height:22px!important;min-height:22px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-set-timer {
+   min-height:24px!important;
+ }
+}
