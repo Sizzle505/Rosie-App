@@ -4,11 +4,12 @@ import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunn
 export const DRILL_WIDTH = 690;
 export const DRILL_HEIGHT = 820;
 export const DRILL_ANCHOR = 210;
-// The original spinning cone now seats 12px deeper into the preserved brass collar.
-// Keep collision and contact FX at the actual rendered tip, including its 3px
-// local vertical correction. Do not change the vehicle's position or pitch.
-export const DRILL_TIP_OFFSET = 158;
-export const DRILL_TIP_VERTICAL_OFFSET = 3;
+// Source-image registration: the original front engine socket's axis is
+// lower than the hull pivot. The entire 16-frame drill seats in that socket,
+// with matching collision/FX at its actual (vehicle-local) rotating tip.
+// Keep these two coordinates shared for every pitch and Turbo state.
+export const DRILL_TIP_OFFSET = 154;
+export const DRILL_TIP_VERTICAL_OFFSET = 35;
 export function drillTipPosition(run) {
   const pitch = run.pitch || 0, co = Math.cos(pitch), si = Math.sin(pitch);
   return {
