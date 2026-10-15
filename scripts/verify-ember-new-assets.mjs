@@ -20,7 +20,7 @@ const jsx=await readFile("src/EmberTunnelDrill.jsx","utf8");
 const section=jsx.match(/const DRILL_ART = \{([\s\S]*?)\n\};/);
 assert.ok(section,"DRILL_ART registry missing");
 const art=Object.fromEntries([...section[1].matchAll(/(\w+):"([^"]+)"/g)].map(x=>[x[1],x[2]]));
-const entry=await build({stdin:{contents:`import{paintDrill}from './src/emberDrillPainter.js';import{tunnelCenter}from './src/emberDrillEngine.js';import{FORMATION_LAYOUT}from './src/emberTunnelLayout.js';window.__newAssetQA={paintDrill,tunnelCenter,FORMATION_LAYOUT};`,resolveDir:process.cwd(),sourcefile:"new-background-integration-qa.js",loader:"js"},bundle:true,format:"iife",platform:"browser",write:false,logLevel:"silent"});
+const entry=await build({stdin:{contents:`import{paintDrill}from './src/emberDrillPainter.js';import{tunnelCenter}from './src/emberDrillEngine.js';import{FORMATION_LAYOUT}from './src/emberTunnelLayout.js';import{softenedFormation}from './src/emberTunnelSculpture.js';window.__newAssetQA={paintDrill,tunnelCenter,FORMATION_LAYOUT,softenedFormation};`,resolveDir:process.cwd(),sourcefile:"new-background-integration-qa.js",loader:"js"},bundle:true,format:"iife",platform:"browser",write:false,logLevel:"silent"});
 const dir="artifacts/ember-new-assets-iphone";
 await mkdir(dir,{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -40,6 +40,28 @@ const loaded=await page.evaluate(async registry=>{
  window.__newArt=images;const canvas=document.createElement("canvas");canvas.width=690;canvas.height=820;window.__newCanvas=canvas;
  return Object.keys(images).length;
 },art);
+// Refuse the exact visual regression in the provided iPhone screenshot:
+// formation JPEG/PNG masks must NOT leave straight visible hard vertical bars.
+const edgeAudit=await page.evaluate(()=>{
+ const checked=[];
+ for(const key of ["newRootShelf","newCrystalRidge","newCrystalMound","newSlopeFloor","newRootCurtain","ogCanopyA"]){
+  const im=window.__newArt[key];
+  if(!im)throw new Error("Missing original source "+key);
+  const masked=window.__newAssetQA.softenedFormation(im);
+  const cx=masked.getContext("2d"),w=masked.width,h=masked.height;
+  const alphaAt=x=>{
+   const pixels=cx.getImageData(x,0,1,h).data;
+   let a=0;for(let y=0;y<h;y++)a+=pixels[y*4+3];
+   return a/h;
+  };
+  const left=alphaAt(0),right=alphaAt(w-1),middle=alphaAt(Math.floor(w*.5));
+  if(left>1||right>1||middle<22)throw new Error("Hard sprite edge: "+key+" "+[left,right,middle]);
+  if(masked.src!==im.src)throw new Error("Lost asset provenance for "+key);
+  checked.push({key,left,right,middle});
+ }
+ return checked;
+});
+console.log("PASS HARD-EDGE CROP REGRESSION",JSON.stringify(edgeAudit));
 const scenes=[
  ["barkroot-and-roots",8,1530,"bg01","bg02","newRootCurtain"],
  ["lantern-and-crystal-ridge",25,2070,"bg03","bg02","newCrystalRidge"],
