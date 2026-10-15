@@ -23,6 +23,7 @@ import "./cheese-honeywood.css";
 import "./cheese-sprint.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
+import EmberTunnelDrill from "./EmberTunnelDrill.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
@@ -2982,7 +2983,10 @@ function App() {
         ) : page === "cheese" ? (
           <CheeseMemoryGame />
         ) : page === "captain" ? (
-          <CaptainRosieGame soundOn={soundOn} />
+          <>
+            <CaptainRosieGame soundOn={soundOn} />
+            <EmberTunnelDrill soundOn={soundOn} />
+          </>
         ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />
         ) : page === "vault" ? (

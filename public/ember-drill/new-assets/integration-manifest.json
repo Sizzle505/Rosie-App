@@ -1,0 +1,676 @@
+{
+  "schema": "rosie.ember.assets.v1",
+  "version": "2026-10-14-integrated-01",
+  "repository": "Sizzle505/Rosie-App",
+  "branch": "work/ember-og-ribbon-prototype-20261014",
+  "sourcePack": "Ember Tunnel - 10 Usable Background Assets.zip",
+  "created_at": "2026-10-15T01:58:30.954303+00:00",
+  "sceneCanvas": [
+    690,
+    820
+  ],
+  "notes": {
+    "non_destructive": "Do not overwrite existing OG source artworks; development branch only.",
+    "background_strategy": "Pan seven new plate images within existing panorama timeline; three parallax overlays behind wall/obstacles at separate scroll speeds.",
+    "foreground_strategy": "Select new original created 12 foreground cutouts in curated course placements; preserve collision alignment and safe passage.",
+    "rosie_identity": "Generated dog/vehicle images are candidate assets only; do not replace approved Rosie sprites with generic dog depictions.",
+    "quality_limitation": "Backgrounds are derived from composed AI image studies, not native-detail full-resolution masters; preview before approval.",
+    "original_files": "Source masters retained alongside optimized game runtime binaries for reproducibility."
+  },
+  "assets": [
+    {
+      "id": "bg01",
+      "source_name": "BG 01 - Barkroot Deep Hollow.webp",
+      "source_png": "BG 01 - Barkroot Deep Hollow.png",
+      "source_sha256": "459007171a900183a0b68db56bb850d25872574ddceb727b754d6626c0633f57",
+      "master_sha256": "c04fd3f3250be93880b921a2be9e59fab35ee4815913f2b86236aa929aca0f56",
+      "output": "background/bg01.webp",
+      "output_sha256": "c8472437a775020f26d601a5c12d6a8617a36c27ef88830cae827cd863e7bf45",
+      "bytes": 179488,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "0-10s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "bg02",
+      "source_name": "BG 02 - Barkroot Distant Root Arches.webp",
+      "source_png": "BG 02 - Barkroot Distant Root Arches.png",
+      "source_sha256": "9d0d33c85b7676b1fabe5ff6e3c6d4e7f6736cf598fd954b3c66b92a614ea03e",
+      "master_sha256": "3eddb488e19316bb69154a646b497770c085e049fea03522a29377c955484cde",
+      "output": "background/bg02.webp",
+      "output_sha256": "d65330bd3dda02960a2060b3db40fa589b123bc0826152c0bf3bdcdcb34a1c28",
+      "bytes": 273780,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": true,
+      "role": "parallax",
+      "window": "0-38s",
+      "parallax_speed": 0.15,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "source-composited transparent overlay"
+    },
+    {
+      "id": "bg03",
+      "source_name": "BG 03 - Lantern Burrow Gallery.webp",
+      "source_png": "BG 03 - Lantern Burrow Gallery.png",
+      "source_sha256": "528414ce392873c89cc93d54a13155318a10125d7e73cdf69fcdf5fd98f7b309",
+      "master_sha256": "dadd18c348d12f5e0d0cb2c70b97e40e266d8088fe276095b08335f5157c6899",
+      "output": "background/bg03.webp",
+      "output_sha256": "d89b26073460d4e7a9fa88d5c714ba9f8319e4dc762e138e7740dc2b4ad9961d",
+      "bytes": 185770,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "21-32s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "bg04",
+      "source_name": "BG 04 - Amber Geode Distance Field.webp",
+      "source_png": "BG 04 - Amber Geode Distance Field.png",
+      "source_sha256": "2b535a8502895a38704db71e0e4462d65927fd6740868128de3af9695007734d",
+      "master_sha256": "d60394f54103ce39d66d0cc4621772019a9848d66a1f4e6744c6b79721089f32",
+      "output": "background/bg04.webp",
+      "output_sha256": "9ac91d8b81b5b538df8521dcaf0face10e99ce9bb9fed9a6e9da6f4f00657df9",
+      "bytes": 184536,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "32-38s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "bg05",
+      "source_name": "BG 05 - Amber To Ruby Fault Line.webp",
+      "source_png": "BG 05 - Amber To Ruby Fault Line.png",
+      "source_sha256": "cc047c04ef9ed7abfef4e1f95e96fdb810a612ba34832c192b06ca27e2106bf7",
+      "master_sha256": "db68dae2765e33383a5f4ebed986c667a074a853b3566cc837ce95bf433a343f",
+      "output": "background/bg05.webp",
+      "output_sha256": "bf5b04fd4e6fe54b9df013faa8be020178f3d422a5a54817df3161589daefe60",
+      "bytes": 188842,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "31-38s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "bg06",
+      "source_name": "BG 06 - Ruby Heart Geode.webp",
+      "source_png": "BG 06 - Ruby Heart Geode.png",
+      "source_sha256": "531abf72bcb3c92f8d113bf06464f34dfa6f5da4a5af6fca3663d5e40637d430",
+      "master_sha256": "71240a7178b997bac3e292f003592b2bb52727fbcdb4765146ac2d5d7b38167d",
+      "output": "background/bg06.webp",
+      "output_sha256": "22abc79b840c68f4a512c840958d30e18401984cad73c7764cffc8dfce2b3192",
+      "bytes": 177148,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "43-54s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "bg07",
+      "source_name": "BG 07 - Ruby Crystal Colonnade.webp",
+      "source_png": "BG 07 - Ruby Crystal Colonnade.png",
+      "source_sha256": "3ae5d5516ffa1818db43323730b4dc81f8f0f96fa2408eaa33eecd396054d7ba",
+      "master_sha256": "56a308574988fcaf06a9bc5a9cacaff0432e8d4b5cc1f21faead8490cf3f42d1",
+      "output": "background/bg07.webp",
+      "output_sha256": "d694199209ab4017f333e60a68a7b75a824bf9fbd3bb992f37e450278670db60",
+      "bytes": 141066,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": true,
+      "role": "parallax",
+      "window": "38-61s",
+      "parallax_speed": 0.11,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "source-composited transparent overlay"
+    },
+    {
+      "id": "bg08",
+      "source_name": "BG 08 - Buried Barkbridge Temple.webp",
+      "source_png": "BG 08 - Buried Barkbridge Temple.png",
+      "source_sha256": "2187efc3da330fb3f62855e21928b7559a13dea2dcfd33950a4eaf0ee931414c",
+      "master_sha256": "0c2df16af14737cd19bd61da54dbcf18037f65ba6a7e63805fe6b7912e493a3e",
+      "output": "background/bg08.webp",
+      "output_sha256": "a58d646a2bd7fe15468f82e92bd1437684cd9f704a6256b87bd8e861b7b9c52e",
+      "bytes": 182686,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "54-65s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "bg09",
+      "source_name": "BG 09 - Temple Light Shafts and Dust.webp",
+      "source_png": "BG 09 - Temple Light Shafts and Dust.png",
+      "source_sha256": "b836aac71c72390f09f8ea3bf348900c420cbccd55b5792fa4701ad16901041d",
+      "master_sha256": "a47af29928436a634d257346975f07926232036449c6139eaa2d632262831633",
+      "output": "background/bg09.webp",
+      "output_sha256": "9412b8a6e9d87173d8cd44c2e8cc587c288e5d34e70ec0b0b8aa358f6355e024",
+      "bytes": 115188,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": true,
+      "role": "parallax",
+      "window": "54-75s",
+      "parallax_speed": 0.06,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "source-composited transparent overlay"
+    },
+    {
+      "id": "bg10",
+      "source_name": "BG 10 - Hall Of The Ember Vault.webp",
+      "source_png": "BG 10 - Hall Of The Ember Vault.png",
+      "source_sha256": "5563bf5f428f7c037ed45f54aa15b79018a39900383d058f952b8bb577e191f1",
+      "master_sha256": "2818a6cdae71bd191f1da7a548a0da9b0f01f699964d979461ce3fbbd2336229",
+      "output": "background/bg10.webp",
+      "output_sha256": "270a8b0d6648c56cc6f8654ce44d8e17807b9429b6db8625f2132bbdc2ac7992",
+      "bytes": 166388,
+      "native_export": [
+        3072,
+        1536
+      ],
+      "runtime_size": [
+        2048,
+        1024
+      ],
+      "alpha": false,
+      "role": "background",
+      "window": "65-75s",
+      "parallax_speed": 0,
+      "render_layer": "behind tunnel collision edges, obstacle art, collectibles, vehicle",
+      "source_quality": "recomposed-upscaled multi-panel environment study, not native 3072px master"
+    },
+    {
+      "id": "newRootShelf",
+      "source_name": "glowing_rootbound_cave_overhang.png",
+      "source_sha256": "a20e87d794d242eb245d867239e97ead2196839d5740e6fe43c3e64d15897fff",
+      "output": "obstacle/newRootShelf.webp",
+      "output_sha256": "96c09b112988a36281f7d49005e0b2c369e58698430e8bba3b2988745ba1ec48",
+      "bytes": 246104,
+      "runtime_size": [
+        1024,
+        488
+      ],
+      "source_size": [
+        1817,
+        866
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newSlopeRoof",
+      "source_name": "rootbound_amber_cave_overhang.png",
+      "source_sha256": "592749114597b166b308ca8a04cbe1a43529a9d6685358e6573b186f8f8e8ae0",
+      "output": "obstacle/newSlopeRoof.webp",
+      "output_sha256": "a42ad9fcb7720eb712b1bc4db89fbfc06a4ebc122578c22ee94c7911f0884537",
+      "bytes": 136720,
+      "runtime_size": [
+        1024,
+        512
+      ],
+      "source_size": [
+        1774,
+        887
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newCrystalRoof",
+      "source_name": "glowing_crystal_cave_overhang.png",
+      "source_sha256": "93e6ff1e2ffdf10825b12f862c1ac5e2a21b5486d7fd0cb6105c54fca6d34795",
+      "output": "obstacle/newCrystalRoof.webp",
+      "output_sha256": "c4de44d90ce7e38762d3fbed75ae64ff230924c212d15ec6452c2925bf4867f9",
+      "bytes": 199830,
+      "runtime_size": [
+        1024,
+        478
+      ],
+      "source_size": [
+        1836,
+        857
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newRootCurtain",
+      "source_name": "glowing_amber_root_curtain.png",
+      "source_sha256": "fa185d4a9d2d69a068f8d3ca93dc5026878d7c690c5486cf45f87ed91346fcb3",
+      "output": "obstacle/newRootCurtain.webp",
+      "output_sha256": "38f08a498414408fcc5ec0d61b401cd965a1b4d86196802b68e5b26ff3457a27",
+      "bytes": 313930,
+      "runtime_size": [
+        640,
+        800
+      ],
+      "source_size": [
+        1122,
+        1402
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newCrystalMound",
+      "source_name": "glowing_amber_crystal_rock_formation.png",
+      "source_sha256": "32891091822d69756432306fee970fd58c5f2dd1833103c2fa36c4e01a06f026",
+      "output": "obstacle/newCrystalMound.webp",
+      "output_sha256": "34263b196e7dc02452fdb568d47405fdc2d9de39e442b30483d059ca51d9f68c",
+      "bytes": 194074,
+      "runtime_size": [
+        1024,
+        565
+      ],
+      "source_size": [
+        1672,
+        941
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "floor",
+      "anchor": "bottom structural seam with tips upward",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newRootMound",
+      "source_name": "glowing_amber_root_mound.png",
+      "source_sha256": "89a0be4ca575e44afcf7b151e3d27afd50b138623f62b0b20c2c8bdf4d2af679",
+      "output": "obstacle/newRootMound.webp",
+      "output_sha256": "2d1cb1acf8924bc0a31b10e4e9cc8f6c26c54f20bfc25158db363060256ba95b",
+      "bytes": 164688,
+      "runtime_size": [
+        1024,
+        512
+      ],
+      "source_size": [
+        1774,
+        887
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "floor",
+      "anchor": "bottom structural seam with tips upward",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newCrystalTeeth",
+      "source_name": "molten_crystal_spike_ridge.png",
+      "source_sha256": "436c8daf56025dd8164b285e1d108cf41b50059bcaa8a1e798c5013e3a69f6bc",
+      "output": "obstacle/newCrystalTeeth.webp",
+      "output_sha256": "189336b33f83ea5ad1cbb787d08590e7840488f5e8c43dfbcbaffd1cdaf5e070",
+      "bytes": 198900,
+      "runtime_size": [
+        1024,
+        488
+      ],
+      "source_size": [
+        1774,
+        887
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "floor",
+      "anchor": "bottom structural seam with tips upward",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newCrystalRidge",
+      "source_name": "amberroot_crystal_ridge.png",
+      "source_sha256": "8975011ca061c6133a254572163ec875bc4d54cdbf383b31cd311a8f452bbc04",
+      "output": "obstacle/newCrystalRidge.webp",
+      "output_sha256": "16a11593ae03d2ff6c1f12bd78a110c22bd7d5959d45a7df4b24f05ddeb9eb99",
+      "bytes": 169352,
+      "runtime_size": [
+        1024,
+        510
+      ],
+      "source_size": [
+        1774,
+        887
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "floor",
+      "anchor": "bottom structural seam with tips upward",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newSlopeFloor",
+      "source_name": "amberroot_descent_obstacle.png",
+      "source_sha256": "44211a07bf62ec6e2e5413a0b252f39287d98a21103ed994cc53c058e66e5141",
+      "output": "obstacle/newSlopeFloor.webp",
+      "output_sha256": "680cff1da4a6183145b58bbd8c528599a70fb7705b94d8b24e7b41b329172913",
+      "bytes": 148572,
+      "runtime_size": [
+        1024,
+        516
+      ],
+      "source_size": [
+        1774,
+        887
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "floor",
+      "anchor": "bottom structural seam with tips upward",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newCrystalDrape",
+      "source_name": "amber_crystal_root_cave_overhang.png",
+      "source_sha256": "df8643f6ede17574f54ff0d9e339253c54c16f15e0a46508069d629b29f51af4",
+      "output": "obstacle/newCrystalDrape.webp",
+      "output_sha256": "779797386b1e25902b7570de101a2b4efed88010514394816545a10709ed4de8",
+      "bytes": 165026,
+      "runtime_size": [
+        1024,
+        495
+      ],
+      "source_size": [
+        1774,
+        887
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newBarkrootRoof",
+      "source_name": "barkroot_amber_crystal_overhang.png",
+      "source_sha256": "36678e68b1246b7beb3132099f8df6e45d553a3b253ca67b629174202ca150de",
+      "output": "obstacle/newBarkrootRoof.webp",
+      "output_sha256": "b8af133fc7523b5fa041ad87839ce7fe86e02942745ef168d4434b35c15070c6",
+      "bytes": 150448,
+      "runtime_size": [
+        1024,
+        452
+      ],
+      "source_size": [
+        1733,
+        908
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "newThinRoots",
+      "source_name": "glowing_amber_rootrock_cluster.png",
+      "source_sha256": "9a1afb36bf084a486df9cc882aab3871d59df8afbd6619c2e77d551bda54cf23",
+      "output": "obstacle/newThinRoots.webp",
+      "output_sha256": "e501228114aa05a00eff4d0a7925e90a42cad76803f6779f9d9ee54087c77b8f",
+      "bytes": 172562,
+      "runtime_size": [
+        473,
+        800
+      ],
+      "source_size": [
+        1086,
+        1448
+      ],
+      "alpha": true,
+      "role": "sculptural gameplay formation",
+      "side": "ceiling",
+      "anchor": "top structural seam with tips down",
+      "collision": "same world/slope placement as transparent visual, conservative hull, requires geometry QA"
+    },
+    {
+      "id": "steampunk_golden_drill_sprite_sheet",
+      "source_name": "steampunk_golden_drill_sprite_sheet.png",
+      "source_sha256": "3920f6d587f2ca93accd4c0e8a38ac05b716c0756bcf7751b9778d8d158be107",
+      "output": "drill-candidates/steampunk_golden_drill_sprite_sheet.webp",
+      "output_sha256": "4485cdf5a7e087562af97254bba236bcfb7b1b458c4675b811ab047598a017f9",
+      "runtime_size": [
+        1223,
+        1000
+      ],
+      "bytes": 667584,
+      "alpha": true,
+      "role": "drill fx/coupling candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": false,
+      "reason": "Must validate sprite-frame registration before activation"
+    },
+    {
+      "id": "ornate_steampunk_brass_coupling",
+      "source_name": "ornate_steampunk_brass_coupling.png",
+      "source_sha256": "82a4b093741b86d61a79fce5df31e99f955cadfe0993b6012eacf293119598d2",
+      "output": "drill-candidates/ornate_steampunk_brass_coupling.webp",
+      "output_sha256": "69169caf15d6349250186ea2caa0160909bffd2b3167a9deb0b00d39746d9f65",
+      "runtime_size": [
+        1000,
+        1000
+      ],
+      "bytes": 233110,
+      "alpha": true,
+      "role": "drill fx/coupling candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": false,
+      "reason": "Must validate sprite-frame registration before activation"
+    },
+    {
+      "id": "golden_jet_flame_vfx_sprite_sheet",
+      "source_name": "golden_jet_flame_vfx_sprite_sheet.png",
+      "source_sha256": "5f2ac496bd04e533282aac9fd6befa2ab017afd5a4ef72cf99b1fdbd159b7339",
+      "output": "drill-candidates/golden_jet_flame_vfx_sprite_sheet.webp",
+      "output_sha256": "30b83edbe6ce33047eec3caf104e4b062304b662207b0c7a1c70942e7b9c1083",
+      "runtime_size": [
+        1400,
+        467
+      ],
+      "bytes": 306406,
+      "alpha": true,
+      "role": "drill fx/coupling candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": false,
+      "reason": "Must validate sprite-frame registration before activation"
+    },
+    {
+      "id": "golden_drill_impact_effect_sprite_sheet",
+      "source_name": "golden_drill_impact_effect_sprite_sheet.png",
+      "source_sha256": "febbcd41029e6f455d6c62ed2b563e2a583b1c31eec33f14bfa9e9cb20a48492",
+      "output": "drill-candidates/golden_drill_impact_effect_sprite_sheet.webp",
+      "output_sha256": "ed03b5dac84e6a4ba9b82191f538a3c6e9f9a7be1034a8136e677beadeda1d57",
+      "runtime_size": [
+        1400,
+        700
+      ],
+      "bytes": 468950,
+      "alpha": true,
+      "role": "drill fx/coupling candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": false,
+      "reason": "Must validate sprite-frame registration before activation"
+    },
+    {
+      "id": "captain_rosie_s_steampunk_drillcraft",
+      "source_name": "captain_rosie_s_steampunk_drillcraft.png",
+      "source_sha256": "404918271a0aa82c4389235b053029b7681e10d036ee427cd9ccec60abfc89d2",
+      "output": "drill-candidates/captain_rosie_s_steampunk_drillcraft.webp",
+      "output_sha256": "94992b9a3d1da12dac6c14ef545b80b8441571a38de1450c86778eb529de637b",
+      "runtime_size": [
+        1400,
+        788
+      ],
+      "bytes": 298594,
+      "alpha": true,
+      "role": "quarantined visual candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": true,
+      "reason": "Do not replace approved Captain Rosie artwork without visual review"
+    },
+    {
+      "id": "captain_rosie_s_steampunk_drill_submarine",
+      "source_name": "captain_rosie_s_steampunk_drill_submarine.png",
+      "source_sha256": "a951685ea18739261c147fa1f333a892d55d8840ccd7fdf744725e2bce3a1e2a",
+      "output": "drill-candidates/captain_rosie_s_steampunk_drill_submarine.webp",
+      "output_sha256": "96aa0aeb8a85090118cfe3b4b9d6f44a47dad4eb17cfa14f7e301cb51929c981",
+      "runtime_size": [
+        1400,
+        800
+      ],
+      "bytes": 246790,
+      "alpha": true,
+      "role": "quarantined visual candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": true,
+      "reason": "Do not replace approved Captain Rosie artwork without visual review"
+    },
+    {
+      "id": "steampunk_captain_rosie_in_flight",
+      "source_name": "steampunk_captain_rosie_in_flight.png",
+      "source_sha256": "d4ab55a8a1f888805070ac66b3d3c8814cf6f833c3f2422b22f4721e53052cbc",
+      "output": "drill-candidates/steampunk_captain_rosie_in_flight.webp",
+      "output_sha256": "36d656de7d98e34cfb3bdc9bbd47e62ace6310011e6c0b3886b9c2eec8c885d9",
+      "runtime_size": [
+        1400,
+        788
+      ],
+      "bytes": 290506,
+      "alpha": true,
+      "role": "quarantined visual candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": true,
+      "reason": "Do not replace approved Captain Rosie artwork without visual review"
+    },
+    {
+      "id": "steampunk_dog_captain_drillcraft",
+      "source_name": "steampunk_dog_captain_drillcraft.png",
+      "source_sha256": "3b80375c7efd86e68dd6d8bd1291b1f0b60659d9f016648b44cea2c1cfe7a34a",
+      "output": "drill-candidates/steampunk_dog_captain_drillcraft.webp",
+      "output_sha256": "77d3aa6b5c28bbc70b2551bf79b008ab1dc6076cd5ab0c2afb3c0d2c73a70bd6",
+      "runtime_size": [
+        1400,
+        788
+      ],
+      "bytes": 328298,
+      "alpha": true,
+      "role": "quarantined visual candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": true,
+      "reason": "Do not replace approved Captain Rosie artwork without visual review"
+    },
+    {
+      "id": "steampunk_corgi_captain_drill_vehicle",
+      "source_name": "steampunk_corgi_captain_drill_vehicle.png",
+      "source_sha256": "9a8d92336186aa7b42a76497a0d7b16d8fdb54bce31efd9f998d9256e86ada0f",
+      "output": "drill-candidates/steampunk_corgi_captain_drill_vehicle.webp",
+      "output_sha256": "afb61232efdd9093af7fc59181727d55f48c58d8156ff17848f8d185d860a1ee",
+      "runtime_size": [
+        1400,
+        800
+      ],
+      "bytes": 313146,
+      "alpha": true,
+      "role": "quarantined visual candidate",
+      "runtime_enabled": false,
+      "requires_user_art_approval": true,
+      "reason": "Do not replace approved Captain Rosie artwork without visual review"
+    },
+    {
+      "id": "painterly_amber_crystal_cave_asset_pack",
+      "source_name": "painterly_amber_crystal_cave_asset_pack.png",
+      "source_sha256": "4322556c1edd3b1c20d135c3b90777eb5b40b885d323321fd9f9138ff52680b2",
+      "output": null,
+      "role": "archived additional source, not runtime-enabled",
+      "runtime_enabled": false,
+      "reason": "Composite or derivative needs individual cutout verification"
+    }
+  ]
+}

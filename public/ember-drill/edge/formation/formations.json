@@ -1,0 +1,313 @@
+{
+  "originalArchive": "/Rosie-App-Transfer/Timekeepers Asset Pack - Midnight Observatory/EmberOGAssets.zip",
+  "originalArchiveBytes": 72255395,
+  "strategy": "real OG-asset scene dressing: structural continuous cut face below infrequent LARGE independent alpha formations, never replace with thin texture",
+  "collision": "main ribbon v=0 unchanged; ornamental tips limited to <18 units into playable channel",
+  "noRepeats": "explicit spaced world landmark placements, no tilePattern on formation images",
+  "assets": [
+    {
+      "name": "hanging-canopy-a.webp",
+      "source": "20 - Cavern Ceiling Overlay.png",
+      "sourceSha256": "64c4aa2ce3c532cdc4cf78f7c8b0b346406f28e4a439704d6f8cba3525274043",
+      "crop": [
+        90,
+        0,
+        770,
+        287
+      ],
+      "size": [
+        660,
+        279
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "hanging-canopy-b.webp",
+      "source": "20 - Cavern Ceiling Overlay.png",
+      "sourceSha256": "64c4aa2ce3c532cdc4cf78f7c8b0b346406f28e4a439704d6f8cba3525274043",
+      "crop": [
+        760,
+        0,
+        1440,
+        263
+      ],
+      "size": [
+        660,
+        255
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "hanging-canopy-c.webp",
+      "source": "20 - Cavern Ceiling Overlay.png",
+      "sourceSha256": "64c4aa2ce3c532cdc4cf78f7c8b0b346406f28e4a439704d6f8cba3525274043",
+      "crop": [
+        1410,
+        0,
+        2110,
+        297
+      ],
+      "size": [
+        660,
+        280
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rising-crystal-a.webp",
+      "source": "21 - Crystal Floor Overlay.png",
+      "sourceSha256": "50e423b31641752e5abc6ace50e4f4174f7886b4a994cb68ade55c758881502e",
+      "crop": [
+        60,
+        359,
+        780,
+        724
+      ],
+      "size": [
+        660,
+        335
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rising-crystal-b.webp",
+      "source": "21 - Crystal Floor Overlay.png",
+      "sourceSha256": "50e423b31641752e5abc6ace50e4f4174f7886b4a994cb68ade55c758881502e",
+      "crop": [
+        750,
+        461,
+        1510,
+        724
+      ],
+      "size": [
+        660,
+        228
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rising-crystal-c.webp",
+      "source": "21 - Crystal Floor Overlay.png",
+      "sourceSha256": "50e423b31641752e5abc6ace50e4f4174f7886b4a994cb68ade55c758881502e",
+      "crop": [
+        1420,
+        357,
+        2110,
+        724
+      ],
+      "size": [
+        660,
+        351
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rich-roof-a.webp",
+      "source": "35 - Dynamic Tunnel Edge D.png",
+      "sourceSha256": "756b05316cedd01f9fca365e6c6bb522ad820a4855eaccdf9a5a6969954158db",
+      "crop": [
+        140,
+        0,
+        890,
+        211
+      ],
+      "size": [
+        660,
+        186
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rich-roof-b.webp",
+      "source": "36 - Dynamic Tunnel Edge E.png",
+      "sourceSha256": "573c3eab5538cfcc1676e9519c4e601fcdff64ec7b36ba781c274834b558c94b",
+      "crop": [
+        1090,
+        0,
+        1880,
+        245
+      ],
+      "size": [
+        660,
+        205
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rich-floor-a.webp",
+      "source": "35 - Dynamic Tunnel Edge D.png",
+      "sourceSha256": "756b05316cedd01f9fca365e6c6bb522ad820a4855eaccdf9a5a6969954158db",
+      "crop": [
+        850,
+        521,
+        1650,
+        724
+      ],
+      "size": [
+        660,
+        167
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "rich-floor-b.webp",
+      "source": "36 - Dynamic Tunnel Edge E.png",
+      "sourceSha256": "573c3eab5538cfcc1676e9519c4e601fcdff64ec7b36ba781c274834b558c94b",
+      "crop": [
+        170,
+        483,
+        960,
+        724
+      ],
+      "size": [
+        660,
+        201
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "slope-roof-a.webp",
+      "source": "33 - Dynamic Tunnel Edge B.png",
+      "sourceSha256": "862c111527225988d5ec4f3e6ed2e62cfe7156dc98de68ead0541f1459b2667e",
+      "crop": [
+        320,
+        0,
+        1140,
+        209
+      ],
+      "size": [
+        660,
+        168
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "slope-roof-b.webp",
+      "source": "34 - Dynamic Tunnel Edge C.png",
+      "sourceSha256": "185770e9328de01c9bc7bed6feee8e8e2ba233410834e04387b8ab24c95ee9b1",
+      "crop": [
+        1150,
+        0,
+        1980,
+        219
+      ],
+      "size": [
+        660,
+        174
+      ],
+      "orientation": "ceiling",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "slope-floor-a.webp",
+      "source": "33 - Dynamic Tunnel Edge B.png",
+      "sourceSha256": "862c111527225988d5ec4f3e6ed2e62cfe7156dc98de68ead0541f1459b2667e",
+      "crop": [
+        1050,
+        529,
+        1890,
+        724
+      ],
+      "size": [
+        660,
+        153
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "slope-floor-b.webp",
+      "source": "34 - Dynamic Tunnel Edge C.png",
+      "sourceSha256": "185770e9328de01c9bc7bed6feee8e8e2ba233410834e04387b8ab24c95ee9b1",
+      "crop": [
+        150,
+        517,
+        1000,
+        724
+      ],
+      "size": [
+        660,
+        161
+      ],
+      "orientation": "floor",
+      "anchor": "ceiling: alpha nose 12-18px into corridor, rest outward; floor: alpha tips max 12-18px into corridor",
+      "edits": "original pixels only; intact natural alpha silhouettes, isolated source contact, horizontal alpha feather, Lanczos WebP",
+      "role": "nonrepeating large sculptural cliff/root/crystal formation; register to local tunnel tangent and outward normal"
+    },
+    {
+      "name": "original-roots-1.webp",
+      "source": "14 - Hanging Roots.png",
+      "sourceSha256": "cdc7e8d54a99d6119d3142b9fb4d1d8cf8653541018023f5bf38bac3fc564ab8",
+      "crop": [
+        100,
+        180,
+        665,
+        885
+      ],
+      "size": [
+        385,
+        480
+      ],
+      "orientation": "ceiling",
+      "anchor": "tendrils register behind collision lip; fringe only just inside safe channel",
+      "edits": "crop and resize source alpha, feather only horizontal ends; no invented roots",
+      "role": "standalone substantial hanging root relief"
+    },
+    {
+      "name": "original-roots-2.webp",
+      "source": "14 - Hanging Roots.png",
+      "sourceSha256": "cdc7e8d54a99d6119d3142b9fb4d1d8cf8653541018023f5bf38bac3fc564ab8",
+      "crop": [
+        650,
+        180,
+        1190,
+        885
+      ],
+      "size": [
+        368,
+        480
+      ],
+      "orientation": "ceiling",
+      "anchor": "tendrils register behind collision lip; fringe only just inside safe channel",
+      "edits": "crop and resize source alpha, feather only horizontal ends; no invented roots",
+      "role": "standalone substantial hanging root relief"
+    }
+  ]
+}

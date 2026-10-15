@@ -1,0 +1,61 @@
+{
+  "sourceArchive": "Dropbox /Rosie-App-Transfer/Timekeepers Asset Pack - Midnight Observatory/EmberOGAssets.zip",
+  "sourceArchiveBytes": 72255395,
+  "original": "32 - Dynamic Tunnel Edge A.png",
+  "unmodifiedOriginalRetained": "Dropbox only; no 72MB master committed to runtime",
+  "prototypeGate": "Barkroot only; approve actual iPhone flat/climb/dive before variants/Ruby",
+  "assets": [
+    {
+      "name": "barkroot-top.webp",
+      "path": "/ember-drill/edge/barkroot-top.webp",
+      "source": "32 - Dynamic Tunnel Edge A.png",
+      "archiveSource": "04 - Barkroot and Dynamic Tunnel Artwork/32 - Dynamic Tunnel Edge A.png",
+      "sourceSha256": "62a2bf9091e2f134a617dac59f571c29fd93d233fc539d64136a414639fd3726",
+      "size": [
+        2048,
+        120
+      ],
+      "role": "ceiling",
+      "anchor": "v=0 at collision boundary, U=continuous world arc length * 0.94",
+      "visibleOriginalContourRows": [
+        130,
+        247
+      ],
+      "edits": "alpha-cut upper/lower silhouette, per-column air contour registration, 148px bidirectional endpoint seam repair, alpha feather after outward pixel 79, optimized WebP",
+      "tileTest": "3x horizontal repetition; L/R RGBA mean absolute error 0.0",
+      "seamError": 0.0,
+      "alphaAtV0Mean": 165.43,
+      "alphaAtV119Mean": 0.0,
+      "safeInwardProtrusion": 0,
+      "drawLayer": "world-arc cut faces above scenery, below pickups/hazards/vehicle",
+      "expectedScene": "Barkroot representative prototype at flat, climb and dive; not yet Ruby or Temple",
+      "replaces": "legacy earth textures as dominant structural tunnel edge"
+    },
+    {
+      "name": "barkroot-bottom.webp",
+      "path": "/ember-drill/edge/barkroot-bottom.webp",
+      "source": "32 - Dynamic Tunnel Edge A.png",
+      "archiveSource": "04 - Barkroot and Dynamic Tunnel Artwork/32 - Dynamic Tunnel Edge A.png",
+      "sourceSha256": "62a2bf9091e2f134a617dac59f571c29fd93d233fc539d64136a414639fd3726",
+      "size": [
+        2048,
+        120
+      ],
+      "role": "floor",
+      "anchor": "v=0 at collision boundary, U=continuous world arc length * 0.94",
+      "visibleOriginalContourRows": [
+        456,
+        590
+      ],
+      "edits": "alpha-cut upper/lower silhouette, per-column air contour registration, 148px bidirectional endpoint seam repair, alpha feather after outward pixel 79, optimized WebP",
+      "tileTest": "3x horizontal repetition; L/R RGBA mean absolute error 0.0",
+      "seamError": 0.0,
+      "alphaAtV0Mean": 177.83,
+      "alphaAtV119Mean": 0.0,
+      "safeInwardProtrusion": 0,
+      "drawLayer": "world-arc cut faces above scenery, below pickups/hazards/vehicle",
+      "expectedScene": "Barkroot representative prototype at flat, climb and dive; not yet Ruby or Temple",
+      "replaces": "legacy earth textures as dominant structural tunnel edge"
+    }
+  ]
+}
