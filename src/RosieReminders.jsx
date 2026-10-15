@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./RosieReminders.css";
 import { useRosieAccount } from "./private/AccountContext.jsx";
 import { PrivateNotes } from "./private/PrivateNotes.jsx";
+import { isScheduled, isDone, doneKey, isOverdue, nextOccurrence, datePlus, calendarIcs, validateBackup } from "./reminderLogic.js";
 
 const KEY = "rosieverse.reminders.v1";
 const EMPTY = { version: 1, items: [], notes: [], goals: [], gratitude: [] };
@@ -36,18 +37,6 @@ function readStore() {
   } catch { /* Fall back to an empty organizer when storage is disabled or malformed. */ }
   return { ...EMPTY, items: [], notes: [], goals: [], gratitude: [] };
 }
-function isScheduled(item, key) {
-  if (!item.date || item.date > key) return false;
-  if (item.repeat === "daily") return true;
-  if (item.repeat === "weekly") {
-    const elapsed = Math.round((dateObj(key) - dateObj(item.date)) / 86400000);
-    return elapsed % 7 === 0;
-  }
-  if (item.repeat === "monthly") return Number(key.slice(8)) === Number(item.date.slice(8));
-  return item.date === key;
-}
-function doneKey(item, key) { return item.repeat && item.repeat !== "none" ? key : "once"; }
-function isDone(item, key) { return (item.completedDates || []).includes(doneKey(item, key)); }
 const blankItem = (category, day = dateKey()) => ({
   id: "", category, title: "", detail: "", date: category === "shopping" ? "" : day,
   time: "", repeat: "none", priority: "normal"
@@ -85,6 +74,16 @@ export default function RosieReminders() {
   const [groceryDraft, setGroceryDraft] = useState("");
   const [editingQuickId, setEditingQuickId] = useState(null);
   const [editingQuickTitle, setEditingQuickTitle] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [todayView, setTodayView] = useState("day");
+  const [quickDue, setQuickDue] = useState("today");
+  const [quickPriority, setQuickPriority] = useState(false);
+  const [noteScope, setNoteScope] = useState("cloud");
+  const [noteSearch, setNoteSearch] = useState("");
+  const [undoSnapshot, setUndoSnapshot] = useState(null);
+  const [notice, setNotice] = useState("");
+  const [liveDay, setLiveDay] = useState(dateKey);
 
   const [focusedNote, setFocusedNote] = useState(null);
   const importRef = useRef(null);
@@ -95,22 +94,50 @@ export default function RosieReminders() {
   }, [store]);
 
   const shown = useMemo(() => {
-    const source = section === "today" ? store.items.filter(x => isScheduled(x, selectedDate))
-      : store.items.filter(x => x.category === section);
-    if (section === "shopping") return source; // Keep exactly the input order: no automatic categorization.
+    let source;
+    if (section === "today" && todayView === "upcoming") {
+      source = store.items.filter(x => x.category !== "shopping").map(x => {
+        const occurrenceDate = nextOccurrence(x, selectedDate, 14);
+        return occurrenceDate ? { ...x, occurrenceDate } : null;
+      }).filter(Boolean);
+    } else if (section === "today" && todayView === "overdue") {
+      source = store.items.filter(x => isOverdue(x, selectedDate));
+    } else if (section === "today") {
+      source = store.items.filter(x => isScheduled(x, selectedDate) ||
+        (selectedDate === liveDay && isOverdue(x, selectedDate)));
+    } else {
+      source = store.items.filter(x => x.category === section);
+    }
+    const query = searchText.trim().toLocaleLowerCase();
+    if (query) source = source.filter(x =>
+      (x.title + " " + (x.detail || "")).toLocaleLowerCase().includes(query));
+    if (statusFilter !== "all") source = source.filter(x => {
+      const done = isDone(x, x.occurrenceDate || selectedDate);
+      return statusFilter === "done" ? done : statusFilter === "open" ? !done
+        : statusFilter === "high" ? x.priority === "high" && !done : true;
+    });
+    if (section === "shopping") return source;
     return [...source].sort((a, b) =>
-      Number(isDone(a, selectedDate)) - Number(isDone(b, selectedDate)) ||
-      (a.date || "9999").localeCompare(b.date || "9999") ||
+      Number(isDone(a, a.occurrenceDate || selectedDate)) -
+        Number(isDone(b, b.occurrenceDate || selectedDate)) ||
+      Number(isOverdue(b, selectedDate)) - Number(isOverdue(a, selectedDate)) ||
+      (a.occurrenceDate || a.date || "9999").localeCompare(b.occurrenceDate || b.date || "9999") ||
       (a.time || "99:99").localeCompare(b.time || "99:99") ||
       a.title.localeCompare(b.title));
-  }, [section, store.items, selectedDate]);
+  }, [section, todayView, store.items, selectedDate, liveDay, searchText, statusFilter]);
   const counts = useMemo(() => ({
     tasks: store.items.filter(x => x.category === "tasks" && !isDone(x, selectedDate)).length,
     shopping: store.items.filter(x => x.category === "shopping" && !isDone(x, selectedDate)).length,
     appointments: store.items.filter(x => x.category === "appointments" && !isDone(x, selectedDate)).length,
     notes: user ? cloudNoteCount : store.notes.length, goals: store.goals.length
   }), [store, selectedDate, user, cloudNoteCount]);
-  const featured = shown.find(x => x.priority === "high" && !isDone(x, selectedDate));
+  const featured = shown.find(x => x.priority === "high" && !isDone(x, x.occurrenceDate || selectedDate));
+  const overdueCount = store.items.filter(x => isOverdue(x, liveDay)).length;
+  const upcomingCount = store.items.filter(x => x.category !== "shopping" &&
+    nextOccurrence(x, liveDay, 14)).length;
+  const completedHere = store.items.filter(x => (section === "today"
+    ? isScheduled(x, selectedDate) || isOverdue(x, selectedDate) : x.category === section) &&
+    isDone(x, selectedDate) && (!x.repeat || x.repeat === "none")).length;
 
   const openNew = (category = section === "today" ? "tasks" : section) => {
     setForm(blankItem(["tasks", "shopping", "appointments"].includes(category) ? category : "tasks", selectedDate));
@@ -120,9 +147,40 @@ export default function RosieReminders() {
     setForm({ ...blankItem(item.category, selectedDate), ...item });
     setEditorOpen(true);
   };
+  // Update the day on return to the app, including after the phone has been asleep.
+  useEffect(() => {
+    const refreshDay = () => {
+      const now = dateKey();
+      setLiveDay(previous => {
+        if (previous !== now) setSelectedDate(current => current === previous ? now : current);
+        return now;
+      });
+    };
+    const onStorage = event => {
+      if (event.key === KEY && event.newValue) {
+        try { setStore(validateBackup(JSON.parse(event.newValue))); }
+        catch { /* Ignore malformed changes from another tab. */ }
+      }
+    };
+    window.addEventListener("focus", refreshDay);
+    document.addEventListener("visibilitychange", refreshDay);
+    window.addEventListener("storage", onStorage);
+    const interval = window.setInterval(refreshDay, 60000);
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", refreshDay);
+      document.removeEventListener("visibilitychange", refreshDay);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
+
   const saveItem = (event) => {
     event.preventDefault();
     if (!form.title.trim()) return;
+    if (form.repeat !== "none" && !form.date) {
+      setNotice("Choose a starting date for repeating reminders.");
+      return;
+    }
     const next = { ...form, title: form.title.trim(), detail: form.detail.trim() };
     setStore(prev => ({ ...prev, items: next.id
       ? prev.items.map(x => x.id === next.id ? { ...x, ...next } : x)
@@ -138,9 +196,12 @@ export default function RosieReminders() {
     if (!title) return;
     setStore(prev => ({ ...prev, items: [...prev.items, {
       ...blankItem("tasks", selectedDate), id: makeId(), title,
+      date: quickDue === "none" ? "" : quickDue === "tomorrow" ? datePlus(liveDay, 1) : liveDay,
+      priority: quickPriority ? "high" : "normal",
       completedDates: []
     }] }));
     setQuickTask("");
+    setNotice("Task added.");
   };
   const addGroceries = (event) => {
     event.preventDefault();
@@ -151,6 +212,7 @@ export default function RosieReminders() {
       title, date: "", completedDates: []
     }))] }));
     setGroceryDraft("");
+    setNotice(titles.length + " shopping item" + (titles.length === 1 ? "" : "s") + " added.");
   };
   const startQuickEdit = (item) => {
     setEditingQuickId(item.id);
@@ -166,11 +228,60 @@ export default function RosieReminders() {
   };
   const removeItem = (id) => {
     if (!window.confirm("Delete this reminder?")) return;
-    setStore(prev => ({ ...prev, items: prev.items.filter(x => x.id !== id) }));
+    setStore(prev => { setUndoSnapshot(prev); return { ...prev, items: prev.items.filter(x => x.id !== id) }; });
+    setNotice("Reminder deleted. Undo is available below.");
     setEditorOpen(false);
   };
+  const removeQuick = id => {
+    setStore(prev => { setUndoSnapshot(prev); return { ...prev, items: prev.items.filter(x => x.id !== id) }; });
+    setNotice("Item removed.");
+  };
+  const clearCompleted = () => {
+    if (!completedHere || !window.confirm("Remove " + completedHere + " completed one-time item(s)? Repeating reminders will be kept.")) return;
+    setStore(prev => {
+      setUndoSnapshot(prev);
+      return { ...prev, items: prev.items.filter(x => {
+        if (x.repeat && x.repeat !== "none") return true;
+        const inSection = section === "today" ? isScheduled(x, selectedDate) || isOverdue(x, selectedDate)
+          : x.category === section;
+        return !inSection || !isDone(x, selectedDate);
+      }) };
+    });
+    setNotice(completedHere + " completed items cleared.");
+  };
+  const deferItem = item => {
+    if (item.repeat && item.repeat !== "none") { openEdit(item); return; }
+    setStore(prev => {
+      setUndoSnapshot(prev);
+      return { ...prev, items: prev.items.map(x => x.id === item.id ?
+        { ...x, date: datePlus(liveDay, 1), completedDates: [] } : x) };
+    });
+    setNotice("Moved to tomorrow.");
+  };
+  const copyShopping = async () => {
+    const text = store.items.filter(x => x.category === "shopping" && !isDone(x, selectedDate))
+      .map(x => "☐ " + x.title).join("\\n");
+    if (!text) { setNotice("No unchecked items to copy."); return; }
+    try { await navigator.clipboard.writeText(text); setNotice("Unchecked shopping list copied."); }
+    catch { setNotice("Clipboard unavailable. You can use the JSON backup instead."); }
+  };
+  const exportCalendar = (items = store.items) => {
+    const content = calendarIcs(items);
+    const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "Rosie Reminders Calendar.ics";
+    document.body.appendChild(anchor); anchor.click(); anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+    setNotice("Calendar file prepared. Import it into your calendar; changes will not sync automatically.");
+  };
+  const undoLast = () => {
+    if (!undoSnapshot) return;
+    setStore(undoSnapshot); setUndoSnapshot(null); setNotice("Restored previous items.");
+  };
   const toggleDone = (item) => {
-    const marker = doneKey(item, selectedDate);
+    const marker = doneKey(item, item.occurrenceDate || selectedDate);
     setStore(prev => ({ ...prev, items: prev.items.map(x => {
       if (x.id !== item.id) return x;
       const dates = x.completedDates || [];
@@ -238,7 +349,8 @@ export default function RosieReminders() {
   };
   const chooseSection = (id) => {
     setSection(id);
-    if (id === "today") setTab("today");
+    setSearchText(""); setStatusFilter("all");
+    if (id === "today") { setTab("today"); setTodayView("day"); }
     scrollToOrganizer();
   };
   const addNote = () => {
@@ -246,6 +358,7 @@ export default function RosieReminders() {
     setStore(prev => ({ ...prev, notes: [{ id, title: "Untitled note", body: "", updatedAt: Date.now() }, ...prev.notes] }));
     setFocusedNote(id);
     setSection("notes");
+    setNoteScope("device");
   };
   const updateNote = (id, patch) => setStore(prev => ({ ...prev, notes: prev.notes.map(x => x.id === id ? { ...x, ...patch, updatedAt: Date.now() } : x) }));
   const addGoal = (event) => {
@@ -278,14 +391,15 @@ export default function RosieReminders() {
     try {
       if (file.size > 2_000_000) throw new Error("Backup exceeds the 2 MB limit.");
       const parsed = JSON.parse(await file.text());
-      if (parsed.version !== 1 || !["items", "notes", "goals", "gratitude"].every(k => Array.isArray(parsed[k])))
-        throw new Error("This is not a compatible Rosie Reminders backup.");
+      const restored = validateBackup(parsed);
       if (!window.confirm("Replace all current Reminders data with the backup?")) return;
-      setStore(parsed);
+      setUndoSnapshot(store);\n      setStore(restored);\n      setNotice("Backup restored. Your previous data can be recovered with Undo.");
       setFocusedNote(null);
     } catch (error) { window.alert(error.message || "Unable to import backup."); }
   };
-  const notesActive = store.notes.find(n => n.id === focusedNote) || store.notes[0];
+  const matchingNotes = store.notes.filter(n =>
+    (n.title + " " + n.body).toLocaleLowerCase().includes(noteSearch.trim().toLocaleLowerCase()));
+  const notesActive = matchingNotes.find(n => n.id === focusedNote) || matchingNotes[0];
 
   useEffect(() => {
     if (!editorOpen) return undefined;
