@@ -491,7 +491,7 @@ export default function RosieReminders() {
             {completedHere > 0 && <button type="button" onClick={clearCompleted}>Clear completed ({completedHere})</button>}
             {searchText && <button type="button" onClick={() => setSearchText("")}>Clear search</button>}
           </div>
-        </div>
+        </div>}
 
         {section === "today" && <>
           <div className="rr-day-views" role="group" aria-label="Schedule range">
