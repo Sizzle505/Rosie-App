@@ -51,9 +51,9 @@ export function AccountProvider({ children }) {
     await rosieRequest("auth/logout", { method: "POST" });
     setUser(null);
   }, []);
-  const register = useCallback(async (username, displayName, pin) => {
+  const register = useCallback(async (username, pin) => {
     const result = await rosieRequest("auth/register", {
-      method: "POST", body: JSON.stringify({ username, displayName, pin })
+      method: "POST", body: JSON.stringify({ username, pin })
     });
     setUser(result.user);
     setConnectionError("");
