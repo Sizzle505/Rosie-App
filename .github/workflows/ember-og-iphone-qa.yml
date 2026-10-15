@@ -5,6 +5,9 @@ on:
     paths:
       - "src/emberTunnelRibbons.js"
       - "src/emberDrillPainter.js"
+      - "src/emberNewBackgrounds.js"
+      - "scripts/verify-ember-new-assets.mjs"
+      - "public/ember-drill/new-assets/**"
       - "src/emberAugerFX.js"
       - "tests/ember-auger-turbo.test.mjs"
       - "scripts/verify-ember-auger-turbo.mjs"
@@ -51,6 +54,7 @@ jobs:
           node scripts/verify-ember-header-and-obstacles.mjs
           node scripts/verify-ember-auger-turbo.mjs
           node scripts/verify-ember-course-capture.mjs
+          node scripts/verify-ember-new-assets.mjs
       - name: Keep unmodified gameplay evidence and exact sprite manifest
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,6 +65,8 @@ jobs:
             artifacts/ember-og-header-audit/
             artifacts/ember-auger-turbo-iphone/
             artifacts/ember-designed-course/
+            artifacts/ember-new-assets-iphone/
+            public/ember-drill/new-assets/integration-manifest.json
             public/ember-drill/edge/edge-assets.json
           retention-days: 14
           if-no-files-found: ignore
