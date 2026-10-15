@@ -348,7 +348,7 @@ export default function RosieTimekeeper() {
             "--rtk-numeral-color": selectedColor.light ? "#342b30" : "#fff1d5" }}
           aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
-          <span className="rtk-face-overlay" style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.webp")` }} aria-hidden="true" />
+          <span className={"rtk-face-overlay is-"+selectedFrame.id} style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.webp")` }} aria-hidden="true" />
           <span className="rtk-bezel" aria-hidden="true" />
           {mode==="world" && <span className="rtk-world-hands" aria-hidden="true">
             {[
