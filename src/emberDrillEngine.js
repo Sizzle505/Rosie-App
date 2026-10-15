@@ -68,9 +68,12 @@ export function makeCourse(seed = 1467) {
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
     if (x > 1900 && motif % 2 === 1) {
       const pos = x + 425;
+      // Every third geological set ends in a recovery tunnel. This gives the
+      // player time to re-center before the next deliberate obstacle pattern.
+      const recoveryStretch = Math.floor((x - 1900) / 3050) % 3 === 2;
       // Sculpted original rocks replace nearby generic hazards, not stack
       // two untelegraphed collision volumes on the same screen.
-      if (nearFormation(pos,300)) continue;
+      if (recoveryStretch || nearFormation(pos,300)) continue;
       const side = rand() < 0.5 ? -1 : 1;
       objects.push({ id: ++id, kind: motif === 5 ? "spike" : "rock", x: pos,
         y: clamp(tunnelCenter(pos) + side * 112, 90, 720), radius: motif === 5 ? 37 : 42, taken: false });
@@ -88,6 +91,7 @@ export function newRun(seed = 1467) {
   return { running: true, ended: false, time: 0, scroll: 0, y: tunnelCenter(DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
+    boosts: 0, shards: 0, damageTaken: 0,
     objects: makeCourse(seed), formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
@@ -95,6 +99,7 @@ export function triggerTurbo(s) {
   const repaired = s.hull < 5;
   s.boostTime = TURBO_DURATION; s.charge = 0;
   s.hull = Math.min(5, s.hull + 1);
+  s.boosts++;
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y, repaired });
   return true;
 }
@@ -136,7 +141,7 @@ export function updateRun(s, dt, up = false, down = false) {
     if (!intersectsSculpture(formation, tipWorldX, tipY)) continue;
     s.formationHits.push(formation.at); // One contact per geological obstacle.
     if (boosted) {
-      s.score += 125;
+      s.score += 125; s.shards++;
       s.events.push({type:"shatter",x:tip.x,y:tipY});
     } else if (s.hitCooldown<=0) takeHit(s);
   }
@@ -153,7 +158,7 @@ export function updateRun(s, dt, up = false, down = false) {
     obj.taken = true;
     if (obj.kind === "rock" || obj.kind === "spike") {
       if (boosted) {
-        s.score += 125;
+        s.score += 125; s.shards++;
         s.events.push({ type: "shatter", x: (rock ? tip.x : DRILL_ANCHOR) + deltaX, y: obj.y });
       } else if (s.hitCooldown <= 0) takeHit(s);
       continue;
@@ -178,6 +183,6 @@ export function updateRun(s, dt, up = false, down = false) {
   return s;
 }
 function takeHit(s) {
-  s.hull--; s.hitCooldown = 1.45; s.shock = 0.42; s.combo = 0;
+  s.hull--; s.damageTaken++; s.hitCooldown = 1.45; s.shock = 0.42; s.combo = 0;
   s.events.push({ type: "hit", x: DRILL_ANCHOR, y: s.y });
 }
