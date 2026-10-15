@@ -496,23 +496,6 @@ export default function RosieTimekeeper() {
             <img className="rtk-completion-flourish" src={LUXURY_ASSETS+"world-clock-ui/completion-sparkle.webp"}
               alt="" aria-hidden="true" draggable="false" />}
         </section>
-        <div className="rtk-top-controls" aria-label="Clock mode and appearance">
-          <button type="button" className="rtk-face-trigger" onClick={() => setDialPickerOpen(open => !open)}
-            aria-label="Choose clock face and color" aria-expanded={dialPickerOpen} title="Clock faces and colors">✦</button>
-          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
-            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
-            <button type="button" className={"rtk-globe-mode"+(mode === "world" ? " chosen" : "")} aria-label="World Clock" title="World Clock" aria-pressed={mode === "world"} onClick={() => pickMode("world")}>
-              <img src={LUXURY_ASSETS+"world-clock-ui/globe.webp"} alt="" draggable="false" />
-            </button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
-          </div>
-          {!dialPickerOpen && <div className="rtk-enamel-strip" role="group" aria-label="Clock enamel colors">
-            {DIAL_COLORS.map(item=><button type="button" key={item.id} title={item.label}
-              className={dialColor===item.id?"chosen":""} aria-label={item.label+" clock color"}
-              aria-pressed={dialColor===item.id} style={{"--swatch":item.center}}
-              onClick={()=>setDialColor(item.id)}/>)}
-          </div>}
-        </div>
         <div className={"rtk-action-deck"+(mode==="world" ? " is-world" : "")} aria-label="Timekeeper controls">
           <div className="rtk-controls">
             <button type="button" className="rtk-secondary-action rtk-lap-action"
@@ -537,6 +520,23 @@ export default function RosieTimekeeper() {
               <span className="rtk-action-word">Reset</span>
             </button>
           </div>
+        </div>
+        <div className="rtk-top-controls" aria-label="Clock mode and appearance">
+          <button type="button" className="rtk-face-trigger" onClick={() => setDialPickerOpen(open => !open)}
+            aria-label="Choose clock face and color" aria-expanded={dialPickerOpen} title="Clock faces and colors">✦</button>
+          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
+            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
+            <button type="button" className={"rtk-globe-mode"+(mode === "world" ? " chosen" : "")} aria-label="World Clock" title="World Clock" aria-pressed={mode === "world"} onClick={() => pickMode("world")}>
+              <img src={LUXURY_ASSETS+"world-clock-ui/globe.webp"} alt="" draggable="false" />
+            </button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
+          </div>
+          {!dialPickerOpen && <div className="rtk-enamel-strip" role="group" aria-label="Clock enamel colors">
+            {DIAL_COLORS.map(item=><button type="button" key={item.id} title={item.label}
+              className={dialColor===item.id?"chosen":""} aria-label={item.label+" clock color"}
+              aria-pressed={dialColor===item.id} style={{"--swatch":item.center}}
+              onClick={()=>setDialColor(item.id)}/>)}
+          </div>}
         </div>
         <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")+(dialPickerOpen?" is-customizing":"")} aria-label="Timekeeper settings and splits">
           {dialPickerOpen && <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
