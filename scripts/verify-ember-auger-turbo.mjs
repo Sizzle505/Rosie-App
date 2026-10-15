@@ -83,8 +83,10 @@ for(const data of [still,spin,turbo,turboLater,climb,dive,expired]){
   assert.ok(chassis,"Only preserved Rosie source vehicle");
   for(let k=0;k<6;k++)assert.ok(Math.abs(auger[0].matrix[k]-chassis.matrix[k])<1e-6,
     "Auger detached from body at transform "+k);
-  assert.equal(auger[0].args.at(-4),56);
-  assert.equal(auger[0].args.at(-2),120);
+  assert.equal(auger[0].args.at(-4),44,"Auger must be seated 12px farther into brass collar");
+  assert.equal(auger[0].args.at(-3),-52,"Auger must sit 3px lower");
+  assert.equal(auger[0].args.at(-2),120,"Auger scale may not change");
+  assert.equal(auger[0].args.at(-1),110,"Auger scale may not change");
   assert.equal(data.calls.filter(x=>x.asset==="auger-spin.png").length,0,"Old cone must not be painted");
   assert.equal(data.calls.filter(x=>x.asset==="turbo-head-frames.webp").length,0,"No ghost head");
 }
@@ -94,6 +96,8 @@ for(const data of [turbo,turboLater,climb,dive]){
   const impact=data.calls.find(x=>x.asset==="golden_drill_impact_effect_sprite_sheet.webp");
   assert.ok(jet,"NEW eight-frame rear jet missing");
   assert.ok(impact,"NEW eight-frame event flare missing");
+  assert.equal(impact.args.at(-4),135,"Impact follows the corrected tip X");
+  assert.equal(impact.args.at(-3),-36,"Impact follows the corrected tip Y");
   const dot=jet.matrix[0]*head.matrix[0]+jet.matrix[1]*head.matrix[1];
   assert.ok(dot<-.5,"Only jet must mirror horizontally");
   const dx=jet.matrix[4]-head.matrix[4],dy=jet.matrix[5]-head.matrix[5];
