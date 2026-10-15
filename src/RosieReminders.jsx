@@ -488,7 +488,7 @@ export default function RosieReminders() {
           <div className="rr-utility-actions">
             {section === "shopping" && <button type="button" onClick={copyShopping}>Copy unchecked</button>}
             {section !== "shopping" && <button type="button" onClick={() => exportCalendar(section === "today" ? store.items : store.items.filter(x => x.category === section))}>↓ Calendar .ics</button>}
-            {completedHere > 0 && <button type="button" onClick={clearCompleted}>Clear completed ({completedHere})</button>}
+            {completedHere > 0 && (section !== "today" || todayView === "day") && <button type="button" onClick={clearCompleted}>Clear completed ({completedHere})</button>}
             {searchText && <button type="button" onClick={() => setSearchText("")}>Clear search</button>}
           </div>
         </div>}
@@ -662,6 +662,16 @@ export default function RosieReminders() {
           {store.gratitude.map(g => <div className="rr-gratitude" key={g.id}><span><b>{pretty(g.date,{month:"short",day:"numeric"})}</b> {g.text}</span><button type="button" aria-label="Remove gratitude entry" onClick={() => setStore(prev=>({...prev,gratitude:prev.gratitude.filter(x=>x.id!==g.id)}))}>×</button></div>)}
           {!store.gratitude.length && !store.goals.length && <p className="rr-empty">A brighter day begins with one small step.</p>}
         </div>}
+        <div className="rr-backup-tools" aria-label="Save or restore your organizer">
+          <div className="rr-backup-actions">
+            <button type="button" onClick={exportData}>↓ Download backup</button>
+            <button type="button" onClick={() => importRef.current?.click()}>↑ Restore backup</button>
+            <input ref={importRef} type="file" accept=".json,application/json"
+              className="rr-screen-reader" onChange={importData}
+              aria-label="Select Rosie Reminders backup" tabIndex={-1} />
+          </div>
+          <small>Reminders, shopping, goals and device notes save locally. Backups can move them to another device; signed-in cloud notes are separate.</small>
+        </div>
       </section>}
     </section>
     {editorOpen && <div className="rr-modal-cover" onMouseDown={e => { if(e.target===e.currentTarget) setEditorOpen(false); }}>
