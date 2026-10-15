@@ -393,7 +393,9 @@ export default function RosieReminders() {
       const parsed = JSON.parse(await file.text());
       const restored = validateBackup(parsed);
       if (!window.confirm("Replace all current Reminders data with the backup?")) return;
-      setUndoSnapshot(store);\n      setStore(restored);\n      setNotice("Backup restored. Your previous data can be recovered with Undo.");
+      setUndoSnapshot(store);
+      setStore(restored);
+      setNotice("Backup restored. Your previous data can be recovered with Undo.");
       setFocusedNote(null);
     } catch (error) { window.alert(error.message || "Unable to import backup."); }
   };
