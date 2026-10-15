@@ -1,0 +1,55 @@
+name: Ember new background and formation binary import (one-time)
+on:
+  push:
+    branches: ["work/ember-og-ribbon-prototype-20261014"]
+    paths: [".github/workflows/ember-assets-import-20261014.yml"]
+permissions:
+  contents: write
+jobs:
+  import-new-source-derived:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download runtime binaries from temporary verified asset transfer
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 3 --max-time 110 \
+            "https://sb-3sw7gwjvlpng.vercel.run/runtime-bundle.zip" -o /tmp/ember-runtime-bundle.zip
+          echo "80c1621647213f5033e1a2928553418c8d0829e7952bf75275b270ba25c77b87  /tmp/ember-runtime-bundle.zip" | sha256sum -c -
+          mkdir -p public/ember-drill/new-assets
+          unzip -oq /tmp/ember-runtime-bundle.zip -d /tmp/ember-runtime-verified
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,shutil
+          src=Path('/tmp/ember-runtime-verified')
+          m=json.loads((src/'integration-manifest.json').read_text())
+          dest=Path('public/ember-drill/new-assets')
+          verified=0
+          for a in m['assets']:
+            if not a.get('output'):continue
+            p=src/'runtime'/a['output']
+            assert p.is_file(),p
+            digest=hashlib.sha256(p.read_bytes()).hexdigest()
+            assert digest==a['output_sha256'],(a['id'],digest,a['output_sha256'])
+            target=dest/a['output'];target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(p,target)
+            verified+=1
+          assert verified==31,verified
+          shutil.copyfile(src/'integration-manifest.json',dest/'integration-manifest.json')
+          print('VERIFIED 10 BACKGROUNDS + 12 FORMATIONS + 9 STAGED DRILL/VEHICLE ASSETS')
+          PY
+      - name: Commit assets permanently to isolated Ember feature branch
+        run: |
+          set -e
+          git config user.name "Ember Verified Asset Forge"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/ember-drill/new-assets
+          if ! git diff --cached --quiet; then
+            git commit -m "Permanently integrate 31 hash-verified Ember runtime source assets"
+            git fetch origin work/ember-og-ribbon-prototype-20261014
+            git rebase origin/work/ember-og-ribbon-prototype-20261014
+            git push origin HEAD:work/ember-og-ribbon-prototype-20261014
+          fi
