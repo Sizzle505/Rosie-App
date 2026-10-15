@@ -353,10 +353,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           onPointerCancel={e=>hold("down",false,e)} onLostPointerCapture={e=>hold("down",false,e)}
           aria-label="Angle the drill downward"><span>▼</span><small>ANGLE DOWN</small></button>
       </div>
-      {(active||paused)&&<div className="ember-run-actions">
-        <button type="button" onClick={togglePause}>{paused?"RESUME":"PAUSE"}</button>
+      {active&&<div className="ember-run-actions">
+        <button type="button" onClick={togglePause}>PAUSE</button>
         <button type="button" onClick={start}>RESTART RUN</button>
-        <span>{active?"Swipe the tunnel to steer · Space for Turbo":"Your excavation is safely paused."}</span>
+        <span>Swipe the tunnel to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span>
         <span className="ember-best">BEST {best.toLocaleString()}</span></div>
