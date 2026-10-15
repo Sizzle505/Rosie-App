@@ -109,7 +109,8 @@ const DRILL_ART = {
 const formatTime = t => Math.max(0, Math.ceil(RUN_DURATION - t)) + "s";
 function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
-    cheese:s.cheese, combo:s.combo, boost:s.boostTime,
+    cheese:s.cheese, combo:s.combo, boost:s.boostTime, boosts:s.boosts, shards:s.shards,
+    damageTaken:s.damageTaken, distance:Math.round(s.distance/10),
     passage:Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))), result:s.result };
 }
 function playSound(context,kind) {
@@ -322,7 +323,15 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <h3>{title}</h3>
             <p>{subtitle}</p>
             {mode==="ended"&&hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />}
-            {mode==="ended"&&<div className="ember-results"><span><b>{hud.score.toLocaleString()}</b> POINTS</span><span><b>{hud.gems}</b> GEMS</span><span><b>{best.toLocaleString()}</b> BEST</span></div>}
+            {mode==="ended"&&<div className="ember-results">
+              <span><b>{hud.score.toLocaleString()}</b> POINTS</span>
+              <span><b>{hud.distance.toLocaleString()}m</b> EXCAVATED</span>
+              <span><b>{hud.gems}</b> GEMS</span>
+              <span><b>{hud.boosts}</b> TURBOS</span>
+              <span><b>{hud.shards}</b> ROCKS SHATTERED</span>
+              <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
+              <span><b>{best.toLocaleString()}</b> BEST</span>
+            </div>}
             <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
             <small>Hold ▲ / ▼ to steer. Space ignites Turbo.</small>
           </div>}
