@@ -1,0 +1,33 @@
+name: Rosie Reminders utility checks
+on:
+  push:
+    branches:
+      - work/reminders-utility-upgrade-20261014
+    paths:
+      - 'src/RosieReminders.jsx'
+      - 'src/RosieReminders.css'
+      - 'src/reminderLogic.js'
+      - 'tests/reminder-logic.test.mjs'
+      - '.github/workflows/rosie-reminders-utility.yml'
+  pull_request:
+    paths:
+      - 'src/RosieReminders.jsx'
+      - 'src/RosieReminders.css'
+      - 'src/reminderLogic.js'
+      - 'tests/reminder-logic.test.mjs'
+      - '.github/workflows/rosie-reminders-utility.yml'
+permissions:
+  contents: read
+jobs:
+  reminders-logic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/reminder-logic.test.mjs
+      - run: npm run build
