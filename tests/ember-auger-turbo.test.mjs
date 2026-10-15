@@ -24,13 +24,13 @@ test("all SIXTEEN registered original frames have unique source rectangles",()=>
  assert.notEqual(augerFrameIndex(.09,true),augerFrameIndex(.09,false));
 });
 test("the single auger and rear jet have locked vehicle-local geometry",()=>{
- assert.equal(DRILL_REGISTRATION.rootX,51,"Root is recessed beneath the approved collar");
- assert.equal(DRILL_REGISTRATION.augerX,44,"Spin atlas shifted left exactly 12px");
- assert.equal(DRILL_REGISTRATION.augerY,-52,"Spin atlas lowered exactly 3px");
+ assert.equal(DRILL_REGISTRATION.rootX,47,"Rear spindle fits inside the approved brass socket");
+ assert.equal(DRILL_REGISTRATION.augerX,40,"Rear flange must overlap front housing");
+ assert.equal(DRILL_REGISTRATION.augerY,-20,"Cone axle matches the original lower socket");
  assert.equal(DRILL_REGISTRATION.augerW,120,"Spin scale must remain unchanged");
  assert.equal(DRILL_REGISTRATION.augerH,110,"Spin scale must remain unchanged");
- assert.equal(DRILL_TIP_OFFSET,158);
- assert.equal(DRILL_TIP_VERTICAL_OFFSET,3);
+ assert.equal(DRILL_TIP_OFFSET,154);
+ assert.equal(DRILL_TIP_VERTICAL_OFFSET,35);
  assert.equal(DRILL_REGISTRATION.tipX,DRILL_TIP_OFFSET);
  assert.equal(DRILL_REGISTRATION.tipY,DRILL_TIP_VERTICAL_OFFSET);
  assert.equal(DRILL_REGISTRATION.nozzleX,-116);
