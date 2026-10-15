@@ -688,3 +688,80 @@ body:has(.app-shell.page-reminders),
 .rr-page .rr-note-footer {padding:9px 4px 0;color:#795d58;}
 .rr-page .rr-note-footer button {color:#7c1f3e;font-weight:600;}
 @media(max-width:390px) {.app-shell.page-reminders .rr-feature-grid {border-radius:19px;padding-inline:6px}.rr-page .rr-note-editor {padding:33px 17px 17px}.rr-page .rr-notes .rr-side-head {padding-inline:5px}}
+
+
+/* Organizer functionality additions. All controls remain above the original artwork. */
+.rr-page .rr-utilities {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(118px,145px);
+  gap:9px;margin:14px 0 11px;padding:13px;border:1px solid #bc905a;
+  border-radius:13px;background:linear-gradient(155deg,#fdf0d9d9,#e8cfa3a6);
+  box-shadow:inset 0 1px #fff8e7,0 2px 10px #532c2216;
+}
+.rr-page .rr-search-label,.rr-page .rr-status-label {display:block;min-width:0;}
+.rr-page .rr-utilities input,.rr-page .rr-utilities select,
+.rr-page .rr-note-find input {
+  box-sizing:border-box;width:100%;min-width:0;min-height:42px;
+  border-radius:9px;border:1px solid #b68c57;background:#fffaf0;
+  padding:8px 11px;color:#38232e;font:15px Georgia,serif;
+}
+.rr-page .rr-utility-actions {grid-column:1/-1;display:flex;flex-wrap:wrap;gap:7px;}
+.rr-page .rr-utility-actions button,.rr-page .rr-day-views button,
+.rr-page .rr-undo-line button,.rr-page .rr-note-scope button,
+.rr-page .rr-quick-edit,.rr-page .rr-quick-defer,.rr-page .rr-export-event {
+  min-height:36px;border:1px solid #ac824f;border-radius:10px;
+  background:linear-gradient(#fff8e7,#e9cea3);color:#572b3d;
+  padding:7px 11px;font:600 13px Georgia,serif;
+}
+.rr-page .rr-utility-actions button:hover,.rr-page .rr-day-views button:hover,
+.rr-page .rr-quick-edit:hover,.rr-page .rr-quick-defer:hover {background:#fff8e5;}
+.rr-page .rr-day-views {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:9px 0 6px;}
+.rr-page .rr-day-views button {font-size:clamp(11px,2.7vw,14px);padding:8px 5px;min-width:0;line-height:1.25;}
+.rr-page .rr-day-views button.active,
+.rr-page .rr-note-scope button.active {
+  background:linear-gradient(#7d2b43,#4b172e);border-color:#c79a58;color:#fff0d0;
+}
+.rr-page .rr-feedback,.rr-page .rr-undo-line {
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin:8px 0;padding:9px 11px;border:1px solid #b9905d;
+  border-radius:9px;background:#fff6dff0;color:#502a3c;font:13px Georgia,serif;
+}
+.rr-page .rr-feedback button {font-size:22px;line-height:1;border:0;background:transparent;color:#6e3444;}
+.rr-page .rr-undo-line button {white-space:nowrap;}
+.rr-page .rr-quick-options {display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:9px;color:#633849;font:13px Georgia,serif;}
+.rr-page .rr-quick-options label {display:flex;gap:7px;align-items:center;}
+.rr-page .rr-quick-options select {min-height:35px;border:1px solid #b8905c;border-radius:8px;padding:6px;background:#fff9ed;color:#402130;}
+.rr-page .rr-quick-options input[type="checkbox"] {width:17px;height:17px;accent-color:#762841;}
+.rr-page .rr-simple-row .rr-quick-title {flex:1;min-width:0;cursor:text;}
+.rr-page .rr-quick-title small {display:block;font:italic 12px Georgia,serif;color:#805d4d;margin-top:2px;}
+.rr-page .rr-simple-row .rr-quick-edit,
+.rr-page .rr-simple-row .rr-quick-defer,
+.rr-page .rr-entry .rr-quick-defer {
+  flex:none;min-height:34px;padding:6px 9px;font-size:12px;
+}
+.rr-page .rr-quick-title:focus-visible {outline:2px solid #9f644a;outline-offset:3px;}
+.rr-page .rr-note-scope {display:flex;gap:8px;flex-wrap:wrap;margin:13px 0;}
+.rr-page .rr-note-find {display:block;margin-bottom:9px;}
+.rr-page .rr-goal-slider {display:block;width:100%;min-width:0;order:2;}
+.rr-page .rr-goal-slider input {display:block;width:100%;accent-color:#842e49;}
+.rr-page .rr-export-event {margin:7px 0 13px;}
+.rr-page button:focus-visible,.rr-page input:focus-visible,
+.rr-page select:focus-visible,.rr-page textarea:focus-visible {
+  outline:2px solid #9a3e58;outline-offset:2px;
+}
+@media(max-width:460px) {
+  .rr-page .rr-utilities {grid-template-columns:minmax(0,1fr) 105px;gap:6px;padding:10px;margin:10px 0;}
+  .rr-page .rr-utilities input,.rr-page .rr-utilities select{font-size:13px;padding:7px;}
+  .rr-page .rr-utility-actions button {min-height:35px;font-size:12px;padding:6px 8px;}
+  .rr-page .rr-simple-row {gap:5px;}
+  .rr-page .rr-simple-row .rr-quick-edit,.rr-page .rr-simple-row .rr-quick-defer,
+  .rr-page .rr-entry .rr-quick-defer {padding:6px;min-height:32px;font-size:11px;}
+  .rr-page .rr-simple-row .rr-simple-remove {min-width:28px;width:28px;}
+  .rr-page .rr-entry {gap:6px;}
+  .rr-page .rr-entry-content strong{font-size:16px;}
+  .rr-page .rr-datebar strong {font-size:13px;}
+}
+@media(max-width:345px) {
+  .rr-page .rr-day-views {gap:3px;}
+  .rr-page .rr-simple-row .rr-quick-defer {font-size:0;}
+  .rr-page .rr-simple-row .rr-quick-defer::after {content:"↷";font-size:18px;}
+}
