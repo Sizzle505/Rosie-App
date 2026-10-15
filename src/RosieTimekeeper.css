@@ -3629,3 +3629,46 @@ body:has(.app-shell.page-timekeeper),
   font-size:clamp(9px,2.5vw,12px)!important;
   z-index:2!important;
 }
+
+/* Precision adjustments requested 2026-10-15.
+   Independent translate offsets preserve the existing centered transforms
+   and apply exactly in CSS pixels across every iPhone breakpoint. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  translate:0 -8px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  translate:0 -15px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip,
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:0 -20px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -50px!important;
+}
+/* Cover the old repeat symbol in the actual LEFT circular medal.
+   The existing one button still calls lap in Stopwatch and repeat in Timer. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  position:absolute!important;
+  left:98%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  translate:none!important;
+  width:clamp(37px,9.8vw,43px)!important;
+  height:clamp(37px,9.8vw,43px)!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid #edce89!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle at 37% 26%,#336c9e 0%,#15395d 33%,#071a33 82%,#04101e 100%)!important;
+  box-shadow:inset 0 1px 2px #fff4c260,0 0 0 1px #462c0e,0 1px 3px #000a!important;
+  color:#ffeac0!important;
+  font:700 clamp(11px,2.9vw,13px)/1 Georgia,serif!important;
+  text-shadow:0 1px 2px #010913!important;
+  z-index:3!important;
+  pointer-events:none!important;
+}
