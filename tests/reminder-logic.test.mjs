@@ -56,3 +56,12 @@ test("v1 backups are sanitized without erasing valid content", () => {
   assert.equal(restored.goals[0].progress,100);
   assert.throws(()=>validateBackup({version:2,items:[],notes:[],goals:[],gratitude:[]}));
 });
+
+test("exported monthly and leap-year events keep last-day behavior", () => {
+  const endMonth = calendarIcs([item({date:"2026-01-30",repeat:"monthly"})]);
+  assert.match(endMonth,/RRULE:FREQ=MONTHLY;BYMONTHDAY=30,-1;BYSETPOS=1/);
+  const leap = calendarIcs([item({date:"2024-02-29",repeat:"yearly"})]);
+  assert.match(leap,/RRULE:FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=28,29;BYSETPOS=-1/);
+  const alarm = calendarIcs([item({time:"14:30"})]);
+  assert.match(alarm,/TRIGGER:-PT10M/);
+});
