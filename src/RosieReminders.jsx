@@ -470,8 +470,36 @@ export default function RosieReminders() {
           </div>
         )}
         {storageError && <p className="rr-warning" role="alert">{storageError}</p>}
+        {notice && <div className="rr-feedback" role="status"><span>{notice}</span>
+          <button type="button" onClick={() => setNotice("")} aria-label="Dismiss message">×</button></div>}
+        {undoSnapshot && <div className="rr-undo-line"><span>Last deletion or replacement can be reversed.</span>
+          <button type="button" onClick={undoLast}>↶ Undo</button></div>}
+        {["today", "tasks", "appointments", "shopping"].includes(section) && <div className="rr-utilities" aria-label="Organize reminders">
+          <label className="rr-search-label"><span className="rr-screen-reader">Search current list</span>
+            <input type="search" autoComplete="off" value={searchText}
+              onChange={e => setSearchText(e.target.value)} placeholder="Search reminders and details…" /></label>
+          <label className="rr-status-label"><span className="rr-screen-reader">Filter reminders</span>
+            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+              <option value="all">All</option><option value="open">Not done</option>
+              <option value="done">Completed</option><option value="high">★ Priority</option>
+            </select></label>
+          <div className="rr-utility-actions">
+            {section === "shopping" && <button type="button" onClick={copyShopping}>Copy unchecked</button>}
+            {section !== "shopping" && <button type="button" onClick={() => exportCalendar(section === "today" ? store.items : store.items.filter(x => x.category === section))}>↓ Calendar .ics</button>}
+            {completedHere > 0 && <button type="button" onClick={clearCompleted}>Clear completed ({completedHere})</button>}
+            {searchText && <button type="button" onClick={() => setSearchText("")}>Clear search</button>}
+          </div>
+        </div>
 
         {section === "today" && <>
+          <div className="rr-day-views" role="group" aria-label="Schedule range">
+            <button type="button" className={todayView === "day" ? "active" : ""}
+              aria-pressed={todayView === "day"} onClick={() => setTodayView("day")}>Selected day</button>
+            <button type="button" className={todayView === "upcoming" ? "active" : ""}
+              aria-pressed={todayView === "upcoming"} onClick={() => setTodayView("upcoming")}>Next 14 days ({upcomingCount})</button>
+            <button type="button" className={todayView === "overdue" ? "active" : ""}
+              aria-pressed={todayView === "overdue"} onClick={() => setTodayView("overdue")}>Overdue ({overdueCount})</button>
+          </div>
           {tab === "calendar" && <div className="rr-calendar">
             <div className="rr-month-head">
               <button type="button" aria-label="Previous month" onClick={() => setMonth(m => new Date(m.getFullYear(), m.getMonth()-1, 1))}>‹</button>
@@ -482,13 +510,15 @@ export default function RosieReminders() {
               {calendarDays(month).map((day, i) => day
                 ? <button key={day} type="button" aria-pressed={day === selectedDate}
                     aria-label={pretty(day)} className={day === selectedDate ? "picked" : day === dateKey() ? "current" : ""}
-                    onClick={() => setSelectedDate(day)}>{Number(day.slice(8))}
+                    onClick={() => { setSelectedDate(day); setTodayView("day"); }}>{Number(day.slice(8))}
                     {store.items.some(x => isScheduled(x, day)) && <i aria-hidden="true"/>}</button>
                 : <span key={"blank"+i} />)}</div>
           </div>}
           <div className="rr-datebar">
             <button type="button" onClick={() => moveDay(-1)} aria-label="Previous day">‹</button>
-            <strong>{pretty(selectedDate)}</strong>
+            <strong>{todayView === "overdue" ? "Unfinished past-due items" :
+              todayView === "upcoming" ? "Upcoming from " + pretty(selectedDate, {month:"short",day:"numeric"}) :
+              pretty(selectedDate)}</strong>
             <button type="button" onClick={() => moveDay(1)} aria-label="Next day">›</button>
             <button type="button" className="rr-today-link" onClick={() => { setSelectedDate(dateKey()); setMonth(dateObj(dateKey())); }}>Today</button>
           </div>
@@ -509,9 +539,14 @@ export default function RosieReminders() {
               {editingQuickId === item.id ? <form className="rr-simple-edit" onSubmit={saveQuickEdit}>
                 <input autoFocus value={editingQuickTitle} onChange={e => setEditingQuickTitle(e.target.value)}
                   aria-label={"Rename "+item.title} onBlur={saveQuickEdit} maxLength={140} />
-              </form> : <span onClick={() => startQuickEdit(item)}>{item.title}</span>}
+              </form> : <span className="rr-quick-title" tabIndex={0}
+                role="button" aria-label={"Rename " + item.title}
+                onKeyDown={e => { if(e.key === "Enter" || e.key === " ") { e.preventDefault(); startQuickEdit(item); } }}
+                onClick={() => startQuickEdit(item)}>{item.title}</span>}
+              <button type="button" className="rr-quick-edit" onClick={() => openEdit(item)}
+                aria-label={"Edit details for " + item.title}>Edit</button>
               <button type="button" className="rr-simple-remove" aria-label={"Remove "+item.title}
-                onClick={() => setStore(prev => ({...prev, items:prev.items.filter(x => x.id !== item.id)}))}>×</button>
+                onClick={() => removeQuick(item.id)}>×</button>
             </div>)}
           </div>}
           {!shown.length && <p className="rr-quick-empty">Your grocery list is empty.</p>}
@@ -526,7 +561,14 @@ export default function RosieReminders() {
                 placeholder="Type a task, then press Return…" />
               <button type="submit" disabled={!quickTask.trim()} aria-label="Add task">＋</button>
             </div>
-            <small>Each Return makes a new checkbox. Tap a task to rename it.</small>
+            <div className="rr-quick-options"><label>Due
+              <select value={quickDue} onChange={e => setQuickDue(e.target.value)}>
+                <option value="today">Today</option><option value="tomorrow">Tomorrow</option>
+                <option value="none">No date</option>
+              </select></label>
+              <label className="rr-priority-toggle"><input type="checkbox" checked={quickPriority}
+                onChange={e => setQuickPriority(e.target.checked)} />★ High priority</label></div>
+            <small>Press Return to add. Tap a task to rename; use Edit for dates, notes and repeats.</small>
           </form>
           <div className="rr-simple-rows rr-task-rows">{shown.map(item =>
             <div key={item.id} className={"rr-simple-row"+(isDone(item, selectedDate) ? " is-done" : "")}>
@@ -536,32 +578,59 @@ export default function RosieReminders() {
               {editingQuickId === item.id ? <form className="rr-simple-edit" onSubmit={saveQuickEdit}>
                 <input autoFocus value={editingQuickTitle} onChange={e=>setEditingQuickTitle(e.target.value)}
                   aria-label={"Rename "+item.title} onBlur={saveQuickEdit} maxLength={140} />
-              </form> : <span onClick={()=>startQuickEdit(item)}>{item.title}</span>}
+              </form> : <span className="rr-quick-title" role="button" tabIndex={0}
+                aria-label={"Rename " + item.title}
+                onKeyDown={e => { if(e.key === "Enter" || e.key === " ") { e.preventDefault(); startQuickEdit(item); } }}
+                onClick={()=>startQuickEdit(item)}>{item.title}
+                {item.date && <small>{item.date === liveDay ? "Today" : pretty(item.date,{month:"short",day:"numeric"})}{item.time ? " · " + item.time : ""}</small>}
+              </span>}
+              {isOverdue(item,liveDay) && <button type="button" className="rr-quick-defer"
+                onClick={() => deferItem(item)} aria-label={"Move " + item.title + " to tomorrow"}>Tomorrow</button>}
+              <button type="button" className="rr-quick-edit" onClick={() => openEdit(item)}
+                aria-label={"Edit details for " + item.title}>Edit</button>
               <button type="button" className="rr-simple-remove" aria-label={"Remove "+item.title}
-                onClick={()=>setStore(prev=>({...prev,items:prev.items.filter(x=>x.id!==item.id)}))}>×</button>
+                onClick={()=>removeQuick(item.id)}>×</button>
             </div>)}</div>
           {!shown.length && <p className="rr-quick-empty">One task, one checkbox. Begin anywhere.</p>}
         </>}
         {(section === "today" || section === "appointments") && <>
           {shown.length > 0 && <div className="rr-rows">
-            {shown.map(item => <div key={item.id} className={"rr-entry" + (isDone(item, selectedDate) ? " is-done" : "")}>
-              <button type="button" className="rr-check" aria-label={(isDone(item, selectedDate) ? "Mark incomplete: " : "Complete: ") + item.title}
-                aria-pressed={isDone(item, selectedDate)} onClick={() => toggleDone(item)}>{isDone(item, selectedDate) ? "✓" : ""}</button>
+            {shown.map(item => <div key={item.id} className={"rr-entry" + (isDone(item, item.occurrenceDate || selectedDate) ? " is-done" : "")}>
+              <button type="button" className="rr-check" aria-label={(isDone(item, item.occurrenceDate || selectedDate) ? "Mark incomplete: " : "Complete: ") + item.title}
+                aria-pressed={isDone(item, item.occurrenceDate || selectedDate)} onClick={() => toggleDone(item)}>{isDone(item, item.occurrenceDate || selectedDate) ? "✓" : ""}</button>
               <div className="rr-entry-content"><strong>{item.title}</strong>
                 {(item.detail || item.date || item.time || (item.repeat && item.repeat !== "none")) && <small>
-                  {[section !== "today" && item.date ? pretty(item.date, {month:"short",day:"numeric"}) : "",
+                  {[item.occurrenceDate ? pretty(item.occurrenceDate,{month:"short",day:"numeric"}) :
+                    section !== "today" && item.date ? pretty(item.date, {month:"short",day:"numeric"}) :
+                    isOverdue(item,liveDay) ? "Overdue · " + pretty(item.date,{month:"short",day:"numeric"}) : "",
                     item.time || "", item.repeat !== "none" ? item.repeat : "", item.detail].filter(Boolean).join(" · ")}</small>}
               </div>{item.priority === "high" && <span className="rr-star" aria-label="High priority">★</span>}
+              {isOverdue(item,liveDay) && <button type="button" className="rr-quick-defer"
+                onClick={() => deferItem(item)}>Tomorrow</button>}
               <button type="button" className="rr-edit" onClick={() => openEdit(item)} aria-label={"Edit "+item.title}>›</button>
             </div>)}
           </div>}
+          {!shown.length && <p className="rr-empty">{searchText ? "No reminders match your search." :
+            todayView === "overdue" && section === "today" ? "Nothing overdue. Beautifully caught up." :
+            todayView === "upcoming" && section === "today" ? "No unfinished reminders in the next 14 days." :
+            "Nothing scheduled in this view."}</p>}
           {featured && <div className="rr-priority"><span>★</span><div><b>Top Priority</b><p>{featured.title}</p></div></div>}
           <button type="button" className="rr-primary" onClick={() => openNew()}>＋ Add {section === "appointments" ? "Appointment" : "Reminder"}</button>
         </>}
 
-        {section === "notes" && (user ? <PrivateNotes onCountChange={setCloudNoteCount} /> : <div className="rr-notes">
+        {section === "notes" && <>
+          {user && <div className="rr-note-scope" role="group" aria-label="Note storage location">
+            <button type="button" aria-pressed={noteScope === "cloud"} className={noteScope === "cloud" ? "active" : ""}
+              onClick={() => setNoteScope("cloud")}>Cloud notes ({cloudNoteCount})</button>
+            <button type="button" aria-pressed={noteScope === "device"} className={noteScope === "device" ? "active" : ""}
+              onClick={() => setNoteScope("device")}>This device ({store.notes.length})</button>
+          </div>}
+          {user && noteScope === "cloud" ? <PrivateNotes onCountChange={setCloudNoteCount} /> : <div className="rr-notes">
           <div className="rr-side-head"><strong>Your Notes</strong><button type="button" onClick={addNote}>＋ New note</button></div>
-          <div className="rr-note-picker">{store.notes.map(note => <button key={note.id} type="button"
+          <label className="rr-note-find"><span className="rr-screen-reader">Search local notes</span>
+            <input type="search" value={noteSearch} onChange={e => setNoteSearch(e.target.value)}
+              placeholder="Find notes by title or text…" /></label>
+          <div className="rr-note-picker">{matchingNotes.map(note => <button key={note.id} type="button"
             className={notesActive?.id === note.id ? "active" : ""} onClick={() => setFocusedNote(note.id)}>{note.title}</button>)}</div>
           {notesActive ? <div className="rr-note-editor">
             <input aria-label="Note title" value={notesActive.title} onChange={e => updateNote(notesActive.id, { title: e.target.value })} />
@@ -570,13 +639,18 @@ export default function RosieReminders() {
             <div className="rr-note-footer"><span>Saved automatically on this device</span>
               <button type="button" onClick={() => { if(window.confirm("Delete this note?")) {setStore(prev => ({...prev, notes:prev.notes.filter(n => n.id !== notesActive.id)})); setFocusedNote(null);}}}>Delete note</button></div>
           </div> : <p className="rr-empty">A fresh page, waiting for an excellent idea.</p>}
-        </div>)}
+        </div>}
+        </>}
 
         {section === "goals" && <div className="rr-goals">
           <h3>Goals</h3>
           <form className="rr-inline-add" onSubmit={addGoal}><input aria-label="New goal" placeholder="A goal worth pursuing" value={goalInput} onChange={e => setGoalInput(e.target.value)} maxLength={140}/><button type="submit" className="rr-art-add"><img className="rr-action-art" src="/rosieverse/reminders/approved-art/add-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Add</span></button></form>
           {store.goals.map(goal => <div className="rr-goal" key={goal.id}>
             <strong>{goal.title}</strong><span>{goal.progress}%</span>
+            <label className="rr-goal-slider"><span className="rr-screen-reader">Progress for {goal.title}</span>
+              <input type="range" min="0" max="100" step="5" value={goal.progress}
+                onChange={e => setStore(prev => ({...prev,goals:prev.goals.map(g => g.id === goal.id ?
+                  {...g,progress:Number(e.target.value)} : g)}))}/></label>
             <div className="rr-progress" role="progressbar" aria-valuenow={goal.progress} aria-valuemin={0} aria-valuemax={100}><i style={{width:goal.progress+"%"}}/></div>
             <button type="button" onClick={() => setStore(prev => ({...prev, goals:prev.goals.map(g => g.id === goal.id ? {...g,progress:Math.min(100,g.progress+25)}:g)}))}>＋ 25%</button>
             <button type="button" onClick={() => setStore(prev => ({...prev, goals:prev.goals.filter(g=>g.id !== goal.id)}))} aria-label={"Remove goal "+goal.title}>Remove</button>
@@ -600,10 +674,12 @@ export default function RosieReminders() {
           <div className="rr-form-grid"><label>Date<input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))}/></label>
           <label>Time<input type="time" value={form.time} onChange={e=>setForm(f=>({...f,time:e.target.value}))}/></label></div>
           <div className="rr-form-grid"><label>Repeat<select value={form.repeat} onChange={e=>setForm(f=>({...f,repeat:e.target.value}))}>
-            <option value="none">Never</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option>
+            <option value="none">Never</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option><option value="yearly">Yearly</option>
           </select></label><label>Priority<select value={form.priority} onChange={e=>setForm(f=>({...f,priority:e.target.value}))}>
             <option value="normal">Normal</option><option value="high">High</option>
           </select></label></div>
+          {form.id && form.date && <button type="button" className="rr-export-event"
+            onClick={() => exportCalendar([form])}>↓ Add to calendar</button>}
           <div className="rr-modal-actions">{form.id && <button type="button" className="rr-danger" onClick={()=>removeItem(form.id)}>Delete</button>}
             <button type="button" onClick={()=>setEditorOpen(false)}>Cancel</button><button className="rr-save rr-art-save" type="submit"><img className="rr-action-art" src="/rosieverse/reminders/approved-art/save-art.webp" alt="" draggable="false" /><span className="rr-screen-reader">Save Reminder</span></button></div>
         </form>
