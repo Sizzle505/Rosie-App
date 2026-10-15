@@ -209,6 +209,14 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         updateRun(s,delta,pressed.current.up,pressed.current.down);
         for(const event of s.events){
           if(event.type==="shatter"&&s.boostTime>0)s.tipBurstAt=s.time;
+          if(event.type==="turbo"&&event.repaired){
+            for(let i=0;i<14;i++){
+              const angle=(i/14)*Math.PI*2;
+              const v=38+Math.random()*86;
+              particles.current.push({x:event.x,y:event.y,vx:Math.cos(angle)*v,vy:Math.sin(angle)*v-38,
+                life:.52+Math.random()*.20,max:.72,r:2+Math.random()*2.5,color:"#fff0a6"});
+            }
+          }
           if(event.type==="pickup"&&event.kind==="cache"){
             particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
           }
