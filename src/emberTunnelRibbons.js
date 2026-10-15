@@ -91,12 +91,37 @@ function paintRibbon(c, scroll, side, image) {
   return true;
 }
 
+// The OG seam material originally stopped at 92px of depth, exposing the
+// completely unrelated photographic panorama below it as a horizontal band.
+// Extend the SAME real cut-face material outward as low-contrast cave mass,
+// keeping the crisp original 92px collision contact painted on top.
+function paintWallDepthTexture(c,scroll,side,image){
+ if(!lit(image))return;
+ const stride=20,depth=390,tile=image.naturalWidth;
+ c.save();
+ c.globalAlpha=.56;
+ for(let x=-stride;x<DRILL_WIDTH+stride;x+=stride){
+  const next=Math.min(DRILL_WIDTH+stride,x+stride);
+  const a=sampleTunnelEdge(scroll+x,side),b=sampleTunnelEdge(scroll+next,side);
+  const dx=next-x,dy=b.y-a.y,len=Math.hypot(dx,dy);
+  const tx=dx/len,ty=dy/len,nx=-side*ty,ny=side*tx;
+  const u=arc(scroll+x,side)*U_SCALE;
+  const srcX=((u%tile)+tile)%tile;
+  c.save();c.transform(tx,ty,nx,ny,x,a.y);
+  const span=len*U_SCALE;
+  const first=Math.min(span,tile-srcX);
+  c.drawImage(image,srcX,0,first,image.naturalHeight,0,0,len*first/span+.6,depth);
+  if(first<span)c.drawImage(image,0,0,span-first,image.naturalHeight,
+    len*first/span,0,len*(span-first)/span+.6,depth);
+  c.restore();
+ }
+ c.restore();
+}
 export function paintTunnelRibbons(c, s, assets) {
   const top = assets?.edgeBarkrootTop;
   const floor = assets?.edgeBarkrootBottom;
   if (!lit(top) || !lit(floor)) return false;
-  // Exactly the same function used for the collision boundaries.
-  paintRibbon(c, s.scroll, -1, top);
+  // The rock mass underneath the original-contact ribbon inherits its same\n  // world-space UV, rather than a detached mural strip.\n  paintWallDepthTexture(c,s.scroll,-1,top);\n  paintWallDepthTexture(c,s.scroll,+1,floor);\n  // Exactly the same function used for the collision boundaries.\n  paintRibbon(c, s.scroll, -1, top);
   paintRibbon(c, s.scroll, +1, floor);
   // A subtle interior shadow, NOT a bright painted route outline.
   for (const side of [-1, 1]) {
