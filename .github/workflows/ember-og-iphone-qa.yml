@@ -8,6 +8,8 @@ on:
       - "src/emberAugerFX.js"
       - "tests/ember-auger-turbo.test.mjs"
       - "scripts/verify-ember-auger-turbo.mjs"
+      - "scripts/verify-ember-course-capture.mjs"
+      - "src/emberDrillEngine.js"
       - "src/EmberTunnelDrill.jsx"
       - "scripts/verify-ember-og-prototype.mjs"
       - "scripts/verify-ember-header-and-obstacles.mjs"
@@ -48,6 +50,7 @@ jobs:
           node scripts/verify-ember-og-prototype.mjs
           node scripts/verify-ember-header-and-obstacles.mjs
           node scripts/verify-ember-auger-turbo.mjs
+          node scripts/verify-ember-course-capture.mjs
       - name: Keep unmodified gameplay evidence and exact sprite manifest
         if: always()
         uses: actions/upload-artifact@v4
@@ -57,6 +60,7 @@ jobs:
             artifacts/ember-og-prototype/
             artifacts/ember-og-header-audit/
             artifacts/ember-auger-turbo-iphone/
+            artifacts/ember-designed-course/
             public/ember-drill/edge/edge-assets.json
           retention-days: 14
           if-no-files-found: ignore
