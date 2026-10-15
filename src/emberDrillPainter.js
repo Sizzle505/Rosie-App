@@ -249,6 +249,14 @@ function pickup(c,o,s,assets={}){
 function hazard(c,o,s,assets={}){
   const img=assets[o.kind==='spike'?'spike':'rock'];
   if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?94:92;
+    // Three restrained amber cues grow out of the same wall as the hazard,
+    // signaling the obstruction without adding a separate floating marker.
+    const middle=tunnelCenter(o.x), side=o.y<middle?-1:1, edge=middle+side*(tunnelRadius(o.x)-16);
+    for(let cue=1;cue<=3;cue++){
+      const cueX=x-cue*27, cueY=edge+side*(7+cue*9);
+      glow(c,cueX,cueY,18,"rgba(255,181,75,.16)");
+      circle(c,cueX,cueY,2.2,"rgba(255,224,132,.68)");
+    }
     if(o.kind==='spike'){
       // The ornate wheel is a temple mechanism, not a floating grey target.
       const middle=tunnelCenter(o.x),above=o.y<middle;
