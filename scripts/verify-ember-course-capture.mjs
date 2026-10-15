@@ -41,13 +41,13 @@ for(const [name,world,pitch,boost] of targets){
  const report=await page.evaluate(({world,pitch,boost})=>{
    const stage=window.__courseCanvas,c=stage.getContext("2d");
    const calls=[],draw=c.drawImage.bind(c);
-   c.drawImage=(im,...args)=>{if(im?.src&&im.src.includes("/edge/formation/"))calls.push(im.src.split("/").pop());return draw(im,...args)};
+   c.drawImage=(im,...args)=>{if(im?.src&&(im.src.includes("/edge/formation/")||im.src.includes("/new-assets/obstacle/")))calls.push(im.src.split("/").pop());return draw(im,...args)};
    const s={scroll:world-430,time:world/330,pitch,boostTime:boost,objects:[],hitCooldown:0,shock:0, y:window.__courseQA.tunnelCenter(world-430+210),running:true};
    const saved=window.__courseAssets;
    window.__courseQA.paintDrill(c,s,null,[],saved);
    const pixels=new Uint8ClampedArray(c.getImageData(0,0,690,820).data);
    const without={...saved};
-   for(const key of Object.keys(without))if(key.startsWith("og"))delete without[key];
+   for(const key of Object.keys(without))if(key.startsWith("og")||key.startsWith("new"))delete without[key];
    window.__courseQA.paintDrill(c,s,null,[],without);
    const base=c.getImageData(0,0,690,820).data;
    let delta=0,samples=0;
