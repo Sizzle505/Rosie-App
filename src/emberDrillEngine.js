@@ -93,6 +93,7 @@ export function newRun(seed = 1467) {
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
   s.boostTime = TURBO_DURATION; s.charge = 0;
+  s.hull = Math.min(5, s.hull + 1);
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y });
   return true;
 }
