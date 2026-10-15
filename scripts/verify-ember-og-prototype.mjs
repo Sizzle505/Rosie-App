@@ -36,10 +36,17 @@ if(!loaded||loaded<71)throw new Error("Full original formation set not decoded: 
 const proof=async (label,scroll,pitch,time)=>{
  const result=await page.evaluate(({label,scroll,pitch,time})=>{
   const c=window.__ogCanvas.getContext("2d");
-  const drawn=new Set();
+  const drawn=new Set(),edgeHeights=[];
   const call=c.drawImage.bind(c);
   c.drawImage=(im,...args)=>{
-    if(im?.src)drawn.add(im.src.split("/").slice(-2).join("/"));
+    if(im?.src){
+      const name=im.src.split("/").slice(-2).join("/");
+      drawn.add(name);
+      if(name==="edge/barkroot-top.webp"||name==="edge/barkroot-bottom.webp"){
+        if(args.length!==8)throw Error("Unexpected geological source drawImage signature");
+        edgeHeights.push(args[7]);
+      }
+    }
     return call(im,...args);
   };
   const s={scroll,time,pitch,y:window.__og.tunnelCenter(scroll+210),running:true,
@@ -47,6 +54,8 @@ const proof=async (label,scroll,pitch,time)=>{
   window.__og.paintDrill(c,s,null,[],window.__ogAssets);
   const needed=["edge/barkroot-top.webp","edge/barkroot-bottom.webp"];
   if(needed.some(x=>!drawn.has(x)))throw Error("Original edge images loaded but not DRAWN: "+[...drawn].join(","));
+  if(!edgeHeights.length||edgeHeights.some(h=>h>135||h<95))
+    throw Error("The original 120px geological ribbon was stretched into 390px bars: "+edgeHeights.slice(0,8));
   const formations=[...drawn].filter(x=>x.startsWith("formation/")||x.startsWith("obstacle/"));
   if(!formations.length)throw Error("Real OG ceiling/floor formations NOT DRAWN in "+label);
   const exact=label==="original-hanging-roots"?"obstacle/newRootCurtain.webp":
