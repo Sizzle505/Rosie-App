@@ -4,9 +4,9 @@ import { db, hashPin, sha256, respond, only, unsafeAllowed, readBody, sessionCoo
 export default async function handler(req, res) {
   if (!only(req, res, "POST") || !unsafeAllowed(req, res)) return;
   try {
-    const { username: raw, displayName: rawDisplay, pin } = readBody(req);
-    const username = String(raw || "").trim().toLowerCase();
-    const displayName = String(rawDisplay || "").trim() || username;
+    const { username: raw, pin } = readBody(req);
+    const displayName = String(raw || "").trim();
+    const username = displayName.toLowerCase();
     if (!/^[a-z0-9_.-]{3,32}$/.test(username) ||
       !/^[0-9]{4}([0-9]{2})?$/.test(String(pin || "")) ||
       displayName.length > 80)
