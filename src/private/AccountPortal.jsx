@@ -67,7 +67,7 @@ export default function AccountPortal() {
     }
     setBusy(true); setError("");
     try {
-      if (mode === "create") await register(name, name, pin);
+      if (mode === "create") await register(username.trim(), pin);
       else await login(name, pin);
       setPin(""); setConfirmPin(""); setOpen(false);
     } catch (issue) {
