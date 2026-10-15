@@ -186,6 +186,7 @@ export default function RosieReminders() {
       ? prev.items.map(x => x.id === next.id ? { ...x, ...next } : x)
       : [...prev.items, { ...next, id: makeId(), completedDates: [] }] }));
     setEditorOpen(false);
+    setNotice("Reminder saved.");
   };
 
   // Both quick lists create one ordinary reminder per row, so exporting and
@@ -260,7 +261,7 @@ export default function RosieReminders() {
   };
   const copyShopping = async () => {
     const text = store.items.filter(x => x.category === "shopping" && !isDone(x, selectedDate))
-      .map(x => "☐ " + x.title).join("\\n");
+      .map(x => "☐ " + x.title).join("\n");
     if (!text) { setNotice("No unchecked items to copy."); return; }
     try { await navigator.clipboard.writeText(text); setNotice("Unchecked shopping list copied."); }
     catch { setNotice("Clipboard unavailable. You can use the JSON backup instead."); }
