@@ -52,6 +52,18 @@ const DIAL_COLORS = [
   { id:"teal", label:"Peacock Teal", center:"#137c84", edge:"#072e42", light:false },
   { id:"lapis", label:"Celestial Lapis", center:"#1a4aa7", edge:"#070f38", light:false }
 ];
+const BEZEL_STYLES = [
+  {id:"gold",label:"Imperial Gold",filter:"none"},
+  {id:"rose",label:"Rose Gold",filter:"sepia(.18) saturate(1.15) hue-rotate(328deg)"},
+  {id:"antique",label:"Antique Brass",filter:"sepia(.22) saturate(.73) brightness(.77)"},
+  {id:"platinum",label:"Platinum",filter:"grayscale(.88) brightness(1.23) contrast(1.06)"}
+];
+const TIMER_SETS_KEY = "rosie-timekeeper-sets-v1";
+const MAX_TIMER_MS = 99 * 3600000 + 59 * 60000 + 59000;
+const formatStep = ms => {
+ const sec=Math.floor(ms/1000);
+ return (sec>=3600?Math.floor(sec/3600)+"h ":"")+(sec%3600>=60?Math.floor(sec%3600/60)+"m ":"")+(sec%60?sec%60+"s":sec<60?"0s":"");
+};
 const HAND_STYLES = [
   { id:"dauphine",label:"Gold" },
   { id:"filigree",label:"Filigree" },
@@ -112,17 +124,27 @@ export default function RosieTimekeeper() {
   const [customMinutes, setCustomMinutes] = useState("1");
   const [customSeconds, setCustomSeconds] = useState("00");
   const [timerEntry, setTimerEntry] = useState("presets");
+  const [bezelStyle,setBezelStyle] = useState(()=>{try {const id=localStorage.getItem("rosie-timekeeper-bezel");return BEZEL_STYLES.some(x=>x.id===id)?id:"gold";}catch{return "gold";}});
+  const [savedSets,setSavedSets] = useState(()=>{try {
+    const records=JSON.parse(localStorage.getItem(TIMER_SETS_KEY)||"[]");
+    return Array.isArray(records)?records.filter(x=>typeof x.name==="string"&&Array.isArray(x.steps)&&x.steps.length&&x.steps.every(ms=>Number.isInteger(ms)&&ms>=1000&&ms<=MAX_TIMER_MS)).slice(0,12):[];
+  }catch{return [];}});
+  const [setName,setSetName]=useState("");
+  const [draftSteps,setDraftSteps]=useState([]);
+  const [sequence,setSequence]=useState(null);
   const [dialFrame, setDialFrame] = useState(() => {
     try {
       const saved = window.localStorage.getItem("rosie-timekeeper-dial");
-      return DIAL_FRAMES.some(item => item.id === saved) ? saved : "batons";
-    } catch { return "batons"; }
+      if(window.localStorage.getItem("rosie-timekeeper-luxury-default-v2")!=="1")return "sunburst";
+      return DIAL_FRAMES.some(item => item.id === saved) ? saved : "sunburst";
+    } catch { return "sunburst"; }
   });
   const [dialColor, setDialColor] = useState(() => {
     try {
       const saved = window.localStorage.getItem("rosie-timekeeper-color");
-      return DIAL_COLORS.some(item => item.id === saved) ? saved : "sapphire";
-    } catch { return "sapphire"; }
+      if(window.localStorage.getItem("rosie-timekeeper-luxury-default-v2")!=="1")return "garnet";
+      return DIAL_COLORS.some(item => item.id === saved) ? saved : "garnet";
+    } catch { return "garnet"; }
   });
   const [dialPickerOpen, setDialPickerOpen] = useState(false);
   const [worldZone,setWorldZone] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-zone");return WORLD_CITIES.some(c=>c.zone===saved)?saved:"America/New_York";}catch{return "America/New_York";}});
@@ -143,12 +165,14 @@ export default function RosieTimekeeper() {
     try {
       window.localStorage.setItem("rosie-timekeeper-dial",dialFrame);
       window.localStorage.setItem("rosie-timekeeper-color",dialColor);
+      window.localStorage.setItem("rosie-timekeeper-luxury-default-v2","1");
     } catch {}
   }, [dialFrame,dialColor]);
 
   useEffect(() => {
-    try {localStorage.setItem("rosie-timekeeper-zone",worldZone);localStorage.setItem("rosie-timekeeper-hands",handStyle);}catch{}
-  },[worldZone,handStyle]);
+    try {localStorage.setItem("rosie-timekeeper-zone",worldZone);localStorage.setItem("rosie-timekeeper-hands",handStyle);localStorage.setItem("rosie-timekeeper-bezel",bezelStyle);}catch{}
+  },[worldZone,handStyle,bezelStyle]);
+  useEffect(()=>{try{localStorage.setItem(TIMER_SETS_KEY,JSON.stringify(savedSets));}catch{}},[savedSets]);
   useEffect(() => {
     if(mode!=="world")return undefined;
     setWorldNow(Date.now());
@@ -176,6 +200,13 @@ export default function RosieTimekeeper() {
         setElapsed(actual);
         setLaps(Array.isArray(saved.laps) ? saved.laps.slice(0, 99) : []);
         setRunning(Boolean(saved.running && !expired));
+        const active=saved.sequence;
+        if(active && typeof active.id==="string" && typeof active.name==="string" &&
+           Array.isArray(active.steps) && active.steps.length>0 && active.steps.length<=12 &&
+           active.steps.every(ms=>Number.isInteger(ms)&&ms>=1000&&ms<=MAX_TIMER_MS) &&
+           Number.isInteger(active.index) && active.index>=0 && active.index<active.steps.length){
+          setSequence({...active,steps:[...active.steps]});
+        }
         if (expired) setMessage("The sands of time have run out.");
       }
     } catch {}
@@ -189,16 +220,25 @@ export default function RosieTimekeeper() {
     lastSavedAt.current = now;
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        mode, duration, elapsed, running, laps, savedAt: now
+        mode, duration, elapsed, running, laps, sequence, savedAt: now
       }));
     } catch {}
-  }, [restored, mode, duration, elapsed, running, laps]);
+  }, [restored, mode, duration, elapsed, running, laps, sequence]);
 
   useEffect(() => {
     if (!running) return undefined;
     const tick = () => {
       const live = accumulated.current + performance.now() - anchor.current;
       if (mode === "countdown" && live >= duration) {
+        if(sequence && sequence.index+1<sequence.steps.length){
+          const index=sequence.index+1, next=sequence.steps[index];
+          accumulated.current=0;anchor.current=performance.now();
+          finished.current=false;setElapsed(0);setDuration(next);
+          setRunnerEpoch(n=>n+1);
+          setSequence(prev=>prev ? {...prev,index} : null);
+          setMessage("STEP "+(index+1)+" OF "+sequence.steps.length);
+          return;
+        }
         accumulated.current = duration;
         setElapsed(duration);
         setRunning(false);
@@ -218,7 +258,7 @@ export default function RosieTimekeeper() {
       window.clearInterval(timer);
       document.removeEventListener("visibilitychange", tick);
     };
-  }, [running, mode, duration]);
+  }, [running, mode, duration, sequence]);
 
   const stopAndReset = useCallback(() => {
     setRunning(false);
@@ -233,6 +273,7 @@ export default function RosieTimekeeper() {
   function pickMode(next) {
     if (mode === next) return;
     stopAndReset();
+    setSequence(null);
     setMode(next);
   }
 
@@ -240,6 +281,7 @@ export default function RosieTimekeeper() {
     primeTimekeeperAudio();
     stopAndReset();
     setRunnerEpoch(n=>n+1);
+    if(sequence){setDuration(sequence.steps[sequence.index]);}
     anchor.current = performance.now();
     setMode("countdown");
     setRunning(true);
@@ -263,6 +305,39 @@ export default function RosieTimekeeper() {
     stopAndReset();
     setMode("countdown");
     setDuration(ms);
+    setSequence(null);
+  }
+  function adjustDuration(delta){
+    const next=Math.max(1000,Math.min(MAX_TIMER_MS,Math.round((duration+delta)/1000)*1000));
+    if(next===duration)return;
+    const live=running ? accumulated.current+performance.now()-anchor.current : accumulated.current;
+    const adjustedElapsed=Math.min(Math.max(0,live),next);
+    accumulated.current=adjustedElapsed;anchor.current=performance.now();
+    setDuration(next);setElapsed(adjustedElapsed);finished.current=false;
+    setSequence(null);setMessage("");
+  }
+  function addDraftStep(){
+    setDraftSteps(steps=>steps.length>=12?steps:[...steps,duration]);
+    setTimerEntry("sets");setMessage("");
+  }
+  function saveDraftSet(){
+    const name=setName.trim().slice(0,35),steps=draftSteps.length?draftSteps:[duration];
+    if(!name){setMessage("Name this timer set before saving.");return;}
+    const id=String(Date.now()),record={id,name,steps};
+    setSavedSets(previous=>[record,...previous].slice(0,12));
+    setDraftSteps([]);setSetName("");setMessage("Saved "+name);
+    loadTimerSet(record);
+  }
+  function loadTimerSet(record){
+    stopAndReset();setDuration(record.steps[0]);setMode("countdown");
+    setSequence({id:record.id,name:record.name,steps:[...record.steps],index:0});
+    setTimerEntry("sets");setRunnerEpoch(n=>n+1);
+  }
+  function stepTimerSet(delta){
+    if(!sequence)return;
+    const index=Math.max(0,Math.min(sequence.steps.length-1,sequence.index+delta));
+    stopAndReset();setSequence({...sequence,index});setDuration(sequence.steps[index]);
+    setRunnerEpoch(n=>n+1);
   }
 
   function startOrPause() {
@@ -293,6 +368,7 @@ export default function RosieTimekeeper() {
 
   const selectedColor = DIAL_COLORS.find(item => item.id === dialColor) || DIAL_COLORS[0];
   const selectedFrame = DIAL_FRAMES.find(item => item.id === dialFrame) || DIAL_FRAMES[0];
+  const selectedBezel=BEZEL_STYLES.find(item=>item.id===bezelStyle)||BEZEL_STYLES[0];
   const chosenWorldCity=WORLD_CITIES.find(c=>c.zone===worldZone)||WORLD_CITIES[0];
   const world=worldTimeParts(worldNow,chosenWorldCity.zone);
   const padWorld=n=>String(n).padStart(2,"0");
@@ -351,7 +427,8 @@ export default function RosieTimekeeper() {
         <section className={"rtk-dial" + (running ? " is-running" : "") + (mode === "countdown" ? " is-countdown" : "") + (mode==="world" ? " is-world" : "")}
           style={{ "--rtk-face-center": selectedColor.center, "--rtk-face-edge": selectedColor.edge,
             "--rtk-face-texture": `url("${LUXURY_ASSETS}dial-textures/${selectedColor.id}.webp")`,
-            "--rtk-numeral-color": selectedColor.light ? "#342b30" : "#fff1d5" }}
+            "--rtk-numeral-color": selectedColor.light ? "#342b30" : "#fff1d5",
+            "--rtk-bezel-filter": selectedBezel.filter }}
           aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
           <span className={"rtk-face-overlay is-"+selectedFrame.id} style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.webp")` }} aria-hidden="true" />
@@ -406,8 +483,8 @@ export default function RosieTimekeeper() {
             className={"rtk-squirrel-runner " + (running ? "is-running" : "") + (mode === "countdown" ? " is-countdown" : "") + (squirrelFlipped ? " is-flipped" : "")}
             aria-hidden="true" style={{ "--rtk-squirrel-x": runnerX + "%", "--rtk-squirrel-y": runnerY + "%" }} />}
           {mode==="world" ? <div className="rtk-world-readout" aria-label={chosenWorldCity.city+", "+worldDigital}>
-             <strong className="rtk-world-city-name">{chosenWorldCity.city}</strong>
              <time className="rtk-world-digital">{worldDigital}</time>
+             <strong className="rtk-world-city-name">{chosenWorldCity.city}</strong>
           </div> : <>
             <output className={"rtk-time"+(wholeTime.length > 5 ? " is-hours" : "")} aria-label={mode==="stopwatch"?"Elapsed time":"Time remaining"}>
               <span className="rtk-time-whole">{wholeTime}</span>
@@ -419,6 +496,23 @@ export default function RosieTimekeeper() {
             <img className="rtk-completion-flourish" src={LUXURY_ASSETS+"world-clock-ui/completion-sparkle.webp"}
               alt="" aria-hidden="true" draggable="false" />}
         </section>
+        <div className="rtk-top-controls" aria-label="Clock mode and appearance">
+          <button type="button" className="rtk-face-trigger" onClick={() => setDialPickerOpen(open => !open)}
+            aria-label="Choose clock face and color" aria-expanded={dialPickerOpen} title="Clock faces and colors">✦</button>
+          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
+            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
+            <button type="button" className={"rtk-globe-mode"+(mode === "world" ? " chosen" : "")} aria-label="World Clock" title="World Clock" aria-pressed={mode === "world"} onClick={() => pickMode("world")}>
+              <img src={LUXURY_ASSETS+"world-clock-ui/globe.webp"} alt="" draggable="false" />
+            </button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
+          </div>
+          {!dialPickerOpen && <div className="rtk-enamel-strip" role="group" aria-label="Clock enamel colors">
+            {DIAL_COLORS.map(item=><button type="button" key={item.id} title={item.label}
+              className={dialColor===item.id?"chosen":""} aria-label={item.label+" clock color"}
+              aria-pressed={dialColor===item.id} style={{"--swatch":item.center}}
+              onClick={()=>setDialColor(item.id)}/>)}
+          </div>}
+        </div>
         <div className={"rtk-action-deck"+(mode==="world" ? " is-world" : "")} aria-label="Timekeeper controls">
           <div className="rtk-controls">
             <button type="button" className="rtk-secondary-action rtk-lap-action"
@@ -444,16 +538,7 @@ export default function RosieTimekeeper() {
             </button>
           </div>
         </div>
-        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
-          <button type="button" className="rtk-face-trigger" onClick={() => setDialPickerOpen(open => !open)}
-            aria-label="Choose clock face and color" aria-expanded={dialPickerOpen} title="Clock faces and colors">✦</button>
-          <div className="rtk-mode-switch" role="group" aria-label="Timekeeper mode" data-active={mode}>
-            <button type="button" className={mode === "stopwatch" ? "chosen" : ""} aria-pressed={mode === "stopwatch"} onClick={() => pickMode("stopwatch")}>Stopwatch</button>
-            <button type="button" className={"rtk-globe-mode"+(mode === "world" ? " chosen" : "")} aria-label="World Clock" title="World Clock" aria-pressed={mode === "world"} onClick={() => pickMode("world")}>
-              <img src={LUXURY_ASSETS+"world-clock-ui/globe.webp"} alt="" draggable="false" />
-            </button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
-          </div>
+        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")+(dialPickerOpen?" is-customizing":"")} aria-label="Timekeeper settings and splits">
           {dialPickerOpen && <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
             <div className="rtk-dial-picker-head">
               <span>Clock faces</span>
@@ -466,6 +551,11 @@ export default function RosieTimekeeper() {
                 title={item.label} onClick={() => setDialFrame(item.id)}>
                 <span aria-hidden="true">{item.symbol}</span><small>{item.label}</small>
               </button>)}
+            </div>
+            <div className="rtk-bezel-choices" role="group" aria-label="Clock bezel finish">
+              <span>Bezel</span>{BEZEL_STYLES.map(item=><button type="button" key={item.id}
+                className={bezelStyle===item.id?"chosen":""} aria-label={item.label+" bezel"} aria-pressed={bezelStyle===item.id}
+                onClick={()=>setBezelStyle(item.id)}>{item.label}</button>)}
             </div>
             <div className="rtk-hand-choices" role="group" aria-label="Clock hand style">
               <span>Hands</span>{HAND_STYLES.map(item=><button type="button" key={item.id}
@@ -480,12 +570,6 @@ export default function RosieTimekeeper() {
                 onClick={() => setDialColor(item.id)}
                 style={{ "--swatch": item.center }} />)}
             </div>
-          </div>}
-          {!dialPickerOpen && <div className="rtk-enamel-strip" role="group" aria-label="Clock enamel colors">
-            {DIAL_COLORS.map(item=><button type="button" key={item.id} title={item.label}
-              className={dialColor===item.id?"chosen":""} aria-label={item.label+" clock color"}
-              aria-pressed={dialColor===item.id} style={{"--swatch":item.center}}
-              onClick={()=>setDialColor(item.id)}/>)}
           </div>}
           <div className="rtk-utility-inner">
           {mode === "world" ? (
@@ -522,23 +606,23 @@ export default function RosieTimekeeper() {
 
             </>
           ) : (
-            <>
-              <div className="rtk-utility-heading">
-                <span>{timerEntry === "custom" ? "Custom Timer" : "Quick Timers"}</span>
-                <button type="button" className="rtk-timer-view-toggle"
-                  onClick={() => setTimerEntry(previous => previous === "presets" ? "custom" : "presets")}
-                  aria-label={timerEntry === "presets" ? "Set a custom duration" : "Show quick timer presets"}>
-                  {timerEntry === "presets" ? "Custom ›" : "‹ Quick Timers"}
-                </button>
+            <div className="rtk-timer-workspace">
+              <div className="rtk-timer-tabs" role="group" aria-label="Timer setup">
+                {[["presets","Quick"],["custom","Custom"],["sets","Sets"]].map(([id,label])=>
+                  <button key={id} type="button" className={timerEntry===id?"chosen":""}
+                    aria-pressed={timerEntry===id} onClick={()=>setTimerEntry(id)}>{label}</button>)}
               </div>
-              {timerEntry === "presets" ? <>
-                <div className="rtk-presets" aria-label="Quick timer durations">
-                  {PRESETS.map(preset => <button type="button" key={preset.ms}
-                    className={duration===preset.ms?"chosen":""} onClick={()=>pickPreset(preset.ms)}
-                    aria-pressed={duration===preset.ms}>{preset.label}</button>)}
-                </div>
-                <p className="rtk-selection-note">Select a duration, then press the ruby play button.</p>
-              </> : <div className="rtk-custom-composer">
+              {sequence && <div className="rtk-sequence-running" role="status">
+                <span>{sequence.name}: step {sequence.index+1} of {sequence.steps.length}</span>
+                <button type="button" aria-label="Previous set step" disabled={sequence.index===0} onClick={()=>stepTimerSet(-1)}>‹</button>
+                <button type="button" aria-label="Next set step" disabled={sequence.index>=sequence.steps.length-1} onClick={()=>stepTimerSet(1)}>›</button>
+              </div>}
+              {timerEntry==="presets" && <div className="rtk-presets" aria-label="Quick timer durations">
+                {PRESETS.map(preset=><button key={preset.ms} type="button"
+                  className={duration===preset.ms?"chosen":""}
+                  onClick={()=>pickPreset(preset.ms)} aria-pressed={duration===preset.ms}>{preset.label}</button>)}
+              </div>}
+              {timerEntry==="custom" && <div className="rtk-custom-composer">
                 <div className="rtk-custom-timer" aria-label="Custom countdown duration">
                   <label>Hours<input inputMode="numeric" type="number" min="0" max="99" value={customHours} onChange={e=>setCustomHours(e.target.value)} aria-label="Hours"/></label>
                   <span className="rtk-time-separator" aria-hidden="true">:</span>
@@ -546,10 +630,38 @@ export default function RosieTimekeeper() {
                   <span className="rtk-time-separator" aria-hidden="true">:</span>
                   <label>Seconds<input inputMode="numeric" type="number" min="0" max="59" value={customSeconds} onChange={e=>setCustomSeconds(e.target.value)} aria-label="Seconds"/></label>
                 </div>
-                <button type="button" className="rtk-set-timer" onClick={applyCustomDuration}>Set Custom Timer</button>
+                <button type="button" className="rtk-set-timer" onClick={applyCustomDuration}>Set Duration</button>
               </div>}
-              {/* Only the active input set occupies the instrument face. */}
-            </>
+              {timerEntry==="sets" && <div className="rtk-sets-editor">
+                <div className="rtk-draft-line">
+                  <input aria-label="Timer set name" maxLength="35" placeholder="Name your timer set"
+                    value={setName} onChange={e=>setSetName(e.target.value)}/>
+                  <button type="button" onClick={addDraftStep} disabled={draftSteps.length>=12}
+                    aria-label="Add current duration as a step">+ Step</button>
+                  <button type="button" onClick={saveDraftSet} aria-label="Save timer set">Save</button>
+                </div>
+                {draftSteps.length>0&&<div className="rtk-draft-steps" aria-label="Draft timer steps">
+                  {draftSteps.map((ms,i)=><button key={i} type="button"
+                    title="Remove step" aria-label={"Remove step "+(i+1)}
+                    onClick={()=>setDraftSteps(a=>a.filter((_,n)=>n!==i))}>{i+1}. {formatStep(ms)} ×</button>)}
+                </div>}
+                <div className="rtk-saved-sets">
+                  {savedSets.map(rec=><div key={rec.id} className="rtk-saved-set">
+                    <button type="button" onClick={()=>loadTimerSet(rec)}
+                      aria-label={"Load timer set "+rec.name}>{rec.name} <small>{rec.steps.length} steps</small></button>
+                    <button type="button" className="rtk-delete-set" title={"Delete "+rec.name}
+                      aria-label={"Delete timer set "+rec.name} onClick={()=>{setSavedSets(list=>list.filter(x=>x.id!==rec.id));if(sequence?.id===rec.id)setSequence(null)}}>×</button>
+                  </div>)}
+                  {!savedSets.length && !draftSteps.length && <p className="rtk-sets-hint">Add a duration as a step, name the set, then save it here.</p>}
+                </div>
+              </div>}
+              <div className="rtk-time-adjust" role="group" aria-label="Adjust countdown duration">
+                {[[ -60000,"−1m"],[-30000,"−30s"],[30000,"+30s"],[60000,"+1m"]].map(([ms,label])=>
+                  <button type="button" key={label} aria-label={"Adjust timer "+label}
+                    onClick={()=>adjustDuration(ms)}>{label}</button>)}
+              </div>
+              {message&&mode==="countdown"&&<p className="rtk-timer-message" role="status">{message}</p>}
+            </div>
           )}
           </div>
         </section>
