@@ -1,7 +1,7 @@
 name: Ember OG source-derived iPhone visual QA
 on:
   push:
-    branches: ["work/ember-og-ribbon-prototype-20261014"]
+    branches: ["work/ember-og-ribbon-prototype-20261014", "work/ember-drill-turbo-registered-20261015"]
     paths:
       - "src/emberTunnelRibbons.js"
       - "src/emberDrillPainter.js"

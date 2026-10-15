@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
+import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import "./ember-tunnel-drill.css";
 
 const LABELS = ["Barkroot Passage", "Ruby Temple Galleries"];
@@ -53,7 +54,9 @@ const DRILL_ART = {
   turnUp:"wall-turn-up.webp",
   turnNeutral:"wall-turn-neutral.webp",
   turnDown:"wall-turn-down.webp",
-  auger:"auger-spin.png",
+  auger:"new-assets/drill-candidates/steampunk_golden_drill_sprite_sheet.webp",
+  jetSheet:"new-assets/drill-candidates/golden_jet_flame_vfx_sprite_sheet.webp",
+  impactSheet:"new-assets/drill-candidates/golden_drill_impact_effect_sprite_sheet.webp",
   wallAmberCeiling:"wall-amber-ceiling.webp",
   wallAmberFloor:"wall-amber-floor.webp",
   wallFantasyCeiling:"wall-fantasy-ceiling.webp",
@@ -152,6 +155,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   function turbo() {
     const s=frame.current;
     if(triggerTurbo(s)){
+      s.tipBurstAt=s.time; // Event-driven eight-frame ignition; cosmetic only.
       setHud(snapshot(s));playSound(audio(),"turbo");
       if(navigator.vibrate)navigator.vibrate(25);
     }
@@ -162,7 +166,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     const art={};
     for(const [key,file] of Object.entries(DRILL_ART)){
       const item=new Image();
-      item.decoding="async";item.src="/ember-drill/"+file;art[key]=item;
+      item.decoding="async";
+      if(key==="auger")item.addEventListener("load",()=>primeMechanicalAtlases({auger:item}),{once:true});
+      item.src="/ember-drill/"+file;art[key]=item;
     }
     artRef.current=art;
     const observer=new IntersectionObserver(entries=>{
@@ -190,6 +196,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       if(modeRef.current==="running"&&!document.hidden){
         updateRun(s,delta,pressed.current.up,pressed.current.down);
         for(const event of s.events){
+          if(event.type==="shatter"&&s.boostTime>0)s.tipBurstAt=s.time;
           if(event.type==="pickup"&&event.kind==="cache"){
             particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
           }

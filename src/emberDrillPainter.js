@@ -303,12 +303,18 @@ function vehicle(c,s,portrait,assets={}) {
     const neutral=artReady(assets.turnNeutral)?assets.turnNeutral:assets.body;
     const directed=s.pitch<0?assets.turnUp:assets.turnDown;
     const turnMix=clamp((Math.abs(s.pitch)-.045)/.37,0,1);
+    // The approved poses are NEVER substituted. Their native illustrated
+    // collar remains, but any pre-painted cone to its right is masked out,
+    // preventing two overlapping drill noses during the registered spin.
+    // This mask affects only vehicle-local x>68, not Rosie or her machinery.
+    c.save();
+    c.beginPath();c.rect(-168,-125,236,252);c.clip();
     if(artReady(neutral))drawImageTrim(c,neutral,-168,-125,336,252,artReady(directed)?1-turnMix:1);
     if(artReady(directed)&&turnMix>.001)drawImageTrim(c,directed,-168,-125,336,252,turnMix);
-    // Genuine eight-frame auger and high-contrast axial rotation occupy only
-    // the illustrated drill nose. Turbo art is masked to that same silhouette.
+    c.restore();
+    // 16 actual original paintings, same transform as hull at every pitch.
     paintOriginalAuger(c,s,assets);
-    paintTurboTip(c,s);
+    paintTurboTip(c,s,assets);
     c.restore();return;
   }
 

@@ -1,5 +1,5 @@
 import {
-  DRILL_ANCHOR, tunnelCenter, tunnelRadius
+  drillTipPosition, tunnelCenter, tunnelRadius
 } from "./emberDrillEngine.js";
 
 // A light, local excavation effect for the existing illustrated auger.
@@ -11,12 +11,8 @@ const fract = x => x - Math.floor(x);
 const rnd = n => fract(Math.sin(n * 79.191 + 31.71) * 31741.389);
 
 function tipOf(run) {
-  const pitch = run.pitch || 0;
-  return {
-    x: DRILL_ANCHOR + Math.cos(pitch) * 166,
-    y: run.y + Math.sin(pitch) * 166,
-    pitch
-  };
+  // Identical registration as the rendered original auger and physics hull.
+  return { ...drillTipPosition(run), pitch: run.pitch || 0 };
 }
 function nearerRock(run, point) {
   const world = run.scroll + point.x;
