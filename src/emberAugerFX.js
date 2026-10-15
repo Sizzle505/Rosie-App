@@ -15,11 +15,12 @@ const ready = image => !!(image?.complete && image.naturalWidth > 0);
 const TAU = Math.PI * 2;
 export const AUGER_SHEET = Object.freeze({ columns:4, rows:4, frameWidth:360, frameHeight:300, frames:16 });
 export const DRILL_REGISTRATION = Object.freeze({
-  // Recess the source's rear ribs inside the original approved collar.
-  // The animated master is unscaled and every frame uses this same offset.
-  rootX:51, tipX:DRILL_TIP_OFFSET, tipY:DRILL_TIP_VERTICAL_OFFSET,
+  // Original vehicle socket axis is lower than the rotation pivot.
+  // Seat the actual sixteen-frame metal nose INTO the preserved brass
+  // housing, never leave a dark gap under its rear mounting flange.
+  rootX:47, tipX:DRILL_TIP_OFFSET, tipY:DRILL_TIP_VERTICAL_OFFSET,
   nozzleX:-116, nozzleY:4,
-  augerX:44, augerY:-52, augerW:120, augerH:110,
+  augerX:40, augerY:-20, augerW:120, augerH:110,
 });
 export const JET_SHEET = Object.freeze({ columns:4, rows:2, frames:8, sourceWidth:2172, sourceHeight:724, frameWidth:543, frameHeight:362 });
 export const IMPACT_SHEET = Object.freeze({ columns:4, rows:2, frames:8, sourceWidth:1774, sourceHeight:887, frameWidth:443.5, frameHeight:443.5 });
@@ -87,8 +88,8 @@ export function paintOriginalAuger(c,s,assets) {
   if(!atlas)return false;
   const frame=augerFrameRect(augerFrameIndex(s.time,s.boostTime>0));
   const {augerX,augerY,augerW,augerH}=DRILL_REGISTRATION;
-  // Alpha art starts at x=~51 and finishes x=~158: same as the
-  // actual nose used by collision and excavation effects.
+  // Alpha art starts inside the original socket and terminates at the
+  // collision / excavation tip. No additional fake collar is drawn.
   c.drawImage(atlas,frame.sx,frame.sy,frame.sw,frame.sh,
     augerX,augerY,augerW,augerH);
   return true;
