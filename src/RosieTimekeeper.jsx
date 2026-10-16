@@ -661,17 +661,17 @@ export default function RosieTimekeeper() {
                 <div className="rtk-custom-timer" aria-label="Custom countdown duration">
                   {["Hours","Minutes","Seconds"].map((label,i)=><React.Fragment key={label}>
                     {i>0 && <span className="rtk-time-separator" aria-hidden="true">:</span>}
-                    <label>{label}<div className="rtk-loop-wheel" role="spinbutton" tabIndex={0}
-                      aria-label={label} aria-valuemin={0} aria-valuemax={i===0?99:59}
-                      aria-valuenow={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
-                      onWheel={e=>{const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);const limit=i===0?100:60;chooseTimerUnit(i,(current+(e.deltaY>0?1:-1)+limit)%limit);}}
-                      onTouchStart={e=>{e.currentTarget.dataset.touchY=String(e.touches[0].clientY);}}
-                      onTouchEnd={e=>{const start=Number(e.currentTarget.dataset.touchY);const dy=e.changedTouches[0].clientY-start;if(Math.abs(dy)<9)return;const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);const limit=i===0?100:60;const steps=Math.max(1,Math.min(12,Math.round(Math.abs(dy)/24)));chooseTimerUnit(i,(current+(dy<0?steps:-steps)+limit)%limit);}}
-                      onKeyDown={e=>{if(!["ArrowUp","ArrowDown"].includes(e.key))return;e.preventDefault();const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);const limit=i===0?100:60;chooseTimerUnit(i,(current+(e.key==="ArrowDown"?1:-1)+limit)%limit);}}>
-                      {[-1,0,1].map(offset=><div key={offset} className={"rtk-loop-wheel-number"+(offset===0?" is-selected":"")}>
-                        {String(((i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))+offset+(i===0?100:60))%(i===0?100:60)).padStart(2,"0")}
-                      </div>)}
-                    </div></label>
+                    <label>{label}<select className="rtk-time-wheel" value={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
+                      onChange={e=>chooseTimerUnit(i,e.target.value)} aria-label={label}
+                      onKeyDown={e=>{if(!["ArrowUp","ArrowDown"].includes(e.key))return;
+                        const v=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);
+                        const max=i===0?100:60;
+                        if((e.key==="ArrowUp"&&v===0)||(e.key==="ArrowDown"&&v===max-1)){
+                          e.preventDefault();chooseTimerUnit(i,(v+(e.key==="ArrowUp"?max-1:1))%max);
+                        }
+                      }}>
+                      {Array.from({length:i===0?100:60},(_,n)=><option key={n} value={n}>{String(n).padStart(2,"0")}</option>)}
+                    </select></label>
                   </React.Fragment>)}
                 </div>
                 <div className="rtk-duration-actions">
