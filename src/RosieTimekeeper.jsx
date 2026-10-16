@@ -661,16 +661,17 @@ export default function RosieTimekeeper() {
                 <div className="rtk-custom-timer" aria-label="Custom countdown duration">
                   {["Hours","Minutes","Seconds"].map((label,i)=><React.Fragment key={label}>
                     {i>0 && <span className="rtk-time-separator" aria-hidden="true">:</span>}
-                    <label>{label}<select className="rtk-time-wheel" value={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
-                      onChange={e=>chooseTimerUnit(i,e.target.value)} aria-label={label}
+                    <label>{label}<select className="rtk-time-wheel"
+                      value={(i===0?100:60)+(i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))}
+                      onChange={e=>{const limit=i===0?100:60;chooseTimerUnit(i,Number(e.target.value)%limit);}} aria-label={label}
                       onKeyDown={e=>{if(!["ArrowUp","ArrowDown"].includes(e.key))return;
                         const v=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);
-                        const max=i===0?100:60;
-                        if((e.key==="ArrowUp"&&v===0)||(e.key==="ArrowDown"&&v===max-1)){
-                          e.preventDefault();chooseTimerUnit(i,(v+(e.key==="ArrowUp"?max-1:1))%max);
+                        const limit=i===0?100:60;
+                        if((e.key==="ArrowUp"&&v===0)||(e.key==="ArrowDown"&&v===limit-1)){
+                          e.preventDefault();chooseTimerUnit(i,(v+(e.key==="ArrowUp"?limit-1:1))%limit);
                         }
                       }}>
-                      {Array.from({length:i===0?100:60},(_,n)=><option key={n} value={n}>{String(n).padStart(2,"0")}</option>)}
+                      {Array.from({length:(i===0?100:60)*3},(_,n)=><option key={n} value={n}>{String(n%(i===0?100:60)).padStart(2,"0")}</option>)}
                     </select></label>
                   </React.Fragment>)}
                 </div>
