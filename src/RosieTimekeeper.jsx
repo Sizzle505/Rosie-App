@@ -41,12 +41,12 @@ function cueComplete(){
    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.085,t+.025);g.gain.exponentialRampToValueAtTime(.0001,t+.17);
    o.connect(f).connect(g).connect(ctx.destination);o.start(t);o.stop(t+.18);
   }
-  for(const [off,hz] of [[.42,784],[.59,987.77],[.78,1318.5]]){
+  for(const [off,hz] of [[.42,784],[.59,987.77],[.78,1318.5],[1.16,784],[1.33,987.77],[1.52,1318.5],[1.90,784],[2.07,987.77],[2.26,1318.5]]){
    for(const [harmonic,volume] of [[1,.057],[2.01,.015]]){
     const t=t0+off,o=ctx.createOscillator(),g=ctx.createGain();
     o.type="sine";o.frequency.value=hz*harmonic;
-    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+.60);
-    o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+.62);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+.65);
+    o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+.67);
    }
   }
  }catch{}
@@ -139,7 +139,7 @@ function formatClock(ms, fractions = false, countingDown = false) {
 export default function RosieTimekeeper() {
   const [mode, setMode] = useState(() => {
     applyApprovedDefaultsOnce();
-    return "stopwatch";
+    return "countdown";
   });
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
