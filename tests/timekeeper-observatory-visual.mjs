@@ -67,19 +67,18 @@ for(const [engine,browserType] of [["webkit",webkit],["chromium",chromium]]){
       await page.getByRole("button",{name:"Timer",exact:true}).click();
       assert.equal(await page.locator(".rtk-timer-tabs").count(),0,"No old Quick/Custom tabs");
       assert.equal(await page.locator(".rtk-quick-inline button").count(),4,"Quick presets on one row");
-      assert.equal(await page.locator(".rtk-time-wheel").count(),3,"Native H/M/S selectors");
-      await page.locator(".rtk-time-wheel[aria-label='Seconds']").selectOption("0");
-      await page.getByRole("button",{name:"Decrease Seconds"}).click();
-      assert.equal(await page.locator(".rtk-time-wheel[aria-label='Seconds']").inputValue(),"59",
-        "Seconds reverse scroll must wrap 00 to 59");
-      await page.getByRole("button",{name:"Increase Seconds"}).click();
-      assert.equal(await page.locator(".rtk-time-wheel[aria-label='Seconds']").inputValue(),"0",
-        "Seconds forward scroll must wrap 59 to 00");
-      await page.locator(".rtk-time-wheel[aria-label='Minutes']").selectOption("7");
-      assert((await page.locator(".rtk-time-whole").innerText()).includes("07:00"),
-        "Stopped timer must update without Set Duration");
+      assert.equal(await page.locator(".rtk-loop-wheel").count(),3,"Three infinite scroll wheels");
+      await page.locator(".rtk-loop-wheel[aria-label='Seconds']").focus();
+      await page.keyboard.press("ArrowUp");
+      assert.equal(await page.locator(".rtk-loop-wheel[aria-label='Seconds']").getAttribute("aria-valuenow"),"59","00 wraps backward to 59");
+      await page.keyboard.press("ArrowDown");
+      assert.equal(await page.locator(".rtk-loop-wheel[aria-label='Seconds']").getAttribute("aria-valuenow"),"0","59 wraps forward to 00");
+      await page.locator(".rtk-loop-wheel[aria-label='Minutes']").focus();
+      for(let n=1;n<=7;n++)await page.keyboard.press("ArrowDown");
+      assert((await page.locator(".rtk-time-whole").innerText()).includes("07:00"),"Stopped countdown updates live");
       await page.getByRole("button",{name:"Sets",exact:true}).click();
       assert.equal(await page.locator(".rtk-sets-editor").count(),1,"Sets remains accessible");
+      assert.equal(await page.locator(".rtk-quick-inline").count(),0,"Sets replaces quick row");
       assert.equal(errors.length,0,"Browser errors: "+errors.join(" | "));
       await context.close();
     }
