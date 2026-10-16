@@ -2,6 +2,7 @@ name: Timekeeper mobile visual verification
 on:
   push:
     branches:
+      - main
       - work/timekeeper-enamel-instruments-20261012
       - work/timekeepers-midnight-observatory
     paths:
