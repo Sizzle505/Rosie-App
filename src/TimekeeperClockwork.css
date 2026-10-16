@@ -190,7 +190,7 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls 
   position:absolute!important;
   display:block!important;
   left:88.5%!important;top:50%!important;
-  width:79%!important;height:auto!important;aspect-ratio:1!important;
+  width:67%!important;height:auto!important;aspect-ratio:1!important;
   max-width:none!important;max-height:none!important;
   transform:translate(-50%,-50%)!important;translate:none!important;
   object-fit:contain!important;clip-path:circle(30.5% at 50% 50%)!important;
