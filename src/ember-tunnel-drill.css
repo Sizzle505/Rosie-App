@@ -347,3 +347,10 @@
  .ember-suite .ember-header{height:auto!important;aspect-ratio:1280 / 350}
  .ember-suite .ember-header .ember-header-full-art{width:100%;height:100%}
 }
+
+/* A charged run should feel alive without covering the steering field. */
+.ember-stage.is-active{box-shadow:inset 0 0 42px rgba(255,179,73,.16),0 0 0 1px rgba(255,204,112,.22)}
+.ember-stage.is-active .ember-course-plaque{animation:ember-plaque-breathe 2.2s ease-in-out infinite}
+.ember-stage.is-active .ember-turbo-banner{animation:ember-turbo-pulse .7s ease-in-out infinite alternate}
+@keyframes ember-plaque-breathe{50%{box-shadow:0 7px 20px rgba(244,169,70,.47),inset 0 0 0 1px rgba(255,230,164,.14)}}
+@keyframes ember-turbo-pulse{to{transform:translateX(-50%) scale(1.09);filter:brightness(1.22)}}
