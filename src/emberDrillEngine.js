@@ -91,7 +91,7 @@ export function newRun(seed = 1467) {
   return { running: true, ended: false, time: 0, scroll: 0, y: tunnelCenter(DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
-    boosts: 0, shards: 0, damageTaken: 0,
+    boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
     objects: makeCourse(seed), formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
@@ -175,6 +175,10 @@ export function updateRun(s, dt, up = false, down = false) {
     s.events.push({ type: "pickup", kind: obj.kind, x: DRILL_ANCHOR + deltaX, y: obj.y, combo: s.combo });
   }
   if (s.hull <= 0 || s.time >= RUN_DURATION) {
+    if (s.hull > 0 && s.damageTaken === 0) {
+      s.cleanBonus = 500; s.score += s.cleanBonus;
+      s.events.push({ type: "clean-run", x: DRILL_ANCHOR, y: s.y });
+    }
     s.running = false; s.ended = true;
     s.result = s.hull > 0 ? "complete" : "hull";
     s.time = Math.min(RUN_DURATION, s.time);
