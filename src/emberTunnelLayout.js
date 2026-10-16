@@ -417,11 +417,14 @@ export function formationIntrusion(f){
 }
 export function formationClearance(f,worldX){
  if(!f.obstacle)return 0;
- const d=Math.abs(worldX-f.at)/(f.width*.34);
+ // Match the broad, purpose-built transition cores now drawn in the tunnel.
+ // This is intentionally challenging but still leaves a clean opposite-side
+ // escape route between alternating formations.
+ const d=Math.abs(worldX-f.at)/(f.width*.42);
  if(d>=1)return 0;
- // Tight core of the actual painted rock, not its transparent rectangle.
+ // Solid core of the visible rock - no longer a tiny decorative collision.
  const intrude=formationIntrusion(f);
- return Math.max(0,intrude*.90*Math.pow(1-d*d,1.6));
+ return Math.max(0,intrude*1.14*Math.pow(1-d*d,1.42));
 }
 export function nearFormation(worldX,reach=250){
  return FORMATION_LAYOUT.find(f=>f.obstacle && Math.abs(f.at-worldX)<reach);
