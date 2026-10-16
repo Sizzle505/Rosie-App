@@ -4,6 +4,26 @@ import TimekeeperClockwork from "./TimekeeperClockwork.jsx";
 
 const ART = "/rosieverse/timekeeper/midnight-observatory/hall-plate.webp";
 const STORAGE_KEY = "rosie-timekeeper-v3";
+const APPROVED_DEFAULT_KEY = "rosie-timekeeper-approved-defaults-20261016";
+// Apply the pictured combination ONCE even to people with older saved
+// default selections. Afterwards manual customization remains persistent.
+function applyApprovedDefaultsOnce() {
+  try {
+    if (window.localStorage.getItem(APPROVED_DEFAULT_KEY) === "1") return;
+    const defaults = {
+      "rosie-timekeeper-dial": "sunburst",
+      "rosie-timekeeper-bezel": "gold",
+      "rosie-timekeeper-hands": "dauphine",
+      "rosie-timekeeper-color": "garnet",
+      "rosie-timekeeper-hand-origin-v1": "1",
+      "rosie-timekeeper-luxury-default-v2": "1",
+    };
+    for (const [key,value] of Object.entries(defaults)) {
+      window.localStorage.setItem(key,value);
+    }
+    window.localStorage.setItem(APPROVED_DEFAULT_KEY,"1");
+  } catch {}
+}
 let timekeeperAudio=null;
 function primeTimekeeperAudio(){
  try {const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
@@ -117,7 +137,10 @@ function formatClock(ms, fractions = false, countingDown = false) {
  * Countdown completion is an in-app cue, not a guaranteed iOS system alarm.
  */
 export default function RosieTimekeeper() {
-  const [mode, setMode] = useState("stopwatch");
+  const [mode, setMode] = useState(() => {
+    applyApprovedDefaultsOnce();
+    return "stopwatch";
+  });
   const [running, setRunning] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [duration, setDuration] = useState(60_000);
@@ -150,7 +173,7 @@ export default function RosieTimekeeper() {
   });
   const [dialPickerOpen, setDialPickerOpen] = useState(false);
   const [worldZone,setWorldZone] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-zone");return WORLD_CITIES.some(c=>c.zone===saved)?saved:"America/New_York";}catch{return "America/New_York";}});
-  const [handStyle,setHandStyle] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hands");if(localStorage.getItem("rosie-timekeeper-hand-origin-v1")!=="1")return "observatory";return HAND_STYLES.some(c=>c.id===saved)?saved:"observatory";}catch{return "observatory";}});
+  const [handStyle,setHandStyle] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hands");if(localStorage.getItem("rosie-timekeeper-hand-origin-v1")!=="1")return "dauphine";return HAND_STYLES.some(c=>c.id===saved)?saved:"dauphine";}catch{return "dauphine";}});
   const [worldNow,setWorldNow] = useState(()=>Date.now());
   const [runnerEpoch,setRunnerEpoch] = useState(0);
 
