@@ -252,6 +252,21 @@ export default function RosieTimekeeper() {
     } catch {}
   }, [restored, mode, duration, elapsed, running, laps, sequence]);
 
+  // If a timer finished while the tab was fully suspended or the page was
+  // reloaded, deliver its pending completion cue once the app is foregrounded.
+  useEffect(() => {
+    if (!restored || !completionPending.current) return;
+    const deliver=()=>{
+      if(document.hidden || !completionPending.current) return;
+      completionPending.current=false;
+      primeTimekeeperAudio();
+      cueComplete();
+    };
+    deliver();
+    document.addEventListener("visibilitychange",deliver);
+    return ()=>document.removeEventListener("visibilitychange",deliver);
+  },[restored]);
+
   useEffect(() => {
     if (!running) return undefined;
     if(mode==="countdown" && deadlineWall.current===null) deadlineWall.current=Date.now()+Math.max(0,duration-accumulated.current);
