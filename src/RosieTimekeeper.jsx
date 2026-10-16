@@ -543,7 +543,7 @@ export default function RosieTimekeeper() {
               </clipPath>
             </defs>
             {mode === "stopwatch" && <g>
-              <circle cx="451" cy="349" r="129" fill="url(#rtk-native-lap)" />
+              <circle cx="451" cy="349" r="115" fill="url(#rtk-native-lap)" />
               <text x="451" y="373" textAnchor="middle" fill="#f8dda2"
                 stroke="#4e2c14" strokeWidth="1.4" paintOrder="stroke"
                 fontFamily="Georgia,serif" fontWeight="bold" fontSize="76"
