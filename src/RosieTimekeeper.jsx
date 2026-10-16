@@ -148,7 +148,7 @@ export default function RosieTimekeeper() {
   const [customHours, setCustomHours] = useState("0");
   const [customMinutes, setCustomMinutes] = useState("1");
   const [customSeconds, setCustomSeconds] = useState("00");
-  const [timerEntry, setTimerEntry] = useState("presets");
+  const [timerEntry, setTimerEntry] = useState("custom");
   const [bezelStyle,setBezelStyle] = useState(()=>{try {const id=localStorage.getItem("rosie-timekeeper-bezel");return BEZEL_STYLES.some(x=>x.id===id)?id:"gold";}catch{return "gold";}});
   const [savedSets,setSavedSets] = useState(()=>{try {
     const records=JSON.parse(localStorage.getItem(TIMER_SETS_KEY)||"[]");
@@ -326,11 +326,32 @@ export default function RosieTimekeeper() {
     pickPreset((hours * 3600 + minutes * 60 + seconds) * 1000);
   }
 
+  function syncTimerWheels(ms) {
+    const total=Math.floor(ms/1000);
+    setCustomHours(String(Math.floor(total/3600)));
+    setCustomMinutes(String(Math.floor((total%3600)/60)));
+    setCustomSeconds(String(total%60).padStart(2,"0"));
+  }
   function pickPreset(ms) {
     stopAndReset();
     setMode("countdown");
     setDuration(ms);
+    syncTimerWheels(ms);
     setSequence(null);
+    setMessage("");
+  }
+  function chooseTimerUnit(unit,value) {
+    const parts=[Number(customHours),Number(customMinutes),Number(customSeconds)];
+    parts[unit]=Number(value);
+    const [hours,minutes,seconds]=parts;
+    const ms=(hours*3600+minutes*60+seconds)*1000;
+    if(unit===0)setCustomHours(String(value));
+    if(unit===1)setCustomMinutes(String(value));
+    if(unit===2)setCustomSeconds(String(value).padStart(2,"0"));
+    if(!running){
+      accumulated.current=0;finished.current=false;setElapsed(0);
+      setDuration(Math.max(1000,ms));setSequence(null);setMessage("");
+    }
   }
   function adjustDuration(delta){
     const next=Math.max(1000,Math.min(MAX_TIMER_MS,Math.round((duration+delta)/1000)*1000));
@@ -586,7 +607,7 @@ export default function RosieTimekeeper() {
             <button type="button" className={"rtk-globe-mode"+(mode === "world" ? " chosen" : "")} aria-label="World Clock" title="World Clock" aria-pressed={mode === "world"} onClick={() => pickMode("world")}>
               <img src={LUXURY_ASSETS+"world-clock-ui/globe.webp"} alt="" draggable="false" />
             </button>
-            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
+            <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("custom"); }}>Timer</button>
           </div>
         </div>
         <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
@@ -626,32 +647,34 @@ export default function RosieTimekeeper() {
             </>
           ) : (
             <div className="rtk-timer-workspace">
-              <div className="rtk-timer-tabs" role="group" aria-label="Timer setup">
-                {[["presets","Quick"],["custom","Custom"],["sets","Sets"]].map(([id,label])=>
-                  <button key={id} type="button" className={timerEntry===id?"chosen":""}
-                    aria-pressed={timerEntry===id} onClick={()=>setTimerEntry(id)}>{label}</button>)}
+              <div className="rtk-presets rtk-quick-inline" aria-label="Quick timer durations">
+                {PRESETS.map(preset=><button key={preset.ms} type="button"
+                  className={duration===preset.ms?"chosen":""}
+                  onClick={()=>{pickPreset(preset.ms);setTimerEntry("custom")}}
+                  aria-pressed={duration===preset.ms}>{preset.label}</button>)}
               </div>
               {sequence && <div className="rtk-sequence-running" role="status">
                 <span>{sequence.name}: step {sequence.index+1} of {sequence.steps.length}</span>
                 <button type="button" aria-label="Previous set step" disabled={sequence.index===0} onClick={()=>stepTimerSet(-1)}>‹</button>
                 <button type="button" aria-label="Next set step" disabled={sequence.index>=sequence.steps.length-1} onClick={()=>stepTimerSet(1)}>›</button>
               </div>}
-              {timerEntry==="presets" && <div className="rtk-presets" aria-label="Quick timer durations">
-                {PRESETS.map(preset=><button key={preset.ms} type="button"
-                  className={duration===preset.ms?"chosen":""}
-                  onClick={()=>pickPreset(preset.ms)} aria-pressed={duration===preset.ms}>{preset.label}</button>)}
-              </div>}
-              {timerEntry==="custom" && <div className="rtk-custom-composer">
+              {timerEntry!=="sets" && <div className="rtk-custom-composer">
                 <div className="rtk-custom-timer" aria-label="Custom countdown duration">
-                  <label>Hours<input inputMode="numeric" type="number" min="0" max="99" value={customHours} onChange={e=>setCustomHours(e.target.value)} aria-label="Hours"/></label>
-                  <span className="rtk-time-separator" aria-hidden="true">:</span>
-                  <label>Minutes<input inputMode="numeric" type="number" min="0" max="59" value={customMinutes} onChange={e=>setCustomMinutes(e.target.value)} aria-label="Minutes"/></label>
-                  <span className="rtk-time-separator" aria-hidden="true">:</span>
-                  <label>Seconds<input inputMode="numeric" type="number" min="0" max="59" value={customSeconds} onChange={e=>setCustomSeconds(e.target.value)} aria-label="Seconds"/></label>
+                  {["Hours","Minutes","Seconds"].map((label,i)=><React.Fragment key={label}>
+                    {i>0 && <span className="rtk-time-separator" aria-hidden="true">:</span>}
+                    <label>{label}<select className="rtk-time-wheel" value={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
+                      onChange={e=>chooseTimerUnit(i,e.target.value)} aria-label={label}>
+                      {Array.from({length:i===0?100:60},(_,n)=><option key={n} value={n}>{String(n).padStart(2,"0")}</option>)}
+                    </select></label>
+                  </React.Fragment>)}
                 </div>
-                <button type="button" className="rtk-set-timer" onClick={applyCustomDuration}>Set Duration</button>
+                <div className="rtk-duration-actions">
+                  <button type="button" className="rtk-set-timer" onClick={applyCustomDuration}>Set Duration</button>
+                  <button type="button" className="rtk-sets-toggle" onClick={()=>setTimerEntry("sets")}>Sets</button>
+                </div>
               </div>}
               {timerEntry==="sets" && <div className="rtk-sets-editor">
+                <button type="button" className="rtk-back-custom" onClick={()=>setTimerEntry("custom")}>‹ Timer</button>
                 <div className="rtk-draft-line">
                   <input aria-label="Timer set name" maxLength="35" placeholder="Name your timer set"
                     value={setName} onChange={e=>setSetName(e.target.value)}/>
