@@ -546,3 +546,21 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-squirrel-overlay
 body .app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-squirrel-overlay .rtk-squirrel-tip {
   opacity:1!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.8))!important;
 }
+
+/* Cabinet visibility emergency fix: earlier height override was smaller than
+   the actual desktop/mobile cabinet because it referred to the wrong stage.
+   Keep existing top, extend the actual preexisting height downward. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  height:22.77%!important; /* original 20.7% x 1.10 */
+  max-height:none!important;
+  overflow:visible!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  bottom:3%!important;
+  min-height:0!important;
+}
