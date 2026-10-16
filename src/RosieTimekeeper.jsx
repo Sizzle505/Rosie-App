@@ -32,7 +32,7 @@ function primeTimekeeperAudio(){
  }catch{}
 }
 function cueComplete(){
- try {navigator.vibrate?.([50,45,100]);if(document.hidden||!timekeeperAudio||timekeeperAudio.state!=="running")return;
+ try {navigator.vibrate?.([50,45,100]);if(!timekeeperAudio||timekeeperAudio.state!=="running")return;
   const ctx=timekeeperAudio,t0=ctx.currentTime+.025;
   for(const off of [0,.205]){
    const t=t0+off,o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();
@@ -184,6 +184,8 @@ export default function RosieTimekeeper() {
   const anchor = useRef(0);
   const accumulated = useRef(0);
   const finished = useRef(false);
+  const deadlineWall = useRef(null);
+  const completionPending = useRef(false);
   const utilityRef = useRef(null);
 
   useEffect(() => {
@@ -232,7 +234,7 @@ export default function RosieTimekeeper() {
            Number.isInteger(active.index) && active.index>=0 && active.index<active.steps.length){
           setSequence({...active,steps:[...active.steps]});
         }
-        if (expired) setMessage("The sands of time have run out.");
+        if (expired) {setMessage("The sands of time have run out.");completionPending.current=Boolean(saved.running);}
       }
     } catch {}
     setRestored(true);
@@ -252,12 +254,13 @@ export default function RosieTimekeeper() {
 
   useEffect(() => {
     if (!running) return undefined;
+    if(mode==="countdown" && deadlineWall.current===null) deadlineWall.current=Date.now()+Math.max(0,duration-accumulated.current);
     const tick = () => {
-      const live = accumulated.current + performance.now() - anchor.current;
+      const live = mode==="countdown" && deadlineWall.current!==null ? Math.max(0,duration-(deadlineWall.current-Date.now())) : accumulated.current + performance.now() - anchor.current;
       if (mode === "countdown" && live >= duration) {
         if(sequence && sequence.index+1<sequence.steps.length){
           const index=sequence.index+1, next=sequence.steps[index];
-          accumulated.current=0;anchor.current=performance.now();
+          accumulated.current=0;anchor.current=performance.now();deadlineWall.current=Date.now()+next;
           finished.current=false;setElapsed(0);setDuration(next);
           setRunnerEpoch(n=>n+1);
           setSequence(prev=>prev ? {...prev,index} : null);
@@ -265,12 +268,13 @@ export default function RosieTimekeeper() {
           return;
         }
         accumulated.current = duration;
+        deadlineWall.current=null;
         setElapsed(duration);
         setRunning(false);
         if (!finished.current) {
           finished.current = true;
           setMessage("The sands of time have run out.");
-          cueComplete();
+          if(document.hidden){completionPending.current=true;}else{primeTimekeeperAudio();cueComplete();}
         }
       } else {
         setElapsed(live);
@@ -278,14 +282,16 @@ export default function RosieTimekeeper() {
     };
     tick();
     const timer = window.setInterval(tick, 16);
-    document.addEventListener("visibilitychange", tick);
+    const onVisibility=()=>{tick();if(!document.hidden&&completionPending.current){completionPending.current=false;primeTimekeeperAudio();cueComplete();}};
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       window.clearInterval(timer);
-      document.removeEventListener("visibilitychange", tick);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [running, mode, duration, sequence]);
 
   const stopAndReset = useCallback(() => {
+    deadlineWall.current=null;completionPending.current=false;
     setRunning(false);
     accumulated.current = 0;
     anchor.current = 0;
@@ -360,6 +366,7 @@ export default function RosieTimekeeper() {
     const adjustedElapsed=Math.min(Math.max(0,live),next);
     accumulated.current=adjustedElapsed;anchor.current=performance.now();
     setDuration(next);setElapsed(adjustedElapsed);finished.current=false;
+    deadlineWall.current=running?Date.now()+Math.max(0,next-adjustedElapsed):null;
     setSequence(null);setMessage("");
   }
   function addDraftStep(){
@@ -393,6 +400,7 @@ export default function RosieTimekeeper() {
       accumulated.current = Math.min(mode === "countdown" ? duration : Infinity, ms);
       setElapsed(accumulated.current);
       setRunning(false);
+      deadlineWall.current=null;
       return;
     }
     if (mode === "countdown" && accumulated.current >= duration) {
@@ -400,6 +408,8 @@ export default function RosieTimekeeper() {
       setElapsed(0);
     }
     anchor.current = performance.now();
+    deadlineWall.current=mode==="countdown"?Date.now()+Math.max(0,duration-accumulated.current):null;
+    completionPending.current=false;
     finished.current = false;
     setMessage("");
     setRunning(true);
