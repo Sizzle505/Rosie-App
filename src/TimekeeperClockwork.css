@@ -47,7 +47,7 @@
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
-  background-size: 200% 200%;
+  background-size: 300% 200%;
   opacity: var(--rtk-opacity, .90);
   filter: saturate(1.05) brightness(1.10) contrast(1.07) drop-shadow(0 2px 3px #000b);
   transform-origin: 50% 50%;
@@ -83,3 +83,235 @@
 /* Gears respond to the actual running state; independent ratios and original sprites preserved. */
 .rtk-dial .rtk-rotating-wheel {animation-play-state:paused;}
 .rtk-dial.is-running .rtk-rotating-wheel {animation-play-state:running;}
+
+
+/* Timekeepers corrective registration - preserve the ORIGINAL illustrated
+   images, rather than covering them with procedural CSS hands or medallions.
+   Each isolated 512px sprite is rotated around its true original jewel center. */
+
+/* The established mode selector and customization jewel offsets are preserved. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  translate:0 -45px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:-55px -160px!important;
+}
+
+/* Shift the WHOLE World Clock group down in the information cabinet. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {
+  translate:0 25px!important; /* city, date and day/night down 10px together */
+  padding-bottom:17px!important;
+}
+
+/* Real, transparent WebP artwork on original 512x512 planes. The hour and
+   minute originals for the three older styles were cut with a roughly 20
+   degree right cant and off-center jewels. Rotate that cant out using the
+   separate CSS rotate property while the live JS transform continues to
+   advance the clock hands. The original Observatory hands are vertical. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-hands {
+  position:absolute!important;inset:16%!important;aspect-ratio:1!important;
+  z-index:8!important;pointer-events:none!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+  --rtk-px:50%;
+  --rtk-py:50%;
+  --rtk-correction:0deg;
+  position:absolute!important;
+  width:100%!important;height:100%!important;
+  left:calc(50% - var(--rtk-px))!important;
+  top:calc(50% - var(--rtk-py))!important;
+  background-size:100% 100%!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  transform-origin:var(--rtk-px) var(--rtk-py)!important;
+  rotate:var(--rtk-correction)!important;
+  transition:transform .45s ease-out!important;
+  clip-path:none!important;
+  filter:drop-shadow(0 1px 1px #0705108a)!important;
+  opacity:1!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/dauphine-hour.webp"],
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/dauphine-minute.webp"] {
+  --rtk-px:47.3%;--rtk-py:50%;--rtk-correction:-19deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/filigree-hour.webp"],
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/filigree-minute.webp"] {
+  --rtk-px:45.9%;--rtk-py:50%;--rtk-correction:-21deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/blued-hour.webp"],
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/blued-minute.webp"] {
+  --rtk-px:46.9%;--rtk-py:50%;--rtk-correction:-19deg;
+}
+/* The hour-hand jewelled foot sits a few pixels below center in this set. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/observatory-hour.webp"] {
+  --rtk-px:50%;--rtk-py:51.7%;--rtk-correction:0deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/observatory-minute.webp"],
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/observatory-second.webp"] {
+  --rtk-px:50%;--rtk-py:50%;--rtk-correction:0deg;
+}
+/* The three second hands were extracted separately: all their pivots are
+   above the canvas midpoint, and an unrelated fragment lies to the right.
+   Clip ONLY that debris, retaining the hand's original metalwork. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/dauphine-second.webp"] {
+  --rtk-px:47.3%;--rtk-py:46.8%;--rtk-correction:0deg;
+  clip-path:inset(0 43% 47.8% 34%)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/filigree-second.webp"] {
+  --rtk-px:44.4%;--rtk-py:46.8%;--rtk-correction:-2deg;
+  clip-path:inset(0 43% 47.8% 34%)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand[style*="/blued-second.webp"] {
+  --rtk-px:47.0%;--rtk-py:46.8%;--rtk-correction:0deg;
+  clip-path:inset(0 43% 47.8% 34%)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+  position:absolute!important;left:50%!important;top:50%!important;
+  width:9%!important;height:9%!important;z-index:12!important;
+  transform:translate(-50%,-50%)!important;
+  background-position:center!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  background-color:transparent!important;
+  border:0!important;box-shadow:none!important;border-radius:0!important;
+  filter:drop-shadow(0 1px 1px #08051d9a)!important;
+}
+
+/* Reuse the native illustrated three-button console. The two alternate
+   medallions are cropped to just their original enamel center: the outer
+   ornate gold borders would create doubled rims when laid over the console.
+   No replacement circle, icon or font is drawn by CSS. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  position:absolute!important;
+  display:block!important;
+  left:88.5%!important;top:50%!important;
+  width:67%!important;height:auto!important;aspect-ratio:1!important;
+  max-width:none!important;max-height:none!important;
+  transform:translate(-50%,-50%)!important;translate:none!important;
+  object-fit:contain!important;clip-path:circle(30.5% at 50% 50%)!important;
+  pointer-events:none!important;
+  z-index:4!important;
+  opacity:1!important;
+  filter:none!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action:disabled .rtk-new-lap-art {
+  opacity:.72!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  display:none!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action.is-playing {
+  position:relative!important;isolation:isolate!important;overflow:visible!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action.is-playing .rtk-pause-medallion {
+  position:absolute!important;
+  display:block!important;
+  inset:auto!important;
+  left:50%!important;top:50%!important;
+  width:98%!important;height:98%!important;
+  max-width:none!important;max-height:none!important;
+  transform:translate(-50%,-50%)!important;translate:none!important;
+  object-fit:contain!important;
+  clip-path:circle(19.5% at 50% 50%)!important;
+  pointer-events:none!important;z-index:6!important;
+  filter:none!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action.is-playing svg {
+  display:none!important;
+}
+
+
+/* 2026-10-16 final targeted Timekeepers refinements. */
+
+/* Use the original unmodified three-disc console as the only bezel.
+   This SVG is letterbox-matched to that image and paints only the LEFT
+   enamel inset and the CENTER ruby inset in the appropriate running state. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-console-inlays {
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  display:block!important;
+  z-index:5!important;
+  pointer-events:none!important;
+  overflow:visible!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-accessible,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-pause-accessible {
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  padding:0!important;clip-path:inset(50%)!important;
+  overflow:hidden!important;white-space:nowrap!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action.is-playing::after,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action::after {
+  content:none!important;display:none!important;
+}
+
+/* Three independent explicit CSS-pixel adjustments from the previous view.
+   No whole-panel translation, which would undo the requested separation. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner:has(.rtk-world-settings) {
+  /* Reposition the scroll viewport first: moving the SELECT alone would
+     crop its top 35px under the panel's overflow-y:auto boundary. */
+  top:calc(27% - 35px)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+  position:relative!important;top:15px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {
+  position:relative!important;top:30px!important;
+}
+
+/* Keep every illustration, and its individual observed metal-jewel pivot,
+   precisely coaxial with the dial. Note that left/top compensate for the
+   same pivot used by BOTH the live transform and angle correction. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/dauphine-hour.webp"] {
+  --rtk-px:46.5%;--rtk-py:50.3%;--rtk-correction:-19deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/dauphine-minute.webp"] {
+  --rtk-px:46.7%;--rtk-py:50.3%;--rtk-correction:-19deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/filigree-hour.webp"] {
+  --rtk-px:44.5%;--rtk-py:50.2%;--rtk-correction:-22deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/filigree-minute.webp"] {
+  --rtk-px:45.5%;--rtk-py:49.9%;--rtk-correction:-21deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/blued-hour.webp"] {
+  --rtk-px:46.6%;--rtk-py:50%;--rtk-correction:-19deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/blued-minute.webp"] {
+  --rtk-px:47%;--rtk-py:50%;--rtk-correction:-19deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/observatory-hour.webp"] {
+  --rtk-px:50%;--rtk-py:50.3%;--rtk-correction:0deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/observatory-minute.webp"] {
+  --rtk-px:50%;--rtk-py:50%;--rtk-correction:0deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/observatory-second.webp"] {
+  --rtk-px:50%;--rtk-py:50%;--rtk-correction:0deg;
+}
+
+/* The stray diagonal scraps in the generated second-hand atlases are to
+   the RIGHT of the decorated hand. Only horizontal transparency is clipped,
+   preserving the original jewelled counterweight BELOW the center. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/dauphine-second.webp"] {
+  --rtk-px:47.3%;--rtk-py:46.8%;--rtk-correction:0deg;
+  clip-path:inset(0 45% 0 36%)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/filigree-second.webp"] {
+  --rtk-px:44.4%;--rtk-py:46.8%;--rtk-correction:-2deg;
+  clip-path:inset(0 45% 0 36%)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/blued-second.webp"] {
+  --rtk-px:47%;--rtk-py:46.8%;--rtk-correction:0deg;
+  clip-path:inset(0 45% 0 36%)!important;
+}

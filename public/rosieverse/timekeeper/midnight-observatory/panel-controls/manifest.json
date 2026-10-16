@@ -1,0 +1,17 @@
+{
+  "asset_set": "Timekeepers Sapphire Instrument Controls",
+  "date": "2026-10-14",
+  "source": "Approved Rosie App artwork, transferred through Dropbox",
+  "assets": [
+    "mode-stopwatch.webp",
+    "mode-timer.webp",
+    "mode-world.webp",
+    "preset-button.webp",
+    "section-plaque.webp",
+    "action-plaque.webp"
+  ],
+  "alignment": "All mode graphics normalized to exactly 1200x298 using a common crop; state changes use an unchanging CSS box.",
+  "runtime": "CSS background image swaps keyed to data-active; all three mode buttons remain native, keyboard accessible buttons.",
+  "layout": "30 CSS pixel lift on standard iPhone viewports; smaller safety lift on compact-height screens.",
+  "source_archive": "/Rosie-App-Transfer/Timekeepers Asset Pack - Midnight Observatory/Timekeepers Panel Control Assets 20261014.zip"
+}

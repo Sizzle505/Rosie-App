@@ -1485,6 +1485,84 @@ body:has(.app-shell.page-timekeeper),
   transform:rotate(90deg) scaleX(-1);
   transform-origin:50% 50%;
 }
+
+/* Midnight Observatory - modular production scene.  The backdrop, face,
+   bezel, character, and mechanism remain independent so future clock faces
+   can replace only rtk-face-base.  The shared Resources navigation is not
+   styled here. */
+.rtk-observatory .rtk-art-stage { aspect-ratio:911 / 1727; }
+.rtk-observatory .rtk-background { width:100%; height:auto; }
+.rtk-observatory .rtk-observatory-props { position:absolute; inset:0; z-index:4; pointer-events:none; }
+.rtk-observatory .rtk-rosie-levers {
+  position:absolute; left:31%; top:.8%; width:38%; aspect-ratio:1 / 1;
+  background:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-ready.webp") center / contain no-repeat;
+  filter:drop-shadow(0 7px 9px rgba(0,0,0,.42));
+  transform-origin:50% 70%; transition:transform .35s ease,filter .35s ease;
+}
+.rtk-observatory .rtk-rosie-levers.is-pull { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp"); transform:translateY(2px) scale(1.012); }
+.rtk-observatory .rtk-rosie-levers.is-working { background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp"); animation:rtk-rosie-working 2.6s ease-in-out infinite alternate; }
+.rtk-observatory .rtk-pendulum {
+  position:absolute; top:35%; width:15%; aspect-ratio:3 / 4;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/pendulum-atlas.webp");
+  background-size:200% 100%; background-repeat:no-repeat; transform-origin:50% 7%;
+  animation:rtk-pendulum-swing 2.05s ease-in-out infinite alternate;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.48));
+}
+.rtk-observatory .rtk-pendulum-left { left:3%; background-position:0 50%; }
+.rtk-observatory .rtk-pendulum-right { right:3%; background-position:100% 50%; animation-delay:-1.025s; }
+.rtk-observatory .rtk-hourglass {
+  position:absolute; right:4.8%; top:51.2%; width:10.5%; aspect-ratio:1 / 2;
+  background:url("/rosieverse/timekeeper/midnight-observatory/hourglass-states.webp") 0 50% / 300% 100% no-repeat;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.45));
+}
+.rtk-observatory .rtk-hourglass.is-running { animation:rtk-hourglass-flow 1.8s steps(3,end) infinite; }
+.rtk-observatory .rtk-dial {
+  top:38%; width:62%; z-index:3; gap:clamp(3px,.7vw,9px);
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,.42));
+}
+.rtk-observatory .rtk-face-base {
+  position:absolute; inset:0; z-index:0; border-radius:50%;
+  background:url("/rosieverse/timekeeper/midnight-observatory/face-quiet.webp") center / 100% 100% no-repeat;
+}
+.rtk-observatory .rtk-bezel {
+  position:absolute; inset:-1.9%; z-index:3; pointer-events:none;
+  background:url("/rosieverse/timekeeper/midnight-observatory/bezel.webp") center / 100% 100% no-repeat;
+}
+.rtk-observatory .rtk-clockwork {
+  z-index:1; width:72%; background:transparent; box-shadow:none;
+  -webkit-mask-image:none; mask-image:none; overflow:visible;
+}
+.rtk-observatory .rtk-mechanical-chassis { opacity:.35; }
+.rtk-observatory .rtk-clockwork-vignette,
+.rtk-observatory .rtk-ornate-track { display:none; }
+.rtk-observatory .rtk-rotating-wheel { filter:saturate(1.04) brightness(1.06) drop-shadow(0 2px 3px rgba(0,0,0,.62)); }
+.rtk-observatory .rtk-progress-ring { z-index:4; inset:-5.5%; width:111%; height:111%; }
+.rtk-observatory .rtk-time { position:relative; z-index:5; font-size:clamp(25px,6vw,54px); color:#fff3ca; text-shadow:0 2px 2px #06102c,0 0 11px rgba(103,179,255,.55); }
+.rtk-observatory .rtk-caption { position:relative; z-index:5; color:#f9d898; text-shadow:0 1px 2px #06102c; }
+.rtk-observatory .rtk-squirrel-runner {
+  position:absolute; z-index:7; left:var(--rtk-squirrel-x); top:var(--rtk-squirrel-y);
+  width:17%; aspect-ratio:1.33 / 1; transform:translate(-50%,-50%);
+  background:url("/rosieverse/timekeeper/midnight-observatory/squirrel-run.webp") 0 50% / 400% 100% no-repeat;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.6));
+}
+.rtk-observatory .rtk-squirrel-runner.is-running { animation:none; }
+.rtk-observatory .rtk-squirrel-runner.is-countdown { transform:translate(-50%,-50%) scaleX(-1); }
+.rtk-observatory .rtk-action-deck { top:61.5%; z-index:6; }
+.rtk-observatory .rtk-utility,
+.rtk-observatory .rtk-utility.is-empty,
+.rtk-observatory .rtk-utility.is-timer { top:73.8%; z-index:6; }
+@keyframes rtk-pendulum-swing { from { transform:rotate(-7deg); } to { transform:rotate(7deg); } }
+@keyframes rtk-hourglass-flow { 0%,25% { background-position:0 50%; } 35%,58% { background-position:50% 50%; } 68%,100% { background-position:100% 50%; } }
+@keyframes rtk-rosie-working { from { transform:translateY(0) scale(1); } to { transform:translateY(2px) scale(1.012); } }
+@keyframes rtk-squirrel-stride { to { background-position:100% 50%; } }
+@media (max-height:700px) {
+  .rtk-observatory .rtk-dial { top:36%; width:59%; }
+  .rtk-observatory .rtk-action-deck { top:59.5%; }
+  .rtk-observatory .rtk-utility,.rtk-observatory .rtk-utility.is-empty,.rtk-observatory .rtk-utility.is-timer { top:72.6%; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .rtk-observatory .rtk-rosie-levers,.rtk-observatory .rtk-pendulum,.rtk-observatory .rtk-hourglass,.rtk-observatory .rtk-squirrel-runner { animation:none!important; }
+}
 @media (max-width:520px) and (max-height:700px) {
   .rtk-page .rtk-action-deck {top:calc(57% - 9px);gap:0;}
   .rtk-page .rtk-action-deck .rtk-controls {height:52px;gap:2px;}
@@ -1561,4 +1639,2372 @@ body:has(.app-shell.page-timekeeper),
 .rtk-page .rtk-action-deck .rtk-controls .rtk-repeat-icon {
   display:block;width:40%;height:40%;margin:auto;color:#f9dda6;
   stroke:currentColor;filter:drop-shadow(0 1px 2px #120710);
+}
+
+/* Midnight Observatory final geometry.
+   The prior Timekeeper revisions positioned pieces against several different
+   stage heights. Keep every overlay on the single illustrated art board: on
+   phones it fills the available width; on wider displays the entire board is
+   scaled to the visible height so controls never disappear behind the shared
+   navigation. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+  width:100%;
+  height:auto;
+  aspect-ratio:870 / 1651;
+  margin:0 auto;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-background {
+  display:block;
+  width:100%;
+  height:auto;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck {
+  top:61.5%;
+  z-index:8;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:73.8%;
+  z-index:8;
+}
+@media (min-width:521px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+    width:min(100%,calc(100dvh * 870 / 1651));
+  }
+}
+
+/* The timer ring is inset from the dial itself. Do not inherit the legacy
+   centering transform, which moves the SVG off to the left of the clock. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
+  transform:none;
+}
+
+/* Phone composition: Rosie works the levers from above the bezel instead of
+   obscuring the time face. The dial and control rail are then spaced as one
+   vertical stack, leaving a usable cabinet above the permanent navigation. */
+@media (max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers {
+    left:34.5%;
+    top:.5%;
+    width:31%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-dial {
+    top:43%;
+    width:61%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck {
+    top:62.5%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:75.8%;
+  }
+}
+
+/* Live clockwork layer. The illustrated hall remains the full-screen base;
+   only the requested timer mechanics are independently animated. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-upper-progress-rail,
+.app-shell.page-timekeeper .rtk-observatory .rtk-pendulum,
+.app-shell.page-timekeeper .rtk-observatory .rtk-hourglass { display:none!important; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
+  display:block; position:absolute; z-index:8; inset:-8%; width:116%; height:116%; transform:none;
+  overflow:visible; pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-track {
+  display:block; fill:none; stroke:rgba(157,102,35,.72); stroke-width:1.45;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-dotted,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-twilight,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-energy-sparks,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-ruby { display:none; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  display:block; fill:none; stroke-linecap:round; transform:rotate(-90deg); transform-origin:50% 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom { stroke:#0574ff; stroke-width:4.2; opacity:.44; filter:blur(2px) drop-shadow(0 0 5px #0a8cff); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live { stroke:#55dbff; stroke-width:1.45; filter:drop-shadow(0 0 3px #19a7ff); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-live { transform:rotate(-90deg) scaleX(-1); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner {
+  position:absolute; z-index:10; left:var(--rtk-squirrel-x); top:var(--rtk-squirrel-y); width:14%;
+  transform:translate(-50%,-50%); background-position:0 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown { transform:translate(-50%,-50%) scaleX(-1); }
+@media (max-width:520px) {
+}
+
+/* Reference-led Timekeepers composition.  These rules intentionally sit at
+   the end of the stylesheet so the illustrated board has one source of truth
+   instead of accumulating legacy control treatments. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-pendulum { display:none; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring { display:none; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-clockwork {
+  z-index:2; width:132%; height:132%; aspect-ratio:1; overflow:visible;
+  background:transparent; box-shadow:none; -webkit-mask-image:none; mask-image:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-mechanical-chassis { display:none; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-clockwork-vignette { display:none; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-gear-mount { z-index:2; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-face-base { z-index:3; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel { z-index:6; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-time,
+.app-shell.page-timekeeper .rtk-observatory .rtk-caption { z-index:7; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-upper-progress-rail {
+  position:absolute; z-index:5; left:14%; top:25.2%; width:72%; aspect-ratio:2132 / 738;
+  background:url("/rosieverse/timekeeper/midnight-observatory/upper-progress-rail-v1.webp") center / contain no-repeat;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner {
+  z-index:6; left:var(--rtk-squirrel-x); top:var(--rtk-squirrel-y); width:11.5%;
+  transform:translate(-50%,-50%); filter:drop-shadow(0 2px 2px rgba(0,0,0,.72));
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown { transform:translate(-50%,-50%) scaleX(-1); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-hourglass { right:5.4%; top:48%; width:9.4%; z-index:5; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck {
+  top:63.2%; width:70%; height:9.8%; z-index:9; display:block;
+  background:url("/rosieverse/timekeeper/midnight-observatory/controls-console-v1.webp") center / contain no-repeat;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls {
+  position:absolute; inset:0; display:grid; grid-template-columns:30% 40% 30%; gap:0;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action {
+  width:100%; height:100%; border:0; border-radius:0; background:transparent; box-shadow:none;
+  color:transparent; filter:none; opacity:1;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls button:disabled { opacity:.56; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls button:active { transform:scale(.96); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls svg,
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-action-word { opacity:0; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:73.8%; width:82%; height:20.7%; min-height:0; max-height:none; overflow:hidden; padding:0;
+  border:0; border-radius:0; background:url("/rosieverse/timekeeper/midnight-observatory/information-cabinet-v1.webp") center / 100% 100% no-repeat;
+  box-shadow:none; z-index:8;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  position:absolute; z-index:2; top:13%; left:50%; transform:translateX(-50%); width:46%; height:15%;
+  display:grid; grid-template-columns:1fr 1fr; gap:2px; padding:2px;
+  border:1px solid rgba(241,194,112,.75); border-radius:999px; background:rgba(9,17,48,.72);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button {
+  min-height:0; border:0; padding:0 3px; border-radius:999px; font-size:clamp(8px,1.65vw,13px);
+  color:#f9deb0; background:transparent; box-shadow:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button.chosen { background:linear-gradient(145deg,#9b3153,#55112e); color:#fff2d2; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  position:absolute; top:34%; bottom:12%; left:13%; right:13%; overflow:auto; padding:0;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading { font-size:clamp(11px,2vw,15px); padding-bottom:4px; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-empty { margin:6px 0 0; font-size:clamp(10px,1.8vw,13px); }
+@media (max-width:520px) {
+  /* The fixed Resources rail begins above Safari's bottom controls. Keep
+     every Timekeeper control and the full cabinet in the exposed window. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers { left:32.5%; top:1.6%; width:35%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-dial { top:37%; width:62%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-clockwork { width:122%; height:122%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-upper-progress-rail { top:22.8%; left:14%; width:72%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-hourglass { top:43.5%; width:8.5%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck { top:52%; width:70%; height:9%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer { top:62.2%; width:84%; height:17%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch { top:11%; height:15%; width:51%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner { top:31%; bottom:11%; }
+}
+
+/* The blue arc is deliberately code-driven: it reveals only the elapsed or
+   remaining portion of the timer.  Keeping this last prevents legacy visual
+   treatments from turning it back into a static illustration. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring {
+  display:block;
+  z-index:8;
+  inset:-8%;
+  width:116%;
+  height:116%;
+  transform:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  animation:none !important;
+}
+
+/* Lever-led mechanism: the supplied crisp pull frame is the only animated
+   Rosie state, with two brass drive rods feeding the first outer gears. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp");
+  animation:rtk-rosie-working 2.8s ease-in-out infinite alternate;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp");
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive {
+  position:absolute;
+  z-index:2;
+  top:21%;
+  width:4.3%;
+  height:19%;
+  transform-origin:50% 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#3f210c,#eac16f 27%,#fff1b2 48%,#b66d26 74%,#43210d);
+  box-shadow:0 0 0 1px rgba(47,24,9,.75), 0 2px 5px rgba(0,0,0,.62);
+  opacity:.92;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive::after {
+  content:""; position:absolute; left:50%; bottom:-5px; width:10px; height:10px;
+  transform:translateX(-50%); border-radius:50%;
+  background:radial-gradient(circle at 36% 28%,#fff4c7 0 13%,#c93f62 16% 39%,#74301d 42% 67%,#f0be63 71% 100%);
+  box-shadow:0 1px 3px #050204;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-left { left:35.8%; transform:rotate(23deg); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-right { right:35.8%; transform:rotate(-23deg); }
+.app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props.is-running .rtk-lever-drive {
+  filter:brightness(1.15) drop-shadow(0 0 3px rgba(232,179,68,.55));
+}
+/* The squirrel is a calm marker, not a flickering sprite. Its coordinates are
+   fed by timer progress; this transition merely removes frame-to-frame jitter. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-running {
+  animation:none !important;
+  transition:left 900ms linear, top 900ms linear;
+  will-change:left,top;
+}
+@media (max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive { top:20.5%; height:18%; width:4.7%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-left { left:35.2%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-lever-drive-right { right:35.2%; }
+}
+
+
+/* 2026-10-14: Master-asset lever stations and true exterior gearing.
+   This block supersedes the prior procedural rods and in-dial gearing.
+   All positions are relative to the SAME illustrated art board. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  z-index:3;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-original-atlas.webp");
+  background-size:300% 100%;
+  background-repeat:no-repeat;
+  background-position:0% 50%;
+  image-rendering:auto;
+  animation:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull {
+  background-position:50% 50%;
+  transform:translateY(1px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  background-position:100% 50%;
+  animation:rtk-rosie-working 2.8s ease-in-out infinite alternate;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever {
+  position:absolute;
+  z-index:2;
+  top:17.2%;
+  width:17%;
+  aspect-ratio:3 / 2;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.6));
+  pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left { left:25.9%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right { right:25.9%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::before,
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::after {
+  content:"";
+  display:block;
+  position:absolute;
+  inset:0;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/twin-lever-original-atlas.webp");
+  background-size:200% 200%;
+  background-repeat:no-repeat;
+  transition:opacity .42s ease-in-out,transform .55s cubic-bezier(.2,.8,.2,1);
+  transform-origin:50% 85%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::before { opacity:1; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever::after { opacity:0; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left::before { background-position:0% 0%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left::after { background-position:100% 100%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right::before { background-position:0% 100%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right::after { background-position:100% 0%; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props.is-running .rtk-twin-lever::before { opacity:0; }
+.app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props.is-running .rtk-twin-lever::after { opacity:1; }
+
+/* Unclipped behind the clock shell, never painted across its interior.
+   The first gear of each train sits directly beneath Rosie's levers. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork {
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:38%;
+  width:90%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  overflow:visible;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-clockwork {
+  display:block;
+  position:absolute;
+  z-index:auto;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  transform:none;
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:none;
+  box-shadow:none;
+  -webkit-mask:none;
+  mask:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount {z-index:1;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+  background-size:300% 200%;
+  background-repeat:no-repeat;
+  opacity:var(--rtk-opacity,.95);
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.64)) saturate(1.07) brightness(1.07);
+  animation-play-state:paused;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork.is-running .rtk-rotating-wheel {
+  animation-play-state:running;
+}
+
+/* Visible single supplied squirrel frame; only its position moves.
+   The ring and squirrel share the same gradual 25-minute stopwatch phase. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-running {
+  display:block;
+  z-index:10;
+  width:15.5%;
+  aspect-ratio:543 / 724;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/squirrel-original-still.webp");
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:1;
+  visibility:visible;
+  animation:none !important;
+  transition:left 240ms linear, top 240ms linear;
+  filter:drop-shadow(0 2px 2px #100609) drop-shadow(0 0 1px #f9cc87);
+  will-change:transform;
+}
+@media(max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork { top:37%; width:90%; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever {top:17.1%; width:17.5%;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-left {left:25.4%;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever-right {right:25.4%;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+    animation:none!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+    animation:none!important;
+  }
+}
+/* Rosie and both jeweled control stations are now one artwork per pose:
+   assembled directly from the actual master atlases, with all three poses
+   sharing the same receiving shafts. There are no floating rods/handles. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  top:1.6%;
+  left:28%;
+  width:44%;
+  aspect-ratio:900 / 870;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-integrated-levers.webp");
+  background-size:300% 100%;
+  background-repeat:no-repeat;
+  image-rendering:auto;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-twin-lever {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.76)) saturate(.96) brightness(.96);
+}
+/* Exact Dropbox blue-and-gold instrument cabinet replaces the older plum one. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/information-cabinet-blue.webp");
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  background:rgba(6,22,62,.83);
+  border-color:#ddbb7b;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button.chosen {
+  background:linear-gradient(145deg,#245f9d,#102d61);
+  color:#fff2d1;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner {
+  transition:left 105ms linear,top 105ms linear;
+}
+@media(max-width:520px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+    left:28%;
+    top:1.6%;
+    width:44%;
+  }
+}
+
+/* The squirrel begins at the visible upper-right shoulder, not underneath
+   Rosie's body. The gold/blue ring and running marker share this origin. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  transform:rotate(-30deg);
+  transform-origin:50% 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-live {
+  transform:rotate(150deg) scaleX(-1);
+  transform-origin:50% 50%;
+}
+
+
+/* Timekeepers mechanical correction - the original, hand-aligned Rosie poses
+   have larger brass lever stations feeding an interlocked 16-wheel train. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull,
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  z-index:3;
+  top:1.6%;
+  left:25%;
+  width:50%;
+  aspect-ratio:1050 / 900;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/rosie-connected-lever-drive.webp");
+  background-position:0% 50%;
+  background-size:300% 100%;
+  background-repeat:no-repeat;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.45));
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-pull {
+  background-position:50% 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers.is-working {
+  background-position:100% 50%;
+}
+/* Clock shell is in front of the gearing and disguises its inner halves. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial {
+  z-index:5;
+  isolation:isolate;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork {
+  z-index:2;
+  top:37%;
+  width:90%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-rotating-wheel {
+  filter:drop-shadow(0 2px 3px #080407bb) saturate(.98) brightness(1.02);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner {
+  z-index:11;
+  opacity:1;
+  visibility:visible;
+}
+/* 12 o'clock is the shared squirrel and progress-arc origin. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+  transform:rotate(-90deg);
+  transform-origin:50% 50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-bloom,
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring.is-reverse .rtk-progress-live {
+  transform:rotate(90deg) scaleX(-1);
+  transform-origin:50% 50%;
+}
+/* Disable the earlier purple border-image that masked the imported blue panel. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility::before {
+  display:none!important;
+  content:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/information-cabinet-sapphire.webp")!important;
+  background-color:transparent!important;
+  background-size:100% 100%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button {
+  color:#ffe9c6;
+  border-color:#bd965e;
+  background:linear-gradient(165deg,#1d5b9c 0%,#103668 45%,#06183c 100%);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button.chosen {
+  background:linear-gradient(165deg,#3b87ca 0%,#20538f 48%,#092a65 100%);
+  border-color:#f0cd88;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {
+  background:#092c60;
+}
+
+/* Sapphire Timekeepers cabinet: twice-height instrument layout. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+ top:67%;left:50%;width:88%;height:28%;aspect-ratio:auto;
+ min-height:0;max-height:none;overflow:hidden;padding:0;
+ transform:translateX(-50%);z-index:8;
+ background-image:url("/rosieverse/timekeeper/midnight-observatory/information-cabinet-sapphire.webp")!important;
+ background-size:100% 100%!important;background-position:center;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+ position:absolute;z-index:4;top:10%;left:50%;transform:translateX(-50%);
+ width:76%;height:23%;display:grid;grid-template-columns:1fr 1fr;
+ gap:4px;padding:4px;border:2px solid #f4d290;border-radius:999px;
+ background:linear-gradient(#07142d,#0b325f);
+ box-shadow:0 3px 8px #020615ae,0 0 0 2px #5c3518,inset 0 2px 6px #040a19;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button {
+ position:relative;min-height:0;height:100%;border:0;border-radius:999px;
+ padding:0 3px;font:700 clamp(12px,3.1vw,18px)/1 Georgia,serif;
+ letter-spacing:.035em;color:#e6cda1;background:transparent;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button.chosen {
+ color:#fff5d8;background:linear-gradient(#5292c5,#255687 46%,#102858);
+ box-shadow:inset 0 1px 1px #fff3c89a,0 0 0 1px #dcb672,0 0 10px #61b8fc99;
+ text-shadow:0 0 6px #e3f7ff;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+ position:absolute;z-index:2;left:12%;right:12%;top:38%;bottom:10%;
+ overflow-x:hidden;overflow-y:auto;width:auto;height:auto;padding:0 1px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+ display:flex;align-items:center;justify-content:space-between;
+ min-height:24px;gap:7px;margin:0 0 8px;padding:0 0 8px;
+ font:500 clamp(12px,2.8vw,17px)/1.1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-timer-view-toggle {
+ min-height:25px;padding:3px 9px;border-radius:999px;border:1px solid #d8ac6c;
+ background:linear-gradient(#1a4b82,#0b2851);color:#fce6b4;
+ font:700 clamp(10px,2.5vw,14px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets {
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:7px;width:100%;margin:8px 0 0;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button {
+ flex:none;min-width:0;max-width:none;width:100%;min-height:clamp(40px,10vw,53px);
+ border-radius:11px;border:1.5px solid #cca46d;
+ background:linear-gradient(165deg,#215a96,#122b58 68%,#061935);
+ color:#f9dfb7;font:700 clamp(13px,3.25vw,18px)/1 Georgia,serif;
+ box-shadow:inset 0 1px 1px #bcd2e25a,0 3px 5px #0007;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button.chosen {
+ background:linear-gradient(165deg,#4997cd,#2665a3 48%,#173b78);
+ border-color:#ffe1a0;box-shadow:inset 0 1px 2px #fff3c9a0,0 0 0 1px #dcb376,0 0 10px #41a7fa80;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-selection-note {
+ text-align:center;color:#e1c79e;margin:10px auto 0;
+ font:italic clamp(10px,2.2vw,12px)/1.3 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {
+ display:flex;flex-direction:column;gap:9px;align-items:stretch;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-timer {
+ position:static;top:auto;display:grid;width:100%;margin:0;padding:0;
+ grid-template-columns:minmax(0,1fr) 10px minmax(0,1fr) 10px minmax(0,1fr);
+ gap:5px;align-items:end;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {
+ display:flex;flex-direction:column;align-items:center;min-width:0;gap:5px;
+ color:#f5d8a8;font:700 clamp(10px,2.35vw,13px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {
+ display:block;width:100%;min-width:0;max-width:none;
+ height:clamp(38px,9.4vw,49px);padding:2px 0;text-align:center;
+ font:700 clamp(16px,4.2vw,23px)/1 Georgia,serif;color:#fff0cb;
+ background:linear-gradient(#071b40,#154779);border:1.5px solid #d9ac73;
+ border-radius:10px;box-shadow:inset 0 2px 5px #04152b,0 0 0 1px #f5dba238;
+ -webkit-appearance:none;appearance:textfield;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-time-separator {
+ padding:0 0 12px;align-self:end;text-align:center;
+ color:#f2d199;font:700 19px Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {
+ width:100%;min-height:37px;border:1.5px solid #f1d091;
+ border-radius:999px;background:linear-gradient(#b88b50,#71451f);
+ color:#fff4d5;letter-spacing:.03em;font:700 clamp(12px,3vw,16px)/1 Georgia,serif;
+ box-shadow:inset 0 1px 1px #fff3b880,0 4px 8px #0007;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-empty {
+ margin:12px auto 0;text-align:center;font:italic clamp(12px,2.8vw,16px)/1.4 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing {
+ filter:drop-shadow(0 0 7px #bd2e58) drop-shadow(0 0 4px #e8c37f);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-dotted {
+ display:block;fill:none;stroke:#f6cb85;stroke-width:.3;stroke-dasharray:.3 2.6;opacity:.5;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-track {
+ stroke:#d6a66b;stroke-width:1.8;opacity:.87;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-bloom {
+ stroke:#3392ff;stroke-width:4.3;opacity:.56;filter:blur(1.2px) drop-shadow(0 0 4px #2d8de8);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-progress-live {
+ stroke:#b6eeff;stroke-width:1.65;filter:drop-shadow(0 0 3px #43aafd);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner::before {
+ content:"";position:absolute;inset:12% -10%;border-radius:50%;z-index:-1;pointer-events:none;
+ background:radial-gradient(ellipse,#ffd48166 0%,#398fdf40 45%,transparent 75%);filter:blur(3px);
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {top:66%;height:27%;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-selection-note {display:none;}
+}
+
+/* Final viewport-fit: the permanent Resources bar never covers Custom Timer. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+ top:64.3%;height:31.2%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+ top:34%;bottom:7%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+ padding-bottom:6px;margin-bottom:6px;min-height:21px;
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:61.7%;height:25.5%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {top:8%;height:24%;padding:2px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {top:34%;bottom:4%;left:12%;right:12%;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  min-height:17px;margin:0 0 3px;padding:0 0 4px;font-size:11px;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-timer-view-toggle {min-height:20px;padding:2px 6px;font-size:10px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-presets {gap:4px;margin-top:5px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-presets button {min-height:33px;font-size:12px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:4px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {gap:2px;font-size:9px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:29px;min-height:29px;font-size:15px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-time-separator {padding-bottom:6px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:27px;font-size:11px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-empty {font-size:11px;margin-top:5px;}
+}
+
+/* The four supplied transparent dial frames all share one correctly centered
+   aperture. No clock case, bezel, squirrel, or timer typography is replaced. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-face-base {
+  z-index:3;
+  background-image:
+    radial-gradient(circle at 32% 24%,rgba(255,255,255,.14),transparent 45%),
+    repeating-conic-gradient(from -12deg,rgba(255,255,255,.017) 0deg,rgba(0,0,0,.015) 3deg,rgba(255,255,255,.018) 6deg),
+    radial-gradient(circle at 50% 45%,var(--rtk-face-center,#185198) 8%,var(--rtk-face-edge,#071a3a) 100%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-face-overlay {
+  position:absolute;
+  inset:15.5%;
+  z-index:4;
+  pointer-events:none;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  opacity:.91;
+  filter:drop-shadow(0 1px 1px #020c1c);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-progress-ring {z-index:5;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-bezel {z-index:6;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-time,
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-caption {z-index:7;}
+/* Discreet clock customization is opt-in, never overlaid until invoked. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  width:66%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger {
+  position:absolute;z-index:14;
+  top:10%;left:7%;
+  width:10%;height:23%;
+  display:grid;place-items:center;
+  padding:0;
+  border:1px solid #e9c587;
+  border-radius:50%;
+  background:radial-gradient(circle at 36% 26%,#2869a4,#0e315c 63%,#081833);
+  color:#ffe2a4;
+  font:700 clamp(16px,3.5vw,24px)/1 Georgia,serif;
+  text-shadow:0 0 6px #f3b95e;
+  box-shadow:inset 0 1px 2px #fff0c37a,0 1px 5px #071126b3;
+  cursor:pointer;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger[aria-expanded="true"] {
+  background:radial-gradient(circle,#3371a5,#153457);
+  box-shadow:0 0 9px #edc179,inset 0 1px 2px #fff1c1;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+  position:absolute;z-index:13;
+  top:36%;bottom:7%;left:11%;right:11%;
+  padding:clamp(5px,1.1vw,9px);
+  border:1.5px solid #e4c17f;
+  border-radius:10px;
+  background:linear-gradient(155deg,rgba(12,49,91,.98),rgba(5,20,50,.98));
+  box-shadow:0 0 0 1px #735322,0 6px 18px #010919c9;
+  display:flex;flex-direction:column;gap:clamp(3px,.6vw,6px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker-head {
+  display:flex;justify-content:space-between;align-items:center;
+  color:#f5d8a4;font:700 clamp(11px,2.65vw,15px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker-head button {
+  border:0;background:transparent;color:#f9e1b8;
+  font-size:20px;line-height:16px;padding:0 4px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices {
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button {
+  min-width:0;min-height:35px;padding:2px 0;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
+  background:#092c55;border:1px solid #8c744f;border-radius:6px;color:#ecd0a1;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button.chosen {
+  border-color:#ffe2a0;background:#236399;box-shadow:0 0 5px #7bbcf4aa;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button span {
+  font:700 clamp(15px,3vw,19px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button small {
+  font:600 clamp(7px,1.6vw,10px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices {
+  display:flex;align-items:center;justify-content:center;gap:clamp(8px,2.5vw,16px);
+  color:#ebd1a1;font:700 clamp(9px,2vw,12px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button {
+  width:clamp(17px,4vw,23px);height:clamp(17px,4vw,23px);padding:0;flex-shrink:0;
+  background:radial-gradient(circle at 35% 25%,#ffffff46,var(--swatch) 60%,#020b15);
+  border:1px solid #bd915d;border-radius:50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button.chosen {
+  outline:2px solid #f4d58e;outline-offset:2px;
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {top:34%;bottom:4%;gap:2px;padding:3px 5px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button {min-height:29px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button {width:16px;height:16px;}
+}
+
+/* Compact iPhone safe area: the optional dial chooser and sapphire cabinet
+   must terminate above the immutable Resources navigation rail. */
+@media (max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:61.7%;
+   height:22%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+   top:32%;
+   bottom:3%;
+ }
+}
+
+/* Luxury Timekeepers: shared glass enamel textures, independently chosen
+   gilded interior overlays, and centered World Clock mechanism. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-face-base {
+ background-image:var(--rtk-face-texture)!important;
+ background-position:center!important;background-size:100% 100%!important;
+ background-repeat:no-repeat!important;
+ background-color:var(--rtk-face-edge,#071a3a);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-time,
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-time-whole {
+ color:var(--rtk-numeral-color,#fff1d5)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-time {
+ text-shadow:0 1px 2px #0009,0 0 8px #06102e75;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-flipped {
+ transform:translate(-50%,-50%) scaleX(-1)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown:not(.is-flipped) {
+ transform:translate(-50%,-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+ left:55%;width:73%;height:23%;
+ grid-template-columns:minmax(0,1fr) clamp(32px,8vw,44px) minmax(0,1fr);
+ align-items:center;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button {
+ white-space:nowrap;
+ font-size:clamp(10px,2.85vw,16px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch .rtk-globe-mode,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch .rtk-globe-mode.chosen {
+ position:relative;display:grid;place-items:center;padding:0!important;
+ border-radius:50%!important;aspect-ratio:1;height:100%;min-width:0;
+ background:radial-gradient(circle,#163d70,#092450)!important;
+ border:1px solid #ddb46c;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch .rtk-globe-mode.chosen {
+ box-shadow:0 0 0 2px #f8df9c,0 0 12px #8eceff,inset 0 0 5px #bce8ff;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-globe-mode img {
+ position:absolute;inset:-4%;width:108%;height:108%;object-fit:contain;
+ pointer-events:none;filter:drop-shadow(0 1px 2px #020916);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-hands {
+ position:absolute;inset:16.0%;z-index:7;pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+ position:absolute;inset:0;
+ background-position:center;background-size:100% 100%;background-repeat:no-repeat;
+ transform-origin:50% 50%;
+ transition:transform .6s cubic-bezier(.2,.4,.25,1);
+ filter:drop-shadow(0 2px 2px #000b);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand.is-second {
+ opacity:.86;filter:drop-shadow(0 0 2px #f2d795);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+ position:absolute;left:45%;top:45%;width:10%;height:10%;
+ background-size:contain;background-position:center;background-repeat:no-repeat;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-progress-ring,
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck.is-world {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-time.is-world-time {
+ position:absolute;left:50%;top:66%;width:88%;z-index:9;
+ transform:translateX(-50%)!important;
+ background:radial-gradient(ellipse,#07142dc5,transparent 76%);
+ font:700 clamp(22px,6.2vw,43px)/1.1 "Iowan Old Style",Georgia,serif!important;
+ letter-spacing:.02em!important;
+ white-space:nowrap;display:flex;justify-content:center;text-shadow:0 2px 3px #000e;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-caption {
+ position:absolute;left:50%;top:84%;transform:translateX(-50%);
+ width:85%;text-align:center;z-index:9;
+ font-size:clamp(9px,2.25vw,13px);
+ letter-spacing:.055em;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {
+ display:flex;flex-direction:column;align-items:center;gap:clamp(5px,1vw,9px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings label {
+ font:700 clamp(10px,2.6vw,14px)/1.1 Georgia,serif;color:#f3dba8;
+ letter-spacing:.06em;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select {
+ width:100%;min-height:clamp(28px,7vw,38px);padding:4px 18px 4px 10px;
+ background:linear-gradient(#15508a,#071c42);color:#fff0c6;
+ border:1px solid #dab56e;border-radius:7px;
+ text-align:center;font:700 clamp(12px,2.7vw,15px)/1.1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+ width:100%;min-height:clamp(35px,8.5vw,56px);
+ padding:6px 40px 5px 13px;position:relative;
+ display:flex;justify-content:center;align-items:center;flex-direction:column;
+ gap:2px;text-align:center;
+ background:url("/rosieverse/timekeeper/midnight-observatory/luxury/world-clock-ui/city-plaque.webp") center / 100% 100% no-repeat;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque strong {
+ font:700 clamp(11px,3vw,17px)/1.1 Georgia,serif;
+ color:#fff2c9;
+ text-shadow:0 1px 3px #000c;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque span {
+ font:500 clamp(9px,2vw,12px)/1 Georgia,serif;color:#f6d9a2;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque img {
+ position:absolute;right:8%;top:20%;height:60%;width:auto;object-fit:contain;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+ overflow-y:auto;scrollbar-width:thin;gap:3px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices {
+ display:flex;gap:4px;align-items:center;justify-content:space-between;
+ color:#e9ca94;font:700 clamp(8px,1.9vw,11px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices button {
+ min-width:0;flex:1;border:1px solid #b38b4f;border-radius:5px;
+ background:#0a2b57;color:#e9c99b;
+ font:700 clamp(8px,1.85vw,11px)/1 Georgia,serif;
+ padding:4px 2px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices button.chosen {
+ color:#ffedba;border-color:#ffe19b;background:#1c5d9b;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices {
+ display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;
+ align-items:center;justify-items:center;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices span {font-size:9px;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button {
+ width:clamp(14px,3.4vw,21px);height:clamp(14px,3.4vw,21px);
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+ top:30%;bottom:2%;padding:3px 5px;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button {min-height:25px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {min-height:31px;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {gap:3px;}
+}
+
+/* Final sapphire ornament usage: small jeweled settings toggle, a restrained
+   plaque flourish, and a success sparkle contained inside the dial. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger {
+ background: url("/rosieverse/timekeeper/midnight-observatory/luxury/world-clock-ui/jewel.webp")
+   center / contain no-repeat!important;
+ border:0!important;
+ box-shadow:none!important;
+ font-size:0!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque::after {
+ content:"";position:absolute;
+ left:11%;right:11%;bottom:-6px;height:10px;
+ background:url("/rosieverse/timekeeper/midnight-observatory/luxury/world-clock-ui/divider.webp")
+   center / contain no-repeat;
+ opacity:.82;pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-completion-flourish {
+ position:absolute;top:7%;left:43%;width:14%;height:auto;z-index:8;
+ pointer-events:none;filter:drop-shadow(0 0 7px #87d7ff);
+ animation:rtk-luxury-finish 1.5s ease-out 1 both;
+}
+@keyframes rtk-luxury-finish {
+ from {opacity:0;transform:scale(.48) rotate(-24deg)}
+ 55% {opacity:1;transform:scale(1.2) rotate(6deg)}
+ to {opacity:.92;transform:scale(1) rotate(0)}
+}
+@media(prefers-reduced-motion:reduce) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-completion-flourish {animation:none;}
+}
+
+/* Timekeeper visual review (mobile in-app browser): the clock-face tray
+   must be usable at short visible heights, never hidden behind Resources. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility:has(.rtk-dial-picker) {
+  overflow:visible!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+  top:auto!important;
+  bottom:6%!important;
+  height:clamp(152px, 21vh, 180px)!important;
+  min-height:0!important;
+  max-height:calc(100dvh - 120px);
+  box-sizing:border-box;
+  gap:clamp(3px,.7vh,7px);
+  padding:clamp(7px,1.3vw,11px);
+  border:1.5px solid #e8c987;
+  border-radius:13px;
+  background:linear-gradient(155deg,#154779 0%,#0a2b5b 48%,#061633 100%);
+  box-shadow:0 0 0 2px #6e4a27,0 9px 24px #020616dc,inset 0 1px 2px #a8c5e655;
+  overflow-x:hidden;
+  overflow-y:auto;
+  scrollbar-width:thin;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker-head {
+  min-height:22px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker-head button {
+  min-width:29px;
+  min-height:25px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:#102a52;
+  border:1px solid #e0be7e;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker .rtk-frame-choices button {
+  min-height:clamp(36px,5.2vh,45px);
+  padding:4px 1px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker .rtk-hand-choices button {
+  min-height:24px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker .rtk-color-choices {
+  min-height:26px;
+  padding:4px 0;
+  gap:4px;
+  grid-template-columns:repeat(9,minmax(0,1fr));
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker .rtk-color-choices button {
+  width:clamp(16px,4vw,24px);
+  height:clamp(16px,4vw,24px);
+}
+/* Clock faces are decorative overlays, not competing time readouts.
+   Lower their visual weight around the central digital display. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial:not(.is-world) .rtk-face-overlay {
+  opacity:.67;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,transparent 0 22%,#0006 40%,#000 62%);
+  mask-image:radial-gradient(circle at 50% 50%,transparent 0 22%,#0006 40%,#000 62%);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial:not(.is-world) .rtk-face-overlay.is-roman {
+  opacity:.36;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial:not(.is-world) .rtk-caption {
+  padding:4px 12px;
+  border-radius:999px;
+  background:radial-gradient(ellipse,#061b3cbd 0%,#061b3c67 46%,transparent 75%);
+}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px){
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:calc(64.3% - 22px);
+    height:calc(31.2% - 37px);
+  }
+}
+@media(max-width:520px) and (max-height:700px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:calc(61.7% - 5px);
+    height:18%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker {
+    bottom:3%!important;
+    height:169px!important;
+    max-height:calc(100dvh - 100px);
+  }
+}
+
+/* Popover must win the clock-control stacking context on short screens. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility:has(.rtk-dial-picker) {
+ z-index:24!important;
+}
+
+/* Restored original premium Timekeepers controls from the approved artwork.
+   Same 1200x298 canvas for every mode: only the selected state changes. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:calc(64.3% - 30px)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  top:7%;left:55%;transform:translateX(-50%);
+  width:77%;height:30%;
+  padding:0;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.51fr) minmax(0,1fr);
+  gap:0;border:0;border-radius:0;
+  background-color:transparent!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch::before {
+  content:none!important;display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch[data-active="stopwatch"] {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/mode-stopwatch.webp")!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch[data-active="world"] {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/mode-world.webp")!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch[data-active="countdown"] {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/mode-timer.webp")!important;
+}
+/* Preserve three real accessible buttons as transparent hotspots; image artwork
+   carries the typography and selection so no doubled labels or globe occur. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button.chosen,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch .rtk-globe-mode,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch .rtk-globe-mode.chosen {
+  height:100%;width:100%;min-width:0;
+  border:0!important;outline-offset:-3px;
+  border-radius:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  text-shadow:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+  margin:0;padding:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch .rtk-globe-mode img {
+  display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch button:focus-visible {
+  outline:2px solid #fff1b1;
+  border-radius:9px!important;
+}
+/* The formerly generic preset buttons now use the original sapphired-gold art. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button.chosen {
+  border:0!important;border-radius:0!important;
+  background-color:transparent!important;
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/preset-button.webp")!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  color:#fff0cf!important;
+  text-shadow:0 1px 3px #040b20,0 0 4px #0008!important;
+  box-shadow:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button.chosen {
+  filter:drop-shadow(0 0 5px #70bafb) brightness(1.16);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button:focus-visible {
+  outline:2px solid #ffe6ab;outline-offset:1px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {
+  border:0!important;border-radius:0!important;
+  background:transparent url("/rosieverse/timekeeper/midnight-observatory/panel-controls/action-plaque.webp") center / 100% 100% no-repeat!important;
+  box-shadow:none!important;color:#fff2d4!important;
+  text-shadow:0 1px 3px #060e24;
+  min-height:45px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+  background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/section-plaque.webp");
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  border-bottom:0!important;
+  padding:7px 14px!important;
+  min-height:32px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:40%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing {
+  /* On short screens the face tray must continue to clear the shared nav. */
+  overflow:visible!important;
+}
+@media(max-width:520px) and (max-height:785px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:calc(64.3% - 10px)!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+   height:31%;top:7%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:40%;bottom:3%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+   padding:3px 8px!important;min-height:24px;
+ }
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:calc(61.7% - 5px)!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+   height:36%;top:2%;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {top:37%;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+   padding:2px 8px!important;min-height:19px;margin-bottom:2px;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-presets button {min-height:31px;}
+}
+
+/* Keep the short-but-not-tiny Safari viewport's cabinet fully clear of nav. */
+@media (max-width:520px) and (min-height:701px) and (max-height:785px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    height:calc(31.2% - 60px)!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+    padding:2px 8px!important;min-height:24px;margin-bottom:3px;
+  }
+}
+
+/* 2026-10-15 final Timekeepers geometry: all viewport offsets consolidated. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:calc(64.3% - 60px)!important;
+  overflow:hidden;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+  left:50%!important;
+  top:3.5%!important;
+  width:92%!important;
+  height:35%!important;
+  transform:translateX(-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger {
+  top:39%!important;left:8%!important;
+  width:11%!important;height:12%!important;
+  min-width:29px;min-height:22px;
+  z-index:13;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip {
+  position:absolute;z-index:11;left:20%;right:10%;top:40%;
+  height:11%;display:flex;align-items:center;justify-content:space-evenly;
+  gap:clamp(3px,1vw,8px);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button {
+  flex:0 0 auto;width:clamp(17px,4.8vw,25px);height:clamp(17px,4.8vw,25px);
+  border:1.5px solid #b9996a;border-radius:50%;padding:0;cursor:pointer;
+  background:radial-gradient(circle at 34% 26%,#ffffff88,var(--swatch) 48%,#030b20 100%);
+  box-shadow:inset 0 1px 1px #fff9,0 1px 3px #031427;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button.chosen {
+  outline:2px solid #fbe0a7;outline-offset:2px;
+  box-shadow:inset 0 0 3px #fff6,0 0 8px #b8dfff;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button:focus-visible {
+  outline:3px solid #fff5bf;outline-offset:3px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:53%!important;bottom:7%!important;
+  left:13%!important;right:13%!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  scrollbar-width:thin;overscroll-behavior:contain;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;width:100%;min-height:28px!important;
+  padding:3px 0 5px!important;margin:0 0 6px!important;
+  background:none!important;border-bottom:1px solid #d7a960b9!important;
+  font:700 clamp(12px,2.9vw,16px)/1.1 "Iowan Old Style",Georgia,serif!important;
+  color:#f9e7bc;letter-spacing:.02em;text-shadow:0 1px 3px #031020;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading span:last-child {
+  font-size:clamp(10px,2.4vw,13px)!important;
+  color:#ebd8b0;white-space:nowrap;text-overflow:clip;overflow:visible;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading .rtk-timer-view-toggle {
+  min-height:25px!important;max-width:48%;white-space:nowrap;
+  padding:3px 8px!important;border:1px solid #d4b478!important;
+  border-radius:999px!important;background:linear-gradient(170deg,#245889,#0a2b58)!important;
+  color:#ffe6b4!important;font:700 clamp(10px,2.45vw,13px)/1 Georgia,serif!important;
+  box-shadow:inset 0 1px 1px #faf2c357,0 2px 3px #06182b60!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets {
+  gap:clamp(3px,1.3vw,8px)!important;margin:4px 0 1px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-presets button {
+  min-height:clamp(35px,9.5vw,50px)!important;
+  font-size:clamp(11px,3vw,16px)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-selection-note {
+  margin:4px 0 0!important;font-size:clamp(9px,2.2vw,11px)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {
+  display:flex;flex-direction:column;gap:6px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer {
+  margin-top:0!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {
+  width:92%!important;margin:0 auto!important;min-height:37px!important;
+  font-size:clamp(11px,2.8vw,15px)!important;
+  flex-shrink:0;cursor:pointer;
+}
+/* Clock-hand atlas frames all share center (256,256). Never offset one style separately. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-hands {
+  position:absolute!important;inset:16%!important;
+  aspect-ratio:1;z-index:8;pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+  position:absolute!important;inset:0!important;
+  width:100%;height:100%;
+  background-size:100% 100%;background-position:50% 50%;
+  transform-origin:50% 50%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+  position:absolute!important;
+  width:11%;height:11%;left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:10;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-readout {
+  position:absolute;left:50%;top:92%;z-index:20;
+  transform:translateX(-50%);
+  width:125%;display:flex;align-items:center;flex-direction:column;
+  gap:1px;white-space:nowrap;pointer-events:none;
+  text-align:center;
+  text-shadow:0 1px 4px #050b1e,0 0 9px #f8c86c8e;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-name {
+  font:700 clamp(14px,3.8vw,21px)/1 "Iowan Old Style",Georgia,serif;
+  letter-spacing:.06em;color:#f8e2a9;
+  filter:drop-shadow(0 0 5px #ffe4a177);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-digital {
+  display:block;color:#fff8e3;font:700 clamp(17px,4.4vw,24px)/1 "Iowan Old Style",Georgia,serif;
+  letter-spacing:.035em;
+}
+/* Real timezone day and night ornaments - both always visible. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {gap:4px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-settings label {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+  min-height:25px!important;padding:2px 8px!important;gap:0!important;
+  background-size:100% 100%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque strong {font-size:12px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque span {font-size:10px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {
+  display:flex;gap:12px;justify-content:center;align-items:center;min-height:27px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight span {
+  display:flex;align-items:center;gap:4px;color:#e6c99e;opacity:.52;
+  font:700 11px/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight span.is-current {
+  opacity:1;color:#fff3c9;text-shadow:0 0 5px #ead393;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight img {
+  width:25px;height:25px;object-fit:contain;
+  filter:drop-shadow(0 0 3px #edc373);
+}
+/* Lap records are a genuine aligned table; don't print on ornamental finials. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table {width:100%;min-width:0;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head,
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li {
+  display:grid;grid-template-columns:18% 41% 41%;gap:0;
+  align-items:center;padding:4px 2px;box-sizing:border-box;
+  font-size:clamp(10px,2.75vw,14px);line-height:1.15;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head {
+  font:700 clamp(9px,2.2vw,11px)/1 Georgia,serif;
+  color:#e8bd78;border-bottom:1px solid #a57e4980;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps {margin:0!important;padding:0!important;max-height:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head>:nth-child(2),
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table-head>:nth-child(3),
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li strong,
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li small {text-align:right!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li small {color:#f2d5a0;font-size:inherit;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps li.rtk-fastest-lap {color:#f6dc9e;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-empty {text-align:center;line-height:1.35;font-size:clamp(11px,2.7vw,14px)!important;margin:7px auto!important;}
+/* Make the active left control visibly read LAP, rather than the console's reset-looking emblem. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-lap-action {
+  position:relative!important;isolation:isolate;overflow:visible;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-lap-action .rtk-action-word {
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  display:grid;place-items:center;
+  width:48%;height:41%;opacity:1!important;
+  border-radius:50%;border:1px solid #f1cd7b;
+  background:radial-gradient(circle,#1b5594,#041a3b);
+  color:#fff0c4;font:800 clamp(8px,1.85vw,12px)/1 Georgia,serif;
+  text-shadow:0 1px 2px #020812;pointer-events:none;
+  box-shadow:inset 0 1px 2px #fff5c058,0 0 5px #f9d79065;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-lap-action:disabled .rtk-action-word {opacity:.4!important;}
+/* True direction: timer is opposite stopwatch at every angle, turning at 3 and 9. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown.is-flipped {
+  transform:translate(-50%,-50%) scaleX(-1)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-runner.is-countdown:not(.is-flipped) {
+  transform:translate(-50%,-50%)!important;
+}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px){
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:calc(64.3% - 40px)!important;
+  }
+}
+@media(max-width:520px) and (max-height:700px){
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:calc(61.7% - 35px)!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-mode-switch {
+    top:2%!important;height:34%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-face-trigger {
+    top:37%!important;height:14%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip {
+    top:38%;height:14%;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip button {
+    width:clamp(15px,4.4vw,18px);height:clamp(15px,4.4vw,18px);
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:55%!important;bottom:3%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+    min-height:20px!important;margin-bottom:2px!important;padding:1px 0 2px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:2px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:29px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {min-height:19px;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight img {height:18px;width:18px;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select {min-height:25px;}
+}
+
+/* Final measured mobile collision and composer-fit correction. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  transform:translate(-50%,-22px)!important;
+  z-index:10;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  z-index:15!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:51%!important;
+  bottom:2%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  min-height:23px!important;
+  margin-bottom:3px!important;
+  padding:2px 0 3px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:4px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {gap:2px!important;font-size:clamp(9px,2.2vw,11px)!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:32px!important;min-height:32px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:32px!important;}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px){
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   height:calc(31.2% - 35px)!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:51%!important;bottom:3%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:27px!important;min-height:27px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:28px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {min-height:20px!important;}
+}
+@media(max-width:520px) and (max-height:700px){
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   height:165px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:50%!important;bottom:2%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {min-height:18px!important;margin-bottom:1px!important;padding:0 0 2px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {font-size:9px!important;gap:1px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer input {height:26px!important;min-height:26px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-set-timer {min-height:26px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {gap:2px!important;}
+}
+
+/* Fit Custom Timer including its action above cabinet bottom, no hidden CTA. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading {
+  height:20px!important;min-height:20px!important;max-height:20px!important;
+  padding:0 0 1px!important;margin:0 0 1px!important;
+  line-height:1.1!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-heading .rtk-timer-view-toggle {
+  height:19px!important;min-height:19px!important;max-height:19px!important;
+  padding:1px 6px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-composer {gap:2px!important;}
+@media(max-width:520px) and (max-height:785px){
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-timer input {
+   height:24px!important;min-height:24px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-set-timer {
+   min-height:25px!important;
+ }
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-custom-timer input {
+   height:22px!important;min-height:22px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-set-timer {
+   min-height:24px!important;
+ }
+}
+
+/* Timekeepers luxury utility: mode / jewel+enamel / three actions / cabinet. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+ position:absolute;top:56.5%;left:0;width:100%;height:12.5%;
+ z-index:18;pointer-events:none;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+ pointer-events:auto;position:absolute!important;
+ top:0!important;left:50%!important;transform:translateX(-50%)!important;
+ width:84%!important;height:60%!important;
+ padding:0!important;margin:0!important;z-index:2;
+ display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,.51fr) minmax(0,1fr)!important;
+ gap:0!important;overflow:visible!important;border:0!important;
+ background-position:center!important;background-size:100% 100%!important;
+ background-repeat:no-repeat!important;background-color:transparent!important;
+ box-shadow:none!important;border-radius:0!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch[data-active="stopwatch"] {
+ background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/mode-stopwatch.webp")!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch[data-active="world"] {
+ background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/mode-world.webp")!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch[data-active="countdown"] {
+ background-image:url("/rosieverse/timekeeper/midnight-observatory/panel-controls/mode-timer.webp")!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch::before {content:none!important;display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch button.chosen {
+ display:block!important;width:100%!important;height:100%!important;
+ min-width:0!important;padding:0!important;margin:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;
+ box-shadow:none!important;color:transparent!important;font-size:0!important;
+ text-shadow:none!important;filter:none!important;cursor:pointer;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-globe-mode img {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch button:focus-visible {
+ outline:2px solid #ffe09e!important;outline-offset:0!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+ pointer-events:auto;position:absolute!important;left:7%!important;top:64%!important;
+ width:11%!important;height:31%!important;
+ min-height:20px!important;min-width:22px!important;z-index:4!important;
+ background:url("/rosieverse/timekeeper/midnight-observatory/luxury/world-clock-ui/jewel.webp") center / contain no-repeat!important;
+ border:0!important;border-radius:0!important;font-size:0!important;
+ box-shadow:none!important;cursor:pointer;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+ pointer-events:auto;position:absolute;top:67%!important;left:21%!important;right:9%!important;
+ height:27%!important;z-index:3;display:flex;align-items:center;justify-content:space-around;
+ gap:3px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip button {
+ width:clamp(17px,4.4vw,26px)!important;height:clamp(17px,4.4vw,26px)!important;flex-shrink:0;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+ top:69%!important;transform:translateX(-50%)!important;
+ z-index:12!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+ top:77%!important;height:20%!important;
+ z-index:11!important;overflow:hidden!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+ position:absolute!important;top:9%!important;bottom:7%!important;
+ left:13%!important;right:13%!important;
+ overflow-y:auto!important;overflow-x:hidden!important;
+ overscroll-behavior:contain;scrollbar-width:thin;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing .rtk-dial-picker {
+ position:absolute!important;top:4px!important;bottom:4px!important;
+ height:calc(100% - 8px)!important;max-height:calc(100% - 8px)!important;
+ left:8%!important;right:8%!important;overflow-y:auto!important;
+ display:flex;flex-direction:column;gap:4px;
+ justify-content:flex-start!important;padding:7px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing .rtk-utility-inner {
+ display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel {
+ filter:var(--rtk-bezel-filter,none)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-readout {
+ top:88%!important;z-index:15;
+ gap:2px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-digital {
+ font:700 clamp(17px,4.6vw,25px)/1 "Iowan Old Style",Georgia,serif!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-name {
+ font:700 clamp(13px,3.4vw,19px)/1 "Iowan Old Style",Georgia,serif!important;
+ color:#ffe9ba!important;letter-spacing:.085em!important;
+ text-shadow:0 0 9px #fbd68aa8,0 2px 4px #040711!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices,
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices {
+ display:flex;align-items:center;gap:4px;flex-wrap:wrap;
+ color:#f8deb2;font:700 10px/1.1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices span,
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices span {width:100%;flex-basis:100%;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices button {
+ flex:1;min-width:0;white-space:nowrap;
+ padding:5px 2px;color:#ebd4a9;background:#0c315d;
+ border:1px solid #b99362;border-radius:6px;font:700 clamp(8px,1.85vw,11px)/1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices button.chosen {
+ background:#256ba4;color:#fff1c6;box-shadow:0 0 6px #91d3fb;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace {display:flex;flex-direction:column;gap:5px;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs {
+ position:sticky;top:0;z-index:4;display:grid;grid-template-columns:repeat(3,1fr);
+ gap:5px;background:#0a3163;padding:2px;border-radius:8px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust button {
+ border:1px solid #c6a366;border-radius:6px;
+ color:#f8e2b6;background:linear-gradient(160deg,#1b5485,#092752);
+ font:700 clamp(10px,2.5vw,13px)/1 Georgia,serif;
+ padding:5px 2px;min-height:23px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs button.chosen {
+ background:#3174ad;border-color:#fff1b7;color:#fff6d6;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust {
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;
+ margin:1px 0 5px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace .rtk-presets {
+ margin:3px 0!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace .rtk-presets button {
+ min-height:30px!important;font-size:12px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-sequence-running {
+ display:flex;gap:4px;align-items:center;
+ color:#ffe6b5;font:700 10px/1.1 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-sequence-running span {flex:1;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-sequence-running button {
+ border:1px solid #cba56f;border-radius:4px;color:#ffe9b4;background:#173e6b;
+ min-width:27px;height:24px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-sequence-running button:disabled {opacity:.35;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-draft-line {
+ display:grid;grid-template-columns:minmax(0,1fr) 55px 42px;gap:3px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-draft-line input {
+ min-width:0;min-height:30px;padding:3px 6px;
+ border-radius:6px;border:1px solid #ab8c57;
+ background:#081e42;color:#fff0c6;font:12px Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-draft-line button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-draft-steps button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-saved-set button {
+ border:1px solid #b99255;border-radius:6px;
+ background:#144a7b;color:#fbe7b9;
+ font:700 10px/1.2 Georgia,serif;padding:3px 4px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-sets-editor {
+ display:flex;flex-direction:column;gap:5px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-draft-steps {
+ display:flex;flex-wrap:wrap;gap:4px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-saved-sets {
+ display:flex;flex-direction:column;gap:4px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-saved-set {display:flex;gap:4px;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-saved-set button:first-child {flex:1;text-align:left;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-saved-set small {opacity:.75;margin-left:4px;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-saved-set .rtk-delete-set {width:28px;font-size:18px;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-sets-hint,
+.app-shell.page-timekeeper .rtk-observatory .rtk-timer-message {
+ text-align:center;font:11px/1.25 Georgia,serif;color:#fbe6bb;margin:4px 0;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table {min-height:0;overflow:visible;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps {max-height:none!important;overflow:visible!important;}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {top:54%;height:10.5%;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {top:66%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty {top:72%!important;height:13.5%!important;}
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-dial {width:58%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {top:54.5%;height:10%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {height:62%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {top:65%!important;height:30%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {top:68%!important;height:28%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip button {width:14px!important;height:14px!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {top:64.5%!important;}
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty {
+ top:73%!important;height:10%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-readout {top:82%!important;}
+}
+
+/* October 15 - compact clock controls, accessible cabinet, and circular enamel mask.
+   Geometry is expressed against the existing Timekeeper art stage, not viewport body.
+   Final overrides intentionally supersede accumulated legacy mobile offsets. */
+
+/* Enamel belongs only inside the inner dial aperture; preserve the outside bezel,
+   squirrel, gears and shadows outside the clipping boundary. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-face-base {
+  clip-path:circle(37.5% at 50% 50%)!important;
+  -webkit-clip-path:circle(37.5% at 50% 50%)!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  background-clip:padding-box!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-face-overlay {
+  clip-path:circle(49% at 50% 50%)!important;
+  -webkit-clip-path:circle(49% at 50% 50%)!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+}
+/* Controls now read: enamel / jewel, action circles, mode selector, information. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+  top:53.8%!important;left:0!important;width:100%!important;
+  height:20%!important;z-index:18!important;
+  pointer-events:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  top:1%!important;left:7%!important;width:11%!important;
+  height:22%!important;min-height:22px!important;max-height:32px;
+  z-index:3!important;pointer-events:auto!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+  top:2%!important;left:21%!important;right:9%!important;
+  height:19%!important;z-index:3!important;
+  gap:3px!important;pointer-events:auto!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip button {
+  width:clamp(17px,4.5vw,26px)!important;
+  height:clamp(17px,4.5vw,26px)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  top:59.25%!important;z-index:16!important;
+  transform:translateX(-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  top:71%!important;left:50%!important;
+  width:75.6%!important;height:30%!important;
+  transform:translateX(-50%)!important;
+  z-index:2!important;pointer-events:auto!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:73.6%!important;
+  height:25.5%!important;
+  overflow:hidden!important;
+  z-index:11!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:6%!important;bottom:8%!important;
+  left:13%!important;right:13%!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain;scrollbar-width:thin;
+}
+/* Panel form fields scroll INSIDE the cabinet, never beneath Resources navigation. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing .rtk-dial-picker {
+  top:5px!important;bottom:5px!important;max-height:calc(100% - 10px)!important;
+  height:calc(100% - 10px)!important;overflow-y:auto!important;
+}
+@media (max-width:520px) and (min-height:701px) and (max-height:785px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+    top:53.6%!important;height:15.7%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+    top:0!important;height:25%!important;min-height:20px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+    top:0!important;height:25%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    top:58.15%!important;height:8%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+    top:80%!important;height:32%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:70.6%!important;height:14.4%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:6%!important;bottom:5%!important;
+  }
+}
+@media (max-width:520px) and (max-height:700px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+    top:52.4%!important;height:15.4%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+    top:0!important;height:21%!important;min-height:18px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+    top:0!important;height:22%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip button {
+    width:clamp(14px,3.8vw,19px)!important;
+    height:clamp(14px,3.8vw,19px)!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    top:55.7%!important;height:6.8%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+    top:66%!important;height:30%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    top:67.2%!important;height:15.1%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:5%!important;bottom:4%!important;
+  }
+}
+
+/* Timekeepers instrument stack, 2026-10-15: clock -> circular controls ->
+   mode selector -> enamel/jewel -> readable blue cabinet.
+   This final group deliberately supersedes legacy mobile positioning rules. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  top:53.6%!important;
+  z-index:18!important;
+  transform:translateX(-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+  top:53%!important;
+  height:22%!important;
+  left:0!important;width:100%!important;
+  z-index:17!important;pointer-events:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  top:44%!important;left:50%!important;
+  width:75.6%!important;height:27%!important;
+  transform:translateX(-50%)!important;
+  pointer-events:auto!important;z-index:2!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+  top:70.5%!important;left:21%!important;right:9%!important;
+  height:18%!important;
+  z-index:4!important;pointer-events:auto!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  top:69.5%!important;left:7%!important;width:11%!important;
+  height:20%!important;min-height:21px!important;
+  z-index:4!important;pointer-events:auto!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  top:72.7%!important;height:26.7%!important;
+  z-index:10!important;
+  overflow:hidden!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:18%!important;bottom:6%!important;
+  left:13%!important;right:13%!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain;scrollbar-width:thin;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+  margin:0 0 6px!important;padding:0 0 5px!important;
+  font-size:clamp(11px,2.75vw,15px)!important;
+  min-height:22px!important;
+}
+/* The left *existing* circular button is the only Lap control.
+   Re-anchor its inner label to the circular medal in its illustrated sprite. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  position:relative!important;isolation:isolate;overflow:hidden!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  position:absolute!important;
+  left:83%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  margin:0!important;padding:0!important;
+  width:32%!important;height:40%!important;
+  min-width:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font:700 clamp(9px,2.3vw,12px)/1 Georgia,serif!important;
+  border:0!important;border-radius:50%!important;
+  background:transparent!important;box-shadow:none!important;
+  color:#fff2d4!important;text-shadow:0 1px 3px #030914,0 0 4px #673f16!important;
+  pointer-events:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action:disabled .rtk-action-word {
+  opacity:.65!important;
+}
+/* Long lists remain inside the blue cabinet, even after many laps. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-table,
+.app-shell.page-timekeeper .rtk-observatory .rtk-laps {overflow:visible!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing .rtk-dial-picker {
+  top:5px!important;bottom:5px!important;
+  height:calc(100% - 10px)!important;max-height:calc(100% - 10px)!important;
+  overflow-y:auto!important;
+}
+/* Shorter phones: denser control stack without hiding the cabinet below nav. */
+@media(max-width:520px) and (min-height:701px) and (max-height:785px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+   top:53.3%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+   top:53%!important;height:18%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+   top:47%!important;height:29%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+   top:77%!important;height:19%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+   top:76%!important;height:21%!important;min-height:18px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:70.5%!important;height:14.5%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:17%!important;bottom:5%!important;
+ }
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+   top:52.5%!important;height:7.3%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+   top:52.3%!important;height:15%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+   top:50%!important;height:31%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
+   top:81%!important;height:20%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip button {
+   width:clamp(14px,3.8vw,18px)!important;
+   height:clamp(14px,3.8vw,18px)!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+   top:79%!important;height:22%!important;min-height:18px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   top:68.2%!important;height:14.6%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+   top:18%!important;bottom:3%!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading {
+   min-height:17px!important;font-size:11px!important;
+   margin:0 0 3px!important;padding:0 0 2px!important;
+ }
+}
+
+/* The left imported button art places its round medal at the right-hand edge
+   of its transparent 82px hit area. Center the Stopwatch LAP disc on that medal,
+   rather than on the hit area's bounding box. The same button remains Repeat
+   in Timer mode - no duplicate control is rendered. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  overflow:visible!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  left:98%!important;top:50%!important;
+  width:clamp(28px,7.6vw,36px)!important;
+  height:clamp(28px,7.6vw,36px)!important;
+  padding:0!important;
+  border:1px solid #d8b879!important;
+  background:radial-gradient(circle at 38% 30%,#1b5182,#06182d 80%)!important;
+  border-radius:50%!important;
+  box-shadow:inset 0 1px 2px #f9e2a477,0 1px 3px #03071488!important;
+  color:#ffe9b2!important;
+  font-size:clamp(9px,2.5vw,12px)!important;
+  z-index:2!important;
+}
+
+/* Precision adjustments requested 2026-10-15.
+   Independent translate offsets preserve the existing centered transforms
+   and apply exactly in CSS pixels across every iPhone breakpoint. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  translate:0 -8px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  translate:0 -15px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip,
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:0 -20px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -50px!important;
+}
+/* Cover the old repeat symbol in the actual LEFT circular medal.
+   The existing one button still calls lap in Stopwatch and repeat in Timer. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  position:absolute!important;
+  left:98%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  translate:none!important;
+  width:clamp(37px,9.8vw,43px)!important;
+  height:clamp(37px,9.8vw,43px)!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid #edce89!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle at 37% 26%,#336c9e 0%,#15395d 33%,#071a33 82%,#04101e 100%)!important;
+  box-shadow:inset 0 1px 2px #fff4c260,0 0 0 1px #462c0e,0 1px 3px #000a!important;
+  color:#ffeac0!important;
+  font:700 clamp(11px,2.9vw,13px)/1 Georgia,serif!important;
+  text-shadow:0 1px 2px #010913!important;
+  z-index:3!important;
+  pointer-events:none!important;
+}
+
+
+/* 2026-10-15 - revised Lap art, closed-by-default palette, measured jewel / cabinet offsets. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:-15px -80px!important;
+  z-index:28!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -75px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-enamel-strip {
+  display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing {
+  z-index:42!important;
+}
+/* One new illustration replaces the old stop-watch label and obscures the old arrow. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  position:relative!important;
+  overflow:visible!important;
+  isolation:isolate!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-action-word {
+  display:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  position:absolute!important;
+  left:98%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  translate:none!important;
+  width:clamp(56px,14.4vw,68px)!important;
+  height:clamp(56px,14.4vw,68px)!important;
+  object-fit:contain!important;
+  display:block!important;
+  z-index:4!important;
+  pointer-events:none!important;
+  filter:drop-shadow(0 2px 3px #020816a3);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action:disabled .rtk-new-lap-art {
+  opacity:.74;
+}
+/* The squirrel's SVG image rides the end of the progress stroke at r=43. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-squirrel-tip {
+  pointer-events:none!important;
+  opacity:.96;
+  filter:drop-shadow(0 1px 1.5px #061023a8);
+}
+@media (prefers-reduced-motion:reduce) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-progress-ring .rtk-squirrel-tip {
+   transition:none!important;
+ }
+}
+
+/* Final Timekeepers upgrades: interchangeable artwork, common hand pivots, pause control. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel {
+ background-image:var(--rtk-bezel-image)!important;
+ background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;
+ filter:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices {
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices span {grid-column:1 / -1!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices button {
+ white-space:normal!important;min-height:29px;font-size:clamp(9px,2.05vw,12px)!important;
+ text-align:center;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+ background-size:100% 100%!important;background-position:50% 50%!important;
+ transform-origin:50% 50%!important;left:0!important;top:0!important;width:100%!important;height:100%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+ left:50%!important;top:50%!important;
+ transform:translate(-50%,-50%)!important;transform-origin:50% 50%!important;z-index:12!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing {
+ position:relative!important;overflow:visible!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing .rtk-pause-medallion {
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ object-fit:contain!important;display:block!important;pointer-events:none!important;
+ z-index:8!important;filter:drop-shadow(0 1px 2px #000a);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing svg {display:none!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-overlay {
+ position:absolute!important;inset:-5.5%!important;width:111%!important;height:111%!important;
+ z-index:15!important;overflow:visible!important;pointer-events:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-squirrel-overlay .rtk-squirrel-tip {
+ opacity:1!important;filter:drop-shadow(0 1px 2px #130b06c0);pointer-events:none!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {translate:0 -30px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {translate:0 -95px!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-customizing {z-index:42!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-lap-action .rtk-new-lap-art {
+ opacity:1!important;filter:drop-shadow(0 2px 3px #010916b8)!important;
+}
+/* Avoid stacking the raised mode globe and the central Play/Pause action on short iPhones. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {z-index:21!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {z-index:23!important;}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {translate:0 -34px!important;}
+
+/* October 15 precision polish: retain actual 1200x298 mode-control art ratio,
+   lift controls exactly as requested, and fit both button replacement sprites. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  width:75.6%!important;
+  height:auto!important;
+  aspect-ratio:1200 / 298!important;
+  background-size:100% 100%!important;
+  translate:0 -60px!important; /* prior -30, additional -30 */
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -125px!important; /* prior -95, additional -30 */
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:-35px -160px!important; /* previous -15/-80; additional -20/-80 */
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  width:auto!important;
+  height:100%!important;
+  aspect-ratio:1 / 1!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:contain!important;
+  left:98%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing .rtk-pause-medallion {
+  position:absolute!important;
+  inset:auto!important;
+  top:50%!important;left:50%!important;
+  width:auto!important;height:100%!important;
+  aspect-ratio:1 / 1!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:contain!important;
+  transform:translate(-50%,-50%)!important;
+}
+/* Prevent the menu backdrop and the button hit targets from distorting the art. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch button {
+  min-height:0!important;
+}
+
+/* Keep the correctly proportioned selector clear of interactive panel content. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  height:34%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:27%!important;bottom:5%!important;
+}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    height:29%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:39%!important;bottom:5%!important;
+  }
+}
+@media(max-width:520px) and (max-height:700px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    translate:0 -48px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    height:29%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:41%!important;bottom:5%!important;
+  }
+}
+
+/* Follow-up precision: all three instrument controls travel down 15px as a unit.
+   Art assets keep their native ratios and controls keep their established hit boxes. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  translate:0 -19px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  translate:0 -45px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -110px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  width:auto!important;
+  height:84%!important;
+  aspect-ratio:1/1!important;
+  max-width:none!important;max-height:none!important;
+  left:98%!important;top:50%!important;
+  object-fit:contain!important;
+  transform:translate(-50%,-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing .rtk-pause-medallion {
+  height:130%!important;
+  width:auto!important;
+  aspect-ratio:1/1!important;
+  left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:contain!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-readout {
+  translate:0 30px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-city-name {
+  font-family:"Copperplate","Bodoni MT","Didot",Georgia,serif!important;
+  font-variant:small-caps!important;
+  text-transform:uppercase!important;
+  font-size:clamp(13px,3.4vw,19px)!important;
+  letter-spacing:.145em!important;
+  font-weight:700!important;
+  color:#fffefa!important;
+  text-shadow:0 0 4px #ffffff,0 0 11px #ecf6ffdd,0 0 21px #cae4ff99,0 2px 3px #050a1a!important;
+}
+/* Center customization as a true modal within the Timekeepers artwork, independent
+   of the lower information cabinet. The backdrop closes it without trapping users. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-customization-overlay {
+  position:absolute!important;
+  inset:0!important;
+  z-index:70!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  pointer-events:auto!important;
+  isolation:isolate!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-customization-scrim {
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  background:rgba(5,9,24,.54)!important;
+  border:0!important;
+  cursor:pointer;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
+  position:relative!important;
+  display:flex!important;flex-direction:column!important;
+  width:min(86%,450px)!important;
+  max-height:min(76%,610px)!important;
+  min-height:0!important;
+  padding:10px!important;
+  border-radius:18px!important;
+  border:2px solid #dbac5b!important;
+  background:linear-gradient(155deg,#123e6d,#071a38 65%,#173f70)!important;
+  box-shadow:0 16px 45px #000c,inset 0 0 0 2px #efd49a33,0 0 18px #cbab5b66!important;
+  z-index:1!important;
+  overflow:hidden!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog .rtk-dial-picker {
+  position:static!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  scrollbar-width:thin;
+  min-height:0!important;
+  width:100%!important;height:auto!important;
+  max-height:100%!important;
+  padding:5px!important;
+  margin:0!important;
+  border:0!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+@media(max-width:520px) and (max-height:700px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+   translate:0 -33px!important;
+ }
+ .app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
+   max-height:82%!important;
+ }
+}
+
+/* The backdrop covers the artwork frame, which is 100px shorter than tall phone
+   screens. Keep the modal's visual midpoint at the viewport midpoint. */
+@media(min-height:785px) {
+ .app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
+   translate:0 52px!important;
+ }
+}
+
+
+/* Timekeepers final geometry: restore exact requested offsets after concurrent
+   instrument controls were shifted down, and honor one-to-one medallion sizes. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  width:75.6%!important;
+  height:auto!important;
+  aspect-ratio:1200 / 298!important;
+  translate:0 -60px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -125px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+  translate:0 -34px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  left:calc(7% + 25px)!important;
+  translate:-35px -160px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  height:100%!important;width:auto!important;
+  aspect-ratio:1/1!important;
+  max-height:none!important;max-width:none!important;
+  top:50%!important;left:98%!important;
+  transform:translate(-50%,-50%)!important;
+  object-fit:contain!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing .rtk-pause-medallion {
+  height:100%!important;width:auto!important;
+  aspect-ratio:1/1!important;
+  max-height:none!important;max-width:none!important;
+  top:50%!important;left:50%!important;
+  transform:translate(-50%,-50%)!important;
+  object-fit:contain!important;
+}
+@media(max-width:520px) and (max-height:700px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    translate:0 -48px!important;
+  }
 }
