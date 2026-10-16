@@ -118,6 +118,12 @@ export function paintSculpturalTunnel(c,s,assets={}){
       const drawWidth=landmarkCore ? Math.max(540,item.width*1.14) : item.width;
       const height=drawWidth*sprite.naturalHeight/sprite.naturalWidth;
       const intrusion=formationIntrusion(item);
+      // Project the solid center well into the route. Previously the new
+      // three-piece art stayed largely inside the wall, reading as scenery
+      // rather than an obstacle despite its collision volume.
+      const visualIntrusion=landmarkCore
+        ? Math.min(height*.84,intrusion*1.36)
+        : intrusion;
       // Paint connection slopes first, then seat the detailed obstacle on top.
       paintSlopeShoulders(c,s,item,screenX,side,assets);
       c.save();
@@ -130,8 +136,8 @@ export function paintSculpturalTunnel(c,s,assets={}){
       // Top: preserved roots hang DOWN, floor: crystal relief rises UP.
       // This is an illustrated *formation*, NOT a wallpaper panel.
       const organicSprite=softenedFormation(sprite);
-      if(side<0)c.drawImage(organicSprite,-drawWidth/2,-height+intrusion,drawWidth,height);
-      else c.drawImage(organicSprite,-drawWidth/2,-intrusion,drawWidth,height);
+      if(side<0)c.drawImage(organicSprite,-drawWidth/2,-height+visualIntrusion,drawWidth,height);
+      else c.drawImage(organicSprite,-drawWidth/2,-visualIntrusion,drawWidth,height);
       c.restore();
       drawn++;
     }
