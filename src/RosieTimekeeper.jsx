@@ -646,12 +646,12 @@ export default function RosieTimekeeper() {
             </>
           ) : (
             <div className="rtk-timer-workspace">
-              <div className="rtk-presets rtk-quick-inline" aria-label="Quick timer durations">
+              {timerEntry!=="sets" && <div className="rtk-presets rtk-quick-inline" aria-label="Quick timer durations">
                 {PRESETS.map(preset=><button key={preset.ms} type="button"
                   className={duration===preset.ms?"chosen":""}
                   onClick={()=>{pickPreset(preset.ms);setTimerEntry("custom")}}
                   aria-pressed={duration===preset.ms}>{preset.label}</button>)}
-              </div>
+              </div>}
               {sequence && <div className="rtk-sequence-running" role="status">
                 <span>{sequence.name}: step {sequence.index+1} of {sequence.steps.length}</span>
                 <button type="button" aria-label="Previous set step" disabled={sequence.index===0} onClick={()=>stepTimerSet(-1)}>‹</button>
@@ -661,14 +661,16 @@ export default function RosieTimekeeper() {
                 <div className="rtk-custom-timer" aria-label="Custom countdown duration">
                   {["Hours","Minutes","Seconds"].map((label,i)=><React.Fragment key={label}>
                     {i>0 && <span className="rtk-time-separator" aria-hidden="true">:</span>}
-                    <label>{label}<div className="rtk-wheel-wrap">
-                      <button type="button" className="rtk-wheel-arrow" aria-label={"Increase "+label} onClick={()=>chooseTimerUnit(i,((i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))+1)%(i===0?100:60))}>⌃</button>
-                      <select className="rtk-time-wheel" value={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
-                        onChange={e=>chooseTimerUnit(i,e.target.value)} aria-label={label}
-                        onWheel={e=>{if(e.cancelable)e.preventDefault();const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);chooseTimerUnit(i,(current+(e.deltaY>0?1:-1)+(i===0?100:60))%(i===0?100:60));}}>
-                        {Array.from({length:i===0?100:60},(_,n)=><option key={n} value={n}>{String(n).padStart(2,"0")}</option>)}
-                      </select>
-                      <button type="button" className="rtk-wheel-arrow" aria-label={"Decrease "+label} onClick={()=>chooseTimerUnit(i,((i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))+(i===0?100:60)-1)%(i===0?100:60))}>⌄</button>
+                    <label>{label}<div className="rtk-loop-wheel" role="spinbutton" tabIndex={0}
+                      aria-label={label} aria-valuemin={0} aria-valuemax={i===0?99:59}
+                      aria-valuenow={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
+                      onWheel={e=>{const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);const limit=i===0?100:60;chooseTimerUnit(i,(current+(e.deltaY>0?1:-1)+limit)%limit);}}
+                      onTouchStart={e=>{e.currentTarget.dataset.touchY=String(e.touches[0].clientY);}}
+                      onTouchEnd={e=>{const start=Number(e.currentTarget.dataset.touchY);const dy=e.changedTouches[0].clientY-start;if(Math.abs(dy)<9)return;const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);const limit=i===0?100:60;const steps=Math.max(1,Math.min(12,Math.round(Math.abs(dy)/24)));chooseTimerUnit(i,(current+(dy<0?steps:-steps)+limit)%limit);}}
+                      onKeyDown={e=>{if(!["ArrowUp","ArrowDown"].includes(e.key))return;e.preventDefault();const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);const limit=i===0?100:60;chooseTimerUnit(i,(current+(e.key==="ArrowDown"?1:-1)+limit)%limit);}}>
+                      {[-1,0,1].map(offset=><div key={offset} className={"rtk-loop-wheel-number"+(offset===0?" is-selected":"")}>
+                        {String(((i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))+offset+(i===0?100:60))%(i===0?100:60)).padStart(2,"0")}
+                      </div>)}
                     </div></label>
                   </React.Fragment>)}
                 </div>
