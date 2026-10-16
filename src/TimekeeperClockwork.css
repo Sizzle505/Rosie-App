@@ -83,3 +83,155 @@
 /* Gears respond to the actual running state; independent ratios and original sprites preserved. */
 .rtk-dial .rtk-rotating-wheel {animation-play-state:paused;}
 .rtk-dial.is-running .rtk-rotating-wheel {animation-play-state:running;}
+
+
+/* Timekeepers precision patch - Oct 16.
+   Keep the illustrated control console; the temporary Lap/Pause medallions
+   and misregistered raster clock hands are intentionally not displayed. */
+
+/* Only the Stopwatch / World Clock / Timer artwork moves down by 15 CSS px.
+   The sapphire cabinet retains its independent placement. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  translate:0 -45px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:-55px -160px!important;
+}
+
+/* Restore the approved console beneath its original transparent hit targets. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-new-lap-art,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-pause-medallion {
+  display:none!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  position:relative!important;
+  isolation:isolate;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action::after {
+  content:"Lap";
+  position:absolute;left:98%;top:50%;
+  transform:translate(-50%,-50%);
+  display:grid;place-items:center;
+  width:clamp(32px,8.9vw,40px);height:clamp(32px,8.9vw,40px);
+  border:0;border-radius:50%;
+  background:radial-gradient(circle at center,#0c3159 0%,#0b2646 65%,transparent 79%);
+  color:#fff0cf;
+  font:700 clamp(10px,2.7vw,13px)/1 Georgia,serif;
+  text-shadow:0 1px 2px #050711,0 0 3px #e6bb79aa;
+  pointer-events:none;z-index:3;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action:disabled::after {
+  opacity:.78;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action.is-playing {
+  position:relative!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action.is-playing::after {
+  content:"Ⅱ";
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  display:grid;place-items:center;
+  width:clamp(38px,10vw,51px);height:clamp(38px,10vw,51px);
+  border:0;border-radius:50%;
+  background:radial-gradient(circle,#42202e 0%,#3c1727 58%,transparent 78%);
+  color:#fff0c9;
+  font:700 clamp(22px,5.7vw,30px)/1 Arial,sans-serif;
+  text-shadow:0 2px 2px #21040e;
+  pointer-events:none;z-index:3;
+}
+
+/* The ten-minute and multi-zone date label is a genuine two-line information
+   plaque, not the previous 25px-high graphic into which both rows collided. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility:has(.rtk-world-settings) .rtk-utility-inner {
+  top:23%!important;
+  bottom:5%!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {
+  gap:10px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+  box-sizing:border-box!important;
+  flex:0 0 auto!important;
+  min-height:56px!important;
+  padding:8px 14px!important;
+  gap:5px!important;
+  justify-content:center!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque strong,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque span {
+  display:block!important;
+  margin:0!important;
+  text-align:center!important;
+  max-width:100%!important;
+  white-space:nowrap!important;
+  letter-spacing:.018em!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque strong {
+  font:700 clamp(12px,3.2vw,15px)/1.25 Georgia,serif!important;
+  color:#fff0c6!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque span {
+  font:500 clamp(10px,2.65vw,12px)/1.25 Georgia,serif!important;
+  color:#f4dab3!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {
+  min-height:32px!important;gap:18px!important;
+}
+
+/* Each hand is now drawn in one shared 100%-square coordinate system. Its
+   slender tapered blade is centered EXACTLY on x=50%, with its base at y=50%.
+   The independent WebP crops never determine the pivot position. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-hands {
+  inset:16%!important;aspect-ratio:1!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+  background-image:none!important;
+  --hand-dark:#633917;--hand-mid:#c88e34;--hand-light:#ffe7a6;
+  transform-origin:50% 50%!important;
+  overflow:visible!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="filigree"] {
+  --hand-dark:#663b20;--hand-mid:#bd8f47;--hand-light:#ffeac0;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="blued"] {
+  --hand-dark:#081a35;--hand-mid:#3479ae;--hand-light:#addcfb;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="observatory"] {
+  --hand-dark:#633812;--hand-mid:#d6a14b;--hand-light:#fff0c9;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand::before {
+  content:"";position:absolute;left:50%;bottom:50%;width:3.8%;height:26%;
+  transform:translateX(-50%);
+  background:linear-gradient(90deg,var(--hand-dark),var(--hand-mid) 32%,var(--hand-light) 51%,var(--hand-mid) 70%,var(--hand-dark));
+  clip-path:polygon(50% 0,78% 42%,95% 86%,66% 100%,34% 100%,5% 86%,22% 42%);
+  filter:drop-shadow(0 1px 1px #05020a);
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand.is-minute::before {
+  width:2.7%;height:36%;
+  clip-path:polygon(50% 0,69% 43%,87% 89%,65% 100%,35% 100%,13% 89%,31% 43%);
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand.is-second::before {
+  width:1.05%;height:41%;
+  clip-path:polygon(50% 0,85% 24%,85% 100%,15% 100%,15% 24%);
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand.is-hour::after,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand.is-minute::after {
+  content:"";position:absolute;left:50%;top:50%;width:1.65%;height:5.5%;
+  transform:translateX(-50%);background:var(--hand-dark);
+  border-radius:0 0 40% 40%;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hand.is-second::after {
+  content:"";position:absolute;left:50%;top:50%;width:1.15%;height:10%;
+  transform:translateX(-50%);
+  border-radius:0 0 45% 45%;
+  background:linear-gradient(90deg,var(--hand-dark),var(--hand-mid),var(--hand-light));
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+  left:50%!important;top:50%!important;
+  width:8.5%!important;height:8.5%!important;
+  transform:translate(-50%,-50%)!important;
+  background:radial-gradient(circle at 35% 30%,#fff6d9 0%,#e4bc72 13%,#54739a 20%,#1d3558 36%,#dfa54b 45%,#633c1d 71%,#f1d394 88%,#533018 100%)!important;
+  border:1px solid #f9dea0;border-radius:50%;
+  box-shadow:0 1px 2px #130717,inset 0 0 2px #fcf2d1;
+  z-index:12!important;
+}
