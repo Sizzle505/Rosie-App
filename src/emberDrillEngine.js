@@ -59,11 +59,14 @@ export function makeCourse(seed = 1467) {
     const motif = Math.floor(x / 610) % 6;
     const offset = motif === 2 ? -60 : motif === 4 ? 62 : motif === 5 ? -30 : 20;
     const kind = motif === 0 ? "bone" : motif === 3 ? "cheese" : "gem";
-    for (let j = 0; j < 5; j++) {
-      const pos = x + j * 68;
+    // Six-pickup sweep gives each route a readable, rewarding line through
+    // the danger instead of a static row of icons.
+    for (let j = 0; j < 6; j++) {
+      const pos = x + j * 62;
       const lane=courseLaneOffset(pos,offset);
-      const y = clamp(tunnelCenter(pos) + lane + Math.sin(j / 4 * Math.PI) * (motif % 2 ? 13 : -13), 95, 725);
-      objects.push({ id: ++id, kind: j === 4 && motif === 3 ? "cache" : kind, x: pos, y, radius: 20, taken: false });
+      const arc=Math.sin(j / 5 * Math.PI) * (motif % 2 ? 48 : -48);
+      const y = clamp(tunnelCenter(pos) + lane + arc, 95, 725);
+      objects.push({ id: ++id, kind: j === 5 && motif === 3 ? "cache" : kind, x: pos, y, radius: 22, taken: false });
     }
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
     if (x > 1900 && motif % 2 === 1) {
