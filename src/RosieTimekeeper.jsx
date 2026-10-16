@@ -510,9 +510,7 @@ export default function RosieTimekeeper() {
               onClick={mode === "stopwatch" ? lap : repeatCountdown}
               disabled={mode === "stopwatch" && !running}
               title={mode === "stopwatch" ? "Lap" : "Repeat countdown"} aria-label={mode === "stopwatch" ? "Record lap" : "Repeat countdown"}>
-              {mode === "stopwatch" ? <img className="rtk-new-lap-art"
-                src="/rosieverse/timekeeper/midnight-observatory/panel-controls/lap-medallion-solid.webp"
-                alt="" draggable="false" /> : (
+              {mode === "stopwatch" ? <span className="rtk-lap-accessible">Lap</span> : (
                 <svg className="rtk-repeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
                   <path d="m17 2 4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15" />
@@ -522,16 +520,40 @@ export default function RosieTimekeeper() {
             </button>
             <button type="button" className={"rtk-primary-action" + (running ? " is-playing" : "")} onClick={startOrPause}
               title={running ? "Pause" : "Play"} aria-label={running ? "Pause" : "Play"}>
-              {running ? <img className="rtk-pause-medallion"
-                  src="/rosieverse/timekeeper/midnight-observatory/panel-controls/pause-medallion.webp"
-                  draggable="false" alt="" />
-                : <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.3a1.3 1.3 0 0 1 2-.98l12 7.65a1.25 1.25 0 0 1 0 2.1L9 20.72a1.3 1.3 0 0 1-2-.99Z" /></svg>}
+              {running ? <span className="rtk-pause-accessible">Pause</span> : null}
             </button>
             <button type="button" className="rtk-secondary-action rtk-reset-action"
               onClick={stopAndReset} title="Reset" aria-label="Reset stopwatch or countdown">
               <span className="rtk-action-word">Reset</span>
             </button>
           </div>
+          {/* Exactly registered over the imported console's original enamel
+              apertures. Only the inner face changes: never draw a second rim. */}
+          <svg className="rtk-console-inlays" viewBox="0 0 2048 680"
+            preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id="rtk-native-lap" cx="35%" cy="27%" r="78%">
+                <stop offset="0%" stopColor="#263849"/>
+                <stop offset="38%" stopColor="#121c29"/>
+                <stop offset="80%" stopColor="#090f1a"/>
+                <stop offset="100%" stopColor="#03060a"/>
+              </radialGradient>
+              <clipPath id="rtk-native-ruby-clip">
+                <circle cx="1024" cy="345" r="169"/>
+              </clipPath>
+            </defs>
+            {mode === "stopwatch" && <g>
+              <circle cx="451" cy="349" r="129" fill="url(#rtk-native-lap)" />
+              <text x="451" y="373" textAnchor="middle" fill="#f8dda2"
+                stroke="#4e2c14" strokeWidth="1.4" paintOrder="stroke"
+                fontFamily="Georgia,serif" fontWeight="bold" fontSize="76"
+                letterSpacing="1">LAP</text>
+            </g>}
+            {running && <image
+              href="/rosieverse/timekeeper/midnight-observatory/panel-controls/pause-medallion.webp"
+              x="678" y="-1" width="692" height="692"
+              preserveAspectRatio="xMidYMid meet" clipPath="url(#rtk-native-ruby-clip)" />}
+          </svg>
         </div>
         <div className="rtk-top-controls" aria-label="Clock mode and appearance">
           <button type="button" className="rtk-face-trigger" onClick={() => setDialPickerOpen(open => !open)}
