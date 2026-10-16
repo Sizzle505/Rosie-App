@@ -52,6 +52,8 @@ for(const [engine,browserType] of [["webkit",webkit],["chromium",chromium]]){
       assert(world.daynight.top>world.date.bottom+2,"Date and Day/Night are overlapping");
       assert(world.daynight.bottom<world.nav.top-5,"Day/Night is behind bottom navigation");
       await page.screenshot({path:`${output}/${engine}-${width}-world.png`});
+      assert((await page.locator("#rtk-world-city option:checked").textContent()).includes("EDT"),"Selected city must show timezone on the city line");
+      assert.equal(await page.locator(".rtk-world-city-plaque span").count(),0,"Date plaque must have only one line");
       await page.getByRole("button",{name:"Stopwatch"}).click();
       await page.getByRole("button",{name:"Play"}).click();
       await page.waitForTimeout(300);
@@ -62,6 +64,15 @@ for(const [engine,browserType] of [["webkit",webkit],["chromium",chromium]]){
       assert.equal(await page.locator(".rtk-laps li").count(),1);
       await page.screenshot({path:`${output}/${engine}-${width}-running.png`});
       await page.getByRole("button",{name:"Pause"}).click();
+      await page.getByRole("button",{name:"Timer",exact:true}).click();
+      assert.equal(await page.locator(".rtk-timer-tabs").count(),0,"No old Quick/Custom tabs");
+      assert.equal(await page.locator(".rtk-quick-inline button").count(),4,"Quick presets on one row");
+      assert.equal(await page.locator(".rtk-time-wheel").count(),3,"Native H/M/S selectors");
+      await page.locator(".rtk-time-wheel[aria-label='Minutes']").selectOption("7");
+      assert((await page.locator(".rtk-time-whole").innerText()).includes("07:00"),
+        "Stopped timer must update without Set Duration");
+      await page.getByRole("button",{name:"Sets",exact:true}).click();
+      assert.equal(await page.locator(".rtk-sets-editor").count(),1,"Sets remains accessible");
       assert.equal(errors.length,0,"Browser errors: "+errors.join(" | "));
       await context.close();
     }
