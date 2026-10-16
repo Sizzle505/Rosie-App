@@ -142,7 +142,7 @@ function playSound(context,kind) {
   }catch(_){}
 }
 export default function EmberTunnelDrill({ soundOn=true }) {
-  const canvas=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
+  const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467);
@@ -169,13 +169,17 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     pressed.current.up=false;pressed.current.down=false;
     modeRef.current="running";setMode("running");setHud(snapshot(next));
     playSound(audio(),"start");
-    // Keep the active playfield in the intended reading position on phones and
-    // desktop alike, without changing the document layout before a run starts.
-    requestAnimationFrame(()=>{
-      const top=canvas.current?.getBoundingClientRect().top;
+    // React removes the launch card on this state change. Wait for that layout
+    // to settle, then position the stage itself - once and exactly - 500px
+    // from the viewport top. Native scrolling avoids a second smooth-scroll
+    // pass landing noticeably below the requested position on iOS.
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const top=stage.current?.getBoundingClientRect().top;
       if(typeof top!=="number")return;
-      window.scrollTo({top:Math.max(0,window.scrollY+top-500),behavior:"smooth"});
-    });
+      const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
+      const target=Math.max(0,Math.min(max,window.scrollY+top-500));
+      window.scrollTo(0,target);
+    }));
   }
   function turbo() {
     const s=frame.current;
@@ -330,7 +334,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / PASSAGES.length) * 100}%`}} /></div>
         {PASSAGES.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
       </div>
-      <div className={"ember-stage"+(active?" is-active":"")} >
+      <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
         <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
