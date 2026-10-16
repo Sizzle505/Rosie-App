@@ -257,14 +257,16 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls 
 
 /* Three independent explicit CSS-pixel adjustments from the previous view.
    No whole-panel translation, which would undo the requested separation. */
-body .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select {
-  position:relative!important;top:-35px!important;
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner:has(.rtk-world-settings) {
+  /* Reposition the scroll viewport first: moving the SELECT alone would
+     crop its top 35px under the panel's overflow-y:auto boundary. */
+  top:calc(27% - 35px)!important;
 }
 body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
-  top:-20px!important;
+  position:relative!important;top:15px!important;
 }
 body .app-shell.page-timekeeper .rtk-observatory .rtk-world-daynight {
-  position:relative!important;top:-5px!important;
+  position:relative!important;top:30px!important;
 }
 
 /* Keep every illustration, and its individual observed metal-jewel pivot,
