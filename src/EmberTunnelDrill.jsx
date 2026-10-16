@@ -177,10 +177,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       const top=stage.current?.getBoundingClientRect().top;
       if(typeof top!=="number")return;
       const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
-      // Intentionally advance 600px farther than the previous 500px anchor.
-      // This places the active portion of the playfield substantially higher
-      // on the screen as requested.
-      const target=Math.max(0,Math.min(max,window.scrollY+top-1100));
+      // Move 400px down from the prior position while retaining a deterministic
+      // page location after the launch card disappears.
+      const target=Math.max(0,Math.min(max,window.scrollY+top-700));
       window.scrollTo(0,target);
     }));
   }
