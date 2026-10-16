@@ -179,7 +179,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
       // Move 400px down from the prior position while retaining a deterministic
       // page location after the launch card disappears.
-      const target=Math.max(0,Math.min(max,window.scrollY+top-150));
+      // Keep another 130px of the page above the playfield visible on launch.
+      const target=Math.max(0,Math.min(max,window.scrollY+top-20));
       window.scrollTo(0,target);
     }));
   }
