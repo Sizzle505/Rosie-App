@@ -315,3 +315,55 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-han
   --rtk-px:47%;--rtk-py:46.8%;--rtk-correction:0deg;
   clip-path:inset(0 45% 0 36%)!important;
 }
+
+/* Unified iPhone timer composer, 2026-10-16. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {
+  translate:0 37px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace {
+  display:flex!important;flex-direction:column!important;gap:6px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-quick-inline {
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:5px!important;margin:0 0 5px!important;width:100%!important;flex-shrink:0!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-quick-inline button {
+  min-height:clamp(29px,7vw,38px)!important;font-size:clamp(11px,2.8vw,15px)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer {
+  display:flex!important;flex-direction:column!important;gap:5px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer {
+  display:grid!important;grid-template-columns:minmax(0,1fr) 9px minmax(0,1fr) 9px minmax(0,1fr)!important;
+  width:100%!important;gap:4px!important;align-items:end!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  gap:3px!important;min-width:0!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-time-wheel {
+  display:block!important;box-sizing:border-box!important;
+  width:100%!important;min-width:0!important;
+  height:clamp(33px,8vw,42px)!important;
+  padding:2px 19px 2px 7px!important;
+  border:1px solid #e5bf79!important;border-radius:11px!important;
+  background:linear-gradient(160deg,#215284,#092b52)!important;
+  color:#fff0cd!important;text-align:center!important;
+  text-align-last:center!important;
+  font:700 clamp(16px,4.1vw,23px)/1 Georgia,serif!important;
+  appearance:auto!important;-webkit-appearance:menulist!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-duration-actions {
+  display:grid!important;grid-template-columns:minmax(0,1fr) 76px!important;
+  gap:7px!important;align-items:center!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-duration-actions .rtk-set-timer {
+  margin:0!important;width:100%!important;min-height:35px!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-sets-toggle,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-back-custom {
+  min-height:35px!important;
+  background:linear-gradient(#205484,#071c3d)!important;
+  border:1px solid #e4bb76!important;border-radius:10px!important;
+  color:#fff0cb!important;font:700 13px/1 Georgia,serif!important;
+}
