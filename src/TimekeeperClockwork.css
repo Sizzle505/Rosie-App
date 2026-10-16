@@ -564,3 +564,32 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-util
   bottom:3%!important;
   min-height:0!important;
 }
+
+/* Restore the ACTUAL cabinet sizing from RosieTimekeeper.css.
+   That layout uses 34% (desktop/tall phone) and 29% (short phones),
+   not the ancient 20.7% fallback. All increases grow down from the
+   unchanged top edge, with no clipping of the real controls. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  height:37.4%!important;
+  overflow:visible!important;
+}
+@media(max-width:520px) and (max-height:785px) {
+ body .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+ body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+ body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+   height:31.9%!important;
+ }
+}
+/* Three mutually exclusive button columns with a wider right-hand reach
+   for Lap: every point up to the 37% boundary belongs to Lap, and none
+   belongs to the Play/Pause column. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls {
+  grid-template-columns:37% 31% 32%!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-reset-action {
+  clip-path:none!important;
+}
