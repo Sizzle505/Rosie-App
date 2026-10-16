@@ -31,6 +31,19 @@ const DRILL_ART = {
   newCrystalDrape:"new-assets/obstacle/newCrystalDrape.webp",
   newBarkrootRoof:"new-assets/obstacle/newBarkrootRoof.webp",
   newThinRoots:"new-assets/obstacle/newThinRoots.webp",
+  terrainRoofLeftRoot:"terrain-transitions/ember-roof-transition-left-root-heavy.webp",
+  terrainRoofRightRoot:"terrain-transitions/ember-roof-transition-right-root-heavy.webp",
+  terrainRoofLeftCrystal:"terrain-transitions/ember-roof-transition-left-crystal-drape.webp",
+  terrainRoofRightCrystal:"terrain-transitions/ember-roof-transition-right-crystal-drape.webp",
+  terrainRoofCore:"terrain-transitions/ember-roof-obstacle-core-barkroot.webp",
+  terrainFloorLeftRoot:"terrain-transitions/ember-floor-transition-left-rootstone.webp",
+  terrainFloorRightRoot:"terrain-transitions/ember-floor-transition-right-rootstone.webp",
+  terrainFloorLeftRuby:"terrain-transitions/ember-floor-transition-left-ruby-ridge.webp",
+  terrainFloorRightRuby:"terrain-transitions/ember-floor-transition-right-ruby-ridge.webp",
+  terrainFloorCore:"terrain-transitions/ember-floor-obstacle-core-ruby.webp",
+  terrainDebrisRoots:"terrain-transitions/ember-hazard-debris-roots.webp",
+  terrainDebrisCrystals:"terrain-transitions/ember-hazard-debris-crystals.webp",
+  terrainPassageGate:"terrain-transitions/ember-passage-arrival-lantern-gate.webp",
   edgeBarkrootTop:"edge/barkroot-top.webp",
   edgeBarkrootBottom:"edge/barkroot-bottom.webp",
   ogCanopyA:"edge/formation/hanging-canopy-a.webp",
@@ -156,6 +169,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     pressed.current.up=false;pressed.current.down=false;
     modeRef.current="running";setMode("running");setHud(snapshot(next));
     playSound(audio(),"start");
+    // Keep the active playfield in the intended reading position on phones and
+    // desktop alike, without changing the document layout before a run starts.
+    requestAnimationFrame(()=>{
+      const top=canvas.current?.getBoundingClientRect().top;
+      if(typeof top!=="number")return;
+      window.scrollTo({top:Math.max(0,window.scrollY+top-500),behavior:"smooth"});
+    });
   }
   function turbo() {
     const s=frame.current;
