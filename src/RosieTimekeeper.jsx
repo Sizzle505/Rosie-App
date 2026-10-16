@@ -617,11 +617,10 @@ export default function RosieTimekeeper() {
               <label htmlFor="rtk-world-city">World Clock</label>
               <select id="rtk-world-city" aria-label="Select world clock city" value={worldZone}
                 onChange={e=>setWorldZone(e.target.value)}>
-                {WORLD_CITIES.map(item=><option value={item.zone} key={item.zone}>{item.city}</option>)}
+                {WORLD_CITIES.map(item=><option value={item.zone} key={item.zone}>{item.city} · {worldTimeParts(worldNow,item.zone).abbr}</option>)}
               </select>
               <div className="rtk-world-city-plaque">
                 <strong>{world.day}, {world.month} {world.date}</strong>
-                <span>{world.abbr} · {worldIsDay ? "Daytime" : "Nighttime"}</span>
               </div>
               <div className="rtk-world-daynight" aria-label={worldIsDay?"Daytime in selected city":"Nighttime in selected city"}>
                 <span className={worldIsDay?"is-current":""}><img src={LUXURY_ASSETS+"world-clock-ui/sun.webp"} alt="Sun"/>Day</span>
