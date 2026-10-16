@@ -593,3 +593,10 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls 
 body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-reset-action {
   clip-path:none!important;
 }
+
+/* Raise all timer-panel controls three CSS pixels as a group, without moving
+   the information cabinet or affecting the World Clock and Stopwatch modes. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-timer-workspace {
+  position:relative!important;
+  top:-3px!important;
+}
