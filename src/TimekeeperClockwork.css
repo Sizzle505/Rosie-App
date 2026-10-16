@@ -492,3 +492,43 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls 
   min-height:52px!important;min-width:0!important;
   cursor:pointer!important;touch-action:manipulation!important;
 }
+
+/* Corrective pass: preserve iOS-native dropdowns, no faux wheel surfaces. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer .rtk-time-wheel {
+  display:block!important;width:100%!important;
+  box-sizing:border-box!important;height:clamp(33px,8vw,42px)!important;
+  appearance:menulist!important;-webkit-appearance:menulist!important;
+  padding:2px 20px 2px 8px!important;
+  background:linear-gradient(160deg,#215284,#092b52)!important;
+  border:1px solid #e5bf79!important;border-radius:11px!important;
+  text-align:center!important;text-align-last:center!important;
+  color:#fff0cd!important;
+}
+/* Positions are additive to the prior finalized layout. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select {
+  transform:translateY(10px)!important; /* previous +3px; now +7px */
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+  top:19px!important; /* previous 15px; now +4px */
+}
+/* Extend the painted information cabinet only toward its lower edge. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  height:16.06%!important; /* previous 14.6%, scaled by 1.1 */
+  min-height:0!important;
+}
+/* Prevent the central play/pause zone from intercepting taps intended
+   for the left Lap disc. Keep transparent button visuals and original art. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-primary-action {
+  clip-path:ellipse(31% 46% at 50% 50%)!important;
+  pointer-events:auto!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action {
+  clip-path:ellipse(44% 47% at 73% 50%)!important;
+  pointer-events:auto!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-reset-action {
+  clip-path:ellipse(42% 47% at 27% 50%)!important;
+  pointer-events:auto!important;
+}
