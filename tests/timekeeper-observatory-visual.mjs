@@ -68,6 +68,13 @@ for(const [engine,browserType] of [["webkit",webkit],["chromium",chromium]]){
       assert.equal(await page.locator(".rtk-timer-tabs").count(),0,"No old Quick/Custom tabs");
       assert.equal(await page.locator(".rtk-quick-inline button").count(),4,"Quick presets on one row");
       assert.equal(await page.locator(".rtk-time-wheel").count(),3,"Native H/M/S selectors");
+      await page.locator(".rtk-time-wheel[aria-label='Seconds']").selectOption("0");
+      await page.getByRole("button",{name:"Decrease Seconds"}).click();
+      assert.equal(await page.locator(".rtk-time-wheel[aria-label='Seconds']").inputValue(),"59",
+        "Seconds reverse scroll must wrap 00 to 59");
+      await page.getByRole("button",{name:"Increase Seconds"}).click();
+      assert.equal(await page.locator(".rtk-time-wheel[aria-label='Seconds']").inputValue(),"0",
+        "Seconds forward scroll must wrap 59 to 00");
       await page.locator(".rtk-time-wheel[aria-label='Minutes']").selectOption("7");
       assert((await page.locator(".rtk-time-whole").innerText()).includes("07:00"),
         "Stopped timer must update without Set Duration");
