@@ -212,7 +212,7 @@ export default function RosieTimekeeper() {
   useEffect(() => {
     try {
       const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "null");
-      if (saved && (saved.mode === "stopwatch" || saved.mode === "countdown")) {
+      if (saved && saved.running && (saved.mode === "stopwatch" || saved.mode === "countdown")) {
         const restoredMode = saved.mode;
         const restoredDuration = Number.isFinite(saved.duration) && saved.duration > 0 ? saved.duration : 60_000;
         const extra = saved.running ? Math.max(0, Date.now() - (Number(saved.savedAt) || Date.now())) : 0;
