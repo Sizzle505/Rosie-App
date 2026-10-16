@@ -661,10 +661,15 @@ export default function RosieTimekeeper() {
                 <div className="rtk-custom-timer" aria-label="Custom countdown duration">
                   {["Hours","Minutes","Seconds"].map((label,i)=><React.Fragment key={label}>
                     {i>0 && <span className="rtk-time-separator" aria-hidden="true">:</span>}
-                    <label>{label}<select className="rtk-time-wheel" value={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
-                      onChange={e=>chooseTimerUnit(i,e.target.value)} aria-label={label}>
-                      {Array.from({length:i===0?100:60},(_,n)=><option key={n} value={n}>{String(n).padStart(2,"0")}</option>)}
-                    </select></label>
+                    <label>{label}<div className="rtk-wheel-wrap">
+                      <button type="button" className="rtk-wheel-arrow" aria-label={"Increase "+label} onClick={()=>chooseTimerUnit(i,((i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))+1)%(i===0?100:60))}>⌃</button>
+                      <select className="rtk-time-wheel" value={i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds)}
+                        onChange={e=>chooseTimerUnit(i,e.target.value)} aria-label={label}
+                        onWheel={e=>{if(e.cancelable)e.preventDefault();const current=i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds);chooseTimerUnit(i,(current+(e.deltaY>0?1:-1)+(i===0?100:60))%(i===0?100:60));}}>
+                        {Array.from({length:i===0?100:60},(_,n)=><option key={n} value={n}>{String(n).padStart(2,"0")}</option>)}
+                      </select>
+                      <button type="button" className="rtk-wheel-arrow" aria-label={"Decrease "+label} onClick={()=>chooseTimerUnit(i,((i===0?Number(customHours):i===1?Number(customMinutes):Number(customSeconds))+(i===0?100:60)-1)%(i===0?100:60))}>⌄</button>
+                    </div></label>
                   </React.Fragment>)}
                 </div>
                 <div className="rtk-duration-actions">
