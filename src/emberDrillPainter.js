@@ -127,10 +127,11 @@ function scenicFeatures(c,s,assets){
     if(x<-450||x>W+450)continue;
     const mid=tunnelCenter(feature.world),r=tunnelRadius(feature.world);
     if(feature.kind==="gate"){
-      const img=assets.gate;
+      const img=feature.world===15300 ? (assets.terrainPassageGate||assets.gate) : assets.gate;
       if(!artReady(img))continue;
       glow(c,x,mid,190,"rgba(243,170,74,.15)");
-      drawImageTrim(c,img,x-195,mid-145,390,290,.83);
+      const size=img===assets.terrainPassageGate?260:390;
+      drawImageTrim(c,img,x-size/2,mid-size*.38,size,size*.76,.83);
     } else if(feature.kind==="lantern"){
       const y=mid-r+56;
       const img=assets.lantern;
@@ -249,6 +250,8 @@ function pickup(c,o,s,assets={}){
 function hazard(c,o,s,assets={}){
   const img=assets[o.kind==='spike'?'spike':'rock'];
   if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?94:92;
+    const debris=assets[o.kind==='spike'?'terrainDebrisRoots':'terrainDebrisCrystals'];
+    if(artReady(debris))drawImageTrim(c,debris,x-128,y-54,150,75,.34);
     // Three restrained amber cues grow out of the same wall as the hazard,
     // signaling the obstruction without adding a separate floating marker.
     const middle=tunnelCenter(o.x), side=o.y<middle?-1:1, edge=middle+side*(tunnelRadius(o.x)-16);
