@@ -544,39 +544,7 @@ export default function RosieTimekeeper() {
             <button type="button" className={mode === "countdown" ? "chosen" : ""} aria-pressed={mode === "countdown"} onClick={() => { pickMode("countdown"); setTimerEntry("presets"); }}>Timer</button>
           </div>
         </div>
-        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")+(dialPickerOpen?" is-customizing":"")} aria-label="Timekeeper settings and splits">
-          {dialPickerOpen && <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
-            <div className="rtk-dial-picker-head">
-              <span>Clock faces</span>
-              <button type="button" aria-label="Close clock face chooser" onClick={() => setDialPickerOpen(false)}>×</button>
-            </div>
-            <div className="rtk-frame-choices">
-              {DIAL_FRAMES.map(item => <button type="button" key={item.id}
-                className={dialFrame === item.id ? "chosen" : ""}
-                aria-label={item.label + " clock face"} aria-pressed={dialFrame === item.id}
-                title={item.label} onClick={() => setDialFrame(item.id)}>
-                <span aria-hidden="true">{item.symbol}</span><small>{item.label}</small>
-              </button>)}
-            </div>
-            <div className="rtk-bezel-choices" role="group" aria-label="Clock bezel finish">
-              <span>Bezel</span>{BEZEL_STYLES.map(item=><button type="button" key={item.id}
-                className={bezelStyle===item.id?"chosen":""} aria-label={item.label+" bezel"} aria-pressed={bezelStyle===item.id}
-                onClick={()=>setBezelStyle(item.id)}>{item.label}</button>)}
-            </div>
-            <div className="rtk-hand-choices" role="group" aria-label="Clock hand style">
-              <span>Hands</span>{HAND_STYLES.map(item=><button type="button" key={item.id}
-                aria-label={item.label+" clock hands"} aria-pressed={handStyle===item.id}
-                className={handStyle===item.id?"chosen":""} onClick={()=>setHandStyle(item.id)}>{item.label}</button>)}
-            </div>
-            <div className="rtk-color-choices">
-              <span>Enamel</span>
-              {DIAL_COLORS.map(item => <button type="button" key={item.id}
-                className={dialColor === item.id ? "chosen" : ""} title={item.label}
-                aria-label={item.label + " clock color"} aria-pressed={dialColor === item.id}
-                onClick={() => setDialColor(item.id)}
-                style={{ "--swatch": item.center }} />)}
-            </div>
-          </div>}
+        <section ref={utilityRef} className={"rtk-utility" + (mode === "stopwatch" && !laps.length ? " is-empty" : "") + (mode === "countdown" ? " is-timer" : "")} aria-label="Timekeeper settings and splits">
           <div className="rtk-utility-inner">
           {mode === "world" ? (
             <div className="rtk-world-settings">
@@ -671,6 +639,43 @@ export default function RosieTimekeeper() {
           )}
           </div>
         </section>
+        {dialPickerOpen && <div className="rtk-customization-overlay" role="presentation">
+          <button type="button" className="rtk-customization-scrim" aria-label="Dismiss clock customization" onClick={()=>setDialPickerOpen(false)} />
+          <div className="rtk-customization-dialog" role="dialog" aria-modal="true" aria-label="Clock customization">
+            <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
+            <div className="rtk-dial-picker-head">
+              <span>Clock faces</span>
+              <button type="button" aria-label="Close clock face chooser" onClick={() => setDialPickerOpen(false)}>×</button>
+            </div>
+            <div className="rtk-frame-choices">
+              {DIAL_FRAMES.map(item => <button type="button" key={item.id}
+                className={dialFrame === item.id ? "chosen" : ""}
+                aria-label={item.label + " clock face"} aria-pressed={dialFrame === item.id}
+                title={item.label} onClick={() => setDialFrame(item.id)}>
+                <span aria-hidden="true">{item.symbol}</span><small>{item.label}</small>
+              </button>)}
+            </div>
+            <div className="rtk-bezel-choices" role="group" aria-label="Clock bezel finish">
+              <span>Bezel</span>{BEZEL_STYLES.map(item=><button type="button" key={item.id}
+                className={bezelStyle===item.id?"chosen":""} aria-label={item.label+" bezel"} aria-pressed={bezelStyle===item.id}
+                onClick={()=>setBezelStyle(item.id)}>{item.label}</button>)}
+            </div>
+            <div className="rtk-hand-choices" role="group" aria-label="Clock hand style">
+              <span>Hands</span>{HAND_STYLES.map(item=><button type="button" key={item.id}
+                aria-label={item.label+" clock hands"} aria-pressed={handStyle===item.id}
+                className={handStyle===item.id?"chosen":""} onClick={()=>setHandStyle(item.id)}>{item.label}</button>)}
+            </div>
+            <div className="rtk-color-choices">
+              <span>Enamel</span>
+              {DIAL_COLORS.map(item => <button type="button" key={item.id}
+                className={dialColor === item.id ? "chosen" : ""} title={item.label}
+                aria-label={item.label + " clock color"} aria-pressed={dialColor === item.id}
+                onClick={() => setDialColor(item.id)}
+                style={{ "--swatch": item.center }} />)}
+            </div>
+            </div>
+          </div>
+        </div>}
         </div>
       </div>
     </main>
