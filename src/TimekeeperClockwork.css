@@ -367,3 +367,43 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-back-custom {
   border:1px solid #e4bb76!important;border-radius:10px!important;
   color:#fff0cb!important;font:700 13px/1 Georgia,serif!important;
 }
+
+/* Illustrated hand finishing: common optical hub, consistent stacking and
+   mechanical motion while retaining the actual luxury hand sprites. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand.is-hour {
+  z-index:8!important;
+  filter:drop-shadow(0 1px 1px rgba(7,4,14,.68))!important;
+  transition:transform .42s cubic-bezier(.2,.55,.35,1)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand.is-minute {
+  z-index:9!important;
+  filter:drop-shadow(0 1px 1px rgba(7,4,14,.55))!important;
+  transition:transform .4s cubic-bezier(.2,.55,.35,1)!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand.is-second {
+  z-index:10!important;opacity:.81!important;
+  filter:drop-shadow(0 1px 1px rgba(7,4,14,.4))!important;
+  transition:transform .2s linear!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+  z-index:13!important;width:7.7%!important;height:7.7%!important;
+}
+/* The gold minute and hour masters have a subtly different round hub
+   position; register both at the same center of the original jeweled bezel. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/dauphine-hour.webp"] {
+  --rtk-px:46.6%;--rtk-py:50.1%;--rtk-correction:-19.5deg;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand[style*="/dauphine-minute.webp"] {
+  --rtk-px:46.8%;--rtk-py:50.0%;--rtk-correction:-19.5deg;
+}
+/* Give the date plaque one centered line, without the earlier two-line
+   squeeze. The time-zone abbreviation is shown by the city selector. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque {
+  min-height:clamp(38px,7.2vw,50px)!important;
+  padding:5px 12px!important;
+  gap:0!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-world-city-plaque strong {
+  font-size:clamp(13px,3.2vw,17px)!important;
+  line-height:1.3!important;
+}
