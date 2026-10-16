@@ -600,3 +600,25 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-time
   position:relative!important;
   top:-8px!important;
 }
+
+/* Keep stopwatch lap records entirely inside the decorative cabinet. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-lap-table {
+  width:100%!important; max-width:100%!important;
+  min-width:0!important; min-height:0!important;
+  overflow:hidden!important; box-sizing:border-box!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-laps {
+  max-height:100%!important; min-height:0!important;
+  overflow-y:auto!important; overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  width:100%!important; max-width:100%!important;
+  box-sizing:border-box!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-laps li,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-lap-table-head {
+  min-width:0!important; max-width:100%!important;box-sizing:border-box!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-laps li > *,
+body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-lap-table-head > * {
+  min-width:0!important; overflow:hidden!important;text-overflow:ellipsis!important;
+}
