@@ -78,8 +78,11 @@ export function makeCourse(seed = 1467) {
       // two untelegraphed collision volumes on the same screen.
       if (recoveryStretch || nearFormation(pos,300)) continue;
       const side = rand() < 0.5 ? -1 : 1;
-      objects.push({ id: ++id, kind: motif === 5 ? "spike" : "rock", x: pos,
-        y: clamp(tunnelCenter(pos) + side * 112, 90, 720), radius: motif === 5 ? 37 : 42, taken: false });
+      // Temple wheels are the recurring mechanical threat, bolted directly
+      // to the roof/floor that launches them rather than floating mid-route.
+      const wheel = motif === 1 || motif === 5;
+      objects.push({ id: ++id, kind: wheel ? "spike" : "rock", x: pos,
+        y: clamp(tunnelCenter(pos) + side * (wheel ? 126 : 112), 90, 720), radius: wheel ? 52 : 42, taken: false });
     }
   }
   // An early, visible temple wheel teaches the player that historic machinery
@@ -87,7 +90,7 @@ export function makeCourse(seed = 1467) {
   const firstWheelX=2280;
   objects.push({id:++id,kind:"spike",x:firstWheelX,
     y:tunnelCenter(firstWheelX)-tunnelRadius(firstWheelX)+52,
-    radius:37,taken:false});
+    radius:52,taken:false});
   return objects;
 }
 export function newRun(seed = 1467) {
