@@ -3777,3 +3777,80 @@ body:has(.app-shell.page-timekeeper),
 .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {z-index:21!important;}
 .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {z-index:23!important;}
 .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {translate:0 -34px!important;}
+
+/* October 15 precision polish: retain actual 1200x298 mode-control art ratio,
+   lift controls exactly as requested, and fit both button replacement sprites. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+  width:75.6%!important;
+  height:auto!important;
+  aspect-ratio:1200 / 298!important;
+  background-size:100% 100%!important;
+  translate:0 -60px!important; /* prior -30, additional -30 */
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  translate:0 -125px!important; /* prior -95, additional -30 */
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+  translate:-35px -160px!important; /* previous -15/-80; additional -20/-80 */
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls .rtk-lap-action .rtk-new-lap-art {
+  width:auto!important;
+  height:100%!important;
+  aspect-ratio:1 / 1!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:contain!important;
+  left:98%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-primary-action.is-playing .rtk-pause-medallion {
+  position:absolute!important;
+  inset:auto!important;
+  top:50%!important;left:50%!important;
+  width:auto!important;height:100%!important;
+  aspect-ratio:1 / 1!important;
+  max-width:none!important;max-height:none!important;
+  object-fit:contain!important;
+  transform:translate(-50%,-50%)!important;
+}
+/* Prevent the menu backdrop and the button hit targets from distorting the art. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch button {
+  min-height:0!important;
+}
+
+/* Keep the correctly proportioned selector clear of interactive panel content. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  height:34%!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+.app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  top:27%!important;bottom:5%!important;
+}
+@media(max-width:520px) and (min-height:701px) and (max-height:785px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    height:29%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:39%!important;bottom:5%!important;
+  }
+}
+@media(max-width:520px) and (max-height:700px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    translate:0 -48px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+    height:29%!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:41%!important;bottom:5%!important;
+  }
+}

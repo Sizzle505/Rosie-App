@@ -486,8 +486,8 @@ export default function RosieTimekeeper() {
               aria-hidden="true" focusable="false">
             <image key={runnerEpoch} className="rtk-squirrel-tip"
               href="/rosieverse/timekeeper/midnight-observatory/squirrel-original-still.webp"
-              x="0" y="0" width="10.5" height="13.9" preserveAspectRatio="xMidYMid meet"
-              transform={`translate(${runnerX} ${runnerY}) scale(${squirrelFlipped ? -1 : 1} 1) translate(-5.25 -6.95)`}
+              x="0" y="0" width="13.65" height="18.07" preserveAspectRatio="xMidYMid meet"
+              transform={`translate(${runnerX} ${runnerY}) scale(${squirrelFlipped ? -1 : 1} 1) translate(-6.825 -9.035)`}
             />
           </svg>}
           {mode==="world" ? <div className="rtk-world-readout" aria-label={chosenWorldCity.city+", "+worldDigital}>
