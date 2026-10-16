@@ -110,7 +110,7 @@ const formatTime = t => Math.max(0, Math.ceil(RUN_DURATION - t)) + "s";
 function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
     cheese:s.cheese, combo:s.combo, boost:s.boostTime, boosts:s.boosts, shards:s.shards,
-    damageTaken:s.damageTaken, distance:Math.round(s.distance/10),
+    damageTaken:s.damageTaken, cleanBonus:s.cleanBonus, distance:Math.round(s.distance/10),
     passage:Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))), result:s.result };
 }
 function playSound(context,kind) {
@@ -330,6 +330,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               <span><b>{hud.boosts}</b> TURBOS</span>
               <span><b>{hud.shards}</b> ROCKS SHATTERED</span>
               <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
+              {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
               <span><b>{best.toLocaleString()}</b> BEST</span>
             </div>}
             <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
