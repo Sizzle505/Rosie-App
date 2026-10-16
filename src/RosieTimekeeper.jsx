@@ -53,10 +53,11 @@ const DIAL_COLORS = [
   { id:"lapis", label:"Celestial Lapis", center:"#1a4aa7", edge:"#070f38", light:false }
 ];
 const BEZEL_STYLES = [
-  {id:"gold",label:"Imperial Gold",filter:"none"},
-  {id:"rose",label:"Rose Gold",filter:"sepia(.18) saturate(1.15) hue-rotate(328deg)"},
-  {id:"antique",label:"Antique Brass",filter:"sepia(.22) saturate(.73) brightness(.77)"},
-  {id:"platinum",label:"Platinum",filter:"grayscale(.88) brightness(1.23) contrast(1.06)"}
+  {id:"gold",label:"Imperial Original",file:"bezel.webp"},
+  {id:"artdeco",label:"Sapphire Art Deco",file:"bezel-options/artdeco.webp"},
+  {id:"baroque",label:"Ruby Baroque",file:"bezel-options/baroque.webp"},
+  {id:"celestial",label:"Celestial Observatory",file:"bezel-options/celestial.webp"},
+  {id:"pearl",label:"Ivory Pearl",file:"bezel-options/pearl.webp"}
 ];
 const TIMER_SETS_KEY = "rosie-timekeeper-sets-v1";
 const MAX_TIMER_MS = 99 * 3600000 + 59 * 60000 + 59000;
@@ -67,7 +68,8 @@ const formatStep = ms => {
 const HAND_STYLES = [
   { id:"dauphine",label:"Gold" },
   { id:"filigree",label:"Filigree" },
-  { id:"blued",label:"Blued Steel" }
+  { id:"blued",label:"Blued Steel" },
+  { id:"observatory",label:"Gilded Observatory" }
 ];
 const WORLD_CITIES = [
   {city:"New York", zone:"America/New_York"},
@@ -148,7 +150,7 @@ export default function RosieTimekeeper() {
   });
   const [dialPickerOpen, setDialPickerOpen] = useState(false);
   const [worldZone,setWorldZone] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-zone");return WORLD_CITIES.some(c=>c.zone===saved)?saved:"America/New_York";}catch{return "America/New_York";}});
-  const [handStyle,setHandStyle] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hands");return HAND_STYLES.some(c=>c.id===saved)?saved:"dauphine";}catch{return "dauphine";}});
+  const [handStyle,setHandStyle] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hands");if(localStorage.getItem("rosie-timekeeper-hand-origin-v1")!=="1")return "observatory";return HAND_STYLES.some(c=>c.id===saved)?saved:"observatory";}catch{return "observatory";}});
   const [worldNow,setWorldNow] = useState(()=>Date.now());
   const [runnerEpoch,setRunnerEpoch] = useState(0);
 
@@ -170,7 +172,7 @@ export default function RosieTimekeeper() {
   }, [dialFrame,dialColor]);
 
   useEffect(() => {
-    try {localStorage.setItem("rosie-timekeeper-zone",worldZone);localStorage.setItem("rosie-timekeeper-hands",handStyle);localStorage.setItem("rosie-timekeeper-bezel",bezelStyle);}catch{}
+    try {localStorage.setItem("rosie-timekeeper-zone",worldZone);localStorage.setItem("rosie-timekeeper-hands",handStyle);localStorage.setItem("rosie-timekeeper-bezel",bezelStyle);localStorage.setItem("rosie-timekeeper-hand-origin-v1","1");}catch{}
   },[worldZone,handStyle,bezelStyle]);
   useEffect(()=>{try{localStorage.setItem(TIMER_SETS_KEY,JSON.stringify(savedSets));}catch{}},[savedSets]);
   useEffect(() => {
@@ -429,7 +431,7 @@ export default function RosieTimekeeper() {
           style={{ "--rtk-face-center": selectedColor.center, "--rtk-face-edge": selectedColor.edge,
             "--rtk-face-texture": `url("${LUXURY_ASSETS}dial-textures/${selectedColor.id}.webp")`,
             "--rtk-numeral-color": selectedColor.light ? "#342b30" : "#fff1d5",
-            "--rtk-bezel-filter": selectedBezel.filter }}
+            "--rtk-bezel-image": `url("/rosieverse/timekeeper/midnight-observatory/${selectedBezel.file}")` }}
           aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
           <span className={"rtk-face-overlay is-"+selectedFrame.id} style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.webp")` }} aria-hidden="true" />
@@ -479,13 +481,15 @@ export default function RosieTimekeeper() {
             <circle className="rtk-progress-live" cx="50" cy="50" r="43"
               strokeDasharray={circumference}
               strokeDashoffset={circumference * (1 - dialProgress)} />
-            {mode !== "world" && <image key={runnerEpoch}
-              className="rtk-squirrel-tip"
+          </svg>
+          {mode !== "world" && <svg className="rtk-squirrel-overlay" viewBox="0 0 100 100"
+              aria-hidden="true" focusable="false">
+            <image key={runnerEpoch} className="rtk-squirrel-tip"
               href="/rosieverse/timekeeper/midnight-observatory/squirrel-original-still.webp"
               x="0" y="0" width="10.5" height="13.9" preserveAspectRatio="xMidYMid meet"
               transform={`translate(${runnerX} ${runnerY}) scale(${squirrelFlipped ? -1 : 1} 1) translate(-5.25 -6.95)`}
-            />}
-          </svg>
+            />
+          </svg>}
           {mode==="world" ? <div className="rtk-world-readout" aria-label={chosenWorldCity.city+", "+worldDigital}>
              <time className="rtk-world-digital">{worldDigital}</time>
              <strong className="rtk-world-city-name">{chosenWorldCity.city}</strong>
@@ -507,7 +511,7 @@ export default function RosieTimekeeper() {
               disabled={mode === "stopwatch" && !running}
               title={mode === "stopwatch" ? "Lap" : "Repeat countdown"} aria-label={mode === "stopwatch" ? "Record lap" : "Repeat countdown"}>
               {mode === "stopwatch" ? <img className="rtk-new-lap-art"
-                src="/rosieverse/timekeeper/midnight-observatory/panel-controls/lap-medallion.webp"
+                src="/rosieverse/timekeeper/midnight-observatory/panel-controls/lap-medallion-solid.webp"
                 alt="" draggable="false" /> : (
                 <svg className="rtk-repeat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -518,7 +522,9 @@ export default function RosieTimekeeper() {
             </button>
             <button type="button" className={"rtk-primary-action" + (running ? " is-playing" : "")} onClick={startOrPause}
               title={running ? "Pause" : "Play"} aria-label={running ? "Pause" : "Play"}>
-              {running ? <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="5" height="16" rx=".8" /><rect x="14" y="4" width="5" height="16" rx=".8" /></svg>
+              {running ? <img className="rtk-pause-medallion"
+                  src="/rosieverse/timekeeper/midnight-observatory/panel-controls/pause-medallion.webp"
+                  draggable="false" alt="" />
                 : <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.3a1.3 1.3 0 0 1 2-.98l12 7.65a1.25 1.25 0 0 1 0 2.1L9 20.72a1.3 1.3 0 0 1-2-.99Z" /></svg>}
             </button>
             <button type="button" className="rtk-secondary-action rtk-reset-action"
