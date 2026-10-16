@@ -96,7 +96,8 @@ const CAVERN_SCENES=[
   {at:54,key:"templeOrganic",accent:"bg08"},
   {at:65,key:"scenicTemple",accent:"bg10"},
 ];
-const SCENE_CROSSFADE_SECONDS=.42;
+// Fast, eased changes keep the run moving without a conspicuous panorama flash.
+const SCENE_CROSSFADE_SECONDS=.30;
 // Wide 2:1 studies contain artist-composed dark framing at top and bottom.
 // Never substitute them for our approved cave wall painting: those black
 // margins were responsible for the rectangular "photo pasted into tunnel"
@@ -104,7 +105,7 @@ const SCENE_CROSSFADE_SECONDS=.42;
 function atmosphericAccent(c,img,progress,opacity){
  if(!artReady(img)||opacity<.003)return;
  c.save();c.globalCompositeOperation="screen";
- panorama(c,img,progress,opacity*.32);
+ panorama(c,img,progress,opacity*.18);
  c.restore();
 }
 // These are world-anchored scenic set pieces, NOT collectible markers.
@@ -114,11 +115,10 @@ const CAVERN_FEATURES=[
   {kind:"crystaloverlay",world:3150,side:1},
   {kind:"lantern",world:5700,side:-1},
   {kind:"crystaloverlay",world:7500,side:1},
-  {kind:"gate",world:10780,side:0},
+  // The supplied gate is a complete entrance illustration, not wall terrain.
+  // It is intentionally not composited into the playable tunnel.
   {kind:"lantern",world:12500,side:-1},
-  {kind:"gate",world:15300,side:0},
   {kind:"crystaloverlay",world:17700,side:1},
-  {kind:"gate",world:20800,side:0},
   {kind:"lantern",world:23400,side:-1},
 ];
 function scenicFeatures(c,s,assets){
@@ -126,13 +126,7 @@ function scenicFeatures(c,s,assets){
     const x=feature.world-s.scroll;
     if(x<-450||x>W+450)continue;
     const mid=tunnelCenter(feature.world),r=tunnelRadius(feature.world);
-    if(feature.kind==="gate"){
-      const img=feature.world===15300 ? (assets.terrainPassageGate||assets.gate) : assets.gate;
-      if(!artReady(img))continue;
-      glow(c,x,mid,190,"rgba(243,170,74,.15)");
-      const size=img===assets.terrainPassageGate?260:390;
-      drawImageTrim(c,img,x-size/2,mid-size*.38,size,size*.76,.83);
-    } else if(feature.kind==="lantern"){
+    if(feature.kind==="lantern"){
       const y=mid-r+56;
       const img=assets.lantern;
       if(artReady(img)){
@@ -167,10 +161,11 @@ function scenery(c,s,assets={}) {
   if(current>0){
     const prev=CAVERN_SCENES[current-1];
     const fade=clamp((s.time-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
+    const eased=fade*fade*(3-2*fade);
     panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
-    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,fade);
-    atmosphericAccent(c,assets[prev.accent],1,1-fade);
-    atmosphericAccent(c,assets[scene.accent],local,fade);
+    panorama(c,assets[scene.key]||assets.scenicBarkroot,local,eased);
+    atmosphericAccent(c,assets[prev.accent],1,1-eased);
+    atmosphericAccent(c,assets[scene.accent],local,eased);
   }else{
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
     atmosphericAccent(c,assets[scene.accent],local,1);
@@ -249,7 +244,7 @@ function pickup(c,o,s,assets={}){
 }
 function hazard(c,o,s,assets={}){
   const img=assets[o.kind==='spike'?'spike':'rock'];
-  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-90&&x<W+90){const sz=o.kind==='spike'?94:92;
+  if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-120&&x<W+120){const sz=o.kind==='spike'?188:92;
     const debris=assets[o.kind==='spike'?'terrainDebrisRoots':'terrainDebrisCrystals'];
     if(artReady(debris))drawImageTrim(c,debris,x-128,y-54,150,75,.34);
     // Three restrained amber cues grow out of the same wall as the hazard,
@@ -266,11 +261,11 @@ function hazard(c,o,s,assets={}){
       const boundary=middle+(above?-1:1)*(tunnelRadius(o.x)-9);
       const fixture=above?-1:1;
       c.save();
-      c.strokeStyle="rgba(45,30,25,.83)";c.lineWidth=12;c.lineCap="round";
+      c.strokeStyle="rgba(45,30,25,.83)";c.lineWidth=16;c.lineCap="round";
       c.beginPath();c.moveTo(x,boundary);c.lineTo(x,o.y);c.stroke();
-      c.strokeStyle="rgba(213,155,79,.88)";c.lineWidth=3;
+      c.strokeStyle="rgba(213,155,79,.88)";c.lineWidth=4;
       c.beginPath();c.moveTo(x-2,boundary);c.lineTo(x-2,o.y);c.stroke();
-      circle(c,x,boundary,11,"#4b3025");circle(c,x,boundary,6,"#c99b55");
+      circle(c,x,boundary,14,"#4b3025");circle(c,x,boundary,8,"#c99b55");
       c.restore();
     }else{
       glow(c,x,y,57,"rgba(246,123,77,.14)");
