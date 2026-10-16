@@ -65,33 +65,33 @@ function alphaCorridorClip(c,s,side){
   c.closePath();c.clip();
 }
 
-// Use the recovered narrow OG slope formations as geological shoulders. Their
-// perspective and feathered edges are made for this exact roof/floor contact;
-// the larger generated panels were visually too mural-like for this job.
+// The purpose-built transition pair is composited under the original detailed
+// formation. Each side has its own painted direction - never mirror a sprite -
+// so a roof/floor hazard grows naturally out of the surrounding tunnel wall.
 function paintSlopeShoulders(c,s,item,screenX,side,assets){
   if(!item.obstacle)return;
-  const slopeKey=side<0
-    ? (item.index%2 ? "ogSlopeRoofA" : "ogSlopeRoofB")
-    : (item.index%2 ? "ogSlopeFloorA" : "ogSlopeFloorB");
-  const slope=assets[slopeKey];
-  if(!ready(slope))return;
-  const width=Math.min(430,Math.max(350,item.width*.76));
-  const height=width*slope.naturalHeight/slope.naturalWidth;
+  const crystalVariant=item.index%3===1;
+  const keys=side<0
+    ? (crystalVariant?["terrainRoofLeftCrystal","terrainRoofRightCrystal"]:["terrainRoofLeftRoot","terrainRoofRightRoot"])
+    : (crystalVariant?["terrainFloorLeftRuby","terrainFloorRightRuby"]:["terrainFloorLeftRoot","terrainFloorRightRoot"]);
+  const width=Math.min(460,Math.max(385,item.width*.88));
   const offset=item.width*.37;
-  for(const direction of [-1,1]){
+  for(const [slot,direction] of [[0,-1],[1,1]]){
+    const slope=assets[keys[slot]];
+    if(!ready(slope))continue;
+    const height=width*slope.naturalHeight/slope.naturalWidth;
     const world=item.at+direction*offset;
     c.save();
     c.translate(screenX+direction*offset,worldSurface(world,side));
     c.rotate(thetaAt(world,side));
-    if(direction>0)c.scale(-1,1);
-    c.globalAlpha=.90;
-    c.filter="contrast(1.05) saturate(1.04)";
+    c.globalAlpha=.94;
+    c.filter="contrast(1.04) saturate(1.03)";
     c.shadowBlur=7;c.shadowColor="rgba(13,7,10,.66)";
     const shoulder=softenedFormation(slope);
-    // The two shoulders overlap the formation's base by 40%, producing a
-    // continuous, tapered rise instead of a hard lateral start or end.
-    if(side<0)c.drawImage(shoulder,-width*.54,-height+26,width,height);
-    else c.drawImage(shoulder,-width*.54,-26,width,height);
+    // Deep ends face inward and overlap the core; shallow ends dissolve into
+    // the continuous wall ribbon, eliminating the former pasted-on block.
+    if(side<0)c.drawImage(shoulder,-width*.54,-height+Math.min(126,item.depth*.61),width,height);
+    else c.drawImage(shoulder,-width*.54,-Math.min(126,item.depth*.61),width,height);
     c.restore();
   }
 }
@@ -104,9 +104,14 @@ export function paintSculpturalTunnel(c,s,assets={}){
       if(item.side!==side)continue;
       const screenX=item.at-s.scroll;
       if(screenX < -item.width*.55-12 || screenX > W+item.width*.55+12)continue;
-      const sprite=assets[item.key];
+      const landmarkCore=item.obstacle && (
+        (side<0 && [2,12,26,38].includes(item.index)) ||
+        (side>0 && [3,11,24,35].includes(item.index))
+      );
+      const sprite=landmarkCore ? assets[side<0?"terrainRoofCore":"terrainFloorCore"] : assets[item.key];
       if(!ready(sprite))continue;
-      const height=item.width*sprite.naturalHeight/sprite.naturalWidth;
+      const drawWidth=landmarkCore ? Math.max(410,item.width*.94) : item.width;
+      const height=drawWidth*sprite.naturalHeight/sprite.naturalWidth;
       const intrusion=formationIntrusion(item);
       // Paint connection slopes first, then seat the detailed obstacle on top.
       paintSlopeShoulders(c,s,item,screenX,side,assets);
@@ -120,8 +125,8 @@ export function paintSculpturalTunnel(c,s,assets={}){
       // Top: preserved roots hang DOWN, floor: crystal relief rises UP.
       // This is an illustrated *formation*, NOT a wallpaper panel.
       const organicSprite=softenedFormation(sprite);
-      if(side<0)c.drawImage(organicSprite,-item.width/2,-height+intrusion,item.width,height);
-      else c.drawImage(organicSprite,-item.width/2,-intrusion,item.width,height);
+      if(side<0)c.drawImage(organicSprite,-drawWidth/2,-height+intrusion,drawWidth,height);
+      else c.drawImage(organicSprite,-drawWidth/2,-intrusion,drawWidth,height);
       c.restore();
       drawn++;
     }
