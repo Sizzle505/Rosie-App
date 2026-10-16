@@ -74,8 +74,11 @@ function paintSlopeShoulders(c,s,item,screenX,side,assets){
   const keys=side<0
     ? (crystalVariant?["terrainRoofLeftCrystal","terrainRoofRightCrystal"]:["terrainRoofLeftRoot","terrainRoofRightRoot"])
     : (crystalVariant?["terrainFloorLeftRuby","terrainFloorRightRuby"]:["terrainFloorLeftRoot","terrainFloorRightRoot"]);
-  const width=Math.min(460,Math.max(385,item.width*.88));
-  const offset=item.width*.37;
+  // These are the actual wall-to-core transition pieces. Make the blend
+  // broad enough to remain obvious on every playable hazard, not only the
+  // former showcase formations.
+  const width=Math.min(520,Math.max(440,item.width*.98));
+  const offset=item.width*.40;
   for(const [slot,direction] of [[0,-1],[1,1]]){
     const slope=assets[keys[slot]];
     if(!ready(slope))continue;
@@ -84,14 +87,14 @@ function paintSlopeShoulders(c,s,item,screenX,side,assets){
     c.save();
     c.translate(screenX+direction*offset,worldSurface(world,side));
     c.rotate(thetaAt(world,side));
-    c.globalAlpha=.94;
+    c.globalAlpha=.98;
     c.filter="contrast(1.04) saturate(1.03)";
     c.shadowBlur=7;c.shadowColor="rgba(13,7,10,.66)";
     const shoulder=softenedFormation(slope);
     // Deep ends face inward and overlap the core; shallow ends dissolve into
     // the continuous wall ribbon, eliminating the former pasted-on block.
-    if(side<0)c.drawImage(shoulder,-width*.54,-height+Math.min(126,item.depth*.61),width,height);
-    else c.drawImage(shoulder,-width*.54,-Math.min(126,item.depth*.61),width,height);
+    if(side<0)c.drawImage(shoulder,-width*.54,-height+Math.min(148,item.depth*.70),width,height);
+    else c.drawImage(shoulder,-width*.54,-Math.min(148,item.depth*.70),width,height);
     c.restore();
   }
 }
@@ -104,13 +107,13 @@ export function paintSculpturalTunnel(c,s,assets={}){
       if(item.side!==side)continue;
       const screenX=item.at-s.scroll;
       if(screenX < -item.width*.55-12 || screenX > W+item.width*.55+12)continue;
-      const landmarkCore=item.obstacle && (
-        (side<0 && [2,12,26,38].includes(item.index)) ||
-        (side>0 && [3,11,24,35].includes(item.index))
-      );
+      // Every collision-bearing formation uses a matching, purpose-built
+      // core. Keeping the original art only for scenic formations prevents
+      // any old square-cut obstacle from reappearing between transitions.
+      const landmarkCore=item.obstacle;
       const sprite=landmarkCore ? assets[side<0?"terrainRoofCore":"terrainFloorCore"] : assets[item.key];
       if(!ready(sprite))continue;
-      const drawWidth=landmarkCore ? Math.max(410,item.width*.94) : item.width;
+      const drawWidth=landmarkCore ? Math.max(438,item.width*.98) : item.width;
       const height=drawWidth*sprite.naturalHeight/sprite.naturalWidth;
       const intrusion=formationIntrusion(item);
       // Paint connection slopes first, then seat the detailed obstacle on top.
