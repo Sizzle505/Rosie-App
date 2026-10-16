@@ -99,7 +99,7 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-tri
 
 /* Shift the WHOLE World Clock group down in the information cabinet. */
 body .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {
-  translate:0 15px!important;
+  translate:0 25px!important; /* city, date and day/night down 10px together */
   padding-bottom:17px!important;
 }
 
