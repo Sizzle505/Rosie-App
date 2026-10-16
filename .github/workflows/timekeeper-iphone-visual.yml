@@ -3,17 +3,20 @@ on:
   push:
     branches:
       - work/timekeeper-enamel-instruments-20261012
+      - work/timekeepers-midnight-observatory
     paths:
       - src/RosieTimekeeper.jsx
       - src/RosieTimekeeper.css
       - src/TimekeeperClockwork.css
       - tests/timekeeper-iphone-visual.mjs
+      - tests/timekeeper-observatory-visual.mjs
       - .github/workflows/timekeeper-iphone-visual.yml
   pull_request:
     paths:
       - src/RosieTimekeeper.jsx
       - src/RosieTimekeeper.css
       - tests/timekeeper-iphone-visual.mjs
+      - tests/timekeeper-observatory-visual.mjs
 permissions:
   contents: read
 jobs:
@@ -39,10 +42,10 @@ jobs:
           done
           cat /tmp/rosie-vite.log
           exit 1
-      - run: node tests/timekeeper-iphone-visual.mjs
+      - run: node tests/timekeeper-observatory-visual.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: timekeeper-mobile-screenshots
-          path: artifacts/timekeeper-iphone/
+          name: timekeeper-observatory-screenshots
+          path: artifacts/timekeeper-approved/
           retention-days: 14
