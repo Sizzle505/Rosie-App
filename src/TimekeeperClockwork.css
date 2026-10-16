@@ -532,3 +532,17 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-controls 
   clip-path:ellipse(42% 47% at 27% 50%)!important;
   pointer-events:auto!important;
 }
+
+/* Squirrel correction: restore the original enlarged 111% track coordinate
+   plane (the previous inset:0 reduced the track and displaced its rider).
+   Lift the actual rendered sprite 9px and retain frontmost stacking. */
+body .app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-squirrel-overlay {
+  inset:-5.5%!important;
+  width:111%!important;height:111%!important;
+  translate:0 -9px!important;
+  z-index:35!important;
+  pointer-events:none!important;
+}
+body .app-shell.page-timekeeper .rtk-observatory .rtk-dial .rtk-squirrel-overlay .rtk-squirrel-tip {
+  opacity:1!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.8))!important;
+}
