@@ -77,8 +77,8 @@ function paintSlopeShoulders(c,s,item,screenX,side,assets){
   // These are the actual wall-to-core transition pieces. Make the blend
   // broad enough to remain obvious on every playable hazard, not only the
   // former showcase formations.
-  const width=Math.min(520,Math.max(440,item.width*.98));
-  const offset=item.width*.40;
+  const width=Math.min(620,Math.max(540,item.width*1.12));
+  const offset=item.width*.43;
   for(const [slot,direction] of [[0,-1],[1,1]]){
     const slope=assets[keys[slot]];
     if(!ready(slope))continue;
@@ -113,7 +113,9 @@ export function paintSculpturalTunnel(c,s,assets={}){
       const landmarkCore=item.obstacle;
       const sprite=landmarkCore ? assets[side<0?"terrainRoofCore":"terrainFloorCore"] : assets[item.key];
       if(!ready(sprite))continue;
-      const drawWidth=landmarkCore ? Math.max(438,item.width*.98) : item.width;
+      // The 394px center plate needs to be materially larger than the old
+      // decorative formation - it is the playable obstruction, not an accent.
+      const drawWidth=landmarkCore ? Math.max(540,item.width*1.14) : item.width;
       const height=drawWidth*sprite.naturalHeight/sprite.naturalWidth;
       const intrusion=formationIntrusion(item);
       // Paint connection slopes first, then seat the detailed obstacle on top.
