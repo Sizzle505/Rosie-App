@@ -354,3 +354,4 @@
 .ember-stage.is-active .ember-turbo-banner{animation:ember-turbo-pulse .7s ease-in-out infinite alternate}
 @keyframes ember-plaque-breathe{50%{box-shadow:0 7px 20px rgba(244,169,70,.47),inset 0 0 0 1px rgba(255,230,164,.14)}}
 @keyframes ember-turbo-pulse{to{transform:translateX(-50%) scale(1.09);filter:brightness(1.22)}}
+.ember-replay-intro{display:block;margin:10px auto 0;padding:8px 14px;border:1px solid rgba(230,186,99,.62);border-radius:999px;background:rgba(17,39,49,.72);color:#f6d891;font:700 9px Georgia,serif;letter-spacing:.11em;cursor:pointer}.ember-replay-intro:hover{background:rgba(27,63,78,.94)}
