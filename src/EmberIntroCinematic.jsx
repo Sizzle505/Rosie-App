@@ -57,7 +57,7 @@ function paint(ctx,images,ms){
   const alphaScene=(name,amount)=>{ctx.save();ctx.globalAlpha=clamp(amount);drawScene(ctx,i(name));ctx.restore();};
   if(s<5.3){
     drawScene(ctx,i('park'));
-    if(s>=1.65)drawFX(ctx,i('hole'+clamp(Math.floor(smooth((s-1.65)/2.9)*5),0,4)),346,714,400+Math.floor((s-1.65)*23));
+    if(s>=1.65)drawFX(ctx,i('holes'+clamp(Math.floor(smooth((s-1.65)/2.9)*5),0,4)),346,714,400+Math.floor((s-1.65)*23));
     const k=s<1.65?0:idx(s-1.65,8,7.5);
     const h=s>4.6?405*(1-.39*smooth((s-4.6)/.7)):405;
     drawObject(ctx,i('dig'+k),345,s>4.6?769+105*smooth((s-4.6)/.7):772,h);
@@ -75,7 +75,7 @@ function paint(ctx,images,ms){
     if(p<.95){
       if(i('shadow'))ctx.drawImage(i('shadow'),0,0,W,H);
       drawObject(ctx,i('land'+Math.min(3,Math.floor(p*4.2))),295,752,360);
-      if(p<.68)drawFX(ctx,i('dust'+Math.min(5,Math.floor(p*8))),313,720,550,{opacity:.8});
+      if(p<.68)drawFX(ctx,i('landDust'+Math.min(5,Math.floor(p*8))),313,720,550,{opacity:.8});
     }else if(p<2.5){
       drawObject(ctx,i('land3'),307+(p-.95)*24,754,350);
     }else{
