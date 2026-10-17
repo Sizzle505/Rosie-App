@@ -39,6 +39,7 @@ import RosieTimekeeper from "./RosieTimekeeper.jsx";
 import RosieResources from "./RosieResources.jsx";
 import RosieQrAtelier from "./RosieQrAtelier.jsx";
 import RosieRecipes from "./RosieRecipes.jsx";
+import RosieReviews from "./RosieReviews.jsx";
 import { AccountProvider } from "./private/AccountContext.jsx";
 import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
@@ -2255,7 +2256,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "qr-atelier", "recipes"];
+  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "qr-atelier", "recipes", "reviews"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").toLowerCase();
     return validPages.includes(requested) ? requested : "home";
@@ -3001,6 +3002,8 @@ function App() {
           <RosieQrAtelier />
         ) : page === "recipes" ? (
           <RosieRecipes />
+        ) : page === "reviews" ? (
+          <RosieReviews />
         ) : page === "resources" ? (
           <RosieResources onNavigate={navigateTo} />
         ) : (
@@ -3034,7 +3037,7 @@ function App() {
             <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
             <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
             <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
-            <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
+            <button type="button" aria-label="Open Rosie’s Reviews" className={page === "reviews" ? "active" : ""} onClick={() => navigateTo("reviews")}><span className="nav-icon-wrap"><svg className="rosie-nav-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="2"/><circle cx="11" cy="10" r="2"/><circle cx="21" cy="10" r="2"/><circle cx="11" cy="22" r="2"/><circle cx="21" cy="22" r="2"/></svg></span><small>Reviews</small></button>
           </nav>}
         </>}
         <AccountPortal />
