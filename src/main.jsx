@@ -2838,7 +2838,8 @@ function App() {
       </div>
 
       <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
-        {page === "captain" && <CaptainOuterAtmosphere />}
+        {/* The Great Dig has its own underground visual world. Keep the retired
+            maritime backdrop off this route so it cannot cover the cinematic. */}
 
 
         {page === "home" ? (
@@ -3002,7 +3003,9 @@ function App() {
         ) : page === "cheese" ? (
           <CheeseMemoryGame />
         ) : page === "captain" ? (
-          <EmberDigExperience soundOn={soundOn} />
+          <main className="ember-dig-page">
+            <EmberDigExperience soundOn={soundOn} />
+          </main>
         ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />
         ) : page === "vault" ? (
