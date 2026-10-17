@@ -24,6 +24,7 @@ import "./cheese-sprint.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
 import EmberTunnelDrill from "./EmberTunnelDrill.jsx";
+import EmberIntroCinematic from "./EmberIntroCinematic.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
@@ -2250,6 +2251,24 @@ function CaptainRosieGame({ soundOn }) {
 }
 
 
+function EmberDigExperience({ soundOn }) {
+  const [showIntro, setShowIntro] = useState(() => {
+    try { return localStorage.getItem("rosie:ember:intro:watched:v1") !== "true"; }
+    catch { return true; }
+  });
+  const finishIntro = () => {
+    try { localStorage.setItem("rosie:ember:intro:watched:v1", "true"); } catch {}
+    setShowIntro(false);
+  };
+  const replayIntro = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    setShowIntro(true);
+  };
+  return showIntro
+    ? <EmberIntroCinematic onComplete={finishIntro} />
+    : <EmberTunnelDrill soundOn={soundOn} onReplayIntro={replayIntro} />;
+}
+
 function App() {
   const [loaded, setLoaded] = useState(false);
   // Captain's audio uses this shared setting. It must exist before the Captain
@@ -2985,7 +3004,7 @@ function App() {
         ) : page === "captain" ? (
           <>
             <CaptainRosieGame soundOn={soundOn} />
-            <EmberTunnelDrill soundOn={soundOn} />
+            <EmberDigExperience soundOn={soundOn} />
           </>
         ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />
