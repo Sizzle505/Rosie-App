@@ -12,6 +12,21 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/rosieverse-180.png?v=1" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="description" content="Enter RosieVerse - Rosie’s whimsical world of fortunes, voyages, cards, games, and cheese." />
+    <script>
+      window.addEventListener("error", function (event) {
+        var message = event && event.error && event.error.stack ? event.error.stack : (event && event.message) || "Unknown startup error";
+        window.__rosieStartupError = message;
+        document.addEventListener("DOMContentLoaded", function () {
+          var root = document.getElementById("root");
+          if (root && !root.childElementCount) {
+            root.innerHTML = '<main style="min-height:100vh;padding:28px 20px;background:#100b11;color:#f6e8cf;font:16px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif"><strong style="display:block;margin-bottom:10px;color:#f4ca7a">RosieVerse startup error</strong><code style="white-space:pre-wrap;word-break:break-word">' + String(message).replace(/[&<>]/g, function (character) { return ({"&":"&amp;","<":"&lt;",">":"&gt;"})[character]; }) + '</code></main>';
+          }
+        });
+      }, true);
+      window.addEventListener("unhandledrejection", function (event) {
+        throw event.reason instanceof Error ? event.reason : new Error(String(event.reason));
+      });
+    </script>
     <!-- Wheel labels only; font-display swap retains a fast offline serif fallback. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
