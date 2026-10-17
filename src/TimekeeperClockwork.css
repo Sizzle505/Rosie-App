@@ -622,3 +622,14 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-laps li > *,
 body .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-lap-table-head > * {
   min-width:0!important; overflow:hidden!important;text-overflow:ellipsis!important;
 }
+
+/* Installed iPhone app: the artwork has been drawing behind the device's
+   status bar. Keep the scene background edge-to-edge, but start the entire
+   illustrated stage below the physical top safe area, not above it.
+   This moves every overlay together without disturbing internal geometry. */
+@media (display-mode:standalone) and (max-width:520px) {
+ body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+   position:relative!important;
+   top:max(0px,env(safe-area-inset-top,0px))!important;
+ }
+}
