@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./RosieReviews.css";
 
 const STORE = "rosie-reviews-diary-v1";
+const DEMO_FILM = { id: 10830, title: "Matilda", release_date: "1996-08-02", overview: "A gifted young girl uses her imagination and extraordinary abilities to stand up to cruelty.", poster_path: null, runtime: 98, genres: [{ name: "Family" }, { name: "Comedy" }, { name: "Fantasy" }] };
 const poster = (path, width = 342) => path ? `https://image.tmdb.org/t/p/w${width}${path}` : null;
 const readDiary = () => {
   try { const data = JSON.parse(localStorage.getItem(STORE) || "{}"); return data && typeof data === "object" && !Array.isArray(data) ? data : {}; }
@@ -26,7 +27,8 @@ export default function RosieReviews() {
   const [query, setQuery] = useState("");
   const [appliedQuery, setAppliedQuery] = useState("");
   const [tab, setTab] = useState("discover");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([DEMO_FILM]);
+  const [pageNumber, setPageNumber] = useState(1);
   const [selected, setSelected] = useState(null);
   const [details, setDetails] = useState(null);
   const [diary, setDiary] = useState(readDiary);
@@ -44,7 +46,7 @@ export default function RosieReviews() {
       const body = await response.json();
       if (!response.ok) throw new Error(body.error || "Movie search failed");
       setResults(body.results || []);
-    }).catch(e => { if (e.name !== "AbortError") { setResults([]); setError(e.message); } }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    }).catch(e => { if (e.name !== "AbortError") { setResults(appliedQuery ? [] : [DEMO_FILM]); setError(e.message); } }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [appliedQuery, tab]);
   useEffect(() => {
@@ -56,6 +58,7 @@ export default function RosieReviews() {
   }, [selected]);
   const entry = selected ? diary[selected.id] || {} : {};
   const movies = useMemo(() => Object.values(diary).filter(item => item.movie), [diary]);
+  const exportDiary = () => { const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), entries: diary }, null, 2)], { type: "application/json" }); const href = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = href; a.download = "Rosies Reviews Diary.json"; a.click(); setTimeout(() => URL.revokeObjectURL(href), 3000); };
   const visible = tab === "discover" ? results : movies.filter(item => tab === "diary" ? item.watched : tab === "favorites" ? item.favorite : item.watchlist).map(item => item.movie).sort((a,b) => a.title.localeCompare(b.title));
   const save = patch => {
     if (!selected) return;
@@ -69,7 +72,7 @@ export default function RosieReviews() {
       <div className="reviews-marquee">★ MOVIES WORTH WAGGING ABOUT ★</div>
     </header>
     <div className="reviews-content">
-      <form className="reviews-search" onSubmit={event => { event.preventDefault(); setAppliedQuery(query.trim()); setTab("discover"); }}>
+      <form className="reviews-search" onSubmit={event => { event.preventDefault(); setAppliedQuery(query.trim()); setPageNumber(1); setTab("discover"); }}>
         <input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search movies…" aria-label="Search movies by title" />
         <button type="submit">Search</button>
       </form>
@@ -79,8 +82,10 @@ export default function RosieReviews() {
         {loading && <p role="status">Finding movies…</p>}
         {error && <p className="reviews-error" role="status">{error}. {error.includes("not configured") ? "Your diary still works once you have saved some films." : "Please try again."}</p>}
         {!loading && !error && !visible.length && <p>{tab === "discover" ? "No movies found. Try a different title." : "Nothing here yet. Find a movie and add it to your collection."}</p>}
+        {error && tab === "discover" && !appliedQuery && <p className="reviews-demo-note">Try the Matilda sample below - you can rate it, mark it watched, and write a review while live movie search is being configured.</p>}
         <div className="reviews-film-grid">{visible.map(movie => <div className="reviews-film-card" key={movie.id}><MoviePoster movie={movie} onClick={() => openMovie(movie)} /><button type="button" className="reviews-film-title" onClick={() => openMovie(movie)}>{movie.title}</button><small>{year(movie)} {diary[movie.id]?.rating ? `· ★ ${diary[movie.id].rating}` : ""}</small></div>)}</div>
       </section>
+      <div className="reviews-utilities"><span>{movies.filter(m => m.watched).length} watched · {movies.filter(m => m.favorite).length} favorites · {movies.filter(m => m.watchlist).length} to watch</span><button type="button" onClick={exportDiary}>Export My Diary</button></div>
       <p className="reviews-attribution">Movie information and posters provided by <a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">TMDB</a>. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
     </div>
     {selected && <div className="reviews-modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) setSelected(null); }}>
