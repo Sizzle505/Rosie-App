@@ -187,6 +187,21 @@ export default function RosieTimekeeper() {
   const deadlineWall = useRef(null);
   const completionPending = useRef(false);
   const utilityRef = useRef(null);
+  // Keep the illustrated scene anchored to the very top when arriving via
+  // hash navigation; mobile Safari can retain a previous page's scroll offset.
+  useEffect(() => {
+    const resetViewport = () => {
+      if (window.location.hash.startsWith("#timekeeper")) {
+        window.scrollTo({top:0,left:0,behavior:"instant"});
+        document.scrollingElement?.scrollTo({top:0,left:0,behavior:"instant"});
+      }
+    };
+    resetViewport();
+    window.requestAnimationFrame(resetViewport);
+    window.addEventListener("pageshow",resetViewport);
+    return () => window.removeEventListener("pageshow",resetViewport);
+  }, []);
+
 
   useEffect(() => {
     try {
