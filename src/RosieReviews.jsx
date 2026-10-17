@@ -8,7 +8,6 @@ const readDiary = () => {
   catch { return {}; }
 };
 const year = movie => movie?.release_date?.slice(0, 4) || "—";
-const initialMatilda = { id: 10830, title: "Matilda", release_date: "1996-08-02", overview: "A brilliant young girl discovers the power of imagination, kindness, and standing up for herself.", poster_path: "/r63rM4qUkLrRf7S9u8cV7cfo7mC.jpg" };
 function MoviePoster({ movie, onClick }) {
   return <button type="button" className="review-poster" onClick={onClick} aria-label={`View ${movie.title}`}>
     {movie.poster_path ? <img loading="lazy" src={poster(movie.poster_path)} alt="" onError={event => { event.currentTarget.style.display = "none"; }} /> : null}
@@ -17,12 +16,9 @@ function MoviePoster({ movie, onClick }) {
 }
 function StarRating({ rating, onChange }) {
   return <div className="review-rating" role="group" aria-label="Your rating in half-star increments">
-    {Array.from({ length: 10 }, (_, index) => {
-      const value = (index + 1) / 2;
-      return <button key={index} type="button" className={value <= rating ? "selected" : ""} onClick={() => onChange(value === rating ? 0 : value)} aria-label={`Rate ${value} stars`} aria-pressed={rating === value}>
-        {index % 2 ? "★" : "◀"}
-      </button>;
-    })}
+    {Array.from({ length: 5 }, (_, index) => <span className="rating-star" key={index}>
+      {[0.5, 1].map(step => { const value = index + step; return <button key={step} type="button" className={`rating-half ${step === 1 ? "right" : "left"} ${value <= rating ? "selected" : ""}`} onClick={() => onChange(value === rating ? 0 : value)} aria-label={`Rate ${value} stars`} aria-pressed={rating === value}>★</button>; })}
+    </span>)}
     <output>{rating ? `${rating.toFixed(1)} / 5` : "Not rated"}</output>
   </div>;
 }
