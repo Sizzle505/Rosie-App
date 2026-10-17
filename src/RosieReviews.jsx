@@ -67,7 +67,10 @@ export default function RosieReviews() {
   function openMovie(movie) { setSelected(movie); setDraft(diary[movie.id]?.review || ""); setEditing(false); }
   function submitReview(event) { event.preventDefault(); save({ review: draft.trim() }); setEditing(false); }
   return <main className="rosie-reviews" aria-label="Rosie's Reviews - Canine Critiques">
-    <header className="reviews-hero">
+    <header className="reviews-hero" aria-label="Rosie's Reviews — Canine Critiques">
+      <picture className="reviews-hero-art">
+        <img src="/rosieverse/reviews/rosies-reviews-header.jpg" alt="Rosie's Reviews - Canine Critiques. Rosie the cinema critic in her private screening room." onLoad={event => event.currentTarget.closest("header")?.classList.add("has-art")} onError={event => { event.currentTarget.style.display = "none"; }} />
+      </picture>
       <div className="reviews-hero-copy"><span className="reviews-eyebrow">ROSIE'S PRIVATE CINEMA</span><h1>Rosie’s<br/>Reviews</h1><p>Canine Critiques</p></div>
       <div className="reviews-marquee">★ MOVIES WORTH WAGGING ABOUT ★</div>
     </header>
