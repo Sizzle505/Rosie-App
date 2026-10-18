@@ -92,7 +92,11 @@ export function sessionCookie(token, maxAge = COOKIE_AGE) {
   const secure = process.env.VERCEL ? "; Secure" : "";
   return `${COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}${secure}`;
 }
-export function userView(row) { return { id: row.id, username: row.username, displayName: row.display_name }; }
+export function displayName(value) {
+  const name = String(value || "").trim();
+  return name ? name.charAt(0).toUpperCase() + name.slice(1) : name;
+}
+export function userView(row) { return { id: row.id, username: row.username, displayName: displayName(row.display_name) }; }
 export async function getSession(req, { renew = false } = {}) {
   const token = cookies(req)[COOKIE];
   if (!token || !/^[a-f0-9]{64}$/.test(token)) return null;
