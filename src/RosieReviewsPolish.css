@@ -1,0 +1,7 @@
+.reviews-recommends{margin-top:18px}
+.review-rating .rating-half{font-size:0}
+.review-rating .rating-half svg{width:27px;height:27px;fill:currentColor;stroke:currentColor;stroke-width:1.25px;vertical-align:middle}
+.reviews-verdict-picker{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.reviews-verdict-picker button{min-height:43px;padding:6px;text-align:center}
+.reviews-verdict-picker small{display:none}
+@media(max-width:480px){.reviews-verdict-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}

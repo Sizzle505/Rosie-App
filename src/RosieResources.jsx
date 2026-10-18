@@ -1,14 +1,18 @@
 import React from "react";
 import "./RosieResources.css";
+import qrAtelierAsset from "./assets/resources/qr-atelier-transparent.webp";
+import calculationsAsset from "./assets/resources/calculations-turquoise-transparent.webp";
+import reviewsAsset from "./assets/resources/reviews-crimson-transparent.webp";
 
 const ASSETS = "/rosieverse/resources/";
 
 const destinations = [
-  { id: "reminders", title: "Rosie’s Reminders", image: "reminders.webp" },
-  { id: "qr-atelier", title: "Rosie’s QR Atelier", image: "qr-atelier.png" },
-  { id: "calculations", title: "Rosie’s Calculations", image: "calculations.webp" },
-  { id: "recipes", title: "Rosie’s Recipes", image: "recipes.png" },
-  { id: "timekeeper", title: "Rosie’s Timekeeper", image: "timekeeper.webp" },
+  { id: "reminders", title: "Rosie’s Reminders", image: `${ASSETS}reminders.webp` },
+  { id: "qr-atelier", title: "Rosie’s QR Atelier", image: qrAtelierAsset },
+  { id: "calculations", title: "Rosie’s Calculations", image: calculationsAsset },
+  { id: "recipes", title: "Rosie’s Recipes", image: `${ASSETS}recipes.png` },
+  { id: "reviews", title: "Rosie’s Reviews", image: reviewsAsset },
+  { id: "timekeeper", title: "Rosie’s Timekeeper", image: `${ASSETS}timekeeper.webp` },
 ];
 
 /**
@@ -40,7 +44,7 @@ export default function RosieResources({ onNavigate }) {
               onClick={() => onNavigate(id)}
             >
               <img
-                src={`${ASSETS}${image}`}
+                src={image}
                 alt=""
                 draggable="false"
                 loading="eager"
