@@ -2330,6 +2330,7 @@ function App() {
   const revealFinishTimerRef = useRef(null);
   const dismissTimerRef = useRef(null);
   const dictationTimerRef = useRef(null);
+  const landingSwipeRef = useRef(null);
 
   const speechSupported = useMemo(
     () => Boolean(window.SpeechRecognition || window.webkitSpeechRecognition),
@@ -2416,6 +2417,23 @@ function App() {
       window.history.pushState(null, "", `#${nextPage}`);
     }
     setPage(nextPage);
+  }
+
+  function beginLandingSwipe(event) {
+    if (page !== "home" && page !== "resources") return;
+    const touch = event.touches[0];
+    landingSwipeRef.current = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function completeLandingSwipe(event) {
+    const start = landingSwipeRef.current;
+    landingSwipeRef.current = null;
+    if (!start || (page !== "home" && page !== "resources")) return;
+    const touch = event.changedTouches[0];
+    const horizontal = touch.clientX - start.x;
+    const vertical = touch.clientY - start.y;
+    if (Math.abs(horizontal) < 72 || Math.abs(horizontal) < Math.abs(vertical) * 1.35) return;
+    navigateTo(page === "home" ? "resources" : "home");
   }
 
   function reshufflePrompts() {
@@ -2822,7 +2840,7 @@ function App() {
         <div className="loading-copy">Consulting the ancient treat ledger…</div>
       </div>
 
-      <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`}>
+      <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`} onTouchStart={beginLandingSwipe} onTouchEnd={completeLandingSwipe}>
         {page === "captain" && <CaptainOuterAtmosphere />}
 
 
@@ -3033,8 +3051,8 @@ function App() {
             <button type="button" aria-label="Open QR" className={page === "qr-atelier" ? "active" : ""} aria-current={page === "qr-atelier" ? "page" : undefined} onClick={() => navigateTo("qr-atelier")}><span className="nav-icon-wrap"><ResourceNavIcon type="qr-atelier" /></span><small>QR</small></button>
             <button type="button" aria-label="Open Rosie’s Calculations" className={page === "calculations" ? "active" : ""} aria-current={page === "calculations" ? "page" : undefined} onClick={() => navigateTo("calculations")}><span className="nav-icon-wrap"><ResourceNavIcon type="calculations" /></span><small>Calculations</small></button>
             <button type="button" aria-label="Open Rosie’s Recipes" className={page === "recipes" ? "active" : ""} aria-current={page === "recipes" ? "page" : undefined} onClick={() => navigateTo("recipes")}><span className="nav-icon-wrap"><ResourceNavIcon type="recipes" /></span><small>Recipes</small></button>
-            <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
             <button type="button" aria-label="Open Rosie’s Reviews" className={page === "reviews" ? "active" : ""} aria-current={page === "reviews" ? "page" : undefined} onClick={() => navigateTo("reviews")}><span className="nav-icon-wrap"><ResourceNavIcon type="reviews" /></span><small>Reviews</small></button>
+            <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
           </nav> :
           <nav className="bottom-nav" aria-label="RosieVerse destinations">
             <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
