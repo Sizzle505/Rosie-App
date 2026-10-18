@@ -5,7 +5,8 @@
   box-sizing: border-box;
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   max-width: none;
   min-height: 100svh;
@@ -122,7 +123,7 @@
 /* Align the complete observatory header/button composition 12px lower. */
 .rr-hub-content { transform:translateY(16px); }
 
-/* All five destinations use the same illustrated 3:1 button silhouette.
+/* All resource destinations use the same illustrated 3:1 button silhouette.
    Keep their frames aligned and their inter-button spacing uniform. */
 .rr-hub-buttons {
   gap: clamp(8px, 1.35svh, 15px);
