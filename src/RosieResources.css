@@ -152,15 +152,24 @@
 /* Keep every one of the six resources visible above the fixed navigation on
    a phone: one shared plaque scale, compact crest, and deliberate spacing. */
 @media (max-width: 700px) {
+  .app-shell.page-resources > main.rr-hub-page {
+    height: var(--rosie-visible-height, 100svh) !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
   .rr-hub-content {
     transform: none !important;
+    height: calc(var(--rosie-visible-height, 100svh) - 82px - env(safe-area-inset-bottom, 0px)) !important;
     min-height: 0 !important;
     padding-top: 3px !important;
+    justify-content: space-between;
   }
   .rr-hub-header { height: clamp(56px, 9svh, 76px) !important; }
   .rr-hub-buttons {
     width: min(76vw, 290px) !important;
-    gap: 2px !important;
+    flex: 1 1 auto;
+    align-content: space-between;
+    gap: 0 !important;
     margin-top: 2px !important;
   }
   .rr-hub-button { aspect-ratio: 3 / 1 !important; }
@@ -173,11 +182,13 @@
   .app-shell.page-resources > main.rr-hub-page {
     padding-top: env(safe-area-inset-top, 0px) !important;
   }
-  .rr-hub-content { padding-top: 0 !important; }
-  .rr-hub-header { height: 42px !important; }
+  .rr-hub-content {
+    height: calc(var(--rosie-visible-height, 100svh) - 82px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+    padding-top: 0 !important;
+  }
+  .rr-hub-header { height: clamp(48px, 7svh, 62px) !important; }
   .rr-hub-buttons {
     width: min(70vw, 270px) !important;
-    gap: clamp(6px, 1.4svh, 12px) !important;
     margin-top: 4px !important;
   }
 }
