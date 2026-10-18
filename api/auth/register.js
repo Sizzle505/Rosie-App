@@ -1,15 +1,15 @@
 import { randomBytes } from "node:crypto";
-import { db, hashPin, sha256, respond, only, unsafeAllowed, readBody, sessionCookie, userView, handleError } from "../_lib/core.js";
+import { db, hashPin, sha256, respond, only, unsafeAllowed, readBody, sessionCookie, userView, displayName, handleError } from "../_lib/core.js";
 
 export default async function handler(req, res) {
   if (!only(req, res, "POST") || !unsafeAllowed(req, res)) return;
   try {
     const { username: raw, pin } = readBody(req);
-    const displayName = String(raw || "").trim();
-    const username = displayName.toLowerCase();
+    const chosenName = String(raw || "").trim();
+    const username = chosenName.toLowerCase();
     if (!/^[a-z0-9_.-]{3,32}$/.test(username) ||
       !/^[0-9]{4}([0-9]{2})?$/.test(String(pin || "")) ||
-      displayName.length > 80)
+      chosenName.length > 80)
       return respond(res, 400, { error: "Choose a username and four- or six-digit PIN." });
     // Creation is deliberately simple, but server-side throttling and a small total-account cap
     // prevent a public hobby app from being turned into an unrestricted account factory.
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     const users = await db("rosie_users?select=id&limit=41");
     if (users.length >= 40) return respond(res, 403, { error: "Rosie's guest book is full. Please ask the host for help." });
     const newUsers = await db("rosie_users?select=id,username,display_name", {
-      method: "POST", body: { username, display_name: displayName, pin_hash: await hashPin(String(pin)), pin_length: String(pin).length }
+      method: "POST", body: { username, display_name: displayName(chosenName), pin_hash: await hashPin(String(pin)), pin_length: String(pin).length }
     });
     const user = newUsers[0];
     if (!user) throw new Error("Account creation was not confirmed.");
