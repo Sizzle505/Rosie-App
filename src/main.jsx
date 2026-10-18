@@ -46,8 +46,8 @@ import captainWindSprite from "./captainWindSprite.js";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
-// The five utility pages and their landing hub share the Resources navigation family.
-const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calculations", "recipes", "timekeeper"]);
+// The utility pages and their landing hub share the Resources navigation family.
+const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calculations", "recipes", "timekeeper", "reviews"]);
 
 function ResourceNavIcon({ type }) {
   const common = { viewBox: "0 0 32 32", fill: "none", stroke: "currentColor",
@@ -60,6 +60,9 @@ function ResourceNavIcon({ type }) {
   if (type === "recipes") return <svg {...common}><path d="M5 8c4-2 8-2 11 0 3-2 7-2 11 0v19c-4-2-8-2-11 0-3-2-7-2-11 0z"/><path d="M16 8v19M8 12h5M8 16h5M19 12h5M19 16h5"/></svg>;
   if (type === "timekeeper") return <svg {...common}>
     <circle cx="16" cy="17" r="10"/><path d="M16 10v7l4 2M12 3h8M16 3v4"/>
+  </svg>;
+  if (type === "reviews") return <svg {...common}>
+    <circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="2"/><circle cx="11" cy="10" r="2"/><circle cx="21" cy="10" r="2"/><circle cx="11" cy="22" r="2"/><circle cx="21" cy="22" r="2"/>
   </svg>;
   return <svg {...common}>
     <rect x="7" y="4" width="18" height="24" rx="3"/>
@@ -3031,6 +3034,7 @@ function App() {
             <button type="button" aria-label="Open Rosie’s Calculations" className={page === "calculations" ? "active" : ""} aria-current={page === "calculations" ? "page" : undefined} onClick={() => navigateTo("calculations")}><span className="nav-icon-wrap"><ResourceNavIcon type="calculations" /></span><small>Calculations</small></button>
             <button type="button" aria-label="Open Rosie’s Recipes" className={page === "recipes" ? "active" : ""} aria-current={page === "recipes" ? "page" : undefined} onClick={() => navigateTo("recipes")}><span className="nav-icon-wrap"><ResourceNavIcon type="recipes" /></span><small>Recipes</small></button>
             <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
+            <button type="button" aria-label="Open Rosie’s Reviews" className={page === "reviews" ? "active" : ""} aria-current={page === "reviews" ? "page" : undefined} onClick={() => navigateTo("reviews")}><span className="nav-icon-wrap"><ResourceNavIcon type="reviews" /></span><small>Reviews</small></button>
           </nav> :
           <nav className="bottom-nav" aria-label="RosieVerse destinations">
             <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
@@ -3038,7 +3042,6 @@ function App() {
             <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
             <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
             <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
-            <button type="button" aria-label="Open Rosie’s Reviews" className={page === "reviews" ? "active" : ""} onClick={() => navigateTo("reviews")}><span className="nav-icon-wrap"><svg className="rosie-nav-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.7"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="2"/><circle cx="11" cy="10" r="2"/><circle cx="21" cy="10" r="2"/><circle cx="11" cy="22" r="2"/><circle cx="21" cy="22" r="2"/></svg></span><small>Reviews</small></button>
           </nav>}
         </>}
         <AccountPortal />
