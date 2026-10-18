@@ -5,10 +5,10 @@ const ASSETS = "/rosieverse/resources/";
 
 const destinations = [
   { id: "reminders", title: "Rosie’s Reminders", image: "reminders.webp" },
-  { id: "qr-atelier", title: "Rosie’s QR Atelier", image: "qr-atelier-20261018.webp" },
-  { id: "calculations", title: "Rosie’s Calculations", image: "calculations-turquoise-20261018.webp" },
+  { id: "qr-atelier", title: "Rosie’s QR Atelier", image: "qr-atelier-transparent-20261018.webp" },
+  { id: "calculations", title: "Rosie’s Calculations", image: "calculations-turquoise-transparent-20261018.webp" },
   { id: "recipes", title: "Rosie’s Recipes", image: "recipes.png" },
-  { id: "reviews", title: "Rosie’s Reviews", image: "reviews-crimson-20261018.webp" },
+  { id: "reviews", title: "Rosie’s Reviews", image: "reviews-crimson-transparent-20261018.webp" },
   { id: "timekeeper", title: "Rosie’s Timekeeper", image: "timekeeper.webp" },
 ];
 
