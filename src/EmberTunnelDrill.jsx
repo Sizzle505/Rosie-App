@@ -368,7 +368,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("up",true,e)} onPointerUp={e=>hold("up",false,e)}
           onPointerCancel={e=>hold("up",false,e)} onLostPointerCapture={e=>hold("up",false,e)}
-          aria-label="Angle the drill upward"><span>▲</span><small>ANGLE UP</small></button>
+          aria-label="Angle the drill upward"><span>▲</span></button>
         <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
           disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
@@ -380,11 +380,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}
           onPointerCancel={e=>hold("down",false,e)} onLostPointerCapture={e=>hold("down",false,e)}
-          aria-label="Angle the drill downward"><span>▼</span><small>ANGLE DOWN</small></button>
+          aria-label="Angle the drill downward"><span>▼</span></button>
       </div>
       {active&&<div className="ember-run-actions">
-        <button type="button" onClick={togglePause}>PAUSE</button>
-        <button type="button" onClick={start}>RESTART RUN</button>
+        <button className="ember-icon-action" type="button" onClick={togglePause} aria-label="Pause run" title="Pause run">❚❚</button>
+        <button className="ember-icon-action" type="button" onClick={start} aria-label="Replay run" title="Replay run">↻</button>
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span>
