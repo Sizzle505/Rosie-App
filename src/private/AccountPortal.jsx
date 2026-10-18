@@ -116,7 +116,7 @@ export default function AccountPortal() {
           </div>
           <form className={styles.form} onSubmit={submit}>
             <label htmlFor="rosie-acct-user">Username</label>
-            <input ref={firstInput} id="rosie-acct-user" type="text" autoCapitalize="none" autoCorrect="off"
+            <input ref={firstInput} id="rosie-acct-user" type="text" autoCapitalize={mode === "create" ? "words" : "none"} autoCorrect="off"
               spellCheck={false} autoComplete="username" maxLength={32} required value={username}
               onChange={e => setUsername(e.target.value)} placeholder="Your member name" />
             {mode === "create" && <>
