@@ -141,7 +141,7 @@ function playSound(context,kind) {
     osc.start(start);osc.stop(start+.20);
   }catch(_){}
 }
-export default function EmberTunnelDrill({ soundOn=true }) {
+export default function EmberTunnelDrill({ soundOn=true, onReplayIntro }) {
   const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
@@ -389,6 +389,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span>
         <span className="ember-best">BEST {best.toLocaleString()}</span></div>
+      {mode !== "running" && mode !== "paused" && onReplayIntro && <button type="button" className="ember-replay-intro" onClick={onReplayIntro}>REPLAY THE DISCOVERY</button>}
     </section>
   );
 }
