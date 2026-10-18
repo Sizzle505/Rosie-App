@@ -142,6 +142,12 @@
   aspect-ratio: auto;
   object-fit: contain;
 }
+
+/* The three new transparent plaques are held just inside the legacy artwork's
+   visual footprint so the six-item stack reads as one matched set. */
+.rr-hub-button--qr-atelier img,
+.rr-hub-button--calculations img,
+.rr-hub-button--reviews img { transform: scale(.93); }
 @media (max-width: 390px) and (max-height: 730px) {
   .rr-hub-buttons { gap: 8px; }
 }
