@@ -4044,7 +4044,7 @@ body:has(.app-shell.page-timekeeper),
     z-index: 12 !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
-    top: 76% !important;
+    top: 84% !important;
     width: 75.6% !important;
     height: auto !important;
     aspect-ratio: 1200 / 298 !important;
@@ -4057,6 +4057,12 @@ body:has(.app-shell.page-timekeeper),
     min-height: 0 !important;
     max-height: none !important;
     translate: 0 0 !important;
+  }
+
+  /* The decorative word overlays must never steal a click from the
+     desktop mode buttons positioned below the illustrated action deck. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-action-word {
+    pointer-events: none !important;
   }
 
   /* The full-size decorative cabinet becomes a functional side panel.
