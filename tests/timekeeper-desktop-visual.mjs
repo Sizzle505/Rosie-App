@@ -40,7 +40,7 @@ for (const [engine, browserType] of [["chromium", chromium], ["webkit", webkit]]
           scene:rect(".rtk-scene"),
           art:rect(".rtk-art-stage"),
           dial:rect(".rtk-dial"),
-          enamel:rect(".rtk-enamel-strip"),
+          face:rect(".rtk-face-trigger"),
           actions:rect(".rtk-action-deck"),
           mode:rect(".rtk-top-controls .rtk-mode-switch"),
           panel:rect(".rtk-utility"),
@@ -61,8 +61,8 @@ for (const [engine, browserType] of [["chromium", chromium], ["webkit", webkit]]
         "Cabinet must remain legible: " + JSON.stringify(geometry));
       assert(geometry.panelInner.height >= 130,
         "Cabinet contents need usable height: " + JSON.stringify(geometry));
-      assert(geometry.enamel.bottom <= geometry.actions.top + 22,
-        "Jewel/enamel must be clear of action buttons: " + JSON.stringify(geometry));
+      assert(geometry.face.bottom <= geometry.actions.top + 22,
+        "Customization jewel must be clear of action buttons: " + JSON.stringify(geometry));
       assert(geometry.actions.bottom <= geometry.mode.top + 34,
         "Mode selector must be below action buttons: " + JSON.stringify(geometry));
       assert(geometry.dial.bottom <= geometry.actions.top + 30,
