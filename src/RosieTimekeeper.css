@@ -4064,9 +4064,9 @@ body:has(.app-shell.page-timekeeper),
 
   /* The full-size decorative cabinet becomes a functional side panel.
      Preserve its native art, internal scrolling, and the timer/lap UI. */
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility,
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-empty,
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer {
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
     top: clamp(115px, 27%, 245px) !important;
     left: calc(100% + var(--rtk-desktop-gap)) !important;
     width: var(--rtk-desktop-panel-width) !important;
