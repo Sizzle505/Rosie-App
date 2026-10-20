@@ -8,7 +8,7 @@ const url = "http://127.0.0.1:5173/#timekeeper";
 const output = "artifacts/timekeeper-desktop";
 await fs.mkdir(output, { recursive: true });
 
-const desktopSizes = [[800, 600], [1024, 768], [1280, 800], [1440, 900]];
+const desktopSizes = [[800, 600], [1024, 768], [1100, 700], [1280, 800], [1440, 900], [1792, 850]];
 for (const [engine, browserType] of [["chromium", chromium], ["webkit", webkit]]) {
   const browser = await browserType.launch({ headless: true });
   try {
@@ -49,6 +49,9 @@ for (const [engine, browserType] of [["chromium", chromium], ["webkit", webkit]]
           utilityClientHeight:utility.clientHeight,
           nav:rect(".resources-bottom-nav"),
           hasDesktopMQ:matchMedia("(min-width: 800px)").matches,
+          wideDesktop:matchMedia("(min-width: 1100px)").matches,
+          atmosphere:getComputedStyle(document.querySelector("main.rtk-page"),"::before").backgroundImage,
+          galleryHeading:getComputedStyle(document.querySelector(".rtk-observatory"),"::before").content,
           overflow:document.documentElement.scrollWidth > innerWidth + 2
         };
       });
@@ -57,6 +60,16 @@ for (const [engine, browserType] of [["chromium", chromium], ["webkit", webkit]]
         "Cabinet must sit to the right of the illustrated stage: " + JSON.stringify(geometry));
       assert(geometry.panel.right <= geometry.scene.right + 2,
         "Cabinet must remain within the desktop scene: " + JSON.stringify(geometry));
+      if (geometry.wideDesktop) {
+        assert(Math.abs(geometry.scene.width-width)<2,
+          "Wide desktop atmosphere must fill viewport without hard vertical bars: "+JSON.stringify(geometry));
+        assert(geometry.panel.width>=405,
+          "Wide desktop cabinet should be legible and balanced with clock: "+JSON.stringify(geometry));
+        assert(geometry.atmosphere.includes("hall-plate.webp"),
+          "Use observatory art to unify desktop background: "+JSON.stringify(geometry));
+        assert(geometry.galleryHeading.includes("TIMEKEEPER"),
+          "The desktop cabinet should have a heading");
+      }
       assert(geometry.panel.width >= 298 && geometry.panel.height >= 235,
         "Cabinet must remain legible: " + JSON.stringify(geometry));
       assert(geometry.panelInner.height >= 130,
