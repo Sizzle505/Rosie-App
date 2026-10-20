@@ -11,6 +11,7 @@ on:
       - src/TimekeeperClockwork.css
       - tests/timekeeper-iphone-visual.mjs
       - tests/timekeeper-observatory-visual.mjs
+      - tests/timekeeper-desktop-visual.mjs
       - .github/workflows/timekeeper-iphone-visual.yml
   pull_request:
     paths:
@@ -44,9 +45,12 @@ jobs:
           cat /tmp/rosie-vite.log
           exit 1
       - run: node tests/timekeeper-observatory-visual.mjs
+      - run: node tests/timekeeper-desktop-visual.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: timekeeper-observatory-screenshots
-          path: artifacts/timekeeper-approved/
+          path: |
+            artifacts/timekeeper-approved/
+            artifacts/timekeeper-desktop/
           retention-days: 14

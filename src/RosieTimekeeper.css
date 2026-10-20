@@ -4008,3 +4008,85 @@ body:has(.app-shell.page-timekeeper),
     translate:0 -48px!important;
   }
 }
+
+
+/* Timekeepers desktop-only composition (2026-10-20).
+   The approved phone composition and all <=799px rules remain untouched.
+   The illustrated clock/control stage stays intact; the information cabinet
+   uses the space alongside it on desktop instead of stacking below it. */
+@media (min-width: 800px) {
+  .app-shell.page-timekeeper .rtk-observatory {
+    --rtk-desktop-art-width: min(43vw, calc((100dvh - 98px) * 870 / 1651), 510px);
+    --rtk-desktop-panel-width: clamp(300px, 32vw, 440px);
+    --rtk-desktop-gap: clamp(24px, 3vw, 44px);
+    width: min(100%, 1160px) !important;
+    background:
+      radial-gradient(ellipse at 32% 40%, rgba(108, 68, 111, .21), transparent 48%),
+      radial-gradient(ellipse at 77% 52%, rgba(174, 112, 45, .12), transparent 49%),
+      linear-gradient(115deg, #100b16, #241421 55%, #100a16);
+  }
+
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+    width: var(--rtk-desktop-art-width) !important;
+    margin-left: max(18px, calc((100% - var(--rtk-desktop-art-width) - var(--rtk-desktop-panel-width) - var(--rtk-desktop-gap)) / 2)) !important;
+    margin-right: 0 !important;
+  }
+
+  /* Prevent mobile's fixed-pixel lift values from collapsing the desktop
+     clock/actions/selector stack. All positions are relative to the artwork. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    top: 60.5% !important;
+    translate: 0 0 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+    top: 0 !important;
+    height: 100% !important;
+    z-index: 12 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+    top: 84% !important;
+    width: 75.6% !important;
+    height: auto !important;
+    aspect-ratio: 1200 / 298 !important;
+    translate: 0 0 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+    top: 53.8% !important;
+    left: 8% !important;
+    height: clamp(28px, 4.3dvh, 37px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    translate: 0 0 !important;
+  }
+
+  /* The decorative word overlays must never steal a click from the
+     desktop mode buttons positioned below the illustrated action deck. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck .rtk-action-word {
+    pointer-events: none !important;
+  }
+
+  /* The full-size decorative cabinet becomes a functional side panel.
+     Preserve its native art, internal scrolling, and the timer/lap UI. */
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
+    top: clamp(115px, 27%, 245px) !important;
+    left: calc(100% + var(--rtk-desktop-gap)) !important;
+    width: var(--rtk-desktop-panel-width) !important;
+    height: clamp(250px, 42dvh, 380px) !important;
+    transform: none !important;
+    translate: 0 0 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top: 23% !important;
+    bottom: 9% !important;
+    left: 12% !important;
+    right: 12% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
+    translate: 0 0 !important;
+  }
+}
