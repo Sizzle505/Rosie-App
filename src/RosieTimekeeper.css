@@ -4057,10 +4057,6 @@ body:has(.app-shell.page-timekeeper),
     max-height: none !important;
     translate: 0 0 !important;
   }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-enamel-strip {
-    top: 54% !important;
-    height: clamp(28px, 4.3dvh, 37px) !important;
-  }
 
   /* The full-size decorative cabinet becomes a functional side panel.
      Preserve its native art, internal scrolling, and the timer/lap UI. */
