@@ -4041,9 +4041,10 @@ body:has(.app-shell.page-timekeeper),
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
     top: 0 !important;
     height: 100% !important;
+    z-index: 12 !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
-    top: 73% !important;
+    top: 76% !important;
     width: 75.6% !important;
     height: auto !important;
     aspect-ratio: 1200 / 298 !important;
