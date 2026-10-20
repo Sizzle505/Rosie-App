@@ -4090,3 +4090,79 @@ body:has(.app-shell.page-timekeeper),
     translate: 0 0 !important;
   }
 }
+
+
+/* Timekeepers desktop gallery correction (2026-10-20).
+   The previous 1160px flat-colored strip and small floating cabinet looked
+   disconnected at wide desktop widths. Extend the actual observatory mood
+   across the screen and build one centered, proportionate instrument group.
+   All existing phone, PWA, and 800-1099px layout rules remain untouched. */
+@media (min-width: 1100px) {
+  .app-shell.page-timekeeper main.rtk-page {
+    position: relative !important;
+    isolation: isolate;
+    background: #100914 !important;
+  }
+
+  /* Blurred reuse of existing hall art - atmosphere, not another clock. */
+  .app-shell.page-timekeeper main.rtk-page::before {
+    content: "";
+    position: absolute;
+    inset: -42px;
+    z-index: -1;
+    pointer-events: none;
+    background: url("/rosieverse/timekeeper/midnight-observatory/hall-plate.webp")
+      center 42% / cover no-repeat;
+    filter: blur(28px) brightness(.43) saturate(.75);
+    opacity: .47;
+    transform: scale(1.04);
+  }
+  .app-shell.page-timekeeper main.rtk-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, #0c0610 0%, transparent 22%, transparent 78%, #0c0610 100%),
+      linear-gradient(0deg, #0b0610b5 0%, transparent 24%, transparent 78%, #100a15a6 100%),
+      radial-gradient(ellipse at 64% 40%, #643c4338, transparent 45%);
+  }
+
+  .app-shell.page-timekeeper .rtk-observatory {
+    --rtk-desktop-art-width: min(45vw, calc((100dvh - 72px) * 870 / 1651), 500px);
+    --rtk-desktop-panel-width: clamp(410px, 33vw, 520px);
+    --rtk-desktop-gap: clamp(28px, 3.2vw, 55px);
+    width: 100% !important;
+    max-width: none !important;
+    background: transparent !important;
+  }
+
+  /* Title/ornament give the information instrument a deliberate place in
+     the landscape composition rather than a floating blue rectangle. */
+  .app-shell.page-timekeeper .rtk-observatory::before {
+    content: "THE TIMEKEEPER'S DESK";
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    top: clamp(66px, 10.5dvh, 118px);
+    left: calc(50% + (var(--rtk-desktop-art-width) + var(--rtk-desktop-gap) - var(--rtk-desktop-panel-width)) / 2);
+    width: var(--rtk-desktop-panel-width);
+    box-sizing: border-box;
+    padding: 0 10px 14px;
+    border-bottom: 1px solid rgba(220, 169, 93, .45);
+    text-align: center;
+    white-space: nowrap;
+    color: #f5d69c;
+    font: small-caps 600 clamp(16px, 1.35vw, 23px) / 1.15 Georgia, "Times New Roman", serif;
+    letter-spacing: .13em;
+    text-shadow: 0 1px 2px #08050e, 0 0 14px #e0a45f70;
+  }
+
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
+    top: clamp(155px, 23dvh, 225px) !important;
+    height: clamp(282px, 39dvh, 370px) !important;
+  }
+}
