@@ -26,3 +26,20 @@
 .privacy{margin:15px 0 4px;text-align:center;color:#876a55;font:italic 12px Georgia,serif;}
 @media(max-width:420px){.entrance{margin:5px auto 10px;padding:14px 17px 22px;border-radius:15px}.topLine{font-size:9px}.portrait{width:118px}.entrance h2{font-size:30px}.ledgerHeader{align-items:stretch}.newNote{width:100%}.chip{max-width:100%;}.paper textarea{min-height:180px}}
 @media(prefers-reduced-motion:no-preference){.portrait{animation:rosie-guest-glow 5s ease-in-out infinite}@keyframes rosie-guest-glow{0%,100%{box-shadow:0 0 0 6px #9e702634,0 8px 22px #0009}50%{box-shadow:0 0 0 6px #9e702634,0 8px 22px #0009,0 0 20px #ffe6b64a}}}
+
+/* Notes utility: compact search and copy action, matching existing ledger. */
+.findNotes{display:block;margin:10px 0 5px;}
+.findNotes input {
+  box-sizing:border-box;width:100%;min-height:42px;padding:9px 12px;
+  border:1px solid #b58c59;border-radius:10px;
+  background:#fffaf0;color:#382131;font:14px Georgia,serif;
+}
+.findNotes input:focus-visible,.duplicate:focus-visible {outline:2px solid #8a3152;outline-offset:2px;}
+.srOnly{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+.noMatches {text-align:center;font:italic 13px Georgia,serif;color:#755d4d;}
+.duplicate {
+  min-height:38px;border:1px solid #ad814d;border-radius:12px;
+  background:linear-gradient(#fff9e8,#ead1a8);color:#5e2540;
+  padding:7px 13px;font:600 13px Georgia,serif;cursor:pointer;
+}
+.duplicate:disabled{opacity:.6;cursor:wait;}
