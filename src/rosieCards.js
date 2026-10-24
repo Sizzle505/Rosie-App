@@ -1734,6 +1734,748 @@ const rosieCards = [
     "set": "October 2026 - Approved",
     "image": "/card-vault/rc-260-wingsuit-rosie.webp",
     "alt": "Wingsuit Rosie collectible Rosie card"
+  },
+{
+    "id": "rc-261",
+    "name": "Rosie’s New Groove",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-261-rosies-new-groove.webp",
+    "alt": "Rosie’s New Groove collectible Rosie card"
+  },
+  {
+    "id": "rc-262",
+    "name": "Rosie Shingle Creek",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-262-rosie-shingle-creek.webp",
+    "alt": "Rosie Shingle Creek collectible Rosie card"
+  },
+  {
+    "id": "rc-263",
+    "name": "Time Paradox Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-263-time-paradox-rosie.webp",
+    "alt": "Time Paradox Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-264",
+    "name": "The Rosie Who Knew Too Much",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-264-the-rosie-who-knew-too-much.webp",
+    "alt": "The Rosie Who Knew Too Much collectible Rosie card"
+  },
+  {
+    "id": "rc-265",
+    "name": "Rosie Flew Over the Cuckoo’s Nest",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-265-rosie-flew-over-the-cuckoos-nest.webp",
+    "alt": "Rosie Flew Over the Cuckoo’s Nest collectible Rosie card"
+  },
+  {
+    "id": "rc-266",
+    "name": "Frankenstein Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-266-frankenstein-rosie.webp",
+    "alt": "Frankenstein Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-267",
+    "name": "Ben-Hur Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-267-ben-hur-rosie.webp",
+    "alt": "Ben-Hur Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-268",
+    "name": "Whistleblower Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-268-whistleblower-rosie.webp",
+    "alt": "Whistleblower Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-269",
+    "name": "Steampunk Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-269-steampunk-rosie.webp",
+    "alt": "Steampunk Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-270",
+    "name": "Dracula Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-270-dracula-rosie.webp",
+    "alt": "Dracula Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-271",
+    "name": "Mummy Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-271-mummy-rosie.webp",
+    "alt": "Mummy Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-272",
+    "name": "Star Fox Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-272-star-fox-rosie.webp",
+    "alt": "Star Fox Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-273",
+    "name": "The Invisible Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-273-the-invisible-rosie.webp",
+    "alt": "The Invisible Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-274",
+    "name": "Avatar (Na’vi) Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-274-avatar-navi-rosie.webp",
+    "alt": "Avatar (Na’vi) Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-275",
+    "name": "Beatnik Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-275-beatnik-rosie.webp",
+    "alt": "Beatnik Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-276",
+    "name": "Billboard Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-276-billboard-rosie.webp",
+    "alt": "Billboard Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-277",
+    "name": "Hostile Takeover Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-277-hostile-takeover-rosie.webp",
+    "alt": "Hostile Takeover Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-279",
+    "name": "Inuit Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-279-inuit-rosie.webp",
+    "alt": "Inuit Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-280",
+    "name": "Bowling League Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-280-bowling-league-rosie.webp",
+    "alt": "Bowling League Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-281",
+    "name": "Dalai Lama Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-281-dalai-lama-rosie.webp",
+    "alt": "Dalai Lama Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-282",
+    "name": "Stone Age Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-282-stone-age-rosie.webp",
+    "alt": "Stone Age Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-283",
+    "name": "Museum Heist Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-283-museum-heist-rosie.webp",
+    "alt": "Museum Heist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-284",
+    "name": "NBA Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-284-nba-rosie.webp",
+    "alt": "NBA Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-285",
+    "name": "Treehouse Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-285-treehouse-rosie.webp",
+    "alt": "Treehouse Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-286",
+    "name": "Pillow Fort Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-286-pillow-fort-rosie.webp",
+    "alt": "Pillow Fort Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-287",
+    "name": "The Good, the Bad and the Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-287-the-good-the-bad-and-the-rosie.webp",
+    "alt": "The Good, the Bad and the Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-288",
+    "name": "Kid Cudi Car Bomb Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-288-kid-cudi-car-bomb-rosie.webp",
+    "alt": "Kid Cudi Car Bomb Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-289",
+    "name": "V for Vendetta Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-289-v-for-vendetta-rosie.webp",
+    "alt": "V for Vendetta Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-290",
+    "name": "Ghostbuster Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-290-ghostbuster-rosie.webp",
+    "alt": "Ghostbuster Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-291",
+    "name": "Luau Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-291-luau-rosie.webp",
+    "alt": "Luau Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-292",
+    "name": "Havana Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-292-havana-rosie.webp",
+    "alt": "Havana Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-293",
+    "name": "Art Basel Miami Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-293-art-basel-miami-rosie.webp",
+    "alt": "Art Basel Miami Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-294",
+    "name": "Foosball Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-294-foosball-rosie.webp",
+    "alt": "Foosball Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-295",
+    "name": "Jumanji Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-295-jumanji-rosie.webp",
+    "alt": "Jumanji Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-296",
+    "name": "NASCAR Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-296-nascar-rosie.webp",
+    "alt": "NASCAR Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-297",
+    "name": "Knights Templar Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-297-knights-templar-rosie.webp",
+    "alt": "Knights Templar Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-298",
+    "name": "Escape from Alcatraz Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-298-escape-from-alcatraz-rosie.webp",
+    "alt": "Escape from Alcatraz Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-299",
+    "name": "Somnambulism Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-299-somnambulism-rosie.webp",
+    "alt": "Somnambulism Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-300",
+    "name": "Rip Van Winkle Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-300-rip-van-winkle-rosie.webp",
+    "alt": "Rip Van Winkle Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-301",
+    "name": "Sleepy Hollow Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-301-sleepy-hollow-rosie.webp",
+    "alt": "Sleepy Hollow Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-302",
+    "name": "Claymation Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-302-claymation-rosie.webp",
+    "alt": "Claymation Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-303",
+    "name": "Minimalist Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-303-minimalist-rosie.webp",
+    "alt": "Minimalist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-304",
+    "name": "TED Talk Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-304-ted-talk-rosie.webp",
+    "alt": "TED Talk Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-305",
+    "name": "Ponce de León Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-305-ponce-de-leon-rosie.webp",
+    "alt": "Ponce de León Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-306",
+    "name": "Mortal Kombat Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-306-mortal-kombat-rosie.webp",
+    "alt": "Mortal Kombat Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-307",
+    "name": "CSI Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-307-csi-rosie.webp",
+    "alt": "CSI Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-308",
+    "name": "Stealth Bomber Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-308-stealth-bomber-rosie.webp",
+    "alt": "Stealth Bomber Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-309",
+    "name": "Shawshank Redemption Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-309-shawshank-redemption-rosie.webp",
+    "alt": "Shawshank Redemption Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-310",
+    "name": "Theranos Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-310-theranos-rosie.webp",
+    "alt": "Theranos Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-311",
+    "name": "Bellagio Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-311-bellagio-rosie.webp",
+    "alt": "Bellagio Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-312",
+    "name": "Silicon Valley Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-312-silicon-valley-rosie.webp",
+    "alt": "Silicon Valley Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-313",
+    "name": "Doomsday Bunker Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-313-doomsday-bunker-rosie.webp",
+    "alt": "Doomsday Bunker Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-314",
+    "name": "Shrek Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-314-shrek-rosie.webp",
+    "alt": "Shrek Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-315",
+    "name": "Air Force One Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-315-air-force-one-rosie.webp",
+    "alt": "Air Force One Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-316",
+    "name": "Streamer Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-316-streamer-rosie.webp",
+    "alt": "Streamer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-317",
+    "name": "Malibu Beach House Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-317-malibu-beach-house-rosie.webp",
+    "alt": "Malibu Beach House Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-318",
+    "name": "Feng Shui Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-318-feng-shui-rosie.webp",
+    "alt": "Feng Shui Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-319",
+    "name": "All-Bran Buds Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-319-all-bran-buds-rosie.webp",
+    "alt": "All-Bran Buds Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-320",
+    "name": "Vincent Van Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-320-vincent-van-rosie.webp",
+    "alt": "Vincent Van Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-321",
+    "name": "Seussical Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-321-seussical-rosie.webp",
+    "alt": "Seussical Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-322",
+    "name": "Vertigo Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-322-vertigo-rosie.webp",
+    "alt": "Vertigo Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-323",
+    "name": "Lion King Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-323-lion-king-rosie.webp",
+    "alt": "Lion King Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-324",
+    "name": "Rosie Fett",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-324-rosie-fett.webp",
+    "alt": "Rosie Fett collectible Rosie card"
+  },
+  {
+    "id": "rc-325",
+    "name": "Hall of Mirrors Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-325-hall-of-mirrors-rosie.webp",
+    "alt": "Hall of Mirrors Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-326",
+    "name": "Minotaur Labyrinth Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-326-minotaur-labyrinth-rosie.webp",
+    "alt": "Minotaur Labyrinth Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-327",
+    "name": "Gordian Knot Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-327-gordian-knot-rosie.webp",
+    "alt": "Gordian Knot Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-328",
+    "name": "Ozymandias Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-328-ozymandias-rosie.webp",
+    "alt": "Ozymandias Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-329",
+    "name": "Wonka Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-329-wonka-rosie.webp",
+    "alt": "Wonka Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-330",
+    "name": "Marlboro Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-330-marlboro-rosie.webp",
+    "alt": "Marlboro Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-331",
+    "name": "Gyrocopter Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-331-gyrocopter-rosie.webp",
+    "alt": "Gyrocopter Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-332",
+    "name": "Rabbi Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-332-rabbi-rosie.webp",
+    "alt": "Rabbi Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-333",
+    "name": "Saxophone Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-333-saxophone-rosie.webp",
+    "alt": "Saxophone Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-334",
+    "name": "Clawed Monet",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-334-clawed-monet.webp",
+    "alt": "Clawed Monet collectible Rosie card"
+  },
+  {
+    "id": "rc-335",
+    "name": "Kaleidoscope Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-335-kaleidoscope-rosie.webp",
+    "alt": "Kaleidoscope Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-336",
+    "name": "Knit Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-336-knit-rosie.webp",
+    "alt": "Knit Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-337",
+    "name": "Castaway Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-337-castaway-rosie.webp",
+    "alt": "Castaway Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-338",
+    "name": "Thor Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-338-thor-rosie.webp",
+    "alt": "Thor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-339",
+    "name": "The Rosie in the Iron Mask",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-339-the-rosie-in-the-iron-mask.webp",
+    "alt": "The Rosie in the Iron Mask collectible Rosie card"
+  },
+  {
+    "id": "rc-340",
+    "name": "Maître d’ Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-340-maitre-d-rosie.webp",
+    "alt": "Maître d’ Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-341",
+    "name": "The Rosie of Tomorrow",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-341-the-rosie-of-tomorrow.webp",
+    "alt": "The Rosie of Tomorrow collectible Rosie card"
+  },
+  {
+    "id": "rc-342",
+    "name": "Master & Commander Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-342-master-and-commander-rosie.webp",
+    "alt": "Master & Commander Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-343",
+    "name": "Free Solo Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-343-free-solo-rosie.webp",
+    "alt": "Free Solo Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-344",
+    "name": "Kibbutz Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-344-kibbutz-rosie.webp",
+    "alt": "Kibbutz Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-345",
+    "name": "Harvard Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-345-harvard-rosie.webp",
+    "alt": "Harvard Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-346",
+    "name": "Avant Garde Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-346-avant-garde-rosie.webp",
+    "alt": "Avant Garde Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-347",
+    "name": "PLUR Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-347-plur-rosie.webp",
+    "alt": "PLUR Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-349",
+    "name": "Noah’s Ark Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-349-noahs-ark-rosie.webp",
+    "alt": "Noah’s Ark Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-350",
+    "name": "Hypnotist Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-350-hypnotist-rosie.webp",
+    "alt": "Hypnotist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-351",
+    "name": "Fu Manchu Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-351-fu-manchu-rosie.webp",
+    "alt": "Fu Manchu Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-352",
+    "name": "Retro Future Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-352-retro-future-rosie.webp",
+    "alt": "Retro Future Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-353",
+    "name": "Costco Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-353-costco-rosie.webp",
+    "alt": "Costco Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-354",
+    "name": "Curious Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-354-curious-rosie.webp",
+    "alt": "Curious Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-355",
+    "name": "Scientology Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-355-scientology-rosie.webp",
+    "alt": "Scientology Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-356",
+    "name": "Portal Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-356-portal-rosie.webp",
+    "alt": "Portal Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-357",
+    "name": "Scrooge McShiba Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-357-scrooge-mcshiba-rosie.webp",
+    "alt": "Scrooge McShiba Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-358",
+    "name": "Found Footage Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-358-found-footage-rosie.webp",
+    "alt": "Found Footage Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-359",
+    "name": "The Shiba of Wall Street",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-359-the-shiba-of-wall-street.webp",
+    "alt": "The Shiba of Wall Street collectible Rosie card"
+  },
+  {
+    "id": "rc-360",
+    "name": "Project Warpspeed Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-360-project-warpspeed-rosie.webp",
+    "alt": "Project Warpspeed Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-361",
+    "name": "Transcendental Meditation Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-361-transcendental-meditation-rosie.webp",
+    "alt": "Transcendental Meditation Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-362",
+    "name": "Beowulf Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-362-beowulf-rosie.webp",
+    "alt": "Beowulf Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-363",
+    "name": "UFO Encounter Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-363-ufo-encounter-rosie.webp",
+    "alt": "UFO Encounter Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-364",
+    "name": "Mount Rushmore Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-364-mount-rushmore-rosie.webp",
+    "alt": "Mount Rushmore Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-365",
+    "name": "Lucky Charms Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-365-lucky-charms-rosie.webp",
+    "alt": "Lucky Charms Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-366",
+    "name": "Panathenaic Stadium Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-366-panathenaic-stadium-rosie.webp",
+    "alt": "Panathenaic Stadium Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-367",
+    "name": "Predator Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-367-predator-rosie.webp",
+    "alt": "Predator Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-368",
+    "name": "Constellation Rosie",
+    "set": "October 2026 - Collector Series",
+    "image": "/card-vault/rc-368-constellation-rosie.webp",
+    "alt": "Constellation Rosie collectible Rosie card"
   }
 ];
 
