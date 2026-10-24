@@ -1,0 +1,77 @@
+name: Import Rosie card batch 2
+on:
+  push:
+    branches:
+      - work/rosie-cards-batch-2-20261024
+    paths:
+      - .github/workflows/rosie-import-batch-2.yml
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
+      - name: Download 106 vetted card images from Dropbox
+        env:
+          ROSIE_ARCHIVE_URL: 'https://ucd7b2da533c04a53916ddabd410.dl.dropboxusercontent.com/cd/0/get/DKkjARL6qjudjtv2c_g5V2bDHTdIHAuwlusw7vwyeiXUN-w3bv4twYdwzoJVyfYKXZinT0WD7c-1i2dBEX5OboEIKCDo43R1Krrowrh1PvCGzcEGsYiYcdcUDAstv6znyOnkQJyqZaSIyz2WxTuVjP_P-CcFWGR7HxDv0ZZbsfMlvg/file?c_luid=667ded1d'
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --silent --show-error "$ROSIE_ARCHIVE_URL" --output /tmp/rosie-next-cards.zip
+          echo "9ecebbb26536115932e9682ea3e80ca5f84f8f29c2668505a1197bda6ce47a65  /tmp/rosie-next-cards.zip" | sha256sum --check
+          mkdir -p /tmp/rosie-next-cards
+          unzip -q /tmp/rosie-next-cards.zip -d /tmp/rosie-next-cards
+      - name: Verify exact IDs and import files
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const extracted = '/tmp/rosie-next-cards';
+          const rows = JSON.parse(fs.readFileSync(path.join(extracted, 'cards-batch-2-manifest.json'),'utf8'));
+          if(rows.length !== 106) throw Error('Expected exactly 106 new cards');
+          const existing = fs.readFileSync('src/rosieCards.js','utf8');
+          if(!existing.includes('"id": "rc-260"')) throw Error('Existing inventory changed');
+          const ids = new Set();
+          const expected = new Set(Array.from({length:108},(_,i)=>'rc-'+String(i+261).padStart(3,'0')).filter(v=>!['rc-278','rc-348'].includes(v)));
+          for (const card of rows) {
+            if(!expected.has(card.id) || ids.has(card.id)) throw Error('Unexpected/duplicate ID '+card.id);
+            ids.add(card.id);
+            if(existing.includes('"id": "'+card.id+'"')) throw Error('Existing ID collision '+card.id);
+            const source = path.join(extracted,'public','card-vault',card.filename);
+            const target = path.join('public','card-vault',card.filename);
+            if(fs.existsSync(target)) throw Error('Asset overwrite prohibited: '+target);
+            const bytes = fs.readFileSync(source);
+            if(bytes.length < 25000 || bytes.toString('ascii',0,4)!=='RIFF' || bytes.toString('ascii',8,12)!=='WEBP') throw Error('Invalid WebP '+card.filename);
+            if(crypto.createHash('sha256').update(bytes).digest('hex') !== card.sha256) throw Error('Image checksum mismatch '+card.filename);
+          }
+          if(ids.size!==expected.size || [...expected].some(id=>!ids.has(id))) throw Error('Missing ID');
+          fs.mkdirSync('public/card-vault',{recursive:true});
+          for(const card of rows) fs.copyFileSync(path.join(extracted,'public','card-vault',card.filename),path.join('public','card-vault',card.filename));
+          const additional=fs.readFileSync(path.join(extracted,'rosie-cards-batch-2.js'),'utf8').trim();
+          const end='\n];\n\nexport default rosieCards;';
+          if(!existing.includes(end)) throw Error('Manifest termination changed; abort');
+          fs.writeFileSync('src/rosieCards.js',existing.replace(end,',\n'+additional+'\n];\n\nexport default rosieCards;'));
+          const final=fs.readFileSync('src/rosieCards.js','utf8');
+          if(!final.includes('"id": "rc-368"') || final.includes('"id": "rc-278"') || final.includes('"id": "rc-348"')) throw Error('New ID range mismatch');
+          console.log('Imported 106 distinct full-framed cards with preserved existing Card Vault IDs');
+          NODE
+      - name: Test Vite production build
+        run: |
+          npm ci
+          npm run build
+      - name: Commit verified Card Vault changes
+        run: |
+          set -euo pipefail
+          git config user.name "Rosie Card Import"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/rosieCards.js public/card-vault/
+          git rm -- .github/workflows/rosie-import-batch-2.yml
+          git diff --cached --check
+          git commit -m "Import 106 October Rosie collector cards 261-368"
+          git push origin HEAD
