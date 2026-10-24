@@ -985,6 +985,755 @@ const rosieCards = [
     "set": "Grand Adventures",
     "image": "/card-vault/rc-152.webp",
     "alt": "Falconer Rosie collectible Rosie card"
+  },
+{
+    "id": "rc-153",
+    "name": "Dayclub Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-153-dayclub-rosie.webp",
+    "alt": "Dayclub Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-154",
+    "name": "Dr. Phil Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-154-dr-phil-rosie.webp",
+    "alt": "Dr. Phil Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-155",
+    "name": "Retirement Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-155-retirement-rosie.webp",
+    "alt": "Retirement Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-156",
+    "name": "Judo Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-156-judo-rosie.webp",
+    "alt": "Judo Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-157",
+    "name": "Bubble Bath Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-157-bubble-bath-rosie.webp",
+    "alt": "Bubble Bath Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-158",
+    "name": "Camper Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-158-camper-rosie.webp",
+    "alt": "Camper Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-159",
+    "name": "Popcorn Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-159-popcorn-rosie.webp",
+    "alt": "Popcorn Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-160",
+    "name": "Woodcarving Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-160-woodcarving-rosie.webp",
+    "alt": "Woodcarving Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-161",
+    "name": "Crepe Master Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-161-crepe-master-rosie.webp",
+    "alt": "Crepe Master Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-162",
+    "name": "Triathlon Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-162-triathlon-rosie.webp",
+    "alt": "Triathlon Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-163",
+    "name": "Rio de Janeiro Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-163-rio-de-janeiro-rosie.webp",
+    "alt": "Rio de Janeiro Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-164",
+    "name": "Pompeii Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-164-pompeii-rosie.webp",
+    "alt": "Pompeii Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-165",
+    "name": "Self-Driving Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-165-self-driving-rosie.webp",
+    "alt": "Self-Driving Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-166",
+    "name": "Alani Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-166-alani-rosie.webp",
+    "alt": "Alani Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-167",
+    "name": "Flu Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-167-flu-rosie.webp",
+    "alt": "Flu Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-168",
+    "name": "Halo Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-168-halo-rosie.webp",
+    "alt": "Halo Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-169",
+    "name": "Fighter Jet Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-169-fighter-jet-rosie.webp",
+    "alt": "Fighter Jet Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-170",
+    "name": "Counterfeiter Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-170-counterfeiter-rosie.webp",
+    "alt": "Counterfeiter Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-171",
+    "name": "Casanova Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-171-casanova-rosie.webp",
+    "alt": "Casanova Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-172",
+    "name": "Xochimilco Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-172-xochimilco-rosie.webp",
+    "alt": "Xochimilco Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-173",
+    "name": "Tax Accountant Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-173-tax-accountant-rosie.webp",
+    "alt": "Tax Accountant Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-174",
+    "name": "Dark Future Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-174-dark-future-rosie.webp",
+    "alt": "Dark Future Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-175",
+    "name": "Hot Ones Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-175-hot-ones-rosie.webp",
+    "alt": "Hot Ones Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-176",
+    "name": "Parkour Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-176-parkour-rosie.webp",
+    "alt": "Parkour Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-177",
+    "name": "Garden of Eden Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-177-garden-of-eden-rosie.webp",
+    "alt": "Garden of Eden Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-178",
+    "name": "Hydrofoil Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-178-hydrofoil-rosie.webp",
+    "alt": "Hydrofoil Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-179",
+    "name": "Quantum Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-179-quantum-rosie.webp",
+    "alt": "Quantum Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-180",
+    "name": "Whoville Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-180-whoville-rosie.webp",
+    "alt": "Whoville Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-181",
+    "name": "Axe Throwing Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-181-axe-throwing-rosie.webp",
+    "alt": "Axe Throwing Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-182",
+    "name": "Golfer Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-182-golfer-rosie.webp",
+    "alt": "Golfer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-183",
+    "name": "Dog the Bounty Hunter Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-183-dog-the-bounty-hunter-rosie.webp",
+    "alt": "Dog the Bounty Hunter Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-184",
+    "name": "Pentagon Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-184-pentagon-rosie.webp",
+    "alt": "Pentagon Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-185",
+    "name": "Vaporwave Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-185-vaporwave-rosie.webp",
+    "alt": "Vaporwave Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-186",
+    "name": "Rosie & the Living Dead",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-186-rosie-and-the-living-dead.webp",
+    "alt": "Rosie & the Living Dead collectible Rosie card"
+  },
+  {
+    "id": "rc-187",
+    "name": "MechaRosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-187-mecharosie.webp",
+    "alt": "MechaRosie collectible Rosie card"
+  },
+  {
+    "id": "rc-188",
+    "name": "Oregon Trail Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-188-oregon-trail-rosie.webp",
+    "alt": "Oregon Trail Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-189",
+    "name": "Rambo Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-189-rambo-rosie.webp",
+    "alt": "Rambo Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-190",
+    "name": "Teriyaki Chicken Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-190-teriyaki-chicken-rosie.webp",
+    "alt": "Teriyaki Chicken Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-191",
+    "name": "Macy’s Day Parade Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-191-macys-day-parade-rosie.webp",
+    "alt": "Macy’s Day Parade Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-192",
+    "name": "Viking Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-192-viking-rosie.webp",
+    "alt": "Viking Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-193",
+    "name": "Cherokee Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-193-cherokee-rosie.webp",
+    "alt": "Cherokee Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-194",
+    "name": "Highlander Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-194-highlander-rosie.webp",
+    "alt": "Highlander Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-196",
+    "name": "Insomnia Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-196-insomnia-rosie.webp",
+    "alt": "Insomnia Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-197",
+    "name": "Disco Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-197-disco-rosie.webp",
+    "alt": "Disco Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-198",
+    "name": "Pumpkin Patch Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-198-pumpkin-patch-rosie.webp",
+    "alt": "Pumpkin Patch Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-199",
+    "name": "Ferris Wheel Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-199-ferris-wheel-rosie.webp",
+    "alt": "Ferris Wheel Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-200",
+    "name": "Infomercial Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-200-infomercial-rosie.webp",
+    "alt": "Infomercial Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-201",
+    "name": "Cryogenic Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-201-cryogenic-rosie.webp",
+    "alt": "Cryogenic Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-202",
+    "name": "Anesthesiologist Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-202-anesthesiologist-rosie.webp",
+    "alt": "Anesthesiologist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-203",
+    "name": "Rock ’Em Sock ’Em Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-203-rock-em-sock-em-rosie.webp",
+    "alt": "Rock ’Em Sock ’Em Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-204",
+    "name": "Trojan Horse Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-204-trojan-horse-rosie.webp",
+    "alt": "Trojan Horse Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-205",
+    "name": "Maine Lobster Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-205-maine-lobster-rosie.webp",
+    "alt": "Maine Lobster Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-206",
+    "name": "Tesla Coil Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-206-tesla-coil-rosie.webp",
+    "alt": "Tesla Coil Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-207",
+    "name": "Mars Rover Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-207-mars-rover-rosie.webp",
+    "alt": "Mars Rover Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-208",
+    "name": "2008 Recession Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-208-2008-recession-rosie.webp",
+    "alt": "2008 Recession Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-209",
+    "name": "Pizza Parlor Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-209-pizza-parlor-rosie.webp",
+    "alt": "Pizza Parlor Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-210",
+    "name": "Exodus Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-210-exodus-rosie.webp",
+    "alt": "Exodus Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-211",
+    "name": "The Godfather Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-211-the-godfather-rosie.webp",
+    "alt": "The Godfather Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-212",
+    "name": "SpaceX Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-212-spacex-rosie.webp",
+    "alt": "SpaceX Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-213",
+    "name": "Silence of the Lambs Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-213-silence-of-the-lambs-rosie.webp",
+    "alt": "Silence of the Lambs Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-214",
+    "name": "Fast and Furious Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-214-fast-and-furious-rosie.webp",
+    "alt": "Fast and Furious Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-215",
+    "name": "Napoleon Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-215-napoleon-rosie.webp",
+    "alt": "Napoleon Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-216",
+    "name": "The Once and Future Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-216-the-once-and-future-rosie.webp",
+    "alt": "The Once and Future Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-217",
+    "name": "Zoot Suit Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-217-zoot-suit-rosie.webp",
+    "alt": "Zoot Suit Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-218",
+    "name": "Rap Battle Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-218-rap-battle-rosie.webp",
+    "alt": "Rap Battle Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-219",
+    "name": "Terminator Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-219-terminator-rosie.webp",
+    "alt": "Terminator Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-220",
+    "name": "Nixon Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-220-nixon-rosie.webp",
+    "alt": "Nixon Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-221",
+    "name": "Breaking Bad Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-221-breaking-bad-rosie.webp",
+    "alt": "Breaking Bad Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-222",
+    "name": "3D Printing Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-222-3d-printing-rosie.webp",
+    "alt": "3D Printing Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-223",
+    "name": "Puzzle Master Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-223-puzzle-master-rosie.webp",
+    "alt": "Puzzle Master Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-224",
+    "name": "Spartan Race Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-224-spartan-race-rosie.webp",
+    "alt": "Spartan Race Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-225",
+    "name": "Minecraft Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-225-minecraft-rosie.webp",
+    "alt": "Minecraft Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-226",
+    "name": "Bellhop Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-226-bellhop-rosie.webp",
+    "alt": "Bellhop Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-227",
+    "name": "Welder Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-227-welder-rosie.webp",
+    "alt": "Welder Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-228",
+    "name": "Miner Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-228-miner-rosie.webp",
+    "alt": "Miner Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-229",
+    "name": "Bouncer Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-229-bouncer-rosie.webp",
+    "alt": "Bouncer Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-230",
+    "name": "Bartender Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-230-bartender-rosie.webp",
+    "alt": "Bartender Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-231",
+    "name": "Pharaoh Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-231-pharaoh-rosie.webp",
+    "alt": "Pharaoh Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-232",
+    "name": "Sister (Nun) Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-232-sister-nun-rosie.webp",
+    "alt": "Sister (Nun) Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-233",
+    "name": "Chernobyl Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-233-chernobyl-rosie.webp",
+    "alt": "Chernobyl Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-234",
+    "name": "Faustian Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-234-faustian-rosie.webp",
+    "alt": "Faustian Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-235",
+    "name": "Shakespearean Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-235-shakespearean-rosie.webp",
+    "alt": "Shakespearean Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-236",
+    "name": "LASIK Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-236-lasik-rosie.webp",
+    "alt": "LASIK Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-237",
+    "name": "Moon Landing Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-237-moon-landing-rosie.webp",
+    "alt": "Moon Landing Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-238",
+    "name": "Sheriff Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-238-sheriff-rosie.webp",
+    "alt": "Sheriff Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-239",
+    "name": "Yard Work Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-239-yard-work-rosie.webp",
+    "alt": "Yard Work Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-240",
+    "name": "Lazy River Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-240-lazy-river-rosie.webp",
+    "alt": "Lazy River Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-241",
+    "name": "JAG Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-241-jag-rosie.webp",
+    "alt": "JAG Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-242",
+    "name": "Test Pilot Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-242-test-pilot-rosie.webp",
+    "alt": "Test Pilot Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-243",
+    "name": "Navy SEAL Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-243-navy-seal-rosie.webp",
+    "alt": "Navy SEAL Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-244",
+    "name": "Quarterback Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-244-quarterback-rosie.webp",
+    "alt": "Quarterback Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-245",
+    "name": "Valedictorian Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-245-valedictorian-rosie.webp",
+    "alt": "Valedictorian Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-246",
+    "name": "Ragnarok Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-246-ragnarok-rosie.webp",
+    "alt": "Ragnarok Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-247",
+    "name": "The Rosie of Notre Dame",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-247-the-rosie-of-notre-dame.webp",
+    "alt": "The Rosie of Notre Dame collectible Rosie card"
+  },
+  {
+    "id": "rc-248",
+    "name": "Longshoreman Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-248-longshoreman-rosie.webp",
+    "alt": "Longshoreman Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-249",
+    "name": "Stylist Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-249-stylist-rosie.webp",
+    "alt": "Stylist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-250",
+    "name": "Rosie the Crocodile Hunter",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-250-rosie-the-crocodile-hunter.webp",
+    "alt": "Rosie the Crocodile Hunter collectible Rosie card"
+  },
+  {
+    "id": "rc-251",
+    "name": "Chinatown Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-251-chinatown-rosie.webp",
+    "alt": "Chinatown Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-252",
+    "name": "Tsar Rosienov",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-252-tsar-rosienov.webp",
+    "alt": "Tsar Rosienov collectible Rosie card"
+  },
+  {
+    "id": "rc-253",
+    "name": "Saving Private Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-253-saving-private-rosie.webp",
+    "alt": "Saving Private Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-254",
+    "name": "Smokejumper Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-254-smokejumper-rosie.webp",
+    "alt": "Smokejumper Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-255",
+    "name": "Jungle Temple Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-255-jungle-temple-rosie.webp",
+    "alt": "Jungle Temple Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-256",
+    "name": "Carcassonne Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-256-carcassonne-rosie.webp",
+    "alt": "Carcassonne Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-257",
+    "name": "Boston Tea Party Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-257-boston-tea-party-rosie.webp",
+    "alt": "Boston Tea Party Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-258",
+    "name": "Bank Heist Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-258-bank-heist-rosie.webp",
+    "alt": "Bank Heist Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-259",
+    "name": "Bootlegger Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-259-bootlegger-rosie.webp",
+    "alt": "Bootlegger Rosie collectible Rosie card"
+  },
+  {
+    "id": "rc-260",
+    "name": "Wingsuit Rosie",
+    "set": "October 2026 - Approved",
+    "image": "/card-vault/rc-260-wingsuit-rosie.webp",
+    "alt": "Wingsuit Rosie collectible Rosie card"
   }
 ];
 
