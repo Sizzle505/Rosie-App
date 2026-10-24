@@ -734,9 +734,8 @@
 
 
 /* A single portrait viewport owns thumbnail geometry across every zoom step.
-   Never stretch the artwork: source cards are 2:3, and cover is a proportional
-   fallback for future nonstandard dimensions. Avoid per-tile paint containment
-   so Safari can repaint decoded images during continuous scrolling. */
+   A modest overscan crops inconsistent baked-in side gutters from imported
+   artwork, which is preferable in the wall to visible blank columns. */
 .wall {
   grid-auto-rows: max-content;
   align-items: start;
@@ -771,12 +770,15 @@
   margin: 0;
   aspect-ratio: auto;
   object-fit: cover;
-  object-position: left top;
+  object-position: center;
   border: 0;
   border-radius: inherit;
   background: transparent;
   box-shadow: none;
-  transform: none;
+  /* This is intentionally gallery-only. The detail view still shows the
+     complete original card. */
+  transform: scale(1.12);
+  transform-origin: center;
 }
 /* A painted inset frame replaces physical button padding/borders, so the
    source image genuinely occupies the full 2:3 rectangle edge to edge. */
