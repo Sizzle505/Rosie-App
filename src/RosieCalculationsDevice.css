@@ -1572,3 +1572,13 @@
   .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-close { position:fixed; z-index:201; top:28px; right:34px; }
 }
 @media (max-width:1023px) { .rc-desktop-hero-copy { display:none; } }
+
+/* On desktop the live heading is the title; source art is a portrait vignette. */
+@media (min-width:1024px) {
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero {
+    width:54%; height:150%; right:-9%; bottom:-26%;
+    transform:scale(1.55); transform-origin:28% 49%;
+    object-position:32% 47%;
+    mask-image:linear-gradient(90deg,transparent 0%,#000 28%,#000 100%);
+  }
+}
