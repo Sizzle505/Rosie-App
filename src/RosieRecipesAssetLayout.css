@@ -406,3 +406,11 @@
   .recipes-signoff { grid-column:2; padding:26px 0 0; }
 }
 @media (min-width:1450px) { .recipes-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
+/* Desktop card facts need their own fixed reading band at four columns. */
+@media (min-width:1024px) {
+  .recipes-card-metrics { bottom:7px!important; height:18%!important; padding:4px 0 1px!important; }
+  .recipes-card-metrics span { gap:2px!important; }
+  .recipes-card-metrics b { display:block; font-size:8px!important; }
+  .recipes-card-metrics em { font-size:11px!important; line-height:1.12!important; }
+}
