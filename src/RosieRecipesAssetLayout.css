@@ -547,3 +547,21 @@
   }
   .recipes-crest { width:min(600px,100%); }
 }
+
+/* Give the desktop cookbook a layered, warm salon around the parchment index
+   rather than leaving it on a flat brown field. */
+@media (min-width:1024px) {
+  .app-shell.page-recipes {
+    background:
+      radial-gradient(ellipse at 8% 15%,rgba(227,165,67,.20),transparent 25%),
+      radial-gradient(ellipse at 90% 42%,rgba(105,36,10,.42),transparent 34%),
+      repeating-linear-gradient(114deg,rgba(255,228,167,.025) 0 1px,transparent 1px 84px),
+      linear-gradient(135deg,#1c0903,#5a260c 48%,#1e0903);
+  }
+  .app-shell.page-recipes > .recipes-page {
+    background:
+      radial-gradient(ellipse at 50% 0,rgba(255,205,105,.14),transparent 32%),
+      repeating-linear-gradient(90deg,rgba(255,231,180,.016) 0 1px,transparent 1px 70px),
+      linear-gradient(180deg,rgba(45,16,4,.36),rgba(29,8,2,.12) 60%,rgba(21,6,2,.42))!important;
+  }
+}
