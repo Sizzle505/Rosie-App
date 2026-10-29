@@ -68,7 +68,7 @@ export default function RosieReminders() {
   const [cloudNoteCount, setCloudNoteCount] = useState(0);
   const [store, setStore] = useState(readStore);
   const [section, setSection] = useState("today");
-  const [tab, setTab] = useState(() => typeof window !== "undefined" && window.matchMedia("(min-width: 1100px)").matches ? "today" : null);
+  const [tab, setTab] = useState(() => typeof window !== "undefined" && window.matchMedia("(min-width: 1100px)").matches ? "calendar" : null);
   const [selectedDate, setSelectedDate] = useState(dateKey);
   const [month, setMonth] = useState(() => dateObj(dateKey()));
   const [editorOpen, setEditorOpen] = useState(false);

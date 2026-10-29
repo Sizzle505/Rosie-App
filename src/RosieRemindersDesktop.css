@@ -229,3 +229,101 @@
   .app-shell.page-reminders > main.rr-page {grid-template-columns:minmax(300px,36fr) minmax(0,74fr);column-gap:21px;padding-inline:20px !important;}
   .app-shell.page-reminders .rr-desktop-counts span {font-size:11px;}
 }
+
+/*
+  Desktop refinement: continuous illustrated wallpaper, true horizontal
+  composite header (full original art retained), aligned ledger, calendar
+  opening in place. Does not affect viewports below 1100px.
+*/
+@media (min-width:1100px) {
+  html:has(.app-shell.page-reminders),
+  body:has(.app-shell.page-reminders),
+  #root:has(.app-shell.page-reminders),
+  .app-shell.page-reminders {
+    background-color:#0a1026;
+    background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp");
+    background-size:100% auto;
+    background-position:center top;
+    background-repeat:repeat-y;
+  }
+
+  .app-shell.page-reminders > main.rr-page {
+    grid-template-columns:minmax(0, 39fr) minmax(0, 61fr);
+    column-gap:clamp(19px,2vw,31px);
+    row-gap:11px;
+    padding:clamp(57px,4.4vw,76px) clamp(18px,1.7vw,27px) 100px !important;
+    background-color:#0a1026;
+    background-image:url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp");
+    background-position:center top;
+    background-size:100% auto;
+    background-repeat:repeat-y;
+    box-shadow:inset 1px 0 rgba(229,185,104,.20),inset -1px 0 rgba(229,185,104,.20),0 0 65px #03051488;
+  }
+
+  /* Original hero remains 100% intact within a custom landscape frame.
+     A matching illustrated celestial extension fills the left 20%. */
+  .app-shell.page-reminders main.rr-page > header.rr-hero {
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    aspect-ratio:1.40 / 1;
+    width:100%;
+    min-height:0;
+    background:
+      linear-gradient(90deg,rgba(8,14,33,.10),rgba(8,13,29,.02)),
+      url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") left center / 470px auto repeat;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero picture {
+    display:block;
+    position:relative;
+    z-index:2;
+    width:80%;
+    min-width:0;
+    height:auto;
+    margin-left:auto;
+    flex:0 0 80%;
+    overflow:hidden;
+    border-radius:5px 9px 9px 5px;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero img {
+    display:block;
+    width:100%;
+    height:auto;
+    min-height:0;
+    object-fit:contain;
+    object-position:center;
+  }
+
+  /* Ledger and banner follow the same column and share exactly the same width. */
+  .app-shell.page-reminders .rr-desktop-overview {
+    width:100%;
+    max-width:none;
+    margin:0;
+    top:65px;
+    background:
+      linear-gradient(155deg,rgba(20,29,55,.93),rgba(9,18,38,.95) 65%,rgba(29,18,43,.94)),
+      url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") center / 470px auto repeat;
+  }
+
+  /* The wallpaper must remain visible right through the organizer column. */
+  .app-shell.page-reminders .rr-content {
+    background:transparent !important;
+    min-height:0 !important;
+  }
+  .app-shell.page-reminders .rr-feature-grid {
+    background:
+      linear-gradient(180deg,rgba(5,13,34,.43),rgba(5,12,32,.61)),
+      url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") center / 470px auto repeat;
+  }
+  .app-shell.page-reminders .rr-tabs {
+    margin:7px auto 0;
+    position:relative;
+    z-index:3;
+  }
+  .app-shell.page-reminders .rr-paper {
+    position:relative;
+    z-index:2;
+    margin-top:0;
+    scroll-margin-top:69px;
+  }
+}
