@@ -1,0 +1,231 @@
+/*
+  Widescreen Reminders - intentionally isolated from the perfected iPhone PWA.
+  The original illustrated banner is shown in full with its native aspect ratio.
+  No existing mobile selectors or graphic assets are modified.
+*/
+.rr-desktop-overview { display:none; }
+
+@media (min-width:1100px) {
+  html:has(.app-shell.page-reminders),
+  body:has(.app-shell.page-reminders),
+  #root:has(.app-shell.page-reminders),
+  .app-shell.page-reminders {
+    background-color:#080e21;
+    background-image:
+      radial-gradient(ellipse at 50% 6%,rgba(89,50,99,.44),transparent 62%),
+      linear-gradient(90deg,rgba(3,8,20,.70),rgba(5,14,36,.20) 42%,rgba(3,8,20,.65)),
+      url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg");
+    background-size:cover,cover,470px auto;
+    background-repeat:no-repeat,no-repeat,repeat;
+    background-position:center top;
+  }
+
+  .app-shell.page-reminders > main.rr-page {
+    display:grid;
+    grid-template-columns:minmax(325px, 39fr) minmax(0, 77fr);
+    grid-template-rows:auto 1fr;
+    column-gap:clamp(24px,3vw,46px);
+    row-gap:18px;
+    max-width:1540px;
+    margin:0 auto;
+    padding:clamp(56px,5vw,76px) clamp(22px,4vw,62px) 120px !important;
+    min-height:100dvh;
+    align-items:start;
+    background:
+      linear-gradient(110deg,rgba(9,15,32,.80),rgba(6,14,32,.58) 55%,rgba(12,13,32,.82)),
+      url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp") center top / 760px auto repeat;
+    box-shadow:inset 1px 0 rgba(229,185,104,.14),inset -1px 0 rgba(229,185,104,.14),0 0 80px #0205119e;
+  }
+
+  .app-shell.page-reminders .rr-hero-pin,
+  .app-shell.page-reminders .rr-hero-pin.is-pinned { display:none !important; }
+
+  .app-shell.page-reminders main.rr-page > header.rr-hero {
+    position:relative;
+    top:auto;
+    grid-column:1;
+    grid-row:1;
+    display:block;
+    width:100%;
+    max-width:none;
+    min-width:0;
+    overflow:hidden;
+    border:2px solid #d6ad65;
+    border-radius:19px;
+    padding:6px;
+    background:linear-gradient(140deg,#a66e32,#f8d99b 20%,#634021 58%,#d0a45b);
+    box-shadow:0 0 0 1px #251626,0 0 0 6px #aa6d3244,0 16px 38px #000a;
+  }
+  .app-shell.page-reminders .rr-hero::after {
+    content:"";
+    position:absolute;
+    inset:12px;
+    border:1px solid #f7e5b17a;
+    border-radius:10px;
+    pointer-events:none;
+    z-index:3;
+  }
+  .app-shell.page-reminders .rr-hero picture,
+  .app-shell.page-reminders .rr-hero img {
+    width:100%;
+    height:auto;
+    min-height:0;
+    object-fit:contain;
+    border-radius:11px;
+  }
+
+  .app-shell.page-reminders .rr-desktop-overview {
+    display:block;
+    grid-column:1;
+    grid-row:2;
+    align-self:start;
+    position:sticky;
+    top:70px;
+    margin-top:0;
+    padding:22px clamp(16px,2.2vw,27px) 21px;
+    border:1px solid #d5a85d;
+    border-radius:18px;
+    color:#f7eac9;
+    background:
+      linear-gradient(155deg,#1c2139ee,#0a1730ed 65%,#281625ed),
+      url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") center / 470px repeat;
+    box-shadow:inset 0 0 0 3px #cda65b22,inset 0 1px 14px #f5cd7e12,0 13px 30px #0008;
+  }
+  .rr-desktop-overview::before {
+    content:"";
+    position:absolute;
+    inset:7px;
+    border:1px solid #dfbc754c;
+    border-radius:12px;
+    pointer-events:none;
+  }
+  .rr-desktop-eyebrow {
+    margin:0 0 10px;
+    letter-spacing:.20em;
+    color:#e7bd78;
+    font:600 10px/1.4 Georgia,serif;
+    text-align:center;
+  }
+  .rr-desktop-overview h2 {
+    margin:0;
+    font:normal clamp(25px,2.5vw,32px)/1.08 Baskerville,Georgia,serif;
+    text-align:center;
+    color:#ffe7ae;
+    text-shadow:0 2px 10px #000a;
+  }
+  .rr-desktop-date {
+    margin:8px 0 18px;
+    font:italic 15px Georgia,serif;
+    color:#dfc49e;
+    text-align:center;
+  }
+  .rr-desktop-counts {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    margin-bottom:15px;
+  }
+  .rr-desktop-counts button {
+    background:linear-gradient(155deg,#29344f,#10182f);
+    color:#ecd19e;
+    padding:10px 4px 11px;
+    border:1px solid #b98b47a8;
+    border-radius:10px;
+    min-width:0;
+    box-shadow:inset 0 1px #ffe6aa22;
+  }
+  .rr-desktop-counts span {display:block;font:13px Georgia,serif;white-space:nowrap;}
+  .rr-desktop-counts strong {display:block;margin-top:5px;font:25px Georgia,serif;color:#fff1c8;}
+  .rr-desktop-actions {display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .rr-desktop-actions button {
+    min-width:0;
+    padding:11px 7px;
+    border:1px solid #d6a65d;
+    border-radius:10px;
+    color:#ffe9bd;
+    font:600 14px Georgia,serif;
+    background:linear-gradient(#6e2138,#3f1129);
+  }
+  .rr-desktop-actions button + button {background:linear-gradient(#38445c,#1d243a);}
+  .rr-desktop-overview button:hover {filter:brightness(1.14);}
+  .rr-desktop-overview button:focus-visible {outline:3px solid #ffeab0;outline-offset:3px;}
+
+  .app-shell.page-reminders .rr-content {
+    grid-column:2;
+    grid-row:1 / span 2;
+    position:relative;
+    width:100%;
+    min-width:0;
+    min-height:0;
+    max-width:none;
+    margin:0;
+    padding:0 0 24px !important;
+    isolation:auto;
+    background:transparent;
+    overflow:visible;
+  }
+  .app-shell.page-reminders .rr-content::before {display:none;}
+  .app-shell.page-reminders .rr-content:not(:has(> .rr-paper)),
+  .app-shell.page-reminders .rr-content:has(> .rr-paper) {padding-bottom:32px !important;}
+  .app-shell.page-reminders .rr-feature-grid {
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    column-gap:clamp(5px,.8vw,11px);
+    row-gap:9px;
+    width:100%;
+    max-width:none;
+    margin:0 auto 12px;
+    padding:16px clamp(11px,1.5vw,22px);
+    border-radius:19px;
+    background:
+      linear-gradient(180deg,#071326a8,#0c1332c0),
+      url("/rosieverse/reminders/20261013/celestial-button-wallpaper.jpg") center / 470px auto repeat;
+  }
+  .app-shell.page-reminders .rr-feature {
+    grid-column:span 2;
+    align-self:center;
+    display:flex;
+    width:100%;
+    min-width:0;
+    height:auto;
+    max-width:none;
+    aspect-ratio:auto;
+    padding:0;
+    border:0;
+  }
+  .app-shell.page-reminders .rr-feature:nth-child(4) {grid-column:2 / span 2;}
+  .app-shell.page-reminders .rr-feature-goals {
+    grid-column:4 / span 2;
+    width:100%;
+    max-width:none;
+    margin:0;
+  }
+  .app-shell.page-reminders .rr-feature .rr-button-image,
+  .app-shell.page-reminders .rr-feature-shopping .rr-button-image,
+  .app-shell.page-reminders .rr-feature-appointments .rr-button-image,
+  .app-shell.page-reminders .rr-feature-goals .rr-button-image {
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    aspect-ratio:auto;
+    object-fit:contain;
+    transform:none;
+  }
+  .app-shell.page-reminders .rr-tabs {width:min(100%,510px);margin:9px auto 15px;}
+  .app-shell.page-reminders .rr-paper {
+    width:100%;
+    max-width:none;
+    margin:0 auto;
+    scroll-margin-top:76px;
+    padding:clamp(20px,2.6vw,34px);
+    border-radius:21px;
+    min-height:250px;
+    box-shadow:0 0 0 1px #f8d89a,0 0 0 6px #6f451b77,inset 0 0 0 3px #fff5de,0 20px 35px #0009;
+  }
+}
+
+@media (min-width:1100px) and (max-width:1220px) {
+  .app-shell.page-reminders > main.rr-page {grid-template-columns:minmax(300px,36fr) minmax(0,74fr);column-gap:21px;padding-inline:20px !important;}
+  .app-shell.page-reminders .rr-desktop-counts span {font-size:11px;}
+}

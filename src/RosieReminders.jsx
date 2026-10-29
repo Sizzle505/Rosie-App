@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./RosieReminders.css";
+import "./RosieRemindersDesktop.css";
 import { useRosieAccount } from "./private/AccountContext.jsx";
 import { PrivateNotes } from "./private/PrivateNotes.jsx";
 
@@ -67,7 +68,7 @@ export default function RosieReminders() {
   const [cloudNoteCount, setCloudNoteCount] = useState(0);
   const [store, setStore] = useState(readStore);
   const [section, setSection] = useState("today");
-  const [tab, setTab] = useState(null);
+  const [tab, setTab] = useState(() => typeof window !== "undefined" && window.matchMedia("(min-width: 1100px)").matches ? "today" : null);
   const [selectedDate, setSelectedDate] = useState(dateKey);
   const [month, setMonth] = useState(() => dateObj(dateKey()));
   const [editorOpen, setEditorOpen] = useState(false);
@@ -230,7 +231,7 @@ export default function RosieReminders() {
       const node = organizerRef.current;
       if (!node) return;
       const height = heroRef.current?.getBoundingClientRect().height || heroHeight;
-      const pinnedBottom = height * .7 + 3;
+      const pinnedBottom = window.matchMedia("(min-width: 1100px)").matches ? 72 : height * .7 + 3;
       const target = node.getBoundingClientRect().top + window.scrollY - pinnedBottom;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       window.scrollTo({top:Math.max(0,target),behavior:reduced?"auto":"smooth"});
@@ -316,6 +317,20 @@ export default function RosieReminders() {
       </picture>
       <h1 className="rr-screen-reader">Rosie’s Reminders - Personal Organizer</h1>
     </header>
+    <aside className="rr-desktop-overview" aria-label="Desktop organizer overview">
+      <p className="rr-desktop-eyebrow">THE CAPTAIN'S PRIVATE LEDGER</p>
+      <h2>Your Day, Beautifully Organized</h2>
+      <p className="rr-desktop-date">{pretty(selectedDate, { weekday: "long", month: "long", day: "numeric" })}</p>
+      <div className="rr-desktop-counts">
+        <button type="button" onClick={() => chooseSection("tasks")}><span>Tasks</span><strong>{counts.tasks}</strong></button>
+        <button type="button" onClick={() => chooseSection("appointments")}><span>Appointments</span><strong>{counts.appointments}</strong></button>
+        <button type="button" onClick={() => chooseSection("shopping")}><span>Shopping</span><strong>{counts.shopping}</strong></button>
+      </div>
+      <div className="rr-desktop-actions">
+        <button type="button" onClick={() => openNew("tasks")}>＋ New Reminder</button>
+        <button type="button" onClick={() => chooseSection("today")}>View Today</button>
+      </div>
+    </aside>
     <section className="rr-content">
       <div className="rr-feature-grid" aria-label="Organizer tools">
         {CATEGORIES.map(c => <button type="button" key={c.id}
