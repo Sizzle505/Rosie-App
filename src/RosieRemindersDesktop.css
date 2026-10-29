@@ -477,3 +477,20 @@
       0 15px 28px #02061270;
   }
 }
+
+/* Full-bleed desktop composition: eliminate the artificial 1460px canvas cap.
+   Responsive only at desktop breakpoint; no mobile/tablet layout is changed. */
+@media (min-width:1100px) {
+  html:has(.app-shell.page-reminders) {
+    background-size:100% 100%, max(1420px,100vw) auto, 650px auto !important;
+  }
+  .app-shell.page-reminders > main.rr-page {
+    box-sizing:border-box;
+    width:100%;
+    max-width:none;
+    margin-inline:auto;
+    grid-template-columns:minmax(0,35fr) minmax(0,65fr);
+    column-gap:clamp(16px,1.25vw,26px);
+    padding-inline:clamp(14px,1.45vw,30px) !important;
+  }
+}
