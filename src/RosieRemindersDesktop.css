@@ -327,3 +327,153 @@
     scroll-margin-top:69px;
   }
 }
+
+/* 2026-10-29: The desktop is one celestial composition, not nested wallpapers.
+   Only widescreen layouts are affected. All iPhone and iPad art stays intact. */
+@media (min-width:1100px) {
+  html:has(.app-shell.page-reminders) {
+    background-color:#091329 !important;
+    background-image:
+      linear-gradient(90deg,rgba(4,8,22,.55) 0%,rgba(4,9,23,.15) 23%,rgba(4,9,23,.13) 77%,rgba(4,8,22,.55) 100%),
+      url("/rosieverse/reminders/approved-art/midnight-celestial-seamless.webp"),
+      url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp") !important;
+    background-size:100% 100%,1420px auto,650px auto !important;
+    background-position:center top,center top,center top !important;
+    background-repeat:no-repeat,repeat-y,repeat !important;
+    background-attachment:fixed,fixed,fixed !important;
+  }
+  body:has(.app-shell.page-reminders),
+  #root:has(.app-shell.page-reminders),
+  .app-shell.page-reminders {
+    background:transparent !important;
+  }
+  .app-shell.page-reminders > main.rr-page {
+    grid-template-columns:minmax(0,36fr) minmax(0,64fr);
+    grid-template-rows:auto 1fr;
+    column-gap:clamp(18px,1.5vw,26px);
+    row-gap:12px;
+    max-width:1460px;
+    min-height:100dvh;
+    padding:clamp(64px,4.3vw,80px) clamp(20px,2.55vw,40px) 104px !important;
+    background:transparent !important;
+    box-shadow:none;
+  }
+
+  /* Preserves every pixel of the approved hero foreground.
+     Symmetrical, softly lit scenery replaces the hard empty blue side-strip. */
+  .app-shell.page-reminders main.rr-page > header.rr-hero {
+    display:flex;
+    position:relative;
+    align-items:center;
+    justify-content:center;
+    aspect-ratio:1.34;
+    padding:7px;
+    border-radius:18px;
+    border:2px solid #cfa865;
+    background:linear-gradient(150deg,#b88c49,#f3da9e 22%,#674420 55%,#bc934b);
+    box-shadow:0 0 0 1px #121126,0 0 0 4px #e3b96521,0 15px 28px #02061280;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero::before {
+    content:"";
+    position:absolute;
+    inset:9px;
+    z-index:1;
+    border-radius:11px;
+    background:
+      linear-gradient(90deg,#050e24c0,#0b183733 45%,#0b183733 55%,#050e24c0),
+      url("/rosieverse/reminders/approved-art/midnight-celestial-full.webp") center top /cover no-repeat;
+    pointer-events:none;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero::after {
+    z-index:4;
+    inset:11px;
+    border-color:#f4d7a272;
+    border-radius:10px;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero picture {
+    display:block;
+    position:relative;
+    z-index:2;
+    width:86%;
+    flex:0 0 86%;
+    height:auto;
+    margin:0 auto;
+    border-radius:4px;
+    box-shadow:0 0 20px #0307162b;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 4%,#000 96%,transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0%,#000 4%,#000 96%,transparent 100%);
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero img {
+    width:100%;height:auto;object-fit:contain;
+    border-radius:4px;
+  }
+  .app-shell.page-reminders .rr-desktop-overview {
+    top:68px;
+    margin:0;
+    width:100%;
+    padding:19px clamp(16px,2vw,25px) 20px;
+    border:1px solid #bd955d;
+    border-radius:17px;
+    color:#f5dfae;
+    background:
+      linear-gradient(155deg,rgba(12,24,46,.95),rgba(12,23,44,.94) 50%,rgba(24,21,42,.95)),
+      url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp") center /510px auto repeat;
+    box-shadow:inset 0 0 0 2px #e0b66d16,inset 0 1px #fff4ce21,0 14px 30px #03071370;
+  }
+  .app-shell.page-reminders .rr-desktop-overview::before {
+    inset:7px;border-radius:11px;border-color:#d4b47538;
+  }
+  .app-shell.page-reminders .rr-desktop-overview h2 {
+    font-size:clamp(25px,2.2vw,30px);
+    line-height:1.1;
+  }
+  .app-shell.page-reminders .rr-desktop-date {margin:7px 0 14px;}
+  .app-shell.page-reminders .rr-desktop-counts {gap:7px;margin-bottom:13px;}
+  .app-shell.page-reminders .rr-desktop-counts button {
+    border-color:#98774787;
+    background:linear-gradient(#1f304a,#111e37);
+  }
+  .app-shell.page-reminders .rr-desktop-actions button {min-height:40px;}
+
+  .app-shell.page-reminders .rr-content {
+    background:transparent !important;
+    padding:0 0 24px !important;
+    min-height:0 !important;
+  }
+  /* The tools board and ledger are now the same understated indigo surface. */
+  .app-shell.page-reminders .rr-feature-grid {
+    width:100%;
+    padding:clamp(10px,1vw,15px) clamp(12px,1.3vw,18px);
+    margin:0 auto 7px;
+    column-gap:clamp(5px,.75vw,10px);
+    row-gap:5px;
+    border:1px solid #bd955d;
+    border-radius:17px;
+    background:
+      linear-gradient(155deg,rgba(12,24,46,.92),rgba(12,23,44,.93) 50%,rgba(24,21,42,.93)),
+      url("/rosieverse/reminders/approved-art/midnight-velvet-tile.webp") center /510px auto repeat;
+    box-shadow:inset 0 0 0 2px #e0b66d16,inset 0 1px #fff4ce21,0 14px 30px #03071370;
+  }
+  .app-shell.page-reminders .rr-feature-grid::before {
+    inset:7px;border-radius:11px;border-color:#d4b47538;
+  }
+  .app-shell.page-reminders .rr-tabs {
+    width:min(100%,510px);
+    margin:3px auto -16px;
+    position:relative;
+    z-index:4;
+  }
+  .app-shell.page-reminders .rr-paper {
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+    border-radius:17px;
+    scroll-margin-top:67px;
+    border:3px double #ad8043;
+    box-shadow:
+      0 0 0 1px #f0d8a7,
+      0 0 0 4px #8e693a62,
+      inset 0 0 0 2px #fff8e8,
+      0 15px 28px #02061270;
+  }
+}
