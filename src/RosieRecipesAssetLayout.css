@@ -377,35 +377,97 @@
   }
 }
 
-
-/* Desktop edition - a single editorial cookbook composition. */
+/* Desktop edition - a single editorial cookbook composition.  This sits
+   after the mobile rules deliberately: iPhone and iPad retain their approved
+   portrait stage without inheriting any of these measurements. */
 @media (min-width: 1024px) {
   .app-shell.page-recipes { background:#321606; }
-  .app-shell.page-recipes > .recipes-page { display:grid; grid-template-columns:minmax(310px,.72fr) minmax(720px,1.55fr); grid-template-rows:auto 1fr; column-gap:clamp(28px,4vw,74px); align-items:start; width:min(1440px,calc(100% - clamp(48px,8vw,150px))); min-height:100vh; margin:0 auto; padding:clamp(32px,4vw,62px) 0 126px!important; overflow:visible; background:radial-gradient(ellipse at 18% 18%,rgba(239,160,56,.2),transparent 29%),linear-gradient(122deg,#2f1506 0%,#4d2209 46%,#2b1206 100%)!important; }
-  .recipes-page::before { inset:0; width:auto; opacity:.16; background-size:560px auto; background-position:left top; }
+  .app-shell.page-recipes > .recipes-page {
+    display:grid;
+    grid-template-columns:minmax(310px, .72fr) minmax(720px, 1.55fr);
+    grid-template-rows:auto 1fr;
+    column-gap:clamp(28px,4vw,74px);
+    align-items:start;
+    width:min(1440px, calc(100% - clamp(48px,8vw,150px)));
+    min-height:100vh;
+    margin:0 auto;
+    padding:clamp(32px,4vw,62px) 0 126px !important;
+    overflow:visible;
+    background:
+      radial-gradient(ellipse at 18% 18%,rgba(239,160,56,.2),transparent 29%),
+      linear-gradient(122deg,#2f1506 0%,#4d2209 46%,#2b1206 100%) !important;
+  }
+  .recipes-page::before {
+    inset:0;
+    width:auto;
+    opacity:.16;
+    background-size:560px auto;
+    background-position:left top;
+  }
   .recipes-page::after { background:linear-gradient(90deg,#1f0d04a6,transparent 45%,#1b0904a6); }
-  .recipes-top-scene { position:sticky; z-index:0; top:30px; left:auto; grid-column:1; grid-row:1 / span 2; width:100%; height:min(680px,calc(100vh - 130px)); aspect-ratio:auto; transform:none; border:2px solid #c88a30; border-radius:24px; background-size:cover; background-position:center 15%; box-shadow:inset 0 0 0 3px #f3c76b55,0 18px 42px #130702a8; }
-  .recipes-body { grid-column:2; grid-row:1 / span 2; width:100%; max-width:none; padding:0; margin:0; }
-  .recipes-heading { min-height:176px; padding:0 0 14px!important; display:flex; align-items:center; justify-content:center; }
-  .recipes-crest { width:min(780px,96%); }
-  .recipes-index { top:auto!important; max-width:none; margin:0!important; padding:22px clamp(22px,3vw,42px) 40px!important; border-radius:24px; background:linear-gradient(140deg,#f9e6bb,#fffaf0 48%,#efd09a)!important; box-shadow:inset 0 0 0 2px #fff5d5,inset 0 0 0 6px #c88c35,0 20px 42px #17090383!important; }
+  .recipes-top-scene {
+    position:sticky;
+    z-index:0;
+    top:30px;
+    left:auto;
+    grid-column:1;
+    grid-row:1 / span 2;
+    width:100%;
+    height:min(680px, calc(100vh - 130px));
+    aspect-ratio:auto;
+    transform:none;
+    border:2px solid #c88a30;
+    border-radius:24px;
+    background-size:cover;
+    background-position:center 15%;
+    box-shadow:inset 0 0 0 3px #f3c76b55,0 18px 42px #130702a8;
+  }
+  .recipes-body {
+    grid-column:2;
+    grid-row:1 / span 2;
+    width:100%;
+    max-width:none;
+    padding:0;
+    margin:0;
+  }
+  .recipes-heading {
+    min-height:176px;
+    padding:0 0 14px !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .recipes-crest { width:min(780px, 96%); }
+  .recipes-index {
+    top:auto !important;
+    max-width:none;
+    margin:0 !important;
+    padding:22px clamp(22px,3vw,42px) 40px !important;
+    border-radius:24px;
+    background:linear-gradient(140deg,#f9e6bb,#fffaf0 48%,#efd09a) !important;
+    box-shadow:inset 0 0 0 2px #fff5d5,inset 0 0 0 6px #c88c35,0 20px 42px #17090383 !important;
+  }
   .recipes-meal-filters { justify-content:flex-start; max-width:none; margin-bottom:14px; }
   .recipes-meal-filters button { min-height:38px; padding:8px 14px; font-size:13px; }
   .recipes-inline-search { max-width:none; min-height:46px; margin-bottom:14px; padding-inline:15px; }
   .recipes-inline-search input { height:44px; font-size:17px; }
-  .recipes-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(15px,1.7vw,24px)!important; }
-  .recipes-card { aspect-ratio:.76; border-radius:18px!important; }
-  .recipes-card-copy strong { font-size:clamp(16px,1.4vw,21px)!important; }
-  .recipes-card-metrics b { font-size:9px!important; }
-  .recipes-card-metrics em { font-size:12px!important; }
-  .recipes-detail { max-width:none!important; margin:0!important; }
+  .recipes-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(15px,1.7vw,24px) !important; }
+  .recipes-card { aspect-ratio:.76; border-radius:18px !important; }
+  .recipes-card-copy strong { font-size:clamp(16px,1.4vw,21px) !important; }
+  .recipes-card-metrics b { font-size:9px !important; }
+  .recipes-card-metrics em { font-size:12px !important; }
+  .recipes-detail { max-width:none !important; margin:0 !important; }
   .recipes-detail-cover { display:grid; grid-template-columns:minmax(280px,.9fr) minmax(320px,1.1fr); align-items:stretch; }
   .recipes-detail-photo { height:100%; min-height:355px; margin:8px; border-radius:15px; }
   .recipes-detail-intro { display:flex; flex-direction:column; justify-content:center; padding:32px; }
-  .recipes-summary-strip,.recipes-written-method { max-width:none; }
+  .recipes-summary-strip { max-width:none; }
+  .recipes-written-method { max-width:none; }
   .recipes-signoff { grid-column:2; padding:26px 0 0; }
 }
-@media (min-width:1450px) { .recipes-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
+@media (min-width: 1450px) {
+  .recipes-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+}
 
 /* Desktop card facts need their own fixed reading band at four columns. */
 @media (min-width:1024px) {
@@ -415,13 +477,37 @@
   .recipes-card-metrics em { font-size:11px!important; line-height:1.12!important; }
 }
 
-/* Purpose-built desktop edition: a wide kitchen hero and an independent cookbook surface. */
+/* Purpose-built desktop edition: a wide kitchen hero and an independent,
+   full-width cookbook surface. Mobile artwork and its portrait framing never
+   enter this layout. */
 @media (min-width:1024px) {
   .app-shell.page-recipes { background:#251005; }
-  .app-shell.page-recipes > .recipes-page { display:block; width:100%; min-height:100vh; margin:0; padding:clamp(28px,3.5vw,62px) 0 132px!important; overflow:visible; background:linear-gradient(135deg,#231005,#4c220b 53%,#1e0c04)!important; }
+  .app-shell.page-recipes > .recipes-page {
+    display:block;
+    width:100%;
+    min-height:100vh;
+    margin:0;
+    padding:clamp(28px,3.5vw,62px) 0 132px!important;
+    overflow:visible;
+    background:linear-gradient(135deg,#231005,#4c220b 53%,#1e0c04)!important;
+  }
   .recipes-page::before { display:none; }
   .recipes-page::after { background:linear-gradient(180deg,transparent 45%,#160703b8); }
-  .recipes-top-scene { position:relative; z-index:1; top:auto; left:auto; transform:none; width:min(1480px,calc(100% - clamp(48px,8vw,156px))); height:clamp(370px,31vw,510px); margin:0 auto; aspect-ratio:auto; border:2px solid #c98d37; border-radius:28px; background-image:url('/rosieverse/recipes/recipes-desktop-hero-v1.webp'); background-size:cover; background-position:center; box-shadow:inset 0 0 0 3px #f9d98440,0 22px 54px #100401b0; }
+  .recipes-top-scene {
+    position:relative;
+    z-index:1;
+    top:auto;left:auto;transform:none;
+    width:min(1480px,calc(100% - clamp(48px,8vw,156px)));
+    height:clamp(370px,31vw,510px);
+    margin:0 auto;
+    aspect-ratio:auto;
+    border:2px solid #c98d37;
+    border-radius:28px;
+    background-image:url('/rosieverse/recipes/recipes-desktop-hero-v1.webp');
+    background-size:cover;
+    background-position:center;
+    box-shadow:inset 0 0 0 3px #f9d98440,0 22px 54px #100401b0;
+  }
   .recipes-body { position:relative; z-index:2; width:min(1360px,calc(100% - clamp(64px,10vw,190px))); max-width:none; margin:-235px auto 0; padding:0; }
   .recipes-heading { width:56%; min-height:235px; margin-left:auto; padding:22px 18px 0!important; display:flex; align-items:flex-start; justify-content:center; }
   .recipes-crest { width:min(690px,100%); }
@@ -436,4 +522,28 @@
   .recipes-signoff { width:min(1360px,calc(100% - clamp(64px,10vw,190px))); margin:0 auto; padding:28px 0 0; }
   .recipes-detail { width:100%; }
 }
+
 @media (min-width:1650px) { .recipes-grid { grid-template-columns:repeat(5,minmax(0,1fr)); } }
+
+/* Desktop panorama v2 is composed at the same 3:1 ratio used by the page.
+   Keep every part of the artwork visible - no `cover` crop, no stretching. */
+@media (min-width:1024px) {
+  .recipes-top-scene {
+    height:auto;
+    aspect-ratio:3 / 1;
+    background-color:#261005;
+    background-image:url('/rosieverse/recipes/recipes-desktop-panorama-v2.webp');
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+  }
+  .recipes-body { margin:-360px auto 0; }
+  .recipes-heading {
+    width:48%;
+    min-height:360px;
+    margin-left:auto;
+    padding:0 6% 0 2%!important;
+    align-items:center;
+  }
+  .recipes-crest { width:min(600px,100%); }
+}
