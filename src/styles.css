@@ -7859,3 +7859,62 @@ html, body, #root, .app-shell { min-height:var(--rosie-visible-height,100vh); }
 .app-shell:not(.page-home) .bottom-side-seal--home{left:calc(50% - 166px)!important}
 .app-shell:not(.page-home) .bottom-side-seal--tools{left:calc(50% + 126px)!important}
 @media(max-width:680px){.app-shell:not(.page-home) .bottom-side-seal{height:32px!important;width:36px!important}.app-shell:not(.page-home) .bottom-side-seal--home{left:calc(50% - 150px)!important}.app-shell:not(.page-home) .bottom-side-seal--tools{left:calc(50% + 114px)!important}}
+
+/* Desktop navigation is a quiet header instrument, not a mobile dock laid over
+   the work surface.  These rules intentionally begin above the iPad breakpoint:
+   iPhone and iPad retain their existing, touch-first presentation unchanged. */
+@media (min-width:1024px) {
+  .app-shell:not(.page-home) .bottom-nav {
+    position:fixed;
+    z-index:1200;
+    top:14px;
+    bottom:auto !important;
+    left:50%;
+    width:min(560px,calc(100% - 460px)) !important;
+    min-width:390px;
+    min-height:44px;
+    height:44px;
+    transform:translateX(-50%);
+    border:1px solid rgba(224,181,95,.55);
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(48,21,31,.98),rgba(19,10,17,.985));
+    box-shadow:0 10px 25px rgba(0,0,0,.36),inset 0 1px rgba(255,238,195,.14);
+  }
+  .app-shell:not(.page-home) .bottom-nav > button {
+    min-height:42px;
+    padding:3px 5px 2px !important;
+  }
+  .app-shell:not(.page-home) .bottom-nav > button::before { inset:3px 4px; border-radius:9px; }
+  .app-shell:not(.page-home) .bottom-nav > button .nav-icon-wrap,
+  .app-shell:not(.page-home) .bottom-nav > button small { top:0 !important; }
+  .app-shell:not(.page-home) .bottom-nav .nav-icon-wrap { width:18px; height:18px; }
+  .app-shell:not(.page-home) .bottom-nav .rosie-nav-icon { width:17px; height:17px; }
+  .app-shell:not(.page-home) .bottom-nav button small {
+    margin-top:1px;
+    font-size:8px;
+    letter-spacing:.02em;
+  }
+  .app-shell:not(.page-home) .bottom-side-seal {
+    z-index:1201 !important;
+    top:18px !important;
+    bottom:auto !important;
+    width:34px !important;
+    height:34px !important;
+    border-radius:11px !important;
+    transform:none !important;
+  }
+  .app-shell:not(.page-home) .bottom-side-seal--home { left:calc(50% - 330px) !important; }
+  .app-shell:not(.page-home) .bottom-side-seal--tools { left:calc(50% + 296px) !important; }
+  .app-shell:not(.page-home) .nav-family-toggle {
+    z-index:1201;
+    top:18px;
+    bottom:auto;
+    left:calc(50% + 340px);
+    min-width:72px;
+    min-height:34px;
+    padding:3px 8px;
+    transform:none;
+    border-radius:11px;
+    font-size:9px;
+  }
+}
