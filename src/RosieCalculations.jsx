@@ -366,6 +366,11 @@ export default function RosieCalculations() {
         decoding="async"
         fetchPriority="high"
       />
+      <div className="rc-desktop-hero-copy" aria-hidden="true">
+        <span>Rosie’s Resources</span>
+        <h1>Rosie’s<br />Calculations</h1>
+        <p>Pocket Toolkit</p>
+      </div>
     </header>
     <div className="rc-calculator-stage">
       <AssetCalculator calc={calc} send={send} />
