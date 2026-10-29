@@ -1546,3 +1546,29 @@
     padding-bottom:112px !important;
   }
 }
+
+
+/* Desktop edition - a cohesive calculations workbench. */
+@media (min-width:1024px) {
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) { display:grid!important; grid-template-columns:minmax(590px,1.18fr) minmax(410px,.82fr); grid-template-rows:288px auto; gap:clamp(28px,3.6vw,64px); align-items:start; width:min(1380px,calc(100% - clamp(48px,8vw,150px))); min-height:calc(100vh - 22px); margin:0 auto; padding:30px 0 130px!important; background:radial-gradient(ellipse at 50% 0,rgba(126,32,52,.5),transparent 39%),linear-gradient(135deg,#18060d,#3b0b1a 56%,#16060d)!important; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero { grid-column:1 / -1; grid-row:1; position:relative!important; top:auto!important; z-index:1; width:100%!important; max-width:none!important; height:288px; margin:0!important; overflow:hidden!important; border:2px solid #af7e36; border-radius:22px; background:linear-gradient(90deg,rgba(20,4,9,.08),#25060f 42%,#120408 100%),url('/rosieverse/calculations/burgundy-satin.png') center/cover; box-shadow:inset 0 0 0 3px #e6bb6150,0 18px 38px #0a0206ab; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero { position:absolute; right:0; bottom:0; width:47%; height:100%; max-width:none; object-fit:cover; object-position:39% 44%; opacity:.98; mask-image:linear-gradient(90deg,transparent 0%,#000 23%); }
+  .rc-desktop-hero-copy { position:absolute; z-index:2; left:clamp(34px,5vw,78px); top:50%; transform:translateY(-50%); width:47%; color:#fff1c9; text-shadow:0 3px 16px #160307; }
+  .rc-desktop-hero-copy span { display:block; margin-bottom:6px; color:#d9ad5a; font:700 12px/1 Georgia,serif; letter-spacing:.2em; text-transform:uppercase; }
+  .rc-desktop-hero-copy h1 { margin:0; font:normal clamp(36px,4vw,57px)/.88 Georgia,serif; letter-spacing:-.04em; }
+  .rc-desktop-hero-copy p { width:max-content; margin:11px 0 0; padding:6px 20px 7px; border-block:1px solid #d6a14c; color:#f7d999; font:normal clamp(18px,1.8vw,27px)/1 Georgia,serif; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage { grid-column:1; grid-row:2; width:100%; max-width:none; margin:0; padding:18px clamp(34px,5vw,74px) 26px; border:1px solid #9d6932; border-radius:22px; background:linear-gradient(145deg,#241015d9,#0d0d14e8); box-shadow:inset 0 0 0 2px #deb15a2b,0 16px 31px #05020780; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rac-frame { margin:0 auto; max-width:650px; padding:44px clamp(30px,4vw,50px) 46px; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rac-key { height:61px; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace { grid-column:2; grid-row:2; width:100%; max-width:none; min-height:0!important; margin:0; padding:20px 22px 24px!important; border:1px solid #9d6932; border-radius:22px; background:linear-gradient(145deg,#451020d9,#190713e8); box-shadow:inset 0 0 0 2px #e2b25e2b,0 16px 31px #05020780; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tools-heading { margin:0 0 19px; font-size:clamp(25px,2.25vw,33px); }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-grid { gap:13px; padding:0; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-footer-note { margin:18px 0 0; }
+  .app-shell.page-calculations .rc-page--tool-open { min-height:100vh; padding-bottom:120px!important; }
+  .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-overlay { position:fixed; z-index:200; inset:0; display:grid; place-items:center; padding:40px 24px 110px; background:rgba(9,2,7,.8); backdrop-filter:blur(7px); }
+  .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-viewport { width:min(830px,calc(100vw - 48px)); max-height:calc(100vh - 150px); overflow:auto; padding:14px 22px 24px; border:1px solid #d29a42; border-radius:24px; background:linear-gradient(145deg,#3d0d1c,#16050e); box-shadow:0 28px 80px #000; }
+  .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-fit { transform:none!important; }
+  .app-shell.page-calculations .rc-page--tool-open .rc-tool-panel.rc-device { width:min(100%,760px); min-height:690px; margin:0 auto; }
+  .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-close { position:fixed; z-index:201; top:28px; right:34px; }
+}
+@media (max-width:1023px) { .rc-desktop-hero-copy { display:none; } }
