@@ -1461,3 +1461,77 @@
 
 /* Extend the approved burgundy silk continuously through the toolkit footer. */
 .app-shell.page-calculations .rc-page:not(.rc-page--tool-open){background-color:#380c20;background-image:url('/randomizers/rosie-salon-burgundy-texture.svg');background-size:100% 100%;background-repeat:no-repeat;background-position:center top}
+
+/* Desktop workbench: Calculator and toolkit are peers, not a phone-sized
+   vertical sequence with a large unused field between them.  This is kept
+   entirely outside the phone/tablet range. */
+@media (min-width: 1024px) {
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
+    display:grid;
+    grid-template-columns:minmax(520px,650px) minmax(380px,500px);
+    grid-template-rows:auto auto;
+    column-gap:clamp(28px,4vw,66px);
+    align-items:start;
+    justify-content:center;
+    min-height:100vh;
+    padding:0 clamp(30px,5vw,90px) 112px !important;
+    background-size:cover;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
+    grid-column:1 / -1;
+    width:min(100%,1180px);
+    max-width:1180px;
+    margin:0 auto 6px;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
+    grid-column:1;
+    width:100%;
+    max-width:650px;
+    margin:0;
+    padding:0;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace {
+    grid-column:2;
+    width:100%;
+    max-width:500px;
+    min-height:0 !important;
+    margin:0;
+    padding:10px 0 0 !important;
+    background:transparent;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tools-heading {
+    margin:4px 0 16px;
+    font-size:clamp(25px,2.4vw,34px);
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-card--currency {
+    grid-column:span 2;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rac-frame {
+    margin:0;
+    padding:42px clamp(28px,4vw,46px) 43px;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rac-key {
+    height:58px;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-footer-note {
+    margin:17px 0 0;
+  }
+
+  .app-shell.page-calculations .rc-page--tool-open {
+    display:block;
+    padding-bottom:112px !important;
+  }
+}
