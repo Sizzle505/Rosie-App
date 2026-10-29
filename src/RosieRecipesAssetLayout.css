@@ -414,3 +414,26 @@
   .recipes-card-metrics b { display:block; font-size:8px!important; }
   .recipes-card-metrics em { font-size:11px!important; line-height:1.12!important; }
 }
+
+/* Purpose-built desktop edition: a wide kitchen hero and an independent cookbook surface. */
+@media (min-width:1024px) {
+  .app-shell.page-recipes { background:#251005; }
+  .app-shell.page-recipes > .recipes-page { display:block; width:100%; min-height:100vh; margin:0; padding:clamp(28px,3.5vw,62px) 0 132px!important; overflow:visible; background:linear-gradient(135deg,#231005,#4c220b 53%,#1e0c04)!important; }
+  .recipes-page::before { display:none; }
+  .recipes-page::after { background:linear-gradient(180deg,transparent 45%,#160703b8); }
+  .recipes-top-scene { position:relative; z-index:1; top:auto; left:auto; transform:none; width:min(1480px,calc(100% - clamp(48px,8vw,156px))); height:clamp(370px,31vw,510px); margin:0 auto; aspect-ratio:auto; border:2px solid #c98d37; border-radius:28px; background-image:url('/rosieverse/recipes/recipes-desktop-hero-v1.webp'); background-size:cover; background-position:center; box-shadow:inset 0 0 0 3px #f9d98440,0 22px 54px #100401b0; }
+  .recipes-body { position:relative; z-index:2; width:min(1360px,calc(100% - clamp(64px,10vw,190px))); max-width:none; margin:-235px auto 0; padding:0; }
+  .recipes-heading { width:56%; min-height:235px; margin-left:auto; padding:22px 18px 0!important; display:flex; align-items:flex-start; justify-content:center; }
+  .recipes-crest { width:min(690px,100%); }
+  .recipes-index { top:auto!important; max-width:none; margin:0!important; padding:26px clamp(26px,3.4vw,54px) 48px!important; border:3px solid #c68a30; border-radius:28px; background:linear-gradient(135deg,#f6dfae,#fffaf0 50%,#eac27f)!important; box-shadow:inset 0 0 0 3px #fff4d5,inset 0 0 0 7px #d5a04a,0 22px 52px #1607039c!important; }
+  .recipes-meal-filters { max-width:none; justify-content:center; gap:10px; margin-bottom:16px; }
+  .recipes-meal-filters button { min-height:40px; padding:9px 16px; font-size:14px; }
+  .recipes-inline-search { max-width:940px; min-height:50px; margin:0 auto 20px; padding-inline:18px; border-radius:13px; }
+  .recipes-inline-search input { height:48px; font-size:18px; }
+  .recipes-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(16px,1.8vw,28px)!important; }
+  .recipes-card { aspect-ratio:.74; }
+  .recipes-card-copy strong { font-size:clamp(16px,1.35vw,22px)!important; }
+  .recipes-signoff { width:min(1360px,calc(100% - clamp(64px,10vw,190px))); margin:0 auto; padding:28px 0 0; }
+  .recipes-detail { width:100%; }
+}
+@media (min-width:1650px) { .recipes-grid { grid-template-columns:repeat(5,minmax(0,1fr)); } }
