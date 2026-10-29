@@ -1482,7 +1482,18 @@
     grid-column:1 / -1;
     width:min(100%,1180px);
     max-width:1180px;
-    margin:0 auto 6px;
+    height:330px;
+    margin:0 auto 20px;
+    overflow:hidden;
+    position:relative;
+    top:auto;
+    z-index:2;
+  }
+
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero {
+    height:100%;
+    object-fit:cover;
+    object-position:center 46%;
   }
 
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
