@@ -1,0 +1,166 @@
+/* Calculations Desktop Atelier, October 29 2026.
+   Every selector is restricted to desktop widths; the original iPhone and
+   iPad hero, calculator, toolkit imagery, touch areas and controls are intact.
+   Full-resolution dedicated assets were brought over through Dropbox. */
+@media (min-width:1100px) {
+  html:has(.app-shell.page-calculations) {
+    background-color:#2c050d;
+    background-image:
+      linear-gradient(90deg,rgba(24,0,8,.17),rgba(24,0,8,.05),rgba(24,0,8,.17)),
+      url("/rosieverse/calculations/desktop-20261029/desktop-velvet-background.webp");
+    background-size:100% 100%,cover;
+    background-position:center,center top;
+    background-repeat:no-repeat,repeat-y;
+    background-attachment:fixed,fixed;
+  }
+  body:has(.app-shell.page-calculations),
+  #root:has(.app-shell.page-calculations),
+  .app-shell.page-calculations {
+    background:transparent!important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
+    display:grid!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:100vh;
+    margin:0 auto!important;
+    padding:clamp(64px,4.2vw,77px) clamp(16px,1.75vw,34px) 105px!important;
+    grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr)!important;
+    grid-template-rows:auto auto!important;
+    align-content:start;
+    align-items:start;
+    gap:clamp(12px,1.15vw,21px) clamp(17px,1.55vw,29px)!important;
+    background:transparent!important;
+    overflow:visible;
+  }
+  /* A true 3:1 header, not the original 16:9 mobile hero distorted on desktop. */
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
+    grid-column:1!important;
+    grid-row:1!important;
+    align-self:start;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0;
+    height:auto!important;
+    aspect-ratio:3 / 1!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    border:2px solid #e0ad52;
+    border-radius:19px;
+    background:
+      url("/rosieverse/calculations/desktop-20261029/desktop-golden-header.webp") center /contain no-repeat,
+      #25040e!important;
+    box-shadow:0 0 0 1px #15040b,0 0 0 5px #c28c3b3b,inset 0 0 0 2px #ffe3a84a,0 13px 28px #130009a6;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero::after {
+    content:"";position:absolute;inset:6px;border:1px solid #f0ca7780;
+    border-radius:12px;pointer-events:none;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero,
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-desktop-hero-copy {
+    display:none!important;
+  }
+  /* Existing functional calculator remains untouched, now mounted on
+     a purpose-made jewel-and-velvet workbench. */
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
+    grid-column:1!important;
+    grid-row:2!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0;
+    margin:0!important;
+    padding:clamp(16px,2vw,31px) clamp(18px,3vw,48px) 32px!important;
+    border:2px solid #cda050;
+    border-radius:20px;
+    background:
+      linear-gradient(145deg,rgba(42,4,15,.43),rgba(21,2,10,.75)),
+      url("/rosieverse/calculations/desktop-20261029/desktop-velvet-background.webp") center /cover no-repeat!important;
+    box-shadow:0 0 0 1px #16050c,0 0 0 5px #ae78342b,inset 0 0 0 2px #e7bc6b50,0 17px 35px #11010791;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rac-frame {
+    width:100%;max-width:650px;margin:0 auto!important;
+    padding:clamp(19px,2vw,33px) clamp(24px,3.3vw,50px) 32px!important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rac-key {
+    height:clamp(47px,4vw,59px)!important;
+  }
+  /* An actual ornate instrument bureau: the pre-rendered borders sit outside
+     live functional tool buttons. Three desktop columns avoid the previous
+     excessive tall narrow phone-stack of buttons. */
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace {
+    grid-column:2!important;
+    grid-row:1 / span 2!important;
+    position:relative;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0;
+    min-height:0!important;
+    margin:0!important;
+    padding:clamp(76px,7.6vw,122px) clamp(78px,7.6vw,130px) clamp(65px,6.8vw,106px)!important;
+    border:0!important;
+    border-radius:17px;
+    background:
+      url("/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp") center top /100% 100% no-repeat,
+      #6a171a!important;
+    box-shadow:0 0 0 1px #b77b34,0 0 0 5px #b77b3440,0 16px 40px #11010789;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tools-heading {
+    margin:0 auto clamp(16px,1.7vw,29px)!important;
+    text-align:center;
+    font:normal clamp(21px,2vw,33px)/1.05 Georgia,serif!important;
+    color:#4c1916;
+    text-shadow:0 1px #fff4d3;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:clamp(3px,.7vw,10px) clamp(5px,1vw,12px)!important;
+    align-items:start;
+    padding:0!important;
+    margin:0 auto;
+    width:100%;
+    overflow:visible;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-card {
+    margin:0!important;
+    align-self:stretch;
+    filter:drop-shadow(0 4px 6px #32100940);
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-footer-note {
+    text-align:center;
+    color:#4b271d;
+    margin:16px 0 0!important;
+    font:italic clamp(11px,.85vw,15px) Georgia,serif;
+  }
+}
+/* The 1100-1250 breakpoint retains a readable minimum control width without
+   touching the existing iPad-responsive layout below 1100px. */
+@media (min-width:1100px) and (max-width:1250px) {
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
+    grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)!important;
+    column-gap:12px!important;
+    padding-inline:12px!important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace {
+    padding:70px 58px 64px!important;
+  }
+}
+
+@media (min-width:1320px) {
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace {
+    padding-top:clamp(78px,7.1vw,112px)!important;
+    padding-bottom:clamp(58px,5.2vw,85px)!important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-grid {
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:clamp(3px,.4vw,8px) clamp(4px,.6vw,11px)!important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-card--currency {
+    grid-column:1/-1!important;
+    aspect-ratio:1085 / 246!important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-card--currency img.rc-tool-art {
+    object-fit:contain!important;
+  }
+}

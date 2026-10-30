@@ -3,6 +3,7 @@ import { calculatorReducer, initialCalculator, keyFromKeyboard } from "./calcula
 import AssetCalculator from "./AssetCalculator.jsx";
 import "./RosieCalculations.css";
 import "./RosieCalculationsDevice.css";
+import "./RosieCalculationsDesktop.css";
 
 const TOOLS = [
   { id: "tip", title: "Tip Calculator", detail: "Tips, totals and per-person shares", mark: "♜" },
