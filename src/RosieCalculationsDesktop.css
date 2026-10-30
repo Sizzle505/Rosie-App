@@ -164,3 +164,23 @@
     object-fit:contain!important;
   }
 }
+
+/* Restore the canonical Rosie Calculations scene on desktop. The original
+   16:9 artwork contains the exact character, stacked 3D chessboard,
+   cryptex, calculator and study. Do not replace it with generic AI art. */
+@media (min-width:1100px) {
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
+    aspect-ratio:16 / 9 !important;
+    height:auto !important;
+    min-height:0 !important;
+    background-color:#18050d !important;
+    background-image:url("/rosieverse/calculations/hero/hero-mobile-16x9.webp") !important;
+    background-repeat:no-repeat !important;
+    background-size:100% 100% !important;
+    background-position:center !important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero,
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-desktop-hero-copy {
+    display:none !important;
+  }
+}
