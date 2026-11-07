@@ -1,0 +1,103 @@
+/*
+ * iPad composition layer.  This intentionally lives after each page's bespoke
+ * artwork rules: it only applies to touch-first tablet viewports, leaving the
+ * phone and desktop compositions completely intact.
+ */
+@media (min-width: 721px) and (max-width: 1199px) and (pointer: coarse) {
+  :root {
+    --rosie-tablet-gutter: clamp(18px, 3vw, 34px);
+    --rosie-nav-height: 68px;
+    --rosie-nav-gap: 14px;
+  }
+
+  .app-shell { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+
+  .topbar { height: 70px; padding-inline: 22px; grid-template-columns: 48px 1fr 48px; }
+  .topbar .round-button { width: 42px; height: 42px; }
+  .topbar .brand strong { font-size: 22px; }
+
+  .bottom-nav {
+    width: min(680px, calc(100% - (2 * var(--rosie-tablet-gutter)))) !important;
+    min-height: var(--rosie-nav-height);
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .bottom-nav > button { min-height: var(--rosie-nav-height); }
+  .bottom-nav .nav-icon-wrap { width: 28px; height: 28px; }
+  .bottom-nav .rosie-nav-icon { width: 25px; height: 25px; }
+  .bottom-nav button small { margin-top: 6px; font-size: 10px; }
+
+  /* Shared practical-page field: never let a phone-width main column create
+     empty side fields or cramped controls on an iPad. */
+  .page-reminders > main,
+  .page-calculations > main,
+  .page-reviews > main,
+  .page-recipes > main,
+  .page-qr-atelier > main,
+  .page-timekeeper > main { padding-bottom: calc(104px + env(safe-area-inset-bottom)) !important; }
+
+  /* Grand Salon and Resources retain their illustrated, centered identity,
+     but use the available tablet canvas instead of a phone-sized island. */
+  .page-home .home { padding-inline: var(--rosie-tablet-gutter); }
+  .page-home .banner { width: min(72vw, 650px, 46dvh); }
+  .page-home .hero { width: min(94vw, 1020px); height: min(42dvh, 500px); }
+  .page-home .worldGrid { width: min(78vw, 680px, 48dvh); }
+
+  .page-resources .rr-hub-content { padding-top: clamp(16px, 3svh, 30px); }
+  .page-resources .rr-hub-header { height: clamp(210px, 28svh, 290px); }
+  .page-resources .rr-hub-buttons { width: min(76vw, 650px); gap: clamp(12px, 1.8svh, 20px); }
+
+  /* Utility pages: larger but bounded touch targets and deliberately sized
+     working surfaces.  Their phone layouts remain governed below 721px. */
+  .page-reminders .rr-page { max-width: 1020px; margin-inline: auto; }
+  .page-reminders .rr-feature-grid { max-width: 940px; margin-inline: auto; }
+  .page-reminders .rr-paper { max-width: 940px; margin-inline: auto; }
+  .page-reminders .rr-tabs button { min-height: 52px; }
+
+  .page-qr-atelier .qa-scene { max-width: 1120px; margin-inline: auto; padding-inline: var(--rosie-tablet-gutter); }
+  .page-qr-atelier .qa-panel,
+  .page-qr-atelier .qa-preview-stage { min-width: 0; }
+  .page-qr-atelier .qa-type { min-height: 48px; }
+  .page-qr-atelier .qa-field input,
+  .page-qr-atelier .qa-field select,
+  .page-qr-atelier .qa-field textarea { min-height: 46px; }
+
+  .page-calculations .rc-page { padding-inline: var(--rosie-tablet-gutter); }
+  .page-calculations .rc-device { max-width: 980px; margin-inline: auto; }
+  .page-calculations .rc-tool-card button,
+  .page-calculations .rc-device button { min-height: 44px; }
+
+  .page-recipes .recipes-body { width: min(100% - (2 * var(--rosie-tablet-gutter)), 980px); margin-inline: auto; }
+  .page-recipes .recipes-heading { padding-top: clamp(500px, 56vw, 630px); }
+  .page-recipes .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .page-recipes .recipes-meal-filters button { min-height: 44px; }
+
+  .page-timekeeper main.rtk-page { margin-top: 0 !important; }
+  .page-timekeeper .rtk-scene { max-width: 980px; margin-inline: auto; }
+  .page-timekeeper .rtk-action-deck .rtk-controls button { min-width: 52px; min-height: 52px; }
+
+  .page-reviews .rosie-reviews { width: min(100%, 1080px); padding-inline: var(--rosie-tablet-gutter); }
+  .page-reviews .reviews-content { padding: 24px 22px 34px; }
+  .page-reviews .reviews-film-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px 14px; }
+  .page-reviews .reviews-film-strip { grid-auto-columns: minmax(128px, 18%); }
+  .page-reviews .reviews-search input,
+  .page-reviews .reviews-search button { min-height: 46px; }
+
+  .page-vault .page,
+  .page-randomizers .page { width: min(100%, 1120px); margin-inline: auto; }
+}
+
+/* Landscape iPad has ample width but limited vertical space.  Keep the
+   illustrated headers legible without pushing the primary interaction below
+   the fold. */
+@media (min-width: 721px) and (max-width: 1199px) and (pointer: coarse) and (orientation: landscape) and (max-height: 900px) {
+  .page-home .home { gap: 6px; padding-block: 8px 18px; }
+  .page-home .banner { width: min(50vw, 520px, 24dvh); }
+  .page-home .hero { height: min(39dvh, 360px); }
+  .page-home .worldGrid { width: min(54vw, 590px, 34dvh); }
+
+  .page-resources .rr-hub-content { padding-top: 4px; }
+  .page-resources .rr-hub-header { height: min(25svh, 190px); }
+  .page-resources .rr-hub-buttons { width: min(58vw, 560px); gap: 8px; margin-top: 4px; }
+
+  .page-recipes .recipes-heading { padding-top: clamp(390px, 41vw, 500px); }
+}
