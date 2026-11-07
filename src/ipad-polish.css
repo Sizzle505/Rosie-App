@@ -172,8 +172,8 @@
 
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
     display: block !important;
-    width: min(100%, 432px) !important;
-    max-width: 432px !important;
+    width: min(100%, 600px) !important;
+    max-width: 600px !important;
     margin: -18px auto 0 !important;
     padding: 0 !important;
     border: 0 !important;
@@ -183,13 +183,13 @@
   }
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-calculator {
     width: 100%;
-    max-width: 432px;
+    max-width: 600px;
     margin: 18px auto 10px;
   }
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace {
     display: block !important;
-    width: min(100%, 520px) !important;
-    max-width: 520px !important;
+    width: min(100%, 760px) !important;
+    max-width: 760px !important;
     min-height: 0 !important;
     margin: 0 auto !important;
     padding: 0 10px 18px !important;
@@ -199,7 +199,7 @@
     box-shadow: none !important;
   }
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tools-heading { margin: 18px 0 2px; }
-  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-grid .rc-tool-card { margin-block: -4px; }
 
   .app-shell.page-calculations .rc-page .rc-active-tool-overlay {
@@ -212,11 +212,11 @@
     padding: 58px 12px calc(92px + env(safe-area-inset-bottom)) !important;
     background: url('/rosieverse/calculations/burgundy-satin.png') center / cover no-repeat #4a071b !important;
   }
-  .app-shell.page-calculations .rc-page .rc-active-tool-viewport { display: block !important; width: min(100%, 520px); margin: 0 auto; }
+  .app-shell.page-calculations .rc-page .rc-active-tool-viewport { display: block !important; width: min(100%, 650px); margin: 0 auto; }
   .app-shell.page-calculations .rc-page .rc-active-tool-fit { transform: none !important; }
   .app-shell.page-calculations .rc-page .rc-tool-panel.rc-device {
-    width: min(100%, 520px) !important;
-    min-height: min(790px, 152vw) !important;
+    width: min(100%, 650px) !important;
+    min-height: min(790px, 122vw) !important;
     margin: 0 auto 14px !important;
     padding: clamp(104px, 28vw, 151px) 18.5% clamp(86px, 23vw, 125px) !important;
   }
@@ -236,24 +236,25 @@
   }
 }
 
-/* Recipes and Timekeeper also retain their intentional iPhone compositions:
-   centered illustrated stages, not wide desktop canvases. */
+/* Recipes and Timekeeper retain their illustrated iPhone language, while the
+   working canvas expands deliberately across iPad rather than remaining a
+   phone-width column. */
 @media (min-width: 721px) and (max-width: 1199px) and (pointer: coarse) {
   .page-recipes .recipes-body {
-    width: min(100%, 600px) !important;
+    width: min(100% - (2 * var(--rosie-tablet-gutter)), 820px) !important;
     margin-inline: auto;
     padding-inline: 8px;
   }
-  .page-recipes .recipes-heading { padding-top: clamp(500px, 90vw, 720px) !important; }
-  .page-recipes .recipes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+  .page-recipes .recipes-heading { padding-top: clamp(500px, 66vw, 680px) !important; }
+  .page-recipes .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 16px !important; }
   .page-recipes .recipes-index,
-  .page-recipes .recipes-detail { max-width: 600px; }
+  .page-recipes .recipes-detail { max-width: 760px; }
 
   .app-shell.page-timekeeper { padding-bottom: calc(85px + env(safe-area-inset-bottom)); }
   .app-shell.page-timekeeper main.rtk-page { margin-top: 0 !important; }
   .page-timekeeper .rtk-scene {
-    width: min(100%, 520px) !important;
-    max-width: 520px !important;
+    width: min(100%, 870px) !important;
+    max-width: 870px !important;
     margin-inline: auto;
   }
 }
