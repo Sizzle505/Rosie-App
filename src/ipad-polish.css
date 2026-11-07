@@ -42,6 +42,25 @@
   .page-home .hero { width: min(94vw, 1020px); height: min(42dvh, 500px); }
   .page-home .worldGrid { width: min(78vw, 680px, 48dvh); }
 
+  /* The three original play worlds each have a distinct tablet composition -
+     their bespoke art stays full scale without using desktop's wide columns. */
+  .page-fortune > .fortune-page { width: min(100% - (2 * var(--rosie-tablet-gutter)), 860px); padding-top: 20px; }
+  .page-fortune .fortune-console { width: min(100%, 780px); }
+  .page-fortune .machine .booth { height: clamp(610px, 76vw, 735px); }
+  .page-fortune .question-card { padding: 22px 24px 20px; }
+  .page-fortune .quick-prompts button { min-height: 48px; }
+
+  .page-cheese > .cheese-game-page { width: min(100% - (2 * var(--rosie-tablet-gutter)), 1040px); padding-inline: 0; }
+  .page-cheese .cheese-desktop-layout { gap: 18px; }
+  .page-cheese .cheese-game-frame { min-width: 0; }
+  .page-cheese .cheese-choice,
+  .page-cheese .cheese-start-button { min-height: 46px; }
+
+  .page-captain > .captain-game-page { width: min(100% - (2 * var(--rosie-tablet-gutter)), 1040px); padding-inline: 0; }
+  .page-captain .captain-hero { min-height: clamp(250px, 30vw, 325px); }
+  .page-captain .yacht-game-shell { min-width: 0; }
+  .page-captain .captain-game-page button { min-height: 44px; }
+
   .page-resources .rr-hub-content { padding-top: clamp(16px, 3svh, 30px); }
   .page-resources .rr-hub-header { height: clamp(210px, 28svh, 290px); }
   .page-resources .rr-hub-buttons { width: min(76vw, 650px); gap: clamp(12px, 1.8svh, 20px); }
@@ -94,6 +113,9 @@
   .page-home .banner { width: min(50vw, 520px, 24dvh); }
   .page-home .hero { height: min(39dvh, 360px); }
   .page-home .worldGrid { width: min(54vw, 590px, 34dvh); }
+
+  .page-fortune .machine .booth { height: min(68vw, 575px); }
+  .page-captain .captain-hero { min-height: 210px; }
 
   .page-resources .rr-hub-content { padding-top: 4px; }
   .page-resources .rr-hub-header { height: min(25svh, 190px); }

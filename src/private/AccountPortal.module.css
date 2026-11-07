@@ -13,6 +13,17 @@
 .mainAction{width:100%;min-height:49px;margin:15px 0 6px;border:1px solid #f7dfad;border-radius:99px;background:#e8c68c url("/rosieverse/account/rosie-gold-action.svg") center / 100% 100% no-repeat;color:#301c27;font:bold 17px Georgia,serif;box-shadow:inset 0 1px #fff8da,0 6px 13px #0006}.mainAction:disabled{opacity:.6}.warning{margin:7px 0 3px;color:#ffd1cc;font:13px/1.5 Georgia,serif}.warning button{color:#fbe2b7;border:0;background:transparent;text-decoration:underline}.footnote{margin:12px auto 0;max-width:310px;color:#b5a5a8;font:italic 11px/1.5 Georgia,serif}
 @media(max-width:600px){.trigger{top:calc(env(safe-area-inset-top,0px) + 5px);right:6px;width:44px;height:44px}.backdrop{align-items:center}.panel{border-radius:16px;padding-top:23px;padding-bottom:18px}.crest{width:53px;height:53px}.panel h2{font-size:30px}.tabs{margin:12px 0}.explanation{margin-bottom:12px}.form{gap:6px}}
 @media(max-height:650px){.backdrop{align-items:flex-start}.panel{margin:auto 0}.crest{width:42px;height:42px}.panel h2{font-size:25px;margin:5px 0}.panel .explanation{margin:5px auto 8px}.mainAction{margin-top:8px}}
+@media(min-width:721px) and (max-width:1199px) and (pointer:coarse){
+  .trigger{top:calc(env(safe-area-inset-top,0px) + 12px);right:18px;width:52px;height:52px}
+  .trigger img{width:52px;height:52px}
+  .backdrop{padding:calc(env(safe-area-inset-top,0px) + 28px) 28px calc(env(safe-area-inset-bottom,0px) + 28px)}
+  .panel{width:min(620px,100%);padding:34px 42px 30px;border-radius:24px}
+  .dismiss{width:42px;height:42px;right:16px;top:16px}
+  .crest{width:70px;height:70px}
+  .panel h2{font-size:38px}.explanation{max-width:440px;font-size:16px}
+  .tabs button,.pinChoice button{min-height:46px;font-size:15px}
+  .form input{min-height:52px;font-size:17px}.mainAction{min-height:54px;font-size:18px}
+}
 @media(prefers-reduced-motion:reduce){.trigger,.panel{animation:none!important}}
 
 /* Production artwork supports native controls and editable live labels. */
