@@ -136,3 +136,14 @@
 .recipes-crest.has-art {padding:0;}
 .recipes-crest.has-art>img {display:block;}
 .recipes-crest.has-art>span,.recipes-crest.has-art>small {display:none;}
+
+/* iPad keeps the illustrated cookbook arrangement, but gives its working
+   pages the full tablet canvas rather than inheriting a desktop card wall. */
+@media (min-width:721px) and (max-width:1199px) {
+  .app-shell.page-recipes > .recipes-page { padding-bottom:calc(102px + env(safe-area-inset-bottom,0px)); }
+  .recipes-body { width:min(calc(100% - 48px),820px); padding-inline:0; }
+  .recipes-heading { padding-top:clamp(500px,66vw,680px) !important; }
+  .recipes-index,.recipes-detail { max-width:760px; }
+  .recipes-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+  .recipes-card-copy strong { font-size:clamp(15px,2.15vw,20px); }
+}

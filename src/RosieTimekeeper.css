@@ -4166,3 +4166,67 @@ body:has(.app-shell.page-timekeeper),
     height: clamp(282px, 39dvh, 370px) !important;
   }
 }
+
+/* iPad is one illustrated Timekeeper stage, not the desktop split-panel
+   gallery.  These declarations intentionally follow the desktop rules so
+   tablet widths cannot inherit the side-cabinet presentation. */
+@media (min-width:721px) and (max-width:1199px) {
+  .app-shell.page-timekeeper main.rtk-page {
+    position:relative !important;
+    isolation:isolate;
+    background:#0b0810 !important;
+  }
+  .app-shell.page-timekeeper main.rtk-page::before,
+  .app-shell.page-timekeeper main.rtk-page::after { display:none !important; }
+  .app-shell.page-timekeeper .rtk-observatory {
+    width:min(100%,870px) !important;
+    max-width:870px !important;
+    margin-inline:auto !important;
+    background:#120d14 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory::before { content:none !important; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
+    width:100% !important;
+    margin:0 auto !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls {
+    top:0 !important;
+    height:100% !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
+    top:auto !important;
+    bottom:7.2% !important;
+    width:clamp(250px,52vw,365px) !important;
+    height:auto !important;
+    aspect-ratio:auto !important;
+    translate:0 0 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-face-trigger {
+    top:53.8% !important;
+    left:8% !important;
+    translate:0 0 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
+    top:61.5% !important;
+    translate:0 0 !important;
+  }
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
+    top:73.8% !important;
+    left:50% !important;
+    width:min(84%,510px) !important;
+    height:auto !important;
+    max-height:24% !important;
+    transform:translateX(-50%) !important;
+    translate:0 0 !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+    top:17% !important;
+    bottom:5% !important;
+    left:10% !important;
+    right:10% !important;
+    overflow-y:auto !important;
+  }
+}
