@@ -386,8 +386,8 @@
 .speedReadout { order: 2; width: 44px; height: 14px; display: block; margin: 0 auto; color: #d5dae0; font: 700 7px/14px ui-sans-serif, system-ui, sans-serif; white-space: nowrap; text-align: center; }
 .rangeShell { order: 3; position: relative; width: 36px; height: 116px; min-width: 36px; display: grid; place-items: center; margin: 0 auto; overflow: hidden; }
 .rangeShell::before, .rangeShell::after { position: absolute; left: 50%; transform: translateX(-50%); color: rgba(205,213,221,.58); font: 800 8px/1 ui-sans-serif,system-ui,sans-serif; pointer-events: none; }
-.rangeShell::before { content: "↑"; top: 0; }
-.rangeShell::after { content: "↓"; bottom: 0; }
+.rangeShell::before { content: "â"; top: 0; }
+.rangeShell::after { content: "â"; bottom: 0; }
 .speedRange { position: absolute; left: 50%; top: 50%; width: 18px; height: 84px; margin: 0; transform: translate(-50%,-50%); writing-mode: vertical-lr; direction: rtl; appearance: auto; -webkit-appearance: auto; accent-color: #e0e5ea; cursor: pointer; }
 
 .lightbox {
@@ -803,6 +803,46 @@
     aspect-ratio: auto;
     object-fit: contain;
     object-position: center;
+  }
+}
+
+/* iPad card inspection uses the full available tablet width with a deliberate
+   physical half-inch breathing room on each edge.  The overlay scrolls when
+   a portrait card is taller than the viewport - it is never cropped. */
+@media (min-width: 721px) and (max-width: 1199px) and (pointer: coarse) {
+  .lightbox {
+    display: block;
+    padding: .5in;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .selectionStage {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    min-height: calc(100dvh - 1in);
+    margin: 0 auto;
+  }
+  .selectionStage .expandedCard {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+  .selectionStage .expandedCard .enlargedImage {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+  .selectionStage .closeButton {
+    position: fixed;
+    top: calc(.5in + env(safe-area-inset-top));
+    right: .5in;
   }
 }
 .wall .tile::after {
