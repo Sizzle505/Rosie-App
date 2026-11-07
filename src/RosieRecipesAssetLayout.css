@@ -68,7 +68,7 @@
   -webkit-text-fill-color:#60320e;text-align:center;text-align-last:center;
   font:600 clamp(11px,2.5vw,14px)/1 Georgia,serif;
   padding:0 22px 0 9px;box-shadow:none;cursor:pointer}
-.recipes-sort:after {content:"▾";position:absolute;z-index:1;right:10px;top:50%;transform:translateY(-54%);
+.recipes-sort:after {content:"â¾";position:absolute;z-index:1;right:10px;top:50%;transform:translateY(-54%);
   font-size:15px;color:#8b4b12;pointer-events:none}
 .recipes-sort select option {color:#60320e;background:#fff2d6}
 
@@ -477,6 +477,61 @@
   .recipes-card-metrics em { font-size:11px!important; line-height:1.12!important; }
 }
 
+/* iPad uses the same illustrated vertical cookbook as iPhone, simply scaled
+   across the tablet's available width.  This comes after every desktop rule
+   in this file so a landscape iPad never inherits the wide panorama layout. */
+@media (min-width:721px) and (max-width:1199px) {
+  .app-shell.page-recipes { background:#4a2309 !important; }
+  .app-shell.page-recipes > .recipes-page {
+    display:block !important;
+    min-height:100svh;
+    margin:0;
+    padding:0 0 calc(102px + env(safe-area-inset-bottom,0px)) !important;
+    overflow:hidden;
+    background:linear-gradient(180deg,#aa5519 0,#e49b36 58%,#a64e16 100%) !important;
+  }
+  .recipes-page::before { display:block !important; }
+  .recipes-page::after { background:linear-gradient(180deg,transparent 0%,rgba(57,22,3,.26) 28%,rgba(108,39,4,.10) 80%,rgba(73,25,5,.28)) !important; }
+  .recipes-top-scene {
+    position:absolute !important;
+    z-index:-1;
+    top:0 !important;
+    left:50% !important;
+    width:min(100%,700px) !important;
+    height:auto !important;
+    aspect-ratio:821 / 1916 !important;
+    margin:0 !important;
+    transform:translateX(-50%) !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background-image:url('/rosieverse/recipes/recipes-hero.webp') !important;
+    background-position:center top !important;
+    background-size:100% 100% !important;
+    box-shadow:none !important;
+  }
+  .recipes-body {
+    width:min(calc(100% - 48px),820px) !important;
+    max-width:none !important;
+    margin:0 auto !important;
+    padding:0 !important;
+  }
+  .recipes-heading {
+    display:block !important;
+    width:auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:clamp(500px,66vw,680px) 0 0 !important;
+  }
+  .recipes-index { max-width:760px !important; margin:0 auto !important; padding:18px clamp(12px,3vw,28px) 38px !important; }
+  .recipes-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:clamp(12px,3.2vw,22px) !important; }
+  .recipes-card { aspect-ratio:1086/1448 !important; border-radius:24px !important; }
+  .recipes-detail { max-width:760px !important; margin:24px auto 0 !important; }
+  .recipes-detail-cover { display:block !important; }
+  .recipes-detail-photo { height:auto !important; min-height:0 !important; margin:0 !important; border-radius:0 !important; }
+  .recipes-detail-intro { display:block !important; padding:0 !important; }
+  .recipes-signoff { width:auto !important; margin:0 !important; padding:28px 10px 18px !important; }
+}
+
 /* Purpose-built desktop edition: a wide kitchen hero and an independent,
    full-width cookbook surface. Mobile artwork and its portrait framing never
    enter this layout. */
@@ -564,4 +619,22 @@
       repeating-linear-gradient(90deg,rgba(255,231,180,.016) 0 1px,transparent 1px 70px),
       linear-gradient(180deg,rgba(45,16,4,.36),rgba(29,8,2,.12) 60%,rgba(21,6,2,.42))!important;
   }
+}
+
+/* Final iPad precedence - deliberately follows the desktop panorama rules. */
+@media (min-width:721px) and (max-width:1199px) {
+  .app-shell.page-recipes { background:#4a2309 !important; }
+  .app-shell.page-recipes > .recipes-page { display:block !important; padding:0 0 calc(102px + env(safe-area-inset-bottom,0px)) !important; overflow:hidden; background:linear-gradient(180deg,#aa5519 0,#e49b36 58%,#a64e16 100%) !important; }
+  .recipes-page::before { display:block !important; }
+  .recipes-top-scene { position:absolute !important; z-index:-1; top:0 !important; left:50% !important; width:min(100%,700px) !important; height:auto !important; aspect-ratio:821 / 1916 !important; margin:0 !important; transform:translateX(-50%) !important; border:0 !important; border-radius:0 !important; background-image:url('/rosieverse/recipes/recipes-hero.webp') !important; background-size:100% 100% !important; box-shadow:none !important; }
+  .recipes-body { width:min(calc(100% - 48px),820px) !important; margin:0 auto !important; padding:0 !important; }
+  .recipes-heading { display:block !important; width:auto !important; min-height:0 !important; margin:0 !important; padding:clamp(500px,66vw,680px) 0 0 !important; }
+  .recipes-index { max-width:760px !important; margin:0 auto !important; }
+  .recipes-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:clamp(12px,3.2vw,22px) !important; }
+  .recipes-card { aspect-ratio:1086/1448 !important; border-radius:24px !important; }
+  .recipes-detail { max-width:760px !important; margin:24px auto 0 !important; }
+  .recipes-detail-cover { display:block !important; }
+  .recipes-detail-photo { height:auto !important; min-height:0 !important; margin:0 !important; }
+  .recipes-detail-intro { display:block !important; padding:0 !important; }
+  .recipes-signoff { width:auto !important; margin:0 !important; padding:28px 10px 18px !important; }
 }
