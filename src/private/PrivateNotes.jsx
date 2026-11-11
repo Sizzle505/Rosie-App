@@ -24,6 +24,8 @@ function Notebook({ onCountChange }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [creating, setCreating] = useState(false);
+  const [search, setSearch] = useState("");
+  const [duplicating, setDuplicating] = useState(false);
   const [status, setStatus] = useState({});
   const pending = useRef(new Map());
   const inflight = useRef(new Map());
@@ -151,6 +153,18 @@ function Notebook({ onCountChange }) {
       onCountChange?.(remaining.length);
     } catch (issue) { setError(issue.message); if (issue.status === 401) refresh(); }
   };
+  const duplicate = async note => {
+    setDuplicating(true); setError("");
+    try {
+      const { note: copy } = await rosieRequest("notes", { method:"POST",
+        body:JSON.stringify({title:(note.title || "Untitled note").slice(0,132) + " (copy)",body:note.body || ""}) });
+      setNotes(previous => [copy,...previous]); setSelected(copy.id);
+      setSearch(""); onCountChange?.(notes.length + 1);
+    } catch (issue) { setError(issue.message); if (issue.status === 401) refresh(); }
+    finally { setDuplicating(false); }
+  };
+  const matching = notes.filter(n =>
+    (n.title + " " + (n.body || "")).toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()));
   const active = notes.find(n => n.id === selected);
   return <div className={styles.ledger}>
     <div className={styles.ledgerHeader}><div><span className={styles.eyebrow}>ROSIE’S PRIVATE LEDGER</span>
@@ -162,7 +176,12 @@ function Notebook({ onCountChange }) {
         const restored = found.map(n=>retrieveDraft(owner,n));setNotes(restored);setSelected(restored[0]?.id||null);onCountChange?.(restored.length);
       }).catch(issue=>setError(issue.message)).finally(()=>setLoading(false)); }}>Retry</button></p>}
     {loading ? <p role="status" className={styles.empty}>Rosie is opening the ledger…</p> : <>
-      {!!notes.length && <nav className={styles.noteList} aria-label="Your notes">{notes.map(note =>
+      {!!notes.length && <label className={styles.findNotes}>
+        <span className={styles.srOnly}>Search cloud notes</span>
+        <input type="search" placeholder="Find cloud notes by title or contents…"
+          value={search} onChange={e => setSearch(e.target.value)} />
+      </label>}
+      {!!notes.length && <nav className={styles.noteList} aria-label="Your notes">{matching.map(note =>
         <button type="button" key={note.id} aria-current={note.id === selected ? "true" : undefined}
           className={note.id === selected ? styles.current : ""} onClick={() => {
             for (const id of pending.current.keys()) flush(id);
@@ -170,6 +189,7 @@ function Notebook({ onCountChange }) {
           }}>
           <strong>{note.title || "Untitled note"}</strong><small>{new Date(note.updated_at).toLocaleDateString()}</small>
         </button>)}</nav>}
+      {!!notes.length && !matching.length && <p className={styles.noMatches}>No notes match that search.</p>}
       {active ? <section className={styles.paper} aria-label="Edit note">
         <input aria-label="Note title" maxLength={140} value={active.title}
           onChange={e => patch(active.id, "title", e.target.value)} placeholder="Untitled note" />
@@ -179,6 +199,8 @@ function Notebook({ onCountChange }) {
           className={status[active.id] === "Save Failed" ? styles.failure : styles.saveState}>
           {status[active.id] || "Saved"} {status[active.id] === "Saved" ? "✓" : ""}</span>
           {status[active.id] === "Save Failed" && <button className={styles.retry} onClick={() => flush(active.id)}>Retry Save</button>}
+          <button type="button" className={styles.duplicate} disabled={duplicating}
+            onClick={() => duplicate(active)}>{duplicating ? "Copying…" : "Duplicate"}</button>
           <button type="button" className={styles.delete} onClick={() => remove(active.id)}>Delete note</button>
         </div>
       </section> : <div className={styles.empty}>A fresh page awaits. Rosie recommends beginning with an excellent idea.</div>}
