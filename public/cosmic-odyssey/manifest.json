@@ -1,0 +1,28 @@
+{
+  "prototypeVersion": "0.1.0",
+  "created": "2026-11-11",
+  "assets": 23,
+  "mechanics": {
+    "charge": {
+      "treat": 1,
+      "cheese": 2,
+      "laserCost": 1,
+      "rocketCost": 2
+    },
+    "hp": {
+      "jett": 1,
+      "chip": 1,
+      "kitty": 3
+    },
+    "ai": {
+      "jett": "patrol",
+      "chip": "patrol dash",
+      "kitty": "BFS chase"
+    },
+    "viewport": {
+      "mobile": "13x19 portrait",
+      "desktop": "21x13 landscape"
+    }
+  },
+  "notes": "First playable mechanics prototype. Paths to assets are independent; original masters are in batch ZIPs."
+}
