@@ -6,6 +6,7 @@ import "./visual-rebuild.css";
 import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
 import "./captain-refresh.css";
+import "./cosmic-odyssey-portal.css";
 import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
@@ -3007,6 +3008,11 @@ function App() {
           <CheeseMemoryGame />
         ) : page === "captain" ? (
           <>
+            <section className="cosmic-odyssey-portal" aria-label="Cosmic Odyssey prototype">
+              <img src="/cosmic-odyssey/assets/rosie.webp" alt="Captain Rosie aboard her spacecraft" />
+              <div className="cosmic-odyssey-portal-copy"><span>NEW CAPTAIN'S ARCADE · PLAYABLE PREVIEW</span><h2>Captain Rosie: Cosmic Odyssey</h2><p>Chart a maze of distant worlds. Collect treats, power your weapons and outwit three spacefaring Fiends.</p></div>
+              <a className="cosmic-odyssey-portal-button" href="/cosmic-odyssey/index.html">LAUNCH COSMIC ODYSSEY</a>
+            </section>
             <CaptainRosieGame soundOn={soundOn} />
             <EmberTunnelDrill soundOn={soundOn} />
           </>
