@@ -99,7 +99,8 @@
  }
  function playerPose(dir,turn,now){
   if(!player||now<(player.actionUntil||0))return;
-  const state=movementArt(dir,turn);
+  const evasive=turn&&entities.some(e=>!e.killed&&dist(e,player)<=3);
+  const state=evasive?'rosie-dodge':movementArt(dir,turn);
   setSprite(player,state);
   if(turn&&(dir==='left'||dir==='right')){
    const playId=sessionId,stamp=now;
