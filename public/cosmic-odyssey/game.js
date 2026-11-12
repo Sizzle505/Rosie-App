@@ -112,11 +112,12 @@
   }
  }
  function playAttackPose(type){
-  const sid=sessionId;
+  const sid=sessionId,attackToken=(player.attackToken||0)+1;
+  player.attackToken=attackToken;
   player.actionUntil=performance.now()+460;
   setSprite(player,type==='laser'?'rosie-laser':'rosie-rocket');
   setTimeout(()=>{
-   if(sid===sessionId&&player&&phase==='playing'){
+   if(sid===sessionId&&player&&phase==='playing'&&player.attackToken===attackToken){
     player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));
    }
   },470);
@@ -174,7 +175,7 @@
   score=0;ammo=0;lives=3;got=0;deadCount=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(6900+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
-  player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
+  player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
   createBoard();player.el=addSprite('rosie-cruise',player.x,player.y,'rosie');for(const e of entities)e.el=addSprite(e.id,e.x,e.y,'fiend '+e.id);
   populate(310+level*37);const patrols=[[],[]];for(const [i,e] of entities.entries()){
    if(i===2)continue;const nearby=[...itemAt.keys()].filter(k=>itemAt.get(k).kind==='treat').map(k=>{const[x,y]=k.split(',').map(Number);return{x,y};}).filter(p=>dist(p,e.spawn)<Math.max(9,cols*.7));
@@ -224,7 +225,7 @@
   const now=performance.now();wantFacing=dir;pendingStep=true;pendingUntil=now+Math.max(400,STEP_MS*2);
   if(advance(now,dir))pendingStep=false;
  }
- function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
+ function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.attackToken=(player.attackToken||0)+1;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
   const sp=player.spawn;player.x=sp.x;player.y=sp.y;position(player);positionShield();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
  function collide(){for(const e of entities)if(!e.killed&&e.health>0&&e.x===player.x&&e.y===player.y){damage(e);break;}}
  function fire(type){
