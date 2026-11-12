@@ -113,3 +113,15 @@
   .sprite-art{animation:none!important;transform:scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
   .sprite.fiend.defeated .sprite-art{animation:cosmic-defeat-flare .25s forwards!important}
 }
+
+/* Existing art integration: sprite-authored attack, defeat and pickup states. */
+.life-icon{display:inline-block;width:clamp(17px,1.8vw,25px);height:clamp(17px,1.8vw,25px);
+  margin:0 1px;object-fit:contain;vertical-align:middle;filter:drop-shadow(0 0 3px #ffb85188)}
+.laser-bolt-projectile{position:absolute;pointer-events:none;z-index:26;object-fit:fill;
+  transform-origin:0 50%;filter:drop-shadow(0 0 5px #ff6b2a) drop-shadow(0 0 11px #f53630);
+  animation:cosmic-laser-art 225ms ease-out forwards}
+@keyframes cosmic-laser-art{from{opacity:.99;filter:brightness(1.5) drop-shadow(0 0 8px #ffb577)}
+ to{opacity:0;filter:brightness(.7) drop-shadow(0 0 3px #f74c20)}}
+.sprite.fiend.defeated .sprite-art{animation-duration:1.25s}
+.sprite.fiend.defeat-jett .sprite-art,.sprite.fiend.defeat-kitty .sprite-art,
+.sprite.fiend.defeat-chip .sprite-art{object-fit:contain}
