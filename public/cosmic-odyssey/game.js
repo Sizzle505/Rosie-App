@@ -67,7 +67,10 @@
   if(!obj?.el)return;
   // Normalize by painted ship silhouette rather than canvas dimensions.
   const dims=obj===player?[3.42,2.45]:obj.id==='jett'?[2.43,2.15]:obj.id==='chip'?[2.55,2.13]:[2.55,1.95];
-  const px=tile*dims[0],py=tile*dims[1],x=(obj.x+.5)*tile-px/2,y=(obj.y+.5)*tile-py/2;
+  const px=tile*dims[0],py=tile*dims[1];
+  // Keep the whole spacecraft inside the frame even when the logical position hugs an edge.
+  const x=Math.max(3,Math.min(cols*tile-px-3,(obj.x+.5)*tile-px/2));
+  const y=Math.max(3,Math.min(rows*tile-py-3,(obj.y+.5)*tile-py/2));
   obj.el.style.width=px+'px';obj.el.style.height=py+'px';
   obj.el.style.transform=`translate3d(${x}px,${y}px,0)`;
   const art=obj.el.spriteArt;
@@ -88,18 +91,19 @@
   const active=phase==='playing'&&now<protectedUntil;
   const size=tile*3.65;
   el.style.width=size+'px';el.style.height=size+'px';
-  el.style.left=((player.x+.5)*tile-size/2)+'px';
-  el.style.top=((player.y+.5)*tile-size/2)+'px';
+  el.style.left=Math.max(2,Math.min(cols*tile-size-2,(player.x+.5)*tile-size/2))+'px';
+  el.style.top=Math.max(2,Math.min(rows*tile-size-2,(player.y+.5)*tile-size/2))+'px';
   el.classList.toggle('active',active);
  }
  function changeScene(next){
   scene=next==='lunar'?'lunar':'nebula';
   board.dataset.scene=scene;
+  const app=document.getElementById('cosmic-app');if(app)app.dataset.scene=scene;
   const label=$('scene-name');if(label)label.textContent=scene==='nebula'?'NEBULA':'LUNAR';
   $('level').textContent=scene==='nebula'?'NEBULA PASSAGE':'LUNAR OUTPOST';
  }
  function popup(text,p){const el=document.createElement('div');el.className='popup-message';el.textContent=text;el.style.left=`${(p.x+.2)*tile}px`;el.style.top=`${(p.y-.1)*tile}px`;board.append(el);setTimeout(()=>el.remove(),990);}
- function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),440);}
+ function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),type==='explosion'?700:440);}
  function sound(freq=480,duration=.07,shape='sine'){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!sound.context)sound.context=new C();const ctx=sound.context,o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.value=freq;g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);}catch{}}
  function say(text){message.textContent=text;}
  function ui(){ $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').textContent='♥ '.repeat(lives).trim()||'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
