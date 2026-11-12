@@ -4258,10 +4258,10 @@ body:has(.app-shell.page-timekeeper),
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props { z-index: 6; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers {
-    top: 5% !important; left: -19% !important; width: 45% !important;
+    top: 15% !important; left: -42% !important; width: 57% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
-    top: 58% !important;
+    top: 55% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
     top: 72% !important; left: 50% !important; width: 70% !important;
@@ -4269,21 +4269,33 @@ body:has(.app-shell.page-timekeeper),
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    top: 29% !important;
+    top: 25% !important;
     left: calc(100% + clamp(16px, 2vw, 40px)) !important;
-    width: clamp(310px, 27vw, 520px) !important;
-    height: clamp(270px, 35dvh, 360px) !important;
+    width: min(23vw, 440px) !important;
+    height: clamp(340px, 45dvh, 430px) !important;
     transform: none !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
-    top: 18% !important; bottom: 9% !important;
+    top: 16% !important; bottom: 8% !important;
+    left: 10% !important; right: 10% !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-presets button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-adjust-row button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer button {
+    min-height: 34px !important; font-size: 14px !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer select {
+    min-height: 44px !important; font-size: 18px !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {
+    font-size: 14px !important;
   }
 }
 @media (min-width: 1200px) and (max-width: 1399px) {
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    width: clamp(270px, 25vw, 350px) !important;
+    width: min(23vw, 280px) !important;
   }
 }
