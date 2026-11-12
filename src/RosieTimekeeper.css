@@ -4231,58 +4231,59 @@ body:has(.app-shell.page-timekeeper),
   }
 }
 
-/* Desktop: one large central instrument in a purpose-built landscape hall. */
+/* Desktop observatory: the clock and every control fit in the first view.
+   Rosie operates at the left of the bezel and the real cabinet occupies the
+   right wing. Mobile and tablet art rules above are deliberately unchanged. */
 @media (min-width: 1200px) {
   .app-shell.page-timekeeper main.rtk-page {
-    min-height: 1020px;
+    min-height: 100dvh;
     background: #100811 url('/rosieverse/timekeeper/midnight-observatory/desktop-observatory-20261112.webp') center top / cover no-repeat !important;
   }
   .app-shell.page-timekeeper main.rtk-page::before,
   .app-shell.page-timekeeper main.rtk-page::after,
   .app-shell.page-timekeeper .rtk-observatory::before { content: none !important; }
   .app-shell.page-timekeeper .rtk-observatory {
-    --rtk-desktop-art-width: min(720px, 90vw);
-    width: 100% !important;
-    max-width: none !important;
-    min-height: 1020px;
-    background: transparent !important;
+    --rtk-desktop-art-width: min(720px, 50vw, calc((100dvh - 80px) * .95));
+    width: 100% !important; max-width: none !important;
+    min-height: 100dvh; background: transparent !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage {
     width: var(--rtk-desktop-art-width) !important;
-    height: 1020px !important;
-    aspect-ratio: auto !important;
-    margin: 0 auto !important;
+    height: min(850px, calc(100dvh - 10px)) !important;
+    aspect-ratio: auto !important; margin: 0 auto !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-background { display: none; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-dial {
-    top: 32% !important;
-    width: 62% !important;
+    top: 36% !important; width: 58% !important;
   }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props { z-index: 6; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers {
-    top: 0 !important;
-    width: 32% !important;
-    left: 34% !important;
+    top: 8% !important; left: -12% !important; width: 35% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
-    top: 54% !important;
+    top: 62% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
-    top: 66% !important;
-    width: 70% !important;
-    left: 50% !important;
+    top: 72% !important; left: 50% !important; width: 70% !important;
   }
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    top: 77% !important;
-    left: 50% !important;
-    width: min(650px, 92%) !important;
-    height: 270px !important;
-    transform: translateX(-50%) !important;
+    top: 29% !important;
+    left: calc(100% + clamp(16px, 2vw, 40px)) !important;
+    width: clamp(310px, 27vw, 520px) !important;
+    height: clamp(270px, 35dvh, 360px) !important;
+    transform: none !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
-    top: 18% !important;
-    bottom: 9% !important;
+    top: 18% !important; bottom: 9% !important;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1399px) {
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
+    width: clamp(270px, 25vw, 350px) !important;
   }
 }

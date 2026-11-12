@@ -1085,36 +1085,35 @@
   .qa-finish-strip {display:none!important;}
 }
 
-/* Desktop atelier: landscape art and a real two-column workbench. */
+/* Desktop workshop: preserve Rosie and place the QR frame on the right dais. */
 @media (min-width: 1200px) {
   .app-shell.page-qr-atelier > main.qa-page { margin-top: 0; }
   .app-shell.page-qr-atelier .qa-scene {
     width: 100%; max-width: none; min-height: 1120px;
     display: grid; grid-template-columns: minmax(490px, 47%) minmax(560px, 53%);
-    grid-template-rows: 150px auto auto 1fr;
+    grid-template-rows: 150px auto auto auto 1fr;
     align-items: start; overflow: visible;
     background: #052218 url('/qr-atelier/desktop-workshop-20261112.webp') center top / 100% auto no-repeat;
   }
   .app-shell.page-qr-atelier .qa-scene::before { content: none; }
   .app-shell.page-qr-atelier .qa-hero { grid-column: 1 / -1; grid-row: 1; height: 150px; }
   .app-shell.page-qr-atelier .qa-title { top: 62px; right: 7%; width: min(37vw, 510px); }
-  .app-shell.page-qr-atelier .qa-preview-stage {
-    grid-column: 1; grid-row: 2; margin: 310px 0 0;
-    width: 100%;
-  }
-  .app-shell.page-qr-atelier .qa-ring { width: min(35vw, 470px); transform: none; }
-  .app-shell.page-qr-atelier .qa-preview-actions { margin: -64px auto 28px; }
   .app-shell.page-qr-atelier .qa-panel {
-    grid-column: 2; grid-row: 2 / span 2;
-    width: min(88%, 700px); margin: 145px auto 20px;
+    grid-column: 2; grid-row: 2;
+    width: min(88%, 700px); margin: 145px auto 16px;
   }
   .app-shell.page-qr-atelier .qa-panel-inner { padding: 16px 14px 22px; }
+  .app-shell.page-qr-atelier .qa-preview-stage {
+    grid-column: 2; grid-row: 3; width: 100%; margin: -8px auto 0;
+  }
+  .app-shell.page-qr-atelier .qa-ring { width: min(23vw, 320px); transform: none; }
+  .app-shell.page-qr-atelier .qa-preview-actions { margin: -46px auto 12px; }
   .app-shell.page-qr-atelier .qa-finish-strip {
-    grid-column: 1; grid-row: 3; width: min(86%, 510px); margin: 0 auto 28px;
+    grid-column: 2; grid-row: 4; width: min(86%, 510px); margin: 0 auto 28px;
   }
   .app-shell.page-qr-atelier .qa-collection {
-    grid-column: 2; grid-row: 4; width: min(88%, 700px); margin: 12px auto 50px;
+    grid-column: 2; grid-row: 5; width: min(88%, 700px); margin: 12px auto 50px;
   }
-  .app-shell.page-qr-atelier .qa-save-drawer { grid-column: 2; grid-row: 4; }
+  .app-shell.page-qr-atelier .qa-save-drawer { grid-column: 2; grid-row: 5; }
   .app-shell.page-qr-atelier .qa-type { min-height: 76px; }
 }
