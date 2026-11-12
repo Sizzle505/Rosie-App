@@ -3,7 +3,7 @@
   "updated": "2026-11-12",
   "branch": "cosmic-odyssey-prototype-20261111",
   "origin": "Original individually generated image assets, optimized for browser",
-  "new_asset_count": 16,
+  "new_asset_count": 19,
   "existing_asset_count_before": 23,
   "art": [
     {
@@ -101,11 +101,36 @@
       "asset": "assets/laser-bolt.webp",
       "status": "integrated into prototype",
       "optimized": true
+    },
+    {
+      "source": "emerald_ringed_energy_bolt.png",
+      "asset": "assets/chip-bolt.webp",
+      "status": "integrated into Chip projectile combat",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_golden_paw_rocket.png",
+      "asset": "assets/rosie-projectile.webp",
+      "status": "integrated as Rosie rocket projectile",
+      "optimized": true
+    },
+    {
+      "source": "meteor_mischief_golden_cosmic_frame.png",
+      "asset": "assets/meteor.webp",
+      "status": "integrated as third scene backdrop",
+      "optimized": true
     }
   ],
   "limitations": [
     "ZIP member-level audit incomplete due Dropbox text fetch size limit",
     "Some earlier produced key poses still need transfer",
-    "Standalone poses are not frame-by-frame animation sequences"
+    "Standalone poses are not frame-by-frame animation sequences",
+    "Original Jett and Kitty projectile artwork remains to be recovered; temporary game effects are clearly marked"
+  ],
+  "tested": [
+    "syntax parse",
+    "mobile 11x15 shield and enemy projectile collisions",
+    "desktop 17x11 shield and enemy projectile collisions",
+    "Meteor scene selector"
   ]
 }
