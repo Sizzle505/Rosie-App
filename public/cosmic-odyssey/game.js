@@ -270,7 +270,7 @@
   nextMoveAt=now+STEP_MS;lastFacing=dir;
   player.x=nx;player.y=ny;player.lastMoveAt=now;
   playerPose(dir,changedDirection,now);
-  position(player);positionShield();pick();collide();
+  position(player);positionShield();pick();collide();checkPlayerShots(performance.now());
   if(player.x===exitPos.x&&player.y===exitPos.y){
     if(got>=target&&deadCount===3){completeLevel();}
     else say(`Portal locked: ${Math.max(0,target-got)} biscuits and ${3-deadCount} Fiends remaining.`);
@@ -419,6 +419,15 @@
    else damage(shot.source);
    removeEnemyShot(shot);
   }
+ }
+}
+ function checkPlayerShots(now){
+ if(phase!=='playing')return;
+ for(const shot of [...enemyShots]){
+  if(shot.x!==player.x||shot.y!==player.y)continue;
+  if(now<protectedUntil){effect('spark',player,1.3);popup('SHIELDED!',player);}
+  else damage(shot.source);
+  removeEnemyShot(shot);
  }
 }
  function moveFiend(e,now){if(e.killed)return;if(now<e.next)return;let interval=e.speed;if(now<slowUntil)interval*=2.1;if(e.id==='chip'&&Math.floor(now/2600)%2===0)interval*=.62;e.next=now+interval;
