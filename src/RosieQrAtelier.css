@@ -1100,13 +1100,13 @@
   .app-shell.page-qr-atelier .qa-title { top: 62px; right: 7%; width: min(37vw, 510px); }
   .app-shell.page-qr-atelier .qa-panel {
     grid-column: 2; grid-row: 2;
-    width: min(88%, 700px); margin: 145px auto 16px;
+    width: min(88%, 700px); margin: 105px auto 8px;
   }
   .app-shell.page-qr-atelier .qa-panel-inner { padding: 16px 14px 22px; }
   .app-shell.page-qr-atelier .qa-preview-stage {
     grid-column: 2; grid-row: 3; width: 100%; margin: -8px auto 0;
   }
-  .app-shell.page-qr-atelier .qa-ring { width: min(23vw, 320px); transform: none; }
+  .app-shell.page-qr-atelier .qa-ring { width: min(19vw, 265px); transform: none; }
   .app-shell.page-qr-atelier .qa-preview-actions { margin: -46px auto 12px; }
   .app-shell.page-qr-atelier .qa-finish-strip {
     grid-column: 2; grid-row: 4; width: min(86%, 510px); margin: 0 auto 28px;

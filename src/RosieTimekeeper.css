@@ -4258,10 +4258,10 @@ body:has(.app-shell.page-timekeeper),
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props { z-index: 6; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers {
-    top: 8% !important; left: -12% !important; width: 35% !important;
+    top: 5% !important; left: -19% !important; width: 45% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
-    top: 62% !important;
+    top: 58% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
     top: 72% !important; left: 50% !important; width: 70% !important;
