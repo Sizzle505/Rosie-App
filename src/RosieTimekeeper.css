@@ -4261,7 +4261,7 @@ body:has(.app-shell.page-timekeeper),
     top: 15% !important; left: -42% !important; width: 57% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
-    top: 58% !important;
+    top: 55% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
     top: 72% !important; left: 50% !important; width: 70% !important;
@@ -4271,7 +4271,7 @@ body:has(.app-shell.page-timekeeper),
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
     top: 25% !important;
     left: calc(100% + clamp(16px, 2vw, 40px)) !important;
-    width: clamp(310px, 27vw, 520px) !important;
+    width: min(23vw, 440px) !important;
     height: clamp(340px, 45dvh, 430px) !important;
     transform: none !important;
   }
