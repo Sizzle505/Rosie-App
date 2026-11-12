@@ -158,3 +158,100 @@
 @media(prefers-reduced-motion:reduce){
   .enemy-bolt{transition:none!important}
 }
+
+/* Cosmic Odyssey campaign art direction - original reused space and character artwork. */
+.cosmic-top{
+  min-height:86px;overflow:hidden;isolation:isolate;
+  background:
+    linear-gradient(90deg,#140a35c9 0%,#151136d5 19%,#0a1938b8 49%,#1d0b31df 82%,#110b29e3),
+    url('assets/meteor.webp') center 18% / cover no-repeat;
+  border:2px solid #edbd6a;
+  box-shadow:inset 0 0 0 2px #fff2b829,inset 0 7px 20px #111037aa,0 4px 18px #7c45958a;
+}
+.cosmic-top::before{
+  content:"";position:absolute;inset:5px 6px;z-index:-1;pointer-events:none;
+  border-top:1px solid #f8d9918c;border-bottom:1px solid #a8744880;
+  background:radial-gradient(ellipse at 50% 100%,#f8a96b25,transparent 54%);
+}
+.cosmic-top::after{
+  content:"✦";position:absolute;right:78px;top:50%;transform:translateY(-50%);
+  color:#fcd591;opacity:.72;text-shadow:0 0 13px #ffe498;pointer-events:none;
+}
+.banner-ship{
+  position:absolute;left:82px;bottom:-21px;width:195px;height:118px;opacity:.97;pointer-events:none;
+  filter:drop-shadow(0 3px 10px #02071dc0) drop-shadow(0 0 10px #ffad467a);
+}
+.banner-ship img{display:block;width:100%;height:100%;object-fit:contain}
+.cosmic-brand{position:relative;z-index:3;max-width:70%;text-shadow:0 2px 8px #120828}
+.cosmic-brand h1{
+  font-size:clamp(19px,2.5vw,32px);letter-spacing:1.6px;
+  color:#ffe0a4;-webkit-text-stroke:.3px #ffd990;
+  text-shadow:0 1px #a04b29,0 3px #2d0c32,0 0 19px #ffc77281;
+}
+.brand-kicker{font-size:9px;letter-spacing:1.8px;color:#ffd09f}
+.banner-subtitle{display:block;margin-top:1px;font:700 8px Arial,sans-serif;letter-spacing:2.5px;color:#b7c6fb}
+.scene-corner,.pause-corner{z-index:5}
+.cosmic-hud{width:min(100%,1220px)}
+.hud-stat.stage-stat b{font-size:clamp(14px,1.5vw,20px);color:#8cdfff}
+.cosmic-app[data-scene='nebula']{
+ background:linear-gradient(#090a28a8,#090d28b5),url('assets/meteor.webp') center 40% / cover no-repeat;
+}
+.board[data-scene='nebula']{
+ background:linear-gradient(#0609274f,#0a0c245a),url('assets/meteor.webp') center / cover no-repeat;
+}
+.cosmic-app[data-scene='lunar']{
+ background:linear-gradient(#0d1028b5,#101d3b9a),url('assets/lunar.webp') center / cover no-repeat;
+}
+.board[data-scene='lunar']{
+ background:linear-gradient(#07152842,#060d254f),url('assets/lunar.webp') center / cover no-repeat;
+}
+.board.lunar-maze .cell.wall{
+  background:linear-gradient(155deg,#465a80e6 0%,#1c304de9 43%,#101e3ceb 56%,#4b5177df);
+  border-color:#91caff7a;
+  box-shadow:inset 0 0 2px #b6e4eacc,inset 0 0 8px #071a44;
+}
+.board.lunar-maze .cell.wall::before{
+  background:radial-gradient(circle,#d7e5ff92,#7a9acd65 35%,transparent 70%);
+}
+.board.lunar-maze .cell.lunar-machinery::after{
+  content:"";position:absolute;left:23%;right:23%;top:42%;height:14%;border-radius:4px;
+  background:linear-gradient(90deg,#68fefc80,#f0dca7aa,#87c7ff90);
+  box-shadow:0 0 6px #64dfffb3;
+}
+.board.lunar-maze .cell.floor{
+  background:linear-gradient(125deg,#b4d9ef19,#06203a1c);
+  box-shadow:inset 0 0 0 1px #8bdbff54;
+}
+.board.lunar-maze .cell.lunar-deck::after{
+  content:"";position:absolute;inset:19%;border:1px solid #a8e5e84d;border-radius:18%;
+  background:radial-gradient(circle at center,#b5d5ff1e,transparent 65%);
+  pointer-events:none;
+}
+.board .cell.nebula-glow::after{
+ content:"";position:absolute;inset:19%;border-radius:50%;
+ background:radial-gradient(circle,#f9bb8150,transparent 70%);pointer-events:none;
+}
+.board-frame{border-color:#e0ae5c}
+.board.lunar-maze ~ .veil[data-scene='lunar'],.veil[data-scene='lunar']{
+ background:linear-gradient(#061328d5,#12223add),url('assets/lunar.webp') center/cover no-repeat;
+}
+.rocket-projectile img{display:block;width:100%;height:100%;object-fit:contain}
+.rocket-projectile{filter:drop-shadow(0 0 10px #ffcd7b) drop-shadow(-8px 0 12px #fb5522)}
+.mission-rosie{width:min(80%,295px);height:min(21dvh,160px)}
+.mission-card{border-color:#f8d495}
+@media(max-width:780px){
+ .cosmic-top{min-height:63px;padding-left:40px;padding-right:43px}
+ .banner-ship{left:28px;bottom:-11px;width:80px;height:60px;opacity:.26}
+ .cosmic-top::after{display:none}
+ .cosmic-brand{max-width:94%}
+ .cosmic-brand h1{font-size:clamp(13px,3.9vw,22px);letter-spacing:.15px}
+ .banner-subtitle{font-size:6px;letter-spacing:1.1px}
+ .brand-kicker{font-size:6px;letter-spacing:.7px}
+ .hud-stat.stage-stat{flex:.65}
+ .hud-stat.stage-stat b{font-size:12px}
+}
+@media(max-width:365px){
+ .hud-stat.stage-stat small{font-size:7px}
+ .cosmic-brand h1{font-size:13px}
+ .banner-subtitle{display:none}
+}
