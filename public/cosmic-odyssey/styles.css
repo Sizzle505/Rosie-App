@@ -104,8 +104,9 @@
 }
 .shield-aura{
   transition:left 170ms ease-out,top 170ms ease-out,opacity 160ms ease-out;
-  z-index:14;
+  z-index:11; /* Behind Rosie's artwork: the bubble is visible without covering her face. */
 }
+.shield-aura.active{opacity:.83}
 .effect.explosion{animation-duration:.64s}
 @media(prefers-reduced-motion:reduce){
   .sprite,.shield-aura{transition-duration:0ms!important}
