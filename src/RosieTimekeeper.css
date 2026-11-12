@@ -4269,7 +4269,7 @@ body:has(.app-shell.page-timekeeper),
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
     top: 66% !important;
     width: 70% !important;
-    left: 15% !important;
+    left: 50% !important;
   }
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
