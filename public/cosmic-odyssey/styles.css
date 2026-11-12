@@ -23,3 +23,92 @@
 .effect.spark{z-index:26}
 @media(max-width:620px){.cosmic-top{padding-left:44px;padding-right:44px}.scene-corner{left:5px;width:32px;height:32px;padding:4px;justify-content:center}.scene-corner small{display:none}.brand-kicker{letter-spacing:1px;font-size:7px}.cosmic-brand h1{font-size:clamp(13px,3.7vw,19px)}}
 @media(max-height:670px){.scene-corner{height:30px}.cosmic-top{padding-left:43px;padding-right:45px}}
+
+/* Prototype motion polish - original approved artwork, no generated or substituted assets. */
+.sprite{
+  object-fit:unset;
+  transition:transform var(--step-ms,164ms) cubic-bezier(.22,.6,.3,1);
+  will-change:transform;
+  contain:layout style;
+}
+.sprite-art{
+  display:block;width:100%;height:100%;object-fit:contain;
+  transform-origin:50% 52%;pointer-events:none;
+  animation:cosmic-float var(--hover-period,1.2s) ease-in-out infinite;
+}
+.sprite.rosie{--step-ms:170ms;--hover-period:1.1s}
+.sprite.fiend.jett{--hover-period:.77s}
+.sprite.fiend.chip{--hover-period:1.32s}
+.sprite.fiend.kitty{--hover-period:1.18s}
+@keyframes cosmic-float{
+  0%,100%{transform:translateY(1px) scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
+  50%{transform:translateY(-2px) scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
+}
+.sprite.rosie .sprite-art{filter:drop-shadow(0 1px 5px #eebd5b55)}
+.sprite.fiend.jett .sprite-art{filter:drop-shadow(0 0 5px #bd79f17a)}
+.sprite.fiend.chip .sprite-art{filter:drop-shadow(0 0 5px #80e7b177)}
+.sprite.fiend.kitty .sprite-art{filter:drop-shadow(0 0 5px #ff77d777)}
+.sprite.fiend.defeated{z-index:21;pointer-events:none;transition:none}
+.sprite.fiend.defeated .sprite-art{transform-origin:50% 50%;filter:drop-shadow(0 0 9px #ffbf65)}
+.sprite.fiend.defeat-jett .sprite-art{animation:cosmic-jett-defeat 1.28s ease-in forwards}
+.sprite.fiend.defeat-chip .sprite-art{animation:cosmic-chip-defeat 1.24s ease-in-out forwards}
+.sprite.fiend.defeat-kitty .sprite-art{animation:cosmic-kitty-defeat 1.36s ease-in forwards}
+@keyframes cosmic-jett-defeat{
+  0%{opacity:1;transform:scale(1) rotate(0deg);filter:brightness(1.7) drop-shadow(0 0 12px #d6aeff)}
+  24%{opacity:1;transform:translateY(-9px) rotate(-18deg);filter:brightness(2) drop-shadow(0 0 14px #d6aeff)}
+  48%{opacity:1;transform:translateY(2px) rotate(17deg)}
+  100%{opacity:0;transform:translate(-16px,36px) rotate(-125deg) scale(.37)}
+}
+@keyframes cosmic-chip-defeat{
+  0%{opacity:1;transform:rotate(0) scale(1);filter:brightness(1.6) drop-shadow(0 0 12px #95ffc8)}
+  22%{opacity:1;transform:translateY(-12px) rotate(35deg) scale(1.09)}
+  45%{opacity:1;transform:translateY(-5px) rotate(-35deg)}
+  75%{opacity:.8;transform:translateY(6px) rotate(190deg) scale(.73)}
+  100%{opacity:0;transform:translateY(26px) rotate(400deg) scale(.2)}
+}
+@keyframes cosmic-kitty-defeat{
+  0%{opacity:1;transform:translate(0,0) rotate(0) scale(1);filter:brightness(2) drop-shadow(0 0 15px #ff80d7)}
+  28%{opacity:1;transform:translate(-8px,3px) rotate(-9deg)}
+  56%{opacity:.9;transform:translate(17px,-8px) rotate(9deg) scale(.95)}
+  100%{opacity:0;transform:translate(90px,-45px) rotate(28deg) scale(.38)}
+}
+.sprite.fiend.defeat-jett::after,.sprite.fiend.defeat-chip::after,.sprite.fiend.defeat-kitty::after{
+  content:"";position:absolute;z-index:-1;left:25%;top:18%;width:58%;height:58%;
+  border-radius:50%;filter:blur(8px);pointer-events:none;
+  background:radial-gradient(circle,#fff2d2b9,#ac5efc75,transparent 72%);
+  animation:cosmic-defeat-flare .95s ease-out forwards;
+}
+.sprite.fiend.defeat-chip::after{background:radial-gradient(circle,#caffe2b5,#2fff9a72,transparent 72%)}
+.sprite.fiend.defeat-kitty::after{background:radial-gradient(circle,#fff4dbaa,#ff6da77a,transparent 72%)}
+@keyframes cosmic-defeat-flare{0%{opacity:.2;transform:scale(.4)}35%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(2)}}
+.board{
+  background-image:linear-gradient(#050d2180,#060b1b75),url('assets/nebula.webp');
+  background-size:cover;background-position:center center;
+}
+.board[data-scene='lunar']{
+  background-image:linear-gradient(#07112360,#060a1c62),url('assets/lunar.webp');
+}
+.cell.floor{
+  background:linear-gradient(135deg,#07112623,#060b1c15);
+  box-shadow:inset 0 0 0 1px #4fc7fa31;
+}
+.cell.wall{
+  background:linear-gradient(150deg,#1d2855ea,#101c39e8 50%,#080e27ec);
+  box-shadow:inset 0 0 2px 1px #ddb05b73,inset 0 0 6px #010315;
+}
+.cosmic-app[data-scene='nebula']{
+  background-image:linear-gradient(180deg,#09102bb8,#0e1032a8),url('assets/nebula.webp');
+}
+.cosmic-app[data-scene='lunar']{
+  background-image:linear-gradient(180deg,#0b1530aa,#0e1334ba),url('assets/lunar.webp');
+}
+.shield-aura{
+  transition:left 170ms ease-out,top 170ms ease-out,opacity 160ms ease-out;
+  z-index:14;
+}
+.effect.explosion{animation-duration:.64s}
+@media(prefers-reduced-motion:reduce){
+  .sprite,.shield-aura{transition-duration:0ms!important}
+  .sprite-art{animation:none!important;transform:scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
+  .sprite.fiend.defeated .sprite-art{animation:cosmic-defeat-flare .25s forwards!important}
+}
