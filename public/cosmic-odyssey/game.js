@@ -7,6 +7,17 @@
  const asset = name => window.COSMIC_ASSETS?.[name] || `assets/${name}.webp`;
  const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message');
  const DIRS={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]};
+ // Standalone, approved image assets imported from the earlier Rosie/Fiend batches.
+ const EXTRA_ART=[
+  'rosie-cruise','rosie-bank-left','rosie-bank-right','rosie-dodge','rosie-boost',
+  'rosie-laser','rosie-rocket','chip-turn','chip-ascent','chip-rear','chip-dash',
+  'chip-fire','chip-stun','jett-retreat','kitty-retreat','laser-bolt'
+ ];
+ // Preload high-impact pose transitions to prevent a blank sprite on the first attack/defeat.
+ for(const id of ['rosie-cruise','rosie-laser','rosie-rocket','chip-stun','jett-retreat','kitty-retreat']){
+  const img=new Image();img.src=asset(id);
+ }
+
  const ENEMY_INFO=[
   {id:'jett',name:'Jett Scroundrel',hp:1,speed:510,kind:'patrol',points:150},
   {id:'chip',name:'Chip Scurrio',hp:1,speed:465,kind:'patrol',points:175},
@@ -80,6 +91,36 @@
     art.style.setProperty('--bank',dir==='up'?'-5deg':dir==='down'?'4deg':'0deg');
   }
  }
+ function movementArt(dir,turn=false){
+  if(dir==='up')return player.straightSteps%3===2?'rosie-rear':'rosie-up';
+  if(dir==='down')return 'rosie-front';
+  if(turn)return dir==='left'?'rosie-bank-left':'rosie-bank-right';
+  return player.straightSteps>=4?'rosie-boost':'rosie-cruise';
+ }
+ function playerPose(dir,turn,now){
+  if(!player||now<(player.actionUntil||0))return;
+  const state=movementArt(dir,turn);
+  setSprite(player,state);
+  if(turn&&(dir==='left'||dir==='right')){
+   const playId=sessionId,stamp=now;
+   setTimeout(()=>{
+    if(playId===sessionId&&player&&phase==='playing'&&
+       player.lastMoveAt===stamp&&performance.now()>=(player.actionUntil||0)){
+      setSprite(player,'rosie-cruise');
+    }
+   },230);
+  }
+ }
+ function playAttackPose(type){
+  const sid=sessionId;
+  player.actionUntil=performance.now()+460;
+  setSprite(player,type==='laser'?'rosie-laser':'rosie-rocket');
+  setTimeout(()=>{
+   if(sid===sessionId&&player&&phase==='playing'){
+    player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));
+   }
+  },470);
+ }
  function setSprite(obj,name){
   const art=obj?.el?.spriteArt;
   if(art&&art.dataset.asset!==name){art.src=asset(name);art.dataset.asset=name;}
@@ -106,7 +147,7 @@
  function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),type==='explosion'?700:440);}
  function sound(freq=480,duration=.07,shape='sine'){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!sound.context)sound.context=new C();const ctx=sound.context,o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.value=freq;g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);}catch{}}
  function say(text){message.textContent=text;}
- function ui(){ $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').textContent='♥ '.repeat(lives).trim()||'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
+ function ui(){ $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
  function addSprite(name,x,y,css){
   const el=document.createElement('div');el.className=`sprite ${css}`;el.setAttribute('aria-hidden','true');
   const art=document.createElement('img');art.src=asset(name);art.alt='';art.draggable=false;art.className='sprite-art';art.dataset.asset=name;
@@ -133,8 +174,8 @@
   score=0;ammo=0;lives=3;got=0;deadCount=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(6900+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
-  player={x:spawn.x,y:spawn.y,spawn};entities=ENEMY_INFO.map((a,i)=>({...a,spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
-  createBoard();player.el=addSprite('rosie',player.x,player.y,'rosie');for(const e of entities)e.el=addSprite(e.id,e.x,e.y,'fiend '+e.id);
+  player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
+  createBoard();player.el=addSprite('rosie-cruise',player.x,player.y,'rosie');for(const e of entities)e.el=addSprite(e.id,e.x,e.y,'fiend '+e.id);
   populate(310+level*37);const patrols=[[],[]];for(const [i,e] of entities.entries()){
    if(i===2)continue;const nearby=[...itemAt.keys()].filter(k=>itemAt.get(k).kind==='treat').map(k=>{const[x,y]=k.split(',').map(Number);return{x,y};}).filter(p=>dist(p,e.spawn)<Math.max(9,cols*.7));
    nearby.sort((a,b)=>Math.atan2(a.y-e.y,a.x-e.x)-Math.atan2(b.y-e.y,b.x-e.x));
@@ -166,9 +207,11 @@
   }
   const vec=DIRS[dir],nx=player.x+vec[0],ny=player.y+vec[1];
   if(!open(nx,ny))return false;
+  const changedDirection=lastFacing!==dir;
+  player.straightSteps=changedDirection?0:(player.straightSteps||0)+1;
   nextMoveAt=now+STEP_MS;lastFacing=dir;
-  player.x=nx;player.y=ny;
-  setSprite(player,dir==='up'?'rosie-up':dir==='down'?'rosie-front':'rosie');
+  player.x=nx;player.y=ny;player.lastMoveAt=now;
+  playerPose(dir,changedDirection,now);
   position(player);positionShield();pick();collide();
   if(player.x===exitPos.x&&player.y===exitPos.y){
     if(got>=target&&deadCount===3){score+=1000;enter('win','Captain Rosie has secured the treats and defeated the Fiends. The portal is clear.','FLY AGAIN');sound(1400,.4);}
@@ -181,14 +224,14 @@
   const now=performance.now();wantFacing=dir;pendingStep=true;pendingUntil=now+Math.max(400,STEP_MS*2);
   if(advance(now,dir))pendingStep=false;
  }
- function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player)setSprite(player,lastFacing==='up'?'rosie-up':lastFacing==='down'?'rosie-front':'rosie');},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
+ function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
   const sp=player.spawn;player.x=sp.x;player.y=sp.y;position(player);positionShield();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
  function collide(){for(const e of entities)if(!e.killed&&e.health>0&&e.x===player.x&&e.y===player.y){damage(e);break;}}
  function fire(type){
   if(phase!=='playing')return;
   const cost=type==='laser'?1:2;
   if(ammo<cost){say(`Need ${cost} treat${cost>1?'s':''} to fire ${type}.`);sound(180,.04);return;}
-  ammo-=cost;ui();
+  ammo-=cost;ui();playAttackPose(type);
   const [dx,dy]=DIRS[lastFacing],origin={x:player.x,y:player.y};
   let cx=origin.x,cy=origin.y;const traversed=[];
   while(open(cx+dx,cy+dy)){cx+=dx;cy+=dy;traversed.push({x:cx,y:cy});if(traversed.length>30)break;}
@@ -198,6 +241,14 @@
   const fireAngle=lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0;
   effect('muzzle',origin,1.7);
   if(type==='laser'){
+    // The independent original red bolt asset is drawn on top of the laser beam.
+    const bolt=document.createElement('img');bolt.className='laser-bolt-projectile';
+    bolt.src=asset('laser-bolt');bolt.alt='';bolt.draggable=false;
+    const span=Math.max(tile*.7,dist(origin,impact)*tile);
+    bolt.style.width=Math.max(tile*2.1,span)+'px';bolt.style.height=tile*1.1+'px';
+    bolt.style.left=((origin.x+.5)*tile)+'px';bolt.style.top=((origin.y+.5)*tile)+'px';
+    bolt.style.transform=`translateY(-50%) rotate(${fireAngle}deg)`;
+    board.append(bolt);setTimeout(()=>bolt.remove(),225);
     effect('beam',origin,1);
     const beam=board.lastChild;
     const distance=Math.max(tile*.65,dist(origin,impact)*tile);
@@ -239,16 +290,16 @@
   effect('spark',e,2.2);sound(360,.09,'square');
   if(e.health<=0){
     e.killed=true;deadCount++;score+=e.points;
-    // Individual animated defeats, using the existing Fiend art and effects - no additional images.
-    setSprite(e,e.id==='chip'?'chip-attack':e.id+'-attack');
+    // Actual standalone defeat art - Jett's failing jetpack, Chip's stunned UFO, Kitty's smoke-filled retreat.
+    setSprite(e,e.id==='jett'?'jett-retreat':e.id==='kitty'?'kitty-retreat':'chip-stun');
     e.el.classList.add('defeated','defeat-'+e.id);
     effect('explosion',e,e.id==='kitty'?2.4:1.85);
     setTimeout(()=>e.el?.remove(),1450);
     popup(`+${e.points} ${e.name.split(' ')[0]} DOWN`,e);
     say(`${e.name} defeated! ${3-deadCount} Fiends remain.`);
   }else{
-    setSprite(e,'kitty-attack');
-    setTimeout(()=>{if(!e.killed)setSprite(e,e.id);},460);
+    setSprite(e,e.id==='chip'?'chip-stun':e.id+'-attack');
+    const hurtId=sessionId;setTimeout(()=>{if(hurtId===sessionId&&!e.killed)setSprite(e,e.id);},460);
     popup(`${e.name.split(' ')[0]} ♥${e.health}`,e);
     say(`${e.name} - ${e.health} HP left.`);
   }
@@ -263,11 +314,20 @@
   }
   let direction=bfs(e,goal);if(!direction){const n=neighbors(e);if(n.length)direction=n[Math.floor(Math.random()*n.length)].dir;}
   if(direction){
+    const changedDirection=e.lastDir&&e.lastDir!==direction;
     e.x+=DIRS[direction][0];e.y+=DIRS[direction][1];e.lastDir=direction;
     e.el.style.setProperty('--step-ms',Math.min(330,Math.max(175,interval*.7))+'ms');
     if(dist(e,player)<3&&Math.floor(now/700)%3===0){
-      setSprite(e,e.id+'-attack');e.until=now+420;
-    }else if(now>e.until)setSprite(e,e.id);
+      setSprite(e,e.id==='chip'?'chip-fire':e.id+'-attack');e.until=now+420;
+    }else if(now>e.until){
+      if(e.id==='chip'){
+        const sprite=interval<330?'chip-dash':
+          direction==='up'?'chip-ascent':
+          direction==='down'?'chip-rear':
+          changedDirection?'chip-turn':'chip';
+        setSprite(e,sprite);
+      }else setSprite(e,e.id);
+    }
     position(e);collide();
   }
  }
