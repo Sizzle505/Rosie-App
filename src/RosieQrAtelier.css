@@ -1097,10 +1097,10 @@
   }
   .app-shell.page-qr-atelier .qa-scene::before { content: none; }
   .app-shell.page-qr-atelier .qa-hero { grid-column: 1 / -1; grid-row: 1; height: 150px; }
-  .app-shell.page-qr-atelier .qa-title { top: 20px; right: 7%; width: min(37vw, 510px); }
+  .app-shell.page-qr-atelier .qa-title { top: 10px; right: 7%; width: min(37vw, 510px); }
   .app-shell.page-qr-atelier .qa-panel {
     grid-column: 2; grid-row: 2;
-    width: min(82%, 650px); margin: 80px auto 8px;
+    width: min(82%, 650px); margin: 68px auto 8px;
   }
   .app-shell.page-qr-atelier .qa-panel-inner { padding: 8px 12px 8px; }
   .app-shell.page-qr-atelier .qa-panel h2 { margin-bottom: 10px; }

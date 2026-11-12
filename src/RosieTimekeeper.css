@@ -4296,6 +4296,6 @@ body:has(.app-shell.page-timekeeper),
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    width: clamp(270px, 25vw, 350px) !important;
+    width: min(23vw, 280px) !important;
   }
 }
