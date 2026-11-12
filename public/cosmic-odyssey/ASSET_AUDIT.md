@@ -9,7 +9,7 @@
   - `Captain-Rosie-Cosmic-Odyssey-UI-Batch-4.zip` (5,493,705 bytes)
   - `Captain-Rosie-Cosmic-Odyssey-Playable-Prototype.zip`.
 - The ZIPs' existence and sizes were verified from Dropbox metadata. Their internal member lists could **not** be retrieved by the connected Dropbox text interface, which has a 5 MB extraction limit. Do not treat a ZIP's presence as proof that each member was inspected or imported.
-- The Cosmic Odyssey development branch had **23** optimized gameplay image assets before this pass. It now includes **16 additional standalone optimized artwork files** imported from the project's verified original artwork, totaling **39 image assets** under `public/cosmic-odyssey/assets/`.
+- The Cosmic Odyssey development branch had **23** optimized gameplay image assets before this pass. It now includes **19 additional standalone optimized artwork files** imported from the project's verified original artwork, totaling **42 image assets** under `public/cosmic-odyssey/assets/`.
 - These are independent images, **not crops from a composite sprite sheet**. They are optimized WebP derivatives of the full source PNGs. Keep original masters in their archived packages.
 
 ## New art connected to gameplay
@@ -35,7 +35,7 @@
 ## Outstanding assets already produced but not yet individually recovered from ZIPs
 - Jett's individual turning, ascent, rear-flight, windup, stun states and purple plasma/exhaust overlays.
 - Kitty's alternate navigation, windup, stun, boost, twin-laser and thruster overlays.
-- Additional Fiend impact, charge and stun effects; Chip's separate emerald projectiles.
+- Additional Fiend impact, charge and stun effects; original Jett purple and Kitty pink projectile images remain to be recovered.
 - Additional wall-junction and floor-tile art, decorative hazards, power-bone/cheese pickup variants, optional result/header art.
 - Rosie damage/respawn/victory transition frames and alternate visual effects.
 These are candidates for **recovery and integration**, not necessarily candidates for generating anew. Verify actual ZIP members and quality before importing.
@@ -45,3 +45,15 @@ These are candidates for **recovery and integration**, not necessarily candidate
 - Health, scoring, gameplay rules, and hitboxes are separate from image bounds.
 - Validate at iPhone scale for visual size and corridor occlusion before merging.
 - Do not merge this experimental game into the main Captain games without playtesting.
+
+## Follow-up integration - November 12, 2026
+Three more original **standalone** assets were imported from verified source images and optimized as WebP, without extracting from contact sheets:
+- `assets/chip-bolt.webp` - Emerald Ringed Energy Bolt - image-backed projectile fired by Chip
+- `assets/rosie-projectile.webp` - Captain Rosie's Golden Paw Rocket - image-backed rocket now travels down the corridor and explodes
+- `assets/meteor.webp` - Meteor Mischief Golden Cosmic Frame - selectable third playtest backdrop
+
+Prototype gameplay additionally supports telegraphed Fiend ranged attacks. Jett and Kitty currently use **temporary colored projectile styling**, not recovered standalone projectile masters; do not classify those two effects as production-complete. Projectiles follow the open tile grid, respect the protection shield, and can hit Rosie either when they enter her square or when she moves into theirs.
+
+**Verification:** JavaScript passed syntax checks. Simulated mobile 11×15 and desktop 17×11 tests confirmed the original Chip projectile asset, shield-blocked collision, unshielded damage, and Meteor selection. The connected Vercel preview was reported READY. Real iPhone visual and input testing is still outstanding.
+
+**Archive limitation:** The connected Dropbox provider confirms the source ZIPs exist but its text extraction interface rejects ZIPs larger than 5 MB. A signed download was requested but the working container cannot retrieve its host. Therefore the full member-by-member ZIP audit cannot yet be certified. Continue recovering source-quality Fiend assets when accessible; never replace them with contact-sheet crops.
