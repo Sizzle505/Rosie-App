@@ -11,7 +11,7 @@
  const EXTRA_ART=[
   'rosie-cruise','rosie-bank-left','rosie-bank-right','rosie-dodge','rosie-boost',
   'rosie-laser','rosie-rocket','chip-turn','chip-ascent','chip-rear','chip-dash',
-  'chip-fire','chip-stun','jett-retreat','kitty-retreat','laser-bolt'
+  'chip-fire','chip-stun','jett-retreat','kitty-retreat','laser-bolt','chip-bolt','rosie-projectile'
  ];
  // Preload high-impact pose transitions to prevent a blank sprite on the first attack/defeat.
  for(const id of ['rosie-cruise','rosie-laser','rosie-rocket','chip-stun','jett-retreat','kitty-retreat']){
@@ -145,13 +145,13 @@
   el.classList.toggle('active',active);
  }
  function changeScene(next){
-  scene=next==='lunar'?'lunar':'nebula';
+  scene=['nebula','lunar','meteor'].includes(next)?next:'nebula';
   board.dataset.scene=scene;
-  const app=document.getElementById('cosmic-app');if(app)app.dataset.scene=scene;
-  const label=$('scene-name');if(label)label.textContent=scene==='nebula'?'NEBULA':'LUNAR';
-  $('level').textContent=`LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].name}`;
-  const kicker=$('stage-kicker');if(kicker)kicker.textContent=`THE HOUSE OF ROSIE · LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].name}`;
- }
+  const app=$('cosmic-app');if(app)app.dataset.scene=scene;
+  const labels={nebula:['NEBULA','NEBULA PASSAGE'],lunar:['LUNAR','LUNAR OUTPOST'],meteor:['METEOR','METEOR MISCHIEF']};
+  const label=$('scene-name');if(label)label.textContent=labels[scene][0];
+  $('level').textContent=labels[scene][1];
+}
  function popup(text,p){const el=document.createElement('div');el.className='popup-message';el.textContent=text;el.style.left=`${(p.x+.2)*tile}px`;el.style.top=`${(p.y-.1)*tile}px`;board.append(el);setTimeout(()=>el.remove(),990);}
  function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),type==='explosion'?700:440);}
  function sound(freq=480,duration=.07,shape='sine'){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!sound.context)sound.context=new C();const ctx=sound.context,o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.value=freq;g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);}catch{}}
@@ -323,9 +323,9 @@
   }else{
     sound(320,.18,'sawtooth');say('Rocket launched!');
     const rocket=document.createElement('span');rocket.className='rocket-projectile';
-    rocket.innerHTML=`<svg viewBox="0 0 112 52" aria-hidden="true"><defs><linearGradient id="rocketMetal" x2="0" y2="1"><stop stop-color="#fff8d6"/><stop offset=".47" stop-color="#f8ead1"/><stop offset=".52" stop-color="#cdb8a5"/><stop offset="1" stop-color="#fef0d5"/></linearGradient></defs><path d="M20 19 3 8 8 23 2 41 23 34" fill="#f8ae2c" stroke="#ffea99" stroke-width="2"/><path d="M24 18 13 4 43 16 43 36 13 49 24 32" fill="#b72434" stroke="#f8c866" stroke-width="2"/><path d="M30 12H79Q95 16 106 26Q95 37 79 40H30Z" fill="url(#rocketMetal)" stroke="#dba84e" stroke-width="3"/><path d="M51 13H65V39H51Z" fill="#173965"/><path d="M65 13H76V39H65Z" fill="#b82538"/><path d="M80 14Q98 19 106 26Q98 33 80 38" fill="#c52b3b" stroke="#ffe4a0" stroke-width="2"/><path d="M21 19Q11 26 21 33L0 26Z" fill="#fff3a0" opacity=".95"/></svg>`;
-    const size=tile*1.65,angle=fireAngle,ms=Math.min(900,Math.max(180,dist(origin,impact)*92));
-    rocket.style.width=size+'px';rocket.style.height=size*.55+'px';
+    rocket.innerHTML=`<img src="${asset('rosie-projectile')}" alt="" draggable="false">`;
+    const size=tile*2.25,angle=fireAngle,ms=Math.min(900,Math.max(180,dist(origin,impact)*92));
+    rocket.style.width=size+'px';rocket.style.height=size*.78+'px';
     rocket.style.left=((origin.x+.5)*tile)+'px';rocket.style.top=((origin.y+.5)*tile)+'px';
     rocket.style.transform=`translate(-50%,-50%) rotate(${angle}deg)`;
     board.append(rocket);
@@ -445,7 +445,7 @@
     if(Math.max(Math.abs(dx),Math.abs(dy))<9)return;
     requestMove(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');
   },{passive:true});
-  $('scene-toggle').addEventListener('click',()=>changeScene(scene==='nebula'?'lunar':'nebula'));
+  $('scene-toggle').addEventListener('click',()=>changeScene(scene==='nebula'?'lunar':scene==='lunar'?'meteor':'nebula'));
   $('laser').addEventListener('click',()=>fire('laser'));
   $('rocket').addEventListener('click',()=>fire('rocket'));
   $('pause-top').addEventListener('click',pause);
