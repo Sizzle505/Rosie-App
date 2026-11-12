@@ -18,6 +18,10 @@
   const img=new Image();img.src=asset(id);
  }
 
+ const LEVELS=[
+  {name:'NEBULA PASSAGE',tagline:'METEOR MISCHIEF',scene:'nebula',seed:6900,target:18,speed:1,accent:'nebula'},
+  {name:'LUNAR OUTPOST',tagline:'THE MOONLIGHT GAUNTLET',scene:'lunar',seed:12263,target:22,speed:.87,accent:'lunar'}
+ ];
  const ENEMY_INFO=[
   {id:'jett',name:'Jett Scroundrel',hp:1,speed:510,kind:'patrol',points:150},
   {id:'chip',name:'Chip Scurrio',hp:1,speed:465,kind:'patrol',points:175},
@@ -77,7 +81,7 @@
  function position(obj){
   if(!obj?.el)return;
   // Normalize by painted ship silhouette rather than canvas dimensions.
-  const dims=obj===player?[3.42,2.45]:obj.id==='jett'?[2.43,2.15]:obj.id==='chip'?[2.55,2.13]:[2.55,1.95];
+  const dims=obj===player?[4.05,2.87]:obj.id==='jett'?[2.43,2.15]:obj.id==='chip'?[2.55,2.13]:[2.55,1.95];
   const px=tile*dims[0],py=tile*dims[1];
   // Keep the whole spacecraft inside the frame even when the logical position hugs an edge.
   const x=Math.max(3,Math.min(cols*tile-px-3,(obj.x+.5)*tile-px/2));
@@ -92,10 +96,12 @@
   }
  }
  function movementArt(dir,turn=false){
-  if(dir==='up')return player.straightSteps%3===2?'rosie-rear':'rosie-up';
-  if(dir==='down')return 'rosie-front';
-  if(turn)return dir==='left'?'rosie-bank-left':'rosie-bank-right';
-  return player.straightSteps>=4?'rosie-boost':'rosie-cruise';
+  // The original three-quarter cruising craft is Rosie's canonical navigation pose.
+  // Rear/front art is reserved for later dedicated sequences; never cycle it during ordinary travel.
+  if(turn&&(dir==='left'||dir==='right'))return dir==='left'?'rosie-bank-left':'rosie-bank-right';
+  if(dir==='up')return 'rosie-up';
+  if(player.straightSteps>=5&&dir==='right')return 'rosie-boost';
+  return 'rosie-cruise';
  }
  function playerPose(dir,turn,now){
   if(!player||now<(player.actionUntil||0))return;
@@ -132,7 +138,7 @@
   const el=$('cosmic-shield');
   if(!player||!el)return;
   const active=phase==='playing'&&now<protectedUntil;
-  const size=tile*3.65;
+  const size=tile*4.08;
   el.style.width=size+'px';el.style.height=size+'px';
   el.style.left=Math.max(2,Math.min(cols*tile-size-2,(player.x+.5)*tile-size/2))+'px';
   el.style.top=Math.max(2,Math.min(rows*tile-size-2,(player.y+.5)*tile-size/2))+'px';
@@ -143,13 +149,14 @@
   board.dataset.scene=scene;
   const app=document.getElementById('cosmic-app');if(app)app.dataset.scene=scene;
   const label=$('scene-name');if(label)label.textContent=scene==='nebula'?'NEBULA':'LUNAR';
-  $('level').textContent=scene==='nebula'?'NEBULA PASSAGE':'LUNAR OUTPOST';
+  $('level').textContent=`LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].name}`;
+  const kicker=$('stage-kicker');if(kicker)kicker.textContent=`THE HOUSE OF ROSIE · LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].name}`;
  }
  function popup(text,p){const el=document.createElement('div');el.className='popup-message';el.textContent=text;el.style.left=`${(p.x+.2)*tile}px`;el.style.top=`${(p.y-.1)*tile}px`;board.append(el);setTimeout(()=>el.remove(),990);}
  function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),type==='explosion'?700:440);}
  function sound(freq=480,duration=.07,shape='sine'){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!sound.context)sound.context=new C();const ctx=sound.context,o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.value=freq;g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);}catch{}}
  function say(text){message.textContent=text;}
- function ui(){ $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
+ function ui(){ const stageBadge=$('stage-badge');if(stageBadge)stageBadge.textContent=`${level} / ${LEVELS.length}`; $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
  function addSprite(name,x,y,css){
   const el=document.createElement('div');el.className=`sprite ${css}`;el.setAttribute('aria-hidden','true');
   const art=document.createElement('img');art.src=asset(name);art.alt='';art.draggable=false;art.className='sprite-art';art.dataset.asset=name;
@@ -169,14 +176,43 @@
   special.slice(7,9).forEach(p=>addPickup(p.x,p.y,'shield'));
   special.slice(9,11).forEach(p=>addPickup(p.x,p.y,'rocket'));
  }
- function createBoard(){board.innerHTML='';itemAt.clear();cells=[];for(let y=0;y<rows;y++){const row=[];for(let x=0;x<cols;x++){const cell=document.createElement('div');cell.className='cell '+(grid[y][x]?'wall':'floor');board.append(cell);row.push(cell);}cells.push(row);}
+ function createBoard(){
+  board.innerHTML='';itemAt.clear();cells=[];
+  board.classList.toggle('lunar-maze',level===2);
+  const paint=rand(8000+level*773);
+  for(let y=0;y<rows;y++){
+   const row=[];
+   for(let x=0;x<cols;x++){
+    const cell=document.createElement('div');
+    const isWall=grid[y][x]===1;
+    cell.className='cell '+(isWall?'wall':'floor');
+    if(level===2){
+      if(isWall && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.21)cell.classList.add('lunar-machinery');
+      if(!isWall && paint()<.16)cell.classList.add('lunar-deck');
+    }else if(!isWall&&paint()<.12)cell.classList.add('nebula-glow');
+    board.append(cell);row.push(cell);
+   }cells.push(row);
+  }
   const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';e.src=asset('portal');e.alt='Exit portal';board.append(e);positionExit();}
- function enter(status,text,buttonText){if(status==='paused')pausedAt=performance.now();phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;veil.classList.remove('hidden');$('veil-title').textContent=status==='win'?'MISSION COMPLETE':status==='lose'?'MISSION FAILED':status==='paused'?'MISSION PAUSED':'COSMIC ODYSSEY';$('veil-msg').textContent=text;$('start').textContent=buttonText;ui();}
- function init(){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
-  score=0;ammo=0;lives=3;got=0;deadCount=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
-  maze(6900+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
+ function enter(status,text,buttonText){
+  if(status==='paused')pausedAt=performance.now();
+  phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
+  veil.classList.remove('hidden');
+  $('veil-title').textContent=status==='win'?'ODYSSEY COMPLETE':
+    status==='level-clear'?'NEBULA CLEARED':
+    status==='lose'?'MISSION FAILED':
+    status==='paused'?'MISSION PAUSED':'COSMIC ODYSSEY';
+  const title=$('mission-crest');if(title)title.textContent=status==='level-clear'?
+    '✦ STAGE 02 UNLOCKED · LUNAR OUTPOST ✦':
+    `✦ LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].tagline} ✦`;
+  $('veil-msg').textContent=text;$('start').textContent=buttonText;ui();
+ }
+ function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
+  if(!carry){score=0;ammo=0;lives=3;}
+  target=LEVELS[level-1].target;got=0;deadCount=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
+  maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
-  player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
+  player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,speed:Math.round(a.speed*LEVELS[level-1].speed),spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
   createBoard();player.el=addSprite('rosie-cruise',player.x,player.y,'rosie');for(const e of entities)e.el=addSprite(e.id,e.x,e.y,'fiend '+e.id);
   populate(310+level*37);const patrols=[[],[]];for(const [i,e] of entities.entries()){
    if(i===2)continue;const nearby=[...itemAt.keys()].filter(k=>itemAt.get(k).kind==='treat').map(k=>{const[x,y]=k.split(',').map(Number);return{x,y};}).filter(p=>dist(p,e.spawn)<Math.max(9,cols*.7));
@@ -185,9 +221,24 @@
    e.patrol=picks.length?picks:[e.spawn,player.spawn];if(i===1)e.patrol.reverse();
   }
   const aura=document.createElement('img');aura.id='cosmic-shield';aura.className='shield-aura';aura.src=asset('shield');aura.alt='';aura.draggable=false;board.append(aura);
-  changeScene(scene);resize();for(const e of entities)position(e);position(player);positionShield();ui();}
- function start(){if(phase==='paused'){const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;for(const e of entities)e.next+=delta;nextMoveAt=performance.now();phase='playing';running=true;veil.classList.add('hidden');positionShield();say('Resume course.');return;}
-  level=1;init();phase='playing';running=true;protectedUntil=performance.now()+1800;veil.classList.add('hidden');positionShield();say('Launch shield active! Collect treats to arm your ship.');sound(670,.17);ui();}
+  changeScene(LEVELS[level-1].scene);resize();for(const e of entities)position(e);position(player);positionShield();ui();}
+ function start(){
+  if(phase==='paused'){
+    const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;
+    for(const e of entities)e.next+=delta;
+    nextMoveAt=performance.now();phase='playing';running=true;veil.classList.add('hidden');
+    positionShield();say('Resume course.');return;
+  }
+  const carry=phase==='level-clear'&&level<LEVELS.length;
+  level=carry?level+1:1;
+  init(carry);
+  phase='playing';running=true;
+  protectedUntil=performance.now()+2200;
+  veil.classList.add('hidden');positionShield();
+  say(carry?'Lunar Outpost! Fiends move faster. Secure the station and escape.':
+    'Nebula Passage! Collect biscuits and stop the Fiends.');
+  sound(carry?880:670,.17);ui();
+ }
  function pause(){if(phase==='playing')enter('paused','Your mission is safely paused. Resume whenever ready.','RESUME MISSION');else if(phase==='paused')start();}
  function pick(){const k=key(player.x,player.y),item=itemAt.get(k);if(!item)return;itemAt.delete(k);item.el.remove();const p={x:player.x,y:player.y};
   switch(item.kind){case'treat':got++;ammo=Math.min(8,ammo+1);score+=10;sound(720,.045);break;
@@ -195,7 +246,7 @@
   case'bone':ammo=Math.min(8,ammo+3);score+=75;protectedUntil=performance.now()+3900;popup('GOLDEN BONE +3',p);sound(1120,.16);break;
   case'rocket':ammo=Math.min(8,ammo+2);score+=25;popup('ROCKET +2',p);sound(840,.1);break;
   case'shield':protectedUntil=performance.now()+5500;popup('SHIELD!',p);sound(930,.13);break;
-  }ui();positionShield();if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say('Portal unlocked! Enter the swirling gateway!');}
+  }ui();positionShield();if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level<LEVELS.length?'Portal unlocked! Enter to reach Lunar Outpost.':'Portal unlocked! Complete the final stage.');}
  }
  // One controller owns all movement. A quick tap moves one tile; holding a key/pad repeats at STEP_MS.
  function canStep(dir){const v=DIRS[dir];return !!v&&open(player.x+v[0],player.y+v[1]);}
@@ -216,10 +267,18 @@
   playerPose(dir,changedDirection,now);
   position(player);positionShield();pick();collide();
   if(player.x===exitPos.x&&player.y===exitPos.y){
-    if(got>=target&&deadCount===3){score+=1000;enter('win','Captain Rosie has secured the treats and defeated the Fiends. The portal is clear.','FLY AGAIN');sound(1400,.4);}
+    if(got>=target&&deadCount===3){completeLevel();}
     else say(`Portal locked: ${Math.max(0,target-got)} biscuits and ${3-deadCount} Fiends remaining.`);
   }
   return true;
+ }
+ function completeLevel(){
+  if(level<LEVELS.length){
+    score+=650;enter('level-clear','Captain Rosie cleared Nebula Passage. Your score, hull, and treat charge carry forward. Lunar Outpost has a new maze, more biscuits, and faster Fiends.','ENTER LUNAR OUTPOST');
+  }else{
+    score+=1500;enter('win','Both cosmic sectors secured! Captain Rosie defeated Jett, Chip, and Kitty in Lunar Outpost and escaped with the treats.','PLAY AGAIN');
+  }
+  sound(1400,.35);ui();
  }
  function requestMove(dir){
   if(phase!=='playing'||!DIRS[dir])return;
@@ -305,7 +364,7 @@
     popup(`${e.name.split(' ')[0]} ♥${e.health}`,e);
     say(`${e.name} - ${e.health} HP left.`);
   }
-  if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say('All Fiends defeated! Reach the portal.');}
+  if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level===1?'Reach the portal for Lunar Outpost!':'Final portal unlocked - finish the Odyssey!');}
   ui();
  }
  function moveFiend(e,now){if(e.killed)return;if(now<e.next)return;let interval=e.speed;if(now<slowUntil)interval*=2.1;if(e.id==='chip'&&Math.floor(now/2600)%2===0)interval*=.62;e.next=now+interval;
@@ -394,5 +453,5 @@
   window.addEventListener('resize',()=>{if(phase==='start'&&!player){cols=innerWidth>=760&&innerWidth>innerHeight?17:11;rows=cols===17?11:15;init();}resize();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&phase==='playing')pause();});
  }
- controls();init();enter('start','Collect 18 biscuits to fuel your laser (1 treat) or rocket (2 treats). Jett and Chip patrol the treat lanes; Kitty actively hunts Rosie and takes three laser hits. Defeat all three and escape through the portal.','LAUNCH MISSION');loopId=requestAnimationFrame(tick);
+ controls();init();enter('start','Two stages: Nebula Passage and Lunar Outpost. Collect biscuits to power your laser (1 treat) or rocket (2 treats). Defeat the three Fiends, then enter each portal. Kitty takes three laser hits.','LAUNCH MISSION');loopId=requestAnimationFrame(tick);
 })();
