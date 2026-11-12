@@ -28,7 +28,7 @@
   {id:'kitty',name:'Kitty Xenovese',hp:3,speed:410,kind:'chase',points:400}
  ];
  let cols=11,rows=15,tile=26,grid=[],itemAt=new Map(),cells=[],entities=[],player=null,exitPos=null;
- let scene='nebula',running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
+ let scene='nebula',enemyShots=[],running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0;
  const pressedKeys=new Map(),STEP_MS=190;
@@ -76,7 +76,7 @@
   tile=Math.max(9,Math.floor(Math.min((innerWidth-24)/cols,freeH/rows)));
   frame.style.width=(cols*tile+6)+'px';frame.style.height=(rows*tile+6)+'px';
   board.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;board.style.gridTemplateRows=`repeat(${rows}, 1fr)`;
-  if(player){position(player);for(const ent of entities)position(ent);positionExit();positionShield();}
+  if(player){position(player);for(const ent of entities)position(ent);positionExit();positionShield();for(const shot of enemyShots)positionEnemyShot(shot);}
  }
  function position(obj){
   if(!obj?.el)return;
@@ -209,7 +209,7 @@
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
   if(!carry){score=0;ammo=0;lives=3;}
-  target=LEVELS[level-1].target;got=0;deadCount=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
+  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
   player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,speed:Math.round(a.speed*LEVELS[level-1].speed),spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
@@ -225,7 +225,7 @@
  function start(){
   if(phase==='paused'){
     const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;
-    for(const e of entities)e.next+=delta;
+    for(const e of entities){e.next+=delta;if(e.nextAttack)e.nextAttack+=delta;}for(const shot of enemyShots)shot.stepAt+=delta;
     nextMoveAt=performance.now();phase='playing';running=true;veil.classList.add('hidden');
     positionShield();say('Resume course.');return;
   }
@@ -367,6 +367,55 @@
   if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level===1?'Reach the portal for Lunar Outpost!':'Final portal unlocked - finish the Odyssey!');}
   ui();
  }
+ function positionEnemyShot(shot){
+ if(!shot.el)return;
+ const w=tile*(shot.owner==='chip'?1.42:.92),h=tile*(shot.owner==='chip'?1.05:.50);
+ shot.el.style.width=w+'px';shot.el.style.height=h+'px';
+ shot.el.style.left=((shot.x+.5)*tile-w/2)+'px';
+ shot.el.style.top=((shot.y+.5)*tile-h/2)+'px';
+ const angle=shot.dir==='left'?180:shot.dir==='up'?-90:shot.dir==='down'?90:0;
+ shot.el.style.transform=`rotate(${angle}deg)`;
+}
+ function removeEnemyShot(shot){
+ shot.el?.remove();
+ const i=enemyShots.indexOf(shot);if(i>=0)enemyShots.splice(i,1);
+}
+ function spawnEnemyShot(e,dir,now){
+ if(phase!=='playing'||e.killed)return;
+ const id=e.id,el=id==='chip'?document.createElement('img'):document.createElement('span');
+ if(id==='chip')el.src=asset('chip-bolt');
+ el.className=`enemy-bolt enemy-bolt-${id}`;
+ el.setAttribute('aria-hidden','true');
+ const shot={owner:id,source:e,dir,x:e.x,y:e.y,el,stepAt:now+145,remaining:id==='kitty'?6:5};
+ board.append(el);enemyShots.push(shot);positionEnemyShot(shot);
+ setSprite(e,id==='chip'?'chip-fire':id+'-attack');
+ e.until=now+490;
+ e.nextAttack=now+(id==='chip'?3150:id==='kitty'?3750:4250);
+}
+ function maybeFiendAttack(e,now){
+ if(now<(e.nextAttack||0)||e.killed||dist(e,player)>6)return;
+ let dir=null;
+ if(e.x===player.x)dir=player.y>e.y?'down':'up';
+ else if(e.y===player.y)dir=player.x>e.x?'right':'left';
+ if(!dir)return;
+ const [dx,dy]=DIRS[dir];let x=e.x,y=e.y;
+ for(let n=0;n<dist(e,player);n++){x+=dx;y+=dy;if(!open(x,y))return;}
+ spawnEnemyShot(e,dir,now);
+}
+ function updateEnemyShots(now){
+ for(const shot of [...enemyShots]){
+  if(now<shot.stepAt)continue;
+  shot.stepAt=now+(shot.owner==='kitty'?125:155);
+  const [dx,dy]=DIRS[shot.dir],x=shot.x+dx,y=shot.y+dy;
+  if(!open(x,y)||shot.remaining<=0){removeEnemyShot(shot);continue;}
+  shot.x=x;shot.y=y;shot.remaining--;positionEnemyShot(shot);
+  if(player.x===x&&player.y===y){
+   if(now<protectedUntil){effect('spark',player,1.5);popup('SHIELDED!',player);}
+   else damage(shot.source);
+   removeEnemyShot(shot);
+  }
+ }
+}
  function moveFiend(e,now){if(e.killed)return;if(now<e.next)return;let interval=e.speed;if(now<slowUntil)interval*=2.1;if(e.id==='chip'&&Math.floor(now/2600)%2===0)interval*=.62;e.next=now+interval;
   let goal=null;if(e.kind==='chase')goal=player;
   else{let patrol=e.patrol||[];goal=patrol[e.patrolIndex%patrol.length]||player;if(goal.x===e.x&&goal.y===e.y){e.patrolIndex++;goal=patrol[e.patrolIndex%patrol.length]||player;}
@@ -391,6 +440,7 @@
     }
     position(e);collide();
   }
+  maybeFiendAttack(e,now);
  }
  function tick(now){
   loopId=requestAnimationFrame(tick);if(phase!=='playing')return;lastTick=now;
@@ -400,6 +450,7 @@
     if(advance(now,dir))pendingStep=false;
   }
   for(const e of entities)moveFiend(e,now);
+  updateEnemyShots(now);
   positionShield(now);
   player.el.style.opacity=now<protectedUntil&&Math.floor(now/220)%2===0?'.87':'1';
  }
