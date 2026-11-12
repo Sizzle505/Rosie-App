@@ -4267,14 +4267,14 @@ body:has(.app-shell.page-timekeeper),
     top: 54% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-top-controls .rtk-mode-switch {
-    top: 61% !important;
+    top: 66% !important;
     width: 70% !important;
     left: 15% !important;
   }
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    top: 70% !important;
+    top: 77% !important;
     left: 50% !important;
     width: min(650px, 92%) !important;
     height: 270px !important;

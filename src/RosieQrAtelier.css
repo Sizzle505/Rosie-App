@@ -1106,7 +1106,7 @@
   .app-shell.page-qr-atelier .qa-preview-actions { margin: -64px auto 28px; }
   .app-shell.page-qr-atelier .qa-panel {
     grid-column: 2; grid-row: 2 / span 2;
-    width: min(88%, 700px); margin: 46px auto 20px;
+    width: min(88%, 700px); margin: 145px auto 20px;
   }
   .app-shell.page-qr-atelier .qa-panel-inner { padding: 16px 14px 22px; }
   .app-shell.page-qr-atelier .qa-finish-strip {
