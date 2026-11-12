@@ -4258,7 +4258,7 @@ body:has(.app-shell.page-timekeeper),
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-observatory-props { z-index: 6; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-rosie-levers {
-    top: 3% !important; left: 32% !important; width: 36% !important;
+    top: 9% !important; left: 32% !important; width: 36% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-action-deck:not(.is-world) {
     top: 72% !important;
