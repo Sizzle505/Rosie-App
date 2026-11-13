@@ -42,6 +42,7 @@ import RosieResources from "./RosieResources.jsx";
 import RosieQrAtelier from "./RosieQrAtelier.jsx";
 import RosieRecipes from "./RosieRecipes.jsx";
 import RosieReviews from "./RosieReviews.jsx";
+import LayoutPlayground, { LayoutPreviewBridge } from "./LayoutPlayground.jsx";
 import { AccountProvider } from "./private/AccountContext.jsx";
 import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
@@ -3250,4 +3251,11 @@ function App() {
     </>
   );
 }
-createRoot(document.getElementById("root")).render(<AccountProvider><App /></AccountProvider>);
+const layoutParams = new URLSearchParams(window.location.search);
+const isLayoutStudio = layoutParams.has("layout");
+const isLayoutPreview = layoutParams.has("layoutPreview");
+createRoot(document.getElementById("root")).render(
+  isLayoutStudio
+    ? <LayoutPlayground />
+    : <AccountProvider><App />{isLayoutPreview && <LayoutPreviewBridge />}</AccountProvider>
+);
