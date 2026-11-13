@@ -993,3 +993,22 @@
 @media(prefers-reduced-motion:reduce){
  .board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{animation:none!important}
 }
+
+/* Keep animation cost low in a fast-moving maze: pulse only a sparse subset.
+   Mobile always uses static luminous barriers to preserve touch responsiveness. */
+.board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{
+  animation:none;
+}
+.board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"]:nth-child(7n + 2) .wall-art-image{
+  animation:cosmic-modular-barrier 3.4s ease-in-out infinite alternate;
+}
+.board[data-wall-art="modular"] .cell.wall-art-cell.barrier-struck .wall-art-image{
+  animation:none!important;
+  filter:brightness(1.7) drop-shadow(0 0 7px #ffd5ad)!important;
+  opacity:1!important;
+}
+@media(max-width:760px){
+ .board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{
+   animation:none!important;
+ }
+}
