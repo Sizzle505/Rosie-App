@@ -4,7 +4,13 @@
 (() => {
  'use strict';
  const $ = id => document.getElementById(id);
- const asset = name => window.COSMIC_ASSETS?.[name] || `assets/${name}.webp`;
+ const ARCADE_SCENE_ART={
+  'scene-arcade-nebula':'../captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp',
+  'scene-arcade-blackhole':'../captain-arcade-backgrounds/07-Cosmic-Odyssey-Black-Hole-Observatory.webp',
+  'scene-arcade-lunar':'../captain-arcade-backgrounds/08-Cosmic-Odyssey-Lunar-Starport.webp',
+  'scene-arcade-starship':'../captain-arcade-backgrounds/09-Cosmic-Odyssey-Starship-Passage.webp'
+ };
+ const asset = name => window.COSMIC_ASSETS?.[name] || ARCADE_SCENE_ART[name] || `assets/${name}.webp`;
  const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message');
  const DIRS={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]};
  // Standalone, approved image assets imported from the earlier Rosie/Fiend batches.
@@ -25,15 +31,15 @@
    'shield','explosion','laser-bolt','rosie-projectile','life');
 
  const LEVELS=[
-  {name:'NEBULA PASSAGE',tagline:'GALACTIC ARCHWAYS',scene:'nebula',seed:6900,target:18,speed:1,accent:'nebula'},
+  {name:'NEBULA PASSAGE',tagline:'GALACTIC ARCHWAYS',scene:'arcade-nebula',seed:6900,target:18,speed:1,accent:'nebula'},
   {name:'METEOR MISCHIEF',tagline:'THE ASTEROID GAUNTLET',scene:'meteor',seed:9810,target:19,speed:.97,accent:'meteor'},
-  {name:'LUNAR OUTPOST',tagline:'MOON COLONY RUN',scene:'lunar',seed:12263,target:20,speed:.95,accent:'lunar'},
+  {name:'LUNAR OUTPOST',tagline:'MOON COLONY RUN',scene:'arcade-lunar',seed:12263,target:20,speed:.95,accent:'lunar'},
   {name:'CRYSTAL CAVERNS',tagline:'THE AMETHYST DEEP',scene:'crystal',seed:16342,target:20,speed:.93,accent:'crystal'},
   {name:'VOLCANIC FOUNDRY',tagline:'MAGMA MACHINERY',scene:'foundry',seed:21831,target:21,speed:.91,accent:'foundry'},
-  {name:'DERELICT STARSHIP',tagline:'GHOST SHIP CORRIDORS',scene:'derelict',seed:24749,target:21,speed:.89,accent:'derelict'},
+  {name:'DERELICT STARSHIP',tagline:'GHOST SHIP CORRIDORS',scene:'arcade-starship',seed:24749,target:21,speed:.89,accent:'derelict'},
   {name:'COMET ICE CANYON',tagline:'FROSTBOUND FLIGHT',scene:'ice',seed:28112,target:22,speed:.87,accent:'ice'},
   {name:'RINGWORLD GARDENS',tagline:'THE ORBITAL SANCTUARY',scene:'garden',seed:32673,target:22,speed:.86,accent:'garden'},
-  {name:'BLACK HOLE OBSERVATORY',tagline:'EVENT HORIZON',scene:'blackhole',seed:35218,target:23,speed:.85,accent:'blackhole'},
+  {name:'BLACK HOLE OBSERVATORY',tagline:'EVENT HORIZON',scene:'arcade-blackhole',seed:35218,target:23,speed:.85,accent:'blackhole'},
   {name:'ANCIENT ALIEN RUINS',tagline:'THE FINAL RELIC',scene:'ruins',seed:39101,target:23,speed:.84,accent:'ruins'}
  ];
  const SCENES=[
@@ -50,7 +56,11 @@
   {id:'nebula-alt',name:'NEBULA - ALT'},
   {id:'meteor-alt',name:'METEOR - ALT'},
   {id:'lunar-alt',name:'LUNAR - ALT A'},
-  {id:'lunar-alt2',name:'LUNAR - ALT B'}
+  {id:'lunar-alt2',name:'LUNAR - ALT B'},
+  {id:'arcade-nebula',name:'NEBULA TRAVERSE · NEW'},
+  {id:'arcade-lunar',name:'LUNAR STARPORT · NEW'},
+  {id:'arcade-starship',name:'DERELICT STARSHIP PASSAGE · NEW'},
+  {id:'arcade-blackhole',name:'BLACK HOLE OBSERVATORY · NEW'}
  ];
  const ENEMY_INFO=[
   {id:'jett',name:'Jett Scroundrel',hp:1,speed:510,kind:'patrol',points:150},
@@ -257,7 +267,8 @@
  const PARTITION_MATERIAL={
    nebula:'deco',meteor:'foundry',lunar:'lunar',crystal:'crystal',foundry:'foundry',
    derelict:'void',ice:'lunar',garden:'verdant',blackhole:'void',ruins:'crystal',
-   'nebula-alt':'deco','meteor-alt':'foundry','lunar-alt':'lunar','lunar-alt2':'lunar'
+   'nebula-alt':'deco','meteor-alt':'foundry','lunar-alt':'lunar','lunar-alt2':'lunar',
+   'arcade-nebula':'deco','arcade-lunar':'lunar','arcade-starship':'void','arcade-blackhole':'void'
  };
  function wallConnectivity(x,y){
    return ((y>0&&grid[y-1][x]===1)?1:0)
@@ -272,7 +283,9 @@
    nebula:[0,4,1],meteor:[3,2,0],lunar:[4,3,1],
    crystal:[5,0,4],foundry:[2,3,5],derelict:[1,6,3],
    ice:[4,0,1],garden:[1,4,0],blackhole:[5,0,3],
-   ruins:[2,5,1]
+   ruins:[2,5,1],
+   'arcade-nebula':[0,4,1],'arcade-lunar':[4,3,1],
+   'arcade-starship':[1,6,3],'arcade-blackhole':[5,0,3]
  };
  function wallSprite(mask,x,y,sceneId=LEVELS[level-1].scene){
    const links=[1,2,4,8].filter(bit=>!!(mask&bit)).length;
