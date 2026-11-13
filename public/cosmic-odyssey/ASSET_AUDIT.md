@@ -169,3 +169,26 @@ Runtime chooses orientation using the existing `wallConnectivity()` four-bit mas
 QA: game JS parsed; simulated 393×852 portrait and 1280×800 desktop runs covered all ten levels. All 10 atlas indices appeared across the tested levels, and every rendered wall retained its original wall collision status. No missing wall-art elements were found. `?classicWalls=1` opts out to the original partition SVGs for side-by-side review. Energy-wall animation is reduced on iPhone and suppressed for reduced-motion accessibility.
 
 **Rollback:** revert the Cosmic Odyssey wall-rendering commits or append `?classicWalls=1` to the preview URL; delete the Dropbox copies only if explicitly requested.
+
+
+## November 13 connected-maze corrective rebuild
+
+The previous wall renderer displayed a different miniature full object in every wall tile, producing disjointed end posts, black rectangles, and unreadable connections. That renderer was replaced - not merely restyled.
+
+**New runtime assets, all sourced from approved independent artwork:**
+
+- `connected-wall-atlas.webp` (16 four-neighbor connection masks). Reconstructed from the original armored horizontal/vertical bulkheads and structural junction hardware. Each mask shares boundary geometry with its neighbors. Isolated 1-cell obstacles are freestanding armored pylons instead of black squares.
+- `energy-barrier-spans.webp` (five extended originals: blue lightning, retractable spikes, red laser, cyan forcefield, magenta plasma). Midsections are extended while terminal machinery is preserved. Only two to four deliberate continuous barrier spans are drawn per level, not hundreds of mini-gates.
+- `sector-setpieces.webp` (eight approved unused stage assets from Batch 5): lunar plasma relay, nebula crystals, volcanic forge, derelict hull, lunar reactor, crystal variation, shipwreck, lunar airlock. Displayed in the formerly empty large-desktop control-console space with stage-specific selection.
+
+Sources are preserved in Dropbox:
+- `/Rosie-App-Transfer/Captain-Rosie-Cosmic-Odyssey-Maze-Walls-Batch-2.zip`
+- `/Rosie-App-Transfer/Captain-Rosie-Cosmic-Odyssey-New-Assets-41-to-50.zip`
+
+The older atlas `wall-atlas-b2.webp` remains in the repo only for historical comparison and is not referenced by the active renderer. The unapproved generic Shiba is not used.
+
+**Invariant:** `grid[y][x]` remains the sole collision/pathfinding and projectile-ray source. Energy barriers currently look hazardous but are solid walls, not damaging or switchable gates. No new enemy logic or character sizing changes.
+
+**Visual control:** The board backdrop is dimmed for readability, while energy spans use limited glow and pulse only on desktop. The existing `?classicWalls=1` fallback preserves original static partition art.
+
+**Validation:** JS syntax passed. Simulated portrait and desktop layouts across all 10 stages confirmed wall coverage, unchanged wall/floor counts, nonempty long spans, correct stage-specific barrier types, correct setpiece selection, and unmodified classic fallback. A representative artwork-only maze mockup was inspected, but an actual-device screenshot review is still needed.
