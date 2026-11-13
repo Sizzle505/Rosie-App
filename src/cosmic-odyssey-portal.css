@@ -111,3 +111,51 @@
  .captain-arcade-jump button small{font-size:9px}
  .cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell iframe{height:calc(100dvh - 30px);min-height:550px}
 }
+
+/* Wide desktop Captain integration: inline playfield should occupy the page, not a 1,140px card. */
+@media(min-width:900px){
+ .cosmic-odyssey-portal.cosmic-odyssey-main-entry{
+   box-sizing:border-box;
+   position:relative;left:50%;transform:translateX(-50%);
+   width:calc(100vw - 30px)!important;
+   max-width:1760px!important;
+   margin:20px 0 28px!important;
+   padding:10px 13px!important;
+   display:grid!important;grid-template-columns:minmax(245px,330px) minmax(0,1fr);
+   gap:10px 18px;align-items:center;
+ }
+ .cosmic-odyssey-main-entry>.cosmic-odyssey-entry-banner{
+   display:block;width:330px!important;max-width:100%!important;
+   max-height:110px!important;height:auto!important;
+   aspect-ratio:3 / 1!important;
+   object-fit:contain!important;object-position:center!important;
+   margin:0!important;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info{
+   min-width:0;display:flex;flex-direction:row;
+   justify-content:space-between;align-items:center;
+   gap:12px;padding:2px;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info p{
+   max-width:360px;font-size:12px;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-actions{
+   flex:0 0 auto;justify-content:flex-end;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell{
+   width:100%;grid-column:1 / -1;
+   margin:2px 0 0!important;padding:3px!important;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell iframe{
+   display:block;width:100%;min-height:640px!important;
+   height:min(1020px,calc(100dvh - 28px))!important;
+   max-height:none;border:0;
+ }
+}
+@media(min-width:900px) and (max-width:1250px){
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info{
+   flex-direction:column;align-items:center;text-align:center;gap:7px;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-actions{justify-content:center}
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info p{display:none}
+}
