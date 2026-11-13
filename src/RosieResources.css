@@ -192,3 +192,25 @@
     margin-top: 4px !important;
   }
 }
+
+/* Desktop observatory: six destinations read as a gallery, not a phone stack. */
+@media (min-width: 1200px) {
+  .app-shell.page-resources > main.rr-hub-page {
+    min-height: 100dvh;
+    background-position: center, center 38%, center;
+  }
+  .rr-hub-content {
+    transform: none;
+    min-height: 100dvh;
+    padding: clamp(68px, 9dvh, 100px) 0 90px;
+  }
+  .rr-hub-header { height: clamp(180px, 23dvh, 250px); }
+  .rr-hub-crest { width: min(36vw, 520px); }
+  .rr-hub-buttons {
+    width: min(88vw, 1240px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(22px, 2vw, 36px);
+    margin-top: clamp(32px, 5dvh, 58px);
+  }
+  .rr-hub-button { min-width: 0; }
+}
