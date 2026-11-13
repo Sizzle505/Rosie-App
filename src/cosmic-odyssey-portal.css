@@ -159,3 +159,147 @@
  .cosmic-odyssey-main-entry .cosmic-odyssey-entry-actions{justify-content:center}
  .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info p{display:none}
 }
+
+/* 2026-11-13: Normal-mode banner at original proportions, centered over playfield.
+   Avoid 330px column and visible cutoffs. Fullscreen play remains separate. */
+@media(min-width:900px){
+ .cosmic-odyssey-portal.cosmic-odyssey-main-entry{
+   display:flex!important;flex-direction:column!important;
+   align-items:center!important;justify-content:flex-start!important;
+   gap:12px!important;
+   padding:18px clamp(12px,2vw,30px)!important;
+ }
+ .cosmic-odyssey-main-entry>.cosmic-odyssey-entry-banner{
+   display:block!important;
+   width:min(90%,930px)!important;
+   max-width:930px!important;max-height:none!important;
+   height:auto!important;aspect-ratio:3/1!important;
+   margin:0 auto!important;align-self:center!important;
+   object-fit:contain!important;object-position:center!important;
+   border-radius:15px;filter:none!important;
+   flex-shrink:0!important;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info{
+   width:100%;max-width:1300px;
+   display:flex!important;flex-direction:row!important;
+   align-items:center!important;justify-content:center!important;
+   flex-wrap:wrap!important;gap:12px 22px!important;
+   padding:0 4px 2px!important;text-align:center!important;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info p{max-width:560px!important}
+ .cosmic-odyssey-main-entry .captain-fs-cosmic{
+   width:100%!important;max-width:none!important;
+   align-self:stretch!important;
+ }
+}
+@media(min-width:900px) and (max-width:1250px){
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info p{display:block!important}
+}
+/* Shared non-destructive fullscreen controls, preserving running React game state. */
+.captain-fullscreen-frame{
+  position:relative;display:block;width:100%;min-width:0;
+  isolation:isolate;
+}
+.captain-fullscreen-toggle{
+  position:absolute;right:12px;top:12px;z-index:200;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-width:118px;min-height:36px;padding:8px 12px;
+  border:1px solid #f7d88c;border-radius:10px;
+  background:linear-gradient(145deg,#171c40ec,#422644ee);
+  color:#fff1c8;font:700 11px/1.2 Arial,sans-serif;
+  letter-spacing:.25px;white-space:nowrap;
+  box-shadow:0 3px 14px #0008,0 0 12px #d8ae6552;
+  cursor:pointer;touch-action:manipulation;
+}
+.captain-fullscreen-toggle>span{font-size:19px;line-height:1}
+.captain-fullscreen-toggle:hover{filter:brightness(1.18)}
+.captain-fullscreen-toggle:focus-visible{
+  outline:3px solid #ffdda1;outline-offset:3px;
+}
+.captain-fs-cosmic{
+  grid-column:1/-1;position:relative;width:100%;
+}
+.captain-fs-cosmic .cosmic-odyssey-embedded-shell{
+  width:100%;margin:2px auto!important;
+}
+.captain-fs-cosmic .captain-fullscreen-toggle{
+  top:11px;right:14px;z-index:250;
+}
+.captain-fullscreen-frame:fullscreen,
+.captain-fullscreen-frame:-webkit-full-screen,
+.captain-fullscreen-frame.is-fallback-fullscreen{
+  position:fixed!important;
+  inset:0!important;width:100vw!important;height:100dvh!important;
+  max-width:none!important;max-height:none!important;
+  min-width:0!important;min-height:0!important;
+  margin:0!important;border:0!important;border-radius:0!important;
+  padding:0!important;transform:none!important;
+  overflow:auto!important;overscroll-behavior:contain;
+  background:linear-gradient(165deg,#0b1531,#090b22 58%,#160f2b)!important;
+  z-index:2147483640!important;
+  isolation:isolate;
+}
+.captain-fullscreen-frame:is(:fullscreen,.is-fallback-fullscreen)> .captain-fullscreen-toggle{
+  position:fixed;top:max(10px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));
+  z-index:2147483642;min-width:120px;
+}
+.captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen){
+  display:flex!important;flex-direction:column!important;
+  overflow:hidden!important;
+}
+.captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)>.cosmic-odyssey-embedded-shell{
+  flex:1 1 auto;width:100%!important;height:100%!important;
+  max-width:none!important;max-height:none!important;
+  padding:0!important;margin:0!important;border:0!important;
+  border-radius:0!important;overflow:hidden!important;
+}
+.captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen) iframe{
+  display:block!important;width:100%!important;height:100%!important;
+  min-height:0!important;max-height:none!important;
+  border:0!important;border-radius:0!important;
+}
+.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page{
+  width:100%!important;max-width:none!important;
+  min-height:100dvh!important;height:auto!important;
+  margin:0 auto!important;padding:50px 15px 18px!important;
+}
+.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-shell{
+  max-width:min(1500px,100%)!important;
+}
+.captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.ember-suite{
+  width:100%!important;max-width:min(1650px,100%)!important;
+  margin:0 auto!important;min-height:100dvh!important;
+  padding:52px 18px 20px!important;
+}
+.captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-stage{
+  height:clamp(360px,66dvh,950px)!important;
+}
+.captain-fs-captain2:is(:fullscreen,.is-fallback-fullscreen)>.captain2-page{
+  margin:0 auto!important;max-width:1600px!important;
+  width:100%!important;min-height:100dvh!important;
+  padding-top:46px!important;
+}
+.captain-fs-captain2:is(:fullscreen,.is-fallback-fullscreen) .c2-world{
+  height:clamp(370px,63dvh,920px)!important;
+}
+.captain-fs-cheese:is(:fullscreen,.is-fallback-fullscreen)>*{
+  width:100%!important;max-width:none!important;
+  margin:0 auto!important;min-height:100dvh!important;
+  padding-top:46px!important;
+}
+body.captain-fullscreen-fallback-active{
+  overflow:hidden!important;
+}
+@media(max-width:760px){
+ .captain-fullscreen-toggle{
+   top:6px;right:6px;min-width:0;min-height:35px;
+   padding:6px 9px;font-size:9px;border-radius:8px;
+ }
+ .captain-fullscreen-toggle>span{font-size:17px}
+ .captain-fullscreen-frame:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{
+   top:max(6px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));
+ }
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.ember-suite{
+   padding:48px 5px 12px!important;
+ }
+}
