@@ -1053,7 +1053,7 @@
 }
 .board[data-wall-art="continuous"]::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:linear-gradient(180deg,#03092029,#04102437);
+  background:linear-gradient(180deg,#03092063,#04102470);
 }
 .board[data-wall-art="continuous"] .cell{z-index:1}
 .board[data-wall-art="continuous"] .cell.wall.partition-wall.continuous-wall{
@@ -1126,4 +1126,16 @@
 }
 @media(prefers-reduced-motion:reduce){
  .board[data-wall-art="continuous"] .barrier-span{animation:none!important}
+}
+
+/* Subtle energy shimmer is confined to the two or three full barrier spans,
+ * instead of animating dozens of separate wall tiles. */
+@keyframes cosmic-full-barrier-pulse{
+ from{opacity:.88;filter:brightness(.93) drop-shadow(0 0 3px #4cc8fa66)}
+ to{opacity:1;filter:brightness(1.08) drop-shadow(0 0 7px #62d5faaa)}
+}
+@media(min-width:761px) and (prefers-reduced-motion:no-preference){
+ .board[data-wall-art="continuous"] .barrier-span{
+  animation:cosmic-full-barrier-pulse 3.8s ease-in-out infinite alternate;
+ }
 }
