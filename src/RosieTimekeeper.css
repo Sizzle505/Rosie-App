@@ -4277,7 +4277,7 @@ body:has(.app-shell.page-timekeeper),
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
-    top: 17% !important; bottom: 9% !important;
+    top: 17% !important; bottom: 20% !important;
     left: 11% !important; right: 11% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading { font-size: 18px !important; margin-bottom: 14px; }
