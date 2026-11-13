@@ -111,16 +111,12 @@
  }
  function position(obj){
   if(!obj?.el)return;
-  // Center visible artwork on the hitbox tile. At the edge, gently scale it
-  // instead of shifting the ship into an unrelated firing lane.
-  const dims=obj===player?[4.05,2.87]:obj.id==='jett'?[1.8225,1.6125]:
-    obj.id==='chip'?[2.55,2.13]:[2.55,1.95];
+  const dims=obj===player?[3.70,2.68]:obj.id==='jett'?[1.8225,1.6125]:
+    obj.id==='chip'?[2.55,2.13]:[2.72,2.12];
   const cx=(obj.x+.5)*tile,cy=(obj.y+.5)*tile;
-  const desiredW=tile*dims[0],desiredH=tile*dims[1];
-  const roomX=Math.max(tile,2*Math.min(cx,cols*tile-cx)-tile*.12);
-  const roomY=Math.max(tile,2*Math.min(cy,rows*tile-cy)-tile*.12);
-  const scale=Math.min(1,roomX/desiredW,roomY/desiredH);
-  const px=desiredW*scale,py=desiredH*scale;
+  // Player's painted footprint must NOT vary with position or movement pose.
+  // Clipping at the outer border is preferable to the ship shrinking as it travels.
+  const px=tile*dims[0],py=tile*dims[1];
   const x=cx-px/2,y=cy-py/2;
   obj.el.style.width=px+'px';obj.el.style.height=py+'px';
   obj.visualBounds={x,y,width:px,height:py};
@@ -128,33 +124,19 @@
   const art=obj.el.spriteArt;
   if(art){
     const dir=obj===player?lastFacing:obj.lastDir||'right';
-    obj.el.dataset.facing=dir;
     art.style.setProperty('--flip',dir==='left'?-1:1);
-    art.style.setProperty('--bank',dir==='up'?'-5deg':dir==='down'?'4deg':'0deg');
+    art.style.setProperty('--bank',dir==='up'?'-6deg':dir==='down'?'5deg':'0deg');
   }
  }
- function movementArt(dir,turn=false){
-  // The original three-quarter cruising craft is Rosie's canonical navigation pose.
-  // Rear/front art is reserved for later dedicated sequences; never cycle it during ordinary travel.
-  if(performance.now()<boostUntil)return 'rosie-boost';
-  if(turn&&(dir==='left'||dir==='right'))return dir==='left'?'rosie-bank-left':'rosie-bank-right';
-  if(dir==='up')return 'rosie-up';
+ function movementArt(){
+  // Consistent canonical craft for all four normal travel directions.
+  // Direction is expressed by rotation/mirroring and engine motion, not
+  // swapping unrelated images with different internal artwork sizes.
   return 'rosie-cruise';
  }
  function playerPose(dir,turn,now){
   if(!player||now<(player.actionUntil||0))return;
-  const evasive=now>=boostUntil&&turn&&entities.some(e=>!e.killed&&dist(e,player)<=3);
-  const state=evasive?'rosie-dodge':movementArt(dir,turn);
-  setSprite(player,state);
-  if(turn&&(dir==='left'||dir==='right')){
-   const playId=sessionId,stamp=now;
-   setTimeout(()=>{
-    if(playId===sessionId&&player&&phase==='playing'&&
-       player.lastMoveAt===stamp&&performance.now()>=(player.actionUntil||0)){
-      setSprite(player,movementArt(lastFacing,false));
-    }
-   },230);
-  }
+  setSprite(player,'rosie-cruise');
  }
  function playAttackPose(type){
   const sid=sessionId,attackToken=(player.attackToken||0)+1;
@@ -163,7 +145,7 @@
   setSprite(player,type==='laser'?'rosie-laser':'rosie-rocket');
   setTimeout(()=>{
    if(sid===sessionId&&player&&phase==='playing'&&player.attackToken===attackToken){
-    player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));
+    player.actionUntil=0;setSprite(player,'rosie-cruise');
    }
   },470);
  }
@@ -487,7 +469,7 @@
   if(!player)return;
   player.el.classList.remove('boosting');
   player.el.style.setProperty('--step-ms','165ms');
-  if(phase==='playing'&&performance.now()>=(player.actionUntil||0))setSprite(player,movementArt(lastFacing,false));
+  if(phase==='playing'&&performance.now()>=(player.actionUntil||0))setSprite(player,'rosie-cruise');
   ui();
  }
  function requestMove(dir){
@@ -496,7 +478,7 @@
   if(advance(now,dir))pendingStep=false;
  }
  function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.attackToken=(player.attackToken||0)+1;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
-  const sp=player.spawn;player.x=sp.x;player.y=sp.y;position(player);positionShield();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
+  position(player);positionShield();updateAimPreview();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
  function collide(){for(const e of entities)if(!e.killed&&e.health>0&&e.x===player.x&&e.y===player.y){damage(e);break;}}
  function forwardRay(origin,facing){
   // Strict cardinal corridor: no diagonal snapping, wall penetration or corner shots.
