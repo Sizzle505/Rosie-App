@@ -503,3 +503,22 @@ body.captain-fullscreen-fallback-active #root *:has(.captain-fullscreen-frame.is
   border:1px solid #c29d6a!important;
   background:#080b22;
 }
+
+/* Keep the Yacht Dash course visibly taller than it is wide at normal desktop height. */
+@media(min-width:900px) and (min-height:650px) and (orientation:landscape){
+ .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-shell{
+   width:min(100%,calc(82dvh - 178px),630px)!important;
+ }
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-caption{
+   display:none!important;
+ }
+ .captain-fs-captain2:is(:fullscreen,.is-fallback-fullscreen)>.captain2-page{
+   width:min(100%,960px)!important;max-width:960px!important;
+ }
+ .captain-fs-captain2:is(:fullscreen,.is-fallback-fullscreen) .c2-world{
+   height:clamp(500px,calc(100dvh - 265px),850px)!important;
+ }
+ .captain-fs-cheese:is(:fullscreen,.is-fallback-fullscreen)>*{
+   width:min(100%,1220px)!important;max-width:1220px!important;
+ }
+}
