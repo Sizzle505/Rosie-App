@@ -128,6 +128,7 @@
   const art=obj.el.spriteArt;
   if(art){
     const dir=obj===player?lastFacing:obj.lastDir||'right';
+    obj.el.dataset.facing=dir;
     art.style.setProperty('--flip',dir==='left'?-1:1);
     art.style.setProperty('--bank',dir==='up'?'-5deg':dir==='down'?'4deg':'0deg');
   }
