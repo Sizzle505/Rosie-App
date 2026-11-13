@@ -1686,6 +1686,7 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
 
 function CaptainRosieGame({ soundOn }) {
   const [running, setRunning] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(75);
@@ -1716,6 +1717,7 @@ function CaptainRosieGame({ soundOn }) {
   const finishedRef = useRef(false);
   const boostRef = useRef(false);
   const boostDrainTimerRef = useRef(0);
+  const boostRemainingRef = useRef(0);
   const streakRef = useRef(0);
   const comboRef = useRef(1);
   const touchStartRef = useRef(null);
@@ -1785,7 +1787,7 @@ function CaptainRosieGame({ soundOn }) {
   }
 
   function moveCaptain(direction) {
-    if (!running) return;
+    if (!running || paused) return;
     setLane((current) => {
       const next = Math.max(0, Math.min(2, current + direction));
       laneRef.current = next;
@@ -1794,7 +1796,7 @@ function CaptainRosieGame({ soundOn }) {
   }
 
   function steerTo(nextLane) {
-    if (!running) return;
+    if (!running || paused) return;
     const safeLane = Math.max(0, Math.min(2, nextLane));
     laneRef.current = safeLane;
     setLane(safeLane);
@@ -1804,8 +1806,10 @@ function CaptainRosieGame({ soundOn }) {
     if (finishedRef.current) return;
     finishedRef.current = true;
     boostRef.current = false;
+    boostRemainingRef.current = 0;
     window.clearInterval(boostDrainTimerRef.current);
     setBoost(false);
+    setPaused(false);
     setRunning(false);
     setEnded(true);
     setMessage(reason);
@@ -1817,7 +1821,9 @@ function CaptainRosieGame({ soundOn }) {
     if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
     boostRef.current = false;
+    boostRemainingRef.current = 0;
     window.clearInterval(boostDrainTimerRef.current);
+    setPaused(false);
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
@@ -1844,29 +1850,41 @@ function CaptainRosieGame({ soundOn }) {
   }
 
   function engageBoost() {
-    if (!running || boostRef.current || turbo < 100) return;
+    if (!running || paused || boostRef.current || turbo < 100) return;
     boostRef.current = true;
+    boostRemainingRef.current = 6000;
+    setTurbo(100);
     setBoost(true);
-    // The active boost visibly burns off from right to left; pickups cannot
-    // refill the meter again until this six-second run has ended.
-    const duration = 6000;
-    const startedAt = performance.now();
-    window.clearInterval(boostDrainTimerRef.current);
-    boostDrainTimerRef.current = window.setInterval(() => {
-      const elapsed = performance.now() - startedAt;
-      setTurbo(Math.max(0, Math.ceil(100 - elapsed / duration * 100)));
-    }, 80);
     setMessage("FULL STEAM. Captain Rosie's golden wake doubles every score for six seconds.");
     pulse("boost");
     captainTone("boost");
     window.navigator.vibrate?.([20, 25, 20, 25, 35]);
-    window.setTimeout(() => {
-      window.clearInterval(boostDrainTimerRef.current);
-      boostRef.current = false;
-      setBoost(false);
-      setTurbo(0);
-      setMessage("Boost complete. Return to elegant, responsible yacht speeds.");
-    }, duration);
+  }
+
+  useEffect(() => {
+    if (!running || paused || !boost) return undefined;
+    let last = performance.now();
+    const timer = window.setInterval(() => {
+      const now = performance.now();
+      boostRemainingRef.current = Math.max(0, boostRemainingRef.current - (now - last));
+      last = now;
+      const remaining = boostRemainingRef.current;
+      setTurbo(Math.ceil(remaining / 6000 * 100));
+      if (remaining <= 0) {
+        window.clearInterval(timer);
+        boostRef.current = false;
+        setBoost(false);
+        setTurbo(0);
+        setMessage("Boost complete. Return to elegant, responsible yacht speeds.");
+      }
+    }, 80);
+    boostDrainTimerRef.current = timer;
+    return () => window.clearInterval(timer);
+  }, [running, paused, boost]);
+
+  function toggleYachtPause() {
+    if (!running || ended) return;
+    setPaused(current => !current);
   }
 
   function onCoursePointerDown(event) {
@@ -1874,7 +1892,7 @@ function CaptainRosieGame({ soundOn }) {
   }
 
   function onCoursePointerUp(event) {
-    if (!running || !touchStartRef.current) return;
+    if (!running || paused || !touchStartRef.current) return;
     const startPoint = touchStartRef.current;
     touchStartRef.current = null;
     const deltaX = event.clientX - startPoint.x;
@@ -1888,7 +1906,7 @@ function CaptainRosieGame({ soundOn }) {
   }
 
   useEffect(() => {
-    if (!running) return undefined;
+    if (!running || paused) return undefined;
     const timer = window.setInterval(() => {
       setTimeLeft((current) => {
         if (current <= 1) {
@@ -1899,10 +1917,10 @@ function CaptainRosieGame({ soundOn }) {
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [running]);
+  }, [running, paused]);
 
   useEffect(() => {
-    if (!running) return;
+    if (!running || paused) return;
     if (phaseKey === lastPhaseRef.current) return;
     lastPhaseRef.current = phaseKey;
     const next = CAPTAIN_PHASES[phaseKey];
@@ -1913,7 +1931,7 @@ function CaptainRosieGame({ soundOn }) {
   }, [phaseKey, running]);
 
   useEffect(() => {
-    if (!running) return undefined;
+    if (!running || paused) return undefined;
 
     // A modestly longer mobile cadence substantially reduces paint pressure on
     // iPhone while preserving the same world speed and pickup timings.
@@ -2038,10 +2056,23 @@ function CaptainRosieGame({ soundOn }) {
     }, tickMs);
 
     return () => window.clearInterval(tick);
-  }, [running, phaseKey]);
+  }, [running, paused, phaseKey]);
 
   useEffect(() => {
     function onKeyDown(event) {
+      if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
+      if ((event.key === "p" || event.key === "P") && running) {
+        event.preventDefault();
+        toggleYachtPause();
+        return;
+      }
+      if (paused) {
+        if (event.key === " " || event.key === "Enter") {
+          event.preventDefault();
+          setPaused(false);
+        }
+        return;
+      }
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         moveCaptain(-1);
@@ -2061,7 +2092,7 @@ function CaptainRosieGame({ soundOn }) {
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [running, turbo]);
+  }, [running, paused, turbo]);
 
   useEffect(() => {
     if (running || !ended) return;
@@ -2073,7 +2104,7 @@ function CaptainRosieGame({ soundOn }) {
   }, [running, ended, score]);
 
   return (
-    <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "")}>
+    <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
       <section className="captain-hero">
         <div className="captain-hero-banner" role="img" aria-label="Captain Rosie at the helm of an ornate Japanese sailing ship at sunset, with islands, torii gates and waterfalls" />
         <div className="captain-title">
@@ -2128,7 +2159,7 @@ function CaptainRosieGame({ soundOn }) {
         </div>
 
         <div
-          className={`yacht-course${running ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
+          className={`yacht-course${running && !paused ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
           data-captain-level={level.id}
           data-captain-climate={level.climate}
           data-captain-passage={levelNumber + 1}
@@ -2139,7 +2170,7 @@ function CaptainRosieGame({ soundOn }) {
         >
           <CaptainScenicPainting scene={scenery} />
           <CaptainCinematicEnvironment
-            underway={running}
+            underway={running && !paused}
             boost={boost}
             streak={streak}
             timeLeft={timeLeft}
@@ -2147,9 +2178,23 @@ function CaptainRosieGame({ soundOn }) {
             eventPulse={eventPulse}
             eventKind={eventKind}
           />
-          <CaptainLevelScenery scene={scenery} underway={running} boost={boost} />
-          <CaptainLotusGust underway={running} />
-          <CaptainCourseMotion phaseKey={phaseKey} underway={running} boost={boost} />
+          <CaptainLevelScenery scene={scenery} underway={running && !paused} boost={boost} />
+          <CaptainLotusGust underway={running && !paused} />
+          <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />
+          <button type="button" className="captain-yacht-pause-button"
+            onClick={toggleYachtPause} disabled={!running}
+            aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}
+            aria-pressed={paused}>{paused ? "▶ RESUME" : "Ⅱ PAUSE"}</button>
+          {paused && (
+            <div className="captain-yacht-pause-overlay" role="status">
+              <div>
+                <span>CAPTAIN'S ORDERS</span>
+                <strong>VOYAGE PAUSED</strong>
+                <p>Your time, treats, and boost charge are preserved.</p>
+                <button type="button" onClick={toggleYachtPause}>RESUME VOYAGE</button>
+              </div>
+            </div>
+          )}
           <div className="sun-glint" aria-hidden="true" />
           <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
           <div className="wake-lines" aria-hidden="true" />
