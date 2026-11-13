@@ -499,6 +499,20 @@
  function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.attackToken=(player.attackToken||0)+1;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
   position(player);positionShield();updateAimPreview();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
  function collide(){for(const e of entities)if(!e.killed&&e.health>0&&e.x===player.x&&e.y===player.y){damage(e);break;}}
+ function overlappingFiend(){
+  if(!player)return null;
+  const p=player.visualBounds;
+  return entities.filter(e=>{
+    if(e.killed||e.health<=0)return false;
+    if(e.x===player.x&&e.y===player.y)return true;
+    const b=e.visualBounds;
+    if(!p||!b)return false;
+    const overlapX=Math.min(p.x+p.width,b.x+b.width)-Math.max(p.x,b.x);
+    const overlapY=Math.min(p.y+p.height,b.y+b.height)-Math.max(p.y,b.y);
+    // Require a meaningful painted footprint overlap, not a touching shadow.
+    return overlapX>tile*.32&&overlapY>tile*.32;
+  }).sort((a,b)=>dist(a,player)-dist(b,player))[0]||null;
+ }
  function forwardRay(origin,facing){
   // Strict cardinal corridor: no diagonal snapping, wall penetration or corner shots.
   const [dx,dy]=DIRS[facing]||DIRS.right;
@@ -513,7 +527,7 @@
  }
  function acquireDirectionalTarget(origin,facing){return forwardRay(origin,facing).enemy;}
  function updateAimPreview(){
-  const target=phase==='playing'&&ammo>0&&player?acquireDirectionalTarget(player,lastFacing):null;
+  const target=phase==='playing'&&ammo>0&&player?(overlappingFiend()||acquireDirectionalTarget(player,lastFacing)):null;
   if(aimPreview!==target){
     if(aimPreview?.el)aimPreview.el.classList.remove('targetable');
     aimPreview=target;
@@ -530,6 +544,19 @@
   const cost=type==='laser'?1:2;
   if(ammo<cost){say(`Need ${cost} treat${cost>1?'s':''} to fire ${type}.`);sound(180,.04);return;}
   const origin={x:player.x,y:player.y};
+  const closeTarget=overlappingFiend();
+  if(closeTarget){
+    // Point-blank strikes take priority regardless of facing direction or
+    // a wall beyond Rosie's spacecraft. The hit is immediate and deterministic.
+    ammo-=cost;ui();playAttackPose(type);
+    effect('muzzle',player,1.15);
+    effect(type==='rocket'?'explosion':'spark',closeTarget,type==='rocket'?2.9:2.2);
+    sound(type==='rocket'?160:710,type==='rocket'?.17:.11,type==='rocket'?'sawtooth':'square');
+    hit(closeTarget,type==='rocket'?2:1);
+    say(`POINT-BLANK ${type.toUpperCase()} HIT: ${closeTarget.name}`);
+    updateAimPreview();
+    return;
+  }
   const shot=forwardRay(origin,lastFacing);
   if(!shot.tiles.length){
     say('A wall blocks the firing lane. Turn toward an open corridor.');
