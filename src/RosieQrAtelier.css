@@ -1097,10 +1097,10 @@
   }
   .app-shell.page-qr-atelier .qa-scene::before { content: none; }
   .app-shell.page-qr-atelier .qa-hero { grid-column: 1 / -1; grid-row: 1; height: 120px; }
-  .app-shell.page-qr-atelier .qa-title { top: 452px; left: 9%; right: auto; width: min(32vw, 440px); }
+  .app-shell.page-qr-atelier .qa-title { top: clamp(520px, 40vw, 760px); left: 9%; right: auto; width: min(32vw, 440px); }
   .app-shell.page-qr-atelier .qa-panel {
     grid-column: 2; grid-row: 3;
-    width: min(72%, 510px); margin: 0 auto 12px;
+    width: min(72%, 510px); margin: 24px auto 12px;
     justify-self: center;
   }
   .app-shell.page-qr-atelier .qa-panel-inner { padding: 8px 12px 8px; }
