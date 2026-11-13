@@ -87,6 +87,7 @@
   const x=Math.max(3,Math.min(cols*tile-px-3,(obj.x+.5)*tile-px/2));
   const y=Math.max(3,Math.min(rows*tile-py-3,(obj.y+.5)*tile-py/2));
   obj.el.style.width=px+'px';obj.el.style.height=py+'px';
+  obj.visualBounds={x,y,width:px,height:py};
   obj.el.style.transform=`translate3d(${x}px,${y}px,0)`;
   const art=obj.el.spriteArt;
   if(art){
@@ -138,10 +139,15 @@
   const el=$('cosmic-shield');
   if(!player||!el)return;
   const active=phase==='playing'&&now<protectedUntil;
+  const box=player.visualBounds;
+  if(!box)return;
+  // The oversized ship is clamped at maze edges; its shield must follow the rendered
+  // ship, not the unclamped logical grid cell. Place the ring over its painted hull.
   const size=tile*4.08;
+  const cx=box.x+box.width*.49,cy=box.y+box.height*.51;
   el.style.width=size+'px';el.style.height=size+'px';
-  el.style.left=Math.max(2,Math.min(cols*tile-size-2,(player.x+.5)*tile-size/2))+'px';
-  el.style.top=Math.max(2,Math.min(rows*tile-size-2,(player.y+.5)*tile-size/2))+'px';
+  el.style.left=(cx-size/2)+'px';
+  el.style.top=(cy-size/2)+'px';
   el.classList.toggle('active',active);
  }
  function changeScene(next){
