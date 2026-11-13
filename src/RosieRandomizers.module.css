@@ -1285,7 +1285,8 @@
 .desktopHeroCopy { display: none; }
 @media (min-width: 1200px) {
   .page { width: min(1600px, 100%); padding-top: 72px; }
-  .page > * { width: 100%; }
+  .page > * { width: min(1440px, calc(100% - 64px)); }
+  .page > .illustratedHero { width: 100%; }
   .ivoryRow { gap: clamp(18px, 2vw, 30px); }
   .wheelSalon { margin-top: clamp(18px, 2vw, 30px); }
   .illustratedHero {
