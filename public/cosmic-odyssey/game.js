@@ -13,10 +13,16 @@
   'rosie-laser','rosie-rocket','chip-turn','chip-ascent','chip-rear','chip-dash',
   'chip-fire','chip-stun','jett-retreat','kitty-retreat','laser-bolt','chip-bolt','rosie-projectile'
  ];
- // Preload high-impact pose transitions to prevent a blank sprite on the first attack/defeat.
- for(const id of ['rosie-cruise','rosie-laser','rosie-rocket','chip-stun','jett-retreat','kitty-retreat']){
-  const img=new Image();img.src=asset(id);
+ // Keep the approved individual combat poses ready before their first use.
+ const artCache=new Map();
+ function preloadArt(...ids){
+  for(const id of ids){
+   if(artCache.has(id))continue;
+   const img=new Image();img.src=asset(id);artCache.set(id,img);
+  }
  }
+ preloadArt(...EXTRA_ART,'jett','chip','kitty','jett-attack','kitty-attack','chip-attack',
+   'shield','explosion','laser-bolt','rosie-projectile','life');
 
  const LEVELS=[
   {name:'NEBULA PASSAGE',tagline:'GALACTIC ARCHWAYS',scene:'nebula',seed:6900,target:18,speed:1,accent:'nebula'},
@@ -337,6 +343,7 @@
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
   if(!carry){score=0;ammo=0;lives=3;}
+  preloadArt('scene-'+LEVELS[level-1].scene, ...(LEVELS[level]?['scene-'+LEVELS[level].scene]:[]));
   target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
@@ -498,6 +505,11 @@
   const {enemy:victim,impact}=shot;
   const fireAngle=lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0;
   const travelTiles=dist(origin,impact);
+  const [dx,dy]=DIRS[lastFacing];
+  const muzzleOffset=Math.min(.75,travelTiles*.4);
+  const muzzle={x:origin.x+dx*muzzleOffset,y:origin.y+dy*muzzleOffset};
+  const nozzleX=(muzzle.x+.5)*tile,nozzleY=(muzzle.y+.5)*tile;
+  const travelPx=Math.max(tile*.18,(travelTiles-muzzleOffset)*tile);
   if(victim)say(`${type==='laser'?'Laser':'Rocket'} locked: ${victim.name}`);
   else say(`${type==='laser'?'Laser':'Rocket'} fired ${lastFacing}. No Fiend in the firing lane.`);
   if(victim){
@@ -505,25 +517,25 @@
     victim.el.classList.add('auto-locked');
     setTimeout(()=>{if(sessionId===shotSession)victim.el?.classList.remove('auto-locked');},330);
   }
-  effect('muzzle',origin,1.7);
+  effect('muzzle',muzzle,1.15);
   if(type==='laser'){
     // The independent original red bolt asset is drawn on top of the laser beam.
     const bolt=document.createElement('img');bolt.className='laser-bolt-projectile';
     bolt.src=asset('laser-bolt');bolt.alt='';bolt.draggable=false;
-    const span=Math.max(tile*.7,travelTiles*tile);
+    const span=travelPx;
     bolt.style.width=span+'px';bolt.style.height=tile*1.1+'px';
-    bolt.style.left=((origin.x+.5)*tile)+'px';
-    bolt.style.top=((origin.y+.5)*tile-tile*.55)+'px';
+    bolt.style.left=nozzleX+'px';
+    bolt.style.top=(nozzleY-tile*.55)+'px';
     bolt.style.transformOrigin='0 50%';
     bolt.style.transform=`rotate(${fireAngle}deg)`;
     board.append(bolt);setTimeout(()=>bolt.remove(),225);
     effect('beam',origin,1);
     const beam=board.lastChild;
-    const distance=Math.max(tile*.65,travelTiles*tile);
-    beam.style.left=((origin.x+.5)*tile)+'px';
+    const distance=travelPx;
+    beam.style.left=nozzleX+'px';
     beam.style.width=distance+'px';
     const beamHeight=Math.max(4,tile*.095);
-    beam.style.top=((origin.y+.5)*tile-beamHeight/2)+'px';
+    beam.style.top=(nozzleY-beamHeight/2)+'px';
     beam.style.height=beamHeight+'px';
     beam.style.transformOrigin='0 50%';
     beam.style.transform=`rotate(${fireAngle}deg)`;
@@ -535,7 +547,7 @@
     rocket.innerHTML=`<img src="${asset('rosie-projectile')}" alt="" draggable="false">`;
     const size=tile*2.25,angle=fireAngle,ms=Math.min(900,Math.max(180,travelTiles*92));
     rocket.style.width=size+'px';rocket.style.height=size*.78+'px';
-    rocket.style.left=((origin.x+.5)*tile)+'px';rocket.style.top=((origin.y+.5)*tile)+'px';
+    rocket.style.left=nozzleX+'px';rocket.style.top=nozzleY+'px';
     rocket.style.transform=`translate(-50%,-50%) rotate(${angle}deg)`;
     board.append(rocket);
     requestAnimationFrame(()=>{
