@@ -312,3 +312,194 @@ body.captain-fullscreen-fallback-active #root *:has(.captain-fullscreen-frame.is
   transform:none!important;perspective:none!important;
   contain:none!important;overflow:visible!important;
 }
+
+/* Gameplay-first full-screen layouts. Aspect geometry is preserved. */
+@media(min-width:900px) and (min-height:650px) and (orientation:landscape){
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.ember-suite{
+    display:grid!important;
+    grid-template-columns:minmax(255px,340px) minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto minmax(0,1fr) auto!important;
+    align-items:start!important;column-gap:22px!important;row-gap:10px!important;
+    width:100%!important;max-width:none!important;
+    height:100dvh!important;min-height:0!important;
+    margin:0!important;padding:52px 22px 18px!important;
+    overflow:auto!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-section-divider{
+    display:none!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-header{
+    grid-column:1!important;grid-row:1!important;height:clamp(110px,15dvh,165px)!important;
+    min-height:0!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-stats{
+    grid-column:1!important;grid-row:2!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-expedition{
+    grid-column:1!important;grid-row:3!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-stage{
+    grid-column:2!important;grid-row:1/6!important;align-self:center!important;justify-self:center!important;
+    box-sizing:border-box!important;
+    width:min(100%,calc(84dvh - 74px),760px)!important;
+    height:auto!important;aspect-ratio:690 / 820!important;
+    min-width:0!important;min-height:0!important;max-width:760px!important;max-height:none!important;
+    margin:0 auto!important;overflow:hidden!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-canvas{
+    width:100%!important;height:100%!important;aspect-ratio:690 / 820!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-controls{
+    grid-column:1!important;grid-row:4!important;align-self:center!important;width:100%!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-run-actions{
+    grid-column:1!important;grid-row:5!important;align-self:end!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-caption{
+    grid-column:1!important;grid-row:5!important;align-self:end!important;
+    margin-top:40px!important;
+  }
+
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page{
+    display:grid!important;
+    grid-template-columns:minmax(265px,330px) minmax(0,1fr)!important;
+    grid-template-rows:auto auto minmax(0,1fr)!important;
+    gap:10px 18px!important;align-items:start!important;
+    width:100%!important;max-width:none!important;
+    min-height:0!important;height:100dvh!important;
+    margin:0!important;padding:52px 18px 18px!important;
+    overflow:auto!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-hero{
+    grid-column:1!important;grid-row:1!important;
+    min-height:0!important;height:clamp(115px,16dvh,175px)!important;
+    margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip{
+    grid-column:1!important;grid-row:2!important;margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-hud{
+    grid-column:1!important;grid-row:3!important;
+    display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    width:100%!important;height:auto!important;max-width:none!important;
+    align-content:start!important;gap:9px!important;
+    margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-shell{
+    grid-column:2!important;grid-row:1/4!important;
+    justify-self:center!important;align-self:start!important;
+    width:min(100%,630px)!important;max-width:630px!important;
+    min-width:0!important;height:auto!important;
+    margin:0 auto!important;box-sizing:border-box!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-course{
+    width:100%!important;height:clamp(500px,calc(100dvh - 218px),900px)!important;
+    min-height:0!important;max-height:none!important;
+    aspect-ratio:auto!important;box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+}
+/* Smaller screens use stacked cabinets without distorting underlying game geometry. */
+@media(max-width:899px), (max-height:649px){
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.ember-suite{
+    width:100%!important;max-width:760px!important;
+    margin:0 auto!important;padding:47px 7px 18px!important;
+    overflow:auto!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-stage{
+    box-sizing:border-box!important;
+    width:min(100%,calc(84dvh - 85px),690px)!important;
+    height:auto!important;aspect-ratio:690 / 820!important;
+    min-height:0!important;max-height:none!important;
+    margin:6px auto!important;
+  }
+  .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-canvas{
+    display:block;width:100%!important;height:100%!important;
+    aspect-ratio:690 / 820!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page{
+    width:100%!important;max-width:740px!important;min-height:100dvh!important;
+    height:auto!important;margin:0 auto!important;padding:47px 8px 16px!important;
+    overflow:auto!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-shell{
+    width:100%!important;max-width:590px!important;margin:0 auto!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-course{
+    width:100%!important;height:clamp(450px,70dvh,760px)!important;
+    max-height:none!important;
+  }
+}
+/* Yacht pause - freeze motion and control input without losing current progress. */
+.captain-yacht-pause-button{
+  position:absolute;z-index:65;right:12px;top:12px;
+  padding:8px 12px;min-height:34px;
+  border:1px solid #f5d391;border-radius:9px;
+  background:linear-gradient(140deg,#123b54ed,#10253fec);
+  color:#fff0c2;font:700 11px Arial,sans-serif;letter-spacing:.65px;
+  cursor:pointer;box-shadow:0 3px 12px #031b2a9c;
+}
+.captain-yacht-pause-button:disabled{opacity:.42;cursor:default}
+.captain-yacht-pause-button:focus-visible{
+  outline:3px solid #ffe6a3;outline-offset:3px;
+}
+.captain-yacht-pause-overlay{
+  position:absolute;z-index:60;inset:0;
+  display:grid;place-items:center;
+  padding:22px;
+  background:linear-gradient(160deg,#032539ce,#041c30d9);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  color:#fcecc9;text-align:center;
+}
+.captain-yacht-pause-overlay>div{
+  width:min(92%,400px);padding:28px 18px;
+  border:1px solid #e2be7c;border-radius:18px;
+  background:linear-gradient(145deg,#153a53ef,#0b233be8);
+  box-shadow:0 12px 40px #07141ad6;
+}
+.captain-yacht-pause-overlay span{
+  display:block;font:700 10px Arial,sans-serif;letter-spacing:2px;color:#d4b97f;
+}
+.captain-yacht-pause-overlay strong{
+  display:block;margin-top:8px;font:700 clamp(24px,4vw,37px) Georgia,serif;
+}
+.captain-yacht-pause-overlay p{font:13px/1.5 Arial,sans-serif;color:#e7e0ce}
+.captain-yacht-pause-overlay button{
+  margin-top:12px;min-height:43px;padding:10px 19px;
+  border:1px solid #ffdf9b;border-radius:9px;
+  background:linear-gradient(135deg,#af4940,#7f2c4b);
+  color:#fff8dc;font:bold 12px Arial,sans-serif;cursor:pointer;
+}
+.captain-game-page.is-paused .yacht-course *,
+.captain-game-page.is-paused .yacht-course *::before,
+.captain-game-page.is-paused .yacht-course *::after,
+.captain-game-page.is-paused .yacht-course::before,
+.captain-game-page.is-paused .yacht-course::after{
+  animation-play-state:paused!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .captain-yacht-pause-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+/* Cosmic Odyssey: remove the giant empty backing panel, keep only game and banner. */
+.cosmic-odyssey-portal.cosmic-odyssey-main-entry{
+  background:transparent!important;
+  border:0!important;box-shadow:none!important;
+  border-radius:0!important;padding:0!important;
+  row-gap:8px!important;
+}
+.cosmic-odyssey-main-entry>.cosmic-odyssey-entry-banner{
+  box-shadow:0 7px 24px #05082080!important;
+}
+.cosmic-odyssey-main-entry .cosmic-odyssey-entry-info{
+  background:transparent!important;padding:2px 5px!important;
+}
+.cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell{
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;padding:0!important;margin:0!important;
+}
+.cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell iframe{
+  border:1px solid #c29d6a!important;
+  background:#080b22;
+}
