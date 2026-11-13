@@ -19,8 +19,32 @@
  }
 
  const LEVELS=[
-  {name:'NEBULA PASSAGE',tagline:'METEOR MISCHIEF',scene:'nebula',seed:6900,target:18,speed:1,accent:'nebula'},
-  {name:'LUNAR OUTPOST',tagline:'THE MOONLIGHT GAUNTLET',scene:'lunar',seed:12263,target:22,speed:.87,accent:'lunar'}
+  {name:'NEBULA PASSAGE',tagline:'GALACTIC ARCHWAYS',scene:'nebula',seed:6900,target:18,speed:1,accent:'nebula'},
+  {name:'METEOR MISCHIEF',tagline:'THE ASTEROID GAUNTLET',scene:'meteor',seed:9810,target:19,speed:.97,accent:'meteor'},
+  {name:'LUNAR OUTPOST',tagline:'MOON COLONY RUN',scene:'lunar',seed:12263,target:20,speed:.95,accent:'lunar'},
+  {name:'CRYSTAL CAVERNS',tagline:'THE AMETHYST DEEP',scene:'crystal',seed:16342,target:20,speed:.93,accent:'crystal'},
+  {name:'VOLCANIC FOUNDRY',tagline:'MAGMA MACHINERY',scene:'foundry',seed:21831,target:21,speed:.91,accent:'foundry'},
+  {name:'DERELICT STARSHIP',tagline:'GHOST SHIP CORRIDORS',scene:'derelict',seed:24749,target:21,speed:.89,accent:'derelict'},
+  {name:'COMET ICE CANYON',tagline:'FROSTBOUND FLIGHT',scene:'ice',seed:28112,target:22,speed:.87,accent:'ice'},
+  {name:'RINGWORLD GARDENS',tagline:'THE ORBITAL SANCTUARY',scene:'garden',seed:32673,target:22,speed:.86,accent:'garden'},
+  {name:'BLACK HOLE OBSERVATORY',tagline:'EVENT HORIZON',scene:'blackhole',seed:35218,target:23,speed:.85,accent:'blackhole'},
+  {name:'ANCIENT ALIEN RUINS',tagline:'THE FINAL RELIC',scene:'ruins',seed:39101,target:23,speed:.84,accent:'ruins'}
+ ];
+ const SCENES=[
+  {id:'nebula',name:'NEBULA PASSAGE'},
+  {id:'meteor',name:'METEOR MISCHIEF'},
+  {id:'lunar',name:'LUNAR OUTPOST'},
+  {id:'crystal',name:'CRYSTAL CAVERNS'},
+  {id:'foundry',name:'VOLCANIC FOUNDRY'},
+  {id:'derelict',name:'DERELICT STARSHIP'},
+  {id:'ice',name:'COMET ICE CANYON'},
+  {id:'garden',name:'RINGWORLD GARDENS'},
+  {id:'blackhole',name:'BLACK HOLE OBSERVATORY'},
+  {id:'ruins',name:'ANCIENT ALIEN RUINS'},
+  {id:'nebula-alt',name:'NEBULA - ALT'},
+  {id:'meteor-alt',name:'METEOR - ALT'},
+  {id:'lunar-alt',name:'LUNAR - ALT A'},
+  {id:'lunar-alt2',name:'LUNAR - ALT B'}
  ];
  const ENEMY_INFO=[
   {id:'jett',name:'Jett Scroundrel',hp:1,speed:510,kind:'patrol',points:150},
@@ -153,13 +177,15 @@
   el.classList.toggle('active',active);
  }
  function changeScene(next){
-  scene=['nebula','lunar','meteor'].includes(next)?next:'nebula';
-  board.dataset.scene=scene;
-  const app=$('cosmic-app');if(app)app.dataset.scene=scene;
-  const labels={nebula:['NEBULA','NEBULA PASSAGE'],lunar:['LUNAR','LUNAR OUTPOST'],meteor:['METEOR','METEOR MISCHIEF']};
-  const label=$('scene-name');if(label)label.textContent=labels[scene][0];
-  $('level').textContent=labels[scene][1];
-}
+  const item=SCENES.find(o=>o.id===next)||SCENES[0];scene=item.id;
+  board.dataset.scene=item.id;
+  const app=$('cosmic-app');if(app)app.dataset.scene=item.id;
+  const label=$('scene-name');if(label)label.textContent=item.name.split(' ')[0];
+  const stage=LEVELS[level-1];
+  $('level').textContent=`LEVEL ${level} / ${LEVELS.length} · ${stage.name}`;
+  const kicker=$('stage-kicker');if(kicker)kicker.textContent=`THE HOUSE OF ROSIE · LEVEL ${level} / ${LEVELS.length} · ${stage.name}`;
+  const alt=$('scene-description');if(alt)alt.textContent=`SCENERY: ${item.name}`;
+ }
  function popup(text,p){const el=document.createElement('div');el.className='popup-message';el.textContent=text;el.style.left=`${(p.x+.2)*tile}px`;el.style.top=`${(p.y-.1)*tile}px`;board.append(el);setTimeout(()=>el.remove(),990);}
  function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),type==='explosion'?700:440);}
  function sound(freq=480,duration=.07,shape='sine'){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!sound.context)sound.context=new C();const ctx=sound.context,o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.value=freq;g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);}catch{}}
@@ -233,13 +259,15 @@
   phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
   veil.classList.remove('hidden');
   $('veil-title').textContent=status==='win'?'ODYSSEY COMPLETE':
-    status==='level-clear'?'NEBULA CLEARED':
+    status==='level-clear'?LEVELS[level-1].name+' CLEARED':
     status==='lose'?'MISSION FAILED':
     status==='paused'?'MISSION PAUSED':'COSMIC ODYSSEY';
   const title=$('mission-crest');if(title)title.textContent=status==='level-clear'?
-    '✦ STAGE 02 UNLOCKED · LUNAR OUTPOST ✦':
+    `✦ STAGE ${level+1} UNLOCKED · ${LEVELS[level]?.name||'ODYSSEY'} ✦`:
     `✦ LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].tagline} ✦`;
-  $('veil-msg').textContent=text;$('start').textContent=buttonText;ui();
+  $('veil-msg').textContent=text;$('start').textContent=buttonText;
+  const select=$('stage-select');if(select&&status==='level-clear')select.value=String(Math.min(level+1,LEVELS.length));
+  ui();
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
   if(!carry){score=0;ammo=0;lives=3;}
@@ -271,13 +299,13 @@
     positionShield();say('Resume course.');return;
   }
   const carry=phase==='level-clear'&&level<LEVELS.length;
-  level=carry?level+1:1;
+  const chosen=Number($('stage-select')?.value||1);
+  level=carry?level+1:Math.max(1,Math.min(LEVELS.length,Number.isFinite(chosen)?chosen:1));
   init(carry);
   phase='playing';running=true;
   protectedUntil=performance.now()+2200;
   veil.classList.add('hidden');positionShield();
-  say(carry?'Lunar Outpost! Fiends move faster. Secure the station and escape.':
-    'Nebula Passage! Collect biscuits and stop the Fiends.');
+  say(`${LEVELS[level-1].name}! Collect biscuits, defeat the Fiends, and escape.`);
   sound(carry?880:670,.17);ui();
  }
  function pause(){if(phase==='playing')enter('paused','Your mission is safely paused. Resume whenever ready.','RESUME MISSION');else if(phase==='paused')start();}
@@ -287,7 +315,7 @@
   case'bone':ammo=Math.min(8,ammo+3);score+=75;protectedUntil=performance.now()+3900;popup('GOLDEN BONE +3',p);sound(1120,.16);break;
   case'rocket':ammo=Math.min(8,ammo+2);score+=25;popup('ROCKET +2',p);sound(840,.1);break;
   case'shield':protectedUntil=performance.now()+5500;popup('SHIELD!',p);sound(930,.13);break;
-  }ui();positionShield();if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level<LEVELS.length?'Portal unlocked! Enter to reach Lunar Outpost.':'Portal unlocked! Complete the final stage.');}
+  }ui();positionShield();if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level<LEVELS.length?`Portal unlocked! Next: ${LEVELS[level].name}.`:'Final portal unlocked! Complete the Odyssey.');}
  }
  // One controller owns all movement. A quick tap moves one tile; holding a key/pad repeats at STEP_MS.
  function canStep(dir){const v=DIRS[dir];return !!v&&open(player.x+v[0],player.y+v[1]);}
@@ -315,9 +343,9 @@
  }
  function completeLevel(){
   if(level<LEVELS.length){
-    score+=650;enter('level-clear','Captain Rosie cleared Nebula Passage. Your score, hull, and treat charge carry forward. Lunar Outpost has a new maze, more biscuits, and faster Fiends.','ENTER LUNAR OUTPOST');
+    score+=650;enter('level-clear',`${LEVELS[level-1].name} cleared! Hull, charge, and score carry forward to ${LEVELS[level].name}. Prepare for a new environment.`,`ENTER ${LEVELS[level].name}`);
   }else{
-    score+=1500;enter('win','Both cosmic sectors secured! Captain Rosie defeated Jett, Chip, and Kitty in Lunar Outpost and escaped with the treats.','PLAY AGAIN');
+    score+=1500;enter('win','Ten cosmic sectors secured! Captain Rosie defeated the Fiends and completed the Odyssey.','PLAY AGAIN');
   }
   sound(1400,.35);ui();
  }
@@ -405,7 +433,7 @@
     popup(`${e.name.split(' ')[0]} ♥${e.health}`,e);
     say(`${e.name} - ${e.health} HP left.`);
   }
-  if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level===1?'Reach the portal for Lunar Outpost!':'Final portal unlocked - finish the Odyssey!');}
+  if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level<LEVELS.length?`Portal open! Next: ${LEVELS[level].name}.`:'Final portal unlocked - finish the Odyssey!');}
   ui();
  }
  function positionEnemyShot(shot){
@@ -546,7 +574,14 @@
     if(Math.max(Math.abs(dx),Math.abs(dy))<9)return;
     requestMove(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');
   },{passive:true});
-  $('scene-toggle').addEventListener('click',()=>changeScene(scene==='nebula'?'lunar':scene==='lunar'?'meteor':'nebula'));
+  $('scene-toggle').addEventListener('click',()=>{
+    const index=SCENES.findIndex(o=>o.id===scene);
+    changeScene(SCENES[(index+1)%SCENES.length].id);
+  });
+  const stageSelect=$('stage-select');if(stageSelect){
+    stageSelect.innerHTML=LEVELS.map((s,i)=>`<option value="${i+1}">${i+1}. ${s.name}</option>`).join('');
+    stageSelect.value='1';
+  }
   $('laser').addEventListener('click',()=>fire('laser'));
   $('rocket').addEventListener('click',()=>fire('rocket'));
   $('pause-top').addEventListener('click',pause);
@@ -554,5 +589,5 @@
   window.addEventListener('resize',()=>{if(phase==='start'&&!player){cols=innerWidth>=760&&innerWidth>innerHeight?17:11;rows=cols===17?11:15;init();}resize();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&phase==='playing')pause();});
  }
- controls();init();enter('start','Two stages: Nebula Passage and Lunar Outpost. Collect biscuits to power your laser (1 treat) or rocket (2 treats). Defeat the three Fiends, then enter each portal. Kitty takes three laser hits.','LAUNCH MISSION');loopId=requestAnimationFrame(tick);
+ controls();init();enter('start','Explore ten distinct cosmic environments. Collect biscuits to power lasers (1 treat) and rockets (2 treats), defeat three Fiends, and reach the portal. Choose any stage below to playtest it directly.','LAUNCH MISSION');loopId=requestAnimationFrame(tick);
 })();
