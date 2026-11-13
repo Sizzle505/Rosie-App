@@ -110,3 +110,19 @@ Four alternate views (`scene-nebula-alt`, `scene-meteor-alt`, `scene-lunar-alt`,
 - Responsive D-pad controls were enlarged for normal-height portrait phones, with a compact fallback for short viewports.
 - Revisit balance over ten stages: increased speed and plasma mines may require adjustment based on playtests. Do not increase difficulty further without feedback.
 - All changes remain in the Cosmic Odyssey development branch / Draft PR #159. Do not merge into production until visually reviewed.
+
+## Maze architecture and targeting revision - November 13, 2026
+
+**Corrected visual hierarchy:** The illustrated scene is now rendered inside the actual gameplay board at near-full contrast. The outside page uses a subdued vignette. Corridors are transparent, with no generic square floor overlays.
+
+**New connected partition assets:** Six 512×512 SVG atlases are stored as `assets/partitions-deco.svg`, `partitions-lunar.svg`, `partitions-crystal.svg`, `partitions-foundry.svg`, `partitions-verdant.svg`, and `partitions-void.svg`. Each contains 16 independent graphical configurations representing the four-bit N=1, E=2, S=4, W=8 wall adjacency mask: isolated pillar, end caps, straight sections, bends, T-junctions and four-way junctions. A wall cell selects the matching atlas position with `--partition-x`/`--partition-y`. Neighbor connectors share the same dimensions. Collision remains based on `grid`, not image alpha.
+
+Material families: Nebula→deco; Meteor/Foundry→foundry; Lunar/Ice→lunar; Crystal/Ruins→crystal; Garden→verdant; Derelict/Black Hole→void. Alternative scenery previews update wall materials as well.
+
+**Spawn-platform lifecycle:** Rosie's and each Fiend's large launch-pad artwork is a short opening flourish only. Once a stage begins, pads fade and their DOM images and launch-cell classes are removed after 820 ms. They do not remain scattered through the level.
+
+**Directional auto aim:** `acquireDirectionalTarget(origin,facing)` considers only live Fiends forward of Rosie in a ~31° cone. A densely sampled grid ray rejects any wall-covered shot, including diagonal corner intersections. Candidates are ranked by perpendicular distance to her firing direction, with range breaking ties. A briefly shown target reticle confirms the lock; the laser beam and rocket projectile rotate toward the chosen target. If there is no visible Fiend, the weapon fires straight in the last movement direction. This is an aim assist, not automatic firing.
+
+**Verification:** JavaScript parses. Mock gameplay checks covered 11×15 portrait and 17×11 desktop grids, fourteen/fifteen distinct wall connection masks, proper scene-material switching, straight-on and offset enemy locks, nearest-aligned Fiend priority, wall obstruction, and targets behind Rosie. A separate lifecycle test confirmed all four spawn stations fade and are removed from the new session. The rocket rendered with a diagonal angle (18.43°) toward an off-axis target and reverted to cardinal heading when the target's line was blocked. These are logic/simulation tests, not a live iPhone visual inspection.
+
+**Status:** Development preview only, unmerged Draft PR #159. A real browser/on-device screenshot review remains necessary, particularly the look of the six new modular partition atlases at native iPhone sizes.
