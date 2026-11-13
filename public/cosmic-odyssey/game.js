@@ -101,10 +101,11 @@
  function desiredMazeLayout(){
   const desktop=innerWidth>=760&&innerWidth>innerHeight;
   if(!desktop)return {cols:11,rows:15};
-  // A wider, genuinely landscape maze makes useful use of desktop displays.
-  // Keep narrow/laptop viewports readable without stretching game cells.
-  const wide=innerWidth>=1450?27:innerWidth>=1120?23:17;
-  return {cols:wide,rows:11};
+  // Large desktops use an Art Deco command console beside the full-height maze.
+  // The 17×11 field fits the resulting tall play area without wasted space.
+  if(innerWidth>=1500&&innerHeight>=740)return {cols:17,rows:11};
+  // Laptops retain the wide, compact masthead format.
+  return {cols:innerWidth>=1450?27:innerWidth>=1120?23:17,rows:11};
  }
  function resize(){
   const wanted=desiredMazeLayout();
