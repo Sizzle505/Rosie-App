@@ -4269,17 +4269,26 @@ body:has(.app-shell.page-timekeeper),
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
   body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    top: 25% !important;
-    left: calc(100% + clamp(16px, 2vw, 40px)) !important;
-    width: min(23vw, 440px) !important;
-    height: clamp(340px, 45dvh, 430px) !important;
+    top: 24% !important;
+    left: calc(100% - 8px) !important;
+    width: clamp(280px, 24vw, 360px) !important;
+    height: clamp(400px, 55dvh, 530px) !important;
     transform: none !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
-    top: 16% !important; bottom: 8% !important;
-    left: 10% !important; right: 10% !important;
+    top: 17% !important; bottom: 9% !important;
+    left: 11% !important; right: 11% !important;
   }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading { font-size: 18px !important; margin-bottom: 14px; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace { gap: 14px; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs button { min-height: 36px; font-size: 13px; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust { gap: 7px; margin: 7px 0; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust button { min-height: 34px; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace .rtk-presets { gap: 7px; margin: 8px 0 !important; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace .rtk-presets button { min-height: 38px !important; font-size: 13px !important; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-custom-composer { gap: 14px !important; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-duration-actions button { min-height: 38px; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-presets button,
   .app-shell.page-timekeeper .rtk-observatory .rtk-adjust-row button,
   .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer button {
@@ -4290,12 +4299,5 @@ body:has(.app-shell.page-timekeeper),
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {
     font-size: 14px !important;
-  }
-}
-@media (min-width: 1200px) and (max-width: 1399px) {
-  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
-  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
-  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
-    width: min(23vw, 280px) !important;
   }
 }

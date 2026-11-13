@@ -887,7 +887,8 @@
 }
 
 @media (max-width: 680px) {
-  .page > * { width: 100%; }
+  .page > * { width: min(1440px, calc(100% - 64px)); }
+  .page > .illustratedHero { width: 100%; }
   .wheelStage::before { top: 77px; height: 355px; }
   .wheelWrap::before { inset: 13px; }
   .wheelWrap::after { top: 36px; left: 67px; width: 95px; height: 45px; }
