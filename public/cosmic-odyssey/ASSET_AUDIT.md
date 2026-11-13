@@ -57,3 +57,22 @@ Prototype gameplay additionally supports telegraphed Fiend ranged attacks. Jett 
 **Verification:** JavaScript passed syntax checks. Simulated mobile 11×15 and desktop 17×11 tests confirmed the original Chip projectile asset, shield-blocked collision, unshielded damage, and Meteor selection. The connected Vercel preview was reported READY. Real iPhone visual and input testing is still outstanding.
 
 **Archive limitation:** The connected Dropbox provider confirms the source ZIPs exist but its text extraction interface rejects ZIPs larger than 5 MB. A signed download was requested but the working container cannot retrieve its host. Therefore the full member-by-member ZIP audit cannot yet be certified. Continue recovering source-quality Fiend assets when accessible; never replace them with contact-sheet crops.
+
+
+## Environment integration - November 12, 2026 (later pass)
+Verified all six source PNGs against the exact members of `Captain-Rosie-Cosmic-Odyssey-Environment-Batch-2.zip`, then imported small WebP gameplay derivatives. Their original full-size image files remain available in the ZIP. Images were **not** arbitrarily cropped from a montage during this pass.
+
+| Source ZIP member | Installed gameplay image | Use |
+|---|---|---|
+| `11-t-junction.png` | `assets/junction-tee.webp` | Actual maze T-junction floor inlay |
+| `12-crossing.png` | `assets/junction-cross.webp` | Actual four-way floor inlay |
+| `13-end-cap.png` | `assets/junction-endcap.webp` | Dead-end corridor floor inlay |
+| `15-fiend-spawn-node.png` | `assets/fiend-spawn.webp` | Painted launch platforms under Rosie and each Fiend |
+| `19-large-asteroid.png` | `assets/asteroid-large.webp` | Decorative outer-playfield space scenery |
+| `20-small-asteroid.png` | `assets/asteroid-small.webp` | Secondary outer scenery and occasional wall crater detail |
+
+**Technical scope:** Inlays and scenery do not change maze connectivity, logical hitboxes, item placement, or enemy pathfinding. The shield is now centered on Rosie's clamped rendered visual bounds rather than the unclamped tile center. This corrects the alignment discrepancy near edges of the board. Original image dimensions vary and the optimized WebP files are intended only for gameplay-scale use; do not enlarge them to hero/banner size.
+
+**Repository count:** 48 optimized image files in `public/cosmic-odyssey/assets/`, including the six new environment imports.
+
+**Verification:** New Git blobs' SHA-1 hashes matched local optimized files. Runtime simulations of the portrait 11×15 and landscape 17×11 mazes produced all four launch pads, actual floor junction classes, a centered shield, and successful transition to Lunar Outpost. Real-device display review remains recommended.
