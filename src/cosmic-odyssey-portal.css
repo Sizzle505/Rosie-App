@@ -59,3 +59,55 @@
  .cosmic-odyssey-embedded-shell{margin:11px 0 0;padding:2px;border-radius:9px}
  .cosmic-odyssey-embedded-shell iframe{height:calc(100dvh - 28px);min-height:560px}
 }
+
+/* Captain tab discovery: show the third game, and let desktop users jump to it. */
+.captain-arcade-jump{
+ width:min(1120px,calc(100% - 28px));margin:14px auto 18px;
+ padding:10px 12px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
+ border:1px solid #e1b76b;border-radius:15px;
+ background:linear-gradient(110deg,#10112eea,#242042ee 55%,#341536e9);
+ box-shadow:0 8px 30px #050b2080;
+ color:#ffe7b1;
+}
+.captain-arcade-jump>span{
+ font:700 10px/1.4 Arial,sans-serif;letter-spacing:1.1px;
+ color:#efc77d;
+}
+.captain-arcade-jump button{
+ display:flex;align-items:center;gap:12px;min-height:54px;cursor:pointer;
+ border:1px solid #efc978;border-radius:10px;
+ padding:6px 17px 6px 8px;color:#fff1c9;
+ background:linear-gradient(110deg,#512038,#88283d);
+ box-shadow:0 0 12px #f5ba4b2a;
+}
+.captain-arcade-jump button img{
+ display:block;width:78px;height:41px;object-fit:cover;object-position:center;
+ border-radius:5px;filter:none;
+}
+.captain-arcade-jump button strong{
+ font:bold 12px Arial,sans-serif;letter-spacing:.35px;
+}
+.captain-arcade-jump button small{
+ font:10px Arial,sans-serif;color:#ffd9a0;
+}
+.captain-arcade-jump>a{
+ display:inline-flex;align-items:center;justify-content:center;
+ min-height:44px;padding:7px 12px;border:1px solid #e4be81;
+ border-radius:9px;color:#ffe3ba;text-decoration:none;
+ font:700 11px Arial,sans-serif;
+}
+.captain-arcade-jump button:hover,.captain-arcade-jump>a:hover{filter:brightness(1.14)}
+.captain-arcade-jump button:focus-visible,.captain-arcade-jump>a:focus-visible{
+ outline:3px solid #ffd57d;outline-offset:3px;
+}
+.cosmic-odyssey-main-entry{scroll-margin-top:35px}
+.cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell iframe{
+ height:min(940px,calc(100dvh - 40px));min-height:620px;
+}
+@media(max-width:700px){
+ .captain-arcade-jump{gap:8px;margin:8px auto 12px;padding:8px}
+ .captain-arcade-jump>span{width:100%;text-align:center}
+ .captain-arcade-jump button{width:100%;justify-content:center;flex-wrap:wrap}
+ .captain-arcade-jump button small{font-size:9px}
+ .cosmic-odyssey-main-entry .cosmic-odyssey-embedded-shell iframe{height:calc(100dvh - 30px);min-height:550px}
+}
