@@ -616,6 +616,14 @@
   }
   const shot=forwardRay(origin,lastFacing);
   if(!shot.tiles.length){
+    const [dx,dy]=DIRS[lastFacing],wx=origin.x+dx,wy=origin.y+dy;
+    if(inside(wx,wy)&&grid[wy][wx]===1){
+      const wall=cells[wy]?.[wx];if(wall){
+        wall.classList.add('barrier-struck');
+        setTimeout(()=>wall.classList.remove('barrier-struck'),310);
+      }
+      effect('spark',{x:wx,y:wy},1.1);
+    }
     say('A wall blocks the firing lane. Turn toward an open corridor.');
     sound(180,.045);updateAimPreview();return;
   }
