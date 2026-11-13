@@ -1109,7 +1109,7 @@
   overflow:hidden;pointer-events:none;
  }
  .cosmic-bottom .sector-art #sector-setpiece{
-  flex:1;display:block;width:min(88%,300px);
+  flex:1;display:block;width:min(76%,212px);
   background-image:url('assets/sector-setpieces.webp');
   background-repeat:no-repeat;background-size:400% 200%;
   filter:drop-shadow(0 0 10px #6997d75c);
