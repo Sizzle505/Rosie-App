@@ -1,7 +1,19 @@
 {
-  "prototypeVersion": "0.1.0",
-  "created": "2026-11-11",
-  "assets": 23,
+  "prototypeVersion": "0.3.0",
+  "updated": "2026-11-12",
+  "imageAssets": 48,
+  "levels": [
+    {
+      "name": "Nebula Passage",
+      "scene": "nebula",
+      "targetBiscuits": 18
+    },
+    {
+      "name": "Lunar Outpost",
+      "scene": "lunar",
+      "targetBiscuits": 22
+    }
+  ],
   "mechanics": {
     "charge": {
       "treat": 1,
@@ -15,14 +27,33 @@
       "kitty": 3
     },
     "ai": {
-      "jett": "patrol",
-      "chip": "patrol dash",
-      "kitty": "BFS chase"
+      "jett": "patrol and plasma",
+      "chip": "patrol dash and emerald energy",
+      "kitty": "BFS chase and ranged attack"
     },
     "viewport": {
-      "mobile": "13x19 portrait",
-      "desktop": "21x13 landscape"
+      "mobile": "11x15 portrait",
+      "desktop": "17x11 landscape"
     }
   },
-  "notes": "First playable mechanics prototype. Paths to assets are independent; original masters are in batch ZIPs."
+  "environmentAssets": {
+    "reused": [
+      "meteor",
+      "nebula",
+      "lunar",
+      "portal"
+    ],
+    "recoveredOriginalImages": [
+      "fiend-spawn",
+      "asteroid-large",
+      "asteroid-small",
+      "junction-cross",
+      "junction-tee",
+      "junction-endcap"
+    ],
+    "effect": "Decorative layers only, no hitbox changes"
+  },
+  "shieldAlignment": "Follows clamped, rendered player spacecraft visualBounds rather than logical grid coordinate",
+  "sourceArchive": "Captain-Rosie-Cosmic-Odyssey-Environment-Batch-2.zip",
+  "qualityNote": "Six new WebP files are small in-game optimized copies of verified PNG source members; keep full-resolution masters in ZIP and do not upscale for title screens."
 }
