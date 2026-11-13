@@ -4253,17 +4253,11 @@ body:has(.app-shell.page-timekeeper),
     aspect-ratio: auto !important; margin: 0 auto !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-background { display: none; }
-  /* Register the supplied moving wheels as an arch behind Rosie's levers.
-     The lower half of the old annulus crossed the architecture and bezel. */
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(n+9) { display: none; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(1) { left: 17% !important; top: 49% !important; width: 15% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(2) { left: 25% !important; top: 36% !important; width: 13% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(3) { left: 34% !important; top: 25% !important; width: 15% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(4) { left: 44% !important; top: 19% !important; width: 13% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(5) { left: 55% !important; top: 19% !important; width: 15% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(6) { left: 66% !important; top: 26% !important; width: 13% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(7) { left: 75% !important; top: 37% !important; width: 15% !important; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork .rtk-gear-mount:nth-child(8) { left: 82% !important; top: 50% !important; width: 13% !important; }
+  /* The same annular train as iPhone, tucked behind the dial bezel. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork {
+    top: 53% !important;
+    width: 82% !important;
+  }
   .app-shell.page-timekeeper .rtk-observatory .rtk-dial {
     top: 53% !important; width: 58% !important;
   }
