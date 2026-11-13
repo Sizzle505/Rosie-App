@@ -7,6 +7,7 @@ import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
 import "./captain-refresh.css";
 import "./cosmic-odyssey-portal.css";
+import "./captain-arcade-backgrounds.css";
 import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
@@ -3173,6 +3174,7 @@ function App() {
           <FullscreenGameFrame label="Cheese Memory" variant="cheese"><CheeseMemoryGame /></FullscreenGameFrame>
         ) : page === "captain" ? (
           <>
+            <div className="captain-arcade-page-background" aria-hidden="true" />
             <nav className="captain-arcade-jump" aria-label="Captain arcade game navigation">
               <span>CAPTAIN'S THREE ADVENTURES</span>
               <button type="button" onClick={() => document.getElementById("cosmic-odyssey-arcade")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
