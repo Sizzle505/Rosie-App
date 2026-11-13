@@ -663,3 +663,48 @@
 @media(prefers-reduced-motion:reduce){
   .pickup.boost,.boost-weapon.active .boost-icon,.sprite.rosie.boosting::before{animation:none!important}
 }
+
+/* Original approved Cosmic Odyssey banner replaces the temporary text header. */
+.cosmic-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.cosmic-top.cosmic-banner-top{
+  flex:0 0 auto;max-width:1250px;width:100%;min-height:0!important;
+  border:1px solid #d4a253;border-radius:14px;padding:0!important;
+  overflow:hidden;isolation:isolate;background:#0b1231;
+  box-shadow:0 0 20px #f6b75b40,inset 0 0 0 1px #ffc87e64;
+}
+.cosmic-banner-art{
+  display:block;width:100%;height:clamp(106px,17vw,210px);
+  object-fit:cover;object-position:center 48%;
+  pointer-events:none;user-select:none;
+}
+.cosmic-banner-stage{
+  position:absolute;z-index:4;left:50%;bottom:3px;transform:translateX(-50%);
+  max-width:75%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding:2px 10px;border-radius:9px;
+  background:#091028c9;border:1px solid #e1b47180;
+  color:#ffeac0;font:700 9px/1.3 Arial,sans-serif;letter-spacing:.7px;
+  text-align:center;text-shadow:0 0 5px #000;
+}
+.cosmic-banner-top .scene-corner{
+  left:8px;top:12px;transform:none;min-width:36px;min-height:34px;
+  background:linear-gradient(130deg,#0c183de8,#26153cdc);
+}
+.cosmic-banner-top .pause-corner{
+  right:8px;top:7px;transform:none;width:42px;
+  background:#080f28c0;border:1px solid #dab878aa;border-radius:50%;
+}
+.sprite.fiend.kitty .sprite-art{
+  image-rendering:auto;object-fit:contain;
+  filter:drop-shadow(0 0 7px #ff8bd77a);
+}
+.sprite.rosie .sprite-art{image-rendering:auto;object-fit:contain}
+@media(max-width:680px){
+  .cosmic-banner-art{height:clamp(85px,25vw,108px);object-position:center 42%}
+  .cosmic-banner-stage{font-size:7px;max-width:68%;padding:2px 5px;bottom:2px}
+  .cosmic-banner-top .scene-corner{top:5px;left:5px}
+  .cosmic-banner-top .pause-corner{top:4px;right:5px;width:34px}
+}
+@media(max-height:680px) and (orientation:landscape){
+  .cosmic-banner-art{height:70px;object-position:center 45%}
+  .cosmic-banner-stage{display:none}
+}
