@@ -126,3 +126,19 @@ Material families: Nebula→deco; Meteor/Foundry→foundry; Lunar/Ice→lunar; C
 **Verification:** JavaScript parses. Mock gameplay checks covered 11×15 portrait and 17×11 desktop grids, fourteen/fifteen distinct wall connection masks, proper scene-material switching, straight-on and offset enemy locks, nearest-aligned Fiend priority, wall obstruction, and targets behind Rosie. A separate lifecycle test confirmed all four spawn stations fade and are removed from the new session. The rocket rendered with a diagonal angle (18.43°) toward an off-axis target and reverted to cardinal heading when the target's line was blocked. These are logic/simulation tests, not a live iPhone visual inspection.
 
 **Status:** Development preview only, unmerged Draft PR #159. A real browser/on-device screenshot review remains necessary, particularly the look of the six new modular partition atlases at native iPhone sizes.
+
+## Weapon targeting and visual-scale stabilization - November 13, 2026
+
+**Reported defect:** The old auto-aim accepted Fiends within a ~31-degree cone and rotated shots diagonally. When oversized spacecraft sprites were clamped near board edges, their drawn centers also diverged from their logical projectile origins.
+
+**Implemented:** The firing lane is now a strict, cardinal-direction corridor (the last direction Rosie moved). The first living Fiend on the uninterrupted tile ray is selected. The shot cannot auto-aim diagonally, through a wall, around a corner, or behind Rosie. If no Fiend is on the ray, it fires straight to the final open cell. If a wall immediately blocks the first cell, firing is cancelled without ammunition loss. Visual beam/bolt rotation points and rocket origins are aligned with the tile center and shifted a short, consistent distance toward Rosie's weapon muzzle.
+
+**Feedback:** `aim-indicator` in the HUD displays `AIM: UP/RIGHT/DOWN/LEFT` or `LOCK: JETT/CHIP/KITTY`; lockable Fiends receive a discreet outlined reticle. Character and combat artwork is now preloaded, along with the current and next level backdrops, to reduce first-use popping.
+
+**Proportions:** Jett's gameplay footprint was reduced by 25% on both axes, from 2.43×2.15 tiles to 1.8225×1.6125 tiles. Edge-positioned ships now scale proportionally to remain inside the playfield instead of shifting off their logical grid positions. The shield resizes to match Rosie's actual visible bounds.
+
+**Rocket/laser refinements:** Laser artworks rotate around their true firing origin and stop at the target or wall. Rockets travel along the actual facing lane. Rocket explosions no longer apply special damage to a target that has moved up to two tiles beyond the blast.
+
+**Automated/simulated verification:** JavaScript syntax passed. On 393×852 and 1280×800 mock viewports, all four firing directions selected the nearest Fiend in the open cardinal lane. Off-axis, blocked, and behind-player targets were excluded. Blocked adjacent-wall shots retained ammunition. Jett's rendered width measured 1.8225 tiles and edge-aligned sprites remained centered. A rocket firing on a three-cell clear line impacted the Jett target at the scheduled explosion and defeated him. All ten campaign layouts on each viewport had sufficient reachable biscuits, reachable Fiends, accessible exits, and functioning wormhole placement from Stage 4 onward.
+
+**Limitations:** Logic and DOM simulation are not equivalent to real iPhone/desktop rendering. This branch still needs a live device review for visual size, touch feel, and projectile animations before merging.
