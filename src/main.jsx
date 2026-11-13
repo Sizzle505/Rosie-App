@@ -6,6 +6,7 @@ import "./visual-rebuild.css";
 import "./fortune-desktop.css";
 import "./cheese-left-panel.css";
 import "./captain-refresh.css";
+import "./cosmic-odyssey-portal.css";
 import "./captain-scene.css";
 import "./captain-motion.css";
 import "./responsive-polish.css";
@@ -2255,6 +2256,35 @@ function CaptainRosieGame({ soundOn }) {
 }
 
 
+function CosmicOdysseyArcade(){
+  const [isOpen,setIsOpen]=useState(false);
+  return (
+    <section className="cosmic-odyssey-portal cosmic-odyssey-main-entry" aria-label="Captain Rosie Cosmic Odyssey arcade">
+      <img className="cosmic-odyssey-entry-banner" src="/cosmic-odyssey/assets/cosmic-banner.webp"
+        alt="Captain Rosie: Cosmic Odyssey - original starship arcade banner" loading="lazy" />
+      <div className="cosmic-odyssey-entry-info">
+        <span>CAPTAIN'S ARCADE · THIRD ADVENTURE</span>
+        <p>Explore ten space worlds, collect treats, defeat Jett, Chip and Kitty, and pilot Rosie to the exit portal.</p>
+        <div className="cosmic-odyssey-entry-actions">
+          <button type="button" className="cosmic-odyssey-portal-button"
+            onClick={()=>setIsOpen(open=>!open)} aria-expanded={isOpen}
+            aria-controls="cosmic-odyssey-embedded-game">
+            {isOpen?'CLOSE COSMIC ODYSSEY':'PLAY COSMIC ODYSSEY'}
+          </button>
+          <a className="cosmic-odyssey-window-link" href="/cosmic-odyssey/index.html"
+            target="_blank" rel="noopener noreferrer">OPEN FULL SCREEN</a>
+        </div>
+      </div>
+      {isOpen && (
+        <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
+          <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
+            loading="lazy" allowFullScreen />
+        </div>
+      )}
+    </section>
+  );
+}
+
 function App() {
   const [loaded, setLoaded] = useState(false);
   // Captain's audio uses this shared setting. It must exist before the Captain
@@ -3009,6 +3039,7 @@ function App() {
           <>
             <CaptainRosieGame soundOn={soundOn} />
             <EmberTunnelDrill soundOn={soundOn} />
+            <CosmicOdysseyArcade />
           </>
         ) : page === "captain2" ? (
           <Captain2Game soundOn={soundOn} />

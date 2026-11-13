@@ -1,0 +1,710 @@
+:root{font-family:Georgia,'Times New Roman',serif;color:#fff1c3;background:#090e29;font-synthesis:none}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}img{display:block}body{background:radial-gradient(ellipse at 50% 20%,#39306f 0%,#121334 40%,#070b20 90%)}.cosmic-app{--gold:#ffd179;display:flex;flex-direction:column;align-items:center;gap:6px;width:100vw;height:100dvh;overflow:hidden;padding:calc(6px + env(safe-area-inset-top)) 9px calc(5px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#09112dbb,#13113755),url('assets/nebula.webp') center / cover no-repeat}.cosmic-top{display:flex;align-items:center;justify-content:center;position:relative;width:100%;max-width:1250px;min-height:49px;padding:5px 54px;border:1px solid #b7883c;border-radius:15px;background:linear-gradient(115deg,#2c124e,#0a1936 38%,#2b173a 80%,#49182d);box-shadow:inset 0 0 0 2px #ecc16f33,0 3px 18px #0009}.cosmic-brand{text-align:center}.brand-kicker{display:block;font:600 8px Arial,sans-serif;letter-spacing:2px;color:#e6c18b}.cosmic-brand h1{margin:3px 0 0;color:#ffdda0;letter-spacing:.9px;font-size:clamp(15px,2.5vw,29px);text-shadow:0 1px #8a3719,0 2px #1c0e29,0 0 14px #f9bd4d55}.cosmic-brand h1 b{font-weight:500;color:#ffd380;font-size:.83em}.pause-corner{border:0;background:none;position:absolute;right:6px;top:50%;transform:translateY(-50%);width:44px;padding:3px}.pause-corner img{width:100%}.cosmic-hud{display:flex;justify-content:space-around;align-items:center;gap:3px;width:min(100%,1200px);min-height:45px;border:1px solid #bd8b4d;border-radius:11px;background:linear-gradient(150deg,#331334dd,#0d1a3fef 38%,#260f35ed);box-shadow:inset 0 1px 8px #ffd17b35}.hud-stat{min-width:0;text-align:center;flex:1;white-space:nowrap}.hud-stat small{display:block;color:#cca9aa;font:700 9px Arial,sans-serif;letter-spacing:.5px}.hud-stat b{font:bold 17px Arial,sans-serif;color:#ffe7ac;text-shadow:0 0 8px #ffad4966}.hud-stat i{font:10px Arial,sans-serif;color:#b8abb9}.cosmic-stage{flex:1;min-height:0;min-width:0;display:flex;align-items:center;justify-content:center;width:100%;overflow:hidden}.board-frame{position:relative;isolation:isolate;border:3px ridge #d29a44;background:#070d26;border-radius:10px;box-shadow:0 0 0 2px #301230,0 0 35px #673dbb95,inset 0 0 24px #08091b;overflow:hidden}.board{position:absolute;inset:0;display:grid;background:linear-gradient(#091032e8,#080c24ea),url('assets/nebula.webp') center/cover;isolation:isolate;touch-action:none;overflow:hidden}.board[data-scene='lunar']{background:linear-gradient(#08112bcc,#08112bbb),url('assets/lunar.webp') center / cover}.cell{min-width:0;min-height:0;position:relative}.cell.wall{background:linear-gradient(125deg,#343a66,#142547 47%,#0e1a37 52%,#212247);border:1px solid #ad754c55;box-shadow:inset 0 0 2px 1px #d59c4066,inset 0 0 7px #000a}.cell.wall::before{content:"";position:absolute;inset:28% 28%;background:radial-gradient(circle,#d5b25560,#64308e34,transparent 68%);border-radius:50%}.cell.floor{background:linear-gradient(140deg,#101d37c7,#080d24a8);box-shadow:inset 0 0 0 1px #40a5f71b}.cell.floor::before{content:"";position:absolute;inset:0;border-radius:3px;border-left:1px solid #43f1fd35;border-top:1px solid #43f1fd14;pointer-events:none}.pickup{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2}.pickup.treat{width:25%;height:25%;background:radial-gradient(circle at 38% 30%,#fff8bd,#f6c64e 50%,#a8531c);border-radius:35%;box-shadow:0 0 6px 2px #fac349bb;transform:translate(-50%,-50%) rotate(33deg)}.pickup.cheese,.pickup.bone,.pickup.shield,.pickup.rocket{object-fit:contain;width:90%;height:90%;filter:drop-shadow(0 0 5px #eab44c)}.pickup.bone{width:64%;height:53%;background:radial-gradient(ellipse,#faffb7,#eac849 58%,#d66d17 65%,transparent 70%);border-radius:30%;box-shadow:0 0 12px #ffe48d}.sprite{position:absolute;left:0;top:0;z-index:8;pointer-events:none;display:block;object-fit:contain;filter:drop-shadow(0 0 4px #000) drop-shadow(0 1px 6px #080625);will-change:transform;transition:transform 125ms linear}.sprite.rosie{z-index:12;filter:drop-shadow(0 2px 4px #130815) drop-shadow(0 0 5px #f6c86aaa)}.sprite.fiend.hurt{filter:drop-shadow(0 0 6px #fff) brightness(1.7) saturate(.4)}.sprite.fiend.dead{opacity:0!important;transition:opacity .25s}.sprite.rosie.hurt{filter:drop-shadow(0 0 9px #ff4237) brightness(1.8)}.effect{position:absolute;pointer-events:none;z-index:22;transform:translate(-50%,-50%);animation:effect-pop .38s ease-out forwards}.effect img{width:100%;height:100%;object-fit:contain}.effect.beam{height:5px;background:linear-gradient(90deg,transparent,#ff6e51,#fff5a1,#ff6d46);box-shadow:0 0 9px 3px #f93531;border-radius:3px;animation:beam .25s ease-out forwards;transform-origin:left center}.effect.rocket-flight{background:radial-gradient(ellipse,#ffe4a0,#f7a645,#f33a276e,transparent 72%);border-radius:60%;box-shadow:0 0 10px #fa7e27}.effect.spark{background:radial-gradient(circle,#fff5ab,#ff6b20 35%,#da2532b5 58%,transparent 70%);border-radius:50%}@keyframes effect-pop{from{opacity:0;scale:.5}20%{opacity:1}to{opacity:0;scale:1.45}}@keyframes beam{from{opacity:1;scale:0.1 1}to{opacity:0;scale:1 1}}.popup-message{position:absolute;z-index:24;font:700 15px Arial,sans-serif;pointer-events:none;color:#ffe49b;text-shadow:0 2px #3e113b,0 0 7px #f6b753;animation:float 1s ease-out forwards}@keyframes float{to{opacity:0;transform:translateY(-33px)}}.exit{position:absolute;z-index:3;object-fit:contain;filter:drop-shadow(0 0 7px #4bdeff)}.exit.locked{filter:grayscale(1) brightness(.55);opacity:.6}.exit.open{animation:glow 1.3s ease-in-out infinite alternate}@keyframes glow{to{filter:drop-shadow(0 0 13px #c186ff) brightness(1.5)}}.veil{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:linear-gradient(#02051bd9,#0f0a2ded),url('assets/nebula.webp') center/cover;padding:12px}.veil.hidden{display:none}.mission-card{width:min(96%,550px);max-height:100%;overflow:auto;text-align:center;border:2px solid #e6bc71;border-radius:19px;box-shadow:0 0 35px #9f68ff66,inset 0 0 18px #cf974b38;background:linear-gradient(135deg,#241840ec,#080e2df5,#2d1236fa);padding:12px}.mission-crest{font:700 10px Arial,sans-serif;color:#e9c590;letter-spacing:2px}.mission-rosie{width:min(70%,260px);height:min(20dvh,140px);margin:2px auto;object-fit:contain;filter:drop-shadow(0 0 10px #d7a561)}.mission-card h2{font-size:clamp(18px,3.4vw,32px);margin:0;color:#ffe3a2;letter-spacing:2px;text-shadow:0 2px #8c2e21}.mission-card p{color:#e7d7e6;font:12px/1.45 Arial,sans-serif;margin:5px auto;max-width:460px}.fiend-cameos{display:flex;gap:2px;justify-content:space-around;align-items:center;height:60px;max-width:360px;margin:3px auto}.fiend-cameos img{width:31%;max-height:60px;object-fit:contain}.launch-button{margin:3px auto 5px;padding:11px 26px;border:2px solid #f8d993;border-radius:12px;color:#fff0c1;font:bold 14px Arial,sans-serif;letter-spacing:1px;background:linear-gradient(120deg,#a42d35,#6d213c 50%,#ba562e);box-shadow:0 2px 12px #ffaf6477}.control-help{font:10px Arial,sans-serif;color:#d3c4d7}.cosmic-bottom{width:min(100%,1250px);flex-shrink:0}.status-line{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:18px;padding:0 6px;font:10px Arial,sans-serif;color:#f3d9a6}.status-line #message{min-width:0;max-width:76%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.status-line #level{font-size:9px;letter-spacing:.6px;color:#93c2ff}.command-bar{display:flex;align-items:center;justify-content:center;gap:clamp(12px,7vw,85px);min-height:84px;padding:1px 0}.dpad{display:grid;grid-template-columns:repeat(3,31px);grid-template-rows:repeat(3,25px);align-items:center;justify-items:center;gap:1px;touch-action:none}.dpad button{width:31px;height:25px;padding:0;border:1px solid #bf975e;border-radius:6px;background:linear-gradient(135deg,#443459,#182a55);color:#ffda89;font:18px Arial,sans-serif;box-shadow:inset 0 0 4px #c3ab7c78}.dpad button:active{background:#6d406c}.d-up{grid-area:1/2}.d-left{grid-area:2/1}.d-center{grid-area:2/2;text-align:center;color:#d3a958}.d-right{grid-area:2/3}.d-down{grid-area:3/2}.weapons{display:flex;align-items:center;gap:9px}.weapon{position:relative;padding:0;border:0;background:transparent;width:66px;height:69px;filter:drop-shadow(0 0 5px #a65462)}.weapon img{width:63px;height:63px;object-fit:contain}.weapon small{position:absolute;left:0;right:0;bottom:-2px;color:#f6d395;background:#09132acc;border:1px solid #785c3a;border-radius:6px;font:700 10px Arial,sans-serif}.weapon small span{font-weight:400}.weapon:disabled{opacity:.38;filter:grayscale(.7)}.controls-note{display:none;color:#beaacb;font:11px Arial,sans-serif;letter-spacing:.6px}.controls-note span{color:#d9aa62}@media (min-width:800px) and (orientation:landscape){.cosmic-app{padding:12px;gap:8px}.cosmic-top{min-height:65px}.brand-kicker{font-size:10px}.cosmic-hud{min-height:56px}.hud-stat small{font-size:11px}.hud-stat b{font-size:21px}.command-bar{min-height:87px}.controls-note{display:block}.cosmic-bottom{max-width:1180px}.status-line{font-size:12px}}@media(max-height:670px){.cosmic-app{gap:3px}.cosmic-top{min-height:36px}.cosmic-hud{min-height:35px}.command-bar{min-height:59px}.dpad{grid-template-columns:repeat(3,24px);grid-template-rows:repeat(3,18px)}.dpad button{width:24px;height:18px;font-size:13px}.weapon{width:49px;height:49px}.weapon img{height:47px;width:47px}.status-line{min-height:12px}.mission-card{padding:5px}.mission-card p{font-size:10px}.fiend-cameos{height:44px}.fiend-cameos img{max-height:43px}.mission-rosie{height:70px}.launch-button{padding:7px 15px}}@media (max-width:365px){.cosmic-brand h1{font-size:14px}.brand-kicker{letter-spacing:1px}.hud-stat small{font-size:7px}.hud-stat b{font-size:14px}.cosmic-hud{gap:1px}.weapon{width:60px}}
+
+/* Cosmic Odyssey prototype playtest pass - larger characters, clearer scenery, visible effects */
+.cosmic-top{padding-left:76px;padding-right:62px}
+.scene-corner{position:absolute;left:8px;top:50%;transform:translateY(-50%);border:1px solid #d5a65b;border-radius:10px;padding:5px 9px;display:flex;align-items:center;gap:5px;color:#ffe3a0;background:linear-gradient(120deg,#231943,#17264e);box-shadow:0 0 7px #c7924c65}
+.scene-corner span{font-size:16px;color:#ffdc8b}.scene-corner small{font:700 9px Arial,sans-serif;letter-spacing:.4px}
+.board{background:linear-gradient(180deg,#08132c66,#070e246f),url('assets/nebula.webp') center/cover no-repeat}
+.board[data-scene='lunar']{background:linear-gradient(180deg,#08132a5c,#080d236e),url('assets/lunar.webp') center/cover no-repeat}
+.cell.floor{background:linear-gradient(135deg,#09142d36,#070c211e);box-shadow:inset 0 0 0 1px #4ebef32b}
+.cell.floor::before{border-left-color:#49e7f432;border-top-color:#69d8f518}
+.cell.wall{background:linear-gradient(145deg,#24305ec7,#14213bde 48%,#0c1530e7 55%,#24204de6);box-shadow:inset 0 0 2px 1px #d59c4080,inset 0 0 6px #000b}
+.board-frame{box-shadow:0 0 0 2px #301230,0 0 45px #673dbbaa, inset 0 0 24px #08091b}
+.sprite{filter:drop-shadow(0 0 5px #000d) drop-shadow(0 3px 7px #07051c);transition:transform 125ms linear}
+.sprite.rosie{filter:drop-shadow(0 2px 6px #000e) drop-shadow(0 0 7px #f6c86ab3)}
+.sprite.fiend{filter:drop-shadow(0 2px 5px #000d) drop-shadow(0 0 5px #bb83d782)}
+.shield-aura{position:absolute;left:0;top:0;z-index:11;pointer-events:none;object-fit:contain;opacity:0;transform-origin:center;filter:drop-shadow(0 0 6px #46dcff) drop-shadow(0 0 12px #2ebcff);transition:opacity 160ms ease-out}
+.shield-aura.active{opacity:.94;animation:cosmic-shield-glow 1s ease-in-out infinite alternate}
+@keyframes cosmic-shield-glow{from{filter:drop-shadow(0 0 5px #51cfff) brightness(.96)}to{filter:drop-shadow(0 0 11px #96f7ff) brightness(1.22)}}
+.rocket-projectile{position:absolute;z-index:25;pointer-events:none;will-change:left,top;filter:drop-shadow(0 0 5px #fbe097) drop-shadow(-7px 0 9px #f15620)}
+.rocket-projectile svg{width:100%;height:100%;display:block}
+.effect.explosion{animation:effect-pop .55s ease-out forwards;z-index:26;filter:drop-shadow(0 0 12px #ff9b33)}
+.effect.muzzle{border-radius:50%;background:radial-gradient(circle,#fff7bc 0%,#ffcb74 12%,#ff633f 31%,#de20335c 51%,transparent 75%);box-shadow:0 0 11px #f54e38bb;animation:effect-pop .21s ease-out forwards;z-index:24}
+.effect.spark{z-index:26}
+@media(max-width:620px){.cosmic-top{padding-left:44px;padding-right:44px}.scene-corner{left:5px;width:32px;height:32px;padding:4px;justify-content:center}.scene-corner small{display:none}.brand-kicker{letter-spacing:1px;font-size:7px}.cosmic-brand h1{font-size:clamp(13px,3.7vw,19px)}}
+@media(max-height:670px){.scene-corner{height:30px}.cosmic-top{padding-left:43px;padding-right:45px}}
+
+/* Prototype motion polish - original approved artwork, no generated or substituted assets. */
+.sprite{
+  object-fit:unset;
+  transition:transform var(--step-ms,164ms) cubic-bezier(.22,.6,.3,1);
+  will-change:transform;
+  contain:layout style;
+}
+.sprite-art{
+  display:block;width:100%;height:100%;object-fit:contain;
+  transform-origin:50% 52%;pointer-events:none;
+  animation:cosmic-float var(--hover-period,1.2s) ease-in-out infinite;
+}
+.sprite.rosie{--step-ms:170ms;--hover-period:1.1s}
+.sprite.fiend.jett{--hover-period:.77s}
+.sprite.fiend.chip{--hover-period:1.32s}
+.sprite.fiend.kitty{--hover-period:1.18s}
+@keyframes cosmic-float{
+  0%,100%{transform:translateY(1px) scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
+  50%{transform:translateY(-2px) scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
+}
+.sprite.rosie .sprite-art{filter:drop-shadow(0 1px 5px #eebd5b55)}
+.sprite.fiend.jett .sprite-art{filter:drop-shadow(0 0 5px #bd79f17a)}
+.sprite.fiend.chip .sprite-art{filter:drop-shadow(0 0 5px #80e7b177)}
+.sprite.fiend.kitty .sprite-art{filter:drop-shadow(0 0 5px #ff77d777)}
+.sprite.fiend.defeated{z-index:21;pointer-events:none;transition:none}
+.sprite.fiend.defeated .sprite-art{transform-origin:50% 50%;filter:drop-shadow(0 0 9px #ffbf65)}
+.sprite.fiend.defeat-jett .sprite-art{animation:cosmic-jett-defeat 1.28s ease-in forwards}
+.sprite.fiend.defeat-chip .sprite-art{animation:cosmic-chip-defeat 1.24s ease-in-out forwards}
+.sprite.fiend.defeat-kitty .sprite-art{animation:cosmic-kitty-defeat 1.36s ease-in forwards}
+@keyframes cosmic-jett-defeat{
+  0%{opacity:1;transform:scale(1) rotate(0deg);filter:brightness(1.7) drop-shadow(0 0 12px #d6aeff)}
+  24%{opacity:1;transform:translateY(-9px) rotate(-18deg);filter:brightness(2) drop-shadow(0 0 14px #d6aeff)}
+  48%{opacity:1;transform:translateY(2px) rotate(17deg)}
+  100%{opacity:0;transform:translate(-16px,36px) rotate(-125deg) scale(.37)}
+}
+@keyframes cosmic-chip-defeat{
+  0%{opacity:1;transform:rotate(0) scale(1);filter:brightness(1.6) drop-shadow(0 0 12px #95ffc8)}
+  22%{opacity:1;transform:translateY(-12px) rotate(35deg) scale(1.09)}
+  45%{opacity:1;transform:translateY(-5px) rotate(-35deg)}
+  75%{opacity:.8;transform:translateY(6px) rotate(190deg) scale(.73)}
+  100%{opacity:0;transform:translateY(26px) rotate(400deg) scale(.2)}
+}
+@keyframes cosmic-kitty-defeat{
+  0%{opacity:1;transform:translate(0,0) rotate(0) scale(1);filter:brightness(2) drop-shadow(0 0 15px #ff80d7)}
+  28%{opacity:1;transform:translate(-8px,3px) rotate(-9deg)}
+  56%{opacity:.9;transform:translate(17px,-8px) rotate(9deg) scale(.95)}
+  100%{opacity:0;transform:translate(90px,-45px) rotate(28deg) scale(.38)}
+}
+.sprite.fiend.defeat-jett::after,.sprite.fiend.defeat-chip::after,.sprite.fiend.defeat-kitty::after{
+  content:"";position:absolute;z-index:-1;left:25%;top:18%;width:58%;height:58%;
+  border-radius:50%;filter:blur(8px);pointer-events:none;
+  background:radial-gradient(circle,#fff2d2b9,#ac5efc75,transparent 72%);
+  animation:cosmic-defeat-flare .95s ease-out forwards;
+}
+.sprite.fiend.defeat-chip::after{background:radial-gradient(circle,#caffe2b5,#2fff9a72,transparent 72%)}
+.sprite.fiend.defeat-kitty::after{background:radial-gradient(circle,#fff4dbaa,#ff6da77a,transparent 72%)}
+@keyframes cosmic-defeat-flare{0%{opacity:.2;transform:scale(.4)}35%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(2)}}
+.board{
+  background-image:linear-gradient(#050d2180,#060b1b75),url('assets/nebula.webp');
+  background-size:cover;background-position:center center;
+}
+.board[data-scene='lunar']{
+  background-image:linear-gradient(#07112360,#060a1c62),url('assets/lunar.webp');
+}
+.cell.floor{
+  background:linear-gradient(135deg,#07112623,#060b1c15);
+  box-shadow:inset 0 0 0 1px #4fc7fa31;
+}
+.cell.wall{
+  background:linear-gradient(150deg,#1d2855ea,#101c39e8 50%,#080e27ec);
+  box-shadow:inset 0 0 2px 1px #ddb05b73,inset 0 0 6px #010315;
+}
+.cosmic-app[data-scene='nebula']{
+  background-image:linear-gradient(180deg,#09102bb8,#0e1032a8),url('assets/nebula.webp');
+}
+.cosmic-app[data-scene='lunar']{
+  background-image:linear-gradient(180deg,#0b1530aa,#0e1334ba),url('assets/lunar.webp');
+}
+.shield-aura{
+  transition:left 170ms ease-out,top 170ms ease-out,opacity 160ms ease-out;
+  z-index:11; /* Behind Rosie's artwork: the bubble is visible without covering her face. */
+}
+.shield-aura.active{opacity:.83}
+.effect.explosion{animation-duration:.64s}
+@media(prefers-reduced-motion:reduce){
+  .sprite,.shield-aura{transition-duration:0ms!important}
+  .sprite-art{animation:none!important;transform:scaleX(var(--flip,1)) rotate(var(--bank,0deg))}
+  .sprite.fiend.defeated .sprite-art{animation:cosmic-defeat-flare .25s forwards!important}
+}
+
+/* Existing art integration: sprite-authored attack, defeat and pickup states. */
+.life-icon{display:inline-block;width:clamp(17px,1.8vw,25px);height:clamp(17px,1.8vw,25px);
+  margin:0 1px;object-fit:contain;vertical-align:middle;filter:drop-shadow(0 0 3px #ffb85188)}
+.laser-bolt-projectile{position:absolute;pointer-events:none;z-index:26;object-fit:fill;
+  transform-origin:0 50%;filter:drop-shadow(0 0 5px #ff6b2a) drop-shadow(0 0 11px #f53630);
+  animation:cosmic-laser-art 225ms ease-out forwards}
+@keyframes cosmic-laser-art{from{opacity:.99;filter:brightness(1.5) drop-shadow(0 0 8px #ffb577)}
+ to{opacity:0;filter:brightness(.7) drop-shadow(0 0 3px #f74c20)}}
+.sprite.fiend.defeated .sprite-art{animation-duration:1.25s}
+.sprite.fiend.defeat-jett .sprite-art,.sprite.fiend.defeat-kitty .sprite-art,
+.sprite.fiend.defeat-chip .sprite-art{object-fit:contain}
+
+/* November 12: recovered artwork and readable ranged-combat feedback. */
+.board[data-scene='meteor']{
+  background-image:linear-gradient(180deg,#040a1c5c,#070b2054),url('assets/meteor.webp');
+  background-position:center center;background-size:cover;
+}
+.cosmic-app[data-scene='meteor']{
+  background-image:linear-gradient(180deg,#080b2db0,#0f1034a6),url('assets/meteor.webp');
+  background-position:center;background-size:cover;
+}
+.rocket-projectile img{display:block;width:100%;height:100%;object-fit:contain}
+.enemy-bolt{
+  position:absolute;z-index:19;pointer-events:none;
+  transform-origin:50% 50%;
+  transition:left 150ms linear,top 150ms linear;
+  will-change:left,top;
+}
+.enemy-bolt-chip{
+  object-fit:contain;filter:drop-shadow(0 0 7px #29ff83) drop-shadow(0 0 5px #8cffc7);
+}
+.enemy-bolt-jett{
+  border-radius:60%;border:2px solid #e7b3ffbb;
+  background:radial-gradient(ellipse,#fff9df 0%,#d99cff 24%,#7b33dd 52%,#5626a776 75%,transparent 100%);
+  box-shadow:0 0 8px #9f4ced,0 0 14px #7435c388;
+}
+.enemy-bolt-kitty{
+  border-radius:40%;border:2px solid #ffc4e9bb;
+  background:linear-gradient(90deg,#ff89ca22,#ffb9e6,#fff9fc,#fa4ca1);
+  box-shadow:0 0 9px #ff4db9,0 0 14px #ff8acc77;
+}
+@media(prefers-reduced-motion:reduce){
+  .enemy-bolt{transition:none!important}
+}
+
+/* Cosmic Odyssey campaign art direction - original reused space and character artwork. */
+.cosmic-top{
+  min-height:86px;overflow:hidden;isolation:isolate;
+  background:
+    linear-gradient(90deg,#140a35c9 0%,#151136d5 19%,#0a1938b8 49%,#1d0b31df 82%,#110b29e3),
+    url('assets/meteor.webp') center 18% / cover no-repeat;
+  border:2px solid #edbd6a;
+  box-shadow:inset 0 0 0 2px #fff2b829,inset 0 7px 20px #111037aa,0 4px 18px #7c45958a;
+}
+.cosmic-top::before{
+  content:"";position:absolute;inset:5px 6px;z-index:-1;pointer-events:none;
+  border-top:1px solid #f8d9918c;border-bottom:1px solid #a8744880;
+  background:radial-gradient(ellipse at 50% 100%,#f8a96b25,transparent 54%);
+}
+.cosmic-top::after{
+  content:"✦";position:absolute;right:78px;top:50%;transform:translateY(-50%);
+  color:#fcd591;opacity:.72;text-shadow:0 0 13px #ffe498;pointer-events:none;
+}
+.banner-ship{
+  position:absolute;left:82px;bottom:-21px;width:195px;height:118px;opacity:.97;pointer-events:none;
+  filter:drop-shadow(0 3px 10px #02071dc0) drop-shadow(0 0 10px #ffad467a);
+}
+.banner-ship img{display:block;width:100%;height:100%;object-fit:contain}
+.cosmic-brand{position:relative;z-index:3;max-width:70%;text-shadow:0 2px 8px #120828}
+.cosmic-brand h1{
+  font-size:clamp(19px,2.5vw,32px);letter-spacing:1.6px;
+  color:#ffe0a4;-webkit-text-stroke:.3px #ffd990;
+  text-shadow:0 1px #a04b29,0 3px #2d0c32,0 0 19px #ffc77281;
+}
+.brand-kicker{font-size:9px;letter-spacing:1.8px;color:#ffd09f}
+.banner-subtitle{display:block;margin-top:1px;font:700 8px Arial,sans-serif;letter-spacing:2.5px;color:#b7c6fb}
+.scene-corner,.pause-corner{z-index:5}
+.cosmic-hud{width:min(100%,1220px)}
+.hud-stat.stage-stat b{font-size:clamp(14px,1.5vw,20px);color:#8cdfff}
+.cosmic-app[data-scene='nebula']{
+ background:linear-gradient(#090a28a8,#090d28b5),url('assets/meteor.webp') center 40% / cover no-repeat;
+}
+.board[data-scene='nebula']{
+ background:linear-gradient(#0609274f,#0a0c245a),url('assets/meteor.webp') center / cover no-repeat;
+}
+.cosmic-app[data-scene='lunar']{
+ background:linear-gradient(#0d1028b5,#101d3b9a),url('assets/lunar.webp') center / cover no-repeat;
+}
+.board[data-scene='lunar']{
+ background:linear-gradient(#07152842,#060d254f),url('assets/lunar.webp') center / cover no-repeat;
+}
+.board.lunar-maze .cell.wall{
+  background:linear-gradient(155deg,#465a80e6 0%,#1c304de9 43%,#101e3ceb 56%,#4b5177df);
+  border-color:#91caff7a;
+  box-shadow:inset 0 0 2px #b6e4eacc,inset 0 0 8px #071a44;
+}
+.board.lunar-maze .cell.wall::before{
+  background:radial-gradient(circle,#d7e5ff92,#7a9acd65 35%,transparent 70%);
+}
+.board.lunar-maze .cell.lunar-machinery::after{
+  content:"";position:absolute;left:23%;right:23%;top:42%;height:14%;border-radius:4px;
+  background:linear-gradient(90deg,#68fefc80,#f0dca7aa,#87c7ff90);
+  box-shadow:0 0 6px #64dfffb3;
+}
+.board.lunar-maze .cell.floor{
+  background:linear-gradient(125deg,#b4d9ef19,#06203a1c);
+  box-shadow:inset 0 0 0 1px #8bdbff54;
+}
+.board.lunar-maze .cell.lunar-deck::after{
+  content:"";position:absolute;inset:19%;border:1px solid #a8e5e84d;border-radius:18%;
+  background:radial-gradient(circle at center,#b5d5ff1e,transparent 65%);
+  pointer-events:none;
+}
+.board .cell.nebula-glow::after{
+ content:"";position:absolute;inset:19%;border-radius:50%;
+ background:radial-gradient(circle,#f9bb8150,transparent 70%);pointer-events:none;
+}
+.board-frame{border-color:#e0ae5c}
+.board.lunar-maze ~ .veil[data-scene='lunar'],.veil[data-scene='lunar']{
+ background:linear-gradient(#061328d5,#12223add),url('assets/lunar.webp') center/cover no-repeat;
+}
+.rocket-projectile img{display:block;width:100%;height:100%;object-fit:contain}
+.rocket-projectile{filter:drop-shadow(0 0 10px #ffcd7b) drop-shadow(-8px 0 12px #fb5522)}
+.mission-rosie{width:min(80%,295px);height:min(21dvh,160px)}
+.mission-card{border-color:#f8d495}
+@media(max-width:780px){
+ .cosmic-top{min-height:63px;padding-left:40px;padding-right:43px}
+ .banner-ship{left:28px;bottom:-11px;width:80px;height:60px;opacity:.26}
+ .cosmic-top::after{display:none}
+ .cosmic-brand{max-width:94%}
+ .cosmic-brand h1{font-size:clamp(13px,3.9vw,22px);letter-spacing:.15px}
+ .banner-subtitle{font-size:6px;letter-spacing:1.1px}
+ .brand-kicker{font-size:6px;letter-spacing:.7px}
+ .hud-stat.stage-stat{flex:.65}
+ .hud-stat.stage-stat b{font-size:12px}
+}
+@media(max-width:365px){
+ .hud-stat.stage-stat small{font-size:7px}
+ .cosmic-brand h1{font-size:13px}
+ .banner-subtitle{display:none}
+}
+
+/* Recognizable existing launch nodes, with isolated visual effects and tile-sized collision geometry. */
+.cell.captain-launch-pad{
+ background:radial-gradient(circle,#f9dd9c42,#10417b4d 38%,#0d123918 70%);
+}
+.cell.captain-launch-pad::after,.cell.fiend-launch-pad::after{
+ content:"";position:absolute;inset:7%;border-radius:50%;
+ box-shadow:inset 0 0 0 2px #fbe29a80,inset 0 0 8px #e9af6380,0 0 12px #ffc46a70;
+ background:radial-gradient(circle,#ffe8b34d,transparent 61%);
+ pointer-events:none;
+}
+.cell.fiend-launch-pad::after{
+ inset:15%;box-shadow:inset 0 0 0 2px #8979ff88,0 0 10px #a36fff80;
+ background:radial-gradient(circle,#a689ff60,transparent 70%);
+}
+.cell.chip-hangar::after{
+ box-shadow:inset 0 0 0 2px #82ffd6a1,0 0 10px #32edbb96;
+ background:radial-gradient(circle,#37f9ac65,transparent 72%);
+}
+.cell.kitty-hangar::after{
+ box-shadow:inset 0 0 0 2px #ffa8ecaf,0 0 10px #f963d998;
+ background:radial-gradient(circle,#ff8fd05d,transparent 70%);
+}
+.board.lunar-maze .cell.fiend-launch-pad::after{
+ box-shadow:inset 0 0 0 2px #b8d9ffbf,0 0 10px #6ed5ffbd;
+}
+
+/* Authentic Cosmic Odyssey scenery: six independently recovered source images.
+ * These layers never alter the maze grid or intercept controls. */
+.cosmic-stage{position:relative;isolation:isolate}
+.cosmic-stage::before,.cosmic-stage::after{
+  content:"";position:absolute;z-index:0;pointer-events:none;
+  background-position:center;background-repeat:no-repeat;background-size:contain;
+  filter:drop-shadow(0 0 15px #fe893f88);opacity:.88;
+  animation:cosmic-rock-drift 11s ease-in-out infinite alternate;
+}
+.cosmic-stage::before{
+  background-image:url('assets/asteroid-large.webp');
+  width:clamp(70px,7vw,105px);height:clamp(70px,7vw,105px);
+  left:-1.8%;top:19%;transform:rotate(-12deg);
+}
+.cosmic-stage::after{
+  background-image:url('assets/asteroid-small.webp');
+  width:clamp(65px,6vw,96px);height:clamp(55px,6vw,92px);
+  right:-1.1%;bottom:16%;transform:rotate(19deg);
+  animation-delay:-4.4s;
+}
+.cosmic-app[data-scene='lunar'] .cosmic-stage::before,
+.cosmic-app[data-scene='lunar'] .cosmic-stage::after{
+  filter:hue-rotate(175deg) saturate(.62) drop-shadow(0 0 12px #6abfff90);
+  opacity:.65;
+}
+@keyframes cosmic-rock-drift{
+  from{translate:0 -5px}to{translate:3px 9px}
+}
+.cosmic-stage .board-frame{position:relative;z-index:1}
+.cell.floor.art-cross::after,.cell.floor.art-tee::after,.cell.floor.art-endcap::after{
+  content:"";position:absolute;z-index:0;inset:7%;pointer-events:none;
+  background-size:100% 100%;background-repeat:no-repeat;background-position:center;
+  transform:rotate(var(--art-turn,0deg));opacity:.64;
+  filter:drop-shadow(0 0 3px #6fbdff88);
+}
+.cell.floor.art-cross::after{background-image:url('assets/junction-cross.webp');opacity:.65}
+.cell.floor.art-tee::after{background-image:url('assets/junction-tee.webp');opacity:.50}
+.cell.floor.art-endcap::after{background-image:url('assets/junction-endcap.webp');opacity:.48}
+.board.lunar-maze .cell.floor.art-cross::after,
+.board.lunar-maze .cell.floor.art-tee::after,
+.board.lunar-maze .cell.floor.art-endcap::after{
+  filter:hue-rotate(167deg) saturate(.60) drop-shadow(0 0 3px #a1ddff80);
+  opacity:.57;
+}
+.cell.wall.asteroid-crater::after{
+  content:"";position:absolute;inset:3%;pointer-events:none;
+  background:url('assets/asteroid-small.webp') center/contain no-repeat;
+  opacity:.76;filter:drop-shadow(0 0 3px #ff7d4480);
+}
+.cell .launch-art{
+  position:absolute;z-index:1;left:50%;top:50%;width:145%;height:145%;
+  transform:translate(-50%,-50%);object-fit:contain;
+  opacity:.82;pointer-events:none;filter:drop-shadow(0 0 7px #ffbe6080);
+}
+.cell .launch-art.launch-rosie{
+  width:168%;height:168%;opacity:.82;filter:drop-shadow(0 0 8px #f5b545ad);
+}
+.cell .launch-art.launch-jett{filter:hue-rotate(66deg) drop-shadow(0 0 7px #b885ffbc)}
+.cell .launch-art.launch-chip{filter:hue-rotate(153deg) drop-shadow(0 0 7px #3dffc8ab)}
+.cell .launch-art.launch-kitty{filter:hue-rotate(268deg) drop-shadow(0 0 7px #ff8ac6b0)}
+.cell.captain-launch-pad::after,.cell.fiend-launch-pad::after{opacity:.24}
+@media(max-width:780px){
+  .cosmic-stage::before,.cosmic-stage::after{opacity:.20;filter:blur(.4px)}
+  .cosmic-stage::before{left:-4%;top:7%;width:90px}
+  .cosmic-stage::after{right:-5%;bottom:4%;width:82px}
+  .cell .launch-art{opacity:.61}
+}
+@media(prefers-reduced-motion:reduce){
+  .cosmic-stage::before,.cosmic-stage::after{animation:none}
+}
+
+/* The oval shield preserves full spacecraft width without clipping the vertical edges. */
+.shield-aura{object-fit:fill}
+
+/* Art-directed ten-stage Cosmic Odyssey environment integration, November 2026. */
+.board[data-scene]{
+ background-position:center center!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.cosmic-app[data-scene]{
+ background-position:center center!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.board[data-scene="nebula"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-nebula.webp')!important}
+.cosmic-app[data-scene="nebula"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-nebula.webp')!important}
+.board[data-scene="meteor"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-meteor.webp')!important}
+.cosmic-app[data-scene="meteor"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-meteor.webp')!important}
+.board[data-scene="lunar"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-lunar.webp')!important}
+.cosmic-app[data-scene="lunar"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-lunar.webp')!important}
+.board[data-scene="crystal"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-crystal.webp')!important}
+.cosmic-app[data-scene="crystal"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-crystal.webp')!important}
+.board[data-scene="foundry"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-foundry.webp')!important}
+.cosmic-app[data-scene="foundry"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-foundry.webp')!important}
+.board[data-scene="derelict"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-derelict.webp')!important}
+.cosmic-app[data-scene="derelict"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-derelict.webp')!important}
+.board[data-scene="ice"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-ice.webp')!important}
+.cosmic-app[data-scene="ice"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-ice.webp')!important}
+.board[data-scene="garden"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-garden.webp')!important}
+.cosmic-app[data-scene="garden"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-garden.webp')!important}
+.board[data-scene="blackhole"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-blackhole.webp')!important}
+.cosmic-app[data-scene="blackhole"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-blackhole.webp')!important}
+.board[data-scene="ruins"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-ruins.webp')!important}
+.cosmic-app[data-scene="ruins"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-ruins.webp')!important}
+.board[data-scene="nebula-alt"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-nebula-alt.webp')!important}
+.cosmic-app[data-scene="nebula-alt"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-nebula-alt.webp')!important}
+.board[data-scene="meteor-alt"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-meteor-alt.webp')!important}
+.cosmic-app[data-scene="meteor-alt"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-meteor-alt.webp')!important}
+.board[data-scene="lunar-alt"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-lunar-alt.webp')!important}
+.cosmic-app[data-scene="lunar-alt"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-lunar-alt.webp')!important}
+.board[data-scene="lunar-alt2"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-lunar-alt2.webp')!important}
+.cosmic-app[data-scene="lunar-alt2"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-lunar-alt2.webp')!important}
+
+.board[data-scene] .cell.floor{
+ background:linear-gradient(140deg,rgba(9,20,44,.18),rgba(5,9,26,.26));
+ box-shadow:inset 0 0 0 1px rgba(70,183,244,.29);
+}
+.board[data-scene] .cell.wall{
+ background:linear-gradient(135deg,rgba(50,58,105,.91),rgba(9,28,54,.93) 48%,rgba(21,25,53,.97) 54%,rgba(39,32,80,.90));
+ border:1px solid rgba(204,153,81,.48);
+ box-shadow:inset 0 0 2px 1px rgba(220,159,67,.44),inset 0 0 8px rgba(0,0,0,.40);
+}
+.board[data-scene="lunar"] .cell.wall,.board[data-scene="ice"] .cell.wall{
+ background:linear-gradient(135deg,#3b6382dc,#173052e9 48%,#10213bec 55%,#536d88db);
+ border-color:#72d7f97a;
+}
+.board[data-scene="foundry"] .cell.wall,.board[data-scene="meteor"] .cell.wall{
+ background:linear-gradient(135deg,#663151e8,#39213ce6 48%,#1b1738ee 55%,#693e3be6);
+ border-color:#eaa45799;
+}
+.board[data-scene="crystal"] .cell.wall,.board[data-scene="ruins"] .cell.wall{
+ background:linear-gradient(135deg,#55417fe8,#22244fe9 48%,#151c45e6 55%,#493b85e8);
+ border-color:#aa91ff91;
+}
+.board[data-scene="garden"] .cell.wall{
+ background:linear-gradient(135deg,#49755be3,#24483fe9 48%,#1f393fe6 55%,#746b42df);
+ border-color:#e7d28f90;
+}
+.board[data-scene="derelict"] .cell.wall,.board[data-scene="blackhole"] .cell.wall{
+ background:linear-gradient(135deg,#4a5471e8,#192440ed 48%,#101729ef 55%,#403c62e8);
+ border-color:#b28a5e7a;
+}
+.cell .environment-prop{
+ position:absolute;z-index:1;left:50%;top:50%;
+ width:126%;height:126%;object-fit:contain;pointer-events:none;
+ opacity:.83;filter:drop-shadow(0 0 4px #0e071edd) drop-shadow(0 0 4px #b58df344);
+ transform:translate(-50%,-50%) rotate(var(--prop-turn,0deg));
+}
+.cell .launch-art{
+ width:185%;height:185%;opacity:.82;
+ filter:drop-shadow(0 0 8px #ffc66b77);
+}
+.cell .launch-art.launch-rosie{width:178%;height:178%;opacity:.76}
+.cell .launch-art.launch-jett,.cell .launch-art.launch-chip,.cell .launch-art.launch-kitty{
+ filter:drop-shadow(0 0 6px #8ba0ffb8);
+ opacity:.87;
+}
+.exit{
+ filter:drop-shadow(0 0 8px #e1b7ff) drop-shadow(0 0 11px #9671eeb8);
+}
+.exit.open{animation:cosmic-portal-breathe 1.4s ease-in-out infinite alternate}
+@keyframes cosmic-portal-breathe{from{filter:drop-shadow(0 0 6px #48d2ff)}to{filter:drop-shadow(0 0 19px #bfa3ff) brightness(1.28)}}
+.pickup.crate,.pickup.repair,.pickup.gravity,.pickup.mine,.pickup.wormhole{
+ width:110%;height:110%;z-index:4;pointer-events:none;object-fit:contain;
+ filter:drop-shadow(0 0 6px #000e) drop-shadow(0 0 6px #f1bf79a3);
+}
+.pickup.repair{filter:drop-shadow(0 0 5px #86ffd2) drop-shadow(0 0 5px #b3ffd780)}
+.pickup.gravity,.pickup.wormhole{filter:drop-shadow(0 0 5px #52d9ff) drop-shadow(0 0 6px #698bff9e)}
+.pickup.mine{width:90%;height:90%;animation:cosmic-mine-pulse 1.05s ease-in-out infinite alternate;filter:drop-shadow(0 0 7px #ff3838)}
+.pickup.wormhole{animation:cosmic-wormhole-pulse 1.7s ease-in-out infinite alternate}
+@keyframes cosmic-mine-pulse{to{filter:drop-shadow(0 0 12px #ff5e33) brightness(1.32)}}
+@keyframes cosmic-wormhole-pulse{to{filter:drop-shadow(0 0 12px #8bf0ff) brightness(1.25)}}
+.mission-level-picker{margin:7px auto 5px;display:flex;align-items:center;justify-content:center;gap:9px}
+.mission-level-picker label{font:700 10px Arial,sans-serif;letter-spacing:.6px;color:#f5d69f}
+.mission-level-picker select{
+ max-width:min(245px,52vw);min-width:155px;appearance:auto;
+ padding:6px 9px;border:1px solid #d4a962;border-radius:9px;
+ color:#ffe5ab;background:#171b40;outline-offset:3px;
+ font:600 11px Arial,sans-serif;
+}
+.scene-description{font:9px Arial,sans-serif;color:#d8caa4;white-space:nowrap}
+@media(max-width:650px){
+ .mission-level-picker{flex-wrap:wrap;gap:3px}
+ .mission-level-picker label{width:100%;font-size:9px}
+ .mission-level-picker select{max-width:85%;font-size:12px}
+ .scene-description{display:none}
+ .cell .environment-prop{opacity:.66;width:113%;height:113%}
+ .cell .launch-art{opacity:.66}
+}
+@media(max-height:660px){.mission-level-picker{margin:2px auto}.mission-level-picker label{font-size:8px}.mission-level-picker select{padding:3px 7px}}
+@media(prefers-reduced-motion:reduce){.exit.open,.pickup.mine,.pickup.wormhole{animation:none}}
+
+/* Playtest ergonomics and environmental rules legend. */
+.mission-card .mission-tip{max-width:450px;margin:5px auto 7px;color:#aee3ed;font:11px/1.35 Arial,sans-serif}
+@media(max-width:700px) and (orientation:portrait) and (min-height:680px){
+ .command-bar{min-height:110px;justify-content:space-around;gap:24px}
+ .dpad{grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,32px);gap:3px}
+ .dpad button{width:42px;height:32px;font-size:22px;border-radius:8px}
+ .weapons{gap:11px}
+ .weapon{width:73px;height:78px}
+ .weapon img{width:72px;height:72px}
+ .mission-card{max-height:95%}
+ .control-help{font-size:10px}
+}
+@media(max-width:400px) and (max-height:710px) and (orientation:portrait){
+ .command-bar{min-height:72px}
+ .dpad{grid-template-columns:repeat(3,28px);grid-template-rows:repeat(3,22px);gap:2px}
+ .dpad button{width:28px;height:22px;font-size:16px}
+ .mission-card .mission-tip{font-size:9px}
+}
+.dpad button,.weapon{touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.dpad button:focus-visible,.weapon:focus-visible,.mission-level-picker select:focus-visible{
+ outline:2px solid #f9cf74;outline-offset:2px;
+}
+
+/* Fit the mission launcher above the fold on smaller portrait phones. */
+@media(max-width:700px) and (orientation:portrait){
+ .mission-card{padding:8px 10px}
+ .mission-rosie{height:min(13dvh,105px);margin:2px auto}
+ .mission-card h2{margin:1px 0;font-size:clamp(18px,5vw,24px)}
+ .mission-card p{font-size:10px;line-height:1.35;margin:3px auto}
+ .mission-card .mission-tip{font-size:9px;line-height:1.3;margin:3px auto 4px}
+ .fiend-cameos{height:43px;margin:2px auto}
+ .fiend-cameos img{max-height:42px}
+ .mission-level-picker{margin:3px auto}
+ .launch-button{padding:8px 18px;margin:3px auto}
+}
+
+/* Reconstructed 2026-11-13: scenic playfield with actual connected wall partition atlases. */
+.cosmic-app[data-scene]{
+  background:radial-gradient(ellipse at 50% 20%,#20234e 0%,#0e1330 45%,#070a1b 100%)!important;
+}
+.cosmic-stage::before,.cosmic-stage::after{display:none!important}
+.cosmic-stage .board-frame{
+  border:2px solid #e0b66e;
+  box-shadow:0 0 0 2px #20132f,0 4px 25px #060a28c4,0 0 22px #a770dc39!important;
+}
+.board[data-scene]{
+  background-repeat:no-repeat!important;background-position:center!important;
+  background-size:cover!important;background-color:#090d2a!important;
+}
+.board .cell.floor{
+  background:transparent!important;
+  border:0!important;box-shadow:none!important;
+}
+.board .cell.floor::before,.board .cell.floor::after{display:none!important}
+.board .cell.wall.partition-wall{
+  border:0!important;box-shadow:none!important;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-size:400% 400%!important;
+  background-position:var(--partition-x,0%) var(--partition-y,0%)!important;
+  overflow:hidden;
+}
+.board .cell.wall.partition-wall::before,
+.board .cell.wall.partition-wall::after{display:none!important}
+.board[data-scene="nebula"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-nebula.webp')!important}
+.board[data-scene="meteor"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-meteor.webp')!important}
+.board[data-scene="lunar"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-lunar.webp')!important}
+.board[data-scene="crystal"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-crystal.webp')!important}
+.board[data-scene="foundry"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-foundry.webp')!important}
+.board[data-scene="derelict"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-derelict.webp')!important}
+.board[data-scene="ice"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-ice.webp')!important}
+.board[data-scene="garden"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-garden.webp')!important}
+.board[data-scene="blackhole"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-blackhole.webp')!important}
+.board[data-scene="ruins"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-ruins.webp')!important}
+.board[data-scene="nebula-alt"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-nebula-alt.webp')!important}
+.board[data-scene="meteor-alt"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-meteor-alt.webp')!important}
+.board[data-scene="lunar-alt"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-lunar-alt.webp')!important}
+.board[data-scene="lunar-alt2"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-lunar-alt2.webp')!important}
+.board[data-material="deco"] .cell.partition-wall{background-image:url('assets/partitions-deco.svg')!important}
+.board[data-material="lunar"] .cell.partition-wall{background-image:url('assets/partitions-lunar.svg')!important}
+.board[data-material="crystal"] .cell.partition-wall{background-image:url('assets/partitions-crystal.svg')!important}
+.board[data-material="foundry"] .cell.partition-wall{background-image:url('assets/partitions-foundry.svg')!important}
+.board[data-material="verdant"] .cell.partition-wall{background-image:url('assets/partitions-verdant.svg')!important}
+.board[data-material="void"] .cell.partition-wall{background-image:url('assets/partitions-void.svg')!important}
+
+.board .cell.partition-wall .environment-prop{
+  width:102%!important;height:102%!important;opacity:.72!important;
+  filter:drop-shadow(0 1px 5px #010816e0)!important;
+}
+.cell .launch-art{transition:opacity .60s ease-out,transform .60s ease-in!important}
+.board .cell.launch-fading .launch-art{
+  opacity:0!important;
+  transform:translate(-50%,-50%) scale(.35)!important;
+}
+.board .cell.launch-fading.captain-launch-pad::after,
+.board .cell.launch-fading.fiend-launch-pad::after{opacity:0!important;transition:opacity .5s}
+.sprite.fiend.auto-locked::after{
+  content:"";position:absolute;inset:27% 29%;border:2px solid #ffe6a1;border-radius:50%;
+  box-shadow:0 0 6px #ffc362,0 0 12px #eabf5d;pointer-events:none;
+  animation:cosmic-auto-lock .3s ease-out forwards;
+}
+@keyframes cosmic-auto-lock{0%{opacity:.55;transform:scale(1.5)}55%{opacity:1}100%{opacity:.2;transform:scale(.9)}}
+@media(prefers-reduced-motion:reduce){
+ .cell .launch-art{transition:none!important}
+ .sprite.fiend.auto-locked::after{animation:none}
+}
+
+/* Playtest pass: unmistakable straight-line targeting and unobstructed shots. */
+.status-line #message{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status-line #level{flex:0 1 auto;min-width:0}
+.aim-indicator{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  min-width:72px;min-height:19px;padding:2px 7px;
+  border:1px solid #71809a88;border-radius:7px;
+  background:#10152dd9;color:#b9c2d5;
+  font:700 10px/1.1 Arial,sans-serif;letter-spacing:.35px;white-space:nowrap;
+}
+.aim-indicator.locked{
+  border-color:#e7c267;background:linear-gradient(110deg,#291b36de,#4a2b25d9);
+  color:#ffe9a1;text-shadow:0 0 5px #ffd06e8c;
+  box-shadow:inset 0 0 6px #facf5f30,0 0 5px #facf5f23;
+}
+.sprite.fiend.targetable::before{
+  content:"";position:absolute;z-index:7;inset:28% 30%;
+  border:2px dashed #ffe09c;border-radius:50%;
+  pointer-events:none;opacity:.72;
+  box-shadow:0 0 5px #d9b7628c, inset 0 0 5px #f6b95755;
+  animation:cosmic-targetable 1.1s ease-in-out infinite alternate;
+}
+@keyframes cosmic-targetable{from{opacity:.50;transform:scale(1.12)}to{opacity:.9;transform:scale(.96)}}
+@media(max-width:680px){
+ .aim-indicator{min-width:65px;font-size:9px;padding:2px 5px}
+ .status-line #level{display:none}
+ .status-line #message{max-width:68%}
+}
+@media(prefers-reduced-motion:reduce){.sprite.fiend.targetable::before{animation:none}}
+
+/* Turbo Boost: a real charge-funded movement perk, separate from treat ammunition. */
+.weapon.boost-weapon{position:relative;filter:drop-shadow(0 0 5px #6aeef0a0)}
+.boost-weapon .boost-icon{display:block;width:63px;height:63px;position:relative;margin:auto}
+.boost-weapon .boost-icon svg{display:block;width:100%;height:100%;object-fit:contain}
+.boost-weapon:disabled{opacity:.4;filter:grayscale(.68)}
+.boost-weapon:not(:disabled) .boost-icon{filter:drop-shadow(0 0 8px #59e7f5)}
+.boost-weapon.active{opacity:1!important;filter:drop-shadow(0 0 9px #92ffff)}
+.boost-weapon.active .boost-icon{animation:cosmic-boost-pulse .32s ease-in-out infinite alternate}
+.boost-weapon small{color:#fff2bb;border-color:#3cbec5;background:#0c2447eb}
+.pickup.boost{
+  display:block;width:73%;height:73%;z-index:4;border-radius:38% 52% 37% 52%;
+  background:radial-gradient(circle at 34% 27%,#f5ffff 0%,#98f8fe 18%,#2bc4e4 46%,#156dbd 64%,#122957 78%);
+  box-shadow:0 0 8px 3px #66eaf8aa,inset 0 0 0 2px #fff0a4;
+  animation:cosmic-boost-pulse .9s ease-in-out infinite alternate;
+}
+.pickup.boost::after{
+  content:"➤";position:absolute;inset:0;display:grid;place-items:center;
+  color:#fff2bd;font:bold clamp(12px,2.2vw,22px) Arial,sans-serif;
+  text-shadow:0 0 5px #083777;transform:rotate(-35deg);
+  pointer-events:none;
+}
+.sprite.rosie.boosting{
+  filter:drop-shadow(0 0 11px #37e9ffb0) drop-shadow(0 0 15px #f5b45d80)!important;
+}
+.sprite.rosie.boosting::before{
+  content:"";position:absolute;left:-33%;top:32%;width:65%;height:29%;z-index:-1;
+  background:linear-gradient(90deg,transparent,#1785e685 30%,#54e7ffa8 68%,#ffeb91d1 100%);
+  clip-path:polygon(0% 50%,27% 12%,48% 35%,100% 0%,100% 100%,48% 65%,27% 88%);
+  filter:drop-shadow(0 0 9px #61efff);
+  pointer-events:none;animation:cosmic-thruster-flicker .20s ease-in-out infinite alternate;
+}
+.sprite.rosie.boosting[data-facing="left"]::before{
+  left:auto;right:-33%;transform:scaleX(-1);
+}
+.sprite.rosie.boosting .sprite-art{
+  filter:drop-shadow(0 0 6px #6df5ff8c) brightness(1.09);
+  animation-duration:.48s;
+}
+@keyframes cosmic-boost-pulse{from{filter:brightness(.88) drop-shadow(0 0 5px #40d6ff)}to{filter:brightness(1.3) drop-shadow(0 0 11px #75ffff)}}
+@keyframes cosmic-thruster-flicker{from{opacity:.76;scale:.82 1}to{opacity:1;scale:1.13 .92}}
+@media(max-height:670px){
+  .boost-weapon .boost-icon{width:47px;height:47px}
+}
+@media(max-width:365px){
+  .weapons{gap:4px}
+  .weapon.boost-weapon{width:50px}
+  .boost-weapon .boost-icon{width:48px;height:48px}
+}
+@media(prefers-reduced-motion:reduce){
+  .pickup.boost,.boost-weapon.active .boost-icon,.sprite.rosie.boosting::before{animation:none!important}
+}
+
+/* Original approved Cosmic Odyssey banner replaces the temporary text header. */
+.cosmic-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.cosmic-top.cosmic-banner-top{
+  flex:0 0 auto;max-width:1250px;width:100%;min-height:0!important;
+  border:1px solid #d4a253;border-radius:14px;padding:0!important;
+  overflow:hidden;isolation:isolate;background:#0b1231;
+  box-shadow:0 0 20px #f6b75b40,inset 0 0 0 1px #ffc87e64;
+}
+.cosmic-banner-art{
+  display:block;width:100%;height:clamp(106px,17vw,210px);
+  object-fit:cover;object-position:center 48%;
+  pointer-events:none;user-select:none;
+}
+.cosmic-banner-stage{
+  position:absolute;z-index:4;left:50%;bottom:3px;transform:translateX(-50%);
+  max-width:75%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding:2px 10px;border-radius:9px;
+  background:#091028c9;border:1px solid #e1b47180;
+  color:#ffeac0;font:700 9px/1.3 Arial,sans-serif;letter-spacing:.7px;
+  text-align:center;text-shadow:0 0 5px #000;
+}
+.cosmic-banner-top .scene-corner{
+  left:8px;top:12px;transform:none;min-width:36px;min-height:34px;
+  background:linear-gradient(130deg,#0c183de8,#26153cdc);
+}
+.cosmic-banner-top .pause-corner{
+  right:8px;top:7px;transform:none;width:42px;
+  background:#080f28c0;border:1px solid #dab878aa;border-radius:50%;
+}
+.sprite.fiend.kitty .sprite-art{
+  image-rendering:auto;object-fit:contain;
+  filter:drop-shadow(0 0 7px #ff8bd77a);
+}
+.sprite.rosie .sprite-art{image-rendering:auto;object-fit:contain}
+@media(max-width:680px){
+  .cosmic-banner-art{height:clamp(85px,25vw,108px);object-position:center 42%}
+  .cosmic-banner-stage{font-size:7px;max-width:68%;padding:2px 5px;bottom:2px}
+  .cosmic-banner-top .scene-corner{top:5px;left:5px}
+  .cosmic-banner-top .pause-corner{top:4px;right:5px;width:34px}
+}
+@media(max-height:680px) and (orientation:landscape){
+  .cosmic-banner-art{height:70px;object-position:center 45%}
+  .cosmic-banner-stage{display:none}
+}

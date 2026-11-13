@@ -1,0 +1,61 @@
+.cosmic-odyssey-portal{box-sizing:border-box;display:grid;grid-template-columns:120px minmax(0,1fr) auto;align-items:center;gap:16px;max-width:1120px;margin:12px auto 20px;padding:14px 18px;border:2px solid #d6a65a;border-radius:21px;color:#ffe8b1;background:linear-gradient(100deg,#0b123de9,#1d103bdc 58%,#3a1942eb),url('/cosmic-odyssey/assets/nebula.webp') center / cover;box-shadow:0 0 25px #271559a3,inset 0 0 0 2px #ffe4a829}.cosmic-odyssey-portal img{width:100%;max-height:94px;object-fit:contain;filter:drop-shadow(0 0 7px #eaa94f)}.cosmic-odyssey-portal-copy span{font:700 10px Arial,sans-serif;letter-spacing:1.2px;color:#e5ba74}.cosmic-odyssey-portal-copy h2{font-family:Georgia,serif;font-size:clamp(19px,2.3vw,29px);margin:3px 0 5px;color:#ffdc91;text-shadow:0 2px 5px #03020a}.cosmic-odyssey-portal-copy p{font:13px/1.5 Arial,sans-serif;color:#f3e6dd;margin:0}.cosmic-odyssey-portal-button{display:inline-block;text-decoration:none;text-align:center;white-space:nowrap;padding:14px 18px;border:1px solid #ffd78a;border-radius:12px;background:linear-gradient(140deg,#ac353c,#71204f);font:700 12px Arial,sans-serif;color:#fff1bd;box-shadow:0 0 14px #e1825a65}.cosmic-odyssey-portal-button:hover{filter:brightness(1.15)}@media(max-width:700px){.cosmic-odyssey-portal{grid-template-columns:70px minmax(0,1fr);gap:8px;margin:10px 9px 16px;padding:10px}.cosmic-odyssey-portal img{max-height:72px}.cosmic-odyssey-portal-copy span{font-size:8px}.cosmic-odyssey-portal-copy h2{font-size:18px}.cosmic-odyssey-portal-copy p{font-size:11px}.cosmic-odyssey-portal-button{grid-column:1/-1;padding:11px;font-size:12px;white-space:normal}}
+/* Production Captain page: third arcade beneath Ember Tunnel Drill */
+.cosmic-odyssey-portal.cosmic-odyssey-main-entry{
+ display:block;max-width:min(1140px,calc(100% - 28px));width:100%;
+ margin:36px auto 42px;padding:14px;
+ border:2px solid #dda950;border-radius:22px;
+ background:linear-gradient(160deg,#090d29,#1a153c 62%,#190d2a);
+ box-shadow:0 12px 45px #060719c7,inset 0 0 0 2px #ffde9340;
+ color:#ffebc0;box-sizing:border-box;overflow:visible;
+}
+.cosmic-odyssey-main-entry > .cosmic-odyssey-entry-banner{
+ display:block;width:100%;max-height:none;height:auto;aspect-ratio:3/1;
+ border:1px solid #eebc688c;border-radius:13px;object-fit:contain;
+ filter:none;box-shadow:0 4px 20px #0009;
+}
+.cosmic-odyssey-entry-info{
+ display:flex;align-items:center;justify-content:space-between;gap:20px;
+ padding:13px 6px 2px;
+}
+.cosmic-odyssey-entry-info>span{
+ flex:0 0 auto;font:700 10px Arial,sans-serif;letter-spacing:1.5px;color:#f6ce82;
+}
+.cosmic-odyssey-entry-info p{
+ margin:0;max-width:450px;font:13px/1.48 Arial,sans-serif;color:#e7d9dc;
+}
+.cosmic-odyssey-entry-actions{display:flex;gap:9px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.cosmic-odyssey-main-entry .cosmic-odyssey-portal-button{
+ border:1px solid #ffe0a3;padding:12px 15px;min-height:43px;
+ background:linear-gradient(145deg,#b23f4d,#7c254d);
+ color:#fff4d8;white-space:nowrap;
+}
+.cosmic-odyssey-window-link{
+ text-decoration:underline;text-underline-offset:4px;
+ color:#e9d0a7;font:700 11px Arial,sans-serif;white-space:nowrap;
+}
+.cosmic-odyssey-embedded-shell{
+ margin:17px 0 2px;padding:5px;
+ background:#070b25;border:1px solid #b68a58;border-radius:15px;
+ overflow:hidden;box-shadow:0 0 21px #522d6b8f;
+}
+.cosmic-odyssey-embedded-shell iframe{
+ display:block;border:0;border-radius:10px;width:100%;height:min(950px,93dvh);
+ min-height:590px;background:#070c24;
+}
+@media(max-width:900px){
+ .cosmic-odyssey-entry-info{flex-direction:column;align-items:center;text-align:center;gap:8px}
+ .cosmic-odyssey-entry-actions{justify-content:center}
+}
+@media(max-width:650px){
+ .cosmic-odyssey-portal.cosmic-odyssey-main-entry{
+  max-width:calc(100% - 14px);padding:7px;margin:23px auto 30px;border-radius:14px;
+ }
+ .cosmic-odyssey-main-entry>.cosmic-odyssey-entry-banner{border-radius:9px}
+ .cosmic-odyssey-entry-info{padding:10px 5px 5px}
+ .cosmic-odyssey-entry-info p{font-size:11px}
+ .cosmic-odyssey-entry-info>span{font-size:9px}
+ .cosmic-odyssey-entry-actions{width:100%;gap:10px}
+ .cosmic-odyssey-main-entry .cosmic-odyssey-portal-button{flex:1;max-width:240px}
+ .cosmic-odyssey-embedded-shell{margin:11px 0 0;padding:2px;border-radius:9px}
+ .cosmic-odyssey-embedded-shell iframe{height:calc(100dvh - 28px);min-height:560px}
+}

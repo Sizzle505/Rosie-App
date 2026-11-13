@@ -1,0 +1,136 @@
+{
+  "name": "Captain Rosie Cosmic Odyssey",
+  "updated": "2026-11-12",
+  "branch": "cosmic-odyssey-prototype-20261111",
+  "origin": "Original individually generated image assets, optimized for browser",
+  "new_asset_count": 19,
+  "existing_asset_count_before": 23,
+  "art": [
+    {
+      "source": "captain_rosie_s_cosmic_cruise.png",
+      "asset": "assets/rosie-cruise.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_banking_starship.png",
+      "asset": "assets/rosie-bank-left.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_golden_banked_rocket.png",
+      "asset": "assets/rosie-bank-right.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_cosmic_dodge.png",
+      "asset": "assets/rosie-dodge.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "rosie_s_rocket_boost_dash.png",
+      "asset": "assets/rosie-boost.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_laser_attack.png",
+      "asset": "assets/rosie-laser.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_twin_rocket_attack.png",
+      "asset": "assets/rosie-rocket.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "chip_scurrio_s_emerald_turn.png",
+      "asset": "assets/chip-turn.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "chip_scurrio_s_emerald_ufo_ascension.png",
+      "asset": "assets/chip-ascent.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "rear_view_chip_scurrio_ufo_icon.png",
+      "asset": "assets/chip-rear.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "chip_scurrio_s_emerald_dash.png",
+      "asset": "assets/chip-dash.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "chip_scurrio_s_emerald_ufo_attack.png",
+      "asset": "assets/chip-fire.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "dazed_squirrel_in_a_damaged_emerald_ufo.png",
+      "asset": "assets/chip-stun.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "jett_scroundrel_s_damaged_jetpack_retreat.png",
+      "asset": "assets/jett-retreat.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "kitty_xenovese_s_damaged_retreat.png",
+      "asset": "assets/kitty-retreat.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "glossy_red_sci_fi_laser_bolt.png",
+      "asset": "assets/laser-bolt.webp",
+      "status": "integrated into prototype",
+      "optimized": true
+    },
+    {
+      "source": "emerald_ringed_energy_bolt.png",
+      "asset": "assets/chip-bolt.webp",
+      "status": "integrated into Chip projectile combat",
+      "optimized": true
+    },
+    {
+      "source": "captain_rosie_s_golden_paw_rocket.png",
+      "asset": "assets/rosie-projectile.webp",
+      "status": "integrated as Rosie rocket projectile",
+      "optimized": true
+    },
+    {
+      "source": "meteor_mischief_golden_cosmic_frame.png",
+      "asset": "assets/meteor.webp",
+      "status": "integrated as third scene backdrop",
+      "optimized": true
+    }
+  ],
+  "limitations": [
+    "ZIP member-level audit incomplete due Dropbox text fetch size limit",
+    "Some earlier produced key poses still need transfer",
+    "Standalone poses are not frame-by-frame animation sequences",
+    "Original Jett and Kitty projectile artwork remains to be recovered; temporary game effects are clearly marked"
+  ],
+  "tested": [
+    "syntax parse",
+    "mobile 11x15 shield and enemy projectile collisions",
+    "desktop 17x11 shield and enemy projectile collisions",
+    "Meteor scene selector"
+  ]
+}
