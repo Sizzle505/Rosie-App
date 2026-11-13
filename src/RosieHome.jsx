@@ -17,15 +17,15 @@ const art = (filename) => `/rosieverse/${filename}`;
 export default function RosieHome({ onNavigate }) {
   const [failedArt, setFailedArt] = React.useState({});
   return (
-    <main className={styles.home} aria-label="RosieVerse - discover Rosie's worlds">
+    <main className={styles.home} data-layout-target="home-page" aria-label="RosieVerse - discover Rosie's worlds">
       <RosieVerseAtmosphere />
 
-      <header className={styles.banner}>
+      <header className={styles.banner} data-layout-target="home-banner">
         <h1 className={styles.screenReaderOnly}>RosieVerse</h1>
         <img src={art("title.webp")} alt="RosieVerse - Play, Explore, Discover - A Brighter Day with Rosie" fetchPriority="high" draggable="false" />
       </header>
 
-      <section className={styles.hero} aria-label="Rosie standing in a Japanese sunset landscape">
+      <section className={styles.hero} data-layout-target="home-hero" aria-label="Rosie standing in a Japanese sunset landscape">
         <img src={art("hero.webp")}
           alt="Rosie proudly overlooking cherry blossoms, a golden Japanese bay, lanterns, bridges and Mount Fuji"
           fetchPriority="high" draggable="false" />
@@ -33,7 +33,7 @@ export default function RosieHome({ onNavigate }) {
         <div className={styles.heroShade} aria-hidden="true" />
       </section>
 
-      <nav className={styles.worldGrid} aria-label="RosieVerse destinations">
+      <nav className={styles.worldGrid} data-layout-target="home-worlds" aria-label="RosieVerse destinations">
         {worlds.map((world, index) => (
           <button
             type="button"
