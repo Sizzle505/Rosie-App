@@ -192,14 +192,40 @@
     const cell=document.createElement('div');
     const isWall=grid[y][x]===1;
     cell.className='cell '+(isWall?'wall':'floor');
-    if(level===2){
-      if(isWall && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.21)cell.classList.add('lunar-machinery');
-      if(!isWall && paint()<.16)cell.classList.add('lunar-deck');
-    }else if(!isWall&&paint()<.12)cell.classList.add('nebula-glow');
+    if(isWall){
+      if(level===2 && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.21)cell.classList.add('lunar-machinery');
+      if(level===1 && x>1 && y>1 && x<cols-2 && y<rows-2 && paint()<.045)cell.classList.add('asteroid-crater');
+    }else{
+      if(level===2&&paint()<.16)cell.classList.add('lunar-deck');
+      if(level===1&&paint()<.12)cell.classList.add('nebula-glow');
+      // Actual original junction and end-cap art is a low-opacity floor inlay,
+      // never a hitbox or impassable obstacle.
+      const ends=neighbors({x,y});
+      const degree=ends.length;
+      if(degree===4 && paint()<.65)cell.classList.add('art-cross');
+      else if(degree===3 && paint()<.58){
+        cell.classList.add('art-tee');
+        const dirs=ends.map(e=>e.dir);
+        const missing=['up','right','down','left'].find(d=>!dirs.includes(d));
+        cell.style.setProperty('--art-turn',({up:'0deg',right:'90deg',down:'180deg',left:'270deg'})[missing]||'0deg');
+      }else if(degree===1 && paint()<.45){
+        cell.classList.add('art-endcap');
+        cell.style.setProperty('--art-turn',({down:'0deg',left:'90deg',up:'180deg',right:'270deg'})[ends[0].dir]||'0deg');
+      }
+    }
     board.append(cell);row.push(cell);
    }cells.push(row);
   }
-  const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';e.src=asset('portal');e.alt='Exit portal';board.append(e);positionExit();}
+  const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';
+  e.src=asset('portal');e.alt='Exit portal';board.append(e);positionExit();
+ }
+ function placeLaunchArt(p,kind){
+  const cell=cells[p.y]?.[p.x];if(!cell)return;
+  const img=document.createElement('img');
+  img.className='launch-art launch-'+kind;
+  img.src=asset('fiend-spawn');img.alt='';img.draggable=false;
+  img.setAttribute('aria-hidden','true');cell.append(img);
+ }
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
@@ -223,6 +249,8 @@
   // Reuse the existing decorative circuitry to identify launch and Fiend hangars.
   cells[spawn.y][spawn.x].classList.add('captain-launch-pad');
   spots.forEach((p,i)=>cells[p.y][p.x].classList.add('fiend-launch-pad',i===2?'kitty-hangar':i===1?'chip-hangar':'jett-hangar'));
+  placeLaunchArt(spawn,'rosie');
+  spots.forEach((p,i)=>placeLaunchArt(p,['jett','chip','kitty'][i]));
   player.el=addSprite('rosie-cruise',player.x,player.y,'rosie');
   for(const e of entities)e.el=addSprite(e.id,e.x,e.y,'fiend '+e.id);
   populate(310+level*37);const patrols=[[],[]];for(const [i,e] of entities.entries()){
