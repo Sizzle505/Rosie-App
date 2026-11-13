@@ -352,3 +352,6 @@
 @media(prefers-reduced-motion:reduce){
   .cosmic-stage::before,.cosmic-stage::after{animation:none}
 }
+
+/* The oval shield preserves full spacecraft width without clipping the vertical edges. */
+.shield-aura{object-fit:fill}
