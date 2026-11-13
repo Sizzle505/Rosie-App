@@ -179,6 +179,7 @@
  function changeScene(next){
   const item=SCENES.find(o=>o.id===next)||SCENES[0];scene=item.id;
   board.dataset.scene=item.id;
+  board.dataset.material=PARTITION_MATERIAL[item.id]||'deco';
   const app=$('cosmic-app');if(app)app.dataset.scene=item.id;
   const label=$('scene-name');if(label)label.textContent=item.name.split(' ')[0];
   const stage=LEVELS[level-1];
@@ -225,42 +226,37 @@
     if(p1&&p2){warpPoints=[p1,p2];addPickup(p1.x,p1.y,'wormhole');addPickup(p2.x,p2.y,'wormhole');}
   }
  }
+ const PARTITION_MATERIAL={
+   nebula:'deco',meteor:'foundry',lunar:'lunar',crystal:'crystal',foundry:'foundry',
+   derelict:'void',ice:'lunar',garden:'verdant',blackhole:'void',ruins:'crystal',
+   'nebula-alt':'deco','meteor-alt':'foundry','lunar-alt':'lunar','lunar-alt2':'lunar'
+ };
+ function wallConnectivity(x,y){
+   return ((y>0&&grid[y-1][x]===1)?1:0)
+       | ((x<cols-1&&grid[y][x+1]===1)?2:0)
+       | ((y<rows-1&&grid[y+1][x]===1)?4:0)
+       | ((x>0&&grid[y][x-1]===1)?8:0);
+ }
  function createBoard(){
-  board.innerHTML='';itemAt.clear();cells=[];
-  board.classList.toggle('lunar-maze',LEVELS[level-1].scene==='lunar');
-  const paint=rand(8000+level*773);
-  for(let y=0;y<rows;y++){
-   const row=[];
-   for(let x=0;x<cols;x++){
-    const cell=document.createElement('div');
-    const isWall=grid[y][x]===1;
-    cell.className='cell '+(isWall?'wall':'floor');
-    if(isWall){
-      if(LEVELS[level-1].scene==='lunar'&&x>0&&y>0&&x<cols-1&&y<rows-1&&paint()<.16)cell.classList.add('lunar-machinery');
-      if(LEVELS[level-1].scene==='meteor'&&x>0&&y>0&&x<cols-1&&y<rows-1&&paint()<.12)cell.classList.add('asteroid-crater');
-    }else{
-      if(LEVELS[level-1].scene==='lunar'&&paint()<.13)cell.classList.add('lunar-deck');
-      if(LEVELS[level-1].scene==='nebula'&&paint()<.10)cell.classList.add('nebula-glow');
-      // Actual original junction and end-cap art is a low-opacity floor inlay,
-      // never a hitbox or impassable obstacle.
-      const ends=neighbors({x,y});
-      const degree=ends.length;
-      if(degree===4 && paint()<.54)cell.classList.add('art-cross');
-      else if(degree===3 && paint()<.29){
-        cell.classList.add('art-tee');
-        const dirs=ends.map(e=>e.dir);
-        const missing=['up','right','down','left'].find(d=>!dirs.includes(d));
-        cell.style.setProperty('--art-turn',({up:'0deg',right:'90deg',down:'180deg',left:'270deg'})[missing]||'0deg');
-      }else if(degree===1 && paint()<.45){
-        cell.classList.add('art-endcap');
-        cell.style.setProperty('--art-turn',({down:'0deg',left:'90deg',up:'180deg',right:'270deg'})[ends[0].dir]||'0deg');
-      }
-    }
-    board.append(cell);row.push(cell);
-   }cells.push(row);
-  }
-  const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';
-  e.src=asset('cosmic-exit-new');e.alt='Exit portal';board.append(e);positionExit();
+   board.innerHTML='';itemAt.clear();cells=[];
+   board.dataset.material=PARTITION_MATERIAL[LEVELS[level-1].scene]||'deco';
+   for(let y=0;y<rows;y++){
+     const row=[];
+     for(let x=0;x<cols;x++){
+       const cell=document.createElement('div'),isWall=grid[y][x]===1;
+       cell.className='cell '+(isWall?'wall partition-wall':'floor');
+       if(isWall){
+         const mask=wallConnectivity(x,y);
+         cell.dataset.partition=String(mask);
+         cell.style.setProperty('--partition-x',((mask%4)*100/3)+'%');
+         cell.style.setProperty('--partition-y',(Math.floor(mask/4)*100/3)+'%');
+       }
+       board.append(cell);row.push(cell);
+     }
+     cells.push(row);
+   }
+   const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';
+   e.src=asset('cosmic-exit-new');e.alt='Exit portal';board.append(e);positionExit();
  }
  function placeLaunchArt(p,kind){
   const cell=cells[p.y]?.[p.x];if(!cell)return;
@@ -268,6 +264,23 @@
   img.className='launch-art launch-'+kind;
   img.src=asset(({jett:'spawn-jett',chip:'spawn-chip',kitty:'spawn-kitty',rosie:'gravity-pad'})[kind]||'fiend-spawn');img.alt='';img.draggable=false;
   img.setAttribute('aria-hidden','true');cell.append(img);
+ }
+ function dismissLaunchPads(){
+   const sid=sessionId,launchCells=[];
+   for(const row of cells)for(const cell of row){
+     if(!cell.classList.contains('captain-launch-pad')&&!cell.classList.contains('fiend-launch-pad'))continue;
+     launchCells.push(cell);cell.classList.add('launch-fading');
+   }
+   setTimeout(()=>{
+     if(sessionId!==sid)return;
+     for(const cell of launchCells){
+       for(const child of Array.from(cell.children)){
+         if(child.classList?.contains('launch-art'))child.remove();
+       }
+       cell.classList.remove('launch-fading','captain-launch-pad','fiend-launch-pad',
+         'kitty-hangar','chip-hangar','jett-hangar');
+     }
+   },820);
  }
  const DECOR={
   nebula:['beacon','reactor-cyan'],meteor:['hazard-molten','meteor-flame','debris-satellite'],
@@ -288,7 +301,7 @@
     spots.push({x,y});
   }
   spots.sort(()=>rnd()-.5);
-  const count=Math.min(spots.length,Math.max(4,Math.floor(cols*rows/23)));
+  const count=Math.min(spots.length,Math.max(2,Math.floor(cols*rows/75)));
   for(let i=0;i<count;i++){
     const p=spots[i],img=document.createElement('img');
     img.className='environment-prop';img.src=asset(art[i%art.length]);
@@ -352,7 +365,7 @@
   init(carry);
   phase='playing';running=true;
   protectedUntil=performance.now()+2200;
-  veil.classList.add('hidden');positionShield();
+  veil.classList.add('hidden');positionShield();dismissLaunchPads();
   say(`${LEVELS[level-1].name}! Collect biscuits, defeat the Fiends, and escape.`);
   sound(carry?880:670,.17);ui();
  }
