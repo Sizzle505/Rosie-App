@@ -4275,8 +4275,8 @@ body:has(.app-shell.page-timekeeper),
     height: clamp(400px, 55dvh, 530px) !important;
     transform: none !important;
   }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner,
-  .app-shell.page-timekeeper .rtk-observatory .rtk-utility.is-timer .rtk-utility-inner {
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-utility-inner,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer .rtk-utility-inner {
     top: 17% !important; bottom: 20% !important;
     left: 11% !important; right: 11% !important;
   }
