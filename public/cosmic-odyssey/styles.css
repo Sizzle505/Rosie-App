@@ -1012,3 +1012,33 @@
    animation:none!important;
  }
 }
+
+/* Captain Arcade Batch 10: new full-resolution backgrounds inside the playable maze.
+   Artwork is layered underneath the modular collision walls, never above HUD or sprites. */
+.board[data-scene="arcade-nebula"]{
+  background-image:linear-gradient(180deg,rgba(5,8,23,.12),rgba(5,8,23,.18)),
+    url("../captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp")!important;
+}
+.board[data-scene="arcade-lunar"]{
+  background-image:linear-gradient(180deg,rgba(5,8,23,.08),rgba(5,8,23,.18)),
+    url("../captain-arcade-backgrounds/08-Cosmic-Odyssey-Lunar-Starport.webp")!important;
+}
+.board[data-scene="arcade-starship"]{
+  background-image:linear-gradient(180deg,rgba(5,8,23,.12),rgba(5,8,23,.20)),
+    url("../captain-arcade-backgrounds/09-Cosmic-Odyssey-Starship-Passage.webp")!important;
+}
+.board[data-scene="arcade-blackhole"]{
+  background-image:linear-gradient(180deg,rgba(5,8,23,.10),rgba(5,8,23,.20)),
+    url("../captain-arcade-backgrounds/07-Cosmic-Odyssey-Black-Hole-Observatory.webp")!important;
+}
+.board[data-scene^="arcade-"]{
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.cosmic-app[data-scene^="arcade-"]{
+  background-image:linear-gradient(180deg,rgba(5,8,24,.85),rgba(5,8,24,.91)),
+    url("../captain-arcade-backgrounds/10-Captain-Arcade-Navy-Gold-Quiet.webp")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
