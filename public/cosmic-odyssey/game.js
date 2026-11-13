@@ -132,7 +132,7 @@
   board.style.gridTemplateRows=`repeat(${rows}, 1fr)`;
   if(player){
    position(player);for(const ent of entities)position(ent);
-   positionExit();positionShield();
+   positionExit();positionShield();positionBarrierSpans();
    for(const shot of enemyShots)positionEnemyShot(shot);
   }
  }
@@ -203,14 +203,8 @@
   const item=SCENES.find(o=>o.id===next)||SCENES[0];scene=item.id;
   board.dataset.scene=item.id;
   board.dataset.material=PARTITION_MATERIAL[item.id]||'deco';
-  // Switching the backdrop also reskins the modular barriers without rebuilding the maze.
-  if(board.dataset.wallArt==='modular')for(let y=0;y<cells.length;y++)for(let x=0;x<cells[y].length;x++){
-    const cell=cells[y][x];if(!cell.classList.contains('wall-art-cell'))continue;
-    const part=wallSprite(wallConnectivity(x,y),x,y,item.id);
-    cell.dataset.wallSprite=String(part.index);cell.dataset.wallKind=part.kind;
-    const art=Array.from(cell.children).find(el=>el.classList?.contains('wall-art-image'));
-    if(art){art.style.backgroundPosition=`${(part.index%5)*25}% ${Math.floor(part.index/5)*100}%`;art.style.transform=`rotate(${part.angle}deg)`;}
-  }
+  // Reskin the few long energy spans; never redraw or alter the collision maze.
+  barrierSpans(item.id);setSectorArt(item.id);
   const app=$('cosmic-app');if(app)app.dataset.scene=item.id;
   const label=$('scene-name');if(label)label.textContent=item.name.split(' ')[0];
   const stage=LEVELS[level-1];
@@ -276,77 +270,116 @@
        | ((y<rows-1&&grid[y+1][x]===1)?4:0)
        | ((x>0&&grid[y][x-1]===1)?8:0);
  }
- // Sprite atlas contains all ten approved independent maze-wall images, in manifest order.
- // This is presentation only: the grid remains authoritative for movement, weapons and AI.
- const WALL_ATLAS_COUNT=10;
- const WALL_STYLE_BY_SCENE={
-   nebula:[0,4,1],meteor:[3,2,0],lunar:[4,3,1],
-   crystal:[5,0,4],foundry:[2,3,5],derelict:[1,6,3],
-   ice:[4,0,1],garden:[1,4,0],blackhole:[5,0,3],
-   ruins:[2,5,1],
-   'arcade-nebula':[0,4,1],'arcade-lunar':[4,3,1],
-   'arcade-starship':[1,6,3],'arcade-blackhole':[5,0,3]
- };
- function wallSprite(mask,x,y,sceneId=LEVELS[level-1].scene){
-   const links=[1,2,4,8].filter(bit=>!!(mask&bit)).length;
-   const salt=(x*37+y*61+level*29+cols*7)>>>0;
-   let index=1,angle=0,kind='armor';
-   if(links===4){index=9;}
-   else if(links===3){
-     index=8;
-     const missing=[1,2,4,8].find(bit=>!(mask&bit));
-     angle=({1:0,2:90,4:180,8:270})[missing];
-   }else if(links===2&&![5,10].includes(mask)){
-     index=7;angle=({6:0,12:90,9:180,3:270})[mask]||0;
-   }else{
-     const vertical=(mask&5)!==0&&(mask&10)===0;
-     const pool=WALL_STYLE_BY_SCENE[sceneId]||[1,0,4];
-     index=pool[salt%pool.length];
-     // Guarantee regular structural stretches so powered gates are accents, not a noisy grid.
-     if(salt%7===0)index=vertical?6:1;
-     if(index===1&&vertical)index=6;
-     if(index===6&&!vertical)index=1;
-     if(vertical&&index!==6)angle=90;
-     kind=[0,3,4,5].includes(index)?'energy':'armor';
-   }
-   if(index<0||index>=WALL_ATLAS_COUNT)index=1;
-   return {index,angle,kind};
- }
+ // Connected architectural atlas remastered from approved real metal bulkhead,
+ // vertical wall and junction artwork. 16 four-way connectivity masks, not random
+ // standalone miniatures packed into individual cells.
+ const BARRIER_KIND={nebula:0,meteor:2,lunar:3,crystal:4,foundry:1,
+   derelict:2,ice:3,garden:0,blackhole:4,ruins:1,
+   'nebula-alt':0,'meteor-alt':2,'lunar-alt':3,'lunar-alt2':3};
+ const SECTOR_SETPIECE={nebula:1,meteor:6,lunar:0,crystal:5,foundry:2,
+   derelict:3,ice:4,garden:1,blackhole:6,ruins:7,
+   'nebula-alt':1,'meteor-alt':6,'lunar-alt':0,'lunar-alt2':0};
  function createBoard(){
-   board.innerHTML='';itemAt.clear();cells=[];
-   board.dataset.material=PARTITION_MATERIAL[LEVELS[level-1].scene]||'deco';
-   const classicWallView=typeof window.location?.search==='string'&&
-     new URLSearchParams(window.location.search).get('classicWalls')==='1';
-   board.dataset.wallArt=classicWallView?'classic':'modular';
-   for(let y=0;y<rows;y++){
-     const row=[];
-     for(let x=0;x<cols;x++){
-       const cell=document.createElement('div'),isWall=grid[y][x]===1;
-       cell.className='cell '+(isWall?'wall partition-wall':'floor');
-       if(isWall){
-         const mask=wallConnectivity(x,y);
-         cell.dataset.partition=String(mask);
-         cell.style.setProperty('--partition-x',((mask%4)*100/3)+'%');
-         cell.style.setProperty('--partition-y',(Math.floor(mask/4)*100/3)+'%');
-         if(!classicWallView){
-           const sprite=wallSprite(mask,x,y);
-           cell.classList.add('wall-art-cell');
-           cell.dataset.wallSprite=String(sprite.index);
-           cell.dataset.wallKind=sprite.kind;
-           const art=document.createElement('span');
-           art.className='wall-art-image';
-           art.setAttribute('aria-hidden','true');
-           art.style.backgroundPosition=`${(sprite.index%5)*25}% ${Math.floor(sprite.index/5)*100}%`;
-           art.style.transform=`rotate(${sprite.angle}deg)`;
-           cell.append(art);
-         }
-       }
-       board.append(cell);row.push(cell);
+  board.innerHTML='';itemAt.clear();cells=[];
+  board.dataset.material=PARTITION_MATERIAL[LEVELS[level-1].scene]||'deco';
+  const classic=typeof window.location?.search==='string'&&
+    new URLSearchParams(window.location.search).get('classicWalls')==='1';
+  board.dataset.wallArt=classic?'classic':'continuous';
+  for(let y=0;y<rows;y++){
+   const row=[];
+   for(let x=0;x<cols;x++){
+    const cell=document.createElement('div'),isWall=grid[y][x]===1;
+    cell.className='cell '+(isWall?'wall partition-wall':'floor');
+    if(isWall){
+     const mask=wallConnectivity(x,y);
+     cell.dataset.partition=String(mask);
+     cell.style.setProperty('--partition-x',((mask%4)*100/3)+'%');
+     cell.style.setProperty('--partition-y',(Math.floor(mask/4)*100/3)+'%');
+     if(!classic){
+      cell.classList.add('continuous-wall');
+      const art=document.createElement('span');
+      art.className='connected-wall-art';art.setAttribute('aria-hidden','true');
+      art.style.backgroundPosition=`${(mask%4)*100/3}% ${Math.floor(mask/4)*100/3}%`;
+      cell.append(art);
      }
-     cells.push(row);
+    }
+    board.append(cell);row.push(cell);
    }
-   const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';
-   e.src=asset('cosmic-exit-new');e.alt='Exit portal';board.append(e);positionExit();
+   cells.push(row);
+  }
+  const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';
+  e.src=asset('cosmic-exit-new');e.alt='Exit portal';board.append(e);positionExit();
+ }
+ function barrierSpans(sceneId){
+  const old=Array.from(board.children).filter(el=>el.classList?.contains('barrier-span'));
+  old.forEach(el=>el.remove());
+  if(board.dataset.wallArt!=='continuous')return;
+  const candidates=[];
+  function offer(axis,x,y,len){
+    if(len<2)return;
+    // Only expose a special barrier when at least one lengthwise side faces a corridor.
+    let exposed=0,decor=0;
+    for(let i=0;i<len;i++){
+     const px=axis==='h'?x+i:x,py=axis==='v'?y+i:y;
+     const a=axis==='h'?{x:px,y:py-1}:{x:px-1,y:py};
+     const b=axis==='h'?{x:px,y:py+1}:{x:px+1,y:py};
+     if(open(a.x,a.y)||open(b.x,b.y))exposed++;
+     if(cells[py]?.[px]?.children?.some(el=>el.classList?.contains('environment-prop')))decor++;
+    }
+    if(exposed<Math.ceil(len*.5)||decor)return;
+    const length=Math.min(4,len),start=Math.floor((len-length)/2);
+    const xx=x+(axis==='h'?start:0),yy=y+(axis==='v'?start:0);
+    candidates.push({axis,x:xx,y:yy,len:length,
+      rank:(xx*47+yy*71+level*31+(axis==='h'?13:41))%113+length*9});
+  }
+  for(let y=1;y<rows-1;y++){
+   let x=1;while(x<cols-1){
+    if(grid[y][x]!==1){x++;continue;}
+    const start=x;while(x<cols-1&&grid[y][x]===1)x++;
+    offer('h',start,y,x-start);
+   }
+  }
+  for(let x=1;x<cols-1;x++){
+   let y=1;while(y<rows-1){
+    if(grid[y][x]!==1){y++;continue;}
+    const start=y;while(y<rows-1&&grid[y][x]===1)y++;
+    offer('v',x,start,y-start);
+   }
+  }
+  candidates.sort((a,b)=>b.rank-a.rank);
+  const used=new Set(),limit=Math.max(2,Math.min(4,Math.floor(cols*rows/70)));
+  let selected=0;
+  for(const span of candidates){
+    if(selected>=limit)break;
+    const keys=Array.from({length:span.len},(_,i)=>key(span.x+(span.axis==='h'?i:0),span.y+(span.axis==='v'?i:0)));
+    if(keys.some(k=>used.has(k)))continue;
+    keys.forEach(k=>used.add(k));
+    const el=document.createElement('span');el.className='barrier-span';
+    el.setAttribute('aria-hidden','true');
+    el.dataset.axis=span.axis;el.dataset.x=span.x;el.dataset.y=span.y;el.dataset.len=span.len;
+    const kind=BARRIER_KIND[sceneId]??0;
+    el.dataset.kind=kind;
+    el.style.backgroundPosition=`${kind*25}% 50%`;
+    board.append(el);selected++;
+  }
+  positionBarrierSpans();
+ }
+ function positionBarrierSpans(){
+  for(const el of Array.from(board.children).filter(e=>e.classList?.contains('barrier-span'))){
+    const vertical=el.dataset.axis==='v',x=Number(el.dataset.x),y=Number(el.dataset.y),len=Number(el.dataset.len);
+    el.style.left=((x+(vertical?.5:len/2))*tile)+'px';
+    el.style.top=((y+(vertical?len/2:.5))*tile)+'px';
+    el.style.width=(len*tile)+'px';
+    el.style.height=(tile*.89)+'px';
+    el.style.transform=`translate(-50%,-50%) rotate(${vertical?90:0}deg)`;
+  }
+ }
+ function setSectorArt(sceneId){
+  const setpiece=$('sector-setpiece'),label=$('sector-art-label');
+  const idx=SECTOR_SETPIECE[sceneId]??1;
+  if(setpiece)setpiece.style.backgroundPosition=`${(idx%4)*100/3}% ${Math.floor(idx/4)*100}%`;
+  const item=SCENES.find(x=>x.id===sceneId);
+  if(label)label.textContent=(item?.name||sceneId).toUpperCase();
  }
  function placeLaunchArt(p,kind){
   const cell=cells[p.y]?.[p.x];if(!cell)return;
@@ -391,7 +424,7 @@
     spots.push({x,y});
   }
   spots.sort(()=>rnd()-.5);
-  const count=Math.min(spots.length,Math.max(2,Math.floor(cols*rows/75)));
+  const count=Math.min(spots.length,Math.max(1,Math.floor(cols*rows/125)));
   for(let i=0;i<count;i++){
     const p=spots[i],img=document.createElement('img');
     img.className='environment-prop';img.src=asset(art[i%art.length]);
