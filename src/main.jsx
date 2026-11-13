@@ -42,6 +42,7 @@ import RosieResources from "./RosieResources.jsx";
 import RosieQrAtelier from "./RosieQrAtelier.jsx";
 import RosieRecipes from "./RosieRecipes.jsx";
 import RosieReviews from "./RosieReviews.jsx";
+import DesktopLayoutPlayground from "./DesktopLayoutPlayground.jsx";
 import { AccountProvider } from "./private/AccountContext.jsx";
 import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
@@ -3244,6 +3245,7 @@ function App() {
           </nav>}
         </>}
         <AccountPortal />
+        <DesktopLayoutPlayground page={page} />
       </div>
 
       <div className={`toast ${toast ? "toast-visible" : ""}`}>{toast}</div>
