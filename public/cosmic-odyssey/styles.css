@@ -581,3 +581,33 @@
  .cell .launch-art{transition:none!important}
  .sprite.fiend.auto-locked::after{animation:none}
 }
+
+/* Playtest pass: unmistakable straight-line targeting and unobstructed shots. */
+.status-line #message{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.status-line #level{flex:0 1 auto;min-width:0}
+.aim-indicator{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  min-width:72px;min-height:19px;padding:2px 7px;
+  border:1px solid #71809a88;border-radius:7px;
+  background:#10152dd9;color:#b9c2d5;
+  font:700 10px/1.1 Arial,sans-serif;letter-spacing:.35px;white-space:nowrap;
+}
+.aim-indicator.locked{
+  border-color:#e7c267;background:linear-gradient(110deg,#291b36de,#4a2b25d9);
+  color:#ffe9a1;text-shadow:0 0 5px #ffd06e8c;
+  box-shadow:inset 0 0 6px #facf5f30,0 0 5px #facf5f23;
+}
+.sprite.fiend.targetable::before{
+  content:"";position:absolute;z-index:7;inset:28% 30%;
+  border:2px dashed #ffe09c;border-radius:50%;
+  pointer-events:none;opacity:.72;
+  box-shadow:0 0 5px #d9b7628c, inset 0 0 5px #f6b95755;
+  animation:cosmic-targetable 1.1s ease-in-out infinite alternate;
+}
+@keyframes cosmic-targetable{from{opacity:.50;transform:scale(1.12)}to{opacity:.9;transform:scale(.96)}}
+@media(max-width:680px){
+ .aim-indicator{min-width:65px;font-size:9px;padding:2px 5px}
+ .status-line #level{display:none}
+ .status-line #message{max-width:68%}
+}
+@media(prefers-reduced-motion:reduce){.sprite.fiend.targetable::before{animation:none}}
