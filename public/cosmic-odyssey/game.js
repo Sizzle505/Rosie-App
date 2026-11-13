@@ -59,6 +59,7 @@
  ];
  let cols=11,rows=15,tile=26,grid=[],itemAt=new Map(),cells=[],entities=[],player=null,exitPos=null,warpPoints=[],warpCooldown=0;
  let scene='nebula',enemyShots=[],running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
+ let boostCharges=0,boostUntil=0;const BOOST_MAX=2,BOOST_DURATION_MS=2200,BOOST_STEP_MS=110;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0,aimPreview=null;
  const pressedKeys=new Map(),STEP_MS=190;
@@ -134,14 +135,14 @@
  function movementArt(dir,turn=false){
   // The original three-quarter cruising craft is Rosie's canonical navigation pose.
   // Rear/front art is reserved for later dedicated sequences; never cycle it during ordinary travel.
+  if(performance.now()<boostUntil)return 'rosie-boost';
   if(turn&&(dir==='left'||dir==='right'))return dir==='left'?'rosie-bank-left':'rosie-bank-right';
   if(dir==='up')return 'rosie-up';
-  if(player.straightSteps>=5&&dir==='right')return 'rosie-boost';
   return 'rosie-cruise';
  }
  function playerPose(dir,turn,now){
   if(!player||now<(player.actionUntil||0))return;
-  const evasive=turn&&entities.some(e=>!e.killed&&dist(e,player)<=3);
+  const evasive=now>=boostUntil&&turn&&entities.some(e=>!e.killed&&dist(e,player)<=3);
   const state=evasive?'rosie-dodge':movementArt(dir,turn);
   setSprite(player,state);
   if(turn&&(dir==='left'||dir==='right')){
@@ -149,7 +150,7 @@
    setTimeout(()=>{
     if(playId===sessionId&&player&&phase==='playing'&&
        player.lastMoveAt===stamp&&performance.now()>=(player.actionUntil||0)){
-      setSprite(player,'rosie-cruise');
+      setSprite(player,movementArt(lastFacing,false));
     }
    },230);
   }
@@ -202,7 +203,11 @@
  function effect(type,p,size=1){const el=document.createElement('span');el.className=`effect ${type}`;el.style.left=((p.x+.5)*tile)+'px';el.style.top=((p.y+.5)*tile)+'px';el.style.width=(tile*size)+'px';el.style.height=(tile*size)+'px';if(type==='explosion')el.innerHTML=`<img src="${asset('explosion')}" alt="">`;board.append(el);setTimeout(()=>el.remove(),type==='explosion'?700:440);}
  function sound(freq=480,duration=.07,shape='sine'){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!sound.context)sound.context=new C();const ctx=sound.context,o=ctx.createOscillator(),g=ctx.createGain();o.type=shape;o.frequency.value=freq;g.gain.setValueAtTime(.035,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration);}catch{}}
  function say(text){message.textContent=text;}
- function ui(){ const stageBadge=$('stage-badge');if(stageBadge)stageBadge.textContent=`${level} / ${LEVELS.length}`; $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
+ function ui(){
+ const boostButton=$('boost'),boostCount=$('boost-count'),boostActive=phase==='playing'&&performance.now()<boostUntil;
+ if(boostButton){boostButton.disabled=phase!=='playing'||boostCharges===0||boostActive;boostButton.classList.toggle('active',boostActive);boostButton.setAttribute('aria-label',boostActive?'Boost active':`Activate boost - ${boostCharges} charges available`);}
+ if(boostCount)boostCount.textContent=boostActive?'ACTIVE':`${boostCharges} / ${BOOST_MAX}`;
+ const stageBadge=$('stage-badge');if(stageBadge)stageBadge.textContent=`${level} / ${LEVELS.length}`; $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
  function addSprite(name,x,y,css){
   const el=document.createElement('div');el.className=`sprite ${css}`;el.setAttribute('aria-hidden','true');
   const art=document.createElement('img');art.src=asset(name);art.alt='';art.draggable=false;art.className='sprite-art';art.dataset.asset=name;
@@ -210,7 +215,7 @@
  }
  function addPickup(x,y,kind){
   if(!open(x,y)||itemAt.has(key(x,y)))return;
-  const el=kind==='treat'||kind==='bone'?document.createElement('span'):document.createElement('img');
+  const el=kind==='treat'||kind==='bone'||kind==='boost'?document.createElement('span'):document.createElement('img');
   el.className='pickup '+kind;el.setAttribute('aria-hidden','true');
   const images={rocket:'rocket-pickup',shield:'shield-pickup',cheese:'cheese',
     crate:'supply-crate',repair:'repair-station',gravity:'gravity-pad',mine:'mine-plasma',wormhole:'wormhole'};
@@ -223,17 +228,19 @@
   options.sort(()=>rnd()-.5);let treatCount=0;
   for(const p of options){if(rnd()<.59){addPickup(p.x,p.y,'treat');treatCount++;}}
   if(treatCount<target){for(const p of options){if(treatCount>=target+6)break;if(!itemAt.has(key(p.x,p.y))){addPickup(p.x,p.y,'treat');treatCount++;}}}
-  const special=options.filter(p=>!itemAt.has(key(p.x,p.y)));special.slice(0,5).forEach(p=>addPickup(p.x,p.y,'cheese'));
-  special.slice(5,7).forEach(p=>addPickup(p.x,p.y,'bone'));
-  special.slice(7,9).forEach(p=>addPickup(p.x,p.y,'shield'));
-  special.slice(9,11).forEach(p=>addPickup(p.x,p.y,'rocket'));
-  // New independent gameplay props, only on unobstructed maze floor cells.
-  if(special[11])addPickup(special[11].x,special[11].y,'crate');
-  if(special[12])addPickup(special[12].x,special[12].y,'repair');
-  if(level>=2&&special[13])addPickup(special[13].x,special[13].y,'gravity');
-  if(level>=2)special.slice(14,Math.min(14+Math.min(3,Math.floor(level/3)+1),special.length)).forEach(p=>addPickup(p.x,p.y,'mine'));
+  const special=options.filter(p=>!itemAt.has(key(p.x,p.y)));
+  // Two rare fuel cores per stage; these are not weapon treats and do not alter biscuit goals.
+  special.slice(0,2).forEach(p=>addPickup(p.x,p.y,'boost'));
+  special.slice(2,7).forEach(p=>addPickup(p.x,p.y,'cheese'));
+  special.slice(7,9).forEach(p=>addPickup(p.x,p.y,'bone'));
+  special.slice(9,11).forEach(p=>addPickup(p.x,p.y,'shield'));
+  special.slice(11,13).forEach(p=>addPickup(p.x,p.y,'rocket'));
+  if(special[13])addPickup(special[13].x,special[13].y,'crate');
+  if(special[14])addPickup(special[14].x,special[14].y,'repair');
+  if(level>=2&&special[15])addPickup(special[15].x,special[15].y,'gravity');
+  if(level>=2)special.slice(16,Math.min(16+Math.min(3,Math.floor(level/3)+1),special.length)).forEach(p=>addPickup(p.x,p.y,'mine'));
   if(level>=4){
-    const p1=special[18],p2=special[19];
+    const p1=special[20],p2=special[21];
     if(p1&&p2){warpPoints=[p1,p2];addPickup(p1.x,p1.y,'wormhole');addPickup(p2.x,p2.y,'wormhole');}
   }
  }
@@ -342,7 +349,7 @@
   ui();
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
-  if(!carry){score=0;ammo=0;lives=3;}
+  if(!carry){score=0;ammo=0;lives=3;boostCharges=0;}boostUntil=0;
   preloadArt('scene-'+LEVELS[level-1].scene, ...(LEVELS[level]?['scene-'+LEVELS[level].scene]:[]));
   target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
@@ -367,7 +374,7 @@
   changeScene(LEVELS[level-1].scene);resize();for(const e of entities)position(e);position(player);positionShield();ui();}
  function start(){
   if(phase==='paused'){
-    const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;
+    const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;if(boostUntil>pausedAt)boostUntil+=delta;
     for(const e of entities){e.next+=delta;if(e.nextAttack)e.nextAttack+=delta;}for(const shot of enemyShots)shot.stepAt+=delta;
     nextMoveAt=performance.now();phase='playing';running=true;veil.classList.add('hidden');
     positionShield();say('Resume course.');return;
@@ -398,6 +405,9 @@
      if(lives<3){lives++;popup('HULL REPAIRED',p);}
      else{protectedUntil=Math.max(protectedUntil,now+2600);popup('REPAIR SHIELD',p);}
      score+=60;effect('spark',p,1.6);sound(910,.16);break;
+   case'boost':
+     boostCharges=Math.min(BOOST_MAX,boostCharges+1);score+=35;
+     effect('spark',p,1.4);popup('BOOST CORE +1',p);sound(1120,.14);break;
    case'gravity':
      protectedUntil=Math.max(protectedUntil,now+4200);ammo=Math.min(8,ammo+1);
      effect('spark',p,1.4);popup('GRAVITY BOOST!',p);sound(1100,.2);break;
@@ -439,8 +449,9 @@
   if(!open(nx,ny))return false;
   const changedDirection=lastFacing!==dir;
   player.straightSteps=changedDirection?0:(player.straightSteps||0)+1;
-  nextMoveAt=now+STEP_MS;lastFacing=dir;
+  nextMoveAt=now+(now<boostUntil?BOOST_STEP_MS:STEP_MS);lastFacing=dir;
   player.x=nx;player.y=ny;player.lastMoveAt=now;
+  player.el.style.setProperty('--step-ms',now<boostUntil?'105ms':'165ms');
   playerPose(dir,changedDirection,now);
   position(player);positionShield();pick();collide();checkPlayerShots(performance.now());updateAimPreview();
   if(player.x===exitPos.x&&player.y===exitPos.y){
@@ -456,6 +467,27 @@
     score+=1500;enter('win','Ten cosmic sectors secured! Captain Rosie defeated the Fiends and completed the Odyssey.','PLAY AGAIN');
   }
   sound(1400,.35);ui();
+ }
+ function activateBoost(){
+  if(phase!=='playing'||boostCharges<1||performance.now()<boostUntil)return;
+  const now=performance.now();
+  boostCharges--;boostUntil=now+BOOST_DURATION_MS;
+  // First subsequent tile starts promptly, but still passes through normal wall/collision checks.
+  nextMoveAt=Math.min(nextMoveAt,now+BOOST_STEP_MS);
+  player.el.classList.add('boosting');
+  player.el.style.setProperty('--step-ms','105ms');
+  if(now>=player.actionUntil)setSprite(player,'rosie-boost');
+  effect('spark',player,2.1);popup('TURBO BOOST!',player);
+  say('Turbo Boost: faster flight for 2.2 seconds. Walls and Fiends still count!');
+  sound(1200,.16,'sawtooth');ui();
+ }
+ function endBoost(){
+  boostUntil=0;
+  if(!player)return;
+  player.el.classList.remove('boosting');
+  player.el.style.setProperty('--step-ms','165ms');
+  if(phase==='playing'&&performance.now()>=(player.actionUntil||0))setSprite(player,movementArt(lastFacing,false));
+  ui();
  }
  function requestMove(dir){
   if(phase!=='playing'||!DIRS[dir])return;
@@ -681,6 +713,7 @@
     if(advance(now,dir))pendingStep=false;
   }
   for(const e of entities)moveFiend(e,now);
+  if(boostUntil&&now>=boostUntil)endBoost();
   updateEnemyShots(now);updateAimPreview();
   positionShield(now);
   player.el.style.opacity=now<protectedUntil&&Math.floor(now/220)%2===0?'.87':'1';
@@ -699,6 +732,7 @@
     if(phase!=='playing')return;
     if(e.code==='Space'||e.key===' '){e.preventDefault();if(!e.repeat)fire('laser');}
     else if(e.key==='Enter'||e.code==='NumpadEnter'||e.key.toLowerCase()==='x'){e.preventDefault();if(!e.repeat)fire('rocket');}
+    else if(e.key==='Shift'||e.key.toLowerCase()==='b'){e.preventDefault();if(!e.repeat)activateBoost();}
     else if(e.key==='Escape'||e.key.toLowerCase()==='p'){e.preventDefault();if(!e.repeat)pause();}
   });
   document.addEventListener('keyup',e=>{
@@ -737,6 +771,7 @@
   }
   $('laser').addEventListener('click',()=>fire('laser'));
   $('rocket').addEventListener('click',()=>fire('rocket'));
+  $('boost').addEventListener('click',activateBoost);
   $('pause-top').addEventListener('click',pause);
   $('start').addEventListener('click',start);
   window.addEventListener('resize',()=>{if(phase==='start'&&!player){cols=innerWidth>=760&&innerWidth>innerHeight?17:11;rows=cols===17?11:15;init();}resize();});
