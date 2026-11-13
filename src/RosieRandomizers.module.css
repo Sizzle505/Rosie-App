@@ -887,8 +887,7 @@
 }
 
 @media (max-width: 680px) {
-  .page > * { width: min(1440px, calc(100% - 64px)); }
-  .page > .illustratedHero { width: 100%; }
+  .page > * { width: 100%; }
   .wheelStage::before { top: 77px; height: 355px; }
   .wheelWrap::before { inset: 13px; }
   .wheelWrap::after { top: 36px; left: 67px; width: 95px; height: 45px; }
@@ -1286,7 +1285,8 @@
 .desktopHeroCopy { display: none; }
 @media (min-width: 1200px) {
   .page { width: min(1600px, 100%); padding-top: 72px; }
-  .page > * { width: 100%; }
+  .page > * { width: min(1440px, calc(100% - 64px)); }
+  .page > .illustratedHero { width: 100%; }
   .ivoryRow { gap: clamp(18px, 2vw, 30px); }
   .wheelSalon { margin-top: clamp(18px, 2vw, 30px); }
   .illustratedHero {

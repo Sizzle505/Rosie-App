@@ -4281,7 +4281,9 @@ body:has(.app-shell.page-timekeeper),
     left: 11% !important; right: 11% !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-utility-heading { font-size: 18px !important; margin-bottom: 14px; }
-  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace { gap: 14px; }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace {
+    min-height: 100%; justify-content: space-between; gap: 14px;
+  }
   .app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs button { min-height: 36px; font-size: 13px; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust { gap: 7px; margin: 7px 0; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust button { min-height: 34px; }
