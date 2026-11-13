@@ -82,8 +82,10 @@ const TARGETS = {
     ["grid", "Movie grid", ".reviews-film-grid"]
   ],
   home: [
-    ["page", "Home scene", ".home-page, .rosie-home"],
-    ["header", "Home heading", ".home-header, .rosie-home-header"]
+    ["page", "Home scene", "[data-layout-target='home-page']"],
+    ["header", "Home banner", "[data-layout-target='home-banner']"],
+    ["hero", "Rosie landscape", "[data-layout-target='home-hero']"],
+    ["destinations", "World buttons", "[data-layout-target='home-worlds']"]
   ],
   captain: [
     ["hero", "Captain heading", ".captain-hero"],
@@ -104,8 +106,10 @@ const TARGETS = {
     ["ticket", "Fortune ticket", ".fortune-ticket"]
   ],
   vault: [
-    ["page", "Card Vault", ".card-vault-page, .vault-page"],
-    ["header", "Vault heading", ".card-vault-header, .vault-header"]
+    ["page", "Card Vault", ".vault-collector-page"],
+    ["header", "Vault heading", ".vault-collector-header"],
+    ["plaque", "Gold plaque", ".vault-collector-plaque"],
+    ["gallery", "Card gallery", ".vault-collector-gallery"]
   ]
 };
 const DEVICES = {
