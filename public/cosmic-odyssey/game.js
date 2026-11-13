@@ -143,11 +143,13 @@
   if(!box)return;
   // The oversized ship is clamped at maze edges; its shield must follow the rendered
   // ship, not the unclamped logical grid cell. Place the ring over its painted hull.
-  const size=tile*4.08;
+  // Keep the bubble wide enough for the ship, but use an elliptical profile so
+  // its top and bottom are not severed near the maze's outer rows.
+  const bubbleWidth=tile*4.08,bubbleHeight=tile*3.10;
   const cx=box.x+box.width*.49,cy=box.y+box.height*.51;
-  el.style.width=size+'px';el.style.height=size+'px';
-  el.style.left=(cx-size/2)+'px';
-  el.style.top=(cy-size/2)+'px';
+  el.style.width=bubbleWidth+'px';el.style.height=bubbleHeight+'px';
+  el.style.left=(cx-bubbleWidth/2)+'px';
+  el.style.top=(cy-bubbleHeight/2)+'px';
   el.classList.toggle('active',active);
  }
  function changeScene(next){
