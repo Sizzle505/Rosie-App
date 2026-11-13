@@ -932,3 +932,64 @@
    text-align:center;letter-spacing:.4px;white-space:normal;
  }
 }
+
+/* Cosmic Odyssey Serious Sci-Fi Maze Walls, Batch 2.
+ * Ten individually approved source artworks, packed into one transparent 5x2 WebP atlas.
+ * Purely visual: never alters movement, raycasting, collision, enemy AI, or pickup placement.
+ * ?classicWalls=1 restores the old partitions for before/after comparisons. */
+.board[data-wall-art="modular"] .cell.wall.partition-wall.wall-art-cell{
+  background-image:linear-gradient(145deg,rgba(14,26,45,.82),rgba(8,17,33,.88))!important;
+  background-size:cover!important;
+  border:0!important;
+  box-shadow:inset 0 0 2px #d9b67845!important;
+  overflow:hidden;
+  isolation:isolate;
+}
+.board[data-wall-art="modular"] .cell.wall.wall-art-cell::before,
+.board[data-wall-art="modular"] .cell.wall.wall-art-cell::after{display:none!important}
+.board[data-wall-art="modular"] .wall-art-image{
+  position:absolute;
+  inset:-2%;
+  z-index:2;
+  display:block;
+  pointer-events:none;
+  background-image:url('assets/wall-atlas-b2.webp');
+  background-repeat:no-repeat;
+  background-size:500% 200%;
+  transform-origin:50% 50%;
+  opacity:.97;
+  filter:drop-shadow(0 0 2px rgba(115,164,219,.60));
+}
+.board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{
+  opacity:1;
+  filter:drop-shadow(0 0 4px rgba(79,193,248,.64));
+  animation:cosmic-modular-barrier 3.4s ease-in-out infinite alternate;
+}
+.board[data-scene="meteor"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image,
+.board[data-scene="foundry"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{
+  filter:drop-shadow(0 0 4px rgba(243,72,95,.62));
+}
+.board[data-scene="crystal"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image,
+.board[data-scene="blackhole"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{
+  filter:drop-shadow(0 0 4px rgba(216,96,251,.61));
+}
+.board[data-wall-art="modular"] .cell.wall-art-cell .environment-prop{
+  z-index:4!important;
+  opacity:.83!important;
+}
+@keyframes cosmic-modular-barrier{
+  from{opacity:.78;filter:brightness(.91) drop-shadow(0 0 2px #56cde6a8)}
+  to{opacity:1;filter:brightness(1.2) drop-shadow(0 0 6px #8de8ffaa)}
+}
+@media(max-width:760px){
+ .board[data-wall-art="modular"] .wall-art-image{
+   inset:0;
+   filter:drop-shadow(0 0 1px rgba(113,207,250,.53));
+ }
+ .board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{
+   animation-duration:5s;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .board[data-wall-art="modular"] .cell.wall-art-cell[data-wall-kind="energy"] .wall-art-image{animation:none!important}
+}
