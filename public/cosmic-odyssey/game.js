@@ -275,10 +275,12 @@
  // standalone miniatures packed into individual cells.
  const BARRIER_KIND={nebula:0,meteor:2,lunar:3,crystal:4,foundry:1,
    derelict:2,ice:3,garden:0,blackhole:4,ruins:1,
-   'nebula-alt':0,'meteor-alt':2,'lunar-alt':3,'lunar-alt2':3};
+   'nebula-alt':0,'meteor-alt':2,'lunar-alt':3,'lunar-alt2':3,
+   'arcade-nebula':0,'arcade-lunar':3,'arcade-starship':2,'arcade-blackhole':4};
  const SECTOR_SETPIECE={nebula:1,meteor:6,lunar:0,crystal:5,foundry:2,
    derelict:3,ice:4,garden:1,blackhole:6,ruins:7,
-   'nebula-alt':1,'meteor-alt':6,'lunar-alt':0,'lunar-alt2':0};
+   'nebula-alt':1,'meteor-alt':6,'lunar-alt':0,'lunar-alt2':0,
+   'arcade-nebula':1,'arcade-lunar':0,'arcade-starship':3,'arcade-blackhole':6};
  function createBoard(){
   board.innerHTML='';itemAt.clear();cells=[];
   board.dataset.material=PARTITION_MATERIAL[LEVELS[level-1].scene]||'deco';
@@ -412,7 +414,11 @@
   derelict:['debris-satellite','sentry-gold','barrier-cyan'],
   ice:['obstacle-crystal','barrier-cyan','beacon'],
   garden:['beacon','reactor-cyan'],blackhole:['turret-prism','sentry-gold','reactor-cyan'],
-  ruins:['obstacle-crystal','beacon','hazard-gate']
+  ruins:['obstacle-crystal','beacon','hazard-gate'],
+  'arcade-nebula':['beacon','reactor-cyan'],
+  'arcade-lunar':['mining-drill','reactor-cyan','barrier-cyan'],
+  'arcade-starship':['debris-satellite','sentry-gold'],
+  'arcade-blackhole':['turret-prism','reactor-cyan']
  };
  function decorateEnvironment(seed){
   const art=DECOR[LEVELS[level-1].scene]||[];
