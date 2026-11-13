@@ -21,7 +21,7 @@
    const img=new Image();img.src=asset(id);artCache.set(id,img);
   }
  }
- preloadArt(...EXTRA_ART,'jett','chip','kitty','jett-attack','kitty-attack','chip-attack',
+ preloadArt(...EXTRA_ART,'jett','chip','kitty-hq','jett-attack','chip-attack',
    'shield','explosion','laser-bolt','rosie-projectile','life');
 
  const LEVELS=[
@@ -150,6 +150,7 @@
   },470);
  }
  function setSprite(obj,name){
+  if(name==='kitty'||name==='kitty-attack')name='kitty-hq';
   const art=obj?.el?.spriteArt;
   if(art&&art.dataset.asset!==name){art.src=asset(name);art.dataset.asset=name;}
  }
@@ -192,6 +193,7 @@
  if(boostCount)boostCount.textContent=boostActive?'ACTIVE':`${boostCharges} / ${BOOST_MAX}`;
  const stageBadge=$('stage-badge');if(stageBadge)stageBadge.textContent=`${level} / ${LEVELS.length}`; $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
  function addSprite(name,x,y,css){
+  if(name==='kitty')name='kitty-hq';
   const el=document.createElement('div');el.className=`sprite ${css}`;el.setAttribute('aria-hidden','true');
   const art=document.createElement('img');art.src=asset(name);art.alt='';art.draggable=false;art.className='sprite-art';art.dataset.asset=name;
   el.spriteArt=art;el.append(art);board.append(el);return el;
