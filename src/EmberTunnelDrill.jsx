@@ -147,6 +147,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467);
   const [mode,setMode]=useState("idle");
+  const [arcadeBackdrop,setArcadeBackdrop]=useState(0);
+  const arcadeBackdrops=[{id:"foundry",label:"MOLTEN FOUNDRY"},{id:"crystal",label:"CRYSTAL VAULT"},{id:"control",label:"EXCAVATION CONTROL"}];
   const [hud,setHud]=useState(()=>snapshot(frame.current));
   const [best,setBest]=useState(()=>{
     try {return Number(localStorage.getItem("rosieEmberDrillBest")||0)}catch(_){return 0}
@@ -320,7 +322,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   };
   const passageProgress = Math.min(100, ((hud.time - PASSAGES[hud.passage].start) / (PASSAGES[hud.passage].end - PASSAGES[hud.passage].start)) * 100);
   return (
-    <section className="ember-suite" aria-label="Captain Rosie Ember Tunnel Drill game">
+    <section className="ember-suite" data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
       <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
         <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
@@ -336,6 +338,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <span className="ember-route-label">EXCAVATION ROUTE</span>
         <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / PASSAGES.length) * 100}%`}} /></div>
         {PASSAGES.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
+      </div>
+      <div className="ember-arcade-scene-select" aria-label="Ember Tunnel background selection">
+        <span>ENVIRONMENT</span>
+        <button type="button" onClick={()=>setArcadeBackdrop(index=>(index+1)%arcadeBackdrops.length)}
+          aria-label={`Change Ember Tunnel background, currently ${arcadeBackdrops[arcadeBackdrop].label}`}>
+          {arcadeBackdrops[arcadeBackdrop].label} · CHANGE
+        </button>
       </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
         <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
