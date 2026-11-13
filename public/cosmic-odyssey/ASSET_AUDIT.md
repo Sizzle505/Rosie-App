@@ -76,3 +76,37 @@ Verified all six source PNGs against the exact members of `Captain-Rosie-Cosmic-
 **Repository count:** 48 optimized image files in `public/cosmic-odyssey/assets/`, including the six new environment imports.
 
 **Verification:** New Git blobs' SHA-1 hashes matched local optimized files. Runtime simulations of the portrait 11×15 and landscape 17×11 mazes produced all four launch pads, actual floor junction classes, a centered shield, and successful transition to Lunar Outpost. Real-device display review remains recommended.
+
+## Expanded environment integration - November 13, 2026
+
+**Source preservation:** Complete Environment Batches 6, 7, 8, and 9 are saved under `/Rosie-App-Transfer/` in Dropbox, along with the 34-file optimized environment ZIP. All ten newest full-resolution backgrounds were additionally uploaded as individually named PNGs. The Batch 6 environment *atlases* remain source material: they are not assumed to be seamlessly tileable and were not chopped into gameplay sprites.
+
+**Installed gameplay art:** 82 optimized WebP assets under `public/cosmic-odyssey/assets/` (48 before this pass, 34 newly added). The additions consist of 10 new primary backgrounds, 4 earlier alternative backgrounds, and 20 individually authored transparent props. New artwork is retained in the original archives; optimized copies are used in-browser.
+
+### Ten campaign environments
+| Stage | Scene | Background |
+|---|---|---|
+| 1 | Nebula Passage | `scene-nebula.webp` |
+| 2 | Meteor Mischief | `scene-meteor.webp` |
+| 3 | Lunar Outpost | `scene-lunar.webp` |
+| 4 | Crystal Caverns | `scene-crystal.webp` |
+| 5 | Volcanic Foundry | `scene-foundry.webp` |
+| 6 | Derelict Starship | `scene-derelict.webp` |
+| 7 | Comet Ice Canyon | `scene-ice.webp` |
+| 8 | Ringworld Gardens | `scene-garden.webp` |
+| 9 | Black Hole Observatory | `scene-blackhole.webp` |
+| 10 | Ancient Alien Ruins | `scene-ruins.webp` |
+
+Four alternate views (`scene-nebula-alt`, `scene-meteor-alt`, `scene-lunar-alt`, `scene-lunar-alt2`) are also installed; use the header scenery selector to cycle through all 14. The start overlay allows direct selection of any stage for playtesting without completing the earlier levels. Sequential advancement carries score, remaining hull and ammunition forward.
+
+### Props and mechanics
+- Character-specific spawn artwork: `spawn-jett`, `spawn-chip`, `spawn-kitty`, `gravity-pad` for Rosie's launch point, and `cosmic-exit-new` for the final portal.
+- Environment wall decoration uses the additional art (`hazard-molten`, `obstacle-crystal`, `hazard-gate`, `reactor-cyan`, `beacon`, `debris-satellite`, `mining-drill`, `turret-prism`, `barrier-cyan`, `meteor-flame`, `sentry-gold`). Wall decoration does not modify traversal or hitboxes.
+- New floor interactions: cargo supply crates grant three ammunition, repair stations heal one hull (or temporary protection if already at full health), gravity pads grant short protection and one ammunition, plasma mines inflict a collision hit unless shielded, and a paired wormhole system allows two-way travel from Stage 4 onward.
+- Previously approved Rosie, Jett, Kitty and Chip sprite states are preserved. Arrow/WASD input, treat-funded weapons, Fiend AI and projectile hits are unchanged apart from the new environment interactions.
+
+### Technical verification and cautions
+- JavaScript parse passed. Simulated 393×852 mobile and 1280×800 desktop test beds generated maze cells, seven/eight decorative objects, all four launch pads, functional item placement, correctly paired wormholes on later stages, and final-stage win state. A full live browser screenshot and actual iPhone touch testing have **not** been performed and must not be claimed.
+- Responsive D-pad controls were enlarged for normal-height portrait phones, with a compact fallback for short viewports.
+- Revisit balance over ten stages: increased speed and plasma mines may require adjustment based on playtests. Do not increase difficulty further without feedback.
+- All changes remain in the Cosmic Odyssey development branch / Draft PR #159. Do not merge into production until visually reviewed.
