@@ -142,3 +142,30 @@ Material families: Nebula→deco; Meteor/Foundry→foundry; Lunar/Ice→lunar; C
 **Automated/simulated verification:** JavaScript syntax passed. On 393×852 and 1280×800 mock viewports, all four firing directions selected the nearest Fiend in the open cardinal lane. Off-axis, blocked, and behind-player targets were excluded. Blocked adjacent-wall shots retained ammunition. Jett's rendered width measured 1.8225 tiles and edge-aligned sprites remained centered. A rocket firing on a three-cell clear line impacted the Jett target at the scheduled explosion and defeated him. All ten campaign layouts on each viewport had sufficient reachable biscuits, reachable Fiends, accessible exits, and functioning wormhole placement from Stage 4 onward.
 
 **Limitations:** Logic and DOM simulation are not equivalent to real iPhone/desktop rendering. This branch still needs a live device review for visual size, touch feel, and projectile animations before merging.
+
+## Serious Sci-Fi Maze-Wall Batch 2 - November 13, 2026
+
+**Source archive:** `/Rosie-App-Transfer/Captain-Rosie-Cosmic-Odyssey-Maze-Walls-Batch-2.zip` (Dropbox, 10 individual full-resolution transparent PNGs plus source manifest). This batch contains **no Rosie/Shiba character artwork**. An older environment batch containing an unapproved generic Shiba remains excluded.
+
+**Web runtime:** `public/cosmic-odyssey/assets/wall-atlas-b2.webp` - 880 × 352 transparent WebP, comprising ten independently generated or explicitly assembled originals, arranged in a 5 × 2 atlas. Original images were not replaced, and their full-resolution files remain in Dropbox. The optimized atlas is also archived at `/Rosie-App-Transfer/Cosmic-Odyssey-Serious-Sci-Fi-Wall-Atlas-Batch-2.webp`. Source bytes match Git blob `c705cec93a7241f05f5ca56623f1d2976c1b605e`.
+
+Atlas index mapping:
+
+| Index | Original filename | Application |
+|---|---|---|
+| 0 | 01-Arc-Lightning-Wall-Horizontal.png | Blue lightning barrier |
+| 1 | 02-Reinforced-Bulkhead-Horizontal.png | Solid horizontal bulkhead |
+| 2 | 03-Retractable-Spike-Barrier.png | Solid spike barricade |
+| 3 | 04-Red-Laser-Security-Gate.png | Red laser barrier |
+| 4 | 05-Cyan-Hex-Forcefield.png | Cyan hex hard-light barrier |
+| 5 | 06-Magenta-Plasma-Containment.png | Magenta containment wall |
+| 6 | 07-Reinforced-Bulkhead-Vertical.png | Solid vertical bulkhead |
+| 7 | 08-Reinforced-Bulkhead-Corner.png | L-junction, rotated to match connections |
+| 8 | 09-Reinforced-Bulkhead-T-Junction.png | T-junction, rotated to match connections |
+| 9 | 10-Reinforced-Bulkhead-Cross-Junction.png | Four-way junction |
+
+Runtime chooses orientation using the existing `wallConnectivity()` four-bit mask. The new graphics affect *wall appearance only*; they do **not** add walkability, toggling, destructibility, damage, or player abilities. Collisions, pickups, pathfinding, firing lanes, score, and stage progression continue to use the original grid. When the scenery selector changes, the wall theme changes without remaking the maze. A blocked shot flashes at the wall instead of silently failing.
+
+QA: game JS parsed; simulated 393×852 portrait and 1280×800 desktop runs covered all ten levels. All 10 atlas indices appeared across the tested levels, and every rendered wall retained its original wall collision status. No missing wall-art elements were found. `?classicWalls=1` opts out to the original partition SVGs for side-by-side review. Energy-wall animation is reduced on iPhone and suppressed for reduced-motion accessibility.
+
+**Rollback:** revert the Cosmic Odyssey wall-rendering commits or append `?classicWalls=1` to the preview URL; delete the Dropbox copies only if explicitly requested.

@@ -193,6 +193,14 @@
   const item=SCENES.find(o=>o.id===next)||SCENES[0];scene=item.id;
   board.dataset.scene=item.id;
   board.dataset.material=PARTITION_MATERIAL[item.id]||'deco';
+  // Switching the backdrop also reskins the modular barriers without rebuilding the maze.
+  if(board.dataset.wallArt==='modular')for(let y=0;y<cells.length;y++)for(let x=0;x<cells[y].length;x++){
+    const cell=cells[y][x];if(!cell.classList.contains('wall-art-cell'))continue;
+    const part=wallSprite(wallConnectivity(x,y),x,y,item.id);
+    cell.dataset.wallSprite=String(part.index);cell.dataset.wallKind=part.kind;
+    const art=Array.from(cell.children).find(el=>el.classList?.contains('wall-art-image'));
+    if(art){art.style.backgroundPosition=`${(part.index%5)*25}% ${Math.floor(part.index/5)*100}%`;art.style.transform=`rotate(${part.angle}deg)`;}
+  }
   const app=$('cosmic-app');if(app)app.dataset.scene=item.id;
   const label=$('scene-name');if(label)label.textContent=item.name.split(' ')[0];
   const stage=LEVELS[level-1];
@@ -257,9 +265,46 @@
        | ((y<rows-1&&grid[y+1][x]===1)?4:0)
        | ((x>0&&grid[y][x-1]===1)?8:0);
  }
+ // Sprite atlas contains all ten approved independent maze-wall images, in manifest order.
+ // This is presentation only: the grid remains authoritative for movement, weapons and AI.
+ const WALL_ATLAS_COUNT=10;
+ const WALL_STYLE_BY_SCENE={
+   nebula:[0,4,1],meteor:[3,2,0],lunar:[4,3,1],
+   crystal:[5,0,4],foundry:[2,3,5],derelict:[1,6,3],
+   ice:[4,0,1],garden:[1,4,0],blackhole:[5,0,3],
+   ruins:[2,5,1]
+ };
+ function wallSprite(mask,x,y,sceneId=LEVELS[level-1].scene){
+   const links=[1,2,4,8].filter(bit=>!!(mask&bit)).length;
+   const salt=(x*37+y*61+level*29+cols*7)>>>0;
+   let index=1,angle=0,kind='armor';
+   if(links===4){index=9;}
+   else if(links===3){
+     index=8;
+     const missing=[1,2,4,8].find(bit=>!(mask&bit));
+     angle=({1:0,2:90,4:180,8:270})[missing];
+   }else if(links===2&&![5,10].includes(mask)){
+     index=7;angle=({6:0,12:90,9:180,3:270})[mask]||0;
+   }else{
+     const vertical=(mask&5)!==0&&(mask&10)===0;
+     const pool=WALL_STYLE_BY_SCENE[sceneId]||[1,0,4];
+     index=pool[salt%pool.length];
+     // Guarantee regular structural stretches so powered gates are accents, not a noisy grid.
+     if(salt%7===0)index=vertical?6:1;
+     if(index===1&&vertical)index=6;
+     if(index===6&&!vertical)index=1;
+     if(vertical&&index!==6)angle=90;
+     kind=[0,3,4,5].includes(index)?'energy':'armor';
+   }
+   if(index<0||index>=WALL_ATLAS_COUNT)index=1;
+   return {index,angle,kind};
+ }
  function createBoard(){
    board.innerHTML='';itemAt.clear();cells=[];
    board.dataset.material=PARTITION_MATERIAL[LEVELS[level-1].scene]||'deco';
+   const classicWallView=typeof window.location?.search==='string'&&
+     new URLSearchParams(window.location.search).get('classicWalls')==='1';
+   board.dataset.wallArt=classicWallView?'classic':'modular';
    for(let y=0;y<rows;y++){
      const row=[];
      for(let x=0;x<cols;x++){
@@ -270,6 +315,18 @@
          cell.dataset.partition=String(mask);
          cell.style.setProperty('--partition-x',((mask%4)*100/3)+'%');
          cell.style.setProperty('--partition-y',(Math.floor(mask/4)*100/3)+'%');
+         if(!classicWallView){
+           const sprite=wallSprite(mask,x,y);
+           cell.classList.add('wall-art-cell');
+           cell.dataset.wallSprite=String(sprite.index);
+           cell.dataset.wallKind=sprite.kind;
+           const art=document.createElement('span');
+           art.className='wall-art-image';
+           art.setAttribute('aria-hidden','true');
+           art.style.backgroundPosition=`${(sprite.index%5)*25}% ${Math.floor(sprite.index/5)*100}%`;
+           art.style.transform=`rotate(${sprite.angle}deg)`;
+           cell.append(art);
+         }
        }
        board.append(cell);row.push(cell);
      }
@@ -559,6 +616,14 @@
   }
   const shot=forwardRay(origin,lastFacing);
   if(!shot.tiles.length){
+    const [dx,dy]=DIRS[lastFacing],wx=origin.x+dx,wy=origin.y+dy;
+    if(inside(wx,wy)&&grid[wy][wx]===1){
+      const wall=cells[wy]?.[wx];if(wall){
+        wall.classList.add('barrier-struck');
+        setTimeout(()=>wall.classList.remove('barrier-struck'),310);
+      }
+      effect('spark',{x:wx,y:wy},1.1);
+    }
     say('A wall blocks the firing lane. Turn toward an open corridor.');
     sound(180,.045);updateAimPreview();return;
   }
