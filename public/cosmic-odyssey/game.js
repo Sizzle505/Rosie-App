@@ -51,7 +51,7 @@
   {id:'chip',name:'Chip Scurrio',hp:1,speed:465,kind:'patrol',points:175},
   {id:'kitty',name:'Kitty Xenovese',hp:3,speed:410,kind:'chase',points:400}
  ];
- let cols=11,rows=15,tile=26,grid=[],itemAt=new Map(),cells=[],entities=[],player=null,exitPos=null;
+ let cols=11,rows=15,tile=26,grid=[],itemAt=new Map(),cells=[],entities=[],player=null,exitPos=null,warpPoints=[],warpCooldown=0;
  let scene='nebula',enemyShots=[],running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0;
@@ -196,8 +196,14 @@
   const art=document.createElement('img');art.src=asset(name);art.alt='';art.draggable=false;art.className='sprite-art';art.dataset.asset=name;
   el.spriteArt=art;el.append(art);board.append(el);return el;
  }
- function addPickup(x,y,kind){const el=kind==='treat'||kind==='bone'?document.createElement('span'):document.createElement('img');el.className=`pickup ${kind}`;
-  if(el.tagName==='IMG')el.src=asset(kind==='rocket'?'rocket-pickup':kind==='shield'?'shield-pickup':'cheese');cells[y][x].append(el);itemAt.set(key(x,y),{kind,el});
+ function addPickup(x,y,kind){
+  if(!open(x,y)||itemAt.has(key(x,y)))return;
+  const el=kind==='treat'||kind==='bone'?document.createElement('span'):document.createElement('img');
+  el.className='pickup '+kind;el.setAttribute('aria-hidden','true');
+  const images={rocket:'rocket-pickup',shield:'shield-pickup',cheese:'cheese',
+    crate:'supply-crate',repair:'repair-station',gravity:'gravity-pad',mine:'mine-plasma',wormhole:'wormhole'};
+  if(el.tagName==='IMG')el.src=asset(images[kind]||'cheese');
+  cells[y][x].append(el);itemAt.set(key(x,y),{kind,el});
  }
  function populate(seed){const rnd=rand(seed+67);let floor=[];for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++)if(open(x,y))floor.push({x,y});
   const reserved=new Set([key(player.x,player.y),...entities.map(e=>key(e.x,e.y)),key(exitPos.x,exitPos.y)]);
@@ -209,10 +215,19 @@
   special.slice(5,7).forEach(p=>addPickup(p.x,p.y,'bone'));
   special.slice(7,9).forEach(p=>addPickup(p.x,p.y,'shield'));
   special.slice(9,11).forEach(p=>addPickup(p.x,p.y,'rocket'));
+  // New independent gameplay props, only on unobstructed maze floor cells.
+  if(special[11])addPickup(special[11].x,special[11].y,'crate');
+  if(special[12])addPickup(special[12].x,special[12].y,'repair');
+  if(level>=2&&special[13])addPickup(special[13].x,special[13].y,'gravity');
+  if(level>=2)special.slice(14,Math.min(14+Math.min(3,Math.floor(level/3)+1),special.length)).forEach(p=>addPickup(p.x,p.y,'mine'));
+  if(level>=4){
+    const p1=special[18],p2=special[19];
+    if(p1&&p2){warpPoints=[p1,p2];addPickup(p1.x,p1.y,'wormhole');addPickup(p2.x,p2.y,'wormhole');}
+  }
  }
  function createBoard(){
   board.innerHTML='';itemAt.clear();cells=[];
-  board.classList.toggle('lunar-maze',level===2);
+  board.classList.toggle('lunar-maze',LEVELS[level-1].scene==='lunar');
   const paint=rand(8000+level*773);
   for(let y=0;y<rows;y++){
    const row=[];
@@ -221,11 +236,11 @@
     const isWall=grid[y][x]===1;
     cell.className='cell '+(isWall?'wall':'floor');
     if(isWall){
-      if(level===2 && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.21)cell.classList.add('lunar-machinery');
-      if(level===1 && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.11)cell.classList.add('asteroid-crater');
+      if(LEVELS[level-1].scene==='lunar'&&x>0&&y>0&&x<cols-1&&y<rows-1&&paint()<.16)cell.classList.add('lunar-machinery');
+      if(LEVELS[level-1].scene==='meteor'&&x>0&&y>0&&x<cols-1&&y<rows-1&&paint()<.12)cell.classList.add('asteroid-crater');
     }else{
-      if(level===2&&paint()<.16)cell.classList.add('lunar-deck');
-      if(level===1&&paint()<.12)cell.classList.add('nebula-glow');
+      if(LEVELS[level-1].scene==='lunar'&&paint()<.13)cell.classList.add('lunar-deck');
+      if(LEVELS[level-1].scene==='nebula'&&paint()<.10)cell.classList.add('nebula-glow');
       // Actual original junction and end-cap art is a low-opacity floor inlay,
       // never a hitbox or impassable obstacle.
       const ends=neighbors({x,y});
@@ -245,14 +260,42 @@
    }cells.push(row);
   }
   const e=document.createElement('img');e.id='cosmic-exit';e.className='exit locked';
-  e.src=asset('portal');e.alt='Exit portal';board.append(e);positionExit();
+  e.src=asset('cosmic-exit-new');e.alt='Exit portal';board.append(e);positionExit();
  }
  function placeLaunchArt(p,kind){
   const cell=cells[p.y]?.[p.x];if(!cell)return;
   const img=document.createElement('img');
   img.className='launch-art launch-'+kind;
-  img.src=asset('fiend-spawn');img.alt='';img.draggable=false;
+  img.src=asset(({jett:'spawn-jett',chip:'spawn-chip',kitty:'spawn-kitty',rosie:'gravity-pad'})[kind]||'fiend-spawn');img.alt='';img.draggable=false;
   img.setAttribute('aria-hidden','true');cell.append(img);
+ }
+ const DECOR={
+  nebula:['beacon','reactor-cyan'],meteor:['hazard-molten','meteor-flame','debris-satellite'],
+  lunar:['mining-drill','reactor-cyan','barrier-cyan'],crystal:['obstacle-crystal','turret-prism'],
+  foundry:['hazard-molten','reactor-cyan','hazard-gate','mining-drill'],
+  derelict:['debris-satellite','sentry-gold','barrier-cyan'],
+  ice:['obstacle-crystal','barrier-cyan','beacon'],
+  garden:['beacon','reactor-cyan'],blackhole:['turret-prism','sentry-gold','reactor-cyan'],
+  ruins:['obstacle-crystal','beacon','hazard-gate']
+ };
+ function decorateEnvironment(seed){
+  const art=DECOR[LEVELS[level-1].scene]||[];
+  if(!art.length)return;
+  const rnd=rand(seed+9021),spots=[];
+  for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+    if(grid[y][x]!==1||dist({x,y},player.spawn)<3||dist({x,y},exitPos)<2)continue;
+    if(entities.some(e=>dist({x,y},e.spawn)<2))continue;
+    spots.push({x,y});
+  }
+  spots.sort(()=>rnd()-.5);
+  const count=Math.min(spots.length,Math.max(4,Math.floor(cols*rows/23)));
+  for(let i=0;i<count;i++){
+    const p=spots[i],img=document.createElement('img');
+    img.className='environment-prop';img.src=asset(art[i%art.length]);
+    img.alt='';img.draggable=false;img.setAttribute('aria-hidden','true');
+    img.style.setProperty('--prop-turn',((i%4)*90)+'deg');
+    cells[p.y][p.x].append(img);
+  }
  }
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
@@ -271,7 +314,7 @@
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
   if(!carry){score=0;ammo=0;lives=3;}
-  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
+  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
   player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,speed:Math.round(a.speed*LEVELS[level-1].speed),spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
@@ -281,6 +324,7 @@
   spots.forEach((p,i)=>cells[p.y][p.x].classList.add('fiend-launch-pad',i===2?'kitty-hangar':i===1?'chip-hangar':'jett-hangar'));
   placeLaunchArt(spawn,'rosie');
   spots.forEach((p,i)=>placeLaunchArt(p,['jett','chip','kitty'][i]));
+  decorateEnvironment(3700+level*227);
   player.el=addSprite('rosie-cruise',player.x,player.y,'rosie');
   for(const e of entities)e.el=addSprite(e.id,e.x,e.y,'fiend '+e.id);
   populate(310+level*37);const patrols=[[],[]];for(const [i,e] of entities.entries()){
@@ -309,13 +353,47 @@
   sound(carry?880:670,.17);ui();
  }
  function pause(){if(phase==='playing')enter('paused','Your mission is safely paused. Resume whenever ready.','RESUME MISSION');else if(phase==='paused')start();}
- function pick(){const k=key(player.x,player.y),item=itemAt.get(k);if(!item)return;itemAt.delete(k);item.el.remove();const p={x:player.x,y:player.y};
-  switch(item.kind){case'treat':got++;ammo=Math.min(8,ammo+1);score+=10;sound(720,.045);break;
-  case'cheese':ammo=Math.min(8,ammo+2);score+=50;slowUntil=performance.now()+5200;popup('CHEESE +2',p);sound(960,.14);break;
-  case'bone':ammo=Math.min(8,ammo+3);score+=75;protectedUntil=performance.now()+3900;popup('GOLDEN BONE +3',p);sound(1120,.16);break;
-  case'rocket':ammo=Math.min(8,ammo+2);score+=25;popup('ROCKET +2',p);sound(840,.1);break;
-  case'shield':protectedUntil=performance.now()+5500;popup('SHIELD!',p);sound(930,.13);break;
-  }ui();positionShield();if(got>=target&&deadCount===3){$('cosmic-exit').classList.remove('locked');$('cosmic-exit').classList.add('open');say(level<LEVELS.length?`Portal unlocked! Next: ${LEVELS[level].name}.`:'Final portal unlocked! Complete the Odyssey.');}
+ function pick(){
+  const k=key(player.x,player.y),item=itemAt.get(k);if(!item)return;
+  const now=performance.now(),p={x:player.x,y:player.y};
+  if(item.kind!=='wormhole'){itemAt.delete(k);item.el.remove();}
+  switch(item.kind){
+   case'treat':got++;ammo=Math.min(8,ammo+1);score+=10;sound(720,.045);break;
+   case'cheese':ammo=Math.min(8,ammo+2);score+=50;slowUntil=now+5200;popup('CHEESE +2',p);sound(960,.14);break;
+   case'bone':ammo=Math.min(8,ammo+3);score+=75;protectedUntil=now+3900;popup('GOLDEN BONE +3',p);sound(1120,.16);break;
+   case'rocket':ammo=Math.min(8,ammo+2);score+=25;popup('ROCKET +2',p);sound(840,.1);break;
+   case'shield':protectedUntil=now+5500;popup('SHIELD!',p);sound(930,.13);break;
+   case'crate':ammo=Math.min(8,ammo+3);score+=50;popup('SUPPLIES +3',p);sound(840,.14);break;
+   case'repair':
+     if(lives<3){lives++;popup('HULL REPAIRED',p);}
+     else{protectedUntil=Math.max(protectedUntil,now+2600);popup('REPAIR SHIELD',p);}
+     score+=60;sound(910,.16);break;
+   case'gravity':
+     protectedUntil=Math.max(protectedUntil,now+4200);ammo=Math.min(8,ammo+1);
+     popup('GRAVITY BOOST!',p);sound(1100,.2);break;
+   case'mine':
+     effect('explosion',p,2.3);sound(150,.21,'sawtooth');
+     if(now<protectedUntil)popup('MINE SHIELDED',p);
+     else damage({name:'a plasma mine'});
+     break;
+   case'wormhole':
+     if(now<warpCooldown||warpPoints.length!==2)break;
+     const destination=warpPoints.find(o=>o.x!==p.x||o.y!==p.y);
+     if(destination){
+       warpCooldown=now+1200;protectedUntil=Math.max(protectedUntil,now+1250);
+       effect('spark',p,2);
+       player.x=destination.x;player.y=destination.y;
+       position(player);positionShield();effect('spark',destination,2);
+       popup('WORMHOLE!',destination);score+=20;sound(760,.16);
+     }
+     break;
+  }
+  ui();positionShield();
+  if(got>=target&&deadCount===3){
+    $('cosmic-exit').classList.remove('locked');
+    $('cosmic-exit').classList.add('open');
+    say(level<LEVELS.length?`Portal open! Next: ${LEVELS[level].name}.`:'Final portal open!');
+  }
  }
  // One controller owns all movement. A quick tap moves one tile; holding a key/pad repeats at STEP_MS.
  function canStep(dir){const v=DIRS[dir];return !!v&&open(player.x+v[0],player.y+v[1]);}
