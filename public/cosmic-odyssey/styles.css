@@ -293,12 +293,12 @@
 }
 .cosmic-stage::before{
   background-image:url('assets/asteroid-large.webp');
-  width:clamp(110px,15vw,220px);height:clamp(110px,15vw,220px);
+  width:clamp(70px,7vw,105px);height:clamp(70px,7vw,105px);
   left:-1.8%;top:19%;transform:rotate(-12deg);
 }
 .cosmic-stage::after{
   background-image:url('assets/asteroid-small.webp');
-  width:clamp(90px,11vw,160px);height:clamp(70px,10vw,125px);
+  width:clamp(65px,6vw,96px);height:clamp(55px,6vw,92px);
   right:-1.1%;bottom:16%;transform:rotate(19deg);
   animation-delay:-4.4s;
 }
@@ -318,8 +318,8 @@
   filter:drop-shadow(0 0 3px #6fbdff88);
 }
 .cell.floor.art-cross::after{background-image:url('assets/junction-cross.webp');opacity:.65}
-.cell.floor.art-tee::after{background-image:url('assets/junction-tee.webp');opacity:.57}
-.cell.floor.art-endcap::after{background-image:url('assets/junction-endcap.webp');opacity:.55}
+.cell.floor.art-tee::after{background-image:url('assets/junction-tee.webp');opacity:.50}
+.cell.floor.art-endcap::after{background-image:url('assets/junction-endcap.webp');opacity:.48}
 .board.lunar-maze .cell.floor.art-cross::after,
 .board.lunar-maze .cell.floor.art-tee::after,
 .board.lunar-maze .cell.floor.art-endcap::after{
