@@ -309,7 +309,11 @@
     `✦ STAGE ${level+1} UNLOCKED · ${LEVELS[level]?.name||'ODYSSEY'} ✦`:
     `✦ LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].tagline} ✦`;
   $('veil-msg').textContent=text;$('start').textContent=buttonText;
-  const select=$('stage-select');if(select&&status==='level-clear')select.value=String(Math.min(level+1,LEVELS.length));
+  const select=$('stage-select'),picker=document.querySelector('.mission-level-picker');
+  if(select&&status==='level-clear')select.value=String(Math.min(level+1,LEVELS.length));
+  else if(select&&status==='lose')select.value=String(level);
+  else if(select&&status==='win')select.value='1';
+  if(picker)picker.style.display=(status==='paused'||status==='level-clear')?'none':'flex';
   ui();
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
@@ -363,14 +367,14 @@
    case'bone':ammo=Math.min(8,ammo+3);score+=75;protectedUntil=now+3900;popup('GOLDEN BONE +3',p);sound(1120,.16);break;
    case'rocket':ammo=Math.min(8,ammo+2);score+=25;popup('ROCKET +2',p);sound(840,.1);break;
    case'shield':protectedUntil=now+5500;popup('SHIELD!',p);sound(930,.13);break;
-   case'crate':ammo=Math.min(8,ammo+3);score+=50;popup('SUPPLIES +3',p);sound(840,.14);break;
+   case'crate':ammo=Math.min(8,ammo+3);score+=50;effect('spark',p,1.3);popup('SUPPLIES +3',p);sound(840,.14);break;
    case'repair':
      if(lives<3){lives++;popup('HULL REPAIRED',p);}
      else{protectedUntil=Math.max(protectedUntil,now+2600);popup('REPAIR SHIELD',p);}
-     score+=60;sound(910,.16);break;
+     score+=60;effect('spark',p,1.6);sound(910,.16);break;
    case'gravity':
      protectedUntil=Math.max(protectedUntil,now+4200);ammo=Math.min(8,ammo+1);
-     popup('GRAVITY BOOST!',p);sound(1100,.2);break;
+     effect('spark',p,1.4);popup('GRAVITY BOOST!',p);sound(1100,.2);break;
    case'mine':
      effect('explosion',p,2.3);sound(150,.21,'sawtooth');
      if(now<protectedUntil)popup('MINE SHIELDED',p);
