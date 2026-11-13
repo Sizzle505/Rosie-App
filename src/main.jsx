@@ -1288,8 +1288,8 @@ function CheeseMemoryGame() {
 
             <div className="cheese-exam-portrait">
               <picture>
-                <source media="(min-width: 1200px)" srcSet="/barkbridge-examiner-desktop-20261113.webp" />
-                <img src="/rosie-doctor-cheese-hero.webp" alt="Doctor Rosie administering the practical examination" />
+                <source media="(min-width: 1200px)" srcSet="/barkbridge-cheese-exam-still-life-20261113.webp" />
+                <img src="/rosie-doctor-cheese-hero.webp" alt="Cheese examination still life on desktop; Doctor Rosie on mobile" />
               </picture>
               <span>DOCTOR ROSIE · EXAMINER</span>
             </div>
