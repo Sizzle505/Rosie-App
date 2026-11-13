@@ -324,7 +324,7 @@
      const a=axis==='h'?{x:px,y:py-1}:{x:px-1,y:py};
      const b=axis==='h'?{x:px,y:py+1}:{x:px+1,y:py};
      if(open(a.x,a.y)||open(b.x,b.y))exposed++;
-     if(cells[py]?.[px]?.children?.some(el=>el.classList?.contains('environment-prop')))decor++;
+     if(Array.from(cells[py]?.[px]?.children||[]).some(el=>el.classList?.contains('environment-prop')))decor++;
     }
     if(exposed<Math.ceil(len*.5)||decor)return;
     const length=Math.min(4,len),start=Math.floor((len-length)/2);
