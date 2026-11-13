@@ -2257,9 +2257,11 @@ function CaptainRosieGame({ soundOn }) {
 
 
 function CosmicOdysseyArcade(){
-  const [isOpen,setIsOpen]=useState(false);
+  // The arcade is intentionally visible by default; it previously looked absent
+  // because it was buried beneath two games and also collapsed.
+  const [isOpen,setIsOpen]=useState(true);
   return (
-    <section className="cosmic-odyssey-portal cosmic-odyssey-main-entry" aria-label="Captain Rosie Cosmic Odyssey arcade">
+    <section id="cosmic-odyssey-arcade" className="cosmic-odyssey-portal cosmic-odyssey-main-entry" aria-label="Captain Rosie Cosmic Odyssey arcade">
       <img className="cosmic-odyssey-entry-banner" src="/cosmic-odyssey/assets/cosmic-banner.webp"
         alt="Captain Rosie: Cosmic Odyssey - original starship arcade banner" loading="lazy" />
       <div className="cosmic-odyssey-entry-info">
@@ -3037,6 +3039,15 @@ function App() {
           <CheeseMemoryGame />
         ) : page === "captain" ? (
           <>
+            <nav className="captain-arcade-jump" aria-label="Captain arcade game navigation">
+              <span>CAPTAIN'S THREE ADVENTURES</span>
+              <button type="button" onClick={() => document.getElementById("cosmic-odyssey-arcade")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
+                <img src="/cosmic-odyssey/assets/cosmic-banner.webp" alt="" aria-hidden="true" loading="lazy" />
+                <strong>GO TO COSMIC ODYSSEY</strong>
+                <small>Space maze · After the Tunnel Drill</small>
+              </button>
+              <a href="/cosmic-odyssey/index.html" target="_blank" rel="noopener noreferrer">PLAY FULL SCREEN</a>
+            </nav>
             <CaptainRosieGame soundOn={soundOn} />
             <EmberTunnelDrill soundOn={soundOn} />
             <CosmicOdysseyArcade />
