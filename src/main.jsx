@@ -1287,10 +1287,10 @@ function CheeseMemoryGame() {
             </div>
 
             <div className="cheese-exam-portrait">
-              <img
-                src="/rosie-doctor-cheese-hero.webp"
-                alt="Doctor Rosie administering the practical examination"
-              />
+              <picture>
+                <source media="(min-width: 1200px)" srcSet="/barkbridge-examiner-desktop-20261113.webp" />
+                <img src="/rosie-doctor-cheese-hero.webp" alt="Doctor Rosie administering the practical examination" />
+              </picture>
               <span>DOCTOR ROSIE · EXAMINER</span>
             </div>
 

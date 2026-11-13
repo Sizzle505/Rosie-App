@@ -4253,6 +4253,10 @@ body:has(.app-shell.page-timekeeper),
     aspect-ratio: auto !important; margin: 0 auto !important;
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-background { display: none; }
+  /* The desktop observatory already contains a coherent painted gear train.
+     Hide the separate annular sprite layer so its duplicate wheels do not
+     float across the architecture or appear to pass through the clock. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-exterior-gearwork { display: none !important; }
   .app-shell.page-timekeeper .rtk-observatory .rtk-dial {
     top: 53% !important; width: 58% !important;
   }
