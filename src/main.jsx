@@ -2256,6 +2256,93 @@ function CaptainRosieGame({ soundOn }) {
 }
 
 
+function FullscreenGameFrame({ children, label, variant }) {
+  const frameRef = useRef(null);
+  const [nativeFullscreen, setNativeFullscreen] = useState(false);
+  const [fallbackFullscreen, setFallbackFullscreen] = useState(false);
+  const expanded = nativeFullscreen || fallbackFullscreen;
+
+  useEffect(() => {
+    const syncFullscreen = () => {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      setNativeFullscreen(active === frameRef.current);
+    };
+    document.addEventListener("fullscreenchange", syncFullscreen);
+    document.addEventListener("webkitfullscreenchange", syncFullscreen);
+    syncFullscreen();
+    return () => {
+      document.removeEventListener("fullscreenchange", syncFullscreen);
+      document.removeEventListener("webkitfullscreenchange", syncFullscreen);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!fallbackFullscreen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.classList.add("captain-fullscreen-fallback-active");
+    document.body.style.overflow = "hidden";
+    const escape = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        setFallbackFullscreen(false);
+      }
+    };
+    document.addEventListener("keydown", escape, true);
+    return () => {
+      document.removeEventListener("keydown", escape, true);
+      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("captain-fullscreen-fallback-active");
+    };
+  }, [fallbackFullscreen]);
+
+  const toggleFullscreen = async () => {
+    if (fallbackFullscreen) {
+      setFallbackFullscreen(false);
+      return;
+    }
+    if (nativeFullscreen) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) {
+        try { await exit.call(document); } catch { setNativeFullscreen(false); }
+      } else setNativeFullscreen(false);
+      return;
+    }
+    const element = frameRef.current;
+    if (!element) return;
+    const request = element.requestFullscreen || element.webkitRequestFullscreen;
+    if (request) {
+      try {
+        await request.call(element);
+        return;
+      } catch {
+        // Embedded web views and older iPhone browsers may reject element fullscreen.
+        // Keep the current game mounted and expand it with CSS instead.
+      }
+    }
+    setFallbackFullscreen(true);
+  };
+
+  return (
+    <section
+      ref={frameRef}
+      className={`captain-fullscreen-frame captain-fs-${variant}${expanded ? " is-expanded" : ""}${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
+      aria-label={`${label} game`}
+    >
+      <button type="button" className="captain-fullscreen-toggle"
+        onClick={toggleFullscreen}
+        aria-label={expanded ? `Exit full screen for ${label}` : `Enter full screen for ${label}`}
+        title={expanded ? "Exit full screen (Esc)" : "Full screen"}
+        aria-pressed={expanded}
+      >
+        <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
+        <b>{expanded ? "EXIT FULL SCREEN" : "FULL SCREEN"}</b>
+      </button>
+      {children}
+    </section>
+  );
+}
+
 function CosmicOdysseyArcade(){
   // The arcade is intentionally visible by default; it previously looked absent
   // because it was buried beneath two games and also collapsed.
@@ -2274,14 +2361,16 @@ function CosmicOdysseyArcade(){
             {isOpen?'CLOSE COSMIC ODYSSEY':'PLAY COSMIC ODYSSEY'}
           </button>
           <a className="cosmic-odyssey-window-link" href="/cosmic-odyssey/index.html"
-            target="_blank" rel="noopener noreferrer">OPEN FULL SCREEN</a>
+            target="_blank" rel="noopener noreferrer">OPEN IN NEW TAB</a>
         </div>
       </div>
       {isOpen && (
-        <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
-          <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
-            loading="lazy" allowFullScreen />
-        </div>
+        <FullscreenGameFrame label="Cosmic Odyssey" variant="cosmic">
+          <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
+            <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
+              loading="lazy" allowFullScreen />
+          </div>
+        </FullscreenGameFrame>
       )}
     </section>
   );
@@ -3036,7 +3125,7 @@ function App() {
           </section>
         </main>
         ) : page === "cheese" ? (
-          <CheeseMemoryGame />
+          <FullscreenGameFrame label="Cheese Memory" variant="cheese"><CheeseMemoryGame /></FullscreenGameFrame>
         ) : page === "captain" ? (
           <>
             <nav className="captain-arcade-jump" aria-label="Captain arcade game navigation">
@@ -3046,14 +3135,18 @@ function App() {
                 <strong>GO TO COSMIC ODYSSEY</strong>
                 <small>Space maze · After the Tunnel Drill</small>
               </button>
-              <a href="/cosmic-odyssey/index.html" target="_blank" rel="noopener noreferrer">PLAY FULL SCREEN</a>
+              <a href="/cosmic-odyssey/index.html" target="_blank" rel="noopener noreferrer">OPEN STANDALONE GAME</a>
             </nav>
-            <CaptainRosieGame soundOn={soundOn} />
-            <EmberTunnelDrill soundOn={soundOn} />
+            <FullscreenGameFrame label="Captain Rosie Yacht Adventure" variant="yacht">
+              <CaptainRosieGame soundOn={soundOn} />
+            </FullscreenGameFrame>
+            <FullscreenGameFrame label="Ember Tunnel Drill" variant="tunnel">
+              <EmberTunnelDrill soundOn={soundOn} />
+            </FullscreenGameFrame>
             <CosmicOdysseyArcade />
           </>
         ) : page === "captain2" ? (
-          <Captain2Game soundOn={soundOn} />
+          <FullscreenGameFrame label="Captain 2" variant="captain2"><Captain2Game soundOn={soundOn} /></FullscreenGameFrame>
         ) : page === "vault" ? (
           <RosieCardVault />
         ) : page === "reminders" ? (
