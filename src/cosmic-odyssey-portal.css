@@ -303,3 +303,12 @@ body.captain-fullscreen-fallback-active{
    padding:48px 5px 12px!important;
  }
 }
+
+/* In browsers without element fullscreen (including some iPhone web views),
+   remove transformed ancestor containing blocks while the in-page fallback
+   is active so its fixed game actually covers the visible viewport. */
+body.captain-fullscreen-fallback-active #root:has(.captain-fullscreen-frame.is-fallback-fullscreen),
+body.captain-fullscreen-fallback-active #root *:has(.captain-fullscreen-frame.is-fallback-fullscreen){
+  transform:none!important;perspective:none!important;
+  contain:none!important;overflow:visible!important;
+}
