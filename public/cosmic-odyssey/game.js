@@ -54,7 +54,7 @@
  let cols=11,rows=15,tile=26,grid=[],itemAt=new Map(),cells=[],entities=[],player=null,exitPos=null,warpPoints=[],warpCooldown=0;
  let scene='nebula',enemyShots=[],running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
- let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0;
+ let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0,aimPreview=null;
  const pressedKeys=new Map(),STEP_MS=190;
  const key=(x,y)=>`${x},${y}`;const inside=(x,y)=>x>=0&&y>=0&&x<cols&&y<rows;
  const open=(x,y)=>inside(x,y)&&grid[y][x]===0;
@@ -104,12 +104,17 @@
  }
  function position(obj){
   if(!obj?.el)return;
-  // Normalize by painted ship silhouette rather than canvas dimensions.
-  const dims=obj===player?[4.05,2.87]:obj.id==='jett'?[2.43,2.15]:obj.id==='chip'?[2.55,2.13]:[2.55,1.95];
-  const px=tile*dims[0],py=tile*dims[1];
-  // Keep the whole spacecraft inside the frame even when the logical position hugs an edge.
-  const x=Math.max(3,Math.min(cols*tile-px-3,(obj.x+.5)*tile-px/2));
-  const y=Math.max(3,Math.min(rows*tile-py-3,(obj.y+.5)*tile-py/2));
+  // Center visible artwork on the hitbox tile. At the edge, gently scale it
+  // instead of shifting the ship into an unrelated firing lane.
+  const dims=obj===player?[4.05,2.87]:obj.id==='jett'?[1.8225,1.6125]:
+    obj.id==='chip'?[2.55,2.13]:[2.55,1.95];
+  const cx=(obj.x+.5)*tile,cy=(obj.y+.5)*tile;
+  const desiredW=tile*dims[0],desiredH=tile*dims[1];
+  const roomX=Math.max(tile,2*Math.min(cx,cols*tile-cx)-tile*.12);
+  const roomY=Math.max(tile,2*Math.min(cy,rows*tile-cy)-tile*.12);
+  const scale=Math.min(1,roomX/desiredW,roomY/desiredH);
+  const px=desiredW*scale,py=desiredH*scale;
+  const x=cx-px/2,y=cy-py/2;
   obj.el.style.width=px+'px';obj.el.style.height=py+'px';
   obj.visualBounds={x,y,width:px,height:py};
   obj.el.style.transform=`translate3d(${x}px,${y}px,0)`;
@@ -313,6 +318,7 @@
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
+  if(aimPreview?.el)aimPreview.el.classList.remove('targetable');aimPreview=null;
   veil.classList.remove('hidden');
   $('veil-title').textContent=status==='win'?'ODYSSEY COMPLETE':
     status==='level-clear'?LEVELS[level-1].name+' CLEARED':
@@ -331,7 +337,7 @@
  }
  function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
   if(!carry){score=0;ammo=0;lives=3;}
-  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
+  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
   player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,speed:Math.round(a.speed*LEVELS[level-1].speed),spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
@@ -429,7 +435,7 @@
   nextMoveAt=now+STEP_MS;lastFacing=dir;
   player.x=nx;player.y=ny;player.lastMoveAt=now;
   playerPose(dir,changedDirection,now);
-  position(player);positionShield();pick();collide();checkPlayerShots(performance.now());
+  position(player);positionShield();pick();collide();checkPlayerShots(performance.now());updateAimPreview();
   if(player.x===exitPos.x&&player.y===exitPos.y){
     if(got>=target&&deadCount===3){completeLevel();}
     else say(`Portal locked: ${Math.max(0,target-got)} biscuits and ${3-deadCount} Fiends remaining.`);
@@ -452,53 +458,43 @@
  function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.attackToken=(player.attackToken||0)+1;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
   const sp=player.spawn;player.x=sp.x;player.y=sp.y;position(player);positionShield();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
  function collide(){for(const e of entities)if(!e.killed&&e.health>0&&e.x===player.x&&e.y===player.y){damage(e);break;}}
- function clearWeaponSight(from,to){
-  // Trace between cell centers. Unlike enemy pursuit, weapons must not pass through walls.
-  const dx=to.x-from.x,dy=to.y-from.y;
-  const distance=Math.hypot(dx,dy);
-  if(distance<.01)return false;
-  const steps=Math.ceil(distance*24);
-  let lastX=from.x,lastY=from.y;
-  for(let i=1;i<steps;i++){
-    const x=Math.floor(from.x+.5+dx*i/steps);
-    const y=Math.floor(from.y+.5+dy*i/steps);
-    if(!open(x,y))return false;
-    // A diagonal ray crossing the corner of two partitions is also blocked.
-    if(x!==lastX&&y!==lastY&&(!open(lastX,y)||!open(x,lastY)))return false;
-    lastX=x;lastY=y;
+ function forwardRay(origin,facing){
+  // Strict cardinal corridor: no diagonal snapping, wall penetration or corner shots.
+  const [dx,dy]=DIRS[facing]||DIRS.right;
+  let x=origin.x,y=origin.y;const tiles=[];
+  for(let i=0;i<Math.max(cols,rows);i++){
+    x+=dx;y+=dy;
+    if(!open(x,y))break;
+    tiles.push({x,y});
   }
-  return true;
+  const enemy=tiles.map(p=>entities.find(e=>!e.killed&&e.health>0&&e.x===p.x&&e.y===p.y)).find(Boolean)||null;
+  return {tiles,enemy,impact:enemy?{x:enemy.x,y:enemy.y}:tiles.at(-1)||{x:origin.x,y:origin.y}};
  }
- function acquireDirectionalTarget(origin,facing){
-  const [vx,vy]=DIRS[facing]||DIRS.right,candidates=[];
-  for(const enemy of entities){
-    if(enemy.killed||enemy.health<=0)continue;
-    const dx=enemy.x-origin.x,dy=enemy.y-origin.y;
-    const forward=dx*vx+dy*vy;
-    const lateral=Math.abs(dx*vy-dy*vx);
-    if(forward<=0||Math.atan2(lateral,forward)>Math.PI/5.8)continue;
-    if(!clearWeaponSight(origin,enemy))continue;
-    candidates.push({enemy,lateral,distance:Math.hypot(dx,dy)});
+ function acquireDirectionalTarget(origin,facing){return forwardRay(origin,facing).enemy;}
+ function updateAimPreview(){
+  const target=phase==='playing'&&ammo>0&&player?acquireDirectionalTarget(player,lastFacing):null;
+  if(aimPreview!==target){
+    if(aimPreview?.el)aimPreview.el.classList.remove('targetable');
+    aimPreview=target;
+    if(target?.el)target.el.classList.add('targetable');
   }
-  candidates.sort((a,b)=>a.lateral-b.lateral||a.distance-b.distance);
-  return candidates[0]?.enemy||null;
+  const el=$('aim-indicator');
+  if(el){
+    el.textContent=target?`LOCK: ${target.name.split(' ')[0].toUpperCase()}`:`AIM: ${lastFacing.toUpperCase()}`;
+    el.classList.toggle('locked',!!target);
+  }
  }
  function fire(type){
   if(phase!=='playing')return;
   const cost=type==='laser'?1:2;
   if(ammo<cost){say(`Need ${cost} treat${cost>1?'s':''} to fire ${type}.`);sound(180,.04);return;}
   ammo-=cost;ui();playAttackPose(type);
-  const [dx,dy]=DIRS[lastFacing],origin={x:player.x,y:player.y};
-  let cx=origin.x,cy=origin.y;const traversed=[];
-  while(open(cx+dx,cy+dy)){cx+=dx;cy+=dy;traversed.push({x:cx,y:cy});if(traversed.length>30)break;}
-  const inLine=entities.filter(e=>!e.killed&&e.health>0&&traversed.some(p=>p.x===e.x&&p.y===e.y)).sort((a,b)=>dist(origin,a)-dist(origin,b));
-  const victim=acquireDirectionalTarget(origin,lastFacing)||inLine[0];
-  const impact=victim?{x:victim.x,y:victim.y}:(traversed.at(-1)||origin);
-  const aimedDelta={x:impact.x-origin.x,y:impact.y-origin.y};
-  const aimAngle=aimedDelta.x||aimedDelta.y
-    ?Math.atan2(aimedDelta.y,aimedDelta.x)*180/Math.PI
-    :(lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0);
-  const fireAngle=aimAngle,travelTiles=Math.hypot(aimedDelta.x,aimedDelta.y);
+  const origin={x:player.x,y:player.y};
+  const {enemy:victim,impact}=forwardRay(origin,lastFacing);
+  const fireAngle=lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0;
+  const travelTiles=dist(origin,impact);
+  if(victim)say(`${type==='laser'?'Laser':'Rocket'} locked: ${victim.name}`);
+  else say(`${type==='laser'?'Laser':'Rocket'} fired ${lastFacing}. No Fiend in the firing lane.`);
   if(victim){
     const shotSession=sessionId;
     victim.el.classList.add('auto-locked');
@@ -525,7 +521,7 @@
     sound(680,.13,'sawtooth');
     if(victim)hit(victim,1);else effect('spark',impact,1.2);
   }else{
-    sound(320,.18,'sawtooth');say('Rocket launched!');
+    sound(320,.18,'sawtooth');
     const rocket=document.createElement('span');rocket.className='rocket-projectile';
     rocket.innerHTML=`<img src="${asset('rosie-projectile')}" alt="" draggable="false">`;
     const size=tile*2.25,angle=fireAngle,ms=Math.min(900,Math.max(180,travelTiles*92));
@@ -547,6 +543,7 @@
       sound(130,.21,'sawtooth');
     },ms+45);
   }
+  updateAimPreview();
  }
  function hit(e,power){
   if(e.killed)return;
@@ -663,7 +660,7 @@
     if(advance(now,dir))pendingStep=false;
   }
   for(const e of entities)moveFiend(e,now);
-  updateEnemyShots(now);
+  updateEnemyShots(now);updateAimPreview();
   positionShield(now);
   player.el.style.opacity=now<protectedUntil&&Math.floor(now/220)%2===0?'.87':'1';
  }
