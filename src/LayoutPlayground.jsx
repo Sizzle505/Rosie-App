@@ -69,15 +69,17 @@ const TARGETS = {
     ["utility", "Timers and tools", ".rtk-utility"]
   ],
   reminders: [
-    ["page", "Reminders content", ".rm-page, .reminders-page"],
-    ["hero", "Reminders heading", ".rm-hero, .reminders-hero"],
-    ["calendar", "Calendar", ".rm-calendar, .reminders-calendar"],
-    ["list", "Reminder list", ".rm-list, .reminders-list"]
+    ["page", "Reminders content", ".rr-page"],
+    ["hero", "Reminders heading", ".rr-hero"],
+    ["calendar", "Calendar", ".rr-calendar"],
+    ["list", "Reminders panel", ".rr-paper"]
   ],
   reviews: [
-    ["page", "Reviews content", ".reviews-page, .rrv-page"],
-    ["header", "Review header", ".reviews-hero, .rrv-hero"],
-    ["content", "Review workspace", ".reviews-content, .rrv-content"]
+    ["page", "Reviews content", ".rosie-reviews"],
+    ["header", "Review header", ".reviews-hero"],
+    ["content", "Review workspace", ".reviews-content"],
+    ["rail", "Review filters", ".reviews-rail"],
+    ["grid", "Movie grid", ".reviews-film-grid"]
   ],
   home: [
     ["page", "Home scene", ".home-page, .rosie-home"],
@@ -87,7 +89,7 @@ const TARGETS = {
     ["hero", "Captain heading", ".captain-hero"],
     ["banner", "Captain banner", ".captain-hero-banner"],
     ["game", "Yacht game", ".yacht-game-shell"],
-    ["tunnel", "Tunnel game", ".ember-tunnel-page"],
+    ["tunnel", "Tunnel game", ".ember-suite"],
     ["odyssey", "Cosmic Odyssey", "#cosmic-odyssey-arcade"]
   ],
   cheese: [
@@ -392,7 +394,7 @@ export default function LayoutPlayground() {
               title={"Editable " + page + " preview"}
               src={"/?layoutPreview=1#" + page}
               style={{ width: width + "px", height: height + "px", transform: "scale(" + zoom + ")" }}
-              onLoad={() => { setFrameReady(false); configure(draftsRef.current[keyFor(page, device)] || {}, selected); }}
+              onLoad={() => configure(draftsRef.current[keyFor(page, device)] || {}, selected)}
             />
           </div>
         </section>
