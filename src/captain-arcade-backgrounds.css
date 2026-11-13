@@ -1,0 +1,141 @@
+/* Captain Arcade: ten-art handoff, Nov 13 2026.
+   Preserve the high-detail art outside the games; never obscure controls or hitboxes. */
+
+.captain-arcade-page-background {
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background-image:
+    linear-gradient(180deg,rgba(5,8,24,.48),rgba(5,8,25,.70) 62%,rgba(6,6,22,.76)),
+    url("/captain-arcade-backgrounds/01-Captain-Arcade-Three-Worlds-Desktop.webp");
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+  background-position: center, center top;
+}
+.captain-arcade-page-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 32%,transparent 12%,rgba(3,7,22,.36) 88%);
+}
+body:has(.captain-arcade-page-background) .captain-arcade-jump,
+body:has(.captain-arcade-page-background) .captain-fullscreen-frame,
+body:has(.captain-arcade-page-background) .cosmic-odyssey-main-entry {
+  position: relative;
+  z-index: 1;
+}
+body:has(.captain-arcade-page-background) .captain-arcade-jump {
+  background-image:
+    linear-gradient(110deg,rgba(5,10,32,.89),rgba(21,15,45,.82)),
+    url("/captain-arcade-backgrounds/10-Captain-Arcade-Navy-Gold-Quiet.webp") !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+@media (max-width: 700px) {
+  .captain-arcade-page-background {
+    background-image:
+      linear-gradient(180deg,rgba(5,7,21,.55),rgba(3,8,20,.78)),
+      url("/captain-arcade-backgrounds/02-Captain-Arcade-Three-Worlds-Mobile.webp");
+    background-size:cover,cover;
+    background-position:center,center 30%;
+  }
+}
+/* Tunnel backgrounds are behind the existing playable canvas and HUD only. */
+.ember-suite[data-arcade-backdrop="foundry"] {
+  background-image:
+    linear-gradient(150deg,rgba(10,19,31,.82),rgba(33,18,27,.78)),
+    url("/captain-arcade-backgrounds/03-Ember-Tunnel-Molten-Foundry.webp") !important;
+}
+.ember-suite[data-arcade-backdrop="crystal"] {
+  background-image:
+    linear-gradient(150deg,rgba(6,14,31,.83),rgba(25,17,44,.79)),
+    url("/captain-arcade-backgrounds/04-Ember-Tunnel-Crystal-Vault.webp") !important;
+}
+.ember-suite[data-arcade-backdrop="control"] {
+  background-image:
+    linear-gradient(150deg,rgba(7,17,30,.77),rgba(16,15,28,.80)),
+    url("/captain-arcade-backgrounds/05-Ember-Tunnel-Excavation-Control.webp") !important;
+}
+.ember-suite[data-arcade-backdrop] {
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+}
+.ember-arcade-scene-select {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin:6px auto 11px;
+  padding:0 7px;
+  position:relative;
+  z-index:8;
+  flex-wrap:wrap;
+}
+.ember-arcade-scene-select span{
+  font:700 10px/1.25 Georgia,serif;
+  letter-spacing:.13em;
+  color:#f0cc91;
+}
+.ember-arcade-scene-select button{
+  font:700 11px/1.2 Arial,sans-serif;
+  min-height:34px;
+  border-radius:9px;
+  border:1px solid rgba(229,183,104,.75);
+  padding:6px 13px;
+  color:#ffead4;
+  background:linear-gradient(145deg,rgba(16,34,56,.96),rgba(48,23,42,.96));
+  box-shadow:0 2px 9px #04081277;
+  cursor:pointer;
+}
+.ember-arcade-scene-select button:hover,
+.ember-arcade-scene-select button:focus-visible {
+  box-shadow:0 0 0 2px #f6d49d85;
+}
+.captain-fs-tunnel:has(.ember-suite[data-arcade-backdrop="foundry"]):is(:fullscreen,.is-fallback-fullscreen) {
+  background:linear-gradient(#090d22c4,#140e20db),
+  url("/captain-arcade-backgrounds/03-Ember-Tunnel-Molten-Foundry.webp") center/cover!important;
+}
+.captain-fs-tunnel:has(.ember-suite[data-arcade-backdrop="crystal"]):is(:fullscreen,.is-fallback-fullscreen) {
+  background:linear-gradient(#090d22c4,#140e20db),
+  url("/captain-arcade-backgrounds/04-Ember-Tunnel-Crystal-Vault.webp") center/cover!important;
+}
+.captain-fs-tunnel:has(.ember-suite[data-arcade-backdrop="control"]):is(:fullscreen,.is-fallback-fullscreen) {
+  background:linear-gradient(#090d22c4,#140e20db),
+  url("/captain-arcade-backgrounds/05-Ember-Tunnel-Excavation-Control.webp") center/cover!important;
+}
+@media(max-width:700px){
+  .ember-arcade-scene-select{margin:4px auto 9px;gap:6px}
+  .ember-arcade-scene-select button{min-height:35px;font-size:10px}
+}
+/* Four additional high-resolution environmental scenes for Cosmic Odyssey. */
+.board[data-scene="arcade-nebula"]{
+  background-image:linear-gradient(180deg,rgba(6,9,27,.08),rgba(6,9,27,.2)),
+    url("/captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp")!important;
+}
+.board[data-scene="arcade-blackhole"]{
+  background-image:linear-gradient(180deg,rgba(6,9,27,.08),rgba(6,9,27,.2)),
+    url("/captain-arcade-backgrounds/07-Cosmic-Odyssey-Black-Hole-Observatory.webp")!important;
+}
+.board[data-scene="arcade-lunar"]{
+  background-image:linear-gradient(180deg,rgba(6,9,27,.08),rgba(6,9,27,.2)),
+    url("/captain-arcade-backgrounds/08-Cosmic-Odyssey-Lunar-Starport.webp")!important;
+}
+.board[data-scene="arcade-starship"]{
+  background-image:linear-gradient(180deg,rgba(6,9,27,.10),rgba(6,9,27,.22)),
+    url("/captain-arcade-backgrounds/09-Cosmic-Odyssey-Starship-Passage.webp")!important;
+}
+.board[data-scene^="arcade-"]{
+  background-size:cover!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+}
+.cosmic-app[data-scene^="arcade-"]{
+  background-image:linear-gradient(180deg,rgba(7,10,29,.83),rgba(7,10,29,.88)),
+    url("/captain-arcade-backgrounds/10-Captain-Arcade-Navy-Gold-Quiet.webp")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
