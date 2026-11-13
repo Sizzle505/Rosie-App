@@ -510,3 +510,74 @@
  .mission-level-picker{margin:3px auto}
  .launch-button{padding:8px 18px;margin:3px auto}
 }
+
+/* Reconstructed 2026-11-13: scenic playfield with actual connected wall partition atlases. */
+.cosmic-app[data-scene]{
+  background:radial-gradient(ellipse at 50% 20%,#20234e 0%,#0e1330 45%,#070a1b 100%)!important;
+}
+.cosmic-stage::before,.cosmic-stage::after{display:none!important}
+.cosmic-stage .board-frame{
+  border:2px solid #e0b66e;
+  box-shadow:0 0 0 2px #20132f,0 4px 25px #060a28c4,0 0 22px #a770dc39!important;
+}
+.board[data-scene]{
+  background-repeat:no-repeat!important;background-position:center!important;
+  background-size:cover!important;background-color:#090d2a!important;
+}
+.board .cell.floor{
+  background:transparent!important;
+  border:0!important;box-shadow:none!important;
+}
+.board .cell.floor::before,.board .cell.floor::after{display:none!important}
+.board .cell.wall.partition-wall{
+  border:0!important;box-shadow:none!important;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-size:400% 400%!important;
+  background-position:var(--partition-x,0%) var(--partition-y,0%)!important;
+  overflow:hidden;
+}
+.board .cell.wall.partition-wall::before,
+.board .cell.wall.partition-wall::after{display:none!important}
+.board[data-scene="nebula"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-nebula.webp')!important}
+.board[data-scene="meteor"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-meteor.webp')!important}
+.board[data-scene="lunar"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-lunar.webp')!important}
+.board[data-scene="crystal"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-crystal.webp')!important}
+.board[data-scene="foundry"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-foundry.webp')!important}
+.board[data-scene="derelict"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-derelict.webp')!important}
+.board[data-scene="ice"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-ice.webp')!important}
+.board[data-scene="garden"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-garden.webp')!important}
+.board[data-scene="blackhole"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-blackhole.webp')!important}
+.board[data-scene="ruins"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-ruins.webp')!important}
+.board[data-scene="nebula-alt"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-nebula-alt.webp')!important}
+.board[data-scene="meteor-alt"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-meteor-alt.webp')!important}
+.board[data-scene="lunar-alt"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-lunar-alt.webp')!important}
+.board[data-scene="lunar-alt2"]{background-image:linear-gradient(180deg,rgba(4,8,20,.10),rgba(5,8,20,.20)),url('assets/scene-lunar-alt2.webp')!important}
+.board[data-material="deco"] .cell.partition-wall{background-image:url('assets/partitions-deco.svg')!important}
+.board[data-material="lunar"] .cell.partition-wall{background-image:url('assets/partitions-lunar.svg')!important}
+.board[data-material="crystal"] .cell.partition-wall{background-image:url('assets/partitions-crystal.svg')!important}
+.board[data-material="foundry"] .cell.partition-wall{background-image:url('assets/partitions-foundry.svg')!important}
+.board[data-material="verdant"] .cell.partition-wall{background-image:url('assets/partitions-verdant.svg')!important}
+.board[data-material="void"] .cell.partition-wall{background-image:url('assets/partitions-void.svg')!important}
+
+.board .cell.partition-wall .environment-prop{
+  width:102%!important;height:102%!important;opacity:.72!important;
+  filter:drop-shadow(0 1px 5px #010816e0)!important;
+}
+.cell .launch-art{transition:opacity .60s ease-out,transform .60s ease-in!important}
+.board .cell.launch-fading .launch-art{
+  opacity:0!important;
+  transform:translate(-50%,-50%) scale(.35)!important;
+}
+.board .cell.launch-fading.captain-launch-pad::after,
+.board .cell.launch-fading.fiend-launch-pad::after{opacity:0!important;transition:opacity .5s}
+.sprite.fiend.auto-locked::after{
+  content:"";position:absolute;inset:27% 29%;border:2px solid #ffe6a1;border-radius:50%;
+  box-shadow:0 0 6px #ffc362,0 0 12px #eabf5d;pointer-events:none;
+  animation:cosmic-auto-lock .3s ease-out forwards;
+}
+@keyframes cosmic-auto-lock{0%{opacity:.55;transform:scale(1.5)}55%{opacity:1}100%{opacity:.2;transform:scale(.9)}}
+@media(prefers-reduced-motion:reduce){
+ .cell .launch-art{transition:none!important}
+ .sprite.fiend.auto-locked::after{animation:none}
+}
