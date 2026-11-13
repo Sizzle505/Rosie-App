@@ -488,9 +488,14 @@
   if(phase!=='playing')return;
   const cost=type==='laser'?1:2;
   if(ammo<cost){say(`Need ${cost} treat${cost>1?'s':''} to fire ${type}.`);sound(180,.04);return;}
-  ammo-=cost;ui();playAttackPose(type);
   const origin={x:player.x,y:player.y};
-  const {enemy:victim,impact}=forwardRay(origin,lastFacing);
+  const shot=forwardRay(origin,lastFacing);
+  if(!shot.tiles.length){
+    say('A wall blocks the firing lane. Turn toward an open corridor.');
+    sound(180,.045);return;
+  }
+  ammo-=cost;ui();playAttackPose(type);
+  const {enemy:victim,impact}=shot;
   const fireAngle=lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0;
   const travelTiles=dist(origin,impact);
   if(victim)say(`${type==='laser'?'Laser':'Rocket'} locked: ${victim.name}`);
@@ -506,17 +511,21 @@
     const bolt=document.createElement('img');bolt.className='laser-bolt-projectile';
     bolt.src=asset('laser-bolt');bolt.alt='';bolt.draggable=false;
     const span=Math.max(tile*.7,travelTiles*tile);
-    bolt.style.width=Math.max(tile*2.1,span)+'px';bolt.style.height=tile*1.1+'px';
-    bolt.style.left=((origin.x+.5)*tile)+'px';bolt.style.top=((origin.y+.5)*tile)+'px';
-    bolt.style.transform=`translateY(-50%) rotate(${fireAngle}deg)`;
+    bolt.style.width=span+'px';bolt.style.height=tile*1.1+'px';
+    bolt.style.left=((origin.x+.5)*tile)+'px';
+    bolt.style.top=((origin.y+.5)*tile-tile*.55)+'px';
+    bolt.style.transformOrigin='0 50%';
+    bolt.style.transform=`rotate(${fireAngle}deg)`;
     board.append(bolt);setTimeout(()=>bolt.remove(),225);
     effect('beam',origin,1);
     const beam=board.lastChild;
     const distance=Math.max(tile*.65,travelTiles*tile);
     beam.style.left=((origin.x+.5)*tile)+'px';
-    beam.style.top=((origin.y+.5)*tile)+'px';
     beam.style.width=distance+'px';
-    beam.style.height=Math.max(4,tile*.095)+'px';
+    const beamHeight=Math.max(4,tile*.095);
+    beam.style.top=((origin.y+.5)*tile-beamHeight/2)+'px';
+    beam.style.height=beamHeight+'px';
+    beam.style.transformOrigin='0 50%';
     beam.style.transform=`rotate(${fireAngle}deg)`;
     sound(680,.13,'sawtooth');
     if(victim)hit(victim,1);else effect('spark',impact,1.2);
@@ -538,7 +547,7 @@
     setTimeout(()=>{
       rocket.remove();if(phase!=='playing'||firedSession!==sessionId)return;
       effect('explosion',impact,3.7);effect('spark',impact,2);
-      const targets=entities.filter(e=>!e.killed&&e.health>0&&(dist(e,impact)<=1||e===victim&&dist(e,impact)<=2));
+      const targets=entities.filter(e=>!e.killed&&e.health>0&&dist(e,impact)<=1);
       targets.forEach(e=>hit(e,2));if(!targets.length)popup('BOOM!',impact);
       sound(130,.21,'sawtooth');
     },ms+45);
