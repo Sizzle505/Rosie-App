@@ -452,6 +452,37 @@
  function damage(e){const now=performance.now();if(now<protectedUntil)return;protectedUntil=now+2300;positionShield(now);lives--;player.attackToken=(player.attackToken||0)+1;player.actionUntil=now+610;setSprite(player,'rosie-damage');const hurtSession=sessionId;setTimeout(()=>{if(hurtSession===sessionId&&player){player.actionUntil=0;setSprite(player,movementArt(lastFacing,false));}},570);player.el.classList.add('hurt');setTimeout(()=>player?.el?.classList.remove('hurt'),800);effect('spark',player,2.5);sound(140,.24,'sawtooth');popup('-1 HULL',player);if(!lives){enter('lose',`Rosie collected ${got} biscuits and defeated ${deadCount} Fiends. Try a different route and keep your ammunition for Kitty.`,'RETRY MISSION');return;}
   const sp=player.spawn;player.x=sp.x;player.y=sp.y;position(player);positionShield();say(`Collision with ${e.name}! Briefly invulnerable.`);ui();}
  function collide(){for(const e of entities)if(!e.killed&&e.health>0&&e.x===player.x&&e.y===player.y){damage(e);break;}}
+ function clearWeaponSight(from,to){
+  // Trace between cell centers. Unlike enemy pursuit, weapons must not pass through walls.
+  const dx=to.x-from.x,dy=to.y-from.y;
+  const distance=Math.hypot(dx,dy);
+  if(distance<.01)return false;
+  const steps=Math.ceil(distance*24);
+  let lastX=from.x,lastY=from.y;
+  for(let i=1;i<steps;i++){
+    const x=Math.floor(from.x+.5+dx*i/steps);
+    const y=Math.floor(from.y+.5+dy*i/steps);
+    if(!open(x,y))return false;
+    // A diagonal ray crossing the corner of two partitions is also blocked.
+    if(x!==lastX&&y!==lastY&&(!open(lastX,y)||!open(x,lastY)))return false;
+    lastX=x;lastY=y;
+  }
+  return true;
+ }
+ function acquireDirectionalTarget(origin,facing){
+  const [vx,vy]=DIRS[facing]||DIRS.right,candidates=[];
+  for(const enemy of entities){
+    if(enemy.killed||enemy.health<=0)continue;
+    const dx=enemy.x-origin.x,dy=enemy.y-origin.y;
+    const forward=dx*vx+dy*vy;
+    const lateral=Math.abs(dx*vy-dy*vx);
+    if(forward<=0||Math.atan2(lateral,forward)>Math.PI/5.8)continue;
+    if(!clearWeaponSight(origin,enemy))continue;
+    candidates.push({enemy,lateral,distance:Math.hypot(dx,dy)});
+  }
+  candidates.sort((a,b)=>a.lateral-b.lateral||a.distance-b.distance);
+  return candidates[0]?.enemy||null;
+ }
  function fire(type){
   if(phase!=='playing')return;
   const cost=type==='laser'?1:2;
@@ -461,22 +492,31 @@
   let cx=origin.x,cy=origin.y;const traversed=[];
   while(open(cx+dx,cy+dy)){cx+=dx;cy+=dy;traversed.push({x:cx,y:cy});if(traversed.length>30)break;}
   const inLine=entities.filter(e=>!e.killed&&e.health>0&&traversed.some(p=>p.x===e.x&&p.y===e.y)).sort((a,b)=>dist(origin,a)-dist(origin,b));
-  const victim=inLine[0];
+  const victim=acquireDirectionalTarget(origin,lastFacing)||inLine[0];
   const impact=victim?{x:victim.x,y:victim.y}:(traversed.at(-1)||origin);
-  const fireAngle=lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0;
+  const aimedDelta={x:impact.x-origin.x,y:impact.y-origin.y};
+  const aimAngle=aimedDelta.x||aimedDelta.y
+    ?Math.atan2(aimedDelta.y,aimedDelta.x)*180/Math.PI
+    :(lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0);
+  const fireAngle=aimAngle,travelTiles=Math.hypot(aimedDelta.x,aimedDelta.y);
+  if(victim){
+    const shotSession=sessionId;
+    victim.el.classList.add('auto-locked');
+    setTimeout(()=>{if(sessionId===shotSession)victim.el?.classList.remove('auto-locked');},330);
+  }
   effect('muzzle',origin,1.7);
   if(type==='laser'){
     // The independent original red bolt asset is drawn on top of the laser beam.
     const bolt=document.createElement('img');bolt.className='laser-bolt-projectile';
     bolt.src=asset('laser-bolt');bolt.alt='';bolt.draggable=false;
-    const span=Math.max(tile*.7,dist(origin,impact)*tile);
+    const span=Math.max(tile*.7,travelTiles*tile);
     bolt.style.width=Math.max(tile*2.1,span)+'px';bolt.style.height=tile*1.1+'px';
     bolt.style.left=((origin.x+.5)*tile)+'px';bolt.style.top=((origin.y+.5)*tile)+'px';
     bolt.style.transform=`translateY(-50%) rotate(${fireAngle}deg)`;
     board.append(bolt);setTimeout(()=>bolt.remove(),225);
     effect('beam',origin,1);
     const beam=board.lastChild;
-    const distance=Math.max(tile*.65,dist(origin,impact)*tile);
+    const distance=Math.max(tile*.65,travelTiles*tile);
     beam.style.left=((origin.x+.5)*tile)+'px';
     beam.style.top=((origin.y+.5)*tile)+'px';
     beam.style.width=distance+'px';
@@ -488,7 +528,7 @@
     sound(320,.18,'sawtooth');say('Rocket launched!');
     const rocket=document.createElement('span');rocket.className='rocket-projectile';
     rocket.innerHTML=`<img src="${asset('rosie-projectile')}" alt="" draggable="false">`;
-    const size=tile*2.25,angle=fireAngle,ms=Math.min(900,Math.max(180,dist(origin,impact)*92));
+    const size=tile*2.25,angle=fireAngle,ms=Math.min(900,Math.max(180,travelTiles*92));
     rocket.style.width=size+'px';rocket.style.height=size*.78+'px';
     rocket.style.left=((origin.x+.5)*tile)+'px';rocket.style.top=((origin.y+.5)*tile)+'px';
     rocket.style.transform=`translate(-50%,-50%) rotate(${angle}deg)`;
