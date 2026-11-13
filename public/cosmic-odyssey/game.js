@@ -98,16 +98,32 @@
   return null;
  }
  function nearestOpen(preferred){if(open(preferred.x,preferred.y))return preferred;for(let r=1;r<Math.max(cols,rows);r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++)if(Math.abs(dx)+Math.abs(dy)===r&&open(preferred.x+dx,preferred.y+dy))return{x:preferred.x+dx,y:preferred.y+dy};return{x:1,y:1};}
- function resize(){
-  // Desktop landscape board; iPhone portrait board. Preserve active run dimensions.
+ function desiredMazeLayout(){
   const desktop=innerWidth>=760&&innerWidth>innerHeight;
-  if(!player && cols!==(desktop?17:11)){cols=desktop?17:11;rows=desktop?11:15;}
-  const head=document.querySelector('.cosmic-top'),hud=document.querySelector('.cosmic-hud'),bottom=document.querySelector('.cosmic-bottom');
-  const freeH=Math.max(170,innerHeight-head.getBoundingClientRect().height-hud.getBoundingClientRect().height-bottom.getBoundingClientRect().height-45);
-  tile=Math.max(9,Math.floor(Math.min((innerWidth-24)/cols,freeH/rows)));
-  frame.style.width=(cols*tile+6)+'px';frame.style.height=(rows*tile+6)+'px';
-  board.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;board.style.gridTemplateRows=`repeat(${rows}, 1fr)`;
-  if(player){position(player);for(const ent of entities)position(ent);positionExit();positionShield();for(const shot of enemyShots)positionEnemyShot(shot);}
+  if(!desktop)return {cols:11,rows:15};
+  // A wider, genuinely landscape maze makes useful use of desktop displays.
+  // Keep narrow/laptop viewports readable without stretching game cells.
+  const wide=innerWidth>=1450?27:innerWidth>=1120?23:17;
+  return {cols:wide,rows:11};
+ }
+ function resize(){
+  const wanted=desiredMazeLayout();
+  if(!player){cols=wanted.cols;rows=wanted.rows;}
+  const stage=document.querySelector('.cosmic-stage');
+  const bounds=stage?.getBoundingClientRect();
+  const availableW=Math.max(150,(bounds?.width||innerWidth)-10);
+  const availableH=Math.max(140,(bounds?.height||innerHeight*.7)-10);
+  tile=Math.max(9,Math.floor(Math.min(availableW/cols,availableH/rows)));
+  const boardW=cols*tile,boardH=rows*tile;
+  frame.style.width=(boardW+6)+'px';
+  frame.style.height=(boardH+6)+'px';
+  board.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;
+  board.style.gridTemplateRows=`repeat(${rows}, 1fr)`;
+  if(player){
+   position(player);for(const ent of entities)position(ent);
+   positionExit();positionShield();
+   for(const shot of enemyShots)positionEnemyShot(shot);
+  }
  }
  function position(obj){
   if(!obj?.el)return;
@@ -333,7 +349,7 @@
   if(picker)picker.style.display=(status==='paused'||status==='level-clear')?'none':'flex';
   ui();
  }
- function init(carry=false){const desktop=innerWidth>=760&&innerWidth>innerHeight;cols=desktop?17:11;rows=desktop?11:15;
+ function init(carry=false){const layout=desiredMazeLayout();cols=layout.cols;rows=layout.rows;
   if(!carry){score=0;ammo=0;lives=3;boostCharges=0;}boostUntil=0;
   preloadArt('scene-'+LEVELS[level-1].scene, ...(LEVELS[level]?['scene-'+LEVELS[level].scene]:[]));
   target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
@@ -759,7 +775,7 @@
   $('boost').addEventListener('click',activateBoost);
   $('pause-top').addEventListener('click',pause);
   $('start').addEventListener('click',start);
-  window.addEventListener('resize',()=>{if(phase==='start'&&!player){cols=innerWidth>=760&&innerWidth>innerHeight?17:11;rows=cols===17?11:15;init();}resize();});
+  window.addEventListener('resize',()=>{const next=desiredMazeLayout();if(phase==='start'&&(cols!==next.cols||rows!==next.rows))init(false);else resize();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&phase==='playing')pause();});
  }
  controls();init();enter('start','Explore ten distinct cosmic environments. Collect biscuits to power lasers (1 treat) and rockets (2 treats), defeat three Fiends, and reach the portal. Choose any stage below to playtest it directly.','LAUNCH MISSION');loopId=requestAnimationFrame(tick);
