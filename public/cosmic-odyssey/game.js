@@ -194,7 +194,7 @@
     cell.className='cell '+(isWall?'wall':'floor');
     if(isWall){
       if(level===2 && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.21)cell.classList.add('lunar-machinery');
-      if(level===1 && x>1 && y>1 && x<cols-2 && y<rows-2 && paint()<.045)cell.classList.add('asteroid-crater');
+      if(level===1 && x>0 && y>0 && x<cols-1 && y<rows-1 && paint()<.11)cell.classList.add('asteroid-crater');
     }else{
       if(level===2&&paint()<.16)cell.classList.add('lunar-deck');
       if(level===1&&paint()<.12)cell.classList.add('nebula-glow');
@@ -202,8 +202,8 @@
       // never a hitbox or impassable obstacle.
       const ends=neighbors({x,y});
       const degree=ends.length;
-      if(degree===4 && paint()<.65)cell.classList.add('art-cross');
-      else if(degree===3 && paint()<.58){
+      if(degree===4 && paint()<.54)cell.classList.add('art-cross');
+      else if(degree===3 && paint()<.29){
         cell.classList.add('art-tee');
         const dirs=ends.map(e=>e.dir);
         const missing=['up','right','down','left'].find(d=>!dirs.includes(d));
