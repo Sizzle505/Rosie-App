@@ -193,6 +193,14 @@
   const item=SCENES.find(o=>o.id===next)||SCENES[0];scene=item.id;
   board.dataset.scene=item.id;
   board.dataset.material=PARTITION_MATERIAL[item.id]||'deco';
+  // Switching the backdrop also reskins the modular barriers without rebuilding the maze.
+  if(board.dataset.wallArt==='modular')for(let y=0;y<cells.length;y++)for(let x=0;x<cells[y].length;x++){
+    const cell=cells[y][x];if(!cell.classList.contains('wall-art-cell'))continue;
+    const part=wallSprite(wallConnectivity(x,y),x,y,item.id);
+    cell.dataset.wallSprite=String(part.index);cell.dataset.wallKind=part.kind;
+    const art=Array.from(cell.children).find(el=>el.classList?.contains('wall-art-image'));
+    if(art){art.style.backgroundPosition=`${(part.index%5)*25}% ${Math.floor(part.index/5)*100}%`;art.style.transform=`rotate(${part.angle}deg)`;}
+  }
   const app=$('cosmic-app');if(app)app.dataset.scene=item.id;
   const label=$('scene-name');if(label)label.textContent=item.name.split(' ')[0];
   const stage=LEVELS[level-1];
@@ -266,9 +274,8 @@
    ice:[4,0,1],garden:[1,4,0],blackhole:[5,0,3],
    ruins:[2,5,1]
  };
- function wallSprite(mask,x,y){
+ function wallSprite(mask,x,y,sceneId=LEVELS[level-1].scene){
    const links=[1,2,4,8].filter(bit=>!!(mask&bit)).length;
-   const sceneId=LEVELS[level-1].scene;
    const salt=(x*37+y*61+level*29+cols*7)>>>0;
    let index=1,angle=0,kind='armor';
    if(links===4){index=9;}
