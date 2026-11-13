@@ -708,3 +708,107 @@
   .cosmic-banner-art{height:70px;object-position:center 45%}
   .cosmic-banner-stage{display:none}
 }
+
+/* Desktop widescreen redesign: correct full 3:1 banner, maximum playable maze. */
+@media(min-width:760px) and (orientation:landscape){
+ html,body{overflow:hidden}
+ .cosmic-app{
+   padding:6px 12px 7px!important;
+   gap:5px!important;
+   align-items:center;
+ }
+ .cosmic-top.cosmic-banner-top{
+   flex:0 0 106px!important;
+   height:106px!important;
+   min-height:106px!important;
+   width:min(100%,1640px)!important;
+   max-width:1640px!important;
+   padding:0 54px!important;
+   border-radius:12px;
+   display:flex;justify-content:center;align-items:center;
+   background:
+     radial-gradient(ellipse at center,#34305d 0%,#17112b 55%,#0a0d22 100%)!important;
+   overflow:hidden;
+ }
+ .cosmic-top.cosmic-banner-top::before,
+ .cosmic-top.cosmic-banner-top::after{
+   content:"";position:absolute;top:50%;height:1px;
+   width:calc(50% - 226px);
+   background:linear-gradient(90deg,transparent,#b99258,#fae3a2,#b99258,transparent);
+   pointer-events:none;opacity:.72;
+ }
+ .cosmic-top.cosmic-banner-top::before{left:14px}
+ .cosmic-top.cosmic-banner-top::after{right:14px}
+ .cosmic-banner-top .cosmic-banner-art{
+   display:block!important;position:relative;
+   width:306px!important;height:102px!important;max-width:none!important;
+   max-height:102px!important;aspect-ratio:3/1!important;
+   object-fit:contain!important;object-position:center center!important;
+   flex:none;filter:none;
+ }
+ .cosmic-banner-top .scene-corner{
+   left:12px;top:50%;transform:translateY(-50%);
+   width:auto;max-width:100px;min-height:36px;
+ }
+ .cosmic-banner-top .pause-corner{
+   right:10px;top:50%;transform:translateY(-50%);
+   width:46px;
+ }
+ .cosmic-banner-stage{
+   left:auto!important;right:62px!important;bottom:3px!important;
+   transform:none!important;max-width:40%;
+ }
+ .cosmic-hud{
+   width:min(100%,1640px)!important;max-width:1640px!important;
+   min-height:44px!important;max-height:46px;
+   flex:0 0 44px;gap:6px;
+ }
+ .hud-stat small{font-size:10px!important}
+ .hud-stat b{font-size:20px!important}
+ .cosmic-stage{
+   flex:1 1 auto!important;min-height:0!important;
+   width:100%!important;max-width:none!important;
+   overflow:hidden;align-items:center;justify-content:center;
+ }
+ .board-frame{max-width:calc(100vw - 22px)}
+ .cosmic-bottom{
+   flex:0 0 auto;width:min(100%,1640px)!important;max-width:1640px!important;
+ }
+ .status-line{
+   min-height:19px!important;
+   font-size:11px!important;
+ }
+ .command-bar{
+   min-height:58px!important;height:58px!important;
+   padding:0 4px!important;
+   gap:clamp(14px,3.7vw,62px)!important;
+ }
+ .dpad{
+   grid-template-columns:repeat(3,28px)!important;
+   grid-template-rows:repeat(3,18px)!important;
+   gap:2px!important;
+ }
+ .dpad button{
+   width:28px!important;height:18px!important;font-size:15px!important;
+ }
+ .weapon{width:55px!important;height:55px!important}
+ .weapon img{width:52px!important;height:52px!important}
+ .weapon small{font-size:9px!important}
+ .weapons{gap:9px}
+ .controls-note{display:block;font-size:10px!important;letter-spacing:.35px}
+}
+@media(min-width:760px) and (orientation:landscape) and (max-height:750px){
+ .cosmic-top.cosmic-banner-top{height:82px!important;min-height:82px!important;flex-basis:82px!important}
+ .cosmic-banner-top .cosmic-banner-art{width:240px!important;height:80px!important;max-height:80px!important}
+ .cosmic-hud{min-height:37px!important;flex-basis:37px!important;max-height:37px}
+ .hud-stat small{font-size:9px!important}
+ .hud-stat b{font-size:17px!important}
+ .command-bar{height:50px!important;min-height:50px!important}
+ .status-line{min-height:16px!important}
+ .cosmic-top.cosmic-banner-top::before,.cosmic-top.cosmic-banner-top::after{width:calc(50% - 166px)}
+}
+@media(min-width:760px) and (orientation:landscape) and (min-height:970px){
+ .cosmic-top.cosmic-banner-top{height:124px!important;min-height:124px!important;flex-basis:124px!important}
+ .cosmic-banner-top .cosmic-banner-art{width:360px!important;height:120px!important;max-height:120px!important}
+ .cosmic-top.cosmic-banner-top::before,.cosmic-top.cosmic-banner-top::after{width:calc(50% - 225px)}
+}
