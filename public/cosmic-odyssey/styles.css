@@ -1042,3 +1042,100 @@
   background-size:cover!important;
   background-position:center!important;
 }
+
+/* NOV 13 CONNECTED-WALL REBUILD
+ * Full-resolution approved source images rebuilt into one 16-topology photographic atlas.
+ * Unlike the former 5x2 collage of individual icons, neighboring metal runs share
+ * edge-to-edge rail geometry. Existing collision/pathfinding remains untouched.
+ */
+.board[data-wall-art="continuous"]{
+  isolation:isolate;
+}
+.board[data-wall-art="continuous"]::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,#03092063,#04102470);
+}
+.board[data-wall-art="continuous"] .cell{z-index:1}
+.board[data-wall-art="continuous"] .cell.wall.partition-wall.continuous-wall{
+  border:0!important;box-shadow:none!important;
+  background:none!important;background-image:none!important;
+  background-color:transparent!important;
+  overflow:hidden;isolation:isolate;
+}
+.board[data-wall-art="continuous"] .cell.wall.continuous-wall::before,
+.board[data-wall-art="continuous"] .cell.wall.continuous-wall::after{
+  display:none!important;
+}
+.board[data-wall-art="continuous"] .connected-wall-art{
+  position:absolute;inset:0;display:block;pointer-events:none;
+  background-image:url('assets/connected-wall-atlas.webp');
+  background-size:400% 400%;background-repeat:no-repeat;
+  opacity:1;image-rendering:auto;
+}
+.board[data-wall-art="continuous"] .cell.continuous-wall .environment-prop{
+  z-index:3!important;
+  width:112%!important;height:112%!important;opacity:.75!important;
+  filter:drop-shadow(0 2px 6px #060f21c9)!important;
+}
+/* A handful of COMPLETE energy barriers replace hundreds of tiny repeating gates. */
+.board[data-wall-art="continuous"] .barrier-span{
+  position:absolute;z-index:5;display:block;pointer-events:none;
+  background-image:url('assets/energy-barrier-spans.webp');
+  background-repeat:no-repeat;background-size:500% 100%;
+  filter:drop-shadow(0 0 7px #6be5ff72);
+  transform-origin:center center;
+  opacity:.98;
+}
+.board[data-scene="meteor"] .barrier-span,
+.board[data-scene="foundry"] .barrier-span{
+  filter:drop-shadow(0 0 7px #e6684778);
+}
+.board[data-scene="crystal"] .barrier-span,
+.board[data-scene="blackhole"] .barrier-span{
+  filter:drop-shadow(0 0 7px #e45bf27b);
+}
+.board[data-wall-art="continuous"] .cell.continuous-wall.barrier-struck .connected-wall-art{
+  filter:brightness(1.5) drop-shadow(0 0 6px #ffd298)!important;
+}
+.sector-art{display:none}
+/* The large unused desktop console well now shows the real scene prop collection. */
+@media(min-width:1500px) and (min-height:740px) and (orientation:landscape){
+ .cosmic-bottom .sector-art{
+  flex:0 0 auto;display:flex;position:relative;align-items:center;
+  justify-content:center;flex-direction:column;
+  min-height:126px;max-height:156px;height:min(17vh,156px);width:100%;
+  border-top:1px solid #d7ac6539;
+  background:radial-gradient(ellipse at center,#2c3c5c35,#11102d00 68%);
+  overflow:hidden;pointer-events:none;
+ }
+ .cosmic-bottom .sector-art #sector-setpiece{
+  flex:1;display:block;width:min(76%,212px);
+  background-image:url('assets/sector-setpieces.webp');
+  background-repeat:no-repeat;background-size:400% 200%;
+  filter:drop-shadow(0 0 10px #6997d75c);
+ }
+ .cosmic-bottom .sector-art #sector-art-label{
+  font:700 9px/1.2 Arial,sans-serif;letter-spacing:1.55px;color:#d5c4a9;
+  white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  padding:0 6px 2px;
+ }
+}
+@media(max-width:760px){
+ .board[data-wall-art="continuous"] .barrier-span{filter:drop-shadow(0 0 3px #5ad8ff6e);opacity:.92}
+ .board[data-wall-art="continuous"] .cell.continuous-wall .environment-prop{opacity:.65!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .board[data-wall-art="continuous"] .barrier-span{animation:none!important}
+}
+
+/* Subtle energy shimmer is confined to the two or three full barrier spans,
+ * instead of animating dozens of separate wall tiles. */
+@keyframes cosmic-full-barrier-pulse{
+ from{opacity:.88;filter:brightness(.93) drop-shadow(0 0 3px #4cc8fa66)}
+ to{opacity:1;filter:brightness(1.08) drop-shadow(0 0 7px #62d5faaa)}
+}
+@media(min-width:761px) and (prefers-reduced-motion:no-preference){
+ .board[data-wall-art="continuous"] .barrier-span{
+  animation:cosmic-full-barrier-pulse 3.8s ease-in-out infinite alternate;
+ }
+}
