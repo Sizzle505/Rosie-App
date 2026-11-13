@@ -355,3 +355,122 @@
 
 /* The oval shield preserves full spacecraft width without clipping the vertical edges. */
 .shield-aura{object-fit:fill}
+
+/* Art-directed ten-stage Cosmic Odyssey environment integration, November 2026. */
+.board[data-scene]{
+ background-position:center center!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.cosmic-app[data-scene]{
+ background-position:center center!important;
+ background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.board[data-scene="nebula"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-nebula.webp')!important}
+.cosmic-app[data-scene="nebula"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-nebula.webp')!important}
+.board[data-scene="meteor"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-meteor.webp')!important}
+.cosmic-app[data-scene="meteor"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-meteor.webp')!important}
+.board[data-scene="lunar"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-lunar.webp')!important}
+.cosmic-app[data-scene="lunar"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-lunar.webp')!important}
+.board[data-scene="crystal"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-crystal.webp')!important}
+.cosmic-app[data-scene="crystal"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-crystal.webp')!important}
+.board[data-scene="foundry"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-foundry.webp')!important}
+.cosmic-app[data-scene="foundry"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-foundry.webp')!important}
+.board[data-scene="derelict"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-derelict.webp')!important}
+.cosmic-app[data-scene="derelict"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-derelict.webp')!important}
+.board[data-scene="ice"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-ice.webp')!important}
+.cosmic-app[data-scene="ice"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-ice.webp')!important}
+.board[data-scene="garden"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-garden.webp')!important}
+.cosmic-app[data-scene="garden"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-garden.webp')!important}
+.board[data-scene="blackhole"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-blackhole.webp')!important}
+.cosmic-app[data-scene="blackhole"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-blackhole.webp')!important}
+.board[data-scene="ruins"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-ruins.webp')!important}
+.cosmic-app[data-scene="ruins"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-ruins.webp')!important}
+.board[data-scene="nebula-alt"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-nebula-alt.webp')!important}
+.cosmic-app[data-scene="nebula-alt"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-nebula-alt.webp')!important}
+.board[data-scene="meteor-alt"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-meteor-alt.webp')!important}
+.cosmic-app[data-scene="meteor-alt"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-meteor-alt.webp')!important}
+.board[data-scene="lunar-alt"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-lunar-alt.webp')!important}
+.cosmic-app[data-scene="lunar-alt"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-lunar-alt.webp')!important}
+.board[data-scene="lunar-alt2"]{background-image:linear-gradient(180deg,rgba(3,8,29,.29),rgba(6,10,29,.37)),url('assets/scene-lunar-alt2.webp')!important}
+.cosmic-app[data-scene="lunar-alt2"]{background-image:linear-gradient(180deg,rgba(5,7,25,.43),rgba(10,7,29,.65)),url('assets/scene-lunar-alt2.webp')!important}
+
+.board[data-scene] .cell.floor{
+ background:linear-gradient(140deg,rgba(9,20,44,.18),rgba(5,9,26,.26));
+ box-shadow:inset 0 0 0 1px rgba(70,183,244,.29);
+}
+.board[data-scene] .cell.wall{
+ background:linear-gradient(135deg,rgba(50,58,105,.91),rgba(9,28,54,.93) 48%,rgba(21,25,53,.97) 54%,rgba(39,32,80,.90));
+ border:1px solid rgba(204,153,81,.48);
+ box-shadow:inset 0 0 2px 1px rgba(220,159,67,.44),inset 0 0 8px rgba(0,0,0,.40);
+}
+.board[data-scene="lunar"] .cell.wall,.board[data-scene="ice"] .cell.wall{
+ background:linear-gradient(135deg,#3b6382dc,#173052e9 48%,#10213bec 55%,#536d88db);
+ border-color:#72d7f97a;
+}
+.board[data-scene="foundry"] .cell.wall,.board[data-scene="meteor"] .cell.wall{
+ background:linear-gradient(135deg,#663151e8,#39213ce6 48%,#1b1738ee 55%,#693e3be6);
+ border-color:#eaa45799;
+}
+.board[data-scene="crystal"] .cell.wall,.board[data-scene="ruins"] .cell.wall{
+ background:linear-gradient(135deg,#55417fe8,#22244fe9 48%,#151c45e6 55%,#493b85e8);
+ border-color:#aa91ff91;
+}
+.board[data-scene="garden"] .cell.wall{
+ background:linear-gradient(135deg,#49755be3,#24483fe9 48%,#1f393fe6 55%,#746b42df);
+ border-color:#e7d28f90;
+}
+.board[data-scene="derelict"] .cell.wall,.board[data-scene="blackhole"] .cell.wall{
+ background:linear-gradient(135deg,#4a5471e8,#192440ed 48%,#101729ef 55%,#403c62e8);
+ border-color:#b28a5e7a;
+}
+.cell .environment-prop{
+ position:absolute;z-index:1;left:50%;top:50%;
+ width:126%;height:126%;object-fit:contain;pointer-events:none;
+ opacity:.83;filter:drop-shadow(0 0 4px #0e071edd) drop-shadow(0 0 4px #b58df344);
+ transform:translate(-50%,-50%) rotate(var(--prop-turn,0deg));
+}
+.cell .launch-art{
+ width:185%;height:185%;opacity:.82;
+ filter:drop-shadow(0 0 8px #ffc66b77);
+}
+.cell .launch-art.launch-rosie{width:178%;height:178%;opacity:.76}
+.cell .launch-art.launch-jett,.cell .launch-art.launch-chip,.cell .launch-art.launch-kitty{
+ filter:drop-shadow(0 0 6px #8ba0ffb8);
+ opacity:.87;
+}
+.exit{
+ filter:drop-shadow(0 0 8px #e1b7ff) drop-shadow(0 0 11px #9671eeb8);
+}
+.exit.open{animation:cosmic-portal-breathe 1.4s ease-in-out infinite alternate}
+@keyframes cosmic-portal-breathe{from{filter:drop-shadow(0 0 6px #48d2ff)}to{filter:drop-shadow(0 0 19px #bfa3ff) brightness(1.28)}}
+.pickup.crate,.pickup.repair,.pickup.gravity,.pickup.mine,.pickup.wormhole{
+ width:110%;height:110%;z-index:4;pointer-events:none;object-fit:contain;
+ filter:drop-shadow(0 0 6px #000e) drop-shadow(0 0 6px #f1bf79a3);
+}
+.pickup.repair{filter:drop-shadow(0 0 5px #86ffd2) drop-shadow(0 0 5px #b3ffd780)}
+.pickup.gravity,.pickup.wormhole{filter:drop-shadow(0 0 5px #52d9ff) drop-shadow(0 0 6px #698bff9e)}
+.pickup.mine{width:90%;height:90%;animation:cosmic-mine-pulse 1.05s ease-in-out infinite alternate;filter:drop-shadow(0 0 7px #ff3838)}
+.pickup.wormhole{animation:cosmic-wormhole-pulse 1.7s ease-in-out infinite alternate}
+@keyframes cosmic-mine-pulse{to{filter:drop-shadow(0 0 12px #ff5e33) brightness(1.32)}}
+@keyframes cosmic-wormhole-pulse{to{filter:drop-shadow(0 0 12px #8bf0ff) brightness(1.25)}}
+.mission-level-picker{margin:7px auto 5px;display:flex;align-items:center;justify-content:center;gap:9px}
+.mission-level-picker label{font:700 10px Arial,sans-serif;letter-spacing:.6px;color:#f5d69f}
+.mission-level-picker select{
+ max-width:min(245px,52vw);min-width:155px;appearance:auto;
+ padding:6px 9px;border:1px solid #d4a962;border-radius:9px;
+ color:#ffe5ab;background:#171b40;outline-offset:3px;
+ font:600 11px Arial,sans-serif;
+}
+.scene-description{font:9px Arial,sans-serif;color:#d8caa4;white-space:nowrap}
+@media(max-width:650px){
+ .mission-level-picker{flex-wrap:wrap;gap:3px}
+ .mission-level-picker label{width:100%;font-size:9px}
+ .mission-level-picker select{max-width:85%;font-size:12px}
+ .scene-description{display:none}
+ .cell .environment-prop{opacity:.66;width:113%;height:113%}
+ .cell .launch-art{opacity:.66}
+}
+@media(max-height:660px){.mission-level-picker{margin:2px auto}.mission-level-picker label{font-size:8px}.mission-level-picker select{padding:3px 7px}}
+@media(prefers-reduced-motion:reduce){.exit.open,.pickup.mine,.pickup.wormhole{animation:none}}
