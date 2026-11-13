@@ -1111,6 +1111,10 @@
     justify-self: end; align-self: start; margin: 152px 0 0 0;
   }
   .app-shell.page-qr-atelier .qa-ring { width: 100%; transform: none; }
+  .app-shell.page-qr-atelier .qa-code-shell {
+    left: 27%; top: 28%; width: 46%;
+    box-shadow: 0 0 0 4px #fff, 0 0 24px #102e238c;
+  }
   .app-shell.page-qr-atelier .qa-preview-actions { margin: -46px auto 12px; }
   .app-shell.page-qr-atelier .qa-finish-strip {
     grid-column: 2; grid-row: 3; width: 56%; margin: 0 0 18px auto;

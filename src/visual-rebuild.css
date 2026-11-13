@@ -3987,6 +3987,10 @@ body {
   .cheese-left-rail .cheese-exam-portrait img {
     object-position: 39% 45%;
   }
+  .page-cheese .cheese-left-rail .cheese-exam-portrait > span,
+  .page-cheese .cheese-left-rail .cheese-exam-portrait::after {
+    display: none;
+  }
 }
 
 .cheese-left-rail .cheese-exam-portrait span {
