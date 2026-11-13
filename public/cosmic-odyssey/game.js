@@ -180,7 +180,7 @@
   // ship, not the unclamped logical grid cell. Place the ring over its painted hull.
   // Keep the bubble wide enough for the ship, but use an elliptical profile so
   // its top and bottom are not severed near the maze's outer rows.
-  const bubbleWidth=tile*4.08,bubbleHeight=tile*3.10;
+  const bubbleWidth=box.width*1.04,bubbleHeight=box.height*1.10;
   const cx=box.x+box.width*.49,cy=box.y+box.height*.51;
   el.style.width=bubbleWidth+'px';el.style.height=bubbleHeight+'px';
   el.style.left=(cx-bubbleWidth/2)+'px';
@@ -499,7 +499,7 @@
   const shot=forwardRay(origin,lastFacing);
   if(!shot.tiles.length){
     say('A wall blocks the firing lane. Turn toward an open corridor.');
-    sound(180,.045);return;
+    sound(180,.045);updateAimPreview();return;
   }
   ammo-=cost;ui();playAttackPose(type);
   const {enemy:victim,impact}=shot;
