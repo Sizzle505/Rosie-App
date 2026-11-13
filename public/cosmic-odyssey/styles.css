@@ -281,3 +281,74 @@
 .board.lunar-maze .cell.fiend-launch-pad::after{
  box-shadow:inset 0 0 0 2px #b8d9ffbf,0 0 10px #6ed5ffbd;
 }
+
+/* Authentic Cosmic Odyssey scenery: six independently recovered source images.
+ * These layers never alter the maze grid or intercept controls. */
+.cosmic-stage{position:relative;isolation:isolate}
+.cosmic-stage::before,.cosmic-stage::after{
+  content:"";position:absolute;z-index:0;pointer-events:none;
+  background-position:center;background-repeat:no-repeat;background-size:contain;
+  filter:drop-shadow(0 0 15px #fe893f88);opacity:.88;
+  animation:cosmic-rock-drift 11s ease-in-out infinite alternate;
+}
+.cosmic-stage::before{
+  background-image:url('assets/asteroid-large.webp');
+  width:clamp(110px,15vw,220px);height:clamp(110px,15vw,220px);
+  left:-1.8%;top:19%;transform:rotate(-12deg);
+}
+.cosmic-stage::after{
+  background-image:url('assets/asteroid-small.webp');
+  width:clamp(90px,11vw,160px);height:clamp(70px,10vw,125px);
+  right:-1.1%;bottom:16%;transform:rotate(19deg);
+  animation-delay:-4.4s;
+}
+.cosmic-app[data-scene='lunar'] .cosmic-stage::before,
+.cosmic-app[data-scene='lunar'] .cosmic-stage::after{
+  filter:hue-rotate(175deg) saturate(.62) drop-shadow(0 0 12px #6abfff90);
+  opacity:.65;
+}
+@keyframes cosmic-rock-drift{
+  from{translate:0 -5px}to{translate:3px 9px}
+}
+.cosmic-stage .board-frame{position:relative;z-index:1}
+.cell.floor.art-cross::after,.cell.floor.art-tee::after,.cell.floor.art-endcap::after{
+  content:"";position:absolute;z-index:0;inset:7%;pointer-events:none;
+  background-size:100% 100%;background-repeat:no-repeat;background-position:center;
+  transform:rotate(var(--art-turn,0deg));opacity:.64;
+  filter:drop-shadow(0 0 3px #6fbdff88);
+}
+.cell.floor.art-cross::after{background-image:url('assets/junction-cross.webp');opacity:.65}
+.cell.floor.art-tee::after{background-image:url('assets/junction-tee.webp');opacity:.57}
+.cell.floor.art-endcap::after{background-image:url('assets/junction-endcap.webp');opacity:.55}
+.board.lunar-maze .cell.floor.art-cross::after,
+.board.lunar-maze .cell.floor.art-tee::after,
+.board.lunar-maze .cell.floor.art-endcap::after{
+  filter:hue-rotate(167deg) saturate(.60) drop-shadow(0 0 3px #a1ddff80);
+  opacity:.57;
+}
+.cell.wall.asteroid-crater::after{
+  content:"";position:absolute;inset:3%;pointer-events:none;
+  background:url('assets/asteroid-small.webp') center/contain no-repeat;
+  opacity:.76;filter:drop-shadow(0 0 3px #ff7d4480);
+}
+.cell .launch-art{
+  position:absolute;z-index:1;left:50%;top:50%;width:145%;height:145%;
+  transform:translate(-50%,-50%);object-fit:contain;
+  opacity:.82;pointer-events:none;filter:drop-shadow(0 0 7px #ffbe6080);
+}
+.cell .launch-art.launch-rosie{
+  width:168%;height:168%;opacity:.82;filter:drop-shadow(0 0 8px #f5b545ad);
+}
+.cell .launch-art.launch-jett{filter:hue-rotate(66deg) drop-shadow(0 0 7px #b885ffbc)}
+.cell .launch-art.launch-chip{filter:hue-rotate(153deg) drop-shadow(0 0 7px #3dffc8ab)}
+.cell .launch-art.launch-kitty{filter:hue-rotate(268deg) drop-shadow(0 0 7px #ff8ac6b0)}
+.cell.captain-launch-pad::after,.cell.fiend-launch-pad::after{opacity:.24}
+@media(max-width:780px){
+  .cosmic-stage::before,.cosmic-stage::after{opacity:.20;filter:blur(.4px)}
+  .cosmic-stage::before{left:-4%;top:7%;width:90px}
+  .cosmic-stage::after{right:-5%;bottom:4%;width:82px}
+  .cell .launch-art{opacity:.61}
+}
+@media(prefers-reduced-motion:reduce){
+  .cosmic-stage::before,.cosmic-stage::after{animation:none}
+}
