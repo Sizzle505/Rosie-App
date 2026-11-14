@@ -258,3 +258,107 @@
     margin-inline: auto;
   }
 }
+
+/* Tablet compositions shared by touch and trackpad iPads. Keep each illustrated
+   surface at its native ratio and let content determine the page height. */
+@media (min-width: 721px) and (max-width: 1199px) {
+  /* Calculations: the calculator and toolkit form one centered reading column. */
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 20px 112px !important;
+    background: #380c20 url('/randomizers/rosie-salon-burgundy-texture.svg') center top / cover no-repeat !important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
+    position: relative !important;
+    top: auto !important;
+    width: min(100%, 760px) !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
+    width: min(100%, 610px) !important;
+    margin: 0 auto !important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace {
+    width: min(100%, 760px) !important;
+    margin: 0 auto !important;
+  }
+
+  /* QR: keep the illustrated workshop, frame, form and saved codes in one
+     natural scroll sequence; avoid stretching the 821:1916 scene artwork. */
+  .app-shell.page-qr-atelier .qa-scene {
+    width: min(100%, 760px);
+    max-width: 760px;
+    padding-inline: 0;
+    overflow: clip;
+  }
+  .app-shell.page-qr-atelier .qa-scene::before {
+    background-size: 100% auto;
+  }
+  .app-shell.page-qr-atelier .qa-hero { height: clamp(430px, 64vw, 510px); }
+  .app-shell.page-qr-atelier .qa-title { right: 4%; width: 53%; }
+  .app-shell.page-qr-atelier .qa-preview-stage,
+  .app-shell.page-qr-atelier .qa-panel,
+  .app-shell.page-qr-atelier .qa-collection { width: min(94%, 660px); }
+  .app-shell.page-qr-atelier .qa-ring { width: min(100%, 620px); }
+
+  /* Oracle: a bounded booth with full width question and answer controls. */
+  .app-shell.page-fortune > .fortune-page {
+    width: min(calc(100% - 40px), 780px);
+    max-width: 780px;
+    margin-inline: auto;
+  }
+  .page-fortune .fortune-console { width: 100%; max-width: 740px; margin-inline: auto; }
+  .page-fortune .machine .booth { height: clamp(570px, 79vw, 690px); }
+  .page-fortune .question-card { width: min(100%, 700px); margin-inline: auto; }
+
+  /* Recipes: the kitchen scene is a fixed-ratio illustration above a generous
+     two column index. Three narrow cards truncate the recipe names. */
+  .app-shell.page-recipes .recipes-body { width: min(calc(100% - 40px), 760px) !important; padding-inline: 0; }
+  .app-shell.page-recipes .recipes-top-scene { width: min(100%, 700px); }
+  .app-shell.page-recipes .recipes-heading { padding-top: clamp(460px, 61vw, 590px) !important; }
+  .app-shell.page-recipes .recipes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px !important; }
+  .app-shell.page-recipes .recipes-card-copy strong { font-size: clamp(16px, 2.3vw, 21px); }
+  .app-shell.page-recipes .recipes-detail { width: min(100%, 650px); }
+
+  /* Cheese: board first in visual priority, with the examiner and setup
+     alongside it in landscape and stacked in portrait. No fixed board height. */
+  .app-shell.page-cheese > .cheese-game-page {
+    width: min(calc(100% - 32px), 1080px);
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 12px 0 110px;
+  }
+  .page-cheese .cheese-desktop-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    width: 100%;
+  }
+  .page-cheese .cheese-left-rail { position: static; width: 100%; }
+  .page-cheese .cheese-desktop-layout > .cheese-game-frame {
+    width: min(100%, 740px);
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: 0 auto;
+  }
+  .page-cheese .cheese-desktop-layout .cheese-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+    gap: clamp(6px, 1vw, 10px);
+  }
+  .page-cheese .cheese-card { width: 100%; height: auto; aspect-ratio: .76; }
+  .page-cheese .cheese-examiner-rail { position: static; width: min(100%, 740px); margin: 0 auto; }
+}
+
+@media (min-width: 950px) and (max-width: 1199px) and (orientation: landscape) {
+  .page-cheese .cheese-desktop-layout {
+    grid-template-columns: minmax(220px, 30%) minmax(0, 1fr);
+    align-items: start;
+  }
+  .page-cheese .cheese-desktop-layout > .cheese-game-frame { grid-column: 2; grid-row: 1 / span 2; }
+  .page-cheese .cheese-examiner-rail { grid-column: 1; grid-row: 2; }
+  .page-cheese .cheese-left-rail { grid-column: 1; grid-row: 1; }
+}

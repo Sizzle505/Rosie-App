@@ -2,7 +2,7 @@
    Every selector is restricted to desktop widths; the original iPhone and
    iPad hero, calculator, toolkit imagery, touch areas and controls are intact.
    Full-resolution dedicated assets were brought over through Dropbox. */
-@media (min-width:1100px) {
+@media (min-width:1200px) {
   html:has(.app-shell.page-calculations) {
     background-color:#2c050d;
     background-image:
@@ -136,7 +136,7 @@
 }
 /* The 1100-1250 breakpoint retains a readable minimum control width without
    touching the existing iPad-responsive layout below 1100px. */
-@media (min-width:1100px) and (max-width:1250px) {
+@media (min-width:1200px) and (max-width:1250px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
     grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)!important;
     column-gap:12px!important;
@@ -168,7 +168,7 @@
 /* Restore the canonical Rosie Calculations scene on desktop. The original
    16:9 artwork contains the exact character, stacked 3D chessboard,
    cryptex, calculator and study. Do not replace it with generic AI art. */
-@media (min-width:1100px) {
+@media (min-width:1200px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
     aspect-ratio:16 / 9 !important;
     height:auto !important;
@@ -188,7 +188,7 @@
 
 /* The engraved Toolkit artwork must not be stretched to the changing height
    of desktop form content. Preserve intrinsic aspect and let the base color fill. */
-@media(min-width:1100px){
+@media(min-width:1200px){
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace{
     background-color:#6a171a!important;
     background-image:url("/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp")!important;
