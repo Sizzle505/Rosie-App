@@ -661,3 +661,38 @@
   .app-shell.page-recipes .recipes-body{margin-top:calc(-1 * min(22vw,320px))!important;}
   .app-shell.page-recipes .recipes-heading{min-height:min(22vw,320px)!important;}
 }
+
+
+/* Desktop split-page cookbook: the 2:1 portrait-and-treats crop remains
+   stationary and centered while the cookbook browses in the right column. */
+@media(min-width:1200px){
+ .app-shell.page-recipes > .recipes-page{display:block!important;min-height:100dvh!important;padding:54px 0 100px!important;overflow:visible!important}
+ .app-shell.page-recipes .recipes-top-scene{
+   position:fixed!important;z-index:2!important;
+   top:50%!important;left:clamp(18px,2.2vw,45px)!important;
+   transform:translateY(-50%)!important;
+   width:min(43vw,720px)!important;
+   height:auto!important;aspect-ratio:2 / 1!important;
+   margin:0!important;
+   background-size:cover!important;
+   background-position:18% 50%!important;
+   border-radius:19px!important;
+   box-shadow:0 0 0 2px #c69552,0 0 0 7px #683c2855,0 18px 42px #17030a9c!important;
+ }
+ .app-shell.page-recipes .recipes-body{
+   position:relative!important;z-index:3!important;
+   width:calc(100% - 49vw)!important;max-width:none!important;
+   margin:0 2.5vw 0 auto!important;padding:0!important;
+ }
+ .app-shell.page-recipes .recipes-heading{
+   display:flex!important;min-height:110px!important;height:auto!important;
+   align-items:center!important;justify-content:center!important;
+   width:100%!important;margin:0 auto 16px!important;padding:0!important;
+ }
+ .app-shell.page-recipes .recipes-crest{width:min(100%,520px)!important}
+ .app-shell.page-recipes .recipes-index{width:100%!important;max-width:none!important;margin:0!important;padding:22px clamp(16px,2vw,34px) 38px!important}
+ .app-shell.page-recipes .recipes-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:clamp(10px,1.2vw,20px)!important}
+ .app-shell.page-recipes .recipes-card{aspect-ratio:1086 / 1448!important}
+ .app-shell.page-recipes .recipes-signoff{width:100%!important;max-width:none!important;margin:16px 0 0!important;text-align:center}
+}
+@media(min-width:1850px){.app-shell.page-recipes .recipes-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
