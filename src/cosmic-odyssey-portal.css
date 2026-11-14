@@ -522,3 +522,50 @@ body.captain-fullscreen-fallback-active #root *:has(.captain-fullscreen-frame.is
    width:min(100%,1220px)!important;max-width:1220px!important;
  }
 }
+
+
+/* 2026-11-13 | Let the Cosmic Odyssey cockpit, not site chrome, own fullscreen.
+   The fixed RosieVerse dock has a higher stacking layer than the fullscreen
+   fallback; hiding it while a game is expanded prevents obscured controls. */
+body.captain-fullscreen-fallback-active .bottom-nav,
+body.captain-fullscreen-fallback-active .bottom-side-seal,
+body.captain-fullscreen-fallback-active .nav-family-toggle{
+  display:none!important;
+}
+@media(max-width:759px) and (orientation:portrait){
+  /* Preserve a compact non-fullscreen game viewport above the RosieVerse dock. */
+  .captain-fs-cosmic:not(:fullscreen):not(.is-fallback-fullscreen)
+  .cosmic-odyssey-embedded-shell iframe{
+    height:calc(100dvh - 126px)!important;
+    min-height:515px!important;
+    max-height:800px!important;
+  }
+  /* A full-word action hid the pause control and crossed the illustrated title. */
+  .captain-fs-cosmic .captain-fullscreen-toggle{
+    top:5px!important;right:48px!important;
+    width:36px!important;height:36px!important;
+    min-width:36px!important;min-height:36px!important;
+    padding:3px!important;gap:0!important;
+    border-radius:10px!important;
+    background:linear-gradient(145deg,#101a3be8,#302247ed)!important;
+  }
+  .captain-fs-cosmic .captain-fullscreen-toggle b{display:none!important}
+  .captain-fs-cosmic .captain-fullscreen-toggle>span{
+    font-size:22px!important;line-height:1!important;
+  }
+  .captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen){
+    height:100dvh!important;min-height:0!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)
+  >.captain-fullscreen-toggle{
+    position:fixed!important;
+    top:max(8px,env(safe-area-inset-top))!important;
+    right:48px!important;
+  }
+  .captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)
+  .cosmic-odyssey-embedded-shell iframe{
+    width:100%!important;height:100%!important;
+    min-height:0!important;max-height:none!important;
+  }
+}
