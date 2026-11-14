@@ -1452,3 +1452,110 @@
   .cosmic-hud .hud-stat small{font-size:6px!important}
   .cosmic-hud .hud-stat b{font-size:13px!important}
 }
+
+
+/* 2026-11-14 | Never clip the approved banner; full original 3:1 artwork
+   remains in document flow and may simply scroll above the phone viewport. */
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-top.cosmic-banner-top{
+   flex:0 0 auto!important;
+   display:block!important;
+   height:auto!important;min-height:0!important;max-height:none!important;
+   overflow:visible!important;
+   aspect-ratio:3 / 1!important;
+   border-radius:10px!important;
+   padding:0!important;
+ }
+ .cosmic-banner-top .cosmic-banner-art{
+   width:100%!important;height:auto!important;max-height:none!important;
+   aspect-ratio:3 / 1!important;
+   object-fit:contain!important;object-position:center!important;
+   border-radius:9px!important;
+ }
+ .cosmic-banner-stage{
+   display:block!important;
+   max-width:85%!important;bottom:3px!important;
+   padding:1px 7px!important;
+   font-size:7px!important;letter-spacing:.35px!important;
+ }
+}
+.control-mode-toggle{
+ flex:0 0 auto;cursor:pointer;touch-action:manipulation;
+ display:inline-flex;align-items:center;justify-content:center;
+ white-space:nowrap;min-width:65px;min-height:25px;
+ padding:3px 7px;border:1px solid #e6bd75;
+ border-radius:7px;background:linear-gradient(140deg,#1f315a,#301d46);
+ color:#ffe8b4;font:bold 9px/1 Arial,sans-serif;
+ letter-spacing:.55px;
+}
+.control-mode-toggle[aria-pressed="true"]{
+ border-color:#80e1ed;color:#ccffff;
+ background:linear-gradient(140deg,#163c60,#242b52);
+ box-shadow:inset 0 0 6px #42d5ee40;
+}
+.control-mode-toggle:focus-visible{outline:2px solid #ffe7ac;outline-offset:2px}
+.dpad[hidden],.joystick[hidden]{display:none!important}
+.joystick{
+ box-sizing:border-box;position:relative;display:grid;place-items:center;
+ flex:0 0 auto;width:124px;height:85px;
+ cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+ -webkit-tap-highlight-color:transparent;
+}
+.joystick:active{cursor:grabbing}
+.joystick-track{
+ box-sizing:border-box;display:block;position:relative;
+ width:78px;height:78px;border-radius:50%;
+ border:2px solid #cda76b;
+ background:
+   radial-gradient(circle at 50% 50%,#314970 0 19%,transparent 20%),
+   radial-gradient(circle at 32% 27%,#3b3559,#101b3d 65%,#060d2a 100%);
+ box-shadow:inset 0 0 0 4px #f6c77a20,inset 0 0 13px #060d2d,0 2px 12px #000b;
+ pointer-events:none;
+}
+.joystick-track::before{
+ content:"";position:absolute;inset:9px;
+ border-radius:50%;border:1px solid #e2b9744f;
+ box-shadow:inset 0 0 12px #2d87bd42;
+}
+.joystick-axis{
+ position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+ background:#eab96f40;pointer-events:none;
+}
+.joystick-axis.axis-h{width:66%;height:1px}
+.joystick-axis.axis-v{width:1px;height:66%}
+.joystick-knob{
+ position:absolute;z-index:2;left:50%;top:50%;
+ width:37px;height:37px;transform:translate(-50%,-50%);
+ border-radius:50%;border:2px solid #ffe3aa;
+ background:
+   radial-gradient(circle at 33% 26%,#96cde0 0,#466d9e 32%,#263654 66%,#111731 100%);
+ box-shadow:inset 0 1px 4px #ffffff88,0 3px 7px #020414b9,0 0 7px #54c8ee73;
+ pointer-events:none;
+}
+.joystick-knob::before{
+ content:"";position:absolute;inset:10px;border-radius:50%;
+ background:radial-gradient(circle,#f8dfa8,#ca9353);
+ box-shadow:0 0 4px #ffda987a;
+}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-bottom .status-line{gap:3px!important}
+ .cosmic-bottom .status-line #message{max-width:none!important}
+ .cosmic-bottom .control-mode-toggle{
+   flex:0 0 auto;min-width:57px;min-height:16px;
+   height:16px;padding:1px 4px;
+   font-size:8px;letter-spacing:.2px;
+   border-radius:5px;
+ }
+ .cosmic-bottom .joystick{
+   width:136px!important;height:70px!important;
+   min-width:136px!important;min-height:70px!important;
+   margin:0!important;padding:0!important;
+ }
+ .cosmic-bottom .joystick-track{width:69px;height:69px}
+ .cosmic-bottom .joystick-knob{width:32px;height:32px}
+ .cosmic-bottom .joystick-knob::before{inset:8px}
+}
+@media(max-width:359px) and (orientation:portrait){
+ .cosmic-bottom .joystick{width:120px!important;min-width:120px!important}
+ .cosmic-bottom .control-mode-toggle{min-width:51px;font-size:7px}
+}
