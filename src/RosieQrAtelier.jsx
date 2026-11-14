@@ -40,12 +40,27 @@ async function qrImage(svg){
 async function canvasBlob(canvas){
   return new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(Error("Could not export this image.")),"image/png"));
 }
-async function exportQR(svg){
-  const img=await qrImage(svg);
+async function exportQR(svg,style="emerald"){
+  // Copy / PNG / Share are a complete framed creation, matching the live atelier.
+  // Keep the QR modules crisp and preserve their quiet zone for scan reliability.
+  const theme=QR_STYLES.find(x=>x.id===style)||QR_STYLES[0];
   const canvas=document.createElement("canvas");canvas.width=1600;canvas.height=1600;
   const ctx=canvas.getContext("2d");
-  ctx.fillStyle="#ffffff";ctx.fillRect(0,0,1600,1600);
-  ctx.imageSmoothingEnabled=false;ctx.drawImage(img,0,0,1600,1600);
+  ctx.fillStyle=theme.dark;ctx.fillRect(0,0,1600,1600);
+  const glow=ctx.createRadialGradient(800,700,100,800,700,740);
+  glow.addColorStop(0,theme.accent+"99");glow.addColorStop(1,theme.dark);
+  ctx.fillStyle=glow;ctx.fillRect(0,0,1600,1600);
+  const img=await qrImage(svg),codeSize=688,x=456,y=472;
+  ctx.fillStyle="#fffef8";ctx.fillRect(x-14,y-14,codeSize+28,codeSize+28);
+  ctx.imageSmoothingEnabled=false;ctx.drawImage(img,x,y,codeSize,codeSize);
+  const frame=new Image();
+  try{
+    await new Promise((resolve,reject)=>{frame.onload=resolve;frame.onerror=reject;frame.src=ART+"qr-frame.webp";});
+    ctx.imageSmoothingEnabled=true;ctx.drawImage(frame,0,0,1600,1600);
+  }catch{
+    ctx.strokeStyle=theme.accent;ctx.lineWidth=22;ctx.strokeRect(22,22,1556,1556);
+    ctx.lineWidth=5;ctx.strokeRect(49,49,1502,1502);
+  }
   return canvasBlob(canvas);
 }
 function drawWrapped(ctx,value,x,y,maxWidth,lineHeight,maxLines=3){
@@ -252,7 +267,7 @@ export default function RosieQrAtelier(){
   function exportFile(kind){
     withDownload(async()=>{
       if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
-      else if(kind==="png")download(await exportQR(output.svg),fileBase+".png");
+      else if(kind==="png")download(await exportQR(output.svg,style),fileBase+".png");
       else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-printable.png");
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
       else if(kind==="vcf")download(new Blob([output.payload],{type:"text/vcard;charset=utf-8"}),fileBase+".vcf");
@@ -261,7 +276,7 @@ export default function RosieQrAtelier(){
   }
   function share(){
     withDownload(async()=>{
-      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg);
+      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg,style);
       const file=new File([blob],fileBase+".png",{type:"image/png"});
       if(navigator.share&&navigator.canShare?.({files:[file]})){
         await navigator.share({files:[file],title:"Rosie's QR Atelier"});
@@ -277,7 +292,7 @@ export default function RosieQrAtelier(){
     setWorking(true);
     try{
       // Supply ClipboardItem with its image promise synchronously for iOS Safari.
-      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg)})]);
+      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg,style)})]);
       toastMessage("QR image copied. Paste it wherever you like.");
     }catch{toastMessage("Could not copy the QR image. Use PNG export instead.");}
     finally{setWorking(false);}
@@ -393,7 +408,10 @@ export default function RosieQrAtelier(){
     </div>
     {fullScreen&&ready&&<div className="qa-fullscreen" role="dialog" aria-modal="true" aria-label="Full-screen scannable QR code">
       <button type="button" className="qa-close" onClick={()=>setFullScreen(false)}>Close ×</button>
-      <div className="qa-fullscreen-qr" dangerouslySetInnerHTML={{__html:output.svg}} aria-label="Full-screen QR code"/>
+      <div className="qa-fullscreen-ring qa-ring" aria-label="Framed full-screen scannable QR code">
+        <div className="qa-code-shell"><div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}}/></div>
+        <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" draggable="false"/>
+      </div>
       <span>{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
     </div>}
   </main>;
