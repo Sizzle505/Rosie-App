@@ -184,3 +184,16 @@
     display:none !important;
   }
 }
+
+
+/* The engraved Toolkit artwork must not be stretched to the changing height
+   of desktop form content. Preserve intrinsic aspect and let the base color fill. */
+@media(min-width:1100px){
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace{
+    background-color:#6a171a!important;
+    background-image:url("/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp")!important;
+    background-position:center top!important;
+    background-size:100% auto!important;
+    background-repeat:no-repeat!important;
+  }
+}
