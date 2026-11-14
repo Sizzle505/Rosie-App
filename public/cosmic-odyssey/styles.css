@@ -1559,3 +1559,24 @@
  .cosmic-bottom .joystick{width:120px!important;min-width:120px!important}
  .cosmic-bottom .control-mode-toggle{min-width:51px;font-size:7px}
 }
+
+
+/* Independent artwork-backed steering buttons; never use text-glyph arrows. */
+.dpad button{overflow:visible}
+.dpad button img{
+ display:block!important;width:100%!important;height:100%!important;
+ max-width:100%!important;max-height:100%!important;
+ object-fit:contain!important;object-position:center!important;
+ pointer-events:none!important;user-select:none!important;
+ -webkit-user-drag:none;
+}
+.dpad button:active img{filter:brightness(1.23) drop-shadow(0 0 4px #8bfbff)}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-bottom .dpad button{
+   padding:0!important;border:0!important;
+   background:transparent!important;box-shadow:none!important;
+ }
+ .cosmic-bottom .dpad button:active{
+   background:transparent!important;box-shadow:none!important;
+ }
+}
