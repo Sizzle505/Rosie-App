@@ -1465,7 +1465,7 @@
 /* Desktop workbench: Calculator and toolkit are peers, not a phone-sized
    vertical sequence with a large unused field between them.  This is kept
    entirely outside the phone/tablet range. */
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
     display:grid;
     grid-template-columns:minmax(520px,650px) minmax(380px,500px);
@@ -1549,7 +1549,7 @@
 
 /* Desktop edition - an actual workbench, not a mobile portrait spread across
    a large canvas.  All rules are explicitly desktop-only. */
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
     display:grid !important;
     grid-template-columns:minmax(590px, 1.18fr) minmax(410px, .82fr);
@@ -1654,12 +1654,12 @@
   .app-shell.page-calculations .rc-page--tool-open .rc-active-tool-close { position:fixed; z-index:201; top:28px; right:34px; }
 }
 
-@media (max-width: 1023px) { .rc-desktop-hero-copy { display:none; } }
+@media (max-width: 1199px) { .rc-desktop-hero-copy { display:none; } }
 
 /* The source artwork contains its own mobile title. On desktop the live title
    is intentional and the art becomes a portrait vignette rather than a second
    competing header. */
-@media (min-width:1024px) {
+@media (min-width:1200px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero {
     width:54%; height:150%; right:-9%; bottom:-26%;
     transform:scale(1.55); transform-origin:28% 49%;
@@ -1670,7 +1670,7 @@
 
 /* Purpose-built wide hero artwork for the desktop study. The mobile source
    image remains in service below this breakpoint. */
-@media (min-width:1024px) {
+@media (min-width:1200px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
     grid-template-rows:clamp(330px,28vw,450px) auto;
     width:min(1500px,calc(100% - clamp(48px,8vw,156px)));
@@ -1694,7 +1694,7 @@
 
 /* Desktop panorama v2 is a native 3:1 composition. The previous `cover`
    treatment discarded the deliberate copy-safe zone and desk details. */
-@media (min-width:1024px) {
+@media (min-width:1200px) {
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) {
     grid-template-rows:auto auto;
   }
@@ -1713,7 +1713,7 @@
 /* Final desktop composition: the artwork becomes a compact study banner and
    the actual tools own the first screen.  The panorama is shown at its native
    ratio on the right - it is not cropped to manufacture a short hero. */
-@media (min-width:1024px) {
+@media (min-width:1200px) {
   .app-shell.page-calculations {
     background:
       radial-gradient(ellipse at 9% 8%,rgba(182,115,50,.18),transparent 25%),
