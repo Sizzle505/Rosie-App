@@ -192,3 +192,12 @@ The older atlas `wall-atlas-b2.webp` remains in the repo only for historical com
 **Visual control:** The board backdrop is dimmed for readability, while energy spans use limited glow and pulse only on desktop. The existing `?classicWalls=1` fallback preserves original static partition art.
 
 **Validation:** JS syntax passed. Simulated portrait and desktop layouts across all 10 stages confirmed wall coverage, unchanged wall/floor counts, nonempty long spans, correct stage-specific barrier types, correct setpiece selection, and unmodified classic fallback. A representative artwork-only maze mockup was inspected, but an actual-device screenshot review is still needed.
+
+
+## November 13 follow-up - transparent walls and live Fiend radar
+
+Corrected original `connected-wall-atlas.webp` by removing an extraneous semi-opaque blue-slate panel (~alpha 210) from the unoccupied space around each metal wall. Structural rails, endcaps, and connectivity mask geometry remain from the approved artwork. The resulting 704×704 transparent WebP is approximately 73 KB and matches Git blob `b7af27d3f50035eb492e466b2395e85cb5a5eb9a`. Original source remains in Dropbox at `/Rosie-App-Transfer/Cosmic-Odyssey-Connected-Wall-Rebuild-Transfer-20261113.json` and `/Rosie-App-Transfer/Cosmic-Odyssey-Connected-Wall-Atlas-Final-20261113.base64.txt`; the corrected optimized image was also transferred separately as `Cosmic-Odyssey-Clean-Connected-Wall-Atlas-20261113.base64.txt`. Actual geometry and game grid unchanged.
+
+The desktop sector-art well now shares space with a three-Fiend tactical tracker using the existing approved Jett/Chip/Kitty spacecraft images. Shows full names, health bars, current HP, and distinct defeated state. Tracker is intentionally hidden on narrow viewports to keep iPhone gameplay clear; the existing HUD Fiend total remains visible everywhere.
+
+Mock DOM test at 393×852 and 1760×850 passed: all existing wall cells still covered, health values update correctly when Kitty takes one hit, destroyed Fiends show 0 HP and DEFEATED, and all Fiend statuses reset at the next stage. A locally rendered maze comparison confirms that slate rectangles no longer obscure the background. Physical-device and full live-browser visual QA remain outstanding.
