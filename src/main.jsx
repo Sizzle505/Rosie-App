@@ -26,6 +26,7 @@ import "./cheese-sprint.css";
 import "./ipad-polish.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
+import AxisJoystick from "./AxisJoystick.jsx";
 import EmberTunnelDrill from "./EmberTunnelDrill.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
@@ -1686,6 +1687,8 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
 }
 
 function CaptainRosieGame({ soundOn }) {
+  const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("yachtSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
+  const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
   const [running, setRunning] = useState(false);
   const [paused, setPaused] = useState(false);
   const [score, setScore] = useState(0);
@@ -2262,10 +2265,11 @@ function CaptainRosieGame({ soundOn }) {
           )}
         </div>
 
-        <div className="captain-command-deck">
-          <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running} aria-label="Steer port">
+        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}>
+          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" /> :
+          <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
             <span>◀</span><small>PORT</small>
-          </button>
+          </button>}
 
           <button
             type="button"
@@ -2284,9 +2288,11 @@ function CaptainRosieGame({ soundOn }) {
             </span>
           </button>
 
-          <button type="button" className="helm-button" onClick={() => moveCaptain(1)} disabled={!running} aria-label="Steer starboard">
+          {steerMode==="joystick" ? <button className="captain-steering-toggle" type="button" aria-label="Use arrow buttons" title="Arrow buttons" onClick={toggleSteerMode}>◀▶</button> :
+          <button type="button" className="helm-button" onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
             <span>▶</span><small>STARBOARD</small>
-          </button>
+          </button>}
+          {steerMode==="buttons"&&<button className="captain-steering-toggle" type="button" aria-label="Use joystick" title="Joystick" onClick={toggleSteerMode}>◉</button>}
         </div>
 
         <div className="captain-cargo-key">
