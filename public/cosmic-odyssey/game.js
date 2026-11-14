@@ -996,8 +996,8 @@
     for(const name of ['pointerup','pointercancel','lostpointercapture'])aimStick.addEventListener(name,releaseAim);
     window.addEventListener('blur',()=>{aimPointer=null;if(aimKnob)aimKnob.style.transform='translate(-50%,-50%)'});
   }
-  let savedMode='dpad';
-  try{savedMode=localStorage.getItem('cosmicSteeringMode')||'dpad';}catch(_){}
+  let savedMode='joystick';
+  try{savedMode=localStorage.getItem('cosmicSteeringMode')||'joystick';}catch(_){}
   switchControls(savedMode==='joystick'?'joystick':'dpad');
   document.querySelectorAll('.dpad button').forEach(btn=>{
     const dir=btn.dataset.dir;
