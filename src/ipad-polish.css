@@ -272,9 +272,21 @@
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
     position: relative !important;
     top: auto !important;
-    width: min(100%, 760px) !important;
+    width: min(100%, 560px) !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    overflow: visible !important;
     margin: 0 auto !important;
+    background: none !important;
     box-shadow: none !important;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    mask-image: none !important;
   }
   .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
     width: min(100%, 610px) !important;
