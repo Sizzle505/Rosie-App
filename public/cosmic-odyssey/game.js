@@ -910,6 +910,71 @@
     heldDir=[...pressedKeys.values()].at(-1)||null;
   });
   window.addEventListener('blur',()=>{heldDir=null;pendingStep=false;pressedKeys.clear();});
+  // A touch joystick which sends the same cardinal directions as the D-pad.
+  // It does not modify pathfinding, speed, collision, or shooting behavior.
+  const modeButton=$('control-mode-toggle');
+  const joystick=$('joystick'),knob=$('joystick-knob');
+  const dpad=document.querySelector('.dpad');
+  let stickPointer=null,stickDirection=null;
+  function resetStick(){
+    stickPointer=null;
+    if(heldDir===stickDirection)heldDir=null;
+    stickDirection=null;
+    if(knob)knob.style.transform='translate(-50%, -50%)';
+  }
+  function switchControls(mode){
+    const stick=mode==='joystick';
+    resetStick();
+    heldDir=null;
+    if(dpad)dpad.hidden=stick;
+    if(joystick)joystick.hidden=!stick;
+    if(modeButton){
+      modeButton.textContent=stick?'D-PAD':'JOYSTICK';
+      modeButton.setAttribute('aria-pressed',String(stick));
+      modeButton.setAttribute('aria-label',stick?'Switch to D-pad steering':'Switch to joystick steering');
+      modeButton.title=stick?'Return to D-pad steering':'Try joystick steering';
+    }
+    try{localStorage.setItem('cosmicSteeringMode',stick?'joystick':'dpad');}catch(_){}
+  }
+  function updateStick(ev){
+    if(stickPointer!==ev.pointerId||!joystick)return;
+    const r=joystick.getBoundingClientRect();
+    const dx=ev.clientX-(r.left+r.width/2),dy=ev.clientY-(r.top+r.height/2);
+    const radius=Math.min(r.width,r.height)*.29;
+    const dist=Math.hypot(dx,dy);
+    const fraction=dist?Math.min(1,radius/dist):0;
+    const x=dx*fraction,y=dy*fraction;
+    if(knob)knob.style.transform='translate(calc(-50% + '+x+'px), calc(-50% + '+y+'px))';
+    const next=dist<9?null:(Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
+    if(next!==stickDirection){
+      if(heldDir===stickDirection)heldDir=null;
+      stickDirection=next;
+      if(next){heldDir=next;requestMove(next);}
+    }
+  }
+  if(modeButton){
+    modeButton.addEventListener('click',()=>switchControls(joystick?.hidden?'joystick':'dpad'));
+  }
+  if(joystick){
+    joystick.addEventListener('pointerdown',ev=>{
+      if(stickPointer!==null)return;
+      ev.preventDefault();
+      stickPointer=ev.pointerId;
+      joystick.setPointerCapture?.(ev.pointerId);
+      updateStick(ev);
+    });
+    joystick.addEventListener('pointermove',ev=>{
+      if(stickPointer===ev.pointerId){ev.preventDefault();updateStick(ev);}
+    });
+    const release=ev=>{if(stickPointer===ev.pointerId)resetStick();};
+    joystick.addEventListener('pointerup',release);
+    joystick.addEventListener('pointercancel',release);
+    joystick.addEventListener('lostpointercapture',release);
+    window.addEventListener('blur',resetStick);
+  }
+  let savedMode='dpad';
+  try{savedMode=localStorage.getItem('cosmicSteeringMode')||'dpad';}catch(_){}
+  switchControls(savedMode==='joystick'?'joystick':'dpad');
   document.querySelectorAll('.dpad button').forEach(btn=>{
     const dir=btn.dataset.dir;
     btn.addEventListener('pointerdown',ev=>{
