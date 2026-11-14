@@ -2867,7 +2867,7 @@ function App() {
     }, 960);
   }
 
-  function toggleDictation() {
+  async function toggleDictation() {
     const recognition = recognitionRef.current;
     if (!speechSupported || !recognition) {
       setToast("Speech input is not available on this browser.");
@@ -2883,6 +2883,22 @@ function App() {
     window.clearTimeout(dictationTimerRef.current);
     setDictationStatus("listening");
 
+    // Tesla's 2026.26.6+ browser supports cabin-microphone permissions.
+    // Prime that grant on a user gesture before starting native speech recognition.
+    // Standard iPhone/iPad behavior is unchanged.
+    const isTeslaBrowser=/Tesla|TeslaBrowser|TeslaWebKit/i.test(navigator.userAgent);
+    if(isTeslaBrowser && navigator.mediaDevices?.getUserMedia){
+      try{
+        const permissionStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+        permissionStream.getTracks().forEach(track=>track.stop());
+      }catch{
+        setListening(false);
+        setDictationStatus("denied");
+        setToast("Allow cabin microphone access in Tesla's browser to dictate.");
+        window.setTimeout(()=>setToast(""),3200);
+        return;
+      }
+    }
     try {
       recognition.start();
     } catch {
