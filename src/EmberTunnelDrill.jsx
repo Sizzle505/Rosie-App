@@ -294,7 +294,12 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         const context=el.getContext("2d");
         if(context){
           context.setTransform(el.width/DRILL_WIDTH,0,0,el.height/DRILL_HEIGHT,0,0);
-          paintDrill(context,s,portrait.current,particles.current,artRef.current);
+          // The stage uses different aspect ratios on desktop and phones. Correct the
+          // vehicle's horizontal scale without changing gameplay or stretching the art.
+          const rect=el.getBoundingClientRect();
+          const correction=Math.max(.50,Math.min(1.70,
+            (rect.height/DRILL_HEIGHT)/Math.max(.001,rect.width/DRILL_WIDTH)));
+          paintDrill(context,s,portrait.current,particles.current,artRef.current,correction);
         }
       }
       raf=requestAnimationFrame(render);
