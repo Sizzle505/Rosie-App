@@ -1287,3 +1287,29 @@
     touch-action:manipulation;
   }
 }
+
+/* Desktop oracle: fixed, viewport-centered illustrated Madame Rosie cabinet.
+   Right-hand forms and fortunes continue to scroll normally. */
+@media(min-width:1200px){
+ .app-shell.page-fortune > .fortune-page{
+   --madame-content-width:calc(min(100vw,1260px) - 72px);
+   --madame-rail-width:calc(var(--madame-content-width) * .638);
+ }
+ .app-shell.page-fortune .fortune-page .machine{
+   position:fixed!important;
+   z-index:10;
+   top:max(19px,calc((100dvh - min(700px,calc(100dvh - 118px))) / 2))!important;
+   left:calc((100vw - min(100vw,1260px)) / 2 + 24px)!important;
+   width:var(--madame-rail-width)!important;
+   max-height:calc(100dvh - 40px)!important;
+   margin:0!important;
+ }
+ .app-shell.page-fortune .fortune-page .machine .booth{
+   height:min(700px,calc(100dvh - 118px))!important;
+   min-height:0!important;
+ }
+ .app-shell.page-fortune .fortune-page .console-caption{
+   opacity:.75;
+   text-align:center;
+ }
+}
