@@ -3,6 +3,7 @@ import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, trigge
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import "./ember-tunnel-drill.css";
+import AxisJoystick from "./AxisJoystick.jsx";
 
 const PASSAGES = [
   { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2 },
@@ -142,6 +143,8 @@ function playSound(context,kind) {
   }catch(_){}
 }
 export default function EmberTunnelDrill({ soundOn=true }) {
+  const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
+  const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
   const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
@@ -374,10 +377,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           </div>}
       </div>
       <div className="ember-controls">
+        {steerMode==="joystick" ? <AxisJoystick axis="vertical" label="Drill pitch" disabled={!active}
+          onDirection={sign=>{pressed.current.up=sign<0;pressed.current.down=sign>0;}}
+          onRelease={resetHold} /> :
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("up",true,e)} onPointerUp={e=>hold("up",false,e)}
           onPointerCancel={e=>hold("up",false,e)} onLostPointerCapture={e=>hold("up",false,e)}
-          aria-label="Angle the drill upward"><span>▲</span></button>
+          aria-label="Angle the drill upward"><span>▲</span></button>}
         <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
           disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
@@ -386,10 +392,12 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
             <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
+        {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">▲▼</button> :
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}
           onPointerCancel={e=>hold("down",false,e)} onLostPointerCapture={e=>hold("down",false,e)}
-          aria-label="Angle the drill downward"><span>▼</span></button>
+          aria-label="Angle the drill downward"><span>▼</span></button>}
+        {steerMode==="buttons"&&<button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use joystick" title="Joystick">◉</button>}
       </div>
       {active&&<div className="ember-run-actions">
         <button className="ember-icon-action" type="button" onClick={togglePause} aria-label="Pause run" title="Pause run">❚❚</button>
