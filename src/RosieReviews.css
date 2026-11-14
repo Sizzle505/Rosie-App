@@ -22,3 +22,26 @@
   .reviews-film-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 22px 18px; }
   .reviews-detail { max-width: 760px; }
 }
+
+
+/* Theater drapery carries across the desktop review panels, not bare gutters. */
+@media(min-width:1200px){
+  .app-shell.page-reviews{
+    background-color:#420e24!important;
+    background-image:
+      linear-gradient(90deg,#20061288,transparent 25%,transparent 75%,#20061288),
+      url("/randomizers/rosie-salon-burgundy-texture.svg")!important;
+    background-position:center,center top!important;
+    background-size:100% 100%,min(48vw,700px) auto!important;
+    background-repeat:no-repeat,repeat!important;
+  }
+  .app-shell.page-reviews .rosie-reviews{
+    background:transparent!important;
+    width:min(100%,1480px);
+  }
+  .app-shell.page-reviews .reviews-hero.has-art{
+    aspect-ratio:2 / 1!important;
+    background-size:cover!important;
+    background-position:40% center!important;
+  }
+}
