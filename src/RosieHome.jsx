@@ -1,6 +1,9 @@
 import React from "react";
 import styles from "./RosieHome.module.css";
 import RosieVerseAtmosphere from "./RosieVerseAtmosphere";
+import qrAtelierArt from "./assets/resources/qr-atelier-transparent.webp";
+import calculationsArt from "./assets/resources/calculations-turquoise-transparent.webp";
+import reviewsArt from "./assets/resources/reviews-crimson-transparent.webp";
 
 const worlds = [
   { id: "fortune", name: "Fortune Teller", art: "buttons/fortune.webp" },
@@ -12,6 +15,14 @@ const worlds = [
 ];
 
 const art = (filename) => `/rosieverse/${filename}`;
+const desktopTools = [
+  {id:"reminders",name:"Reminders",image:"/rosieverse/resources/reminders.webp"},
+  {id:"qr-atelier",name:"QR Atelier",image:qrAtelierArt},
+  {id:"calculations",name:"Calculations",image:calculationsArt},
+  {id:"recipes",name:"Recipes",image:"/rosieverse/resources/recipes.png"},
+  {id:"timekeeper",name:"Timekeeper",image:"/rosieverse/resources/timekeeper.webp"},
+  {id:"reviews",name:"Reviews",image:reviewsArt}
+];
 
 /** RosieVerse art landing. Navigates through the existing app router; no new routing dependency. */
 export default function RosieHome({ onNavigate }) {
@@ -32,6 +43,22 @@ export default function RosieHome({ onNavigate }) {
         <div className={styles.waterGlow} aria-hidden="true" />
         <div className={styles.heroShade} aria-hidden="true" />
       </section>
+
+
+      <nav className={styles.desktopTools} aria-label="Quick access to Rosie tools">
+        <div className={styles.toolRail}>
+          {desktopTools.slice(0,3).map(item => <button type="button" key={item.id}
+            title={item.name} aria-label={"Open "+item.name} onClick={()=>onNavigate(item.id)}>
+            <img src={item.image} alt="" draggable="false"/>
+          </button>)}
+        </div>
+        <div className={styles.toolRail}>
+          {desktopTools.slice(3).map(item => <button type="button" key={item.id}
+            title={item.name} aria-label={"Open "+item.name} onClick={()=>onNavigate(item.id)}>
+            <img src={item.image} alt="" draggable="false"/>
+          </button>)}
+        </div>
+      </nav>
 
       <nav className={styles.worldGrid} aria-label="RosieVerse destinations">
         {worlds.map((world, index) => (
