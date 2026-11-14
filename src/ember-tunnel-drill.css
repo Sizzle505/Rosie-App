@@ -354,3 +354,11 @@
 .ember-stage.is-active .ember-turbo-banner{animation:ember-turbo-pulse .7s ease-in-out infinite alternate}
 @keyframes ember-plaque-breathe{50%{box-shadow:0 7px 20px rgba(244,169,70,.47),inset 0 0 0 1px rgba(255,230,164,.14)}}
 @keyframes ember-turbo-pulse{to{transform:translateX(-50%) scale(1.09);filter:brightness(1.22)}}
+
+/* Optional single-axis pitch stick; original arrows remain a one-tap choice. */
+.ember-controls{position:relative;align-items:center}
+.ember-controls:has(.axis-stick){grid-template-columns:minmax(80px,1fr) minmax(140px,2.5fr) minmax(55px,.75fr)}
+.ember-controls .axis-stick{margin:0 auto}
+.ember-stick-toggle{position:absolute;right:5px;top:5px;width:30px;height:25px!important;padding:1px!important;z-index:2;border-radius:7px!important;font:700 10px Arial,sans-serif!important;opacity:.88}
+.ember-controls:not(:has(.axis-stick)) .ember-stick-toggle{top:-30px;right:0}
+@media(max-width:620px){.ember-controls:has(.axis-stick){grid-template-columns:72px minmax(0,1fr) 40px}}
