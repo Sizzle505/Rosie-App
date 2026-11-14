@@ -72,6 +72,7 @@
  let boostCharges=0,boostUntil=0;const BOOST_MAX=2,BOOST_DURATION_MS=2200,BOOST_STEP_MS=110;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0,aimPreview=null;
+ let aimFacing='right',independentAim=false,oneStepStick=false;
  const pressedKeys=new Map(),STEP_MS=190;
  const key=(x,y)=>`${x},${y}`;const inside=(x,y)=>x>=0&&y>=0&&x<cols&&y<rows;
  const open=(x,y)=>inside(x,y)&&grid[y][x]===0;
@@ -159,7 +160,7 @@
   obj.el.style.transform=`translate3d(${x}px,${y}px,0)`;
   const art=obj.el.spriteArt;
   if(art){
-    const dir=obj===player?lastFacing:obj.lastDir||'right';
+    const dir=obj===player?aimFacing:obj.lastDir||'right';
     art.style.setProperty('--flip',dir==='left'?-1:1);
     art.style.setProperty('--bank',dir==='up'?'-6deg':dir==='down'?'5deg':'0deg');
   }
@@ -483,9 +484,9 @@
   ui();
  }
  function init(carry=false){const layout=desiredMazeLayout();cols=layout.cols;rows=layout.rows;
-  if(!carry){score=0;ammo=0;lives=3;boostCharges=0;}boostUntil=0;
+  if(!carry){score=0;ammo=0;boostCharges=0;}lives=3;boostUntil=0;
   preloadArt('scene-'+LEVELS[level-1].scene, ...(LEVELS[level]?['scene-'+LEVELS[level].scene]:[]));
-  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
+  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';aimFacing='right';independentAim=false;protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
   player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,speed:Math.round(a.speed*LEVELS[level-1].speed),spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
@@ -584,6 +585,7 @@
   const changedDirection=lastFacing!==dir;
   player.straightSteps=changedDirection?0:(player.straightSteps||0)+1;
   nextMoveAt=now+(now<boostUntil?BOOST_STEP_MS:STEP_MS);lastFacing=dir;
+  if(!independentAim)aimFacing=dir;
   player.x=nx;player.y=ny;player.lastMoveAt=now;
   player.el.style.setProperty('--step-ms',now<boostUntil?'105ms':'165ms');
   playerPose(dir,changedDirection,now);
@@ -596,7 +598,7 @@
  }
  function completeLevel(){
   if(level<LEVELS.length){
-    score+=650;enter('level-clear',`${LEVELS[level-1].name} cleared! Hull, charge, and score carry forward to ${LEVELS[level].name}. Prepare for a new environment.`,`ENTER ${LEVELS[level].name}`);
+    score+=650;enter('level-clear',`${LEVELS[level-1].name} cleared! Hull fully restored; charge and score carry forward to ${LEVELS[level].name}. Prepare for a new environment.`,`ENTER ${LEVELS[level].name}`);
   }else{
     score+=1500;enter('win','Ten cosmic sectors secured! Captain Rosie defeated the Fiends and completed the Odyssey.','PLAY AGAIN');
   }
@@ -659,7 +661,7 @@
  }
  function acquireDirectionalTarget(origin,facing){return forwardRay(origin,facing).enemy;}
  function updateAimPreview(){
-  const target=phase==='playing'&&ammo>0&&player?(overlappingFiend()||acquireDirectionalTarget(player,lastFacing)):null;
+  const target=phase==='playing'&&ammo>0&&player?(overlappingFiend()||acquireDirectionalTarget(player,aimFacing)):null;
   if(aimPreview!==target){
     if(aimPreview?.el)aimPreview.el.classList.remove('targetable');
     aimPreview=target;
@@ -667,7 +669,7 @@
   }
   const el=$('aim-indicator');
   if(el){
-    el.textContent=target?`LOCK: ${target.name.split(' ')[0].toUpperCase()}`:`AIM: ${lastFacing.toUpperCase()}`;
+    el.textContent=target?`LOCK: ${target.name.split(' ')[0].toUpperCase()}`:`AIM: ${aimFacing.toUpperCase()}`;
     el.classList.toggle('locked',!!target);
   }
  }
@@ -689,9 +691,9 @@
     updateAimPreview();
     return;
   }
-  const shot=forwardRay(origin,lastFacing);
+  const shot=forwardRay(origin,aimFacing);
   if(!shot.tiles.length){
-    const [dx,dy]=DIRS[lastFacing],wx=origin.x+dx,wy=origin.y+dy;
+    const [dx,dy]=DIRS[aimFacing],wx=origin.x+dx,wy=origin.y+dy;
     if(inside(wx,wy)&&grid[wy][wx]===1){
       const wall=cells[wy]?.[wx];if(wall){
         wall.classList.add('barrier-struck');
@@ -704,15 +706,15 @@
   }
   ammo-=cost;ui();playAttackPose(type);
   const {enemy:victim,impact}=shot;
-  const fireAngle=lastFacing==='left'?180:lastFacing==='up'?-90:lastFacing==='down'?90:0;
+  const fireAngle=aimFacing==='left'?180:aimFacing==='up'?-90:aimFacing==='down'?90:0;
   const travelTiles=dist(origin,impact);
-  const [dx,dy]=DIRS[lastFacing];
+  const [dx,dy]=DIRS[aimFacing];
   const muzzleOffset=Math.min(.75,travelTiles*.4);
   const muzzle={x:origin.x+dx*muzzleOffset,y:origin.y+dy*muzzleOffset};
   const nozzleX=(muzzle.x+.5)*tile,nozzleY=(muzzle.y+.5)*tile;
   const travelPx=Math.max(tile*.18,(travelTiles-muzzleOffset)*tile);
   if(victim)say(`${type==='laser'?'Laser':'Rocket'} locked: ${victim.name}`);
-  else say(`${type==='laser'?'Laser':'Rocket'} fired ${lastFacing}. No Fiend in the firing lane.`);
+  else say(`${type==='laser'?'Laser':'Rocket'} fired ${aimFacing}. No Fiend in the firing lane.`);
   if(victim){
     const shotSession=sessionId;
     victim.el.classList.add('auto-locked');
@@ -915,9 +917,13 @@
   const modeButton=$('control-mode-toggle');
   const joystick=$('joystick'),knob=$('joystick-knob');
   const dpad=document.querySelector('.dpad');
-  let stickPointer=null,stickDirection=null;
+  let stickPointer=null,stickDirection=null,stickTriggered=false;
+  const stepToggle=$('step-mode-toggle'),aimStick=$('aim-joystick'),aimKnob=$('aim-joystick-knob');
+  const setStepMode=next=>{oneStepStick=!!next;if(stepToggle){stepToggle.setAttribute('aria-pressed',String(oneStepStick));stepToggle.title=oneStepStick?'Continuous joystick steering':'One square per drag';}try{localStorage.setItem('cosmicStickOneStep',oneStepStick?'1':'0')}catch{}};
+  if(stepToggle){stepToggle.addEventListener('click',()=>setStepMode(!oneStepStick));try{setStepMode(localStorage.getItem('cosmicStickOneStep')==='1')}catch{setStepMode(false)}}
+  let aimPointer=null;
   function resetStick(){
-    stickPointer=null;
+    stickPointer=null;stickTriggered=false;
     if(heldDir===stickDirection)heldDir=null;
     stickDirection=null;
     if(knob)knob.style.transform='translate(-50%, -50%)';
@@ -949,7 +955,10 @@
     if(next!==stickDirection){
       if(heldDir===stickDirection)heldDir=null;
       stickDirection=next;
-      if(next){heldDir=next;requestMove(next);}
+      if(next){
+        if(oneStepStick){if(!stickTriggered){stickTriggered=true;requestMove(next);}}
+        else{heldDir=next;requestMove(next);}
+      }
     }
   }
   if(modeButton){
@@ -959,7 +968,7 @@
     joystick.addEventListener('pointerdown',ev=>{
       if(stickPointer!==null)return;
       ev.preventDefault();
-      stickPointer=ev.pointerId;
+      stickPointer=ev.pointerId;stickTriggered=false;
       joystick.setPointerCapture?.(ev.pointerId);
       updateStick(ev);
     });
@@ -971,6 +980,21 @@
     joystick.addEventListener('pointercancel',release);
     joystick.addEventListener('lostpointercapture',release);
     window.addEventListener('blur',resetStick);
+  }
+  // Right stick changes the firing orientation without entering the movement controller.
+  if(aimStick){
+    const moveAim=ev=>{
+      if(aimPointer!==ev.pointerId)return;
+      const r=aimStick.getBoundingClientRect(),dx=ev.clientX-(r.left+r.width/2),dy=ev.clientY-(r.top+r.height/2);
+      const distance=Math.hypot(dx,dy),radius=Math.min(r.width,r.height)*.29,scale=distance?Math.min(1,radius/distance):0;
+      if(aimKnob)aimKnob.style.transform=`translate(calc(-50% + ${dx*scale}px),calc(-50% + ${dy*scale}px))`;
+      if(distance>=9){aimFacing=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');independentAim=true;position(player);updateAimPreview();}
+    };
+    const releaseAim=ev=>{if(aimPointer!==ev.pointerId)return;aimPointer=null;if(aimKnob)aimKnob.style.transform='translate(-50%,-50%)'};
+    aimStick.addEventListener('pointerdown',ev=>{if(aimPointer!==null)return;ev.preventDefault();aimPointer=ev.pointerId;aimStick.setPointerCapture?.(ev.pointerId);moveAim(ev)});
+    aimStick.addEventListener('pointermove',ev=>{if(aimPointer===ev.pointerId){ev.preventDefault();moveAim(ev)}});
+    for(const name of ['pointerup','pointercancel','lostpointercapture'])aimStick.addEventListener(name,releaseAim);
+    window.addEventListener('blur',()=>{aimPointer=null;if(aimKnob)aimKnob.style.transform='translate(-50%,-50%)'});
   }
   let savedMode='dpad';
   try{savedMode=localStorage.getItem('cosmicSteeringMode')||'dpad';}catch(_){}
