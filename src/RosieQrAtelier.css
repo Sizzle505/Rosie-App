@@ -1131,3 +1131,48 @@
   .app-shell.page-qr-atelier .qa-formats { gap: 5px; }
   .app-shell.page-qr-atelier .qa-type { font-size: clamp(10px, 1vw, 13px) !important; }
 }
+
+
+/* Full-screen view uses the same framed, colored ring as the live preview. */
+.qa-fullscreen-ring.qa-ring{
+  width:min(90vw,76dvh,670px)!important;
+  height:auto!important;
+  aspect-ratio:1!important;
+  flex:none;
+  transform:none!important;
+  background-color:transparent;
+}
+.qa-fullscreen-ring .qa-code-shell{left:28.5%!important;top:29.5%!important;width:43%!important}
+.qa-fullscreen-ring .qa-ring-art{display:block;z-index:2}
+.qa-fullscreen{overflow:auto}
+/* The right-hand workbench can scroll while the desktop atelier's
+   illustrated left partition stays on screen. */
+@media(min-width:1200px){
+  .app-shell.page-qr-atelier .qa-scene{position:relative;align-content:start}
+  .app-shell.page-qr-atelier .qa-title{
+    position:fixed;
+    z-index:10;
+    top:clamp(92px,13vh,170px);
+    left:clamp(22px,8vw,120px);
+    right:auto;
+    width:clamp(290px,30vw,430px);
+    transform:none;
+  }
+  .app-shell.page-qr-atelier .qa-collection{
+    position:fixed;
+    z-index:10;
+    top:clamp(470px,63vh,660px);
+    left:clamp(55px,11vw,175px);
+    width:clamp(260px,24vw,365px);
+    max-height:calc(100dvh - clamp(470px,63vh,660px) - 25px);
+    overflow:auto;
+    margin:0;
+  }
+  .app-shell.page-qr-atelier .qa-panel,
+  .app-shell.page-qr-atelier .qa-preview-stage,
+  .app-shell.page-qr-atelier .qa-finish-strip,
+  .app-shell.page-qr-atelier .qa-save-drawer{position:relative;z-index:3}
+}
+@media(min-width:1200px) and (max-height:760px){
+  .app-shell.page-qr-atelier .qa-collection{top:56vh;max-height:39vh}
+}
