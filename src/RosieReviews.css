@@ -45,3 +45,37 @@
     background-position:40% center!important;
   }
 }
+
+
+/* 2:1 cinema art stays centered in the desktop left rail while the movie
+   catalogue and journal scroll independently in the right column. */
+@media(min-width:1200px){
+ .app-shell.page-reviews .rosie-reviews{
+   display:block!important;position:relative!important;
+   width:100%!important;max-width:none!important;
+   min-height:100dvh!important;padding:60px 2vw 105px!important;
+ }
+ .app-shell.page-reviews .reviews-hero.has-art{
+   position:fixed!important;z-index:2!important;
+   top:50%!important;left:clamp(18px,2.2vw,45px)!important;
+   width:min(43vw,720px)!important;height:auto!important;
+   aspect-ratio:2 / 1!important;
+   transform:translateY(-50%)!important;
+   margin:0!important;
+   background-size:cover!important;background-position:31% center!important;
+   box-shadow:0 0 0 1px #d2a250,0 0 0 6px #b8814840,0 18px 42px #18030b8a!important;
+ }
+ .app-shell.page-reviews .reviews-hero.has-art .reviews-hero-copy{
+   left:53%!important;right:3%!important;top:9%!important;bottom:8%!important;
+ }
+ .app-shell.page-reviews .reviews-hero h1{font-size:clamp(30px,3.1vw,62px)!important;margin:8px 0!important}
+ .app-shell.page-reviews .reviews-hero p{font-size:clamp(12px,1.3vw,22px)!important}
+ .app-shell.page-reviews .reviews-content{
+   position:relative!important;z-index:3!important;
+   width:calc(100% - 49vw)!important;max-width:none!important;
+   margin:0 0 0 auto!important;
+   padding:clamp(16px,1.7vw,30px)!important;
+ }
+ .app-shell.page-reviews .reviews-film-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))!important;gap:14px!important}
+ .app-shell.page-reviews .reviews-film-strip{grid-auto-columns:minmax(125px,25%)!important}
+}
