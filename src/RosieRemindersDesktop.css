@@ -552,3 +552,81 @@
     text-shadow:0 3px 6px rgba(0,0,0,.85),0 0 19px rgba(235,186,104,.2);
   }
 }
+
+
+/* Fixed desktop left gallery: enlarged approved illustration above a compact
+   functional ledger. These changes are intentionally desktop-only. */
+@media (min-width:1100px){
+  .app-shell.page-reminders > main.rr-page{
+    --rr-rail-edge:clamp(14px,1.45vw,30px);
+    --rr-rail-gap:clamp(16px,1.25vw,26px);
+    --rr-rail-width:calc((100vw - 2 * var(--rr-rail-edge) - var(--rr-rail-gap)) * .35);
+    --rr-hero-size:calc(var(--rr-rail-width) / 1.13);
+    --rr-ledger-size:174px;
+    --rr-rail-top:max(66px,calc((100dvh - var(--rr-hero-size) - var(--rr-ledger-size) - 12px) / 2));
+    grid-template-rows:auto;
+    align-items:start;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero{
+    position:fixed;
+    z-index:12;
+    top:var(--rr-rail-top);
+    left:var(--rr-rail-edge);
+    width:var(--rr-rail-width);
+    height:var(--rr-hero-size);
+    aspect-ratio:1.13;
+    margin:0;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero picture{
+    width:96%;
+    flex:0 0 96%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .app-shell.page-reminders main.rr-page > header.rr-hero img{
+    width:100%;height:100%;object-fit:contain;
+  }
+  .app-shell.page-reminders .rr-desktop-overview{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:fixed;
+    z-index:12;
+    top:calc(var(--rr-rail-top) + var(--rr-hero-size) + 12px);
+    left:var(--rr-rail-edge);
+    width:var(--rr-rail-width);
+    height:var(--rr-ledger-size);
+    margin:0;
+    padding:12px clamp(14px,1.5vw,21px) 11px;
+  }
+  .app-shell.page-reminders .rr-desktop-eyebrow{
+    margin:0 0 4px;
+    font-size:8px;
+    font-weight:500;
+    letter-spacing:.12em;
+    opacity:.72;
+  }
+  .app-shell.page-reminders .rr-desktop-overview h2{display:none;}
+  .app-shell.page-reminders .rr-desktop-date{margin:2px 0 9px;font-size:13px;}
+  .app-shell.page-reminders .rr-desktop-counts{gap:6px;margin-bottom:8px;}
+  .app-shell.page-reminders .rr-desktop-counts button{padding:6px 3px 5px;}
+  .app-shell.page-reminders .rr-desktop-counts span{font-size:11px;}
+  .app-shell.page-reminders .rr-desktop-counts strong{font-size:19px;margin-top:1px;}
+  .app-shell.page-reminders .rr-desktop-actions{gap:7px;}
+  .app-shell.page-reminders .rr-desktop-actions button{min-height:32px;padding:7px 5px;font-size:12px;}
+  .app-shell.page-reminders .rr-content{
+    grid-column:2;
+    grid-row:1;
+    min-height:100dvh!important;
+    align-self:start;
+  }
+}
+@media (min-width:1100px) and (max-height:700px){
+  .app-shell.page-reminders > main.rr-page{
+    --rr-hero-size:min(calc(var(--rr-rail-width) / 1.13),calc(100dvh - 270px));
+    --rr-ledger-size:161px;
+    --rr-rail-top:64px;
+  }
+}
