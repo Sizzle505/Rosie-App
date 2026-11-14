@@ -1580,3 +1580,24 @@
    background:transparent!important;box-shadow:none!important;
  }
 }
+
+/* November 2026 - two-stick combat dock. Movement and aiming are separate inputs. */
+.cosmic-bottom .command-bar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:clamp(4px,1vw,14px)!important}
+.cosmic-bottom .weapons{order:2;display:flex;justify-content:center;flex:1 1 auto;min-width:0}
+.cosmic-bottom .joystick:not(.aim-joystick),.cosmic-bottom .dpad{order:1;flex-shrink:0}
+.cosmic-bottom .aim-joystick{order:3;flex:0 0 clamp(76px,10vw,120px)!important;min-width:0!important;height:86px!important;display:grid!important;place-items:center}
+.cosmic-bottom .aim-joystick .joystick-track{width:clamp(58px,7vw,78px);height:clamp(58px,7vw,78px)}
+.cosmic-bottom .aim-stick-caption{position:absolute;bottom:-2px;left:0;right:0;text-align:center;color:#f5d9a5;font:700 8px/1 Arial,sans-serif;letter-spacing:1px;pointer-events:none}
+.step-mode-toggle{flex:0 0 auto;min-width:25px;min-height:24px;border:1px solid #bfa16d;border-radius:6px;padding:2px 4px;background:#16244a;color:#e3caa0;font:700 11px/1 Arial,sans-serif}
+.step-mode-toggle[aria-pressed="true"]{border-color:#8de6eb;background:#17465c;color:#d9feff;box-shadow:0 0 7px #7efaff5d}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-bottom .command-bar{gap:1px!important}
+ .cosmic-bottom .joystick:not(.aim-joystick){width:clamp(73px,21vw,100px)!important;min-width:0!important;min-height:67px!important}
+ .cosmic-bottom .aim-joystick{width:clamp(64px,18vw,85px)!important;min-width:0!important;flex-basis:clamp(64px,18vw,85px)!important;height:67px!important}
+ .cosmic-bottom .joystick-track,.cosmic-bottom .aim-joystick .joystick-track{width:clamp(55px,16vw,67px)!important;height:clamp(55px,16vw,67px)!important}
+ .cosmic-bottom .joystick-knob{width:29px!important;height:29px!important}
+ .cosmic-bottom .weapons{gap:2px!important;min-width:0!important}
+ .cosmic-bottom .weapons .weapon{min-width:0!important;max-width:clamp(35px,13vw,55px)!important}
+ .cosmic-bottom .aim-stick-caption{bottom:0;font-size:7px}
+ .cosmic-bottom .status-line .step-mode-toggle{min-width:23px;min-height:18px;padding:1px 3px;font-size:10px}
+}
