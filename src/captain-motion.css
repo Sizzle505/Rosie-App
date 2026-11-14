@@ -176,3 +176,10 @@
   25% {opacity:.75;}
   100% {opacity:0; transform:translateX(-50%) scale(1.55);}
 }
+
+/* One-axis Yacht Dash helm option, without reducing the central boost button. */
+.captain-command-deck{position:relative}
+.captain-command-deck.has-axis-joystick{grid-template-columns:minmax(88px,1fr) minmax(0,2.2fr) 40px!important;align-items:center}
+.captain-command-deck .axis-stick{margin:auto}
+.captain-steering-toggle{position:absolute;right:5px;top:2px;z-index:7;width:28px!important;height:25px!important;min-width:0!important;padding:1px!important;border-radius:8px!important;border:1px solid #dfb878!important;background:#102a45!important;color:#fbe3ae!important;font:700 11px/1 Arial,sans-serif!important}
+.captain-command-deck.has-axis-joystick .captain-steering-toggle{position:relative;top:auto;right:auto;margin:auto}
