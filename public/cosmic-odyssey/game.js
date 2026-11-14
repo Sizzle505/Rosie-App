@@ -220,7 +220,21 @@
  const boostButton=$('boost'),boostCount=$('boost-count'),boostActive=phase==='playing'&&performance.now()<boostUntil;
  if(boostButton){boostButton.disabled=phase!=='playing'||boostCharges===0||boostActive;boostButton.classList.toggle('active',boostActive);boostButton.setAttribute('aria-label',boostActive?'Boost active':`Activate boost - ${boostCharges} charges available`);}
  if(boostCount)boostCount.textContent=boostActive?'ACTIVE':`${boostCharges} / ${BOOST_MAX}`;
- const stageBadge=$('stage-badge');if(stageBadge)stageBadge.textContent=`${level} / ${LEVELS.length}`; $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';}
+ const stageBadge=$('stage-badge');if(stageBadge)stageBadge.textContent=`${level} / ${LEVELS.length}`; $('score').textContent=String(score).padStart(5,'0');$('ammo').innerHTML=`${ammo} <i>/ 8</i>`;$('lives').innerHTML=lives?Array.from({length:lives},()=>`<img class="life-icon" src="${asset('life')}" alt="♥">`).join(''):'—';$('gathered').textContent=`${Math.min(got,target)} / ${target}`;$('fiends-left').textContent=3-deadCount;$('laser').disabled=ammo<1||phase!=='playing';$('rocket').disabled=ammo<2||phase!=='playing';updateFiendRadar();}
+ function updateFiendRadar(){
+  const count=$('fiend-scan-count');if(count)count.textContent=(3-deadCount)+' ACTIVE';
+  for(const id of ['jett','chip','kitty']){
+   const e=entities.find(x=>x.id===id);
+   const root=$('fiend-track-'+id),label=$('fiend-hp-'+id),bar=$('fiend-bar-'+id);
+   if(!root||!label||!bar||!e)continue;
+   const down=!!e.killed||e.health<=0;
+   root.classList.toggle('eliminated',down);
+   root.classList.toggle('damaged',!down&&e.health<e.hp);
+   const hp=Math.max(0,e.health);
+   label.textContent=down?'DEFEATED':hp+' / '+e.hp+' HP';
+   bar.style.width=Math.round(hp/e.hp*100)+'%';
+  }
+ }
  function addSprite(name,x,y,css){
   if(name==='kitty')name='kitty-hq';
   const el=document.createElement('div');el.className=`sprite ${css}`;el.setAttribute('aria-hidden','true');
