@@ -57,7 +57,7 @@ function SealedEnvelope({ phase = "sealed" }) {
     open: "05-opened-envelope.webp"
   };
   return <div className={`ss-envelope-art ss-envelope-art--${phase}`} aria-hidden="true">
-    <img src="/randomizers/secret-santa/" + states[phase] className="ss-envelope-art__image" alt="" loading="lazy" />
+    <img src={"/randomizers/secret-santa/" + states[phase]} className="ss-envelope-art__image" alt="" loading="lazy" />
   </div>;
 }
 function ExchangeMeta({ exchange }) {
@@ -225,7 +225,7 @@ export default function RosieSecretSanta() {
       {screen === "intro" && <div className="ss-start">
         <div className="ss-start__note">
           <SealedEnvelope />
-          <img src="${art}07-gift-collection.webp" alt="" className="ss-start__gifts" loading="lazy" />
+          <img src="/randomizers/secret-santa/07-gift-collection.webp" alt="" className="ss-start__gifts" loading="lazy" />
           <p>Every guest receives one private assignment, revealed through their own invitation.</p>
         </div>
         <div className="ss-start__actions">
@@ -243,7 +243,7 @@ export default function RosieSecretSanta() {
       </div>}
 
       {screen === "create" && <div className="ss-paper ss-create">
-        <div className="ss-section-heading ss-create__title"><div><span>01 / BEGIN THE EXCHANGE</span><h3>The guest ledger</h3></div><img src="${art}08-invitation-scroll.webp" alt="" loading="lazy" /></div>
+        <div className="ss-section-heading ss-create__title"><div><span>01 / BEGIN THE EXCHANGE</span><h3>The guest ledger</h3></div><img src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" loading="lazy" /></div>
         <form onSubmit={createExchange}>
           <label>Exchange name<input required maxLength={100} value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} /></label>
           <div className="ss-two">
@@ -264,7 +264,7 @@ export default function RosieSecretSanta() {
         <div className="ss-section-heading">
           <span>ORGANIZER'S PRIVATE LEDGER</span>
           <h3>{exchange.title}</h3>
-          <img className="ss-host-crest" src="${art}09-secret-santa-emblem.webp" alt="" aria-hidden="true" loading="lazy" />
+          <img className="ss-host-crest" src="/randomizers/secret-santa/09-secret-santa-emblem.webp" alt="" aria-hidden="true" loading="lazy" />
           <ExchangeMeta exchange={exchange} />
         </div>
         <div className="ss-host-tools">
@@ -312,7 +312,7 @@ export default function RosieSecretSanta() {
           {rulesDirty && <button type="button" className="ss-button ss-button--quiet ss-save-rules" disabled={busy}
             onClick={() => changeHost("rules", { exclusions: rules })}>SAVE RESTRICTIONS</button>}
           <div className="ss-draw">
-            <img src="${art}09-secret-santa-emblem.webp" alt="" aria-hidden="true"/>
+            <img src="/randomizers/secret-santa/09-secret-santa-emblem.webp" alt="" aria-hidden="true"/>
             <div>
               <h4>Ready for Rosie's verdict?</h4>
               <p>The draw is permanent. Afterward, names and restrictions are locked and individual invitations reveal recipients.</p>
@@ -324,7 +324,7 @@ export default function RosieSecretSanta() {
           </div>
         </>}
         {exchange.status === "drawn" && <div className="ss-finished">
-          <img src="${art}07-gift-collection.webp" alt="" aria-hidden="true" loading="lazy"/>
+          <img src="/randomizers/secret-santa/07-gift-collection.webp" alt="" aria-hidden="true" loading="lazy"/>
           <strong>✦ THE HOUSE HAS SPOKEN ✦</strong>
           <p>Every person has one recipient. Individual assignments are only disclosed through private invitation links.</p>
         </div>}
@@ -342,11 +342,11 @@ export default function RosieSecretSanta() {
           <button type="button" className="ss-text-link" onClick={() => openGuest(auth.id, auth.guestId, auth.token)} disabled={busy}>REFRESH EXCHANGE</button>
         </div>
         <div className="ss-reveal">
-          <img className="ss-reveal__frame" src="${art}10-ornamental-frame.webp" alt="" aria-hidden="true" loading="lazy" />
+          <img className="ss-reveal__frame" src="/randomizers/secret-santa/10-ornamental-frame.webp" alt="" aria-hidden="true" loading="lazy" />
           <span className="ss-eyebrow">SEALED BY ROSIE</span>
           <SealedEnvelope phase={sealPhase} />
           {recipient ? <div className="ss-recipient" aria-live="polite">
-            <img src="${art}06-recipient-card.webp" alt="" aria-hidden="true" loading="lazy" />
+            <img src="/randomizers/secret-santa/06-recipient-card.webp" alt="" aria-hidden="true" loading="lazy" />
             <small>YOU ARE SHOPPING FOR</small>
             <strong>{recipient.name}</strong>
             <p>A secret worth keeping. Happy gifting!</p>
