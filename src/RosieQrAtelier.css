@@ -1193,148 +1193,47 @@
  .app-shell.page-qr-atelier .qa-collection{z-index:3}
 }
 
-
-/* Layout Playground export applied November 16, 2026.
-   Reference widths: desktop 1440px, tablet 820px, phone 390px.
-   Use individual translate/scale longhands to reproduce the playground's
-   rendered offsets without replacing the existing art/positioning transforms
-   or breaking the surrounding layout's flow. Only QR Atelier is affected. */
+/* QR Atelier - approved Layout Playground positions, 2026-11-16.
+   Reproduce the exact layout used in the 1440px desktop playground before
+   applying the saved per-element movements. Retain current QR functionality. */
 @media screen and (min-width: 1200px) {
-  /* Re-establish the desktop baseline used by the actual playground preview.
-     Main changed the title to fixed positioning after that preview was made. */
+  .app-shell.page-qr-atelier .qa-scene { align-content: normal; }
+  .app-shell.page-qr-atelier .qa-scene::before { content: none !important; display: none !important; }
   .app-shell.page-qr-atelier .qa-title {
-    position: absolute;
+    position: absolute; z-index: auto;
     top: clamp(520px, 37vw, 700px);
     left: calc(41vw - min(32vw, 440px) - 18px);
-    right: auto;
-    width: min(32vw, 440px);
-    transform: translateY(34px);
-    translate: 32px 22px;
-    scale: .9;
-  }
-  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring {
-    translate: -71px -27px;
-  }
-  .app-shell.page-qr-atelier .qa-preview-actions {
-    translate: -71px -37px;
-  }
-  .app-shell.page-qr-atelier .qa-panel {
-    translate: -71px -42px;
-    scale: .92;
-  }
-  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
-    translate: -71px -413px;
-    scale: .74;
-  }
-  /* The collection was also made fixed after the playground was branched.
-     Preserve its original grid placement before applying the saved move. */
-  .app-shell.page-qr-atelier .qa-collection {
-    position: relative;
-    grid-column: 1;
-    grid-row: 4;
-    top: auto;
-    left: auto;
-    width: 40%;
-    max-height: none;
-    overflow: visible;
-    margin: 32px auto 18px;
-    translate: 42px -137px;
-  }
-}
-
-@media screen and (min-width: 701px) and (max-width: 1199px) {
-  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
-    translate: 0 -18px;
-  }
-  .app-shell.page-qr-atelier .qa-panel {
-    translate: 0 -30px;
-  }
-  .app-shell.page-qr-atelier .qa-collection {
-    translate: 0 -38px;
-  }
-  .app-shell.page-qr-atelier .qa-preview-actions {
-    translate: -1px -50px;
-    scale: 1.4;
-  }
-}
-
-@media screen and (max-width: 700px) {
-  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring {
-    translate: 0 -9px;
-  }
-  .app-shell.page-qr-atelier .qa-preview-actions {
-    translate: -1px -6px;
-  }
-  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
-    translate: 0 -9px;
-  }
-  .app-shell.page-qr-atelier .qa-panel {
-    translate: -1px -21px;
-  }
-  .app-shell.page-qr-atelier .qa-collection {
-    translate: -3px -34px;
-  }
-}
-
-/* Keep the QR printable-card flow unchanged. */
-@media print {
-  .app-shell.page-qr-atelier .qa-title,
-  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring,
-  .app-shell.page-qr-atelier .qa-preview-actions,
-  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes,
-  .app-shell.page-qr-atelier .qa-panel,
-  .app-shell.page-qr-atelier .qa-collection {
-    translate: none;
-    scale: 1;
-  }
-}
-
-
-/* Reconcile the 1440px-layout-playground baseline with later desktop changes.
-   The playground preview was branched before the fixed-position desktop title,
-   collection and duplicated left-wall wallpaper were introduced. Those changes
-   altered the actual starting positions of every saved item. Reconstruct the
-   playground's exact desktop grid/stacking context FIRST; the exported
-   per-element translate/scale values above then apply unchanged. */
-@media screen and (min-width: 1200px) {
-  .app-shell.page-qr-atelier .qa-scene {
-    align-content: normal;
-  }
-  /* At the playground commit, desktop scene::before had content:none.
-     The more recent fixed wallpaper layer must not be rendered on top. */
-  .app-shell.page-qr-atelier .qa-scene::before {
-    content: none !important;
-    display: none !important;
-  }
-  .app-shell.page-qr-atelier .qa-title {
-    position: absolute;
-    z-index: auto;
-    top: clamp(520px, 37vw, 700px);
-    left: calc(41vw - min(32vw, 440px) - 18px);
-    right: auto;
-    width: min(32vw, 440px);
+    right: auto; width: min(32vw, 440px);
     transform: translateY(34px);
   }
   .app-shell.page-qr-atelier .qa-collection {
-    position: relative;
-    z-index: 1;
-    grid-column: 1;
-    grid-row: 4;
-    top: auto;
-    left: auto;
-    width: 40%;
-    max-height: none;
-    overflow: visible;
+    position: relative; z-index: 1;
+    grid-column: 1; grid-row: 4;
+    top: auto; left: auto;
+    width: 40%; max-height: none; overflow: visible;
     margin: 32px auto 18px;
   }
   .app-shell.page-qr-atelier .qa-preview-stage,
-  .app-shell.page-qr-atelier .qa-panel {
-    z-index: 2;
-  }
-  .app-shell.page-qr-atelier .qa-finish-strip {
-    z-index: 3;
-  }
-  .app-shell.page-qr-atelier .qa-save-drawer {
-    z-index: 7;
-  }
+  .app-shell.page-qr-atelier .qa-panel { z-index: 2; }
+  .app-shell.page-qr-atelier .qa-finish-strip { z-index: 3; }
+  .app-shell.page-qr-atelier .qa-save-drawer { z-index: 7; }
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring { translate: -71px -27px; }
+  .app-shell.page-qr-atelier .qa-preview-actions { translate: -71px -37px; }
+  .app-shell.page-qr-atelier .qa-title { translate: 32px 22px; scale: 0.9; }
+  .app-shell.page-qr-atelier .qa-panel { translate: -71px -42px; scale: 0.92; }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: -71px -413px; scale: 0.74; }
+  .app-shell.page-qr-atelier .qa-collection { translate: 42px -137px; }
+}
+@media screen and (min-width: 701px) and (max-width: 1199px) {
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: 0px -18px; }
+  .app-shell.page-qr-atelier .qa-panel { translate: 0px -30px; }
+  .app-shell.page-qr-atelier .qa-collection { translate: 0px -38px; }
+  .app-shell.page-qr-atelier .qa-preview-actions { translate: -1px -50px; scale: 1.4; }
+}
+@media screen and (max-width: 700px) {
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring { translate: 0px -9px; }
+  .app-shell.page-qr-atelier .qa-preview-actions { translate: -1px -6px; }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: 0px -9px; }
+  .app-shell.page-qr-atelier .qa-panel { translate: -1px -21px; }
+  .app-shell.page-qr-atelier .qa-collection { translate: -3px -34px; }
 }
