@@ -1192,3 +1192,74 @@
  .app-shell.page-qr-atelier .qa-title,
  .app-shell.page-qr-atelier .qa-collection{z-index:3}
 }
+
+/* QR Atelier - approved Layout Playground positions, 2026-11-16.
+   Reproduce the exact layout used in the 1440px desktop playground before
+   applying the saved per-element movements. Retain current QR functionality. */
+@media screen and (min-width: 1200px) {
+  .app-shell.page-qr-atelier .qa-scene { align-content: normal; }
+  .app-shell.page-qr-atelier .qa-scene::before { content: none !important; display: none !important; }
+  .app-shell.page-qr-atelier .qa-title {
+    position: absolute; z-index: auto;
+    top: clamp(520px, 37vw, 700px);
+    left: calc(41vw - min(32vw, 440px) - 18px);
+    right: auto; width: min(32vw, 440px);
+    transform: translateY(34px);
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    position: relative; z-index: 1;
+    grid-column: 1; grid-row: 4;
+    top: auto; left: auto;
+    width: 40%; max-height: none; overflow: visible;
+    margin: 32px auto 18px;
+  }
+  .app-shell.page-qr-atelier .qa-preview-stage,
+  .app-shell.page-qr-atelier .qa-panel { z-index: 2; }
+  .app-shell.page-qr-atelier .qa-finish-strip { z-index: 3; }
+  .app-shell.page-qr-atelier .qa-save-drawer { z-index: 7; }
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring { translate: -71px -27px; }
+  .app-shell.page-qr-atelier .qa-preview-actions { translate: -71px -37px; }
+  .app-shell.page-qr-atelier .qa-title { translate: 32px 22px; scale: 0.9; }
+  .app-shell.page-qr-atelier .qa-panel { translate: -71px -42px; scale: 0.92; }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: -71px -413px; scale: 0.74; }
+  .app-shell.page-qr-atelier .qa-collection { translate: 42px -137px; }
+}
+/* Tablet CSS introduced after the original playground narrowed the QR frame
+   and shortened the workshop. Undo only those QR-specific tablet changes so
+   the 820px playground's saved offsets have their original geometry. */
+@media screen and (min-width: 721px) and (max-width: 1199px) {
+  .app-shell.page-qr-atelier .qa-scene {
+    width: 100%; max-width: 760px; overflow: hidden;
+  }
+  .app-shell.page-qr-atelier .qa-hero {
+    height: calc(clamp(356px, 102vw, 620px) - 22px);
+  }
+  .app-shell.page-qr-atelier .qa-title {
+    width: min(60.35%, 442px);
+  }
+  .app-shell.page-qr-atelier .qa-preview-stage {
+    width: 100%;
+  }
+  .app-shell.page-qr-atelier .qa-ring {
+    width: min(104.1295%, 718.77px);
+  }
+  .app-shell.page-qr-atelier .qa-panel {
+    width: min(93%, 630px);
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    width: auto;
+  }
+}
+@media screen and (min-width: 701px) and (max-width: 1199px) {
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: 0px -18px; }
+  .app-shell.page-qr-atelier .qa-panel { translate: 0px -30px; }
+  .app-shell.page-qr-atelier .qa-collection { translate: 0px -38px; }
+  .app-shell.page-qr-atelier .qa-preview-actions { translate: -1px -50px; scale: 1.4; }
+}
+@media screen and (max-width: 700px) {
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring { translate: 0px -9px; }
+  .app-shell.page-qr-atelier .qa-preview-actions { translate: -1px -6px; }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: 0px -9px; }
+  .app-shell.page-qr-atelier .qa-panel { translate: -1px -21px; }
+  .app-shell.page-qr-atelier .qa-collection { translate: -3px -34px; }
+}

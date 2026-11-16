@@ -1,0 +1,53 @@
+name: QR Atelier approved layout - actual browser geometry
+on:
+  push:
+    branches:
+      - feature/qr-atelier-exported-layout-20261116
+    paths:
+      - src/RosieQrAtelier.css
+      - scripts/verify_qr_exported_layout.mjs
+      - .github/workflows/qr-layout-parity.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/RosieQrAtelier.css
+      - scripts/verify_qr_exported_layout.mjs
+      - .github/workflows/qr-layout-parity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  layout-parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Restore exact original Playground preview code
+        run: |
+          git worktree add /tmp/rosie-layout-reference origin/feature/visual-layout-playground
+          npm ci
+          npm ci --prefix /tmp/rosie-layout-reference
+      - name: Install Chromium
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Compare live reference and adjusted pages on all 3 viewports
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/rosie-current.log 2>&1 &
+          ( cd /tmp/rosie-layout-reference && npm run dev -- --host 127.0.0.1 --port 5174 > /tmp/rosie-original.log 2>&1 ) &
+          sleep 8
+          node scripts/verify_qr_exported_layout.mjs
+      - name: Preserve screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qr-atelier-exported-layout-comparison
+          path: artifacts/qr-layout/
+          if-no-files-found: ignore
