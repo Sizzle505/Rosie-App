@@ -1224,6 +1224,32 @@
   .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: -71px -413px; scale: 0.74; }
   .app-shell.page-qr-atelier .qa-collection { translate: 42px -137px; }
 }
+/* Tablet CSS introduced after the original playground narrowed the QR frame
+   and shortened the workshop. Undo only those QR-specific tablet changes so
+   the 820px playground's saved offsets have their original geometry. */
+@media screen and (min-width: 721px) and (max-width: 1199px) {
+  .app-shell.page-qr-atelier .qa-scene {
+    width: 100%; max-width: 760px; overflow: hidden;
+  }
+  .app-shell.page-qr-atelier .qa-hero {
+    height: calc(clamp(356px, 102vw, 620px) - 22px);
+  }
+  .app-shell.page-qr-atelier .qa-title {
+    width: min(60.35%, 442px);
+  }
+  .app-shell.page-qr-atelier .qa-preview-stage {
+    width: 100%;
+  }
+  .app-shell.page-qr-atelier .qa-ring {
+    width: min(104.1295%, 718.77px);
+  }
+  .app-shell.page-qr-atelier .qa-panel {
+    width: min(93%, 630px);
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    width: auto;
+  }
+}
 @media screen and (min-width: 701px) and (max-width: 1199px) {
   .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: 0px -18px; }
   .app-shell.page-qr-atelier .qa-panel { translate: 0px -30px; }
