@@ -1288,3 +1288,53 @@
     scale: 1;
   }
 }
+
+
+/* Reconcile the 1440px-layout-playground baseline with later desktop changes.
+   The playground preview was branched before the fixed-position desktop title,
+   collection and duplicated left-wall wallpaper were introduced. Those changes
+   altered the actual starting positions of every saved item. Reconstruct the
+   playground's exact desktop grid/stacking context FIRST; the exported
+   per-element translate/scale values above then apply unchanged. */
+@media screen and (min-width: 1200px) {
+  .app-shell.page-qr-atelier .qa-scene {
+    align-content: normal;
+  }
+  /* At the playground commit, desktop scene::before had content:none.
+     The more recent fixed wallpaper layer must not be rendered on top. */
+  .app-shell.page-qr-atelier .qa-scene::before {
+    content: none !important;
+    display: none !important;
+  }
+  .app-shell.page-qr-atelier .qa-title {
+    position: absolute;
+    z-index: auto;
+    top: clamp(520px, 37vw, 700px);
+    left: calc(41vw - min(32vw, 440px) - 18px);
+    right: auto;
+    width: min(32vw, 440px);
+    transform: translateY(34px);
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    position: relative;
+    z-index: 1;
+    grid-column: 1;
+    grid-row: 4;
+    top: auto;
+    left: auto;
+    width: 40%;
+    max-height: none;
+    overflow: visible;
+    margin: 32px auto 18px;
+  }
+  .app-shell.page-qr-atelier .qa-preview-stage,
+  .app-shell.page-qr-atelier .qa-panel {
+    z-index: 2;
+  }
+  .app-shell.page-qr-atelier .qa-finish-strip {
+    z-index: 3;
+  }
+  .app-shell.page-qr-atelier .qa-save-drawer {
+    z-index: 7;
+  }
+}
