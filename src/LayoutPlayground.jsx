@@ -566,8 +566,8 @@ export function LayoutPreviewBridge() {
       let baseline = originalStyles.get(node);
       if (baseline) return baseline;
       const style = getComputedStyle(node);
-      const movement = style.translate === "none" ? [] : style.translate.split(/\\s+/);
-      const size = style.scale === "none" ? [1] : style.scale.split(/\\s+/).map(Number);
+      const movement = style.translate === "none" ? [] : style.translate.split(/\s+/);
+      const size = style.scale === "none" ? [1] : style.scale.split(/\s+/).map(Number);
       baseline = {
         inlineTranslate: node.style.translate,
         inlineScale: node.style.scale,
