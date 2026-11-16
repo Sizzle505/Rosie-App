@@ -45,7 +45,7 @@ try {
       const result = { exchange, invitations, hostToken: "b".repeat(64) };
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(result) });
     });
-    await page.locator(".ss-inline-create textarea").fill("Alice\\nBlair\\nCasey");
+    await page.locator(".ss-inline-create textarea").fill(["Alice", "Blair", "Casey"].join(String.fromCharCode(10)));
     await page.getByRole("button", { name: "CREATE EXCHANGE" }).click();
     await page.locator(".ss-invite__email input").first().waitFor({ state: "visible" });
     assert.equal(await page.locator(".ss-invite__email input").count(), 3,
