@@ -37,7 +37,7 @@ function validateNames(names) {
 }
 function view(row) {
   return {
-    id: row.id, title: row.title, budget: row.budget, date: row.exchange_date,
+    id: row.id, title: row.title,
     status: row.status, drawnAt: row.drawn_at,
     participants: row.participants.map(({ id, name }) => ({ id, name })),
     exclusions: row.exclusions
@@ -104,8 +104,6 @@ export default async function handler(req, res) {
       case "create": {
         if (typeof input.title !== "string" || !input.title.trim() || input.title.trim().length > 100)
           bad("Give the exchange a name (up to 100 characters).");
-        if (input.budget !== undefined && (typeof input.budget !== "string" || input.budget.length > 80))
-          bad("Enter a shorter gift budget.");
         const names = validateNames(input.names);
         const hostToken = randomBytes(32).toString("hex");
         const saved = await db(TABLE + "?select=" + FIELDS, {
@@ -113,8 +111,6 @@ export default async function handler(req, res) {
           body: {
             organizer_hash: sha256(hostToken),
             title: input.title.trim(),
-            budget: (input.budget || "").trim(),
-            exchange_date: validDate(input.date),
             participants: names.map(name => ({ id: randomUUID(), name }))
           }
         });
@@ -172,7 +168,7 @@ export default async function handler(req, res) {
       case "reveal": {
         const { row, person } = await guest(input);
         const data = {
-          exchange: { title: row.title, budget: row.budget, date: row.exchange_date, status: row.status },
+          exchange: { title: row.title, status: row.status },
           guest: { id: person.id, name: person.name }
         };
         if (input.action === "reveal" && row.status === "drawn") {

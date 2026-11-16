@@ -45,10 +45,7 @@ async function copyValue(text) {
   input.remove();
   if (!success) throw new Error("Unable to copy. Select the address manually.");
 }
-const initialForm = {
-  title: "Rosie's Secret Santa", budget: "$50", date: "",
-  names: "Alex\nJordan\nTaylor\nMorgan\nCasey"
-};
+const initialForm = { title: "Rosie's Secret Santa", names: "" };
 
 function SealedEnvelope({ phase = "sealed" }) {
   const states = {
@@ -62,14 +59,12 @@ function SealedEnvelope({ phase = "sealed" }) {
 }
 function ExchangeMeta({ exchange }) {
   return <div className="ss-metadata">
-    {exchange?.budget && <span><b>GIFT BUDGET</b>{exchange.budget}</span>}
-    {exchange?.date && <span><b>EXCHANGE DATE</b>{new Date(exchange.date + "T12:00:00").toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</span>}
-    <span><b>STATUS</b>{exchange?.status === "drawn" ? "Names drawn" : "Collecting guests"}</span>
+    <span><b>STATUS</b>{exchange?.status === "drawn" ? "Names drawn" : "Awaiting draw"}</span>
   </div>;
 }
 
 export default function RosieSecretSanta() {
-  const [screen, setScreen] = useState("intro");
+  const [screen, setScreen] = useState("create");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -142,7 +137,7 @@ export default function RosieSecretSanta() {
     event.preventDefault();
     await act("create", async () => {
       const names = form.names.split(/[\n,]+/).map(value => value.trim()).filter(Boolean);
-      const result = await request("create", { title: form.title, budget: form.budget, date: form.date, names });
+      const result = await request("create", { title: form.title, names });
       const token = result.hostToken;
       setAuth({ role: "host", id: result.exchange.id, token });
       setExchange(result.exchange);
@@ -206,58 +201,57 @@ export default function RosieSecretSanta() {
 
   return (
     <section className="ss-shell" aria-label="Rosie's Secret Santa">
-      <div className="ss-hero">
-        <div className="ss-hero__copy">
-          <span className="ss-eyebrow">ROSIE'S PRIVATE HOLIDAY SALON · 04</span>
-          <h2 className="ss-screen-reader-only">Secret Santa</h2>
-          <img src="/randomizers/secret-santa/02-secret-santa-header.webp" className="ss-hero__plaque"
-            width="2172" height="724" alt="" draggable="false" />
-          <p>A little generosity. A lot of secrecy. Let Rosie draw the names.</p>
+      <div className="ss-hero ss-hero--preferred">
+        <h2 className="ss-screen-reader-only">Rosie's Secret Santa</h2>
+        <img className="ss-hero__banner" src="/randomizers/secret-santa/11-preferred-banner.webp"
+          alt="Rosie in her black-and-gold casino tuxedo and Santa hat with the Rosie’s Secret Santa plaque" />
+        <div className="ss-hero__mobile" aria-hidden="true">
+          <img src="/randomizers/secret-santa/12-preferred-rosie.webp" alt="" />
+          <img src="/randomizers/secret-santa/13-preferred-marquee.webp" alt="" />
         </div>
-        <img src="/randomizers/secret-santa/01-rosie-secret-santa-host.webp"
-          alt="Rosie in her casino tuxedo and Santa hat, guarding the Secret Santa lottery drum"
-          width="1536" height="1024" className="ss-hero__rosie" loading="lazy" draggable="false" />
       </div>
 
       {error && <div role="alert" className="ss-alert ss-alert--error">{error}</div>}
       {notice && <div role="status" className="ss-alert ss-alert--success">{notice}</div>}
 
-      {screen === "intro" && <div className="ss-start">
-        <div className="ss-start__note">
-          <SealedEnvelope />
-          <img src="/randomizers/secret-santa/07-gift-collection.webp" alt="" className="ss-start__gifts" loading="lazy" />
-          <p>Every guest receives one private assignment, revealed through their own invitation.</p>
+      {screen === "create" && <div className="ss-paper ss-inline-create">
+        <div className="ss-inline-create__intro">
+          <span className="ss-eyebrow">ROSIE'S PRIVATE GIFT EXCHANGE</span>
+          <h3>Draw the names.<br/><em>Keep the secret.</em></h3>
+          <p>Enter your guests, create the exchange, then send each person their own private reveal link.</p>
+          <img src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" loading="lazy" />
         </div>
-        <div className="ss-start__actions">
-          <h3>The guest list is yours. The secrets are Rosie's.</h3>
-          <p>Invite friends or family, set a gift budget, exclude pairs, and share private reveal links. No RosieVerse account required.</p>
-          <button className="ss-button" type="button" onClick={() => setScreen("create")}>CREATE AN EXCHANGE</button>
-          {saved.length > 0 && <div className="ss-recent">
-            <strong>YOUR SAVED EXCHANGES</strong>
-            {saved.map((entry, i) => <button key={i} type="button" disabled={busy}
-              onClick={() => entry.role === "host" ? openHost(entry.id, entry.token) : openGuest(entry.id, entry.guestId, entry.token)}>
-              <span>{entry.label || "Secret Santa exchange"}</span><small>{entry.role === "host" ? "Organizer" : "My invitation"}</small>
-            </button>)}
-          </div>}
+        <div className="ss-inline-create__form">
+          <form onSubmit={createExchange}>
+            <label>EXCHANGE NAME
+              <input required maxLength={100} value={form.title}
+                onChange={event => setForm(f => ({ ...f, title: event.target.value }))} />
+            </label>
+            <label>GUESTS <small>3–40 names · one per line</small>
+              <textarea required rows={6} value={form.names} maxLength={3000}
+                placeholder={"Alex\\nJordan\\nTaylor\\nMorgan"}
+                onChange={event => setForm(f => ({ ...f, names: event.target.value }))} />
+            </label>
+            <div className="ss-inline-create__footer">
+              <p>No registration required. Each recipient is revealed individually.</p>
+              <button className="ss-button" type="submit" disabled={busy}>
+                {busy ? "CREATING…" : "CREATE EXCHANGE"}
+              </button>
+            </div>
+          </form>
+          {saved.length > 0 && <details className="ss-recent ss-recent--compact">
+            <summary>Your saved exchanges ({saved.length})</summary>
+            <div className="ss-recent__items">
+              {saved.map((entry, i) => <button key={i} type="button" disabled={busy}
+                onClick={() => entry.role === "host"
+                  ? openHost(entry.id, entry.token)
+                  : openGuest(entry.id, entry.guestId, entry.token)}>
+                <span>{entry.label || "Secret Santa"}</span>
+                <small>{entry.role === "host" ? "Organizer" : "Invitation"}</small>
+              </button>)}
+            </div>
+          </details>}
         </div>
-      </div>}
-
-      {screen === "create" && <div className="ss-paper ss-create">
-        <div className="ss-section-heading ss-create__title"><div><span>01 / BEGIN THE EXCHANGE</span><h3>The guest ledger</h3></div><img src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" loading="lazy" /></div>
-        <form onSubmit={createExchange}>
-          <label>Exchange name<input required maxLength={100} value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} /></label>
-          <div className="ss-two">
-            <label>Suggested gift budget<input maxLength={80} value={form.budget} placeholder="$50" onChange={e => setForm(f => ({ ...f, budget: e.target.value }))} /></label>
-            <label>Exchange date (optional)<input type="date" value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} /></label>
-          </div>
-          <label>Guest names <small>3 to 40 guests, one per line</small>
-            <textarea rows={7} required value={form.names} onChange={e => setForm(f => ({ ...f, names: e.target.value }))} />
-          </label>
-          <div className="ss-form-footer">
-            <button type="button" className="ss-button ss-button--quiet" onClick={() => setScreen("intro")}>BACK</button>
-            <button className="ss-button" disabled={busy}>{busy ? "CREATING..." : "CREATE PRIVATE EXCHANGE"}</button>
-          </div>
-        </form>
       </div>}
 
       {screen === "host" && exchange && <div className="ss-paper">
@@ -328,7 +322,7 @@ export default function RosieSecretSanta() {
           <strong>✦ THE HOUSE HAS SPOKEN ✦</strong>
           <p>Every person has one recipient. Individual assignments are only disclosed through private invitation links.</p>
         </div>}
-        <button type="button" className="ss-text-link" onClick={() => { setScreen("intro"); setAuth(null); }}>BACK TO SECRET SANTA</button>
+        <button type="button" className="ss-text-link" onClick={() => { setScreen("create"); setAuth(null); }}>BACK TO SECRET SANTA</button>
       </div>}
 
       {screen === "guest" && guestData && <div className="ss-guest">
