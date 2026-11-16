@@ -1313,19 +1313,23 @@
   .desktopHeroCopy p { margin: 0 0 auto; font: italic clamp(17px, 1.6vw, 27px)/1.2 Georgia, serif; }
   .ivoryRow { margin-top: 0; }
 }
-
-
-/* Full-sized burgundy silk atmosphere behind the desktop randomizer cards. */
-@media(min-width:1200px){
-  .page{
-    background-color:#410f22!important;
+/* Desktop casino: real burgundy silk under the panels and across outer
+   gutters, not the nearly black blank backing. Original panel art preserved. */
+@media(min-width:1200px) {
+  :global(.app-shell.page-randomizers),
+  .page {
+    background-color:#65172c!important;
     background-image:
-      linear-gradient(90deg,rgba(32,3,13,.36),rgba(100,16,41,.13) 48%,rgba(32,3,13,.36)),
-      url("/randomizers/rosie-salon-burgundy-texture.svg")!important;
-    background-size:100% 100%,min(48vw,700px) auto!important;
-    background-position:center,center top!important;
-    background-repeat:no-repeat,repeat!important;
-    min-height:100dvh;
+      radial-gradient(ellipse at 50% 0%,rgba(237,84,101,.23),transparent 61%),
+      repeating-linear-gradient(90deg,rgba(27,1,10,.40) 0%,rgba(23,0,10,.15) 5%,rgba(203,52,76,.14) 11%,rgba(247,93,115,.12) 16%,rgba(50,1,18,.22) 21%,rgba(20,0,9,.45) 25%),
+      url('/randomizers/rosie-salon-burgundy-texture.svg')!important;
+    background-position:center top,center top,center top!important;
+    background-size:100% 100%,440px 100%,440px 440px!important;
+    background-repeat:no-repeat,repeat,repeat!important;
+    background-attachment:fixed,fixed,fixed!important;
   }
-  .page::before{opacity:.08!important;}
+  .page {min-height:100dvh;isolation:isolate;}
+  .page::before {opacity:.1!important}
+  /* Keep the approved silk behind, not over, the cream cards or wheel. */
+  .ivoryRow,.wheelSalon {position:relative;z-index:2;}
 }
