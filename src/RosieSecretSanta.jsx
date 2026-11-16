@@ -47,6 +47,19 @@ async function copyValue(text) {
 }
 const initialForm = { title: "Rosie's Secret Santa", names: "" };
 
+function emailDraftsFor(exchange) {
+  return Object.fromEntries((exchange?.participants || []).map(person => [person.id, person.email || ""]));
+}
+function invitationEmailLink(email, name, exchangeTitle, privateLink) {
+  const subject = exchangeTitle + " - Your Secret Santa invitation";
+  const body = "Hi " + name + ",\n\nYou are invited to " + exchangeTitle +
+    ". Here is your personal invitation:\n\n" + privateLink +
+    "\n\nPlease keep your assignment secret!";
+  return "mailto:" + encodeURIComponent(email) +
+    "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+}
+
+
 function SealedEnvelope({ phase = "sealed" }) {
   const states = {
     sealed: "03-sealed-envelope.webp",
@@ -77,6 +90,7 @@ export default function RosieSecretSanta() {
   const [recipient, setRecipient] = useState(null);
   const [sealPhase, setSealPhase] = useState("sealed");
   const [newGuest, setNewGuest] = useState("");
+  const [emailDrafts, setEmailDrafts] = useState({});
   const [giver, setGiver] = useState("");
   const [recipientChoice, setRecipientChoice] = useState("");
   const [rules, setRules] = useState([]);
@@ -94,6 +108,7 @@ export default function RosieSecretSanta() {
       setAuth({ role: "host", id, token });
       setExchange(result.exchange);
       setInvitations(result.invitations || []);
+      setEmailDrafts(emailDraftsFor(result.exchange));
       setRules(result.exchange.exclusions || []);
       setRulesDirty(false);
       setRecipient(null);
@@ -142,6 +157,7 @@ export default function RosieSecretSanta() {
       setAuth({ role: "host", id: result.exchange.id, token });
       setExchange(result.exchange);
       setInvitations(result.invitations);
+      setEmailDrafts(emailDraftsFor(result.exchange));
       setRules([]);
       setScreen("host");
       remember({ role: "host", id: result.exchange.id, token, label: result.exchange.title });
@@ -159,9 +175,13 @@ export default function RosieSecretSanta() {
       const result = await request(action, { exchangeId: auth.id, hostToken: auth.token, ...params });
       setExchange(result.exchange);
       setInvitations(result.invitations || []);
-      setRules(result.exchange.exclusions || []);
-      setRulesDirty(false);
+      if (action !== "emails") {
+        setRules(result.exchange.exclusions || []);
+        setRulesDirty(false);
+      }
+      if (action === "emails") setEmailDrafts(emailDraftsFor(result.exchange));
       setNotice(action === "draw" ? "The names are drawn and sealed. Send each guest their private link." :
+        action === "emails" ? "Guest email addresses saved." :
         action === "rules" ? "Assignment restrictions saved." : "Guest list updated.");
       if (action === "add") setNewGuest("");
     });
@@ -195,6 +215,10 @@ export default function RosieSecretSanta() {
     });
   }
   const people = exchange?.participants || [];
+  const unsavedEmailUpdates = people.filter(person =>
+    (emailDrafts[person.id] ?? person.email ?? "").trim() !== (person.email || "")
+  ).map(person => ({ id: person.id, email: (emailDrafts[person.id] ?? "").trim() }));
+  const hasUnsavedEmails = unsavedEmailUpdates.length > 0;
   const nameOf = id => people.find(p => p.id === id)?.name || "Unknown guest";
   const hostLink = auth?.role === "host" ? urlFor("host", auth.id, auth.token) : "";
   const guestLink = auth?.role === "guest" ? urlFor("guest", auth.id, auth.token, auth.guestId) : "";
@@ -269,19 +293,48 @@ export default function RosieSecretSanta() {
         <p className="ss-hint">Keep your organizer link private. Anyone who holds a guest invitation link, including the organizer, can open that person's envelope. Share each link directly and discreetly.</p>
         <div className="ss-section-heading ss-section-heading--sm"><span>THE ENVELOPES</span><h4>Guest invitations</h4></div>
         <div className="ss-invite-list">
-          {invitations.map((item, index) => <div className="ss-invite" key={item.id}>
-            <span className="ss-invite__number">{String(index + 1).padStart(2, "0")}</span>
-            <span className="ss-invite__name">{item.name}</span>
-            <span className="ss-invite__status">{exchange.status === "drawn" ? "Sealed" : "Invited"}</span>
-            <button type="button" onClick={() => doCopy(urlFor("guest", exchange.id, item.token, item.id), "Invitation copied for " + item.name + ".")}>COPY INVITE</button>
-            {exchange.status === "draft" && <button type="button" className="ss-small-remove" aria-label={"Remove " + item.name}
-              onClick={() => { if (window.confirm("Remove " + item.name + " from this exchange?")) changeHost("remove", { guestId: item.id }); }}>×</button>}
-          </div>)}
+          {invitations.map((item, index) => {
+            const person = people.find(p => p.id === item.id);
+            const email = person?.email || "";
+            const guestLink = urlFor("guest", exchange.id, item.token, item.id);
+            return <div className="ss-invite ss-invite--emails" key={item.id}>
+              <div className="ss-invite__identity">
+                <span className="ss-invite__number">{String(index + 1).padStart(2, "0")}</span>
+                <span className="ss-invite__name">{item.name}</span>
+              </div>
+              <label className="ss-invite__email">
+                <span className="ss-screen-reader-only">Optional email for {item.name}</span>
+                <input type="email" inputMode="email" autoComplete="off"
+                  aria-label={"Optional email for " + item.name} placeholder="Email (optional)"
+                  maxLength={254} disabled={busy || exchange.status !== "draft"}
+                  value={emailDrafts[item.id] ?? email}
+                  onChange={event => setEmailDrafts(previous => ({ ...previous, [item.id]: event.target.value }))} />
+              </label>
+              <div className="ss-invite__actions">
+                <button type="button" disabled={busy}
+                  onClick={() => doCopy(guestLink, "Invitation copied for " + item.name + ".")}>COPY LINK</button>
+                {!!email && !hasUnsavedEmails && <a className="ss-invite__mailto"
+                  href={invitationEmailLink(email, item.name, exchange.title, guestLink)}
+                  aria-label={"Draft invitation email for " + item.name}>DRAFT EMAIL</a>}
+                {exchange.status === "draft" && <button type="button" className="ss-small-remove"
+                  disabled={busy || hasUnsavedEmails} aria-label={"Remove " + item.name}
+                  onClick={() => { if (window.confirm("Remove " + item.name + " from this exchange?")) changeHost("remove", { guestId: item.id }); }}>×</button>}
+              </div>
+            </div>;
+          })}
         </div>
+        {exchange.status === "draft" && <div className="ss-email-tools">
+          <p>Emails are optional and visible only in the organizer's ledger. Save your changes before drawing names or drafting invitations.</p>
+          <button type="button" className="ss-button ss-button--quiet"
+            disabled={busy || !hasUnsavedEmails}
+            onClick={() => changeHost("emails", { updates: unsavedEmailUpdates })}>
+            {busy ? "SAVING…" : "SAVE GUEST EMAILS"}
+          </button>
+        </div>}
         {exchange.status === "draft" && <>
           <div className="ss-addguest">
             <input aria-label="New guest name" maxLength={60} value={newGuest} placeholder="Add another guest" onChange={e => setNewGuest(e.target.value)} />
-            <button type="button" className="ss-button ss-button--quiet" disabled={busy || !newGuest.trim()} onClick={() => changeHost("add", { name: newGuest })}>ADD GUEST</button>
+            <button type="button" className="ss-button ss-button--quiet" disabled={busy || hasUnsavedEmails || !newGuest.trim()} onClick={() => changeHost("add", { name: newGuest })}>ADD GUEST</button>
           </div>
           <div className="ss-section-heading ss-section-heading--sm"><span>02 / HOUSE RULES</span><h4>Who cannot draw whom?</h4></div>
           <p className="ss-hint">Optional directional restrictions. To keep a couple from drawing each other, add both directions.</p>
@@ -303,7 +356,7 @@ export default function RosieSecretSanta() {
               <button type="button" aria-label="Remove restriction" onClick={() => { setRules(r => r.filter((_, i) => i !== index)); setRulesDirty(true); }}>×</button>
             </div>)}
           </div>}
-          {rulesDirty && <button type="button" className="ss-button ss-button--quiet ss-save-rules" disabled={busy}
+          {rulesDirty && <button type="button" className="ss-button ss-button--quiet ss-save-rules" disabled={busy || hasUnsavedEmails}
             onClick={() => changeHost("rules", { exclusions: rules })}>SAVE RESTRICTIONS</button>}
           <div className="ss-draw">
             <img src="/randomizers/secret-santa/09-secret-santa-emblem.webp" alt="" aria-hidden="true"/>
@@ -311,7 +364,7 @@ export default function RosieSecretSanta() {
               <h4>Ready for Rosie's verdict?</h4>
               <p>The draw is permanent. Afterward, names and restrictions are locked and individual invitations reveal recipients.</p>
             </div>
-            <button type="button" className="ss-button" disabled={busy || rulesDirty}
+            <button type="button" className="ss-button" disabled={busy || rulesDirty || hasUnsavedEmails}
               onClick={() => { if (window.confirm("Draw and lock the assignments for all " + people.length + " guests?")) changeHost("draw", {}); }}>
               {busy ? "DRAWING..." : "DRAW THE NAMES"}
             </button>
