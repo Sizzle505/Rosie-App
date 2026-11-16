@@ -175,8 +175,10 @@ export default function RosieSecretSanta() {
       const result = await request(action, { exchangeId: auth.id, hostToken: auth.token, ...params });
       setExchange(result.exchange);
       setInvitations(result.invitations || []);
-      setRules(result.exchange.exclusions || []);
-      setRulesDirty(false);
+      if (action !== "emails") {
+        setRules(result.exchange.exclusions || []);
+        setRulesDirty(false);
+      }
       if (action === "emails") setEmailDrafts(emailDraftsFor(result.exchange));
       setNotice(action === "draw" ? "The names are drawn and sealed. Send each guest their private link." :
         action === "emails" ? "Guest email addresses saved." :
