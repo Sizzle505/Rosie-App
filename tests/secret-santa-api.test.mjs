@@ -88,6 +88,60 @@ test("validates impossible restrictions before locking the draw", async () => {
   const dashboard = await invoke("dashboard", { exchangeId: exchange.id, hostToken });
   assert.equal(dashboard.body.exchange.status, "draft");
 });
+
+test("organizer can save, replace and clear optional guest emails without exposing them to participants", async () => {
+  const created = await invoke("create", { title: "Email contacts", names: ["Alice", "Blair", "Casey"] });
+  assert.equal(created.status, 201);
+  const { exchange, hostToken, invitations } = created.body;
+  const credentials = { exchangeId: exchange.id, hostToken };
+  const guest = exchange.participants[0];
+  assert.equal(guest.email, "");
+
+  const forbidden = await invoke("emails", {
+    exchangeId: exchange.id, hostToken: "0".repeat(64),
+    updates: [{ id: guest.id, email: "alice@example.com" }]
+  });
+  assert.equal(forbidden.status, 403);
+
+  const invalid = await invoke("emails", {
+    ...credentials, updates: [{ id: guest.id, email: "invalid\r\nBcc: malicious@example.com" }]
+  });
+  assert.equal(invalid.status, 400);
+
+  const saved = await invoke("emails", {
+    ...credentials, updates: [
+      { id: guest.id, email: " Alice+gift@example.com " },
+      { id: exchange.participants[1].id, email: "blair@example.com" }
+    ]
+  });
+  assert.equal(saved.status, 200);
+  assert.equal(saved.body.exchange.participants[0].email, "Alice+gift@example.com");
+  assert.equal(saved.body.exchange.participants[1].email, "blair@example.com");
+  assert.equal(saved.body.exchange.participants[2].email, "");
+
+  const dashboard = await invoke("dashboard", credentials);
+  assert.equal(dashboard.body.exchange.participants[0].email, "Alice+gift@example.com");
+  assert.equal(Object.hasOwn(dashboard.body.invitations[0], "email"), false);
+  const guestView = await invoke("guest", {
+    exchangeId: exchange.id, guestId: invitations[0].id, guestToken: invitations[0].token
+  });
+  assert.equal(guestView.status, 200);
+  assert.equal(Object.hasOwn(guestView.body.guest, "email"), false);
+  assert.equal(Object.hasOwn(guestView.body.exchange, "participants"), false);
+
+  const cleared = await invoke("emails", {
+    ...credentials, updates: [{ id: guest.id, email: "" }]
+  });
+  assert.equal(cleared.status, 200);
+  assert.equal(cleared.body.exchange.participants[0].email, "");
+  assert.equal(cleared.body.exchange.participants[1].email, "blair@example.com");
+
+  const draw = await invoke("draw", credentials);
+  assert.equal(draw.status, 200);
+  const locked = await invoke("emails", { ...credentials, updates: [{ id: guest.id, email: "after@example.com" }] });
+  assert.equal(locked.status, 409);
+});
+
 test.after(() => {
   globalThis.fetch = savedFetch;
   process.env.SUPABASE_URL = savedUrl;

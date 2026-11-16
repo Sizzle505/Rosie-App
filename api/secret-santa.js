@@ -27,6 +27,13 @@ function validDate(value) {
     bad("Enter a valid exchange date.");
   return value;
 }
+function cleanEmail(value) {
+  if (typeof value !== "string" || value.length > 254) bad("Enter a valid email address (up to 254 characters).");
+  const email = value.trim();
+  if (email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email))
+    bad("Enter a valid email address.");
+  return email;
+}
 function validateNames(names) {
   if (!Array.isArray(names) || names.length < 3 || names.length > 40)
     bad("Add 3 to 40 participants.");
@@ -39,7 +46,7 @@ function view(row) {
   return {
     id: row.id, title: row.title,
     status: row.status, drawnAt: row.drawn_at,
-    participants: row.participants.map(({ id, name }) => ({ id, name })),
+    participants: row.participants.map(({ id, name, email }) => ({ id, name, email: email || "" })),
     exclusions: row.exclusions
   };
 }
@@ -138,6 +145,25 @@ export default async function handler(req, res) {
         const next = await patchDraft(row, {
           participants: row.participants.filter(p => p.id !== input.guestId),
           exclusions: row.exclusions.filter(p => p.giver !== input.guestId && p.recipient !== input.guestId)
+        });
+        return respond(res, 200, { exchange: view(next), invitations: invites(next) });
+      }
+      case "emails": {
+        const row = await host(input);
+        if (row.status !== "draft") bad("Guest emails can only be edited before the draw.", 409);
+        if (!Array.isArray(input.updates) || input.updates.length < 1 || input.updates.length > 40)
+          bad("Select at least one guest email to save.");
+        const ids = new Set(row.participants.map(person => person.id));
+        const updates = new Map();
+        for (const item of input.updates) {
+          if (!item || !ids.has(item.id) || updates.has(item.id))
+            bad("Invalid or duplicate guest email entry.");
+          updates.set(item.id, cleanEmail(item.email));
+        }
+        const next = await patchDraft(row, {
+          participants: row.participants.map(person =>
+            updates.has(person.id) ? { ...person, email: updates.get(person.id) } : person
+          )
         });
         return respond(res, 200, { exchange: view(next), invitations: invites(next) });
       }
