@@ -6,7 +6,7 @@ import "./LayoutPlayground.css";
  * Preview mode is available only through ?layoutPreview=1, and all edits
  * stay inside the iframe until the user exports a layout specification.
  */
-const STORAGE_KEY = "rosieverse.layout-playground.drafts.v1";
+const STORAGE_KEY = "rosieverse.layout-playground.drafts.v2";
 const BASELINE_COMMIT = "5e8afcf9d42bd245750e8f2b01aa116bccb73dc7";
 const DEVICE_HEIGHTS = { tablet: 1180, mobile: 844 };
 const formatSize = (width, height) => Math.round(width) + " × " + Math.round(height);
@@ -356,7 +356,7 @@ export default function LayoutPlayground() {
   function exportLayout() {
     const payload = {
       tool: "RosieVerse Layout Playground",
-      version: 1,
+      version: 2,
       exportedAt: new Date().toISOString(),
       referenceWidths: { desktop: immersive && device === "desktop" ? width : desktopWidth, tablet: 820, mobile: 390 },
       baselineCommit: BASELINE_COMMIT,
@@ -378,9 +378,14 @@ export default function LayoutPlayground() {
     if (!file) return;
     try {
       const parsed = JSON.parse(await file.text());
-      if (parsed.tool !== "RosieVerse Layout Playground" || parsed.version !== 1 || !parsed.layouts || typeof parsed.layouts !== "object") {
+      if (parsed.tool !== "RosieVerse Layout Playground" || ![1, 2].includes(parsed.version) || !parsed.layouts || typeof parsed.layouts !== "object") {
         throw Error("Not a RosieVerse layout export.");
       }
+      if (parsed.version === 1 && !window.confirm(
+        "This was exported from an older Rosie App. Its offsets may duplicate layout changes already published. Import them anyway?"
+      )) return;
+      if (parsed.baselineCommit && parsed.baselineCommit !== BASELINE_COMMIT &&
+        !window.confirm("This layout was saved against a different version of Rosie App. Import anyway?")) return;
       const safe = {};
       for (const [key, values] of Object.entries(parsed.layouts)) {
         const [pageId, deviceId] = key.split("/");
@@ -522,6 +527,7 @@ export function LayoutPreviewBridge() {
     const page = window.location.hash.replace("#", "") || "home";
     const parts = TARGETS[page] || [];
     const active = {};
+    const originalStyles = new WeakMap();
     let selected = "";
     let editing = true;
     let dragged = null;
@@ -551,13 +557,44 @@ export function LayoutPreviewBridge() {
       label.textContent = spec[1] + " · drag to move";
       label.style.top = rect.top < 29 ? "0" : "-27px";
     }
+    // Never overwrite existing CSS offsets with zero. The real app already
+    // positions many objects via the translate/scale CSS longhands. The old
+    // playground zeroed these out, so its supposed "baseline" was inaccurate.
+    // Capture each element's actual computed geometry before editing, then
+    // compose user movement on top; restore original inline styles on reset.
+    function getOriginal(node) {
+      let baseline = originalStyles.get(node);
+      if (baseline) return baseline;
+      const style = getComputedStyle(node);
+      const movement = style.translate === "none" ? [] : style.translate.split(/\\s+/);
+      const size = style.scale === "none" ? [1] : style.scale.split(/\\s+/).map(Number);
+      baseline = {
+        inlineTranslate: node.style.translate,
+        inlineScale: node.style.scale,
+        x: movement[0] || "0px",
+        y: movement[1] || "0px",
+        scales: size.every(Number.isFinite) ? size : [1]
+      };
+      originalStyles.set(node, baseline);
+      return baseline;
+    }
+    const addOffset = (base, offset) => offset === 0 ? base
+      : "calc(" + base + (offset > 0 ? " + " : " - ") + Math.abs(offset) + "px)";
     function refresh() {
       for (const spec of parts) {
         const node = lookup(spec);
         if (!node) continue;
+        const baseline = getOriginal(node);
         const value = normalizeTransform(active[spec[0]]);
-        node.style.translate = value.x + "px " + value.y + "px";
-        node.style.scale = String(value.scale);
+        const edited = active[spec[0]] &&
+          (value.x !== 0 || value.y !== 0 || value.scale !== 1);
+        if (!edited) {
+          node.style.translate = baseline.inlineTranslate;
+          node.style.scale = baseline.inlineScale;
+        } else {
+          node.style.translate = addOffset(baseline.x, value.x) + " " + addOffset(baseline.y, value.y);
+          node.style.scale = baseline.scales.map(size => Number((size * value.scale).toFixed(6))).join(" ");
+        }
       }
       drawHighlight();
     }
