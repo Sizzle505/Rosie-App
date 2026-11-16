@@ -50,16 +50,15 @@ const initialForm = {
   names: "Alex\nJordan\nTaylor\nMorgan\nCasey"
 };
 
-function SealedEnvelope({ open = false }) {
-  return (
-    <div className={`ss-envelope ${open ? "ss-envelope--open" : ""}`} aria-hidden="true">
-      <div className="ss-envelope__back" />
-      <div className="ss-envelope__card"><span>ROSIE'S PRIVATE SALON</span><b>SECRET SANTA</b><i>✦</i></div>
-      <div className="ss-envelope__front" />
-      <div className="ss-envelope__flap" />
-      <div className="ss-envelope__seal">✦</div>
-    </div>
-  );
+function SealedEnvelope({ phase = "sealed" }) {
+  const states = {
+    sealed: "03-sealed-envelope.webp",
+    breaking: "04-breaking-paw-seal.webp",
+    open: "05-opened-envelope.webp"
+  };
+  return <div className={`ss-envelope-art ss-envelope-art--${phase}`} aria-hidden="true">
+    <img src="/randomizers/secret-santa/" + states[phase] className="ss-envelope-art__image" alt="" loading="lazy" />
+  </div>;
 }
 function ExchangeMeta({ exchange }) {
   return <div className="ss-metadata">
@@ -81,6 +80,7 @@ export default function RosieSecretSanta() {
   const [invitations, setInvitations] = useState([]);
   const [guestData, setGuestData] = useState(null);
   const [recipient, setRecipient] = useState(null);
+  const [sealPhase, setSealPhase] = useState("sealed");
   const [newGuest, setNewGuest] = useState("");
   const [giver, setGiver] = useState("");
   const [recipientChoice, setRecipientChoice] = useState("");
@@ -113,6 +113,7 @@ export default function RosieSecretSanta() {
       setAuth({ role: "guest", id, guestId, token });
       setGuestData(data);
       setRecipient(null);
+      setSealPhase("sealed");
       setScreen("guest");
       remember({ role: "guest", id, guestId, token, label: data.exchange.title + " - " + data.guest.name });
       setSaved(readSaved());
@@ -192,7 +193,10 @@ export default function RosieSecretSanta() {
         exchangeId: auth.id, guestId: auth.guestId, guestToken: auth.token
       });
       if (!result.recipient) throw new Error("Rosie has not drawn the names yet.");
+      setSealPhase("breaking");
+      await new Promise(resolve => window.setTimeout(resolve, 650));
       setRecipient(result.recipient);
+      setSealPhase("open");
     });
   }
   const people = exchange?.participants || [];
@@ -205,12 +209,14 @@ export default function RosieSecretSanta() {
       <div className="ss-hero">
         <div className="ss-hero__copy">
           <span className="ss-eyebrow">ROSIE'S PRIVATE HOLIDAY SALON · 04</span>
-          <h2>Secret <em>Santa</em></h2>
+          <h2 className="ss-screen-reader-only">Secret Santa</h2>
+          <img src="/randomizers/secret-santa/02-secret-santa-header.webp" className="ss-hero__plaque"
+            width="2172" height="724" alt="" draggable="false" />
           <p>A little generosity. A lot of secrecy. Let Rosie draw the names.</p>
-          <div className="ss-hero__rule" aria-hidden="true">✦ <span /> ✦</div>
         </div>
-        <img src="/randomizers/rosie-casino.webp" alt="Rosie, the original black-and-tan casino host in her gold-trimmed tuxedo" className="ss-hero__rosie" loading="lazy" />
-        <div className="ss-hero__wreath" aria-hidden="true">✧</div>
+        <img src="/randomizers/secret-santa/01-rosie-secret-santa-host.webp"
+          alt="Rosie in her casino tuxedo and Santa hat, guarding the Secret Santa lottery drum"
+          width="1536" height="1024" className="ss-hero__rosie" loading="lazy" draggable="false" />
       </div>
 
       {error && <div role="alert" className="ss-alert ss-alert--error">{error}</div>}
@@ -219,6 +225,7 @@ export default function RosieSecretSanta() {
       {screen === "intro" && <div className="ss-start">
         <div className="ss-start__note">
           <SealedEnvelope />
+          <img src="${art}07-gift-collection.webp" alt="" className="ss-start__gifts" loading="lazy" />
           <p>Every guest receives one private assignment, revealed through their own invitation.</p>
         </div>
         <div className="ss-start__actions">
@@ -236,7 +243,7 @@ export default function RosieSecretSanta() {
       </div>}
 
       {screen === "create" && <div className="ss-paper ss-create">
-        <div className="ss-section-heading"><span>01 / BEGIN THE EXCHANGE</span><h3>The guest ledger</h3></div>
+        <div className="ss-section-heading ss-create__title"><div><span>01 / BEGIN THE EXCHANGE</span><h3>The guest ledger</h3></div><img src="${art}08-invitation-scroll.webp" alt="" loading="lazy" /></div>
         <form onSubmit={createExchange}>
           <label>Exchange name<input required maxLength={100} value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} /></label>
           <div className="ss-two">
@@ -257,6 +264,7 @@ export default function RosieSecretSanta() {
         <div className="ss-section-heading">
           <span>ORGANIZER'S PRIVATE LEDGER</span>
           <h3>{exchange.title}</h3>
+          <img className="ss-host-crest" src="${art}09-secret-santa-emblem.webp" alt="" aria-hidden="true" loading="lazy" />
           <ExchangeMeta exchange={exchange} />
         </div>
         <div className="ss-host-tools">
@@ -304,7 +312,7 @@ export default function RosieSecretSanta() {
           {rulesDirty && <button type="button" className="ss-button ss-button--quiet ss-save-rules" disabled={busy}
             onClick={() => changeHost("rules", { exclusions: rules })}>SAVE RESTRICTIONS</button>}
           <div className="ss-draw">
-            <img src="/randomizers/rosie-signet.webp" alt="" aria-hidden="true"/>
+            <img src="${art}09-secret-santa-emblem.webp" alt="" aria-hidden="true"/>
             <div>
               <h4>Ready for Rosie's verdict?</h4>
               <p>The draw is permanent. Afterward, names and restrictions are locked and individual invitations reveal recipients.</p>
@@ -316,6 +324,7 @@ export default function RosieSecretSanta() {
           </div>
         </>}
         {exchange.status === "drawn" && <div className="ss-finished">
+          <img src="${art}07-gift-collection.webp" alt="" aria-hidden="true" loading="lazy"/>
           <strong>✦ THE HOUSE HAS SPOKEN ✦</strong>
           <p>Every person has one recipient. Individual assignments are only disclosed through private invitation links.</p>
         </div>}
@@ -333,9 +342,11 @@ export default function RosieSecretSanta() {
           <button type="button" className="ss-text-link" onClick={() => openGuest(auth.id, auth.guestId, auth.token)} disabled={busy}>REFRESH EXCHANGE</button>
         </div>
         <div className="ss-reveal">
+          <img className="ss-reveal__frame" src="${art}10-ornamental-frame.webp" alt="" aria-hidden="true" loading="lazy" />
           <span className="ss-eyebrow">SEALED BY ROSIE</span>
-          <SealedEnvelope open={!!recipient} />
+          <SealedEnvelope phase={sealPhase} />
           {recipient ? <div className="ss-recipient" aria-live="polite">
+            <img src="${art}06-recipient-card.webp" alt="" aria-hidden="true" loading="lazy" />
             <small>YOU ARE SHOPPING FOR</small>
             <strong>{recipient.name}</strong>
             <p>A secret worth keeping. Happy gifting!</p>
