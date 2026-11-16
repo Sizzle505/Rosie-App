@@ -1192,3 +1192,80 @@
  .app-shell.page-qr-atelier .qa-title,
  .app-shell.page-qr-atelier .qa-collection{z-index:3}
 }
+
+
+/* Layout Playground export applied November 16, 2026.
+   Reference widths: desktop 1440px, tablet 820px, phone 390px.
+   Use individual translate/scale longhands to reproduce the playground's
+   rendered offsets without replacing the existing art/positioning transforms
+   or breaking the surrounding layout's flow. Only QR Atelier is affected. */
+@media screen and (min-width: 1200px) {
+  .app-shell.page-qr-atelier .qa-title {
+    translate: 32px 22px;
+    scale: .9;
+  }
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring {
+    translate: -71px -27px;
+  }
+  .app-shell.page-qr-atelier .qa-preview-actions {
+    translate: -71px -37px;
+  }
+  .app-shell.page-qr-atelier .qa-panel {
+    translate: -71px -42px;
+    scale: .92;
+  }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
+    translate: -71px -413px;
+    scale: .74;
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    translate: 42px -137px;
+  }
+}
+
+@media screen and (min-width: 701px) and (max-width: 1199px) {
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
+    translate: 0 -18px;
+  }
+  .app-shell.page-qr-atelier .qa-panel {
+    translate: 0 -30px;
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    translate: 0 -38px;
+  }
+  .app-shell.page-qr-atelier .qa-preview-actions {
+    translate: -1px -50px;
+    scale: 1.4;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring {
+    translate: 0 -9px;
+  }
+  .app-shell.page-qr-atelier .qa-preview-actions {
+    translate: -1px -6px;
+  }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
+    translate: 0 -9px;
+  }
+  .app-shell.page-qr-atelier .qa-panel {
+    translate: -1px -21px;
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    translate: -3px -34px;
+  }
+}
+
+/* Keep the QR printable-card flow unchanged. */
+@media print {
+  .app-shell.page-qr-atelier .qa-title,
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring,
+  .app-shell.page-qr-atelier .qa-preview-actions,
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes,
+  .app-shell.page-qr-atelier .qa-panel,
+  .app-shell.page-qr-atelier .qa-collection {
+    translate: none;
+    scale: 1;
+  }
+}
