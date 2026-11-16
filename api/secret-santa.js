@@ -20,8 +20,10 @@ function cleanName(value) {
 }
 function validDate(value) {
   if (!value) return null;
-  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value) ||
-      new Date(value + "T00:00:00Z").toISOString().slice(0, 10) !== value)
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value))
+    bad("Enter a valid exchange date.");
+  const parsed = new Date(value + "T00:00:00Z");
+  if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value)
     bad("Enter a valid exchange date.");
   return value;
 }
