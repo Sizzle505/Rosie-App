@@ -494,6 +494,9 @@ export default function LayoutPlayground() {
         <select aria-label="Page in fullscreen" value={page} onChange={event => switchPage(event.target.value)}>
           {PAGES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select>
+        <select aria-label="Device in fullscreen" value={device} onChange={event => switchDevice(event.target.value)}>
+          {Object.entries(DEVICES).map(([id, item]) => <option key={id} value={id}>{item.label}</option>)}
+        </select>
         <button type="button" aria-pressed={editEnabled} onClick={() => setEditEnabled(value => !value)}>
           {editEnabled ? "Arrange: ON" : "Interact: ON"}
         </button>
