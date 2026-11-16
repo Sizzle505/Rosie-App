@@ -2435,7 +2435,7 @@ function App() {
   const [soundOn] = useState(true);
   const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "qr-atelier", "recipes", "reviews"];
   const pageFromLocation = () => {
-    const requested = window.location.hash.replace("#", "").toLowerCase();
+    const requested = window.location.hash.replace("#", "").split("?")[0].toLowerCase();
     return validPages.includes(requested) ? requested : "home";
   };
   const [page, setPage] = useState(pageFromLocation);
