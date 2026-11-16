@@ -200,7 +200,7 @@ export default function RosieSecretSanta() {
   const guestLink = auth?.role === "guest" ? urlFor("guest", auth.id, auth.token, auth.guestId) : "";
 
   return (
-    <section className="ss-shell" aria-label="Rosie's Secret Santa">
+    <section className="ss-shell" data-layout-target="randomizers-santa" aria-label="Rosie's Secret Santa">
       <div className="ss-hero ss-hero--preferred">
         <h2 className="ss-screen-reader-only">Rosie's Secret Santa</h2>
         <img className="ss-hero__banner" src="/randomizers/secret-santa/11-preferred-banner.webp"
