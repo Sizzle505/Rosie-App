@@ -20,4 +20,22 @@
     <div class="fiend-track" id="fiend-track-kitty"><img src="assets/kitty.webp" alt=""><div class="fiend-track-detail"><strong>KITTY XENOVESE</strong><div class="fiend-health"><span id="fiend-bar-kitty"></span></div><small id="fiend-hp-kitty">3 / 3 HP</small></div></div>
   </div>
 </div></div>
-</div><script src="game.js"></script></body></html>
+</div><div id="victory-overlay" class="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="victory-title" hidden>
+  <div class="victory-card">
+    <div class="victory-visual">
+      <img id="victory-image" class="victory-image" alt="Captain Rosie triumphs over the Fiends" width="1100" height="1100" draggable="false">
+      <div id="victory-nav" class="victory-nav" hidden>
+        <button id="victory-prev" type="button" aria-label="Previous approved victory illustration">‹</button>
+        <span id="victory-scene-count" aria-live="polite">SCENE 1 OF 2</span>
+        <button id="victory-next" type="button" aria-label="Next approved victory illustration">›</button>
+      </div>
+    </div>
+    <div class="victory-details">
+      <span class="victory-eyebrow" id="victory-stage">THE HOUSE OF ROSIE · COSMIC ODYSSEY</span>
+      <h2 id="victory-title">SECTOR SECURED</h2>
+      <p id="victory-summary">Captain Rosie prevails.</p>
+      <button id="victory-continue" class="victory-continue" type="button">CONTINUE ODYSSEY</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script></body></html>

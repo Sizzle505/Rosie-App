@@ -201,3 +201,28 @@ Corrected original `connected-wall-atlas.webp` by removing an extraneous semi-op
 The desktop sector-art well now shares space with a three-Fiend tactical tracker using the existing approved Jett/Chip/Kitty spacecraft images. Shows full names, health bars, current HP, and distinct defeated state. Tracker is intentionally hidden on narrow viewports to keep iPhone gameplay clear; the existing HUD Fiend total remains visible everywhere.
 
 Mock DOM test at 393×852 and 1760×850 passed: all existing wall cells still covered, health values update correctly when Kitty takes one hit, destroyed Fiends show 0 HP and DEFEATED, and all Fiend statuses reset at the next stage. A locally rendered maze comparison confirms that slate rectangles no longer obscure the background. Physical-device and full live-browser visual QA remain outstanding.
+
+## Approved Victory Scenes - November 15, 2026
+
+**Source of truth:** `/Rosie-App-Transfer/Captain-Rosie-Cosmic-Odyssey-Approved-Victory-Collection-20261114.zip` in Dropbox. All 16 files from `Approved-New/` and `Retained-Earlier/` were re-encoded independently as 1100×1100, quality-84 WebP images, without cropping, for runtime delivery under `assets/victories/`. Original 1254×1254 PNGs remain unchanged in Dropbox. One `Earlier-Variant-For-Review-Not-Game-Ready/captain_rosie_s_fiery_foundry_victory.png` was **excluded** from game assets.
+
+### Exact stage mapping and variants
+
+| Stage | Approved runtime images (primary first) |
+|---|---|
+| 1. Nebula Passage | `nebula_pursuit_captain_rosie_strikes_back.webp` |
+| 2. Meteor Mischief | `captain_rosie_s_cosmic_victory.webp` |
+| 3. Lunar Outpost | `captain_rosie_s_lunar_victory.webp`, `captain_rosie_s_cosmic_perp_walk.webp` |
+| 4. Crystal Caverns | `captain_rosie_s_crystal_victory.webp`, `rosie_s_triumphant_crystal_chase.webp` |
+| 5. Volcanic Foundry | `captain_rosie_molten_foundry_assault.webp`, `captain_rosie_s_volcanic_foundry_victory.webp`, `captain_rosie_s_molten_victory_escort.webp` |
+| 6. Derelict Starship | `captain_rosie_s_victory_in_the_starship_graveyard.webp`, `captain_rosie_s_ricochet_victory.webp` |
+| 7. Comet Ice Canyon | `crystal_victory_in_cosmic_skies.webp` |
+| 8. Ringworld Gardens | `captain_rosie_s_crystal_sky_victory.webp` |
+| 9. Black Hole Observatory | `captain_rosie_s_orbital_victory_custody.webp`, `captain_rosie_s_cosmic_custody.webp` |
+| 10. Ancient Alien Ruins | `captain_rosie_s_electrifying_escape.webp` |
+
+Each stage displays one original square victory scene when completed. Six additional approved scenes can be browsed with on-screen controls on the relevant stages. The artwork carries no scores, HUD text, or results; only the adjacent in-app panel contains the separate victory headline and continuation control. The victory modal is viewport-fixed on desktop, portrait iPhone, and landscape iPhone, keeping the illustrations uncropped (`object-fit:contain`).
+
+**Behavioral invariants:** The existing game logic, earned score, treats, hull, Boost, difficulty, pathfinding, stage picker and stage-change routines remain unchanged. The standard launch/pause/loss overlays are retained. The final stage shows the victory gallery and a PLAY AGAIN control. Only the current stage's primary scene is prefetched; variants load upon selection.
+
+**QA:** All 16 Git images matched their computed content blob SHA-1; WebP dimensions are 1100×1100. JavaScript parsing passed. DOM-based simulations at 393×852 and 1400×900 passed all ten level-completion transitions, scene-selector cycling, 16 unique image paths, next-level progression, campaign restart, and overlay show/hide state. Actual phone browser visual inspection remains pending.

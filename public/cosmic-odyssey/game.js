@@ -11,7 +11,7 @@
   'scene-arcade-starship':'../captain-arcade-backgrounds/09-Cosmic-Odyssey-Starship-Passage.webp'
  };
  const asset = name => window.COSMIC_ASSETS?.[name] || ARCADE_SCENE_ART[name] || `assets/${name}.webp`;
- const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message');
+ const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message'),victoryOverlay=$('victory-overlay');
  const DIRS={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]};
  // Standalone, approved image assets imported from the earlier Rosie/Fiend batches.
  const EXTRA_ART=[
@@ -42,6 +42,20 @@
   {name:'BLACK HOLE OBSERVATORY',tagline:'EVENT HORIZON',scene:'arcade-blackhole',seed:35218,target:23,speed:.85,accent:'blackhole'},
   {name:'ANCIENT ALIEN RUINS',tagline:'THE FINAL RELIC',scene:'ruins',seed:39101,target:23,speed:.84,accent:'ruins'}
  ];
+ // Sixteen approved square triumph images, grouped by matching story sector.
+ // Every approved file is used exactly once; the review-only extra is excluded.
+ const VICTORY_STAGES=[
+  ['nebula_pursuit_captain_rosie_strikes_back'],
+  ['captain_rosie_s_cosmic_victory'],
+  ['captain_rosie_s_lunar_victory','captain_rosie_s_cosmic_perp_walk'],
+  ['captain_rosie_s_crystal_victory','rosie_s_triumphant_crystal_chase'],
+  ['captain_rosie_molten_foundry_assault','captain_rosie_s_volcanic_foundry_victory','captain_rosie_s_molten_victory_escort'],
+  ['captain_rosie_s_victory_in_the_starship_graveyard','captain_rosie_s_ricochet_victory'],
+  ['crystal_victory_in_cosmic_skies'],
+  ['captain_rosie_s_crystal_sky_victory'],
+  ['captain_rosie_s_orbital_victory_custody','captain_rosie_s_cosmic_custody'],
+  ['captain_rosie_s_electrifying_escape']
+ ];
  const SCENES=[
   {id:'nebula',name:'NEBULA PASSAGE'},
   {id:'meteor',name:'METEOR MISCHIEF'},
@@ -71,6 +85,7 @@
  let scene='nebula',enemyShots=[],running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
  let boostCharges=0,boostUntil=0;const BOOST_MAX=2,BOOST_DURATION_MS=2200,BOOST_STEP_MS=110;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
+ let victorySceneIndex=0;
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0,aimPreview=null;
  let aimFacing='right',independentAim=false,oneStepStick=false;
  const pressedKeys=new Map(),STEP_MS=190;
@@ -463,11 +478,42 @@
     cells[p.y][p.x].append(img);
   }
  }
+ function selectVictoryScene(nextIndex){
+  const scenes=VICTORY_STAGES[level-1]||[];
+  if(!scenes.length)return;
+  victorySceneIndex=((nextIndex%scenes.length)+scenes.length)%scenes.length;
+  const img=$('victory-image'),name=scenes[victorySceneIndex];
+  if(img){
+   // Lazy-load just the scene being viewed; never crop the square composition.
+   img.src=asset('victories/'+name);
+   img.alt=`Captain Rosie triumphs in ${LEVELS[level-1].name.toLowerCase()}, approved illustration ${victorySceneIndex+1} of ${scenes.length}`;
+  }
+  const nav=$('victory-nav');
+  if(nav)nav.hidden=scenes.length<=1;
+  const count=$('victory-scene-count');
+  if(count)count.textContent=`SCENE ${victorySceneIndex+1} OF ${scenes.length}`;
+ }
+ function presentVictory(status,buttonText){
+  if(!victoryOverlay)return;
+  victorySceneIndex=0;
+  victoryOverlay.hidden=false;
+  victoryOverlay.dataset.stage=String(level);
+  $('victory-stage').textContent=`THE HOUSE OF ROSIE · SECTOR ${level} / ${LEVELS.length}`;
+  $('victory-title').textContent=status==='win'?'COSMIC ODYSSEY COMPLETE':LEVELS[level-1].name;
+  $('victory-summary').textContent=status==='win'
+   ?'Captain Rosie has prevailed. The Fiends have been brought to justice.'
+   :'The Fiends are defeated. Another sector secured.';
+  $('victory-continue').textContent=buttonText;
+  selectVictoryScene(0);
+  $('victory-continue').focus({preventScroll:true});
+ }
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
   if(aimPreview?.el)aimPreview.el.classList.remove('targetable');aimPreview=null;
-  veil.classList.remove('hidden');
+  const victorious=status==='level-clear'||status==='win';
+  veil.classList.toggle('hidden',victorious);
+  if(victoryOverlay)victoryOverlay.hidden=!victorious;
   $('veil-title').textContent=status==='win'?'ODYSSEY COMPLETE':
     status==='level-clear'?LEVELS[level-1].name+' CLEARED':
     status==='lose'?'MISSION FAILED':
@@ -481,11 +527,14 @@
   else if(select&&status==='lose')select.value=String(level);
   else if(select&&status==='win')select.value='1';
   if(picker)picker.style.display=(status==='paused'||status==='level-clear')?'none':'flex';
+  if(victorious)presentVictory(status,buttonText);
   ui();
  }
  function init(carry=false){const layout=desiredMazeLayout();cols=layout.cols;rows=layout.rows;
   if(!carry){score=0;ammo=0;boostCharges=0;}lives=3;boostUntil=0;
   preloadArt('scene-'+LEVELS[level-1].scene, ...(LEVELS[level]?['scene-'+LEVELS[level].scene]:[]));
+  // Prime only the primary approved victory illustration for the current sector.
+  if(VICTORY_STAGES[level-1]?.[0])preloadArt('victories/'+VICTORY_STAGES[level-1][0]);
   target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';aimFacing='right';independentAim=false;protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
@@ -508,6 +557,7 @@
   const aura=document.createElement('img');aura.id='cosmic-shield';aura.className='shield-aura';aura.src=asset('shield');aura.alt='';aura.draggable=false;board.append(aura);
   changeScene(LEVELS[level-1].scene);resize();for(const e of entities)position(e);position(player);positionShield();ui();}
  function start(){
+  if(victoryOverlay)victoryOverlay.hidden=true;
   if(phase==='paused'){
     const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;if(boostUntil>pausedAt)boostUntil+=delta;
     for(const e of entities){e.next+=delta;if(e.nextAttack)e.nextAttack+=delta;}for(const shot of enemyShots)shot.stepAt+=delta;
@@ -1032,6 +1082,14 @@
   $('boost').addEventListener('click',activateBoost);
   $('pause-top').addEventListener('click',pause);
   $('start').addEventListener('click',start);
+  $('victory-continue').addEventListener('click',start);
+  $('victory-prev').addEventListener('click',()=>selectVictoryScene(victorySceneIndex-1));
+  $('victory-next').addEventListener('click',()=>selectVictoryScene(victorySceneIndex+1));
+  document.addEventListener('keydown',e=>{
+   if(!victoryOverlay||victoryOverlay.hidden)return;
+   if(e.key==='ArrowLeft'){e.preventDefault();selectVictoryScene(victorySceneIndex-1);}
+   else if(e.key==='ArrowRight'){e.preventDefault();selectVictoryScene(victorySceneIndex+1);}
+  });
   window.addEventListener('resize',()=>{const next=desiredMazeLayout();if(phase==='start'&&(cols!==next.cols||rows!==next.rows))init(false);else resize();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&phase==='playing')pause();});
  }
