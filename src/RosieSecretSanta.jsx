@@ -229,7 +229,7 @@ export default function RosieSecretSanta() {
             </label>
             <label>GUESTS <small>3–40 names · one per line</small>
               <textarea required rows={6} value={form.names} maxLength={3000}
-                placeholder={"Alex\\nJordan\\nTaylor\\nMorgan"}
+                placeholder="One guest per line…"
                 onChange={event => setForm(f => ({ ...f, names: event.target.value }))} />
             </label>
             <div className="ss-inline-create__footer">
