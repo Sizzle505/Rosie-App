@@ -182,8 +182,8 @@ export default function RosieRandomizers() {
   }
 
   return (
-    <main className={styles.page}>
-      <header className={styles.illustratedHero}>
+    <main className={styles.page} data-layout-target="randomizers-page">
+      <header className={styles.illustratedHero} data-layout-target="randomizers-header">
         <h1 className={styles.heroAccessibleTitle}>Rosie’s Randomizers</h1>
         <img
           className={styles.approvedHeaderArt}
@@ -202,14 +202,14 @@ export default function RosieRandomizers() {
         </div>
       </header>
 
-      <section className={styles.ivoryRow} aria-label="Quick randomizers">
+      <section className={styles.ivoryRow} data-layout-target="randomizers-quick" aria-label="Quick randomizers">
         <article className={styles.ivoryCard}>
           <div className={styles.cardTopline}>
             <span>THE HOUSE COIN</span>
             <i>01</i>
           </div>
           <h2>Leave it to chance.</h2>
-          <div className={styles.coinScene}>
+          <div className={styles.coinScene} data-layout-target="randomizers-coin">
             <span className={styles.coinShadow} />
             <div
               className={`${styles.coin} ${coinFlip ? styles.coinFlipping : ""}`}
@@ -243,7 +243,7 @@ export default function RosieRandomizers() {
             <i>02</i>
           </div>
           <h2>A roll with standards.</h2>
-          <div className={styles.diceScene}>
+          <div className={styles.diceScene} data-layout-target="randomizers-dice">
             <img className={`${styles.decorativeDie} ${styles.decorativeDieLeft}`} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
             <img className={`${styles.decorativeDie} ${styles.decorativeDieRight}`} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
             <DiceFace value={dice} rolling={diceRoll} />
@@ -258,8 +258,8 @@ export default function RosieRandomizers() {
         </article>
       </section>
 
-      <section className={styles.wheelSalon} aria-label="Custom decision wheel">
-        <div className={styles.wheelStage}>
+      <section className={styles.wheelSalon} data-layout-target="randomizers-wheel" aria-label="Custom decision wheel">
+        <div className={styles.wheelStage} data-layout-target="randomizers-wheel-stage">
           <div className={styles.wheelHeading}>
             <span>THE PRIVATE WHEEL</span>
             <h2>Dealer’s choice.</h2>
@@ -312,7 +312,7 @@ export default function RosieRandomizers() {
           </button>
         </div>
 
-        <aside className={styles.wheelEditor}>
+        <aside className={styles.wheelEditor} data-layout-target="randomizers-editor">
           <div className={styles.editorHead}>
             <img src="/randomizers/rosie-signet.webp" alt="" aria-hidden="true" />
             <div>
