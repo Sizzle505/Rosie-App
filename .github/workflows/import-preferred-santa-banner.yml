@@ -1,0 +1,40 @@
+name: Import preferred Secret Santa banner
+on:
+  push:
+    branches: [feature/rosie-secret-santa-20261115]
+    paths: [.github/workflows/import-preferred-santa-banner.yml]
+permissions:
+  contents: write
+jobs:
+  import-preferred:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - run: python3 -m pip install --user pillow
+      - name: Crop the user-selected Secret Santa artwork into responsive banners
+        env:
+          SOURCE_URL: "https://uc19c1005eef12422780d1141e19.dl.dropboxusercontent.com/cd/0/get/DMEnJ-CkFOgQvUWBDPF7eZw7Qj419U6qP2opy1nbiQ0TiPki0wb3xPDeE7nONDB3chywFhwHzL37KkApgOQm1EtjUbTbm9fnT6uGReQgRMLxnkk-gzBt3P1EEI_371JmMqY1-YjgkqhQCFzIptI0jo6Wji_r6PTO1AMaiz3PLeUcoA/file?c_luid=667ded1d"
+        run: |
+          set -euo pipefail
+          echo "::add-mask::$SOURCE_URL"
+          curl --fail --silent --show-error --location --max-time 120 "$SOURCE_URL" -o /tmp/rosie-preferred.png
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          src=Image.open('/tmp/rosie-preferred.png').convert('RGB')
+          assert src.size == (1536,1024), src.size
+          dest=Path('public/randomizers/secret-santa')
+          dest.mkdir(parents=True,exist_ok=True)
+          slices={
+           '11-preferred-banner.webp':(0,0,1536,418),
+           '12-preferred-rosie.webp':(0,0,775,418),
+           '13-preferred-marquee.webp':(775,0,1536,418)
+          }
+          for name,box in slices.items():
+           src.crop(box).save(dest/name,'WEBP',quality=94,method=6)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/randomizers/secret-santa/11* public/randomizers/secret-santa/12* public/randomizers/secret-santa/13*
+          git commit -m "Import exact user-preferred Rosie Secret Santa banner artwork"
+          git push origin "HEAD:$GITHUB_REF_NAME"
