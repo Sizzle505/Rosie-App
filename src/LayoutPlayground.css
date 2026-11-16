@@ -122,3 +122,7 @@
 
 /* Hidden inspector must beat the floating-panel display rule. */
 .lp-immersive .lp-sidebar.lp-floating-inspector.lp-inspector-hidden{display:none}
+
+/* Minimal fullscreen chrome for judging the composition without an overlay. */
+.lp-immersive-hud.lp-hud-minimized{min-height:0;width:auto;max-width:160px;padding:3px;border-radius:999px}
+.lp-immersive-hud.lp-hud-minimized button{font-size:10px;min-height:25px;padding:3px 12px;border-radius:999px}
