@@ -119,3 +119,6 @@
   .lp-immersive .lp-sidebar.lp-floating-inspector{top:78px;max-height:calc(100dvh - 91px)}
   .lp-immersive-tip{font-size:9px}
 }
+
+/* Hidden inspector must beat the floating-panel display rule. */
+.lp-immersive .lp-sidebar.lp-floating-inspector.lp-inspector-hidden{display:none}
