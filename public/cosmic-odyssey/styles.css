@@ -1641,7 +1641,7 @@
  align-self:center;justify-self:center;
  display:flex;flex-direction:column;align-items:center;
  gap:clamp(5px,.9vh,12px);
- width:min(100%,610px,calc(100dvh - 130px));
+ width:min(100%,610px,calc(100dvh - 177px));
  min-width:0;min-height:0;
 }
 .victory-image{
@@ -1724,7 +1724,7 @@
    padding:clamp(8px,1.6vh,15px);
  }
  .victory-visual{
-   width:min(89vw,460px,calc(100dvh - 248px));
+   width:min(89vw,460px,calc(100dvh - 294px));
    flex:none;gap:5px;
  }
  .victory-image{
@@ -1752,7 +1752,7 @@
    gap:clamp(8px,1.8vw,18px);padding:clamp(7px,1.1vw,12px);
  }
  .victory-visual{
-   width:min(100%,calc(100dvh - 86px),48vw);
+   width:min(100%,calc(100dvh - 111px),48vw);
    gap:3px;
  }
  .victory-image{max-height:calc(100dvh - 111px);aspect-ratio:1}
