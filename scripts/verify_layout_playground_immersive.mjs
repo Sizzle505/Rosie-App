@@ -46,6 +46,13 @@ try {
     "Desktop iframe must fill true fullscreen viewport width "+JSON.stringify(frameMetrics));
   assert.equal(frameMetrics.zoom,"scale(1)");
   console.log("PASS: Fullscreen desktop is a true 1:1 browser-width CSS viewport");
+  await page.getByRole("button",{name:"Hide tools"}).click();
+  await page.locator(".lp-hud-minimized").waitFor();
+  assert.equal(await page.locator(".lp-immersive-tip").count(),0,"Hidden controls must reveal the unobstructed page");
+  await page.getByRole("button",{name:"Show tools"}).click();
+  await page.locator(".lp-immersive-hud:not(.lp-hud-minimized)").waitFor();
+  console.log("PASS: Fullscreen toolbar can collapse and restore without changing viewport");
+
 
   await page.getByRole("button",{name:"Elements & position"}).click();
   await page.locator(".lp-floating-inspector").waitFor();
