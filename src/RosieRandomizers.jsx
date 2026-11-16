@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./RosieRandomizers.module.css";
 import RosieRouletteFace from "./RosieRouletteFace.jsx";
+import RosieSecretSanta from "./RosieSecretSanta.jsx";
 
 const DEFAULT_WHEEL = [
   "Go Out",
@@ -366,6 +367,8 @@ export default function RosieRandomizers() {
           </div>
         </aside>
       </section>
+
+      <RosieSecretSanta />
 
       <footer className={styles.salonsFooter}>
         <span />
