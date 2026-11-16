@@ -219,7 +219,7 @@ export default function RosieSecretSanta() {
       {screen === "intro" && <div className="ss-start">
         <div className="ss-start__note">
           <SealedEnvelope />
-          <p>Every guest receives one secret assignment. Nobody sees the complete draw.</p>
+          <p>Every guest receives one private assignment, revealed through their own invitation.</p>
         </div>
         <div className="ss-start__actions">
           <h3>The guest list is yours. The secrets are Rosie's.</h3>
@@ -264,7 +264,7 @@ export default function RosieSecretSanta() {
           <button type="button" className="ss-button ss-button--quiet" onClick={() => doCopy(hostLink, "Private organizer link copied.")}>COPY ORGANIZER LINK</button>
           <button type="button" className="ss-button ss-button--quiet" onClick={refreshHost} disabled={busy}>REFRESH</button>
         </div>
-        <p className="ss-hint">Keep your organizer link private. Each invitation link is a private key to one person's eventual assignment; send it directly to that guest.</p>
+        <p className="ss-hint">Keep your organizer link private. Anyone who holds a guest invitation link, including the organizer, can open that person's envelope. Share each link directly and discreetly.</p>
         <div className="ss-section-heading ss-section-heading--sm"><span>THE ENVELOPES</span><h4>Guest invitations</h4></div>
         <div className="ss-invite-list">
           {invitations.map((item, index) => <div className="ss-invite" key={item.id}>
