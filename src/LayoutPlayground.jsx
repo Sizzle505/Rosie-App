@@ -7,7 +7,7 @@ import "./LayoutPlayground.css";
  * stay inside the iframe until the user exports a layout specification.
  */
 const STORAGE_KEY = "rosieverse.layout-playground.drafts.v2";
-const BASELINE_COMMIT = "5e8afcf9d42bd245750e8f2b01aa116bccb73dc7";
+const BASELINE_COMMIT = "05c69a2e585113496a96e09fd7ee3e733091b51a";
 const DEVICE_HEIGHTS = { tablet: 1180, mobile: 844 };
 const formatSize = (width, height) => Math.round(width) + " × " + Math.round(height);
 const PAGES = [
@@ -167,6 +167,7 @@ export default function LayoutPlayground() {
   const [notice, setNotice] = useState("");
   const [immersive, setImmersive] = useState(false);
   const [inspectorOpen, setInspectorOpen] = useState(false);
+  const [hudMinimized, setHudMinimized] = useState(false);
   const [editEnabled, setEditEnabled] = useState(true);
   const [undoAvailable, setUndoAvailable] = useState(false);
   const [screenSize, setScreenSize] = useState(() => ({ width: window.innerWidth, height: window.innerHeight }));
@@ -293,6 +294,7 @@ export default function LayoutPlayground() {
   async function enterImmersive() {
     setImmersive(true);
     setInspectorOpen(false);
+    setHudMinimized(false);
     setEditEnabled(true);
     try {
       if (rootRef.current?.requestFullscreen) await rootRef.current.requestFullscreen();
@@ -305,6 +307,7 @@ export default function LayoutPlayground() {
   async function leaveImmersive() {
     setImmersive(false);
     setInspectorOpen(false);
+    setHudMinimized(false);
     if (document.fullscreenElement === rootRef.current) {
       try { await document.exitFullscreen(); } catch { /* fallback to tab-sized editing */ }
     }
@@ -493,7 +496,9 @@ export default function LayoutPlayground() {
           </div>
         </section>
       </div>
-      {immersive && <div className="lp-immersive-hud" role="toolbar" aria-label="Fullscreen layout controls">
+      {immersive && <div className={"lp-immersive-hud" + (hudMinimized ? " lp-hud-minimized" : "")}
+        role="toolbar" aria-label="Fullscreen layout controls">
+        {hudMinimized ? <button type="button" onClick={() => setHudMinimized(false)}>Show tools</button> : <>
         <strong>ROSIEVERSE <span>LAYOUT STUDIO</span></strong>
         <span className="lp-live-size">{formatSize(width, height)} · {Math.round(zoom * 100)}% view</span>
         <select aria-label="Page in fullscreen" value={page} onChange={event => switchPage(event.target.value)}>
@@ -510,9 +515,11 @@ export default function LayoutPlayground() {
         </button>
         <button type="button" onClick={undo} disabled={!undoAvailable}>Undo</button>
         <button type="button" className="lp-gold" onClick={exportLayout}>Export JSON</button>
+        <button type="button" onClick={() => { setInspectorOpen(false); setHudMinimized(true); }}>Hide tools</button>
         <button type="button" onClick={leaveImmersive}>Exit fullscreen</button>
+        </>}
       </div>}
-      {immersive && <p className="lp-immersive-tip">
+      {immersive && !hudMinimized && <p className="lp-immersive-tip">
         {editEnabled ? "Drag page elements directly. Use Elements & position for exact X/Y and scale." :
           "Live interaction mode: page controls work normally. Switch back to Arrange to move elements."}
       </p>}
