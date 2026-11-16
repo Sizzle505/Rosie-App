@@ -1200,7 +1200,15 @@
    rendered offsets without replacing the existing art/positioning transforms
    or breaking the surrounding layout's flow. Only QR Atelier is affected. */
 @media screen and (min-width: 1200px) {
+  /* Re-establish the desktop baseline used by the actual playground preview.
+     Main changed the title to fixed positioning after that preview was made. */
   .app-shell.page-qr-atelier .qa-title {
+    position: absolute;
+    top: clamp(520px, 37vw, 700px);
+    left: calc(41vw - min(32vw, 440px) - 18px);
+    right: auto;
+    width: min(32vw, 440px);
+    transform: translateY(34px);
     translate: 32px 22px;
     scale: .9;
   }
@@ -1218,7 +1226,18 @@
     translate: -71px -413px;
     scale: .74;
   }
+  /* The collection was also made fixed after the playground was branched.
+     Preserve its original grid placement before applying the saved move. */
   .app-shell.page-qr-atelier .qa-collection {
+    position: relative;
+    grid-column: 1;
+    grid-row: 4;
+    top: auto;
+    left: auto;
+    width: 40%;
+    max-height: none;
+    overflow: visible;
+    margin: 32px auto 18px;
     translate: 42px -137px;
   }
 }
