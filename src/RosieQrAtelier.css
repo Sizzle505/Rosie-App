@@ -1234,7 +1234,25 @@
     min-height:max(960px,56.25vw);
     grid-template-rows:60px 390px auto auto auto;
     padding-bottom:60px;
-    background-size:100% 100%;
+    /* Keep the workshop artwork stationary as longer creation forms grow. */
+    background-size:100% auto;
+    background-color:#160f0a;
+    background-repeat:no-repeat;
+  }
+  .app-shell.page-qr-atelier .qa-scene::after {
+    content:"";
+    position:absolute;
+    top:calc(100vw * 941 / 1672 - 2px);
+    bottom:0;
+    left:0;
+    right:0;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg,transparent 49.8%,rgba(186,113,38,.3) 50%,transparent 50.2%) 0 0 / 19% 100%,
+      repeating-linear-gradient(0deg,transparent 0 83px,rgba(183,115,42,.27) 84px,transparent 86px),
+      radial-gradient(ellipse at 50% 0,rgba(106,63,30,.36),transparent 65%),
+      #160f0a;
+    z-index:0;
   }
 }
 /* Tablet CSS introduced after the original playground narrowed the QR frame
