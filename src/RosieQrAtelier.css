@@ -1288,7 +1288,7 @@
 @media screen and (min-width: 1200px) {
   /* title: (32,22), scale .9 + (-28,+37), scale ×1 */
   .app-shell.page-qr-atelier .qa-title {
-    translate: 4px 29px;
+    translate: 4px -1px;
     scale: .9;
   }
   /* workbench: (-71,-42), scale .92 + (0,+99), scale ×1.19 */
@@ -1315,6 +1315,17 @@
   /* preview actions: (-71,-37) + (0,-17) */
   .app-shell.page-qr-atelier .qa-preview-actions {
     translate: -71px -54px;
+  }
+  /* Website layout is the anchor; left-side controls never follow form height. */
+  .app-shell.page-qr-atelier .qa-collection {
+    position:absolute;
+    grid-column:auto;
+    grid-row:auto;
+    top:clamp(670px,45.75vw,871px);
+    left:19.24%;
+    width:18.8%;
+    margin:0;
+    translate:none;
   }
   /* The finish choices stay aligned with the frame as form fields change. */
   .app-shell.page-qr-atelier .qa-finish-strip {
