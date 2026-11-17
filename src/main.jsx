@@ -3198,15 +3198,6 @@ function App() {
         ) : page === "captain" ? (
           <>
             <div className="captain-arcade-page-background" aria-hidden="true" />
-            <nav className="captain-arcade-jump" aria-label="Captain arcade game navigation">
-              <span>CAPTAIN'S THREE ADVENTURES</span>
-              <button type="button" onClick={() => document.getElementById("cosmic-odyssey-arcade")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
-                <img src="/cosmic-odyssey/assets/cosmic-banner.webp" alt="" aria-hidden="true" loading="lazy" />
-                <strong>GO TO COSMIC ODYSSEY</strong>
-                <small>Space maze · After the Tunnel Drill</small>
-              </button>
-              <a href="/cosmic-odyssey/index.html" target="_blank" rel="noopener noreferrer">OPEN STANDALONE GAME</a>
-            </nav>
             <FullscreenGameFrame label="Captain Rosie Yacht Adventure" variant="yacht">
               <CaptainRosieGame soundOn={soundOn} />
             </FullscreenGameFrame>
