@@ -1768,3 +1768,9 @@
 @media(prefers-reduced-motion:reduce){
  .victory-card,.victory-image{animation:none!important;transition:none!important}
 }
+/* Keep live header controls and decoration inside the artwork's gold frame. */
+.cosmic-top.cosmic-banner-top{
+  border:0!important;box-shadow:none!important;overflow:hidden!important;
+}
+.cosmic-banner-top .cosmic-banner-art{border:0!important;box-shadow:none!important;}
+.cosmic-banner-top .cosmic-banner-stage{bottom:clamp(7px,1vw,13px)!important;}
