@@ -11,6 +11,8 @@ try {
     const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 });
     const page = await context.newPage();
     await page.goto("http://127.0.0.1:5173/#randomizers", { waitUntil: "networkidle" });
+    // Wait for Rosie's app-wide loading curtain to disappear before taking visual evidence.
+    await page.locator(".loading-screen").waitFor({ state: "hidden", timeout: 15000 });
     const secret = page.locator(".ss-shell");
     await secret.waitFor({ state: "visible" });
     assert.equal(await page.locator(".ss-inline-create form").isVisible(), true,
