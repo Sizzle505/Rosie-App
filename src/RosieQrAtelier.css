@@ -1319,6 +1319,8 @@
   /* The finish choices stay aligned with the frame as form fields change. */
   .app-shell.page-qr-atelier .qa-finish-strip {
     position:absolute;
+    grid-column:auto;
+    grid-row:auto;
     top:clamp(740px,43.99vw,838px);
     left:54.42%;
     width:38.16%;
