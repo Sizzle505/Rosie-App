@@ -198,7 +198,7 @@ export default function RosieRandomizers() {
           <span>ROSIE’S PRIVATE SALON</span>
           <strong><em>Rosie’s</em><br/>Randomizers</strong>
           <p>For decisions too important<br/>to leave to humans.</p>
-          <small>COINS&nbsp; ✦ &nbsp;DICE&nbsp; ✦ &nbsp;WHEELS&nbsp; ✦ &nbsp;AND MORE</small>
+          <small>COINS&nbsp; ✦ &nbsp;DICE&nbsp; ✦ &nbsp;WHEELS<br/>AND MORE</small>
         </div>
       </header>
 
