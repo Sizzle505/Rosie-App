@@ -1233,6 +1233,7 @@
   .app-shell.page-qr-atelier .qa-scene {
     min-height:0;
     grid-template-rows:60px 390px auto auto auto;
+    padding-bottom:60px;
     background-size:100% 100%;
   }
 }
