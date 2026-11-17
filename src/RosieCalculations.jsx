@@ -226,6 +226,7 @@ export default function RosieCalculations() {
   useLayoutEffect(() => {
     if (tool || !scrollToolkitBottomRef.current) return undefined;
     scrollToolkitBottomRef.current = false;
+    if (window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches) return undefined;
     const scrollToBottom = () => {
       const root = document.scrollingElement || document.documentElement;
       window.scrollTo({top:Math.max(0, root.scrollHeight-window.innerHeight), behavior:"instant"});
@@ -233,6 +234,11 @@ export default function RosieCalculations() {
     const frame = requestAnimationFrame(scrollToBottom);
     const settle = window.setTimeout(scrollToBottom, 140);
     return () => {cancelAnimationFrame(frame);window.clearTimeout(settle);};
+  }, [tool]);
+  useEffect(() => {
+    if (!tool || !window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches) return;
+    const frame = requestAnimationFrame(() => document.querySelector(".rc-active-tool-overlay")?.scrollIntoView({behavior:"smooth",block:"nearest"}));
+    return () => cancelAnimationFrame(frame);
   }, [tool]);
   // A dedicated iPhone tool stage covers the page header. Scale the WHOLE
   // approved one-piece gold frame (not its contents independently) to fit
