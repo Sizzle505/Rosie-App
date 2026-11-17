@@ -216,14 +216,22 @@
     background-image:url('/rosieverse/calculations/hero/hero-mobile-16x9.webp')!important;
     background-size:115% auto!important;background-position:center bottom!important;
     background-repeat:no-repeat!important;
+    border:2px solid #e0ad52!important;border-radius:19px!important;
+    box-shadow:0 0 0 1px #15040b,0 0 0 5px #c28c3b3b,inset 0 0 0 2px #ffe3a84a,0 13px 28px #130009a6!important;
   }
+  .app-shell.page-calculations main.rc-page > .rc-hero .rc-custom-hero,
+  .app-shell.page-calculations main.rc-page > .rc-hero .rc-desktop-hero-copy {display:none!important;}
   .app-shell.page-calculations main.rc-page > .rc-calculator-stage {
     grid-column:1!important;grid-row:2!important;width:100%!important;margin:0!important;
+    padding:clamp(16px,2vw,31px) clamp(18px,3vw,48px) 32px!important;
+    border:2px solid #cda050!important;border-radius:20px!important;
+    background:linear-gradient(145deg,rgba(42,4,15,.43),rgba(21,2,10,.75)),url('/rosieverse/calculations/desktop-20261029/desktop-velvet-background.webp') center / cover no-repeat!important;
+    box-shadow:0 0 0 1px #16050c,0 0 0 5px #ae78342b,inset 0 0 0 2px #e7bc6b50,0 17px 35px #11010791!important;
   }
   .app-shell.page-calculations main.rc-page > .rc-workspace {
     grid-column:2!important;grid-row:1 / span 2!important;
-    position:relative!important;width:100%!important;min-height:720px!important;
-    margin:0!important;padding:clamp(84px,6vw,115px) clamp(75px,7vw,125px) 80px!important;
+    position:relative!important;width:100%!important;min-height:0!important;
+    margin:0!important;padding:clamp(84px,6vw,115px) clamp(75px,7vw,125px) 14px!important;
     border:0!important;border-radius:17px!important;
     background-color:#4a071b!important;
     background-image:url('/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp'),url('/rosieverse/calculations/burgundy-satin.png')!important;
@@ -235,6 +243,10 @@
     display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
     gap:clamp(8px,.8vw,14px)!important;align-items:center!important;
     width:100%!important;padding:0!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tools-heading {
+    margin:0 auto clamp(16px,1.7vw,29px)!important;
+    color:#4c1916!important;text-shadow:0 1px #fff4d3!important;
   }
   .app-shell.page-calculations main.rc-page .rc-tool-card,
   .app-shell.page-calculations main.rc-page .rc-tool-card:nth-child(n) {
