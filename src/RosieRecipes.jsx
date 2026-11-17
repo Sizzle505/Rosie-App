@@ -124,6 +124,21 @@ export default function RosieRecipes() {
   }
   return <main className="recipes-page" aria-label="Rosie’s Recipes">
     <div className="recipes-top-scene" role="img" aria-label="Rosie cooking a royal feast in her warm golden kitchen" />
+    <aside className="recipes-desktop-discovery" aria-label="Find recipes">
+      <div className={`recipes-crest ${crestReady ? "has-art" : ""}`} role="img" aria-label="Rosie’s Recipes - The Royal Cookbook">
+        <img src={ROOT + "recipes-title.webp"} alt="" /><span>Rosie’s Recipes</span><small>THE ROYAL COOKBOOK</small>
+      </div>
+      <div className="recipes-desktop-controls">
+        <label className="recipes-inline-search"><span aria-hidden="true">⌕</span><span className="recipes-visually-hidden">Find a recipe</span>
+          <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a recipe…" autoComplete="off" />
+        </label>
+        <nav className="recipes-meal-filters" aria-label="Browse recipes by meal">
+          {RECIPE_CATEGORIES.map((cat) => <button key={cat} type="button" className={category===cat?"is-active":""} aria-pressed={category===cat}
+            onClick={() => setCategory(cat)}>{cat === "All" ? "Random" : cat === "Favorites" ? "Favorites" : COOKBOOK.labels[cat] || cat}</button>)}
+        </nav>
+        {(query || category !== "All") && <p className="recipes-count" role="status">{filtered.length} {filtered.length===1?"recipe":"recipes"}</p>}
+      </div>
+    </aside>
     <div className="recipes-body">
       <header className="recipes-heading">
         <h1 className="recipes-visually-hidden">Rosie’s Recipes</h1>
