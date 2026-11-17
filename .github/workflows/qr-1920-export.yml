@@ -1,0 +1,54 @@
+name: QR Atelier - November 17 fullscreen export parity
+on:
+  push:
+    branches:
+      - feature/qr-1920-export-20261117
+    paths:
+      - src/RosieQrAtelier.css
+      - scripts/verify_qr_1920_export.mjs
+      - .github/workflows/qr-1920-export.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - src/RosieQrAtelier.css
+      - scripts/verify_qr_1920_export.mjs
+      - .github/workflows/qr-1920-export.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-with-playground:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install original baseline and updated app
+        run: |
+          git worktree add /tmp/rosie-qr-export-reference 05c69a2e585113496a96e09fd7ee3e733091b51a
+          npm ci
+          npm ci --prefix /tmp/rosie-qr-export-reference
+      - name: Build updated app
+        run: npm run build
+      - name: Install Chromium for actual browser comparisons
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run 1920px 1440px tablet and phone parity checks
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/qr-new.log 2>&1 &
+          ( cd /tmp/rosie-qr-export-reference && npm run dev -- --host 127.0.0.1 --port 5174 > /tmp/qr-reference.log 2>&1 ) &
+          sleep 8
+          node scripts/verify_qr_1920_export.mjs
+      - name: Preserve screenshots for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qr-at-1920-export-browser-evidence
+          path: artifacts/qr-20261117/
+          if-no-files-found: ignore
