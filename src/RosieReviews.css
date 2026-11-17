@@ -82,7 +82,26 @@
 
 /* Wide desktop cinema: align the art and catalogue at the top of the page.
    Phone and touch tablet presentations retain their existing rules. */
+.reviews-desktop-discovery {display:none}
 @media (min-width:1200px) and (hover:hover) and (pointer:fine) {
+ .app-shell.page-reviews .reviews-desktop-discovery {
+   display:block;position:fixed;z-index:4;
+   top:calc(clamp(106px,13vh,144px) + min(22vw,380px) + 22px);
+   left:clamp(24px,3vw,60px);width:min(44vw,760px);
+   max-height:calc(100dvh - clamp(106px,13vh,144px) - min(22vw,380px) - 35px);
+   overflow-y:auto;padding:22px 25px 12px;
+   border:2px solid #b78b55;border-radius:18px;
+   background:linear-gradient(145deg,#f7ebd0,#e9cfaa);
+   box-shadow:inset 0 0 0 3px #fff6e5,0 15px 35px #18030b9c;
+   scrollbar-width:thin;
+ }
+ .app-shell.page-reviews .reviews-desktop-discovery .reviews-kicker {display:block;margin-bottom:12px;}
+ .app-shell.page-reviews .reviews-desktop-discovery .reviews-tabs {
+   margin:16px 0 8px;flex-wrap:wrap;overflow:visible;border:0;padding:0;
+ }
+ .app-shell.page-reviews .reviews-discovery-count {margin:5px 0;color:#744a3e;font:12px system-ui,sans-serif;}
+ .app-shell.page-reviews .reviews-content > .reviews-search,
+ .app-shell.page-reviews .reviews-content > .reviews-tabs {display:none!important;}
  .app-shell.page-reviews .rosie-reviews { padding-top:86px!important; }
  .app-shell.page-reviews .reviews-hero.has-art {
    top:clamp(106px,13vh,144px)!important;
