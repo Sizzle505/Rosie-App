@@ -400,6 +400,7 @@ export default function RosieSecretSanta() {
 
 
       {screen === "join" && joinMeta && <div className="ss-paper ss-join-card">
+        <img className="ss-join-art" src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" aria-hidden="true" loading="lazy" />
         <span className="ss-eyebrow">YOU'RE INVITED</span>
         <h3>{joinMeta.title}</h3>
         {joinMeta.open ? <form onSubmit={registerGuest} className="ss-join-form">
@@ -428,8 +429,9 @@ export default function RosieSecretSanta() {
         </form> : <p>Registration has closed. If you're already participating, use your private invitation link.</p>}
       </div>}
 
-      {screen === "host" && exchange && <div className="ss-paper">
+      {screen === "host" && exchange && <div className="ss-paper ss-host-page">
         <div className="ss-section-heading">
+          <img className="ss-host-gifts" src="/randomizers/secret-santa/07-gift-collection.webp" alt="" aria-hidden="true" loading="lazy" />
           <span>ORGANIZER'S PRIVATE LEDGER</span>
           <h3>{exchange.title}</h3>
           <img className="ss-host-crest" src="/randomizers/secret-santa/09-secret-santa-emblem.webp" alt="" aria-hidden="true" loading="lazy" />
@@ -566,6 +568,7 @@ export default function RosieSecretSanta() {
 
       {screen === "guest" && guestData && <div className="ss-guest">
         <div className="ss-paper ss-guest__details">
+          <img className="ss-guest-scroll" src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" aria-hidden="true" loading="lazy" />
           <span className="ss-eyebrow">A PRIVATE ENVELOPE FOR</span>
           <h3>{guestData.guest.name}</h3>
           <p>You're part of <strong>{guestData.exchange.title}</strong>.</p>

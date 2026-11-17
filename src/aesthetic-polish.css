@@ -41,6 +41,13 @@
 }
 
 /* Cheese - give the exam a quiet, bespoke university setting while retaining the game board's geometry. */
+@media (min-width: 1200px) {
+  .app-shell.page-cheese {
+    background: #211319 url('/rosieverse/refresh/cheese-academy.webp') center top / cover fixed no-repeat;
+  }
+  .app-shell.page-cheese .cheese-game-page { padding-top: 76px; }
+  .app-shell.page-cheese .cheese-game-page::before { opacity: 0; }
+}
 .cheese-game-page {
   position: relative;
   isolation: isolate;
