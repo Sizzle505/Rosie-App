@@ -252,7 +252,7 @@ export default function RosieSecretSanta() {
           alt="" aria-hidden="true" loading="lazy" />
         <div className="ss-inline-create__intro">
           <span className="ss-eyebrow">ROSIE'S PRIVATE GIFT EXCHANGE</span>
-          <h3>Draw the names.<br/><em>Keep the secret.</em></h3>
+          <h3>Draw the names.<br/>{" "}<em>Keep the secret.</em></h3>
           <p>Enter your guests, create the exchange, then send each person their own private reveal link.</p>
           <img src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" loading="lazy" />
         </div>
