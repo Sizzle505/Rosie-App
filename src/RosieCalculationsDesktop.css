@@ -208,7 +208,7 @@
   }
   .app-shell.page-calculations main.rc-page .rc-tool-grid {
     display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:clamp(7px,.6vw,11px) clamp(8px,.85vw,16px)!important;align-items:center!important;
+    gap:clamp(10px,.75vw,14px) clamp(10px,.8vw,16px)!important;align-items:center!important;
     width:100%!important;padding:0!important;
   }
   .app-shell.page-calculations main.rc-page .rc-tools-heading {
@@ -219,6 +219,8 @@
   .app-shell.page-calculations main.rc-page .rc-tool-card:nth-child(n) {
     grid-column:auto!important;width:100%!important;height:auto!important;
     aspect-ratio:538 / 246!important;min-height:0!important;
+    margin:0!important;padding:0!important;border:0!important;background:transparent!important;
+    box-shadow:none!important;
   }
   .app-shell.page-calculations main.rc-page .rc-tool-card--currency,
   .app-shell.page-calculations main.rc-page .rc-tool-card--currency:nth-child(n) {
@@ -246,7 +248,12 @@
     width:100%!important;max-width:670px!important;margin:0 auto!important;
   }
   .app-shell.page-calculations main.rc-page .rc-active-tool-close {
-    position:static!important;display:block!important;margin:12px auto 0!important;
+    display:none!important;
   }
+  .app-shell.page-calculations main.rc-page .rac-frame {
+    width:100%;max-width:650px;margin:0 auto!important;
+    padding:clamp(19px,2vw,33px) clamp(24px,3.3vw,50px) 32px!important;
+  }
+  .app-shell.page-calculations main.rc-page .rac-key {height:clamp(47px,4vw,59px)!important;}
   .app-shell.page-calculations main.rc-page .rc-footer-note {color:#f4d8a7!important;}
 }
