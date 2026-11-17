@@ -25,17 +25,6 @@ const approved = Object.freeze({
 const browser = await chromium.launch({headless:true});
 await fs.mkdir("artifacts/qr-20261117", {recursive:true});
 
-function extractRuler() {
-  const out = {};
-  for(const [id,sel] of Object.entries(selectors)){
-    const element = document.querySelector(sel);
-    if (!element) throw Error("QR target not found: "+id);
-    const r=element.getBoundingClientRect(),style=getComputedStyle(element);
-    out[id]={x:r.x,y:r.y,width:r.width,height:r.height,translate:style.translate,scale:style.scale};
-  }
-  return out;
-}
-
 async function loaded(page) {
   await page.locator(".qa-panel").waitFor({timeout:20000});
   await page.evaluate(async ()=>{
@@ -69,7 +58,7 @@ try {
             const element=document.querySelector(selectors[id]);
             if(!element)throw Error("Missing original element: "+id);
             const computed=getComputedStyle(element);
-            const parts=computed.translate==="none"?[]:computed.translate.split(/\\s+/);
+            const parts=computed.translate==="none"?[]:computed.translate.split(/\s+/);
             const factors=computed.scale==="none"?[1]:computed.scale.split(/\\s+/).map(Number);
             element.style.translate=add(parts[0]||"0px",x)+" "+add(parts[1]||"0px",y);
             element.style.scale=factors.map(n=>Number((n*scale).toFixed(6))).join(" ");
@@ -77,16 +66,14 @@ try {
         },{approved,selectors});
       }
       const [a,b]=await Promise.all([
-        original.evaluate(extractRuler.toString().startsWith("function")?
-          // Runtime function serializes selectors separately.
-          ({selectors})=>{
-            const out={};
-            for(const [id,sel] of Object.entries(selectors)){
-              const r=document.querySelector(sel).getBoundingClientRect();
-              out[id]={x:r.x,y:r.y,width:r.width,height:r.height};
-            }
-            return out;
-          }:null,{selectors}),
+        original.evaluate(({selectors})=>{
+          const out={};
+          for(const [id,sel] of Object.entries(selectors)){
+            const r=document.querySelector(sel).getBoundingClientRect();
+            out[id]={x:r.x,y:r.y,width:r.width,height:r.height};
+          }
+          return out;
+        },{selectors}),
         revised.evaluate(({selectors})=>{
           const out={};
           for(const [id,sel] of Object.entries(selectors)){
