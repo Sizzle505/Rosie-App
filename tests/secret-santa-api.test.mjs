@@ -13,6 +13,7 @@ function success(body) {
 }
 globalThis.fetch = async (url, options) => {
   const u = new URL(url);
+  if (u.pathname === "/rest/v1/rpc/rosie_rate_limit") return success({ blocked: false });
   assert.equal(u.pathname, "/rest/v1/rosie_santa_exchanges");
   assert.ok(options.headers.Authorization.startsWith("Bearer "));
   const method = options.method;
@@ -20,7 +21,7 @@ globalThis.fetch = async (url, options) => {
     const body = JSON.parse(options.body);
     const now = new Date().toISOString();
     const row = { id: crypto.randomUUID(), status: "draft", assignments: {}, exclusions: [],
-      created_at: now, updated_at: now, drawn_at: null, budget: "", exchange_date: null, ...body };
+      created_at: now, updated_at: now, drawn_at: null, budget: "", exchange_date: null, revision: 0, join_enabled: false, ...body };
     rows.push(row);
     return success([row]);
   }
@@ -28,7 +29,9 @@ globalThis.fetch = async (url, options) => {
   const matches = rows.filter(row => !id || row.id === id);
   if (method === "GET") return success(matches);
   if (method === "PATCH") {
-    const eligible = matches.filter(row => !u.searchParams.get("status") || row.status === u.searchParams.get("status").replace("eq.", ""));
+    const eligible = matches.filter(row =>
+      (!u.searchParams.get("status") || row.status === u.searchParams.get("status").replace("eq.", "")) &&
+      (!u.searchParams.get("revision") || row.revision === Number(u.searchParams.get("revision").replace("eq.", ""))));
     const changes = JSON.parse(options.body);
     for (const row of eligible) Object.assign(row, changes);
     return success(eligible.map(row => ({ ...row })));
@@ -140,6 +143,89 @@ test("organizer can save, replace and clear optional guest emails without exposi
   assert.equal(draw.status, 200);
   const locked = await invoke("emails", { ...credentials, updates: [{ id: guest.id, email: "after@example.com" }] });
   assert.equal(locked.status, 409);
+});
+
+
+test("open invitation requires correct passcode and registers guests with private wishes", async () => {
+  const made = await invoke("create", { title: "Rosie's Secret Santa 2026",
+    names: [], registration: true, passcode: "67" });
+  assert.equal(made.status, 201);
+  const { exchange, hostToken, joinToken } = made.body;
+  assert.equal(exchange.participants.length, 0);
+  assert.equal(exchange.joinEnabled, true);
+  assert.match(joinToken, /^[0-9a-f]{64}$/);
+  const creds = { exchangeId: exchange.id, joinToken };
+  const info = await invoke("joinInfo", creds);
+  assert.equal(info.body.exchange.title, "Rosie's Secret Santa 2026");
+  assert.equal(info.body.exchange.open, true);
+  const invisible = await invoke("joinInfo", { ...creds, joinToken: "0".repeat(64) });
+  assert.equal(invisible.status, 403);
+  const wrong = await invoke("join", { ...creds, passcode: "68", name: "Jo",
+    email: "jo@example.com", wishlist: [] });
+  assert.equal(wrong.status, 403);
+  const badLink = await invoke("join", { ...creds, passcode: "67", name: "Jo",
+    email: "jo@example.com", wishlist: [{ title: "Unsafe", url: "javascript:alert(1)" }] });
+  assert.equal(badLink.status, 400);
+  const joined = await invoke("join", { ...creds, passcode: "67", name: "Jo",
+    email: "jo@example.com", wishlist: [{ title: "Book", url: "https://books.example/1" }] });
+  assert.equal(joined.status, 201, JSON.stringify(joined.body));
+  const guestCreds = { exchangeId: exchange.id, guestId: joined.body.guest.id,
+    guestToken: joined.body.guestToken };
+  assert.equal(joined.body.guest.wishlist[0].title, "Book");
+  assert.equal(joined.body.guest.email, "jo@example.com");
+  assert.equal(Object.hasOwn(joined.body, "participants"), false);
+  const repeatName = await invoke("join", { ...creds, passcode: "67", name: "jo",
+    email: "someone@example.com", wishlist: [] });
+  assert.equal(repeatName.status, 409);
+  const repeatEmail = await invoke("join", { ...creds, passcode: "67", name: "Else",
+    email: "JO@example.com", wishlist: [] });
+  assert.equal(repeatEmail.status, 409);
+  const other = await invoke("join", { ...creds, passcode: "67", name: "Sam",
+    email: "sam@example.com", wishlist: [] });
+  assert.equal(other.status, 201);
+  const third = await invoke("join", { ...creds, passcode: "67", name: "Lee",
+    email: "lee@example.com", wishlist: [] });
+  assert.equal(third.status, 201);
+  const update = await invoke("saveWishlist", { ...guestCreds, email: "jo.new@example.com",
+    wishlist: [{ title: "Fuzzy slippers", url: "https://shop.example/slippers" },
+      { title: "Surprise", url: "" }] });
+  assert.equal(update.status, 200);
+  assert.equal(update.body.guest.wishlist.length, 2);
+  const badOwner = await invoke("saveWishlist", { ...guestCreds, guestToken: "0".repeat(64),
+    email: "theft@example.com", wishlist: [] });
+  assert.equal(badOwner.status, 403);
+  const dashboard = await invoke("dashboard", { exchangeId: exchange.id, hostToken });
+  assert.equal(dashboard.body.exchange.participants.length, 3);
+  assert.equal(dashboard.body.exchange.participants[0].email, "jo.new@example.com");
+  assert.equal(dashboard.body.joinToken, joinToken);
+  const guestRead = await invoke("guest", guestCreds);
+  assert.equal(guestRead.body.guest.wishlist.length, 2);
+  assert.equal(Object.hasOwn(guestRead.body, "participants"), false);
+  const draw = await invoke("draw", { exchangeId: exchange.id, hostToken });
+  assert.equal(draw.status, 200);
+  const revealed = await invoke("reveal", guestCreds);
+  assert.equal(revealed.status, 200);
+  assert.ok(Array.isArray(revealed.body.recipient.wishlist));
+  const afterDraw = await invoke("join", { ...creds, passcode: "67",
+    name: "Late", email: "late@example.com", wishlist: [] });
+  assert.equal(afterDraw.status, 409);
+  const afterEdit = await invoke("saveWishlist", { ...guestCreds, email: "jo.new@example.com",
+    wishlist: [{ title: "Fresh list", url: "https://shop.example/fresh" }] });
+  assert.equal(afterEdit.status, 200);
+});
+
+test("invalid wishlist inputs cannot overwrite a guest's saved list", async () => {
+  const made = await invoke("create", { title: "Wishlist safety", names: ["Ash", "Bea", "Cam"] });
+  const first = made.body.invitations[0];
+  const credentials = { exchangeId: made.body.exchange.id, guestId: first.id, guestToken: first.token };
+  const tooMany = await invoke("saveWishlist", { ...credentials,
+    wishlist: Array.from({ length: 21 }, (_, i) => ({ title: "Item " + i, url: "" })) });
+  assert.equal(tooMany.status, 400);
+  const invalid = await invoke("saveWishlist", { ...credentials,
+    wishlist: [{ title: "Bad", url: "https://user:password@example.com/gift" }] });
+  assert.equal(invalid.status, 400);
+  const fresh = await invoke("guest", credentials);
+  assert.deepEqual(fresh.body.guest.wishlist, []);
 });
 
 test.after(() => {
