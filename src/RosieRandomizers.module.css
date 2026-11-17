@@ -1298,7 +1298,7 @@
   .approvedHeaderArt { display: none; }
   .desktopHeroCopy {
     display: flex; position: absolute; z-index: 2;
-    left: 6%; top: 17%; width: 44%; height: 70%;
+    left: 6%; top: 14%; width: 36%; height: 72%;
     flex-direction: column; align-items: flex-start;
     color: #fff2d8; text-shadow: 0 2px 10px #130508;
   }
@@ -1307,12 +1307,13 @@
     letter-spacing: .22em;
   }
   .desktopHeroCopy strong {
-    margin: 18px 0 12px; font: 600 clamp(42px, 4.3vw, 78px)/.93 Georgia, serif;
+    margin: clamp(14px,1.5vw,26px) 0 clamp(11px,1.3vw,20px);
+    font: 600 clamp(42px, 4vw, 72px)/.96 Georgia, serif;
     letter-spacing: -.045em;
   }
   .desktopHeroCopy strong em { font-weight: 400; }
   .desktopHeroCopy p { margin: 0 0 auto; font: italic clamp(17px, 1.6vw, 27px)/1.2 Georgia, serif; }
-  .desktopHeroCopy small {max-width:390px;line-height:1.45;}
+  .desktopHeroCopy small {max-width:390px;line-height:1.45;padding-top:10px;border-top:1px solid #f1cb8073;}
   .ivoryRow { margin-top: 0; }
 }
 /* Desktop randomizer casino: dedicated garnet satin, with a richer glint
