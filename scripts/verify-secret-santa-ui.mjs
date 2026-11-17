@@ -6,7 +6,7 @@ await mkdir("artifacts/secret-santa", { recursive: true });
 const browser = await chromium.launch({ headless: true });
 try {
   for (const [device, width, height] of [
-    ["desktop", 1366, 900], ["ipad", 820, 1180], ["iphone", 390, 844]
+    ["desktop", 1366, 900], ["ipad", 820, 1180], ["iphone", 390, 844], ["iphone-small", 350, 780]
   ]) {
     const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 });
     const page = await context.newPage();
@@ -25,6 +25,32 @@ try {
     const dims = await secret.evaluate(node => ({ client: node.clientWidth, scroll: node.scrollWidth }));
     assert.ok(dims.scroll <= dims.client + 3,
       device + " panel overflows horizontally " + JSON.stringify(dims));
+    if (width <= 600) {
+      const rosie = page.locator(".ss-hero__mobile-rosie img");
+      const marquee = page.locator(".ss-hero__mobile-marquee img");
+      const props = page.locator(".ss-hero__mobile-props");
+      assert.equal(await rosie.isVisible(), true, device + " Rosie artwork hidden");
+      assert.equal(await marquee.isVisible(), true, device + " Secret Santa plaque hidden");
+      assert.equal(await props.isVisible(), true, device + " art embellishments hidden");
+      for (const art of ["07-gift-collection.webp", "03-sealed-envelope.webp", "08-invitation-scroll.webp"]) {
+        const node = props.locator('img[src$="' + art + '"]');
+        assert.equal(await node.isVisible(), true, device + " missing asset " + art);
+        await node.evaluate(image => image.decode());
+      }
+      const r = await rosie.boundingBox();
+      const m = await marquee.boundingBox();
+      const shell = await secret.boundingBox();
+      assert.ok(r && m && shell);
+      assert.ok(r.width >= shell.width * 0.86,
+        device + " Rosie should occupy the phone width: " + JSON.stringify({r,shell}));
+      assert.ok(m.width >= shell.width * 0.86,
+        device + " Secret Santa plaque should occupy the phone width");
+      assert.ok(m.y > r.y + r.height * 0.70,
+        device + " plaque should stack below Rosie's artwork rather than sit beside her");
+      assert.ok(m.y < r.y + r.height + 8,
+        device + " plaque should visually connect to Rosie without unnecessary blank space");
+      assert.equal(await page.locator(".ss-inline-create__emblem").isVisible(), true);
+    }
     await secret.screenshot({ path: "artifacts/secret-santa/" + device + ".png" });
 
     // Exercise the organizer's private pre-draw email editor with a mocked API.
