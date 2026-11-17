@@ -79,3 +79,33 @@
  .app-shell.page-reviews .reviews-film-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))!important;gap:14px!important}
  .app-shell.page-reviews .reviews-film-strip{grid-auto-columns:minmax(125px,25%)!important}
 }
+
+/* Wide desktop cinema: align the art and catalogue at the top of the page.
+   Phone and touch tablet presentations retain their existing rules. */
+@media (min-width:1200px) and (hover:hover) and (pointer:fine) {
+ .app-shell.page-reviews .rosie-reviews { padding-top:86px!important; }
+ .app-shell.page-reviews .reviews-hero.has-art {
+   top:clamp(106px,13vh,144px)!important;
+   left:clamp(24px,3vw,60px)!important;
+   width:min(44vw,760px)!important;
+   transform:none!important;
+   background-position:31% center!important;
+ }
+ .app-shell.page-reviews .reviews-content {
+   width:calc(53vw - clamp(24px,3vw,60px))!important;
+   margin-right:clamp(24px,3vw,60px)!important;
+   padding:clamp(22px,1.8vw,34px)!important;
+ }
+ .app-shell.page-reviews .reviews-search input { min-height:48px; }
+ .app-shell.page-reviews .reviews-tabs { gap:10px; }
+ .app-shell.page-reviews .reviews-tabs button { min-height:40px; }
+ .app-shell.page-reviews .reviews-film-strip {
+   grid-auto-columns:clamp(130px,17%,190px)!important;
+   gap:clamp(12px,1vw,18px)!important;
+   scrollbar-color:#9b6c4a #ead6b7;
+ }
+ .app-shell.page-reviews .reviews-film-grid {
+   grid-template-columns:repeat(auto-fill,minmax(145px,1fr))!important;
+   gap:20px 16px!important;
+ }
+}
