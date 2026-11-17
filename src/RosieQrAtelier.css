@@ -1288,7 +1288,7 @@
 @media screen and (min-width: 1200px) {
   /* title: (32,22), scale .9 + (-28,+37), scale ×1 */
   .app-shell.page-qr-atelier .qa-title {
-    translate: 4px 59px;
+    translate: 4px 29px;
     scale: .9;
   }
   /* workbench: (-71,-42), scale .92 + (0,+99), scale ×1.19 */
@@ -1310,10 +1310,18 @@
   }
   /* saved collection: (42,-137) + (56,+202) */
   .app-shell.page-qr-atelier .qa-collection {
-    translate: 98px 65px;
+    translate: 98px 35px;
   }
   /* preview actions: (-71,-37) + (0,-17) */
   .app-shell.page-qr-atelier .qa-preview-actions {
     translate: -71px -54px;
+  }
+  /* The finish choices stay aligned with the frame as form fields change. */
+  .app-shell.page-qr-atelier .qa-finish-strip {
+    position:absolute;
+    top:clamp(740px,43.99vw,838px);
+    left:54.42%;
+    width:38.16%;
+    margin:0;
   }
 }
