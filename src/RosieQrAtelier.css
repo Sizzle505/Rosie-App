@@ -1231,7 +1231,7 @@
     padding-bottom:0!important;
   }
   .app-shell.page-qr-atelier .qa-scene {
-    min-height:0;
+    min-height:max(960px,56.25vw);
     grid-template-rows:60px 390px auto auto auto;
     padding-bottom:60px;
     background-size:100% 100%;
@@ -1293,8 +1293,9 @@
   }
   /* workbench: (-71,-42), scale .92 + (0,+99), scale ×1.19 */
   .app-shell.page-qr-atelier .qa-panel {
-    translate: -71px 57px;
+    translate: -71px 40px;
     scale: 1.0948;
+    transform-origin:top center;
   }
   /* inputs are a separate child target of the enlarged workbench. */
   .app-shell.page-qr-atelier .qa-inputs {
