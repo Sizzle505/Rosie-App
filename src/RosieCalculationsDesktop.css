@@ -169,7 +169,7 @@
    engraved bureau has its natural proportions; silk continues below it. */
 @media (min-width:1200px) and (hover:hover) and (pointer:fine) {
   .app-shell.page-calculations main.rc-page {
-    display:grid!important;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;
+    position:relative!important;display:grid!important;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;
     grid-template-rows:auto auto!important;align-content:start;align-items:start;
     gap:clamp(12px,1.15vw,21px) clamp(17px,1.55vw,29px)!important;
     width:100%!important;max-width:none!important;min-height:100dvh!important;
@@ -197,7 +197,7 @@
   }
   .app-shell.page-calculations main.rc-page.rc-page > .rc-workspace {
     grid-column:2!important;grid-row:1 / span 2!important;
-    position:relative!important;width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;
+    position:absolute!important;inset:0 0 auto 0!important;width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;
     margin:0!important;padding:clamp(78px,5.8vw,108px) clamp(50px,5.2vw,100px) 28px!important;
     border:0!important;border-radius:17px!important;
     background-color:#4a071b!important;
