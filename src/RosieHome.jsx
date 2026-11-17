@@ -1,6 +1,9 @@
 import React from "react";
 import styles from "./RosieHome.module.css";
 import RosieVerseAtmosphere from "./RosieVerseAtmosphere";
+import qrButton from "./assets/resources/qr-atelier-transparent.webp";
+import calculationsButton from "./assets/resources/calculations-turquoise-transparent.webp";
+import reviewsButton from "./assets/resources/reviews-crimson-transparent.webp";
 
 const worlds = [
   { id: "fortune", name: "Fortune Teller", art: "buttons/fortune.webp" },
@@ -13,12 +16,12 @@ const worlds = [
 
 const art = (filename) => `/rosieverse/${filename}`;
 const tools = [
-  { id: "reminders", name: "Reminders", mark: "✦" },
-  { id: "qr-atelier", name: "QR Atelier", mark: "▦" },
-  { id: "calculations", name: "Calculations", mark: "∑" },
-  { id: "recipes", name: "Recipes", mark: "♨" },
-  { id: "reviews", name: "Reviews", mark: "★" },
-  { id: "timekeeper", name: "Timekeepers", mark: "◷" }
+  { id: "reminders", name: "Reminders", image: "/rosieverse/resources/reminders.webp" },
+  { id: "qr-atelier", name: "QR Atelier", image: qrButton },
+  { id: "calculations", name: "Calculations", image: calculationsButton },
+  { id: "recipes", name: "Recipes", image: "/rosieverse/resources/recipes.png" },
+  { id: "reviews", name: "Reviews", image: reviewsButton },
+  { id: "timekeeper", name: "Timekeepers", image: "/rosieverse/resources/timekeeper.webp" }
 ];
 /** RosieVerse art landing. Navigates through the existing app router; no new routing dependency. */
 export default function RosieHome({ onNavigate }) {
@@ -68,7 +71,7 @@ export default function RosieHome({ onNavigate }) {
       <nav className={styles.toolDock} aria-label="Rosie's tools">
         {tools.map((tool) => (
           <button key={tool.id} type="button" onClick={() => onNavigate(tool.id)} aria-label={`Open ${tool.name}`}>
-            <span aria-hidden="true">{tool.mark}</span>{tool.name}
+            <img src={tool.image} alt="" draggable="false" loading="eager" />
           </button>
         ))}
       </nav>
