@@ -736,9 +736,9 @@
     display:block;width:min(100%,520px)!important;margin:0 auto!important;
   }
   .app-shell.page-recipes .recipes-desktop-controls {
-    position:fixed;top:calc(clamp(220px,24vh,245px) + min(22vw,380px) + 12px);
+    position:fixed;top:calc(clamp(240px,26vh,260px) + min(22vw,380px) + 12px);
     left:clamp(22px,3vw,58px);width:min(44vw,760px);
-    max-height:calc(100dvh - clamp(220px,24vh,245px) - min(22vw,380px) - 24px);
+    max-height:calc(100dvh - clamp(240px,26vh,260px) - min(22vw,380px) - 24px);
     overflow-y:auto;scrollbar-width:thin;scrollbar-color:#a66a37 #f2d7aa;
     padding:18px 20px 14px;border:2px solid #b87939;border-radius:20px;
     background:linear-gradient(155deg,#fff7e4,#f4ddb5 70%,#edc797);
@@ -755,7 +755,7 @@
   .app-shell.page-recipes .recipes-index > .recipes-count {display:none!important;}
   .app-shell.page-recipes > .recipes-page { padding-top:76px!important; }
   .app-shell.page-recipes .recipes-top-scene {
-    top:clamp(220px,24vh,245px)!important;
+    top:clamp(240px,26vh,260px)!important;
     transform:none!important;
     width:min(44vw,760px)!important;
     max-width:none!important;
