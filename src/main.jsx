@@ -2186,10 +2186,13 @@ function CaptainRosieGame({ soundOn }) {
           <CaptainLevelScenery scene={scenery} underway={running && !paused} boost={boost} />
           <CaptainLotusGust underway={running && !paused} />
           <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />
-          <button type="button" className="captain-yacht-pause-button"
-            onClick={toggleYachtPause} disabled={!running}
-            aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}
-            aria-pressed={paused}>{paused ? "▶ RESUME" : "Ⅱ PAUSE"}</button>
+          <div className="captain-yacht-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
+            <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
+              aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
+              title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}>{paused ? "▶" : "❚❚"}</button>
+            <button className="ember-icon-action" type="button" onClick={startGame}
+              aria-label="Reset Yacht Dash" title="Reset Yacht Dash">↻</button>
+          </div>
           {paused && (
             <div className="captain-yacht-pause-overlay" role="status">
               <div>
