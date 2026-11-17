@@ -1263,3 +1263,44 @@
   .app-shell.page-qr-atelier .qa-panel { translate: -1px -21px; }
   .app-shell.page-qr-atelier .qa-collection { translate: -3px -34px; }
 }
+
+
+/* QR Atelier - November 17, 2026 FULLSCREEN Layout Playground v2 export.
+   Source baseline: 05c69a2e585113496a96e09fd7ee3e733091b51a
+   Reference: desktop 1920 × 1080 CSS pixels, fullscreen.
+   All values below are baseline + exported adjustment, NOT standalone offsets.
+   This deliberately affects only desktop; user's iPad/iPhone positions remain
+   as previously approved. Independent translate/scale preserves original
+   transforms and exact visual composition of nested playground targets. */
+@media screen and (min-width: 1200px) {
+  /* title: (32,22), scale .9 + (-28,+37), scale ×1 */
+  .app-shell.page-qr-atelier .qa-title {
+    translate: 4px 59px;
+    scale: .9;
+  }
+  /* workbench: (-71,-42), scale .92 + (0,+99), scale ×1.19 */
+  .app-shell.page-qr-atelier .qa-panel {
+    translate: -71px 57px;
+    scale: 1.0948;
+  }
+  /* inputs are a separate child target of the enlarged workbench. */
+  .app-shell.page-qr-atelier .qa-inputs {
+    translate: 2px 1px;
+  }
+  /* finish strip + (1,+4); material choices retain old -71,-413/.74 */
+  .app-shell.page-qr-atelier .qa-finish-strip {
+    translate: 1px 4px;
+  }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {
+    translate: -71px -412px;
+    scale: .74;
+  }
+  /* saved collection: (42,-137) + (56,+202) */
+  .app-shell.page-qr-atelier .qa-collection {
+    translate: 98px 65px;
+  }
+  /* preview actions: (-71,-37) + (0,-17) */
+  .app-shell.page-qr-atelier .qa-preview-actions {
+    translate: -71px -54px;
+  }
+}
