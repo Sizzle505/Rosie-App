@@ -12,6 +12,12 @@ class UserError extends Error {
   constructor(status, message) { super(message); this.status = status; }
 }
 const bad = (message, status = 400) => { throw new UserError(status, message); };
+function checkedCode(value) {
+  try { return normalizeJoinCode(value); } catch (error) { bad(error.message); }
+}
+function checkedWishes(value) {
+  try { return validateWishlist(value); } catch (error) { bad(error.message); }
+}
 
 function cleanName(value) {
   if (typeof value !== "string") bad("Enter a valid guest name.");
@@ -176,7 +182,7 @@ export default async function handler(req, res) {
       case "configureJoin": {
         const row = await host(input);
         if (row.status !== "draft") bad("Sign-ups are closed after the draw.", 409);
-        const passcode = normalizeJoinCode(input.passcode);
+        const passcode = checkedCode(input.passcode);
         const token = deriveJoinToken(input.hostToken, row.id);
         const next = await patchDraft(row, {
           join_enabled: true, join_token_hash: sha256(token),
@@ -194,8 +200,8 @@ export default async function handler(req, res) {
         const name = cleanName(input.name);
         const email = cleanEmail(input.email);
         if (!email) bad("Enter your email address.");
-        const wishlist = validateWishlist(input.wishlist || []);
-        const code = normalizeJoinCode(input.passcode);
+        const wishlist = checkedWishes(input.wishlist || []);
+        const code = checkedCode(input.passcode);
         const person = { id: randomUUID(), name, email, wishlist };
         const next = await reviseParticipants(input.exchangeId, row => {
           checkJoin(row, input.joinToken);
@@ -214,7 +220,7 @@ export default async function handler(req, res) {
       }
       case "saveWishlist": {
         const { row, person } = await guest(input);
-        const wishlist = validateWishlist(input.wishlist);
+        const wishlist = checkedWishes(input.wishlist);
         const email = cleanEmail(input.email ?? person.email ?? "");
         const next = await reviseParticipants(row.id, current => {
           const own = current.participants.find(p => p.id === person.id);
