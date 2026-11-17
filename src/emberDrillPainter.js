@@ -295,7 +295,8 @@ function hazard(c,o,s,assets={}){
 }
 function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
   if(artReady(assets.body)){
-    c.save();c.translate(DRILL_ANCHOR,s.y);c.rotate(s.pitch);c.scale(horizontalCorrection,1);
+    // Correct the canvas aspect before rotation, so pitched poses keep their width.
+    c.save();c.translate(DRILL_ANCHOR,s.y);c.scale(horizontalCorrection,1);c.rotate(s.pitch);
     if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha=.52;
     const boosted=s.boostTime>0;
     // Exhaust and travel streaks live behind the intact Rosie/engine sprite.
@@ -326,7 +327,7 @@ function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
   }
 
   const x=DRILL_ANCHOR,y=s.y;
-  c.save();c.translate(x,y);c.rotate(s.pitch);c.scale(horizontalCorrection,1);
+  c.save();c.translate(x,y);c.scale(horizontalCorrection,1);c.rotate(s.pitch);
   if(s.hitCooldown>0&&Math.floor(s.time*14)%2===1)c.globalAlpha=.42;
   glow(c,65,4,s.boostTime>0?180:102,s.boostTime>0?"rgba(255,212,71,.45)":"rgba(244,145,43,.20)");
   // Dirt plume behind drill, continuous and directional.
