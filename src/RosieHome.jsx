@@ -12,6 +12,14 @@ const worlds = [
 ];
 
 const art = (filename) => `/rosieverse/${filename}`;
+const tools = [
+  { id: "reminders", name: "Reminders", mark: "✦" },
+  { id: "qr-atelier", name: "QR Atelier", mark: "▦" },
+  { id: "calculations", name: "Calculations", mark: "∑" },
+  { id: "recipes", name: "Recipes", mark: "♨" },
+  { id: "reviews", name: "Reviews", mark: "★" },
+  { id: "timekeeper", name: "Timekeepers", mark: "◷" }
+];
 /** RosieVerse art landing. Navigates through the existing app router; no new routing dependency. */
 export default function RosieHome({ onNavigate }) {
   const [failedArt, setFailedArt] = React.useState({});
@@ -54,6 +62,13 @@ export default function RosieHome({ onNavigate }) {
                   <strong>Rosie’s Resources</strong>
                 </span>}
             <span className={styles.activeSheen} aria-hidden="true" />
+          </button>
+        ))}
+      </nav>
+      <nav className={styles.toolDock} aria-label="Rosie's tools">
+        {tools.map((tool) => (
+          <button key={tool.id} type="button" onClick={() => onNavigate(tool.id)} aria-label={`Open ${tool.name}`}>
+            <span aria-hidden="true">{tool.mark}</span>{tool.name}
           </button>
         ))}
       </nav>
