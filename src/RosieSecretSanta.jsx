@@ -230,8 +230,17 @@ export default function RosieSecretSanta() {
         <img className="ss-hero__banner" src="/randomizers/secret-santa/11-preferred-banner.webp"
           alt="Rosie in her black-and-gold casino tuxedo and Santa hat with the Rosie’s Secret Santa plaque" />
         <div className="ss-hero__mobile" aria-hidden="true">
-          <img src="/randomizers/secret-santa/12-preferred-rosie.webp" alt="" />
-          <img src="/randomizers/secret-santa/13-preferred-marquee.webp" alt="" />
+          <div className="ss-hero__mobile-rosie">
+            <img src="/randomizers/secret-santa/12-preferred-rosie.webp" alt="" />
+          </div>
+          <div className="ss-hero__mobile-marquee">
+            <img src="/randomizers/secret-santa/13-preferred-marquee.webp" alt="" />
+          </div>
+          <div className="ss-hero__mobile-props">
+            <img className="ss-hero__mobile-gifts" src="/randomizers/secret-santa/07-gift-collection.webp" alt="" loading="lazy" />
+            <img className="ss-hero__mobile-envelope" src="/randomizers/secret-santa/03-sealed-envelope.webp" alt="" loading="lazy" />
+            <img className="ss-hero__mobile-scroll" src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" loading="lazy" />
+          </div>
         </div>
       </div>
 
@@ -239,9 +248,11 @@ export default function RosieSecretSanta() {
       {notice && <div role="status" className="ss-alert ss-alert--success">{notice}</div>}
 
       {screen === "create" && <div className="ss-paper ss-inline-create">
+        <img className="ss-inline-create__emblem" src="/randomizers/secret-santa/09-secret-santa-emblem.webp"
+          alt="" aria-hidden="true" loading="lazy" />
         <div className="ss-inline-create__intro">
           <span className="ss-eyebrow">ROSIE'S PRIVATE GIFT EXCHANGE</span>
-          <h3>Draw the names.<br/><em>Keep the secret.</em></h3>
+          <h3>Draw the names.<br/>{" "}<em>Keep the secret.</em></h3>
           <p>Enter your guests, create the exchange, then send each person their own private reveal link.</p>
           <img src="/randomizers/secret-santa/08-invitation-scroll.webp" alt="" loading="lazy" />
         </div>
@@ -252,7 +263,7 @@ export default function RosieSecretSanta() {
                 onChange={event => setForm(f => ({ ...f, title: event.target.value }))} />
             </label>
             <label>GUESTS <small>3–40 names · one per line</small>
-              <textarea required rows={6} value={form.names} maxLength={3000}
+              <textarea required rows={5} value={form.names} maxLength={3000}
                 placeholder="One guest per line…"
                 onChange={event => setForm(f => ({ ...f, names: event.target.value }))} />
             </label>
