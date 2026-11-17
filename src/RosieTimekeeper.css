@@ -37,6 +37,8 @@ main.rtk-page { display:block; width:100%; min-width:0; margin:0; padding:0 !imp
   .rtk-utility { width:85%; }
   .rtk-utility-heading { font-size:13px; }
 }
+
+
 @media(max-width:355px) {
   .rtk-mode-switch button { font-size:8px; padding:3px 5px; }
   .rtk-time { font-size:25px; }
@@ -4306,5 +4308,38 @@ body:has(.app-shell.page-timekeeper),
   }
   .app-shell.page-timekeeper .rtk-observatory .rtk-custom-timer label {
     font-size: 14px !important;
+  }
+}
+
+/* Desktop timer and split cabinet: a physical watchmaker panel with live controls. */
+@media (min-width:1200px) {
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-empty,
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility.is-timer {
+    background:#3b0719 url('/rosieverse/refresh/timekeeper-panel.webp') center / 100% 100% no-repeat !important;
+    border:0 !important;
+    border-radius:22px !important;
+    box-shadow:0 18px 36px #000a !important;
+    overflow:hidden !important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-utility-inner {
+    color:#fff1ce;
+    scrollbar-color:#c99b55 #330d20;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-time-adjust button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-presets button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-duration-actions button {
+    border:1px solid #d2aa68 !important;
+    border-radius:8px !important;
+    color:#fff0d0 !important;
+    background:linear-gradient(155deg,#6d2441,#351125 64%,#1c1226) !important;
+    box-shadow:inset 0 1px #ffdda45c,0 3px 6px #10030e9c !important;
+    text-shadow:0 1px 2px #180914;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-tabs button.chosen,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-presets button.chosen {
+    background:linear-gradient(155deg,#c39955,#85512c 56%,#4b2820) !important;
+    color:#fff9df !important;
   }
 }

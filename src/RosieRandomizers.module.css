@@ -1110,6 +1110,13 @@
   background-size: cover, cover;
 }
 
+@media (min-width:1200px) {
+  .wheelSalon {
+    background:linear-gradient(90deg,rgba(14,2,8,.12),rgba(14,2,8,.36)),
+      url('/rosieverse/refresh/roulette-salon.webp') center center / cover no-repeat;
+  }
+}
+
 
 /* Rosie roulette radial metallic silver labels - handoff */
 /* Preserve the existing radial positioning and live rotation. Typography is

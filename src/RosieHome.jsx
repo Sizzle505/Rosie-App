@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./RosieHome.module.css";
 import RosieVerseAtmosphere from "./RosieVerseAtmosphere";
-import qrButton from "./assets/resources/qr-atelier-transparent.webp";
 import calculationsButton from "./assets/resources/calculations-turquoise-transparent.webp";
 import reviewsButton from "./assets/resources/reviews-crimson-transparent.webp";
 
@@ -17,7 +16,7 @@ const worlds = [
 const art = (filename) => `/rosieverse/${filename}`;
 const tools = [
   { id: "reminders", name: "Reminders", image: "/rosieverse/resources/reminders.webp" },
-  { id: "qr-atelier", name: "QR Atelier", image: qrButton },
+  { id: "qr-atelier", name: "QR Atelier", image: "/rosieverse/refresh/qr-button.webp" },
   { id: "calculations", name: "Calculations", image: calculationsButton },
   { id: "recipes", name: "Recipes", image: "/rosieverse/resources/recipes.png" },
   { id: "reviews", name: "Reviews", image: reviewsButton },

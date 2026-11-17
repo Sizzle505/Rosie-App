@@ -243,7 +243,7 @@
 .toolDock { display:none; }
 @media (min-width:1200px) and (hover:hover) and (pointer:fine) {
   .toolDock {
-    position:absolute;z-index:5;top:52%;left:50%;transform:translateX(-50%);
+    position:absolute;z-index:5;top:calc(52% - 80px);left:50%;transform:translateX(-50%);
     display:grid;grid-template-columns:repeat(2,minmax(0,260px));
     grid-template-rows:repeat(3,auto);justify-content:space-between;
     width:min(1160px,94vw);gap:clamp(8px,1.5dvh,15px) 0;margin:0;padding:0;

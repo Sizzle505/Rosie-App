@@ -1242,16 +1242,14 @@
   .app-shell.page-qr-atelier .qa-scene::after {
     content:"";
     position:absolute;
-    top:calc(100vw * 941 / 1672 - 2px);
+    top:calc(100vw * 941 / 1672 - 90px);
     bottom:0;
     left:0;
     right:0;
     pointer-events:none;
-    background:
-      linear-gradient(90deg,transparent 49.8%,rgba(186,113,38,.3) 50%,transparent 50.2%) 0 0 / 19% 100%,
-      repeating-linear-gradient(0deg,transparent 0 83px,rgba(183,115,42,.27) 84px,transparent 86px),
-      radial-gradient(ellipse at 50% 0,rgba(106,63,30,.36),transparent 65%),
-      #160f0a;
+    background:#160f0a url('/rosieverse/refresh/qr-floor.webp') center top / 100% auto repeat-y;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,black 90px);
+    mask-image:linear-gradient(to bottom,transparent,black 90px);
     z-index:0;
   }
 }
