@@ -129,7 +129,7 @@ test("organizer can save, replace and clear optional guest emails without exposi
     exchangeId: exchange.id, guestId: invitations[0].id, guestToken: invitations[0].token
   });
   assert.equal(guestView.status, 200);
-  assert.equal(guestView.body.guest.email, "");
+  assert.equal(guestView.body.guest.email, "Alice+gift@example.com");
   assert.equal(Object.hasOwn(guestView.body.exchange, "participants"), false);
 
   const cleared = await invoke("emails", {
