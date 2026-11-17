@@ -165,39 +165,6 @@
   }
 }
 
-/* Restore the canonical Rosie Calculations scene on desktop. The original
-   16:9 artwork contains the exact character, stacked 3D chessboard,
-   cryptex, calculator and study. Do not replace it with generic AI art. */
-@media (min-width:1200px) {
-  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero {
-    aspect-ratio:16 / 9 !important;
-    height:auto !important;
-    min-height:0 !important;
-    background-color:#18050d !important;
-    background-image:url("/rosieverse/calculations/hero/hero-mobile-16x9.webp") !important;
-    background-repeat:no-repeat !important;
-    background-size:100% 100% !important;
-    background-position:center !important;
-  }
-  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-custom-hero,
-  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-hero .rc-desktop-hero-copy {
-    display:none !important;
-  }
-}
-
-
-/* The engraved Toolkit artwork must not be stretched to the changing height
-   of desktop form content. Preserve intrinsic aspect and let the base color fill. */
-@media(min-width:1200px){
-  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) > .rc-workspace{
-    background-color:#6a171a!important;
-    background-image:url("/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp")!important;
-    background-position:center top!important;
-    background-size:100% auto!important;
-    background-repeat:no-repeat!important;
-  }
-}
-
 /* Desktop study: keep the full page in place when a tool is selected. The
    engraved bureau has its natural proportions; silk continues below it. */
 @media (min-width:1200px) and (hover:hover) and (pointer:fine) {
@@ -209,7 +176,7 @@
     padding:clamp(64px,4.2vw,77px) clamp(16px,1.75vw,34px) 105px!important;
     overflow:visible!important;background:transparent!important;
   }
-  .app-shell.page-calculations main.rc-page > .rc-hero {
+  .app-shell.page-calculations main.rc-page.rc-page > .rc-hero {
     grid-column:1!important;grid-row:1!important;position:relative!important;top:auto!important;
     width:100%!important;height:auto!important;aspect-ratio:4 / 3!important;
     margin:0!important;overflow:hidden!important;
@@ -228,7 +195,7 @@
     background:linear-gradient(145deg,rgba(42,4,15,.43),rgba(21,2,10,.75)),url('/rosieverse/calculations/desktop-20261029/desktop-velvet-background.webp') center / cover no-repeat!important;
     box-shadow:0 0 0 1px #16050c,0 0 0 5px #ae78342b,inset 0 0 0 2px #e7bc6b50,0 17px 35px #11010791!important;
   }
-  .app-shell.page-calculations main.rc-page > .rc-workspace {
+  .app-shell.page-calculations main.rc-page.rc-page > .rc-workspace {
     grid-column:2!important;grid-row:1 / span 2!important;
     position:relative!important;width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;
     margin:0!important;padding:clamp(78px,5.8vw,108px) clamp(50px,5.2vw,100px) 28px!important;
