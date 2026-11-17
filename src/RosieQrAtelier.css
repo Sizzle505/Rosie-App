@@ -1224,6 +1224,18 @@
   .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes { translate: -71px -413px; scale: 0.74; }
   .app-shell.page-qr-atelier .qa-collection { translate: 42px -137px; }
 }
+/* The desktop workshop ends with its illustrated scene and working controls. */
+@media screen and (min-width: 1200px) {
+  .app-shell.page-qr-atelier > main.qa-page {
+    min-height:0!important;
+    padding-bottom:0!important;
+  }
+  .app-shell.page-qr-atelier .qa-scene {
+    min-height:0;
+    grid-template-rows:60px 390px auto auto auto;
+    background-size:100% 100%;
+  }
+}
 /* Tablet CSS introduced after the original playground narrowed the QR frame
    and shortened the workshop. Undo only those QR-specific tablet changes so
    the 820px playground's saved offsets have their original geometry. */
