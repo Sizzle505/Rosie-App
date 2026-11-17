@@ -1293,6 +1293,7 @@
     width: 100%; left: auto; transform: none; margin: 0 auto 22px;
     aspect-ratio: 2.6 / 1;
     background: url('/randomizers/desktop-casino-header-20261112.webp') center / contain no-repeat;
+    clip-path:inset(1.2% .7% round 20px);
   }
   .approvedHeaderArt { display: none; }
   .desktopHeroCopy {
@@ -1311,6 +1312,7 @@
   }
   .desktopHeroCopy strong em { font-weight: 400; }
   .desktopHeroCopy p { margin: 0 0 auto; font: italic clamp(17px, 1.6vw, 27px)/1.2 Georgia, serif; }
+  .desktopHeroCopy small {max-width:390px;line-height:1.45;}
   .ivoryRow { margin-top: 0; }
 }
 /* Desktop randomizer casino: dedicated garnet satin, with a richer glint
