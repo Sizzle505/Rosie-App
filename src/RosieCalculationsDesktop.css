@@ -230,7 +230,7 @@
   }
   .app-shell.page-calculations main.rc-page > .rc-workspace {
     grid-column:2!important;grid-row:1 / span 2!important;
-    position:relative!important;width:100%!important;min-height:0!important;
+    position:relative!important;width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;
     margin:0!important;padding:clamp(84px,6vw,115px) clamp(75px,7vw,125px) 14px!important;
     border:0!important;border-radius:17px!important;
     background-color:#4a071b!important;
