@@ -197,3 +197,78 @@
     background-repeat:no-repeat!important;
   }
 }
+
+/* Desktop study: keep the full page in place when a tool is selected. The
+   engraved bureau has its natural proportions; silk continues below it. */
+@media (min-width:1200px) and (hover:hover) and (pointer:fine) {
+  .app-shell.page-calculations main.rc-page {
+    display:grid!important;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;
+    grid-template-rows:auto auto!important;align-content:start;align-items:start;
+    gap:clamp(12px,1.15vw,21px) clamp(17px,1.55vw,29px)!important;
+    width:100%!important;max-width:none!important;min-height:100dvh!important;
+    padding:clamp(64px,4.2vw,77px) clamp(16px,1.75vw,34px) 105px!important;
+    overflow:visible!important;background:transparent!important;
+  }
+  .app-shell.page-calculations main.rc-page > .rc-hero {
+    grid-column:1!important;grid-row:1!important;position:relative!important;top:auto!important;
+    width:100%!important;height:auto!important;aspect-ratio:16 / 9!important;
+    margin:0!important;overflow:hidden!important;
+    background-image:url('/rosieverse/calculations/hero/hero-mobile-16x9.webp')!important;
+    background-size:115% auto!important;background-position:center bottom!important;
+    background-repeat:no-repeat!important;
+  }
+  .app-shell.page-calculations main.rc-page > .rc-calculator-stage {
+    grid-column:1!important;grid-row:2!important;width:100%!important;margin:0!important;
+  }
+  .app-shell.page-calculations main.rc-page > .rc-workspace {
+    grid-column:2!important;grid-row:1 / span 2!important;
+    position:relative!important;width:100%!important;min-height:720px!important;
+    margin:0!important;padding:clamp(84px,6vw,115px) clamp(75px,7vw,125px) 80px!important;
+    border:0!important;border-radius:17px!important;
+    background-color:#4a071b!important;
+    background-image:url('/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp'),url('/rosieverse/calculations/burgundy-satin.png')!important;
+    background-position:center top,center top!important;
+    background-size:100% auto,100% auto!important;
+    background-repeat:no-repeat,repeat-y!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tool-grid {
+    display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:clamp(8px,.8vw,14px)!important;align-items:center!important;
+    width:100%!important;padding:0!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tool-card,
+  .app-shell.page-calculations main.rc-page .rc-tool-card:nth-child(n) {
+    grid-column:auto!important;width:100%!important;height:auto!important;
+    aspect-ratio:538 / 246!important;min-height:0!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tool-card--currency,
+  .app-shell.page-calculations main.rc-page .rc-tool-card--currency:nth-child(n) {
+    grid-column:1 / -1!important;justify-self:center!important;
+    width:min(64%,440px)!important;aspect-ratio:1085 / 246!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tool-card img.rc-tool-art {
+    width:100%!important;height:100%!important;object-fit:contain!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-active-tool-overlay {
+    position:relative!important;inset:auto!important;z-index:1!important;
+    display:block!important;width:100%!important;height:auto!important;
+    margin:clamp(28px,3vw,52px) 0 0!important;padding:24px 12px 22px!important;
+    border:1px solid #d6a65e;border-radius:18px;
+    background:url('/rosieverse/calculations/burgundy-satin.png') center top / 100% auto repeat-y #4a071b!important;
+    box-shadow:inset 0 0 0 3px #edc67b30,0 12px 28px #18020db0;
+    backdrop-filter:none!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-active-tool-viewport {
+    display:block!important;width:100%!important;max-height:none!important;
+    overflow:visible!important;margin:0!important;padding:0!important;
+    border:0!important;background:transparent!important;box-shadow:none!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-active-tool-fit {transform:none!important;}
+  .app-shell.page-calculations main.rc-page .rc-active-tool-overlay .rc-tool-panel.rc-device {
+    width:100%!important;max-width:670px!important;margin:0 auto!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-active-tool-close {
+    position:static!important;display:block!important;margin:12px auto 0!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-footer-note {color:#f4d8a7!important;}
+}
