@@ -199,7 +199,8 @@
     grid-column:2!important;grid-row:1 / span 2!important;
     position:absolute!important;inset:0 clamp(16px,1.75vw,34px) auto 0!important;width:auto!important;max-width:none!important;min-width:0!important;min-height:0!important;
     margin:0!important;padding:clamp(78px,5.8vw,108px) clamp(50px,5.2vw,100px) 28px!important;
-    border:0!important;border-radius:17px!important;
+    border:2px solid #cda050!important;border-radius:20px!important;
+    box-shadow:0 0 0 1px #16050c,0 0 0 5px #ae78342b,inset 0 0 0 2px #e7bc6b50,0 17px 35px #11010791!important;
     background-color:#4a071b!important;
     background-image:url('/rosieverse/calculations/desktop-20261029/desktop-ornate-workspace.webp'),url('/rosieverse/calculations/burgundy-satin.png')!important;
     background-position:center top,center top!important;
