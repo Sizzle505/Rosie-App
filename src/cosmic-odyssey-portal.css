@@ -443,6 +443,21 @@ body.captain-fullscreen-fallback-active #root *:has(.captain-fullscreen-frame.is
 .captain-yacht-pause-button:focus-visible{
   outline:3px solid #ffe6a3;outline-offset:3px;
 }
+.captain-yacht-actions{
+  position:absolute;z-index:65;top:12px;right:12px;display:flex;gap:7px;
+}
+.captain-yacht-actions .ember-icon-action{
+  display:grid;place-items:center;width:37px;height:34px;padding:0;
+  border:1px solid rgba(242,205,130,.7);border-radius:999px;
+  background:linear-gradient(#1f526a,#0d2c3d);color:#f7ddaa;
+  box-shadow:inset 0 1px #ffffff50,0 4px 12px #0006;
+  font:700 17px/1 system-ui,sans-serif;cursor:pointer;
+}
+.captain-yacht-actions .ember-icon-action+ .ember-icon-action{
+  font-size:24px;background:transparent;border-color:rgba(221,182,112,.58);color:#d9bf8b;
+}
+.captain-yacht-actions .ember-icon-action:disabled{opacity:.42;cursor:default}
+.captain-yacht-actions .ember-icon-action:focus-visible{outline:3px solid #ffe6a3;outline-offset:3px}
 .captain-yacht-pause-overlay{
   position:absolute;z-index:60;inset:0;
   display:grid;place-items:center;
@@ -489,7 +504,8 @@ body.captain-fullscreen-fallback-active #root *:has(.captain-fullscreen-frame.is
   row-gap:8px!important;
 }
 .cosmic-odyssey-main-entry>.cosmic-odyssey-entry-banner{
-  box-shadow:0 7px 24px #05082080!important;
+  border:0!important;box-shadow:none!important;
+  border-radius:0!important;clip-path:inset(0 round 18px);
 }
 .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info{
   background:transparent!important;padding:2px 5px!important;
