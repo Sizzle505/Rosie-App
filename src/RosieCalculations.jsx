@@ -213,7 +213,9 @@ function ToolPanel({ active, values, update, currencyOptions, fxRate, fxState, o
 
 export default function RosieCalculations() {
   const [calc, send] = useReducer(calculatorReducer, initialCalculator);
-  const [tool, setTool] = useState(null);
+  const desktopTools = () => window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches;
+  const [tool, setTool] = useState(() => desktopTools() ? "tip" : null);
+  const initialToolRef = useRef(true);
   const toolRef = useRef(null);
   const toolStageRef = useRef(null);
   const scrollToolkitBottomRef = useRef(false);
@@ -223,6 +225,12 @@ export default function RosieCalculations() {
   const [fxRate, setFxRate] = useState(null);
   const [fxState, setFxState] = useState("loading");
   const update = (field, value) => setValues(previous => ({ ...previous, [field]: value }));
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)");
+    const sync = () => { if (desktop.matches) setTool(previous => previous || "tip"); };
+    desktop.addEventListener("change", sync);
+    return () => desktop.removeEventListener("change", sync);
+  }, []);
   useLayoutEffect(() => {
     if (tool || !scrollToolkitBottomRef.current) return undefined;
     scrollToolkitBottomRef.current = false;
@@ -236,6 +244,7 @@ export default function RosieCalculations() {
     return () => {cancelAnimationFrame(frame);window.clearTimeout(settle);};
   }, [tool]);
   useEffect(() => {
+    if (initialToolRef.current) { initialToolRef.current = false; return; }
     if (!tool || !window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches) return;
     const frame = requestAnimationFrame(() => document.querySelector(".rc-active-tool-overlay")?.scrollIntoView({behavior:"smooth",block:"nearest"}));
     return () => cancelAnimationFrame(frame);
@@ -384,7 +393,7 @@ export default function RosieCalculations() {
     </div>
     <div className="rc-workspace">
       <h2 className="rc-tools-heading"><span>✦</span> The Pocket Toolkit <span>✦</span></h2>
-      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card rc-tool-card--"+item.id+(tool===item.id?" active":"")} aria-label={item.title} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?null:item.id)}><img className="rc-tool-art" src={"/rosieverse/calculations/toolkit/button-"+item.id+".webp"} alt="" loading="lazy" draggable="false"/></button>)}</div>
+      <div className="rc-tool-grid">{TOOLS.map(item=><button type="button" key={item.id} className={"rc-tool-card rc-tool-card--"+item.id+(tool===item.id?" active":"")} aria-label={item.title} aria-pressed={tool===item.id} onClick={()=>setTool(previous=>previous===item.id?(desktopTools()?previous:null):item.id)}><img className="rc-tool-art" src={"/rosieverse/calculations/toolkit/button-"+item.id+".webp"} alt="" loading="lazy" draggable="false"/></button>)}</div>
       {tool && <div className="rc-active-tool-overlay" aria-label="Gold calculator instrument">
         <div className="rc-active-tool-viewport" ref={toolStageRef}>
           <div className="rc-active-tool-fit" style={{ "--rc-tool-scale": toolScale }}>
