@@ -275,11 +275,11 @@ export default async function handler(req, res) {
       case "draw": {
         const row = await host(input);
         if (row.status !== "draft") bad("Names have already been drawn.", 409);
+        if (row.participants.length < 3) bad("At least three guests must register before drawing.", 409);
         const mapping = drawSecretSanta(row.participants.map(p => p.id), row.exclusions);
         if (!mapping) bad("Those exclusions make a valid draw impossible. Remove some restrictions and try again.", 422);
         // One conditional database update atomically locks the draw and its
         // entire assignment set. Two simultaneous draws cannot overwrite each other.
-        if (row.participants.length < 3) bad("At least three guests must register before drawing.", 409);
         const changed = await db(TABLE + "?id=eq." + row.id + "&status=eq.draft&revision=eq." +
           row.revision + "&select=id", {
           method: "PATCH", body: {
