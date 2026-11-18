@@ -832,6 +832,12 @@ function BarkbridgeGraduation({ moves, elapsed, onReplay }) {
       </div>
 
       <div className="diploma-aftercare">
+        <div className="barkbridge-side-celebration" aria-hidden="true">
+          <GraduateRosie />
+          <figure className="barkbridge-cheese-reward barkbridge-side-tray">
+            <img src="/barkbridge/diploma/gourmet-cheese-platter-v2.png" alt="" loading="eager" decoding="async" />
+          </figure>
+        </div>
         <div className="diploma-results-strip" aria-label="Examination results">
           <span className="diploma-results-heading">EXAMINATION RESULTS</span>
           <div className="diploma-stats">

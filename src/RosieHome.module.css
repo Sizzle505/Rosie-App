@@ -246,7 +246,7 @@
   .worldGrid {width:min(100%,740px,62dvh);}
   .world[aria-label="Open Fortune Teller"] {top:10px;}
   .world[aria-label="Open Cheese Board Exam"] {top:7px;}
-  .world.secondary {top:4px;transform:scale(1.15);transform-origin:center top;}
+  .world.secondary {top:2px;transform:scale(1.15);transform-origin:center top;}
   .world.secondary:hover,.world.secondary:active {transform:scale(1.15) translateY(-2px);}
   .world.secondary[aria-label="Open Captain Rosie"] {left:-30px;}
   .world.secondary[aria-label="Open Randomizers"] {left:30px;}

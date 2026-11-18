@@ -224,6 +224,7 @@
 
 /* Desktop graduation: one composed ceremony, with Rosie behind the tangible
    cheese platter and the examination results beside the intact diploma. */
+.barkbridge-side-celebration {display:none;}
 @media(min-width:1200px){
  .barkbridge-graduation{
    display:grid!important;
@@ -259,22 +260,32 @@
    width:100%!important;max-width:100%!important;
  }
  .barkbridge-graduation .graduate-rosie{
-   position:absolute!important;z-index:3!important;
-   right:8%!important;bottom:10%!important;
-   width:clamp(150px,17vw,245px)!important;
-   max-width:32%!important;margin:0!important;
+   display:none!important;
  }
  .barkbridge-graduation .barkbridge-cheese-reward-desktop{
-   position:relative!important;z-index:5!important;
-   width:min(94%,650px)!important;
-   margin:-11% auto 0!important;
-   transform:translateX(8%)!important;filter:none!important;opacity:1!important;
+   display:none!important;
+ }
+ .barkbridge-graduation .barkbridge-side-celebration{
+   display:block;position:relative;width:100%;height:260px;flex:none;
+ }
+ .barkbridge-graduation .barkbridge-side-celebration .graduate-rosie{
+   display:block!important;position:absolute!important;z-index:3!important;
+   right:18%!important;top:0!important;bottom:auto!important;
+   width:210px!important;max-width:64%!important;margin:0!important;
+ }
+ .barkbridge-graduation .barkbridge-side-tray{
+   display:block!important;position:absolute!important;z-index:5!important;
+   left:0;right:0;bottom:0;width:100%!important;margin:0!important;
+   transform:none!important;filter:none!important;opacity:1!important;
+ }
+ .barkbridge-graduation .barkbridge-side-tray img{
+   display:block;width:100%;height:auto!important;max-height:125px!important;object-fit:contain!important;
  }
  .barkbridge-graduation .barkbridge-cheese-reward-desktop img{height:auto!important;max-height:19dvh!important;object-fit:contain!important}
  .barkbridge-graduation .diploma-aftercare{
    grid-column:2!important;grid-row:1!important;
    display:flex!important;flex-direction:column!important;
-   align-self:center!important;gap:9px!important;
+   align-self:start!important;gap:9px!important;
    width:100%!important;max-width:100%!important;
    margin:0!important;padding:10px!important;
  }
