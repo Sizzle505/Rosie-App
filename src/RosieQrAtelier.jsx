@@ -40,7 +40,7 @@ async function qrImage(svg){
 async function canvasBlob(canvas){
   return new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(Error("Could not export this image.")),"image/png"));
 }
-async function exportQR(svg,style="emerald"){
+async function exportQR(svg,style="emerald",caption=""){
   // Copy / PNG / Share are a complete framed creation, matching the live atelier.
   // Keep the QR modules crisp and preserve their quiet zone for scan reliability.
   const theme=QR_STYLES.find(x=>x.id===style)||QR_STYLES[0];
@@ -60,6 +60,17 @@ async function exportQR(svg,style="emerald"){
   }catch{
     ctx.strokeStyle=theme.accent;ctx.lineWidth=22;ctx.strokeRect(22,22,1556,1556);
     ctx.lineWidth=5;ctx.strokeRect(49,49,1502,1502);
+  }
+  const inscription=String(caption||"").trim().slice(0,48);
+  if(inscription){
+    // Draw on the finished frame, matching both preview and shared PNG.
+    ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
+    let fontSize=52;
+    do{ctx.font="italic "+fontSize+"px Georgia, serif";fontSize-=2;}
+    while(fontSize>27&&ctx.measureText(inscription).width>800);
+    ctx.fillStyle="#50351f";ctx.shadowColor="#fff5d9";ctx.shadowBlur=3;
+    ctx.fillText(inscription,800,1390,800);
+    ctx.restore();
   }
   return canvasBlob(canvas);
 }
@@ -196,6 +207,7 @@ export default function RosieQrAtelier(){
   const [showPassword,setShowPassword]=useState(false);
   const [fullScreen,setFullScreen]=useState(false);
   const [label,setLabel]=useState("");
+  const [frameCaption,setFrameCaption]=useState("");
   const [loadedId,setLoadedId]=useState(null);
   const [filter,setFilter]=useState("");
   const [showSaveMenu,setShowSaveMenu]=useState(false);
@@ -205,7 +217,7 @@ export default function RosieQrAtelier(){
   const previewRef=useRef(null),ringRef=useRef(null),saveDrawerRef=useRef(null),timerRef=useRef(null);
   const v=forms[type];
   const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
-  const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setShowPassword(false);};
+  const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setFrameCaption("");setShowPassword(false);};
   const output=useMemo(()=>{
     try{const payload=qrPayload(type,v),data=makeQr(payload);return {...data,payload,error:""};}
     catch(e){const error=/code length overflow|data too long|overflow/i.test(e?.message||"")
@@ -237,7 +249,7 @@ export default function RosieQrAtelier(){
     if(!ready)return toastMessage(output.error);
     const name=label.trim()||itemName(type,v);
     const record={id:loadedId||((globalThis.crypto?.randomUUID?.())||Date.now().toString(36)),type,
-      values:{...v},label:name,style,savedAt:new Date().toISOString()};
+      values:{...v},label:name,frameCaption:frameCaption.trim(),style,savedAt:new Date().toISOString()};
     setSaved(list=>[record,...list.filter(x=>x.id!==record.id)].slice(0,40));
     setLoadedId(record.id);setLabel(name);setShowSaveMenu(false);toastMessage("Saved in My Collection on this device.");
   }
@@ -245,14 +257,14 @@ export default function RosieQrAtelier(){
     setType(item.type);
     setForms(previous=>({...previous,[item.type]:{...initialValues()[item.type],...item.values}}));
     setStyle(QR_STYLES.some(s=>s.id===item.style)?item.style:"emerald");
-    setLoadedId(item.id);setLabel(item.label||"");
+    setLoadedId(item.id);setLabel(item.label||"");setFrameCaption(item.frameCaption||"");
     setShowPassword(false);setShowSaveMenu(false);
     window.scrollTo({top:0,behavior:"smooth"});
   }
   function removeRecord(item){
     if(!window.confirm("Delete \""+item.label+"\" from this device?"))return;
     setSaved(list=>list.filter(x=>x.id!==item.id));
-    if(loadedId===item.id){setLoadedId(null);setLabel("");}
+    if(loadedId===item.id){setLoadedId(null);setLabel("");setFrameCaption("");}
     toastMessage("Removed from your collection.");
   }
   async function withDownload(action){
@@ -267,7 +279,7 @@ export default function RosieQrAtelier(){
   function exportFile(kind){
     withDownload(async()=>{
       if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
-      else if(kind==="png")download(await exportQR(output.svg,style),fileBase+".png");
+      else if(kind==="png")download(await exportQR(output.svg,style,frameCaption),fileBase+".png");
       else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-printable.png");
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
       else if(kind==="vcf")download(new Blob([output.payload],{type:"text/vcard;charset=utf-8"}),fileBase+".vcf");
@@ -276,7 +288,7 @@ export default function RosieQrAtelier(){
   }
   function share(){
     withDownload(async()=>{
-      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg,style);
+      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg,style,frameCaption);
       const file=new File([blob],fileBase+".png",{type:"image/png"});
       if(navigator.share&&navigator.canShare?.({files:[file]})){
         await navigator.share({files:[file],title:"Rosie's QR Atelier"});
@@ -292,7 +304,7 @@ export default function RosieQrAtelier(){
     setWorking(true);
     try{
       // Supply ClipboardItem with its image promise synchronously for iOS Safari.
-      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg,style)})]);
+      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg,style,frameCaption)})]);
       toastMessage("QR image copied. Paste it wherever you like.");
     }catch{toastMessage("Could not copy the QR image. Use PNG export instead.");}
     finally{setWorking(false);}
@@ -328,6 +340,7 @@ export default function RosieQrAtelier(){
           <div className="qa-code-shell">{ready?<div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}} role="img" aria-label="Scannable QR code"/>
             :<div className="qa-waiting"><img className="qa-idle-emblem" src={ART+"idle-paw.webp"} alt="" /><span>Awaiting your creation</span></div>}</div>
           <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" aria-hidden="true" draggable="false"/>
+          {frameCaption&&<span className="qa-ring-caption qa-custom-caption">{frameCaption}</span>}
         </div>
         <div className="qa-preview-actions" role="group" aria-label="QR preview actions">
           <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready} aria-label="View QR full screen">
@@ -411,6 +424,9 @@ export default function RosieQrAtelier(){
       <div className="qa-fullscreen-ring qa-ring" aria-label="Framed full-screen scannable QR code">
         <div className="qa-code-shell"><div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}}/></div>
         <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" draggable="false"/>
+        <input type="text" className="qa-frame-caption-input" maxLength={48}
+          value={frameCaption} onChange={event=>setFrameCaption(event.target.value)}
+          placeholder="Add an inscription" aria-label="Text in bottom panel of QR frame"/>
       </div>
       <span>{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
     </div>}
