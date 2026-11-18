@@ -1,0 +1,52 @@
+name: Verify Rosie Gmail delivery (one-time)
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/rosie-gmail-live-verify-20261118.yml
+permissions:
+  contents: read
+jobs:
+  live-gmail-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Create isolated exchange and test Gmail confirmation
+        run: |
+          node --input-type=module <<'JS'
+          import assert from "node:assert/strict";
+          import { randomBytes } from "node:crypto";
+          const endpoint = "https://rosie-app-git.vercel.app/api/secret-santa";
+          async function call(action, payload) {
+            const response = await fetch(endpoint, {
+              method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action, ...payload }), signal: AbortSignal.timeout(50000)
+            });
+            const body = await response.json();
+            return { status: response.status, body };
+          }
+          const title = "Rosie Gmail Verification - " + new Date().toISOString();
+          const passcode = randomBytes(12).toString("hex").slice(0, 10).replace(/[a-f]/g, n => String(n.charCodeAt(0) - 97)).slice(0, 10);
+          const created = await call("create", { title, names: [], registration: true, passcode });
+          assert.equal(created.status, 201, "Temporary exchange creation failed: " + created.status + " " + (created.body.error || ""));
+          const { exchange, hostToken, joinToken } = created.body;
+          console.log("TEST_EXCHANGE_ID=" + exchange.id);
+          const info = await call("dashboard", { exchangeId: exchange.id, hostToken });
+          assert.equal(info.status, 200);
+          console.log("GMAIL_CONFIGURED=" + Boolean(info.body.mail?.configured));
+          assert.equal(info.body.mail?.configured, true, "Production Gmail credentials are not being detected.");
+          const registered = await call("join", {
+            exchangeId: exchange.id, joinToken, passcode,
+            name: "Rosie Mail Verification", email: "RosieVerse750@gmail.com",
+            wishlist: []
+          });
+          assert.equal(registered.status, 201, "Test registration failed: " + registered.status + " " + (registered.body.error || ""));
+          console.log("GMAIL_SEND_SENT=" + registered.body.mail?.sent);
+          console.log("GMAIL_SEND_FAILED=" + registered.body.mail?.failed);
+          assert.equal(registered.body.mail?.sent, 1,
+            "Gmail did not accept the test message. Check Vercel function logs for SMTP details.");
+          const finalStatus = await call("mailStatus", { exchangeId: exchange.id, hostToken });
+          assert.equal(finalStatus.status, 200);
+          assert.equal(finalStatus.body.mail?.delivery?.[registered.body.guest.id]?.registration?.status, "sent");
+          console.log("PASS: Gmail accepted a registration confirmation sent to the account's own inbox.");
+          JS
