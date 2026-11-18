@@ -1,5 +1,8 @@
 /* Desktop refinements remain outside the tablet and phone layouts. */
 @media (min-width: 1200px) {
+  /* Filters establish a containing block for fixed descendants, making the
+     game board follow the scrolling page instead of the viewport. */
+  .page-cheese .cheese-desktop-layout {filter:none!important;}
   .page-cheese .cheese-desktop-layout > .cheese-left-rail,
   .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
     position:sticky!important;top:20px!important;align-self:start!important;
