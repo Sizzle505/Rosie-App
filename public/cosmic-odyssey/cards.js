@@ -1,37 +1,87 @@
-/* Fiend dossier cards - fronts by default; click, tap or keyboard to flip. */
+/* Cosmic Odyssey collectible profiles: desktop selection, immersive reversible cards,
+   and an iPhone deck below the complete playable game. */
 (() => {
   'use strict';
   const veil=document.getElementById('veil');
   const launcher=document.getElementById('mission-launcher');
-  if(!veil||!launcher)return;
+  const gallery=veil?.querySelector('.fiend-card-gallery');
+  const deck=document.getElementById('mobile-card-deck');
+  const dialog=document.getElementById('card-detail-modal');
+  const closeButton=document.getElementById('card-detail-close');
+  const display=document.getElementById('card-detail-display');
+  const front=document.getElementById('card-detail-front');
+  const back=document.getElementById('card-detail-back');
+  if(!veil||!launcher||!gallery||!deck||!dialog||!closeButton||!display||!front||!back)return;
+  const cards=Array.from(gallery.querySelectorAll('.fiend-flip-card'));
   const names={rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'};
-  const cards=Array.from(document.querySelectorAll('.fiend-flip-card'));
-  const gallery=veil.querySelector('.fiend-card-gallery');
-  if(gallery&&cards.length){
-    const fitCards=()=>{
-      const {width,height}=gallery.getBoundingClientRect();
-      if(width<=0||height<=0)return;
-      const gap=parseFloat(getComputedStyle(gallery).columnGap)||0;
-      const byWidth=(width-gap*(cards.length-1)-2)/cards.length;
-      const byHeight=(height-2)*2/3;
-      gallery.style.setProperty('--card-fit-width',Math.max(1,Math.floor(Math.min(byWidth,byHeight)))+'px');
-    };
-    if('ResizeObserver' in window){
-      new ResizeObserver(fitCards).observe(gallery);
-    }
-    window.addEventListener('resize',fitCards,{passive:true});
-    fitCards();
-  }
+  const handset=window.matchMedia('(max-width:759px) and (orientation:portrait), (max-width:950px) and (max-height:560px) and (pointer:coarse)');
+  let selected=null;
+  let activeName='Character';
 
+  function fitCards(){
+    if(gallery.parentElement!==veil)return;
+    const {width,height}=gallery.getBoundingClientRect();
+    if(width<=0||height<=0)return;
+    const gap=parseFloat(getComputedStyle(gallery).columnGap)||0;
+    const byWidth=(width-gap*(cards.length-1)-2)/cards.length;
+    const byHeight=(height-2)*2/3;
+    gallery.style.setProperty('--card-fit-width',Math.max(1,Math.floor(Math.min(byWidth,byHeight)))+'px');
+  }
+  function placeGallery(){
+    if(handset.matches){
+      if(gallery.parentElement!==deck)deck.appendChild(gallery);
+      gallery.style.removeProperty('--card-fit-width');
+    }else{
+      if(gallery.parentElement!==veil)veil.insertBefore(gallery,launcher);
+      fitCards();
+    }
+  }
+  if('ResizeObserver' in window)new ResizeObserver(fitCards).observe(gallery);
+  handset.addEventListener?.('change',placeGallery);
+  window.addEventListener('resize',placeGallery,{passive:true});
+  placeGallery();
+
+  function updateFlipLabel(){
+    display.setAttribute('aria-label',display.classList.contains('is-flipped')
+      ?'Show front of '+activeName+' card'
+      :'Show back of '+activeName+' card');
+  }
+  function openCard(card){
+    if(typeof dialog.showModal!=='function')return;
+    selected=card;
+    activeName=names[card.dataset.fiend]||'Character';
+    front.src=card.querySelector('.fiend-card-front').getAttribute('src');
+    back.src=card.querySelector('.fiend-card-back').getAttribute('src');
+    front.alt=activeName+' profile portrait';
+    back.alt=activeName+' character dossier';
+    display.classList.remove('is-flipped');
+    updateFlipLabel();
+    dialog.setAttribute('aria-label',activeName+' collectible character card');
+    dialog.showModal();
+    display.focus({preventScroll:true});
+  }
+  function dismissCard(){
+    if(dialog.open)dialog.close();
+  }
   cards.forEach(card=>{
-    card.addEventListener('click',()=>{
-      const flipped=card.classList.toggle('is-flipped');
-      const name=names[card.dataset.fiend]||'Fiend';
-      card.setAttribute('aria-pressed',String(flipped));
-      const isRosie=card.dataset.fiend==='rosie';
-      card.setAttribute('aria-label',flipped?(isRosie?'Show Captain Rosie hero portrait':'Show '+name+' wanted poster'):(isRosie?'Flip Captain Rosie card to read her biography':'Flip '+name+' card to read criminal dossier'));
-    });
+    card.setAttribute('aria-pressed','false');
+    const name=names[card.dataset.fiend]||'Character';
+    card.setAttribute('aria-label','Enlarge '+name+' character card');
+    card.addEventListener('click',()=>openCard(card));
   });
+  display.addEventListener('click',()=>{
+    display.classList.toggle('is-flipped');
+    updateFlipLabel();
+  });
+  closeButton.addEventListener('click',dismissCard);
+  dialog.addEventListener('click',event=>{if(event.target===dialog)dismissCard();});
+  dialog.addEventListener('close',()=>{
+    display.classList.remove('is-flipped');
+    const previous=selected;selected=null;
+    previous?.focus({preventScroll:true});
+  });
+
+  /* Keep the existing draggable level/launch dock behavior. */
   const handle=launcher.querySelector('.mission-launcher-handle');
   if(!handle)return;
   let drag=null;

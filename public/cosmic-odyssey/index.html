@@ -21,7 +21,21 @@
     <div class="fiend-track" id="fiend-track-kitty"><img src="assets/kitty.webp" alt=""><div class="fiend-track-detail"><strong>KITTY XENOVESE</strong><div class="fiend-health"><span id="fiend-bar-kitty"></span></div><small id="fiend-hp-kitty">3 / 3 HP</small></div></div>
   </div>
 </div></div>
-</div><div id="victory-overlay" class="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="victory-title" hidden>
+</div>
+<section class="mobile-card-deck" id="mobile-card-deck" aria-label="Captain Rosie and Galaxy's Most Wanted character cards">
+  <div class="mobile-card-deck-title"><span>PROFILES IN COURAGE</span><h2>Captain Rosie &amp; the Fiends</h2><p>Choose a character to view the full dossier.</p></div>
+</section>
+<dialog class="card-detail-modal" id="card-detail-modal" aria-label="Character profile viewer">
+  <button type="button" class="card-detail-close" id="card-detail-close" aria-label="Close character profile">✕ <span>CLOSE</span></button>
+  <button type="button" class="card-detail-display" id="card-detail-display" aria-label="Flip enlarged character card">
+    <span class="fiend-flip-inner">
+      <img class="fiend-card-face fiend-card-front" id="card-detail-front" alt="" draggable="false" />
+      <img class="fiend-card-face fiend-card-back" id="card-detail-back" alt="" draggable="false" />
+    </span>
+  </button>
+  <div class="card-detail-hint" aria-hidden="true">TAP THE CARD TO FLIP · CLOSE TO RETURN</div>
+</dialog>
+<div id="victory-overlay" class="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="victory-title" hidden>
   <div class="victory-card">
     <div class="victory-visual">
       <img id="victory-image" class="victory-image" alt="Captain Rosie triumphs over the Fiends" width="1100" height="1100" draggable="false">

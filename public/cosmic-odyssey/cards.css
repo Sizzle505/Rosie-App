@@ -66,3 +66,76 @@
   .fiend-card-gallery{inset:3px 4px 66px;--gallery-gap:3px;gap:var(--gallery-gap)}
   .fiend-flip-card{width:var(--card-fit-width,min(23%,180px))}
 }
+
+/* Character dossier selection: one actual gallery, placed below the game on iPhone. */
+.mobile-card-deck{display:none}
+.card-detail-modal:not([open]){display:none!important}
+.card-detail-modal{
+  box-sizing:border-box;position:fixed;inset:0;
+  width:100vw;height:100dvh;max-width:none;max-height:none;
+  margin:0;padding:0;border:0;border-radius:0;
+  overflow:hidden;background:
+    radial-gradient(ellipse at 50% 40%,#233b72e8,#0a0f2bf2 60%,#030513f8),
+    url('assets/nebula.webp') center/cover;
+  color:#ffe4b0;
+}
+.card-detail-modal::backdrop{background:rgba(2,4,16,.94);backdrop-filter:blur(9px)}
+.card-detail-display{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:min(64dvh,calc(100vw - 26px));
+  height:auto;aspect-ratio:2/3;
+  border:0;border-radius:12px;padding:0;background:transparent;
+  cursor:pointer;filter:drop-shadow(0 0 30px #dea85565) drop-shadow(0 15px 28px #0009);
+  perspective:1600px;
+}
+.card-detail-display .fiend-flip-inner{width:100%;height:100%}
+.card-detail-display .fiend-card-face{border:2px solid #e4c280;border-radius:10px;object-fit:fill}
+.card-detail-display.is-flipped .fiend-flip-inner{transform:rotateY(180deg)}
+.card-detail-close{
+  position:absolute;z-index:4;right:max(12px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));
+  display:flex;align-items:center;gap:8px;padding:10px 14px;
+  border:1px solid #e4c080;border-radius:9px;background:#10162ce8;
+  color:#ffe6b7;font:700 13px Arial,sans-serif;letter-spacing:.12em;cursor:pointer;
+}
+.card-detail-hint{
+  position:absolute;left:50%;bottom:clamp(3px,.6dvh,11px);
+  transform:translateX(-50%);white-space:nowrap;text-align:center;
+  color:#e2c48e;font:700 10px/1.2 Arial,sans-serif;letter-spacing:.11em;pointer-events:none;
+}
+.card-detail-close:focus-visible,.card-detail-display:focus-visible{outline:3px solid #ffe19b;outline-offset:4px}
+@media(max-width:759px) and (orientation:portrait),
+       (max-width:950px) and (max-height:560px) and (pointer:coarse){
+  html,body{overflow-x:hidden!important;overflow-y:auto!important}
+  .mobile-card-deck{
+    display:block;box-sizing:border-box;max-width:920px;width:100%;
+    margin:0 auto;padding:18px 13px 28px;
+    background:linear-gradient(180deg,#0b1535,#160e2f 65%,#080a1d);
+    border-top:2px solid #bd914e;
+  }
+  .mobile-card-deck-title{text-align:center;margin:0 0 15px;color:#f6e4bb}
+  .mobile-card-deck-title span{font:800 10px/1.2 Arial,sans-serif;letter-spacing:.22em;color:#d4ad67}
+  .mobile-card-deck-title h2{margin:6px 0;font:500 clamp(22px,5vw,32px)/1.15 Georgia,serif}
+  .mobile-card-deck-title p{margin:0;font:italic 12px/1.4 Georgia,serif;color:#bea994}
+  .mobile-card-deck .fiend-card-gallery{
+    --gallery-gap:12px;
+    position:static!important;inset:auto!important;z-index:auto;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:start;justify-items:center;gap:12px;
+    width:100%;height:auto;min-height:0;max-height:none;
+    pointer-events:auto;
+  }
+  .mobile-card-deck .fiend-flip-card{
+    box-sizing:border-box;width:min(100%,245px)!important;max-width:none!important;max-height:none!important;
+    height:auto!important;aspect-ratio:2/3;
+    filter:drop-shadow(0 5px 12px #0009);
+  }
+  .card-detail-close{padding:8px 9px;font-size:12px}
+  .card-detail-close span{font-size:10px}
+  .card-detail-hint{font-size:8px}
+}
+@media(max-width:950px) and (max-height:560px) and (pointer:coarse) and (orientation:landscape){
+  .mobile-card-deck .fiend-card-gallery{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+  .mobile-card-deck .fiend-flip-card{width:min(100%,205px)!important}
+}
+@media(prefers-reduced-motion:reduce){.card-detail-display .fiend-flip-inner{transition:none}}

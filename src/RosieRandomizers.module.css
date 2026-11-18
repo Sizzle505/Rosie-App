@@ -1440,3 +1440,45 @@
   .editorBody{display:none}
   .wheelEditor[data-expanded="true"] .editorBody{display:block}
 }
+
+/* Desktop screenshot alignment: halve the wheel/editor gap and use the
+   deliberate open space in the approved header art for larger editorial type. */
+@media(min-width:1200px){
+  .wheelEditor{
+    position:relative;
+    left:-60px;
+  }
+  .desktopHeroCopy{
+    left:6%;top:12%;width:53%;height:78%;
+  }
+  .desktopHeroCopy span{
+    font-size:clamp(13px,1.2vw,19px);
+    letter-spacing:.20em;
+  }
+  .desktopHeroCopy strong{
+    margin:clamp(15px,1.65vw,27px) 0 clamp(15px,1.5vw,23px);
+    max-width:100%;
+    font-size:clamp(60px,5vw,85px);
+    line-height:1.03;
+    letter-spacing:-.035em;
+    text-shadow:0 3px 14px #15020b;
+  }
+  .desktopHeroCopy p{
+    max-width:85%;
+    font-size:clamp(20px,1.75vw,29px);
+    line-height:1.36;
+  }
+  .desktopHeroCopy small{
+    width:90%;max-width:660px;
+    padding:15px 0 0;
+    font-size:clamp(12px,1.05vw,17px);
+    line-height:1.5;letter-spacing:.14em;white-space:nowrap;
+    border-top:1px solid #f1cb808c;
+  }
+}
+@media(min-width:1200px) and (max-width:1400px){
+  .desktopHeroCopy{width:55%}
+  .desktopHeroCopy strong{font-size:clamp(57px,5vw,71px)}
+  .desktopHeroCopy p{font-size:clamp(19px,1.65vw,25px)}
+  .desktopHeroCopy small{font-size:12px}
+}
