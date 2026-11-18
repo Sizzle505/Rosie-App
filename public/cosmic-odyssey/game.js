@@ -510,6 +510,18 @@
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
+   veil.dataset.phase=status;
+   if(status==='start'){
+     document.querySelectorAll('.fiend-flip-card').forEach(card=>{
+       card.classList.remove('is-flipped');
+       card.setAttribute('aria-pressed','false');
+       const name=({jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'})[card.dataset.fiend]||'Fiend';
+       card.setAttribute('aria-label','Flip '+name+' card to read criminal dossier');
+     });
+   }else{
+     const dock=$('mission-launcher');
+     if(dock){dock.style.left='';dock.style.top='';dock.style.right='';dock.style.bottom='';dock.style.transform='';}
+   }
   if(aimPreview?.el)aimPreview.el.classList.remove('targetable');aimPreview=null;
   const victorious=status==='level-clear'||status==='win';
   veil.classList.toggle('hidden',victorious);
