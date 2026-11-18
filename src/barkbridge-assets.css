@@ -260,15 +260,15 @@
  }
  .barkbridge-graduation .graduate-rosie{
    position:absolute!important;z-index:3!important;
-   right:1%!important;bottom:10%!important;
+   right:8%!important;bottom:10%!important;
    width:clamp(150px,17vw,245px)!important;
    max-width:32%!important;margin:0!important;
  }
  .barkbridge-graduation .barkbridge-cheese-reward-desktop{
    position:relative!important;z-index:5!important;
    width:min(94%,650px)!important;
-   margin:-2% auto 0!important;
-   transform:none!important;filter:none!important;opacity:1!important;
+   margin:-11% auto 0!important;
+   transform:translateX(8%)!important;filter:none!important;opacity:1!important;
  }
  .barkbridge-graduation .barkbridge-cheese-reward-desktop img{height:auto!important;max-height:19dvh!important;object-fit:contain!important}
  .barkbridge-graduation .diploma-aftercare{

@@ -1115,6 +1115,8 @@
     background:linear-gradient(90deg,rgba(14,2,8,.12),rgba(14,2,8,.36)),
       url('/rosieverse/refresh/roulette-salon.webp') center center / cover no-repeat;
   }
+  .wheelStage {translate:45px 0;}
+  .wheelEditor {margin-left:-45px;}
 }
 
 

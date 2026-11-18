@@ -3,6 +3,7 @@
   /* Filters establish a containing block for fixed descendants, making the
      game board follow the scrolling page instead of the viewport. */
   .page-cheese .cheese-desktop-layout {filter:none!important;}
+  .page-cheese .cheese-desktop-layout {min-height:100dvh;}
   .page-cheese .cheese-desktop-layout > .cheese-left-rail,
   .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
     position:sticky!important;top:20px!important;align-self:start!important;
@@ -16,6 +17,7 @@
   .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {grid-column:3!important;grid-row:1!important;}
 
   .app-shell.page-fortune {
+    display:flow-root;
     background-image:url('/rosieverse/refresh/fortune-tent.webp')!important;
     background-size:cover!important;background-position:center top!important;
   }
