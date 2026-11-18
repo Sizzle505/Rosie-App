@@ -426,7 +426,7 @@ export default function RosieQrAtelier(){
         <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" draggable="false"/>
         <input type="text" className="qa-frame-caption-input" maxLength={48}
           value={frameCaption} onChange={event=>setFrameCaption(event.target.value)}
-          placeholder="Add an inscription" aria-label="Text in bottom panel of QR frame"/>
+          placeholder="" aria-label="Text in bottom panel of QR frame"/>
       </div>
       <span>{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
     </div>}

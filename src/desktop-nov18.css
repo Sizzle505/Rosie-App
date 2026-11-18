@@ -5,8 +5,12 @@
     position:sticky!important;top:20px!important;align-self:start!important;
   }
   .page-cheese .cheese-desktop-layout > .cheese-game-frame {
-    position:sticky!important;top:76px!important;align-self:start!important;
+    position:fixed!important;top:76px!important;
+    left:calc(max(12px,50vw - 750px) + clamp(270px,19vw,304px) + 14px)!important;
+    width:var(--cheese-center)!important;z-index:5!important;
+    align-self:start!important;
   }
+  .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {grid-column:3!important;grid-row:1!important;}
 
   .app-shell.page-fortune {
     background-image:url('/rosieverse/refresh/fortune-tent.webp')!important;
@@ -76,7 +80,7 @@
   }
   /* The cheese board is a fixed-in-view game surface, never an internal scroller. */
   .page-cheese .cheese-desktop-layout > .cheese-game-frame {
-    position:sticky!important;top:76px!important;align-self:start!important;
+    position:fixed!important;top:76px!important;align-self:start!important;
     overflow:clip!important;overscroll-behavior:none!important;
     min-height:0!important;max-height:none!important;
   }

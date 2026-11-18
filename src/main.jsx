@@ -1346,7 +1346,7 @@ function CheeseMemoryGame() {
                   className={"cheese-card" + (faceUp ? " is-flipped" : "") + (isMatched ? " is-matched" : "")}
                   key={cheese.cardId}
                   onClick={() => chooseCard(index)}
-                  disabled={gameMode === "sprint" ? challengePhase !== "playing" : !started}
+                  disabled={gameMode === "sprint" && challengePhase !== "playing"}
                   aria-label={faceUp ? cheese.name : "Face-down cheese card"}
                 >
                   <span className="cheese-card-inner">

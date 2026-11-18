@@ -1408,7 +1408,7 @@
   position:absolute;
   z-index:6;
   left:24%;
-  bottom:9.7%;
+  bottom:calc(9.7% + 20px);
   width:52%;
   height:7.2%;
   min-height:24px;

@@ -9,8 +9,7 @@ const worlds = [
   { id: "cheese", name: "Cheese Board Exam", art: "buttons/cheese.webp" },
   { id: "captain", name: "Captain Rosie", art: "buttons/captain.webp" },
   { id: "vault", name: "Card Vault", art: "buttons/vault.webp" },
-  { id: "randomizers", name: "Randomizers", art: "buttons/randomizers.webp" },
-  { id: "resources", name: "Rosie’s Resources", art: "buttons/resources.png" }
+  { id: "randomizers", name: "Randomizers", art: "buttons/randomizers.webp" }
 ];
 
 const art = (filename) => `/rosieverse/${filename}`;
@@ -49,7 +48,7 @@ export default function RosieHome({ onNavigate }) {
             type="button"
             key={world.id}
             aria-label={`Open ${world.name}`}
-            className={`${styles.world} ${world.id === "resources" ? styles.resourcesWorld : index < 2 ? styles.featured : styles.secondary}`}
+            className={`${styles.world} ${index < 2 ? styles.featured : styles.secondary}`}
             style={{
               "--glint-delay": `${-index * 1.7}s`,
               "--frame-mask": world.art ? `url("${art(world.art)}")` : "none"
@@ -61,7 +60,7 @@ export default function RosieHome({ onNavigate }) {
                   onError={() => setFailedArt(previous => ({...previous, [world.id]: true}))} />
               : <span className={styles.resourcesFallback} aria-hidden="true">
                   <span className={styles.resourceSymbols}>◷ <span>✎</span> ∑</span>
-                  <strong>Rosie’s Resources</strong>
+                  <strong>{world.name}</strong>
                 </span>}
             <span className={styles.activeSheen} aria-hidden="true" />
           </button>
