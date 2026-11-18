@@ -288,6 +288,12 @@ test("festive welcome and draw emails preserve privacy and accessible content", 
   assert.match(welcome.html, /email\/invitation-scroll\.png/);
   assert.match(draw.html, /email\/sealed-envelope\.png/);
   assert.match(draw.html, /email\/rosie-crest\.png/);
+  assert.match(welcome.html, /email\/holiday-gifts\.png/);
+  assert.match(draw.html, /email\/holiday-gifts\.png/);
+  assert.match(welcome.html, /max-width:680px/);
+  assert.match(draw.html, /max-width:680px/);
+  assert.match(welcome.html, /padding:8px 7px 28px/);
+  assert.match(draw.html, /padding:8px 7px 28px/);
   assert.match(draw.html, /role="presentation"/);
   assert.match(welcome.html, /Dear Alex/);
   assert.match(welcome.html, /OPEN MY PRIVATE ENVELOPE/);
