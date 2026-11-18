@@ -85,7 +85,12 @@ export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
   const mainArt = emailArt(
     registration ? "invitation-scroll.png" : "sealed-envelope.png",
     registration ? "An elegant holiday invitation scroll" : "Rosie's golden sealed envelope",
-    registration ? 240 : 296
+    registration ? 374 : 440
+  );
+  const giftsArt = emailArt(
+    "holiday-gifts.png",
+    "Rosie's festive collection of beautifully wrapped Christmas presents",
+    405
   );
   const html = '<!doctype html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -94,36 +99,39 @@ export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
     '<body style="margin:0;padding:0;background-color:#1f1420;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">' +
     '<div style="display:none!important;font-size:1px;line-height:1px;color:#1f1420;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all">' + safeHtml(preheader) + '</div>' +
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#1f1420" style="border-collapse:collapse;background-color:#1f1420"><tr>' +
-    '<td align="center" style="padding:26px 10px 40px">' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:100%;max-width:600px;border-collapse:separate;border:1px solid #b99257;background-color:#fff7e9">' +
+    '<td align="center" style="padding:8px 7px 28px">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="680" style="width:100%;max-width:680px;border-collapse:separate;border:1px solid #b99257;background-color:#fff7e9">' +
     '<tr><td align="center" bgcolor="#2e1729" style="background-color:#2e1729;line-height:0;padding:0;">' +
-    emailArt("rosie-holiday-banner.jpg", "Rosie in her festive Secret Santa tuxedo and Santa hat", 600) +
+    emailArt("rosie-holiday-banner.jpg", "Rosie in her festive Secret Santa tuxedo and Santa hat", 680) +
     '</td></tr>' +
-    '<tr><td bgcolor="#2e1729" align="center" style="background-color:#2e1729;padding:13px 18px 15px;border-bottom:3px solid #c4a164">' +
+    '<tr><td bgcolor="#2e1729" align="center" style="background-color:#2e1729;padding:7px 12px 8px;border-bottom:2px solid #c4a164">' +
     '<span style="font:700 11px/1.6 Arial,Helvetica,sans-serif;letter-spacing:2.4px;color:#f5d9a3">ROSIE&#39;S SECRET SANTA &nbsp; &#10022; &nbsp; 2026</span>' +
     '</td></tr>' +
-    '<tr><td align="center" bgcolor="#fff7e9" style="background-color:#fff7e9;padding:30px 30px 6px">' +
+    '<tr><td align="center" bgcolor="#fff7e9" style="background-color:#fff7e9;padding:17px 20px 1px">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tr><td align="center">' +
     '<span style="color:#997340;font:700 10px/1.6 Arial,Helvetica,sans-serif;letter-spacing:2.5px">' + safeHtml(eyebrow) + '</span>' +
-    '<h1 style="font:normal 38px/1.17 Georgia,\'Times New Roman\',serif;letter-spacing:-.6px;margin:13px 0 9px;color:#642840">' + safeHtml(headline) + '</h1>' +
-    '<p style="font:italic 16px/1.6 Georgia,\'Times New Roman\',serif;color:#936f47;margin:0 0 9px">' + safeHtml(italicLine) + '</p>' +
+    '<h1 style="font:normal 41px/1.13 Georgia,\'Times New Roman\',serif;letter-spacing:-.6px;margin:8px 0 5px;color:#642840">' + safeHtml(headline) + '</h1>' +
+    '<p style="font:italic 16px/1.6 Georgia,\'Times New Roman\',serif;color:#936f47;margin:0 0 3px">' + safeHtml(italicLine) + '</p>' +
     '</td></tr></table></td></tr>' +
-    '<tr><td align="center" bgcolor="#fff7e9" style="padding:9px 28px 7px;background-color:#fff7e9">' +
+    '<tr><td align="center" bgcolor="#fff7e9" style="padding:0 8px 2px;background-color:#fff7e9">' +
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center">' +
     mainArt +
     '</td></tr></table></td></tr>' +
-    '<tr><td bgcolor="#fff7e9" style="background-color:#fff7e9;padding:13px 42px 3px">' +
+    '<tr><td bgcolor="#fff7e9" style="background-color:#fff7e9;padding:4px 34px 1px">' +
     '<p style="font:18px/1.5 Georgia,\'Times New Roman\',serif;color:#6a3047;margin:0 0 17px">Dear ' + safeHtml(name) + ',</p>' +
     '<p style="font:16px/1.7 Georgia,\'Times New Roman\',serif;color:#443238;margin:0 0 17px">' + safeHtml(intro) + '</p>' +
     '<p style="font:16px/1.7 Georgia,\'Times New Roman\',serif;color:#443238;margin:0 0 20px">' + safeHtml(next) + '</p>' +
     '</td></tr>' +
-    '<tr><td bgcolor="#fff7e9" style="background-color:#fff7e9;padding:3px 34px 14px">' +
+    '<tr><td bgcolor="#fff7e9" style="background-color:#fff7e9;padding:3px 34px 4px">' +
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f5e9d0" style="border-collapse:collapse;background-color:#f5e9d0;border-top:1px solid #e5cda7;border-bottom:1px solid #e5cda7">' +
     '<tr><td align="center" style="padding:20px 18px">' +
     '<p style="color:#7b5741;font:700 10px/1.5 Arial,Helvetica,sans-serif;letter-spacing:1.6px;margin:0 0 7px">' + safeHtml(noteHeading) + '</p>' +
     '<p style="color:#664d45;font:15px/1.6 Georgia,\'Times New Roman\',serif;margin:0">' + safeHtml(note) + '</p>' +
     '</td></tr></table></td></tr>' +
-    '<tr><td bgcolor="#fff7e9" align="center" style="background-color:#fff7e9;padding:11px 22px 10px">' +
+    '<tr><td bgcolor="#fff7e9" align="center" style="background-color:#fff7e9;padding:0 18px 0">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center">' +
+    giftsArt + '</td></tr></table></td></tr>' +
+    '<tr><td bgcolor="#fff7e9" align="center" style="background-color:#fff7e9;padding:4px 22px 10px">' +
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>' +
     '<td align="center" bgcolor="#692e48" style="background-color:#692e48;border:1px solid #d3ad69;border-radius:5px">' +
     '<a href="' + safeHtml(url) + '" target="_blank" style="display:inline-block;padding:17px 27px;text-decoration:none;color:#fff9e9;font:700 13px/1.5 Arial,Helvetica,sans-serif;letter-spacing:1.05px">' + safeHtml(button) + '</a>' +
