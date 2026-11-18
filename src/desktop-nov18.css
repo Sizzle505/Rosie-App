@@ -62,10 +62,18 @@
   .app-shell.page-qr-atelier .qa-collection {
     position:fixed!important;z-index:3!important;
   }
+  /* Smaller, tighter, centered desktop Pocket Toolkit options. */
   .app-shell.page-calculations main.rc-page .rc-tool-grid {
-    width:min(80%,680px)!important;margin-inline:auto!important;
-    column-gap:clamp(12px,1.1vw,20px)!important;
-    row-gap:clamp(9px,.8vw,15px)!important;
+    width:min(68%,578px)!important;margin-inline:auto!important;
+    justify-content:center!important;justify-items:center!important;
+    column-gap:clamp(8.4px,.77vw,14px)!important;
+    row-gap:clamp(6.3px,.56vw,10.5px)!important;
+  }
+  /* The cheese board is a fixed-in-view game surface, never an internal scroller. */
+  .page-cheese .cheese-desktop-layout > .cheese-game-frame {
+    position:sticky!important;top:76px!important;align-self:start!important;
+    overflow:clip!important;overscroll-behavior:none!important;
+    min-height:0!important;max-height:none!important;
   }
   .app-shell.page-calculations main.rc-page .rc-active-tool-overlay .rc-tool-panel.rc-device {
     min-height:850px!important;
