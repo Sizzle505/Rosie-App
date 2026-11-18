@@ -243,7 +243,7 @@
 .toolDock { display:none; }
 @media (min-width:1200px) and (hover:hover) and (pointer:fine) {
   /* The five game destinations use the height vacated by Resources. */
-  .worldGrid {width:min(100%,740px,64dvh);}
+  .worldGrid {width:min(100%,740px,62dvh);}
   .toolDock {
     position:absolute;z-index:5;top:calc(52% - 80px);left:50%;transform:translateX(-50%);
     display:grid;grid-template-columns:repeat(2,minmax(0,260px));
