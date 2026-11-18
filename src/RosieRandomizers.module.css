@@ -1356,3 +1356,87 @@
   /* Keep the approved silk behind, not over, the cream cards or wheel. */
   .ivoryRow,.wheelSalon {position:relative;z-index:2;}
 }
+
+/* November 18: improve spacing and typography without modifying approved casino artwork. */
+.wheelSalon{column-gap:11px}
+.ivoryCard h2{
+  align-self:stretch;
+  margin:11px 0 5px;
+  text-align:center;
+  font-family:"Iowan Old Style","Baskerville",Georgia,serif;
+  font-weight:500;
+  font-size:clamp(23px,2.25vw,29px);
+  line-height:1.13;
+  letter-spacing:-.026em;
+  text-wrap:balance;
+}
+.wheelHeading{padding:3px 8px 1px}
+.wheelHeading > span{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  font-size:10px;letter-spacing:.19em;line-height:1.3;
+}
+.wheelHeading > span::before,.wheelHeading > span::after{
+  content:"";display:inline-block;width:25px;height:1px;
+  background:linear-gradient(90deg,transparent,#d9ae59);
+}
+.wheelHeading > span::after{transform:rotate(180deg)}
+.wheelHeading h2{
+  margin:8px 0 5px;
+  font-family:"Iowan Old Style","Baskerville",Georgia,serif;
+  font-size:clamp(27px,2.5vw,35px);
+  line-height:1.15;
+  font-style:italic;letter-spacing:-.028em;
+  text-wrap:balance;
+}
+.wheelHeading p{font-size:clamp(12px,1.1vw,15px);line-height:1.4;letter-spacing:.005em}
+.editorHead{min-width:0}
+.editorHead > div{min-width:0}
+.editorHead h3{
+  font-family:"Iowan Old Style","Baskerville",Georgia,serif;
+  font-size:clamp(21px,1.7vw,25px);
+  line-height:1.2;letter-spacing:-.02em;
+  text-wrap:balance;
+}
+.editorBody > p{margin:13px 0 17px;color:#746657;font-size:12px;line-height:1.45}
+.editorToggle{display:none}
+@media(min-width:861px){
+  .wheelSalon{column-gap:8px}
+}
+@media(min-width:1200px){
+  .wheelSalon{column-gap:9px}
+  .wheelEditor{margin-left:-42px}
+  .wheelStage{translate:clamp(52px,6vw,94px) 0}
+  .desktopHeroCopy{gap:0}
+  .desktopHeroCopy span,.desktopHeroCopy small{letter-spacing:.15em;line-height:1.36}
+  .desktopHeroCopy strong{
+    max-width:100%;
+    margin:clamp(11px,1.15vw,20px) 0 clamp(12px,1.2vw,19px);
+    font-size:clamp(40px,3.65vw,64px);
+    line-height:1;
+    letter-spacing:-.036em;
+  }
+  .desktopHeroCopy p{font-size:clamp(16px,1.4vw,24px);line-height:1.3}
+}
+@media(max-width:680px){
+  .ivoryCard h2{margin:9px 0 5px;font-size:clamp(22px,5.6vw,26px)}
+  .wheelHeading h2{font-size:clamp(26px,6.7vw,30px)}
+  .wheelHeading > span{font-size:9px;letter-spacing:.15em}
+  .wheelHeading > span::before,.wheelHeading > span::after{width:18px}
+  .wheelHeading p{font-size:12px}
+  .wheelEditor{padding:11px 14px 12px}
+  .editorHead{gap:9px}
+  .editorHead h3{font-size:20px}
+  .editorToggle{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    min-height:40px;margin-left:auto;padding:7px 10px;
+    border:1px solid rgba(126,93,34,.44);border-radius:10px;
+    background:linear-gradient(145deg,#fff9e7,#e9d7aa);
+    color:#61451b;font:800 9px/1 Arial,sans-serif;
+    letter-spacing:.08em;cursor:pointer;white-space:nowrap;
+  }
+  .editorToggle:focus-visible{outline:2px solid #9e691d;outline-offset:3px}
+  .editorChevron{display:inline-block;font-size:18px;line-height:1;transition:transform .18s ease}
+  .wheelEditor[data-expanded="true"] .editorChevron{transform:rotate(180deg)}
+  .editorBody{display:none}
+  .wheelEditor[data-expanded="true"] .editorBody{display:block}
+}

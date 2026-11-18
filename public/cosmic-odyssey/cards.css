@@ -43,3 +43,26 @@
 .fiend-flip-card{width:min(23%,210px,calc((100dvh - 230px)*.6667))}
 @media(max-width:740px){.fiend-card-gallery{gap:4px}.fiend-flip-card{width:min(23%,130px,calc((100dvh - 250px)*.6667))}}
 @media(max-height:520px) and (orientation:landscape){.fiend-card-gallery{gap:4px}.fiend-flip-card{width:min(23%,calc((100dvh - 120px)*.6667))}}
+
+/* Fit the four 2:3 collectible cards against the gallery's actual dimensions.
+   The launcher occupies the reserved lower strip; the cards never overlap. */
+.fiend-card-gallery{
+  --gallery-gap:clamp(4px,.85vw,11px);
+  inset:7px 8px 92px;
+  gap:var(--gallery-gap);
+}
+.fiend-flip-card{
+  flex:0 0 auto;
+  width:var(--card-fit-width,min(23%,240px));
+  max-width:100%;
+  max-height:100%;
+  aspect-ratio:2/3;
+}
+@media(max-width:740px){
+  .fiend-card-gallery{inset:5px 4px 88px;--gallery-gap:4px;gap:var(--gallery-gap)}
+  .fiend-flip-card{width:var(--card-fit-width,min(23%,165px))}
+}
+@media(max-height:520px) and (orientation:landscape){
+  .fiend-card-gallery{inset:3px 4px 66px;--gallery-gap:3px;gap:var(--gallery-gap)}
+  .fiend-flip-card{width:var(--card-fit-width,min(23%,180px))}
+}

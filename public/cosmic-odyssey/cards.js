@@ -6,6 +6,23 @@
   if(!veil||!launcher)return;
   const names={rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'};
   const cards=Array.from(document.querySelectorAll('.fiend-flip-card'));
+  const gallery=veil.querySelector('.fiend-card-gallery');
+  if(gallery&&cards.length){
+    const fitCards=()=>{
+      const {width,height}=gallery.getBoundingClientRect();
+      if(width<=0||height<=0)return;
+      const gap=parseFloat(getComputedStyle(gallery).columnGap)||0;
+      const byWidth=(width-gap*(cards.length-1)-2)/cards.length;
+      const byHeight=(height-2)*2/3;
+      gallery.style.setProperty('--card-fit-width',Math.max(1,Math.floor(Math.min(byWidth,byHeight)))+'px');
+    };
+    if('ResizeObserver' in window){
+      new ResizeObserver(fitCards).observe(gallery);
+    }
+    window.addEventListener('resize',fitCards,{passive:true});
+    fitCards();
+  }
+
   cards.forEach(card=>{
     card.addEventListener('click',()=>{
       const flipped=card.classList.toggle('is-flipped');

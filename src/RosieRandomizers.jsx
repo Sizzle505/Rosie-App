@@ -82,6 +82,7 @@ export default function RosieRandomizers() {
   const [wheelResult, setWheelResult] = useState("Rosie is taking wagers.");
   const [coinResult, setCoinResult] = useState("Heads is on the table.");
   const [diceResult, setDiceResult] = useState("Showing a five.");
+  const [rouletteCustomizationOpen, setRouletteCustomizationOpen] = useState(false);
 
   const sectors = useMemo(
     () => entries.map((entry, index) => ({ entry, index })),
@@ -312,14 +313,26 @@ export default function RosieRandomizers() {
           </button>
         </div>
 
-        <aside className={styles.wheelEditor} data-layout-target="randomizers-editor">
+        <aside className={styles.wheelEditor} data-layout-target="randomizers-editor" data-expanded={rouletteCustomizationOpen ? "true" : "false"}>
           <div className={styles.editorHead}>
             <img src="/randomizers/rosie-signet.webp" alt="" aria-hidden="true" />
             <div>
               <span>YOUR TABLE</span>
               <h3>Set the choices</h3>
             </div>
+            <button
+              className={styles.editorToggle}
+              type="button"
+              onClick={() => setRouletteCustomizationOpen((open) => !open)}
+              aria-expanded={rouletteCustomizationOpen}
+              aria-controls="rosie-wheel-editor-body"
+              aria-label={rouletteCustomizationOpen ? "Close roulette customization" : "Open roulette customization"}
+            >
+              <span>{rouletteCustomizationOpen ? "CLOSE" : "CUSTOMIZE"}</span>
+              <span className={styles.editorChevron} aria-hidden="true">⌄</span>
+            </button>
           </div>
+          <div id="rosie-wheel-editor-body" className={styles.editorBody}>
           <p>Add up to ten. Every seated choice is editable; changes update the wheel instantly.</p>
 
           <form className={styles.addForm} onSubmit={addEntry}>
@@ -364,6 +377,7 @@ export default function RosieRandomizers() {
           <div className={styles.editorFooter}>
             <small>{entries.length}/10 SEATS FILLED</small>
             <button type="button" onClick={resetWheel}>RESTORE HOUSE WHEEL</button>
+          </div>
           </div>
         </aside>
       </section>
