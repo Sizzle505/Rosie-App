@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-rosieverse-icons.mjs && vite build",
+    "build": "node scripts/generate-rosieverse-icons.mjs && node scripts/build-santa-email-previews.mjs && vite build",
     "preview": "vite preview",
     "icons:generate": "node scripts/generate-rosieverse-icons.mjs"
   },
