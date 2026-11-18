@@ -4,14 +4,15 @@
   const veil=document.getElementById('veil');
   const launcher=document.getElementById('mission-launcher');
   if(!veil||!launcher)return;
-  const names={jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'};
+  const names={rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'};
   const cards=Array.from(document.querySelectorAll('.fiend-flip-card'));
   cards.forEach(card=>{
     card.addEventListener('click',()=>{
       const flipped=card.classList.toggle('is-flipped');
       const name=names[card.dataset.fiend]||'Fiend';
       card.setAttribute('aria-pressed',String(flipped));
-      card.setAttribute('aria-label',flipped?'Show '+name+' wanted poster':'Flip '+name+' card to read criminal dossier');
+      const isRosie=card.dataset.fiend==='rosie';
+      card.setAttribute('aria-label',flipped?(isRosie?'Show Captain Rosie hero portrait':'Show '+name+' wanted poster'):(isRosie?'Flip Captain Rosie card to read her biography':'Flip '+name+' card to read criminal dossier'));
     });
   });
   const handle=launcher.querySelector('.mission-launcher-handle');

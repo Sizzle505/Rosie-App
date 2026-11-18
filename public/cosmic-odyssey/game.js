@@ -515,8 +515,8 @@
      document.querySelectorAll('.fiend-flip-card').forEach(card=>{
        card.classList.remove('is-flipped');
        card.setAttribute('aria-pressed','false');
-       const name=({jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'})[card.dataset.fiend]||'Fiend';
-       card.setAttribute('aria-label','Flip '+name+' card to read criminal dossier');
+       const name=({rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'})[card.dataset.fiend]||'Fiend';
+       card.setAttribute('aria-label',card.dataset.fiend==='rosie'?'Flip Captain Rosie card to read her biography':'Flip '+name+' card to read criminal dossier');
      });
    }else{
      const dock=$('mission-launcher');
