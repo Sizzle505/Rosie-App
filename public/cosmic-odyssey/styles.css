@@ -1797,3 +1797,29 @@
 }
 .cosmic-banner-top .cosmic-banner-art{border:0!important;box-shadow:none!important;}
 .cosmic-banner-top .cosmic-banner-stage{bottom:clamp(7px,1vw,13px)!important;}
+
+/* The victory room, cabinet, and inscription are three distinct scene surfaces. */
+.victory-overlay[data-stage="1"]{--victory-room:url('/captain-victory-backdrops/nebula.webp');--victory-cabinet:url('assets/scene-nebula.webp');--victory-plaque:url('assets/scene-nebula-alt.webp')}
+.victory-overlay[data-stage="2"]{--victory-room:url('/captain-victory-backdrops/meteor.webp');--victory-cabinet:url('assets/scene-meteor.webp');--victory-plaque:url('assets/scene-meteor-alt.webp')}
+.victory-overlay[data-stage="3"]{--victory-room:url('/captain-victory-backdrops/lunar.webp');--victory-cabinet:url('assets/scene-lunar.webp');--victory-plaque:url('assets/scene-lunar-alt.webp')}
+.victory-overlay[data-stage="4"]{--victory-room:url('/captain-victory-backdrops/crystal.webp');--victory-cabinet:url('assets/scene-crystal.webp');--victory-plaque:url('/captain-arcade-backgrounds/04-Ember-Tunnel-Crystal-Vault.webp')}
+.victory-overlay[data-stage="5"]{--victory-room:url('/captain-victory-backdrops/foundry.webp');--victory-cabinet:url('assets/scene-foundry.webp');--victory-plaque:url('/captain-arcade-backgrounds/03-Ember-Tunnel-Molten-Foundry.webp')}
+.victory-overlay[data-stage="6"]{--victory-room:url('/captain-victory-backdrops/derelict.webp');--victory-cabinet:url('assets/scene-derelict.webp');--victory-plaque:url('/captain-arcade-backgrounds/09-Cosmic-Odyssey-Starship-Passage.webp')}
+.victory-overlay[data-stage="7"]{--victory-room:url('/captain-victory-backdrops/ice.webp');--victory-cabinet:url('assets/scene-ice.webp');--victory-plaque:url('/captain-arcade-backgrounds/08-Cosmic-Odyssey-Lunar-Starport.webp')}
+.victory-overlay[data-stage="8"]{--victory-room:url('/captain-victory-backdrops/garden.webp');--victory-cabinet:url('assets/scene-garden.webp');--victory-plaque:url('/captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp')}
+.victory-overlay[data-stage="9"]{--victory-room:url('/captain-victory-backdrops/blackhole.webp');--victory-cabinet:url('assets/scene-blackhole.webp');--victory-plaque:url('/captain-arcade-backgrounds/07-Cosmic-Odyssey-Black-Hole-Observatory.webp')}
+.victory-overlay[data-stage="10"]{--victory-room:url('/captain-victory-backdrops/ruins.webp');--victory-cabinet:url('assets/scene-ruins.webp');--victory-plaque:url('/captain-arcade-backgrounds/10-Captain-Arcade-Navy-Gold-Quiet.webp')}
+.victory-overlay[data-stage]{
+ background-image:linear-gradient(130deg,rgba(4,8,27,.23),rgba(5,8,25,.30)),var(--victory-room);
+ background-position:center,center;background-size:cover,cover;background-repeat:no-repeat;
+}
+.victory-overlay[data-stage] .victory-card{
+ background-image:linear-gradient(105deg,rgba(5,8,24,.12),rgba(5,8,24,.35) 52%,rgba(5,8,24,.47)),var(--victory-cabinet);
+ background-position:center;background-size:cover;background-repeat:no-repeat;
+}
+.victory-overlay[data-stage] .victory-details{
+ border-color:#e4bd7899;
+ background-image:linear-gradient(160deg,rgba(6,9,27,.78),rgba(8,9,27,.84)),var(--victory-plaque);
+ background-position:center;background-size:cover;
+ box-shadow:inset 0 0 0 1px #ffe4ae24,inset 0 0 28px #a88d6c20,0 8px 24px #03081788;
+}

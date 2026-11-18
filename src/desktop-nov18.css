@@ -5,14 +5,15 @@
     position:sticky!important;top:20px!important;align-self:start!important;
   }
   .page-cheese .cheese-desktop-layout > .cheese-game-frame {
-    position:sticky!important;top:70px!important;align-self:start!important;
+    position:sticky!important;top:76px!important;align-self:start!important;
   }
 
   .app-shell.page-fortune {
-    background-image:radial-gradient(circle at 0 0,#4b1937,transparent 18%),
-      radial-gradient(circle at 100% 0,#4b1937,transparent 18%),
-      url('/rosieverse/refresh/fortune-tent.webp')!important;
-    background-size:auto,auto,cover!important;background-position:center top!important;
+    background-image:url('/rosieverse/refresh/fortune-tent.webp')!important;
+    background-size:cover!important;background-position:center top!important;
+  }
+  .app-shell.page-fortune .fortune-page {
+    background-image:none!important;background-color:transparent!important;
   }
   .app-shell.page-fortune .fortune-page .question-card,
   .app-shell.page-fortune .fortune-page .fortune-ticket {translate:0 50px;}
@@ -62,13 +63,16 @@
     position:fixed!important;z-index:3!important;
   }
   .app-shell.page-calculations main.rc-page .rc-tool-grid {
-    width:min(91%,760px)!important;margin-inline:auto!important;
+    width:min(84%,700px)!important;margin-inline:auto!important;
     column-gap:clamp(12px,1.1vw,20px)!important;
     row-gap:clamp(9px,.8vw,15px)!important;
   }
   .app-shell.page-calculations main.rc-page .rc-active-tool-overlay .rc-tool-panel.rc-device {
-    min-height:900px!important;
-    padding-top:calc(clamp(142px,39vw,212px) + 75px)!important;
+    min-height:850px!important;
+    padding-top:calc(clamp(142px,39vw,212px) + 25px)!important;
     padding-bottom:calc(clamp(115px,33vw,184px) + 75px)!important;
+  }
+  .app-shell.page-calculations .nav-family-toggle {
+    top:18px!important;left:calc(50% + 340px)!important;
   }
 }

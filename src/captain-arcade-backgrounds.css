@@ -23,7 +23,7 @@
 }
 .captain-arcade-page-background {transition:background-image .35s ease;}
 .captain-arcade-page-background[data-focused-game="yacht"] {
-  background-image:linear-gradient(180deg,#0813294d,#090c1d8a 68%),url('/captain-arcade-backgrounds/yacht-desktop-20261118.webp');
+  background-image:linear-gradient(180deg,#08132938,#090c1d79 68%),url('/captain-sakura-course-wide.webp');
 }
 .captain-arcade-page-background[data-focused-game="tunnel"] {
   background-image:linear-gradient(180deg,#0b10255c,#100d1e96 65%),url('/captain-arcade-backgrounds/tunnel-desktop-20261118.webp');

@@ -265,16 +265,12 @@
   .toolDock button:focus-visible {outline:2px solid #fff0b9;outline-offset:2px;}
 }
 
-/* A wider but balanced desktop salon: the center art remains unobstructed. */
-@media (min-width:1200px) {
-  .home {gap:12px;padding-top:13px;}
-  .banner {width:min(700px,50vw);}
-  .hero {width:min(1080px,60vw);height:min(45dvh,470px);}
-  .worldGrid {width:min(980px,59vw);max-width:980px;margin-top:-25px;}
+/* Restore the original salon composition while centering larger side resources. */
+@media (min-width:1200px) and (hover:hover) and (pointer:fine) {
   .toolDock {
-    top:clamp(315px,47dvh,520px);
-    width:min(1600px,96vw);
-    grid-template-columns:repeat(2,minmax(0,285px));
-    row-gap:clamp(7px,1dvh,12px);
+    top:50%;transform:translate(-50%,-50%);
+    width:min(1400px,96vw);
+    grid-template-columns:repeat(2,minmax(0,clamp(230px,19vw,364px)));
+    row-gap:clamp(9px,1.4dvh,16px);
   }
 }
