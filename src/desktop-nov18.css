@@ -63,7 +63,7 @@
     position:fixed!important;z-index:3!important;
   }
   .app-shell.page-calculations main.rc-page .rc-tool-grid {
-    width:min(84%,700px)!important;margin-inline:auto!important;
+    width:min(80%,680px)!important;margin-inline:auto!important;
     column-gap:clamp(12px,1.1vw,20px)!important;
     row-gap:clamp(9px,.8vw,15px)!important;
   }
@@ -72,7 +72,7 @@
     padding-top:calc(clamp(142px,39vw,212px) + 25px)!important;
     padding-bottom:calc(clamp(115px,33vw,184px) + 75px)!important;
   }
-  .app-shell.page-calculations .nav-family-toggle {
+  .app-shell.page-calculations.app-shell .nav-family-toggle {
     top:18px!important;left:calc(50% + 340px)!important;
   }
 }
