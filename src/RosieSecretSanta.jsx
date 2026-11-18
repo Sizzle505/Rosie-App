@@ -138,6 +138,7 @@ export default function RosieSecretSanta() {
   const [guestEmail, setGuestEmail] = useState("");
   const [guestWishes, setGuestWishes] = useState([blankWish()]);
   const [setupCode, setSetupCode] = useState("");
+  const [mailStatus, setMailStatus] = useState(null);
 
   async function act(operation, callback) {
     setBusy(true); setError(""); setNotice("");
@@ -152,6 +153,7 @@ export default function RosieSecretSanta() {
       setExchange(result.exchange);
       setInvitations(result.invitations || []);
       setJoinToken(result.joinToken || null);
+      setMailStatus(result.mail || null);
       setEmailDrafts(emailDraftsFor(result.exchange));
       setRules(result.exchange.exclusions || []);
       setRulesDirty(false);
@@ -210,6 +212,8 @@ export default function RosieSecretSanta() {
       setExchange(result.exchange);
       setInvitations(result.invitations);
       setJoinToken(result.joinToken || null);
+      setMailStatus((await request("mailStatus", { exchangeId: result.exchange.id,
+        hostToken: token })).mail);
       setEmailDrafts(emailDraftsFor(result.exchange));
       setRules([]);
       setScreen("host");
@@ -231,12 +235,16 @@ export default function RosieSecretSanta() {
       setExchange(result.exchange);
       setInvitations(result.invitations || []);
       if (result.joinToken) setJoinToken(result.joinToken);
+      if (result.mailStatus) setMailStatus(result.mailStatus);
       if (action !== "emails") {
         setRules(result.exchange.exclusions || []);
         setRulesDirty(false);
       }
       if (action === "emails") setEmailDrafts(emailDraftsFor(result.exchange));
-      setNotice(action === "draw" ? "The names are drawn and sealed. Send each guest their private link." :
+      setNotice(action === "draw" ? (result.mail?.configured
+        ? "Names drawn. Rosie submitted " + result.mail.sent + " notification(s) to Gmail." +
+          (result.mail.failed ? " " + result.mail.failed + " could not be sent. You can retry below." : "")
+        : "Names drawn and sealed. Automatic emails are not yet enabled; keep the private guest links available.") :
         action === "configureJoin" ? "Shared sign-ups enabled. Copy your invitation link and share its passcode separately." :
         action === "emails" ? "Guest email addresses saved." :
         action === "rules" ? "Assignment restrictions saved." : "Guest list updated.");
@@ -267,7 +275,28 @@ export default function RosieSecretSanta() {
       remember({ role: "guest", id: data.exchangeId, guestId: data.guest.id,
         token: data.guestToken, label: data.exchange.title + " - " + data.guest.name });
       setSaved(readSaved());
-      setNotice("You're registered! Your personal invitation is saved on this device. Copy it for safekeeping.");
+      setNotice(data.mail?.sent
+        ? "You're registered! Rosie has emailed your private invitation. It's also saved on this device."
+        : "You're registered! Save or copy your private link. Automatic email is not yet available.");
+    });
+  }
+  async function sendHostMail(action, params = {}) {
+    if (!auth || auth.role !== "host") return;
+    await act(action, async () => {
+      const result = await request(action, {
+        exchangeId: auth.id, hostToken: auth.token, ...params
+      });
+      if (result.mailStatus) setMailStatus(result.mailStatus);
+      if (!result.mail?.configured) {
+        setNotice("Gmail is not connected yet. Finish the secure Vercel app-password setup to enable sending.");
+      } else if (result.mail.sent) {
+        setNotice("Rosie sent " + result.mail.sent + " email(s) through Gmail." +
+          (result.mail.failed ? " " + result.mail.failed + " could not be sent." : ""));
+      } else {
+        setNotice(result.mail.failed
+          ? "Gmail could not send the requested email(s). Please try again after checking the configuration."
+          : "No unsent notifications found. You can resend an individual invitation below.");
+      }
     });
   }
   async function saveGuestWishlist(event) {
@@ -469,7 +498,31 @@ export default function RosieSecretSanta() {
             </button>
           </div>}
         </div>
-        <p className="ss-hint">Keep your organizer link private. Anyone who holds a guest invitation link, including the organizer, can open that person's envelope. Share each link directly and discreetly.</p>
+        <p className="ss-hint">Keep your organizer link private. Anyone with a personal guest link can open that person's envelope. Automatic emails, when enabled, go to each guest individually.</p>
+        <div className="ss-mail-panel" aria-label="Secret Santa email notifications">
+          <div className="ss-mail-panel__heading">
+            <span className="ss-eyebrow">LET ROSIE DELIVER THE ENVELOPES</span>
+            <h4>Email notifications</h4>
+            <p>From <strong>RosieVerse750@gmail.com</strong></p>
+            <p>{mailStatus?.configured
+              ? "Gmail sending is connected. Rosie emails personal links to guests; SMTP acceptance does not guarantee inbox delivery."
+              : "Email sending is awaiting a Gmail app password in Vercel. Private invitation links still work in the meantime."}</p>
+          </div>
+          <div className="ss-mail-panel__actions">
+            <button type="button" className="ss-button" disabled={busy || !mailStatus?.configured}
+              onClick={() => sendHostMail(exchange.status === "drawn" ? "sendMatches" : "sendConfirmations")}>
+              {exchange.status === "drawn" ? "SEND / RETRY MATCH EMAILS" : "SEND CONFIRMATION EMAILS"}
+            </button>
+            <button type="button" className="ss-button ss-button--quiet" disabled={busy}
+              onClick={async () => {
+                try {
+                  const result = await request("mailStatus", { exchangeId: auth.id, hostToken: auth.token });
+                  setMailStatus(result.mail);
+                  setNotice("Email status refreshed.");
+                } catch (err) { setError(err.message); }
+              }}>REFRESH EMAIL STATUS</button>
+          </div>
+        </div>
         <div className="ss-section-heading ss-section-heading--sm"><span>THE ENVELOPES</span><h4>Guest invitations</h4></div>
         <div className="ss-invite-list">
           {invitations.map((item, index) => {
@@ -492,6 +545,17 @@ export default function RosieSecretSanta() {
               <div className="ss-invite__actions">
                 <button type="button" disabled={busy}
                   onClick={() => doCopy(guestLink, "Invitation copied for " + item.name + ".")}>COPY LINK</button>
+                {!!email && !hasUnsavedEmails && <div className="ss-mail-individual">
+                  <span>{mailStatus?.delivery?.[item.id]?.[exchange.status === "drawn" ? "draw" : "registration"]?.status === "sent"
+                    ? "Sent to Gmail"
+                    : mailStatus?.delivery?.[item.id]?.[exchange.status === "drawn" ? "draw" : "registration"]?.status === "failed"
+                    ? "Email failed"
+                    : "Not emailed"}</span>
+                  <button type="button" disabled={busy || !mailStatus?.configured}
+                    onClick={() => sendHostMail("resendGuestEmail", { guestId: item.id })}>
+                    {mailStatus?.delivery?.[item.id]?.[exchange.status === "drawn" ? "draw" : "registration"]?.status === "sent"
+                      ? "RESEND EMAIL" : "EMAIL GUEST"}</button>
+                </div>}
                 {!!email && !hasUnsavedEmails && <a className="ss-invite__mailto"
                   href={invitationEmailLink(email, item.name, exchange.title, guestLink)}
                   aria-label={"Draft invitation email for " + item.name}>DRAFT EMAIL</a>}
