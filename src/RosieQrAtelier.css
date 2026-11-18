@@ -1355,3 +1355,21 @@
     margin:0;
   }
 }
+
+/* The left workshop stays in its original viewport as the right form grows.
+   Keep this after the legacy desktop rules that suppressed ::before. */
+@media screen and (min-width:1200px) {
+  body .app-shell.page-qr-atelier .qa-scene::before {
+    content:""!important;display:block!important;position:fixed!important;
+    inset:0 auto 0 0!important;width:47vw!important;height:100dvh!important;
+    z-index:1!important;pointer-events:none!important;mask-image:none!important;
+    background-image:url('/qr-atelier/desktop-workshop-20261112.webp'),url('/rosieverse/refresh/qr-floor.webp')!important;
+    background-size:100vw auto,100vw 100dvh!important;
+    background-position:left top,left top!important;
+    background-repeat:no-repeat!important;
+  }
+  body .app-shell.page-qr-atelier .qa-scene {
+    background-size:100% auto,100% 100%!important;
+    background-repeat:no-repeat,no-repeat!important;
+  }
+}
