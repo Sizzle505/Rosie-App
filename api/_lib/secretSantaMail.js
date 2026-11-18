@@ -21,28 +21,131 @@ function wrapped64(value) {
   return Buffer.from(value, "utf8").toString("base64").match(/.{1,76}/g).join("\r\n");
 }
 function mimeHeader(value) { return "=?UTF-8?B?" + Buffer.from(String(value), "utf8").toString("base64") + "?="; }
-export function composeSecretSantaMail({ exchange, guest, kind, url }) {
+const ART = PUBLIC_ORIGIN + "/randomizers/secret-santa/email/";
+
+function emailArt(file, alt, width, extraStyle = "") {
+  return '<img src="' + ART + file + '" width="' + width + '" alt="' + safeHtml(alt) +
+    '" border="0" style="display:block;width:100%;max-width:' + width +
+    'px;height:auto;border:0;outline:none;text-decoration:none;' + extraStyle + '">';
+}
+
+/**
+ * Plain-text and hosted-image HTML renditions share exactly the same guest
+ * capability. This renderer intentionally NEVER includes assignment names.
+ */
+export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
   if (!["registration", "draw"].includes(kind)) throw new Error("Unknown mail type.");
   if (typeof guest.email !== "string" || !/^[^\s<>@\r\n]+@[^\s<>@\r\n]+\.[^\s<>@\r\n]+$/.test(guest.email))
     throw new Error("Invalid recipient email.");
-  const personName = guest.name || "friend";
-  const subject = kind === "registration"
-    ? "You're in! Your private Rosie Secret Santa invitation"
-    : "Rosie has drawn the names - your Secret Santa envelope is ready";
-  const opening = kind === "registration"
-    ? "You're registered for " + exchange.title + ". Your private invitation is below. Save it - it also lets you update your wishlist."
-    : "The names have been drawn for " + exchange.title + ". Your sealed envelope is ready. Open the link to discover your match and see their wishlist.";
-  const button = kind === "registration" ? "Open my private invitation" : "Break the seal";
-  const text = "Hello " + personName + ",\n\n" + opening + "\n\n" + button + ":\n" + url +
-    "\n\nThis is your personal link. Don't forward it to anyone else.\n\nWith love,\nRosie's Secret Santa";
-  const html = '<!doctype html><html><body style="background:#1d1018;margin:0;padding:30px 12px;font-family:Georgia,serif;color:#392331"><div style="max-width:540px;margin:auto;border:1px solid #bc9556;border-radius:13px;background:#fff7e8;padding:34px 27px;text-align:center">' +
-    '<p style="color:#997339;font:700 11px Arial,sans-serif;letter-spacing:3px">ROSIE\'S SECRET SANTA</p>' +
-    '<h1 style="font-weight:normal;font-size:30px;color:#5d2339;margin:12px 0">A little holiday magic</h1>' +
-    '<p style="font-size:17px">Hello ' + safeHtml(personName) + ',</p>' +
-    '<p style="font-size:15px;line-height:1.6">' + safeHtml(opening) + '</p>' +
-    '<p style="margin:32px 0"><a href="' + safeHtml(url) + '" style="display:inline-block;background:#6b213c;color:#fff8e9;border:1px solid #ae8749;border-radius:22px;padding:15px 25px;text-decoration:none;font:700 13px Arial,sans-serif;letter-spacing:.3px">' + safeHtml(button) + '</a></p>' +
-    '<p style="font:12px/1.5 Arial,sans-serif;color:#836c52">This invitation is private. Please do not forward it.</p>' +
-    '<div style="border-top:1px solid #d5b98c;padding-top:20px;margin-top:24px;color:#7b5a30;font-style:italic">With love, Rosie</div></div></body></html>';
+  if (typeof url !== "string" || !url.startsWith(PUBLIC_ORIGIN + "/#randomizers?guest="))
+    throw new Error("A private guest invitation link is required.");
+
+  const name = String(guest.name || "friend").trim().slice(0, 60);
+  const exchangeName = String(exchange.title || "Rosie's Secret Santa").slice(0, 100);
+  const registration = kind === "registration";
+  const subject = registration
+    ? "Rosie has a holiday secret. You're on the list."
+    : "The names are drawn. Rosie isn't telling.";
+  const preheader = registration
+    ? "Your place is reserved. Your private Secret Santa envelope is inside."
+    : "One sealed envelope. One very important secret. Open yours inside.";
+  const eyebrow = registration ? "AN OFFICIAL HOLIDAY WELCOME" : "A VERY PRIVATE HOLIDAY DISPATCH";
+  const headline = registration ? "You're on the list." : "The names are drawn.";
+  const italicLine = registration
+    ? "Rosie checked it twice. The paperwork was mostly ceremonial."
+    : "Rosie knows. Rosie isn't telling.";
+  const intro = registration
+    ? "Your place in " + exchangeName + " is officially reserved. The stockings are under surveillance, and Rosie has set aside a private envelope with your name on it."
+    : "The draw for " + exchangeName + " is complete. One very special name is waiting inside your sealed envelope. Rosie has been entrusted with the secret and is taking the responsibility rather seriously.";
+  const next = registration
+    ? "Your envelope keeps your wishlist safe and lets you change your gift ideas whenever inspiration strikes. After the drawing, return to the same link to learn whose holiday you'll brighten."
+    : "Open your envelope to discover who you're shopping for, along with their personal wishlist and product links. Rosie will maintain a perfectly inscrutable expression.";
+  const noteHeading = registration ? "A NOTE FROM THE NORTH PAW" : "YOUR MISSION, SHOULD YOU ACCEPT IT";
+  const note = registration
+    ? "The names have not been drawn yet. Your private link is yours to keep, and it will be ready for the big reveal."
+    : "Make one person's holiday a little brighter. Protect the secret at all costs. Especially from the group chat.";
+  const button = registration ? "OPEN MY PRIVATE ENVELOPE" : "BREAK THE SEAL";
+  const small = registration
+    ? "Your personal link also lets you update your wishlist. Please keep it private."
+    : "Your assignment is visible only through your personal link. Please don't forward it.";
+  const signoff = registration
+    ? "A little mystery makes the holidays brighter."
+    : "Discretion is the greatest gift. After the actual gift, of course.";
+
+  const text = [
+    "ROSIE'S SECRET SANTA", "",
+    "Hello " + name + ",", "",
+    headline, italicLine, "", intro, "", next, "",
+    noteHeading, note, "", button + ":", url, "",
+    small, "", signoff, "", "Warm wishes and a very discreet wag,", "Rosie"
+  ].join("\n");
+
+  // Layout is a narrow, single-column table with inline styles. Every essential
+  // message remains readable when mail clients block external images.
+  const mainArt = emailArt(
+    registration ? "invitation-scroll.png" : "sealed-envelope.png",
+    registration ? "An elegant holiday invitation scroll" : "Rosie's golden sealed envelope",
+    registration ? 240 : 296
+  );
+  const html = '<!doctype html><html lang="en"><head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">' +
+    '<title>' + safeHtml(subject) + '</title></head>' +
+    '<body style="margin:0;padding:0;background-color:#1f1420;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">' +
+    '<div style="display:none!important;font-size:1px;line-height:1px;color:#1f1420;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all">' + safeHtml(preheader) + '</div>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#1f1420" style="border-collapse:collapse;background-color:#1f1420"><tr>' +
+    '<td align="center" style="padding:26px 10px 40px">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:100%;max-width:600px;border-collapse:separate;border:1px solid #b99257;background-color:#fff7e9">' +
+    '<tr><td align="center" bgcolor="#2e1729" style="background-color:#2e1729;line-height:0;padding:0;">' +
+    emailArt("rosie-holiday-banner.jpg", "Rosie in her festive Secret Santa tuxedo and Santa hat", 600) +
+    '</td></tr>' +
+    '<tr><td bgcolor="#2e1729" align="center" style="background-color:#2e1729;padding:13px 18px 15px;border-bottom:3px solid #c4a164">' +
+    '<span style="font:700 11px/1.6 Arial,Helvetica,sans-serif;letter-spacing:2.4px;color:#f5d9a3">ROSIE&#39;S SECRET SANTA &nbsp; &#10022; &nbsp; 2026</span>' +
+    '</td></tr>' +
+    '<tr><td align="center" bgcolor="#fff7e9" style="background-color:#fff7e9;padding:30px 30px 6px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tr><td align="center">' +
+    '<span style="color:#997340;font:700 10px/1.6 Arial,Helvetica,sans-serif;letter-spacing:2.5px">' + safeHtml(eyebrow) + '</span>' +
+    '<h1 style="font:normal 38px/1.17 Georgia,\'Times New Roman\',serif;letter-spacing:-.6px;margin:13px 0 9px;color:#642840">' + safeHtml(headline) + '</h1>' +
+    '<p style="font:italic 16px/1.6 Georgia,\'Times New Roman\',serif;color:#936f47;margin:0 0 9px">' + safeHtml(italicLine) + '</p>' +
+    '</td></tr></table></td></tr>' +
+    '<tr><td align="center" bgcolor="#fff7e9" style="padding:9px 28px 7px;background-color:#fff7e9">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center">' +
+    mainArt +
+    '</td></tr></table></td></tr>' +
+    '<tr><td bgcolor="#fff7e9" style="background-color:#fff7e9;padding:13px 42px 3px">' +
+    '<p style="font:18px/1.5 Georgia,\'Times New Roman\',serif;color:#6a3047;margin:0 0 17px">Dear ' + safeHtml(name) + ',</p>' +
+    '<p style="font:16px/1.7 Georgia,\'Times New Roman\',serif;color:#443238;margin:0 0 17px">' + safeHtml(intro) + '</p>' +
+    '<p style="font:16px/1.7 Georgia,\'Times New Roman\',serif;color:#443238;margin:0 0 20px">' + safeHtml(next) + '</p>' +
+    '</td></tr>' +
+    '<tr><td bgcolor="#fff7e9" style="background-color:#fff7e9;padding:3px 34px 14px">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f5e9d0" style="border-collapse:collapse;background-color:#f5e9d0;border-top:1px solid #e5cda7;border-bottom:1px solid #e5cda7">' +
+    '<tr><td align="center" style="padding:20px 18px">' +
+    '<p style="color:#7b5741;font:700 10px/1.5 Arial,Helvetica,sans-serif;letter-spacing:1.6px;margin:0 0 7px">' + safeHtml(noteHeading) + '</p>' +
+    '<p style="color:#664d45;font:15px/1.6 Georgia,\'Times New Roman\',serif;margin:0">' + safeHtml(note) + '</p>' +
+    '</td></tr></table></td></tr>' +
+    '<tr><td bgcolor="#fff7e9" align="center" style="background-color:#fff7e9;padding:11px 22px 10px">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>' +
+    '<td align="center" bgcolor="#692e48" style="background-color:#692e48;border:1px solid #d3ad69;border-radius:5px">' +
+    '<a href="' + safeHtml(url) + '" target="_blank" style="display:inline-block;padding:17px 27px;text-decoration:none;color:#fff9e9;font:700 13px/1.5 Arial,Helvetica,sans-serif;letter-spacing:1.05px">' + safeHtml(button) + '</a>' +
+    '</td></tr></table></td></tr>' +
+    '<tr><td bgcolor="#fff7e9" align="center" style="background-color:#fff7e9;padding:5px 28px 27px">' +
+    '<p style="color:#846e63;font:13px/1.6 Arial,Helvetica,sans-serif;margin:7px 0 12px">' + safeHtml(small) + '</p>' +
+    '<p style="color:#94734e;font:12px/1.6 Arial,Helvetica,sans-serif;margin:0">Button not opening? <a href="' + safeHtml(url) + '" style="color:#6c314c;text-decoration:underline">Use your private link</a>.</p>' +
+    '</td></tr>' +
+    '<tr><td bgcolor="#291624" align="center" style="background-color:#291624;border-top:3px solid #bc925b;padding:22px 26px 25px">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center">' +
+    emailArt("rosie-crest.png", "Rosie's holiday seal", 84) + '</td></tr></table>' +
+    '<p style="color:#f1d6a2;font:italic 16px/1.5 Georgia,\'Times New Roman\',serif;margin:12px 0 7px">' + safeHtml(signoff) + '</p>' +
+    '<p style="font:12px/1.6 Georgia,\'Times New Roman\',serif;color:#e9d2be;margin:0">Warm wishes and a very discreet wag,<br><strong style="font:italic 19px Georgia,\'Times New Roman\',serif;color:#f8e6bf">Rosie</strong></p>' +
+    '</td></tr></table>' +
+    '<p style="color:#c9b7bd;font:11px/1.5 Arial,Helvetica,sans-serif;text-align:center;padding:16px 7px 0;max-width:570px;margin:0">' +
+    'This message was sent to you because you joined a private gift exchange. ' +
+    'If this wasn&#39;t you, simply disregard it.</p>' +
+    '</td></tr></table></body></html>';
+  return { subject, preheader, text, html };
+}
+export function composeSecretSantaMail({ exchange, guest, kind, url }) {
+  const { subject, text, html } = renderSecretSantaEmail({ exchange, guest, kind, url });
   const boundary = "rosie_" + randomBytes(12).toString("hex");
   const sender = mailSender();
   const message = [
