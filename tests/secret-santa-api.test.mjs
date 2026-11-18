@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import handler from "../api/secret-santa.js";
-import { composeSecretSantaMail, privateGuestUrl } from "../api/_lib/secretSantaMail.js";
+import { composeSecretSantaMail, privateGuestUrl, renderSecretSantaEmail } from "../api/_lib/secretSantaMail.js";
 
 const savedFetch = globalThis.fetch;
 const savedUrl = process.env.SUPABASE_URL;
@@ -275,6 +275,31 @@ test("Gmail messages contain only each guest's private envelope link", () => {
     guest: { name: "Bad", email: "bad@example.com\r\nBcc:other@example.com" },
     kind: "draw" }));
 });
+test("festive welcome and draw emails preserve privacy and accessible content", () => {
+  const params = {
+    exchange: { title: "Rosie's Secret Santa 2026" },
+    guest: { name: "Alex", email: "alex@example.com" },
+    url: privateGuestUrl("11111111-2222-4333-8444-555555555555",
+      "11111111-2222-4333-8444-666666666666", "ab".repeat(32))
+  };
+  const welcome = renderSecretSantaEmail({ ...params, kind: "registration" });
+  const draw = renderSecretSantaEmail({ ...params, kind: "draw" });
+  assert.match(welcome.html, /email\/rosie-holiday-banner\.jpg/);
+  assert.match(welcome.html, /email\/invitation-scroll\.png/);
+  assert.match(draw.html, /email\/sealed-envelope\.png/);
+  assert.match(draw.html, /email\/rosie-crest\.png/);
+  assert.match(draw.html, /role="presentation"/);
+  assert.match(welcome.html, /Dear Alex/);
+  assert.match(welcome.html, /OPEN MY PRIVATE ENVELOPE/);
+  assert.match(draw.html, /BREAK THE SEAL/);
+  assert.match(welcome.text, /You're on the list/);
+  assert.match(draw.text, /The names are drawn/);
+  assert.ok(welcome.html.includes(params.url));
+  assert.ok(draw.html.includes(params.url));
+  assert.throws(() => renderSecretSantaEmail({ ...params, url: "https://example.com",
+    kind: "draw" }), /private guest invitation link/);
+});
+
 test("unauthorized guests cannot access host email controls", async () => {
   const made = await invoke("create", { title: "Mail authorization", names: ["A", "B", "C"] });
   const invite = made.body.invitations[0];
