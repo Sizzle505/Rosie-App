@@ -210,7 +210,7 @@ function VaultTitleLaserAnimator() {
 
 
 
-const BASE_DRIFT_PX_PER_SECOND = 39; // 1.5x baseline; all speed multipliers scale proportionally
+const BASE_DRIFT_PX_PER_SECOND = 39; // Preserve tablet/phone drift; desktop baseline is reduced by 20%.
 const INITIAL_DRIFT_DELAY_MS = 1000;
 const MANUAL_PAUSE_MS = 3400;
 const DESELECT_RESUME_DELAY_MS = 400;
@@ -244,7 +244,8 @@ function makeBatch(pool, batch, previousName = '') {
 function defaultCardsPerRow() {
   if (typeof window === 'undefined') return 4;
   if (window.matchMedia('(max-width: 720px)').matches) return 2;
-  // Match the wall's previous 310px minimum card width on first visit.
+  if (window.matchMedia('(min-width: 1200px)').matches) return 5;
+  // Preserve the tablet's existing width-responsive layout.
   return Math.max(2, Math.min(10, Math.floor((window.innerWidth - 12 + 4) / 314)));
 }
 
@@ -333,13 +334,15 @@ function RosieCardVaultWall() {
     // Fractional target retains subpixel progress; native user scrolling rebases it.
     let targetY = window.scrollY;
     let appliedY = window.scrollY;
+    const driftRate = window.matchMedia('(min-width: 1200px)').matches
+      ? BASE_DRIFT_PX_PER_SECOND * 0.8 : BASE_DRIFT_PX_PER_SECOND;
     const drift = now => {
       const elapsed = Math.min(Math.max(now - last, 0), 32) / 1000;
       last = now;
       if (!dragging.current && now >= pauseUntil.current && document.visibilityState === 'visible') {
         const actual = window.scrollY;
         if (Math.abs(actual - appliedY) > 6) targetY = actual;
-        targetY = Math.max(0, targetY + BASE_DRIFT_PX_PER_SECOND * speed * elapsed);
+        targetY = Math.max(0, targetY + driftRate * speed * elapsed);
         window.scrollTo({ left: 0, top: targetY, behavior: 'instant' });
         appliedY = window.scrollY;
       } else {
