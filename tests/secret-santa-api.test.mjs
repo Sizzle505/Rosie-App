@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import handler from "../api/secret-santa.js";
+import { composeSecretSantaMail, privateGuestUrl } from "../api/_lib/secretSantaMail.js";
 
 const savedFetch = globalThis.fetch;
 const savedUrl = process.env.SUPABASE_URL;
@@ -8,12 +9,37 @@ const savedKey = process.env.SUPABASE_SECRET_KEY;
 process.env.SUPABASE_URL = "https://example.invalid";
 process.env.SUPABASE_SECRET_KEY = "test-service-role-key";
 let rows = [];
+let notifications = [];
 function success(body) {
   return { ok: true, status: 200, text: async () => JSON.stringify(body) };
 }
 globalThis.fetch = async (url, options) => {
   const u = new URL(url);
   if (u.pathname === "/rest/v1/rpc/rosie_rate_limit") return success({ blocked: false });
+  if (u.pathname === "/rest/v1/rosie_santa_notifications") {
+    const method = options.method;
+    const matches = notifications.filter(row =>
+      (!u.searchParams.has("exchange_id") || row.exchange_id === u.searchParams.get("exchange_id").replace("eq.", "")) &&
+      (!u.searchParams.has("guest_id") || row.guest_id === u.searchParams.get("guest_id").replace("eq.", "")) &&
+      (!u.searchParams.has("kind") || row.kind === u.searchParams.get("kind").replace("eq.", "")) &&
+      (!u.searchParams.has("status") || row.status === u.searchParams.get("status").replace("eq.", "")));
+    if (method === "GET") return success(matches);
+    if (method === "POST") {
+      const data = JSON.parse(options.body);
+      const row = { status: "pending", attempts: 0, claimed_at: null,
+        claim_token: null, sent_at: null, ...data };
+      if (notifications.some(n => n.exchange_id === row.exchange_id &&
+          n.guest_id === row.guest_id && n.kind === row.kind)) throw new Error("Duplicate notification");
+      notifications.push(row);
+      return success([row]);
+    }
+    if (method === "PATCH") {
+      const changes = JSON.parse(options.body);
+      for (const row of matches) Object.assign(row, changes);
+      return success(matches.map(row => ({ ...row })));
+    }
+    throw new Error("Unexpected notifications call");
+  }
   assert.equal(u.pathname, "/rest/v1/rosie_santa_exchanges");
   assert.ok(options.headers.Authorization.startsWith("Bearer "));
   const method = options.method;
@@ -64,6 +90,10 @@ test("private guest links reveal only one recipient, not the mapping", async () 
   assert.equal(Object.hasOwn(before.body, "recipient"), false);
   const draw = await invoke("draw", { exchangeId: exchange.id, hostToken });
   assert.equal(draw.status, 200);
+  assert.equal(draw.body.mail.configured, false);
+  const sendAgain = await invoke("sendMatches", { exchangeId: exchange.id, hostToken });
+  assert.equal(sendAgain.status, 200);
+  assert.equal(sendAgain.body.mail.configured, false);
   assert.equal(Object.hasOwn(draw.body.exchange, "assignments"), false);
   const unopened = await invoke("guest", creds);
   assert.equal(Object.hasOwn(unopened.body, "recipient"), false);
@@ -226,6 +256,38 @@ test("invalid wishlist inputs cannot overwrite a guest's saved list", async () =
   assert.equal(invalid.status, 400);
   const fresh = await invoke("guest", credentials);
   assert.deepEqual(fresh.body.guest.wishlist, []);
+});
+
+
+test("Gmail messages contain only each guest's private envelope link", () => {
+  const link = privateGuestUrl("11111111-2222-4333-8444-555555555555",
+    "11111111-2222-4333-8444-666666666666", "ab".repeat(32));
+  assert.ok(link.startsWith("https://rosie-app-git.vercel.app/#randomizers?guest="));
+  const base = { exchange: { title: "Rosie's Secret Santa 2026" },
+    guest: { name: "Amy", email: "amy@example.com" }, url: link };
+  const confirmation = composeSecretSantaMail({ ...base, kind: "registration" });
+  const matched = composeSecretSantaMail({ ...base, kind: "draw" });
+  assert.equal(confirmation.to, "amy@example.com");
+  assert.ok(confirmation.message.includes("Content-Type: multipart/alternative"));
+  assert.notEqual(confirmation.subject, matched.subject);
+  assert.ok(!matched.message.includes("other@example.com"));
+  assert.throws(() => composeSecretSantaMail({ ...base,
+    guest: { name: "Bad", email: "bad@example.com\r\nBcc:other@example.com" },
+    kind: "draw" }));
+});
+test("unauthorized guests cannot access host email controls", async () => {
+  const made = await invoke("create", { title: "Mail authorization", names: ["A", "B", "C"] });
+  const invite = made.body.invitations[0];
+  const unauthorized = await invoke("sendConfirmations", { exchangeId: made.body.exchange.id,
+    guestId: invite.id, guestToken: invite.token });
+  assert.equal(unauthorized.status, 403);
+  const denied = await invoke("mailStatus", { exchangeId: made.body.exchange.id,
+    guestId: invite.id, guestToken: invite.token });
+  assert.equal(denied.status, 403);
+  const hostStatus = await invoke("mailStatus", { exchangeId: made.body.exchange.id,
+    hostToken: made.body.hostToken });
+  assert.equal(hostStatus.status, 200);
+  assert.equal(hostStatus.body.mail.configured, false);
 });
 
 test.after(() => {
