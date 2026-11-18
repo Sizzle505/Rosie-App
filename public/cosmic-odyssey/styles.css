@@ -1771,14 +1771,14 @@
 
 /* The victory artwork stays dominant; the surrounding cabinet follows its sector. */
 .victory-card{
-  background-image:linear-gradient(105deg,rgba(8,13,34,.85),rgba(10,16,39,.93) 49%,rgba(8,12,32,.95)),
-    url('assets/scene-nebula.webp');
+  background-image:linear-gradient(100deg,rgba(8,13,34,.10),rgba(10,16,39,.24) 49%,rgba(8,12,32,.38)),
+    url('/captain-arcade-backgrounds/victory-celebration-20261118.webp');
   background-position:center;background-size:cover;
 }
-.victory-overlay[data-stage="3"] .victory-card{background-image:linear-gradient(105deg,#0b1733d9,#0b142fea 55%,#0a112ef5),url('assets/scene-lunar.webp')}
-.victory-overlay[data-stage="4"] .victory-card,.victory-overlay[data-stage="7"] .victory-card{background-image:linear-gradient(105deg,#0b1733d9,#0b142fea 55%,#0a112ef5),url('assets/scene-crystal.webp')}
-.victory-overlay[data-stage="5"] .victory-card{background-image:linear-gradient(105deg,#201323df,#171329ef 55%,#15102af5),url('assets/scene-foundry.webp')}
-.victory-overlay[data-stage="6"] .victory-card,.victory-overlay[data-stage="9"] .victory-card{background-image:linear-gradient(105deg,#0b1733d9,#0b142fea 55%,#0a112ef5),url('assets/scene-derelict.webp')}
+.victory-overlay[data-stage="3"] .victory-card{background-position:left center}
+.victory-overlay[data-stage="4"] .victory-card,.victory-overlay[data-stage="7"] .victory-card{background-position:30% center}
+.victory-overlay[data-stage="5"] .victory-card{background-position:55% center}
+.victory-overlay[data-stage="6"] .victory-card,.victory-overlay[data-stage="9"] .victory-card{background-position:right center}
 .victory-details{padding:clamp(16px,2vw,30px);border:1px solid #d7af7047;border-radius:15px;background:radial-gradient(ellipse at 50% 0%,#33466b3d,transparent 70%),#070d24a8;box-shadow:inset 0 0 24px #d4b26c12}
 .retry-corner{position:absolute;z-index:4;top:6px;right:49px;width:32px;height:32px;padding:0;border:1px solid #d8b87b;border-radius:8px;background:#101b3de6;color:#ffe5aa;font:26px/1 Georgia,serif}
 .retry-corner:hover{filter:brightness(1.25)}

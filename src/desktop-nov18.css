@@ -5,7 +5,7 @@
     position:sticky!important;top:20px!important;align-self:start!important;
   }
   .page-cheese .cheese-desktop-layout > .cheese-game-frame {
-    position:sticky!important;top:78px!important;align-self:start!important;
+    position:sticky!important;top:70px!important;align-self:start!important;
   }
 
   .app-shell.page-fortune {
@@ -24,22 +24,51 @@
   }
   .app-shell.page-fortune .fortune-page .bottom-omens {
     position:fixed!important;z-index:11;
-    left:calc((100vw - min(100vw,1260px)) / 2 + 24px)!important;
+    --omen-width:min(calc((min(100vw,1260px) - 72px) * .55),620px);
+    left:calc((100vw - min(100vw,1260px)) / 2 + 24px + (var(--madame-rail-width) - var(--omen-width)) / 2)!important;
     top:calc(70px + min(650px,100dvh - 255px) + 12px)!important;
-    width:min(calc((min(100vw,1260px) - 72px) * .55),620px)!important;
+    width:var(--omen-width)!important;
     margin:0!important;padding:10px!important;
   }
+  /* The scroll veil painted square dark corners over the tent illustration. */
+  .app-shell.page-fortune .fortune-page::after {display:none!important;}
 
-  .app-shell.page-qr-atelier {background:#160f0a url('/rosieverse/refresh/qr-floor.webp') center top / 100% auto repeat-y!important;}
+  .app-shell.page-qr-atelier {background:#271306 url('/rosieverse/refresh/qr-floor.webp') center top / 100% auto repeat-y!important;}
+  body:has(.app-shell.page-qr-atelier) {background:#271306 url('/rosieverse/refresh/qr-floor.webp') center top / 100% auto repeat-y!important;}
   .app-shell.page-qr-atelier .qa-scene {
-    background-color:#160f0a!important;
+    min-height:calc(100vw * 941 / 1672 + 380px)!important;
+    padding-bottom:250px!important;
+    overflow:visible!important;
+    background-color:#271306!important;
     background-image:url('/qr-atelier/desktop-workshop-20261112.webp'),url('/rosieverse/refresh/qr-floor.webp')!important;
     background-size:100% auto,100% auto!important;
-    background-position:center top,center top!important;
+    background-position:center top,center calc(100vw * 941 / 1672 - 90px)!important;
     background-repeat:no-repeat,repeat-y!important;
   }
+  /* A fixed left viewport holds the original workshop while only forms grow. */
+  .app-shell.page-qr-atelier .qa-scene::before {
+    content:""!important;display:block!important;position:fixed!important;
+    inset:0 auto 0 0!important;width:47%!important;height:100dvh!important;
+    z-index:1!important;pointer-events:none!important;mask-image:none!important;
+    background:url('/qr-atelier/desktop-workshop-20261112.webp') left top / 100vw auto no-repeat!important;
+  }
   .app-shell.page-qr-atelier .qa-scene::after {
-    display:block!important;left:0!important;right:53%!important;
-    background:#160f0a!important;
+    display:none!important;
+  }
+  .app-shell.page-qr-atelier .qa-title {
+    position:fixed!important;z-index:3!important;
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    position:fixed!important;z-index:3!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tool-grid {
+    width:min(91%,760px)!important;margin-inline:auto!important;
+    column-gap:clamp(12px,1.1vw,20px)!important;
+    row-gap:clamp(9px,.8vw,15px)!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-active-tool-overlay .rc-tool-panel.rc-device {
+    min-height:900px!important;
+    padding-top:calc(clamp(142px,39vw,212px) + 75px)!important;
+    padding-bottom:calc(clamp(115px,33vw,184px) + 75px)!important;
   }
 }
