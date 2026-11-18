@@ -1381,3 +1381,52 @@
     pointer-events:none!important;
   }
 }
+
+
+/* The QR frame's lower engraved panel is an editable inscription in View.
+   Keep it centered within the art on every device, never over the QR modules. */
+.qa-preview-stage .qa-ring .qa-custom-caption {
+  display:block!important;
+  position:absolute;
+  z-index:4;
+  left:24%!important;
+  right:24%!important;
+  bottom:9.7%!important;
+  margin:0;
+  padding:0 3px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  pointer-events:none;
+  color:#50351f;
+  text-align:center;
+  font:italic 500 clamp(10px,2vw,18px)/1.2 "Iowan Old Style","Palatino Linotype",Georgia,serif!important;
+  text-shadow:0 1px 0 #fff5d9;
+}
+.qa-fullscreen-ring.qa-ring .qa-frame-caption-input {
+  box-sizing:border-box;
+  position:absolute;
+  z-index:6;
+  left:24%;
+  bottom:9.7%;
+  width:52%;
+  height:7.2%;
+  min-height:24px;
+  padding:0 5px;
+  border:1px solid transparent;
+  border-radius:6px;
+  outline-offset:1px;
+  background:transparent;
+  color:#50351f;
+  text-align:center;
+  font:italic 500 clamp(11px,2.25vw,21px)/1.2 "Iowan Old Style","Palatino Linotype",Georgia,serif!important;
+  text-shadow:0 1px 0 #fff5d9;
+}
+.qa-fullscreen-ring.qa-ring .qa-frame-caption-input::placeholder {
+  color:#7c6343;
+  opacity:.8;
+}
+.qa-fullscreen-ring.qa-ring .qa-frame-caption-input:focus {
+  background:rgba(255,245,213,.55);
+  border-color:rgba(124,85,42,.55);
+}
