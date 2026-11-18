@@ -959,7 +959,7 @@
     if(phase!=='playing')return;
     if(e.code==='Space'||e.key===' '){e.preventDefault();if(!e.repeat)fire('laser');}
     else if(e.key==='Enter'||e.code==='NumpadEnter'||e.key.toLowerCase()==='x'){e.preventDefault();if(!e.repeat)fire('rocket');}
-    else if(e.key==='Shift'||e.key.toLowerCase()==='b'){e.preventDefault();if(!e.repeat)activateBoost();}
+    else if(e.key.toLowerCase()==='b'){e.preventDefault();if(!e.repeat)activateBoost();}
     else if(e.key==='Escape'||e.key.toLowerCase()==='p'){e.preventDefault();if(!e.repeat)pause();}
   });
   document.addEventListener('keyup',e=>{
