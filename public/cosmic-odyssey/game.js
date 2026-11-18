@@ -12,6 +12,35 @@
  };
  const asset = name => window.COSMIC_ASSETS?.[name] || ARCADE_SCENE_ART[name] || `assets/${name}.webp`;
  const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message'),victoryOverlay=$('victory-overlay');
+ // Web Audio music is independent of synthesized game effects.
+ const music=window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:'music'}):null;
+ const musicButton=$('music-toggle');
+ let musicWarned=false;
+ function musicPlay(state){
+   if(!music)return;
+   Promise.resolve(music.play(state)).catch(error=>{
+     if(!musicWarned){console.warn('Cosmic Odyssey soundtrack unavailable',error);musicWarned=true;}
+   });
+ }
+ function musicButtonState(){
+   if(!musicButton||!music)return;
+   musicButton.textContent=music.muted?'MUSIC OFF':'MUSIC ON';
+   musicButton.setAttribute('aria-pressed',String(!music.muted));
+   musicButton.title=music.muted?'Unmute soundtrack':'Mute soundtrack';
+ }
+ if(musicButton&&music){
+   musicButtonState();
+   musicButton.addEventListener('click',()=>{
+     music.setMuted(!music.muted);musicButtonState();
+     if(!music.muted&&phase==='start')musicPlay('menu');
+     if(!music.muted&&phase==='playing')musicPlay('playing');
+   });
+ }
+ document.addEventListener('pointerdown',()=>{if(phase==='start')musicPlay('menu')},{once:true});
+ document.addEventListener('visibilitychange',()=>{
+   if(document.hidden)music?.duck();
+   else if(phase==='playing')music?.unduck();
+ });
  const DIRS={up:[0,-1],right:[1,0],down:[0,1],left:[-1,0]};
  // Standalone, approved image assets imported from the earlier Rosie/Fiend batches.
  const EXTRA_ART=[
@@ -510,6 +539,7 @@
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
+   musicPlay(status);
   if(aimPreview?.el)aimPreview.el.classList.remove('targetable');aimPreview=null;
   const victorious=status==='level-clear'||status==='win';
   veil.classList.toggle('hidden',victorious);
@@ -562,6 +592,7 @@
     const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;if(boostUntil>pausedAt)boostUntil+=delta;
     for(const e of entities){e.next+=delta;if(e.nextAttack)e.nextAttack+=delta;}for(const shot of enemyShots)shot.stepAt+=delta;
     nextMoveAt=performance.now();phase='playing';running=true;veil.classList.add('hidden');
+     musicPlay('playing');
     positionShield();say('Resume course.');return;
   }
   const carry=phase==='level-clear'&&level<LEVELS.length;
@@ -569,7 +600,8 @@
   level=carry?level+1:Math.max(1,Math.min(LEVELS.length,Number.isFinite(chosen)?chosen:1));
   init(carry);
   phase='playing';running=true;
-  protectedUntil=performance.now()+2200;
+  musicPlay('playing');
+   protectedUntil=performance.now()+2200;
   veil.classList.add('hidden');positionShield();dismissLaunchPads();
   say(`${LEVELS[level-1].name}! Collect biscuits, defeat the Fiends, and escape.`);
   sound(carry?880:670,.17);ui();
