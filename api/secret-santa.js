@@ -300,7 +300,7 @@ export default async function handler(req, res) {
         if (!changed.length) bad("The guest list changed. Refresh the exchange before drawing.", 409);
         const next = await findRow(row.id);
         const mail = await deliverNotifications(next, "draw");
-        return respond(res, 200, { exchange: view(next), invitations: invites(next), mail });
+        return respond(res, 200, { exchange: view(next), invitations: invites(next), mail, mailStatus: await mailOverview(next) });
       }
       case "mailStatus": {
         const row = await host(input);
