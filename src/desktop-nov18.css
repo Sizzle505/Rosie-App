@@ -98,3 +98,16 @@
     top:18px!important;left:calc(50% + 340px)!important;
   }
 }
+
+/* A short desktop viewport must still leave room for the examiner's full
+   sticky card below the 20px stop. The full portrait remains on tall screens. */
+@media (min-width:1200px) and (max-height:760px) {
+  .page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    height:clamp(230px,39dvh,295px)!important;
+    aspect-ratio:auto!important;
+  }
+  .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
+    top:20px!important;max-height:calc(100dvh - 40px)!important;
+    overflow-y:auto!important;overscroll-behavior:contain;
+  }
+}

@@ -471,7 +471,7 @@ export default function RosieSecretSanta() {
           <button type="button" className="ss-button ss-button--quiet" onClick={() => doCopy(hostLink, "Private organizer link copied.")}>COPY ORGANIZER LINK</button>
           <button type="button" className="ss-button ss-button--quiet" onClick={refreshHost} disabled={busy}>REFRESH</button>
         </div>
-        <div className="ss-shared-invite">
+        <div className="ss-host-overview"><div className="ss-shared-invite">
           <div>
             <span className="ss-eyebrow">ONE LINK FOR EVERYONE</span>
             <h4>Guest self-registration</h4>
@@ -498,7 +498,7 @@ export default function RosieSecretSanta() {
             </button>
           </div>}
         </div>
-        <p className="ss-hint">Keep your organizer link private. Anyone with a personal guest link can open that person's envelope. Automatic emails, when enabled, go to each guest individually.</p>
+        <p className="ss-hint ss-host-privacy">Keep your organizer link private. Anyone with a personal guest link can open that person's envelope. Automatic emails, when enabled, go to each guest individually.</p>
         <div className="ss-mail-panel" aria-label="Secret Santa email notifications">
           <div className="ss-mail-panel__heading">
             <span className="ss-eyebrow">LET ROSIE DELIVER THE ENVELOPES</span>
@@ -522,7 +522,7 @@ export default function RosieSecretSanta() {
                 } catch (err) { setError(err.message); }
               }}>REFRESH EMAIL STATUS</button>
           </div>
-        </div>
+        </div></div>
         <div className="ss-section-heading ss-section-heading--sm"><span>THE ENVELOPES</span><h4>Guest invitations</h4></div>
         <div className="ss-invite-list">
           {invitations.map((item, index) => {
@@ -658,9 +658,7 @@ export default function RosieSecretSanta() {
               <button type="button" className="ss-button" disabled={busy} onClick={revealName}>{busy ? "OPENING..." : "BREAK THE SEAL"}</button> :
               <p className="ss-waiting">Your envelope is sealed until Rosie draws the names.</p>}
         </div>
-      </div>}
-
-      {screen === "guest" && guestData && <div className="ss-paper ss-guest-wishlist">
+        <div className="ss-paper ss-guest-wishlist">
         <span className="ss-eyebrow">ROSIE'S GIFT LEDGER</span>
         <h3>My private wishlist</h3>
         <p>Your ideas are shown to the person who draws your name once the exchange is drawn.</p>
@@ -672,6 +670,7 @@ export default function RosieSecretSanta() {
           <GiftRows items={guestWishes} onChange={setGuestWishes} />
           <button className="ss-button" type="submit" disabled={busy}>{busy ? "SAVING…" : "SAVE MY WISHLIST"}</button>
         </form>
+        </div>
       </div>}
       <div className="ss-footer">ROSIE KEEPS HER SECRETS. PLEASE KEEP YOURS.</div>
     </section>

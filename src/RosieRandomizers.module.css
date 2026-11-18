@@ -1112,11 +1112,21 @@
 
 @media (min-width:1200px) {
   .wheelSalon {
+    grid-template-columns:minmax(0,1.42fr) minmax(390px,.78fr);
+    gap:12px;
     background:linear-gradient(90deg,rgba(14,2,8,.12),rgba(14,2,8,.36)),
       url('/rosieverse/refresh/roulette-salon.webp') center center / cover no-repeat;
   }
-  .wheelStage {translate:45px 0;}
-  .wheelEditor {margin-left:-45px;}
+  .wheelStage {translate:clamp(52px,6vw,94px) 0;}
+  .wheelEditor {
+    margin-left:-30px;align-self:center;box-sizing:border-box;
+    padding:23px 24px 25px;
+  }
+  .wheelEditor::after {
+    content:'✦  ROSIE’S TABLE  ✦';display:block;text-align:center;
+    margin-top:17px;padding-top:12px;border-top:1px solid rgba(140,98,42,.28);
+    color:#9a7746;font:700 8px/1 Arial,sans-serif;letter-spacing:.18em;
+  }
 }
 
 
