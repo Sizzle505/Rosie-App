@@ -1,0 +1,63 @@
+name: Prepare approved Secret Santa artwork for email
+on:
+  push:
+    branches: [feature/rosie-santa-festive-emails]
+    paths:
+      - .github/workflows/rosie-santa-email-asset-prep.yml
+permissions:
+  contents: write
+jobs:
+  convert-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/rosie-santa-festive-emails
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Convert Rosie-approved WebP art to portable email JPG and PNG
+        run: |
+          python -m pip install --quiet Pillow
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          source=Path('public/randomizers/secret-santa')
+          target=source/'email'
+          target.mkdir(parents=True,exist_ok=True)
+          assets=[
+            ('11-preferred-banner.webp','rosie-holiday-banner.jpg',1060,'jpeg'),
+            ('12-preferred-rosie.webp','rosie-portrait.png',420,'png'),
+            ('13-preferred-marquee.webp','rosie-plaque.png',740,'png'),
+            ('03-sealed-envelope.webp','sealed-envelope.png',500,'png'),
+            ('08-invitation-scroll.webp','invitation-scroll.png',400,'png'),
+            ('07-gift-collection.webp','holiday-gifts.png',490,'png'),
+            ('09-secret-santa-emblem.webp','rosie-crest.png',260,'png')
+          ]
+          for filename,outname,maxwidth,fmt in assets:
+            with Image.open(source/filename) as original:
+              im=original.copy()
+              im.thumbnail((maxwidth, 4000),Image.Resampling.LANCZOS)
+              output=target/outname
+              if fmt=='jpeg':
+                if im.mode=='RGBA':
+                  background=Image.new('RGB',im.size,(38,17,28))
+                  background.paste(im,mask=im.getchannel('A'))
+                  im=background
+                else: im=im.convert('RGB')
+                im.save(output,format='JPEG',quality=88,subsampling=0,optimize=True,progressive=True)
+              else:
+                im.save(output,format='PNG',optimize=True,compress_level=9)
+              print(filename,original.size,'->',outname,im.size,output.stat().st_size,'bytes')
+          PY
+      - name: Commit only new email-safe art to feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/randomizers/secret-santa/email/
+          if ! git diff --cached --quiet; then
+            git commit -m "Create email-compatible versions of approved Rosie Secret Santa art"
+            git push origin HEAD:feature/rosie-santa-festive-emails
+          fi
