@@ -268,7 +268,7 @@
 /* Restore the original salon composition while centering larger side resources. */
 @media (min-width:1200px) and (hover:hover) and (pointer:fine) {
   .toolDock {
-    top:50%;transform:translate(-50%,-50%);
+    top:45dvh;transform:translate(-50%,-50%);
     width:min(1400px,96vw);
     grid-template-columns:repeat(2,minmax(0,clamp(230px,19vw,364px)));
     row-gap:clamp(9px,1.4dvh,16px);
