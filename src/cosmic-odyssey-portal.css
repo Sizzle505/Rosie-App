@@ -195,6 +195,16 @@
 @media(min-width:900px) and (max-width:1250px){
  .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info p{display:block!important}
 }
+@media(min-width:1450px){
+ .cosmic-odyssey-portal.cosmic-odyssey-main-entry{gap:4px!important;padding-top:13px!important;}
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-info{
+   position:absolute;z-index:4;right:18px;top:30px;
+   width:clamp(150px,13vw,210px);padding:0!important;margin:0!important;
+ }
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-actions{display:grid;gap:9px;width:100%;}
+ .cosmic-odyssey-main-entry .cosmic-odyssey-entry-actions>*{width:100%;box-sizing:border-box;text-align:center;white-space:normal;}
+ .cosmic-odyssey-main-entry .captain-fs-cosmic{margin-top:0!important;}
+}
 /* Shared non-destructive fullscreen controls, preserving running React game state. */
 .captain-fullscreen-frame{
   position:relative;display:block;width:100%;min-width:0;

@@ -24,6 +24,7 @@ import "./barkbridge-option-one.css";
 import "./cheese-honeywood.css";
 import "./cheese-sprint.css";
 import "./ipad-polish.css";
+import "./desktop-nov18.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
 import AxisJoystick from "./AxisJoystick.jsx";
@@ -2093,6 +2094,11 @@ function CaptainRosieGame({ soundOn }) {
       if ((event.key === " " || event.key === "Enter") && !running) {
         event.preventDefault();
         startGame();
+        return;
+      }
+      if ((event.key === " " || event.code === "Space") && running) {
+        event.preventDefault();
+        if (!event.repeat) engageBoost();
       }
     }
     window.addEventListener("keydown", onKeyDown);
@@ -2408,8 +2414,6 @@ function CosmicOdysseyArcade(){
       <img className="cosmic-odyssey-entry-banner" src="/cosmic-odyssey/assets/cosmic-banner.webp"
         alt="Captain Rosie: Cosmic Odyssey - original starship arcade banner" loading="lazy" />
       <div className="cosmic-odyssey-entry-info">
-        <span>CAPTAIN'S ARCADE · THIRD ADVENTURE</span>
-        <p>Explore ten space worlds, collect treats, defeat Jett, Chip and Kitty, and pilot Rosie to the exit portal.</p>
         <div className="cosmic-odyssey-entry-actions">
           <button type="button" className="cosmic-odyssey-portal-button"
             onClick={()=>setIsOpen(open=>!open)} aria-expanded={isOpen}
@@ -2430,6 +2434,28 @@ function CosmicOdysseyArcade(){
       )}
     </section>
   );
+}
+
+function CaptainArcadeBackdrop(){
+  React.useEffect(()=>{
+    const scenes=[['yacht','.captain-fs-yacht'],['tunnel','.captain-fs-tunnel'],['cosmic','#cosmic-odyssey-arcade']];
+    const backdrop=document.querySelector('.captain-arcade-page-background');
+    if(!backdrop)return;
+    let frame=0;
+    const update=()=>{
+      frame=0;
+      const middle=window.innerHeight*.48;
+      const closest=scenes.map(([name,selector])=>{
+        const rect=document.querySelector(selector)?.getBoundingClientRect();
+        return {name,distance:rect?Math.max(rect.top-middle,0,middle-rect.bottom):Infinity};
+      }).sort((a,b)=>a.distance-b.distance)[0];
+      backdrop.dataset.focusedGame=closest?.name||'yacht';
+    };
+    const schedule=()=>{if(!frame)frame=requestAnimationFrame(update)};
+    update();window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);
+    return ()=>{cancelAnimationFrame(frame);window.removeEventListener('scroll',schedule);window.removeEventListener('resize',schedule)};
+  },[]);
+  return <div className="captain-arcade-page-background" data-focused-game="yacht" aria-hidden="true" />;
 }
 
 function App() {
@@ -3200,7 +3226,7 @@ function App() {
           <FullscreenGameFrame label="Cheese Memory" variant="cheese"><CheeseMemoryGame /></FullscreenGameFrame>
         ) : page === "captain" ? (
           <>
-            <div className="captain-arcade-page-background" aria-hidden="true" />
+            <CaptainArcadeBackdrop />
             <FullscreenGameFrame label="Captain Rosie Yacht Adventure" variant="yacht">
               <CaptainRosieGame soundOn={soundOn} />
             </FullscreenGameFrame>

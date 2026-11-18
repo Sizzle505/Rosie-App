@@ -946,6 +946,12 @@
     const dir=dirForKey(e.key);
     if(dir){
       e.preventDefault();
+      if(e.shiftKey&&e.key.startsWith('Arrow')){
+        if(phase==='playing'){
+          aimFacing=dir;independentAim=true;position(player);updateAimPreview();
+        }
+        return;
+      }
       const code=e.code||e.key;
       if(e.repeat||pressedKeys.has(code))return;
       pressedKeys.set(code,dir);heldDir=dir;requestMove(dir);return;
@@ -1081,6 +1087,11 @@
   $('rocket').addEventListener('click',()=>fire('rocket'));
   $('boost').addEventListener('click',activateBoost);
   $('pause-top').addEventListener('click',pause);
+  $('retry-top').addEventListener('click',()=>{
+    if(!window.confirm('Retry this sector from the beginning?'))return;
+    const select=$('stage-select');if(select)select.value=String(level);
+    phase='start';start();
+  });
   $('start').addEventListener('click',start);
   $('victory-continue').addEventListener('click',start);
   $('victory-prev').addEventListener('click',()=>selectVictoryScene(victorySceneIndex-1));

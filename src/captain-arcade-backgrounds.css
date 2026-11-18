@@ -21,6 +21,16 @@
   inset: 0;
   background: radial-gradient(ellipse at 50% 32%,transparent 12%,rgba(3,7,22,.36) 88%);
 }
+.captain-arcade-page-background {transition:background-image .35s ease;}
+.captain-arcade-page-background[data-focused-game="yacht"] {
+  background-image:linear-gradient(180deg,#0813299c,#090c1dd9 68%),url('/captain-levels/sunrise-across-torii-sea.webp');
+}
+.captain-arcade-page-background[data-focused-game="tunnel"] {
+  background-image:linear-gradient(180deg,#0b1025ae,#100d1edb 65%),url('/captain-arcade-backgrounds/03-Ember-Tunnel-Molten-Foundry.webp');
+}
+.captain-arcade-page-background[data-focused-game="cosmic"] {
+  background-image:linear-gradient(180deg,#07102aa8,#080a21d8 68%),url('/captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp');
+}
 body:has(.captain-arcade-page-background) .captain-arcade-jump,
 body:has(.captain-arcade-page-background) .captain-fullscreen-frame,
 body:has(.captain-arcade-page-background) .cosmic-odyssey-main-entry {

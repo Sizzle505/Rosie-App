@@ -347,13 +347,6 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / PASSAGES.length) * 100}%`}} /></div>
         {PASSAGES.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
       </div>
-      <div className="ember-arcade-scene-select" aria-label="Ember Tunnel background selection">
-        <span>ENVIRONMENT</span>
-        <button type="button" onClick={()=>setArcadeBackdrop(index=>(index+1)%arcadeBackdrops.length)}
-          aria-label={`Change Ember Tunnel background, currently ${arcadeBackdrops[arcadeBackdrop].label}`}>
-          {arcadeBackdrops[arcadeBackdrop].label} · CHANGE
-        </button>
-      </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
         <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"

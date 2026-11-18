@@ -1,0 +1,45 @@
+/* Desktop refinements remain outside the tablet and phone layouts. */
+@media (min-width: 1200px) {
+  .page-cheese .cheese-desktop-layout > .cheese-left-rail,
+  .page-cheese .cheese-desktop-layout > .cheese-examiner-rail {
+    position:sticky!important;top:20px!important;align-self:start!important;
+  }
+  .page-cheese .cheese-desktop-layout > .cheese-game-frame {
+    position:sticky!important;top:78px!important;align-self:start!important;
+  }
+
+  .app-shell.page-fortune {
+    background-image:radial-gradient(circle at 0 0,#4b1937,transparent 18%),
+      radial-gradient(circle at 100% 0,#4b1937,transparent 18%),
+      url('/rosieverse/refresh/fortune-tent.webp')!important;
+    background-size:auto,auto,cover!important;background-position:center top!important;
+  }
+  .app-shell.page-fortune .fortune-page .question-card,
+  .app-shell.page-fortune .fortune-page .fortune-ticket {translate:0 50px;}
+  .app-shell.page-fortune .fortune-page .machine {
+    top:70px!important;
+  }
+  .app-shell.page-fortune .fortune-page .machine .booth {
+    height:min(650px,calc(100dvh - 255px))!important;
+  }
+  .app-shell.page-fortune .fortune-page .bottom-omens {
+    position:fixed!important;z-index:11;
+    left:calc((100vw - min(100vw,1260px)) / 2 + 24px)!important;
+    top:calc(70px + min(650px,100dvh - 255px) + 12px)!important;
+    width:min(calc((min(100vw,1260px) - 72px) * .55),620px)!important;
+    margin:0!important;padding:10px!important;
+  }
+
+  .app-shell.page-qr-atelier {background:#160f0a url('/rosieverse/refresh/qr-floor.webp') center top / 100% auto repeat-y!important;}
+  .app-shell.page-qr-atelier .qa-scene {
+    background-color:#160f0a!important;
+    background-image:url('/qr-atelier/desktop-workshop-20261112.webp')!important;
+    background-size:100% auto!important;
+    background-position:center top!important;
+    background-repeat:no-repeat!important;
+  }
+  .app-shell.page-qr-atelier .qa-scene::after {
+    display:block!important;left:47%!important;right:0!important;
+    background:#160f0a url('/rosieverse/refresh/qr-floor.webp') center top / 100% auto repeat-y!important;
+  }
+}
