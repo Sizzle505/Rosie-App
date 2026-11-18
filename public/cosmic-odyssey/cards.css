@@ -1,0 +1,39 @@
+/* Cosmic Odyssey | approved Fiend collectible cards | 2026-11-18 */
+.veil:has(.fiend-card-gallery){padding:9px;background:linear-gradient(#050821d9,#100c2add),url('assets/nebula.webp') center/cover}
+.fiend-card-gallery{position:absolute;z-index:2;inset:8px 10px 103px;display:flex;align-items:center;justify-content:center;gap:clamp(7px,1.7vw,20px);pointer-events:none}
+.fiend-flip-card{position:relative;display:block;flex:0 1 auto;min-width:0;width:min(29%,240px,calc((100dvh - 230px)*.6667));max-height:100%;aspect-ratio:2/3;padding:0;border:0;border-radius:9px;perspective:1400px;background:transparent;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 6px 17px #000b)}
+.fiend-flip-inner{position:relative;display:block;width:100%;height:100%;border-radius:8px;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .58s cubic-bezier(.25,.7,.19,1)}
+.fiend-flip-card.is-flipped .fiend-flip-inner{transform:rotateY(180deg)}
+.fiend-card-face{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;border-radius:8px;border:1px solid #e3b66d;box-shadow:0 0 0 1px #ffd58e42;backface-visibility:hidden;-webkit-backface-visibility:hidden;user-select:none}
+.fiend-card-back{transform:rotateY(180deg)}
+.fiend-flip-card:hover{filter:drop-shadow(0 6px 16px #edbb6ca6)}
+.fiend-flip-card:focus-visible{outline:3px solid #ffe29a;outline-offset:5px}
+.mission-card.mission-launcher{position:absolute;z-index:5;right:clamp(9px,1.8%,22px);bottom:clamp(8px,1.7%,18px);width:min(365px,96%);max-height:none;min-height:0;margin:0;padding:7px 11px 9px;overflow:visible;border:1px solid #e5bd75;border-radius:12px;text-align:center;background:linear-gradient(125deg,#1c1539f2,#101329f4);box-shadow:0 9px 23px #0009,0 0 13px #af6db64a}
+.mission-launcher .mission-launcher-handle{display:block;margin:0 0 5px;padding:1px 4px;color:#ffe2a2;font:700 11px/1.2 Georgia,serif;letter-spacing:1.4px;cursor:move;touch-action:none;user-select:none}
+.mission-launcher .mission-launcher-controls{display:flex;align-items:center;justify-content:center;gap:9px}
+.mission-launcher .mission-level-picker{display:flex;flex:1;min-width:0;margin:0!important;justify-content:stretch;gap:0}
+.mission-launcher .mission-level-picker select{display:block;width:100%;max-width:100%;min-width:0;height:37px;padding:5px 7px;border-radius:8px;font:700 11px Arial,sans-serif}
+.mission-launcher .launch-button{flex:0 0 auto;margin:0!important;min-height:37px;padding:9px 12px!important;border-radius:8px;font:700 11px/1 Arial,sans-serif;letter-spacing:.3px;white-space:nowrap}
+.mission-launcher [hidden]{display:none!important}
+.veil[data-phase="paused"] .fiend-card-gallery,.veil[data-phase="lose"] .fiend-card-gallery{display:none}
+.veil[data-phase="paused"] .mission-launcher,.veil[data-phase="lose"] .mission-launcher{right:50%;bottom:50%;transform:translate(50%,50%);width:min(365px,94%)}
+.veil[data-phase="paused"] .mission-launcher-handle,.veil[data-phase="lose"] .mission-launcher-handle{cursor:default}
+@media(max-width:740px){
+ .fiend-card-gallery{inset:7px 5px 111px;gap:5px}
+ .fiend-flip-card{width:min(31%,165px,calc((100dvh - 250px)*.6667));border-radius:5px}
+ .fiend-card-face,.fiend-flip-inner{border-radius:5px}
+ .mission-card.mission-launcher{right:50%;bottom:8px;transform:translateX(50%);width:min(360px,96%);padding:7px 9px 9px}
+ .mission-launcher .mission-level-picker{flex-wrap:nowrap}
+ .mission-launcher .mission-level-picker label{display:none}
+ .mission-launcher .mission-level-picker select{font-size:10px}
+ .mission-launcher .launch-button{padding:8px!important;font-size:10px}
+ .veil[data-phase="paused"] .mission-launcher,.veil[data-phase="lose"] .mission-launcher{transform:translate(50%,50%)}
+}
+@media(max-height:520px) and (orientation:landscape){
+ .fiend-card-gallery{inset:4px 6px 71px;gap:6px}
+ .fiend-flip-card{width:min(23%,calc((100dvh - 120px)*.6667))}
+ .mission-card.mission-launcher{width:min(300px,47%);right:8px;bottom:5px;padding:4px 7px 6px;transform:none}
+ .mission-launcher .mission-launcher-handle{font-size:9px;margin:0 0 2px}
+ .mission-launcher .mission-level-picker select,.mission-launcher .launch-button{height:29px;min-height:29px;padding:6px!important;font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.fiend-flip-inner{transition:none}}
