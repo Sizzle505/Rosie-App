@@ -2,6 +2,9 @@ import { createHmac, randomBytes, randomUUID, timingSafeEqual } from "node:crypt
 import { db, respond, readBody, sha256, unsafeAllowed } from "./_lib/core.js";
 import { drawSecretSanta } from "./_lib/secretSantaDraw.js";
 import { deriveJoinToken, joinCodeHash, equalHex, normalizeJoinCode, validateWishlist } from "./_lib/secretSantaWishlist.js";
+import { mailOverview, deliverNotifications } from "./_lib/secretSantaNotifications.js";
+
+export const config = { maxDuration: 60 };
 
 const TABLE = "rosie_santa_exchanges";
 const FIELDS = "id,organizer_hash,title,budget,exchange_date,participants,exclusions,assignments,status,created_at,updated_at,drawn_at,join_enabled,join_token_hash,join_code_hash,revision";
@@ -177,7 +180,7 @@ export default async function handler(req, res) {
       case "dashboard": {
         const row = await host(input);
         return respond(res, 200, { exchange: view(row), invitations: invites(row),
-          joinToken: hostJoinToken(row, input.hostToken) });
+          joinToken: hostJoinToken(row, input.hostToken), mail: await mailOverview(row) });
       }
       case "configureJoin": {
         const row = await host(input);
@@ -215,8 +218,9 @@ export default async function handler(req, res) {
             bad("That email is already registered. Use your personal invitation to edit your wishlist.", 409);
           return [...row.participants, person];
         }, true);
+        const mail = await deliverNotifications(next, "registration", { guestIds: [person.id] });
         return respond(res, 201, { ...guestSummary(next, person), guestToken: inviteToken(next, person.id),
-          exchangeId: next.id });
+          exchangeId: next.id, mail });
       }
       case "saveWishlist": {
         const { row, person } = await guest(input);
@@ -295,7 +299,34 @@ export default async function handler(req, res) {
         });
         if (!changed.length) bad("The guest list changed. Refresh the exchange before drawing.", 409);
         const next = await findRow(row.id);
-        return respond(res, 200, { exchange: view(next), invitations: invites(next) });
+        const mail = await deliverNotifications(next, "draw");
+        return respond(res, 200, { exchange: view(next), invitations: invites(next), mail });
+      }
+      case "mailStatus": {
+        const row = await host(input);
+        return respond(res, 200, { mail: await mailOverview(row) });
+      }
+      case "sendMatches":
+      case "sendConfirmations": {
+        const row = await host(input);
+        if (input.action === "sendMatches" && row.status !== "drawn")
+          bad("Draw the names before notifying matches.", 409);
+        const kind = input.action === "sendMatches" ? "draw" : "registration";
+        const mail = await deliverNotifications(row, kind);
+        return respond(res, 200, { exchange: view(row), invitations: invites(row),
+          mail, mailStatus: await mailOverview(row) });
+      }
+      case "resendGuestEmail": {
+        const row = await host(input);
+        if (typeof input.guestId !== "string" ||
+            !row.participants.some(p => p.id === input.guestId))
+          bad("Guest not found.", 404);
+        const kind = row.status === "drawn" ? "draw" : "registration";
+        const mail = await deliverNotifications(row, kind, {
+          guestIds: [input.guestId], force: true
+        });
+        return respond(res, 200, { exchange: view(row), invitations: invites(row),
+          mail, mailStatus: await mailOverview(row) });
       }
       case "guest":
       case "reveal": {
