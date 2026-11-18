@@ -1,0 +1,63 @@
+name: Verify Secret Santa email layout updates
+on:
+  push:
+    branches: [feature/rosie-santa-email-fullbleed-gifts]
+    paths:
+      - .github/workflows/rosie-santa-email-fullbleed-verify.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/secret-santa*.test.mjs
+      - run: npm run build
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Check desktop and phone email images and remove dead space
+        run: |
+          python -m http.server 8090 --directory dist >/tmp/rosie-email-server.log 2>&1 &
+          node --input-type=module <<'JS'
+          import assert from "node:assert/strict";
+          import { chromium } from "playwright";
+          const browser = await chromium.launch({headless:true, args:["--no-sandbox"]});
+          try {
+            for (const width of [390,1280]) {
+              const page = await browser.newPage({viewport:{width,height:900}});
+              for (const type of ["registration","draw"]) {
+                await page.goto("http://127.0.0.1:8090/randomizers/secret-santa/email/preview-"+type+".html");
+                const data = await page.evaluate(() => {
+                  const selector = s => document.querySelector('img[src*="'+s+'"]');
+                  const hero = selector("rosie-holiday-banner.jpg");
+                  const gifts = selector("holiday-gifts.png");
+                  const main = selector("invitation-scroll.png") || selector("sealed-envelope.png");
+                  const h = hero?.getBoundingClientRect();
+                  const g = gifts?.getBoundingClientRect();
+                  const m = main?.getBoundingClientRect();
+                  return {heroWidth:h?.width,heroHeight:h?.height,
+                    heroImageLoaded:hero?.naturalWidth>0,
+                    giftWidth:g?.width,giftImageLoaded:g?.naturalWidth>0,
+                    mainWidth:m?.width,mainLoaded:main?.naturalWidth>0,
+                    scrollWidth:document.documentElement.scrollWidth,
+                    viewportWidth:innerWidth};
+                });
+                console.log(type,width,JSON.stringify(data));
+                assert.equal(data.heroImageLoaded,true);
+                assert.equal(data.giftImageLoaded,true);
+                assert.equal(data.mainLoaded,true);
+                assert.ok(data.heroWidth >= Math.min(width-32,655),"header must fill width");
+                assert.ok(data.giftWidth >= Math.min(width-65,345),"gift illustration should be prominent");
+                assert.ok(data.mainWidth >= Math.min(width-65,type==="draw"?400:345),"envelope/scroll should be large");
+                assert.ok(data.scrollWidth <= width+2,"email must not overflow mobile width");
+              }
+              await page.close();
+            }
+          } finally { await browser.close(); }
+          JS
