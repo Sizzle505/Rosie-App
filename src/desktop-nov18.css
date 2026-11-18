@@ -69,6 +69,11 @@
     column-gap:clamp(8.4px,.77vw,14px)!important;
     row-gap:clamp(6.3px,.56vw,10.5px)!important;
   }
+  /* Fit the square cheese board above the fixed navigation without needing
+     a second scrollable region within the central gameplay panel. */
+  .page-cheese .cheese-desktop-layout {
+    --cheese-center:min(51vw,calc(100dvh - 235px));
+  }
   /* The cheese board is a fixed-in-view game surface, never an internal scroller. */
   .page-cheese .cheese-desktop-layout > .cheese-game-frame {
     position:sticky!important;top:76px!important;align-self:start!important;
