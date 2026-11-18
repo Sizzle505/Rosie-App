@@ -516,7 +516,7 @@
        card.classList.remove('is-flipped');
        card.setAttribute('aria-pressed','false');
        const name=({rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'})[card.dataset.fiend]||'Fiend';
-       card.setAttribute('aria-label',card.dataset.fiend==='rosie'?'Flip Captain Rosie card to read her biography':'Flip '+name+' card to read criminal dossier');
+       card.setAttribute('aria-label','Enlarge '+name+' character card');
      });
    }else{
      const dock=$('mission-launcher');
