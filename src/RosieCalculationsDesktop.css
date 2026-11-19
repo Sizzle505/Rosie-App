@@ -296,3 +296,12 @@
     position:relative;top:-25px;
   }
 }
+@media screen and (min-width:1200px) {
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-grid {
+    column-gap:clamp(3.8px,.35vw,6.3px)!important;
+    position:relative!important;top:-40px!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tools-heading {
+    position:relative!important;top:-25px!important;
+  }
+}
