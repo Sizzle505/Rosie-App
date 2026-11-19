@@ -4641,3 +4641,109 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-h
   .app-shell.page-timekeeper .rtk-observatory .rtk-world-shortcuts {gap:5px;}
   .app-shell.page-timekeeper .rtk-observatory .rtk-world-shortcuts button {min-height:32px;}
 }
+
+/* World Clock cabinet and readable native city menu (desktop).
+   Keep the original cabinet artwork; give its contents a complete, legible
+   layout without affecting the Stopwatch/Timer or tablet/mobile modes. */
+@media screen and (min-width:1200px) {
+  body .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility:has(.rtk-world-settings) .rtk-utility-inner {
+    top:18%!important;
+    bottom:8%!important;
+    left:10%!important;
+    right:10%!important;
+    padding:3px 5px 8px!important;
+    box-sizing:border-box;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-settings {
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:center;
+    align-content:start;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    padding:2px 1px 7px;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-settings label {
+    display:block!important;
+    grid-column:1 / -1;
+    text-align:center;
+    color:#fff0ca!important;
+    font:700 13px/1.3 Georgia,serif!important;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-settings select {
+    display:block;
+    grid-column:1 / -1;
+    box-sizing:border-box;
+    width:100%!important;
+    min-width:0;
+    height:44px!important;
+    min-height:44px!important;
+    padding:6px 35px 6px 11px!important;
+    border:2px solid #e8c383!important;
+    border-radius:10px!important;
+    color:#fff6db!important;
+    background-color:#102743!important;
+    background-image:linear-gradient(160deg,#22577b,#0e2746)!important;
+    color-scheme:dark;
+    text-align:left!important;
+    text-align-last:left!important;
+    font:700 14px/1.3 Georgia,serif!important;
+    letter-spacing:0!important;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    cursor:pointer;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-settings select option {
+    color:#fff6db!important;
+    background:#102743!important;
+    font:600 14px/1.4 Georgia,serif!important;
+    padding:6px;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-shortcuts {
+    grid-column:1 / -1;
+    width:100%!important;
+    min-width:0;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-shortcuts button {
+    min-width:0;
+    min-height:36px!important;
+    padding:6px 5px!important;
+    font:700 12px/1.15 Georgia,serif!important;
+    color:#fff2d0!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-shortcuts button.chosen {
+    color:#281714!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-city-plaque {
+    grid-column:1 / -1;
+    width:100%!important;
+    min-height:37px!important;
+    margin:0!important;
+    padding:5px 8px!important;
+    box-sizing:border-box;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-city-plaque strong {
+    font:700 14px/1.2 Georgia,serif!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-daynight {
+    grid-column:1 / -1;
+    display:flex!important;
+    justify-content:center;
+    align-items:center;
+    gap:22px!important;
+    min-height:27px!important;
+    margin:0!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-world-daynight span {
+    font-size:12px!important;
+  }
+}
