@@ -33,8 +33,17 @@
   width:100%!important;height:100%!important;object-fit:contain!important;
   z-index:2;pointer-events:none;user-select:none;
 }
-/* The colored enamel insert extends to the artwork's inner frame edge.
-   The QR itself stays square, centered and individually sized per frame. */
+/* Fill the full oval behind the artwork, then cover any image artifacts within
+   the inset without painting over the decorative gilded border. */
+.qa-rosie-insert-underlay {
+  position:absolute!important;
+  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
+  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
+  border-radius:50%;clip-path:ellipse(50% 50% at 50% 50%);
+  transform:scale(1.14);transform-origin:center;
+  z-index:1;background:var(--rosie-code-bg,#fff)!important;
+  pointer-events:none;
+}
 .qa-rosie-insert-backdrop {
   position:absolute!important;
   left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
@@ -46,9 +55,9 @@
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
-  z-index:4;background:var(--rosie-code-bg,#fff);overflow:hidden;
+  z-index:4;background:#ffffff!important;overflow:hidden;
 }
-.qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:var(--rosie-code-bg,#fff);}
+.qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#ffffff!important;}
 .qa-rosie-title-field,.qa-rosie-printed-title {
   position:absolute!important;z-index:5;
   left:var(--rosie-title-x)!important;top:var(--rosie-title-y)!important;
@@ -115,10 +124,14 @@
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-backdrop,
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay,
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-backdrop {
+    background:var(--rosie-code-bg,#fff)!important;
+    print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
+  }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr,
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr svg {
-    background:var(--rosie-code-bg,#fff)!important;
+    background:#ffffff!important;
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-printed-title {
