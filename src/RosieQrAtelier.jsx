@@ -9,20 +9,21 @@ import "./rosie-qr-viewer.css";
 
 const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
+// Aperture geometry is measured from the supplied transparent oval frame artwork.
 const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,titleX:904,titleY:857,titleWidth:540},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,titleX:892,titleY:853,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:824,cy:500,codeSize:400,titleX:793,titleY:880,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,titleX:722,titleY:889,titleWidth:555}
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:904,titleY:857,titleWidth:540},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:892,titleY:853,titleWidth:540},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:793,titleY:880,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:722,titleY:889,titleWidth:555}
 ];
-const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352,ROSIE_INSERT_SIZE=440;
+const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 function rosieFrameStyle(frame){
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
-  const insertSize=frame.insertSize||ROSIE_INSERT_SIZE;
   return {
-    "--rosie-insert-left":((frame.cx-insertSize/2)/ROSIE_ART_W*100)+"%",
-    "--rosie-insert-top":((frame.cy-insertSize/2)/ROSIE_ART_H*100)+"%",
-    "--rosie-insert-size":(insertSize/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-left":((frame.insertX-frame.insertW/2)/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-top":((frame.insertY-frame.insertH/2)/ROSIE_ART_H*100)+"%",
+    "--rosie-insert-width":(frame.insertW/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-height":(frame.insertH/ROSIE_ART_H*100)+"%",
     "--rosie-code-left":((frame.cx-codeSize/2)/ROSIE_ART_W*100)+"%",
     "--rosie-code-top":((frame.cy-codeSize/2)/ROSIE_ART_H*100)+"%",
     "--rosie-code-size":(codeSize/ROSIE_ART_W*100)+"%",
@@ -84,17 +85,22 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   const ctx=canvas.getContext("2d");
   ctx.scale(2,2);
   const qr=await qrImage(svg),art=await loadImage(ROSIE_ASSET_ROOT+frame.file);
-  const insertSize=frame.insertSize||ROSIE_INSERT_SIZE;
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const finish=QR_STYLES.find(item=>item.id===style)||QR_STYLES[0];
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // Fill the entire inset aperture, not merely the QR square.
+  // Paint over any opaque remnants inside the frame's oval artwork opening.
+  // This matches the live preview and keeps Rosie, the gilding, and the title intact.
+  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW/2,frame.insertH/2,0,0,Math.PI*2);
+  ctx.clip();
   ctx.fillStyle=finish.light;
-  ctx.fillRect(frame.cx-insertSize/2,frame.cy-insertSize/2,insertSize,insertSize);
+  ctx.fillRect(frame.insertX-frame.insertW/2,frame.insertY-frame.insertH/2,frame.insertW,frame.insertH);
+  ctx.restore();
   ctx.imageSmoothingEnabled=false;
   ctx.drawImage(qr,x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=true;
-  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   const inscription=String(caption||"").trim().slice(0,48);
   if(inscription){
     ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
