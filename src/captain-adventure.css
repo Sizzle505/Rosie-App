@@ -79,6 +79,13 @@
   transform: translateX(-50%);
   font-size: 16px;
   font-weight: 800;
+  width: auto;
+  height: auto;
+  display: block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   color: #ffecaa;
   text-shadow: 0 1px 4px #281b20, 0 0 9px #e9823e;
   animation: captainDriftPulse .65s ease-in-out infinite alternate;
