@@ -4480,7 +4480,8 @@ body:has(.app-shell.page-timekeeper),
 .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand.is-second {
   opacity:1;filter:drop-shadow(0 1px 1px #000c);
 }
-body .app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+body .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-hands .rtk-world-pivot {
+  width:6%!important;height:6%!important;
   border:2px solid var(--rtk-hand-edge)!important;border-radius:50%!important;
   background:radial-gradient(circle at 36% 30%,#fff9e7 0%,var(--rtk-hand-light) 20%,var(--rtk-hand-mid) 46%,var(--rtk-hand-dark) 72%,var(--rtk-hand-edge) 100%)!important;
   box-shadow:inset 0 0 0 2px var(--rtk-hand-light),0 2px 3px #0009!important;
