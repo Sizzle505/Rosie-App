@@ -58,7 +58,6 @@ const DIAL_FRAMES = [
   { id: "deco", label: "Art Deco", symbol: "◆" },
   { id: "moonlight", label: "Moonlight", symbol: "☽" },
   { id: "pearl-baroque", label: "Pearl", symbol: "❈" },
-  { id: "emerald-filigree", label: "Emerald", symbol: "✧" },
   { id: "celestial", label: "Celestial", symbol: "☾" },
   { id: "astrolabe", label: "Astrolabe", symbol: "Ⅻ", ext: "svg" },
   { id: "marquetry", label: "Marquetry", symbol: "✦", ext: "svg" },
@@ -97,8 +96,8 @@ const formatStep = ms => {
 };
 const HAND_STYLES = [
   { id:"breguet",label:"Breguet" },
+  { id:"classic",label:"Original Ornate" },
   { id:"cathedral",label:"Cathedral" },
-  { id:"spade",label:"Spade" },
   { id:"skeleton",label:"Skeleton" }
 ];
 const HAND_METALS = [
@@ -679,6 +678,11 @@ export default function RosieTimekeeper() {
                 onChange={e=>setWorldZone(e.target.value)}>
                 {WORLD_CITIES.map(item=><option value={item.zone} key={item.zone}>{item.city} · {worldTimeParts(worldNow,item.zone).abbr}</option>)}
               </select>
+              <div className="rtk-world-shortcuts" role="group" aria-label="Quick world clock cities">
+                {WORLD_CITIES.filter(item=>["America/New_York","Europe/London","Asia/Tokyo","Australia/Sydney"].includes(item.zone)).map(item=><button type="button" key={item.zone}
+                  className={worldZone===item.zone?"chosen":""} aria-pressed={worldZone===item.zone}
+                  onClick={()=>setWorldZone(item.zone)}>{item.city}</button>)}
+              </div>
               <div className="rtk-world-city-plaque">
                 <strong>{world.day}, {world.month} {world.date}</strong>
               </div>

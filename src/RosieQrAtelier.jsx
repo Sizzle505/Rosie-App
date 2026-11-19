@@ -12,8 +12,8 @@ const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
 const ROSIE_FRAMES=[
   {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,titleX:904,titleY:857,titleWidth:540},
   {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,titleX:892,titleY:853,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:824,cy:500,titleX:793,titleY:866,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,titleX:722,titleY:875,titleWidth:555}
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:824,cy:500,titleX:793,titleY:880,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,titleX:722,titleY:889,titleWidth:555}
 ];
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 function rosieFrameStyle(frame){
@@ -75,8 +75,9 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   // Render exactly the active viewer composition: transparent canvas, QR plus Rosie and inscription.
   const frame=ROSIE_FRAMES.find(x=>x.id===frameId)||ROSIE_FRAMES[0];
   const canvas=document.createElement("canvas");
-  canvas.width=ROSIE_ART_W;canvas.height=ROSIE_ART_H;
+  canvas.width=ROSIE_ART_W*2;canvas.height=ROSIE_ART_H*2;
   const ctx=canvas.getContext("2d");
+  ctx.scale(2,2);
   const qr=await qrImage(svg),art=await loadImage(ROSIE_ASSET_ROOT+frame.file);
   const x=frame.cx-ROSIE_CODE_SIZE/2,y=frame.cy-ROSIE_CODE_SIZE/2;
   ctx.fillStyle="#ffffff";ctx.fillRect(x,y,ROSIE_CODE_SIZE,ROSIE_CODE_SIZE);
@@ -87,9 +88,9 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   const inscription=String(caption||"").trim().slice(0,48);
   if(inscription){
     ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
-    let fontSize=41;
+    let fontSize=49;
     do{ctx.font="italic "+fontSize+"px Georgia,serif";fontSize-=2;}
-    while(fontSize>23&&ctx.measureText(inscription).width>frame.titleWidth);
+    while(fontSize>27&&ctx.measureText(inscription).width>frame.titleWidth);
     ctx.fillStyle="#50351f";ctx.shadowColor="#fff5d9";ctx.shadowBlur=2;
     ctx.fillText(inscription,frame.titleX,frame.titleY,frame.titleWidth);
     ctx.restore();
