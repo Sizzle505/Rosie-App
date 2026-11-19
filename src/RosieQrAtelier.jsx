@@ -48,8 +48,8 @@ function makeQr(payload,style="emerald"){
   const modules=[];
   for(let row=0;row<count;row++)for(let col=0;col<count;col++)
     if(qr.isDark(row,col))modules.push("M"+(col+quiet)+" "+(row+quiet)+"h1v1h-1z");
-  // Unlike palette-only finishes, the QR modules use the selected dark color.
-  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+dimension+' '+dimension+'" shape-rendering="crispEdges"><rect width="'+dimension+'" height="'+dimension+'" fill="'+theme.light+'"/><path d="'+modules.join("")+'" fill="'+theme.dark+'"/></svg>';
+  // The QR modules use the selected dark color; the quiet zone and entire QR square stay pure white.
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+dimension+' '+dimension+'" shape-rendering="crispEdges"><rect width="'+dimension+'" height="'+dimension+'" fill="#ffffff"/><path d="'+modules.join("")+'" fill="'+theme.dark+'"/></svg>';
   return {svg,modules:count};
 }
 function safeName(text){
@@ -88,8 +88,13 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const finish=QR_STYLES.find(item=>item.id===style)||QR_STYLES[0];
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // Paint over any opaque remnants inside the frame's oval artwork opening.
-  // This matches the live preview and keeps Rosie, the gilding, and the title intact.
+  // Fill the entire opening behind the artwork (including the dark crescent),
+  // then clean up any opaque artwork remnants inside the safe inner ellipse.
+  // The QR is a separate white square, exactly as in the unframed preview.
+  ctx.fillStyle=finish.light;
+  ctx.beginPath();
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.57,frame.insertH*.57,0,0,Math.PI*2);
+  ctx.fill();
   ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   ctx.save();
   ctx.beginPath();
@@ -98,6 +103,8 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   ctx.fillStyle=finish.light;
   ctx.fillRect(frame.insertX-frame.insertW/2,frame.insertY-frame.insertH/2,frame.insertW,frame.insertH);
   ctx.restore();
+  ctx.fillStyle="#ffffff";
+  ctx.fillRect(x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=false;
   ctx.drawImage(qr,x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=true;
@@ -116,6 +123,7 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
 function RosieFrameComposition({frame,svg,caption,onCaptionChange,finish="emerald",printOnly=false}){
   const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).light;
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
+    <div className="qa-rosie-insert-underlay" aria-hidden="true"/>
     <div className="qa-rosie-insert-backdrop" aria-hidden="true"/>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
