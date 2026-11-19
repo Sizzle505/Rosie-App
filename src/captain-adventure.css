@@ -1,0 +1,162 @@
+/* Yacht Dash voyage progression. Designed to layer over the existing Japanese paintings. */
+.captain-game-page .captain-course-banner .captain-passage-challenge {
+  display: block;
+  max-width: 235px;
+  margin: 4px auto 0;
+  color: #e9d3a5;
+  font-size: 8px;
+  line-height: 1.35;
+  letter-spacing: .015em;
+  text-transform: none;
+  font-style: normal;
+  text-wrap: balance;
+}
+.captain-game-page .sea-pickup-rival {
+  width: 70px;
+  height: 74px;
+  margin-left: -13px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 9px 5px rgba(1,19,42,.42));
+}
+.captain-game-page .sea-pickup-rival .rival-yacht-icon {
+  position: relative;
+  width: 56px;
+  height: 68px;
+  display: block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: rotate(-5deg);
+  animation: rivalYachtBob 2.8s ease-in-out infinite;
+}
+.captain-game-page .rival-yacht-icon .rival-mast {
+  position: absolute;
+  top: 3px;
+  left: 27px;
+  width: 3px;
+  height: 54px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ffe5a5, #946122);
+  box-shadow: 0 0 5px rgba(255,228,163,.5);
+}
+.captain-game-page .rival-yacht-icon .rival-sail {
+  position: absolute;
+  top: 7px;
+  left: 9px;
+  width: 18px;
+  height: 43px;
+  background: linear-gradient(105deg, #ffb27a, #b32343 65%, #510e39);
+  clip-path: polygon(93% 0,100% 100%,0 100%);
+  filter: drop-shadow(1px 1px 1px #57202f);
+}
+.captain-game-page .rival-yacht-icon .rival-sail-alt {
+  left: 32px;
+  width: 15px;
+  height: 37px;
+  top: 13px;
+  background: linear-gradient(110deg, #f3cb83, #7c316b);
+  clip-path: polygon(0 0,0 100%,100% 100%);
+}
+.captain-game-page .rival-yacht-icon .rival-hull {
+  position: absolute;
+  bottom: 7px;
+  left: 4px;
+  width: 49px;
+  height: 15px;
+  border: 2px solid #ffdc92;
+  border-radius: 7px 7px 25px 25px;
+  transform: perspective(40px) rotateX(-18deg);
+  background: linear-gradient(180deg, #a83a57, #381a46);
+  box-shadow: 0 4px 0 rgba(255,255,255,.16);
+}
+.captain-game-page .sea-pickup .captain-drift-warning {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffecaa;
+  text-shadow: 0 1px 4px #281b20, 0 0 9px #e9823e;
+  animation: captainDriftPulse .65s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.captain-game-page .captain-voyage-stars {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 4px auto 2px;
+  color: #f7cd6e;
+  font-size: 20px;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(234,194,91,.25);
+}
+.captain-game-page .captain-voyage-stars .is-unearned { color: rgba(191,200,198,.3); text-shadow: none; }
+.captain-game-page .captain-results-panel .voyage-stats {
+  max-width: 365px;
+  margin-top: 9px;
+}
+.captain-game-page .captain-results-panel .voyage-stats span {
+  padding: 5px 7px;
+}
+.captain-game-page .captain-voyage-passages {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 5px auto 0;
+  flex-wrap: wrap;
+  max-width: 310px;
+}
+.captain-game-page .captain-voyage-passages i {
+  font-size: 7px;
+  font-style: normal;
+  border: 1px solid rgba(238,205,137,.32);
+  border-radius: 20px;
+  padding: 3px 6px;
+  color: #869da6;
+}
+.captain-game-page .captain-voyage-passages i.is-cleared {
+  color: #ffe3a2;
+  background: rgba(203,153,67,.15);
+}
+.captain-game-page .yacht-course[data-captain-level="tempest"] .captain-course-banner {
+  border-color: rgba(163,210,232,.65);
+}
+.captain-game-page .yacht-course[data-captain-level="moonlight"] .captain-course-banner {
+  box-shadow: 0 0 23px rgba(172,161,232,.22);
+}
+@keyframes rivalYachtBob {
+  0%,100% { translate: 0 0; rotate: -2deg; }
+  50% { translate: 0 3px; rotate: 2deg; }
+}
+@keyframes captainDriftPulse { from { opacity: .55; } to { opacity: 1; } }
+@media (max-width: 720px) {
+  .captain-game-page .captain-course-banner .captain-passage-challenge {
+    max-width: 175px;
+    font-size: 7px;
+    line-height: 1.23;
+  }
+  .captain-game-page .sea-pickup-rival {
+    transform: scale(.78);
+    transform-origin: top center;
+  }
+  .captain-game-page .captain-results-panel .voyage-stats {
+    gap: 4px;
+    margin-top: 7px;
+  }
+  .captain-game-page .captain-voyage-passages i {
+    font-size: 6px;
+    padding: 2px 4px;
+  }
+}
+@media (max-width: 380px), (max-height: 600px) {
+  .captain-game-page .captain-course-banner .captain-passage-challenge { display: none; }
+  .captain-game-page .captain-voyage-passages { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .captain-game-page .sea-pickup-rival .rival-yacht-icon,
+  .captain-game-page .sea-pickup .captain-drift-warning { animation: none !important; }
+}
