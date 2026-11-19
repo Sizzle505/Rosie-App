@@ -90,7 +90,7 @@
 /* The selected frame is printed as foreground image content, never as a page background. */
 .qa-print-sheet.qa-rosie-print-sheet{display:none;}
 @media print {
-  @page {size:auto;margin:12mm;}
+  @page {size:auto;margin:4mm;}
   .qa-rosie-viewer.qa-fullscreen {display:none!important;}
   .qa-print-sheet.qa-rosie-print-sheet {
     position:fixed!important;inset:0!important;z-index:999999!important;

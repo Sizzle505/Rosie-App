@@ -4623,3 +4623,15 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-h
   .app-shell.page-timekeeper .rtk-observatory .rtk-saved-sets {max-height:155px;overflow-y:auto;padding-right:4px;}
   .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace:has(.rtk-sets-editor) .rtk-time-adjust {margin-top:auto!important;}
 }
+@media (min-width:1200px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace:has(.rtk-sets-editor) .rtk-sets-editor {
+    flex:1;min-height:185px;max-height:none;overflow:hidden;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace:has(.rtk-sets-editor) .rtk-saved-sets {
+    flex:1;max-height:none;display:flex;justify-content:center;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-timer-workspace:has(.rtk-sets-editor) .rtk-sets-hint {
+    margin:auto 14px!important;padding:16px 12px;border:1px solid #cba66c99;border-radius:12px;
+    background:#102c46aa;font:italic 14px/1.35 Georgia,serif!important;
+  }
+}
