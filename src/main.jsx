@@ -2397,7 +2397,7 @@ function FullscreenGameFrame({ children, label, variant }) {
       className={`captain-fullscreen-frame captain-fs-${variant}${expanded ? " is-expanded" : ""}${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
       aria-label={`${label} game`}
     >
-      <button type="button" className="captain-fullscreen-toggle"
+      {variant !== "cheese" && <button type="button" className="captain-fullscreen-toggle"
         onClick={toggleFullscreen}
         aria-label={expanded ? `Exit full screen for ${label}` : `Enter full screen for ${label}`}
         title={expanded ? "Exit full screen (Esc)" : "Full screen"}
@@ -2405,7 +2405,7 @@ function FullscreenGameFrame({ children, label, variant }) {
       >
         <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
         <b>{expanded ? "EXIT FULL SCREEN" : "FULL SCREEN"}</b>
-      </button>
+      </button>}
       {children}
     </section>
   );
