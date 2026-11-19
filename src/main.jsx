@@ -1981,6 +1981,10 @@ function CaptainRosieGame({ soundOn }) {
       let turboDelta = 0;
       let lifeLoss = 0;
       let cheeseGain = 0;
+      let nearMissBonus = 0;
+      let nearMissCount = 0;
+      let rivalsPassed = 0;
+      let rivalsBonus = 0;
       const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
@@ -1990,35 +1994,41 @@ function CaptainRosieGame({ soundOn }) {
       // setItems() immediately afterward previously lost earned points.
       {
         spawnClockRef.current += tickMs;
-        const phaseSpeed = phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75;
-        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + (item.speed + phaseSpeed) * movementScale }));
+        const phaseSpeed = (phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .25 : .46) + level.pace;
+        const next = itemsRef.current.map((item) => {
+          const moved = { ...item, y: item.y + (item.speed + phaseSpeed) * movementScale };
+          // Telegraph the change, then drift long before the yacht's collision zone.
+          if (moved.driftTo !== undefined && !moved.drifted && moved.y >= 43) {
+            moved.lane = moved.driftTo;
+            moved.drifted = true;
+          }
+          return moved;
+        });
 
-        const spawnEvery = phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485;
-        if (spawnClockRef.current >= spawnEvery) {
+        if (spawnClockRef.current >= level.cadence) {
           spawnClockRef.current = 0;
-          const roll = secureIndex(100);
-          const template = roll < 52
-            ? CAPTAIN_PICKUPS[0]
-            : roll < 77
-              ? CAPTAIN_PICKUPS[1]
-              : roll < 86
-                ? CAPTAIN_PICKUPS[2]
-                : CAPTAIN_PICKUPS[3];
-          next.push({
-            ...template,
-            id: itemIdRef.current += 1,
-            lane: secureIndex(3),
-            y: -12,
-            speed: 1.75 + secureIndex(8) / 10
+          const wave = captainTrafficWave(level.id, spawnSequenceRef.current++, secureIndex);
+          wave.forEach((pattern) => {
+            const template = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === pattern.kind)
+              || { kind: "rival", label: "Rival regatta yacht", points: 0, turbo: 0 };
+            next.push({
+              ...template,
+              ...pattern,
+              id: itemIdRef.current += 1,
+              y: -12,
+              speed: 1.75 + secureIndex(8) / 10,
+              drifted: false,
+              scoredPass: false
+            });
           });
         }
 
         const remaining = next.filter((item) => {
           const inCatchZone = item.y >= 77 && item.y <= 92;
           if (inCatchZone && item.lane === laneRef.current) {
-            if (item.kind === "buoy") {
+            if (item.kind === "buoy" || item.kind === "rival") {
               lifeLoss += 1;
-              lastHit = "buoy";
+              lastHit = item.kind;
               streakRef.current = 0;
               comboRef.current = 1;
             } else {
@@ -2033,8 +2043,19 @@ function CaptainRosieGame({ soundOn }) {
             }
             return false;
           }
+          if ((item.kind === "buoy" || item.kind === "rival") && !item.scoredPass && item.y >= 94) {
+            item.scoredPass = true;
+            if (Math.abs(item.lane - laneRef.current) === 1) {
+              nearMissBonus += 15;
+              nearMissCount += 1;
+            }
+            if (item.kind === "rival") {
+              rivalsBonus += boostRef.current ? 120 : 70;
+              rivalsPassed += 1;
+            }
+          }
           if (item.y >= 108) {
-            if (item.kind !== "buoy") missedGood = true;
+            if (item.kind !== "buoy" && item.kind !== "rival") missedGood = true;
             return false;
           }
           return true;
@@ -2075,6 +2096,18 @@ function CaptainRosieGame({ soundOn }) {
         window.navigator.vibrate?.(lastHit === "cheese" ? [18, 24, 28] : 15);
       }
 
+      if (nearMissBonus || rivalsBonus) {
+        setScore((current) => current + nearMissBonus + rivalsBonus);
+        if (nearMissCount) setNearMisses((current) => current + nearMissCount);
+        if (rivalsPassed) setRivalsOutmaneuvered((current) => current + rivalsPassed);
+        if (!scoreDelta && !lifeLoss) {
+          setMessage(rivalsPassed
+            ? "RIVAL OUTMANEUVERED. The regatta fleet is left in Rosie's wake."
+            : "CLEAN NEAR MISS. Excellent seamanship earns bonus points.");
+          if (rivalsPassed) captainTone("cheese");
+        }
+      }
+
       if (lifeLoss) {
         setStreak(0);
         setCombo(1);
@@ -2085,7 +2118,9 @@ function CaptainRosieGame({ soundOn }) {
           if (next === 0) {
             finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
           } else {
-            setMessage("BUOY STRIKE. Rosie has issued a formal glare from the bridge.");
+            setMessage(lastHit === "rival"
+              ? "RIVAL COLLISION. Rosie has issued an official protest."
+              : "BUOY STRIKE. Rosie has issued a formal glare from the bridge.");
             window.navigator.vibrate?.([55, 35, 55]);
           }
           return next;
@@ -2094,7 +2129,7 @@ function CaptainRosieGame({ soundOn }) {
     }, tickMs);
 
     return () => window.clearInterval(tick);
-  }, [running, paused, phaseKey]);
+  }, [running, paused, phaseKey, level.id]);
 
   useEffect(() => {
     function onKeyDown(event) {
