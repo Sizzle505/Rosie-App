@@ -262,3 +262,27 @@
   .app-shell.page-calculations main.rc-page .rac-key {height:clamp(47px,4vw,59px)!important;}
   .app-shell.page-calculations main.rc-page .rc-footer-note {color:#f4d8a7!important;}
 }
+
+/* November 19 - final authoritative desktop-only Pocket Toolkit size and alignment.
+   Greater specificity than legacy desktop rules is intentional. */
+@media screen and (min-width:1200px) {
+  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-grid {
+    width:min(57.8%,491px)!important;
+    max-width:100%!important;
+    margin:0 auto!important;
+    padding:0!important;
+    justify-content:center!important;
+    justify-items:center!important;
+    align-items:center!important;
+    column-gap:clamp(6.3px,.58vw,10.5px)!important;
+    row-gap:clamp(4.7px,.42vw,7.9px)!important;
+  }
+  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tools-heading {
+    width:100%!important;max-width:100%!important;
+    margin:0 auto clamp(8px,.8vw,14px)!important;
+    text-align:center!important;
+    font-size:clamp(18px,1.55vw,26px)!important;
+    line-height:1.1!important;
+    letter-spacing:.012em!important;
+  }
+}
