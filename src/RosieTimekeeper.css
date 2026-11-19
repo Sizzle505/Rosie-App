@@ -4356,3 +4356,113 @@ body:has(.app-shell.page-timekeeper),
     background:#2a1026;
   }
 }
+
+/* New watchmaker collection: actual artwork in the chooser, generous hit areas,
+   and the same engraved sapphire/brass vocabulary as the observatory. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
+  background:linear-gradient(155deg,#173959,#09182f 58%,#142d4d)!important;
+  border:2px solid #ecc681!important;
+  box-shadow:0 22px 60px #000c,inset 0 0 0 2px #786337,inset 0 0 0 4px #ffe4a428!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog .rtk-dial-picker {
+  gap:12px!important;padding:12px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker-head {
+  font-size:19px!important;letter-spacing:.02em;
+  border-bottom:1px solid #d8ad6b78;padding-bottom:8px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-dial-picker-head button {
+  width:30px;height:30px;cursor:pointer;border:1px solid #cda66b;border-radius:50%;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices,
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices {
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button,
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices button {
+  min-height:72px!important;min-width:0!important;padding:5px 3px!important;
+  display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  background:linear-gradient(145deg,#123862,#081b39)!important;
+  border:1px solid #9b7945!important;border-radius:9px!important;
+  color:#f5dfb4!important;cursor:pointer;
+  box-shadow:inset 0 1px #ffdf9d29,0 3px 8px #0005;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices span:not(.rtk-option-art),
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices > span {
+  font-size:13px!important;letter-spacing:.08em;text-transform:uppercase;
+  color:#ffe7b3;grid-column:1/-1;margin-bottom:1px;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices button.chosen,
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices button.chosen,
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices button.chosen {
+  border-color:#ffecae!important;background:linear-gradient(145deg,#255b85,#153453)!important;
+  box-shadow:0 0 0 1px #f8cf80,0 0 12px #80c6f088,inset 0 1px #fff7c066!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-option-art {
+  display:block!important;width:44px!important;height:44px!important;flex:none!important;
+  background-position:center;background-size:contain;background-repeat:no-repeat;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-frame-choices small,
+.app-shell.page-timekeeper .rtk-observatory .rtk-bezel-choices small {
+  font:600 10px/1.12 Georgia,serif;white-space:normal;text-align:center;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices {
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px!important;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices button {
+  min-height:52px!important;padding:3px 2px!important;display:flex;align-items:center;
+  color:#f5dfb4!important;background:#102c4e!important;border:1px solid #9b7945!important;
+  border-radius:8px!important;cursor:pointer;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices small {
+  font:600 10px/1.15 Georgia,serif;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-hand-sample {
+  display:block!important;width:19px!important;height:40px!important;flex:none!important;
+  background-position:center;background-size:160px 160px;background-repeat:no-repeat;
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-color-choices {justify-content:space-between!important;gap:8px!important;}
+
+@media (min-width:1200px) {
+  /* The jewel sits at the left edge of the central stage. Its chooser uses
+     the adjacent wall, leaving the clock completely visible for live preview. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-customization-overlay {
+    inset:0!important;pointer-events:none!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-customization-scrim {
+    background:transparent!important;pointer-events:auto!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
+    position:absolute!important;right:calc(100% - 20px)!important;left:auto!important;
+    top:24%!important;width:min(485px,calc((100vw - var(--rtk-desktop-art-width))/2 - 18px))!important;
+    max-height:min(72dvh,665px)!important;translate:none!important;
+    padding:6px!important;pointer-events:auto!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog .rtk-dial-picker {padding:10px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-presets button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-time-adjust button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-duration-actions button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-draft-line button {
+    color:#fff0ca!important;border:1px solid #d4ad6a!important;border-radius:10px!important;
+    background:linear-gradient(160deg,#1e5480,#123259 52%,#09213e)!important;
+    box-shadow:inset 0 1px #fff2bd71,inset 0 -2px #06152e,0 3px 7px #100916a8!important;
+    text-shadow:0 1px 2px #07142c!important;
+    transition:filter .18s,transform .18s,box-shadow .18s;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility button:hover {
+    filter:brightness(1.18);transform:translateY(-1px);
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility button:focus-visible {
+    outline:2px solid #fff0bb;outline-offset:2px;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-presets button.chosen {
+    background:linear-gradient(160deg,#b7803e,#79421f)!important;
+    box-shadow:inset 0 1px #fff4cb,0 0 10px #f9c078a8!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-utility .rtk-time-wheel {
+    color:#fff6db!important;background:linear-gradient(155deg,#194974,#0b274c)!important;
+    border:1px solid #e6bf7a!important;border-radius:9px!important;
+    box-shadow:inset 0 1px #fff0b85c,0 3px 9px #0008!important;
+  }
+}
