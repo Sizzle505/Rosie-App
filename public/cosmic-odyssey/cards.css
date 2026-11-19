@@ -141,8 +141,8 @@
 /* Discreet character dossier navigation, isolated from the gameplay HUD. */
 .card-detail-navigation{position:absolute;inset:0;z-index:5;display:block;pointer-events:none}
 .card-detail-navigation .card-detail-cycle{position:absolute;top:50%;transform:translateY(-50%);pointer-events:auto}
-.card-detail-navigation #card-detail-prev{left:max(7px,calc(50% - min(32dvh, (100vw - 26px)/2) - 52px))}
-.card-detail-navigation #card-detail-next{right:max(7px,calc(50% - min(32dvh, (100vw - 26px)/2) - 52px))}
+.card-detail-navigation #card-detail-prev{left:max(7px,calc(50% - min(32dvh, calc((100vw - 26px)/2)) - 52px))}
+.card-detail-navigation #card-detail-next{right:max(7px,calc(50% - min(32dvh, calc((100vw - 26px)/2)) - 52px))}
 .card-detail-navigation .card-detail-position{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);pointer-events:none}
 @media(max-width:759px){.card-detail-navigation .card-detail-cycle{top:auto;bottom:28px;transform:none}.card-detail-navigation #card-detail-prev{left:clamp(7px,12vw,42px)}.card-detail-navigation #card-detail-next{right:clamp(7px,12vw,42px)}.card-detail-navigation .card-detail-position{bottom:38px}}
 .card-detail-cycle{display:grid;place-items:center;width:34px;height:34px;min-width:34px;padding:0;border:1px solid rgba(230,190,123,.58);border-radius:50%;background:rgba(13,24,46,.82);color:#f9e5bf;font:normal 26px/1 Georgia,serif;cursor:pointer}
