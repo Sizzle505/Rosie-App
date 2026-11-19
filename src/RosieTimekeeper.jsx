@@ -63,7 +63,8 @@ const DIAL_FRAMES = [
   { id: "astrolabe", label: "Astrolabe", symbol: "Ⅻ", ext: "svg" },
   { id: "marquetry", label: "Marquetry", symbol: "✦", ext: "svg" },
   { id: "midnight-compass", label: "Compass", symbol: "✧", ext: "svg" },
-  { id: "versailles-lace", label: "Versailles", symbol: "Ⅻ", ext: "svg" }
+  { id: "versailles-lace", label: "Versailles", symbol: "Ⅻ", ext: "svg" },
+  { id: "solstice", label: "Solstice", symbol: "☼", ext: "svg" }
 ];
 const LUXURY_ASSETS = "/rosieverse/timekeeper/midnight-observatory/luxury/";
 const DIAL_COLORS = [
