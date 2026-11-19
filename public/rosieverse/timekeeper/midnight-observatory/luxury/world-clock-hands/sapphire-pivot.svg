@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-<defs><linearGradient id="gold" x2=".75" y2="1"><stop stop-color="#fff5c9"/><stop offset=".24" stop-color="#d59a3c"/><stop offset=".48" stop-color="#fff2b3"/><stop offset=".75" stop-color="#ae6426"/><stop offset="1" stop-color="#f2cc76"/></linearGradient>
-<linearGradient id="silver" x2=".7" y2="1"><stop stop-color="#fffdf2"/><stop offset=".32" stop-color="#b7d4da"/><stop offset=".7" stop-color="#5d8194"/><stop offset="1" stop-color="#e8f4e7"/></linearGradient>
-<radialGradient id="gem"><stop stop-color="#f7fcff"/><stop offset=".18" stop-color="#82bbec"/><stop offset=".54" stop-color="#11519a"/><stop offset=".82" stop-color="#08254f"/><stop offset="1" stop-color="#040d2e"/></radialGradient>
-<radialGradient id="ruby"><stop stop-color="#fff4d8"/><stop offset=".22" stop-color="#f36d8b"/><stop offset=".65" stop-color="#9a143c"/><stop offset="1" stop-color="#3a061b"/></radialGradient>
-<radialGradient id="jade"><stop stop-color="#e8ffeb"/><stop offset=".25" stop-color="#85d7b1"/><stop offset=".72" stop-color="#15734c"/><stop offset="1" stop-color="#073322"/></radialGradient>
-<filter id="glow"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="64" cy="64" r="24" fill="#25172b" stroke="#93c4e6" stroke-width="6"/><circle cx="64" cy="64" r="16" fill="url(#gem)" stroke="#fff0bb" stroke-width="2"/><circle cx="58" cy="56" r="4" fill="#fff" opacity=".7"/></svg>

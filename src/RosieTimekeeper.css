@@ -4468,3 +4468,111 @@ body:has(.app-shell.page-timekeeper),
     box-shadow:inset 0 1px #fff0b85c,0 3px 9px #0008!important;
   }
 }
+
+/* Separate mechanical silhouettes and finish: all three masks share the arbor. */
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand {
+  background:linear-gradient(90deg,var(--rtk-hand-edge) 0%,var(--rtk-hand-dark) 22%,var(--rtk-hand-light) 43%,var(--rtk-hand-mid) 64%,var(--rtk-hand-edge) 100%)!important;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-position:center;mask-position:center;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  filter:drop-shadow(0 2px 2px #000b);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-hand.is-second {
+  opacity:1;filter:drop-shadow(0 1px 1px #000c);
+}
+.app-shell.page-timekeeper .rtk-observatory .rtk-world-hands .rtk-world-pivot {
+  border:2px solid var(--rtk-hand-edge)!important;border-radius:50%!important;
+  background:radial-gradient(circle at 36% 30%,#fff9e7 0%,var(--rtk-hand-light) 20%,var(--rtk-hand-mid) 46%,var(--rtk-hand-dark) 72%,var(--rtk-hand-edge) 100%)!important;
+  box-shadow:inset 0 0 0 2px var(--rtk-hand-light),0 2px 3px #0009!important;
+}
+
+@media (min-width:1200px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices {
+    display:flex!important;flex-wrap:wrap;justify-content:space-between!important;
+    padding:8px 10px 10px!important;border:1px solid #c49a5d8c!important;
+    border-radius:10px!important;background:#081b35b8!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices > span,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-choice-label,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices > span {
+    width:100%;color:#ffe2a8;font:700 13px/1.2 Georgia,serif!important;
+    text-transform:uppercase;letter-spacing:.09em;padding-bottom:4px;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button {
+    width:31px!important;height:31px!important;flex:none;
+    border:2px solid #d1aa6d!important;box-shadow:inset 0 1px 3px #fff9,0 3px 7px #0008!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices button.chosen {
+    outline:2px solid #fff4c0;outline-offset:2px;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-hand-choices button {
+    min-height:82px!important;flex-direction:column!important;justify-content:center!important;gap:1px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-hand-sample {
+    width:53px!important;height:56px!important;
+    background:linear-gradient(90deg,var(--rtk-hand-edge),var(--rtk-hand-light) 38%,var(--rtk-hand-mid) 62%,var(--rtk-hand-edge))!important;
+    -webkit-mask-size:125px 125px;mask-size:125px 125px;
+    -webkit-mask-position:center 43%;mask-position:center 43%;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    filter:drop-shadow(1px 2px 1px #0009);
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices {
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;
+    padding:7px 0 3px;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices > span {grid-column:1/-1;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices button {
+    min-width:0;min-height:58px;border:1px solid #ae8750;border-radius:9px;
+    background:linear-gradient(145deg,#15375b,#091c36);color:#f8e6c3;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
+    cursor:pointer;box-shadow:inset 0 1px #ffe4a742,0 3px 6px #0008;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices button.chosen {
+    border-color:#fff0b6;box-shadow:0 0 0 1px #f5c67e,0 0 12px #7fc4ee88;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices i {
+    display:block;width:34px;height:17px;border-radius:50%;border:1px solid #fff5c8;
+    background:linear-gradient(165deg,var(--metal-light),var(--metal-mid) 48%,var(--metal-dark));
+    box-shadow:inset 0 1px 2px #fff9,0 2px 3px #0009;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-metal-choices small {
+    font:600 9px/1.1 Georgia,serif;text-align:center;
+  }
+
+  /* Actual information cabinet buttons: engraved brass lips and clear hierarchy. */
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-presets button,
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-time-adjust button {
+    border:2px solid #cba263!important;border-radius:13px!important;
+    background:linear-gradient(180deg,#376c94 0%,#173b62 17%,#102c4b 56%,#07172e 100%)!important;
+    box-shadow:inset 0 2px 1px #fff2c5a8,inset 0 -3px 0 #5b3d22,0 4px 7px #13050aaa!important;
+    color:#fff2d1!important;font:700 15px/1 Georgia,serif!important;letter-spacing:.01em;
+    min-height:43px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-presets button.chosen {
+    color:#211329!important;border-color:#ffdfa0!important;
+    background:linear-gradient(180deg,#fff1bc,#e7b968 43%,#ad6a32 100%)!important;
+    text-shadow:0 1px #ffebbb!important;
+    box-shadow:inset 0 1px #fff,0 0 0 2px #55351b,0 0 17px #f6b961aa!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-time-adjust button {
+    font-size:13px!important;min-height:41px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-set-timer {
+    color:#241327!important;border:2px solid #fff0bb!important;border-radius:13px!important;
+    background:linear-gradient(180deg,#fff6cc,#dbb475 35%,#a76d37 82%,#60351c)!important;
+    box-shadow:inset 0 2px #fff9de,inset 0 -3px #634026,0 4px 8px #000a!important;
+    text-shadow:0 1px #fff3bf!important;font:700 16px/1 Georgia,serif!important;
+    min-height:43px!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-sets-toggle {
+    min-height:43px!important;border:2px solid #cba263!important;border-radius:13px!important;
+    background:linear-gradient(180deg,#376c94,#123658 42%,#07172e)!important;
+    box-shadow:inset 0 2px #fff2c5a8,inset 0 -3px #5b3d22,0 4px 7px #13050aaa!important;
+    font:700 13px/1 Georgia,serif!important;
+  }
+  .app-shell.page-timekeeper .rtk-observatory .rtk-art-stage .rtk-utility .rtk-time-wheel {
+    border:2px solid #e7bf79!important;border-radius:11px!important;
+    background:linear-gradient(180deg,#2e658d,#123858 32%,#071f3d)!important;
+    box-shadow:inset 0 2px #d5f1ff8c,inset 0 -3px #5b3c24,0 3px 8px #000a!important;
+  }
+}
