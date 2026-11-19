@@ -5,8 +5,27 @@ import {
   eventIcs
 } from "./qrAtelierLogic.js";
 import "./RosieQrAtelier.css";
+import "./rosie-qr-viewer.css";
 
 const ART="/qr-atelier/";
+const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
+const ROSIE_FRAMES=[
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,titleX:904,titleY:857,titleWidth:540},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,titleX:892,titleY:853,titleWidth:540},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:824,cy:500,titleX:793,titleY:866,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,titleX:722,titleY:875,titleWidth:555}
+];
+const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
+function rosieFrameStyle(frame){
+  return {
+    "--rosie-code-left":((frame.cx-ROSIE_CODE_SIZE/2)/ROSIE_ART_W*100)+"%",
+    "--rosie-code-top":((frame.cy-ROSIE_CODE_SIZE/2)/ROSIE_ART_H*100)+"%",
+    "--rosie-code-size":(ROSIE_CODE_SIZE/ROSIE_ART_W*100)+"%",
+    "--rosie-title-x":(frame.titleX/ROSIE_ART_W*100)+"%",
+    "--rosie-title-y":(frame.titleY/ROSIE_ART_H*100)+"%",
+    "--rosie-title-width":(frame.titleWidth/ROSIE_ART_W*100)+"%"
+  };
+}
 const STORAGE="rosieverse.qr-atelier.collection.v1";
 const validType=type=>QR_TYPES.some(x=>x.id===type);
 const clampSaved=data=>Array.isArray(data)?data.filter(x=>x && validType(x.type) && x.values && typeof x.values==="object").slice(0,40):[];
@@ -14,11 +33,18 @@ function readCollection(){
   try{return clampSaved(JSON.parse(localStorage.getItem(STORAGE)||"[]"));}
   catch{return [];}
 }
-function makeQr(payload){
+function makeQr(payload,style="emerald"){
   const qr=qrcode(0,"M");
   qr.addData(qrByteString(payload),"Byte");
   qr.make();
-  return {svg:qr.createSvgTag({cellSize:8,margin:32,scalable:true}),modules:qr.getModuleCount()};
+  const theme=QR_STYLES.find(x=>x.id===style)||QR_STYLES[0];
+  const count=qr.getModuleCount(),quiet=4,dimension=count+quiet*2;
+  const modules=[];
+  for(let row=0;row<count;row++)for(let col=0;col<count;col++)
+    if(qr.isDark(row,col))modules.push("M"+(col+quiet)+" "+(row+quiet)+"h1v1h-1z");
+  // Unlike palette-only finishes, the QR modules use the selected dark color.
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+dimension+' '+dimension+'" shape-rendering="crispEdges"><rect width="'+dimension+'" height="'+dimension+'" fill="#ffffff"/><path d="'+modules.join("")+'" fill="'+theme.dark+'"/></svg>';
+  return {svg,modules:count};
 }
 function safeName(text){
   return String(text||"qr").toLowerCase().normalize("NFKD").replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48)||"qr";
@@ -40,40 +66,46 @@ async function qrImage(svg){
 async function canvasBlob(canvas){
   return new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(Error("Could not export this image.")),"image/png"));
 }
-async function exportQR(svg,style="emerald",caption=""){
-  // Copy / PNG / Share are a complete framed creation, matching the live atelier.
-  // Keep the QR modules crisp and preserve their quiet zone for scan reliability.
-  const theme=QR_STYLES.find(x=>x.id===style)||QR_STYLES[0];
-  const canvas=document.createElement("canvas");canvas.width=1600;canvas.height=1600;
+async function loadImage(src){
+  const img=new Image();
+  await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(Error("Frame asset unavailable: "+src));img.src=src;});
+  return img;
+}
+async function exportQR(svg,style="emerald",caption="",frameId="seated"){
+  // Render exactly the active viewer composition: transparent canvas, QR plus Rosie and inscription.
+  const frame=ROSIE_FRAMES.find(x=>x.id===frameId)||ROSIE_FRAMES[0];
+  const canvas=document.createElement("canvas");
+  canvas.width=ROSIE_ART_W;canvas.height=ROSIE_ART_H;
   const ctx=canvas.getContext("2d");
-  ctx.fillStyle=theme.dark;ctx.fillRect(0,0,1600,1600);
-  const glow=ctx.createRadialGradient(800,700,100,800,700,740);
-  glow.addColorStop(0,theme.accent+"99");glow.addColorStop(1,theme.dark);
-  ctx.fillStyle=glow;ctx.fillRect(0,0,1600,1600);
-  const img=await qrImage(svg),codeSize=688,x=456,y=472;
-  ctx.fillStyle="#fffef8";ctx.fillRect(x-14,y-14,codeSize+28,codeSize+28);
-  ctx.imageSmoothingEnabled=false;ctx.drawImage(img,x,y,codeSize,codeSize);
-  const frame=new Image();
-  try{
-    await new Promise((resolve,reject)=>{frame.onload=resolve;frame.onerror=reject;frame.src=ART+"qr-frame.webp";});
-    ctx.imageSmoothingEnabled=true;ctx.drawImage(frame,0,0,1600,1600);
-  }catch{
-    ctx.strokeStyle=theme.accent;ctx.lineWidth=22;ctx.strokeRect(22,22,1556,1556);
-    ctx.lineWidth=5;ctx.strokeRect(49,49,1502,1502);
-  }
+  const qr=await qrImage(svg),art=await loadImage(ROSIE_ASSET_ROOT+frame.file);
+  const x=frame.cx-ROSIE_CODE_SIZE/2,y=frame.cy-ROSIE_CODE_SIZE/2;
+  ctx.fillStyle="#ffffff";ctx.fillRect(x,y,ROSIE_CODE_SIZE,ROSIE_CODE_SIZE);
+  ctx.imageSmoothingEnabled=false;
+  ctx.drawImage(qr,x,y,ROSIE_CODE_SIZE,ROSIE_CODE_SIZE);
+  ctx.imageSmoothingEnabled=true;
+  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   const inscription=String(caption||"").trim().slice(0,48);
   if(inscription){
-    // Draw on the finished frame, matching both preview and shared PNG.
     ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
-    let fontSize=52;
-    do{ctx.font="italic "+fontSize+"px Georgia, serif";fontSize-=2;}
-    while(fontSize>27&&ctx.measureText(inscription).width>800);
-    ctx.fillStyle="#50351f";ctx.shadowColor="#fff5d9";ctx.shadowBlur=3;
-    ctx.fillText(inscription,800,1390,800);
+    let fontSize=41;
+    do{ctx.font="italic "+fontSize+"px Georgia,serif";fontSize-=2;}
+    while(fontSize>23&&ctx.measureText(inscription).width>frame.titleWidth);
+    ctx.fillStyle="#50351f";ctx.shadowColor="#fff5d9";ctx.shadowBlur=2;
+    ctx.fillText(inscription,frame.titleX,frame.titleY,frame.titleWidth);
     ctx.restore();
   }
   return canvasBlob(canvas);
 }
+function RosieFrameComposition({frame,svg,caption,onCaptionChange,printOnly=false}){
+  return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={rosieFrameStyle(frame)}>
+    <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
+    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
+    {printOnly?<span className="qa-rosie-printed-title">{caption}</span>:
+      <input className="qa-rosie-title-field" value={caption} onChange={e=>onCaptionChange(e.target.value.slice(0,48))}
+        aria-label="Optional inscription for the frame title plate" placeholder="Add a title"/>}
+  </div>;
+}
+
 function drawWrapped(ctx,value,x,y,maxWidth,lineHeight,maxLines=3){
   const words=String(value||"").split(/\s+/);
   let line="",written=0;
@@ -206,6 +238,7 @@ export default function RosieQrAtelier(){
   const [saved,setSaved]=useState(readCollection);
   const [showPassword,setShowPassword]=useState(false);
   const [fullScreen,setFullScreen]=useState(false);
+  const [rosieFrameIndex,setRosieFrameIndex]=useState(0);
   const [label,setLabel]=useState("");
   const [frameCaption,setFrameCaption]=useState("");
   const [loadedId,setLoadedId]=useState(null);
@@ -219,11 +252,11 @@ export default function RosieQrAtelier(){
   const put=(key,value)=>setForms(all=>({...all,[type]:{...all[type],[key]:value}}));
   const changeType=next=>{setType(next);setLoadedId(null);setLabel("");setFrameCaption("");setShowPassword(false);};
   const output=useMemo(()=>{
-    try{const payload=qrPayload(type,v),data=makeQr(payload);return {...data,payload,error:""};}
+    try{const payload=qrPayload(type,v),data=makeQr(payload,style);return {...data,payload,error:""};}
     catch(e){const error=/code length overflow|data too long|overflow/i.test(e?.message||"")
       ?"That QR contains too much data. Shorten the details or website address.":e.message||"Please review your details.";
       return {payload:"",svg:"",modules:0,error};}
-  },[type,v]);
+  },[type,v,style]);
   const ready=Boolean(output.svg);
   const toastMessage=text=>{setToast(text);window.clearTimeout(timerRef.current);timerRef.current=window.setTimeout(()=>setToast(""),4000);};
   useEffect(()=>()=>window.clearTimeout(timerRef.current),[]);
@@ -240,7 +273,13 @@ export default function RosieQrAtelier(){
   },[showSaveMenu]);
   useEffect(()=>{
     if(!fullScreen)return;
-    const key=e=>{if(e.key==="Escape")setFullScreen(false);};
+    const key=e=>{
+      if(e.key==="Escape")setFullScreen(false);
+      if((e.key==="ArrowLeft"||e.key==="ArrowRight")&&!(e.target instanceof HTMLInputElement)){
+        e.preventDefault();
+        setRosieFrameIndex(i=>(i+(e.key==="ArrowLeft"?-1:1)+ROSIE_FRAMES.length)%ROSIE_FRAMES.length);
+      }
+    };
     document.addEventListener("keydown",key);
     const old=document.body.style.overflow;document.body.style.overflow="hidden";
     return ()=>{document.removeEventListener("keydown",key);document.body.style.overflow=old;};
@@ -274,12 +313,13 @@ export default function RosieQrAtelier(){
     try{await action();}catch(e){if(e?.name!=="AbortError")toastMessage(e?.message||"That export is unavailable.");}
     finally{setWorking(false);}
   }
+  const activeRosieFrame=ROSIE_FRAMES[rosieFrameIndex];
   const slug=safeName(label||itemName(type,v));
   const fileBase=slug.startsWith("rosie-")?slug:"rosie-"+slug;
   function exportFile(kind){
     withDownload(async()=>{
       if(kind==="svg") download(svgBlob(output.svg),fileBase+".svg");
-      else if(kind==="png")download(await exportQR(output.svg,style,frameCaption),fileBase+".png");
+      else if(kind==="png")download(await exportQR(output.svg,style,frameCaption,activeRosieFrame.id),fileBase+"-"+activeRosieFrame.id+".png");
       else if(kind==="card") download(await exportKeepsake(output.svg,type,v,style),fileBase+"-printable.png");
       else if(kind==="ics")download(new Blob([eventIcs(v)],{type:"text/calendar;charset=utf-8"}),fileBase+".ics");
       else if(kind==="vcf")download(new Blob([output.payload],{type:"text/vcard;charset=utf-8"}),fileBase+".vcf");
@@ -288,7 +328,7 @@ export default function RosieQrAtelier(){
   }
   function share(){
     withDownload(async()=>{
-      const blob=type==="calling"?await exportKeepsake(output.svg,type,v,style):await exportQR(output.svg,style,frameCaption);
+      const blob=await exportQR(output.svg,style,frameCaption,activeRosieFrame.id);
       const file=new File([blob],fileBase+".png",{type:"image/png"});
       if(navigator.share&&navigator.canShare?.({files:[file]})){
         await navigator.share({files:[file],title:"Rosie's QR Atelier"});
@@ -304,7 +344,7 @@ export default function RosieQrAtelier(){
     setWorking(true);
     try{
       // Supply ClipboardItem with its image promise synchronously for iOS Safari.
-      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg,style,frameCaption)})]);
+      await navigator.clipboard.write([new ClipboardItem({"image/png":exportQR(output.svg,style,frameCaption,activeRosieFrame.id)})]);
       toastMessage("QR image copied. Paste it wherever you like.");
     }catch{toastMessage("Could not copy the QR image. Use PNG export instead.");}
     finally{setWorking(false);}
@@ -343,7 +383,7 @@ export default function RosieQrAtelier(){
           {frameCaption&&<span className="qa-ring-caption qa-custom-caption">{frameCaption}</span>}
         </div>
         <div className="qa-preview-actions" role="group" aria-label="QR preview actions">
-          <button type="button" onClick={()=>setFullScreen(true)} disabled={!ready} aria-label="View QR full screen">
+          <button type="button" onClick={()=>{setRosieFrameIndex(Math.floor(Math.random()*ROSIE_FRAMES.length));setFullScreen(true);}} disabled={!ready} aria-label="View QR in a Rosie frame">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4"/><rect x="8" y="8" width="8" height="8" rx="1.5"/></svg><span>View</span>
           </button>
           <button type="button" onClick={copyQR} disabled={!ready||working} aria-label="Copy QR image">
@@ -410,25 +450,27 @@ export default function RosieQrAtelier(){
           {matching.length===0&&<p>No matching codes.</p>}
         </div></>}
       </section>
-      {ready&&<section className="qa-print-sheet" aria-label="QR Atelier printable card">
-        <p className="qa-print-brand">ROSIE'S QR ATELIER</p>
-        <h2>{QR_TYPES.find(t=>t.id===type)?.label}</h2>
-        <div className="qa-print-code" dangerouslySetInnerHTML={{__html:output.svg}}/>
-        <h3>{label||itemName(type,v)}</h3>
-        <p>Scan to connect</p>
+      {ready&&<section className="qa-print-sheet qa-rosie-print-sheet" aria-label="Print Rosie frame and QR without background">
+        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} printOnly/>
       </section>}
       <p className="qa-status" role="status" aria-live="polite">{toast}</p>
     </div>
-    {fullScreen&&ready&&<div className="qa-fullscreen" role="dialog" aria-modal="true" aria-label="Full-screen scannable QR code">
-      <button type="button" className="qa-close" onClick={()=>setFullScreen(false)}>Close ×</button>
-      <div className="qa-fullscreen-ring qa-ring" aria-label="Framed full-screen scannable QR code">
-        <div className="qa-code-shell"><div className="qa-svg" dangerouslySetInnerHTML={{__html:output.svg}}/></div>
-        <img className="qa-ring-art" src={ART+"qr-frame.webp"} alt="" draggable="false"/>
-        <input type="text" className="qa-frame-caption-input" maxLength={48}
-          value={frameCaption} onChange={event=>setFrameCaption(event.target.value)}
-          placeholder="" aria-label="Text in bottom panel of QR frame"/>
+    {fullScreen&&ready&&<div className="qa-fullscreen qa-rosie-viewer" role="dialog" aria-modal="true" aria-label="Rosie framed scannable QR code">
+      <button type="button" className="qa-close qa-rosie-close" onClick={()=>setFullScreen(false)}>Close ×</button>
+      <div className="qa-rosie-viewer-content">
+        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} onCaptionChange={setFrameCaption}/>
+        <div className="qa-rosie-frame-controls" role="group" aria-label="Choose the Rosie frame">
+          <button type="button" className="qa-rosie-arrow" aria-label="Previous Rosie frame" onClick={()=>setRosieFrameIndex(i=>(i-1+ROSIE_FRAMES.length)%ROSIE_FRAMES.length)}>‹</button>
+          <span>{activeRosieFrame.label} · {rosieFrameIndex+1} / {ROSIE_FRAMES.length}</span>
+          <button type="button" className="qa-rosie-arrow" aria-label="Next Rosie frame" onClick={()=>setRosieFrameIndex(i=>(i+1)%ROSIE_FRAMES.length)}>›</button>
+        </div>
+        <div className="qa-rosie-viewer-actions">
+          <button type="button" onClick={copyQR} disabled={working}>Copy framed QR</button>
+          <button type="button" onClick={()=>window.print()}>Print</button>
+          <button type="button" onClick={()=>exportFile("png")} disabled={working}>Download PNG</button>
+        </div>
+        <span className="qa-rosie-ready">{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
       </div>
-      <span>{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
     </div>}
   </main>;
 }
