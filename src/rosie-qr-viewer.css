@@ -1,0 +1,113 @@
+/* Rosie QR popup: art and live QR are separate, so scanning/export never includes the scenic background. */
+.qa-rosie-viewer.qa-fullscreen {
+  position:fixed!important;inset:0!important;z-index:12000!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;
+  overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;
+  padding:clamp(58px,7dvh,78px) 10px max(16px,env(safe-area-inset-bottom))!important;
+  gap:0!important;
+  color:#ffebc3;
+  background-color:#04140f!important;
+  background-image:linear-gradient(180deg,rgba(0,13,8,.08),rgba(0,11,7,.22)),
+    url("/qr-atelier/rosie-qr/rosie-popup-desktop.webp")!important;
+  background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important;
+}
+.qa-rosie-viewer .qa-rosie-close {
+  position:absolute!important;z-index:5;top:max(12px,env(safe-area-inset-top));left:50%;
+  transform:translateX(-50%);
+  margin:0!important;min-height:35px!important;padding:5px 19px!important;
+  border:1px solid #d4ad65;background:#102b22!important;color:#fbe5b4!important;
+}
+.qa-rosie-viewer-content {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:100%;min-height:0;max-width:1000px;margin:auto;
+}
+.qa-rosie-composition {
+  position:relative;flex:none;display:block;
+  width:min(96vw,1000px,calc((100dvh - 200px)*1.333333))!important;
+  max-width:none!important;
+  aspect-ratio:1448 / 1086;
+  margin:0 auto;isolation:isolate;
+}
+.qa-rosie-overlay-art {
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  z-index:2;pointer-events:none;user-select:none;
+}
+.qa-rosie-live-qr {
+  position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
+  width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
+  z-index:1;background:white;overflow:hidden;
+}
+.qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#fff;}
+.qa-rosie-title-field,.qa-rosie-printed-title {
+  position:absolute!important;z-index:4;
+  left:var(--rosie-title-x)!important;top:var(--rosie-title-y)!important;
+  transform:translate(-50%,-50%)!important;
+  width:var(--rosie-title-width)!important;height:8%!important;
+  padding:0 1%;box-sizing:border-box;
+  border:1px solid transparent;border-radius:5px;background:transparent;
+  color:#4e301e;text-align:center;
+  font:italic 500 clamp(12px,1.8vw,26px)/1.15 "Iowan Old Style","Palatino Linotype",Georgia,serif!important;
+  text-shadow:0 1px 1px #fff5d9;
+}
+.qa-rosie-title-field::placeholder{color:#765a39;opacity:.67}
+.qa-rosie-title-field:focus {outline:2px solid #d5a55e;background:rgba(255,248,225,.48);}
+.qa-rosie-printed-title{display:grid;place-items:center;white-space:nowrap;overflow:hidden;font-size:clamp(12px,1.7vw,25px)!important;}
+.qa-rosie-frame-controls {display:flex;align-items:center;justify-content:center;gap:13px;margin:0 auto 8px;min-height:36px;}
+.qa-rosie-frame-controls span {min-width:170px;text-align:center;font:500 clamp(11px,1.25vw,14px)/1.2 Georgia,serif;color:#f5e4bf;text-shadow:0 2px 6px #001;}
+.qa-rosie-frame-controls .qa-rosie-arrow {
+  width:32px;height:32px;min-width:32px;display:grid;place-items:center;
+  border:1px solid #c7a067;border-radius:50%;background:#103426de;color:#ffeac2;
+  font:26px/1 Georgia,serif;cursor:pointer;padding:0;
+}
+.qa-rosie-frame-controls .qa-rosie-arrow:hover {filter:brightness(1.2);}
+.qa-rosie-viewer-actions {display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.qa-rosie-viewer-actions button {
+  border:1px solid #bd985f;border-radius:9px;padding:8px 14px;min-height:34px;
+  color:#ffebbd;background:#13372bde;font:600 12px/1.2 Georgia,serif;cursor:pointer;
+}
+.qa-rosie-viewer-actions button:disabled {opacity:.55;cursor:wait;}
+.qa-rosie-ready {display:block;text-align:center;margin:10px auto 0;font:500 13px/1.2 Georgia,serif;color:#f5e6c6;text-shadow:0 2px 5px #001;}
+/* Device-specific scenic backdrops, always isolated from PNG/clipboard/print. */
+@media (min-width:701px) and (max-width:1199px) {
+  .qa-rosie-viewer.qa-fullscreen {background-image:linear-gradient(180deg,rgba(0,10,7,.08),rgba(0,11,7,.24)),url("/qr-atelier/rosie-qr/rosie-popup-ipad.webp")!important;}
+  .qa-rosie-composition {width:min(98vw,calc((100dvh - 190px)*1.333333))!important;}
+}
+@media (max-width:700px) {
+  .qa-rosie-viewer.qa-fullscreen {
+    justify-content:center!important;padding:calc(57px + env(safe-area-inset-top)) 0 max(20px,env(safe-area-inset-bottom))!important;
+    background-image:linear-gradient(180deg,rgba(0,10,7,.08),rgba(0,11,7,.3)),url("/qr-atelier/rosie-qr/rosie-popup-iphone.webp")!important;
+    background-position:center top!important;background-size:cover!important;
+  }
+  .qa-rosie-viewer-content {width:100vw!important;}
+  .qa-rosie-composition {width:min(110vw,480px)!important;max-width:none!important;}
+  .qa-rosie-title-field {font-size:clamp(10px,2.8vw,16px)!important;}
+  .qa-rosie-frame-controls{gap:10px;}
+  .qa-rosie-frame-controls span{min-width:142px;font-size:11px;}
+  .qa-rosie-viewer-actions button {padding:8px 10px;font-size:11px;}
+  .qa-rosie-ready {font-size:12px;}
+}
+/* The selected frame is printed as foreground image content, never as a page background. */
+.qa-print-sheet.qa-rosie-print-sheet{display:none;}
+@media print {
+  @page {size:auto;margin:12mm;}
+  .qa-rosie-viewer.qa-fullscreen {display:none!important;}
+  .qa-print-sheet.qa-rosie-print-sheet {
+    position:fixed!important;inset:0!important;z-index:999999!important;
+    display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;
+    visibility:visible!important;margin:0!important;padding:9mm 0 0!important;
+    background:#fff!important;box-shadow:none!important;border:0!important;
+  }
+  .qa-print-sheet.qa-rosie-print-sheet * {visibility:visible!important;}
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-composition {
+    width:min(180mm,100%)!important;height:auto!important;margin:0 auto!important;
+  }
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
+    display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
+  }
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr,
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr svg {background:white!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;}
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-printed-title {
+    font-size:18pt!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
+  }
+}
