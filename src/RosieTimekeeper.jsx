@@ -83,11 +83,11 @@ const BEZEL_STYLES = [
   {id:"baroque",label:"Ruby Baroque",file:"bezel-options/baroque.webp"},
   {id:"celestial",label:"Celestial Observatory",file:"bezel-options/celestial.webp"},
   {id:"pearl",label:"Ivory Pearl",file:"bezel-options/pearl.webp"},
-  {id:"imperial-sapphire",label:"Imperial Sapphire",file:"bezel-options/imperial-sapphire.svg"},
-  {id:"gilded-laurel",label:"Gilded Laurel",file:"bezel-options/gilded-laurel.svg"},
-  {id:"rose-garnet",label:"Rose Garnet",file:"bezel-options/rose-garnet.svg"},
-  {id:"aurora-enamel",label:"Aurora Enamel",file:"bezel-options/aurora-enamel.svg"},
-  {id:"ivory-moonstone",label:"Ivory Moonstone",file:"bezel-options/ivory-moonstone.svg"}
+  {id:"imperial-sapphire",label:"Imperial Sapphire",file:"bezel-options/imperial-sapphire.webp"},
+  {id:"gilded-laurel",label:"Gilded Laurel",file:"bezel-options/gilded-laurel.webp"},
+  {id:"rose-garnet",label:"Rose Garnet",file:"bezel-options/rose-garnet.webp"},
+  {id:"aurora-enamel",label:"Aurora Enamel",file:"bezel-options/aurora-enamel.webp"},
+  {id:"ivory-moonstone",label:"Ivory Moonstone",file:"bezel-options/ivory-moonstone.webp"}
 ];
 const TIMER_SETS_KEY = "rosie-timekeeper-sets-v1";
 const MAX_TIMER_MS = 99 * 3600000 + 59 * 60000 + 59000;
