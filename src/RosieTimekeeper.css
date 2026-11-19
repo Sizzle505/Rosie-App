@@ -4359,6 +4359,7 @@ body:has(.app-shell.page-timekeeper),
 
 /* New watchmaker collection: actual artwork in the chooser, generous hit areas,
    and the same engraved sapphire/brass vocabulary as the observatory. */
+@media (min-width:1200px) {
 .app-shell.page-timekeeper .rtk-observatory .rtk-customization-dialog {
   background:linear-gradient(155deg,#173959,#09182f 58%,#142d4d)!important;
   border:2px solid #ecc681!important;
@@ -4422,6 +4423,7 @@ body:has(.app-shell.page-timekeeper),
   background-position:center;background-size:160px 160px;background-repeat:no-repeat;
 }
 .app-shell.page-timekeeper .rtk-observatory .rtk-color-choices {justify-content:space-between!important;gap:8px!important;}
+}
 
 @media (min-width:1200px) {
   /* The jewel sits at the left edge of the central stage. Its chooser uses
