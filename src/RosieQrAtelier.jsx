@@ -470,6 +470,7 @@ export default function RosieQrAtelier(){
           <button type="button" onClick={()=>exportFile("png")} disabled={working}>Download PNG</button>
         </div>
         <span className="qa-rosie-ready">{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
+        <span className="qa-rosie-viewer-toast" role="status" aria-live="polite">{toast}</span>
       </div>
     </div>}
   </main>;
