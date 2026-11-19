@@ -25,6 +25,7 @@ import "./cheese-honeywood.css";
 import "./cheese-sprint.css";
 import "./ipad-polish.css";
 import "./desktop-nov18.css";
+import "./captain-adventure.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
 import AxisJoystick from "./AxisJoystick.jsx";
@@ -33,7 +34,7 @@ import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
-import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
+import { CAPTAIN_LEVELS, captainTrafficWave } from "./captainLevels.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1488,6 +1489,13 @@ function CaptainPickupIcon({ kind }) {
     alt="" aria-hidden="true" draggable="false" />;
 }
 
+function CaptainRivalYachtIcon() {
+  return <span className="rival-yacht-icon" aria-hidden="true">
+    <i className="rival-mast" /><i className="rival-sail" />
+    <i className="rival-sail rival-sail-alt" /><i className="rival-hull" />
+  </span>;
+}
+
 function CaptainRosieIllustration({ className = "" }) {
   return (
     <img
@@ -1702,7 +1710,6 @@ function CaptainRosieGame({ soundOn }) {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(75);
-  const [levelOrder, setLevelOrder] = useState(shuffleCaptainLevelOrder);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
   const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
@@ -1717,6 +1724,8 @@ function CaptainRosieGame({ soundOn }) {
   const [turbo, setTurbo] = useState(0);
   const [boost, setBoost] = useState(false);
   const [cheeses, setCheeses] = useState(0);
+  const [nearMisses, setNearMisses] = useState(0);
+  const [rivalsOutmaneuvered, setRivalsOutmaneuvered] = useState(0);
   const [eventPulse, setEventPulse] = useState(0);
   const [eventKind, setEventKind] = useState("ball");
   const [phaseNotice, setPhaseNotice] = useState("");
@@ -1725,6 +1734,8 @@ function CaptainRosieGame({ soundOn }) {
   const laneRef = useRef(1);
   const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
+  const spawnSequenceRef = useRef(0);
+  const lastLevelRef = useRef(0);
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
   const boostRef = useRef(false);
@@ -1740,10 +1751,10 @@ function CaptainRosieGame({ soundOn }) {
   const phase = CAPTAIN_PHASES[phaseKey];
   const elapsed = 75 - timeLeft;
   const levelNumber = Math.min(CAPTAIN_LEVELS.length - 1, Math.floor(elapsed / (75 / CAPTAIN_LEVELS.length)));
-  const level = CAPTAIN_LEVELS[levelOrder[levelNumber]];
+  const level = CAPTAIN_LEVELS[levelNumber];
   const scenery = useCaptainSceneryTransition(level, true);
   // Fetch only the NEXT painting in advance; no mounting or accumulating five layers.
-  const nextLevel = CAPTAIN_LEVELS[levelOrder[levelNumber + 1]] || null;
+  const nextLevel = CAPTAIN_LEVELS[levelNumber + 1] || null;
   useEffect(() => {
     if (!nextLevel) return undefined;
     const image = new Image();
@@ -1755,6 +1766,8 @@ function CaptainRosieGame({ soundOn }) {
   const missionProgress = Math.min(100, Math.round(score / 15));
   const collectedTotal = catches.ball + catches.treat + catches.cheese;
   const rank = captainRank(score);
+  const voyageStars = lives === 0 ? 0 : score >= 3300 && lives >= 2 ? 3 : score >= 1800 ? 2 : score >= 750 ? 1 : 0;
+  const clearedPassages = Math.min(CAPTAIN_LEVELS.length, Math.floor(elapsed / (75 / CAPTAIN_LEVELS.length)));
 
   function audioContext() {
     if (!soundOn) return null;
@@ -1830,7 +1843,6 @@ function CaptainRosieGame({ soundOn }) {
 
   function startGame() {
     audioContext();
-    if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
     boostRef.current = false;
     boostRemainingRef.current = 0;
@@ -1839,6 +1851,8 @@ function CaptainRosieGame({ soundOn }) {
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
+    spawnSequenceRef.current = 0;
+    lastLevelRef.current = 0;
     laneRef.current = 1;
     lastPhaseRef.current = "harbor";
     setLane(1);
@@ -1854,9 +1868,11 @@ function CaptainRosieGame({ soundOn }) {
     setTurbo(0);
     setBoost(false);
     setCheeses(0);
+    setNearMisses(0);
+    setRivalsOutmaneuvered(0);
     setEnded(false);
     setPhaseNotice("CAST OFF");
-    setMessage("Lines cast off. Tennis balls are 10, treats are 20, Golden Cheese is 40. Keep clear of the red buoys.");
+    setMessage("Sakura Strait ahead. Follow the Golden Cheese trail, dodge buoys, and save Full Steam for the toughest stretches.");
     setRunning(true);
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }
@@ -1941,6 +1957,16 @@ function CaptainRosieGame({ soundOn }) {
     captainTone(phaseKey === "sunset" ? "cheese" : "ball");
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }, [phaseKey, running]);
+
+  useEffect(() => {
+    if (!running || paused || levelNumber === lastLevelRef.current) return undefined;
+    lastLevelRef.current = levelNumber;
+    setPhaseNotice(level.name.toUpperCase());
+    setMessage(level.challenge);
+    captainTone("cheese");
+    const noticeTimer = window.setTimeout(() => setPhaseNotice(""), 1800);
+    return () => window.clearTimeout(noticeTimer);
+  }, [levelNumber, running, paused]);
 
   useEffect(() => {
     if (!running || paused) return undefined;
@@ -2227,6 +2253,7 @@ function CaptainRosieGame({ soundOn }) {
           <div className="captain-course-banner">
             <span>PASSAGE {levelNumber + 1} OF {CAPTAIN_LEVELS.length}</span>
             <strong>{level.name}</strong>
+            <small className="captain-passage-challenge">{level.challenge}</small>
           </div>
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
@@ -2238,8 +2265,10 @@ function CaptainRosieGame({ soundOn }) {
               style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
               aria-label={item.label}
             >
-              {item.kind === "cheese" ? <GoldenCheeseIcon /> : <CaptainPickupIcon kind={item.kind} />}
+              {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.kind === "rival"
+                ? <CaptainRivalYachtIcon /> : <CaptainPickupIcon kind={item.kind} />}
               {item.kind === "cheese" && <small>GOLDEN</small>}
+              {item.driftTo !== undefined && !item.drifted && <span className="captain-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
             </div>
           ))}
 
@@ -2262,11 +2291,19 @@ function CaptainRosieGame({ soundOn }) {
                   <div className="voyage-grade">{rank.mark}</div>
                   <strong>{rank.title}</strong>
                   <p>{rank.copy}</p>
+                  <div className="captain-voyage-stars" aria-label={voyageStars + " of 3 voyage stars earned"}>
+                    {Array.from({ length: 3 }, (_, index) => <span key={index} className={index < voyageStars ? "" : "is-unearned"}>★</span>)}
+                  </div>
+                  <div className="captain-voyage-passages" aria-label="Completed passages">
+                    {CAPTAIN_LEVELS.map((passage, index) => <i key={passage.id} className={index < clearedPassages ? "is-cleared" : ""}>{index + 1}. {passage.name}</i>)}
+                  </div>
                   <div className="voyage-stats">
                     <span><b>{score}</b> score</span>
                     <span><b>{bestStreak}</b> best streak</span>
                     <span><b>{collectedTotal}</b> cargo collected</span>
                     <span><b>{cheeses}</b> Golden Cheese</span>
+                    <span><b>{nearMisses}</b> near misses</span>
+                    <span><b>{rivalsOutmaneuvered}</b> rivals beaten</span>
                   </div>
                   <button type="button" onClick={startGame}>SAIL AGAIN</button>
                 </>
