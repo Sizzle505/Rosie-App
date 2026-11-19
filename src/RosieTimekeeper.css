@@ -4635,3 +4635,9 @@ body .app-shell.page-timekeeper .rtk-observatory .rtk-dial.is-world .rtk-world-h
     background:#102c46aa;font:italic 14px/1.35 Georgia,serif!important;
   }
 }
+@media (min-width:1200px) {
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings {gap:5px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-settings select {min-height:40px!important;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-shortcuts {gap:5px;}
+  .app-shell.page-timekeeper .rtk-observatory .rtk-world-shortcuts button {min-height:32px;}
+}
