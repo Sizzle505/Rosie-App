@@ -73,10 +73,19 @@
   }
   /* Smaller, tighter, centered desktop Pocket Toolkit options. */
   .app-shell.page-calculations main.rc-page .rc-tool-grid {
-    width:min(68%,578px)!important;margin-inline:auto!important;
+    /* Reduce the original rendered buttons 15% and gap 25%; center the entire group. */
+    width:min(57.8%,491px)!important;margin-inline:auto!important;
     justify-content:center!important;justify-items:center!important;
-    column-gap:clamp(8.4px,.77vw,14px)!important;
-    row-gap:clamp(6.3px,.56vw,10.5px)!important;
+    column-gap:clamp(6.3px,.58vw,10.5px)!important;
+    row-gap:clamp(4.7px,.42vw,7.9px)!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-tools-heading {
+    max-width:100%!important;
+    font-size:clamp(18px,1.55vw,26px)!important;
+    letter-spacing:.012em!important;
+    line-height:1.1!important;
+    margin:0 auto clamp(8px,.8vw,14px)!important;
+    text-align:center!important;
   }
   /* Fit the square cheese board above the fixed navigation without needing
      a second scrollable region within the central gameplay panel. */
@@ -89,6 +98,14 @@
     overflow:clip!important;overscroll-behavior:none!important;
     min-height:0!important;max-height:none!important;
   }
+  /* The desktop Cheese experience fits its viewport, without page movement. */
+  html:has(.app-shell.page-cheese),
+  body:has(.app-shell.page-cheese) { height:100dvh!important;overflow:hidden!important; }
+  .app-shell.page-cheese {height:100dvh!important;min-height:0!important;overflow:hidden!important;}
+  .app-shell.page-cheese .captain-fs-cheese {height:100%!important;overflow:hidden!important;}
+  .app-shell.page-cheese .cheese-game-page {height:100%!important;max-height:100dvh!important;overflow:hidden!important;}
+  .app-shell.page-cheese .cheese-desktop-layout {max-height:calc(100dvh - 70px)!important;overflow:clip!important;}
+
   .app-shell.page-calculations main.rc-page .rc-active-tool-overlay .rc-tool-panel.rc-device {
     min-height:850px!important;
     padding-top:calc(clamp(142px,39vw,212px) + 25px)!important;
