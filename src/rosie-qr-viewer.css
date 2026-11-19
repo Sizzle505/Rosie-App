@@ -111,3 +111,5 @@
     font-size:18pt!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
 }
+
+.qa-rosie-viewer-toast{display:block;min-height:19px;margin:6px auto 0;color:#fff1c5;text-align:center;font:500 12px/1.2 Georgia,serif;text-shadow:0 2px 4px #000}
