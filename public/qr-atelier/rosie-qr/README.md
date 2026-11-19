@@ -1,0 +1,1 @@
+Rosie QR Atelier: 4 true-alpha Rosie/frame overlays and three device backgrounds. Dynamic QR code and caption must be rendered in DOM/canvas; never rasterize the example QR shown in screenshots. In production, copy WebP files to public/qr-atelier/rosie-qr/. Desktop 16:9, tablet 4:3, phone 9:16.

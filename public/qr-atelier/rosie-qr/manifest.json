@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "asset_dimensions": [
+    1448,
+    1086
+  ],
+  "frames": [
+    {
+      "id": "seated",
+      "file": "rosie-frame-seated.webp",
+      "center": [
+        0.6498618784530387,
+        0.4530386740331492
+      ],
+      "codeSquare": [
+        0.52831,
+        0.29098,
+        0.24309
+      ],
+      "titlePlate": [
+        0.44,
+        0.73,
+        0.39,
+        0.13
+      ]
+    },
+    {
+      "id": "presenting",
+      "file": "rosie-frame-presenting.webp",
+      "center": [
+        0.664364640883978,
+        0.4604051565377532
+      ],
+      "codeSquare": [
+        0.54282,
+        0.29834,
+        0.24309
+      ],
+      "titlePlate": [
+        0.42,
+        0.72,
+        0.4,
+        0.138
+      ]
+    },
+    {
+      "id": "peeking",
+      "file": "rosie-frame-peeking.webp",
+      "center": [
+        0.569060773480663,
+        0.4604051565377532
+      ],
+      "codeSquare": [
+        0.44751,
+        0.29834,
+        0.24309
+      ],
+      "titlePlate": [
+        0.445,
+        0.74,
+        0.354,
+        0.125
+      ]
+    },
+    {
+      "id": "blank",
+      "file": "rosie-frame-blank.webp",
+      "center": [
+        0.4986187845303867,
+        0.4567219152854512
+      ],
+      "codeSquare": [
+        0.37707,
+        0.29466,
+        0.24309
+      ],
+      "titlePlate": [
+        0.305,
+        0.74,
+        0.39,
+        0.15
+      ]
+    }
+  ],
+  "backgrounds": {
+    "rosie-popup-desktop.webp": "emerald_steampunk_victorian_study.png",
+    "rosie-popup-ipad.webp": "emerald_steampunk_library_atelier.png",
+    "rosie-popup-iphone.webp": "emerald_steampunk_atelier_library.png"
+  }
+}
