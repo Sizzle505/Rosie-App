@@ -33,7 +33,12 @@
       <img class="fiend-card-face fiend-card-back" id="card-detail-back" alt="" draggable="false" />
     </span>
   </button>
-  <div class="card-detail-hint" aria-hidden="true">TAP THE CARD TO FLIP · CLOSE TO RETURN</div>
+  <div class="card-detail-navigation" role="group" aria-label="Browse character profiles">
+    <button type="button" class="card-detail-cycle" id="card-detail-prev" aria-label="Previous character card" title="Previous character (Left arrow)">‹</button>
+    <span id="card-detail-position" class="card-detail-position" aria-live="polite"></span>
+    <button type="button" class="card-detail-cycle" id="card-detail-next" aria-label="Next character card" title="Next character (Right arrow)">›</button>
+  </div>
+  <div class="card-detail-hint" aria-hidden="true">CLICK CARD TO FLIP · ← → CYCLE · ESC CLOSE</div>
 </dialog>
 <div id="victory-overlay" class="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="victory-title" hidden>
   <div class="victory-card">
