@@ -11,6 +11,9 @@
   const display=document.getElementById('card-detail-display');
   const front=document.getElementById('card-detail-front');
   const back=document.getElementById('card-detail-back');
+  const prev=document.getElementById('card-detail-prev');
+  const next=document.getElementById('card-detail-next');
+  const position=document.getElementById('card-detail-position');
   if(!veil||!launcher||!gallery||!deck||!dialog||!closeButton||!display||!front||!back)return;
   const cards=Array.from(gallery.querySelectorAll('.fiend-flip-card'));
   const names={rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'};
@@ -46,8 +49,7 @@
       ?'Show front of '+activeName+' card'
       :'Show back of '+activeName+' card');
   }
-  function openCard(card){
-    if(typeof dialog.showModal!=='function')return;
+  function populateCard(card){
     selected=card;
     activeName=names[card.dataset.fiend]||'Character';
     front.src=card.querySelector('.fiend-card-front').getAttribute('src');
@@ -57,7 +59,18 @@
     display.classList.remove('is-flipped');
     updateFlipLabel();
     dialog.setAttribute('aria-label',activeName+' collectible character card');
-    dialog.showModal();
+    if(position)position.textContent=activeName+' · '+(cards.indexOf(card)+1)+' / '+cards.length;
+  }
+  function openCard(card){
+    if(typeof dialog.showModal!=='function')return;
+    populateCard(card);
+    if(!dialog.open)dialog.showModal();
+    display.focus({preventScroll:true});
+  }
+  function cycleCard(delta){
+    if(!dialog.open||!cards.length)return;
+    const current=cards.indexOf(selected);
+    populateCard(cards[(current+delta+cards.length)%cards.length]);
     display.focus({preventScroll:true});
   }
   function dismissCard(){
@@ -74,6 +87,17 @@
     updateFlipLabel();
   });
   closeButton.addEventListener('click',dismissCard);
+  prev?.addEventListener('click',()=>cycleCard(-1));
+  next?.addEventListener('click',()=>cycleCard(1));
+  // Only intercept arrows while the dossier modal is open; normal game controls
+  // remain untouched when playing Cosmic Odyssey.
+  document.addEventListener('keydown',event=>{
+    if(!dialog.open||event.altKey||event.ctrlKey||event.metaKey)return;
+    if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
+      event.preventDefault();event.stopPropagation();
+      cycleCard(event.key==='ArrowLeft'?-1:1);
+    }
+  },true);
   dialog.addEventListener('click',event=>{if(event.target===dialog)dismissCard();});
   dialog.addEventListener('close',()=>{
     display.classList.remove('is-flipped');
