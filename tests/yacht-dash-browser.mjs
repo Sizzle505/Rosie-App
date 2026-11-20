@@ -212,18 +212,21 @@ try {
   // The torii must read as a recognizable passage, not a solid overhead wall.
   const gate=frame.locator(".yacht-footprint-arch");
   await gate.waitFor({state:"visible",timeout:20000});
-  await page.waitForFunction(() => {
-    const el=document.querySelector(".captain-fs-yacht .yacht-footprint-arch");
-    return el && parseFloat(el.style.getPropertyValue("--approach-scale")) >= .70;
-  },null,{timeout:6500});
-  const gateLabel=gate.locator(".yacht-gate-passage");
-  await gateLabel.waitFor({state:"visible",timeout:1500});
+  // Capture the gate instruction when it FIRST appears. Waiting for the
+  // gate to reach the yacht before reading the notice makes this test race
+  // against the 75-second game clock.
   const safePassage=frame.locator(".yacht-safe-passage-cue");
   await safePassage.waitFor({state:"visible",timeout:2500});
   assert.match(await safePassage.textContent(),/CENTER LANE OPEN/);
   const safeBox=await safePassage.boundingBox();
   assert.ok(safeBox && safeBox.width>=140 && safeBox.height>=24,
     "The center-lane warning must remain legible on a phone");
+  await page.waitForFunction(() => {
+    const el=document.querySelector(".captain-fs-yacht .yacht-footprint-arch");
+    return el && parseFloat(el.style.getPropertyValue("--approach-scale")) >= .70;
+  },null,{timeout:6500});
+  const gateLabel=gate.locator(".yacht-gate-passage");
+  await gateLabel.waitFor({state:"visible",timeout:1500});
   const [gateBounds,gateMessageBounds,courseBounds]=await Promise.all([
     gate.boundingBox(),gateLabel.boundingBox(),frame.locator(".yacht-course").boundingBox()
   ]);
@@ -237,7 +240,7 @@ try {
     gateMessageBounds.x+gateMessageBounds.width/2 <
     courseBounds.x+courseBounds.width*.6,
     "The safe-channel label must be centered within the gate");
-  assert.match(await gateLabel.innerText(),/PASS UNDER/);
+  assert.match(await gateLabel.textContent(),/PASS UNDER/);
   await page.screenshot({path:folder+"/iphone-gate-safe-passage.png"});
 
   await frame.locator(":scope > .captain-fullscreen-toggle").click();
