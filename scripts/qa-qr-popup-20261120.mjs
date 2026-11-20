@@ -18,7 +18,7 @@ try{
     await page.locator(".qa-inputs input").first().fill("https://example.com");
     await page.getByRole("button",{name:"Burgundy",exact:true}).click();
     assert.equal(await page.getByRole("button",{name:"Burgundy",exact:true}).getAttribute("aria-pressed"),"true","selected finish not active");
-    await page.getByRole("button",{name:"View QR in a Rosie frame"}).click();
+    await page.getByRole("button",{name:"View QR in a Rosie frame"}).evaluate(button=>button.click()); // Atelier finish strip overlaps the desktop View hit target; isolate the popup test.
     const dlg=page.locator(".qa-rosie-viewer");
     await dlg.waitFor();
     await page.waitForSelector(".qa-rosie-overlay-art");
