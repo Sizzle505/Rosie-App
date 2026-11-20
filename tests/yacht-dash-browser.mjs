@@ -90,6 +90,15 @@ try {
   assert.ok(await deskFrame.locator(".yacht-course.is-underway").isVisible(),
     "Emperor chapter must run on desktop");
   assert.equal(await deskFrame.locator(".yacht-course").getAttribute("data-captain-chapter"),"emperor");
+  // Yacht keyboard controls must not interfere with Tunnel or Cosmic Odyssey
+  // when focus leaves the Yacht cabinet on the multi-game Captain page.
+  await deskFrame.locator(".yacht-game-sign .captain-steering-toggle").focus();
+  await deskPage.keyboard.press("ArrowLeft");
+  await deskFrame.locator(".captain-yacht.lane-0").waitFor({timeout:1500});
+  await deskPage.evaluate(() => document.activeElement?.blur?.());
+  await deskPage.keyboard.press("ArrowRight");
+  assert.equal(await deskFrame.locator(".captain-yacht.lane-0").count(),1,
+    "Keyboard must not steer Yacht when focus is outside its frame");
   await deskPage.screenshot({path:folder+"/desktop-emperor-underway.png",fullPage:false});
   await desktop.close();
   console.log("PASS Yacht Dash iPhone and desktop smoke checks");
