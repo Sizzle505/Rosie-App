@@ -59,6 +59,8 @@ export function makeCourse(seed = 1467) {
   for (let x = 900; x < 30000; x += 610) {
     const motif = Math.floor(x / 610) % 6;
     const offset = motif === 2 ? -60 : motif === 4 ? 62 : motif === 5 ? -30 : 20;
+    // Small seed-specific pickup drift preserves curated safety while making replay courses distinct.
+    const seedNudge = (rand() - .5) * 10;
     const kind = motif === 0 ? "bone" : motif === 3 ? "cheese" : "gem";
     // Six-pickup sweep gives each route a readable, rewarding line through
     // the danger instead of a static row of icons.
@@ -66,7 +68,7 @@ export function makeCourse(seed = 1467) {
       const pos = x + j * 62;
       const lane=courseLaneOffset(pos,offset);
       const arc=Math.sin(j / 5 * Math.PI) * (motif % 2 ? 48 : -48);
-      const y = clamp(tunnelCenter(pos) + lane + arc, 95, 725);
+      const y = clamp(tunnelCenter(pos) + lane + arc + seedNudge, 95, 725);
       objects.push({ id: ++id, kind: j === 5 && motif === 3 ? "cache" : kind, x: pos, y, radius: 22, taken: false });
     }
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
