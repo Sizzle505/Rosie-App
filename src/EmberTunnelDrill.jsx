@@ -219,6 +219,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null);
   const [mode,setMode]=useState("idle");
+  useEffect(()=>{
+    if(mode==="idle")return;
+    const state=mode==="running"?"playing":mode==="paused"?"paused":"ended";
+    window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
+      detail:{scene:"tunnel",state,world:selectedWorld}
+    }));
+  },[mode,selectedWorld]);
   const [notice,setNotice]=useState(null);
   const [selectedWorld,setSelectedWorld]=useState(0);
   const [stageStars,setStageStars]=useState(()=>{
