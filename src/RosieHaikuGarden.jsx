@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
@@ -141,6 +141,12 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [journal, setJournal] = useState(readJournal);
   const [notice, setNotice] = useState("");
   const [working, setWorking] = useState(false);
+  const [reaction, setReaction] = useState(null);
+  useEffect(() => {
+    if (!reaction) return undefined;
+    const timeout = window.setTimeout(() => setReaction(null), 1900);
+    return () => window.clearTimeout(timeout);
+  }, [reaction]);
   const saved = useMemo(() => journal.some((entry) => poemKey(entry) === poemKey(poem)), [journal, poem]);
   const announce = (message) => setNotice(message);
   const saveEntries = (next) => {
@@ -162,6 +168,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     setPoem(poemForTopic(topic, mood, nextVariation));
     setMode("compose");
     announce("From Rosie's hand-curated poetry collection.");
+    setReaction({ type: "inspired" });
   }
   function toggleSave() {
     if (saved) {
@@ -171,15 +178,20 @@ export default function RosieHaikuGarden({ onNavigate }) {
       const entry = { id: poem.id, mood: poem.mood, season: poem.season, lines: [...poem.lines], title: poem.title, version: poem.version ?? 0, savedAt: new Date().toISOString(), source: poem.source };
       saveEntries([entry, ...journal].slice(0, 60));
       announce("Saved in Rosie's poetry journal.");
+      setReaction({ type: "triumphant" });
     }
   }
   async function sharePoem() {
     const text = (poem.title ? poem.title + "\n\n" : "") + formatHaiku(poem);
     try {
-      if (navigator.share) await navigator.share({ title: "Rosie's Haiku Garden", text });
+      if (navigator.share) {
+        await navigator.share({ title: "Rosie's Haiku Garden", text });
+        setReaction({ type: "bestowing" });
+      }
       else if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
         announce("Poem copied to clipboard.");
+        setReaction({ type: "bestowing" });
       } else announce("Sharing is not supported in this browser.");
     } catch (error) {
       if (error?.name !== "AbortError") announce("Could not share this poem.");
@@ -229,7 +241,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
           <div className="haiku-heading"><div className="haiku-overline">THE LITTLE BOOK OF ROSIE</div><h1>Rosie's Haiku Garden</h1><p>Small poems. Grand opinions.</p></div>
           <div className="haiku-header-mark" aria-hidden="true">✿</div>
         </header>
-        <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} />
+        <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll" key={poemKey(poem)}>
