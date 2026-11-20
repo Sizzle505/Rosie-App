@@ -90,8 +90,8 @@ for(const [name,engine,viewport,mobile] of [
       const el=document.querySelector(".ember-stage");
       return Number(el?.getAttribute("data-world-warnings")||0)>0;
     },null,{timeout:14000});
-    const stageTime=await stagePage.locator(".ember-stats").innerText();
-    if(!/\b(?:1[0-5]|[1-9])s\b/.test(stageTime))throw new Error("Selected route does not show a valid 15-second countdown: "+stageTime);
+    const stageDuration=await stagePage.locator(".ember-stage").getAttribute("data-stage-duration");
+    if(stageDuration!=="30")throw new Error("Clockwork boss route must provide a 30-second countdown: "+stageDuration);
     await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
     await stagePage.close();
     // Boss-stage smoke: prove Molten transitions into its interactive encounter.
