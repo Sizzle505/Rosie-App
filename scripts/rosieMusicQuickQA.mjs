@@ -16,7 +16,7 @@ async function verify(name,browser,viewport){
   page.on("pageerror",e=>errors.push(e.message));
   page.on("response",r=>{if(r.url().includes("/rosie-music/"))musicResponses.push({url:r.url(),status:r.status()});});
   try{
-    console.log("START",name,viewport.label,flush=true);
+    console.log("START",name,viewport.label);
     await page.goto(base+"/#home",{waitUntil:"domcontentloaded",timeout:20000});
     const dock=page.locator(".rosie-music-dock");
     await dock.waitFor();
@@ -38,8 +38,10 @@ async function verify(name,browser,viewport){
       await page.locator('.rosie-music-dock[data-track="'+track+'"]').waitFor();
       await p;
     }
-    await dock.locator("#rosie-music-volume").fill("35");
-    assert.equal(await page.evaluate(()=>localStorage.getItem("rosieverse.music.volume.v1")),"0.35");
+    const slider=dock.locator("#rosie-music-volume");
+    await slider.focus();
+    await slider.press("ArrowRight");
+    assert.equal(await page.evaluate(()=>localStorage.getItem("rosieverse.music.volume.v1")),"0.27");
     await page.getByRole("button",{name:"Mute soundtrack"}).click();
     assert.equal(await dock.getAttribute("data-enabled"),"no");
     await page.getByRole("button",{name:"Enable soundtrack"}).click();
