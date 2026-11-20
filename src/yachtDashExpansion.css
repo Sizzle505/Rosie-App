@@ -568,3 +568,60 @@
     margin-top:3px!important;
   }
 }
+
+
+/* Mobile preflight: compact the stage picker rather than letting its buttons
+   fall outside the course and into an intercepting stacking layer. */
+@media(max-width:720px) and (pointer:coarse) {
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) {
+    z-index:180!important;
+    top:50%!important;left:50%!important;
+    transform:translate(-50%,-50%)!important;
+    width:min(calc(100% - 18px),360px)!important;
+    max-height:calc(100% - 14px)!important;
+    padding:10px 11px 12px!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain;
+    border-radius:13px!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel)::after{
+    display:none!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) .start-panel-rosie {
+    display:block;
+    width:48px!important;height:48px!important;
+    margin:0 auto 2px!important;
+    position:relative!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel)>strong {
+    display:block;margin:3px auto 4px!important;
+    font-size:clamp(20px,5vw,24px)!important;
+    line-height:1.05!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel)>p {
+    margin:3px auto 5px!important;
+    font-size:8.5px!important;line-height:1.28!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-goal{
+    margin:2px auto!important;
+    font-size:8px!important;line-height:1.25!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-picker{
+    margin:6px auto 3px!important;
+    gap:5px;
+    max-width:330px;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-picker button{
+    min-width:0!important;
+    min-height:36px!important;
+    height:auto!important;
+    padding:5px 3px!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-select-actions{
+    gap:6px;margin-top:7px!important;
+  }
+  .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-select-actions button{
+    min-width:112px!important;height:36px!important;min-height:36px!important;
+    padding:7px 8px!important;margin:0!important;
+  }
+}
