@@ -427,3 +427,36 @@
   .haiku-page .haiku-scene-image{height:270px;}
   .haiku-page .haiku-scene-canopy{opacity:.10;}
 }
+
+
+/* Final art QA: the illustrated scroll already carries its own top/bottom
+   flourishes. Duplicated HTML ornament/caption collided with the gold crest. */
+.haiku-page .haiku-scroll-caption,
+.haiku-page .haiku-scroll .haiku-ornament{display:none;}
+.haiku-page .haiku-scroll-inner{justify-content:center;}
+.haiku-page .haiku-scroll .haiku-verse p{margin-bottom:10px;}
+/* The flex wrapper inherited `align-items:start` from the earlier grid,
+   unintentionally shrinking the scroll to 393px at 1440px wide. */
+@media(min-width:900px) and (max-width:1479px){
+ .haiku-page .haiku-content{align-items:stretch;}
+ .haiku-page .haiku-scroll-column{width:100%;align-items:center;}
+ .haiku-page .haiku-scroll{width:min(100%,520px);}
+}
+/* iPad portrait has enough space for a proper landscape scroll, which keeps
+   the traditional three-line poem unbroken and reduces gratuitous height. */
+@media(min-width:601px) and (max-width:899px){
+ .haiku-page .haiku-scroll{
+  width:min(100%,560px);
+  aspect-ratio:1448 / 1086;
+  background-image:url("/rosieverse/haiku/scroll-grand.webp");
+ }
+ .haiku-page .haiku-scroll-inner{inset:15% 13% 17%;}
+ .haiku-page .haiku-scroll .haiku-verse p{font-size:clamp(19px,2.7vw,24px);margin-bottom:9px;}
+ .haiku-page .haiku-scene-rosie{left:50%;height:91%;max-width:49%;bottom:0;}
+ .haiku-page .haiku-scene-rosie--expressive{left:50%;height:91%;max-width:49%;bottom:0;}
+}
+@media(max-width:520px){
+ .haiku-page .haiku-scene-quote{left:13px;top:48%;width:46%;}
+ .haiku-page .haiku-scene-quote strong{font-size:clamp(18px,4.7vw,22px);line-height:1.18;}
+ .haiku-page .haiku-scene-quote small{font-size:12px;}
+}
