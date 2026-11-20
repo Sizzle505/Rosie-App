@@ -18,12 +18,12 @@ NAMES = ("seated", "presenting", "peeking", "blank")
 
 for name in NAMES:
     match = re.search(
-        r'\\{id:"' + re.escape(name) + r'".*?openingPath:"(M[^"]+)"',
+        r'[{]id:"' + re.escape(name) + r'".*?openingPath:"(M[^"]+)"',
         JSX,
     )
     if not match:
         raise RuntimeError(f"Missing original aperture geometry for {name}")
-    points = [(int(x), int(y)) for x, y in re.findall(r'(\\d+),(\\d+)', match.group(1))]
+    points = [(int(x), int(y)) for x, y in re.findall(r'([0-9]+),([0-9]+)', match.group(1))]
     if len(points) < 20:
         raise RuntimeError(f"Invalid inner opening for {name}")
     original = Image.open(FRAMES / f"rosie-frame-{name}.webp").convert("RGBA")
