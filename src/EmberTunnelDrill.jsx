@@ -253,6 +253,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     const targetStage=Number.isInteger(requestedStage)?requestedStage:
       requestedStage===null?null:(modeRef.current==="ended"?frame.current.stageIndex:null);
     const next=newRun(seed.current++,targetStage);
+    if(Number.isInteger(targetStage))setSelectedWorld(targetStage);
     loadExpeditionArt(artRef.current,targetStage);
     frame.current=next;particles.current=[];
     noticeRef.current=null;setNotice(null);
@@ -564,6 +565,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
+             {mode==="ended"&&world&&hud.result==="complete"&&hud.stageIndex<EXPEDITION_STAGES.length-1&&
+               <button className="ember-expedition-next" type="button"
+                 onClick={()=>start(hud.stageIndex+1)}>
+                 CONTINUE TO {EXPEDITION_STAGES[hud.stageIndex+1].name.toUpperCase()}
+               </button>}
              {mode==="ended"&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 expedition stars earned"}>
                <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
                <small>{world?(hud.stageIndex>=2?"DEFEAT BOSS · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE"):"FINISH · 2 WALLS · ROYAL RELIC"}</small>
