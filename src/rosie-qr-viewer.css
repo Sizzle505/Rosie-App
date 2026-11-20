@@ -38,23 +38,26 @@
   width:100%!important;height:100%!important;object-fit:contain!important;
   z-index:3;pointer-events:none;user-select:none;
 }
-/* The original transparent WebP sits above the selected-color opening,
-   with precisely traced aperture geometry. No circular mask/ellipse guesses. */
-.qa-rosie-insert-underlay {
+/* The rear mat overscans under the gold frame so no scene-colored slivers
+   appear. The front mat hides opaque pale remnants baked into the WebP opening.
+   Both share the same measured aperture and selected finish color. */
+.qa-rosie-insert-underlay,.qa-rosie-insert-surface {
   position:absolute!important;inset:0!important;
   width:100%!important;height:100%!important;
-  z-index:1;pointer-events:none;
+  pointer-events:none;display:block!important;overflow:visible;
 }
+.qa-rosie-insert-underlay {z-index:1;}
+.qa-rosie-insert-surface {z-index:4;}
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
-  z-index:2;background:#fffef8!important;overflow:visible;
+  z-index:5;background:#fffef8!important;overflow:visible;
   /* Reuse the main QR preview's white inset and fine gold edging. */
   box-shadow:0 0 0 4px #fffef7,0 0 0 7px #b17e36,0 0 18px #f3c76577,0 8px 24px #0007!important;
 }
 .qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#ffffff!important;}
 .qa-rosie-title-field,.qa-rosie-printed-title {
-  position:absolute!important;z-index:5;
+  position:absolute!important;z-index:6;
   left:var(--rosie-title-x)!important;top:var(--rosie-title-y)!important;
   transform:translate(-50%,-50%)!important;
   width:var(--rosie-title-width)!important;height:8%!important;
@@ -125,9 +128,9 @@
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay {
-    /* Only the measured aperture path carries color; never paint the SVG's
-       rectangular bounds, which would obscure the print-page background. */
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay,
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-surface {
+    /* Only the measured aperture paths carry color, not their SVG bounds. */
     background:transparent!important;
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
