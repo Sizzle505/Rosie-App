@@ -86,11 +86,11 @@ export function yachtNextUnlocked(current, completedChapter) {
 export const YACHT_CHAPTER_GOALS = Object.freeze({
   sakura: { score: 650, expert: 1450, nearMisses: 0, rivals: 0,
     description: "Reach Sakura Cove. Golden Cheese and clean cargo streaks earn medals." },
-  typhoon: { score: 850, expert: 1700, nearMisses: 2, rivals: 0,
+  typhoon: { score: 700, expert: 1350, nearMisses: 2, rivals: 0,
     description: "Survive the storm. Expert captains earn two clean near misses." },
-  moonlight: { score: 950, expert: 1900, nearMisses: 0, rivals: 2,
+  moonlight: { score: 800, expert: 1500, nearMisses: 0, rivals: 2,
     description: "Outrace the regatta fleet. Two yacht passes earn the highest honor." },
-  emperor: { score: 1200, expert: 2300, nearMisses: 2, rivals: 2,
+  emperor: { score: 900, expert: 1600, nearMisses: 2, rivals: 2,
     description: "Earn the imperial medal: survive, pass rivals, and sail with precision." }
 });
 
@@ -184,6 +184,19 @@ export function yachtApproachAt(y) {
     scale: 0.30 + 0.70 * t,
     opacity: Math.min(1, 0.62 + t)
   };
+}
+
+/** Use the authoritative lane ref for instantaneous touch/keyboard response. */
+export function yachtClampLane(current, direction) {
+  const base = Number.isFinite(Number(current)) ? Number(current) : 1;
+  const delta = Number.isFinite(Number(direction)) ? Number(direction) : 0;
+  return Math.max(0, Math.min(2, Math.round(base + delta)));
+}
+
+/** In-game impact grace freezes along with gameplay when the player pauses. */
+export const YACHT_IMPACT_GRACE_MS = 1450;
+export function yachtCanTakeHit(graceRemainingMs, alreadyHitThisTick = false) {
+  return !alreadyHitThisTick && (Number(graceRemainingMs) || 0) <= 0;
 }
 
 export function yachtCatchStart(item) {
