@@ -1,4 +1,10 @@
 import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunnelLayout.js";
+import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
+import {makeCrystalShutters,updateCrystalShutters} from "./emberCrystalShutters.js";
+import {getExpeditionStage,EXPEDITION_STAGE_SECONDS} from "./emberExpeditionStages.js";
+import {makeExpeditionHazards,updateExpeditionHazards} from "./emberExpeditionHazards.js";
+import {BOSS_INTRO_TIME,expeditionBossKind,startExpeditionBoss,updateExpeditionBoss,
+  finishExpeditionBossStage} from "./emberExpeditionBossStage.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -58,6 +64,8 @@ export function makeCourse(seed = 1467) {
   for (let x = 900; x < 30000; x += 610) {
     const motif = Math.floor(x / 610) % 6;
     const offset = motif === 2 ? -60 : motif === 4 ? 62 : motif === 5 ? -30 : 20;
+    // Small seed-specific pickup drift preserves curated safety while making replay courses distinct.
+    const seedNudge = (rand() - .5) * 10;
     const kind = motif === 0 ? "bone" : motif === 3 ? "cheese" : "gem";
     // Six-pickup sweep gives each route a readable, rewarding line through
     // the danger instead of a static row of icons.
@@ -65,7 +73,7 @@ export function makeCourse(seed = 1467) {
       const pos = x + j * 62;
       const lane=courseLaneOffset(pos,offset);
       const arc=Math.sin(j / 5 * Math.PI) * (motif % 2 ? 48 : -48);
-      const y = clamp(tunnelCenter(pos) + lane + arc, 95, 725);
+      const y = clamp(tunnelCenter(pos) + lane + arc + seedNudge, 95, 725);
       objects.push({ id: ++id, kind: j === 5 && motif === 3 ? "cache" : kind, x: pos, y, radius: 22, taken: false });
     }
     // Place obstacles after introductory stretch, avoiding the nearest pickup chains.
@@ -93,17 +101,29 @@ export function makeCourse(seed = 1467) {
     radius:52,taken:false});
   return objects;
 }
-export function newRun(seed = 1467) {
-  return { running: true, ended: false, time: 0, scroll: 0, y: tunnelCenter(DRILL_ANCHOR), pitch: 0,
+export function newRun(seed = 1467, stageIndex = null) {
+  const stage=getExpeditionStage(stageIndex);
+  const startX=stage?.startX||0;
+  return { running: true, ended: false, time: 0, scroll: startX,
+    stageIndex:stage?stageIndex:null, stageStartX:startX, duration:stage?(stage.duration||EXPEDITION_STAGE_SECONDS):RUN_DURATION,
+    y: tunnelCenter(startX+DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
     boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
-    objects: makeCourse(seed), formationHits: [], events: [], result: null, distance: 0 };
+    objects: makeCourse(seed), breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
+    crystalShutters:makeCrystalShutters(), hazardsDodged:0,
+    worldHazards:makeExpeditionHazards(stageIndex),worldObjective:false,
+    boss:null,bossY:null,bossDefeated:false,bossAttackHitCycle:-1,
+    objectives:{barkroot:false,ruby:false}, objectiveBonus:0,
+    formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
   const repaired = s.hull < 5;
-  s.boostTime = TURBO_DURATION; s.charge = 0;
+  // In boss arenas each press is a deliberate strike. The classic 4.8s
+  // excavation shield would otherwise auto-hit several later recovery phases
+  // from a single Turbo press.
+  s.boostTime = s.boss ? 0.72 : TURBO_DURATION; s.charge = 0;
   s.hull = Math.min(5, s.hull + 1);
   s.boosts++;
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y, repaired });
@@ -124,14 +144,42 @@ export function updateRun(s, dt, up = false, down = false) {
   s.pitch += (target - s.pitch) * Math.min(1, dt * 6.5);
   s.y = clamp(s.y + Math.sin(s.pitch) * 330 * dt, 65, DRILL_HEIGHT - 65);
   const boosted = s.boostTime > 0;
+  // The two boss routes stop forward movement at their arenas. All existing
+  // collision and collection loops are skipped while a boss is active, so
+  // regular cave formations cannot inflict invisible damage in the battle.
+  if(s.hull>0&&expeditionBossKind(s.stageIndex)&&
+      (s.boss||s.time+dt>=BOSS_INTRO_TIME)){
+    s.time+=dt;
+    s.boostTime=Math.max(0,s.boostTime-dt);
+    s.hitCooldown=Math.max(0,s.hitCooldown-dt);
+    s.shock=Math.max(0,s.shock-dt);
+    if(!s.boss)startExpeditionBoss(s,tunnelCenter);
+    const tip=drillTipPosition(s);
+    updateExpeditionBoss(s,dt,{
+      tipX:tip.x,tipY:tip.y,boosted:s.boostTime>0,onHit:takeHit
+    });
+    if(s.bossDefeated){
+      if(s.damageTaken===0){
+        s.cleanBonus=500;s.score+=500;
+        s.events.push({type:"clean-run",x:DRILL_ANCHOR,y:s.y});
+      }
+      finishExpeditionBossStage(s);
+    }else if(s.hull<=0||s.time>=s.duration){
+      s.running=false;s.ended=true;
+      s.result=s.hull<=0?"hull":"boss-timeout";
+      s.time=Math.min(s.duration,s.time);
+      s.events.push({type:"end",result:s.result});
+    }
+    return s;
+  }
   const speed = boosted ? 480 : 310 + Math.min(42, s.time * 0.48);
   s.scroll += speed * dt;
-  s.distance = s.scroll;
+  s.distance = s.scroll-(s.stageStartX||0);
   s.time += dt;
   s.boostTime = Math.max(0, s.boostTime - dt);
   s.hitCooldown = Math.max(0, s.hitCooldown - dt);
   s.shock = Math.max(0, s.shock - dt);
-  s.passage = clamp(1 + Math.floor(s.time / 15), 1, 5);
+  s.passage = s.stageIndex===null ? clamp(1 + Math.floor(s.time / 15), 1, 5) : s.stageIndex+1;
   const worldX = s.scroll + DRILL_ANCHOR;
   const routeMid = tunnelCenter(worldX);
   const outside = Math.abs(s.y - routeMid) > tunnelRadius(worldX) - 43;
@@ -142,6 +190,21 @@ export function updateRun(s, dt, up = false, down = false) {
   const tip = drillTipPosition(s);
   const tipWorldX = s.scroll + tip.x;
   const tipY = tip.y;
+  drillBreakables(s,dt,{x:tipWorldX,y:tipY},boosted);
+  updateCrystalShutters(s,tipWorldX,tipY,boosted,takeHit,tunnelCenter,tunnelRadius);
+  updateExpeditionHazards(s,tipWorldX,tipY,boosted,takeHit,tunnelCenter,tunnelRadius);
+  // Each passage now has one optional expedition commission; completion is
+  // event-driven and pays once, independently of the three-star challenge.
+  if(!s.objectives.barkroot&&s.events.some(e=>e.type==="break-wall"&&e.material==="earth")){
+    s.objectives.barkroot=true;s.objectiveBonus+=250;s.score+=250;
+    if(s.stageIndex===0)s.worldObjective=true;
+    s.events.push({type:"objective-complete",mission:"barkroot",points:250});
+  }
+  if(!s.objectives.ruby&&s.events.some(e=>
+    (e.type==="shutter-dodged"||e.type==="shutter-shatter")&&e.id==="ruby-shutter")){
+    s.objectives.ruby=true;s.objectiveBonus+=350;s.score+=350;
+    s.events.push({type:"objective-complete",mission:"ruby",points:350});
+  }
   for (const formation of FORMATION_LAYOUT) {
     if (!formation.obstacle || s.formationHits.includes(formation.at)) continue;
     if (!intersectsSculpture(formation, tipWorldX, tipY)) continue;
@@ -180,14 +243,14 @@ export function updateRun(s, dt, up = false, down = false) {
     else if (obj.kind === "gem" || obj.kind === "cache") s.gems++;
     s.events.push({ type: "pickup", kind: obj.kind, x: DRILL_ANCHOR + deltaX, y: obj.y, combo: s.combo });
   }
-  if (s.hull <= 0 || s.time >= RUN_DURATION) {
+  if (s.hull <= 0 || s.time >= (s.duration||RUN_DURATION)) {
     if (s.hull > 0 && s.damageTaken === 0) {
       s.cleanBonus = 500; s.score += s.cleanBonus;
       s.events.push({ type: "clean-run", x: DRILL_ANCHOR, y: s.y });
     }
     s.running = false; s.ended = true;
     s.result = s.hull > 0 ? "complete" : "hull";
-    s.time = Math.min(RUN_DURATION, s.time);
+    s.time = Math.min(s.duration||RUN_DURATION, s.time);
     s.events.push({ type: "end", result: s.result });
   }
   return s;

@@ -1,0 +1,60 @@
+name: Ember Tunnel destructible terrain QA
+concurrency:
+  group: ember-${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - work/ember-destructible-treasures-20261119
+    paths:
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberBreakable*.js"
+      - "src/emberCrystalShutters*.js"
+      - "src/emberDrillEngine.js"
+      - "src/emberDrillPainter.js"
+      - "src/emberBossEncounter.js"
+      - "src/emberExpeditionBossPainter.js"
+      - "src/emberBossAttackVfx.js"
+      - "src/emberExpeditionBossStage.js"
+      - "src/emberExpansionCatalog.js"
+      - "src/emberExpeditionStages.js"
+      - "src/emberExpeditionHazards.js"
+      - "src/emberExpeditionHazardPainter.js"
+      - "scripts/import-ember-expansion.mjs"
+      - "tests/ember-*.test.mjs"
+      - ".github/workflows/ember-breakables-qa.yml"
+  pull_request:
+    paths:
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberBreakable*.js"
+      - "src/emberDrillEngine.js"
+      - "src/emberDrillPainter.js"
+      - "src/emberBossEncounter.js"
+      - "src/emberExpeditionBossPainter.js"
+      - "src/emberExpeditionBossStage.js"
+      - "src/emberExpansionCatalog.js"
+      - "src/emberExpeditionStages.js"
+      - "src/emberExpeditionHazards.js"
+      - "src/emberExpeditionHazardPainter.js"
+      - "scripts/import-ember-expansion.mjs"
+      - "tests/ember-*.test.mjs"
+      - ".github/workflows/ember-breakables-qa.yml"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Verify existing drill and new excavations
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs tests/ember-boss-encounter.test.mjs tests/ember-expansion-catalog.test.mjs tests/ember-expedition-stages.test.mjs tests/ember-expedition-hazards.test.mjs tests/ember-expedition-boss-stage.test.mjs tests/ember-boss-telegraph-geometry.test.mjs tests/ember-boss-attack-vfx.test.mjs
+      - name: Verify Vite production build
+        run: npm run build
