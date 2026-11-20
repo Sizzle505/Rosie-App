@@ -239,6 +239,18 @@ try {
   assert.ok(await deskFrame.locator(".yacht-course.is-underway").isVisible(),
     "Emperor chapter must run on desktop");
   assert.equal(await deskFrame.locator(".yacht-course").getAttribute("data-captain-chapter"),"emperor");
+  // Cast Off removes its own button. Give the game focus automatically so a
+  // player can steer immediately without an extra click into the course.
+  await deskPage.waitForFunction(() =>
+    document.activeElement?.classList?.contains("yacht-course"),null,{timeout:1500});
+  await deskPage.keyboard.press("ArrowLeft");
+  await deskFrame.locator(".captain-yacht.lane-0").waitFor({timeout:1500});
+  // Held arrows should never skip both lanes from repeated OS key events.
+  await deskPage.keyboard.down("ArrowRight");
+  await deskPage.waitForTimeout(620);
+  assert.equal(await deskFrame.locator(".captain-yacht.lane-1").count(),1,
+    "Holding an arrow must only steer one lane until a fresh press");
+  await deskPage.keyboard.up("ArrowRight");
   // Yacht keyboard controls must not interfere with Tunnel or Cosmic Odyssey
   // when focus leaves the Yacht cabinet on the multi-game Captain page.
   await deskFrame.locator(".yacht-steering-options .captain-steering-toggle").focus();
