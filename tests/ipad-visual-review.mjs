@@ -29,8 +29,8 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
           const errors = [];
           page.on("pageerror",e=>errors.push(String(e)));
           await page.goto("http://127.0.0.1:5173/#"+name,{waitUntil:"networkidle"});
-          await page.locator(".loading-screen-hidden").waitFor({state:"attached",timeout:10000}).catch(()=>{});
-          await page.waitForTimeout(550);
+          await page.locator(".loading-screen").waitFor({state:"hidden",timeout:20000});
+          await page.waitForTimeout(250);
           const measure = await page.evaluate(() => {
             const rect = el => {
               if(!el)return null;
@@ -38,11 +38,11 @@ for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
               return {x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height),bottom:Math.round(r.bottom)};
             };
             const picks={
-              home:["main.home","header.banner","section.hero","nav.worldGrid"],
+              home:['[data-layout-target="home-page"]','[data-layout-target="home-banner"]','[data-layout-target="home-hero"]','[data-layout-target="home-worlds"]','nav[aria-label="Rosie\'s tools"]'],
               resources:[".rr-hub-content",".rr-hub-header",".rr-hub-buttons"],
               calculations:[".rc-page",".rc-hero",".rc-calculator-stage",".rc-workspace",".rc-device"],
               "qr-atelier":[".qa-scene",".qa-hero",".qa-preview-stage",".qa-panel",".qa-collection"],
-              reviews:[".reviews-page",".reviews-hero",".reviews-grid",".reviews-panel"],
+              reviews:[".rosie-reviews",".reviews-hero",".reviews-content",".reviews-film-grid"],
               recipes:[".recipes-body",".recipes-top-scene",".recipes-heading",".recipes-grid"]
             };
             const route=location.hash.slice(1);
