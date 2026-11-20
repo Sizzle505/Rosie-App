@@ -2,6 +2,24 @@
 // The messages do not affect physics, and no generated character portraits are used.
 export function excavationNotice(event) {
   if(!event)return null;
+  const hazardNames={crystal:"CRYSTAL SPIKES",piston:"CLOCKWORK PISTON",geyser:"MOLTEN GEYSER",quake:"ROYAL ROCK BURST"};
+  if(event.type==="world-hazard-warning")return {
+    kind:"tip",placement:event.side<0?"bottom":"top",
+    title:(hazardNames[event.kind]||"CAVE HAZARD")+" AHEAD",
+    detail:"Steer toward the center; Turbo can break through.",duration:1.8
+  };
+  if(event.type==="world-hazard-dodged")return {
+    kind:"success",title:"CLEAN ESCAPE",
+    detail:"+125 points · +10 Turbo charge",duration:1.25
+  };
+  if(event.type==="world-hazard-shatter")return {
+    kind:"success",title:"HAZARD SHATTERED",
+    detail:"+175 points · Clear passage",duration:1.35
+  };
+  if(event.type==="world-objective-complete")return {
+    kind:"success",title:"WORLD OBJECTIVE COMPLETE",
+    detail:"Expedition bonus +"+event.points+" points",duration:2.1
+  };
   if(event.type==="shutter-warning")return {
     kind:"tip",placement:event.side<0?"bottom":"top",title:"MOVING CRYSTAL AHEAD",detail:"Steer away from the wall, or shatter it with Turbo.",duration:1.6
   };
