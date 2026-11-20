@@ -26,7 +26,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
             await page.locator(".rc-tool-card--units").click();
           }
           if (route === "qr-atelier") {
-            await page.locator('.qa-panel input[placeholder="https://"]').fill("https://example.com");
+            await page.locator('.qa-panel input[type="url"]').fill("https://example.com");
             await page.getByRole("button", { name: "View QR in a Rosie frame" }).click();
           }
           if (route === "reviews") await page.locator(".reviews-recommends-actions button").first().click();
