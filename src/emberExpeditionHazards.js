@@ -7,7 +7,11 @@ export const EXPEDITION_HAZARD_LAYOUT=Object.freeze([
   Object.freeze({id:"clockwork-piston",stageIndex:2,kind:"piston",x:12180,side:1,maxReach:180}),
   Object.freeze({id:"clockwork-second-piston",stageIndex:2,kind:"piston",x:13870,side:-1,maxReach:170}),
   Object.freeze({id:"molten-geyser",stageIndex:3,kind:"geyser",x:17650,side:1,maxReach:175}),
-  Object.freeze({id:"molten-second-geyser",stageIndex:3,kind:"geyser",x:18200,side:-1,maxReach:157}),
+  // A crack in the actual roof loosens basalt before it descends. Its solid
+  // core is calculated by the same reach function as the illustrated frames.
+  Object.freeze({id:"molten-falling-basalt",stageIndex:3,kind:"basalt",x:18200,side:-1,maxReach:150}),
+  // Repositioned on the open floor so eruption and rockfall never overlap.
+  Object.freeze({id:"molten-second-geyser",stageIndex:3,kind:"geyser",x:18600,side:1,maxReach:157}),
   Object.freeze({id:"royal-earth-burst",stageIndex:4,kind:"quake",x:23720,side:-1,maxReach:166}),
   Object.freeze({id:"royal-second-burst",stageIndex:4,kind:"quake",x:24230,side:1,maxReach:169})
 ]);
