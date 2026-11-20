@@ -1,4 +1,5 @@
 import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunnelLayout.js";
+import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -98,7 +99,8 @@ export function newRun(seed = 1467) {
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
     boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
-    objects: makeCourse(seed), formationHits: [], events: [], result: null, distance: 0 };
+    objects: makeCourse(seed), breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
+    formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
@@ -142,6 +144,7 @@ export function updateRun(s, dt, up = false, down = false) {
   const tip = drillTipPosition(s);
   const tipWorldX = s.scroll + tip.x;
   const tipY = tip.y;
+  drillBreakables(s,dt,{x:tipWorldX,y:tipY},boosted);
   for (const formation of FORMATION_LAYOUT) {
     if (!formation.obstacle || s.formationHits.includes(formation.at)) continue;
     if (!intersectsSculpture(formation, tipWorldX, tipY)) continue;
