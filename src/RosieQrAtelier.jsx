@@ -11,10 +11,10 @@ const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
 // Aperture geometry is measured from the supplied transparent oval frame artwork.
 const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:904,titleY:857,titleWidth:540},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:964,titleY:869,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:809,titleY:923,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:722,titleY:932,titleWidth:555}
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:904,titleY:852,titleWidth:540},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:964,titleY:851,titleWidth:540},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:809,titleY:899,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:722,titleY:914,titleWidth:555}
 ];
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 function rosieFrameStyle(frame){
@@ -96,7 +96,7 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   // Fill the entire opening behind the artwork (including the dark crescent),
   // then clean up any opaque artwork remnants inside the safe inner ellipse.
   // The QR is a separate white square, exactly as in the unframed preview.
-  ctx.fillStyle=finish.light;
+  ctx.fillStyle=finish.dark;
   ctx.beginPath();
   ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.57,frame.insertH*.57,0,0,Math.PI*2);
   ctx.fill();
@@ -105,7 +105,7 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   ctx.beginPath();
   ctx.ellipse(frame.insertX,frame.insertY,frame.insertW/2,frame.insertH/2,0,0,Math.PI*2);
   ctx.clip();
-  ctx.fillStyle=finish.light;
+  ctx.fillStyle=finish.dark;
   ctx.fillRect(frame.insertX-frame.insertW/2,frame.insertY-frame.insertH/2,frame.insertW,frame.insertH);
   ctx.restore();
   ctx.fillStyle="#ffffff";
@@ -125,13 +125,17 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   }
   return canvasBlob(canvas);
 }
-function RosieFrameComposition({frame,svg,caption,onCaptionChange,finish="emerald",printOnly=false}){
-  const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).light;
+function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish="emerald",printOnly=false}){
+  const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).dark;
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
     <div className="qa-rosie-insert-underlay" aria-hidden="true"/>
     <div className="qa-rosie-insert-backdrop" aria-hidden="true"/>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
+    {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
+      aria-label="Close QR preview and return to the Atelier" title="Close preview">
+      <span aria-hidden="true">×</span>
+    </button>}
     {printOnly?<span className="qa-rosie-printed-title">{caption}</span>:
       <input className="qa-rosie-title-field" value={caption} onChange={e=>onCaptionChange(e.target.value.slice(0,48))}
         aria-label="Optional inscription for the frame title plate" placeholder="Add a title"/>}
@@ -493,9 +497,8 @@ export default function RosieQrAtelier(){
       <p className="qa-status" role="status" aria-live="polite">{toast}</p>
     </div>
     {fullScreen&&ready&&<div className="qa-fullscreen qa-rosie-viewer" role="dialog" aria-modal="true" aria-label="Rosie framed scannable QR code">
-      <button type="button" className="qa-close qa-rosie-close" onClick={closeRosieViewer} aria-label="Close QR preview and return to the Atelier" title="Back to Atelier"><span aria-hidden="true">×</span></button>
       <div className="qa-rosie-viewer-content">
-        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} finish={style} onCaptionChange={setFrameCaption}/>
+        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} finish={style} onCaptionChange={setFrameCaption} onClose={closeRosieViewer}/>
         <div className="qa-rosie-frame-controls" role="group" aria-label="Choose the Rosie frame">
           <button type="button" className="qa-rosie-arrow" aria-label="Previous Rosie frame" onClick={()=>setRosieFrameIndex(i=>(i-1+ROSIE_FRAMES.length)%ROSIE_FRAMES.length)}>‹</button>
           <span>{activeRosieFrame.label} · {rosieFrameIndex+1} / {ROSIE_FRAMES.length}</span>
