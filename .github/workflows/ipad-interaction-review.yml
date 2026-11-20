@@ -1,0 +1,39 @@
+name: iPad working panel review
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/ipad-interaction-review.mjs'
+      - '.github/workflows/ipad-interaction-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Start and await Vite
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/rosie-vite.log 2>&1 &
+          for attempt in {1..40}; do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-vite.log
+          exit 1
+      - run: node tests/ipad-interaction-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ipad-working-panels
+          path: artifacts/ipad-interactions/
+          retention-days: 14
