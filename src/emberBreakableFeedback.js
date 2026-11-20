@@ -3,7 +3,7 @@
 export function excavationNotice(event) {
   if(!event)return null;
   if(event.type==="boss-spawn")return {
-    kind:"tip",title:event.boss==="mole-king"?"THE MOLE KING AWAKENS":"CINDERCLAW EMERGES",
+    kind:"tip",title:event.boss==="mole-king"?"THE MOLE KING AWAKENS":event.boss==="copperjack"?"COPPERJACK ACTIVATED":"CINDERCLAW EMERGES",
     detail:"Dodge attacks. Strike with Turbo when the guardian recovers.",duration:2.4
   };
   if(event.type==="boss-warning")return {
@@ -19,7 +19,7 @@ export function excavationNotice(event) {
     detail:event.health+" health remaining",duration:.85
   };
   if(event.type==="boss-victory")return {
-    kind:"success",title:event.boss==="mole-king"?"THE KING SURRENDERS":"CINDERCLAW DEFEATED",
+    kind:"success",title:event.boss==="mole-king"?"THE KING SURRENDERS":event.boss==="copperjack"?"COPPERJACK DISABLED":"CINDERCLAW DEFEATED",
     detail:"Boss reward +"+event.points+" points",duration:3.0
   };
   const hazardNames={crystal:"CRYSTAL SPIKES",piston:"CLOCKWORK PISTON",geyser:"MOLTEN GEYSER",quake:"ROYAL ROCK BURST"};
