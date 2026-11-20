@@ -1,5 +1,16 @@
 name: Yacht Dash chapter expansion - build and engine tests
 on:
+  push:
+    branches: [feature/yacht-dash-four-chapters-20261119]
+    paths:
+      - src/main.jsx
+      - src/yachtDashExpansion.js
+      - src/yachtDashExpansion.css
+      - src/yachtDashExpansion.test.js
+      - src/yachtDashArt.test.js
+      - tests/yacht-dash-browser.mjs
+      - .github/workflows/yacht-dash-expansion.yml
+      - .github/workflows/yacht-dash-browser.yml
   pull_request:
     branches: [main]
     paths:
