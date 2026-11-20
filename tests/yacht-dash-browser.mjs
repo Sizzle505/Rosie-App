@@ -42,6 +42,26 @@ try {
       body:document.body.scrollHeight,children:parts.map(sel=>[sel,measure(panel?.querySelector(sel))]),
       immediate:[...panel.children].slice(0,6).map(x=>({name:x.tagName,css:x.className?.baseVal||x.className,rect:measure(x)}))};
   }));
+  const preflight = await page.evaluate(() => {
+    const rect = sel => document.querySelector(sel)?.getBoundingClientRect();
+    const course=rect(".captain-fs-yacht .yacht-course");
+    const panel=rect(".captain-fs-yacht .captain-start-panel:not(.captain-results-panel)");
+    const pick=rect(".captain-fs-yacht .yacht-chapter-picker");
+    const cast=rect(".captain-fs-yacht .yacht-cast-off");
+    return { courseHeight:course?.height, courseTop:course?.top,
+      panelHeight:panel?.height, panelTop:panel?.top, panelBottom:panel?.bottom,
+      pickerBottom:pick?.bottom, castOffBottom:cast?.bottom,
+      courseBottom:course?.bottom };
+  });
+  console.log("Preflight geometry assertion",JSON.stringify(preflight));
+  assert.ok(preflight.courseHeight >= 280, "Mobile course must not collapse before Cast Off");
+  assert.ok(preflight.panelHeight >= 160, "Level selection must have visible space");
+  assert.ok(preflight.panelTop >= preflight.courseTop - 5 &&
+    preflight.panelBottom <= preflight.courseBottom + 5,
+    "Preflight content must fit inside the water course");
+  assert.ok(preflight.castOffBottom <= preflight.panelBottom + 5,
+    "Cast Off must fit inside the preflight panel");
+  await page.screenshot({path:folder+"/iphone-preflight-before-selection.png"});
   try {
     await picker.nth(1).click({timeout:10000});
   } catch (error) {
@@ -86,6 +106,9 @@ try {
       parentDisplay:p.display };
   }));
   await toggle.waitFor({state:"visible",timeout:5000});
+  const toggleSize=await toggle.boundingBox();
+  assert.ok(toggleSize && toggleSize.width >= 75,
+    "D-pad/joystick switch must be readable and tappable, not a 28px icon");
   const geometry = await page.evaluate(() => {
     const course = document.querySelector(".captain-fs-yacht .yacht-course")?.getBoundingClientRect();
     const controls = document.querySelector(".captain-fs-yacht .captain-command-deck")?.getBoundingClientRect();
