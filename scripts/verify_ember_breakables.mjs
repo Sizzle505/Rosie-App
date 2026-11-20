@@ -84,6 +84,9 @@ for(const [name,engine,viewport,mobile] of [
     if(failed.length)throw new Error("Asset requests failed: "+JSON.stringify(failed));
     const hud=await suite.locator(".ember-stats").innerText();
     if(!hud.includes("HULL")||!hud.includes("TIME"))throw new Error("HUD missing");
+    // In particular on iPad WebKit, two separate 2x-resolution canvases can
+    // starve the later page's animation loop. Close Classic after validating it.
+    await page.close();
     // Exercise an independently selected world while leaving Classic QA intact.
     const stagePage=await context.newPage();
     await stagePage.goto(base+"#captain",{waitUntil:"domcontentloaded",timeout:45000});
