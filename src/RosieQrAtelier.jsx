@@ -9,21 +9,23 @@ import "./rosie-qr-viewer.css";
 
 const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
-// Aperture geometry is measured from the supplied transparent oval frame artwork.
-const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:870,titleY:856,titleWidth:540},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:954,titleY:868,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:754,titleY:919,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:725,titleY:920,titleWidth:555}
-];
+// The original frame WebPs already have transparent openings. Render their
+// selected-color underlay BEHIND the original art, just like the main QR page.
+// Paths trace the actual connected transparent aperture in each source image;
+// no guessed oval dimensions and no masking or recoloring of the gilded art.
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
+// Curious Rosie's original title sits 155 artwork pixels above her lowest
+// gold frame flourish. Apply that SAME rise to every frame's measured bottom tip.
+const ROSIE_TITLE_RISE=155;
+const ROSIE_FRAMES=[
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,bottomX:912,bottomY:1014,titleWidth:540,openingPath:"M886,226 849,239 799,269 762,304 730,350 711,392 697,449 695,517 701,557 712,592 741,634 778,671 818,699 862,719 909,730 931,726 940,713 951,727 961,730 993,726 1046,708 1091,682 1134,644 1163,606 1177,573 1186,527 1187,467 1181,427 1166,379 1145,338 1120,304 1075,263 1033,239 1000,228 993,233 981,232 975,241 967,244 965,254 957,257 944,273 931,256 921,252 920,244 907,232 896,233Z"},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,bottomX:967,bottomY:1002,titleWidth:540,openingPath:"M882,249 834,269 793,297 763,332 734,383 720,423 711,475 711,525 720,577 734,617 753,649 767,660 768,666 796,693 840,724 890,747 936,758 987,759 1023,752 1078,729 1112,707 1151,672 1157,660 1165,655 1184,629 1204,577 1213,525 1213,475 1204,423 1190,383 1161,332 1131,297 1108,277 1090,266 1049,250 1036,249 1027,256 1011,256 1000,262 993,272 988,272 971,289 932,256 917,256 902,247Z"},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,bottomX:782,bottomY:1074,titleWidth:525,openingPath:"M803,233 759,241 701,261 647,293 609,328 576,372 547,435 537,484 536,513 540,518 537,523 537,542 544,581 568,640 592,677 643,729 695,764 750,787 794,796 851,796 900,786 928,776 964,758 1004,730 1024,711 1023,707 1030,700 1035,700 1078,643 1097,599 1108,556 1110,523 1105,518 1109,513 1109,489 1100,440 1080,388 1045,335 1007,297 964,268 911,246 855,234Z"},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,bottomX:724,bottomY:1075,titleWidth:555,openingPath:"M656,255 607,272 569,294 543,315 507,356 486,407 476,453 474,521 480,562 496,613 519,657 543,689 588,730 630,754 671,768 712,772 724,759 736,772 773,768 814,754 864,724 907,682 934,642 958,585 968,539 970,471 964,430 953,392 937,357 896,311 855,281 802,258 786,254 776,259 765,256 758,264 749,267 749,274 740,279 739,284 724,298 709,284 708,279 699,274 699,267 691,264 685,257 671,259 664,254Z"}
+].map(frame=>({...frame,titleX:frame.bottomX,titleY:frame.bottomY-ROSIE_TITLE_RISE}));
 function rosieFrameStyle(frame){
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   return {
-    "--rosie-insert-left":((frame.insertX-frame.insertW/2)/ROSIE_ART_W*100)+"%",
-    "--rosie-insert-top":((frame.insertY-frame.insertH/2)/ROSIE_ART_H*100)+"%",
-    "--rosie-insert-width":(frame.insertW/ROSIE_ART_W*100)+"%",
-    "--rosie-insert-height":(frame.insertH/ROSIE_ART_H*100)+"%",
     "--rosie-code-left":((frame.cx-codeSize/2)/ROSIE_ART_W*100)+"%",
     "--rosie-code-top":((frame.cy-codeSize/2)/ROSIE_ART_H*100)+"%",
     "--rosie-code-size":(codeSize/ROSIE_ART_W*100)+"%",
@@ -93,27 +95,16 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const finish=QR_STYLES.find(item=>item.id===style)||QR_STYLES[0];
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // Punch the baked-in pale opening out of the artwork. Draw the selected
-  // finish BEHIND the cutout, so the gold frame is never painted over.
-  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
-  ctx.save();
-  ctx.globalCompositeOperation="destination-out";
-  ctx.beginPath();
-  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.56,frame.insertH*.56,0,0,Math.PI*2);
-  ctx.fill();
-  ctx.restore();
-  ctx.save();
-  ctx.globalCompositeOperation="destination-over";
+  // Match the live viewer and main Atelier: finish behind the untouched
+  // original transparent frame, white QR square, then the gilded art on top.
   ctx.fillStyle=finish.dark;
-  ctx.beginPath();
-  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.575,frame.insertH*.575,0,0,Math.PI*2);
-  ctx.fill();
-  ctx.restore();
+  ctx.fill(new Path2D(frame.openingPath));
   ctx.fillStyle="#ffffff";
   ctx.fillRect(x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=false;
   ctx.drawImage(qr,x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=true;
+  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   const inscription=String(caption||"").trim().slice(0,48);
   if(inscription){
     ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
@@ -129,18 +120,12 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
 function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish="emerald",printOnly=false}){
   const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).dark;
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
-    <div className="qa-rosie-insert-underlay" aria-hidden="true"/>
-    <svg className="qa-rosie-overlay-art" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H} preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <defs>
-        <mask id={"qa-frame-hole-"+(printOnly?"print":"viewer")} maskUnits="userSpaceOnUse">
-          <rect width={ROSIE_ART_W} height={ROSIE_ART_H} fill="white"/>
-          <ellipse cx={frame.insertX} cy={frame.insertY} rx={frame.insertW*.56} ry={frame.insertH*.56} fill="black"/>
-        </mask>
-      </defs>
-      <image href={ROSIE_ASSET_ROOT+frame.file} width={ROSIE_ART_W} height={ROSIE_ART_H}
-        mask={"url(#qa-frame-hole-"+(printOnly?"print":"viewer")+")"}/>
+    <svg className="qa-rosie-insert-underlay" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
+      preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d={frame.openingPath} fill="var(--rosie-code-bg)"/>
     </svg>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
+    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
       aria-label="Close QR preview and return to the Atelier" title="Close preview">
       <span aria-hidden="true">×</span>
