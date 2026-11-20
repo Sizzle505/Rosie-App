@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -72,3 +72,56 @@ test("Chapter best scores and medals load safely and only improve",()=>{
    {sakura:{best:42,medals:3}});
  assert.strictEqual(updateYachtRecords(first,"unknown",10,3),first);
 });
+
+test("Large rocks and driftwood block exactly two adjacent lanes; the torii leaves center clear",()=>{
+  for(const chapter of ["typhoon","emperor"]){
+    const wide=yachtWaveFor(chapter,2,()=>0)[0];
+    assert.equal(wide.footprint,"wide");
+    assert.ok(["reef-rocks","driftwood","barrel-raft"].some(x=>wide.asset.includes(x)));
+    assert.deepEqual(yachtOccupiedLanes(wide),[0,1]);
+    assert.equal(yachtTouchesHazard(wide,0),true);
+    assert.equal(yachtTouchesHazard(wide,1),true);
+    assert.equal(yachtTouchesHazard(wide,2),false);
+    assert.equal(yachtNearMiss(wide,2),true);
+    const right=yachtWaveFor(chapter,2,()=>2)[0];
+    assert.deepEqual(yachtOccupiedLanes(right),[1,2]);
+    assert.equal(yachtTouchesHazard(right,0),false);
+    const gate=yachtWaveFor(chapter,6,()=>1)[0];
+    assert.equal(gate.footprint,"arch");
+    assert.equal(gate.asset,"/yacht-dash/obstacles/storm-torii.webp");
+    assert.deepEqual(yachtOccupiedLanes(gate),[0,2]);
+    assert.equal(yachtTouchesHazard(gate,0),true);
+    assert.equal(yachtTouchesHazard(gate,1),false);
+    assert.equal(yachtTouchesHazard(gate,2),true);
+    assert.equal(yachtNearMiss(gate,1),true);
+  }
+});
+
+test("Sparse obstacles leave more open water and no overlapping dangerous waves",()=>{
+  for(const chapter of YACHT_CHAPTERS.filter(c=>c.id!=="sakura")){
+    assert.ok(chapter.cadence>=2000,"Obstacle cadence too fast for "+chapter.id);
+    const waves=Array.from({length:34},(_,step)=>yachtWaveFor(chapter.id,step,n=>step % n));
+    assert.ok(waves.every(w=>w.length===1));
+    const hazards=waves.flat().filter(w=>isYachtHazard(w.kind));
+    assert.ok(hazards.length<=15,"Too many hazards: "+chapter.id);
+    assert.ok(waves.flat().some(w=>w.kind==="ball"),"No collectible waves");
+    for(const wave of waves){
+      const occupied=new Set(wave.filter(x=>isYachtHazard(x.kind)).flatMap(yachtOccupiedLanes));
+      assert.ok(occupied.size<=2,"All three lanes blocked in "+chapter.id);
+    }
+  }
+});
+
+test("The supply chest is a useful once-per-new-level reward, not a common hazard",()=>{
+  for(const chapter of ["typhoon","moonlight","emperor"]){
+    const waves=Array.from({length:45},(_,step)=>yachtWaveFor(chapter,step,n=>step % n));
+    const supply=waves.flat().filter(x=>x.kind==="supply");
+    assert.equal(supply.length,1);
+    assert.equal(supply[0].asset,"/yacht-dash/obstacles/cargo-crate.webp");
+    assert.ok(supply[0].points>=100 && supply[0].turbo>=50);
+    assert.equal(isYachtHazard(supply[0].kind),false);
+    assert.ok(waves.flat().every(x=>!x.asset?.includes("cargo-crate") || x.kind==="supply"));
+  }
+  assert.deepEqual(yachtWaveFor("sakura",12,()=>1),[]);
+});
+
