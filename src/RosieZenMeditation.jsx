@@ -150,7 +150,8 @@ export default function RosieZenMeditation({scene="field"}) {
     audio.current?.start(ambience,volume)
       .then(ok=>{if (!ok && ambience!=="off")setAudioUnavailable(true)})
       .catch(()=>setAudioUnavailable(true));
-    navigator.wakeLock?.request?.("screen").then(lock=>{wake.current=lock}).catch(()=>{});
+    const request = navigator.wakeLock?.request?.("screen");
+    request?.then(lock=>{wake.current=lock}).catch(()=>{});
   }
   function stopSound() {
     audio.current?.stop();
