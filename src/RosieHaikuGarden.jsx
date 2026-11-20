@@ -4,6 +4,7 @@ import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
 import "./RosieHaikuAtmosphere.css";
+import "./RosieHaikuArchiveArt.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -235,10 +236,22 @@ export default function RosieHaikuGarden({ onNavigate }) {
         <div className="haiku-scene-atmosphere" />
         <div className="haiku-scene-canopy" />
         <div className="haiku-scene-fog" />
+        {scene === "field" && <div className="haiku-archive-sunbeams" />}
+        {(scene === "field" || scene === "temple") && <div className="haiku-archive-pollen" />}
+        {scene === "zen" && <div className="haiku-archive-zen-sand" />}
+        {scene === "temple" && <div className="haiku-archive-temple-lantern" />}
+        <div className="haiku-archive-petals">
+          {Array.from({ length: 12 }, (_, index) => (
+            <span key={index} className="haiku-archive-petal" style={{
+              left: `${3 + (index * 23) % 94}%`,
+              "--petal-delay": `${-(index * 2.7)}s`,
+              "--petal-duration": `${14 + (index % 5) * 2.7}s`,
+              backgroundImage: `url(/rosieverse/haiku/living-garden/petal-${String(index + 1).padStart(2, "0")}.webp)`
+            }} />
+          ))}
+        </div>
       </div>
-      <div className="haiku-petal haiku-petal-one" aria-hidden="true" />
-      <div className="haiku-petal haiku-petal-two" aria-hidden="true" />
-      <div className="haiku-petal haiku-petal-three" aria-hidden="true" />
+
       <div className="haiku-shell">
         <header className="haiku-header">
           <button className="haiku-back" type="button" onClick={() => onNavigate("home")} aria-label="Back to RosieVerse">← <span>RosieVerse</span></button>
@@ -267,10 +280,10 @@ export default function RosieHaikuGarden({ onNavigate }) {
           </div>
           <aside className="haiku-workbench" aria-label="Poetry studio">
             <nav className="haiku-tabs" aria-label="Haiku activities">
-              <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}>Daily</button>
-              <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}>Compose</button>
-              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}>Meditate</button>
-              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}>Journal <span>{journal.length}</span></button>
+              <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" />Daily</button>
+              <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" />Compose</button>
+              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" />Meditate</button>
+              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-journal-text">Journal <span>{journal.length}</span></span></button>
             </nav>
             {mode === "daily" ? (
               <div className="haiku-panel">
