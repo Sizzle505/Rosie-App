@@ -1,0 +1,21 @@
+name: Temporary QR frame source inspection
+on:
+  push:
+    branches: [fix/qr-viewer-finish-title-close-20261120]
+    paths: [.github/workflows/temp-qr-source-art.yml]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qr-original-frame-art
+          path: |
+            public/qr-atelier/rosie-qr/rosie-frame-seated.webp
+            public/qr-atelier/rosie-qr/rosie-frame-presenting.webp
+            public/qr-atelier/rosie-qr/rosie-frame-peeking.webp
+            public/qr-atelier/rosie-qr/rosie-frame-blank.webp
+          retention-days: 1
