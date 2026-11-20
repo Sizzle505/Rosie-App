@@ -24,7 +24,7 @@ test("original classic run duration and starting coordinates remain unchanged",(
  assert.equal(malformed.duration,RUN_DURATION);
 });
 test("non-boss stages retain their 15-second route playtests",()=>{
- for(let i=0;i<3;i++){
+ for(let i=0;i<2;i++){
    const s=newRun(1467,i);
    assert.equal(s.stageIndex,i);
    assert.equal(s.scroll,EXPEDITION_STAGES[i].startX);
@@ -39,7 +39,8 @@ test("non-boss stages retain their 15-second route playtests",()=>{
    assert.ok(s.distance>0&&s.distance<8000,"stage distance is relative, not world offset");
  }
 });
-test("Molten and Treasury reserve 40 seconds for their boss encounters",()=>{
+test("Clockwork, Molten and Treasury reserve time for their boss encounters",()=>{
+ assert.equal(newRun(1467,2).duration,30);
  for(const i of [3,4]){
    const s=newRun(1467,i);
    assert.equal(s.stageIndex,i);
