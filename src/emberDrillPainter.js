@@ -153,6 +153,23 @@ function scenicFeatures(c,s,assets){
     }
   }
 }
+// Use the imported wide transition art *inside* the selected later worlds.
+// A horizontal crop moves from the previous biome toward the destination,
+// preserving native proportions rather than stretching the panorama.
+function paintExpeditionTransition(c,s,assets){
+  const id={2:"ruby-clockwork",3:"clockwork-molten",4:"molten-treasury"}[s.stageIndex];
+  const img=assets?.["exp-transition:"+id];
+  if(!id||!artReady(img))return false;
+  const cropWidth=Math.min(img.naturalWidth,img.naturalHeight*W/H);
+  const span=Math.max(0,img.naturalWidth-cropWidth);
+  const t=clamp(s.time/3.4,0,1);
+  const eased=t*t*(3-2*t);
+  c.save();
+  c.globalAlpha=.62;
+  c.drawImage(img,span*eased,0,cropWidth,img.naturalHeight,0,0,W,H);
+  c.restore();
+  return true;
+}
 function scenery(c,s,assets={}) {
   c.fillStyle="#23151d";c.fillRect(0,0,W,H);
   // The original 75s course uses its exact old scenic progression. A selected
@@ -180,6 +197,7 @@ function scenery(c,s,assets={}) {
     atmosphericAccent(c,assets[scene.accent],local,1);
   }
   paintNewBackgroundParallax(c,s,assets,W,H);
+  paintExpeditionTransition(c,s,assets);
   // Modest lighting grade distinguishes the later-world route prototypes
   // without presenting unapproved generated backgrounds as finished.
   if(s.stageIndex!==null&&s.stageIndex>=2){
