@@ -170,7 +170,7 @@
 
   /* QR: restore natural flow and remove inherited visual translations.
      The editing controls must stay reachable even when the form grows. */
-  .app-shell.page-qr-atelier > main.qa-page { min-height: 100dvh; height: auto; overflow: visible; }
+  .app-shell.page-qr-atelier > main.qa-page { min-height: 100dvh; height: auto; margin-top: 0 !important; overflow: visible; }
   .app-shell.page-qr-atelier .qa-scene {
     display: block !important;
     position: relative !important;
@@ -337,21 +337,48 @@
 
 @media (min-width: 721px) and (max-width: 1450px) and (any-pointer: coarse) and (orientation: portrait) {
   .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) {
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 16px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 15px !important;
   }
   .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) > .rc-hero {
-    grid-column: 1 !important; grid-row: 1 !important;
+    grid-column: 1 / -1 !important; grid-row: 1 !important;
     width: min(100%, 760px) !important; margin: 0 auto !important;
   }
   .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) > .rc-calculator-stage {
     grid-column: 1 !important; grid-row: 2 !important;
-    width: min(100%, 620px) !important; margin: 0 auto !important;
+    width: 100% !important; margin: 0 auto !important;
   }
   .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) > .rc-workspace {
-    grid-column: 1 !important; grid-row: 3 !important;
-    width: min(100%, 760px) !important; margin: 0 auto !important;
+    grid-column: 2 !important; grid-row: 2 !important;
+    width: 100% !important; margin: 0 auto !important;
+    padding: 50px 14px 35px !important;
   }
+  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-tool-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .app-shell.page-qr-atelier .qa-scene {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: 320px auto auto auto !important;
+    gap: 14px 10px;
+    width: 100% !important;
+    padding: 0 16px 70px !important;
+    overflow: visible !important;
+  }
+  .app-shell.page-qr-atelier .qa-hero { grid-column: 1 / -1; grid-row: 1; height: 320px !important; }
+  .app-shell.page-qr-atelier .qa-title { width: 57% !important; }
+  .app-shell.page-qr-atelier .qa-preview-stage {
+    grid-column: 1 !important; grid-row: 2 !important;
+    width: 100% !important; margin-top: 0 !important;
+  }
+  .app-shell.page-qr-atelier .qa-preview-stage > .qa-ring { width: 100% !important; }
+  .app-shell.page-qr-atelier .qa-panel {
+    grid-column: 2 !important; grid-row: 2 / span 2 !important;
+    width: 100% !important; margin-top: 0 !important;
+  }
+  .app-shell.page-qr-atelier .qa-finish-strip { grid-column: 1 / -1 !important; grid-row: 4 !important; width: 100% !important; }
+  .app-shell.page-qr-atelier .qa-collection { grid-column: 1 !important; grid-row: 3 !important; width: 100% !important; }
+  .app-shell.page-qr-atelier .qa-save-drawer { grid-column: 1 / -1 !important; width: 100% !important; }
 }
 
 @media (min-width: 980px) and (max-width: 1450px) and (any-pointer: coarse) and (orientation: landscape) {
@@ -418,4 +445,43 @@
   .app-shell.page-recipes .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
   .app-shell.page-reviews .reviews-film-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
   .app-shell.page-reviews .reviews-hero.has-art { aspect-ratio: 2.25 !important; }
+}
+
+/* The older desktop styles arrive with route chunks. Stronger selectors keep
+   the large touch iPad in its tablet composition regardless of load order. */
+@media (min-width: 1200px) and (max-width: 1450px) and (any-pointer: coarse) {
+  .app-shell.page-reviews.app-shell .rosie-reviews {
+    display: block !important; position: relative !important;
+    width: min(calc(100% - 40px), 1100px) !important;
+    max-width: 1100px !important;
+    padding: 22px 0 120px !important;
+  }
+  .app-shell.page-reviews.app-shell .reviews-hero.has-art {
+    display: block !important; position: relative !important;
+    top: auto !important; left: auto !important;
+    width: 100% !important; height: auto !important;
+    aspect-ratio: 2.25 !important;
+    margin: 0 0 16px !important;
+    transform: none !important;
+    background: #210b18 !important;
+  }
+  .app-shell.page-reviews.app-shell .reviews-hero.has-art .reviews-hero-art { display: block !important; }
+  .app-shell.page-reviews.app-shell .reviews-hero.has-art .reviews-hero-copy { display: none !important; }
+  .app-shell.page-reviews.app-shell .reviews-content {
+    position: relative !important; width: 100% !important;
+    margin: 0 !important; padding: 30px !important;
+  }
+  .app-shell.page-recipes.app-shell > .recipes-page { padding: 18px 0 125px !important; }
+  .app-shell.page-recipes.app-shell .recipes-top-scene {
+    position: relative !important; top: auto !important; left: auto !important;
+    width: min(calc(100% - 40px), 1060px) !important;
+    max-width: 1060px !important; aspect-ratio: 2 / 1 !important;
+    margin: 0 auto 12px !important; transform: none !important;
+  }
+  .app-shell.page-recipes.app-shell .recipes-body {
+    position: relative !important; width: min(calc(100% - 40px), 1060px) !important;
+    max-width: 1060px !important; margin: 0 auto !important; padding: 0 !important;
+  }
+  .app-shell.page-recipes.app-shell .recipes-heading { display: flex !important; min-height: 0 !important; }
+  .app-shell.page-recipes.app-shell .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 }
