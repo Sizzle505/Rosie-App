@@ -42,7 +42,13 @@ const HAIKU_POSTCARD_SCENES = {
   temple: "/rosieverse/haiku/temple-sunrise.webp"
 };
 const HAIKU_POSTCARD_ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
-const HAIKU_POSTCARD_SCROLL = "/rosieverse/haiku/haiku-scroll-isolated.png";
+const HAIKU_POSTCARD_SCROLL = "/rosieverse/haiku/scroll-mobile.webp";
+const HAIKU_POSTCARD_MOODS = {
+  zen: HAIKU_POSTCARD_ROSIE,
+  savage: "/rosieverse/haiku/rosie-smug.webp",
+  sweet: "/rosieverse/haiku/rosie-affectionate.webp",
+  existential: "/rosieverse/haiku/rosie-existential.webp"
+};
 function drawImageCover(ctx, image, targetWidth, targetHeight) {
   const scale = Math.max(targetWidth / image.width, targetHeight / image.height);
   const sourceWidth = targetWidth / scale;
@@ -74,7 +80,7 @@ async function renderPostcard(poem, sceneId = "field") {
   // Both the photographically rich background and Rosie are individually placed.
   // Only the poem words are generated dynamically; none are baked into the asset.
   try {
-    const rosie = await loadImage(HAIKU_POSTCARD_ROSIE);
+    const rosie = await loadImage(HAIKU_POSTCARD_MOODS[poem.mood] || HAIKU_POSTCARD_ROSIE);
     const height = 790;
     const width = height * (rosie.width / rosie.height);
     ctx.drawImage(rosie, 1200 - width - 35, -40, width, height);
@@ -209,7 +215,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
           <div className="haiku-heading"><div className="haiku-overline">THE LITTLE BOOK OF ROSIE</div><h1>Rosie's Haiku Garden</h1><p>Small poems. Grand opinions.</p></div>
           <div className="haiku-header-mark" aria-hidden="true">✿</div>
         </header>
-        <RosieHaikuScene scene={scene} onSceneChange={setScene} />
+        <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll" key={poemKey(poem)}>
@@ -246,6 +252,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
             ) : mode === "compose" ? (
               <form className="haiku-panel haiku-compose" onSubmit={compose}>
                 <div className="haiku-section-label">ROSIE'S POETRY DESK</div>
+                <img className="haiku-desk-art" src="/rosieverse/haiku/calligraphy-desk.webp" alt="" aria-hidden="true" loading="lazy" />
                 <h2>A poem for anything</h2>
                 <label htmlFor="haiku-topic">Your subject or dedication</label>
                 <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); }} placeholder="Cheese, birthdays, the vacuum…" />
