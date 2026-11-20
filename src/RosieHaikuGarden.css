@@ -707,3 +707,15 @@
     letter-spacing:0;
   }
 }
+
+
+/* Wide desktop finishing pass: center Rosie's wisdom visibly in the lower
+   portion of the first screen, instead of letting the extra scene-button
+   spacing push the final lines below the fold. The content still scrolls
+   naturally and never becomes a fixed overlay. */
+@media (min-width:1480px) and (min-height:730px){
+  .haiku-page .haiku-shell > .haiku-scene-quote{
+    transform:translateY(-110px);
+    margin-bottom:-110px;
+  }
+}
