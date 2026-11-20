@@ -1,0 +1,67 @@
+name: Haiku Garden visual layout QA
+on:
+  pull_request:
+    paths:
+      - src/RosieHaikuGarden.css
+      - src/RosieHaikuArchiveArt.css
+      - src/RosieHaikuMasthead.css
+      - src/RosieHaikuAtmosphere.css
+      - public/rosieverse/haiku/ornaments/**
+      - public/rosieverse/haiku/living-garden/**
+      - src/RosieCalculationsDesktop.css
+      - tests/fixtures/approved-layout-export-2026-11-20.json
+      - tests/haiku-calculations-approved-layout.mjs
+      - src/RosieHaikuGarden.jsx
+      - src/RosieHaikuScene.css
+      - src/RosieHaikuScene.jsx
+      - src/RosieZenMeditation.jsx
+      - src/RosieZenMeditation.css
+      - src/rosieZenAudio.js
+      - src/styles.css
+      - tests/haiku-layout-visual.mjs
+      - tests/haiku-calculations-sandbox-visual.mjs
+      - tests/haiku-final-art-visual.mjs
+      - public/rosieverse/haiku/final/**
+      - src/LayoutPlayground.jsx
+      - src/LayoutPlayground.css
+      - .github/workflows/haiku-layout-visual.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Start Vite preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/haiku-visual-vite.log 2>&1 &
+          for attempt in {1..40}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/haiku-visual-vite.log
+          exit 1
+      - name: Confirm page geometry, scene switching and responsive layout
+        run: node tests/haiku-layout-visual.mjs
+      - name: Verify interactive Haiku and Calculations layout sandbox
+        run: node tests/haiku-calculations-sandbox-visual.mjs
+      - name: Check all user-approved layout coordinates on desktop and protected devices
+        run: node tests/haiku-calculations-approved-layout.mjs
+      - name: Verify finished meditation and journal artwork on desktop tablet phone
+        run: node tests/haiku-final-art-visual.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: haiku-garden-desktop-ipad-iphone-screenshots
+          path: artifacts/haiku-layout/
+          retention-days: 14

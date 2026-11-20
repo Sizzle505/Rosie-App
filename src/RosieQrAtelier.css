@@ -1430,3 +1430,20 @@
   background:rgba(255,245,213,.55);
   border-color:rgba(124,85,42,.55);
 }
+
+/* Release integration: the desktop finish palette is visually aligned behind
+   the View/Copy controls. Keep those controls clickable without allowing the
+   larger preview-stage box to steal clicks from finish swatches. Phone/tablet
+   positions are unchanged. */
+@media screen and (min-width:1200px) {
+  .app-shell.page-qr-atelier .qa-preview-stage {
+    z-index:4!important;
+    pointer-events:none!important;
+  }
+  .app-shell.page-qr-atelier .qa-preview-actions {
+    pointer-events:none!important;
+  }
+  .app-shell.page-qr-atelier .qa-preview-actions button {
+    pointer-events:auto!important;
+  }
+}

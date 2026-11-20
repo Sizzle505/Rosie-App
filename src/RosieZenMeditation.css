@@ -1,0 +1,192 @@
+/* Haiku Zen Garden: intentionally restrained, accessible meditation surfaces. */
+.zen-panel{padding:clamp(16px,2vw,24px);color:#f7e9d1;}
+.zen-panel h2{margin:7px 0 9px;font:normal clamp(24px,2vw,31px)/1.15 Georgia,serif;color:#fff0d7;}
+.zen-panel .zen-panel-intro{margin:0 0 17px;color:#e8d6c9;font:13px/1.65 system-ui,sans-serif;}
+.zen-program-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.zen-program{
+  min-height:75px;padding:12px 10px;text-align:left;display:flex;flex-direction:column;gap:5px;
+  border:1px solid #cbac8070;border-radius:10px;color:#f3e1cf;
+  background:rgba(18,26,43,.68);cursor:pointer;transition:background .2s,border-color .2s;
+}
+.zen-program strong{font:500 16px/1.2 Georgia,serif;}
+.zen-program small{font:650 9px/1.3 system-ui,sans-serif;letter-spacing:.08em;color:#d9b58c;}
+.zen-program.selected,.zen-program:hover{background:rgba(112,72,76,.77);border-color:#efd2a0;}
+.zen-program:focus-visible,.zen-choice-row button:focus-visible{outline:3px solid #ffe3ad;outline-offset:2px;}
+.zen-selected-description{min-height:37px;margin:13px 0 18px;color:#e4d3c9;font:12px/1.55 system-ui,sans-serif;}
+.zen-options{padding:0;margin:0 0 14px;border:0;min-width:0;}
+.zen-options legend{margin:0 0 8px;padding:0;font:700 10px system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#dfbf92;}
+.zen-choice-row{display:flex;gap:6px;flex-wrap:wrap;}
+.zen-choice-row button{flex:1 1 46px;min-height:38px;white-space:nowrap;padding:8px 7px;
+ border:1px solid rgba(232,188,136,.43);border-radius:9px;color:#f1ddc4;background:rgba(16,25,42,.68);
+ font:600 11px system-ui,sans-serif;cursor:pointer;}
+.zen-choice-row button.selected{background:linear-gradient(180deg,#f1d2a2,#d5ad7b);border-color:#f3dbb0;color:#332536;}
+.zen-sound-row button{flex-basis:68px;}
+.zen-volume{display:flex;align-items:center;gap:12px;color:#dfc9ac;font:600 11px system-ui,sans-serif;margin:4px 0 13px;}
+.zen-volume input{flex:1;accent-color:#e6c696;min-width:0;}
+.zen-voice{display:flex;align-items:center;gap:7px;font:12px system-ui,sans-serif;color:#f1dbc8;margin:8px 0 13px;}
+.zen-voice input{accent-color:#d6a76e;width:16px;height:16px;}
+.zen-voice small{font-size:10px;color:#bca99c;}
+.zen-panel .zen-begin{margin:12px 0 16px;}
+.zen-progress-note{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;text-align:center;border-top:1px solid #d9b68466;padding-top:14px;}
+.zen-progress-note span{display:flex;flex-direction:column;gap:4px;font:10px/1.35 system-ui,sans-serif;color:#d9c6ad;}
+.zen-progress-note strong{font:normal 26px Georgia,serif;color:#f8e3b9;}
+.zen-panel .zen-privacy{font:11px/1.4 system-ui,sans-serif;color:#b8a8a9;text-align:center;margin:13px 0 0;}
+
+.zen-immersive{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;
+  overflow-y:auto;overscroll-behavior:contain;padding:24px;isolation:isolate;color:#fef0dc;background:#282133;}
+.zen-immersive-scenery{position:fixed;inset:0;z-index:-2;pointer-events:none;}
+.zen-immersive-scenery img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.zen-immersive-scenery::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(120deg,rgba(17,17,31,.61),rgba(31,20,38,.39) 52%,rgba(17,13,29,.69)),
+             linear-gradient(180deg,rgba(18,11,24,.48),transparent 39%,rgba(15,13,28,.47));}
+.zen-immersive-dialog{position:relative;width:min(1120px,100%);max-height:none;outline:none;padding:clamp(20px,3vw,35px);
+  border:1px solid rgba(244,206,157,.54);border-radius:25px;box-shadow:0 27px 85px rgba(9,8,21,.66);
+  background:linear-gradient(145deg,rgba(40,34,51,.8),rgba(22,25,42,.84));backdrop-filter:blur(11px);}
+.zen-immersive-header{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-bottom:17px;border-bottom:1px solid rgba(237,194,145,.25);}
+.zen-immersive-header span{font:700 10px system-ui,sans-serif;letter-spacing:.22em;color:#f7d5a1;}
+.zen-immersive-header h2{font:normal clamp(27px,3vw,42px)/1.15 Georgia,serif;margin:8px 0 0;color:#fff0d9;}
+.zen-close{flex-shrink:0;display:flex;gap:9px;align-items:center;border:1px solid #e3bd928a;background:#352b3ba8;color:#f6e6d2;
+  border-radius:999px;padding:8px 15px;min-height:38px;font:600 12px system-ui,sans-serif;cursor:pointer;}
+.zen-close span{font-size:21px;line-height:.8;}
+.zen-close:hover{background:#644452;}
+.zen-immersive-body{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(25px,4vw,60px);min-height:460px;}
+.zen-breath-portrait{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;}
+.zen-breath-portrait img{position:relative;z-index:1;max-width:100%;max-height:clamp(265px,55vh,525px);width:auto;height:auto;
+  object-fit:contain;filter:drop-shadow(0 12px 20px rgba(22,12,28,.38));
+  transform-origin:50% 87%;animation:zen-rosie-breathe 10s ease-in-out infinite;}
+.zen-breath-halo{position:absolute;z-index:0;width:min(75%,430px);aspect-ratio:1;top:20%;border-radius:50%;
+  background:radial-gradient(circle,rgba(248,220,158,.23),rgba(248,180,161,.07) 58%,transparent 73%);
+  filter:blur(12px);animation:zen-halo-breathe 10s ease-in-out infinite;}
+.zen-breath-portrait>p{margin:5px 0 0;text-align:center;font:italic 17px/1.4 Georgia,serif;color:#ffe7c5;text-shadow:0 3px 9px #201122;}
+.zen-eyebrow{font:700 10px system-ui,sans-serif;letter-spacing:.2em;color:#ffdaa7;}
+.zen-guidance{min-width:0;padding:16px 0;}
+.zen-session-timer{font:normal clamp(58px,6.2vw,99px)/1.06 Georgia,serif;color:#ffedd1;letter-spacing:.045em;font-variant-numeric:tabular-nums;margin:17px 0 14px;}
+.zen-timeline{height:4px;border-radius:100px;background:#d9b88e4a;overflow:hidden;margin:0 0 28px;}
+.zen-timeline span{display:block;height:100%;background:linear-gradient(90deg,#fff1ce,#e6b37b);transition:width .3s linear;}
+.zen-guidance-copy{min-height:126px;display:flex;align-items:center;}
+.zen-guidance-copy p{font:normal clamp(20px,2vw,28px)/1.45 Georgia,serif;color:#fff0dd;margin:0;text-shadow:0 2px 6px #1e1724;}
+.zen-breath-cue{position:relative;display:flex;align-items:center;gap:14px;min-height:125px;margin-bottom:6px;}
+.zen-breath-cue strong{display:block;font:normal clamp(21px,2vw,29px)/1.3 Georgia,serif;}
+.zen-breath-cue small{display:block;margin-top:9px;font:12px/1.45 system-ui,sans-serif;color:#e4c9ad;}
+.zen-breath-orb{width:63px;height:63px;flex-shrink:0;border-radius:50%;border:1px solid #fbe1bd;
+  background:radial-gradient(circle at 36% 30%,#fff0d1,#e5a6aa 58%,#946b89);
+  box-shadow:0 0 30px #efbba87a;animation:zen-halo-breathe 10s ease-in-out infinite;}
+.zen-breath-count{margin-left:auto;align-self:center;color:#f7d2a2;font:normal 28px Georgia,serif;}
+.zen-session-controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;}
+.zen-action-primary,.zen-action-secondary{min-width:145px;min-height:48px;border-radius:10px;padding:11px 19px;
+  font:700 13px system-ui,sans-serif;cursor:pointer;}
+.zen-action-primary{border:1px solid #fff1d1;background:linear-gradient(#f5dcae,#d4a877);color:#38273d;}
+.zen-action-secondary{border:1px solid #e4c1a78a;background:#27283dc9;color:#f8e5d2;}
+.zen-action-primary:hover{filter:brightness(1.07);}
+.zen-action-secondary:hover{background:#50435c;}
+.zen-session-note,.zen-audio-note{color:#d8c7bb;font:11px/1.5 system-ui,sans-serif;margin-top:18px;}
+.zen-audio-note{color:#ffe6b4;}
+.zen-breath-portrait.paused img,.zen-breath-portrait.paused .zen-breath-halo,
+.zen-breath-cue.paused .zen-breath-orb{animation-play-state:paused;}
+.zen-complete{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:28px;padding:25px 0 4px;}
+.zen-complete img{max-width:100%;max-height:min(55vh,440px);object-fit:contain;filter:drop-shadow(0 12px 25px #0d0b1d66);}
+.zen-complete h3{font:normal clamp(33px,4vw,53px) Georgia,serif;margin:10px 0;color:#fff1d4;}
+.zen-complete p{font:17px/1.6 Georgia,serif;color:#f1dac4;}
+.zen-complete .zen-complete-stats{font:12px/1.6 system-ui,sans-serif;color:#f2d3a9;margin-bottom:24px;}
+@keyframes zen-rosie-breathe{
+  0%,100%{transform:translateY(0) scale(1)}
+  40%{transform:translateY(-4px) scale(1.021)}
+  47%{transform:translateY(-4px) scale(1.022)}
+}
+@keyframes zen-halo-breathe{
+  0%,100%{transform:scale(.95);opacity:.56}
+  40%{transform:scale(1.17);opacity:1}
+  47%{transform:scale(1.17);opacity:1}
+}
+@media(max-width:900px){
+ .zen-immersive{padding:12px;align-items:flex-start;}
+ .zen-immersive-dialog{margin:auto 0;border-radius:18px;}
+ .zen-immersive-body{grid-template-columns:1fr;gap:10px;min-height:0;}
+ .zen-breath-portrait img{max-height:min(32vh,300px);}
+ .zen-breath-halo{top:8%;width:min(48%,260px);}
+ .zen-guidance{padding:10px 4px;}
+ .zen-session-timer{font-size:62px;margin:8px 0 11px;}
+ .zen-guidance-copy{min-height:67px;}
+ .zen-guidance-copy p{font-size:22px;}
+ .zen-timeline{margin-bottom:12px;}
+ .zen-complete{grid-template-columns:1fr;gap:8px;text-align:center;}
+ .zen-complete img{max-height:33vh;display:block;margin:auto;}
+}
+@media(max-width:540px){
+ .zen-panel{padding:19px 17px;}
+ .zen-program{min-height:76px;padding:10px 8px;}
+ .zen-program strong{font-size:14px;}
+ .zen-program small{font-size:8px;}
+ .zen-immersive{padding:0;}
+ .zen-immersive-dialog{min-height:100dvh;width:100%;margin:0;border-radius:0;border:0;
+   padding:calc(13px + env(safe-area-inset-top)) 17px calc(18px + env(safe-area-inset-bottom));}
+ .zen-immersive-header h2{font-size:27px;}
+ .zen-immersive-header span{font-size:8px;letter-spacing:.14em;}
+ .zen-close{padding:7px 10px;min-height:38px;}
+ .zen-immersive-body{gap:4px;}
+ .zen-breath-portrait img{max-height:clamp(190px,32vh,290px);}
+ .zen-breath-portrait>p{font-size:13px;}
+ .zen-session-timer{font-size:58px;}
+ .zen-breath-cue{min-height:96px;}
+ .zen-breath-orb{width:52px;height:52px;}
+ .zen-breath-cue strong{font-size:21px;}
+ .zen-session-controls{gap:10px;}
+ .zen-action-primary,.zen-action-secondary{flex:1;min-width:0;}
+ .zen-session-note{margin-top:10px;}
+}
+@media(prefers-reduced-motion:reduce){
+ .zen-breath-portrait img,.zen-breath-halo,.zen-breath-orb{animation:none !important;}
+ .zen-timeline span{transition:none;}
+}
+
+/* Let the fifth program (Haiku Reflection) breathe across the full selector. */
+.zen-program-grid .zen-program:last-child:nth-child(odd){
+  grid-column:1 / -1;
+  min-height:58px;
+}
+
+
+/* Final Haiku art pass (Nov 20). Preserve real HTML controls and accessible
+   program names. These images decorate the existing buttons only. */
+.zen-program{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:10px;
+  min-height:86px;
+  padding:9px 10px;
+}
+.zen-program-emblem{
+  display:block;
+  flex:0 0 clamp(43px,4vw,59px);
+  width:clamp(43px,4vw,59px);
+  height:clamp(43px,4vw,59px);
+  object-fit:contain;
+  filter:drop-shadow(0 3px 7px rgba(14,9,18,.34));
+  pointer-events:none;
+}
+.zen-program-caption{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1;}
+.zen-program-caption strong{font:500 clamp(13px,1.13vw,16px)/1.18 Georgia,serif;}
+.zen-program-caption small{font:650 9px/1.32 system-ui,sans-serif;letter-spacing:.06em;color:#e5c5a2;}
+.zen-program.selected .zen-program-emblem{filter:drop-shadow(0 2px 9px rgba(248,205,149,.45));}
+.zen-breath-halo{
+  background:
+    url("/rosieverse/haiku/final/lotus-breath-halo.webp") center / contain no-repeat,
+    radial-gradient(circle,rgba(248,220,158,.18),rgba(248,180,161,.08) 60%,transparent 75%);
+  opacity:.56;
+  filter:blur(2px);
+  border-radius:0;
+}
+/* The illustration itself does not replace the visual breathing animation. */
+@media (max-width:900px){
+  .zen-program{min-height:80px;padding:8px;gap:7px;}
+  .zen-program-emblem{width:46px;height:46px;flex-basis:46px;}
+  .zen-program-caption strong{font-size:13px;}
+}
+@media (max-width:540px){
+  .zen-program{min-height:78px;padding:8px 7px;gap:6px;}
+  .zen-program-emblem{width:39px;height:39px;flex-basis:39px;}
+  .zen-program-caption strong{font-size:12px;line-height:1.18;}
+  .zen-program-caption small{font-size:7px;letter-spacing:0;}
+}
+/* The previous reduced-motion rule also stops the new halo animation. */

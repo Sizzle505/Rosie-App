@@ -1,0 +1,123 @@
+{
+  "tool": "RosieVerse Layout Playground",
+  "version": 2,
+  "exportedAt": "2026-11-20T18:54:22.148Z",
+  "referenceWidths": {
+    "desktop": 1920,
+    "tablet": 820,
+    "mobile": 390
+  },
+  "baselineCommit": "05c69a2e585113496a96e09fd7ee3e733091b51a",
+  "referenceViewport": {
+    "width": 1920,
+    "height": 1080,
+    "immersive": true,
+    "device": "desktop"
+  },
+  "layouts": {
+    "haiku/desktop": {
+      "scene-stage": {
+        "x": -102,
+        "y": 180,
+        "scale": 1.07
+      },
+      "scroll": {
+        "x": -121,
+        "y": 52,
+        "scale": 1.08
+      },
+      "postcard": {
+        "x": 0,
+        "y": 2,
+        "scale": 1
+      },
+      "poem-actions": {
+        "x": -123,
+        "y": 29,
+        "scale": 1
+      },
+      "share": {
+        "x": 5,
+        "y": 2,
+        "scale": 1
+      },
+      "save": {
+        "x": 8,
+        "y": 2,
+        "scale": 1
+      },
+      "field": {
+        "x": -70,
+        "y": 211,
+        "scale": 1
+      },
+      "zen-garden": {
+        "x": -69,
+        "y": 212,
+        "scale": 1
+      },
+      "temple": {
+        "x": -70,
+        "y": 213,
+        "scale": 1
+      },
+      "studio": {
+        "x": -107,
+        "y": 298,
+        "scale": 1
+      },
+      "header": {
+        "x": -4,
+        "y": 57,
+        "scale": 1
+      }
+    },
+    "calculations/desktop": {
+      "units": {
+        "x": 8,
+        "y": -2,
+        "scale": 1.05
+      },
+      "tool-grid": {
+        "x": -4,
+        "y": -17,
+        "scale": 1
+      },
+      "toolkit-heading": {
+        "x": 1,
+        "y": -12,
+        "scale": 0.9
+      },
+      "currency": {
+        "x": 6,
+        "y": -23,
+        "scale": 1
+      },
+      "loan": {
+        "x": -4,
+        "y": -18,
+        "scale": 1
+      },
+      "percent": {
+        "x": 5,
+        "y": -17,
+        "scale": 1
+      },
+      "split": {
+        "x": 15,
+        "y": -15,
+        "scale": 1
+      },
+      "date": {
+        "x": -6,
+        "y": -2,
+        "scale": 1
+      },
+      "tip": {
+        "x": 16,
+        "y": -2,
+        "scale": 1.03
+      }
+    }
+  }
+}

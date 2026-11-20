@@ -1,0 +1,271 @@
+{
+  "source_archives": [
+    "haiku-01-10.zip",
+    "haiku-11-20.zip"
+  ],
+  "total_assets": 39,
+  "bytes": 6867000,
+  "assets": [
+    {
+      "path": "ornaments/masthead-grand.webp",
+      "width": 2170,
+      "height": 712,
+      "bytes": 548832,
+      "original_sha256": "ae0c2b1e6994391bfe6899652fee7dbe7a52b773411017d2341c42e33e0efd3b"
+    },
+    {
+      "path": "ornaments/masthead-compact.webp",
+      "width": 2114,
+      "height": 707,
+      "bytes": 554940,
+      "original_sha256": "42dade6bd319cd0206d5752c69e30383d604ca0846a77f44d7ea2ab730caeac4"
+    },
+    {
+      "path": "ornaments/imperial-paw-crest.webp",
+      "width": 1391,
+      "height": 1016,
+      "bytes": 464058,
+      "original_sha256": "207e91eba54228fd4b5dd8518641357f974dcef5c35d071e8d33c4f9851538b6"
+    },
+    {
+      "path": "ornaments/shoji-frame-original.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 479414,
+      "original_sha256": "9ffa5e17a6025e10bb23a57798121c16a08d6d94d201d6c8a9ebb4d2529dd41a"
+    },
+    {
+      "path": "ornaments/washi-paper-original.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 640374,
+      "original_sha256": "e0705c6eff45a9c9aba4ee599601f702bc349222b2fdf05287ea1c39816fa081"
+    },
+    {
+      "path": "ornaments/tab-daily.webp",
+      "width": 543,
+      "height": 724,
+      "bytes": 141762,
+      "original_sha256": "132091fcb42e9a5db0786da77fd178e152fe5fcb219cae14fb19f6b4c3305cee"
+    },
+    {
+      "path": "ornaments/tab-compose.webp",
+      "width": 543,
+      "height": 724,
+      "bytes": 144274,
+      "original_sha256": "8c63dbf02bac2b4742d9afaf21152ee80727962765b64055ae3b2f92ba7c3f11"
+    },
+    {
+      "path": "ornaments/tab-meditate.webp",
+      "width": 543,
+      "height": 724,
+      "bytes": 145522,
+      "original_sha256": "1197376f3326cf9b10cee8869ccaea61d5bc2b807385f19fc3fc26f6aaa474b6"
+    },
+    {
+      "path": "ornaments/tab-journal.webp",
+      "width": 543,
+      "height": 724,
+      "bytes": 163300,
+      "original_sha256": "faed0f8049b9d7e39dfd6d481541027b216d30e4db6fd6a39149d7ebf921cd53"
+    },
+    {
+      "path": "living-garden/field-meadow.webp",
+      "width": 1448,
+      "height": 467,
+      "bytes": 302334,
+      "original_sha256": "3119df478182077bbde6d95bc6a00bbcb8fab7c3d60d0429aa6592973b182491"
+    },
+    {
+      "path": "living-garden/sakura-left.webp",
+      "width": 825,
+      "height": 721,
+      "bytes": 211406,
+      "original_sha256": "6cb53d43d0305af619faae802be7f6387cf89e1704f9d71d6480d64c87dd56f2"
+    },
+    {
+      "path": "living-garden/sakura-right.webp",
+      "width": 843,
+      "height": 846,
+      "bytes": 221064,
+      "original_sha256": "a31485e752a81c78e0ca5433a472979809eb6699fe98cebf69a185b159777d27"
+    },
+    {
+      "path": "living-garden/petals-atlas.webp",
+      "width": 888,
+      "height": 666,
+      "bytes": 37680,
+      "original_sha256": "b0b8e83ddd4afa8454eb2087ac2c2914fa12ecd99bd3988dc5a9b385b17983fe"
+    },
+    {
+      "path": "living-garden/field-sunbeams.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 142348,
+      "original_sha256": "d0b9e5b0ae2dee804af3f601482c7189bb0a2ae62d3fc67d4440b3ebac6a4151"
+    },
+    {
+      "path": "living-garden/golden-pollen.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 24816,
+      "original_sha256": "60b21431c777460d84fce2047629e4212d3880b096768695bed46909edcf1f71"
+    },
+    {
+      "path": "living-garden/zen-sand-sheen.webp",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 58520,
+      "original_sha256": "539cc522fbac7daccd592e84eebd7ac5db566664746b93da7b8290c7097fba71"
+    },
+    {
+      "path": "living-garden/zen-water-ripples.webp",
+      "width": 1100,
+      "height": 420,
+      "bytes": 75030,
+      "original_sha256": "c39f7818bb781691993acb922cbeeca81b1c895d594672ba2bcd005ae3f803b1"
+    },
+    {
+      "path": "living-garden/temple-lantern.webp",
+      "width": 1051,
+      "height": 1448,
+      "bytes": 491996,
+      "original_sha256": "7a9b3737c08528b052e73b2d1bf72a25fb9849f253e0bde50e5654718cddc6ae"
+    },
+    {
+      "path": "living-garden/meditation-halo-alternate.webp",
+      "width": 1200,
+      "height": 1200,
+      "bytes": 117352,
+      "original_sha256": "c43afc78ae060529ed86708640c207baf4c035a5066a767a8c8d0414febbfa43"
+    },
+    {
+      "path": "ornaments/shoji-frame-refined.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 431302,
+      "original_sha256": "f218552fcfd964d7515acc56557de76fc5bd0e60d94db5ac752a040b63090e3d"
+    },
+    {
+      "path": "ornaments/washi-paper-refined.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 657932,
+      "original_sha256": "a727835cb884f3a6c0a7cac849cf8921a17228674034fce90839eb5d1357f8c7"
+    },
+    {
+      "path": "ornaments/meditation-breathe.webp",
+      "width": 433,
+      "height": 460,
+      "bytes": 55094,
+      "original_sha256": "a8e9a8bce44a2da36fcda9c6f631d52d5089651a05b0acc59b874b48bf221716"
+    },
+    {
+      "path": "ornaments/meditation-quiet.webp",
+      "width": 433,
+      "height": 460,
+      "bytes": 61284,
+      "original_sha256": "a478c213a272ed6ec0e65fb2478d7c8ee6960c8d64da90172b776d18e5053ed9"
+    },
+    {
+      "path": "ornaments/meditation-calm.webp",
+      "width": 433,
+      "height": 460,
+      "bytes": 57050,
+      "original_sha256": "b3b7150c3b91e38dc19d9ebddc2922e76461f64e2da23b9e3e5ce6085906ed61"
+    },
+    {
+      "path": "ornaments/meditation-unwind.webp",
+      "width": 433,
+      "height": 460,
+      "bytes": 54952,
+      "original_sha256": "7e3f95bae37ff64cfa08303ee9b71a2c29d0e63af45b81ff2dda5c9c8092b4b7"
+    },
+    {
+      "path": "ornaments/meditation-reflect.webp",
+      "width": 433,
+      "height": 462,
+      "bytes": 57618,
+      "original_sha256": "a13b09f40c47f6d62c215a48aae8925ff6b042826db8eaf6b0279add25a555d2"
+    },
+    {
+      "path": "ornaments/rosie-enlightened-refined.webp",
+      "width": 1122,
+      "height": 1402,
+      "bytes": 485862,
+      "original_sha256": "45df38cf423652660c0806c782e4ec6b880cebb4212f82474833f00b495427a7"
+    },
+    {
+      "path": "living-garden/petal-01.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3456
+    },
+    {
+      "path": "living-garden/petal-02.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3008
+    },
+    {
+      "path": "living-garden/petal-03.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3210
+    },
+    {
+      "path": "living-garden/petal-04.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3778
+    },
+    {
+      "path": "living-garden/petal-05.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3004
+    },
+    {
+      "path": "living-garden/petal-06.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3870
+    },
+    {
+      "path": "living-garden/petal-07.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3458
+    },
+    {
+      "path": "living-garden/petal-08.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3084
+    },
+    {
+      "path": "living-garden/petal-09.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3142
+    },
+    {
+      "path": "living-garden/petal-10.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3374
+    },
+    {
+      "path": "living-garden/petal-11.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 4028
+    },
+    {
+      "path": "living-garden/petal-12.webp",
+      "width": 222,
+      "height": 222,
+      "bytes": 3472
+    }
+  ]
+}

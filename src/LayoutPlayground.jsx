@@ -7,11 +7,17 @@ import "./LayoutPlayground.css";
  * stay inside the iframe until the user exports a layout specification.
  */
 const STORAGE_KEY = "rosieverse.layout-playground.drafts.v2";
+const FOCUS_MODE = new URLSearchParams(window.location.search).get("focus") === "haiku-calculations";
+const FOCUS_STORAGE_KEY = "rosieverse.layout-sandbox.haiku-calculations.v1";
+const ACTIVE_STORAGE_KEY = FOCUS_MODE ? FOCUS_STORAGE_KEY : STORAGE_KEY;
+const FOCUS_PAGE_IDS = new Set(["haiku", "calculations"]);
+const FOCUS_QUERY = "?layout=1&focus=haiku-calculations";
 const BASELINE_COMMIT = "05c69a2e585113496a96e09fd7ee3e733091b51a";
 const DEVICE_HEIGHTS = { tablet: 1180, mobile: 844 };
 const formatSize = (width, height) => Math.round(width) + " × " + Math.round(height);
 const PAGES = [
   { id: "qr-atelier", label: "QR Atelier" },
+  { id: "haiku", label: "Haiku Zen Garden" },
   { id: "calculations", label: "Calculations" },
   { id: "resources", label: "Resources Hub" },
   { id: "recipes", label: "Recipes" },
@@ -26,6 +32,42 @@ const PAGES = [
   { id: "vault", label: "Card Vault" }
 ];
 const TARGETS = {
+  haiku: [
+    ["landscape", "Full-page garden background", ".haiku-page-landscape", "Scenery"],
+    ["header", "Heading area", ".haiku-header", "Heading"],
+    ["title", "Haiku Zen Garden title", ".haiku-heading h1", "Heading"],
+    ["subtitle", "Page subtitle", ".haiku-heading p", "Heading"],
+    ["back", "Back to RosieVerse", ".haiku-back", "Heading"],
+    ["rosie", "Meditating Rosie", ".haiku-scene-rosie", "Rosie & garden"],
+    ["scene-stage", "Rosie scene area", ".haiku-scene-image", "Rosie & garden"],
+    ["scene-buttons", "Background button group", ".haiku-scene-selector", "Rosie & garden"],
+    ["field", "Flower Field button", ".haiku-scene-selector button:nth-child(1)", "Rosie & garden"],
+    ["zen-garden", "Zen Garden button", ".haiku-scene-selector button:nth-child(2)", "Rosie & garden"],
+    ["temple", "Temple button", ".haiku-scene-selector button:nth-child(3)", "Rosie & garden"],
+    ["scroll", "Poetry scroll artwork", ".haiku-scroll", "Poetry scroll"],
+    ["verse", "Three-line haiku group", ".haiku-verse", "Poetry scroll"],
+    ["line-one", "First haiku line", ".haiku-verse p:nth-child(1)", "Poetry scroll"],
+    ["line-two", "Second haiku line", ".haiku-verse p:nth-child(2)", "Poetry scroll"],
+    ["line-three", "Third haiku line", ".haiku-verse p:nth-child(3)", "Poetry scroll"],
+    ["signature", "Rosie's signature", ".haiku-scroll-signature", "Poetry scroll"],
+    ["meter", "5 · 7 · 5", ".haiku-metre", "Poetry scroll"],
+    ["poem-actions", "Save, Share & Postcard", ".haiku-verse-actions", "Poetry controls"],
+    ["save", "Save poem button", ".haiku-verse-actions button:nth-child(1)", "Poetry controls"],
+    ["share", "Share verse button", ".haiku-verse-actions button:nth-child(2)", "Poetry controls"],
+    ["postcard", "Postcard button", ".haiku-verse-actions button:nth-child(3)", "Poetry controls"],
+    ["studio", "Daily / Compose / Meditate panel", ".haiku-workbench", "Activities"],
+    ["tabs", "Activity tabs", ".haiku-tabs", "Activities"],
+    ["panel", "Active activity content", ".haiku-workbench .haiku-panel, .haiku-workbench .zen-panel", "Activities"],
+    ["panel-title", "Active activity heading", ".haiku-workbench .haiku-panel h2, .haiku-workbench .zen-panel h2", "Activities"],
+    ["meditation-programs", "Meditation program buttons", ".zen-program-grid", "Meditation"],
+    ["meditation-duration", "Session length controls", ".zen-options:nth-of-type(1)", "Meditation"],
+    ["meditation-sound", "Garden sound controls", ".zen-options:nth-of-type(2)", "Meditation"],
+    ["meditation-start", "Begin meditation button", ".zen-begin", "Meditation"],
+    ["wisdom", "The Way of the Shiba section", ".haiku-shell > .haiku-scene-quote", "Wisdom footer"],
+    ["wisdom-kicker", "The Way of the Shiba label", ".haiku-shell > .haiku-scene-quote .haiku-scene-quote-kicker", "Wisdom footer"],
+    ["wisdom-quote", "Wisdom main line", ".haiku-shell > .haiku-scene-quote strong", "Wisdom footer"],
+    ["wisdom-aside", "Wisdom smaller line", ".haiku-shell > .haiku-scene-quote small", "Wisdom footer"]
+  ],
   "qr-atelier": [
     ["hero", "Header", ".qa-hero"],
     ["title", "Title artwork", ".qa-title"],
@@ -41,11 +83,24 @@ const TARGETS = {
     ["collection", "Saved collection", ".qa-collection"]
   ],
   calculations: [
-    ["hero", "Main header", ".rc-hero"],
-    ["header-copy", "Header title", ".rc-desktop-hero-copy"],
-    ["stage", "Rosie desk scene", ".rc-calculator-stage"],
-    ["workspace", "Calculator workspace", ".rc-workspace"],
-    ["tool-grid", "Calculator choices", ".rc-tool-grid"]
+    ["hero", "Main header artwork", ".rc-hero", "Heading & desk"],
+    ["header-copy", "Header title", ".rc-desktop-hero-copy", "Heading & desk"],
+    ["stage", "Calculator stage", ".rc-calculator-stage", "Heading & desk"],
+    ["calculator", "Calculator itself", ".rac-frame", "Heading & desk"],
+    ["workspace", "Pocket Toolkit workspace", ".rc-workspace", "Pocket Toolkit"],
+    ["toolkit-heading", "The Pocket Toolkit heading", ".rc-tools-heading", "Pocket Toolkit"],
+    ["tool-grid", "All seven function buttons", ".rc-tool-grid", "Pocket Toolkit"],
+    ["tip", "Tip Calculator button", ".rc-tool-card--tip", "Individual buttons"],
+    ["units", "Unit Conversions button", ".rc-tool-card--units", "Individual buttons"],
+    ["date", "Date Calculator button", ".rc-tool-card--date", "Individual buttons"],
+    ["split", "Split Bill button", ".rc-tool-card--split", "Individual buttons"],
+    ["percent", "Percentages & Discounts button", ".rc-tool-card--percent", "Individual buttons"],
+    ["loan", "Loan & Interest button", ".rc-tool-card--loan", "Individual buttons"],
+    ["currency", "Currency Converter button", ".rc-tool-card--currency", "Individual buttons"],
+    ["tool-overlay", "Open gold instrument", ".rc-active-tool-overlay", "Active instrument"],
+    ["tool-panel", "Instrument panel", ".rc-tool-panel.rc-device", "Active instrument"],
+    ["tool-close", "Close instrument button", ".rc-active-tool-close", "Active instrument"],
+    ["footer", "Calculator footer text", ".rc-footer-note", "Pocket Toolkit"]
   ],
   resources: [
     ["header", "Resources header", ".rr-hub-header"],
@@ -147,7 +202,7 @@ function normalizeTransform(raw) {
 }
 function readDrafts() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_STORAGE_KEY) || "{}");
     return saved && typeof saved === "object" && !Array.isArray(saved) ? saved : {};
   } catch { return {}; }
 }
@@ -157,11 +212,13 @@ const send = (target, kind, fields = {}) =>
 
 export default function LayoutPlayground() {
   const startPage = window.location.hash.slice(1);
-  const [page, setPage] = useState(PAGES.some(item => item.id === startPage) ? startPage : "qr-atelier");
+  const pageOptions = FOCUS_MODE ? PAGES.filter(item => FOCUS_PAGE_IDS.has(item.id)) : PAGES;
+  const [page, setPage] = useState(pageOptions.some(item => item.id === startPage) ? startPage : (FOCUS_MODE ? "haiku" : "qr-atelier"));
   const [device, setDevice] = useState("desktop");
-  const [desktopWidth, setDesktopWidth] = useState(1440);
+  const [desktopWidth, setDesktopWidth] = useState(FOCUS_MODE ? 1792 : 1440);
   const [drafts, setDrafts] = useState(readDrafts);
   const [selected, setSelected] = useState("");
+  const [targetFilter, setTargetFilter] = useState("");
   const [frameReady, setFrameReady] = useState(false);
   const [availableWidth, setAvailableWidth] = useState(900);
   const [notice, setNotice] = useState("");
@@ -181,6 +238,7 @@ export default function LayoutPlayground() {
   const currentKey = keyFor(page, device);
   const currentDraft = drafts[currentKey] || {};
   const parts = TARGETS[page] || [];
+  const filteredParts = parts.filter(part => (part[1]+" "+(part[3]||"")).toLowerCase().includes(targetFilter.toLowerCase()));
   const currentPart = normalizeTransform(currentDraft[selected]);
   // Immersive desktop mirrors the real browser fullscreen CSS viewport, not
   // a shrunken 1440px iframe. Tablet/phone maintain their native CSS widths.
@@ -194,7 +252,7 @@ export default function LayoutPlayground() {
 
   useEffect(() => {
     draftsRef.current = drafts;
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(drafts)); }
+    try { localStorage.setItem(ACTIVE_STORAGE_KEY, JSON.stringify(drafts)); }
     catch { setNotice("Local storage is unavailable. Export before leaving."); }
   }, [drafts]);
 
@@ -280,11 +338,12 @@ export default function LayoutPlayground() {
   });
 
   function switchPage(next) {
-    if (!PAGES.some(item => item.id === next)) return;
+    if (!pageOptions.some(item => item.id === next)) return;
     setPage(next);
     setSelected("");
+    setTargetFilter("");
     setFrameReady(false);
-    window.history.replaceState(null, "", "?layout=1#" + next);
+    window.history.replaceState(null, "", (FOCUS_MODE ? FOCUS_QUERY : "?layout=1") + "#" + next);
   }
   function switchDevice(next) {
     setDevice(next);
@@ -362,7 +421,7 @@ export default function LayoutPlayground() {
       version: 2,
       exportedAt: new Date().toISOString(),
       referenceWidths: { desktop: immersive && device === "desktop" ? width : desktopWidth, tablet: 820, mobile: 390 },
-      baselineCommit: BASELINE_COMMIT,
+      baselineCommit: FOCUS_MODE ? "c235fff601018443e1e465a7a7e6096cbb401560" : BASELINE_COMMIT,
       referenceViewport: { width, height, immersive, device },
       layouts: drafts
     };
@@ -370,7 +429,7 @@ export default function LayoutPlayground() {
     const href = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = href;
-    link.download = "rosie-layout-playground.json";
+    link.download = FOCUS_MODE ? "rosie-haiku-calculations-sandbox.json" : "rosie-layout-playground.json";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -387,12 +446,12 @@ export default function LayoutPlayground() {
       if (parsed.version === 1 && !window.confirm(
         "This was exported from an older Rosie App. Its offsets may duplicate layout changes already published. Import them anyway?"
       )) return;
-      if (parsed.baselineCommit && parsed.baselineCommit !== BASELINE_COMMIT &&
+      if (parsed.baselineCommit && parsed.baselineCommit !== (FOCUS_MODE ? "c235fff601018443e1e465a7a7e6096cbb401560" : BASELINE_COMMIT) &&
         !window.confirm("This layout was saved against a different version of Rosie App. Import anyway?")) return;
       const safe = {};
       for (const [key, values] of Object.entries(parsed.layouts)) {
         const [pageId, deviceId] = key.split("/");
-        if (!PAGES.some(p => p.id === pageId) || !DEVICES[deviceId] || !values || typeof values !== "object") continue;
+        if (!pageOptions.some(p => p.id === pageId) || !DEVICES[deviceId] || !values || typeof values !== "object") continue;
         safe[key] = {};
         for (const [id, value] of Object.entries(values)) {
           if ((TARGETS[pageId] || []).some(part => part[0] === id)) safe[key][id] = normalizeTransform(value);
@@ -411,8 +470,10 @@ export default function LayoutPlayground() {
     <div className={"lp-root" + (immersive ? " lp-immersive" : "")} ref={rootRef}>
       <header className="lp-topbar">
         <div>
-          <b>ROSIEVERSE <span>LAYOUT PLAYGROUND</span></b>
-          <small>Current Rosie App · exact-screen preview · drafts only, never published automatically</small>
+          <b>ROSIEVERSE <span>{FOCUS_MODE ? "HAIKU + CALCULATIONS SANDBOX" : "LAYOUT PLAYGROUND"}</span></b>
+          <small>{FOCUS_MODE
+            ? "Move, resize and fine-tune the live pages · automatically saved to this browser · never changes production"
+            : "Current Rosie App · exact-screen preview · drafts only, never published automatically"}</small>
         </div>
         <div className="lp-top-actions">
           <button type="button" onClick={undo} disabled={!undoAvailable}>Undo</button>
@@ -424,16 +485,38 @@ export default function LayoutPlayground() {
           </button>
           <button type="button" onClick={() => uploadRef.current?.click()}>Import</button>
           <button type="button" className="lp-gold" onClick={exportLayout}>Export layout</button>
-          <a href="/#resources">Exit studio</a>
+          <a href={FOCUS_MODE ? "/#haiku" : "/#resources"}>Exit studio</a>
           <input ref={uploadRef} type="file" accept=".json,application/json" hidden onChange={event => importLayout(event.target.files?.[0])} />
         </div>
       </header>
       <div className="lp-workbench">
         <aside className={"lp-sidebar" + (immersive ? " lp-floating-inspector" : "") + (immersive && !inspectorOpen ? " lp-inspector-hidden" : "")}>
           <label className="lp-label" htmlFor="lp-page">Page</label>
+          {FOCUS_MODE && <div className="lp-sandbox-page-buttons" role="group" aria-label="Sandbox page">
+            {pageOptions.map(item => <button type="button" key={item.id} aria-pressed={page === item.id}
+              className={page === item.id ? "active" : ""} onClick={() => switchPage(item.id)}>{item.label}</button>)}
+          </div>}
           <select id="lp-page" value={page} onChange={event => switchPage(event.target.value)}>
-            {PAGES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+            {pageOptions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
           </select>
+          {FOCUS_MODE && page === "haiku" && <div className="lp-activity-controls">
+            <span className="lp-label">Preview a Haiku activity</span>
+            <div role="group" aria-label="Haiku activity to preview">
+              {["Daily", "Compose", "Meditate", "Journal"].map((name) =>
+                <button type="button" key={name} onClick={() => send(frameRef.current?.contentWindow,
+                  "activate", { target: name.toLowerCase() })}>{name}</button>)}
+            </div>
+          </div>}
+          {FOCUS_MODE && page === "calculations" && <div className="lp-activity-controls">
+            <span className="lp-label">Preview a calculator instrument</span>
+            <select aria-label="Choose instrument to preview" defaultValue="tip"
+              onChange={event => send(frameRef.current?.contentWindow, "activate", { target: event.target.value })}>
+              {["tip", "units", "date", "split", "percent", "loan", "currency"].map(id =>
+                <option key={id} value={id}>{({tip:"Tip Calculator",units:"Unit Conversions",date:"Date Calculator",
+                  split:"Split Bill",percent:"Percentages & Discounts",loan:"Loan & Interest",
+                  currency:"Currency Converter"})[id]}</option>)}
+            </select>
+          </div>}
           <div className="lp-label">Preview size</div>
           <div className="lp-devices">
             {Object.entries(DEVICES).map(([id, item]) =>
@@ -444,19 +527,28 @@ export default function LayoutPlayground() {
               onChange={event => setDesktopWidth(Math.max(1024, Math.min(1920, Number(event.target.value) || 1440)))} />
             <span>px</span>
           </label>}
-          <div className="lp-section-head"><b>Movable elements</b><small>{parts.length} groups</small>{immersive &&
+          <div className="lp-section-head"><b>Movable elements</b><small>{parts.length} elements</small>{immersive &&
             <button type="button" className="lp-close-inspector" onClick={() => setInspectorOpen(false)}>Close ×</button>}</div>
+          {FOCUS_MODE && <input className="lp-target-search" type="search" value={targetFilter}
+            onChange={event => setTargetFilter(event.target.value)} placeholder="Find an element…" aria-label="Find an element" />}
           <div className="lp-target-list">
-            {parts.map(([id, label]) => {
+            {filteredParts.map(([id, label, selector, group], index) => {
               const part = currentDraft[id];
-              return <button key={id} type="button" className={selected === id ? "lp-selected" : ""}
-                onClick={() => setSelected(id)}><span>{label}</span>{part && <i aria-label="Adjusted element" />}</button>;
+              return <React.Fragment key={id}>
+                {FOCUS_MODE && group && filteredParts[index - 1]?.[3] !== group &&
+                  <div className="lp-target-group">{group}</div>}
+                <button type="button" className={selected === id ? "lp-selected" : ""}
+                  aria-label={label} aria-description={part ? "Adjusted element" : undefined}
+                  onClick={() => setSelected(id)}><span>{label}</span>{part && <i aria-hidden="true" />}</button>
+              </React.Fragment>;
             })}
+            {filteredParts.length === 0 && <p className="lp-no-targets">No elements match that search.</p>}
           </div>
           <div className="lp-inspector">
             <div className="lp-section-head"><b>{selected ? parts.find(item => item[0] === selected)?.[1] : "Select an element"}</b></div>
             {selected ? <>
-              <p>Drag the highlighted element in the preview, or enter precise adjustments here.</p>
+              <p>Drag the highlighted element in the preview, or enter precise adjustments here.
+                For elements on another activity, use the activity buttons above.</p>
               <div className="lp-coordinates">
                 {["x", "y"].map(axis => <label key={axis}>{axis.toUpperCase()} offset (px)
                   <input type="number" value={Math.round(currentPart[axis])} step="1"
@@ -477,6 +569,9 @@ export default function LayoutPlayground() {
             </> : <p>Click an element in the page to grab it, or choose one from the list.</p>}
           </div>
           <button type="button" className="lp-reset-all" onClick={resetDevice}>Reset current page / device</button>
+          {FOCUS_MODE && <p className="lp-sandbox-help">Edits are private, autosaved and separated by page and device.
+            Drag the highlighted box, use arrow keys to nudge 1px (Shift for 10px), and adjust the size slider.
+            Export the JSON file to share the exact layout for implementation.</p>}
         </aside>
         <section className="lp-canvas-area" ref={canvasRef} aria-label="Live editable RosieVerse preview">
           <div className="lp-canvas-caption">
@@ -499,10 +594,10 @@ export default function LayoutPlayground() {
       {immersive && <div className={"lp-immersive-hud" + (hudMinimized ? " lp-hud-minimized" : "")}
         role="toolbar" aria-label="Fullscreen layout controls">
         {hudMinimized ? <button type="button" onClick={() => setHudMinimized(false)}>Show tools</button> : <>
-        <strong>ROSIEVERSE <span>LAYOUT STUDIO</span></strong>
+        <strong>ROSIEVERSE <span>{FOCUS_MODE ? "HAIKU + CALCULATIONS" : "LAYOUT STUDIO"}</span></strong>
         <span className="lp-live-size">{formatSize(width, height)} · {Math.round(zoom * 100)}% view</span>
         <select aria-label="Page in fullscreen" value={page} onChange={event => switchPage(event.target.value)}>
-          {PAGES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+          {pageOptions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select>
         <select aria-label="Device in fullscreen" value={device} onChange={event => switchDevice(event.target.value)}>
           {Object.entries(DEVICES).map(([id, item]) => <option key={id} value={id}>{item.label}</option>)}
@@ -563,6 +658,9 @@ export function LayoutPreviewBridge() {
       highlight.style.height = rect.height + "px";
       label.textContent = spec[1] + " · drag to move";
       label.style.top = rect.top < 29 ? "0" : "-27px";
+      highlight.style.pointerEvents = "auto";
+      highlight.style.cursor = "grab";
+      highlight.style.touchAction = "none";
     }
     // Never overwrite existing CSS offsets with zero. The real app already
     // positions many objects via the translate/scale CSS longhands. The old
@@ -621,7 +719,9 @@ export function LayoutPreviewBridge() {
     }
     function pointerDown(event) {
       if (!editing || event.button !== 0) return;
-      const spec = partAt(event.target);
+      const spec = highlight.contains(event.target)
+        ? parts.find(item => item[0] === selected)
+        : partAt(event.target);
       if (!spec) return;
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -652,7 +752,34 @@ export function LayoutPreviewBridge() {
     function onMessage(event) {
       if (event.origin !== window.location.origin || event.source !== window.parent) return;
       const message = event.data;
-      if (message?.source !== "rosie-layout" || message.kind !== "configure") return;
+      if (message?.source !== "rosie-layout") return;
+      if (message.kind === "activate") {
+        // In Arrange mode, direct clicks intentionally select/move elements.
+        // This whitelist lets the parent preview switch real React activity
+        // panels without temporarily disabling the drag handles.
+        const haikuControls = {
+          daily: ".haiku-tabs button:nth-child(1)",
+          compose: ".haiku-tabs button:nth-child(2)",
+          meditate: ".haiku-tabs button:nth-child(3)",
+          journal: ".haiku-tabs button:nth-child(4)"
+        };
+        const calculatorControls = {
+          tip: ".rc-tool-card--tip",
+          units: ".rc-tool-card--units",
+          date: ".rc-tool-card--date",
+          split: ".rc-tool-card--split",
+          percent: ".rc-tool-card--percent",
+          loan: ".rc-tool-card--loan",
+          currency: ".rc-tool-card--currency"
+        };
+        const safe = page === "haiku" ? haikuControls : page === "calculations" ? calculatorControls : null;
+        if (safe && Object.prototype.hasOwnProperty.call(safe, message.target)) {
+          document.querySelector(safe[message.target])?.click();
+          scheduleRefresh();
+        }
+        return;
+      }
+      if (message.kind !== "configure") return;
       const values = message.values && typeof message.values === "object" ? message.values : {};
       for (const key of Object.keys(active)) delete active[key];
       for (const spec of parts) if (values[spec[0]]) active[spec[0]] = normalizeTransform(values[spec[0]]);

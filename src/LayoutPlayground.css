@@ -126,3 +126,40 @@
 /* Minimal fullscreen chrome for judging the composition without an overlay. */
 .lp-immersive-hud.lp-hud-minimized{min-height:0;width:auto;max-width:160px;padding:3px;border-radius:999px}
 .lp-immersive-hud.lp-hud-minimized button{font-size:10px;min-height:25px;padding:3px 12px;border-radius:999px}
+
+
+/* Focused, safely isolated Haiku Zen Garden + Calculations sandbox */
+.lp-sandbox-page-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:4px 0 11px}
+.lp-sandbox-page-buttons button{min-height:43px;padding:8px 6px;border:1px solid #5e6c6b;
+ background:#172932;color:#e5e3db;border-radius:7px;font:650 11px/1.25 system-ui,sans-serif}
+.lp-sandbox-page-buttons button.active{border-color:#f0ca8a;color:#241c23;background:linear-gradient(160deg,#f7dfaa,#caa274)}
+.lp-sandbox-page-buttons button:hover{border-color:#e5bd77}
+.lp-activity-controls{padding:12px 11px;margin:-7px 0 17px;background:#12252d;border:1px solid #40515b;border-radius:9px}
+.lp-activity-controls .lp-label{margin-bottom:8px}
+.lp-activity-controls>div{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.lp-activity-controls button{padding:8px 6px;min-height:36px;border:1px solid #61706a;border-radius:5px;
+ background:#26383e;color:#f3e5cc;font:600 11px system-ui,sans-serif;cursor:pointer}
+.lp-activity-controls button:hover{border-color:#e5bd77;background:#3e4b44}
+.lp-activity-controls select{margin:0;padding:9px;font-size:11px}
+.lp-target-search{display:block;width:100%;padding:10px;margin:0 0 9px;background:#10232d;border:1px solid #617079;
+ border-radius:6px;color:#fff0d8;font-size:12px;outline-offset:2px}
+.lp-target-search::placeholder{color:#aebdc1}
+.lp-target-group{margin:10px 0 3px;padding:7px 4px 4px;border-top:1px solid #43515d;
+ font:700 9px/1.4 system-ui,sans-serif;color:#ebc78a;text-transform:uppercase;letter-spacing:1.2px}
+.lp-no-targets{font:12px/1.6 system-ui,sans-serif;color:#b2bec1;padding:9px}
+.lp-sandbox-help{font:11px/1.55 system-ui,sans-serif;color:#c2c9c5;
+ margin:17px 0 8px;padding:12px 10px;border:1px solid #53616a;border-radius:7px;background:#12262f}
+.lp-sidebar:has(.lp-target-search) .lp-target-list{max-height:clamp(165px,35vh,420px)}
+.lp-sidebar:has(.lp-target-search) .lp-target-list button{min-height:33px;padding:7px 9px}
+.lp-sidebar:has(.lp-target-search) .lp-label{margin-bottom:8px}
+.lp-sidebar:has(.lp-target-search) #lp-page{margin-bottom:16px}
+@media(max-width:850px){
+ .lp-sandbox-page-buttons{grid-template-columns:1fr;gap:5px}
+ .lp-sidebar:has(.lp-target-search) .lp-target-list{max-height:26vh}
+}
+@media(max-width:570px){
+ .lp-activity-controls{padding:8px 5px}
+ .lp-activity-controls>div{grid-template-columns:1fr}
+ .lp-sandbox-help{padding:7px}
+ .lp-target-group{letter-spacing:.6px}
+}

@@ -40,6 +40,7 @@ import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
+import RosieHaikuGarden from "./RosieHaikuGarden.jsx";
 import RosieReminders from "./RosieReminders.jsx";
 import RosieCalculations from "./RosieCalculations.jsx";
 import RosieTimekeeper from "./RosieTimekeeper.jsx";
@@ -2471,7 +2472,7 @@ function App() {
   // Captain's audio uses this shared setting. It must exist before the Captain
   // component mounts - an undefined value previously made that tab crash.
   const [soundOn] = useState(true);
-  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "reminders", "calculations", "timekeeper", "resources", "qr-atelier", "recipes", "reviews"];
+  const validPages = ["home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "haiku", "reminders", "calculations", "timekeeper", "resources", "qr-atelier", "recipes", "reviews"];
   const pageFromLocation = () => {
     const requested = window.location.hash.replace("#", "").split("?")[0].toLowerCase();
     return validPages.includes(requested) ? requested : "home";
@@ -3074,6 +3075,8 @@ function App() {
 
         {page === "home" ? (
           <RosieHome onNavigate={navigateTo} />
+        ) : page === "haiku" ? (
+          <RosieHaikuGarden onNavigate={navigateTo} />
         ) : page === "fortune" ? (
         <main className={`fortune-page ${fortuneScrolled ? "fortune-scrolled" : ""}`}>
           <div className="fortune-console">
