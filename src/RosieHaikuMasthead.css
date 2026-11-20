@@ -99,8 +99,20 @@
   .haiku-page .haiku-workbench{width:100%;}
   .haiku-page .haiku-shell > .haiku-scene-quote {
     transform:none;
-    margin:12px auto 0;
-    padding:10px 12px 16px;
+    margin:0 auto;
+    padding:2px 12px 6px;
+    gap:2px;
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote::before {
+    display:none;
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote strong {
+    font-size:clamp(23px,1.7vw,28px);
+    line-height:1.13;
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote small {
+    font-size:14px;
+    line-height:1.25;
   }
 }
 /* The proportion of the grand plaque is retained on standard desktop. */
