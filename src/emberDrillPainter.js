@@ -404,9 +404,9 @@ export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrect
   paintSculpturalTunnel(c,s,assets);
   paintBreakables(c,s,assets,W);
   paintCrystalShutters(c,s,assets,W);
-  paintExpeditionHazards(c,s,W);
+  paintExpeditionHazards(c,s,W,assets);
   paintTurboWorldStreaks(c,s,W,H);
-  paintExpeditionBoss(c,s,W,H);
+  paintExpeditionBoss(c,s,W,H,assets);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
