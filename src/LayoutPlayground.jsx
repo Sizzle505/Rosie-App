@@ -657,6 +657,9 @@ export function LayoutPreviewBridge() {
       highlight.style.height = rect.height + "px";
       label.textContent = spec[1] + " · drag to move";
       label.style.top = rect.top < 29 ? "0" : "-27px";
+      highlight.style.pointerEvents = "auto";
+      highlight.style.cursor = "grab";
+      highlight.style.touchAction = "none";
     }
     // Never overwrite existing CSS offsets with zero. The real app already
     // positions many objects via the translate/scale CSS longhands. The old
@@ -715,7 +718,9 @@ export function LayoutPreviewBridge() {
     }
     function pointerDown(event) {
       if (!editing || event.button !== 0) return;
-      const spec = partAt(event.target);
+      const spec = highlight.contains(event.target)
+        ? parts.find(item => item[0] === selected)
+        : partAt(event.target);
       if (!spec) return;
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -746,7 +751,34 @@ export function LayoutPreviewBridge() {
     function onMessage(event) {
       if (event.origin !== window.location.origin || event.source !== window.parent) return;
       const message = event.data;
-      if (message?.source !== "rosie-layout" || message.kind !== "configure") return;
+      if (message?.source !== "rosie-layout") return;
+      if (message.kind === "activate") {
+        // In Arrange mode, direct clicks intentionally select/move elements.
+        // This whitelist lets the parent preview switch real React activity
+        // panels without temporarily disabling the drag handles.
+        const haikuControls = {
+          daily: ".haiku-tabs button:nth-child(1)",
+          compose: ".haiku-tabs button:nth-child(2)",
+          meditate: ".haiku-tabs button:nth-child(3)",
+          journal: ".haiku-tabs button:nth-child(4)"
+        };
+        const calculatorControls = {
+          tip: ".rc-tool-card--tip",
+          units: ".rc-tool-card--units",
+          date: ".rc-tool-card--date",
+          split: ".rc-tool-card--split",
+          percent: ".rc-tool-card--percent",
+          loan: ".rc-tool-card--loan",
+          currency: ".rc-tool-card--currency"
+        };
+        const safe = page === "haiku" ? haikuControls : page === "calculations" ? calculatorControls : null;
+        if (safe && Object.prototype.hasOwnProperty.call(safe, message.target)) {
+          document.querySelector(safe[message.target])?.click();
+          scheduleRefresh();
+        }
+        return;
+      }
+      if (message.kind !== "configure") return;
       const values = message.values && typeof message.values === "object" ? message.values : {};
       for (const key of Object.keys(active)) delete active[key];
       for (const spec of parts) if (values[spec[0]]) active[spec[0]] = normalizeTransform(values[spec[0]]);
