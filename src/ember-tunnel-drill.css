@@ -362,3 +362,21 @@
 .ember-stick-toggle{position:absolute;right:5px;top:5px;width:30px;height:25px!important;padding:1px!important;z-index:2;border-radius:7px!important;font:700 10px Arial,sans-serif!important;opacity:.88}
 .ember-controls:not(:has(.axis-stick)) .ember-stick-toggle{top:-30px;right:0}
 @media(max-width:620px){.ember-controls:has(.axis-stick){grid-template-columns:72px minmax(0,1fr) 40px}}
+
+
+/* iOS: holding drill pitch arrows must steer, never select text or open Copy. */
+.ember-suite .ember-controls,
+.ember-suite .ember-controls *,
+.ember-suite .ember-run-actions,
+.ember-suite .ember-run-actions * {
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-tap-highlight-color:transparent;
+}
+.ember-suite .ember-controls button,
+.ember-suite .ember-controls .axis-stick,
+.ember-suite .ember-controls .axis-stick * {
+  touch-action:none;
+}
+.ember-suite .ember-run-actions button {touch-action:manipulation;}
