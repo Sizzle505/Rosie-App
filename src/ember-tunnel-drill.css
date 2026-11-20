@@ -480,3 +480,14 @@
  .ember-expedition.is-world-route>span:not(.ember-route-label){max-width:45%;font-size:7px}
  .ember-expedition.is-world-route .ember-passage-mission{order:3}
 }
+
+/* Accessible game-state announcements remain available without blocking the
+ * mobile view; gameplay telegraphs and health bars are painted in Canvas. */
+.ember-boss-accessible{
+  position:absolute;clip-path:inset(50%);clip:rect(0 0 0 0);
+  width:1px;height:1px;overflow:hidden;white-space:nowrap;pointer-events:none;
+}
+.ember-stage:has(.ember-boss-accessible) .ember-course-plaque{
+  background:linear-gradient(180deg,rgba(52,27,31,.96),rgba(22,18,31,.93));
+  border-color:rgba(255,203,119,.95);
+}
