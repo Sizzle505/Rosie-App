@@ -860,3 +860,19 @@
   .captain-game-page .yacht-safe-passage-cue strong{font-size:10px;}
   .captain-game-page .yacht-safe-passage-cue small{font-size:8px;}
 }
+
+
+/* Measurable phone legibility for the brief torii navigation notice. */
+.captain-game-page .yacht-safe-passage-cue{
+  box-sizing:border-box;
+  min-width:174px;
+  min-height:39px;
+  justify-content:center;
+}
+@media(max-width:720px){
+  .captain-game-page .yacht-safe-passage-cue{
+    min-width:162px;
+    min-height:36px;
+    padding:5px 10px 6px;
+  }
+}
