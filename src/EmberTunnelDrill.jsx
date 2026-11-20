@@ -450,9 +450,15 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     };
     const resize=()=>{
       const el=canvas.current;if(!el)return;
-      const rect=el.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
-      el.width=Math.max(1,Math.round(rect.width*dpr));
-      el.height=Math.max(1,Math.round(rect.height*dpr));
+      const rect=el.getBoundingClientRect();
+      // A 2.6MP retina canvas at tablet dimensions can starve RAF on WebKit.
+      // Cap backing pixels without resizing the visible playfield or hitboxes.
+      const area=Math.max(1,rect.width*rect.height);
+      const dpr=Math.min(window.devicePixelRatio||1,2,Math.sqrt(1250000/area));
+      const width=Math.max(1,Math.round(rect.width*dpr));
+      const height=Math.max(1,Math.round(rect.height*dpr));
+      if(el.width!==width)el.width=width;
+      if(el.height!==height)el.height=height;
     };
     const obs=new ResizeObserver(resize);
     if(canvas.current)obs.observe(canvas.current);
