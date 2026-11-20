@@ -5,6 +5,7 @@
 import {BOSS_SCREEN_X,bossDangerLane} from "./emberExpeditionBossStage.js";
 import {bossPresentation} from "./emberBossEncounter.js";
 import {drawExpansionFrame} from "./emberExpansionCatalog.js";
+import {paintBossAttackVfx} from "./emberBossAttackVfx.js";
 
 const PI=Math.PI;
 function shape(c,points,fill,stroke=null,width=2){
@@ -195,6 +196,9 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
  if(!boss)return;
  const p=bossPresentation(boss);
  telegraph(c,s,W,H,p.attack,p.phase);
+ // Place light-touch environmental attacks behind the existing approved boss art.
+ // All visuals are clipped to the same lane used by the engine to cause damage.
+ paintBossAttackVfx(c,s,W,H,p);
  const x=BOSS_SCREEN_X,y=s.bossY;
  c.save();
  c.translate(x,y);
