@@ -101,11 +101,34 @@ for(const [name,engine,viewport,mobile] of [
     await bossPage.locator(".ember-suite").waitFor({state:"visible",timeout:45000});
     await bossPage.locator(".ember-world-choice").nth(3).click();
     await bossPage.locator(".ember-expedition-launch").click();
+    await bossPage.bringToFront();
     await bossPage.locator(".ember-stage").scrollIntoViewIfNeeded();
-    await bossPage.waitForFunction(()=>{
-      const phase=document.querySelector(".ember-stage")?.getAttribute("data-boss-phase");
-      return phase&&phase!=="none";
-    },null,{timeout:20000});
+    const afterLaunch=await bossPage.evaluate(()=>({
+      visibility:document.visibilityState,
+      world:document.querySelector(".ember-course-plaque")?.innerText,
+      startVisible:!!document.querySelector(".ember-start-overlay"),
+      active:!!document.querySelector(".ember-stage.is-active"),
+      timer:document.querySelector(".ember-stats")?.innerText
+    }));
+    if(!afterLaunch.active||!afterLaunch.world?.includes("Molten"))
+      throw new Error("Molten launch did not engage: "+JSON.stringify(afterLaunch));
+    try{
+      await bossPage.waitForFunction(()=>{
+        const phase=document.querySelector(".ember-stage")?.getAttribute("data-boss-phase");
+        return phase&&phase!=="none";
+      },null,{timeout:25000});
+    }catch(error){
+      const details=await bossPage.evaluate(()=>({
+        visibility:document.visibilityState,
+        active:!!document.querySelector(".ember-stage.is-active"),
+        timer:document.querySelector(".ember-stats")?.innerText,
+        stage:document.querySelector(".ember-stage")?.outerHTML?.slice(0,850),
+        world:document.querySelector(".ember-course-plaque")?.innerText,
+        notices:document.querySelector(".ember-dig-notice")?.innerText,
+        end:document.querySelector(".ember-start-overlay")?.innerText?.slice(0,350)
+      }));
+      throw new Error("Boss phase not reached: "+JSON.stringify(details)+"; "+error);
+    }
     const status=await bossPage.locator(".ember-boss-accessible").innerText();
     if(!status.includes("Cinderclaw")||!status.includes("3 of 3 health"))
       throw new Error("Molten boss did not enter a healthy, readable encounter: "+status);
