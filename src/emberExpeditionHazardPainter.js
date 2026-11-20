@@ -91,6 +91,15 @@ function paintIllustratedHazard(c,h,reach,assets){
  if(h.hit&&!h.resolved)frame=Math.min(total-2,frame+1);
  const w=atlasId==="gear-crusher"?180:atlasId==="lava-geyser"?215:200;
  const height=Math.max(72,reach+52);
+ // The Gear Crusher's source cells have a pale scanner/matte strip along
+ // their bottom 13.5%. Mask only that unapproved band while retaining its
+ // brass feet, machinery and animated smoke. No runtime hitbox changes.
+ if(atlasId==="gear-crusher"){
+   const y=-reach-20;
+   c.save();c.beginPath();c.rect(-w/2,y,w,height*.865);c.clip();
+   const painted=drawExpansionFrame(c,img,atlasId,frame,-w/2,y,w,height);
+   c.restore();return painted;
+ }
  return drawExpansionFrame(c,img,atlasId,frame,-w/2,-reach-28,w,height);
 }
 export function paintExpeditionHazards(c,s,width,assets={}){
