@@ -3,6 +3,15 @@
 // Physics/collision belongs to the stage; this module only controls boss phases
 // and one-time, clearly telegraphed damage opportunities.
 const BOSS_CONFIG = Object.freeze({
+  copperjack:Object.freeze({
+    id:"copperjack",maxHealth:2,reward:1400,
+    attacks:Object.freeze([
+      Object.freeze({id:"gear-sweep",warning:1.1,active:0.55,recovery:1.4,
+        hazard:"floor",warningText:"GEAR SWEEP - RISE ABOVE THE MECHANISM"}),
+      Object.freeze({id:"spark-bolt",warning:1.2,active:0.65,recovery:1.4,
+        hazard:"projectile",warningText:"SPARK BOLT - LEAVE THE CENTER"})
+    ])
+  }),
   cinderclaw:Object.freeze({
     id:"cinderclaw",maxHealth:3,reward:1750,
     attacks:Object.freeze([
