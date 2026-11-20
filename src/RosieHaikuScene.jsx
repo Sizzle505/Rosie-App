@@ -77,6 +77,7 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
   return (
     <section className="haiku-scene-stage" aria-label="Rosie's meditation garden">
       <div className={`haiku-scene-image haiku-scene-image--${scene}`}>
+        {rosieAvailable && characterSrc === ROSIE_MEDITATING && <div className="haiku-scene-aura" aria-hidden="true" />}
         {rosieAvailable && (
           <img
             className={`haiku-scene-rosie${characterSrc === ROSIE_MEDITATING ? " haiku-scene-rosie--slow-breath" : " haiku-scene-rosie--expressive"}`}
