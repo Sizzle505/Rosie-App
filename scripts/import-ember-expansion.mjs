@@ -29,7 +29,7 @@ const expected=[];
 for(const [key,catalog] of Object.entries(EMBER_EXPANSION_ATLASES)){
   const recorded=manifest.atlases[key];
   if(!recorded||recorded.columns!==catalog.columns||recorded.rows!==catalog.rows||
-     recorded.frames!==catalog.frames||recorded.framePx[0]!==catalog.cell||
+     recorded.frameCount!==catalog.frames||recorded.framePx[0]!==catalog.cell||
      recorded.framePx[1]!==catalog.cell){
     throw Error("Atlas registration mismatch: "+key);
   }
