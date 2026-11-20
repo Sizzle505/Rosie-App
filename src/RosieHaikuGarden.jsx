@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
+import RosieZenMeditation from "./RosieZenMeditation.jsx";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -101,7 +102,7 @@ async function renderPostcard(poem, sceneId = "field") {
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "#6c413b";
   ctx.font = "600 24px Georgia, serif";
-  ctx.fillText("ROSIE'S HAIKU GARDEN", 600, hasArtScroll ? 849 : 765);
+  ctx.fillText("HAIKU ZEN GARDEN", 600, hasArtScroll ? 849 : 765);
   ctx.fillStyle = "#493330";
   ctx.font = "500 43px Georgia, serif";
   let nextY = hasArtScroll ? 947 : 855;
@@ -185,7 +186,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     const text = (poem.title ? poem.title + "\n\n" : "") + formatHaiku(poem);
     try {
       if (navigator.share) {
-        await navigator.share({ title: "Rosie's Haiku Garden", text });
+        await navigator.share({ title: "Haiku Zen Garden", text });
         setReaction({ type: "bestowing" });
       }
       else if (navigator.clipboard?.writeText) {
@@ -204,7 +205,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
       const blob = await renderPostcard(poem, scene);
       const file = new File([blob], "rosie-haiku.png", { type: "image/png" });
       if (navigator.canShare?.({ files: [file] }) && navigator.share) {
-        try { await navigator.share({ files: [file], title: "Rosie's Haiku Garden" }); }
+        try { await navigator.share({ files: [file], title: "Haiku Zen Garden" }); }
         catch (error) { if (error?.name !== "AbortError") downloadBlob(blob, "rosie-haiku.png"); }
       } else downloadBlob(blob, "rosie-haiku.png");
       announce("Your poetry postcard is ready.");
@@ -218,7 +219,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     announce("");
   }
   return (
-    <main className="haiku-page" aria-label="Rosie's Haiku Garden">
+    <main className="haiku-page" aria-label="Haiku Zen Garden">
       <div className="haiku-scene" aria-hidden="true">
         <img
           key={selectedBackground.src}
@@ -238,7 +239,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
       <div className="haiku-shell">
         <header className="haiku-header">
           <button className="haiku-back" type="button" onClick={() => onNavigate("home")} aria-label="Back to RosieVerse">← <span>RosieVerse</span></button>
-          <div className="haiku-heading"><div className="haiku-overline">THE LITTLE BOOK OF ROSIE</div><h1>Rosie's Haiku Garden</h1><p>Small poems. Grand opinions.</p></div>
+          <div className="haiku-heading"><div className="haiku-overline">ROSIE'S GARDEN OF SMALL WISDOM</div><h1>Haiku Zen Garden</h1><p>Small poems. Deep breaths. Grand opinions.</p></div>
           <div className="haiku-header-mark" aria-hidden="true">✿</div>
         </header>
         <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} />
@@ -265,6 +266,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
             <nav className="haiku-tabs" aria-label="Haiku activities">
               <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}>Daily</button>
               <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}>Compose</button>
+              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}>Meditate</button>
               <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}>Journal <span>{journal.length}</span></button>
             </nav>
             {mode === "daily" ? (
@@ -273,7 +275,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <h2>Today's little wisdom</h2>
                 <p>One new verse each day, chosen from Rosie's own collection. A quiet moment, with just a hint of Shiba judgment.</p>
                 <div className="haiku-date">{localDayKey()} <span> · </span> {["winter","winter","spring","spring","spring","summer","summer","summer","autumn","autumn","autumn","winter"][new Date().getMonth()]} in the garden</div>
-                <button type="button" className="haiku-primary" onClick={() => setMode("compose")}>Ask Rosie to Compose</button>
+                <button type="button" className="haiku-primary" onClick={() => setMode("meditate")}>Meditate with Rosie</button>
+                <button type="button" className="haiku-secondary-entry" onClick={() => setMode("compose")}>Or ask her to compose a haiku</button>
               </div>
             ) : mode === "compose" ? (
               <form className="haiku-panel haiku-compose" onSubmit={compose}>
@@ -289,6 +292,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <button type="submit" className="haiku-primary">Unfurl a New Haiku</button>
                 <p className="haiku-small-note">Rosie draws from her hand-crafted verse collection. Familiar subjects get a special verse; other dedications receive a poem in your chosen mood.</p>
               </form>
+            ) : mode === "meditate" ? (
+              <RosieZenMeditation scene={scene} />
             ) : (
               <div className="haiku-panel haiku-journal">
                 <div className="haiku-section-label">THE BOOK OF SMALL WISDOM</div>
