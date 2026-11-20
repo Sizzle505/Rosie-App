@@ -1808,7 +1808,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
   const gateApproaching = running && items.some(item =>
-    item.footprint === "arch" && item.y >= 10 && item.y <= 91);
+    // Keep instructions visible from first sight of the arch until its
+    // pillars have fully passed the hull, not just for its collision window.
+    item.footprint === "arch" && item.y >= -12 && item.y <= 108);
   const rank = captainRank(score);
 
   function audioContext() {
