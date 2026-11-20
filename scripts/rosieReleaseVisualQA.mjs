@@ -38,7 +38,7 @@ try {
         const mat=viewer.locator(".qa-rosie-insert-underlay svg");
         assert.equal(await mat.count(),1,"Jewel-colored underlay missing");
         const z=await page.evaluate(()=>{const root=document.querySelector(".qa-rosie-viewer");return [".qa-rosie-insert-underlay",".qa-rosie-overlay-art",".qa-rosie-live-qr"].map(x=>Number(getComputedStyle(root.querySelector(x)).zIndex));});
-        assert.deepEqual(z,[1,2,5],"Incorrect three-layer order");
+        assert.deepEqual(z,[1,3,5],"Incorrect three-layer order");
         await viewer.locator(".qa-rosie-composition").screenshot({path:out+"/"+viewport.name+"-"+finish+"-"+frame+"-"+name+".png"});
         screenshots++;
         if(viewport.mobile&&finish==="emerald"&&frame===0){await page.screenshot({path:out+"/iphone-full-screen.png",fullPage:false});screenshots++;}
