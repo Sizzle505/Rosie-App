@@ -161,6 +161,26 @@ function playSound(context,kind) {
     osc.start(start);osc.stop(start+.20);
   }catch(_){}
 }
+function playBossAudio(context,kind){
+  if(!context)return;
+  try{
+    if(context.state==="suspended")context.resume();
+    const notes=kind==="boss-victory"?[523,659,784,1047]:
+      kind==="boss-hit"?[210,335]:kind==="boss-vulnerable"?[550,770]:[330,218];
+    const now=context.currentTime;
+    for(let i=0;i<notes.length;i++){
+      const osc=context.createOscillator(),amp=context.createGain();
+      const t=now+i*(kind==="boss-victory"?.095:.085);
+      osc.type=kind==="boss-hit"?"sawtooth":kind==="boss-warning"?"triangle":"sine";
+      osc.frequency.setValueAtTime(notes[i],t);
+      amp.gain.setValueAtTime(.0001,t);
+      amp.gain.exponentialRampToValueAtTime(.032,t+.014);
+      amp.gain.exponentialRampToValueAtTime(.0001,t+.125);
+      osc.connect(amp);amp.connect(context.destination);
+      osc.start(t);osc.stop(t+.14);
+    }
+  }catch(_){}
+}
 export default function EmberTunnelDrill({ soundOn=true }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
@@ -334,6 +354,21 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               particles.current.push({x:event.x,y:event.y,vx:Math.cos(angle)*v,vy:Math.sin(angle)*v,
                 life:.42+Math.random()*.24,max:.66,r:2+Math.random()*3,color});
             }
+          }
+          if(event.type==="boss-hit"||event.type==="boss-victory"){
+            const count=event.type==="boss-victory"?38:15;
+            for(let i=0;i<count;i++){
+              const angle=i/count*Math.PI*2,v=80+Math.random()*210;
+              particles.current.push({x:482,y:s.bossY||s.y,
+                vx:Math.cos(angle)*v,vy:Math.sin(angle)*v-60,
+                life:.6+Math.random()*.35,max:.95,r:2+Math.random()*3.5,
+                color:i%3===0?"#fff1b0":i%3===1?"#f3b35a":"#f0d794"});
+            }
+            if(navigator.vibrate)navigator.vibrate(event.type==="boss-victory"?[40,30,40,30,70]:[24,16,24]);
+          }
+          if(["boss-warning","boss-vulnerable","boss-hit","boss-victory"].includes(event.type)
+            &&ts-lastSound.current>95){
+            playBossAudio(sound.current,event.type);lastSound.current=ts;
           }
           if(event.type==="hit"){
             if(navigator.vibrate)navigator.vibrate([34,20,34]);
