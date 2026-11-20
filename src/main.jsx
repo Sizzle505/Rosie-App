@@ -2233,6 +2233,12 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
   useEffect(() => {
     function onKeyDown(event) {
+      const yachtFrame = document.querySelector(".captain-fs-yacht");
+      // The Captain page also mounts Tunnel and Cosmic Odyssey. A global
+      // keyboard handler must never steal their arrows or Space/Turbo.
+      const isInYacht = yachtFrame?.contains(event.target);
+      const isYachtExpanded = yachtFrame?.classList.contains("is-expanded");
+      if (!isInYacht && !isYachtExpanded) return;
       if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
       // Do not hijack native Enter / Space on selected chapter and result buttons.
       if (!running && (event.key === "Enter" || event.key === " ") &&
@@ -2243,7 +2249,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         return;
       }
       if (paused) {
-        if (event.key === " " || event.key === "Enter") {
+        if ((event.key === " " || event.key === "Enter") &&
+            !event.target?.closest?.("button, a, [role='button']")) {
           event.preventDefault();
           setPaused(false);
         }
