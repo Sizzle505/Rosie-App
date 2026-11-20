@@ -15,6 +15,8 @@ on:
       - src/styles.css
       - tests/haiku-layout-visual.mjs
       - tests/haiku-calculations-sandbox-visual.mjs
+      - tests/haiku-final-art-visual.mjs
+      - public/rosieverse/haiku/final/**
       - src/LayoutPlayground.jsx
       - src/LayoutPlayground.css
       - .github/workflows/haiku-layout-visual.yml
@@ -50,6 +52,8 @@ jobs:
         run: node tests/haiku-calculations-sandbox-visual.mjs
       - name: Check all user-approved layout coordinates on desktop and protected devices
         run: node tests/haiku-calculations-approved-layout.mjs
+      - name: Verify finished meditation and journal artwork on desktop tablet phone
+        run: node tests/haiku-final-art-visual.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
