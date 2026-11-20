@@ -10,6 +10,14 @@ const PASSAGES = [
   { label: "Ruby Temple Galleries", start: RUN_DURATION / 2, end: RUN_DURATION },
 ];
 const DRILL_ART = {
+  breakEarthIntact:"breakables/v2/01-earth-wall-intact.webp",
+  breakEarthCracked:"breakables/v2/02-earth-wall-cracked.webp",
+  breakCrystalIntact:"breakables/v2/03-crystal-wall-intact.webp",
+  breakCrystalCracked:"breakables/v2/04-crystal-wall-cracked.webp",
+  breakEntranceClosed:"breakables/v2/05-secret-entrance-closed.webp",
+  breakEntranceOpen:"breakables/v2/06-secret-entrance-open.webp",
+  breakRoyalMedallion:"breakables/v2/09-royal-bone-medallion.webp",
+  breakShatterVfx:"breakables/v2/10-rock-crystal-shatter-vfx-5x2.webp",
   bg01:"new-assets/background/bg01.webp",
   bg02:"new-assets/background/bg02.webp",
   bg03:"new-assets/background/bg03.webp",
@@ -151,6 +159,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467);
   const [mode,setMode]=useState("idle");
+  const [relicFound,setRelicFound]=useState(()=>{
+    try{return localStorage.getItem("rosieEmberRoyalBoneFound")==="1"}catch(_){return false}
+  });
   const [arcadeBackdrop,setArcadeBackdrop]=useState(0);
   const arcadeBackdrops=[{id:"foundry",label:"MOLTEN FOUNDRY"},{id:"crystal",label:"CRYSTAL VAULT"},{id:"control",label:"EXCAVATION CONTROL"}];
   const [hud,setHud]=useState(()=>snapshot(frame.current));
@@ -255,14 +266,17 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
           }
           if(["break-wall","secret-found","crack-wall"].includes(event.type)){
-             particles.current.push({type:"rock-burst",x:event.x,y:event.y,vx:0,vy:0,
-               life:.54,max:.54,r:0,color:"#e5a86a"});
+             particles.current.push({type:event.type==="crack-wall"?"crack-v2":"break-v2",
+               kind:event.material,x:event.x,y:event.y,vx:0,vy:0,
+               life:event.type==="crack-wall"?.30:.62,max:event.type==="crack-wall"?.30:.62,
+               r:0,color:"#e5a86a"});
              if(event.type==="secret-found"){
                try{localStorage.setItem("rosieEmberRoyalBoneFound","1")}catch(_){}
+               setRelicFound(true);
              }
            }
            if(event.type==="hit"||event.type==="shatter"){
-            particles.current.push({type:event.type==="hit"?"hit-burst":"rock-burst",
+            particles.current.push({type:event.type==="hit"?"hit-burst":"break-v2",
               x:event.x,y:event.y,vx:0,vy:0,life:.54,max:.54,r:0,color:"#efbd75"});
           }
           if(event.type==="pickup"||event.type==="shatter"){
