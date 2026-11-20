@@ -34,7 +34,7 @@ try {
         const rect = selector => document.querySelector(selector).getBoundingClientRect().toJSON();
         const image = document.querySelector(".haiku-masthead-art img");
         return {banner:rect(".haiku-masthead-art"), title:rect(".haiku-heading h1"),
-          tagline:rect(".haiku-masthead-tagline"), back:rect(".haiku-back"),
+          back:rect(".haiku-back"),
           src:image.currentSrc,naturalWidth:image.naturalWidth};
       });
       assert.ok(headerGeometry.naturalWidth>1000,label+" should load the real full-resolution masthead");
@@ -46,8 +46,10 @@ try {
       assert.ok(headerGeometry.title.y>headerGeometry.banner.y+headerGeometry.banner.height*.28 &&
         headerGeometry.title.bottom<headerGeometry.banner.bottom-headerGeometry.banner.height*.13,
         label+" masthead title must avoid the ornamental paw and bottom border");
-      assert.ok(headerGeometry.tagline.y>=headerGeometry.banner.bottom-12,
-        label+" subtitle must be below, not painted across the ornamental plaque");
+      assert.equal(await page.locator(".haiku-masthead-tagline").count(),0,
+        label+" old header tagline must not appear");
+      assert.ok((await page.locator(".haiku-status").textContent()).includes("Small poems."),
+        label+" the tagline now belongs below the poetry actions");
       if(width<=600) {
         assert.ok(headerGeometry.back.bottom<=headerGeometry.banner.y+6,
           label+" back button must sit above compact banner rather than cover lanterns");
