@@ -21,6 +21,10 @@ try {
       await page.locator(".haiku-scene-image").waitFor({ state: "visible", timeout: 20000 });
       await page.locator(".haiku-scroll").waitFor({ state: "visible", timeout: 20000 });
       await page.locator(".haiku-workbench").waitFor({ state: "visible", timeout: 20000 });
+      // The site intentionally shows a 950ms intro plus a 600ms fade. Never
+      // capture the splash screen and misrepresent it as a checked layout.
+      await page.locator(".loading-screen").waitFor({ state: "hidden", timeout: 15000 });
+      await page.locator(".app-shell-visible").waitFor({ state: "visible", timeout: 15000 });
       const boxes = await page.evaluate(() => {
         const box = (selector) => {
           const el = document.querySelector(selector);
