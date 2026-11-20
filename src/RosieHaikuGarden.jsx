@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
-import RosieHaikuScene, { HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
+import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
@@ -310,6 +310,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
             <div className="haiku-workbench-footer">A Shiba's perspective on an extraordinarily human world.</div>
           </aside>
         </section>
+        <RosieHaikuWisdom mode={mode} mood={mood} poem={poem} />
       </div>
     </main>
   );
