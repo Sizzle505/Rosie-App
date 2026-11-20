@@ -2361,6 +2361,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
+          <b>ROSIE I</b>
+        </div>
+        <div className="yacht-steering-options" role="group" aria-label="Choose Yacht Dash steering controls">
+          <span>STEERING</span>
           <button type="button" className="captain-steering-toggle"
             aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
             title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
