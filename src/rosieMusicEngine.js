@@ -15,7 +15,7 @@ export class RosieMusicEngine {
   }
   _notify(){this.onStatus({id:this.activeId||this.desired,unlocked:this.unlocked,enabled:this.enabled,error:this.error});}
   _cancelFade(){++this.generation;if(this.fadeHandle)this.cancelFrame(this.fadeHandle);this.fadeHandle=0;}
-  _gain(){return this.volume*(this.ducked?.2:1)*(this.fanfare?.3:1);}
+  _gain(){return this.volume*(this.ducked ? 0.2 : 1)*(this.fanfare ? 0.3 : 1);}
   setDesired(id){
     if(!ROSIE_MUSIC[id]||id==="victory-fanfare")return;
     this.desired=id;
@@ -91,7 +91,7 @@ export class RosieMusicEngine {
     this.hidden=Boolean(hidden);
     if(this.hidden){
       for(const song of this.decks)if(song)song.pause();
-      this.fanfare?.pause();
+      if(this.fanfare){this.fanfare.pause();this.fanfare=null;}
       this._cancelFade();
     }else if(this.enabled&&this.unlocked)this._playDesired();
   }
