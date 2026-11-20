@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, isYachtHazard } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1726,6 +1726,10 @@ function CaptainRosieGame({ soundOn }) {
   const [showVictoryArt, setShowVictoryArt] = useState(false);
   const [nearMisses, setNearMisses] = useState(0);
   const [rivalsPassed, setRivalsPassed] = useState(0);
+  const [chapterRecords, setChapterRecords] = useState(() => {
+    try { return parseYachtRecords(localStorage.getItem("yachtDashRecordsV1")); }
+    catch { return {}; }
+  });
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
   const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
@@ -1778,7 +1782,8 @@ function CaptainRosieGame({ soundOn }) {
     return () => { image.onload = null; };
   }, [nextLevel?.background]);
   const routeProgress = Math.min(100, Math.round(elapsed / 75 * 100));
-  const missionProgress = Math.min(100, Math.round(score / 15));
+  const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
+  const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese;
   const rank = captainRank(score);
 
@@ -2195,6 +2200,15 @@ function CaptainRosieGame({ soundOn }) {
   }, [ended, completed, chapterIndex]);
 
   useEffect(() => {
+    if (!ended) return;
+    setChapterRecords((current) => updateYachtRecords(current, chapter.id, score, chapterMedals));
+  }, [ended, score, chapter.id, chapterMedals]);
+
+  useEffect(() => {
+    try { localStorage.setItem("yachtDashRecordsV1", JSON.stringify(chapterRecords)); } catch {}
+  }, [chapterRecords]);
+
+  useEffect(() => {
     if (running || !ended) return;
     setBest((current) => {
       const next = Math.max(current, score);
@@ -2349,6 +2363,13 @@ function CaptainRosieGame({ soundOn }) {
                   <div className="voyage-grade">{rank.mark}</div>
                   <strong>{rank.title}</strong>
                   <p>{rank.copy}</p>
+                  <div className="yacht-medal-stars" aria-label={chapterMedals + " of 3 passage medals earned"}>
+                    {Array.from({ length: 3 }, (_, index) =>
+                      <span key={index} className={index < chapterMedals ? "is-awarded" : ""}>★</span>)}
+                  </div>
+                  <p className="yacht-objective-summary">
+                    {completed ? YACHT_CHAPTER_GOALS[chapter.id].description : "Return to port and try this passage again."}
+                  </p>
                   <div className="voyage-stats">
                     <span><b>{score}</b> score</span>
                     <span><b>{bestStreak}</b> best streak</span>
@@ -2371,6 +2392,7 @@ function CaptainRosieGame({ soundOn }) {
                   <span>CAPTAIN ROSIE AWAITS YOUR ORDERS</span>
                   <strong>{chapter.name}</strong>
                   <p>{chapter.description}</p>
+                  <small className="yacht-chapter-goal">{YACHT_CHAPTER_GOALS[chapter.id].description}</small>
                   <div className="yacht-chapter-picker" role="group" aria-label="Select Yacht Dash level">
                     {YACHT_CHAPTERS.map((choice, index) => (
                       <button key={choice.id} type="button"
@@ -2379,21 +2401,30 @@ function CaptainRosieGame({ soundOn }) {
                         disabled={!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter}
                         onClick={() => setChapterIndex(index)}>
                         <b>{index + 1}. {choice.name}</b>
-                        {!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter && <small>LOCKED</small>}
+                        {!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter ? <small>LOCKED</small> :
+                          <small className="yacht-stage-record">
+                            {chapterRecords[choice.id]?.best
+                              ? "BEST " + chapterRecords[choice.id].best.toLocaleString() + " · " + "★".repeat(chapterRecords[choice.id].medals || 0)
+                              : YACHT_PLAYTEST_ALL_LEVELS ? "READY TO TEST" : "READY"}
+                          </small>}
                       </button>
                     ))}
                   </div>
-                  <button type="button" className="yacht-cast-off" onClick={() => startGame()}>CAST OFF</button>
+                  <div className="yacht-select-actions">
+                    <button type="button" className="yacht-cast-off" onClick={() => startGame()}>CAST OFF</button>
+                    {YACHT_PLAYTEST_ALL_LEVELS && <button type="button" className="yacht-preview-victory"
+                      onClick={() => setShowVictoryArt(true)}>VIEW VICTORY ART</button>}
+                  </div>
                 </>
               )}
             </div>
           )}
-          {ended && completed && showVictoryArt && (
+          {!running && showVictoryArt && (
             <div className="yacht-victory-overlay" role="dialog" aria-label={chapter.name + " victory"}>
               <img src={chapter.victory} alt={chapter.name + " victory - Captain Rosie receives her award"}
                 onError={() => setShowVictoryArt(false)} />
               <div className="yacht-victory-actions">
-                <button type="button" onClick={() => setShowVictoryArt(false)}>VIEW CAPTAIN'S LOG</button>
+                <button type="button" onClick={() => setShowVictoryArt(false)}>{ended ? "VIEW CAPTAIN'S LOG" : "BACK TO LEVELS"}</button>
                 {chapterIndex < YACHT_CHAPTERS.length - 1 && (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) &&
                   <button type="button" onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
               </div>
@@ -2436,7 +2467,7 @@ function CaptainRosieGame({ soundOn }) {
           <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
           <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
           <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
-          <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to Admiral target</em></span>
+          <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to {chapter.name} medal target</em></span>
         </div>
       </section>
     </main>
