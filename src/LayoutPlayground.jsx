@@ -470,8 +470,10 @@ export default function LayoutPlayground() {
     <div className={"lp-root" + (immersive ? " lp-immersive" : "")} ref={rootRef}>
       <header className="lp-topbar">
         <div>
-          <b>ROSIEVERSE <span>LAYOUT PLAYGROUND</span></b>
-          <small>Current Rosie App · exact-screen preview · drafts only, never published automatically</small>
+          <b>ROSIEVERSE <span>{FOCUS_MODE ? "HAIKU + CALCULATIONS SANDBOX" : "LAYOUT PLAYGROUND"}</span></b>
+          <small>{FOCUS_MODE
+            ? "Move, resize and fine-tune the live pages · automatically saved to this browser · never changes production"
+            : "Current Rosie App · exact-screen preview · drafts only, never published automatically"}</small>
         </div>
         <div className="lp-top-actions">
           <button type="button" onClick={undo} disabled={!undoAvailable}>Undo</button>
@@ -483,16 +485,38 @@ export default function LayoutPlayground() {
           </button>
           <button type="button" onClick={() => uploadRef.current?.click()}>Import</button>
           <button type="button" className="lp-gold" onClick={exportLayout}>Export layout</button>
-          <a href="/#resources">Exit studio</a>
+          <a href={FOCUS_MODE ? "/#haiku" : "/#resources"}>Exit studio</a>
           <input ref={uploadRef} type="file" accept=".json,application/json" hidden onChange={event => importLayout(event.target.files?.[0])} />
         </div>
       </header>
       <div className="lp-workbench">
         <aside className={"lp-sidebar" + (immersive ? " lp-floating-inspector" : "") + (immersive && !inspectorOpen ? " lp-inspector-hidden" : "")}>
           <label className="lp-label" htmlFor="lp-page">Page</label>
+          {FOCUS_MODE && <div className="lp-sandbox-page-buttons" role="group" aria-label="Sandbox page">
+            {pageOptions.map(item => <button type="button" key={item.id} aria-pressed={page === item.id}
+              className={page === item.id ? "active" : ""} onClick={() => switchPage(item.id)}>{item.label}</button>)}
+          </div>}
           <select id="lp-page" value={page} onChange={event => switchPage(event.target.value)}>
-            {PAGES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+            {pageOptions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
           </select>
+          {FOCUS_MODE && page === "haiku" && <div className="lp-activity-controls">
+            <span className="lp-label">Preview a Haiku activity</span>
+            <div role="group" aria-label="Haiku activity to preview">
+              {["Daily", "Compose", "Meditate", "Journal"].map((name) =>
+                <button type="button" key={name} onClick={() => send(frameRef.current?.contentWindow,
+                  "activate", { target: name.toLowerCase() })}>{name}</button>)}
+            </div>
+          </div>}
+          {FOCUS_MODE && page === "calculations" && <div className="lp-activity-controls">
+            <span className="lp-label">Preview a calculator instrument</span>
+            <select aria-label="Choose instrument to preview" defaultValue="tip"
+              onChange={event => send(frameRef.current?.contentWindow, "activate", { target: event.target.value })}>
+              {["tip", "units", "date", "split", "percent", "loan", "currency"].map(id =>
+                <option key={id} value={id}>{({tip:"Tip Calculator",units:"Unit Conversions",date:"Date Calculator",
+                  split:"Split Bill",percent:"Percentages & Discounts",loan:"Loan & Interest",
+                  currency:"Currency Converter"})[id]}</option>)}
+            </select>
+          </div>}
           <div className="lp-label">Preview size</div>
           <div className="lp-devices">
             {Object.entries(DEVICES).map(([id, item]) =>
@@ -503,19 +527,27 @@ export default function LayoutPlayground() {
               onChange={event => setDesktopWidth(Math.max(1024, Math.min(1920, Number(event.target.value) || 1440)))} />
             <span>px</span>
           </label>}
-          <div className="lp-section-head"><b>Movable elements</b><small>{parts.length} groups</small>{immersive &&
+          <div className="lp-section-head"><b>Movable elements</b><small>{parts.length} elements</small>{immersive &&
             <button type="button" className="lp-close-inspector" onClick={() => setInspectorOpen(false)}>Close ×</button>}</div>
+          {FOCUS_MODE && <input className="lp-target-search" type="search" value={targetFilter}
+            onChange={event => setTargetFilter(event.target.value)} placeholder="Find an element…" aria-label="Find an element" />}
           <div className="lp-target-list">
-            {parts.map(([id, label]) => {
+            {filteredParts.map(([id, label, selector, group], index) => {
               const part = currentDraft[id];
-              return <button key={id} type="button" className={selected === id ? "lp-selected" : ""}
-                onClick={() => setSelected(id)}><span>{label}</span>{part && <i aria-label="Adjusted element" />}</button>;
+              return <React.Fragment key={id}>
+                {FOCUS_MODE && group && filteredParts[index - 1]?.[3] !== group &&
+                  <div className="lp-target-group">{group}</div>}
+                <button type="button" className={selected === id ? "lp-selected" : ""}
+                  onClick={() => setSelected(id)}><span>{label}</span>{part && <i aria-label="Adjusted element" />}</button>
+              </React.Fragment>;
             })}
+            {filteredParts.length === 0 && <p className="lp-no-targets">No elements match that search.</p>}
           </div>
           <div className="lp-inspector">
             <div className="lp-section-head"><b>{selected ? parts.find(item => item[0] === selected)?.[1] : "Select an element"}</b></div>
             {selected ? <>
-              <p>Drag the highlighted element in the preview, or enter precise adjustments here.</p>
+              <p>Drag the highlighted element in the preview, or enter precise adjustments here.
+                For elements on another activity, use the activity buttons above.</p>
               <div className="lp-coordinates">
                 {["x", "y"].map(axis => <label key={axis}>{axis.toUpperCase()} offset (px)
                   <input type="number" value={Math.round(currentPart[axis])} step="1"
@@ -536,6 +568,9 @@ export default function LayoutPlayground() {
             </> : <p>Click an element in the page to grab it, or choose one from the list.</p>}
           </div>
           <button type="button" className="lp-reset-all" onClick={resetDevice}>Reset current page / device</button>
+          {FOCUS_MODE && <p className="lp-sandbox-help">Edits are private, autosaved and separated by page and device.
+            Drag the highlighted box, use arrow keys to nudge 1px (Shift for 10px), and adjust the size slider.
+            Export the JSON file to share the exact layout for implementation.</p>}
         </aside>
         <section className="lp-canvas-area" ref={canvasRef} aria-label="Live editable RosieVerse preview">
           <div className="lp-canvas-caption">
@@ -558,10 +593,10 @@ export default function LayoutPlayground() {
       {immersive && <div className={"lp-immersive-hud" + (hudMinimized ? " lp-hud-minimized" : "")}
         role="toolbar" aria-label="Fullscreen layout controls">
         {hudMinimized ? <button type="button" onClick={() => setHudMinimized(false)}>Show tools</button> : <>
-        <strong>ROSIEVERSE <span>LAYOUT STUDIO</span></strong>
+        <strong>ROSIEVERSE <span>{FOCUS_MODE ? "HAIKU + CALCULATIONS" : "LAYOUT STUDIO"}</span></strong>
         <span className="lp-live-size">{formatSize(width, height)} · {Math.round(zoom * 100)}% view</span>
         <select aria-label="Page in fullscreen" value={page} onChange={event => switchPage(event.target.value)}>
-          {PAGES.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
+          {pageOptions.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
         </select>
         <select aria-label="Device in fullscreen" value={device} onChange={event => switchDevice(event.target.value)}>
           {Object.entries(DEVICES).map(([id, item]) => <option key={id} value={id}>{item.label}</option>)}
