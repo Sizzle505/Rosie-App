@@ -7,7 +7,7 @@ export const CAPTAIN_CROSSFADE_MS = 2100;
  * after the next image has decoded, then release the outgoing DOM after 2.1s.
  * Paint and atmosphere use the same compositor, without per-frame React work.
  */
-export function useCaptainSceneryTransition(level, broadcast = false) {
+export function useCaptainSceneryTransition(level, broadcast = false, instant = false) {
   const activeRef = useRef(level || null);
   const [scene, setScene] = useState(() => ({ current: level || null, previous: null, entered: true }));
   useEffect(() => {
@@ -29,6 +29,13 @@ export function useCaptainSceneryTransition(level, broadcast = false) {
       started = true;
       const outgoing = activeRef.current;
       activeRef.current = level;
+      // Switching stages in the level picker should show the selected
+      // painting directly. In-game transitions retain their 2.1s crossfade.
+      if (instant) {
+        setScene({ current: level, previous: null, entered: true });
+        emit();
+        return;
+      }
       setScene({ current: level, previous: outgoing, entered: !outgoing });
       emit();
       if (!outgoing) return;
@@ -54,7 +61,7 @@ export function useCaptainSceneryTransition(level, broadcast = false) {
       cancelAnimationFrame(frame2);
       window.clearTimeout(cleanupTimer);
     };
-  }, [level?.id, broadcast]);
+  }, [level?.id, broadcast, instant]);
   return scene;
 }
 
