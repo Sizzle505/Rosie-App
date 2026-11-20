@@ -20,16 +20,16 @@ function intoBoss(index){
   assert.equal(s.charge,100);
   return s;
 }
-test("only Molten and Treasury have bosses; Classic remains unchanged",()=>{
+test("three advanced worlds have bosses; Classic remains unchanged",()=>{
   assert.equal(expeditionBossKind(null),null);
-  assert.equal(expeditionBossKind(2),null);
+  assert.equal(expeditionBossKind(2),"copperjack");
   assert.equal(expeditionBossKind(3),"cinderclaw");
   assert.equal(expeditionBossKind(4),"mole-king");
   assert.equal(newRun().boss,null);
   assert.equal(newRun().duration,75);
 });
 test("each boss begins with an explicit warning and freezes world movement",()=>{
-  for(const index of [3,4]){
+  for(const index of [2,3,4]){
     const s=intoBoss(index);
     const scroll=s.scroll;
     assert.ok(s.events.some(e=>e.type==="boss-spawn"));
@@ -40,10 +40,14 @@ test("each boss begins with an explicit warning and freezes world movement",()=>
   }
 });
 test("danger zones correspond to warned attacks, not the entire screen",()=>{
-  for(const attack of ["fireball","burrow","quake","earth-burst"]){
+  for(const attack of ["gear-sweep","spark-bolt","fireball","burrow","quake","earth-burst"]){
     const b={phase:"active",attack};
     assert.equal(bossAttackDanger({...b,phase:"warning"},402,402),false);
   }
+  assert.equal(bossAttackDanger({phase:"active",attack:"gear-sweep"},450,402),true);
+  assert.equal(bossAttackDanger({phase:"active",attack:"gear-sweep"},330,402),false);
+  assert.equal(bossAttackDanger({phase:"active",attack:"spark-bolt"},402,402),true);
+  assert.equal(bossAttackDanger({phase:"active",attack:"spark-bolt"},250,402),false);
   assert.equal(bossAttackDanger({phase:"active",attack:"fireball"},402,402),true);
   assert.equal(bossAttackDanger({phase:"active",attack:"fireball"},210,402),false);
   assert.equal(bossAttackDanger({phase:"active",attack:"burrow"},480,402),true);
@@ -52,6 +56,20 @@ test("danger zones correspond to warned attacks, not the entire screen",()=>{
   assert.equal(bossAttackDanger({phase:"active",attack:"quake"},325,402),false);
   assert.equal(bossAttackDanger({phase:"active",attack:"earth-burst"},300,402),true);
   assert.equal(bossAttackDanger({phase:"active",attack:"earth-burst"},460,402),false);
+});
+test("Copperjack requires two separate openings and awards 1400 points",()=>{
+  const s=intoBoss(2);
+  const initial=s.score;
+  for(let i=0;i<650&&s.running;i++){
+    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
+    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0&&s.charge>=100)
+      triggerTurbo(s);
+    updateRun(s,.045);
+  }
+  assert.equal(s.boss.stats.successfulHits,2);
+  assert.equal(s.bossDefeated,true);
+  assert.equal(s.result,"complete");
+  assert.ok(s.score>=initial+1400);
 });
 test("Cinderclaw accepts exactly one Turbo strike per recovery, then can be defeated",()=>{
   const s=intoBoss(3);
