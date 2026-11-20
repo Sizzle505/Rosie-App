@@ -5,9 +5,9 @@ import {
   instagramLink,calendarDate,calendarLink,eventIcs,qrPayload,qrByteString
 } from "./qrAtelierLogic.js";
 
-test("studio contains the eight approved QR types and three finishes",()=>{
+test("studio contains the eight approved QR types and five finishes",()=>{
   assert.deepEqual(QR_TYPES.map(x=>x.id),["wifi","contact","website","zoom","event","payment","instagram","calling"]);
-  assert.equal(QR_STYLES.length,3);
+  assert.deepEqual(QR_STYLES.map(x=>x.id),["emerald","obsidian","burgundy","champagne","sapphire"]);
   assert.equal(initialValues().event.timezone.length>0,true);
 });
 test("Wi-Fi escaping includes special characters and proper format",()=>{
