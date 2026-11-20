@@ -3,17 +3,17 @@
 export const EXPEDITION_STAGE_SECONDS=15;
 export const EXPEDITION_STAGES=Object.freeze([
   Object.freeze({id:"barkroot",name:"Barkroot Passage",startX:0,theme:"barkroot",objective:"Break an earth wall",art:"new-assets/background/bg01.webp"}),
-  Object.freeze({id:"ruby",name:"Ruby Temple",startX:5450,theme:"ruby",objective:"Navigate crystal formations",art:"new-assets/background/bg07.webp"}),
-  Object.freeze({id:"clockwork",name:"Clockwork Catacombs",startX:10750,theme:"clockwork",objective:"Survive the mechanical route",art:"new-assets/background/bg04.webp"}),
-  Object.freeze({id:"molten",name:"Molten Depths",startX:16100,theme:"molten",objective:"Collect gems through the deeper tunnels",art:"new-assets/background/bg06.webp"}),
-  Object.freeze({id:"treasury",name:"Royal Treasury",startX:21500,theme:"treasury",objective:"Bring Rosie safely to the vault",art:"new-assets/background/bg10.webp"})
+  Object.freeze({id:"ruby",name:"Ruby Temple",startX:5450,theme:"ruby",objective:"Evade or shatter the crystal trap",art:"new-assets/background/bg07.webp"}),
+  Object.freeze({id:"clockwork",name:"Clockwork Catacombs",startX:10750,theme:"clockwork",objective:"Outmaneuver the clockwork piston",art:"new-assets/background/bg04.webp"}),
+  Object.freeze({id:"molten",name:"Molten Depths",startX:16100,theme:"molten",objective:"Escape the molten geyser",art:"new-assets/background/bg06.webp"}),
+  Object.freeze({id:"treasury",name:"Royal Treasury",startX:21500,theme:"treasury",objective:"Survive the royal earth burst",art:"new-assets/background/bg10.webp"})
 ]);
 export function getExpeditionStage(index){
   return Number.isInteger(index)&&index>=0&&index<EXPEDITION_STAGES.length?EXPEDITION_STAGES[index]:null;
 }
 export function expeditionStarCount(run){
   if(!getExpeditionStage(run?.stageIndex)||run.result!=="complete")return 0;
-  return 1+Number(run.damageTaken<=1)+Number((run.gems||0)+(run.bones||0)+(run.cheese||0)>=5);
+  return 1+Number(run.damageTaken<=1)+Number(run.worldObjective===true);
 }
 export function safeStoredExpeditionStars(serialized){
   try{
