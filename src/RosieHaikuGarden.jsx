@@ -225,7 +225,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <div className="haiku-verse" aria-label="Haiku poem">{poem.lines.map((line, index) => <p key={index} style={{ "--line-order": index }}>{line}</p>)}</div>
                 <span className="haiku-metre">5 · 7 · 5</span>
                 <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
-                <p className="haiku-dedication">{poem.title}</p>
+                {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
               </div>
             </div>
             <div className="haiku-verse-actions">
@@ -246,7 +246,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <div className="haiku-section-label">A MOMENT WITH ROSIE</div>
                 <h2>Today's little wisdom</h2>
                 <p>One new verse each day, chosen from Rosie's own collection. A quiet moment, with just a hint of Shiba judgment.</p>
-                <div className="haiku-date">{localDayKey()} <span> · </span> {today.season} in the garden</div>
+                <div className="haiku-date">{localDayKey()} <span> · </span> {["winter","winter","spring","spring","spring","summer","summer","summer","autumn","autumn","autumn","winter"][new Date().getMonth()]} in the garden</div>
                 <button type="button" className="haiku-primary" onClick={() => setMode("compose")}>Ask Rosie to Compose</button>
               </div>
             ) : mode === "compose" ? (
