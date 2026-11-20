@@ -185,6 +185,8 @@
   .app-shell.page-qr-atelier .qa-scene::before {
     display: block !important;
     content: "" !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
     background: url('/qr-atelier/workshop.webp') top center / 100% auto no-repeat !important;
   }
   .app-shell.page-qr-atelier .qa-scene::after { display: none !important; }
