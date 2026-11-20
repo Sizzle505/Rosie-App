@@ -61,43 +61,42 @@ const ROSIE_FRAME_MATERIALS={
     glint:"#d2eaff",rim:"#e3f6ff",shadow:"#030c25"
   }
 };
-function rosieFrameMaterialSVG(frame,finishId){
-  const material=ROSIE_FRAME_MATERIALS[finishId]||ROSIE_FRAME_MATERIALS.emerald;
-  const {cx,cy}=frame;
-  const bands=material.bands.map((color,i)=>
-    '<stop offset="'+(i/(material.bands.length-1)*100).toFixed(2)+'%" stop-color="'+color+'"/>'
-  ).join("");
-  const transform=rosieMaterialTransform(frame);
-  const path=frame.openingPath;
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+ROSIE_ART_W+'" height="'+ROSIE_ART_H+'" viewBox="0 0 '+ROSIE_ART_W+' '+ROSIE_ART_H+'" aria-hidden="true">'+
-    '<defs>'+
-      '<linearGradient id="material" gradientUnits="userSpaceOnUse" x1="'+(cx-310)+'" y1="'+(cy-275)+'" x2="'+(cx+325)+'" y2="'+(cy+290)+'">'+bands+'</linearGradient>'+
-      '<radialGradient id="jewelLight" gradientUnits="userSpaceOnUse" cx="'+(cx-170)+'" cy="'+(cy-210)+'" r="480">'+
-        '<stop offset="0" stop-color="'+material.glint+'" stop-opacity=".79"/>'+
-        '<stop offset=".19" stop-color="'+material.glint+'" stop-opacity=".42"/>'+
-        '<stop offset=".52" stop-color="'+material.glint+'" stop-opacity=".08"/>'+
-        '<stop offset="1" stop-color="'+material.glint+'" stop-opacity="0"/>'+
-      '</radialGradient>'+
-      '<linearGradient id="polishedSheen" gradientUnits="userSpaceOnUse" x1="'+(cx-310)+'" y1="'+(cy-280)+'" x2="'+(cx+330)+'" y2="'+(cy+340)+'">'+
-        '<stop offset="0" stop-color="'+material.rim+'" stop-opacity=".13"/>'+
-        '<stop offset=".23" stop-color="'+material.rim+'" stop-opacity=".38"/>'+
-        '<stop offset=".35" stop-color="'+material.rim+'" stop-opacity=".03"/>'+
-        '<stop offset=".59" stop-color="'+material.rim+'" stop-opacity="0"/>'+
-        '<stop offset=".77" stop-color="'+material.rim+'" stop-opacity=".14"/>'+
-        '<stop offset="1" stop-color="'+material.rim+'" stop-opacity=".02"/>'+
-      '</linearGradient>'+
-      '<radialGradient id="jewelDepth" gradientUnits="userSpaceOnUse" cx="'+(cx-115)+'" cy="'+(cy-120)+'" r="530">'+
-        '<stop offset="0" stop-color="'+material.shadow+'" stop-opacity="0"/>'+
-        '<stop offset=".53" stop-color="'+material.shadow+'" stop-opacity=".04"/>'+
-        '<stop offset="1" stop-color="'+material.shadow+'" stop-opacity=".48"/>'+
-      '</radialGradient>'+
-    '</defs>'+
-    '<g transform="'+transform+'">'+
-      '<path d="'+path+'" fill="url(#material)" stroke="url(#material)" stroke-width="6" stroke-linejoin="round"/>'+
-      '<path d="'+path+'" fill="url(#jewelLight)"/>'+
-      '<path d="'+path+'" fill="url(#polishedSheen)"/>'+
-      '<path d="'+path+'" fill="url(#jewelDepth)"/>'+
-    '</g></svg>';
+// The material is a real painted oval, behind the original transparent image.
+// Source image pixels are never cut or recolored at runtime.
+function rosieMaterialBounds(frame){
+  const points=[...frame.openingPath.matchAll(/(\\d+),(\\d+)/g)].map(m=>[+m[1],+m[2]]);
+  const xs=points.map(point=>point[0]),ys=points.map(point=>point[1]);
+  const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+  return {cx:(minX+maxX)/2,cy:(minY+maxY)/2,rx:(maxX-minX)*.55,ry:(maxY-minY)*.55};
+}
+function rosieMaterialStyle(frame,finish){
+  const {cx,cy,rx,ry}=rosieMaterialBounds(frame);
+  const palette=ROSIE_FRAME_MATERIALS[finish]||ROSIE_FRAME_MATERIALS.emerald;
+  const bands=palette.bands;
+  return {
+    "--rosie-insert-left":(cx/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-top":(cy/ROSIE_ART_H*100)+"%",
+    "--rosie-insert-width":(2*rx/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-height":(2*ry/ROSIE_ART_H*100)+"%",
+    "--rosie-insert-finish":`radial-gradient(ellipse at 27% 19%, ${palette.glint}aa 0%, transparent 48%), conic-gradient(from 28deg, ${bands.join(", ")}, ${bands[0]})`,
+    "--rosie-insert-shadow":palette.shadow
+  };
+}
+function paintRosieMaterial(ctx,frame,finish){
+  const {cx,cy,rx,ry}=rosieMaterialBounds(frame);
+  const palette=ROSIE_FRAME_MATERIALS[finish]||ROSIE_FRAME_MATERIALS.emerald;
+  ctx.save();
+  ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,2*Math.PI);ctx.clip();
+  const metal=ctx.createConicGradient(28*Math.PI/180,cx,cy);
+  const colors=[...palette.bands,palette.bands[0]];
+  colors.forEach((color,i)=>metal.addColorStop(i/(colors.length-1),color));
+  ctx.fillStyle=metal;ctx.fillRect(cx-rx,cy-ry,rx*2,ry*2);
+  const highlight=ctx.createRadialGradient(cx-rx*.4,cy-ry*.55,10,cx-rx*.4,cy-ry*.55,rx*1.5);
+  highlight.addColorStop(0,palette.glint+"bb");
+  highlight.addColorStop(.4,palette.glint+"22");
+  highlight.addColorStop(1,palette.glint+"00");
+  ctx.fillStyle=highlight;ctx.fillRect(cx-rx,cy-ry,rx*2,ry*2);
+  ctx.restore();
 }
 const STORAGE="rosieverse.qr-atelier.collection.v1";
 const FINISH_STORAGE="rosieverse.qr-atelier.finish.v1";
@@ -156,16 +155,15 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   canvas.width=ROSIE_ART_W*2;canvas.height=ROSIE_ART_H*2;
   const ctx=canvas.getContext("2d");
   ctx.scale(2,2);
-  const [qr,art,material]=await Promise.all([
+  const [qr,art]=await Promise.all([
     qrImage(svg),
-    loadImage(ROSIE_ASSET_ROOT+frame.file),
-    qrImage(rosieFrameMaterialSVG(frame,style))
+    loadImage(ROSIE_ASSET_ROOT+frame.file)
   ]);
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
   // Identical three-layer composition in the viewer and exported PNG.
   // The frame file itself is truly transparent in its opening.
-  ctx.drawImage(material,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  paintRosieMaterial(ctx,frame,style);
   ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   // Match the live/main-page QR inset: gold outer keyline, ivory inner edge,
   // then the white scannable QR square.
@@ -192,8 +190,7 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
 }
 function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish="emerald",printOnly=false}){
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={rosieFrameStyle(frame)}>
-    <div className="qa-rosie-insert-underlay" aria-hidden="true"
-      dangerouslySetInnerHTML={{__html:rosieFrameMaterialSVG(frame,finish)}}/>
+    <div className="qa-rosie-insert-underlay" style={rosieMaterialStyle(frame,finish)} aria-hidden="true"/>
     <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
