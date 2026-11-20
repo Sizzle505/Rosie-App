@@ -68,5 +68,5 @@ export function poemForTopic(topic, mood = "zen", variation = 0) {
   };
 }
 export function formatHaiku(poem) {
-  return `${poem.lines.join("\n")}\n\n- Rosie’s Haiku Garden`;
+  return `${poem.lines.join("\n")}\n\n- Haiku Zen Garden`;
 }
