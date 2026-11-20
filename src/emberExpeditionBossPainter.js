@@ -2,7 +2,7 @@
 // sprite atlases will replace this file after the separate asset import is QA'd.
 // This paints the danger lanes used by emberExpeditionBossStage.js, not a
 // misleading decorative collision area.
-import {BOSS_SCREEN_X} from "./emberExpeditionBossStage.js";
+import {BOSS_SCREEN_X,bossDangerLane} from "./emberExpeditionBossStage.js";
 import {bossPresentation} from "./emberBossEncounter.js";
 import {drawExpansionFrame} from "./emberExpansionCatalog.js";
 
@@ -138,10 +138,10 @@ function cinderclaw(c,t){
 }
 function telegraph(c,s,W,H,attack,phase){
  if(phase!=="warning"&&phase!=="active")return;
- const y=s.bossY,t=s.time,active=phase==="active";
- const top=(attack==="fireball"||attack==="spark-bolt")?y-96:(attack==="burrow"||attack==="quake"||attack==="gear-sweep")?y+25:0;
- const bottom=(attack==="fireball"||attack==="spark-bolt")?y+96:(attack==="burrow"||attack==="quake"||attack==="gear-sweep")?H:y-35;
- const a=Math.max(0,Math.min(H,top)),b=Math.max(0,Math.min(H,bottom));
+ const active=phase==="active";
+ const lane=bossDangerLane(attack,s.bossY);
+ if(!lane)return;
+ const a=Math.max(0,Math.min(H,lane.top)),b=Math.max(0,Math.min(H,lane.bottom));
  if(b<=a)return;
  c.save();
  c.fillStyle=active?"rgba(232,87,37,.19)":"rgba(255,180,70,.10)";
