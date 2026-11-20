@@ -168,12 +168,20 @@ try {
   // The torii must read as a recognizable passage, not a solid overhead wall.
   const gate=frame.locator(".yacht-footprint-arch");
   await gate.waitFor({state:"visible",timeout:20000});
+  await page.waitForFunction(() => {
+    const el=document.querySelector(".captain-fs-yacht .yacht-footprint-arch");
+    return el && parseFloat(el.style.getPropertyValue("--approach-scale")) >= .70;
+  },null,{timeout:6500});
   const gateLabel=gate.locator(".yacht-gate-passage");
   await gateLabel.waitFor({state:"visible",timeout:1500});
   const [gateBounds,gateMessageBounds,courseBounds]=await Promise.all([
     gate.boundingBox(),gateLabel.boundingBox(),frame.locator(".yacht-course").boundingBox()
   ]);
   assert.ok(gateBounds && gateMessageBounds && courseBounds);
+  assert.ok(gateBounds.width >= courseBounds.width*.72,
+    "Torii pillars must visually span the two OUTER lanes near the collision zone");
+  assert.ok(gateMessageBounds.y > gateBounds.y + gateBounds.height*.55,
+    "Safe passage cue must be beneath the crossbeam, not on top of it");
   assert.ok(gateMessageBounds.x+gateMessageBounds.width/2 >
     courseBounds.x+courseBounds.width*.4 &&
     gateMessageBounds.x+gateMessageBounds.width/2 <
