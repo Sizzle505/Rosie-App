@@ -219,15 +219,24 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
    else cinderclaw(c,s.time);
  }
  c.restore();
- // Health pips are in Canvas so all three viewports get matching game-space sizing.
- c.save();c.textAlign="right";c.font="bold 15px Georgia,serif";
- c.fillStyle="#ffe5a9";c.shadowColor="#161018";c.shadowBlur=7;
- c.fillText(boss.kind==="mole-king"?"THE MOLE KING":boss.kind==="copperjack"?"COPPERJACK":"CINDERCLAW",W-24,78);
+ // Health is deliberately prominent and legible against bright caves,
+ // below the corner paw button and clear of the central stage-name plaque.
+ c.save();
+ const panelX=W-208,panelY=111;
+ const panel=c.createLinearGradient(panelX,panelY,panelX,panelY+80);
+ panel.addColorStop(0,"rgba(48,32,40,.94)");
+ panel.addColorStop(1,"rgba(22,20,32,.94)");
+ c.beginPath();c.roundRect(panelX,panelY,189,79,12);
+ c.fillStyle=panel;c.fill();c.strokeStyle="#e3b879";c.lineWidth=2;c.stroke();
+ c.textAlign="center";c.font="bold 16px Georgia,serif";
+ c.fillStyle="#ffe5a9";
+ c.fillText(boss.kind==="mole-king"?"THE MOLE KING":boss.kind==="copperjack"?"COPPERJACK":"CINDERCLAW",panelX+94,139);
+ const step=25,firstX=panelX+94-(boss.maxHealth-1)*step/2;
  for(let i=0;i<boss.maxHealth;i++){
+   const x=firstX+i*step;
    c.fillStyle=i<boss.health?"#ebae5f":"#54474b";
    c.strokeStyle="#f1d8ab";c.lineWidth=1.5;
-   const bx=W-26-(boss.maxHealth-1-i)*23;
-   c.fillRect(bx-14,88,16,11);c.strokeRect(bx-14,88,16,11);
+   c.fillRect(x-10,151,20,15);c.strokeRect(x-10,151,20,15);
  }
  if(p.vulnerable){
   c.textAlign="center";c.font="bold 15px Georgia,serif";
