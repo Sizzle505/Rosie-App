@@ -141,3 +141,77 @@
 @media(prefers-reduced-motion:reduce) {
   .captain-game-page .sea-pickup .yacht-drift-warning {animation:none;}
 }
+
+
+/* Playtest selection, performance medals and art review. */
+.captain-game-page .captain-start-panel .yacht-chapter-goal {
+  display:block;
+  max-width:310px;
+  margin:6px auto 0;
+  color:#e4cb98;
+  font-size:9px;
+  letter-spacing:.012em;
+  line-height:1.4;
+  text-transform:none;
+}
+.captain-game-page .yacht-chapter-picker .yacht-stage-record {
+  color:#c1d7dc;
+  line-height:1.25;
+  font-size:8px;
+  white-space:normal;
+  text-align:center;
+}
+.captain-game-page .yacht-select-actions {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:7px;
+  align-items:center;
+  margin-top:10px;
+}
+.captain-game-page .captain-start-panel .yacht-select-actions button {
+  margin-top:0;
+  min-height:34px;
+  height:auto;
+  padding:9px 12px;
+  font-size:9px;
+  line-height:1.2;
+  letter-spacing:.02em;
+}
+.captain-game-page .captain-start-panel .yacht-select-actions .yacht-preview-victory {
+  color:#f8dfaa;
+  border:1px solid rgba(232,194,122,.62);
+  background:rgba(8,42,57,.89);
+  box-shadow:inset 0 1px rgba(255,255,255,.09);
+}
+.captain-game-page .yacht-medal-stars {
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:5px auto 2px;
+  line-height:1;
+  font-size:23px;
+  color:rgba(205,218,218,.29);
+  text-shadow:none;
+}
+.captain-game-page .yacht-medal-stars .is-awarded {
+  color:#f6cb73;
+  text-shadow:0 1px 3px rgba(37,19,11,.3),0 0 9px rgba(239,190,96,.28);
+}
+.captain-game-page .captain-results-panel .yacht-objective-summary {
+  max-width:305px;
+  margin:3px auto 7px;
+  font-size:9px;
+  line-height:1.3;
+  color:#e3c99e;
+}
+@media(max-width:720px) {
+  .captain-game-page .captain-start-panel .yacht-select-actions button {font-size:8px;padding:7px 8px;}
+  .captain-game-page .yacht-chapter-picker .yacht-stage-record {font-size:7px;}
+  .captain-game-page .captain-start-panel .yacht-chapter-goal {font-size:8px;line-height:1.3;}
+}
+@media(max-width:380px), (max-height:590px) {
+  .captain-game-page .captain-start-panel .yacht-chapter-goal {display:none;}
+  .captain-game-page .captain-results-panel .yacht-objective-summary {display:none;}
+  .captain-game-page .yacht-chapter-picker .yacht-stage-record {font-size:6px;}
+}
