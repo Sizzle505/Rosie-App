@@ -3,6 +3,7 @@ import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, trigge
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
+import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExpeditionStars} from "./emberExpeditionStages.js";
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 
@@ -129,15 +130,16 @@ const DRILL_ART = {
   spike:"hazard-spike.webp",
 };
 
-const formatTime = t => Math.max(0, Math.ceil(RUN_DURATION - t)) + "s";
+const formatTime = (t,duration=RUN_DURATION) => Math.max(0, Math.ceil(duration - t)) + "s";
 function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
     cheese:s.cheese, combo:s.combo, boost:s.boostTime, boosts:s.boosts, shards:s.shards,
     damageTaken:s.damageTaken, cleanBonus:s.cleanBonus, distance:Math.round(s.distance/10),
     wallsBroken:s.wallsBroken||0,secrets:s.secrets||0,relics:s.relics||0,
     hazardsDodged:s.hazardsDodged||0,objectiveBonus:s.objectiveBonus||0,
+    stageIndex:s.stageIndex??null,duration:s.duration||RUN_DURATION,
     objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
-    passage:Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))), result:s.result };
+    passage:s.stageIndex===null?Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))):s.stageIndex, result:s.result };
 }
 function playSound(context,kind) {
   if (!context) return;
@@ -163,6 +165,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null);
   const [mode,setMode]=useState("idle");
   const [notice,setNotice]=useState(null);
+  const [selectedWorld,setSelectedWorld]=useState(0);
+  const [stageStars,setStageStars]=useState(()=>{
+    try{return safeStoredExpeditionStars(localStorage.getItem("rosieEmberFiveWorldStarsV1"))}catch{return {}}
+  });
   const [relicFound,setRelicFound]=useState(()=>{
     try{return localStorage.getItem("rosieEmberRoyalBoneFound")==="1"}catch(_){return false}
   });
@@ -188,8 +194,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       return sound.current;
     }catch(_){return null}
   }
-  function start() {
-    const next=newRun(seed.current++);
+  function start(requestedStage=undefined) {
+    const targetStage=Number.isInteger(requestedStage)?requestedStage:
+      requestedStage===null?null:(modeRef.current==="ended"?frame.current.stageIndex:null);
+    const next=newRun(seed.current++,targetStage);
     frame.current=next;particles.current=[];
     noticeRef.current=null;setNotice(null);
     pressed.current.up=false;pressed.current.down=false;
@@ -334,7 +342,16 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         }
         if(s.ended){
           modeRef.current="ended";setMode("ended");setHud(snapshot(s));
-           const stars=excavationStars(s);
+           const stage=getExpeditionStage(s.stageIndex);
+           if(stage){
+             const earned=expeditionStarCount(s);
+             if(earned>0)setStageStars(previous=>{
+               const updated={...previous,[stage.id]:Math.max(previous[stage.id]||0,earned)};
+               try{localStorage.setItem("rosieEmberFiveWorldStarsV1",JSON.stringify(updated))}catch{}
+               return updated;
+             });
+           }
+           const stars=s.stageIndex===null?excavationStars(s):0;
            if(stars>bestStarsRef.current){
              bestStarsRef.current=stars;setBestStars(stars);
              try{localStorage.setItem("rosieEmberExpeditionStars",String(stars))}catch(_){}
@@ -381,7 +398,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   },[soundOn]);
   const active=mode==="running";
   const paused=mode==="paused";
-  const title=mode==="ended" ? (hud.result==="complete"?"THE DIG IS DONE":"A VALIANT EXCAVATION") : "THE GREAT DIG";
+  const world=getExpeditionStage(hud.stageIndex);
+  const route=world?EXPEDITION_STAGES.map(w=>({label:w.name,mission:w.objective})):PASSAGES;
+  const title=mode==="ended" ? (hud.result==="complete"?(world?world.name.toUpperCase()+" COMPLETE":"THE DIG IS DONE"):"A VALIANT EXCAVATION") : "THE GREAT DIG";
   const subtitle=mode==="ended" ? (hud.result==="complete"?"Rosie has excavated an entirely respectable amount of park.":"Rosie maintains the rocks were poorly positioned.") :
     "Because some dogs dig holes. Rosie digs civilizations.";
   const hold=(type,on,e)=>{
@@ -389,7 +408,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     if(modeRef.current!=="running")return;
     pressed.current[type]=on;
   };
-  const passageProgress = Math.min(100, ((hud.time - PASSAGES[hud.passage].start) / (PASSAGES[hud.passage].end - PASSAGES[hud.passage].start)) * 100);
+  const passageProgress=world?Math.min(100,hud.time/hud.duration*100):
+    Math.min(100, ((hud.time-PASSAGES[hud.passage].start)/(PASSAGES[hud.passage].end-PASSAGES[hud.passage].start))*100);
   return (
     <section className="ember-suite" data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
@@ -399,21 +419,21 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       </header>
       <div className="ember-stats" aria-live="off">
         <div><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
-        <div><small>TIME</small><strong>{formatTime(hud.time)}</strong></div>
+        <div><small>TIME</small><strong>{formatTime(hud.time,hud.duration)}</strong></div>
         <div><small>HULL</small><strong className="ember-hull">{Array.from({length:5},(_,n)=><i key={n} className={n<hud.hull?"intact":""}>●</i>)}</strong></div>
         <div><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
-      <div className="ember-expedition" aria-label={`Excavation route: passage ${hud.passage+1} of ${PASSAGES.length}`}>
+      <div className="ember-expedition" aria-label={`Excavation route: passage ${hud.passage+1} of ${route.length}`}>
         <span className="ember-route-label">EXCAVATION ROUTE</span>
-        <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / PASSAGES.length) * 100}%`}} /></div>
-        {PASSAGES.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
+        <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / route.length) * 100}%`}} /></div>
+        {route.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
         <div className="ember-passage-mission" aria-live="off"><span>PASSAGE OBJECTIVE</span>
-          <strong>{PASSAGES[hud.passage].mission}</strong>
-          <em>{(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
+          <strong>{route[hud.passage].mission}</strong>
+          <em>{world?"STAGE PLAYTEST":(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
         </div>
       </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
-        <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
+        <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {route.length}</small><strong>{route[hud.passage].label}</strong></div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
@@ -429,9 +449,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
-             {mode==="ended"&&<div className="ember-expedition-medals" aria-label={excavationStars(hud)+" of 3 expedition stars earned"}>
-               <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<excavationStars(hud)?"earned":""}>★</i>)}</span>
-               <small>FINISH · 2 WALLS · ROYAL RELIC</small>
+             {mode==="ended"&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 expedition stars earned"}>
+               <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
+               <small>{world?"FINISH · ≤1 DAMAGE · 5 TREASURES":"FINISH · 2 WALLS · ROYAL RELIC"}</small>
              </div>}
             {mode==="ended"&&(hud.relics>0||relicFound ?
               <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
@@ -450,7 +470,27 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
               <span><b>{best.toLocaleString()}</b> BEST</span>
             </div>}
-            <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
+            <div className="ember-expedition-pick" aria-label="Choose a world to playtest">
+               <span className="ember-expedition-pick-heading">FIVE WORLD EXPEDITION · ALL LEVELS AVAILABLE FOR PLAYTESTING</span>
+               <div className="ember-world-select">
+                 {EXPEDITION_STAGES.map((w,i)=><button type="button" key={w.id}
+                   className={"ember-world-choice"+(selectedWorld===i?" selected":"")}
+                   onClick={()=>setSelectedWorld(i)}
+                   aria-pressed={selectedWorld===i}
+                   style={{backgroundImage:`linear-gradient(180deg,rgba(16,16,25,.25),rgba(16,13,23,.92)),url(/ember-drill/${w.art})`}}>
+                   <strong>{i+1}. {w.name}</strong>
+                   <small aria-label={(stageStars[w.id]||0)+" out of 3 stars"}>
+                     {"★".repeat(stageStars[w.id]||0)}{"☆".repeat(3-(stageStars[w.id]||0))}
+                   </small>
+                 </button>)}
+               </div>
+               <button className="ember-expedition-launch" type="button" onClick={()=>start(selectedWorld)}>
+                 PLAY {EXPEDITION_STAGES[selectedWorld].name.toUpperCase()} · 15s
+               </button>
+               <small>Stages 3-5 use approved placeholder terrain. Boss battles and new art are still in development.</small>
+             </div>
+             <button type="button" onClick={()=>start(null)}>{mode==="ended"&&!world?"DIG AGAIN":"CLASSIC 75-SECOND DIG"}</button>
+             {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
             <small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>
           </div>}
       </div>
@@ -479,7 +519,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       </div>
       {active&&<div className="ember-run-actions">
         <button className="ember-icon-action" type="button" onClick={togglePause} aria-label="Pause run" title="Pause run">❚❚</button>
-        <button className="ember-icon-action" type="button" onClick={start} aria-label="Replay run" title="Replay run">↻</button>
+        <button className="ember-icon-action" type="button" onClick={()=>start(frame.current.stageIndex)} aria-label="Replay run" title="Replay run">↻</button>
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}
