@@ -36,7 +36,16 @@ async function verify(name,browser,viewport){
       const p=page.waitForResponse(r=>r.url().endsWith("/rosie-music/"+track+".mp3")&&[200,206].includes(r.status()),{timeout:13000});
       await page.evaluate(route=>{location.hash="#"+route},route);
       await page.locator('.rosie-music-dock[data-track="'+track+'"]').waitFor();
-      await p;
+      try{await p;}
+      catch(error){
+        console.error("AUDIO_SWITCH_DIAGNOSTIC",name,viewport.label,route,track,
+          await page.evaluate(()=>({
+            dock:document.querySelector(".rosie-music-dock")?.outerHTML.slice(0,600),
+            note:document.querySelector(".rosie-music-note")?.textContent,
+            enabled:localStorage.getItem("rosieverse.music.enabled.v1")
+          })),musicResponses);
+        throw error;
+      }
     }
     const slider=dock.locator("#rosie-music-volume");
     await slider.focus();
