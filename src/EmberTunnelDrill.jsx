@@ -139,6 +139,10 @@ function snapshot(s) {
     hazardsDodged:s.hazardsDodged||0,objectiveBonus:s.objectiveBonus||0,
     stageIndex:s.stageIndex??null,duration:s.duration||RUN_DURATION,
     worldObjective:s.worldObjective===true,worldHazardCount:s.worldHazards?.length||0,
+    worldWarnings:(s.worldHazards||[]).filter(h=>h.warned).length,
+    boss:s.boss?{kind:s.boss.kind,health:s.boss.health,maxHealth:s.boss.maxHealth,
+      phase:s.boss.phase,attack:s.boss.attack,defeated:s.boss.defeated}:null,
+    bossDefeated:s.bossDefeated===true,
     objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
     passage:s.stageIndex===null?Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))):s.stageIndex, result:s.result };
 }
@@ -405,8 +409,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   const paused=mode==="paused";
   const world=getExpeditionStage(hud.stageIndex);
   const route=world?EXPEDITION_STAGES.map(w=>({label:w.name,mission:w.objective})):PASSAGES;
-  const title=mode==="ended" ? (hud.result==="complete"?(world?world.name.toUpperCase()+" COMPLETE":"THE DIG IS DONE"):"A VALIANT EXCAVATION") : "THE GREAT DIG";
-  const subtitle=mode==="ended" ? (hud.result==="complete"?"Rosie has excavated an entirely respectable amount of park.":"Rosie maintains the rocks were poorly positioned.") :
+  const title=mode==="ended" ?
+    (hud.result==="complete"?(world?world.name.toUpperCase()+" COMPLETE":"THE DIG IS DONE"):
+     hud.result==="boss-timeout"?"THE BOSS ESCAPED":"A VALIANT EXCAVATION") : "THE GREAT DIG";
+  const subtitle=mode==="ended" ?
+    (hud.result==="complete"?
+      (hud.bossDefeated?"Rosie has conquered the depths and defeated the guardian.":"Rosie has excavated an entirely respectable amount of park.") :
+     hud.result==="boss-timeout"?"The guardian still holds the chamber. Return and time your Turbo strikes.":"Rosie maintains the rocks were poorly positioned.") :
     "Because some dogs dig holes. Rosie digs civilizations.";
   const hold=(type,on,e)=>{
     if(e?.type==="pointerdown"){e.preventDefault();e.currentTarget.setPointerCapture?.(e.pointerId)}
@@ -443,6 +452,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
+        {hud.boss&&active&&<span className="ember-boss-accessible" role="status" aria-live="off">
+          {hud.boss.kind==="mole-king"?"Mole King":"Cinderclaw"}: {hud.boss.health} of {hud.boss.maxHealth} health,
+          {hud.boss.phase==="recovery"?" vulnerable to Turbo":hud.boss.phase==="warning"?" attack incoming":hud.boss.phase==="active"?" attacking":" defeated"}
+        </span>}
          {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">GUIDE THE AUGER INTO WEAK EARTH · TURBO BREAKS CRYSTAL</div>}
          {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
            {notice.kind==="relic"&&<img src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="" />}
@@ -457,9 +470,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <p>{subtitle}</p>
              {mode==="ended"&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 expedition stars earned"}>
                <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
-               <small>{world?"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · 2 WALLS · ROYAL RELIC"}</small>
+               <small>{world?(world.index>=3?"DEFEAT BOSS · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE"):"FINISH · 2 WALLS · ROYAL RELIC"}</small>
              </div>}
-            {mode==="ended"&&(hud.relics>0||relicFound ?
+            {mode==="ended"&&!hud.boss&&(hud.relics>0||relicFound ?
               <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
               hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />)}
             {mode==="ended"&&<div className="ember-results">
@@ -473,6 +486,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               <span><b>{Number(hud.objectives.barkroot)+Number(hud.objectives.ruby)}/2</b> MISSIONS</span>
               <span><b>{hud.hazardsDodged}</b> CRYSTAL DODGES</span>
                {world&&<span><b>{hud.worldObjective?"COMPLETE":"MISSED"}</b> WORLD MISSION</span>}
+              {hud.boss&&<span><b>{hud.bossDefeated?"DEFEATED":"UNDEFEATED"}</b> {hud.boss.kind==="mole-king"?"MOLE KING":"CINDERCLAW"}</span>}
               <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
               {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
               <span><b>{best.toLocaleString()}</b> BEST</span>
@@ -492,9 +506,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
                  </button>)}
                </div>
                <button className="ember-expedition-launch" type="button" onClick={()=>start(selectedWorld)}>
-                 PLAY {EXPEDITION_STAGES[selectedWorld].name.toUpperCase()} · 15s
+                 PLAY {EXPEDITION_STAGES[selectedWorld].name.toUpperCase()} · {EXPEDITION_STAGES[selectedWorld].duration||15}s
                </button>
-               <small>Each world has a unique moving hazard. Approved scenery is in use; boss battles and final art remain in development.</small>
+               <small>Worlds feature distinct hazards; Molten and Treasury include playable boss fights. Final character artwork is still in review.</small>
              </div>
              <button type="button" onClick={()=>start(null)}>{mode!=="ended"?"START DIGGING":world?"CLASSIC 75-SECOND DIG":"DIG AGAIN"}</button>
              {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
