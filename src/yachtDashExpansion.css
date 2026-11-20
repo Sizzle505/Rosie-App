@@ -876,3 +876,23 @@
     padding:5px 10px 6px;
   }
 }
+
+
+/* Distinct separation between the objective and tappable stage cards: the
+   previous near-zero gap made the caption visually run into their gold frame. */
+@media(max-width:720px) and (pointer:coarse){
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-goal{
+    font-size:10px!important;
+    line-height:1.35!important;
+    margin:5px auto 14px!important;
+    padding:0 5px;
+    max-width:315px;
+    color:#f0e2c4!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-picker {
+    margin-top:5px!important;
+  }
+  .captain-game-page .yacht-course:focus{
+    outline:none;
+  }
+}
