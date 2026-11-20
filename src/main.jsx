@@ -1774,7 +1774,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const chapter = YACHT_CHAPTERS[chapterIndex];
   const levelNumber = Math.min(4, Math.floor(elapsed / 15));
   const level = yachtSceneFor(chapterIndex, elapsed, levelOrder);
-  const scenery = useCaptainSceneryTransition(level, true);
+  const scenery = useCaptainSceneryTransition(level, true, !running && !ended);
   // Fetch only the NEXT painting in advance; no mounting or accumulating five layers.
   const nextLevel = levelNumber < 4
     ? yachtSceneFor(chapterIndex, (levelNumber + 1) * 15, levelOrder) : null;
