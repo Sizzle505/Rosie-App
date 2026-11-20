@@ -4,6 +4,7 @@
 // misleading decorative collision area.
 import {BOSS_SCREEN_X} from "./emberExpeditionBossStage.js";
 import {bossPresentation} from "./emberBossEncounter.js";
+import {drawExpansionFrame} from "./emberExpansionCatalog.js";
 
 const PI=Math.PI;
 function shape(c,points,fill,stroke=null,width=2){
@@ -161,7 +162,35 @@ function telegraph(c,s,W,H,attack,phase){
  c.fillText(active?"DANGER - MOVE AWAY":"WARNING - STEER CLEAR",18,Math.max(22,a+21));
  c.restore();
 }
-export function paintExpeditionBoss(c,s,W,H){
+// Attack-state art is registered frame-by-frame to the current boss cycle.
+// Every image is optional until loaded. Silhouettes retain the original
+// engine collision and attack-zone geometry, not image alpha hitboxes.
+export function expeditionBossFrame(b,p=bossPresentation(b)){
+ if(b.kind==="cinderclaw"){
+   if(p.phase==="defeated")return 11;
+   if(p.phase==="recovery")return 11;
+   if(p.attack==="burrow")return p.phase==="warning"?8:9;
+   if(p.phase==="warning")return 5;
+   if(p.phase==="active")return 6;
+   return Math.floor(b.elapsed*4)%4;
+ }
+ if(b.kind==="copperjack"){
+   if(p.phase==="defeated")return 11;
+   if(p.phase==="recovery")return b.hitThisRecovery?9:8;
+   if(p.phase==="warning")return p.attack==="spark-bolt"?4:5;
+   if(p.phase==="active")return p.attack==="spark-bolt"?7:6;
+   return Math.floor(b.elapsed*4)%2;
+ }
+ if(b.kind==="mole-king"){
+   if(p.phase==="defeated")return 10;
+   if(p.phase==="recovery")return b.hitThisRecovery?9:8;
+   if(p.phase==="warning")return p.attack==="earth-burst"?6:4;
+   if(p.phase==="active")return p.attack==="earth-burst"?7:5;
+   return Math.floor(b.elapsed*3)%3;
+ }
+ return 0;
+}
+export function paintExpeditionBoss(c,s,W,H,assets={}){
  const boss=s.boss;
  if(!boss)return;
  const p=bossPresentation(boss);
@@ -178,9 +207,17 @@ export function paintExpeditionBoss(c,s,W,H){
    c.setLineDash([12,7]);c.beginPath();c.ellipse(0,0,101,95,0,0,2*PI);c.stroke();
    c.setLineDash([]);
  }
- if(boss.kind==="mole-king")moleKing(c,s.time);
- else if(boss.kind==="copperjack")copperjack(c,s.time);
- else cinderclaw(c,s.time);
+ const atlas=assets?.["exp:"+boss.kind];
+ const frame=expeditionBossFrame(boss,p);
+ const isCinder=boss.kind==="cinderclaw";
+ const width=isCinder?335:boss.kind==="mole-king"?310:290;
+ const height=isCinder?255:292;
+ const drew=drawExpansionFrame(c,atlas,boss.kind,frame,-width/2,-height*.67,width,height);
+ if(!drew){
+   if(boss.kind==="mole-king")moleKing(c,s.time);
+   else if(boss.kind==="copperjack")copperjack(c,s.time);
+   else cinderclaw(c,s.time);
+ }
  c.restore();
  // Health pips are in Canvas so all three viewports get matching game-space sizing.
  c.save();c.textAlign="right";c.font="bold 15px Georgia,serif";
