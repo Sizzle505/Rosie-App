@@ -5,6 +5,11 @@ import { paintSculpturalTunnel } from "./emberTunnelSculpture.js";
 import { paintOriginalAuger, paintOriginalBoostExhaust, paintTurboTip, paintTurboWorldStreaks } from "./emberAugerFX.js";
 import { paintExcavationUnderlay, paintExcavationTip } from "./emberExcavationFX.js";
 import { paintNewBackgroundParallax } from "./emberNewBackgrounds.js";
+import { paintBreakables } from "./emberBreakablePainter.js";
+import {paintCrystalShutters} from "./emberCrystalShuttersPainter.js";
+import {paintExpeditionHazards} from "./emberExpeditionHazardPainter.js";
+import {paintExpeditionBoss} from "./emberExpeditionBossPainter.js";
+import {drawExpansionFrame} from "./emberExpansionCatalog.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -148,19 +153,40 @@ function scenicFeatures(c,s,assets){
     }
   }
 }
+// Use the imported wide transition art *inside* the selected later worlds.
+// A horizontal crop moves from the previous biome toward the destination,
+// preserving native proportions rather than stretching the panorama.
+function paintExpeditionTransition(c,s,assets){
+  const id={2:"ruby-clockwork",3:"clockwork-molten",4:"molten-treasury"}[s.stageIndex];
+  const img=assets?.["exp-transition:"+id];
+  if(!id||!artReady(img))return false;
+  const cropWidth=Math.min(img.naturalWidth,img.naturalHeight*W/H);
+  const span=Math.max(0,img.naturalWidth-cropWidth);
+  const t=clamp(s.time/3.4,0,1);
+  const eased=t*t*(3-2*t);
+  c.save();
+  c.globalAlpha=.62;
+  c.drawImage(img,span*eased,0,cropWidth,img.naturalHeight,0,0,W,H);
+  c.restore();
+  return true;
+}
 function scenery(c,s,assets={}) {
   c.fillStyle="#23151d";c.fillRect(0,0,W,H);
+  // The original 75s course uses its exact old scenic progression. A selected
+  // 15s stage opens near the corresponding illustrated passage instead.
+  const sceneTime=s.stageIndex===null?s.time:
+    [0,36,50,61,69][Math.max(0,Math.min(4,s.stageIndex))]+s.time*.24;
   let current=0;
   for(let i=1;i<CAVERN_SCENES.length;i++){
-    if(s.time>=CAVERN_SCENES[i].at)current=i;
+    if(sceneTime>=CAVERN_SCENES[i].at)current=i;
   }
   const scene=CAVERN_SCENES[current];
   const nextAt=CAVERN_SCENES[current+1]?.at??75;
   const duration=Math.max(1,nextAt-scene.at);
-  const local=clamp((s.time-scene.at)/duration,0,1);
+  const local=clamp((sceneTime-scene.at)/duration,0,1);
   if(current>0){
     const prev=CAVERN_SCENES[current-1];
-    const fade=clamp((s.time-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
+    const fade=clamp((sceneTime-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
     const eased=fade*fade*(3-2*fade);
     panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,eased);
@@ -171,6 +197,13 @@ function scenery(c,s,assets={}) {
     atmosphericAccent(c,assets[scene.accent],local,1);
   }
   paintNewBackgroundParallax(c,s,assets,W,H);
+  paintExpeditionTransition(c,s,assets);
+  // Modest lighting grade distinguishes the later-world route prototypes
+  // without presenting unapproved generated backgrounds as finished.
+  if(s.stageIndex!==null&&s.stageIndex>=2){
+    const hues=["rgba(30,80,124,.13)","rgba(177,53,25,.15)","rgba(189,130,45,.13)"];
+    c.fillStyle=hues[s.stageIndex-2]||"transparent";c.fillRect(0,0,W,H);
+  }
   // Keep architecture and crystals legible inside the playable corridor.
   const tint=c.createLinearGradient(0,0,0,H);
   tint.addColorStop(0,"rgba(17,10,18,.13)");
@@ -215,6 +248,21 @@ function wallDepth(c,s){
  }
 }
 function pickup(c,o,s,assets={}){
+  // Newly illustrated bonus icons are limited to the five optional worlds.
+  // Classic collectibles retain their already-approved appearances.
+  if(s.stageIndex!==null&&!o.taken&&["bone","cheese","gem"].includes(o.kind)){
+    const frame=o.kind==="bone"?0:o.kind==="cheese"?1:o.id%3===0?2:3;
+    const x=o.x-s.scroll,y=o.y+Math.sin(s.time*5+o.id)*2;
+    if(x>=-70&&x<=W+70){
+      const size=74;
+      const illustrated=assets["exp:bonus-pickups"];
+      if(artReady(illustrated)){
+        glow(c,x,y,size*.7,"rgba(255,188,89,.15)");
+        if(drawExpansionFrame(c,illustrated,"bonus-pickups",frame,
+          x-size/2,y-size/2,size,size))return;
+      }
+    }
+  }
   const img=o.kind==='cache'?(assets.chest||assets.cache):
     o.kind==='gem'&&o.id%7===0?(assets.coin||assets.gem):
     assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':'nonexistent'];
@@ -388,16 +436,32 @@ export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrect
   // transition core and left the course looking obstacle-free.
   if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
   paintSculpturalTunnel(c,s,assets);
+  // Boss combat freezes and disables the normal tunnel's objects. Do not
+  // leave collectible gems or dangerous-looking inactive obstacles floating
+  // in front of the guardian and misleading the player.
+  if(!s.boss){
+    paintBreakables(c,s,assets,W);
+    paintCrystalShutters(c,s,assets,W);
+    paintExpeditionHazards(c,s,W,assets);
+    for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
+    for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
+  }
   paintTurboWorldStreaks(c,s,W,H);
-  // First collectibles, then drill, with hazards on top for readable play.
-  for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
-  for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
+  paintExpeditionBoss(c,s,W,H,assets);
   paintExcavationUnderlay(c,s);
   vehicle(c,s,portrait,assets,horizontalCorrection);
   paintExcavationTip(c,s);
   for(const p of particles){
     c.save();c.globalAlpha=Math.max(0,p.life/p.max);
-    if((p.type==="rock-burst"||p.type==="hit-burst")&&artReady(assets.rockburst)){
+    if((p.type==="break-v2"||p.type==="crack-v2")&&artReady(assets.breakShatterVfx)){
+      const src=assets.breakShatterVfx;
+      const fraction=clamp(1-p.life/p.max,0,1);
+      const count=p.type==="crack-v2"?4:10;
+      const frame=Math.min(count-1,Math.floor(fraction*count));
+      const fw=src.naturalWidth/5,fh=src.naturalHeight/2;
+      const x=frame%5,y=Math.floor(frame/5);
+      c.drawImage(src,x*fw,y*fh,fw,fh,p.x-79,p.y-72,158,144);
+    } else if((p.type==="break-v2"||p.type==="crack-v2"||p.type==="rock-burst"||p.type==="hit-burst")&&artReady(assets.rockburst)){
       drawImageTrim(c,assets.rockburst,p.x-77,p.y-57,154,114,Math.min(1,p.life/p.max));
     } else if(p.type==="cache-burst"&&artReady(assets.cacheBurst)){
       const frame=Math.min(7,Math.floor((1-p.life/p.max)*8)), fw=assets.cacheBurst.naturalWidth/4,fh=assets.cacheBurst.naturalHeight/2;

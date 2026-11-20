@@ -28,6 +28,9 @@ export default function AxisJoystick({axis="horizontal",onDirection,onRelease,di
     }
   };
   return <div className={"axis-stick"+(vertical?" axis-stick-vertical":"")} role="group"
+      onContextMenu={e=>e.preventDefault()}
+      onSelectStart={e=>e.preventDefault()}
+      onDragStart={e=>e.preventDefault()}
       aria-label={label+" "+(vertical?"up and down":"left and right")}>
     <div className="axis-stick-track" onPointerDown={e=>{
         if(disabled||pointer.current!==null)return;

@@ -38,16 +38,18 @@
   width:100%!important;height:100%!important;object-fit:contain!important;
   z-index:3;pointer-events:none;user-select:none;
 }
-/* The 110% jewel-finish aperture is a single artwork-sized SVG BEHIND the
-   original illustrated frame, not an overlay painted on its filigree. */
+/* The selected metal finish is a 110%-sized, actually painted oval behind
+   the untouched alpha-hollow frame, not an SVG gradient that may fail in Safari.
+   No color ever sits on top of the illustrated gold rim or Rosie. */
 .qa-rosie-insert-underlay {
-  position:absolute!important;inset:0!important;
-  width:100%!important;height:100%!important;
-  z-index:1;pointer-events:none;display:block!important;overflow:visible;
-}
-.qa-rosie-insert-underlay svg {
-  display:block!important;width:100%!important;height:100%!important;
-  overflow:visible;pointer-events:none;
+  position:absolute!important;inset:auto!important;
+  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
+  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
+  border-radius:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:1;pointer-events:none;display:block!important;
+  background:var(--rosie-insert-finish)!important;
+  box-shadow:inset 0 0 22px 12px var(--rosie-insert-shadow)!important;
 }
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
@@ -130,8 +132,8 @@
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay {
-    /* Only the scaled aperture paths carry color, not the SVG bounds. */
-    background:transparent!important;
+    /* Match the live selected metallic background in print. */
+    background:var(--rosie-insert-finish)!important;
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr,

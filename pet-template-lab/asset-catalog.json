@@ -1,0 +1,524 @@
+{
+  "version": 1,
+  "created": "2026-11-19",
+  "status": "provisional; visual confirmation required",
+  "excludes": [
+    "captain",
+    "yacht",
+    "tunnel",
+    "cosmic-odyssey",
+    "card-vault"
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "label": "Landing Page",
+      "slots": [
+        {
+          "id": "home.hero",
+          "source": "public/rosieverse/hero.webp",
+          "target": "home/hero.webp",
+          "required": true
+        },
+        {
+          "id": "home.title",
+          "source": "public/rosieverse/title.webp",
+          "target": "home/title.webp",
+          "required": true
+        },
+        {
+          "id": "home.nav-fortune",
+          "source": "public/rosieverse/buttons/fortune.webp",
+          "target": "home/nav-fortune.webp",
+          "required": true
+        },
+        {
+          "id": "home.nav-cheese",
+          "source": "public/rosieverse/buttons/cheese.webp",
+          "target": "home/nav-cheese.webp",
+          "required": true
+        },
+        {
+          "id": "home.nav-randomizers",
+          "source": "public/rosieverse/buttons/randomizers.webp",
+          "target": "home/nav-randomizers.webp",
+          "required": true
+        },
+        {
+          "id": "home.nav-reminders",
+          "source": "public/rosieverse/resources/reminders.webp",
+          "target": "home/nav-reminders.webp",
+          "required": false
+        },
+        {
+          "id": "home.nav-qr",
+          "source": "public/rosieverse/refresh/qr-button.webp",
+          "target": "home/nav-qr.webp",
+          "required": false
+        },
+        {
+          "id": "home.nav-calculations",
+          "source": "public/rosieverse/resources/calculations.webp",
+          "target": "home/nav-calculations.webp",
+          "required": false
+        },
+        {
+          "id": "home.nav-recipes",
+          "source": "public/rosieverse/resources/recipes.png",
+          "target": "home/nav-recipes.png",
+          "required": false
+        },
+        {
+          "id": "home.nav-timekeeper",
+          "source": "public/rosieverse/resources/timekeeper.webp",
+          "target": "home/nav-timekeeper.webp",
+          "required": false
+        },
+        {
+          "id": "home.nav-reviews",
+          "source": "public/rosieverse/resources/reviews-crimson-20261018.webp",
+          "target": "home/nav-reviews.webp",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "fortune",
+      "label": "Fortune Teller",
+      "slots": [
+        {
+          "id": "fortune.portrait",
+          "source": "public/rosie-fortune-stage.webp",
+          "target": "fortune/portrait.webp",
+          "required": true
+        },
+        {
+          "id": "fortune.turn",
+          "source": "public/rosie-fortune-turn-side.webp",
+          "target": "fortune/turn.webp",
+          "required": true
+        },
+        {
+          "id": "fortune.tent",
+          "source": "public/rosieverse/refresh/fortune-tent.webp",
+          "target": "fortune/tent.webp",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "cheese",
+      "label": "Cheese Board Exam",
+      "slots": [
+        {
+          "id": "cheese.reaction-watching",
+          "source": "public/rosie-reaction-watching.webp",
+          "target": "cheese/reaction-watching.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-intrigued",
+          "source": "public/rosie-reaction-intrigued.webp",
+          "target": "cheese/reaction-intrigued.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-pleased",
+          "source": "public/rosie-reaction-pleased.webp",
+          "target": "cheese/reaction-pleased.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-concerned",
+          "source": "public/rosie-reaction-concerned.webp",
+          "target": "cheese/reaction-concerned.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-triumphant",
+          "source": "public/rosie-reaction-triumphant.webp",
+          "target": "cheese/reaction-triumphant.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-amused",
+          "source": "public/rosie-reaction-amused.webp",
+          "target": "cheese/reaction-amused.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-focused",
+          "source": "public/rosie-reaction-focused.webp",
+          "target": "cheese/reaction-focused.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-unimpressed",
+          "source": "public/rosie-reaction-unimpressed.webp",
+          "target": "cheese/reaction-unimpressed.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-proud",
+          "source": "public/rosie-reaction-proud.webp",
+          "target": "cheese/reaction-proud.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.reaction-elated",
+          "source": "public/rosie-reaction-elated.webp",
+          "target": "cheese/reaction-elated.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.doctor",
+          "source": "public/rosie-doctor-cheese-hero.webp",
+          "target": "cheese/doctor.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.graduate",
+          "source": "public/rosie-barkbridge-graduate.webp",
+          "target": "cheese/graduate.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.cap",
+          "source": "public/barkbridge-premium-cap.webp",
+          "target": "cheese/cap.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.seal",
+          "source": "public/barkbridge-premium-seal.webp",
+          "target": "cheese/seal.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.card-back",
+          "source": "public/cheese-card-back-approved.webp",
+          "target": "cheese/card-back.webp",
+          "required": true
+        },
+        {
+          "id": "cheese.still-life",
+          "source": "public/barkbridge-cheese-exam-still-life-20261113.webp",
+          "target": "cheese/still-life.webp",
+          "required": false
+        },
+        {
+          "id": "cheese.crest",
+          "source": "public/barkbridge/diploma/canine-crest.png",
+          "target": "cheese/crest.png",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "randomizers",
+      "label": "Randomizers",
+      "slots": [
+        {
+          "id": "randomizers.header",
+          "source": "public/randomizers/rosie-randomizers-casino-header-safe-fit.webp",
+          "target": "randomizers/header.webp",
+          "required": true
+        },
+        {
+          "id": "randomizers.coin-heads",
+          "source": "public/randomizers/rosie-coin-heads-hd.webp",
+          "target": "randomizers/coin-heads.webp",
+          "required": true
+        },
+        {
+          "id": "randomizers.coin-tails",
+          "source": "public/randomizers/rosie-coin-tails-hd.webp",
+          "target": "randomizers/coin-tails.webp",
+          "required": true
+        },
+        {
+          "id": "randomizers.die-1",
+          "source": "public/randomizers/rosie-die-1.webp",
+          "target": "randomizers/die-1.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.die-2",
+          "source": "public/randomizers/rosie-die-2.webp",
+          "target": "randomizers/die-2.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.die-3",
+          "source": "public/randomizers/rosie-die-3.webp",
+          "target": "randomizers/die-3.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.die-4",
+          "source": "public/randomizers/rosie-die-4.webp",
+          "target": "randomizers/die-4.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.die-5",
+          "source": "public/randomizers/rosie-die-5.webp",
+          "target": "randomizers/die-5.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.die-6",
+          "source": "public/randomizers/rosie-die-6.webp",
+          "target": "randomizers/die-6.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.signet",
+          "source": "public/randomizers/rosie-signet.webp",
+          "target": "randomizers/signet.webp",
+          "required": true
+        },
+        {
+          "id": "randomizers.decorative-die",
+          "source": "public/randomizers/rosie-decorative-die.webp",
+          "target": "randomizers/decorative-die.webp",
+          "required": false
+        },
+        {
+          "id": "randomizers.casino",
+          "source": "public/randomizers/rosie-casino.webp",
+          "target": "randomizers/casino.webp",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "santa",
+      "label": "Secret Santa",
+      "slots": [
+        {
+          "id": "santa.banner",
+          "source": "public/randomizers/secret-santa/11-preferred-banner.webp",
+          "target": "santa/banner.webp",
+          "required": true
+        },
+        {
+          "id": "santa.host",
+          "source": "public/randomizers/secret-santa/12-preferred-rosie.webp",
+          "target": "santa/host.webp",
+          "required": true
+        },
+        {
+          "id": "santa.marquee",
+          "source": "public/randomizers/secret-santa/13-preferred-marquee.webp",
+          "target": "santa/marquee.webp",
+          "required": false
+        },
+        {
+          "id": "santa.envelope",
+          "source": "public/randomizers/secret-santa/03-sealed-envelope.webp",
+          "target": "santa/envelope.webp",
+          "required": false
+        },
+        {
+          "id": "santa.recipient",
+          "source": "public/randomizers/secret-santa/06-recipient-card.webp",
+          "target": "santa/recipient.webp",
+          "required": false
+        },
+        {
+          "id": "santa.gifts",
+          "source": "public/randomizers/secret-santa/07-gift-collection.webp",
+          "target": "santa/gifts.webp",
+          "required": false
+        },
+        {
+          "id": "santa.scroll",
+          "source": "public/randomizers/secret-santa/08-invitation-scroll.webp",
+          "target": "santa/scroll.webp",
+          "required": false
+        },
+        {
+          "id": "santa.emblem",
+          "source": "public/randomizers/secret-santa/09-secret-santa-emblem.webp",
+          "target": "santa/emblem.webp",
+          "required": true
+        },
+        {
+          "id": "santa.email-portrait",
+          "source": "public/randomizers/secret-santa/email/rosie-portrait.png",
+          "target": "santa/email-portrait.png",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "calculations",
+      "label": "Calculations",
+      "slots": [
+        {
+          "id": "calculations.hero",
+          "source": "public/rosieverse/calculations/hero/hero-full-resolution.webp",
+          "target": "calculations/hero.webp",
+          "required": true
+        },
+        {
+          "id": "calculations.toolkit",
+          "source": "public/rosieverse/calculations/toolkit/housing-shiba.webp",
+          "target": "calculations/toolkit.webp",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "timekeeper",
+      "label": "Timekeepers",
+      "slots": [
+        {
+          "id": "timekeeper.lever-ready",
+          "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-levers-ready.webp",
+          "target": "timekeeper/lever-ready.webp",
+          "required": true
+        },
+        {
+          "id": "timekeeper.lever-working",
+          "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-levers-working.webp",
+          "target": "timekeeper/lever-working.webp",
+          "required": true
+        },
+        {
+          "id": "timekeeper.lever-pull",
+          "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp",
+          "target": "timekeeper/lever-pull.webp",
+          "required": true
+        },
+        {
+          "id": "timekeeper.lever-integrated",
+          "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-integrated-levers.webp",
+          "target": "timekeeper/lever-integrated.webp",
+          "required": false
+        },
+        {
+          "id": "timekeeper.atlas",
+          "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-original-atlas.webp",
+          "target": "timekeeper/atlas.webp",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "qr",
+      "label": "QR Atelier",
+      "slots": [
+        {
+          "id": "qr.frame-blank",
+          "source": "public/qr-atelier/rosie-qr/rosie-frame-blank.webp",
+          "target": "qr/frame-blank.webp",
+          "required": true
+        },
+        {
+          "id": "qr.frame-peeking",
+          "source": "public/qr-atelier/rosie-qr/rosie-frame-peeking.webp",
+          "target": "qr/frame-peeking.webp",
+          "required": true
+        },
+        {
+          "id": "qr.frame-presenting",
+          "source": "public/qr-atelier/rosie-qr/rosie-frame-presenting.webp",
+          "target": "qr/frame-presenting.webp",
+          "required": true
+        },
+        {
+          "id": "qr.frame-seated",
+          "source": "public/qr-atelier/rosie-qr/rosie-frame-seated.webp",
+          "target": "qr/frame-seated.webp",
+          "required": true
+        },
+        {
+          "id": "qr.header",
+          "source": "public/qr-atelier/header-sign.webp",
+          "target": "qr/header.webp",
+          "required": false
+        },
+        {
+          "id": "qr.idle-paw",
+          "source": "public/qr-atelier/idle-paw.webp",
+          "target": "qr/idle-paw.webp",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "recipes",
+      "label": "Recipes",
+      "slots": [
+        {
+          "id": "recipes.kitchen",
+          "source": "public/rosieverse/recipes/recipes-hero.webp",
+          "target": "recipes/kitchen.webp",
+          "required": true
+        },
+        {
+          "id": "recipes.title",
+          "source": "public/rosieverse/recipes/recipes-title.webp",
+          "target": "recipes/title.webp",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "reviews",
+      "label": "Reviews",
+      "slots": [
+        {
+          "id": "reviews.header",
+          "source": "public/rosieverse/reviews/rosies-reviews-header.jpg",
+          "target": "reviews/header.jpg",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "reminders",
+      "label": "Reminders",
+      "slots": [
+        {
+          "id": "reminders.desktop",
+          "source": "public/rosieverse/reminders/hero-desktop.webp",
+          "target": "reminders/desktop.webp",
+          "required": true
+        },
+        {
+          "id": "reminders.mobile",
+          "source": "public/rosieverse/reminders/hero-mobile.webp",
+          "target": "reminders/mobile.webp",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "resources",
+      "label": "Resources Hub",
+      "slots": [
+        {
+          "id": "resources.crest",
+          "source": "public/rosieverse/resources/crest.webp",
+          "target": "resources/crest.webp",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "slots": [
+        {
+          "id": "account.entry",
+          "source": "public/rosieverse/account/rosie-account-entry.svg",
+          "target": "account/entry.svg",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
