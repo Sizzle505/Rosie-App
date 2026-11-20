@@ -14,6 +14,8 @@ try{
     page.setDefaultTimeout(16000);
     page.on("pageerror",err=>{console.error("PAGEERROR",err.message);process.exitCode=1;});
     await page.goto(url,{waitUntil:"domcontentloaded"});
+    // Wait out the full-screen initial Rosie loading animation before visual capture.
+    await page.waitForTimeout(5000);
     await page.waitForSelector(".qa-inputs input");
     await page.locator(".qa-inputs input").first().fill("https://example.com");
     await page.getByRole("button",{name:"Burgundy",exact:true}).click();
@@ -24,6 +26,7 @@ try{
     await page.locator(".qa-rosie-viewer .qa-rosie-overlay-art").waitFor({state:"visible"});
     const frames=new Set();
     for(let i=0;i<4;i++){
+      await page.locator(".qa-rosie-viewer .qa-rosie-overlay-art").evaluate(async image=>{await image.decode();});
       const state=await page.evaluate(()=>{
         const dialog=document.querySelector(".qa-rosie-viewer");
         const composition=dialog.querySelector(".qa-rosie-composition");
