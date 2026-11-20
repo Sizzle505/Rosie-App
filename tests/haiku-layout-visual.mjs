@@ -28,6 +28,31 @@ try {
       await page.locator(".loading-screen").waitFor({ state: "hidden", timeout: 15000 });
       await page.locator(".app-shell-visible").waitFor({ state: "visible", timeout: 15000 });
       await page.locator(".haiku-page-landscape").evaluate((image) => image.decode());
+      const masthead = page.locator(".haiku-masthead-art img");
+      await masthead.evaluate(image=>image.decode());
+      const headerGeometry = await page.evaluate(() => {
+        const rect = selector => document.querySelector(selector).getBoundingClientRect().toJSON();
+        const image = document.querySelector(".haiku-masthead-art img");
+        return {banner:rect(".haiku-masthead-art"), title:rect(".haiku-heading h1"),
+          tagline:rect(".haiku-masthead-tagline"), back:rect(".haiku-back"),
+          src:image.currentSrc,naturalWidth:image.naturalWidth};
+      });
+      assert.ok(headerGeometry.naturalWidth>1000,label+" should load the real full-resolution masthead");
+      assert.ok(headerGeometry.src.includes(width<=600?"masthead-compact.webp":"masthead-grand.webp"),
+        label+" should select the correct phone/desktop artwork: "+headerGeometry.src);
+      assert.ok(headerGeometry.title.x>headerGeometry.banner.x+headerGeometry.banner.width*.10 &&
+        headerGeometry.title.right<headerGeometry.banner.right-headerGeometry.banner.width*.10,
+        label+" masthead title must fit within illustrated frame");
+      assert.ok(headerGeometry.title.y>headerGeometry.banner.y+headerGeometry.banner.height*.28 &&
+        headerGeometry.title.bottom<headerGeometry.banner.bottom-headerGeometry.banner.height*.13,
+        label+" masthead title must avoid the ornamental paw and bottom border");
+      assert.ok(headerGeometry.tagline.y>=headerGeometry.banner.bottom-12,
+        label+" subtitle must be below, not painted across the ornamental plaque");
+      if(width<=600) {
+        assert.ok(headerGeometry.back.bottom<=headerGeometry.banner.y+6,
+          label+" back button must sit above compact banner rather than cover lanterns");
+      }
+
       const boxes = await page.evaluate(() => {
         const box = (selector) => {
           const el = document.querySelector(selector);
