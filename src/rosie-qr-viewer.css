@@ -49,25 +49,6 @@
   display:block!important;width:100%!important;height:100%!important;
   overflow:visible;pointer-events:none;
 }
-/* Fill the full oval behind the artwork, then cover any image artifacts within
-   the inset without painting over the decorative gilded border. */
-.qa-rosie-insert-underlay {
-  position:absolute!important;
-  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
-  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
-  border-radius:50%;clip-path:ellipse(50% 50% at 50% 50%);
-  transform:scale(1.14);transform-origin:center;
-  z-index:1;background:var(--rosie-code-bg,#fff)!important;
-  pointer-events:none;
-}
-.qa-rosie-insert-backdrop {
-  position:absolute!important;
-  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
-  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
-  border-radius:50%;clip-path:ellipse(50% 50% at 50% 50%);
-  z-index:3;background:var(--rosie-code-bg,#fff)!important;
-  pointer-events:none;
-}
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
