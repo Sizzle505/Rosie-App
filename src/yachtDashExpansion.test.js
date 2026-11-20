@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -238,4 +238,42 @@ test("Captain's Log provides the next attainable medal goal instead of generic p
   assert.match(yachtNextMedalHint("moonlight",{...sailor,score:1700,rivalsPassed:1}),/2 rival yachts/);
   assert.match(yachtNextMedalHint("emperor",{...sailor,score:2100,nearMisses:2,rivalsPassed:2}),/All three medals/);
   assert.equal(yachtNextMedalHint("unknown",sailor),"");
+});
+
+test("Supplemental treat cadence is moderate and does not increase hazards",()=>{
+ assert.ok(YACHT_EXTRA_TREAT_MS>=7500 && YACHT_EXTRA_TREAT_MS<=10000);
+ const extra=Math.floor(75000 / YACHT_EXTRA_TREAT_MS);
+ assert.ok(extra>=7 && extra<=10,"Extra treats should be occasional, not another rapid-fire wave");
+ for(const id of ["typhoon","moonlight","emperor"]){
+   const hazards=Array.from({length:34},(_,seq)=>
+     yachtWaveFor(id,seq,()=>seq%3).filter(entry=>isYachtHazard(entry.kind)).length);
+   assert.ok(hazards.reduce((sum,n)=>sum+n,0)<=15);
+ }
+});
+test("Collectibles start legibly but arrive at exactly their previous full size",()=>{
+ const far=yachtPickupApproachAt(-12),middle=yachtPickupApproachAt(48),end=yachtPickupApproachAt(108);
+ const oldFar=yachtApproachAt(-12),oldEnd=yachtApproachAt(108);
+ assert.equal(far.scale,.56);
+ assert.ok(far.scale>oldFar.scale);
+ assert.ok(middle.scale>far.scale && middle.scale<end.scale);
+ assert.equal(end.scale,1);
+ assert.equal(end.scale,oldEnd.scale);
+ assert.equal(far.top,oldFar.top);
+ assert.ok(far.opacity>oldFar.opacity);
+});
+test("Extra treats choose a safe lane when new multi-lane or drifting hazards are present",()=>{
+ assert.equal(yachtBonusTreatLane([],1),1);
+ assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:2}],0),2);
+ assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:1,blockedLanes:[0,2],y:2}],0),1);
+ assert.equal(yachtBonusTreatLane([{kind:"rival",lane:0,driftTo:1,y:3}],0),2);
+ assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:3},
+   {kind:"rival",lane:2,y:5}],0),-1);
+ assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:50}],0),0);
+});
+test("Only the approved undersized skiff and crescent props receive selective scaling",()=>{
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/fishing-skiff.webp"),1.48);
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/moonlight-race-buoy.webp"),1.38);
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/regatta-beacon.webp"),1.38);
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/reef-rocks.webp"),1);
+ assert.equal(yachtAssetScale(null),1);
 });
