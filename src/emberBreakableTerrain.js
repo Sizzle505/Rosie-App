@@ -3,7 +3,7 @@
 export const BREAKABLE_LAYOUT = Object.freeze([
   {x:1120, side:-1, material:"earth", id:"barkroot-earth"},
   {x:6030, side: 1, material:"earth", id:"ruby-earth"},
-  {x:10300,side:-1, material:"crystal",id:"ruby-crystal"},
+  {x:10380,side:-1, material:"crystal",id:"ruby-crystal"},
   {x:15240,side: 1, material:"crystal",id:"temple-crystal"},
   {x:20000,side: 1, material:"entrance",id:"royal-hidden-chamber"},
 ]);
