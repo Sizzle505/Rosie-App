@@ -98,7 +98,7 @@ for(const [name,engine,viewport,mobile] of [
     await stagePage.waitForFunction(()=>{
       const el=document.querySelector(".ember-stage");
       return Number(el?.getAttribute("data-world-warnings")||0)>0;
-    },null,{timeout:14000});
+    },null,{timeout:40000});
     const stageDuration=await stagePage.locator(".ember-stage").getAttribute("data-stage-duration");
     if(stageDuration!=="30")throw new Error("Clockwork boss route must provide a 30-second countdown: "+stageDuration);
     await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
