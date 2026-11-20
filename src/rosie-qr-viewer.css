@@ -110,6 +110,8 @@
   }
   .qa-rosie-viewer-content {width:100vw!important;}
   .qa-rosie-composition {width:min(110vw,480px)!important;max-width:none!important;}
+  /* The phone composition intentionally extends past the viewport; keep the X inside the actual screen. */
+  .qa-rosie-composition .qa-rosie-close {right:12%!important;}
   .qa-rosie-title-field {font-size:clamp(12px,3.3vw,19px)!important;}
   .qa-rosie-frame-controls{gap:10px;}
   .qa-rosie-frame-controls span{min-width:142px;font-size:11px;}
