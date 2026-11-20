@@ -436,14 +436,18 @@ export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrect
   // transition core and left the course looking obstacle-free.
   if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
   paintSculpturalTunnel(c,s,assets);
-  paintBreakables(c,s,assets,W);
-  paintCrystalShutters(c,s,assets,W);
-  paintExpeditionHazards(c,s,W,assets);
+  // Boss combat freezes and disables the normal tunnel's objects. Do not
+  // leave collectible gems or dangerous-looking inactive obstacles floating
+  // in front of the guardian and misleading the player.
+  if(!s.boss){
+    paintBreakables(c,s,assets,W);
+    paintCrystalShutters(c,s,assets,W);
+    paintExpeditionHazards(c,s,W,assets);
+    for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
+    for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
+  }
   paintTurboWorldStreaks(c,s,W,H);
   paintExpeditionBoss(c,s,W,H,assets);
-  // First collectibles, then drill, with hazards on top for readable play.
-  for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
-  for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && (o.kind==="rock"||o.kind==="spike"))hazard(c,o,s,assets);
   paintExcavationUnderlay(c,s);
   vehicle(c,s,portrait,assets,horizontalCorrection);
   paintExcavationTip(c,s);
