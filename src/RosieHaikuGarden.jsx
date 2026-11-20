@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
-import RosieHaikuScene, { readSelectedScene } from "./RosieHaikuScene.jsx";
+import RosieHaikuScene, { HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -133,6 +133,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [poem, setPoem] = useState(() => poemForDay());
   const [mode, setMode] = useState("daily");
   const [scene, setScene] = useState(readSelectedScene);
+  const [backgroundUnavailable, setBackgroundUnavailable] = useState({});
+  const selectedBackground = HAIKU_SCENES.find((item) => item.id === scene) || HAIKU_SCENES[0];
   const [mood, setMood] = useState("zen");
   const [topic, setTopic] = useState("");
   const [variation, setVariation] = useState(0);
@@ -205,7 +207,19 @@ export default function RosieHaikuGarden({ onNavigate }) {
   }
   return (
     <main className="haiku-page" aria-label="Rosie's Haiku Garden">
-      <div className="haiku-scene" aria-hidden="true"><div className="haiku-scene-fog" /></div>
+      <div className="haiku-scene" aria-hidden="true">
+        <img
+          key={selectedBackground.src}
+          className="haiku-page-landscape"
+          src={backgroundUnavailable[scene] ? HERO : selectedBackground.src}
+          alt=""
+          onError={(event) => {
+            if (event.currentTarget.src.endsWith("/hero.webp")) return;
+            setBackgroundUnavailable((current) => ({ ...current, [scene]: true }));
+          }}
+        />
+        <div className="haiku-scene-fog" />
+      </div>
       <div className="haiku-petal haiku-petal-one" aria-hidden="true" />
       <div className="haiku-petal haiku-petal-two" aria-hidden="true" />
       <div className="haiku-petal haiku-petal-three" aria-hidden="true" />
