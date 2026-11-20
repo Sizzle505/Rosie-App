@@ -7,6 +7,14 @@ import "./RosieZenMeditation.css";
 
 const PROGRESS_KEY = "rosieHaikuZenSessionsV1";
 const ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
+const FINAL_ART = "/rosieverse/haiku/final/";
+const PROGRAM_ART = {
+  breathe: "breathe-with-rosie.webp",
+  quiet: "quiet-sit.webp",
+  guided: "a-little-calm.webp",
+  unwind: "evening-unwind.webp",
+  haiku: "haiku-reflection.webp"
+};
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
   { id:"breathe", title:"Breathe with Rosie", label:"FOLLOW THE RHYTHM", description:"A slow four-second inhale and six-second exhale. Adjust to what feels comfortable." },
@@ -229,7 +237,9 @@ export default function RosieZenMeditation({scene="field",poem}) {
       <div className="zen-program-grid" role="group" aria-label="Meditation programs">
         {PROGRAMS.map(p=><button type="button" key={p.id} className={"zen-program"+(kind===p.id?" selected":"")}
           aria-pressed={kind===p.id} onClick={()=>setKind(p.id)}>
-          <strong>{p.title}</strong><small>{p.label}</small>
+          <img className="zen-program-emblem" src={FINAL_ART + PROGRAM_ART[p.id]}
+            alt="" aria-hidden="true" width="62" height="62" decoding="async" loading="lazy"/>
+          <span className="zen-program-caption"><strong>{p.title}</strong><small>{p.label}</small></span>
         </button>)}
       </div>
       <p className="zen-selected-description">{selected.description}</p>
@@ -273,7 +283,7 @@ export default function RosieZenMeditation({scene="field",poem}) {
           </header>
           {status==="complete"?
             <div className="zen-complete">
-              <img src="/rosieverse/haiku/rosie-affectionate.webp" alt="Rosie smiles warmly"/>
+              <img src={FINAL_ART + "rosie-enlightened.webp"} alt="Rosie celebrates your peaceful meditation with a delighted smile"/>
               <div className="zen-complete-copy">
                 <span className="zen-eyebrow">A LITTLE MOMENT OF PEACE</span>
                 <h3>Beautifully done.</h3>
