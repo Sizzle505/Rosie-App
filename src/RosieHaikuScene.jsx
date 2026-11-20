@@ -20,10 +20,14 @@ const ROSIE_EXPRESSIONS = Object.freeze({
 function poseForPoem(mode, mood, poem) {
   if (mode === "daily") return ROSIE_MEDITATING;
   if (mode === "journal") {
-    return ROSIE_EXPRESSIONS[poem?.mood] || "/rosieverse/haiku/rosie-contemplative.webp";
+    return poem?.mood === "zen"
+      ? "/rosieverse/haiku/rosie-contemplative.webp"
+      : (ROSIE_EXPRESSIONS[poem?.mood] || "/rosieverse/haiku/rosie-contemplative.webp");
   }
   if (mood === "savage" && /vacuum|door|bath|squirrel/.test(poem?.id || ""))
     return "/rosieverse/haiku/rosie-indignant.webp";
+  if (mood === "zen" && mode === "compose")
+    return "/rosieverse/haiku/rosie-calligrapher.webp";
   return ROSIE_EXPRESSIONS[mood] || ROSIE_MEDITATING;
 }
 const HAIKU_MESSAGES = Object.freeze({
