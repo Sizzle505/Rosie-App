@@ -23,8 +23,8 @@ test("original classic run duration and starting coordinates remain unchanged",(
  assert.equal(malformed.stageIndex,null);
  assert.equal(malformed.duration,RUN_DURATION);
 });
-test("stage routes start in the selected world and end at 15 seconds",()=>{
- for(let i=0;i<EXPEDITION_STAGES.length;i++){
+test("non-boss stages retain their 15-second route playtests",()=>{
+ for(let i=0;i<3;i++){
    const s=newRun(1467,i);
    assert.equal(s.stageIndex,i);
    assert.equal(s.scroll,EXPEDITION_STAGES[i].startX);
@@ -37,6 +37,15 @@ test("stage routes start in the selected world and end at 15 seconds",()=>{
    assert.equal(s.time,EXPEDITION_STAGE_SECONDS);
    assert.equal(s.result,"complete");
    assert.ok(s.distance>0&&s.distance<8000,"stage distance is relative, not world offset");
+ }
+});
+test("Molten and Treasury reserve 40 seconds for their boss encounters",()=>{
+ for(const i of [3,4]){
+   const s=newRun(1467,i);
+   assert.equal(s.stageIndex,i);
+   assert.equal(s.duration,40);
+   assert.equal(s.boss,null);
+   assert.equal(s.scroll,EXPEDITION_STAGES[i].startX);
  }
 });
 test("three-star stage grading cannot be earned from a failed run",()=>{
