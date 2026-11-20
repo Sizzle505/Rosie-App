@@ -5,6 +5,8 @@ on:
       - src/RosieHaikuGarden.css
       - src/RosieHaikuArchiveArt.css
       - src/RosieHaikuMasthead.css
+      - src/RosieHaikuConceptLayout.css
+      - tests/haiku-concept-visual.mjs
       - src/RosieHaikuAtmosphere.css
       - public/rosieverse/haiku/ornaments/**
       - public/rosieverse/haiku/living-garden/**
@@ -59,6 +61,8 @@ jobs:
         run: node tests/haiku-calculations-approved-layout.mjs
       - name: Verify finished meditation and journal artwork on desktop tablet phone
         run: node tests/haiku-final-art-visual.mjs
+      - name: Verify transparent studio and legible original icons at six responsive sizes
+        run: node tests/haiku-concept-visual.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
