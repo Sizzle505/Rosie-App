@@ -11,7 +11,7 @@ import AxisJoystick from "./AxisJoystick.jsx";
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
 const EXPEDITION_ART_BY_STAGE={
-  0:[],1:[],
+  0:["world-markers"],1:["world-markers"],
   2:["gear-crusher","copperjack","world-markers","bonus-pickups"],
   3:["lava-geyser","falling-basalt","cinderclaw","world-markers","bonus-pickups"],
   4:["royal-earth-burst","mole-king","world-markers","bonus-pickups"]
@@ -511,7 +511,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           data-boss-art-loaded={hud.boss
             ?(artRef.current["exp:"+hud.boss.kind]?.naturalWidth>0?"true":"false")
             :"n/a"} >
-        <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {route.length}</small><strong>{route[hud.passage].label}</strong></div>
+        <div className="ember-course-plaque">
+          {world&&<span className="ember-stage-marker" aria-hidden="true"
+            style={{backgroundImage:`url(${EXPANSION_ROOT}atlases/world-markers-atlas.webp)`,
+              backgroundPosition:`${(hud.stageIndex%3)*50}% ${Math.floor(hud.stageIndex/3)*100}%`}} />}
+          <small>PASSAGE {hud.passage+1} OF {route.length}</small>
+          <strong>{route[hud.passage].label}</strong>
+        </div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
