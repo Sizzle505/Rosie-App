@@ -429,9 +429,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <div><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
       <div className={"ember-expedition"+(world?" is-world-route":"")} aria-label={`Excavation route: passage ${hud.passage+1} of ${route.length}`}>
-        <span className="ember-route-label">EXCAVATION ROUTE</span>
-        <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / route.length) * 100}%`}} /></div>
-        {route.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
+        <span className="ember-route-label">{world?"WORLD PROGRESS":"EXCAVATION ROUTE"}</span>
+        <div className="ember-route-track"><i style={{width:`${world?passageProgress:((hud.passage + passageProgress / 100) / route.length) * 100}%`}} /></div>
+        {world?<span className="current">{hud.passage+1}. {world.name}</span>:
+          route.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
         <div className="ember-passage-mission" aria-live="off"><span>PASSAGE OBJECTIVE</span>
           <strong>{route[hud.passage].mission}</strong>
           <em>{world?(hud.worldObjective?"COMPLETE":"IN PROGRESS"):(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
