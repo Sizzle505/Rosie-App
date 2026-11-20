@@ -111,12 +111,16 @@ export const YACHT_CHAPTER_PHASES = Object.freeze({
 
 export const YACHT_CHAPTER_GOALS = Object.freeze({
   sakura: { score: 650, expert: 1450, nearMisses: 0, rivals: 0,
+    preview: "Collect golden cheese and reach Sakura Cove.",
     description: "Reach Sakura Cove. Golden Cheese and clean cargo streaks earn medals." },
   typhoon: { score: 700, expert: 1350, nearMisses: 2, rivals: 0,
+    preview: "Avoid the reefs. The torii center is clear.",
     description: "Survive the storm. Expert captains earn two clean near misses." },
   moonlight: { score: 800, expert: 1500, nearMisses: 0, rivals: 2,
+    preview: "Outrace rivals and collect regatta prizes.",
     description: "Outrace the regatta fleet. Two yacht passes earn the highest honor." },
   emperor: { score: 850, expert: 1450, nearMisses: 2, rivals: 2,
+    preview: "Master every hazard and earn imperial honors.",
     description: "Earn the imperial medal: survive, pass rivals, and sail with precision." }
 });
 
