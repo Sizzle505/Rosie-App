@@ -31,7 +31,7 @@ test("ordinary auger breaks earth and awards treasure charge",()=>{
   const drops=s.objects.filter(o=>o.id>=91000&&o.kind==="gem");
   assert.equal(drops.length,2,"earth should spill two follow-up gems");
   assert.ok(drops.every(o=>o.x>b.x),"gems should appear ahead of the auger");
-  assert.ok(drops.every(o=>o.y<b.y),"floor/roof deposits lead toward the safe center");
+  assert.ok(drops.every(o=>b.side*(o.y-b.y)<0),"floor/roof deposits lead toward the safe center");
 });
 test("crystals reject ordinary drilling but break under Turbo",()=>{
   const s=newRun();
