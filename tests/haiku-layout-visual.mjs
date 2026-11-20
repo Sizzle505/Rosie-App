@@ -114,6 +114,24 @@ try {
       await page.waitForFunction(() =>
         document.querySelector(".haiku-scene-rosie")?.src.includes("/rosie-triumphant.webp")
       );
+      // Meditation is an actual timed session, not a decorative mockup.
+      await page.getByRole("button",{name:"Meditate",exact:true}).click();
+      await page.getByRole("button",{name:"Silence",exact:true}).click();
+      await page.getByRole("button",{name:"Begin 5-minute meditation",exact:true}).click();
+      const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
+      await room.waitFor({state:"visible"});
+      assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
+        img.src.endsWith("/rosie-meditating-paws-up.webp")
+      ), label+" meditation must use the alpha-transparent image, not the black-box animated WebP");
+      if(label==="user-desktop"||label==="iphone") {
+        await page.screenshot({path:"artifacts/haiku-layout/"+label+"-meditation.png",fullPage:false,animations:"disabled"});
+      }
+      await room.getByRole("button",{name:"Pause",exact:true}).click();
+      assert.ok(await room.getByRole("button",{name:"Resume",exact:true}).isVisible(),label+" pause must work");
+      await room.getByRole("button",{name:"Resume",exact:true}).click();
+      assert.ok(await room.getByRole("button",{name:"Pause",exact:true}).isVisible(),label+" resume must work");
+      await room.getByRole("button",{name:"End session",exact:true}).click();
+      await room.waitFor({state:"hidden"});
       summary.push({ label, width, height, ...boxes });
       console.log("PASS " + label + ": " + JSON.stringify(boxes));
     } catch (err) {
