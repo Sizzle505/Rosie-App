@@ -1,4 +1,5 @@
 import {tunnelCenter,tunnelRadius} from "./emberDrillEngine.js";
+import {drawExpansionFrame} from "./emberExpansionCatalog.js";
 
 // The same h.reach that governs collision draws the physical obstacle.
 // Intentionally procedural until the independently reviewed production
@@ -56,7 +57,28 @@ function quake(c,r,t){
  c.shadowBlur=0;
  base(c,"#b48b53");
 }
-export function paintExpeditionHazards(c,s,width){
+// Atlas registration is visual-only. Collision uses the engine reach above,
+// never alpha boundaries or decorative glow. Unloaded review art falls back.
+function paintIllustratedHazard(c,h,reach,assets){
+ const atlasId=h.kind==="piston"?"gear-crusher":h.kind==="geyser"?"lava-geyser":
+   h.kind==="quake"?"royal-earth-burst":null;
+ if(!atlasId)return false;
+ const img=assets?.["exp:"+atlasId];
+ const extension=Math.max(0,Math.min(1,(reach-18)/Math.max(1,h.maxReach-18)));
+ const total=atlasId==="lava-geyser"?6:8;
+ let frame=0;
+ if(h.resolved)frame=total-1;
+ else if(!h.warned)frame=0;
+ else if(extension<.12)frame=1;
+ else if(extension<.5)frame=2;
+ else if(extension<.9)frame=3;
+ else frame=atlasId==="lava-geyser"?3:4;
+ if(h.hit&&!h.resolved)frame=Math.min(total-2,frame+1);
+ const w=atlasId==="gear-crusher"?180:atlasId==="lava-geyser"?215:200;
+ const height=Math.max(72,reach+52);
+ return drawExpansionFrame(c,img,atlasId,frame,-w/2,-reach-28,w,height);
+}
+export function paintExpeditionHazards(c,s,width,assets={}){
  for(const h of s.worldHazards||[]){
   if(h.shattered)continue;
   const x=h.x-s.scroll;
@@ -76,10 +98,13 @@ export function paintExpeditionHazards(c,s,width){
    c.strokeStyle="#f3d295";c.lineWidth=2;c.setLineDash([7,7]);
    c.beginPath();c.ellipse(0,-10,65,22,0,Math.PI,Math.PI*2);c.stroke();c.setLineDash([]);
   }
-  if(h.kind==="piston")piston(c,r);
-  else if(h.kind==="geyser")geyser(c,r,s.time);
-  else if(h.kind==="quake")quake(c,r,s.time);
-  else crystal(c,r);
+  const illustrated=paintIllustratedHazard(c,h,r,assets);
+  if(!illustrated){
+    if(h.kind==="piston")piston(c,r);
+    else if(h.kind==="geyser")geyser(c,r,s.time);
+    else if(h.kind==="quake")quake(c,r,s.time);
+    else crystal(c,r);
+  }
   c.restore();
  }
 }
