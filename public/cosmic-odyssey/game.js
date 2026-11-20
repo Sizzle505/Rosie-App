@@ -13,11 +13,17 @@
  const asset = name => window.COSMIC_ASSETS?.[name] || ARCADE_SCENE_ART[name] || `assets/${name}.webp`;
  const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message'),victoryOverlay=$('victory-overlay');
  // Web Audio music is independent of synthesized game effects.
- const music=window.ROSIE_COSMIC_SOUNDTRACK_READY && window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:'music'}):null;
+ const music=window.parent===window && window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:'/rosie-music'}):null;
  const musicButton=$('music-toggle');
  if(musicButton&&!music)musicButton.style.display='none';
  let musicWarned=false;
  function musicPlay(state){
+   // The embedded arcade delegates music to Rosie's single shared player;
+   // its original sound effects stay local to this game.
+   if(window.parent!==window){
+     try{window.parent.postMessage({type:"rosieverse:music:scene",state,level},window.location.origin)}catch{}
+     return;
+   }
    if(!music)return;
    Promise.resolve(music.play(state)).catch(error=>{
      if(!musicWarned){console.warn('Cosmic Odyssey soundtrack unavailable',error);musicWarned=true;}
@@ -570,6 +576,7 @@
   else if(select&&status==='win')select.value='1';
   if(picker)picker.style.display=(status==='paused'||status==='level-clear')?'none':'flex';
   if(victorious)presentVictory(status,buttonText);
+  if(status!=='start')musicPlay(status);
   ui();
  }
  function init(carry=false){const layout=desiredMazeLayout();cols=layout.cols;rows=layout.rows;
