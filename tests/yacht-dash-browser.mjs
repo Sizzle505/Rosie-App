@@ -17,6 +17,7 @@ try {
   });
   const page = await phone.newPage();
   await page.goto(address, { waitUntil: "domcontentloaded" });
+  await page.locator(".loading-screen-hidden").waitFor({state:"attached",timeout:15000});
   const frame = page.locator(".captain-fs-yacht");
   const picker = frame.locator(".yacht-chapter-picker button");
   await picker.first().waitFor({ timeout: 15000 });
@@ -163,6 +164,23 @@ try {
   assert.ok(switchBox.y + switchBox.height <= stickBox.y,
     "Steering toggle must not overlap the joystick");
   await page.screenshot({ path:folder+"/iphone-yacht-underway.png" });
+
+  // The torii must read as a recognizable passage, not a solid overhead wall.
+  const gate=frame.locator(".yacht-footprint-arch");
+  await gate.waitFor({state:"visible",timeout:20000});
+  const gateLabel=gate.locator(".yacht-gate-passage");
+  await gateLabel.waitFor({state:"visible",timeout:1500});
+  const [gateBounds,gateMessageBounds,courseBounds]=await Promise.all([
+    gate.boundingBox(),gateLabel.boundingBox(),frame.locator(".yacht-course").boundingBox()
+  ]);
+  assert.ok(gateBounds && gateMessageBounds && courseBounds);
+  assert.ok(gateMessageBounds.x+gateMessageBounds.width/2 >
+    courseBounds.x+courseBounds.width*.4 &&
+    gateMessageBounds.x+gateMessageBounds.width/2 <
+    courseBounds.x+courseBounds.width*.6,
+    "The safe-channel label must be centered within the gate");
+  assert.match(await gateLabel.innerText(),/PASS UNDER/);
+  await page.screenshot({path:folder+"/iphone-gate-safe-passage.png"});
 
   await frame.locator(":scope > .captain-fullscreen-toggle").click();
   await frame.locator(".captain-game-page.is-paused").waitFor({ timeout:3500 });
