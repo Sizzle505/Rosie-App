@@ -22,13 +22,15 @@ export const YACHT_CHAPTERS = Object.freeze([
     id: "sakura", name: "Sakura Strait", destination: "SAKURA COVE",
     description: "The original Japanese coastal voyage. Collect treats and navigate the torii strait.",
     climate: "sunlit", cadence: 650, pace: 0,
-    victory: art("victories", "sakura"), unlockedBy: null, scenes: null
+    victory: art("victories", "sakura"), unlockedBy: null, scenes: null, sceneTitles: null
   },
   {
     id: "typhoon", name: "Typhoon Passage", destination: "STORMBREAK PORT",
     description: "Ride out the squall. Wide reefs, fallen logs and a torii with a clear center passage. One supply chest restores hull and Turbo.",
     climate: "storm", cadence: 2250, pace: .13, unlockedBy: "sakura",
     victory: art("victories", "typhoon"),
+    sceneTitles: ["Gathering Squall", "Temple Cliffs", "Thunder Gate",
+      "Lanterns in the Storm", "Stormbreak Horizon"],
     scenes: [
       art("typhoon", "01-approaching-squall"), art("typhoon", "02-temple-cliffs"),
       art("typhoon", "03-torii-waterfalls"), art("typhoon", "04-lantern-storm"),
@@ -40,6 +42,8 @@ export const YACHT_CHAPTERS = Object.freeze([
     description: "A lantern-lit race with larger floating barriers and rival yachts. One supply chest restores hull and Turbo.",
     climate: "moonlit", cadence: 2150, pace: .19, unlockedBy: "typhoon",
     victory: art("victories", "moonlight"),
+    sceneTitles: ["Race at Moonrise", "Torii Under Stars", "Moonlit Shrine Bay",
+      "Blossom Channel", "Regatta Finish"],
     scenes: [
       art("moonlight", "01-regatta-arrival"), art("moonlight", "02-torii-moonrise"),
       art("moonlight", "03-shrine-bay"), art("moonlight", "04-blossom-channel"),
@@ -51,6 +55,8 @@ export const YACHT_CHAPTERS = Object.freeze([
     description: "The imperial championship combines large barriers, arch passages and rival yachts. One supply chest restores hull and Turbo.",
     climate: "sunlit", cadence: 2050, pace: .28, unlockedBy: "moonlight",
     victory: art("victories", "emperor"),
+    sceneTitles: ["Imperial Harbor", "Ceremonial Waterway", "Golden Palace Bay",
+      "Twilight at the Marina", "The Emperor's Approach"],
     scenes: [
       art("emperor", "01-imperial-harbor"), art("emperor", "02-ceremonial-waterway"),
       art("emperor", "03-gilded-sunset-bay"), art("emperor", "04-twilight-palace-marina"),
@@ -64,10 +70,10 @@ export function yachtSceneFor(chapterIndex, elapsed, originalSceneOrder = [0,1,2
   const index = Math.min(4, Math.max(0, Math.floor(Math.max(0,elapsed) / SCENE_SECONDS)));
   const fallback = CAPTAIN_LEVELS[originalSceneOrder[index] ?? index];
   if (chapter.id === "sakura") {
-    return { ...fallback, name: chapter.name, chapterId: "sakura" };
+    return { ...fallback, chapterId: "sakura" };
   }
   return {
-    id: chapter.id + "-" + index, name: chapter.name, chapterId: chapter.id,
+    id: chapter.id + "-" + index, name: chapter.sceneTitles[index], chapterId: chapter.id,
     background: chapter.scenes[index], fallbackBackground: fallback.background,
     climate: chapter.climate
   };
