@@ -418,7 +418,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
          {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">GUIDE THE AUGER INTO WEAK EARTH · TURBO BREAKS CRYSTAL</div>}
-         {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind} role="status" aria-live="polite">
+         {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
            {notice.kind==="relic"&&<img src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="" />}
            <span><strong>{notice.title}</strong><small>{notice.detail}</small></span>
          </div>}
