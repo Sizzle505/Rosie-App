@@ -538,7 +538,8 @@ export default function LayoutPlayground() {
                 {FOCUS_MODE && group && filteredParts[index - 1]?.[3] !== group &&
                   <div className="lp-target-group">{group}</div>}
                 <button type="button" className={selected === id ? "lp-selected" : ""}
-                  onClick={() => setSelected(id)}><span>{label}</span>{part && <i aria-label="Adjusted element" />}</button>
+                  aria-label={label} aria-description={part ? "Adjusted element" : undefined}
+                  onClick={() => setSelected(id)}><span>{label}</span>{part && <i aria-hidden="true" />}</button>
               </React.Fragment>;
             })}
             {filteredParts.length === 0 && <p className="lp-no-targets">No elements match that search.</p>}
