@@ -277,6 +277,17 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           if(event.type==="pickup"&&event.kind==="cache"){
             particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
           }
+          if(event.type==="hard-rock"){
+            // Safe ricochet when unpowered crystal resists the auger.
+            for(let i=0;i<9;i++){
+              const angle=i*Math.PI*2/9,v=45+Math.random()*60;
+              particles.current.push({x:event.x,y:event.y,
+                vx:Math.cos(angle)*v,vy:Math.sin(angle)*v,
+                life:.26,max:.26,r:1.5+(i%3),color:i%2?"#f3b1f7":"#fff0b5"});
+            }
+            if(navigator.vibrate)navigator.vibrate(20);
+            playSound(sound.current,"turbo");
+          }
           if(["break-wall","secret-found","crack-wall"].includes(event.type)){
              particles.current.push({type:event.type==="crack-wall"?"crack-v2":"break-v2",
                kind:event.material,x:event.x,y:event.y,vx:0,vy:0,
