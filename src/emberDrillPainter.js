@@ -9,6 +9,7 @@ import { paintBreakables } from "./emberBreakablePainter.js";
 import {paintCrystalShutters} from "./emberCrystalShuttersPainter.js";
 import {paintExpeditionHazards} from "./emberExpeditionHazardPainter.js";
 import {paintExpeditionBoss} from "./emberExpeditionBossPainter.js";
+import {drawExpansionFrame} from "./emberExpansionCatalog.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -229,6 +230,20 @@ function wallDepth(c,s){
  }
 }
 function pickup(c,o,s,assets={}){
+  // Newly illustrated bonus icons are limited to the five optional worlds.
+  // Classic collectibles retain their already-approved appearances.
+  if(s.stageIndex!==null&&!o.taken&&["bone","cheese","gem"].includes(o.kind)){
+    const frame=o.kind==="bone"?0:o.kind==="cheese"?1:o.id%3===0?2:3;
+    const x=o.x-s.scroll,y=o.y+Math.sin(s.time*5+o.id)*2;
+    if(x>=-70&&x<=W+70){
+      const size=74;
+      if(drawExpansionFrame(c,assets["exp:bonus-pickups"],"bonus-pickups",frame,
+        x-size/2,y-size/2,size,size)){
+        glow(c,x,y,size*.7,"rgba(255,188,89,.15)");
+        return;
+      }
+    }
+  }
   const img=o.kind==='cache'?(assets.chest||assets.cache):
     o.kind==='gem'&&o.id%7===0?(assets.coin||assets.gem):
     assets[o.kind==='bone'?'bone':o.kind==='cheese'?'cheese':o.kind==='gem'?'gem':'nonexistent'];
