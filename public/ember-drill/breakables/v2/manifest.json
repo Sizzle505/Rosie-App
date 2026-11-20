@@ -1,0 +1,83 @@
+{
+  "version": "v2",
+  "productionStatus": "art-review",
+  "source": "Ember Tunnel First 10 Assets v2.zip",
+  "note": "Individual transparent PNGs retained in source pack; optimized WebP files committed here. Do not use unapproved Rosie portraits for player sprite or gameplay until likeness review.",
+  "sprites": [
+    {
+      "id": 1,
+      "file": "01-earth-wall-intact.webp",
+      "width": 776,
+      "height": 644,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 2,
+      "file": "02-earth-wall-cracked.webp",
+      "width": 776,
+      "height": 644,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 3,
+      "file": "03-crystal-wall-intact.webp",
+      "width": 776,
+      "height": 644,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 4,
+      "file": "04-crystal-wall-cracked.webp",
+      "width": 776,
+      "height": 644,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 5,
+      "file": "05-secret-entrance-closed.webp",
+      "width": 1576,
+      "height": 710,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 6,
+      "file": "06-secret-entrance-open.webp",
+      "width": 1576,
+      "height": 710,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 7,
+      "file": "07-rosie-drilling-effort.webp",
+      "width": 700,
+      "height": 772,
+      "approved_for_gameplay": false
+    },
+    {
+      "id": 8,
+      "file": "08-rosie-excited-discovery.webp",
+      "width": 700,
+      "height": 772,
+      "approved_for_gameplay": false
+    },
+    {
+      "id": 9,
+      "file": "09-royal-bone-medallion.webp",
+      "width": 640,
+      "height": 780,
+      "approved_for_gameplay": true
+    },
+    {
+      "id": 10,
+      "file": "10-rock-crystal-shatter-vfx-5x2.webp",
+      "width": 1150,
+      "height": 760,
+      "approved_for_gameplay": true
+    }
+  ],
+  "vfx": {
+    "columns": 5,
+    "rows": 2,
+    "frames": 10
+  }
+}
