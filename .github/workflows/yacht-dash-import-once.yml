@@ -1,0 +1,63 @@
+name: Yacht Dash - one-time approved art import
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/yacht-dash-import-once.yml
+permissions:
+  contents: write
+jobs:
+  import-art:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/yacht-dash-four-chapters-20261119
+          persist-credentials: true
+      - name: Download short-lived Dropbox asset package
+        env:
+          ASSET_URL: "https://uc2174320d9df66f6c2de1886c27.dl.dropboxusercontent.com/cd/0/get/DMTmdQooW6XKRPw3xTymDnv6cRaeBGCsSPRpYgTbHTzfsZBL8v0O0vOR-2F_thEiKUQa0fI6WG8KkoQMX8F99swW64YDHZ9Cma64iS-O_6WW-xbhjTSFoArWWvd8N3A1sjuDNmypKzItUEo5dlts4q5HuL_jUWioE5ggDhW0NR9FCg/file?c_luid=667ded1d"
+        run: |
+          curl --fail --location --silent --show-error --max-time 120 "$ASSET_URL" --output /tmp/yacht-approved.zip
+          test "$(stat -c %s /tmp/yacht-approved.zip)" -gt 9000000
+      - name: Validate approved WebP files and unpack into public/yacht-dash
+        run: |
+          python - <<'PY'
+          import zipfile, json, hashlib, pathlib, sys
+          z=zipfile.ZipFile('/tmp/yacht-approved.zip')
+          manifest=json.loads(z.read('asset-manifest.json'))
+          names={a['file'].lstrip('/') for a in manifest['assets']}
+          valid=0; zero=0
+          for name in sorted(names):
+              if not name.startswith('yacht-dash/'):
+                  name='public/'+name
+              if name not in z.namelist() or not name.startswith('public/yacht-dash/') or not name.endswith('.webp'):
+                  raise RuntimeError('Unexpected missing or unsafe path: '+name)
+              data=z.read(name)
+              entry=next(a for a in manifest['assets'] if 'public'+a['file']==name)
+              if not data:
+                  zero+=1
+                  print('WARN: empty upstream asset omitted: '+name)
+                  continue
+              if len(data)!=entry['size'] or hashlib.sha256(data).hexdigest()!=entry['sha256']:
+                  raise RuntimeError('Integrity error: '+name)
+              if not data.startswith(b'RIFF') or data[8:12]!=b'WEBP':
+                  raise RuntimeError('Bad WebP: '+name)
+              dest=pathlib.Path(name)
+              dest.parent.mkdir(parents=True,exist_ok=True)
+              dest.write_bytes(data)
+              valid+=1
+          print('Imported verified assets:',valid,'Skipped invalid:',zero)
+          if valid != 38 or zero != 1:
+              raise RuntimeError('Unexpected package contents')
+          PY
+      - name: Commit approved art to feature branch
+        run: |
+          git config user.name "Rosie Asset Import"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/yacht-dash/
+          git diff --cached --quiet && exit 1
+          git commit -m "Import 38 approved Yacht Dash WebP assets from Dropbox [skip ci]"
+          git push origin HEAD:feature/yacht-dash-four-chapters-20261119
