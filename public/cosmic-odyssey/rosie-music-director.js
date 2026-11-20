@@ -15,11 +15,11 @@
       this.request=0;
       this.buffers=new Map();
       this.cues={
-        menu:{file:'cosmic-title-theme',loop:false},
-        playing:{file:'cosmic-gameplay-loop',loop:true},
-        alternate:{file:'cosmic-alternate-loop',loop:true},
-        win:{file:'cosmic-victory-fanfare',loop:false},
-        'level-clear':{file:'cosmic-victory-fanfare',loop:false}
+        menu:{file:'galactic-march',loop:true},
+        playing:{file:'cosmic-arpeggio',loop:true},
+        alternate:{file:'cosmic-interlude',loop:true},
+        win:{file:'victory-fanfare',loop:false},
+        'level-clear':{file:'victory-fanfare',loop:false}
       };
     }
     async unlock(){
