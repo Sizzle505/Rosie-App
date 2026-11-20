@@ -1,0 +1,47 @@
+name: Haiku Garden - one-time art import
+on:
+  push:
+    branches: [feature/rosie-haiku-garden]
+    paths:
+      - ".github/workflows/haiku-art-transfer.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  transfer-art:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout existing feature branch only
+        uses: actions/checkout@v4
+        with:
+          ref: feature/rosie-haiku-garden
+          persist-credentials: true
+      - name: Download and checksum the approved Haiku art
+        env:
+          ART_BASE_URL: https://sb-1e4eu8p7m79y.vercel.run
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -d public/rosieverse/haiku
+          for asset in field-sunrise.webp zen-sunrise.webp temple-sunrise.webp rosie-meditating-paws-up.webp haiku-scroll-isolated.png; do
+            curl --fail --show-error --silent --location --retry 4 --retry-delay 3 --max-time 90 "$ART_BASE_URL/$asset" -o "public/rosieverse/haiku/$asset"
+          done
+          cat > /tmp/rosie-haiku-checksums <<'CHECKSUMS'
+          2f7a07f44346fc2d8657cb22d383acd441f664cd7c2355c8c55ee09f2839a21e  public/rosieverse/haiku/field-sunrise.webp
+          5d83ea535e947aad57dd2fca927ea83d196bb29f0ee82bbca82bbe4a93bc4ede  public/rosieverse/haiku/zen-sunrise.webp
+          f18c98129936f66ec6909936b7a3b57640c2606253d96e7973acccf40fe9d020  public/rosieverse/haiku/temple-sunrise.webp
+          6dd6a1d9e51a6a81dc95e82df93e8a82451aeb7865d04834c865ec55fa816304  public/rosieverse/haiku/rosie-meditating-paws-up.webp
+          8e3f3f05dcc790f9c4193392b16f43f316658c8802e4d950013c37305ad27edc  public/rosieverse/haiku/haiku-scroll-isolated.png
+          CHECKSUMS
+          sha256sum --check /tmp/rosie-haiku-checksums
+      - name: Commit art to PR #193 without changing production
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- public/rosieverse/haiku/
+          if ! git diff --cached --quiet; then
+            git commit -m "Import canonical Rosie meditation and three illustrated Haiku Garden scenes"
+            git push origin HEAD:feature/rosie-haiku-garden
+          fi
