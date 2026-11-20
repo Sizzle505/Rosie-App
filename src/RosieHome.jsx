@@ -40,7 +40,7 @@ export default function RosieHome({ onNavigate }) {
         <div className={styles.waterGlow} aria-hidden="true" />
         <div className={styles.heroShade} aria-hidden="true" />
         <button type="button" className={styles.haikuLantern} onClick={() => onNavigate("haiku")} aria-label="Enter Rosie’s Haiku Garden" title="Rosie’s Haiku Garden">
-          <span className={styles.haikuFlower} aria-hidden="true">❀</span>
+          <img className={styles.haikuLanternImage} src="/rosieverse/haiku/lantern.webp" alt="" aria-hidden="true" loading="lazy" />
           <span className={styles.haikuLanternText}>ROSIE’S<br/>HAIKU GARDEN</span>
         </button>
       </section>
