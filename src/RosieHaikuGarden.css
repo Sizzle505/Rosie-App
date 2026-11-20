@@ -460,3 +460,8 @@
  .haiku-page .haiku-scene-quote strong{font-size:clamp(18px,4.7vw,22px);line-height:1.18;}
  .haiku-page .haiku-scene-quote small{font-size:12px;}
 }
+
+/* The verse formerly had auto vertical margins, separating the metre and
+   signature from the poem and pressing the signature into the bottom crest.
+   Center the three-line poem, metre and signature as one cohesive group. */
+.haiku-page .haiku-scroll .haiku-verse{margin:0;}
