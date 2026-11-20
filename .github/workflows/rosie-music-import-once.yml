@@ -1,0 +1,49 @@
+name: One-time import of 13 RosieVerse Suno recordings
+on:
+  push:
+    branches: [release/20261120-rosieverse-original-soundtrack]
+    paths: [.github/workflows/rosie-music-import-once.yml]
+permissions:
+  contents: write
+jobs:
+  encode:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install media encoder if absent
+        run: |
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+      - name: Verify all 13 full-resolution masters and create 13 web tracks
+        env:
+          ROSIE_SOURCE_01: "https://ucf4923710168a545734e4eefbe1.dl.dropboxusercontent.com/cd/0/get/DMWRdiJy42Bvb4uWnjEhm9tYEZDcVUrY4sP8kLUpVn7273wIy71SLsPc2i2YzgiqV-wyzK7jYtD2lTyDT9Md8Op8O5hBST16rIRLnI9aGEXUIZeK78SrBuVxPEpKjjNimJ6pSj2GKFTK96b7qP2ALULGIw6hHV0kbdQdDIHTuYi3wA/file?c_luid=667ded1d"
+          ROSIE_SOURCE_02: "https://uc23d6c55486c3c5c5a43f70dbc2.dl.dropboxusercontent.com/cd/0/get/DMUc_FLAVBuGRFW8oX_ThBMy_jmf2s8X0ukAeTl_bRDxBTR35O-sxDFJ7cEtCJ-wvtSgB7PKFPFHTI1DJKy6u9pw3UlrRjRecvUyOd_nXPtDDiwNFgCBBs6TsL5dfgGiYu6fDA7ixYG6hhKRKCaG7Gxi_MmHruF0jV01oWnA3J78GQ/file?c_luid=667ded1d"
+          ROSIE_SOURCE_03: "https://uccde7d6cc276caaac556a4084eb.dl.dropboxusercontent.com/cd/0/get/DMWLrUuS7CGTK2kVFadPK27SGgyBItS90C9jwgCzKXlZjTts4v_zdWiMkw6AZVqUtPHWaiTgldCcQzR_q3_QMnUwCywJl1G5JzlNnz24cP8hZ5ULFmceFfgdAdykjNu01Ys5BBwjZp6Qc2wmtG-YKynz5C9b4yDL_cNqROoyI-tTuQ/file?c_luid=667ded1d"
+          ROSIE_SOURCE_04: "https://uca6843a073867a530c45896fd64.dl.dropboxusercontent.com/cd/0/get/DMXMtcK-Zzf_iH02c-x7zB__7qzauBrUs_GKF8BuZAR7z3VNlYMZzx9HC9FX_OFPMVFR3MGY05bPD3ImeauZuhCo1_2sUqo0Fhd1QnIMjwdLtWH3Jb5qBL4W3gtwmu-HtWyKUZYZ7ZikYQMHZ8IcVLADMrcI1rCiJ6ciwZQK2RZm1w/file?c_luid=667ded1d"
+          ROSIE_SOURCE_05: "https://uc2d0abb21ba45806d8d108d79a1.dl.dropboxusercontent.com/cd/0/get/DMV5K3IxMpF7w03g7PQ1GgdEC4ei5F7WzyWQDiuFBSuJkXZPQJ31KWGtIOz5gLGQA2m-vLgztbL8kOiTylMQD2hXuv_Ll9a-OoabjnWjzcFOR_0TnbKLRpmULbLqoHTqvl_vcTiIy9FMNZcixlSyJv7S8MHmF2sZRzudkE_Yp_8gjA/file?c_luid=667ded1d"
+          ROSIE_SOURCE_06: "https://ucaccfc867fa9ae761ec6c861dd4.dl.dropboxusercontent.com/cd/0/get/DMXdQQEO8AsueelI1mGtZqnCOXOd7BXXHHyj0WcDPVXcpcUn2LL3pFbZnBQk5Pix2m6bCPx6-xGIIq9pLTXalQcwzQanPjQrgk5GW77W-2RcWiMk49o2OEscQUP78qhRDpbuUt6lt7g6PJMemBPiv_xRK4ER25wWZ_FjLVZybi39qQ/file?c_luid=667ded1d"
+          ROSIE_SOURCE_07: "https://ucb65ee1d9f7590ea4bb24387cf6.dl.dropboxusercontent.com/cd/0/get/DMUQcDggz5L1eld1YkI7Ll7N3NuqPHo845_9xsZ0VI4f5xcRnVdvEL6nyEqw1tD1W9hilgyRL9CKZNJ2Zlc15KT8QKhMzzkyKHEM5BLz5nr6z0z2uIwYcJPM7OGLpASmQLF24fFyS62N32ohYWy706HAD13Msk6d6sYpJrq2pFQghg/file?c_luid=667ded1d"
+          ROSIE_SOURCE_08: "https://ucb94cdb5085023b4073e616894c.dl.dropboxusercontent.com/cd/0/get/DMVu5VyT5wXwqLHm49sqmGiTY69-NpxRNE463WxRSuk4VlnFIS1Zh2YmPcL4YJNI7Ai-DGqjpuvUc3h8cVpqAdUcosYPfz9tod32zAeahWa0nVS_n6ObrO19gLT515MLrU7rhlaV790pYYJaJp0yutdbye-6X5Jac75ce8LTfPr0Ww/file?c_luid=667ded1d"
+          ROSIE_SOURCE_09: "https://uca365bcf86a3e3a9704ac1d717c.dl.dropboxusercontent.com/cd/0/get/DMWwg9pTYJuTkLC6LAZDlhXhwOM93o5FUnj6HE2i8iZtp_wl9Nm0DcCvNE8c8KxCmp0aOzit2uY2b4me6-jII1w35uzJuOhYGa6eEC5-xMbF2WrL-xRuH629ZubfHscfOsqtDobOgjZziRnWDSjczBfc_BVDYI6nx5fpKpL6cac-iw/file?c_luid=667ded1d"
+          ROSIE_SOURCE_10: "https://uc48d2fe238a34bc7e1680a6f06f.dl.dropboxusercontent.com/cd/0/get/DMW9MjibK1OGBVvuZMXbDvhIasFWJWX6uUhHpihlLkF3V2nS0ACkiAdvdTruRkz6yWvC-seO7sxa5nQe8qj-YGNVW0aM8QbLiuKj4Z06hz426kqXjk3lxVESNmg5SQNA5tuDD5onydk1xSBDkJT2B4ZWbJk8ppb_EUXu6dy3NF7ycQ/file?c_luid=667ded1d"
+          ROSIE_SOURCE_11: "https://uc1f4421326a5c76db813565d28a.dl.dropboxusercontent.com/cd/0/get/DMV-JjXN-mLuKOWIgGYdLNMObkrDUobq8vFywag9fOTYLGOQsHH9hkIFjVhxiPZkXLnNY_D7JTJR2QyxuxVzbgpVQcIwEvJ2TGTTDJBYkfj5SvI3Y_eVBtWyR1fDAJHzyJ9JyDMXvfWnQRarSwiS8Z7B6swwsQ0t28G2hKjqspXojg/file?c_luid=667ded1d"
+          ROSIE_SOURCE_12: "https://ucc61085ac4156ce92aee8b033ff.dl.dropboxusercontent.com/cd/0/get/DMWPnCuKKL4TccWVUbfwBd5zbkJtrlE0mPfTW_9A5j-_O3TYwhYjffIGYYXpWaxb_Q_NucK7iLIO4MKz3CEjVerEmyL0okglnUXFCSj0pPQnaYJL-WRlvIJZAQjjzZKmaSjIAQ5_8cpO5kAY0XPyaKrHGw6ehRpE7WpvN3hC8XEb3g/file?c_luid=667ded1d"
+          ROSIE_SOURCE_13: "https://ucf4eab2503edf2c5a43139d249e.dl.dropboxusercontent.com/cd/0/get/DMVTRtFEVaDQhN1yvHCyc_9Sz22mNUvZ5QpYHUKmVtC_wyNHdEG5SdylT9voc1FFa2QI1x25z3v8xklVpyr4dM2MuYjRs6xv-c8E6c0kHo_d8ZDkji0k1bFMHlxRM8bZibrr2CMZaOkpL4cT1Tn9TP3aq9sq4idb9mRfl7_6v7gV3Q/file?c_luid=667ded1d"
+        run: |
+          set -euo pipefail
+          python3 scripts/import_rosie_music.py
+          test "$(find public/rosie-music -name '*.mp3' -type f | wc -l)" -eq 13
+      - name: Commit only compact browser derivatives
+        run: |
+          set -euo pipefail
+          git config user.name 'RosieVerse music import'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/rosie-music/
+          git diff --cached --quiet && { echo 'No new audio to commit'; exit 1; }
+          git commit -m 'Add 13 approved loop-prepared and level-matched RosieVerse music tracks'
+          git push origin HEAD:release/20261120-rosieverse-original-soundtrack
