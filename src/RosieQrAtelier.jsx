@@ -11,10 +11,10 @@ const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
 // Aperture geometry is measured from the supplied transparent oval frame artwork.
 const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:904,titleY:852,titleWidth:540},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:964,titleY:851,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:809,titleY:899,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:722,titleY:914,titleWidth:555}
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:919,titleY:867,titleWidth:540},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:969,titleY:879,titleWidth:540},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:804,titleY:930,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:745,titleY:914,titleWidth:555}
 ];
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 function rosieFrameStyle(frame){
@@ -93,20 +93,21 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const finish=QR_STYLES.find(item=>item.id===style)||QR_STYLES[0];
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // Fill the entire opening behind the artwork (including the dark crescent),
-  // then clean up any opaque artwork remnants inside the safe inner ellipse.
-  // The QR is a separate white square, exactly as in the unframed preview.
-  ctx.fillStyle=finish.dark;
-  ctx.beginPath();
-  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.57,frame.insertH*.57,0,0,Math.PI*2);
-  ctx.fill();
+  // Punch the baked-in pale opening out of the artwork. Draw the selected
+  // finish BEHIND the cutout, so the gold frame is never painted over.
   ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   ctx.save();
+  ctx.globalCompositeOperation="destination-out";
   ctx.beginPath();
-  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW/2,frame.insertH/2,0,0,Math.PI*2);
-  ctx.clip();
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.535,frame.insertH*.535,0,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+  ctx.save();
+  ctx.globalCompositeOperation="destination-over";
   ctx.fillStyle=finish.dark;
-  ctx.fillRect(frame.insertX-frame.insertW/2,frame.insertY-frame.insertH/2,frame.insertW,frame.insertH);
+  ctx.beginPath();
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.575,frame.insertH*.575,0,0,Math.PI*2);
+  ctx.fill();
   ctx.restore();
   ctx.fillStyle="#ffffff";
   ctx.fillRect(x,y,codeSize,codeSize);
@@ -129,9 +130,17 @@ function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish
   const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).dark;
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
     <div className="qa-rosie-insert-underlay" aria-hidden="true"/>
-    <div className="qa-rosie-insert-backdrop" aria-hidden="true"/>
+    <svg className="qa-rosie-overlay-art" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <defs>
+        <mask id={"qa-frame-hole-"+(printOnly?"print":"viewer")} maskUnits="userSpaceOnUse">
+          <rect width={ROSIE_ART_W} height={ROSIE_ART_H} fill="white"/>
+          <ellipse cx={frame.insertX} cy={frame.insertY} rx={frame.insertW*.535} ry={frame.insertH*.535} fill="black"/>
+        </mask>
+      </defs>
+      <image href={ROSIE_ASSET_ROOT+frame.file} width={ROSIE_ART_W} height={ROSIE_ART_H}
+        mask={"url(#qa-frame-hole-"+(printOnly?"print":"viewer")+")"}/>
+    </svg>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
-    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
       aria-label="Close QR preview and return to the Atelier" title="Close preview">
       <span aria-hidden="true">×</span>
