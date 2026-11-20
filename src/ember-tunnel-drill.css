@@ -491,3 +491,13 @@
   background:linear-gradient(180deg,rgba(52,27,31,.96),rgba(22,18,31,.93));
   border-color:rgba(255,203,119,.95);
 }
+
+/* Batch C medal art is an unobtrusive external seal on the course plaque.
+   Its crop is one cell of the original 3-by-2 atlas, no stretched thumbnails. */
+.ember-course-plaque .ember-stage-marker{
+  display:block;position:absolute;left:-18px;top:2px;width:39px;height:39px;
+  border:1px solid rgba(255,223,152,.78);border-radius:50%;
+  background-size:300% 200%;background-repeat:no-repeat;background-color:#282431;
+  box-shadow:0 2px 9px rgba(0,0,0,.42),inset 0 0 0 2px rgba(255,226,164,.17);
+  pointer-events:none;
+}
