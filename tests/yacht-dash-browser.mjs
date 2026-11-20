@@ -192,6 +192,23 @@ try {
     "Steering toggle must not overlap the joystick");
   await page.screenshot({ path:folder+"/iphone-yacht-underway.png" });
 
+  // Safari Copy/Select callouts must never interrupt sustained steering.
+  const touchControlStyles=await page.evaluate(() => {
+    const yacht=document.querySelector(".captain-fs-yacht .captain-command-deck button");
+    const tunnel=document.querySelector(".ember-suite .ember-controls button");
+    const sw=document.querySelector(".captain-fs-yacht .yacht-steering-options button");
+    const style=el=>el?{userSelect:getComputedStyle(el).userSelect,
+      webkitUserSelect:getComputedStyle(el).webkitUserSelect}:null;
+    return {yacht:style(yacht),tunnel:style(tunnel),switch:style(sw)};
+  });
+  console.log("iPhone long-press control styles",JSON.stringify(touchControlStyles));
+  assert.equal(touchControlStyles.yacht?.userSelect,"none",
+    "Yacht steering must not open text selection on long press");
+  assert.equal(touchControlStyles.tunnel?.userSelect,"none",
+    "Tunnel steering must not open text selection on long press");
+  assert.equal(touchControlStyles.switch?.userSelect,"none",
+    "Yacht steering toggle must not be selectable");
+
   // The torii must read as a recognizable passage, not a solid overhead wall.
   const gate=frame.locator(".yacht-footprint-arch");
   await gate.waitFor({state:"visible",timeout:20000});
@@ -247,7 +264,8 @@ try {
   await deskFrame.locator(".captain-yacht.lane-0").waitFor({timeout:1500});
   // Held arrows should never skip both lanes from repeated OS key events.
   await deskPage.keyboard.down("ArrowRight");
-  await deskPage.waitForTimeout(620);
+  await deskPage.keyboard.down("ArrowRight"); // Chromium sends repeat:true on the second keydown.
+  await deskPage.waitForTimeout(180);
   assert.equal(await deskFrame.locator(".captain-yacht.lane-1").count(),1,
     "Holding an arrow must only steer one lane until a fresh press");
   await deskPage.keyboard.up("ArrowRight");
