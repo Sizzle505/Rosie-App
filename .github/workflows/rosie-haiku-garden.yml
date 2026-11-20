@@ -4,6 +4,9 @@ on:
     paths:
       - "src/haikuEngine.js"
       - "src/RosieHaikuGarden.jsx"
+      - "src/RosieHaikuScene.jsx"
+      - "src/RosieHaikuScene.css"
+      - "public/rosieverse/haiku/**"
       - "src/RosieHaikuGarden.css"
       - "src/RosieHome.jsx"
       - "src/RosieHome.module.css"
