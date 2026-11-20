@@ -202,7 +202,7 @@ function normalizeTransform(raw) {
 }
 function readDrafts() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const saved = JSON.parse(localStorage.getItem(ACTIVE_STORAGE_KEY) || "{}");
     return saved && typeof saved === "object" && !Array.isArray(saved) ? saved : {};
   } catch { return {}; }
 }
@@ -212,11 +212,13 @@ const send = (target, kind, fields = {}) =>
 
 export default function LayoutPlayground() {
   const startPage = window.location.hash.slice(1);
-  const [page, setPage] = useState(PAGES.some(item => item.id === startPage) ? startPage : "qr-atelier");
+  const pageOptions = FOCUS_MODE ? PAGES.filter(item => FOCUS_PAGE_IDS.has(item.id)) : PAGES;
+  const [page, setPage] = useState(pageOptions.some(item => item.id === startPage) ? startPage : (FOCUS_MODE ? "haiku" : "qr-atelier"));
   const [device, setDevice] = useState("desktop");
-  const [desktopWidth, setDesktopWidth] = useState(1440);
+  const [desktopWidth, setDesktopWidth] = useState(FOCUS_MODE ? 1792 : 1440);
   const [drafts, setDrafts] = useState(readDrafts);
   const [selected, setSelected] = useState("");
+  const [targetFilter, setTargetFilter] = useState("");
   const [frameReady, setFrameReady] = useState(false);
   const [availableWidth, setAvailableWidth] = useState(900);
   const [notice, setNotice] = useState("");
@@ -236,6 +238,7 @@ export default function LayoutPlayground() {
   const currentKey = keyFor(page, device);
   const currentDraft = drafts[currentKey] || {};
   const parts = TARGETS[page] || [];
+  const filteredParts = parts.filter(part => (part[1]+" "+(part[3]||"")).toLowerCase().includes(targetFilter.toLowerCase()));
   const currentPart = normalizeTransform(currentDraft[selected]);
   // Immersive desktop mirrors the real browser fullscreen CSS viewport, not
   // a shrunken 1440px iframe. Tablet/phone maintain their native CSS widths.
@@ -249,7 +252,7 @@ export default function LayoutPlayground() {
 
   useEffect(() => {
     draftsRef.current = drafts;
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(drafts)); }
+    try { localStorage.setItem(ACTIVE_STORAGE_KEY, JSON.stringify(drafts)); }
     catch { setNotice("Local storage is unavailable. Export before leaving."); }
   }, [drafts]);
 
@@ -335,11 +338,12 @@ export default function LayoutPlayground() {
   });
 
   function switchPage(next) {
-    if (!PAGES.some(item => item.id === next)) return;
+    if (!pageOptions.some(item => item.id === next)) return;
     setPage(next);
     setSelected("");
+    setTargetFilter("");
     setFrameReady(false);
-    window.history.replaceState(null, "", "?layout=1#" + next);
+    window.history.replaceState(null, "", (FOCUS_MODE ? FOCUS_QUERY : "?layout=1") + "#" + next);
   }
   function switchDevice(next) {
     setDevice(next);
@@ -417,7 +421,7 @@ export default function LayoutPlayground() {
       version: 2,
       exportedAt: new Date().toISOString(),
       referenceWidths: { desktop: immersive && device === "desktop" ? width : desktopWidth, tablet: 820, mobile: 390 },
-      baselineCommit: BASELINE_COMMIT,
+      baselineCommit: FOCUS_MODE ? "c235fff601018443e1e465a7a7e6096cbb401560" : BASELINE_COMMIT,
       referenceViewport: { width, height, immersive, device },
       layouts: drafts
     };
@@ -425,7 +429,7 @@ export default function LayoutPlayground() {
     const href = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = href;
-    link.download = "rosie-layout-playground.json";
+    link.download = FOCUS_MODE ? "rosie-haiku-calculations-sandbox.json" : "rosie-layout-playground.json";
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -442,12 +446,12 @@ export default function LayoutPlayground() {
       if (parsed.version === 1 && !window.confirm(
         "This was exported from an older Rosie App. Its offsets may duplicate layout changes already published. Import them anyway?"
       )) return;
-      if (parsed.baselineCommit && parsed.baselineCommit !== BASELINE_COMMIT &&
+      if (parsed.baselineCommit && parsed.baselineCommit !== (FOCUS_MODE ? "c235fff601018443e1e465a7a7e6096cbb401560" : BASELINE_COMMIT) &&
         !window.confirm("This layout was saved against a different version of Rosie App. Import anyway?")) return;
       const safe = {};
       for (const [key, values] of Object.entries(parsed.layouts)) {
         const [pageId, deviceId] = key.split("/");
-        if (!PAGES.some(p => p.id === pageId) || !DEVICES[deviceId] || !values || typeof values !== "object") continue;
+        if (!pageOptions.some(p => p.id === pageId) || !DEVICES[deviceId] || !values || typeof values !== "object") continue;
         safe[key] = {};
         for (const [id, value] of Object.entries(values)) {
           if ((TARGETS[pageId] || []).some(part => part[0] === id)) safe[key][id] = normalizeTransform(value);
