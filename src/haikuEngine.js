@@ -49,9 +49,11 @@ export function poemForTopic(topic, mood = "zen", variation = 0) {
   const subject = String(topic || "").trim().slice(0, 100);
   const lowercase = subject.toLocaleLowerCase("en-US");
   const tagged = ROSIE_HAIKUS.filter((p) => p.tags?.some((tag) => new RegExp(`\\b${tag}\\b`, "i").test(lowercase)));
-  // A relevant verse wins over the chosen tone; other prompts select
-  // curated, mood-specific verses. The topic remains visible as a dedication.
-  const pool = tagged.length ? tagged : ROSIE_HAIKUS.filter((p) => p.mood === mood);
+  // Honor the visitor's chosen voice first. A matching special verse takes
+  // precedence, otherwise use a hand-edited verse in the selected mood.
+  const moodPool = ROSIE_HAIKUS.filter((p) => p.mood === mood);
+  const matchingMood = tagged.filter((p) => p.mood === mood);
+  const pool = matchingMood.length ? matchingMood : moodPool;
   const index = hashSeed(`${lowercase}:${mood}`) + Math.max(0, variation);
   const selected = pool[index % pool.length];
   return {
