@@ -9,7 +9,9 @@ on:
       - "src/emberCrystalShutters*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
-      - "src/emberBossEncounter.js"\n      - "src/emberExpansionCatalog.js"\n      - "scripts/import-ember-expansion.mjs"
+      - "src/emberBossEncounter.js"
+      - "src/emberExpansionCatalog.js"
+      - "scripts/import-ember-expansion.mjs"
       - "tests/ember-*.test.mjs"
       - ".github/workflows/ember-breakables-qa.yml"
   pull_request:
@@ -18,7 +20,9 @@ on:
       - "src/emberBreakable*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
-      - "src/emberBossEncounter.js"\n      - "src/emberExpansionCatalog.js"\n      - "scripts/import-ember-expansion.mjs"
+      - "src/emberBossEncounter.js"
+      - "src/emberExpansionCatalog.js"
+      - "scripts/import-ember-expansion.mjs"
       - "tests/ember-*.test.mjs"
       - ".github/workflows/ember-breakables-qa.yml"
 permissions:
