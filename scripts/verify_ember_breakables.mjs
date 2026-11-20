@@ -12,6 +12,7 @@ const files=[
 for(const [name,engine,viewport,mobile] of [
   ["chromium-mobile",chromium,{width:393,height:852},true],
   ["webkit-mobile",webkit,{width:390,height:844},true],
+  ["webkit-ipad",webkit,{width:1024,height:768},true],
   ["chromium-desktop",chromium,{width:1440,height:900},false]
 ]){
   const browser=await engine.launch({headless:true});
@@ -55,6 +56,14 @@ for(const [name,engine,viewport,mobile] of [
     if(!(await suite.locator(".ember-expedition-launch").innerText()).includes("CLOCKWORK"))
       throw new Error("World picker did not select Clockwork");
     await suite.screenshot({path:`artifacts/ember-breakables/${name}-worlds.png`});
+    const layout=await suite.evaluate(el=>({
+      outer:Math.ceil(el.getBoundingClientRect().width),
+      scroll:el.scrollWidth,
+      available:document.documentElement.clientWidth,
+      controls:!!el.querySelector(".ember-controls")
+    }));
+    if(layout.scroll>layout.outer+4||layout.outer>layout.available+4||!layout.controls)
+      throw new Error("Tunnel responsive overflow or missing controls: "+JSON.stringify(layout));
     await suite.screenshot({path:`artifacts/ember-breakables/${name}-idle.png`});
     await page.getByRole("button",{name:"START DIGGING"}).click();
     await page.locator(".ember-dig-hint").waitFor({state:"visible",timeout:3500});
