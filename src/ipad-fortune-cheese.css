@@ -1,0 +1,207 @@
+/* Fortune and Cheese compositions for touch iPads only. The two desktop
+   illustrations stay intact; the phone and fine-pointer layouts are untouched. */
+@media (min-width: 721px) and (max-width: 1450px) and (any-pointer: coarse) {
+  .app-shell.page-fortune {
+    display: flow-root;
+    background: #170b17 url('/rosieverse/refresh/fortune-tent.webp') center top / cover fixed no-repeat !important;
+  }
+  .app-shell.page-fortune > .fortune-page {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.17fr) minmax(290px, .83fr) !important;
+    grid-template-rows: auto auto auto !important;
+    align-items: start; align-content: start !important;
+    gap: 14px clamp(14px, 2vw, 24px) !important;
+    width: min(calc(100% - 40px), 1240px) !important;
+    max-width: 1240px !important;
+    min-height: 100dvh !important;
+    margin: 0 auto !important;
+    padding: 76px 0 115px !important;
+    background: none !important;
+  }
+  .app-shell.page-fortune .fortune-page::after { display: none !important; }
+  .app-shell.page-fortune .fortune-console { display: contents !important; }
+  .app-shell.page-fortune .fortune-page .machine {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1; grid-row: 1;
+    width: 100% !important;
+    max-height: none !important;
+    margin: 0 !important;
+  }
+  .app-shell.page-fortune .fortune-page .machine .booth {
+    height: clamp(445px, 50vw, 650px) !important;
+    min-height: 0 !important;
+  }
+  .app-shell.page-fortune .fortune-page .machine .stage {
+    top: clamp(67px, 8vw, 89px) !important;
+    left: 14px !important; right: 14px !important; bottom: 13px !important;
+  }
+  .app-shell.page-fortune .fortune-page .machine .stage-art,
+  .app-shell.page-fortune .fortune-page .machine .stage-art-consulting,
+  .app-shell.page-fortune .fortune-page .machine .stage-turning .stage-art {
+    inset: 0 !important; width: 100% !important; height: 100% !important;
+    object-fit: cover !important; object-position: 50% 50% !important;
+    transform: none !important;
+  }
+  .app-shell.page-fortune .fortune-page .question-card {
+    grid-column: 2; grid-row: 1;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: clamp(17px, 2vw, 25px) !important;
+    translate: none !important;
+    border-radius: 20px;
+  }
+  .app-shell.page-fortune .fortune-page .question-row { grid-template-columns: 1fr !important; }
+  .app-shell.page-fortune .fortune-page .ask-button { width: 100% !important; min-height: 48px; }
+  .app-shell.page-fortune .fortune-page .quick-prompts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .app-shell.page-fortune .fortune-page .quick-prompts button { min-height: 58px; font-size: clamp(11px, 1.05vw, 14px); }
+  .app-shell.page-fortune .fortune-page .console-caption {
+    grid-column: 1; grid-row: 3; margin: 0; text-align: center;
+  }
+  .app-shell.page-fortune .fortune-page .fortune-ticket {
+    grid-column: 2; grid-row: 2 / span 2;
+    width: 100% !important; max-height: none !important;
+    margin: 0 !important; opacity: 1 !important; transform: none !important;
+    translate: none !important; overflow: visible !important;
+  }
+  .app-shell.page-fortune .fortune-waiting-card {
+    display: grid !important; min-height: 185px;
+    place-content: center; justify-items: center; text-align: center;
+  }
+  .app-shell.page-fortune .fortune-page .bottom-omens {
+    position: relative !important; inset: auto !important;
+    grid-column: 1; grid-row: 2;
+    width: min(100%, 620px) !important;
+    margin: 0 auto !important; translate: none !important;
+  }
+  .app-shell.page-fortune .fortune-page .omen-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  /* A compact university dossier makes the square board the primary surface.
+     The examiner follows it in portrait and has its own rail in landscape. */
+  html:has(.app-shell.page-cheese), body:has(.app-shell.page-cheese) {
+    height: auto !important; overflow: auto !important;
+  }
+  .app-shell.page-cheese, .app-shell.page-cheese .captain-fs-cheese,
+  .app-shell.page-cheese .cheese-game-page {
+    height: auto !important; max-height: none !important; min-height: 100dvh !important;
+    overflow: visible !important;
+  }
+  .app-shell.page-cheese .cheese-game-page {
+    width: min(calc(100% - 32px), 1200px) !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 18px 0 115px !important;
+  }
+  .app-shell.page-cheese .cheese-desktop-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    filter: none !important;
+  }
+  .app-shell.page-cheese .cheese-left-rail,
+  .app-shell.page-cheese .cheese-examiner-rail {
+    position: static !important; grid-column: 1 !important; grid-row: auto !important;
+    width: 100% !important; height: auto !important; margin: 0 !important;
+  }
+  .app-shell.page-cheese .cheese-exam-header {
+    display: grid !important;
+    grid-template-columns: 112px 170px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 9px !important;
+    height: 190px !important; min-height: 0 !important;
+    padding: 9px !important;
+  }
+  .app-shell.page-cheese .barkbridge-ident {
+    display: flex !important; flex-direction: column !important; justify-content: center;
+    width: auto !important; min-width: 0 !important; min-height: 0 !important;
+    padding: 7px !important; text-align: center;
+  }
+  .app-shell.page-cheese .barkbridge-ident-seal { width: 46px !important; height: 46px !important; margin: 0 auto 5px; }
+  .app-shell.page-cheese .barkbridge-ident strong { font-size: 9px !important; }
+  .app-shell.page-cheese .barkbridge-ident small { font-size: 5px !important; }
+  .app-shell.page-cheese .cheese-exam-portrait {
+    width: 100% !important; height: 100% !important; min-height: 0 !important;
+    margin: 0 !important; border-radius: 11px;
+  }
+  .app-shell.page-cheese .cheese-exam-portrait img { object-fit: cover !important; object-position: center 50% !important; }
+  .app-shell.page-cheese .cheese-exam-title {
+    display: flex !important; flex-direction: column; min-width: 0;
+    justify-content: center; padding: 0 6px !important;
+  }
+  .app-shell.page-cheese .cheese-exam-title h1 {
+    max-width: none !important; font-size: clamp(24px, 3.4vw, 36px) !important;
+    line-height: .98 !important;
+  }
+  .app-shell.page-cheese .cheese-exam-title > p { margin: 3px 0 7px !important; }
+  .app-shell.page-cheese .cheese-exam-actions { margin: 0 !important; }
+  .app-shell.page-cheese .cheese-header-status { margin-top: 7px !important; }
+  .app-shell.page-cheese .cheese-header-status > div { min-height: 35px !important; }
+  .app-shell.page-cheese .cheese-desktop-layout > .cheese-game-frame {
+    position: relative !important; inset: auto !important;
+    grid-column: 1 !important; grid-row: auto !important;
+    width: min(100%, 650px) !important;
+    height: auto !important; min-height: 0 !important; max-height: none !important;
+    margin: 0 auto !important; padding: 12px !important;
+    overflow: visible !important;
+  }
+  .app-shell.page-cheese .cheese-game-heading { min-height: 38px !important; margin-bottom: 8px !important; }
+  .app-shell.page-cheese .cheese-game-heading h2 { font-size: 23px !important; }
+  .app-shell.page-cheese .cheese-game-heading p { max-width: 45%; font-size: 9px; }
+  .app-shell.page-cheese .cheese-grid {
+    width: 100% !important; height: auto !important; aspect-ratio: 1 !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(4, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+  .app-shell.page-cheese .cheese-card {
+    width: 100% !important; height: 100% !important;
+    min-width: 0; min-height: 0; aspect-ratio: 1 !important;
+  }
+  /* Safari can flatten the 3D card stack and expose the mirrored front. */
+  .app-shell.page-cheese .cheese-card:not(.is-flipped) .cheese-card-front,
+  .app-shell.page-cheese .cheese-card.is-flipped .cheese-card-back {
+    visibility: hidden !important;
+  }
+  .app-shell.page-cheese .cheese-examiner-rail { width: min(100%, 650px) !important; margin: 0 auto !important; }
+  .app-shell.page-cheese .cheese-examiner-rail .rosie-reaction {
+    width: 100% !important; height: auto !important; min-height: 180px !important;
+    display: grid !important; grid-template-columns: 155px minmax(0, 1fr) 28px !important;
+    gap: 12px !important;
+  }
+  .app-shell.page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 150px !important; }
+}
+
+@media (min-width: 1100px) and (max-width: 1450px) and (orientation: landscape) and (any-pointer: coarse) {
+  .app-shell.page-cheese .cheese-desktop-layout {
+    grid-template-columns: minmax(210px, .73fr) minmax(0, 1.65fr) minmax(210px, .73fr) !important;
+    align-items: start !important;
+  }
+  .app-shell.page-cheese .cheese-left-rail { grid-column: 1 !important; grid-row: 1 !important; }
+  .app-shell.page-cheese .cheese-exam-header {
+    display: flex !important; flex-direction: column; height: auto !important; padding: 10px !important;
+  }
+  .app-shell.page-cheese .barkbridge-ident { min-height: 84px !important; }
+  .app-shell.page-cheese .cheese-exam-portrait { height: clamp(180px, 24dvh, 240px) !important; }
+  .app-shell.page-cheese .cheese-exam-title { display: block !important; }
+  .app-shell.page-cheese .cheese-exam-title h1 { font-size: clamp(24px, 2.2vw, 31px) !important; }
+  .app-shell.page-cheese .cheese-exam-actions button { font-size: 8px !important; letter-spacing: .01em !important; }
+  .app-shell.page-cheese .cheese-action-reset { min-width: 57px !important; }
+  .app-shell.page-cheese .cheese-desktop-layout > .cheese-game-frame {
+    grid-column: 2 !important; grid-row: 1 !important;
+    width: 100% !important; margin-top: 70px !important;
+    transform: none !important; padding: 11px !important;
+  }
+  .app-shell.page-cheese .cheese-examiner-rail {
+    grid-column: 3 !important; grid-row: 1 !important;
+    width: 100% !important; margin: 0 !important;
+  }
+  .app-shell.page-cheese .cheese-examiner-rail .rosie-reaction {
+    display: flex !important; flex-direction: column; min-height: 0 !important;
+    padding: 10px !important;
+  }
+  .app-shell.page-cheese .cheese-examiner-rail .rosie-reaction-portrait {
+    width: 100% !important; height: clamp(190px, 33dvh, 320px) !important;
+  }
+}
