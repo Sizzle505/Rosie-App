@@ -1,0 +1,143 @@
+/* Yacht Dash chapter expansion - isolated desktop and iPhone styling. */
+.captain-game-page .yacht-chapter-picker {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  margin:11px auto 3px;
+  max-width:320px;
+}
+.captain-game-page .captain-start-panel .yacht-chapter-picker button {
+  margin:0;
+  padding:6px 4px;
+  min-height:35px;
+  height:auto;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  background:linear-gradient(180deg,#173b54,#0b2437);
+  color:#f6d595;
+  border:1px solid rgba(244,200,104,.3);
+  border-radius:9px;
+  box-shadow:inset 0 1px rgba(255,255,255,.07);
+  font-size:9px;
+  line-height:1.17;
+  letter-spacing:.02em;
+}
+.captain-game-page .yacht-chapter-picker button b{font-weight:750;text-align:center;}
+.captain-game-page .yacht-chapter-picker button small{font-size:7px;letter-spacing:.11em;}
+.captain-game-page .captain-start-panel .yacht-chapter-picker button.is-selected {
+  border-color:#ffe1a1;
+  background:linear-gradient(180deg,#3b5362,#142c42);
+  box-shadow:0 0 10px rgba(249,199,105,.18),inset 0 0 0 1px rgba(255,219,154,.18);
+}
+.captain-game-page .captain-start-panel .yacht-chapter-picker button:disabled {
+  opacity:.48;
+  background:linear-gradient(180deg,#25333e,#17212a);
+  filter:grayscale(.8);
+  cursor:not-allowed;
+}
+.captain-game-page .captain-start-panel .yacht-cast-off {margin-top:10px;}
+.captain-game-page .captain-start-panel:not(.captain-results-panel) {
+  max-height:calc(100% - 45px);
+  overflow:auto;
+  scrollbar-width:thin;
+}
+.captain-game-page .captain-results-panel {
+  max-height:calc(100% - 30px);
+  overflow:auto;
+  scrollbar-width:thin;
+}
+.captain-game-page .yacht-result-actions {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:10px;
+}
+.captain-game-page .captain-results-panel .yacht-result-actions button {
+  margin:0; height:32px; min-height:32px; padding:0 10px;
+  font-size:9px; letter-spacing:.035em;
+}
+.captain-game-page .captain-results-panel .voyage-stats {
+  display:flex; flex-wrap:wrap;gap:4px;justify-content:center;
+}
+.captain-game-page .captain-results-panel .voyage-stats span {padding:4px 6px;}
+.captain-game-page .sea-pickup-obstacle,
+.captain-game-page .sea-pickup-rival {
+  width:70px;
+  height:65px;
+  border:0 !important;
+  border-radius:0 !important;
+  background:none !important;
+  box-shadow:none !important;
+  filter:drop-shadow(0 5px 6px rgba(0,18,32,.46));
+}
+.captain-game-page .sea-pickup-rival {width:90px;height:80px;}
+.captain-game-page .sea-pickup .yacht-hazard-art {
+  display:block;
+  width:100%;height:100%;max-width:unset;max-height:unset;
+  object-fit:contain;
+}
+.captain-game-page .sea-pickup .yacht-drift-warning {
+  position:absolute;
+  top:-18px;left:50%;
+  transform:translateX(-50%);
+  width:auto;height:auto;line-height:1;
+  border:0;border-radius:0;background:none;box-shadow:none;
+  color:#fff4bc;font-size:21px;font-weight:900;
+  text-shadow:0 0 7px #60392c,0 1px 3px #17151a;
+  animation:yachtWarningPulse .7s ease-in-out infinite alternate;
+}
+@keyframes yachtWarningPulse {from{opacity:.58}to{opacity:1}}
+/* Backgrounds use natural currents rather than hard painted lanes. */
+.captain-game-page .yacht-course .lane-line {opacity:.055 !important;}
+.captain-game-page .yacht-course[data-captain-chapter="typhoon"] .captain-cinematic-water {filter:brightness(.83) saturate(1.14);}
+.captain-game-page .yacht-course[data-captain-chapter="moonlight"] .captain-cinematic-water {filter:hue-rotate(16deg) brightness(.74) saturate(.86);}
+.captain-game-page .yacht-course[data-captain-chapter="emperor"] .captain-cinematic-water {filter:saturate(1.14) brightness(.95);}
+.captain-game-page .yacht-victory-overlay {
+  position:absolute;inset:0;z-index:45;
+  overflow:hidden;border-radius:12px;
+  background:#071b2d;
+  pointer-events:auto;
+}
+.captain-game-page .yacht-victory-overlay > img {
+  width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%;
+}
+.captain-game-page .yacht-victory-actions {
+  position:absolute;bottom:0;left:0;right:0;
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;padding:20px 8px 13px;
+  background:linear-gradient(0deg,rgba(4,18,30,.92),rgba(4,18,30,0));
+}
+.captain-game-page .yacht-victory-actions button {
+  background:linear-gradient(180deg,#fae2a2,#d59a42);
+  border:1px solid #ffe9ab;border-radius:999px;color:#193347;
+  font:800 10px/1 inherit;letter-spacing:.035em;
+  padding:9px 12px;cursor:pointer;
+}
+@media(max-width:720px) {
+  .captain-game-page .captain-start-panel .yacht-chapter-picker button {
+    min-height:32px;font-size:8px;padding:5px 3px;
+  }
+  .captain-game-page .yacht-chapter-picker {gap:4px;margin-top:7px;}
+  .captain-game-page .sea-pickup-obstacle {width:51px;height:49px;}
+  .captain-game-page .sea-pickup-rival {width:65px;height:57px;}
+  .captain-game-page .captain-results-panel .yacht-result-actions button {
+    height:28px;min-height:28px;font-size:8px;
+  }
+  .captain-game-page .yacht-victory-actions button {font-size:9px;padding:9px;}
+}
+@media(max-width:370px), (max-height:590px) {
+  .captain-game-page .captain-start-panel .yacht-chapter-picker button {
+    min-height:28px;font-size:7px;
+  }
+  .captain-game-page .captain-start-panel .yacht-chapter-picker button small {font-size:6px;}
+  .captain-game-page .captain-results-panel .voyage-stats {gap:2px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .captain-game-page .sea-pickup .yacht-drift-warning {animation:none;}
+}
