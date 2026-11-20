@@ -99,7 +99,17 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   // Match the live viewer and main Atelier: finish behind the untouched
   // original transparent frame, white QR square, then the gilded art on top.
   ctx.fillStyle=finish.dark;
-  ctx.fill(new Path2D(frame.openingPath));
+  const aperture=new Path2D(frame.openingPath);
+  ctx.fill(aperture);
+  ctx.strokeStyle=finish.dark;
+  ctx.lineWidth=2;
+  ctx.stroke(aperture);
+  // Match the live/main-page QR inset: gold outer keyline, ivory inner edge,
+  // then the white scannable QR square.
+  ctx.fillStyle="#b17e36";
+  ctx.fillRect(x-7,y-7,codeSize+14,codeSize+14);
+  ctx.fillStyle="#fffef7";
+  ctx.fillRect(x-4,y-4,codeSize+8,codeSize+8);
   ctx.fillStyle="#ffffff";
   ctx.fillRect(x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=false;
