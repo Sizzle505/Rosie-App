@@ -111,3 +111,17 @@ The Clockwork, Molten and Treasury challenge routes now culminate in playable bo
 - The smoke timeout now allows 65 seconds of wall-clock while still requiring a real boss spawn with full health. Diagnostic state is retained for any further failure; the test never fakes boss state.
 - Added a fourth **iPad WebKit 1024×768 touch viewport** and layout overflow checks alongside desktop Chromium, mobile Chromium and mobile WebKit.
 - Stage progress now fills to 100% upon early boss victory. Unit tests ensure a single Turbo activation does not automatically damage the boss in later recovery windows.
+
+
+## Latest development pass - Falling Basalt, tablet performance and in-game panoramas
+
+Earlier passages in this document describe historical *pre-import* states and are superseded by this section and the PR body. The new 12-file WebP import is present in the development branch.
+
+- **All nine atlases now have an in-game purpose.** The previously inactive Falling Basalt 8-frame atlas is now anchored at x 18200 on the Molten **ceiling**, replacing the earlier ceiling geyser. The second geyser has moved to the clear **floor** at x 18600. The first geyser remains x 17650. Three hazards are separated rather than overlaying one another.
+- The Falling Basalt solid core is determined by the existing `expeditionHazardReach` function, with a 470px warning and a dedicated "FALLING BASALT" notice. A procedural ceiling-rock fallback is drawn only if the imported atlas has not decoded. Its physics are tested for warning, dodge, one-time reward and nonoverlap with geological formations.
+- **The three transition panoramas are now drawn inside the actual game**, not only on the world-selection cards. Each is aspect-preserving and pans from the previous biome toward the selected biome over the first 3.4s. The Classic route is excluded.
+- **Tablet responsiveness:** the Canvas backing-store is capped at 1.25M pixels, leaving CSS size and collision geometry unchanged. Inactive game panels redraw less often. When rendering is slow, a maximum of 200ms wall time is simulated through collision-accurate substeps of at most 45ms, preserving warnings and preventing the previous severe iPad slow motion.
+- The browser smoke test closes the original Classic game page before launching the next test game to prevent competing WebKit Canvas loops from starving the iPad. All four viewport configurations remain in the QA matrix.
+- The art remains **review quality**, especially the Gear Crusher matte and the new boss frame-to-phase alignment. No rejected victory image has been activated, and production remains untouched.
+
+Release gate: verify the new WebKit iPad and desktop gameplay screenshots and that every imported boss/hazard/panorama actually renders as expected before promoting the branch.
