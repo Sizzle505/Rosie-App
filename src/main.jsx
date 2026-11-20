@@ -26,6 +26,7 @@ import "./cheese-honeywood.css";
 import "./cheese-sprint.css";
 import "./ipad-polish.css";
 import "./desktop-nov18.css";
+import "./yachtDashExpansion.css";
 import "./ipad-composition.css";
 import "./ipad-fortune-cheese.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
