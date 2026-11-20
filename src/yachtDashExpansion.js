@@ -169,6 +169,14 @@ const toriiGate = () => obstacle("storm-torii", 1, {
   label: "Broken torii gate - steer through the middle"
 });
 
+/** Large art overlaps the ship earlier than a small 46px collectible.
+ * Start collision when its leading edge reaches the yacht, not when the art
+ * has already covered the player's ship. All hazards clear at the same point. */
+export function yachtCatchStart(item) {
+  return item.footprint === "arch" ? 60 :
+    item.footprint === "wide" ? 65 : 77;
+}
+
 export function yachtOccupiedLanes(item) {
   return item.blockedLanes ?? [item.lane];
 }
