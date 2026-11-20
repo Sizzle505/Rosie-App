@@ -1708,7 +1708,7 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
   );
 }
 
-function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
+function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequence = 0 }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("yachtSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
   const [running, setRunning] = useState(false);
@@ -1955,6 +1955,14 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
     if (!running || ended) return;
     setPaused(current => !current);
   }
+
+  useEffect(() => {
+    if (fullscreenExitSequence > 0 && running) {
+      setPaused(true);
+      setMessage("Voyage paused when leaving full screen. Resume from the helm.");
+    }
+    // The sequence changes only when the player closes this specific frame.
+  }, [fullscreenExitSequence]);
 
   function onCoursePointerDown(event) {
     touchStartRef.current = running && !paused
@@ -2583,14 +2591,20 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
 
 function FullscreenGameFrame({ children, label, variant }) {
   const frameRef = useRef(null);
+  const hadNativeFullscreen = useRef(false);
   const [nativeFullscreen, setNativeFullscreen] = useState(false);
   const [fallbackFullscreen, setFallbackFullscreen] = useState(false);
+  const [fullscreenExitSequence, setFullscreenExitSequence] = useState(0);
   const expanded = nativeFullscreen || fallbackFullscreen;
 
   useEffect(() => {
     const syncFullscreen = () => {
-      const active = document.fullscreenElement || document.webkitFullscreenElement;
-      setNativeFullscreen(active === frameRef.current);
+      const active = (document.fullscreenElement || document.webkitFullscreenElement) === frameRef.current;
+      if (hadNativeFullscreen.current && !active && variant === "yacht") {
+        setFullscreenExitSequence((count) => count + 1);
+      }
+      hadNativeFullscreen.current = active;
+      setNativeFullscreen(active);
     };
     document.addEventListener("fullscreenchange", syncFullscreen);
     document.addEventListener("webkitfullscreenchange", syncFullscreen);
@@ -2641,6 +2655,7 @@ function FullscreenGameFrame({ children, label, variant }) {
   const toggleFullscreen = async () => {
     if (fallbackFullscreen) {
       setFallbackFullscreen(false);
+      if (variant === "yacht") setFullscreenExitSequence((count) => count + 1);
       return;
     }
     if (nativeFullscreen) {
@@ -2669,7 +2684,8 @@ function FullscreenGameFrame({ children, label, variant }) {
         <b>{expanded ? "EXIT FULL SCREEN" : "FULL SCREEN"}</b>
       </button>}
       {variant === "yacht" && React.isValidElement(children)
-        ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen })
+        ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen,
+            fullscreenExitSequence })
         : children}
     </section>
   );
