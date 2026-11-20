@@ -358,6 +358,10 @@
   .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-tool-grid {
     grid-template-columns: minmax(0, 1fr) !important;
   }
+  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-tool-card--currency {
+    grid-column: 1 !important;
+    width: 100% !important;
+  }
   .app-shell.page-qr-atelier .qa-scene {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
