@@ -5,6 +5,7 @@ import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } fr
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
 import "./RosieHaikuAtmosphere.css";
 import "./RosieHaikuArchiveArt.css";
+import "./RosieHaikuMasthead.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -255,8 +256,15 @@ export default function RosieHaikuGarden({ onNavigate }) {
       <div className="haiku-shell">
         <header className="haiku-header">
           <button className="haiku-back" type="button" onClick={() => onNavigate("home")} aria-label="Back to RosieVerse">← <span>RosieVerse</span></button>
-          <div className="haiku-heading"><div className="haiku-overline">ROSIE'S GARDEN OF SMALL WISDOM</div><h1>Haiku Zen Garden</h1><p>Small poems. Deep breaths. Grand opinions.</p></div>
-          <div className="haiku-header-mark" aria-hidden="true">✿</div>
+          <picture className="haiku-masthead-art" aria-hidden="true">
+            <source media="(max-width: 600px)" srcSet="/rosieverse/haiku/ornaments/masthead-compact.webp" />
+            <img src="/rosieverse/haiku/ornaments/masthead-grand.webp" alt="" decoding="async" />
+          </picture>
+          <div className="haiku-heading">
+            <div className="haiku-overline">ROSIE'S GARDEN OF SMALL WISDOM</div>
+            <h1>Haiku Zen Garden</h1>
+          </div>
+          <p className="haiku-masthead-tagline">Small poems. Deep breaths. Grand opinions.</p>
         </header>
         <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} />
         <section className="haiku-content">
