@@ -244,6 +244,7 @@ function makeBatch(pool, batch, previousName = '') {
 function defaultCardsPerRow() {
   if (typeof window === 'undefined') return 4;
   if (window.matchMedia('(max-width: 720px)').matches) return 2;
+  if (window.matchMedia('(min-width: 721px) and (max-width: 1199px) and (pointer: coarse)').matches) return 4;
   if (window.matchMedia('(min-width: 1200px)').matches) return 5;
   // Preserve the tablet's existing width-responsive layout.
   return Math.max(2, Math.min(10, Math.floor((window.innerWidth - 12 + 4) / 314)));
