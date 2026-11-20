@@ -3,6 +3,7 @@ import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS }
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
+import "./RosieHaikuAtmosphere.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -220,7 +221,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
   }
   return (
     <main className="haiku-page" aria-label="Haiku Zen Garden">
-      <div className="haiku-scene" aria-hidden="true">
+      <div className={`haiku-scene haiku-scene--${scene}`} aria-hidden="true">
         <img
           key={selectedBackground.src}
           className="haiku-page-landscape"
@@ -231,6 +232,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
             setBackgroundUnavailable((current) => ({ ...current, [scene]: true }));
           }}
         />
+        <div className="haiku-scene-atmosphere" />
+        <div className="haiku-scene-canopy" />
         <div className="haiku-scene-fog" />
       </div>
       <div className="haiku-petal haiku-petal-one" aria-hidden="true" />
