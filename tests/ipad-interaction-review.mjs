@@ -16,7 +16,15 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           page.on("pageerror", error => errors.push(String(error)));
           await page.goto("http://127.0.0.1:5173/#" + route, { waitUntil: "networkidle" });
           await page.locator(".loading-screen").waitFor({ state: "hidden", timeout: 20000 });
-          if (route === "calculations") await page.locator(".rc-tool-card--tip").click();
+          if (route === "calculations") {
+            const cards = await page.locator(".rc-tool-card").evaluateAll(elements => elements.map(element => {
+              const box = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              return { label: element.getAttribute("aria-label"), x: Math.round(box.x), y: Math.round(box.y), width: Math.round(box.width), height: Math.round(box.height), display: style.display, gridColumn: style.gridColumn, imageLoaded: !!element.querySelector("img")?.naturalWidth };
+            }));
+            console.log(engine, device, "calculator choices", JSON.stringify(cards));
+            await page.locator(".rc-tool-card--units").click();
+          }
           if (route === "qr-atelier") {
             await page.locator('.qa-panel input[placeholder="https://"]').fill("https://example.com");
             await page.getByRole("button", { name: "View QR in a Rosie frame" }).click();
@@ -28,7 +36,7 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
           const measure = await page.evaluate(() => ({
             scrollWidth: document.documentElement.scrollWidth,
             scrollHeight: document.documentElement.scrollHeight,
-            vault: [...document.querySelectorAll(".rc-tool-card")].map(element => ({
+            toolCards: [...document.querySelectorAll(".rc-tool-card")].map(element => ({
               label: element.getAttribute("aria-label"),
               rect: { x: Math.round(element.getBoundingClientRect().x), y: Math.round(element.getBoundingClientRect().y), width: Math.round(element.getBoundingClientRect().width), height: Math.round(element.getBoundingClientRect().height) },
               imageLoaded: !!element.querySelector("img")?.naturalWidth
