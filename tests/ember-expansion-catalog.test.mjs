@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import {test} from "node:test";
 import {
-  EMBER_WORLD_CATALOG,EMBER_EXPANSION_ATLASES,EMBER_EXPANSION_TRANSITIONS,
+  EMBER_WORLD_CATALOG,EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,
   EXPANSION_ROOT,expansionFileUrl,atlasFrameRect,drawExpansionFrame,worldAtIndex
 } from "../src/emberExpansionCatalog.js";
 
@@ -45,4 +46,27 @@ test("draw helper is inert if art is absent and uses exact registered sheet cell
   assert.equal(drawExpansionFrame(ctx,img,"mole-king",7,30,40,70,80),true);
   assert.deepEqual(calls[0],[img,1152,384,384,384,30,40,70,80]);
   assert.equal(drawExpansionFrame(ctx,{complete:true,naturalWidth:100,naturalHeight:100},"mole-king",7,0,0,30,30),false);
+});
+
+test("nine imported 12-frame boss and animated hazard atlases are mounted for review",()=>{
+  assert.equal(Object.keys(EMBER_CHARACTER_ATLASES).length,2);
+  assert.equal(EMBER_CHARACTER_ATLASES.cinderclaw.frames,12);
+  assert.equal(EMBER_CHARACTER_ATLASES.copperjack.cell,512);
+  assert.deepEqual(atlasFrameRect("cinderclaw",11),{sx:1152,sy:768,sw:384,sh:384});
+  assert.deepEqual(atlasFrameRect("copperjack",11),{sx:1536,sy:1024,sw:512,sh:512});
+  const all=[...Object.values(EMBER_EXPANSION_ATLASES),...Object.values(EMBER_CHARACTER_ATLASES)];
+  for(const atlas of all){
+    const file="public/ember-drill/expansion-batch-c/"+atlas.file;
+    const bytes=fs.readFileSync(file);
+    assert.ok(bytes.length>250000,file+" appears truncated");
+    assert.equal(bytes.toString("ascii",0,4),"RIFF",file);
+    assert.equal(bytes.toString("ascii",8,12),"WEBP",file);
+  }
+});
+test("three wide transition illustrations are genuinely imported",()=>{
+  for(const file of Object.values(EMBER_EXPANSION_TRANSITIONS)){
+    const bytes=fs.readFileSync("public/ember-drill/expansion-batch-c/"+file);
+    assert.ok(bytes.length>200000,file);
+    assert.equal(bytes.toString("ascii",8,12),"WEBP",file);
+  }
 });
