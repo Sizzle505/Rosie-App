@@ -3,7 +3,7 @@
 export function excavationNotice(event) {
   if(!event)return null;
   if(event.type==="shutter-warning")return {
-    kind:"tip",title:"MOVING CRYSTAL AHEAD",detail:"Steer away from the wall, or shatter it with Turbo.",duration:1.6
+    kind:"tip",placement:event.side<0?"bottom":"top",title:"MOVING CRYSTAL AHEAD",detail:"Steer away from the wall, or shatter it with Turbo.",duration:1.6
   };
   if(event.type==="shutter-shatter")return {
     kind:"success",title:"CRYSTAL SHUTTER BROKEN",detail:"+150 points · Clear passage",duration:1.7
