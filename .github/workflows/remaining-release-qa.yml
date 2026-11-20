@@ -44,8 +44,8 @@ jobs:
           from PIL import Image
           from pathlib import Path
           root=Path('qa-screenshots/remaining-release')
-          e=Image.open(root/'iphone-emerald-rosie-frame-blank-hollow.png').convert('RGB')
-          b=Image.open(root/'iphone-burgundy-rosie-frame-blank-hollow.png').convert('RGB')
+          e=Image.open(root/'iphone-emerald-rosie-frame-blank-hollow.png.png').convert('RGB')
+          b=Image.open(root/'iphone-burgundy-rosie-frame-blank-hollow.png.png').convert('RGB')
           # The transparent opening's left side, outside the white QR square.
           # These snapshots are cropped to the composition at 2x iPhone DPR.
           x,y=260,270
