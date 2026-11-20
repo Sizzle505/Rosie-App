@@ -70,6 +70,10 @@ try {
       assert.equal(newZenGeometry.verseItalic,"italic",label+" poem must use the literary italic font");
       assert.ok(Math.abs(newZenGeometry.wisdom.x+newZenGeometry.wisdom.width/2-width/2)<Math.max(32,width*.07),
         label+" The Way of the Shiba must be horizontally centered in the page");
+      if (width===1792 && height===856) {
+        assert.ok(newZenGeometry.wisdom.bottom <= height+6,
+          label+" Zen wisdom should finish within the initial wide-desktop screen: "+newZenGeometry.wisdom.bottom);
+      }
       assert.ok(newZenGeometry.wisdom.y >= boxes.garden.y+boxes.garden.height-10,
         label+" Zen wisdom must appear below Rosie's scenery");
       assert.ok(newZenGeometry.selector.y >= newZenGeometry.rosie.bottom-30,
