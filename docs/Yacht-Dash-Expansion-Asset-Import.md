@@ -1,30 +1,31 @@
-# Yacht Dash expansion - staged artwork
+# Yacht Dash expansion - art and playtesting
 
-The 39 approved image assets are archived in Dropbox:
+All **39 approved WebP assets are imported** under `public/yacht-dash/` on PR #190:
 
-`/Rosie-App-Transfer/Yacht-Dash-Approved-Expansion-Assets-20261119.zip`
+- 15 portrait backgrounds (five each for Typhoon Passage, Moonlight Regatta, The Emperor's Finale)
+- 20 transparent obstacle and rival sprites
+- 4 dedicated Captain Rosie victory screens
+- `public/yacht-dash/asset-manifest.json` lists each file and its verified SHA-256 checksum.
 
-This pack was generated from the approved November 19, 2026 art revisions, excluding rejected draft montages and generic Shiba victories. It contains:
+The import came from Dropbox `/Rosie-App-Transfer/Yacht-Dash-Approved-Expansion-Assets-20261119.zip`. The original ZIP had a zero-byte fishing-skiff placeholder. The skiff was restored from the approved transparent PNG master, separately staged as `/Rosie-App-Transfer/Yacht-Dash-Skiff-Master-20261119.png`. Its corrected size and checksum are in the GitHub manifest. The one-time import workflow has been removed.
 
-- **Sakura Strait**: preserve the original five `public/captain-levels/` paintings. New victory image only.
-- **Typhoon Passage**: five portrait 941×1672 paintings and storm obstacles.
-- **Moonlight Regatta**: five portrait 941×1672 paintings, regatta obstacles and multiple rival yacht poses.
-- **The Emperor's Finale**: five portrait paintings, combined hazards and the awards-podium victory illustration featuring the elderly Akita emperor and Captain Rosie.
-- **Victory screens**: four portrait paintings, including the latest revised Moonlight and Emperor scenes.
-- **Obstacles**: 20 transparent WebP sprites.
+## Current experience
 
-## Import
+Sakura Strait is the original complete 75-second game, with its existing five paintings, collectibles and movement. It is followed by three **independent** 75-second chapters:
 
-1. Download the ZIP from the Dropbox transfer folder above.
-2. Unzip **at the repository root**, preserving `public/yacht-dash/`; the ZIP also includes `asset-manifest.json` (39 entries, filenames and SHA-256 checksums).
-3. Commit `public/yacht-dash/` on this feature branch before merge. Do not replace existing `public/captain-levels/` paintings.
-4. Run `node --test src/yachtDashExpansion.test.js`, `npm run build`, then visually inspect chapter selection and 75-second gameplay on desktop and iPhone.
-5. Check stage unlocking after successful completion, missing-art fallbacks, collisions, rival passing, and the four victory illustrations.
+1. Typhoon Passage - storm wreckage, reef hazards, drifting debris, storm weather
+2. Moonlight Regatta - illuminated hazards, rival yachts and night scenery
+3. The Emperor's Finale - imperial harbor, mixed hazards and the emperor's awards ceremony
 
-The game code deliberately uses fallbacks to existing paintings and a generic buoy if a new asset is not yet in the repository. **Do not merge or deploy this branch as final until all binary art is imported and verified.**
+Each new chapter has five approved 941 × 1672 portrait paintings. Artwork loads from the repository, not from Dropbox at runtime.
 
-## Implementation principles
+**All four chapters are unlocked during playtesting** using `YACHT_PLAYTEST_ALL_LEVELS = true` in `src/yachtDashExpansion.js`. Local score records and up to three performance medals are tracked per chapter; locks may be re-enabled later by changing that one flag. The level picker has victory-art previews to inspect awards without first completing a voyage.
 
-Each chapter is a separate 75-second run with five scenic transitions. Sakura preserves original pickup mechanics; new stages introduce hazards, rival movement, risk/reward, and sequential unlocks. The Emperor's Finale is a new fourth chapter rather than a fifth scene of the Moonlight level.
+## QA
 
-No gameplay lane markings are baked into the paintings; the subtle CSS steering guidelines are reduced in intensity.
+- `node --test src/yachtDashExpansion.test.js src/yachtDashArt.test.js`
+- `npm run build`
+- Inspect desktop and iPhone layout, swipe/joystick/keyboard steering, level switching, hazards, animation smoothness and 75-second success/failure
+- Confirm medals, per-chapter best records, victory previews and no unexpected scroll
+- Confirm Sakura's five original paintings were not modified
+- Keep PR #190 in draft until visual gameplay QA is satisfactory; do not merge into production without release approval
