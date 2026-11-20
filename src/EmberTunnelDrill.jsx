@@ -273,6 +273,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
              if(event.type==="secret-found"){
                try{localStorage.setItem("rosieEmberRoyalBoneFound","1")}catch(_){}
                setRelicFound(true);
+               if(navigator.vibrate)navigator.vibrate([18,18,35]);
              }
            }
            if(event.type==="hit"||event.type==="shatter"){
@@ -291,8 +292,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           if(event.type==="hit"){
             if(navigator.vibrate)navigator.vibrate([34,20,34]);
           }
-          if((event.type==="pickup"||event.type==="hit")&&ts-lastSound.current>95){
-            playSound(sound.current,event.type==="hit"?"hit":"pickup");lastSound.current=ts;
+          if(["pickup","hit","break-wall","secret-found"].includes(event.type)&&ts-lastSound.current>95){
+            playSound(sound.current,event.type==="hit"?"hit":event.type==="break-wall"?"turbo":"pickup");lastSound.current=ts;
           }
         }
         if(ts-lastUi.current>115){
@@ -377,7 +378,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
         {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p><button type="button" onClick={togglePause}>RESUME DIG</button></div>}
         {mode!=="running"&&mode!=="paused"&&
-          <div className="ember-start-overlay">
+          <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
