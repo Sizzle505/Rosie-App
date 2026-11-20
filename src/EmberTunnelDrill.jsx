@@ -437,6 +437,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         }
         if(s.ended){
           modeRef.current="ended";setMode("ended");setHud(snapshot(s));
+          if(s.result==="complete")window.dispatchEvent(
+            new CustomEvent("rosieverse:music:scene",{detail:{scene:"tunnel",state:"victory",world:s.stageIndex}})
+          );
            const stage=getExpeditionStage(s.stageIndex);
            if(stage){
              const earned=expeditionStarCount(s);
