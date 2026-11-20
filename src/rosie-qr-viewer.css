@@ -123,9 +123,10 @@
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay,
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-backdrop {
-    background:var(--rosie-code-bg,#fff)!important;
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay {
+    /* Only the measured aperture path carries color; never paint the SVG's
+       rectangular bounds, which would obscure the print-page background. */
+    background:transparent!important;
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr,
