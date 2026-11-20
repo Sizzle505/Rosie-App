@@ -11,6 +11,9 @@ on:
       - src/rosieZenAudio.js
       - src/styles.css
       - tests/haiku-layout-visual.mjs
+      - tests/haiku-calculations-sandbox-visual.mjs
+      - src/LayoutPlayground.jsx
+      - src/LayoutPlayground.css
       - .github/workflows/haiku-layout-visual.yml
   workflow_dispatch:
 permissions:
@@ -40,6 +43,8 @@ jobs:
           exit 1
       - name: Confirm page geometry, scene switching and responsive layout
         run: node tests/haiku-layout-visual.mjs
+      - name: Verify interactive Haiku and Calculations layout sandbox
+        run: node tests/haiku-calculations-sandbox-visual.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
