@@ -17,7 +17,9 @@ export function startExpeditionBoss(s,center){
   s.boss=createBossEncounter(kind);
   s.bossY=center(s.scroll+BOSS_SCREEN_X);
   s.bossAttackHitCycle=-1;
-  s.charge=Math.max(s.charge,100); // First attack is always possible.
+  // A regular excavation boost must not auto-hit the boss during recovery.
+  s.boostTime=0;
+  s.charge=100; // Each timed strike must be explicitly initiated.
   s.events.push(...s.boss.events);
   return true;
 }
