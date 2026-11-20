@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./RosieHaikuScene.css";
 
 // Each garden is a full-page background; this component only places the
@@ -9,7 +9,6 @@ export const HAIKU_SCENES = Object.freeze([
   { id: "temple", label: "Temple", short: "Temple", src: "/rosieverse/haiku/temple-sunrise.webp" }
 ]);
 const ROSIE_MEDITATING = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
-const ROSIE_BREATHING = "/rosieverse/haiku/rosie-meditation-breathing.webp";
 const ROSIE_REACTIONS = Object.freeze({
   inspired: "/rosieverse/haiku/rosie-inspired.webp",
   triumphant: "/rosieverse/haiku/rosie-triumphant.webp",
@@ -52,21 +51,11 @@ export function readSelectedScene() {
 
 export default function RosieHaikuScene({ scene = "field", onSceneChange, mode = "daily", mood = "zen", poem, reaction = null }) {
   const [rosieAvailable, setRosieAvailable] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(
-    () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-  );
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return undefined;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
-    update();
-    media.addEventListener?.("change", update);
-    return () => media.removeEventListener?.("change", update);
-  }, []);
   const currentMood = mode === "daily" ? "zen" : (mode === "journal" ? poem?.mood || "zen" : mood);
   const basePose = poseForPoem(mode, currentMood, poem);
-  const characterSrc = (reaction && ROSIE_REACTIONS[reaction.type]) ||
-    (basePose === ROSIE_MEDITATING && !reducedMotion ? ROSIE_BREATHING : basePose);
+  // The animated WebP exhibited a black rectangle in some browsers.
+  // Use the proven alpha-transparent master and animate only its element.
+  const characterSrc = (reaction && ROSIE_REACTIONS[reaction.type]) || basePose;
   const caption = HAIKU_MESSAGES[currentMood] || HAIKU_MESSAGES.zen;
   function switchScene(next) {
     onSceneChange?.(next);
@@ -78,7 +67,7 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
       <div className={`haiku-scene-image haiku-scene-image--${scene}`}>
         {rosieAvailable && (
           <img
-            className={`haiku-scene-rosie${characterSrc === ROSIE_MEDITATING || characterSrc === ROSIE_BREATHING ? "" : " haiku-scene-rosie--expressive"}`}
+            className={`haiku-scene-rosie${characterSrc === ROSIE_MEDITATING ? " haiku-scene-rosie--slow-breath" : " haiku-scene-rosie--expressive"}`}
             key={characterSrc}
             src={characterSrc}
             onError={(event) => {
@@ -86,7 +75,7 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
                 event.currentTarget.src = ROSIE_MEDITATING;
               } else setRosieAvailable(false);
             }}
-            alt={characterSrc === ROSIE_MEDITATING || characterSrc === ROSIE_BREATHING
+            alt={characterSrc === ROSIE_MEDITATING
               ? "Rosie, the black-and-tan Shiba Inu, meditates in her sakura kimono with both paws raised"
               : "Rosie strikes a playful poetic pose in her pink-and-gold kimono"}
           />
