@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
-import RosieHaikuScene from "./RosieHaikuScene.jsx";
+import RosieHaikuScene, { readSelectedScene } from "./RosieHaikuScene.jsx";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -36,57 +36,78 @@ function loadImage(src) {
     image.src = src;
   });
 }
-async function renderPostcard(poem) {
+const HAIKU_POSTCARD_SCENES = {
+  field: "/rosieverse/haiku/field-sunrise.webp",
+  zen: "/rosieverse/haiku/zen-sunrise.webp",
+  temple: "/rosieverse/haiku/temple-sunrise.webp"
+};
+const HAIKU_POSTCARD_ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
+const HAIKU_POSTCARD_SCROLL = "/rosieverse/haiku/haiku-scroll-isolated.png";
+function drawImageCover(ctx, image, targetWidth, targetHeight) {
+  const scale = Math.max(targetWidth / image.width, targetHeight / image.height);
+  const sourceWidth = targetWidth / scale;
+  const sourceHeight = targetHeight / scale;
+  ctx.drawImage(image, (image.width - sourceWidth) / 2, (image.height - sourceHeight) / 2, sourceWidth, sourceHeight, 0, 0, targetWidth, targetHeight);
+}
+async function renderPostcard(poem, sceneId = "field") {
   const canvas = document.createElement("canvas");
   canvas.width = 1200;
   canvas.height = 1600;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas unavailable");
+
   const gradient = ctx.createLinearGradient(0, 0, 0, 1600);
-  gradient.addColorStop(0, "#374152");
-  gradient.addColorStop(0.5, "#875e65");
-  gradient.addColorStop(1, "#392934");
+  gradient.addColorStop(0, "#eda0a7");
+  gradient.addColorStop(.45, "#b97f80");
+  gradient.addColorStop(1, "#433047");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 1200, 1600);
-  try {
-    const image = await loadImage(HERO);
-    const scale = Math.max(1200 / image.width, 1600 / image.height);
-    const cropW = 1200 / scale;
-    const cropH = 1600 / scale;
-    ctx.drawImage(image, (image.width - cropW) / 2, (image.height - cropH) / 2, cropW, cropH, 0, 0, 1200, 1600);
-  } catch { /* A beautifully rendered offline postcard is still possible. */ }
-  ctx.fillStyle = "rgba(26, 21, 32, .23)";
-  ctx.fillRect(0, 0, 1200, 1600);
-  ctx.fillStyle = "rgba(252, 243, 219, .94)";
-  ctx.fillRect(96, 320, 1008, 955);
-  ctx.strokeStyle = "#967044";
-  ctx.lineWidth = 5;
-  ctx.strokeRect(112, 336, 976, 923);
-  ctx.strokeStyle = "rgba(151,111,64,.5)";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(127, 351, 946, 893);
-  ctx.textAlign = "center";
-  ctx.fillStyle = "#7e4d40";
-  ctx.font = "600 24px Georgia, serif";
-  ctx.fillText("ROSIE'S HAIKU GARDEN", 600, 425);
-  ctx.fillStyle = "#aa8052";
-  ctx.font = "38px Georgia, serif";
-  ctx.fillText("✦", 600, 499);
-  ctx.fillStyle = "#44342d";
-  ctx.font = "500 47px Georgia, serif";
-  let lineTop = 660;
-  for (const line of poem.lines) {
-    lineTop += paintCenteredText(ctx, line, 600, lineTop, 850, 68) + 46;
+  const background = HAIKU_POSTCARD_SCENES[sceneId] || HAIKU_POSTCARD_SCENES.field;
+  try { drawImageCover(ctx, await loadImage(background), 1200, 1600); }
+  catch {
+    try { drawImageCover(ctx, await loadImage(HERO), 1200, 1600); }
+    catch { /* preserve the sunset gradient offline */ }
   }
-  ctx.fillStyle = "#785745";
-  ctx.font = "italic 32px Georgia, serif";
-  paintCenteredText(ctx, clip(poem.title, 100), 600, 1110, 840, 45);
-  ctx.fillStyle = "#7d5949";
-  ctx.font = "bold 55px Georgia, serif";
-  ctx.fillText("◈", 600, 1195);
-  ctx.fillStyle = "#fff7e8";
-  ctx.font = "bold 38px Georgia, serif";
-  ctx.fillText("A LITTLE WISDOM FROM ROSIE", 600, 1430);
+  ctx.fillStyle = "rgba(29, 23, 39, .2)";
+  ctx.fillRect(0, 0, 1200, 1600);
+
+  // Both the photographically rich background and Rosie are individually placed.
+  // Only the poem words are generated dynamically; none are baked into the asset.
+  try {
+    const rosie = await loadImage(HAIKU_POSTCARD_ROSIE);
+    const height = 790;
+    const width = height * (rosie.width / rosie.height);
+    ctx.drawImage(rosie, 1200 - width - 35, -40, width, height);
+  } catch { /* keep the selected scenery if Rosie fails to load */ }
+
+  let hasArtScroll = false;
+  try {
+    ctx.drawImage(await loadImage(HAIKU_POSTCARD_SCROLL), 95, 530, 1010, 1053);
+    hasArtScroll = true;
+  } catch {
+    ctx.fillStyle = "#fff1dc";
+    ctx.fillRect(130, 640, 940, 805);
+    ctx.strokeStyle = "#aa7958";
+    ctx.lineWidth = 8;
+    ctx.strokeRect(140, 650, 920, 785);
+  }
+  ctx.textAlign = "center";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#6c413b";
+  ctx.font = "600 24px Georgia, serif";
+  ctx.fillText("ROSIE'S HAIKU GARDEN", 600, hasArtScroll ? 849 : 765);
+  ctx.fillStyle = "#493330";
+  ctx.font = "500 43px Georgia, serif";
+  let nextY = hasArtScroll ? 947 : 855;
+  for (const line of poem.lines) {
+    const advance = paintCenteredText(ctx, line, 600, nextY, 750, 57);
+    nextY += Math.max(73, advance + 24);
+  }
+  ctx.fillStyle = "#966b55";
+  ctx.font = "italic 29px Georgia, serif";
+  paintCenteredText(ctx, clip(poem.title, 100), 600, hasArtScroll ? 1285 : 1190, 760, 38);
+  ctx.font = "italic 36px Georgia, serif";
+  ctx.fillText("Rosie  ✿", 600, hasArtScroll ? 1392 : 1305);
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
   if (!blob) throw new Error("Unable to create PNG");
   return blob;
@@ -105,6 +126,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [today, setToday] = useState(() => poemForDay());
   const [poem, setPoem] = useState(() => poemForDay());
   const [mode, setMode] = useState("daily");
+  const [scene, setScene] = useState(readSelectedScene);
   const [mood, setMood] = useState("zen");
   const [topic, setTopic] = useState("");
   const [variation, setVariation] = useState(0);
@@ -159,7 +181,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     if (working) return;
     setWorking(true);
     try {
-      const blob = await renderPostcard(poem);
+      const blob = await renderPostcard(poem, scene);
       const file = new File([blob], "rosie-haiku.png", { type: "image/png" });
       if (navigator.canShare?.({ files: [file] }) && navigator.share) {
         try { await navigator.share({ files: [file], title: "Rosie's Haiku Garden" }); }
@@ -187,7 +209,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
           <div className="haiku-heading"><div className="haiku-overline">THE LITTLE BOOK OF ROSIE</div><h1>Rosie's Haiku Garden</h1><p>Small poems. Grand opinions.</p></div>
           <div className="haiku-header-mark" aria-hidden="true">✿</div>
         </header>
-        <RosieHaikuScene />
+        <RosieHaikuScene scene={scene} onSceneChange={setScene} />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll" key={poemKey(poem)}>
