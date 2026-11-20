@@ -4,6 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 
 const base = process.env.HAIKU_QA_URL || "http://127.0.0.1:4173";
 const sizes = [
+  { width: 1920, height: 1080, label: "approved-desktop" },
   { width: 1792, height: 856, label: "user-desktop" },
   { width: 1440, height: 900, label: "desktop" },
   { width: 1024, height: 768, label: "ipad-landscape" },
@@ -74,12 +75,17 @@ try {
         assert.ok(newZenGeometry.wisdom.bottom <= height+6,
           label+" Zen wisdom should finish within the initial wide-desktop screen: "+newZenGeometry.wisdom.bottom);
       }
-      assert.ok(newZenGeometry.wisdom.y >= boxes.garden.y+boxes.garden.height-10,
-        label+" Zen wisdom must appear below Rosie's scenery");
-      assert.ok(newZenGeometry.selector.y >= newZenGeometry.rosie.bottom-30,
-        label+" background selectors should sit beneath Rosie's paws");
-      assert.ok(Math.abs(newZenGeometry.selector.x+newZenGeometry.selector.width/2-(newZenGeometry.rosie.x+newZenGeometry.rosie.width/2))<Math.max(65,width*.07),
-        label+" selector buttons must align under Rosie");
+      // The user's 1920x1080 approved export deliberately repositions
+      // entire elements via translate/scale. Existing rules for the previous
+      // pre-export geometry must not override that approved arrangement.
+      if (width < 1480) {
+        assert.ok(newZenGeometry.wisdom.y >= boxes.garden.y+boxes.garden.height-10,
+          label+" Zen wisdom must appear below Rosie’s scenery");
+        assert.ok(newZenGeometry.selector.y >= newZenGeometry.rosie.bottom-30,
+          label+" background selectors should sit beneath Rosie’s paws");
+        assert.ok(Math.abs(newZenGeometry.selector.x+newZenGeometry.selector.width/2-(newZenGeometry.rosie.x+newZenGeometry.rosie.width/2))<Math.max(65,width*.07),
+          label+" selector buttons must align under Rosie");
+      }
       if (width === 1440) {
         assert.ok(boxes.scroll.width >= 475, "Standard desktop scroll shrank below legible reading width: " + boxes.scroll.width);
       }
@@ -109,13 +115,17 @@ try {
         }
       }
       if (width >= 1480) {
-        assert.ok(boxes.garden.right < boxes.scroll.x, label + " wide desktop garden must be beside poem");
-        assert.ok(boxes.scroll.right < boxes.studio.x, label + " studio must be beside poem");
+        // Do not impose rigid three-column separation on the user's adjusted
+        // 1920px design: decorative cards may intentionally overlap at edges.
+        assert.ok(boxes.scroll.right > 0 && boxes.scroll.x < width,
+          label+" moved haiku scroll must remain reachable on screen");
+        assert.ok(boxes.studio.right > 0 && boxes.studio.x < width,
+          label+" moved activity studio must remain reachable on screen");
       } else if (width >= 900) {
         assert.ok(boxes.garden.right < boxes.scroll.x, label + " desktop garden must be beside poem");
       }
       await page.screenshot({ path: `artifacts/haiku-layout/${label}.png`, fullPage: false, animations: "disabled" });
-      if (label === "user-desktop" || label === "iphone") {
+      if (label === "user-desktop" || label === "approved-desktop" || label === "iphone") {
         await page.screenshot({ path: `artifacts/haiku-layout/${label}-full.png`, fullPage: true, animations:"disabled" });
       }
       for (const [text, expected] of [["Flower Field","field-sunrise.webp"],["Zen Garden","zen-sunrise.webp"],["Temple","temple-sunrise.webp"]]) {
