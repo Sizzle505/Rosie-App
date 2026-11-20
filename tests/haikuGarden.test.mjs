@@ -50,11 +50,20 @@ test("unknown subjects remain visible as dedications, with safe length and varia
   assert.ok(formatHaiku(first).includes(first.lines.join("\n")));
 });
 
-test("the five production art files ship with the branch and have valid image headers", () => {
+test("all integrated Haiku Garden art files ship with valid image headers", () => {
   const artDir = resolve(dirname(fileURLToPath(import.meta.url)), "../public/rosieverse/haiku");
   for (const asset of [
     "field-sunrise.webp", "zen-sunrise.webp", "temple-sunrise.webp",
-    "rosie-meditating-paws-up.webp", "haiku-scroll-isolated.png"
+    "rosie-meditating-paws-up.webp", "haiku-scroll-isolated.png",
+    "scroll-grand.webp", "scroll-mobile.webp", "lantern.webp",
+    "sakura-canopy.webp", "garden-atmosphere.webp", "garden-ui-sheet.webp",
+    "calligraphy-desk.webp", "inkstone-set.webp", "brushstroke-sprites.webp",
+    "enlightenment-transition.webp",
+    "rosie-contemplative.webp", "rosie-calligrapher.webp",
+    "rosie-smug.webp", "rosie-affectionate.webp", "rosie-existential.webp",
+    "rosie-indignant.webp", "rosie-inspired.webp", "rosie-triumphant.webp",
+    "rosie-bestowing-wisdom.webp", "rosie-meditating-animation.webp",
+    "rosie-meditation-frames.webp", "rosie-meditation-breathing.webp"
   ]) {
     const path = resolve(artDir, asset);
     assert.ok(statSync(path).size > 100_000, asset + " must be genuine full-resolution art");
