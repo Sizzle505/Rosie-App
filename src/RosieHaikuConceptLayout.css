@@ -367,8 +367,8 @@
   .haiku-page .haiku-scene-rosie--slow-breath{
     left:25%;
     max-width:70%;
-    height:109%;
-    bottom:-8%;
+    height:101%;
+    bottom:-3%;
   }
   .haiku-page .haiku-scene-stage .haiku-scene-selector{
     width:min(100%,630px);
@@ -451,4 +451,45 @@
 }
 @media(prefers-reduced-motion:reduce){
   .haiku-page .haiku-tabs > button img{transition:none;transform:none;}
+}
+
+/* Conventional desktop also receives the reference's three aligned zones.
+   Keep 1024px iPad landscape in two columns, and iPad portrait/phone stacked. */
+@media(min-width:1360px) and (max-width:1479px){
+  .haiku-page .haiku-shell{
+    display:grid;
+    grid-template-columns:minmax(0,.94fr) minmax(0,1.17fr) minmax(0,1.03fr);
+    column-gap:16px;
+    row-gap:14px;
+    width:min(100%,1370px);
+    max-width:1370px;
+    align-items:start;
+  }
+  .haiku-page .haiku-header{grid-column:1 / -1;grid-row:1;}
+  .haiku-page .haiku-scene-stage{
+    grid-column:1;
+    grid-row:2;
+    width:100%;
+    min-width:0;
+  }
+  .haiku-page .haiku-content{display:contents;}
+  .haiku-page .haiku-scroll-column{
+    grid-column:2;
+    grid-row:2;
+    min-width:0;
+    width:100%;
+  }
+  .haiku-page .haiku-workbench{
+    grid-column:3;
+    grid-row:2;
+    width:100%;
+  }
+  .haiku-page .haiku-scroll{width:min(100%,520px);}
+  .haiku-page .haiku-scene-image{height:clamp(385px,36vw,455px);}
+  .haiku-page .haiku-tabs > button{min-height:115px;}
+  .haiku-page .haiku-tabs > button img{width:72px;height:72px;}
+  .haiku-page .zen-panel .zen-program-emblem{
+    width:69px;height:69px;flex-basis:69px;
+  }
+  .haiku-page .zen-panel .zen-program{min-height:99px;}
 }
