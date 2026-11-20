@@ -96,7 +96,7 @@ The Clockwork, Molten and Treasury challenge routes now culminate in playable bo
 
 - The boss spawns approximately 8.5 seconds after a route begins. The world scroll then stops; normal cave pickup/formation collisions are suspended for the arena.
 - Every boss cycles between clearly drawn, distinct **warning**, **active**, and **recovery** phases. Warning geometry matches the active damage zone.
-- Rosie's auger must align with the boss within a forgiving attack range. **Only Turbo during a recovery phase damages the boss**, once per recovery opening. Turbo charge is refreshed at recovery, so the fight is winnable without farming pickups.
+- Rosie's auger must align vertically with the guardian; the horizontal Turbo reach permits up- or down-angled strikes. **Only Turbo during a recovery phase damages the boss**, once per recovery opening. Boss Turbo now lasts 0.72 seconds rather than the Classic 4.8-second shield, so one activation cannot auto-hit successive openings. Charge is refreshed at each recovery and any tunnel Turbo is cleared at arena entry.
 - Boss attacks damage Rosie's hull at most once per cycle, respecting existing damage cooldown. Turbo shields the drill during attacks.
 - Defeating the boss gives its unique reward and finishes the stage. Hull failure and timer expiry **do not** count as victories or grant completion stars.
 - Both boss characters and impact markings are rendered procedurally for now, using separate Canvas routines, **not** the pending generated art and **not** the rejected victory screens.
@@ -104,3 +104,10 @@ The Clockwork, Molten and Treasury challenge routes now culminate in playable bo
 - Playwright QA now verifies the persistent Clockwork warning event and independently launches the Molten stage to confirm Cinderclaw's health and phase become visible.
 
 **Remaining work:** production sprite import, device art review, precise hitbox art-registration, additional bosses' animations and tuning, audio, individual world transitions, and the postponed style-correct victory scenes.
+
+## QA stabilization update
+
+- Browser diagnostics isolated the prior Molten boss smoke timeout to **slow headless animation pacing**: a 25-second wall-clock wait advanced only approximately eight seconds of simulation, just short of the 8.5-second boss spawn. The app was active, hull intact, and no JavaScript crash occurred.
+- The smoke timeout now allows 65 seconds of wall-clock while still requiring a real boss spawn with full health. Diagnostic state is retained for any further failure; the test never fakes boss state.
+- Added a fourth **iPad WebKit 1024×768 touch viewport** and layout overflow checks alongside desktop Chromium, mobile Chromium and mobile WebKit.
+- Stage progress now fills to 100% upon early boss victory. Unit tests ensure a single Turbo activation does not automatically damage the boss in later recovery windows.
