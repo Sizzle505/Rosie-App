@@ -1737,8 +1737,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
   const [message, setMessage] = useState("Captain Rosie is on the bridge. The coastal passage is clear and the treats are somewhere ahead.");
   const [best, setBest] = useState(() => {
-    const value = Number(localStorage.getItem("captainRosieBest") || 0);
-    return Number.isFinite(value) ? value : 0;
+    try {
+      const value = Number(localStorage.getItem("captainRosieBest") || 0);
+      return Number.isFinite(value) ? value : 0;
+    } catch { return 0; }
   });
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
@@ -2306,12 +2308,12 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
   useEffect(() => {
     if (running || !ended) return;
-    setBest((current) => {
-      const next = Math.max(current, score);
-      localStorage.setItem("captainRosieBest", String(next));
-      return next;
-    });
+    setBest((current) => Math.max(current, score));
   }, [running, ended, score]);
+
+  useEffect(() => {
+    try { localStorage.setItem("captainRosieBest", String(best)); } catch {}
+  }, [best]);
 
   return (
     <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
