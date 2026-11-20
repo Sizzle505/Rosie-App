@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { createPortal } from "react-dom";
 import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
@@ -1724,6 +1725,18 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   });
   const [completed, setCompleted] = useState(false);
   const [showVictoryArt, setShowVictoryArt] = useState(false);
+  useEffect(() => {
+    if (!showVictoryArt) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopImmediatePropagation?.();
+        setShowVictoryArt(false);
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape, true);
+    return () => document.removeEventListener("keydown", closeOnEscape, true);
+  }, [showVictoryArt]);
   const [nearMisses, setNearMisses] = useState(0);
   const [rivalsPassed, setRivalsPassed] = useState(0);
   const [suppliesCollected, setSuppliesCollected] = useState(0);
@@ -2602,18 +2615,29 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               )}
             </div>
           )}
-          {!running && showVictoryArt && (
-            <div className="yacht-victory-overlay" role="dialog" aria-label={chapter.name + " victory"}>
-              <img src={chapter.victory} alt={chapter.name + " victory - Captain Rosie receives her award"}
+        </div>
+        {!running && showVictoryArt && createPortal(
+          <div className="yacht-victory-overlay" role="dialog" aria-modal="true"
+            aria-label={chapter.name + " victory artwork"}>
+            <div className="yacht-victory-backdrop" aria-hidden="true"
+              style={{ backgroundImage: `url("${chapter.victory}")` }} />
+            <div className="yacht-victory-content">
+              <img className="yacht-victory-art" src={chapter.victory}
+                alt={chapter.name + " victory - Captain Rosie receives her award"}
                 onError={() => setShowVictoryArt(false)} />
               <div className="yacht-victory-actions">
-                <button type="button" onClick={() => setShowVictoryArt(false)}>{ended ? "VIEW CAPTAIN'S LOG" : "BACK TO LEVELS"}</button>
-                {chapterIndex < YACHT_CHAPTERS.length - 1 && (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) &&
+                <button type="button" onClick={() => setShowVictoryArt(false)}>
+                  {ended ? "VIEW CAPTAIN'S LOG" : "BACK TO LEVELS"}
+                </button>
+                {chapterIndex < YACHT_CHAPTERS.length - 1 &&
+                  (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) &&
                   <button type="button" onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
               </div>
             </div>
-          )}
-        </div>
+          </div>,
+          document.fullscreenElement?.classList?.contains("captain-fs-yacht")
+            ? document.fullscreenElement : document.body
+        )}
 
         <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
           onContextMenu={(event) => event.preventDefault()}
