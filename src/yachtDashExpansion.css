@@ -709,3 +709,33 @@
     padding-bottom:18px!important;
   }
 }
+
+
+/* New-chapter debris is borne on the waves, not bobbing as an airborne pickup.
+   A restrained water-contact ring anchors each physical obstacle or rival. */
+.captain-game-page .sea-pickup.yacht-upstream-object {
+  animation:none!important;
+  margin-top:0!important;
+}
+.captain-game-page .sea-pickup.yacht-upstream-object:is(.sea-pickup-obstacle,.sea-pickup-rival)::before {
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:50%;bottom:3%;
+  width:73%;height:15%;
+  transform:translateX(-50%);
+  border:1px solid rgba(215,246,237,.36);
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,
+    rgba(214,250,242,.20) 0 18%,
+    rgba(160,230,221,.12) 40%,
+    transparent 74%);
+  box-shadow:0 0 9px rgba(195,240,233,.10);
+  pointer-events:none;
+}
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-footprint-arch::before{
+  display:none;
+}
+.captain-game-page .sea-pickup.yacht-upstream-object .yacht-hazard-art{
+  position:relative;z-index:1;
+}
