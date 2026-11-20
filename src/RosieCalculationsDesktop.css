@@ -292,21 +292,21 @@
    Pure positional offsets preserve the approved card dimensions, hit areas,
    spacing, footer and active-tool layout. iPad and iPhone are unchanged. */
 @media screen and (min-width:1200px){
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tools-heading{
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tools-heading{
     position:relative!important;
     top:-15px!important;
   }
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-grid{
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-grid{
     position:relative!important;
     top:-25px!important;
   }
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-card--tip,
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-card--split{
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-card--tip,
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-card--split{
     position:relative!important;
     left:10px!important;
   }
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-card--date,
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-card--loan{
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-card--date,
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-card--loan{
     position:relative!important;
     left:-10px!important;
   }
