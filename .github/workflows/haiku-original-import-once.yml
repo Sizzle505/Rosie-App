@@ -1,8 +1,10 @@
 name: Haiku Original Art Import - One Time
 on:
-  push:
+  pull_request:
     branches:
-      - feature/rosie-haiku-garden
+      - main
+    types:
+      - synchronize
 permissions:
   contents: write
 jobs:
