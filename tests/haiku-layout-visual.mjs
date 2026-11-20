@@ -19,6 +19,7 @@ try {
     try {
       await page.goto(base + "/#haiku", { waitUntil: "domcontentloaded", timeout: 60000 });
       await page.locator(".haiku-scene-image").waitFor({ state: "visible", timeout: 20000 });
+      assert.equal(await page.locator(".haiku-heading h1").innerText(),"Haiku Zen Garden");
       await page.locator(".haiku-scroll").waitFor({ state: "visible", timeout: 20000 });
       await page.locator(".haiku-workbench").waitFor({ state: "visible", timeout: 20000 });
       // The site intentionally shows a 950ms intro plus a 600ms fade. Never
@@ -116,6 +117,8 @@ try {
       );
       // Meditation is an actual timed session, not a decorative mockup.
       await page.getByRole("button",{name:"Meditate",exact:true}).click();
+      assert.ok(await page.getByRole("button",{name:"Haiku Reflection"}).isVisible(),
+        label+" should have a poem-led meditation program");
       await page.getByRole("button",{name:"Silence",exact:true}).click();
       await page.getByRole("button",{name:"Begin 5-minute meditation",exact:true}).click();
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
