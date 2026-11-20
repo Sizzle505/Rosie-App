@@ -762,3 +762,31 @@
     translate: -4px 57px;
   }
 }
+
+
+/* Finished journal illustrations: a closed volume for the empty journal
+   and an open book for saved poetry. Neither covers the selectable entries. */
+.haiku-page .haiku-journal-art {
+  display:block;
+  max-width:100%;
+  width:auto;
+  height:auto;
+  margin:0 auto 12px;
+  object-fit:contain;
+  filter:drop-shadow(0 6px 13px rgba(13,8,19,.34));
+  pointer-events:none;
+}
+.haiku-page .haiku-journal-art--closed {
+  max-height:clamp(115px,13vw,172px);
+}
+.haiku-page .haiku-journal-art--open {
+  max-height:clamp(116px,12vw,158px);
+}
+.haiku-page .haiku-journal-list{
+  position:relative;
+  z-index:1;
+}
+@media(max-width:600px){
+  .haiku-page .haiku-journal-art--closed {max-height:145px;}
+  .haiku-page .haiku-journal-art--open {max-height:125px;}
+}
