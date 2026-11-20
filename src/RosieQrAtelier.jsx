@@ -9,40 +9,21 @@ import "./rosie-qr-viewer.css";
 
 const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
-// Some original frame WebPs have opaque matte pixels in the opening.
-// Cut a real transparent aperture from each frame before composing the
-// finish underneath and the scannable white square on top.
-// Aperture contours come from the original assets' central openings.
+// Viewer uses four cleaned alpha-hollow WebPs. No browser-side frame masks.
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 // Curious Rosie's original title sits 155 artwork pixels above her lowest
 // gold frame flourish. Apply that SAME rise to every frame's measured bottom tip.
 const ROSIE_TITLE_RISE=155;
-// One shared, enlarged aperture governs BOTH the jewel material and the
-// negative-space cutout. Never fake transparency by painting above frame art.
+// Enlarge the colored material only, not the hole in the frame.
 const ROSIE_APERTURE_SCALE=1.1;
-const ROSIE_APERTURE_EDGE=6;
-function rosieHoleTransform(frame){
+function rosieMaterialTransform(frame){
   return 'translate('+frame.cx+' '+frame.cy+') scale('+ROSIE_APERTURE_SCALE+') translate('+(-frame.cx)+' '+(-frame.cy)+')';
 }
-function cutRosieFrame(ctx,frame){
-  // Operates on the isolated frame canvas ONLY, never the underlying finish.
-  const path=new Path2D(frame.openingPath);
-  ctx.save();
-  ctx.globalCompositeOperation='destination-out';
-  ctx.translate(frame.cx,frame.cy);
-  ctx.scale(ROSIE_APERTURE_SCALE,ROSIE_APERTURE_SCALE);
-  ctx.translate(-frame.cx,-frame.cy);
-  ctx.fill(path);
-  ctx.lineWidth=ROSIE_APERTURE_EDGE;
-  ctx.lineJoin='round';
-  ctx.stroke(path);
-  ctx.restore();
-}
 const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,bottomX:912,bottomY:1014,titleWidth:540,openingPath:"M886,229 849,242 801,271 765,305 733,351 714,393 700,450 698,516 704,556 715,591 744,633 780,669 820,697 862,716 909,727 929,724 939,710 944,712 953,725 958,724 961,727 993,723 1046,705 1089,680 1131,643 1160,605 1174,572 1183,526 1184,468 1178,428 1163,380 1142,339 1117,305 1073,265 1033,242 1000,231 993,236 983,234 976,244 970,245 968,255 959,259 943,276 929,258 924,258 918,253 917,245 905,234 896,236Z"},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,bottomX:967,bottomY:1002,titleWidth:540,openingPath:"M882,252 836,271 795,299 766,333 737,384 723,424 714,476 714,524 723,576 737,616 756,648 770,659 771,665 798,691 842,722 890,744 936,755 987,756 1023,749 1076,727 1110,705 1148,671 1154,659 1162,654 1181,628 1201,576 1210,524 1210,476 1201,424 1187,384 1158,333 1129,299 1106,279 1102,279 1088,268 1049,253 1036,252 1028,259 1011,259 1002,264 995,274 990,274 971,293 932,259 917,259 902,250Z"},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,bottomX:782,bottomY:1074,titleWidth:525,openingPath:"M803,236 750,245 708,259 662,284 630,309 610,329 577,373 552,425 538,487 537,511 541,517 538,523 538,542 549,592 564,630 581,660 606,691 644,728 663,743 703,767 747,785 798,795 848,795 899,785 962,758 1007,726 1060,670 1084,628 1101,581 1108,545 1108,523 1104,519 1108,513 1108,488 1094,425 1075,382 1042,333 1006,298 978,277 946,260 911,247 855,237Z"},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,bottomX:724,bottomY:1075,titleWidth:555,openingPath:"M656,258 607,275 571,296 545,317 510,357 489,408 479,454 477,520 483,561 499,612 522,656 546,688 590,728 630,751 671,765 712,769 724,755 736,769 773,765 814,751 862,722 904,681 931,641 950,599 964,545 967,472 961,431 950,393 934,358 894,313 853,283 802,261 786,257 776,262 765,259 759,267 752,268 752,275 742,281 742,285 723,302 714,290 706,285 706,281 696,275 696,268 690,267 683,259 671,262 664,257Z"}
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated-hollow.webp",cx:941,cy:492,bottomX:912,bottomY:1014,titleWidth:540,openingPath:"M886,229 849,242 801,271 765,305 733,351 714,393 700,450 698,516 704,556 715,591 744,633 780,669 820,697 862,716 909,727 929,724 939,710 944,712 953,725 958,724 961,727 993,723 1046,705 1089,680 1131,643 1160,605 1174,572 1183,526 1184,468 1178,428 1163,380 1142,339 1117,305 1073,265 1033,242 1000,231 993,236 983,234 976,244 970,245 968,255 959,259 943,276 929,258 924,258 918,253 917,245 905,234 896,236Z"},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting-hollow.webp",cx:962,cy:500,bottomX:967,bottomY:1002,titleWidth:540,openingPath:"M882,252 836,271 795,299 766,333 737,384 723,424 714,476 714,524 723,576 737,616 756,648 770,659 771,665 798,691 842,722 890,744 936,755 987,756 1023,749 1076,727 1110,705 1148,671 1154,659 1162,654 1181,628 1201,576 1210,524 1210,476 1201,424 1187,384 1158,333 1129,299 1106,279 1102,279 1088,268 1049,253 1036,252 1028,259 1011,259 1002,264 995,274 990,274 971,293 932,259 917,259 902,250Z"},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking-hollow.webp",cx:829,cy:531,codeSize:376,bottomX:782,bottomY:1074,titleWidth:525,openingPath:"M803,236 750,245 708,259 662,284 630,309 610,329 577,373 552,425 538,487 537,511 541,517 538,523 538,542 549,592 564,630 581,660 606,691 644,728 663,743 703,767 747,785 798,795 848,795 899,785 962,758 1007,726 1060,670 1084,628 1101,581 1108,545 1108,523 1104,519 1108,513 1108,488 1094,425 1075,382 1042,333 1006,298 978,277 946,260 911,247 855,237Z"},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank-hollow.webp",cx:722,cy:496,bottomX:724,bottomY:1075,titleWidth:555,openingPath:"M656,258 607,275 571,296 545,317 510,357 489,408 479,454 477,520 483,561 499,612 522,656 546,688 590,728 630,751 671,765 712,769 724,755 736,769 773,765 814,751 862,722 904,681 931,641 950,599 964,545 967,472 961,431 950,393 934,358 894,313 853,283 802,261 786,257 776,262 765,259 759,267 752,268 752,275 742,281 742,285 723,302 714,290 706,285 706,281 696,275 696,268 690,267 683,259 671,262 664,257Z"}
 ].map(frame=>({...frame,titleX:frame.bottomX,titleY:frame.bottomY-ROSIE_TITLE_RISE}));
 function rosieFrameStyle(frame){
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
@@ -86,7 +67,7 @@ function rosieFrameMaterialSVG(frame,finishId){
   const bands=material.bands.map((color,i)=>
     '<stop offset="'+(i/(material.bands.length-1)*100).toFixed(2)+'%" stop-color="'+color+'"/>'
   ).join("");
-  const transform=rosieHoleTransform(frame);
+  const transform=rosieMaterialTransform(frame);
   const path=frame.openingPath;
   return '<svg xmlns="http://www.w3.org/2000/svg" width="'+ROSIE_ART_W+'" height="'+ROSIE_ART_H+'" viewBox="0 0 '+ROSIE_ART_W+' '+ROSIE_ART_H+'" aria-hidden="true">'+
     '<defs>'+
@@ -112,7 +93,7 @@ function rosieFrameMaterialSVG(frame,finishId){
       '</radialGradient>'+
     '</defs>'+
     '<g transform="'+transform+'">'+
-      '<path d="'+path+'" fill="url(#material)" stroke="url(#material)" stroke-width="'+ROSIE_APERTURE_EDGE+'" stroke-linejoin="round"/>'+
+      '<path d="'+path+'" fill="url(#material)" stroke="url(#material)" stroke-width="6" stroke-linejoin="round"/>'+
       '<path d="'+path+'" fill="url(#jewelLight)"/>'+
       '<path d="'+path+'" fill="url(#polishedSheen)"/>'+
       '<path d="'+path+'" fill="url(#jewelDepth)"/>'+
@@ -182,17 +163,10 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   ]);
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // Three physical layers: gem material, actually transparent frame, white QR.
-  // Remove matte pixels ONLY from a separate copy of the frame, so the selected
-  // finish can show through the enlarged oval without obscuring the gold trim.
-  const hollowFrame=document.createElement('canvas');
-  hollowFrame.width=ROSIE_ART_W*2;hollowFrame.height=ROSIE_ART_H*2;
-  const frameCtx=hollowFrame.getContext('2d');
-  frameCtx.scale(2,2);
-  frameCtx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
-  cutRosieFrame(frameCtx,frame);
+  // Identical three-layer composition in the viewer and exported PNG.
+  // The frame file itself is truly transparent in its opening.
   ctx.drawImage(material,0,0,ROSIE_ART_W,ROSIE_ART_H);
-  ctx.drawImage(hollowFrame,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   // Match the live/main-page QR inset: gold outer keyline, ivory inner edge,
   // then the white scannable QR square.
   ctx.fillStyle="#b17e36";
@@ -217,23 +191,10 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   return canvasBlob(canvas);
 }
 function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish="emerald",printOnly=false}){
-  const maskId=React.useId().replace(/:/g,'');
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={rosieFrameStyle(frame)}>
     <div className="qa-rosie-insert-underlay" aria-hidden="true"
       dangerouslySetInnerHTML={{__html:rosieFrameMaterialSVG(frame,finish)}}/>
-    <svg className="qa-rosie-overlay-art" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
-      preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <defs>
-        <mask id={maskId} maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"
-          x="0" y="0" width={ROSIE_ART_W} height={ROSIE_ART_H} style={{maskType:"luminance"}}>
-          <rect x="0" y="0" width={ROSIE_ART_W} height={ROSIE_ART_H} fill="#fff"/>
-          <path d={frame.openingPath} transform={rosieHoleTransform(frame)}
-            fill="#000" stroke="#000" strokeWidth={ROSIE_APERTURE_EDGE} strokeLinejoin="round"/>
-        </mask>
-      </defs>
-      <image href={ROSIE_ASSET_ROOT+frame.file} x="0" y="0" width={ROSIE_ART_W}
-        height={ROSIE_ART_H} preserveAspectRatio="none" mask={"url(#"+maskId+")"}/>
-    </svg>
+    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
       aria-label="Close QR preview and return to the Atelier" title="Close preview">
