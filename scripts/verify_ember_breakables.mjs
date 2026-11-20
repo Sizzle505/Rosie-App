@@ -93,6 +93,7 @@ for(const [name,engine,viewport,mobile] of [
     await stagePage.locator(".ember-expedition-launch").click();
     await stagePage.locator(".ember-course-plaque").getByText("Clockwork Catacombs").waitFor({state:"visible",timeout:3500});
     await stagePage.locator(".ember-stage").scrollIntoViewIfNeeded();
+    await stagePage.locator('.ember-stage[data-hazard-art-loaded="true"]').waitFor({timeout:16000});
     // The warning is a short lived UI notification. Verify its persistent
     // registered event instead of racing an animation frame on WebKit.
     await stagePage.waitForFunction(()=>{
@@ -138,12 +139,13 @@ for(const [name,engine,viewport,mobile] of [
       }));
       throw new Error("Boss phase not reached: "+JSON.stringify(details)+"; "+error);
     }
+    await bossPage.locator('.ember-stage[data-boss-art-loaded="true"]').waitFor({timeout:16000});
     const status=await bossPage.locator(".ember-boss-accessible").innerText();
     if(!status.includes("Cinderclaw")||!status.includes("3 of 3 health"))
       throw new Error("Molten boss did not enter a healthy, readable encounter: "+status);
     await bossPage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-cinderclaw-boss.png`});
     await bossPage.close();
-    console.log(name+" passed; classic art, Clockwork warning and Cinderclaw boss verified");
+    console.log(name+" passed; Classic art, illustrated Clockwork hazard and Cinderclaw boss sprite loaded");
   }finally{
     await browser.close();
   }
