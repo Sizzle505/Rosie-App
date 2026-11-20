@@ -1789,6 +1789,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
+  const gateApproaching = running && items.some(item =>
+    item.footprint === "arch" && item.y >= 10 && item.y <= 91);
   const rank = captainRank(score);
 
   function audioContext() {
@@ -2038,6 +2040,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     const movementScale = tickMs / 70;
 
     const tick = window.setInterval(() => {
+      // A timer victory or hull loss can finish just before an interval fires.
+      // Never award post-finish cargo or apply another collision.
+      if (finishedRef.current) return;
       if (hullGraceRemainingRef.current > 0) {
         hullGraceRemainingRef.current = Math.max(0, hullGraceRemainingRef.current - tickMs);
         if (hullGraceRemainingRef.current === 0) setHullRecovering(false);
@@ -2429,6 +2434,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           </div>
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
+          {gateApproaching && <div className="yacht-safe-passage-cue" role="status">
+            <strong>CENTER LANE OPEN</strong>
+            <small>PASS BENEATH THE TORII</small>
+          </div>}
 
           {items.map((item) => {
             const approaching = chapter.id !== "sakura";
