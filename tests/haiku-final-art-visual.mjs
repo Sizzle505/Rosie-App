@@ -47,13 +47,14 @@ try{
       assert.equal(await page.locator(".haiku-archive-zen-sand").count(),0,label+" Zen sand absent in Temple");
       await page.getByRole("button",{name:"Flower Field"}).click();
 
+      // Main-garden lotus overlay was deliberately removed; keep immersive halo only.
+      assert.equal(await page.locator(".haiku-scene-aura").count(),0,label+" no stray garden lotus");
       // The approved atmospheric overlays must be present, below controls, and image-backed.
       assert.equal(await page.locator(".haiku-scene-canopy").count(),1,label+" sakura layer");
       assert.equal(await page.locator(".haiku-scene-atmosphere").count(),1,label+" atmosphere layer");
       for (const [selector,asset] of [
         [".haiku-scene-canopy","sakura-canopy.webp"],
-        [".haiku-scene-atmosphere","garden-atmosphere.webp"],
-        [".haiku-scene-aura","lotus-breath-halo.webp"]
+        [".haiku-scene-atmosphere","garden-atmosphere.webp"]
       ]) {
         assert.equal(await page.locator(selector).count(),1,label+" missing "+selector);
         const image=await page.locator(selector).evaluate(el=>getComputedStyle(el).backgroundImage);

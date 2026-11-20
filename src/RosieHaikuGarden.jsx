@@ -7,6 +7,7 @@ import "./RosieHaikuAtmosphere.css";
 import "./RosieHaikuArchiveArt.css";
 import "./RosieHaikuMasthead.css";
 import "./RosieHaikuConceptLayout.css";
+import "./RosieHaikuPolishHold.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -133,6 +134,32 @@ function downloadBlob(blob, filename) {
   a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
+
+/* Existing page actions are now pictographic controls, not visible text labels.
+   Keep accessible action names and their native button behavior. */
+function HaikuActionIcon({ action, active = false }) {
+  if (action === "save") return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
+    </svg>
+  );
+  if (action === "share") return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="m8.7 10.6 6.6-4.2M8.7 13.4l6.6 4.2" />
+    </svg>
+  );
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2.5" y="3.5" width="19" height="17" rx="2" />
+      <circle cx="8.5" cy="9" r="1.8" />
+      <path d="m3.2 17.8 5.9-5.2 3.8 3.1 3.2-3.9 4.8 5.3" />
+    </svg>
+  );
+}
+
 export default function RosieHaikuGarden({ onNavigate }) {
   const [today, setToday] = useState(() => poemForDay());
   const [poem, setPoem] = useState(() => poemForDay());
@@ -265,7 +292,6 @@ export default function RosieHaikuGarden({ onNavigate }) {
             <div className="haiku-overline">ROSIE'S GARDEN OF SMALL WISDOM</div>
             <h1>Haiku Zen Garden</h1>
           </div>
-          <p className="haiku-masthead-tagline">Small poems. Deep breaths. Grand opinions.</p>
         </header>
         <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} />
         <section className="haiku-content">
@@ -280,12 +306,21 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
               </div>
             </div>
-            <div className="haiku-verse-actions">
-              <button type="button" onClick={toggleSave}>{saved ? "♥ Saved" : "♡ Save"}</button>
-              <button type="button" onClick={sharePoem}>Share Verse</button>
-              <button type="button" onClick={postcard} disabled={working}>{working ? "Painting…" : "Picture Postcard"}</button>
+            <div className="haiku-verse-actions" aria-label="Poem actions">
+              <button type="button" className={saved ? "haiku-icon-action is-active" : "haiku-icon-action"} onClick={toggleSave}
+                aria-label={saved ? "Saved" : "Save"} title={saved ? "Remove saved verse" : "Save verse"} aria-pressed={saved}>
+                <HaikuActionIcon action="save" active={saved} />
+              </button>
+              <button type="button" className="haiku-icon-action" onClick={sharePoem}
+                aria-label="Share Verse" title="Share verse">
+                <HaikuActionIcon action="share" />
+              </button>
+              <button type="button" className="haiku-icon-action" onClick={postcard} disabled={working}
+                aria-label={working ? "Painting postcard" : "Picture Postcard"} title="Picture postcard">
+                <HaikuActionIcon action="postcard" />
+              </button>
             </div>
-            <p role="status" aria-live="polite" className="haiku-status">{notice || "Each verse is composed in the traditional three-line, 5-7-5 form."}</p>
+            <p role="status" aria-live="polite" className="haiku-status">{notice || "Small poems. Deep breaths. Grand opinions."}</p>
           </div>
           <aside className="haiku-workbench" aria-label="Poetry studio">
             <nav className="haiku-tabs" aria-label="Haiku activities">
@@ -294,6 +329,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
               <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
               <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal <span>{journal.length}</span></span></button>
             </nav>
+            <div className="haiku-workbench-body">
             {mode === "daily" ? (
               <div className="haiku-panel">
                 <div className="haiku-section-label">A MOMENT WITH ROSIE</div>
@@ -342,6 +378,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </div>
             )}
             <div className="haiku-workbench-footer">A Shiba's perspective on an extraordinarily human world.</div>
+            </div>
           </aside>
         </section>
         <RosieHaikuWisdom mode={mode} mood={mood} poem={poem} />
