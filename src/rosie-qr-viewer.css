@@ -36,25 +36,19 @@
 .qa-rosie-overlay-art {
   position:absolute!important;inset:0!important;display:block!important;
   width:100%!important;height:100%!important;object-fit:contain!important;
-  z-index:2;pointer-events:none;user-select:none;
+  z-index:3;pointer-events:none;user-select:none;
 }
-/* Fill the full oval behind the artwork, then cover any image artifacts within
-   the inset without painting over the decorative gilded border. */
+/* The original transparent WebP sits above the selected-color opening,
+   with precisely traced aperture geometry. No circular mask/ellipse guesses. */
 .qa-rosie-insert-underlay {
-  position:absolute!important;
-  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
-  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
-  border-radius:50%;clip-path:ellipse(50% 50% at 50% 50%);
-  transform:scale(1.15);transform-origin:center;
-  z-index:1;background:var(--rosie-code-bg,#fff)!important;
-  pointer-events:none;
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  z-index:1;pointer-events:none;
 }
-/* No foreground fill: the selected color must show through the true cutout
-   behind the decorative gold, never cover the frame's inner border. */
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
-  z-index:4;background:#ffffff!important;overflow:hidden;
+  z-index:2;background:#ffffff!important;overflow:hidden;
 }
 .qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#ffffff!important;}
 .qa-rosie-title-field,.qa-rosie-printed-title {
@@ -70,7 +64,6 @@
 }
 .qa-rosie-title-field {
   padding:0!important;line-height:1.1!important;
-  /* Native input text sits optically below the plate center without this correction. */
   transform:translate(-50%,-50%)!important;
 }
 .qa-rosie-title-field::placeholder{color:#765a39;opacity:.67}
