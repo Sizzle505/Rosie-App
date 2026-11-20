@@ -200,3 +200,230 @@
  .haiku-scroll .haiku-metre{font-size:9px;}
  .haiku-scroll .haiku-dedication{font-size:10px;line-height:1.25;}
 }
+
+
+/* ===== Haiku Garden layout repair - Nov 20: dedicated full-width world =====
+   The app's generic `main { width:min(100%,980px) }` made this page an
+   unintended narrow column. Keep the exception scoped exclusively to haiku. */
+.app-shell.page-haiku {
+  width:100%;
+  min-height:100dvh;
+  background:#211d2d;
+}
+.app-shell.page-haiku > main.haiku-page {
+  width:100%;
+  max-width:none;
+  min-width:0;
+  margin:0;
+  box-sizing:border-box;
+  background:
+    radial-gradient(ellipse at 49% 4%,rgba(111,68,101,.23),transparent 43%),
+    linear-gradient(150deg,#282032 0%,#1c1c2b 64%,#181925 100%);
+}
+.haiku-page .haiku-scene {
+  background:none;
+}
+.haiku-page .haiku-scene::after {
+  background:none;
+}
+.haiku-page .haiku-scene-fog {
+  opacity:.28;
+}
+/* Imported canopy artwork is intentionally a restrained foreground accent,
+   not a second pink tree plastered across Rosie's face and the temple. */
+.haiku-page .haiku-scene-canopy {
+  opacity:.14;
+  background-size:100% auto;
+  background-position:center top;
+}
+.haiku-page .haiku-scene-atmosphere {
+  opacity:.08;
+}
+.haiku-page .haiku-header-mark {
+  opacity:.55;
+}
+.haiku-page .haiku-shell {
+  width:min(100%,1570px);
+  max-width:1570px;
+  margin-inline:auto;
+}
+/* Desktop global game navigation occupies the top 58px: the title belongs
+   below it, never underneath the fixed floating toolbar. */
+@media(min-width:1024px){
+  .app-shell.page-haiku > main.haiku-page {
+    padding:80px clamp(22px,2.7vw,46px) 86px;
+  }
+  .haiku-page .haiku-header{
+    min-height:97px;
+    align-items:flex-start;
+  }
+  .haiku-page .haiku-heading{
+    padding:0;
+  }
+  .haiku-page .haiku-heading h1{
+    margin:4px 0 3px;
+    font-size:clamp(36px,3.2vw,54px);
+    line-height:1.07;
+  }
+  .haiku-page .haiku-overline{
+    font-size:9px;
+    letter-spacing:.22em;
+  }
+  .haiku-page .haiku-heading p{font-size:16px;}
+  .haiku-page .haiku-back{top:10px;left:0;}
+  .haiku-page .haiku-header-mark{top:-6px;font-size:40px;}
+  .haiku-page .haiku-scroll-column{gap:11px;}
+  .haiku-page .haiku-scroll{
+    margin:0 auto;
+    filter:drop-shadow(0 10px 18px rgba(12,12,23,.48));
+  }
+  .haiku-page .haiku-scene-stage{
+    margin:0;
+  }
+  .haiku-page .haiku-scene-image{
+    border-width:1px;
+    border-radius:16px;
+  }
+  .haiku-page .haiku-scene-selector{margin-top:10px;}
+}
+/* Wide desktop: the garden, the actual poem, and the studio are equally
+   visible in the opening viewport, not vertically piled below the fold. */
+@media(min-width:1480px){
+  .haiku-page .haiku-shell{
+    display:grid;
+    grid-template-columns:minmax(0,1.22fr) minmax(0,1.02fr) minmax(0,.82fr);
+    column-gap:22px;
+    row-gap:12px;
+    align-items:start;
+  }
+  .haiku-page .haiku-header{
+    grid-column:1 / -1;
+    grid-row:1;
+  }
+  .haiku-page .haiku-scene-stage{
+    grid-column:1;
+    grid-row:2;
+  }
+  .haiku-page .haiku-content{
+    display:contents;
+  }
+  .haiku-page .haiku-scroll-column{
+    grid-column:2;
+    grid-row:2;
+    min-width:0;
+  }
+  .haiku-page .haiku-workbench{
+    grid-column:3;
+    grid-row:2;
+    min-width:0;
+  }
+  .haiku-page .haiku-scene-image{
+    height:clamp(385px,40vw,490px);
+  }
+  .haiku-page .haiku-scene-rosie{
+    left:43%;
+    max-width:57%;
+    height:102%;
+    bottom:-3%;
+  }
+  .haiku-page .haiku-scene-rosie--expressive{
+    left:46%;
+    max-width:54%;
+    height:98%;
+    bottom:-5%;
+  }
+  .haiku-page .haiku-scene-quote{left:20px;width:38%;gap:6px;}
+  .haiku-page .haiku-scene-quote strong{font-size:clamp(23px,2vw,34px);}
+  .haiku-page .haiku-scene-quote small{font-size:14px;}
+  .haiku-page .haiku-scroll{
+    width:min(100%,525px);
+  }
+  .haiku-page .haiku-verse-actions{
+    gap:7px;
+  }
+  .haiku-page .haiku-verse-actions button{
+    padding:9px 11px;
+    min-height:39px;
+  }
+  .haiku-page .haiku-panel{
+    min-height:0;
+    padding:22px 23px;
+  }
+  .haiku-page .haiku-panel h2{
+    font-size:clamp(25px,2.1vw,30px);
+    margin:10px 0 12px;
+  }
+  .haiku-page .haiku-panel p{line-height:1.6;}
+  .haiku-page .haiku-date{margin:18px 0;}
+  .haiku-page .haiku-workbench-footer{padding:12px;}
+}
+/* Standard desktop and landscape tablet: art and verse face each other,
+   with the composition controls below the verse. */
+@media(min-width:900px) and (max-width:1479px){
+  .haiku-page .haiku-shell{
+    width:min(100%,1300px);
+    display:grid;
+    grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+    column-gap:clamp(18px,2.5vw,32px);
+    row-gap:12px;
+    align-items:start;
+  }
+  .haiku-page .haiku-header{
+    grid-column:1 / -1;
+    grid-row:1;
+  }
+  .haiku-page .haiku-scene-stage{
+    grid-column:1;
+    grid-row:2;
+    width:100%;
+    margin:0;
+  }
+  .haiku-page .haiku-content{
+    grid-column:2;
+    grid-row:2;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    min-width:0;
+  }
+  .haiku-page .haiku-scroll-column{gap:10px;}
+  .haiku-page .haiku-scroll{width:min(100%,520px);margin:0 auto;}
+  .haiku-page .haiku-workbench{width:100%;}
+  .haiku-page .haiku-scene-image{height:clamp(350px,37vw,470px);}
+  .haiku-page .haiku-scene-rosie{left:47%;max-width:52%;height:103%;}
+  .haiku-page .haiku-scene-rosie--expressive{left:47%;max-width:52%;height:99%;}
+  .haiku-page .haiku-scene-quote{width:39%;left:20px;}
+  .haiku-page .haiku-scene-quote strong{font-size:clamp(21px,2.7vw,36px);}
+}
+@media(min-width:900px) and (max-width:1023px){
+  .app-shell.page-haiku > main.haiku-page{padding:26px 20px 110px;}
+  .haiku-page .haiku-header{min-height:111px;}
+  .haiku-page .haiku-heading h1{font-size:40px;}
+  .haiku-page .haiku-back{top:4px;}
+}
+/* Portrait iPad and phones retain a stacked reader layout, rather than
+   inheriting compressed three-column desktop text. */
+@media(max-width:899px){
+  .app-shell.page-haiku > main.haiku-page{
+    padding:20px 14px 115px;
+  }
+  .haiku-page .haiku-shell{
+    width:min(100%,700px);
+  }
+  .haiku-page .haiku-content{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+  .haiku-page .haiku-scroll-column{width:100%;gap:12px;}
+  .haiku-page .haiku-header{min-height:149px;}
+  .haiku-page .haiku-heading{padding-top:53px;}
+  .haiku-page .haiku-scene-stage{width:100%;margin:0 auto 20px;}
+  .haiku-page .haiku-scene-image{height:clamp(240px,42vw,380px);}
+  .haiku-page .haiku-workbench{max-width:610px;margin-inline:auto;}
+}
+@media(max-width:520px){
+  .haiku-page .haiku-header{min-height:136px;}
+  .haiku-page .haiku-scene-image{height:270px;}
+  .haiku-page .haiku-scene-canopy{opacity:.10;}
+}
