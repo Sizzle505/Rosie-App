@@ -1764,6 +1764,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const finishedRef = useRef(false);
   const boostRef = useRef(false);
   const boostDrainTimerRef = useRef(0);
+  const phaseNoticeTimerRef = useRef(0);
   const boostRemainingRef = useRef(0);
   const streakRef = useRef(0);
   const comboRef = useRef(1);
@@ -1838,6 +1839,14 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setEventPulse((value) => value + 1);
   }
 
+  function announcePhase(text) {
+    window.clearTimeout(phaseNoticeTimerRef.current);
+    setPhaseNotice(text);
+    phaseNoticeTimerRef.current = window.setTimeout(() => setPhaseNotice(""), 1500);
+  }
+
+  useEffect(() => () => window.clearTimeout(phaseNoticeTimerRef.current), []);
+
   function moveCaptain(direction) {
     if (!running || paused) return;
     // The collision loop reads laneRef synchronously. Waiting for React to
@@ -1867,9 +1876,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     hullGraceRemainingRef.current = 0;
     setPaused(false);
     setRunning(false);
+    window.clearTimeout(phaseNoticeTimerRef.current);
+    setPhaseNotice("");
     setEnded(true);
     setMessage(reason);
-    captainTone("finish");
+    if (success) captainTone("finish"); // A failed voyage never gets victory fanfare.
   }
 
   function startGame(targetChapter = chapterIndex) {
@@ -1917,10 +1928,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setCompleted(false);
     setShowVictoryArt(false);
     setEnded(false);
-    setPhaseNotice("CAST OFF");
+    announcePhase("CAST OFF");
     setMessage(YACHT_CHAPTERS[chosen].description);
     setRunning(true);
-    window.setTimeout(() => setPhaseNotice(""), 1500);
   }
 
   useEffect(() => {
@@ -2038,10 +2048,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     if (!running || paused) return;
     if (phaseKey === lastPhaseRef.current) return;
     lastPhaseRef.current = phaseKey;
-    setPhaseNotice(phase.name.toUpperCase());
+    announcePhase(phase.name.toUpperCase());
     setMessage(phase.copy);
     captainTone(phaseKey === "sunset" ? "cheese" : "ball");
-    window.setTimeout(() => setPhaseNotice(""), 1500);
   }, [phaseKey, running]);
 
   useEffect(() => {
