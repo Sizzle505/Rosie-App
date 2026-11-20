@@ -287,3 +287,24 @@
     transition:none!important;
   }
 }
+
+/* Align the image-only scenery choices with the actual transparent Rosie
+   artwork, not the center of an otherwise empty stage. */
+@media(min-width:1851px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-6%);}
+}
+@media(min-width:1480px) and (max-width:1850px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-14%);}
+}
+@media(min-width:1360px) and (max-width:1479px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(5.5%);}
+}
+@media(min-width:900px) and (max-width:1359px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-10%);}
+}
+@media(min-width:601px) and (max-width:899px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-20%);}
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(4.5%);}
+}
