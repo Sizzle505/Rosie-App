@@ -17,9 +17,9 @@ function pose(s,h,gap=48,atWall=true){
 }
 test("the classic game has no new world hazards, but the five-world routes do",()=>{
  assert.equal(newRun().worldHazards.length,0);
- assert.deepEqual([0,1,2,3,4].map(i=>newRun(1467,i).worldHazards.length),[0,1,2,2,2]);
- assert.equal(EXPEDITION_HAZARD_LAYOUT.length,7);
- assert.equal(makeExpeditionHazards(3)[0].kind,"geyser");
+ assert.deepEqual([0,1,2,3,4].map(i=>newRun(1467,i).worldHazards.length),[0,1,2,3,2]);
+ assert.equal(EXPEDITION_HAZARD_LAYOUT.length,8);
+ assert.deepEqual(makeExpeditionHazards(3).map(h=>h.kind),["geyser","basalt","geyser"]);
 });
 test("hazards occupy deliberately clear, reachable sides of the original cave",()=>{
  for(const h of EXPEDITION_HAZARD_LAYOUT){
@@ -87,6 +87,29 @@ test("Turbo shatters a Molten geyser without damage and pays the world objective
  assert.equal(s.hull,5);
  assert.equal(s.objectiveBonus,425);
  assert.ok(s.events.some(e=>e.type==="world-hazard-shatter"));
+});
+test("ceiling basalt warns before dropping, and safe center passage earns no repeated reward",()=>{
+ const s=newRun(1467,3),rock=s.worldHazards.find(h=>h.kind==="basalt");
+ assert.ok(rock&&rock.side===-1);
+ pose(s,rock,360,false);
+ s.hitCooldown=100;
+ updateRun(s,.016);
+ assert.ok(s.events.some(e=>e.type==="world-hazard-warning"&&e.kind==="basalt"));
+ assert.equal(rock.hit,false);
+ for(let i=0;i<50;i++){
+   s.y=tunnelCenter(s.scroll+DRILL_ANCHOR)-DRILL_TIP_VERTICAL_OFFSET;
+   updateRun(s,.045);
+ }
+ assert.equal(rock.hit,false);
+ assert.equal(rock.resolved,true);
+ assert.equal(s.worldObjective,true);
+ assert.equal(s.objectiveBonus,425);
+ const bonus=s.objectiveBonus;
+ for(let i=0;i<5;i++)updateRun(s,.045);
+ assert.equal(s.objectiveBonus,bonus);
+ const message=excavationNotice({type:"world-hazard-warning",kind:"basalt",side:-1});
+ assert.match(message.title,/BASALT/);
+ assert.match(message.detail,/ceiling/i);
 });
 test("passing a Royal burst from behind cannot award a phantom dodge",()=>{
  const s=newRun(1467,4),h=s.worldHazards[0];
