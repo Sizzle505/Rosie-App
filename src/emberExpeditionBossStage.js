@@ -24,18 +24,24 @@ export function startExpeditionBoss(s,center){
   return true;
 }
 
-export function bossAttackDanger(boss,tipY,bossY){
-  if(!boss||boss.phase!=="active")return false;
-  const delta=tipY-bossY;
-  switch(boss.attack){
-    case "fireball":return Math.abs(delta)<96;
-    case "spark-bolt":return Math.abs(delta)<96;
-    case "gear-sweep":return delta>25;
-    case "burrow":return delta>50;
-    case "quake":return delta>25;
-    case "earth-burst":return delta< -35;
-    default:return false;
+// Shared render/physics bounds - keep the warning and the actual damage lane identical.
+// Unbounded ends are clipped to the Canvas by the painter.
+export function bossDangerLane(attack,bossY){
+  if(!Number.isFinite(bossY))return null;
+  switch(attack){
+    case "fireball":
+    case "spark-bolt":return {top:bossY-96,bottom:bossY+96};
+    case "gear-sweep":
+    case "quake":return {top:bossY+25,bottom:Infinity};
+    case "burrow":return {top:bossY+50,bottom:Infinity};
+    case "earth-burst":return {top:-Infinity,bottom:bossY-35};
+    default:return null;
   }
+}
+export function bossAttackDanger(boss,tipY,bossY){
+  if(!boss||boss.phase!=="active"||!Number.isFinite(tipY))return false;
+  const lane=bossDangerLane(boss.attack,bossY);
+  return !!lane&&tipY>lane.top&&tipY<lane.bottom;
 }
 export function updateExpeditionBoss(s,dt,{tipX,tipY,boosted,onHit}){
   const b=s.boss;
