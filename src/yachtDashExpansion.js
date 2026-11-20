@@ -90,7 +90,7 @@ export const YACHT_CHAPTER_GOALS = Object.freeze({
     description: "Survive the storm. Expert captains earn two clean near misses." },
   moonlight: { score: 800, expert: 1500, nearMisses: 0, rivals: 2,
     description: "Outrace the regatta fleet. Two yacht passes earn the highest honor." },
-  emperor: { score: 900, expert: 1600, nearMisses: 2, rivals: 2,
+  emperor: { score: 850, expert: 1450, nearMisses: 2, rivals: 2,
     description: "Earn the imperial medal: survive, pass rivals, and sail with precision." }
 });
 
