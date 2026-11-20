@@ -10,6 +10,7 @@ on:
       - src/rosieMusicCatalog.js
       - src/rosieMusicCatalog.test.js
       - scripts/rosieMusicBrowserQA.mjs
+      - scripts/rosieMusicQuickQA.mjs
       - public/cosmic-odyssey/game.js
       - public/cosmic-odyssey/rosie-music-director.js
   workflow_dispatch:
@@ -66,7 +67,7 @@ jobs:
           sleep 6
           curl --fail http://127.0.0.1:4173/ >/dev/null
       - name: Inspect iPhone, iPad, desktop music playback and UI
-        run: node scripts/rosieMusicBrowserQA.mjs
+        run: node scripts/rosieMusicQuickQA.mjs
       - name: Preserve real browser screenshots
         if: always()
         uses: actions/upload-artifact@v4
