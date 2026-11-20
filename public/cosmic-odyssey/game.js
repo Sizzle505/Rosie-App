@@ -13,8 +13,9 @@
  const asset = name => window.COSMIC_ASSETS?.[name] || ARCADE_SCENE_ART[name] || `assets/${name}.webp`;
  const board=$('board'),frame=$('board-frame'),veil=$('veil'),message=$('message'),victoryOverlay=$('victory-overlay');
  // Web Audio music is independent of synthesized game effects.
- const music=window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:'music'}):null;
+ const music=window.ROSIE_COSMIC_SOUNDTRACK_READY && window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:'music'}):null;
  const musicButton=$('music-toggle');
+ if(musicButton&&!music)musicButton.style.display='none';
  let musicWarned=false;
  function musicPlay(state){
    if(!music)return;
