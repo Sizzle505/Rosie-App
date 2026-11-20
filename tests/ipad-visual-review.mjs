@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import { chromium, webkit } from "playwright";
 
-const pages = ["home", "resources", "calculations", "qr-atelier", "reviews", "recipes"];
+const pages = (process.env.ROSIE_PAGES || "home,resources,calculations,qr-atelier,reviews,recipes").split(",");
 const devices = [
   {name:"iphone-390x844", width:390, height:844, mobile:true},
   {name:"ipad-mini-768x1024", width:768, height:1024, mobile:true},
@@ -9,8 +9,8 @@ const devices = [
   {name:"ipad-landscape-1180x820", width:1180, height:820, mobile:true},
   {name:"ipad-pro-landscape-1366x1024", width:1366, height:1024, mobile:true},
   {name:"desktop-1440x900", width:1440, height:900, mobile:false}
-];
-const out = "artifacts/ipad-review";
+].filter(device => !process.env.ROSIE_DEVICES || process.env.ROSIE_DEVICES.split(",").includes(device.name));
+const out = process.env.ROSIE_OUT || "artifacts/ipad-review";
 await fs.mkdir(out, {recursive:true});
 const results = [];
 for (const [engine, browserType] of [["webkit",webkit],["chromium",chromium]]) {
