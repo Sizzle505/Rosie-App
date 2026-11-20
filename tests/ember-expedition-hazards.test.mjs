@@ -46,7 +46,7 @@ test("all mechanical hazards visibly extend and retract with predictable geometr
 });
 test("Ruby trap shows a warning before arrival, then collision costs only one hull",()=>{
  const s=newRun(1467,1),h=s.worldHazards[0];
- pose(s,h,450,true);
+ pose(s,h,450,false);
  updateRun(s,.016);
  assert.ok(s.events.some(e=>e.type==="world-hazard-warning"));
  assert.equal(s.hull,5);
