@@ -19,7 +19,7 @@ try {
         return im instanceof HTMLImageElement&&im.complete&&im.naturalWidth===1448;
       });
       const asset=await page.locator(".qa-rosie-overlay-art").getAttribute("src");
-      assert.match(asset,/rosie-frame-(seated|presenting|peeking|blank)-hollow\\.webp$/,asset);
+      assert.match(asset,/rosie-frame-(seated|presenting|peeking|blank)-hollow\.webp$/,asset);
       const frameIndex=await page.locator(".qa-rosie-frame-controls span").textContent();
       await page.locator(".qa-rosie-composition").screenshot({
         path:"qa-screenshots/qr-hollow/"+finish+"-"+frame+".png"
