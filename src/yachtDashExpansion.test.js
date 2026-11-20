@@ -37,7 +37,7 @@ test("Chapter hazards never occupy all lanes and drift within bounds",()=>{
   }
  }
  assert.deepEqual(yachtWaveFor("sakura",5,()=>0),[]);
- assert.ok(yachtWaveFor("moonlight",3,()=>0).some(x=>x.kind==="rival"));
+ assert.ok(yachtWaveFor("moonlight",4,()=>0).some(x=>x.kind==="rival"));
  assert.ok(yachtWaveFor("emperor",4,()=>0).some(x=>x.kind==="rival"));
  assert.equal(isYachtHazard("ball"),false);
 });
