@@ -1,0 +1,356 @@
+{
+  "name": "Yacht Dash Expansion - Approved Art",
+  "date": "2026-11-19",
+  "assetBase": "/yacht-dash/",
+  "stages": {
+    "sakura": {
+      "existing": true,
+      "victory": "/yacht-dash/victories/sakura.webp"
+    },
+    "typhoon": {
+      "scenes": [
+        "/yacht-dash/typhoon/01-approaching-squall.webp",
+        "/yacht-dash/typhoon/02-temple-cliffs.webp",
+        "/yacht-dash/typhoon/03-torii-waterfalls.webp",
+        "/yacht-dash/typhoon/04-lantern-storm.webp",
+        "/yacht-dash/typhoon/05-storm-clears.webp"
+      ],
+      "victory": "/yacht-dash/victories/typhoon.webp"
+    },
+    "moonlight": {
+      "scenes": [
+        "/yacht-dash/moonlight/01-regatta-arrival.webp",
+        "/yacht-dash/moonlight/02-torii-moonrise.webp",
+        "/yacht-dash/moonlight/03-shrine-bay.webp",
+        "/yacht-dash/moonlight/04-blossom-channel.webp",
+        "/yacht-dash/moonlight/05-harbor-pagoda.webp"
+      ],
+      "victory": "/yacht-dash/victories/moonlight.webp"
+    },
+    "emperor": {
+      "scenes": [
+        "/yacht-dash/emperor/01-imperial-harbor.webp",
+        "/yacht-dash/emperor/02-ceremonial-waterway.webp",
+        "/yacht-dash/emperor/03-gilded-sunset-bay.webp",
+        "/yacht-dash/emperor/04-twilight-palace-marina.webp",
+        "/yacht-dash/emperor/05-palace-final-approach.webp"
+      ],
+      "victory": "/yacht-dash/victories/emperor.webp"
+    }
+  },
+  "assets": [
+    {
+      "type": "typhoon",
+      "id": "01-approaching-squall",
+      "file": "/yacht-dash/typhoon/01-approaching-squall.webp",
+      "source": "stormy_sakura_coast_with_glowing_pagoda.png",
+      "size": 312810,
+      "sha256": "35b662a0cc8240c20e28287da7f348e84436d2a8ff7353a4a90ae9618d995747"
+    },
+    {
+      "type": "typhoon",
+      "id": "02-temple-cliffs",
+      "file": "/yacht-dash/typhoon/02-temple-cliffs.webp",
+      "source": "typhoon_passage_temple_cliffs_and_stormy_seas.png",
+      "size": 356542,
+      "sha256": "faf0803348653db0d95716f44bd3f22f1de7f269cd7d94d7cc93196bc61c82de"
+    },
+    {
+      "type": "typhoon",
+      "id": "03-torii-waterfalls",
+      "file": "/yacht-dash/typhoon/03-torii-waterfalls.webp",
+      "source": "typhoon_passage_twin_waterfalls_and_torii.png",
+      "size": 319490,
+      "sha256": "c6a54b5e1a60157fc35a3ccae26329b8b4b6cd81c6d578e3ec31226f3350e8f8"
+    },
+    {
+      "type": "typhoon",
+      "id": "04-lantern-storm",
+      "file": "/yacht-dash/typhoon/04-lantern-storm.webp",
+      "source": "typhoon_passage_lantern_in_the_storm.png",
+      "size": 341002,
+      "sha256": "5eca535fd269b80fe031674a80ea09a89191a62ecc33350594ef196550973d53"
+    },
+    {
+      "type": "typhoon",
+      "id": "05-storm-clears",
+      "file": "/yacht-dash/typhoon/05-storm-clears.webp",
+      "source": "typhoon_passage_dawn_breaks.png",
+      "size": 327958,
+      "sha256": "e31999d1e5426f1db71151e5630e7342e1d9118f80b805f399374d23f79bdafd"
+    },
+    {
+      "type": "moonlight",
+      "id": "01-regatta-arrival",
+      "file": "/yacht-dash/moonlight/01-regatta-arrival.webp",
+      "source": "moonlit_sakura_strait_regatta.png",
+      "size": 307074,
+      "sha256": "55603c16e3be5f45f95727814e2124db5d6f84437b416fc413a0f4217d9c9f25"
+    },
+    {
+      "type": "moonlight",
+      "id": "02-torii-moonrise",
+      "file": "/yacht-dash/moonlight/02-torii-moonrise.webp",
+      "source": "moonlit_sakura_torii_seascape.png",
+      "size": 339268,
+      "sha256": "4b67e2efdad4693885a5f017d33e14c30953e7cfcfb8eaedae2e0bc0ea74af26"
+    },
+    {
+      "type": "moonlight",
+      "id": "03-shrine-bay",
+      "file": "/yacht-dash/moonlight/03-shrine-bay.webp",
+      "source": "moonlit_sakura_bay_shrine.png",
+      "size": 322978,
+      "sha256": "83fd4c9c08e520e7110170b77e64f0de2d2d8bc21c830549ad43e5184155f85d"
+    },
+    {
+      "type": "moonlight",
+      "id": "04-blossom-channel",
+      "file": "/yacht-dash/moonlight/04-blossom-channel.webp",
+      "source": "moonlit_cherry_blossom_channel.png",
+      "size": 316808,
+      "sha256": "437791f465e3381bfdba32ba6f08a6f30dd97e72dca3904e2a05672b47b38ca4"
+    },
+    {
+      "type": "moonlight",
+      "id": "05-harbor-pagoda",
+      "file": "/yacht-dash/moonlight/05-harbor-pagoda.webp",
+      "source": "moonlit_harbor_pagoda_and_shrine.png",
+      "size": 309644,
+      "sha256": "e52c62a991b4cbaf8595cd78c5b35fbfc0e783daa01d75aa4430a057b09c85eb"
+    },
+    {
+      "type": "emperor",
+      "id": "01-imperial-harbor",
+      "file": "/yacht-dash/emperor/01-imperial-harbor.webp",
+      "source": "imperial_harbor_at_dawn.png",
+      "size": 390058,
+      "sha256": "703d9c5ea0b85ab84cfdfdac0d6866f160e4edd5eaa8b97483b4e54c3e32a786"
+    },
+    {
+      "type": "emperor",
+      "id": "02-ceremonial-waterway",
+      "file": "/yacht-dash/emperor/02-ceremonial-waterway.webp",
+      "source": "the_emperor_s_finale_imperial_waterway.png",
+      "size": 411816,
+      "sha256": "7be440d084ffc711de16e31dac3ad6f6567739156f793439b65b854f64709781"
+    },
+    {
+      "type": "emperor",
+      "id": "03-gilded-sunset-bay",
+      "file": "/yacht-dash/emperor/03-gilded-sunset-bay.webp",
+      "source": "emperor_s_sunset_bay_palace.png",
+      "size": 418330,
+      "sha256": "09fa87c2c03e6295213fe6f8bd88d5f2e52f21a79070ad43690af27cd08ae47b"
+    },
+    {
+      "type": "emperor",
+      "id": "04-twilight-palace-marina",
+      "file": "/yacht-dash/emperor/04-twilight-palace-marina.webp",
+      "source": "twilight_imperial_palace_marina.png",
+      "size": 390512,
+      "sha256": "3aec7f93913d04ca933f29ee1a31e335b453717d14d7eaeadf2912760ef10deb"
+    },
+    {
+      "type": "emperor",
+      "id": "05-palace-final-approach",
+      "file": "/yacht-dash/emperor/05-palace-final-approach.webp",
+      "source": "imperial_harbor_palace_finale.png",
+      "size": 400278,
+      "sha256": "94bc1937ca04989ee05a38012da93a233870ed21f59793039e0b04f02343792b"
+    },
+    {
+      "type": "victories",
+      "id": "sakura",
+      "file": "/yacht-dash/victories/sakura.webp",
+      "source": "captain_rosie_s_sakura_strait_victory.png",
+      "size": 446492,
+      "sha256": "7c3509292116d5e2c9bf51e194a5ad4d8f2fbeb7591d7d4be69a15e9519a59f4"
+    },
+    {
+      "type": "victories",
+      "id": "typhoon",
+      "file": "/yacht-dash/victories/typhoon.webp",
+      "source": "typhoon_passage_victory_scene.png",
+      "size": 566760,
+      "sha256": "70653ad93ad3c8a23a1888c672362867e4b54a88a8b438540b9871f7c5c5a03d"
+    },
+    {
+      "type": "victories",
+      "id": "moonlight",
+      "file": "/yacht-dash/victories/moonlight.webp",
+      "source": "moonlight_regatta_victory_with_rosie.png",
+      "size": 428812,
+      "sha256": "ea60c17aafeae690e9fd85cf3a76913983a3d3fe4b4f84d9fb3e1ae85e303f38"
+    },
+    {
+      "type": "victories",
+      "id": "emperor",
+      "file": "/yacht-dash/victories/emperor.webp",
+      "source": "captain_rosie_s_grand_victory_ceremony.png",
+      "size": 522818,
+      "sha256": "6bbdec0bbd22fce1b19f7644f05bbf270539d79e59d3db8b67d5b9a6cc36b7d2"
+    },
+    {
+      "type": "obstacles",
+      "id": "storm-buoy",
+      "file": "/yacht-dash/obstacles/storm-buoy.webp",
+      "source": "ornate_storm_warning_buoy.png",
+      "size": 109552,
+      "sha256": "c2825fcb32fb4a5da5e7e3175dde1b3c57f9bc70ac3b3985d64582d5c96f2bc4"
+    },
+    {
+      "type": "obstacles",
+      "id": "driftwood",
+      "file": "/yacht-dash/obstacles/driftwood.webp",
+      "source": "storm_battered_driftwood_surge.png",
+      "size": 165908,
+      "sha256": "ce8bf24b4bc782fdead886a948a2da45f0700563316a9c76f2427225239301f4"
+    },
+    {
+      "type": "obstacles",
+      "id": "reef-rocks",
+      "file": "/yacht-dash/obstacles/reef-rocks.webp",
+      "source": "jagged_reef_obstacle.png",
+      "size": 124056,
+      "sha256": "a36759ff01e9c5e17293f4b37d256bf0222a57c29e0017c0f039ab017015eca9"
+    },
+    {
+      "type": "obstacles",
+      "id": "whirlpool",
+      "file": "/yacht-dash/obstacles/whirlpool.webp",
+      "source": "dramatic_teal_maelstrom_obstacle.png",
+      "size": 203232,
+      "sha256": "010564d0ed8dd9d6b3dc7e239941bff54c4712db39e98a8c41f2e1a0e0f5103a"
+    },
+    {
+      "type": "obstacles",
+      "id": "fishing-skiff",
+      "file": "/yacht-dash/obstacles/fishing-skiff.webp",
+      "source": "wrecked_japanese_fishing_skiff.png",
+      "size": 115944,
+      "sha256": "954d5ac11504797b9d208330c24abcd7b33384ca92ff6964224d0ece4eedcc8f"
+    },
+    {
+      "type": "obstacles",
+      "id": "cargo-crate",
+      "file": "/yacht-dash/obstacles/cargo-crate.webp",
+      "source": "ornate_floating_blue_cargo_crate.png",
+      "size": 137050,
+      "sha256": "329820e4db1d63265cd6c40206fca6f594648ee92a95d29466b64bc8f5a06ac4"
+    },
+    {
+      "type": "obstacles",
+      "id": "lantern-raft",
+      "file": "/yacht-dash/obstacles/lantern-raft.webp",
+      "source": "moonlit_sakura_lantern_raft.png",
+      "size": 145748,
+      "sha256": "fd1648d9525a62d8a2d70888693a2c2a21e508a8abbea67f33eed76f11774dc4"
+    },
+    {
+      "type": "obstacles",
+      "id": "moonlight-race-buoy",
+      "file": "/yacht-dash/obstacles/moonlight-race-buoy.webp",
+      "source": "moonlit_sakura_regatta_buoy.png",
+      "size": 127532,
+      "sha256": "bdad5447267ab02e8348b0b741bf8a22e232e65add2e3752d263565a77785f12"
+    },
+    {
+      "type": "obstacles",
+      "id": "rival-yacht-front",
+      "file": "/yacht-dash/obstacles/rival-yacht-front.webp",
+      "source": "moonlight_regatta_rival_yacht.png",
+      "size": 188146,
+      "sha256": "ff753f2fb590b54fccf296eda94f814ffef0f2529e5a7b3249296776468a65b1"
+    },
+    {
+      "type": "obstacles",
+      "id": "rival-yacht-turn",
+      "file": "/yacht-dash/obstacles/rival-yacht-turn.webp",
+      "source": "sakura_crest_yacht_in_a_spiraling_turn.png",
+      "size": 130698,
+      "sha256": "b14a2bf885adef4ed7a9657576cfec9d18259e314f56f8bbf5380ab774cbf700"
+    },
+    {
+      "type": "obstacles",
+      "id": "storm-torii",
+      "file": "/yacht-dash/obstacles/storm-torii.webp",
+      "source": "storm_battered_vermilion_torii.png",
+      "size": 213602,
+      "sha256": "0aafba71ed899ed6d411184624b284d66a10a3ee86a5d7dbccfdb13b91af0415"
+    },
+    {
+      "type": "obstacles",
+      "id": "barrel-raft",
+      "file": "/yacht-dash/obstacles/barrel-raft.webp",
+      "source": "stormy_barrel_raft_obstacle.png",
+      "size": 165856,
+      "sha256": "ba286106d655bf4e1cbefc97551c3616689993ecd53e9141e020e7b9ea2b2475"
+    },
+    {
+      "type": "obstacles",
+      "id": "drift-net",
+      "file": "/yacht-dash/obstacles/drift-net.webp",
+      "source": "stormy_drift_net_obstacle.png",
+      "size": 242826,
+      "sha256": "9a11d6cda6f3baf8d1715ac1a21633a46cf9a9a4455a1abbbd121573dac7ffc4"
+    },
+    {
+      "type": "obstacles",
+      "id": "harbor-pylons",
+      "file": "/yacht-dash/obstacles/harbor-pylons.webp",
+      "source": "weathered_harbor_pylons_in_turbulent_seas.png",
+      "size": 187760,
+      "sha256": "ec8f2962b97a7eaf7b553f3c71236bb20d490c5260eac5340995474588e83802"
+    },
+    {
+      "type": "obstacles",
+      "id": "fallen-stone-lantern",
+      "file": "/yacht-dash/obstacles/fallen-stone-lantern.webp",
+      "source": "broken_mossy_japanese_stone_lantern_ruin.png",
+      "size": 176380,
+      "sha256": "bbaf1a45228e9a57d6cb76460569770d7d8b9194f971cad0c4e5a4aee5859480"
+    },
+    {
+      "type": "obstacles",
+      "id": "taiko-barge",
+      "file": "/yacht-dash/obstacles/taiko-barge.webp",
+      "source": "ornate_moonlit_taiko_barge.png",
+      "size": 210218,
+      "sha256": "f6bcdcb3db64f9d74556cf5f57c035b35c9bcc033b33024081424e87071c2611"
+    },
+    {
+      "type": "obstacles",
+      "id": "fan-raft",
+      "file": "/yacht-dash/obstacles/fan-raft.webp",
+      "source": "moonlit_sakura_fan_raft.png",
+      "size": 202872,
+      "sha256": "32ae3d5d18e2c5a566f59c66c41879051e8b308b89a6f2b784a2ca45f5cae237"
+    },
+    {
+      "type": "obstacles",
+      "id": "regatta-beacon",
+      "file": "/yacht-dash/obstacles/regatta-beacon.webp",
+      "source": "moonlit_sakura_regatta_beacon.png",
+      "size": 119548,
+      "sha256": "dd30d3a0c96a0eb4f01e86d005352f486183d89a00e3e21cd078324836790ed3"
+    },
+    {
+      "type": "obstacles",
+      "id": "regatta-rival-side",
+      "file": "/yacht-dash/obstacles/regatta-rival-side.webp",
+      "source": "moonlit_sakura_regatta_yacht.png",
+      "size": 115036,
+      "sha256": "c9429f28afeeec9ddee9c658b7ad43a0258fe947491fb1493739f7a05e847fe7"
+    },
+    {
+      "type": "obstacles",
+      "id": "golden-sprint",
+      "file": "/yacht-dash/obstacles/golden-sprint.webp",
+      "source": "moonlight_regatta_golden_sakura_sprint.png",
+      "size": 113406,
+      "sha256": "fe55947cf60e536251684595898302b61407f1484f0730bbcff11bfe43034f12"
+    }
+  ],
+  "packagingFix": "Recovered originally empty fishing-skiff.webp from its approved transparent PNG master"
+}\n
