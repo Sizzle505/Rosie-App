@@ -5,12 +5,18 @@
     "name": "Example Dog",
     "species": "dog",
     "breed": "",
-    "personality": "Friendly and curious"
+    "personality": ""
   },
   "features": {
     "captain": false,
     "cardVault": false
   },
   "assetBase": "assets",
-  "reviewStatus": "draft"
+  "reviewStatus": "draft",
+  "backend": {
+    "accounts": false,
+    "cloudNotes": false,
+    "secretSanta": false,
+    "email": false
+  }
 }
