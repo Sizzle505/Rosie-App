@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./RosieHaikuScene.css";
 
 // The scene plates and the canonical Rosie pose are independent transparent
@@ -13,7 +13,7 @@ export const HAIKU_SCENES = Object.freeze([
 const ROSIE_MEDITATING = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
 const APPROVED_HERO = "/rosieverse/hero.webp";
 
-function readSelectedScene() {
+export function readSelectedScene() {
   try {
     const saved = localStorage.getItem("rosieHaikuSelectedScene");
     return HAIKU_SCENES.some(({ id }) => id === saved) ? saved : "field";
@@ -22,14 +22,13 @@ function readSelectedScene() {
   }
 }
 
-export default function RosieHaikuScene() {
-  const [scene, setScene] = useState(readSelectedScene);
+export default function RosieHaikuScene({ scene = "field", onSceneChange }) {
   const [missing, setMissing] = useState({});
   const [rosieAvailable, setRosieAvailable] = useState(true);
   const selected = HAIKU_SCENES.find((item) => item.id === scene) || HAIKU_SCENES[0];
   const hasSceneArt = !missing[scene];
   function switchScene(next) {
-    setScene(next);
+    onSceneChange?.(next);
     try { localStorage.setItem("rosieHaikuSelectedScene", next); }
     catch { /* Browsers with disabled storage still support scene selection. */ }
   }
