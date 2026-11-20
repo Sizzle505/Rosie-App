@@ -428,3 +428,18 @@
   .ember-expedition-medals small{font-size:7px;letter-spacing:.04em}
 }
 @media(prefers-reduced-motion:reduce){.ember-dig-notice{animation:none}}
+
+/* Both expedition commissions are optional and remain outside the flight area. */
+.ember-passage-mission{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:4px 8px 2px;border-top:1px solid rgba(220,174,100,.21);
+  color:#e9d2aa;white-space:normal;text-align:center}
+.ember-passage-mission span{font:700 8px Georgia,serif;letter-spacing:.12em;color:#c8a46f}
+.ember-passage-mission strong{font:700 10px Georgia,serif;letter-spacing:.07em;color:#ffedc6}
+.ember-passage-mission em{font:700 9px Georgia,serif;letter-spacing:.08em;color:#a8b9bd;font-style:normal}
+.ember-passage-mission em:last-child{flex:none}
+@media(max-width:620px){
+  .ember-passage-mission{order:4;gap:5px;flex-wrap:wrap;padding:5px 2px 1px}
+  .ember-passage-mission span{font-size:7px}
+  .ember-passage-mission strong{font-size:8px}
+  .ember-passage-mission em{font-size:7px}
+}
