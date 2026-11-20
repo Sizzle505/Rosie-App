@@ -1,6 +1,6 @@
 # Ember Tunnel - Art Integration Pack C (2026-11-20)
 
-**Status: art prepared; image binaries not imported; gameplay modules not activated.**  
+**Current status: five playable playtest worlds, three procedural boss encounters; generated image binaries still not imported.**  
 This document is for PR #192 only and has no effect on production.
 
 ## Source deliverable
@@ -38,7 +38,7 @@ The pure `src/emberExpansionCatalog.js` enumerates all five planned worlds (unlo
 1. Copy artwork into this branch after reviewing every atlas/transition at game display scale. **No binaries have been transferred through GitHub in this pass**.
 2. Fix gear crusher pale matte and smoke artifacts. Recheck visual alpha halos for Mole King, basalt and earth-burst sheets.
 3. Align animated obstacle geometry with collision hitboxes; warnings always precede active damage, and Turbo hits award points once.
-4. Build actual separate stages 3-5, stage selections, saved relic/stars, and in-game boss arenas. The existing application still runs a 75-second two-passage course.
+4. Replace the existing procedural world and boss illustrations with the individually approved atlas images, finish original boss arenas, verify stage difficulty. The Classic 75-second course is still separate.
 5. Complete Desktop Chromium, mobile Safari/WebKit, and iPad QA without changing existing approved Rosie vehicle or earlier levels.
 6. Keep PR #192 in draft until reviewed; never merge or promote to production without explicit approval.
 
@@ -50,10 +50,10 @@ The pure `src/emberExpansionCatalog.js` enumerates all five planned worlds (unlo
 The same draft PR now includes `src/emberExpeditionStages.js` and selected-world routing in `src/EmberTunnelDrill.jsx`.
 
 - Each of five stages can be selected immediately from the game's launch screen (none locked) and starts at its own cave world position.
-- Every route is currently a **15-second terrain/playability test**. The original 75-second Classic course remains available and is not replaced.
+- The initial launch provided five 15-second terrain routes; subsequent revisions extend Clockwork to 30 seconds and Molten/Treasury to 40 seconds for bosses. Classic remains 75 seconds.
 - Each route has a separate timer, stage heading, approved existing-art scenic theme, score report and 0-3 stars saved under `rosieEmberFiveWorldStarsV1` in localStorage.
-- The first star requires completion; the second requires no more than one collision; the third requires at least five collected treasures. Failed runs receive no stars.
-- There is no claim that completed boss fights, unique Clockwork/Molten/Royal mechanics, or the ten new binary images are active. In particular, `emberBossEncounter.js` remains independent until future game integration.
+- First star requires completion; second requires at most one hull hit; third now requires the unique world objective. Failed runs earn no stars.
+- Clockwork, Molten and Treasury subsequently acquired procedural hazards and in-game boss fights. Generated image binaries are still not imported.
 - Old gameplay is isolated by the optional `stageIndex` parameter of `newRun`; its default remains classic `RUN_DURATION = 75`.
 - Dedicated Node tests and cross-browser Playwright smoke tests cover stage selection, individual starting coordinates, classic backward compatibility and reward persistence.
 
@@ -63,7 +63,7 @@ The same draft PR now includes `src/emberExpeditionStages.js` and selected-world
 
 ## November 20 additional gameplay - distinct world hazards
 
-The five selectable 15-second Expedition previews now have dedicated, collision-aligned moving hazards. These are **procedural placeholder illustrations**, not the unimported ChatGPT image binaries.
+The five selectable Expedition previews now have dedicated, collision-aligned moving hazards. These are **procedural placeholder illustrations**, not the unimported ChatGPT image binaries.
 
 | Stage | New hazard | First contact | World objective bonus |
 |---|---|---|---:|
@@ -81,4 +81,26 @@ The five selectable 15-second Expedition previews now have dedicated, collision-
 - `tests/ember-expedition-hazards.test.mjs` exercises placement, warning, damage, Turbo shattering, and one-time rewards. Browser smoke QA explicitly waits for the Clockwork warning after selecting that stage.
 
 ### Visual review still necessary
-These effects are immediately testable without additional art imports, but their final appearance will be replaced selectively by the high-resolution assets after manual registration. Stage 3-5 bosses are **not active**. This remains an isolated draft PR pending desktop, iPhone WebKit and iPad review.
+These effects are immediately testable without additional art imports, but their final appearance will be replaced selectively by the high-resolution assets after manual registration. Stage 3-5 bosses are now **playable using procedural character placeholders**; their production illustration atlases remain unimported. This remains an isolated draft PR pending desktop, iPhone WebKit and iPad review.
+
+
+## Playable boss arenas - November 20 implementation
+
+The Clockwork, Molten and Treasury challenge routes now culminate in playable boss battles implemented by `emberExpeditionBossStage.js` and `emberExpeditionBossPainter.js`.
+
+| World | Duration | Boss | Health | Reward |
+|---|---:|---|---:|---:|
+| Clockwork Catacombs | 30s | Copperjack | 2 Turbo hits | +1,400 |
+| Molten Depths | 40s | Cinderclaw | 3 Turbo hits | +1,750 |
+| Royal Treasury | 40s | Mole King | 4 Turbo hits | +2,600 |
+
+- The boss spawns approximately 8.5 seconds after a route begins. The world scroll then stops; normal cave pickup/formation collisions are suspended for the arena.
+- Every boss cycles between clearly drawn, distinct **warning**, **active**, and **recovery** phases. Warning geometry matches the active damage zone.
+- Rosie's auger must align with the boss within a forgiving attack range. **Only Turbo during a recovery phase damages the boss**, once per recovery opening. Turbo charge is refreshed at recovery, so the fight is winnable without farming pickups.
+- Boss attacks damage Rosie's hull at most once per cycle, respecting existing damage cooldown. Turbo shields the drill during attacks.
+- Defeating the boss gives its unique reward and finishes the stage. Hull failure and timer expiry **do not** count as victories or grant completion stars.
+- Both boss characters and impact markings are rendered procedurally for now, using separate Canvas routines, **not** the pending generated art and **not** the rejected victory screens.
+- `tests/ember-expedition-boss-stage.test.mjs` covers first-warning, stopped scrolling, attack geometry, one successful Turbo hit per recovery, boss victories, and timeout. A source-engine simulation confirmed 2 / 3 / 4 hits across Copperjack / Cinderclaw / Mole King.
+- Playwright QA now verifies the persistent Clockwork warning event and independently launches the Molten stage to confirm Cinderclaw's health and phase become visible.
+
+**Remaining work:** production sprite import, device art review, precise hitbox art-registration, additional bosses' animations and tuning, audio, individual world transitions, and the postponed style-correct victory scenes.
