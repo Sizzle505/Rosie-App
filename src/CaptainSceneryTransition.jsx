@@ -65,10 +65,14 @@ export function CaptainScenicPainting({ scene }) {
     <picture className="captain-scene captain-level-painting" aria-hidden="true">
       {previous && (
         <img key={previous.id} className="captain-backdrop-outgoing"
-          src={previous.background} alt="" draggable="false" decoding="async" />
+          src={previous.background} data-fallback={previous.fallbackBackground || ""}
+          onError={(event) => { if (event.currentTarget.dataset.fallback) { event.currentTarget.src = event.currentTarget.dataset.fallback; event.currentTarget.dataset.fallback = ""; } }}
+          alt="" draggable="false" decoding="async" />
       )}
       <img key={current.id} className={"captain-backdrop-incoming" + (entered ? " is-entered" : "")}
-        src={current.background} alt="" draggable="false" decoding="async" fetchPriority="high" />
+        src={current.background} data-fallback={current.fallbackBackground || ""}
+        onError={(event) => { if (event.currentTarget.dataset.fallback) { event.currentTarget.src = event.currentTarget.dataset.fallback; event.currentTarget.dataset.fallback = ""; } }}
+        alt="" draggable="false" decoding="async" fetchPriority="high" />
     </picture>
   );
 }
