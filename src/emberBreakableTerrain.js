@@ -2,10 +2,10 @@
 // if the player ignores every wall; these are bonuses, not mandatory damage gates.
 export const BREAKABLE_LAYOUT = Object.freeze([
   {x:1120, side:-1, material:"earth", id:"barkroot-earth"},
-  {x:6150, side: 1, material:"earth", id:"ruby-earth"},
+  {x:6030, side: 1, material:"earth", id:"ruby-earth"},
   {x:10300,side:-1, material:"crystal",id:"ruby-crystal"},
-  {x:15100,side: 1, material:"crystal",id:"temple-crystal"},
-  {x:19800,side:-1, material:"entrance",id:"royal-hidden-chamber"},
+  {x:15240,side: 1, material:"crystal",id:"temple-crystal"},
+  {x:20000,side: 1, material:"entrance",id:"royal-hidden-chamber"},
 ]);
 
 const toughness = material => material==="crystal" ? 6 : material==="entrance" ? 4 : 3;
