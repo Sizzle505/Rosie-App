@@ -18,6 +18,8 @@ try {
     await page.goto("http://127.0.0.1:4173/#qr-atelier",{waitUntil:"domcontentloaded"});
     await page.locator(".qa-inputs input").first().fill("https://example.org/rosie");
     await page.locator(".qa-svg svg").waitFor({state:"visible"});
+    await page.waitForTimeout(1800);
+    await page.screenshot({path:out+"/"+viewport.name+"-atelier-before-view.png",fullPage:false});screenshots++;
     const finishes=viewport.mobile?["emerald","burgundy","sapphire"]:["emerald"];
     for (const finish of finishes) {
       await page.locator(".qa-palette-"+finish).click();
