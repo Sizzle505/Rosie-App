@@ -46,7 +46,8 @@ export function updateCrystalShutters(s,tipWorldX,tipY,boosted,onHit,center,radi
     }
     if(!h.resolved&&gap< -112){
       h.resolved=true;
-      if(!h.hit){
+      // An unvisited shelf behind the starting point is not a free dodge.
+      if(!h.hit&&h.warned){
         s.hazardsDodged=(s.hazardsDodged||0)+1;
         s.score+=100;s.charge=Math.min(100,s.charge+8);
         s.events.push({type:"shutter-dodged",id:h.id,x:screenX,y:edge});
