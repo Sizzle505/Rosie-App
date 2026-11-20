@@ -505,8 +505,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         </div>
       </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} data-world-warnings={hud.worldWarnings} data-boss-phase={hud.boss?.phase||"none"} data-stage-duration={hud.duration}
-          data-hazard-art-loaded={world&&world.index>=2
-            ?(artRef.current["exp:"+({2:"gear-crusher",3:"lava-geyser",4:"royal-earth-burst"}[world.index])]?.naturalWidth>0?"true":"false")
+          data-hazard-art-loaded={world&&hud.stageIndex>=2
+            ?(artRef.current["exp:"+({2:"gear-crusher",3:"lava-geyser",4:"royal-earth-burst"}[hud.stageIndex])]?.naturalWidth>0?"true":"false")
             :"n/a"}
           data-boss-art-loaded={hud.boss
             ?(artRef.current["exp:"+hud.boss.kind]?.naturalWidth>0?"true":"false")
@@ -533,7 +533,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <p>{subtitle}</p>
              {mode==="ended"&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 expedition stars earned"}>
                <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
-               <small>{world?(world.index>=2?"DEFEAT BOSS · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE"):"FINISH · 2 WALLS · ROYAL RELIC"}</small>
+               <small>{world?(hud.stageIndex>=2?"DEFEAT BOSS · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE"):"FINISH · 2 WALLS · ROYAL RELIC"}</small>
              </div>}
             {mode==="ended"&&!hud.boss&&(hud.relics>0||relicFound ?
               <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
