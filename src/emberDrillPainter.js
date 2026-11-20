@@ -5,6 +5,7 @@ import { paintSculpturalTunnel } from "./emberTunnelSculpture.js";
 import { paintOriginalAuger, paintOriginalBoostExhaust, paintTurboTip, paintTurboWorldStreaks } from "./emberAugerFX.js";
 import { paintExcavationUnderlay, paintExcavationTip } from "./emberExcavationFX.js";
 import { paintNewBackgroundParallax } from "./emberNewBackgrounds.js";
+import { paintBreakables } from "./emberBreakablePainter.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -388,6 +389,7 @@ export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrect
   // transition core and left the course looking obstacle-free.
   if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
   paintSculpturalTunnel(c,s,assets);
+  paintBreakables(c,s,assets,W);
   paintTurboWorldStreaks(c,s,W,H);
   // First collectibles, then drill, with hazards on top for readable play.
   for(const o of s.objects) if(o.x>=s.scroll-100&&o.x<s.scroll+W+100 && o.kind!=="rock"&&o.kind!=="spike")pickup(c,o,s,assets);
