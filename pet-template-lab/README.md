@@ -1,10 +1,10 @@
 # Pet Template Lab - isolated, non-production groundwork
 
-**RosieVerse remains the flagship.** This folder is not loaded, imported, built, or used by the running Rosie App. Draft PR #191 is intentionally left unmerged.
+**RosieVerse remains the flagship.** This folder is not loaded, imported, built, or used by the running Rosie App. The offline template lab is included solely as developer tooling. Its presence does not activate any pet routes, services, accounts, or deployments.
 
 ## Safety boundary
 
-1. All changes live exclusively in `pet-template-lab/` on a development branch. Never overwrite files in `src/`, `public/`, the existing app manifests, APIs or build configuration.
+1. All pet-template tooling lives exclusively in `pet-template-lab/` and remains outside the live application runtime. Never overwrite files in `src/`, `public/`, the existing app manifests, APIs or build configuration.
 2. No deployment or new Vercel project is created by these tools. The preparation scripts use **no network**.
 3. The public GitHub repository must never contain customer reference photos, private correspondence, credentials, or unreleased pet artwork. Keep all individualized pet folders outside the repo.
 4. Accounts, cloud notes, Secret Santa persistence and email default to **disabled** for each new dog. See `RUNTIME-ISOLATION.md` for the current Rosie-specific Supabase/Gmail dependencies.
