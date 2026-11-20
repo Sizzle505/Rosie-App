@@ -31,9 +31,15 @@ jobs:
           cat /tmp/rosie-vite.log
           exit 1
       - run: node tests/ipad-visual-review.mjs
+      - name: Audit other iPad pages
+        run: node tests/ipad-visual-review.mjs
+        env:
+          ROSIE_PAGES: fortune,cheese,captain,vault,randomizers,timekeeper,reminders
+          ROSIE_DEVICES: ipad-820x1180,ipad-pro-landscape-1366x1024
+          ROSIE_OUT: artifacts/ipad-extra
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ipad-layout-screenshots
-          path: artifacts/ipad-review/
+          path: artifacts/
           retention-days: 14
