@@ -25,6 +25,7 @@ import "./cheese-honeywood.css";
 import "./cheese-sprint.css";
 import "./ipad-polish.css";
 import "./desktop-nov18.css";
+import "./yachtDashExpansion.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
 import AxisJoystick from "./AxisJoystick.jsx";
@@ -34,6 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
+import { YACHT_CHAPTERS, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, isYachtHazard } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1703,6 +1705,15 @@ function CaptainRosieGame({ soundOn }) {
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(75);
   const [levelOrder, setLevelOrder] = useState(shuffleCaptainLevelOrder);
+  const [chapterIndex, setChapterIndex] = useState(0);
+  const [unlockedChapter, setUnlockedChapter] = useState(() => {
+    try { return yachtUnlockedLevel(localStorage.getItem("yachtDashUnlockedChapter")); }
+    catch { return 0; }
+  });
+  const [completed, setCompleted] = useState(false);
+  const [showVictoryArt, setShowVictoryArt] = useState(false);
+  const [nearMisses, setNearMisses] = useState(0);
+  const [rivalsPassed, setRivalsPassed] = useState(0);
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
   const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
@@ -1725,6 +1736,7 @@ function CaptainRosieGame({ soundOn }) {
   const laneRef = useRef(1);
   const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
+  const spawnSequenceRef = useRef(0);
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
   const boostRef = useRef(false);
@@ -1739,11 +1751,13 @@ function CaptainRosieGame({ soundOn }) {
   const phaseKey = timeLeft > 50 ? "harbor" : timeLeft > 25 ? "riviera" : "sunset";
   const phase = CAPTAIN_PHASES[phaseKey];
   const elapsed = 75 - timeLeft;
-  const levelNumber = Math.min(CAPTAIN_LEVELS.length - 1, Math.floor(elapsed / (75 / CAPTAIN_LEVELS.length)));
-  const level = CAPTAIN_LEVELS[levelOrder[levelNumber]];
+  const chapter = YACHT_CHAPTERS[chapterIndex];
+  const levelNumber = Math.min(4, Math.floor(elapsed / 15));
+  const level = yachtSceneFor(chapterIndex, elapsed, levelOrder);
   const scenery = useCaptainSceneryTransition(level, true);
   // Fetch only the NEXT painting in advance; no mounting or accumulating five layers.
-  const nextLevel = CAPTAIN_LEVELS[levelOrder[levelNumber + 1]] || null;
+  const nextLevel = levelNumber < 4
+    ? yachtSceneFor(chapterIndex, (levelNumber + 1) * 15, levelOrder) : null;
   useEffect(() => {
     if (!nextLevel) return undefined;
     const image = new Image();
@@ -1814,8 +1828,10 @@ function CaptainRosieGame({ soundOn }) {
     setLane(safeLane);
   }
 
-  function finishGame(reason) {
+  function finishGame(reason, success = false) {
     if (finishedRef.current) return;
+    setCompleted(success);
+    setShowVictoryArt(success);
     finishedRef.current = true;
     boostRef.current = false;
     boostRemainingRef.current = 0;
@@ -1828,8 +1844,11 @@ function CaptainRosieGame({ soundOn }) {
     captainTone("finish");
   }
 
-  function startGame() {
+  function startGame(targetChapter = chapterIndex) {
     audioContext();
+    const chosen = typeof targetChapter === "number"
+      ? Math.max(0, Math.min(unlockedChapter, targetChapter)) : chapterIndex;
+    if (chosen !== chapterIndex) setChapterIndex(chosen);
     if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
     boostRef.current = false;
@@ -1839,6 +1858,7 @@ function CaptainRosieGame({ soundOn }) {
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
+    spawnSequenceRef.current = 0;
     laneRef.current = 1;
     lastPhaseRef.current = "harbor";
     setLane(1);
@@ -1854,9 +1874,13 @@ function CaptainRosieGame({ soundOn }) {
     setTurbo(0);
     setBoost(false);
     setCheeses(0);
+    setNearMisses(0);
+    setRivalsPassed(0);
+    setCompleted(false);
+    setShowVictoryArt(false);
     setEnded(false);
     setPhaseNotice("CAST OFF");
-    setMessage("Lines cast off. Tennis balls are 10, treats are 20, Golden Cheese is 40. Keep clear of the red buoys.");
+    setMessage(YACHT_CHAPTERS[chosen].description);
     setRunning(true);
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }
@@ -1922,14 +1946,14 @@ function CaptainRosieGame({ soundOn }) {
     const timer = window.setInterval(() => {
       setTimeLeft((current) => {
         if (current <= 1) {
-          finishGame("Port Rosie reached. Captain Rosie has entered the voyage in the official treat ledger.");
+          finishGame(YACHT_CHAPTERS[chapterIndex].name + " conquered. Captain Rosie has entered the voyage in the official treat ledger.", true);
           return 0;
         }
         return current - 1;
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [running, paused]);
+  }, [running, paused, chapterIndex]);
 
   useEffect(() => {
     if (!running || paused) return;
@@ -2110,6 +2134,15 @@ function CaptainRosieGame({ soundOn }) {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [running, paused, turbo]);
+
+  useEffect(() => {
+    if (!ended || !completed) return;
+    setUnlockedChapter((current) => {
+      const next = yachtNextUnlocked(current, chapterIndex);
+      try { localStorage.setItem("yachtDashUnlockedChapter", String(next)); } catch {}
+      return next;
+    });
+  }, [ended, completed, chapterIndex]);
 
   useEffect(() => {
     if (running || !ended) return;
