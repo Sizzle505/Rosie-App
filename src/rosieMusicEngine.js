@@ -23,10 +23,28 @@ export class RosieMusicEngine {
     else this._notify();
   }
   unlock(){
-    if(this.unlocked)return;
+    if(this.unlocked){
+      // Safari can revoke an individual media element's playback permission
+      // after a source change. A later user tap must be able to retry it.
+      if(this.error&&this.enabled&&!this.hidden)this._playDesired();
+      return;
+    }
     this.unlocked=true;
-    if(this.enabled&&!this.hidden)this._playDesired();
-    else this._notify();
+    if(this.enabled&&!this.hidden){
+      // Grant both alternating decks a real user-gesture play() on WebKit.
+      // Keep the spare silent, and never play it over the current track.
+      const webkit=typeof navigator!=="undefined" &&
+        /AppleWebKit/i.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//i.test(navigator.userAgent);
+      if(webkit){
+        const spare=this.decks[1]||(this.decks[1]=this.audioFactory());
+        spare.src=musicUrl(this.desired);spare.preload="metadata";spare.volume=0;
+        try{
+          const attempt=spare.play();
+          attempt?.then?.(()=>{if(this.active!==1)spare.pause();}).catch?.(()=>{});
+        }catch{}
+      }
+      this._playDesired();
+    }else this._notify();
   }
   _playDesired(){
     if(!this.enabled||!this.unlocked||this.hidden)return;
@@ -45,6 +63,10 @@ export class RosieMusicEngine {
     const next=this.decks[nextIndex]||(this.decks[nextIndex]=this.audioFactory());
     next.pause();next.src=musicUrl(id);next.loop=ROSIE_MUSIC[id].loop;
     next.preload="auto";next.volume=0;
+    // Force a fresh resource selection after rapid page changes on WebKit.
+    // Without this, the deck may keep an aborted prior request and never GET
+    // the newly selected MP3 even though its src property has changed.
+    next.load?.();
     this.active=nextIndex;this.activeId=id;this.error=null;
     next.onended=()=>{if(this.active===nextIndex&&!next.loop){this.activeId=null;this._notify();}};
     // Call play synchronously while the originating click/touch is active.
