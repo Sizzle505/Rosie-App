@@ -37,6 +37,8 @@ jobs:
           ROSIE_PAGES: fortune,cheese,captain,vault,randomizers,timekeeper,reminders
           ROSIE_DEVICES: ipad-820x1180,ipad-pro-landscape-1366x1024
           ROSIE_OUT: artifacts/ipad-extra
+      - name: Check tablet working panels
+        run: node tests/ipad-interaction-review.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
