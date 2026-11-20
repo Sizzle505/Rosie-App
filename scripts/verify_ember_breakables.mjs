@@ -49,6 +49,12 @@ for(const [name,engine,viewport,mobile] of [
       }));
     },files);
     if(checks.some(x=>!x.ok))throw new Error("Broken imported imagery: "+JSON.stringify(checks));
+    const worldButtons=suite.locator(".ember-world-choice");
+    if(await worldButtons.count()!==5)throw new Error("Five selectable expedition worlds missing");
+    await worldButtons.nth(2).click();
+    if(!(await suite.locator(".ember-expedition-launch").innerText()).includes("CLOCKWORK"))
+      throw new Error("World picker did not select Clockwork");
+    await suite.screenshot({path:`artifacts/ember-breakables/${name}-worlds.png`});
     await suite.screenshot({path:`artifacts/ember-breakables/${name}-idle.png`});
     await page.getByRole("button",{name:"START DIGGING"}).click();
     await page.locator(".ember-dig-hint").waitFor({state:"visible",timeout:3500});
@@ -69,6 +75,17 @@ for(const [name,engine,viewport,mobile] of [
     if(failed.length)throw new Error("Asset requests failed: "+JSON.stringify(failed));
     const hud=await suite.locator(".ember-stats").innerText();
     if(!hud.includes("HULL")||!hud.includes("TIME"))throw new Error("HUD missing");
+    // Exercise an independently selected world while leaving Classic QA intact.
+    const stagePage=await context.newPage();
+    await stagePage.goto(base+"#captain",{waitUntil:"domcontentloaded",timeout:45000});
+    await stagePage.locator(".ember-suite").waitFor({state:"visible",timeout:45000});
+    await stagePage.locator(".ember-world-choice").nth(2).click();
+    await stagePage.locator(".ember-expedition-launch").click();
+    await stagePage.locator(".ember-course-plaque").getByText("Clockwork Catacombs").waitFor({state:"visible",timeout:3500});
+    const stageTime=await stagePage.locator(".ember-stats").innerText();
+    if(!stageTime.includes("15s")&&!stageTime.includes("14s"))throw new Error("Selected route did not start at 15 seconds");
+    await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
+    await stagePage.close();
     console.log(name+" passed; image frames loaded and earth formation painted");
   }finally{
     await browser.close();
