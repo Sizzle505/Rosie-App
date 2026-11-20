@@ -7,6 +7,7 @@ on:
       - src/yachtDashExpansion.js
       - src/yachtDashExpansion.css
       - src/yachtDashExpansion.test.js
+      - src/yachtDashArt.test.js
       - src/CaptainSceneryTransition.jsx
       - src/CaptainOuterAtmosphere.jsx
       - public/yacht-dash/**
@@ -28,13 +29,10 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Validate scene order, safe lanes and unlock behavior
-        run: node --test src/yachtDashExpansion.test.js
+        run: node --test src/yachtDashExpansion.test.js src/yachtDashArt.test.js
       - name: Build Vite app
         run: npm run build
-      - name: Report pending art import
+      - name: Confirm full approved artwork import
         run: |
-          if [ -d public/yacht-dash ]; then
-            echo "Art folder exists; inspect all assets before release."
-          else
-            echo "::warning::Approved binary art still staged in Dropbox ZIP; see docs/Yacht-Dash-Expansion-Asset-Import.md"
-          fi
+          test "$(find public/yacht-dash -name '*.webp' | wc -l)" -eq 39
+          echo "All 39 approved Yacht Dash images are present."
