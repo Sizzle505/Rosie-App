@@ -22,11 +22,11 @@ export function excavationNotice(event) {
     kind:"success",title:event.boss==="mole-king"?"THE KING SURRENDERS":event.boss==="copperjack"?"COPPERJACK DISABLED":"CINDERCLAW DEFEATED",
     detail:"Boss reward +"+event.points+" points",duration:3.0
   };
-  const hazardNames={crystal:"CRYSTAL SPIKES",piston:"CLOCKWORK PISTON",geyser:"MOLTEN GEYSER",quake:"ROYAL ROCK BURST"};
+  const hazardNames={crystal:"CRYSTAL SPIKES",piston:"CLOCKWORK PISTON",geyser:"MOLTEN GEYSER",basalt:"FALLING BASALT",quake:"ROYAL ROCK BURST"};
   if(event.type==="world-hazard-warning")return {
     kind:"tip",placement:event.side<0?"bottom":"top",
     title:(hazardNames[event.kind]||"CAVE HAZARD")+" AHEAD",
-    detail:"Steer toward the center; Turbo can break through.",duration:1.8
+    detail:event.kind==="basalt"?"The ceiling is cracking - drop toward the clear lane, or use Turbo.":"Steer toward the center; Turbo can break through.",duration:1.8
   };
   if(event.type==="world-hazard-dodged")return {
     kind:"success",title:"CLEAN ESCAPE",
