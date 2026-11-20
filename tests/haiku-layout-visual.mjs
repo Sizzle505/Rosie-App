@@ -142,7 +142,7 @@ try {
       assert.ok(await page.getByRole("button",{name:"Haiku Reflection"}).isVisible(),
         label+" should have a poem-led meditation program");
       await page.getByRole("button",{name:"Silence",exact:true}).click();
-      await page.getByRole("button",{name:"Begin 5-minute meditation",exact:true}).click();
+      await page.locator(".zen-begin").click();
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
       await room.waitFor({state:"visible"});
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
