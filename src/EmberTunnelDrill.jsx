@@ -4,9 +4,30 @@ import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
 import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExpeditionStars} from "./emberExpeditionStages.js";
+import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT} from "./emberExpansionCatalog.js";
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 
+// Art loads only for the selected challenge, keeping the original Classic
+// course fast and unchanged. All source images are available for QA in PR #192.
+const EXPEDITION_ART_BY_STAGE={
+  0:[],1:[],
+  2:["gear-crusher","copperjack","world-markers","bonus-pickups"],
+  3:["lava-geyser","falling-basalt","cinderclaw","world-markers","bonus-pickups"],
+  4:["royal-earth-burst","mole-king","world-markers","bonus-pickups"]
+};
+function loadExpeditionArt(art,stageIndex){
+  if(!Number.isInteger(stageIndex)||stageIndex<0)return;
+  const all={...EMBER_EXPANSION_ATLASES,...EMBER_CHARACTER_ATLASES};
+  for(const id of EXPEDITION_ART_BY_STAGE[stageIndex]||[]){
+    const key="exp:"+id;
+    if(art[key]||!all[id])continue;
+    const image=new Image();
+    image.decoding="async";
+    image.src=EXPANSION_ROOT+all[id].file;
+    art[key]=image;
+  }
+}
 const PASSAGES = [
   { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2, mission:"BREAK AN EARTH WALL" },
   { label: "Ruby Temple Galleries", start: RUN_DURATION / 2, end: RUN_DURATION, mission:"BEAT THE CRYSTAL SHUTTER" },
@@ -223,6 +244,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     const targetStage=Number.isInteger(requestedStage)?requestedStage:
       requestedStage===null?null:(modeRef.current==="ended"?frame.current.stageIndex:null);
     const next=newRun(seed.current++,targetStage);
+    loadExpeditionArt(artRef.current,targetStage);
     frame.current=next;particles.current=[];
     noticeRef.current=null;setNotice(null);
     pressed.current.up=false;pressed.current.down=false;
@@ -533,7 +555,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
                    className={"ember-world-choice"+(selectedWorld===i?" selected":"")}
                    onClick={()=>setSelectedWorld(i)}
                    aria-pressed={selectedWorld===i}
-                   style={{backgroundImage:`linear-gradient(180deg,rgba(16,16,25,.25),rgba(16,13,23,.92)),url(/ember-drill/${w.art})`}}>
+                   style={{backgroundImage:`linear-gradient(180deg,rgba(16,16,25,.25),rgba(16,13,23,.92)),url(${i>=2?EXPANSION_ROOT+Object.values(EMBER_EXPANSION_TRANSITIONS)[i-2]:"/ember-drill/"+w.art})`}}>
                    <strong>{i+1}. {w.name}</strong>
                    <small aria-label={(stageStars[w.id]||0)+" out of 3 stars"}>
                      {"★".repeat(stageStars[w.id]||0)}{"☆".repeat(3-(stageStars[w.id]||0))}
