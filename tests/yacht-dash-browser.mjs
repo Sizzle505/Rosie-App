@@ -34,6 +34,11 @@ try {
         padding:s.padding,minHeight:s.minHeight,maxHeight:s.maxHeight,margin:s.margin,
         transform:s.transform,zIndex:s.zIndex};};
     return {course:measure(course),panel:measure(panel),
+      shell:measure(course.closest(".yacht-game-shell")),
+      shellChildren:[...course.closest(".yacht-game-shell").children].map(x=>({
+        className:x.className,rect:measure(x)
+      })),
+      hud:measure(document.querySelector(".captain-fs-yacht .captain-hud")),
       body:document.body.scrollHeight,children:parts.map(sel=>[sel,measure(panel?.querySelector(sel))]),
       immediate:[...panel.children].slice(0,6).map(x=>({name:x.tagName,css:x.className?.baseVal||x.className,rect:measure(x)}))};
   }));
@@ -54,6 +59,18 @@ try {
   }
   const toggle = frame.locator(".yacht-steering-options .captain-steering-toggle");
   console.log("Mode toggle visible before launch", await toggle.isVisible());
+  console.log("Preflight layout details", JSON.stringify(await page.evaluate(() => {
+    const panel=document.querySelector(".captain-fs-yacht .captain-start-panel");
+    const course=panel.closest(".yacht-course");
+    const shell=course.closest(".yacht-game-shell");
+    const metric=el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return{
+      name:el.className,top:r.top,left:r.left,width:r.width,height:r.height,
+      display:s.display,flex:s.flex,position:s.position,overflow:s.overflow,
+      maxHeight:s.maxHeight,heightStyle:s.height,alignSelf:s.alignSelf,
+      gridRow:s.gridRow,gridColumn:s.gridColumn,padding:s.padding,margin:s.margin}};
+    return {shell:metric(shell),children:[...shell.children].map(metric),
+      panel:metric(panel),picker:metric(panel.querySelector(".yacht-chapter-picker"))};
+  })));
   await page.screenshot({ path:folder+"/iphone-stage-picker.png" });
   await frame.locator(".yacht-cast-off").click();
   await page.waitForFunction(() => {
