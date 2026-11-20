@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
+import RosieHaikuScene from "./RosieHaikuScene.jsx";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -186,6 +187,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
           <div className="haiku-heading"><div className="haiku-overline">THE LITTLE BOOK OF ROSIE</div><h1>Rosie's Haiku Garden</h1><p>Small poems. Grand opinions.</p></div>
           <div className="haiku-header-mark" aria-hidden="true">✿</div>
         </header>
+        <RosieHaikuScene />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll" key={poemKey(poem)}>
