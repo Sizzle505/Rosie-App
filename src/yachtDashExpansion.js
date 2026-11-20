@@ -89,6 +89,26 @@ export function yachtNextUnlocked(current, completedChapter) {
 }
 
 /** Stage medal targets reward performance, but do not restrict playtesting access. */
+/** Flavor of the three 25-second course phases; the original Sakura
+ * phase text stays in CAPTAIN_PHASES. These are narrative, not difficulty gates. */
+export const YACHT_CHAPTER_PHASES = Object.freeze({
+  typhoon: {
+    harbor: { name: "Gathering Squall", copy: "The wind rises. Watch for wreckage and deep reefs." },
+    riviera: { name: "Storm Surge", copy: "The sea grows restless. Read the torii opening early." },
+    sunset: { name: "Stormbreak Run", copy: "The squall begins to break. Bring Rosie into safe harbor." }
+  },
+  moonlight: {
+    harbor: { name: "Lantern Start", copy: "The moon lights the starting channel. Gather the prizes." },
+    riviera: { name: "Regatta Crossing", copy: "Rivals close in. Make each passing lane count." },
+    sunset: { name: "Midnight Sprint", copy: "The finish lanterns are in sight. Hold the racing line." }
+  },
+  emperor: {
+    harbor: { name: "Imperial Waters", copy: "The imperial course opens. Expect the unexpected." },
+    riviera: { name: "The Emperor's Trial", copy: "Storm debris and rivals now share the royal channel." },
+    sunset: { name: "Royal Finish", copy: "One final passage to the imperial podium." }
+  }
+});
+
 export const YACHT_CHAPTER_GOALS = Object.freeze({
   sakura: { score: 650, expert: 1450, nearMisses: 0, rivals: 0,
     description: "Reach Sakura Cove. Golden Cheese and clean cargo streaks earn medals." },
