@@ -1,0 +1,189 @@
+/* Haiku Zen Garden: original transparent mastheads with real searchable text.
+   This stylesheet is imported last and changes only the Haiku page. */
+.haiku-page .haiku-header {
+  --haiku-banner-width:min(590px,68vw);
+  position:relative;
+  display:block;
+  height:215px;
+  min-height:215px;
+  padding:0;
+  margin:0;
+  overflow:visible;
+  text-align:center;
+}
+.haiku-page .haiku-masthead-art {
+  display:block;
+  position:absolute;
+  top:0;
+  left:50%;
+  width:var(--haiku-banner-width);
+  aspect-ratio:2170/712;
+  height:auto;
+  transform:translateX(-50%);
+  z-index:0;
+  pointer-events:none;
+}
+.haiku-page .haiku-masthead-art img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 11px 15px rgba(19,13,23,.53));
+}
+.haiku-page .haiku-heading {
+  position:absolute;
+  z-index:1;
+  display:block;
+  left:50%;
+  top:98px;
+  transform:translate(-50%,-50%);
+  width:min(410px,53vw);
+  padding:0;
+  margin:0;
+  line-height:1;
+  pointer-events:none;
+}
+.haiku-page .haiku-overline,
+.haiku-page .haiku-header-mark {display:none;}
+.haiku-page .haiku-heading h1 {
+  margin:0;
+  padding:0;
+  color:#63353a;
+  font:normal 600 clamp(26px,2.2vw,36px)/1.1 "Iowan Old Style","Palatino Linotype",Baskerville,Georgia,serif;
+  letter-spacing:.01em;
+  text-shadow:0 1px 1px rgba(255,239,199,.91);
+  white-space:nowrap;
+}
+.haiku-page .haiku-masthead-tagline {
+  position:absolute;
+  z-index:1;
+  left:50%;
+  top:195px;
+  margin:0;
+  transform:translateX(-50%);
+  color:#fff2dd;
+  text-shadow:0 2px 7px #201029,0 4px 15px #120c1f;
+  font:italic clamp(13px,1.2vw,16px)/1.4 Georgia,serif;
+  white-space:nowrap;
+}
+.haiku-page .haiku-back {
+  z-index:5;
+  top:12px;
+  left:0;
+  transform:none;
+}
+/* Restore clean, explicit placement in place of the additive desktop
+   playground offsets that were creating uneven alignment and overlap. */
+@media(min-width:1480px) {
+  .app-shell.page-haiku .haiku-header,
+  .app-shell.page-haiku .haiku-scene-image,
+  .app-shell.page-haiku .haiku-scroll,
+  .app-shell.page-haiku .haiku-verse-actions,
+  .app-shell.page-haiku .haiku-verse-actions button,
+  .app-shell.page-haiku .haiku-scene-selector button,
+  .app-shell.page-haiku .haiku-workbench {
+    translate:none!important;
+    scale:none!important;
+  }
+  .haiku-page .haiku-shell{
+    grid-template-columns:minmax(0,1.14fr) minmax(0,1.0fr) minmax(0,.86fr);
+    column-gap:clamp(18px,1.4vw,28px);
+  }
+  .haiku-page .haiku-scene-image{height:clamp(348px,41vh,425px);}
+  .haiku-page .haiku-scene-selector{
+    margin-top:clamp(28px,2.5vw,42px);
+  }
+  .haiku-page .haiku-scene-stage{min-width:0;}
+  .haiku-page .haiku-scroll-column{min-width:0;}
+  .haiku-page .haiku-scroll{width:min(100%,490px);}
+  .haiku-page .haiku-workbench{width:100%;}
+  .haiku-page .haiku-shell > .haiku-scene-quote {
+    transform:none;
+    margin:0 auto;
+    padding:2px 12px 6px;
+    gap:2px;
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote::before {
+    display:none;
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote strong {
+    font-size:clamp(23px,1.7vw,28px);
+    line-height:1.13;
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote small {
+    font-size:14px;
+    line-height:1.25;
+  }
+}
+/* The proportion of the grand plaque is retained on standard desktop. */
+@media (min-width:900px) and (max-width:1479px) {
+  .haiku-page .haiku-header{
+    --haiku-banner-width:min(610px,68vw);
+    height:223px;
+    min-height:223px;
+  }
+  .haiku-page .haiku-heading{top:101px;width:min(360px,46vw);}
+  .haiku-page .haiku-heading h1{font-size:clamp(25px,2.6vw,33px);}
+  .haiku-page .haiku-masthead-tagline{top:205px;}
+  .haiku-page .haiku-back{top:9px;}
+  .haiku-page .haiku-shell{row-gap:18px;}
+  .haiku-page .haiku-scene-image{height:clamp(325px,32vw,400px);}
+}
+/* Landscape and portrait iPad: navigation is a distinct top row, rather than
+   forcing the back button through the lantern and sakura artwork. */
+@media (min-width:601px) and (max-width:899px) {
+  .haiku-page .haiku-header{
+    --haiku-banner-width:min(630px,88vw);
+    height:272px;
+    min-height:272px;
+  }
+  .haiku-page .haiku-masthead-art{top:40px;}
+  .haiku-page .haiku-heading{top:149px;width:min(360px,54vw);}
+  .haiku-page .haiku-heading h1{font-size:clamp(28px,4vw,36px);}
+  .haiku-page .haiku-masthead-tagline{top:251px;}
+  .haiku-page .haiku-back{top:1px;left:0;}
+}
+/* Phones use the actual red compact masthead, not a squeezed desktop plaque.
+   Keep the button above the art and ensure the title fits the dark center. */
+@media(max-width:600px) {
+  .haiku-page .haiku-header{
+    --haiku-banner-width:min(430px,100%);
+    height:218px;
+    min-height:218px;
+  }
+  .haiku-page .haiku-masthead-art{
+    top:47px;
+    aspect-ratio:2114/707;
+  }
+  .haiku-page .haiku-heading {
+    top:118px;
+    width:64%;
+    max-width:300px;
+  }
+  .haiku-page .haiku-heading h1 {
+    color:#ffe6bd;
+    font-size:clamp(19px,5.7vw,27px);
+    line-height:1.1;
+    font-weight:600;
+    text-shadow:0 2px 3px #301012,0 0 10px rgba(0,0,0,.25);
+    letter-spacing:-.012em;
+  }
+  .haiku-page .haiku-masthead-tagline {
+    top:188px;
+    font-size:clamp(11px,3.4vw,14px);
+  }
+  .haiku-page .haiku-back{
+    top:0;
+    left:1px;
+    padding:9px 12px;
+  }
+}
+@media(max-width:360px) {
+  .haiku-page .haiku-header {height:206px;min-height:206px;}
+  .haiku-page .haiku-heading{top:113px;width:65%;}
+  .haiku-page .haiku-heading h1{font-size:19px;}
+  .haiku-page .haiku-masthead-tagline{top:175px;font-size:11px;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .haiku-page .haiku-masthead-art img {animation:none!important;}
+}

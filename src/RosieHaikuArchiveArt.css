@@ -1,0 +1,169 @@
+/* Imported approved Rosie Haiku originals - completely scoped to this page.
+   Independent animated scenery never replaces the canonical Rosie or poem text. */
+.haiku-page .haiku-header-mark {
+  width:clamp(43px,5vw,72px);
+  height:clamp(43px,5vw,72px);
+  font-size:0 !important;
+  background:url("/rosieverse/haiku/ornaments/imperial-paw-crest.webp") center / contain no-repeat;
+  opacity:.86;
+  filter:drop-shadow(0 3px 7px rgba(25,13,24,.42));
+  pointer-events:none;
+}
+.haiku-page .haiku-tabs {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.haiku-page .haiku-tabs > button {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+  min-height:83px;
+  padding:6px 2px;
+  font-size:11px;
+  line-height:1.2;
+  letter-spacing:0;
+}
+.haiku-page .haiku-tabs > button img {
+  width:clamp(32px,3.3vw,43px);
+  height:clamp(35px,3.8vw,49px);
+  flex:0 0 auto;
+  object-fit:contain;
+  pointer-events:none;
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,.25));
+}
+.haiku-page .haiku-tabs > button.selected img {
+  filter:drop-shadow(0 0 5px rgba(255,223,165,.55));
+}
+.haiku-page .haiku-tabs .haiku-tab-journal-text {
+  display:inline;
+  font:inherit;
+  padding:0;
+  background:none;
+  border-radius:0;
+  color:inherit;
+  margin:0;
+}
+.haiku-page .haiku-tabs .haiku-tab-journal-text > span {
+  margin-left:2px;
+  font:600 10px system-ui,sans-serif;
+}
+.haiku-page .haiku-workbench {
+  /* The illustrated washi texture is beneath, never on top of, readable UI. */
+  background-image:linear-gradient(150deg,rgba(35,43,63,.95),rgba(45,35,57,.95) 72%,rgba(57,38,59,.94)),
+    url("/rosieverse/haiku/ornaments/washi-paper-refined.webp");
+  background-size:cover;
+}
+.haiku-page .haiku-archive-sunbeams,
+.haiku-page .haiku-archive-pollen,
+.haiku-page .haiku-archive-zen-sand,
+.haiku-page .haiku-archive-temple-lantern,
+.haiku-page .haiku-archive-petals {
+  position:absolute;
+  pointer-events:none;
+  user-select:none;
+}
+.haiku-page .haiku-archive-sunbeams {
+  inset:0;
+  z-index:3;
+  background:url("/rosieverse/haiku/living-garden/field-sunbeams.webp") center top / cover no-repeat;
+  opacity:.32;
+  mix-blend-mode:screen;
+  animation:haiku-sunlight-slow 18s ease-in-out infinite alternate;
+}
+.haiku-page .haiku-archive-pollen {
+  inset:0;
+  z-index:4;
+  background:url("/rosieverse/haiku/living-garden/golden-pollen.webp") center / cover no-repeat;
+  opacity:.22;
+  mix-blend-mode:screen;
+  animation:haiku-pollen-drift 25s ease-in-out infinite alternate;
+}
+.haiku-page .haiku-archive-zen-sand {
+  left:0;right:0;bottom:0;height:47%;
+  z-index:3;
+  background:url("/rosieverse/haiku/living-garden/zen-sand-sheen.webp") center bottom / cover no-repeat;
+  opacity:.28;
+  mix-blend-mode:screen;
+  animation:haiku-sand-shimmer 15s ease-in-out infinite alternate;
+}
+.haiku-page .haiku-archive-temple-lantern {
+  z-index:4;
+  width:clamp(55px,7vw,100px);
+  height:auto;
+  aspect-ratio:1051 / 1448;
+  right:12%;
+  top:clamp(120px,14vh,235px);
+  background:url("/rosieverse/haiku/living-garden/temple-lantern.webp") center / contain no-repeat;
+  opacity:.79;
+  filter:drop-shadow(0 3px 8px rgba(255,181,110,.22));
+  transform-origin:50% 0%;
+  animation:haiku-lantern-sway 7.5s ease-in-out infinite alternate;
+}
+.haiku-page .haiku-archive-petals {
+  z-index:5;
+  inset:0;
+  overflow:hidden;
+}
+.haiku-page .haiku-archive-petal {
+  position:absolute;
+  top:-36px;
+  display:block;
+  width:clamp(17px,1.9vw,31px);
+  height:clamp(17px,1.9vw,31px);
+  background-position:center;
+  background-size:contain;
+  background-repeat:no-repeat;
+  opacity:.70;
+  animation:haiku-petal-fall var(--petal-duration,20s) linear var(--petal-delay,0s) infinite;
+}
+@keyframes haiku-petal-fall {
+  0% { transform:translate3d(-18px,-20px,0) rotate(0deg);opacity:0; }
+  8% { opacity:.7; }
+  85% { opacity:.62; }
+  100% { transform:translate3d(85px,calc(100vh + 120px),0) rotate(500deg);opacity:0; }
+}
+@keyframes haiku-sunlight-slow {
+  from {opacity:.22;transform:scale(1);}
+  to {opacity:.39;transform:scale(1.035);}
+}
+@keyframes haiku-pollen-drift {
+  from {transform:translate3d(-.7%,0,0);opacity:.12;}
+  to {transform:translate3d(.7%,-1%,0);opacity:.24;}
+}
+@keyframes haiku-sand-shimmer {
+  from {opacity:.14;transform:translateY(0);}
+  to {opacity:.34;transform:translateY(-3px);}
+}
+@keyframes haiku-lantern-sway {
+  from {transform:rotate(-1.4deg);}
+  to {transform:rotate(1.4deg);}
+}
+@media(max-width:900px) {
+  .haiku-page .haiku-archive-temple-lantern {
+    right:6%;top:clamp(145px,20vh,250px);
+    width:55px;
+    opacity:.55;
+  }
+  .haiku-page .haiku-archive-sunbeams {opacity:.22;}
+  .haiku-page .haiku-archive-pollen {opacity:.15;}
+}
+@media(max-width:520px) {
+  .haiku-page .haiku-header-mark{width:39px;height:39px;right:0;top:4px;}
+  .haiku-page .haiku-tabs > button{min-height:71px;font-size:10px;padding:5px 0;}
+  .haiku-page .haiku-tabs > button img{width:32px;height:37px;}
+  .haiku-page .haiku-archive-temple-lantern{display:none;}
+  .haiku-page .haiku-archive-petal {width:17px;height:17px;opacity:.48;}
+  .haiku-page .haiku-archive-zen-sand{opacity:.15;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .haiku-page .haiku-archive-sunbeams,
+  .haiku-page .haiku-archive-pollen,
+  .haiku-page .haiku-archive-zen-sand,
+  .haiku-page .haiku-archive-temple-lantern {
+    animation:none!important;
+    transform:none!important;
+  }
+  .haiku-page .haiku-archive-petals{display:none;}
+}
