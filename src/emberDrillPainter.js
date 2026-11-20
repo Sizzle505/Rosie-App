@@ -237,10 +237,11 @@ function pickup(c,o,s,assets={}){
     const x=o.x-s.scroll,y=o.y+Math.sin(s.time*5+o.id)*2;
     if(x>=-70&&x<=W+70){
       const size=74;
-      if(drawExpansionFrame(c,assets["exp:bonus-pickups"],"bonus-pickups",frame,
-        x-size/2,y-size/2,size,size)){
+      const illustrated=assets["exp:bonus-pickups"];
+      if(artReady(illustrated)){
         glow(c,x,y,size*.7,"rgba(255,188,89,.15)");
-        return;
+        if(drawExpansionFrame(c,illustrated,"bonus-pickups",frame,
+          x-size/2,y-size/2,size,size))return;
       }
     }
   }
