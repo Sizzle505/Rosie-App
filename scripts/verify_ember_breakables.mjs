@@ -94,7 +94,24 @@ for(const [name,engine,viewport,mobile] of [
     if(!/\b(?:1[0-5]|[1-9])s\b/.test(stageTime))throw new Error("Selected route does not show a valid 15-second countdown: "+stageTime);
     await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
     await stagePage.close();
-    console.log(name+" passed; image frames loaded and earth formation painted");
+    // Boss-stage smoke: prove Molten transitions into its interactive encounter.
+    const bossPage=await context.newPage();
+    await bossPage.bringToFront();
+    await bossPage.goto(base+"#captain",{waitUntil:"domcontentloaded",timeout:45000});
+    await bossPage.locator(".ember-suite").waitFor({state:"visible",timeout:45000});
+    await bossPage.locator(".ember-world-choice").nth(3).click();
+    await bossPage.locator(".ember-expedition-launch").click();
+    await bossPage.locator(".ember-stage").scrollIntoViewIfNeeded();
+    await bossPage.waitForFunction(()=>{
+      const phase=document.querySelector(".ember-stage")?.getAttribute("data-boss-phase");
+      return phase&&phase!=="none";
+    },null,{timeout:20000});
+    const status=await bossPage.locator(".ember-boss-accessible").innerText();
+    if(!status.includes("Cinderclaw")||!status.includes("3 of 3 health"))
+      throw new Error("Molten boss did not enter a healthy, readable encounter: "+status);
+    await bossPage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-cinderclaw-boss.png`});
+    await bossPage.close();
+    console.log(name+" passed; classic art, Clockwork warning and Cinderclaw boss verified");
   }finally{
     await browser.close();
   }
