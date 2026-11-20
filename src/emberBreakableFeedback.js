@@ -2,6 +2,19 @@
 // The messages do not affect physics, and no generated character portraits are used.
 export function excavationNotice(event) {
   if(!event)return null;
+  if(event.type==="shutter-warning")return {
+    kind:"tip",title:"MOVING CRYSTAL AHEAD",detail:"Steer away from the wall, or shatter it with Turbo.",duration:1.6
+  };
+  if(event.type==="shutter-shatter")return {
+    kind:"success",title:"CRYSTAL SHUTTER BROKEN",detail:"+150 points · Clear passage",duration:1.7
+  };
+  if(event.type==="shutter-dodged")return {
+    kind:"success",title:"CRYSTAL DODGED",detail:"+100 points · Turbo charge earned",duration:1.2
+  };
+  if(event.type==="objective-complete")return {
+    kind:"success",title:event.mission==="barkroot"?"BARKROOT MISSION COMPLETE":"RUBY MISSION COMPLETE",
+    detail:"Expedition bonus +"+event.points+" points",duration:2.1
+  };
   if(event.type==="hard-rock")return {
     kind:"tip",title:"CRYSTAL TOO HARD",detail:"Charge Burrow Turbo to break it.",duration:2.2
   };
