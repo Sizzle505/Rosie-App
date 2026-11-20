@@ -60,3 +60,20 @@
 @media(prefers-reduced-motion:reduce){
  .haiku-scene-canopy,.haiku-scene-atmosphere,.haiku-scene-rosie--expressive{animation:none;}
 }
+
+
+/* Use the original alpha-transparent Rosie (not the baked-frame animated
+   WebP that produced a black rectangle in Safari/Chrome). One very slow,
+   13.5-second inhale/exhale motion, with a natural pause near the top. */
+.haiku-scene-rosie--slow-breath{
+  transform-origin:50% 88%;
+  animation:haiku-rosie-zen-breathe 13.5s ease-in-out infinite;
+}
+@keyframes haiku-rosie-zen-breathe{
+  0%,100%{transform:translateY(0) scale(1)}
+  43%{transform:translateY(-4px) scale(1.018)}
+  53%{transform:translateY(-4px) scale(1.018)}
+}
+@media(prefers-reduced-motion:reduce){
+ .haiku-scene-rosie--slow-breath{animation:none !important;}
+}
