@@ -34,6 +34,6 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Verify existing drill and new excavations
-        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs
       - name: Verify Vite production build
         run: npm run build
