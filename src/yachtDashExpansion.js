@@ -3,6 +3,12 @@ import { CAPTAIN_LEVELS } from "./captainLevels.js";
 const art = (chapter, file) => "/yacht-dash/" + chapter + "/" + file + ".webp";
 const SCENE_SECONDS = 15;
 export const YACHT_RUN_SECONDS = 75;
+// Playtest mode: all chapters are immediately selectable, without progression locks.
+export const YACHT_PLAYTEST_ALL_LEVELS = true;
+export function yachtPlayableLimit(unlockedLevel) {
+  return YACHT_PLAYTEST_ALL_LEVELS ? YACHT_CHAPTERS.length - 1 : yachtUnlockedLevel(unlockedLevel);
+}
+
 
 /**
  * Each chapter is a complete voyage. Five paintings cycle during that chapter;
