@@ -45,6 +45,18 @@ export function drillBreakables(s,dt,tip,boosted) {
       s.relics=(s.relics||0)+1;
       // A chest of collectibles appears just beyond the revealed doorway.
       s.objects.push({id:90000+s.secrets,kind:"cache",x:b.x+205,y:b.y-b.side*36,radius:27,taken:false});
+    }else{
+      // Every smashed formation opens a short, attainable treasure sweep
+      // toward the tunnel's safer center. Reward the risk of drilling rather
+      // than treating a wall as another static point target.
+      const count=b.material==="crystal"?3:2;
+      for(let i=0;i<count;i++){
+        s.objects.push({
+          id:91000+s.wallsBroken*10+i,kind:"gem",
+          x:b.x+100+i*43,y:b.y-b.side*(30+i*13),
+          radius:20,taken:false
+        });
+      }
     }
   }
 }
