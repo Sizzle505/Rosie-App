@@ -152,17 +152,21 @@ function scenicFeatures(c,s,assets){
 }
 function scenery(c,s,assets={}) {
   c.fillStyle="#23151d";c.fillRect(0,0,W,H);
+  // The original 75s course uses its exact old scenic progression. A selected
+  // 15s stage opens near the corresponding illustrated passage instead.
+  const sceneTime=s.stageIndex===null?s.time:
+    [0,36,50,61,69][Math.max(0,Math.min(4,s.stageIndex))]+s.time*.24;
   let current=0;
   for(let i=1;i<CAVERN_SCENES.length;i++){
-    if(s.time>=CAVERN_SCENES[i].at)current=i;
+    if(sceneTime>=CAVERN_SCENES[i].at)current=i;
   }
   const scene=CAVERN_SCENES[current];
   const nextAt=CAVERN_SCENES[current+1]?.at??75;
   const duration=Math.max(1,nextAt-scene.at);
-  const local=clamp((s.time-scene.at)/duration,0,1);
+  const local=clamp((sceneTime-scene.at)/duration,0,1);
   if(current>0){
     const prev=CAVERN_SCENES[current-1];
-    const fade=clamp((s.time-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
+    const fade=clamp((sceneTime-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
     const eased=fade*fade*(3-2*fade);
     panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,eased);
@@ -173,6 +177,12 @@ function scenery(c,s,assets={}) {
     atmosphericAccent(c,assets[scene.accent],local,1);
   }
   paintNewBackgroundParallax(c,s,assets,W,H);
+  // Modest lighting grade distinguishes the later-world route prototypes
+  // without presenting unapproved generated backgrounds as finished.
+  if(s.stageIndex!==null&&s.stageIndex>=2){
+    const hues=["rgba(30,80,124,.13)","rgba(177,53,25,.15)","rgba(189,130,45,.13)"];
+    c.fillStyle=hues[s.stageIndex-2]||"transparent";c.fillRect(0,0,W,H);
+  }
   // Keep architecture and crystals legible inside the playable corridor.
   const tint=c.createLinearGradient(0,0,0,H);
   tint.addColorStop(0,"rgba(17,10,18,.13)");
