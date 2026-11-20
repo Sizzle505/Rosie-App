@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -125,3 +125,9 @@ test("The supply chest is a useful once-per-new-level reward, not a common hazar
   assert.deepEqual(yachtWaveFor("sakura",12,()=>1),[]);
 });
 
+
+test("Larger obstacles become collidable when their artwork reaches the ship",()=>{
+ assert.equal(yachtCatchStart({kind:"ball",lane:1}),77);
+ assert.equal(yachtCatchStart({kind:"obstacle",footprint:"wide",lane:0}),65);
+ assert.equal(yachtCatchStart({kind:"obstacle",footprint:"arch",lane:1}),60);
+});
