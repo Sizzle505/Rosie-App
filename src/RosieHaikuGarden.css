@@ -100,3 +100,46 @@
 @media (prefers-reduced-motion:reduce) {
   .haiku-scene-fog,.haiku-petal,.haiku-scroll,.haiku-verse p {animation:none !important;}
 }
+
+
+/* Approved Japanese artwork replaces the temporary CSS-drawn scroll.
+   Keep all actual poem text as accessible, selectable HTML above the art. */
+.haiku-scroll {
+  width:min(100%,530px);
+  aspect-ratio:1228 / 1281;
+  height:auto;
+  min-height:0;
+  margin:8px auto 2px;
+  padding:13.5% 14% 12%;
+  background:transparent url("/rosieverse/haiku/haiku-scroll-isolated.png") center / 100% 100% no-repeat;
+  box-shadow:none;
+  filter:drop-shadow(0 20px 24px rgba(12,12,23,.65));
+  overflow:visible;
+}
+.haiku-scroll::before,.haiku-scroll::after {display:none;}
+.haiku-scroll-inner {
+  height:100%;
+  min-height:0;
+  border:0;
+  box-shadow:none;
+  padding:10px 2px;
+}
+.haiku-scroll-inner::before,.haiku-scroll-inner::after {display:none;}
+.haiku-scroll-caption {color:#895744;letter-spacing:.12em;font-size:10px;}
+.haiku-scroll .haiku-ornament {margin:5px 0 6px;font-size:20px;}
+.haiku-scroll .haiku-verse p {font-size:clamp(20px,2.3vw,26px);line-height:1.3;margin:0 0 12px;}
+.haiku-scroll .haiku-metre {margin-top:4px;}
+.haiku-scroll .haiku-scroll-signature {margin:9px 0 3px;font-size:21px;}
+.haiku-scroll .haiku-dedication {font-size:11px;margin:0;max-width:100%;}
+@media(max-width:860px){
+  .haiku-scroll{min-height:0;margin-top:8px;padding:13% 13.5% 12%;}
+  .haiku-scroll-inner{min-height:0;padding:8px 1px;}
+}
+@media(max-width:420px){
+  .haiku-scroll{min-height:0;padding:13% 13.5% 11.5%;}
+  .haiku-scroll-inner{min-height:0;padding:4px 0;}
+  .haiku-scroll .haiku-verse p{font-size:clamp(17px,5.3vw,21px);margin-bottom:9px;}
+  .haiku-scroll .haiku-ornament{margin:2px 0;font-size:16px;}
+  .haiku-scroll .haiku-scroll-signature{font-size:18px;margin-top:5px;}
+  .haiku-scroll .haiku-scroll-caption{font-size:9px;letter-spacing:.06em;}
+}
