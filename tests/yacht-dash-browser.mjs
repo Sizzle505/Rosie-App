@@ -24,6 +24,19 @@ try {
   for (let i = 0; i < 4; i++) {
     assert.equal(await picker.nth(i).isEnabled(), true, "Level "+i+" should be playable");
   }
+  console.log("Preflight panel geometry", await page.evaluate(() => {
+    const panel=document.querySelector(".captain-fs-yacht .captain-start-panel:not(.captain-results-panel)");
+    const course=panel?.closest(".yacht-course");
+    const parts=[".start-panel-rosie",".yacht-chapter-picker",".yacht-select-actions",".yacht-cast-off"];
+    const measure=(el)=>{if(!el)return null;const r=el.getBoundingClientRect(),s=getComputedStyle(el);
+      return {top:Math.round(r.top),height:Math.round(r.height),left:Math.round(r.left),
+        width:Math.round(r.width),position:s.position,display:s.display,overflow:s.overflow,
+        padding:s.padding,minHeight:s.minHeight,maxHeight:s.maxHeight,margin:s.margin,
+        transform:s.transform,zIndex:s.zIndex};};
+    return {course:measure(course),panel:measure(panel),
+      body:document.body.scrollHeight,children:parts.map(sel=>[sel,measure(panel?.querySelector(sel))]),
+      immediate:[...panel.children].slice(0,6).map(x=>({name:x.tagName,css:x.className?.baseVal||x.className,rect:measure(x)}))};
+  }));
   try {
     await picker.nth(1).click({timeout:10000});
   } catch (error) {
