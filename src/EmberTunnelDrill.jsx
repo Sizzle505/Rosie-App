@@ -125,6 +125,7 @@ function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
     cheese:s.cheese, combo:s.combo, boost:s.boostTime, boosts:s.boosts, shards:s.shards,
     damageTaken:s.damageTaken, cleanBonus:s.cleanBonus, distance:Math.round(s.distance/10),
+    wallsBroken:s.wallsBroken||0,secrets:s.secrets||0,relics:s.relics||0,
     passage:Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))), result:s.result };
 }
 function playSound(context,kind) {
@@ -253,7 +254,14 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           if(event.type==="pickup"&&event.kind==="cache"){
             particles.current.push({type:"cache-burst",x:event.x,y:event.y,vx:0,vy:-8,life:.70,max:.70,r:0,color:"#f5d59c"});
           }
-          if(event.type==="hit"||event.type==="shatter"){
+          if(["break-wall","secret-found","crack-wall"].includes(event.type)){
+             particles.current.push({type:"rock-burst",x:event.x,y:event.y,vx:0,vy:0,
+               life:.54,max:.54,r:0,color:"#e5a86a"});
+             if(event.type==="secret-found"){
+               try{localStorage.setItem("rosieEmberRoyalBoneFound","1")}catch(_){}
+             }
+           }
+           if(event.type==="hit"||event.type==="shatter"){
             particles.current.push({type:event.type==="hit"?"hit-burst":"rock-burst",
               x:event.x,y:event.y,vx:0,vy:0,life:.54,max:.54,r:0,color:"#efbd75"});
           }
@@ -365,13 +373,15 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               <span><b>{hud.distance.toLocaleString()}m</b> EXCAVATED</span>
               <span><b>{hud.gems}</b> GEMS</span>
               <span><b>{hud.boosts}</b> TURBOS</span>
-              <span><b>{hud.shards}</b> ROCKS SHATTERED</span>
+              <span><b>{hud.shards+hud.wallsBroken}</b> ROCKS SHATTERED</span>
+              <span><b>{hud.secrets}</b> SECRET CHAMBERS</span>
+              <span><b>{hud.relics}</b> ROYAL RELICS</span>
               <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
               {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
               <span><b>{best.toLocaleString()}</b> BEST</span>
             </div>}
             <button type="button" onClick={start}>{mode==="ended"?"DIG AGAIN":"START DIGGING"}</button>
-            <small>Hold ▲ / ▼ to steer. Space ignites Turbo.</small>
+            <small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>
           </div>}
       </div>
       <div className="ember-controls">
@@ -402,7 +412,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <button className="ember-icon-action" type="button" onClick={start} aria-label="Replay run" title="Replay run">↻</button>
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
-      <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span>
+      <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>
         <span className="ember-best">BEST {best.toLocaleString()}</span></div>
     </section>
   );
