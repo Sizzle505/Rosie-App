@@ -1,0 +1,41 @@
+name: Rosie integrated release visual QA
+on:
+  push:
+    branches:
+      - release/20261120-qr-timekeeper-haiku
+    paths:
+      - .github/workflows/rosie-release-visual-qa.yml
+      - scripts/rosieReleaseVisualQA.mjs
+      - src/rosie-qr-viewer.css
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Build production bundle
+        run: npm run build
+      - name: Start test server
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/rosie-release.log 2>&1 &
+          sleep 5
+          curl --fail http://127.0.0.1:4173/ >/dev/null
+      - name: Capture 4 frame QR layers, Haiku, Timekeepers on phone and desktop
+        run: node scripts/rosieReleaseVisualQA.mjs
+      - name: Preserve visual screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rosie-release-visual-qa
+          path: qa-screenshots/release/*.png
+          retention-days: 7
