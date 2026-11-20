@@ -50,14 +50,14 @@ jobs:
           name: four-hollow-qr-frames
           path: |
             /tmp/qr-hollow-preview.png
-            public/qr-atelier/rosie-qr/rosie-frame-*-hollow.webp
+            public/qr-atelier/rosie-qr/rosie-frame-*.webp
           retention-days: 7
       - name: Commit cleaned frame assets to the existing PR branch
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/qr-atelier/rosie-qr/rosie-frame-*-hollow.webp
+          git add public/qr-atelier/rosie-qr/rosie-frame-*.webp
           if ! git diff --cached --quiet; then
             git commit -m 'Add four truly hollow QR frame WebPs with preserved gold rims'
             git push origin HEAD:fix/qr-viewer-finish-title-close-20261120
