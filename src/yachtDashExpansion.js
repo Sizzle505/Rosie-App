@@ -172,6 +172,20 @@ const toriiGate = () => obstacle("storm-torii", 1, {
 /** Large art overlaps the ship earlier than a small 46px collectible.
  * Start collision when its leading edge reaches the yacht, not when the art
  * has already covered the player's ship. All hazards clear at the same point. */
+/**
+ * Portrait course perspective. New-stage objects first appear at the far
+ * waterline, then steadily grow as they approach Rosie's yacht. Sakura's
+ * original movement/appearance remains unchanged.
+ */
+export function yachtApproachAt(y) {
+  const t = Math.max(0, Math.min(1, (Number(y) + 12) / 120));
+  return {
+    top: 47 + 55 * t,
+    scale: 0.30 + 0.70 * t,
+    opacity: Math.min(1, 0.62 + t)
+  };
+}
+
 export function yachtCatchStart(item) {
   return item.footprint === "arch" ? 60 :
     item.footprint === "wide" ? 65 : 77;
