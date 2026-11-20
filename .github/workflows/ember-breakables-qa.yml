@@ -6,6 +6,7 @@ on:
     paths:
       - "src/EmberTunnelDrill.jsx"
       - "src/emberBreakable*.js"
+      - "src/emberCrystalShutters*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
       - "tests/ember-*.test.mjs"
@@ -34,6 +35,6 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Verify existing drill and new excavations
-        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs
       - name: Verify Vite production build
         run: npm run build
