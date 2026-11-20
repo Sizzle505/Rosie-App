@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1727,6 +1727,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
   const [nearMisses, setNearMisses] = useState(0);
   const [rivalsPassed, setRivalsPassed] = useState(0);
   const [suppliesCollected, setSuppliesCollected] = useState(0);
+  const [hullRecovering, setHullRecovering] = useState(false);
   const [chapterRecords, setChapterRecords] = useState(() => {
     try { return parseYachtRecords(localStorage.getItem("yachtDashRecordsV1")); }
     catch { return {}; }
@@ -1751,6 +1752,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
   const [ended, setEnded] = useState(false);
 
   const laneRef = useRef(1);
+  const livesRef = useRef(3);
+  const hullGraceRemainingRef = useRef(0);
   const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
   const spawnSequenceRef = useRef(0);
@@ -1832,11 +1835,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
 
   function moveCaptain(direction) {
     if (!running || paused) return;
-    setLane((current) => {
-      const next = Math.max(0, Math.min(2, current + direction));
-      laneRef.current = next;
-      return next;
-    });
+    // The collision loop reads laneRef synchronously. Waiting for React to
+    // commit an updater can incorrectly score a hit on iPhone.
+    const next = yachtClampLane(laneRef.current, direction);
+    laneRef.current = next;
+    setLane(next);
   }
 
   function steerTo(nextLane) {
@@ -1855,6 +1858,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
     boostRemainingRef.current = 0;
     window.clearInterval(boostDrainTimerRef.current);
     setBoost(false);
+    setHullRecovering(false);
+    hullGraceRemainingRef.current = 0;
     setPaused(false);
     setRunning(false);
     setEnded(true);
@@ -1884,6 +1889,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
     spawnClockRef.current = 0;
     spawnSequenceRef.current = 0;
     laneRef.current = 1;
+    livesRef.current = 3;
+    hullGraceRemainingRef.current = 0;
+    setHullRecovering(false);
     lastPhaseRef.current = "harbor";
     setLane(1);
     itemsRef.current = [];
@@ -1949,13 +1957,15 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
   }
 
   function onCoursePointerDown(event) {
-    touchStartRef.current = { x: event.clientX, y: event.clientY };
+    touchStartRef.current = running && !paused
+      ? { x: event.clientX, y: event.clientY, pointerId: event.pointerId }
+      : null;
   }
 
   function onCoursePointerUp(event) {
-    if (!running || paused || !touchStartRef.current) return;
     const startPoint = touchStartRef.current;
     touchStartRef.current = null;
+    if (!running || paused || !startPoint || startPoint.pointerId !== event.pointerId) return;
     const deltaX = event.clientX - startPoint.x;
     if (Math.abs(deltaX) > 26) {
       moveCaptain(deltaX > 0 ? 1 : -1);
@@ -1968,17 +1978,37 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
 
   useEffect(() => {
     if (!running || paused) return undefined;
-    const timer = window.setInterval(() => {
-      setTimeLeft((current) => {
-        if (current <= 1) {
-          finishGame(YACHT_CHAPTERS[chapterIndex].name + " conquered. Captain Rosie has entered the voyage in the official treat ledger.", true);
-          return 0;
-        }
-        return current - 1;
-      });
+    // A single timeout avoids firing React state updates from another state
+    // updater, and pauses cleanly when an iPhone is interrupted.
+    const timer = window.setTimeout(() => {
+      if (timeLeft <= 1) {
+        setTimeLeft(0);
+        finishGame(YACHT_CHAPTERS[chapterIndex].name +
+          " conquered. Captain Rosie has entered the voyage in the official treat ledger.", true);
+      } else {
+        setTimeLeft(timeLeft - 1);
+      }
     }, 1000);
-    return () => window.clearInterval(timer);
-  }, [running, paused, chapterIndex]);
+    return () => window.clearTimeout(timer);
+  }, [running, paused, chapterIndex, timeLeft]);
+
+  useEffect(() => {
+    if (!running) return undefined;
+    // Phone calls, app-switching and browser tab changes must never consume
+    // hull or timer while the game is not visible.
+    const pauseWhenHidden = () => {
+      if (document.hidden) {
+        setPaused(true);
+        touchStartRef.current = null;
+      }
+    };
+    document.addEventListener("visibilitychange", pauseWhenHidden);
+    window.addEventListener("pagehide", pauseWhenHidden);
+    return () => {
+      document.removeEventListener("visibilitychange", pauseWhenHidden);
+      window.removeEventListener("pagehide", pauseWhenHidden);
+    };
+  }, [running]);
 
   useEffect(() => {
     if (!running || paused) return;
@@ -2000,6 +2030,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
     const movementScale = tickMs / 70;
 
     const tick = window.setInterval(() => {
+      if (hullGraceRemainingRef.current > 0) {
+        hullGraceRemainingRef.current = Math.max(0, hullGraceRemainingRef.current - tickMs);
+        if (hullGraceRemainingRef.current === 0) setHullRecovering(false);
+      }
       let scoreDelta = 0;
       let turboDelta = 0;
       let lifeLoss = 0;
@@ -2061,11 +2095,15 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
           if (inCatchZone && (isYachtHazard(item.kind)
               ? yachtTouchesHazard(item, laneRef.current) : item.lane === laneRef.current)) {
             if (isYachtHazard(item.kind)) {
-              lifeLoss += 1;
-              hitRival ||= item.kind === "rival";
-              lastHit = "buoy";
-              streakRef.current = 0;
-              comboRef.current = 1;
+              if (yachtCanTakeHit(hullGraceRemainingRef.current, lifeLoss > 0)) {
+                lifeLoss = 1;
+                hitRival ||= item.kind === "rival";
+                lastHit = "buoy";
+                streakRef.current = 0;
+                comboRef.current = 1;
+              }
+              // Hazards never apply repeated damage while crossing the hull,
+              // including during the recovery interval.
             } else if (item.kind === "supply") {
               // Only one supply chest can spawn per chapter; never count it as a
               // regular ball/treat/cheese or penalize players for missing it.
@@ -2127,7 +2165,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
         if (cheeseGain) setCheeses((current) => current + cheeseGain);
         if (supplyCaught) {
           setSuppliesCollected((current) => current + 1);
-          setLives((current) => Math.min(3, current + 1));
+          livesRef.current = Math.min(3, livesRef.current + 1);
+          setLives(livesRef.current);
         }
         const phrase = lastHit === "supply"
           ? "EMERGENCY SUPPLIES. +150 points, one hull repaired, and Turbo recharged."
@@ -2156,19 +2195,19 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
       if (lifeLoss) {
         setStreak(0);
         setCombo(1);
-        setLives((current) => {
-          const next = Math.max(0, current - lifeLoss);
-          pulse("buoy");
-          captainTone("buoy");
-          if (next === 0) {
-            finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
-          } else {
-            setMessage(hitRival ? "RIVAL COLLISION. Rosie demands a formal inquiry."
-              : "OBSTACLE STRIKE. Rosie has issued a formal glare from the bridge.");
-            window.navigator.vibrate?.([55, 35, 55]);
-          }
-          return next;
-        });
+        livesRef.current = Math.max(0, livesRef.current - 1);
+        setLives(livesRef.current);
+        pulse("buoy");
+        captainTone("buoy");
+        if (livesRef.current === 0) {
+          finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
+        } else {
+          hullGraceRemainingRef.current = YACHT_IMPACT_GRACE_MS;
+          setHullRecovering(true);
+          setMessage(hitRival ? "RIVAL COLLISION. Temporary protective wake engaged."
+            : "OBSTACLE STRIKE. Brief protective wake engaged - steer clear.");
+          window.navigator.vibrate?.([55, 35, 55]);
+        }
       }
     }, tickMs);
 
@@ -2178,6 +2217,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
   useEffect(() => {
     function onKeyDown(event) {
       if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
+      // Do not hijack native Enter / Space on selected chapter and result buttons.
+      if (!running && (event.key === "Enter" || event.key === " ") &&
+          event.target?.closest?.("button, a, [role='button']")) return;
       if ((event.key === "p" || event.key === "P") && running) {
         event.preventDefault();
         toggleYachtPause();
@@ -2311,6 +2353,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
           aria-label="Three-lane yacht course. Swipe, tap a lane, or use the controls below to steer."
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
+          onPointerCancel={() => { touchStartRef.current = null; }}
+          onLostPointerCapture={() => { touchStartRef.current = null; }}
         >
           <CaptainScenicPainting scene={scenery} />
           <CaptainCinematicEnvironment
@@ -2400,7 +2444,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
             </div>
           )}
 
-          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "")}>
+          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "") + (hullRecovering ? " yacht-hull-recovering" : "")}>
             <CaptainYachtArt boost={boost} />
           </div>
 
