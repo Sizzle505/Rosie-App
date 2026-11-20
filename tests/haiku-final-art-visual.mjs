@@ -16,6 +16,19 @@ try{
     try{
       await page.goto(base+"/#haiku",{waitUntil:"domcontentloaded",timeout:60000});
       await page.getByRole("heading",{name:"Haiku Zen Garden"}).waitFor({timeout:20000});
+      // The approved atmospheric overlays must be present, below controls, and image-backed.
+      assert.equal(await page.locator(".haiku-scene-canopy").count(),1,label+" sakura layer");
+      assert.equal(await page.locator(".haiku-scene-atmosphere").count(),1,label+" atmosphere layer");
+      for (const [selector,asset] of [
+        [".haiku-scene-canopy","sakura-canopy.webp"],
+        [".haiku-scene-atmosphere","garden-atmosphere.webp"],
+        [".haiku-scene-aura","lotus-breath-halo.webp"]
+      ]) {
+        assert.equal(await page.locator(selector).count(),1,label+" missing "+selector);
+        const image=await page.locator(selector).evaluate(el=>getComputedStyle(el).backgroundImage);
+        assert.ok(image.includes(asset),label+" should use approved image "+asset);
+      }
+
       await page.locator(".haiku-tabs button").filter({hasText:"Meditate"}).click();
       const badges=page.locator(".zen-program-emblem");
       assert.equal(await badges.count(),5,label+" should offer five independent meditation emblems");
