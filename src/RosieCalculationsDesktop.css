@@ -311,3 +311,41 @@
     left:-10px!important;
   }
 }
+
+
+/* Approved manual layout export (4), 2026-11-20, 1920×1080 fullscreen.
+   Values are additive to the pre-existing desktop CSS positioning (including
+   the prior -15px/-25px toolkit adjustments), as in Layout Playground.
+   Apply to wide desktop only; do not change tablet or iPhone layouts. */
+@media screen and (min-width: 1480px) {
+  .app-shell.page-calculations .rc-workspace .rc-tool-grid {
+    translate: -4px -17px;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tools-heading {
+    translate: 1px -12px;
+    scale: 0.9;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--units {
+    translate: 8px -2px;
+    scale: 1.05;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--currency {
+    translate: 6px -23px;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--loan {
+    translate: -4px -18px;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--percent {
+    translate: 5px -17px;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--split {
+    translate: 15px -15px;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--date {
+    translate: -6px -2px;
+  }
+  .app-shell.page-calculations .rc-workspace .rc-tool-card--tip {
+    translate: 16px -2px;
+    scale: 1.03;
+  }
+}
