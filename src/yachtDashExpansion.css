@@ -896,3 +896,155 @@
     outline:none;
   }
 }
+
+
+/* 2026-11-20: Desktop full-screen is a landscape game, not a 500px phone
+   cabinet stranded in a large monitor. Leave the normal desktop/iPhone pages
+   unchanged; the approved portrait scenery still fills the playable river. */
+@media (min-width:900px) and (min-height:650px) and (orientation:landscape) {
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page {
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-columns:minmax(235px,300px) minmax(0,1fr)!important;
+    grid-template-rows:auto auto minmax(0,1fr)!important;
+    gap:10px 17px!important;
+    width:100vw!important;max-width:none!important;
+    height:100dvh!important;min-height:0!important;
+    padding:50px 18px 14px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    align-content:stretch!important;
+    align-items:start!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-hero {
+    grid-column:1!important;grid-row:1!important;
+    width:100%!important;max-width:none!important;
+    margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip {
+    grid-column:1!important;grid-row:2!important;
+    width:100%!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-hud {
+    grid-column:1!important;grid-row:3!important;
+    width:100%!important;max-width:none!important;
+    margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-shell {
+    box-sizing:border-box!important;
+    grid-column:2!important;grid-row:1/4!important;
+    display:flex!important;flex-direction:column!important;
+    justify-self:stretch!important;align-self:stretch!important;
+    width:100%!important;min-width:0!important;max-width:none!important;
+    height:100%!important;min-height:0!important;
+    margin:0!important;padding:9px!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-sign {
+    flex:0 0 auto!important;width:100%!important;margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-steering-options{
+    flex:0 0 33px!important;width:100%!important;
+    margin:4px 0 0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-course {
+    box-sizing:border-box!important;
+    flex:1 1 0!important;
+    width:100%!important;min-width:0!important;max-width:none!important;
+    height:auto!important;min-height:0!important;max-height:none!important;
+    aspect-ratio:auto!important;
+    margin:5px 0 0!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-command-deck{
+    box-sizing:border-box!important;
+    flex:0 0 66px!important;
+    height:66px!important;min-height:66px!important;
+    width:100%!important;
+    margin:6px 0 0!important;
+  }
+}
+
+/* Victory art is intentionally presented OUTSIDE the course. Contain the
+   approved portrait without cropping on normal desktop, desktop fullscreen,
+   and iPhone; the blurred duplicate adds atmosphere only at the edges. */
+.yacht-victory-overlay {
+  position:fixed!important;inset:0!important;
+  z-index:2147483647!important;
+  display:grid;place-items:center;
+  width:100vw!important;height:100dvh!important;
+  min-width:0!important;min-height:0!important;
+  max-width:none!important;max-height:none!important;
+  margin:0!important;padding:0!important;
+  box-sizing:border-box!important;isolation:isolate;
+  overflow:hidden!important;
+  background:#071b2d;
+  pointer-events:auto;
+}
+.yacht-victory-backdrop {
+  position:absolute;inset:-28px;z-index:-1;
+  background-size:cover;background-position:center;
+  filter:blur(24px) brightness(.34) saturate(.67);
+  transform:scale(1.05);
+  pointer-events:none;
+}
+.yacht-victory-content {
+  position:relative;z-index:1;
+  box-sizing:border-box;
+  display:grid;grid-template-rows:minmax(0,1fr) auto;
+  justify-items:center;align-items:center;
+  width:100%;height:100%;min-height:0;
+  padding:12px 15px max(10px,env(safe-area-inset-bottom));
+  gap:9px;
+}
+.yacht-victory-art {
+  display:block;
+  box-sizing:border-box;
+  width:auto!important;
+  height:100%!important;
+  max-width:calc(100vw - 30px)!important;
+  max-height:100%!important;
+  min-width:0;min-height:0;
+  object-fit:contain!important;
+  object-position:center!important;
+  border:1px solid rgba(242,204,129,.7);
+  border-radius:10px;
+  background:#0b3043;
+  box-shadow:0 13px 35px rgba(0,10,21,.52);
+}
+.yacht-victory-actions {
+  position:relative;
+  display:flex;justify-content:center;align-items:center;
+  flex-wrap:wrap;gap:9px;
+  width:auto;max-width:100%;
+  padding:2px 0 3px;
+  background:none!important;
+}
+.yacht-victory-actions button {
+  min-height:40px;
+  padding:9px 16px;
+  border:1px solid #ffe2a0;border-radius:999px;
+  background:linear-gradient(180deg,#fae2a2,#d59a42);
+  color:#173247;
+  font:800 11px/1.1 Georgia,serif;
+  letter-spacing:.04em;cursor:pointer;
+  -webkit-user-select:none;user-select:none;
+  touch-action:manipulation;
+}
+.yacht-victory-actions button:focus-visible{
+  outline:3px solid #fff0ba;outline-offset:3px;
+}
+@media(max-width:720px) {
+  .yacht-victory-content {
+    padding:calc(env(safe-area-inset-top) + 10px) 8px
+      calc(env(safe-area-inset-bottom) + 9px);
+    gap:7px;
+  }
+  .yacht-victory-art {
+    max-width:calc(100vw - 16px)!important;
+    border-radius:8px;
+  }
+  .yacht-victory-actions button {
+    min-height:38px;padding:8px 11px;font-size:9px;
+  }
+}
