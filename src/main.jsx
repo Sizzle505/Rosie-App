@@ -2443,6 +2443,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 item.footprint === "wide" ? { width: "66.666%" } : {}),
               "--approach-scale": perspective.scale *
                 (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
+              // The gate's physical pillars straddle the two outside lanes.
+              // Stretch its width with depth without exaggerating its height.
+              "--approach-scale-x": perspective.scale *
+                (item.footprint === "arch" ? 1.38 : item.footprint === "wide" ? 0.89 : 1),
               "--approach-opacity": perspective.opacity
             } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
             return (
