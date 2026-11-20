@@ -824,3 +824,39 @@
     margin:7px auto 0!important;
   }
 }
+
+
+/* An unambiguous, temporary channel notice while the torii is approaching.
+   Unlike the overhead beam label, it stays at a readable fixed screen size. */
+.captain-game-page .yacht-safe-passage-cue {
+  position:absolute;z-index:28;
+  top:clamp(58px,11%,90px);left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;
+  gap:2px;width:max-content;max-width:85%;
+  padding:6px 14px 7px;
+  pointer-events:none;
+  text-align:center;
+  border:1px solid rgba(185,245,223,.77);
+  border-radius:9px;
+  background:linear-gradient(180deg,rgba(6,54,62,.95),rgba(4,37,51,.93));
+  box-shadow:0 0 13px rgba(117,222,202,.23),0 3px 8px rgba(1,23,36,.32);
+  color:#e6ffe7;
+  text-shadow:0 1px 3px rgba(4,32,42,.7);
+}
+.captain-game-page .yacht-safe-passage-cue strong{
+  font:800 11px/1.15 Georgia,serif;
+  letter-spacing:.10em;color:#d4ffe4;
+}
+.captain-game-page .yacht-safe-passage-cue small{
+  font:700 9px/1.2 Georgia,serif;
+  letter-spacing:.055em;color:#f8e8bd;
+}
+@media(max-width:720px){
+  .captain-game-page .yacht-safe-passage-cue{
+    top:60px;padding:5px 9px 6px;
+    border-radius:7px;
+  }
+  .captain-game-page .yacht-safe-passage-cue strong{font-size:10px;}
+  .captain-game-page .yacht-safe-passage-cue small{font-size:8px;}
+}
