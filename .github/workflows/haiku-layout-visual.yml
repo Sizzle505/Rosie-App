@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - src/RosieHaikuGarden.css
+      - src/RosieCalculationsDesktop.css
+      - tests/fixtures/approved-layout-export-2026-11-20.json
+      - tests/haiku-calculations-approved-layout.mjs
       - src/RosieHaikuGarden.jsx
       - src/RosieHaikuScene.css
       - src/RosieHaikuScene.jsx
@@ -45,6 +48,8 @@ jobs:
         run: node tests/haiku-layout-visual.mjs
       - name: Verify interactive Haiku and Calculations layout sandbox
         run: node tests/haiku-calculations-sandbox-visual.mjs
+      - name: Check all user-approved layout coordinates on desktop and protected devices
+        run: node tests/haiku-calculations-approved-layout.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
