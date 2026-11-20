@@ -14,9 +14,8 @@ export function yachtPlayableLimit(unlockedLevel) {
  * Each chapter is a complete voyage. Five paintings cycle during that chapter;
  * completing one chapter unlocks the next one (not another scene of the same run).
  *
- * New binary masters are staged in Dropbox in:
- * Rosie-App-Transfer/Yacht-Dash-Approved-Expansion-Assets-20261119.zip
- * and must be copied into public/yacht-dash/ before final release.
+ * All 39 approved images now live in public/yacht-dash/ with a SHA-256
+ * asset manifest. The original Sakura scenery remains untouched.
  */
 export const YACHT_CHAPTERS = Object.freeze([
   {
