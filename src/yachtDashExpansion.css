@@ -686,3 +686,12 @@
     height:100%!important;
   }
 }
+
+
+/* Include the complete Cast Off row inside the centered stage panel. Without
+   extra bottom inset the legacy inset border clipped the action by 6px. */
+@media(max-width:720px) and (pointer:coarse) {
+  .captain-game-page .captain-start-panel:not(.captain-results-panel){
+    padding-bottom:28px!important;
+  }
+}
