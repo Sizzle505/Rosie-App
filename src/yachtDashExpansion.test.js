@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -144,4 +144,46 @@ test("Objects arrive from the distant WATERLINE and enlarge toward the yacht",()
  assert.equal(near.scale,1);
  assert.deepEqual(yachtApproachAt(-100),far,"Offscreen initial spawn is clamped");
  assert.deepEqual(yachtApproachAt(900),near,"Past-ship position is clamped");
+});
+
+test("Steering lane changes are synchronous, bounded and accept repeated taps",()=>{
+ assert.equal(yachtClampLane(1,-1),0);
+ assert.equal(yachtClampLane(1,1),2);
+ assert.equal(yachtClampLane(0,-1),0);
+ assert.equal(yachtClampLane(2,1),2);
+ let lane=0;
+ for(const direction of [1,1,-1,1,-1,-1]) lane=yachtClampLane(lane,direction);
+ assert.equal(lane,0);
+ assert.equal(yachtClampLane(NaN,1),2);
+});
+test("A hit gives one pause-safe recovery window and no double damage",()=>{
+ assert.ok(YACHT_IMPACT_GRACE_MS>=1000);
+ assert.ok(YACHT_IMPACT_GRACE_MS<=1800);
+ assert.equal(yachtCanTakeHit(0),true);
+ assert.equal(yachtCanTakeHit(YACHT_IMPACT_GRACE_MS),false);
+ assert.equal(yachtCanTakeHit(1),false);
+ assert.equal(yachtCanTakeHit(0,true),false);
+ assert.equal(yachtCanTakeHit(-1),true);
+});
+test("All three new stages have attainable medal scores after sparse hazards",()=>{
+ const maximumWithNoBoost=(chapter)=>{
+   let score=0,streak=0;
+   for(let step=0;step<34;step++){
+     const item=yachtWaveFor(chapter,step,()=>0)[0];
+     if(item.kind==="rival")score+=70;
+     else if(item.kind==="supply")score+=item.points;
+     else if(["ball","treat","cheese"].includes(item.kind)){
+       streak++;
+       const multiplier=Math.min(4,1+Math.floor(streak/4));
+       score+=({ball:10,treat:20,cheese:40}[item.kind])*multiplier;
+     }
+   }
+   return score;
+ };
+ for(const {id} of YACHT_CHAPTERS.filter(c=>c.id!=="sakura")){
+   const goal=YACHT_CHAPTER_GOALS[id];
+   const possible=maximumWithNoBoost(id);
+   assert.ok(goal.score < possible*.8, id+" silver target needs excessive pickups");
+   assert.ok(goal.expert <= possible+150, id+" gold medal is out of range");
+ }
 });
