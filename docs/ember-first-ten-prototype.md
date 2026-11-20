@@ -41,3 +41,15 @@ The matching transparent PNG sources, contact sheet, and original-size earth stu
 
 ## Release gate
 GitHub Actions verifies the engine tests and Vite production build. The additional cross-browser visual workflow captures screenshots and ensures imported images load and earth walls are actually painted. Keep PR #192 in draft until browser QA and human visual review of the approved art registration. Do not merge or deploy to production without passing those gates.
+
+## Crystal shutter and passage-mission milestone
+The existing 75-second two-passage game now has a second gameplay layer without requiring new generated art:
+- Three deterministic moving crystal shutters at world positions 5300 (roof), 13360 (floor) and 18300 (roof). All have clear same-side formation registration and draw using existing crystal formations.
+- Shutters telegraph before entering the screen; their collision core tracks the exact inward extension drawn by the painter, from a small embedded shelf through extension and retraction.
+- Shutters can be dodged for 100 points and +8 Turbo charge or smashed during Turbo for 150 points. Each shutter can pay only once, and unvisited behind-the-player shutters cannot grant free dodge points.
+- A first Barkroot objective rewards destroying an earth wall (+250), while the second Ruby objective rewards safely passing or shattering the Ruby shutter (+350).
+- Shutter notices are positioned opposite the moving wall, so warnings do not obscure the danger. The live route strip and results show objective status and crystal dodges.
+- New pure engine/feedback tests cover deterministic timing, fair collisions, idempotent rewards, mission scoring and warning placement; browser smoke checks verify the objective panel does not overlap the canvas on iPhone and desktop.
+- Existing approved Rosie vehicle and original 16-frame auger remain untouched.
+
+**Playtest caveat:** This is an exploratory milestone. It does not yet constitute the five-level campaign or a final difficulty tune. Preserve draft PR status until mobile-browser QA and visual assessment have completed.
