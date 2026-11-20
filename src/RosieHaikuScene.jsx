@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./RosieHaikuScene.css";
 
 // The scene plates and the canonical Rosie pose are independent transparent
