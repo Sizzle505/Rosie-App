@@ -26,6 +26,7 @@ import "./cheese-sprint.css";
 import "./ipad-polish.css";
 import "./desktop-nov18.css";
 import "./ipad-composition.css";
+import "./ipad-fortune-cheese.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
 import Captain2Game from "./captain2.jsx";
 import AxisJoystick from "./AxisJoystick.jsx";
@@ -1299,7 +1300,7 @@ function CheeseMemoryGame() {
 
             <div className="cheese-exam-portrait">
               <picture>
-                <source media="(min-width: 1200px)" srcSet="/barkbridge-cheese-exam-still-life-20261113.webp" />
+                <source media="(min-width: 721px)" srcSet="/barkbridge-cheese-exam-still-life-20261113.webp" />
                 <img src="/rosie-doctor-cheese-hero.webp" alt="Cheese examination still life on desktop; Doctor Rosie on mobile" />
               </picture>
               <span>DOCTOR ROSIE · EXAMINER</span>
