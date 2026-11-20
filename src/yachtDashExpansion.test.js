@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -205,4 +205,18 @@ test("Every chapter has distinct scene names matching its five artworks",()=>{
  const sakura=yachtSceneFor(0,0,[0,1,2,3,4]);
  assert.equal(sakura.name,"Torii Sunrise");
  assert.equal(sakura.background,"/captain-levels/sunrise-across-torii-sea.webp");
+});
+
+test("New chapters use themed and distinct stage messages without changing Sakura",()=>{
+ assert.equal(YACHT_CHAPTER_PHASES.sakura,undefined);
+ const keys=["harbor","riviera","sunset"];
+ for(const chapter of ["typhoon","moonlight","emperor"]){
+   const messages=keys.map(k=>YACHT_CHAPTER_PHASES[chapter][k]);
+   assert.equal(messages.length,3);
+   assert.equal(new Set(messages.map(m=>m.name)).size,3);
+   assert.ok(messages.every(m=>m.copy.length>=20));
+ }
+ assert.equal(YACHT_CHAPTER_PHASES.typhoon.sunset.name,"Stormbreak Run");
+ assert.equal(YACHT_CHAPTER_PHASES.moonlight.sunset.name,"Midnight Sprint");
+ assert.equal(YACHT_CHAPTER_PHASES.emperor.sunset.name,"Royal Finish");
 });
