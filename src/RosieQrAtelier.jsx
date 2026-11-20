@@ -18,10 +18,9 @@ const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 // Curious Rosie's original title sits 155 artwork pixels above her lowest
 // gold frame flourish. Apply that SAME rise to every frame's measured bottom tip.
 const ROSIE_TITLE_RISE=155;
-// Both masks use the measured aperture: the rear overscan prevents scene-color
-// slivers, while the front mat covers opaque/white WebP remnants inside the rim.
-const ROSIE_APERTURE_REAR_OVERLAP=64;
-const ROSIE_APERTURE_FRONT_OVERLAP=32;
+// Enlarge each colored opening 10% around the center of its measured contour.
+// The material stays UNDER the original frame art, never over its gilding.
+const ROSIE_APERTURE_SCALE=1.1;
 const ROSIE_FRAMES=[
   {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,bottomX:912,bottomY:1014,titleWidth:540,openingPath:"M886,229 849,242 801,271 765,305 733,351 714,393 700,450 698,516 704,556 715,591 744,633 780,669 820,697 862,716 909,727 929,724 939,710 944,712 953,725 958,724 961,727 993,723 1046,705 1089,680 1131,643 1160,605 1174,572 1183,526 1184,468 1178,428 1163,380 1142,339 1117,305 1073,265 1033,242 1000,231 993,236 983,234 976,244 970,245 968,255 959,259 943,276 929,258 924,258 918,253 917,245 905,234 896,236Z"},
   {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,bottomX:967,bottomY:1002,titleWidth:540,openingPath:"M882,252 836,271 795,299 766,333 737,384 723,424 714,476 714,524 723,576 737,616 756,648 770,659 771,665 798,691 842,722 890,744 936,755 987,756 1023,749 1076,727 1110,705 1148,671 1154,659 1162,654 1181,628 1201,576 1210,524 1210,476 1201,424 1187,384 1158,333 1129,299 1106,279 1102,279 1088,268 1049,253 1036,252 1028,259 1011,259 1002,264 995,274 990,274 971,293 932,259 917,259 902,250Z"},
@@ -38,6 +37,69 @@ function rosieFrameStyle(frame){
     "--rosie-title-y":(frame.titleY/ROSIE_ART_H*100)+"%",
     "--rosie-title-width":(frame.titleWidth/ROSIE_ART_W*100)+"%"
   };
+}
+
+/* Metallic, gem-like finishes echo the five existing palette swatches.
+   This single SVG renderer is used by the viewer AND its exported PNG. */
+const ROSIE_FRAME_MATERIALS={
+  emerald:{
+    bands:["#05261c","#137153","#05291f","#a69551","#0c543d","#166d53","#041e18"],
+    glint:"#4ce9b6",rim:"#f4d58d",shadow:"#00150e"
+  },
+  obsidian:{
+    bands:["#0a111a","#4f606c","#080c13","#94a5b0","#141d27","#4b5a67","#090f18"],
+    glint:"#d7e9f5",rim:"#eef4f9",shadow:"#030508"
+  },
+  burgundy:{
+    bands:["#39081f","#a72d53","#3b0b24","#d9a06a","#671531","#a42d4e","#360a20"],
+    glint:"#ffb0bb",rim:"#f8d49f",shadow:"#200412"
+  },
+  champagne:{
+    bands:["#b18645","#f9dfaa","#a16d2c","#fff5d8","#d0a152","#f6e2ba","#a47b3a"],
+    glint:"#fffef2",rim:"#fff9d9",shadow:"#6f4b22"
+  },
+  sapphire:{
+    bands:["#071436","#285a9d","#081c46","#92c8f1","#0d2559","#346bb1","#07173b"],
+    glint:"#d2eaff",rim:"#e3f6ff",shadow:"#030c25"
+  }
+};
+function rosieFrameMaterialSVG(frame,finishId){
+  const material=ROSIE_FRAME_MATERIALS[finishId]||ROSIE_FRAME_MATERIALS.emerald;
+  const {cx,cy}=frame;
+  const bands=material.bands.map((color,i)=>
+    '<stop offset="'+(i/(material.bands.length-1)*100).toFixed(2)+'%" stop-color="'+color+'"/>'
+  ).join("");
+  const transform='translate('+cx+' '+cy+') scale('+ROSIE_APERTURE_SCALE+') translate('+(-cx)+' '+(-cy)+')';
+  const path=frame.openingPath;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+ROSIE_ART_W+'" height="'+ROSIE_ART_H+'" viewBox="0 0 '+ROSIE_ART_W+' '+ROSIE_ART_H+'" aria-hidden="true">'+
+    '<defs>'+
+      '<linearGradient id="material" gradientUnits="userSpaceOnUse" x1="'+(cx-310)+'" y1="'+(cy-275)+'" x2="'+(cx+325)+'" y2="'+(cy+290)+'">'+bands+'</linearGradient>'+
+      '<radialGradient id="jewelLight" gradientUnits="userSpaceOnUse" cx="'+(cx-170)+'" cy="'+(cy-210)+'" r="480">'+
+        '<stop offset="0" stop-color="'+material.glint+'" stop-opacity=".79"/>'+
+        '<stop offset=".19" stop-color="'+material.glint+'" stop-opacity=".42"/>'+
+        '<stop offset=".52" stop-color="'+material.glint+'" stop-opacity=".08"/>'+
+        '<stop offset="1" stop-color="'+material.glint+'" stop-opacity="0"/>'+
+      '</radialGradient>'+
+      '<linearGradient id="polishedSheen" gradientUnits="userSpaceOnUse" x1="'+(cx-310)+'" y1="'+(cy-280)+'" x2="'+(cx+330)+'" y2="'+(cy+340)+'">'+
+        '<stop offset="0" stop-color="'+material.rim+'" stop-opacity=".13"/>'+
+        '<stop offset=".23" stop-color="'+material.rim+'" stop-opacity=".38"/>'+
+        '<stop offset=".35" stop-color="'+material.rim+'" stop-opacity=".03"/>'+
+        '<stop offset=".59" stop-color="'+material.rim+'" stop-opacity="0"/>'+
+        '<stop offset=".77" stop-color="'+material.rim+'" stop-opacity=".14"/>'+
+        '<stop offset="1" stop-color="'+material.rim+'" stop-opacity=".02"/>'+
+      '</linearGradient>'+
+      '<radialGradient id="jewelDepth" gradientUnits="userSpaceOnUse" cx="'+(cx-115)+'" cy="'+(cy-120)+'" r="530">'+
+        '<stop offset="0" stop-color="'+material.shadow+'" stop-opacity="0"/>'+
+        '<stop offset=".53" stop-color="'+material.shadow+'" stop-opacity=".04"/>'+
+        '<stop offset="1" stop-color="'+material.shadow+'" stop-opacity=".48"/>'+
+      '</radialGradient>'+
+    '</defs>'+
+    '<g transform="'+transform+'">'+
+      '<path d="'+path+'" fill="url(#material)" stroke="url(#material)" stroke-width="6" stroke-linejoin="round"/>'+
+      '<path d="'+path+'" fill="url(#jewelLight)"/>'+
+      '<path d="'+path+'" fill="url(#polishedSheen)"/>'+
+      '<path d="'+path+'" fill="url(#jewelDepth)"/>'+
+    '</g></svg>';
 }
 const STORAGE="rosieverse.qr-atelier.collection.v1";
 const FINISH_STORAGE="rosieverse.qr-atelier.finish.v1";
@@ -96,27 +158,17 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   canvas.width=ROSIE_ART_W*2;canvas.height=ROSIE_ART_H*2;
   const ctx=canvas.getContext("2d");
   ctx.scale(2,2);
-  const qr=await qrImage(svg),art=await loadImage(ROSIE_ASSET_ROOT+frame.file);
+  const [qr,art,material]=await Promise.all([
+    qrImage(svg),
+    loadImage(ROSIE_ASSET_ROOT+frame.file),
+    qrImage(rosieFrameMaterialSVG(frame,style))
+  ]);
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
-  const finish=QR_STYLES.find(item=>item.id===style)||QR_STYLES[0];
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // Match the live viewer and main Atelier: finish behind the untouched
-  // original transparent frame, white QR square, then the gilded art on top.
-  ctx.fillStyle=finish.dark;
-  const aperture=new Path2D(frame.openingPath);
-  ctx.fill(aperture);
-  ctx.strokeStyle=finish.dark;
-  ctx.lineWidth=ROSIE_APERTURE_REAR_OVERLAP;
-  ctx.lineJoin="round";
-  ctx.stroke(aperture);
+  // The 110%-scale jeweled background is strictly behind the original frame.
+  // Use the same SVG source as the browser preview for pixel-level consistency.
+  ctx.drawImage(material,0,0,ROSIE_ART_W,ROSIE_ART_H);
   ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
-  // The original WebPs contain pale, partially opaque matte pixels at the
-  // inner oval. A solid front-facing insert conceals them without tinting the
-  // illustrated metalwork outside the measured opening.
-  ctx.fillStyle=finish.dark;
-  ctx.fill(aperture);
-  ctx.lineWidth=ROSIE_APERTURE_FRONT_OVERLAP;
-  ctx.stroke(aperture);
   // Match the live/main-page QR inset: gold outer keyline, ivory inner edge,
   // then the white scannable QR square.
   ctx.fillStyle="#b17e36";
@@ -141,17 +193,10 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   return canvasBlob(canvas);
 }
 function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish="emerald",printOnly=false}){
-  const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).dark;
-  return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
-    <svg className="qa-rosie-insert-underlay" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
-      preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d={frame.openingPath} fill="var(--rosie-code-bg)" stroke="var(--rosie-code-bg)" strokeWidth={ROSIE_APERTURE_REAR_OVERLAP} strokeLinejoin="round"/>
-    </svg>
+  return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={rosieFrameStyle(frame)}>
+    <div className="qa-rosie-insert-underlay" aria-hidden="true"
+      dangerouslySetInnerHTML={{__html:rosieFrameMaterialSVG(frame,finish)}}/>
     <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
-    <svg className="qa-rosie-insert-surface" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
-      preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d={frame.openingPath} fill="var(--rosie-code-bg)" stroke="var(--rosie-code-bg)" strokeWidth={ROSIE_APERTURE_FRONT_OVERLAP} strokeLinejoin="round"/>
-    </svg>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
       aria-label="Close QR preview and return to the Atelier" title="Close preview">
