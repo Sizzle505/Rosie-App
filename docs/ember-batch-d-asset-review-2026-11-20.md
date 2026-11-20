@@ -1,8 +1,12 @@
 # Ember Tunnel Batch D - Asset Continuation (November 20, 2026)
 
-**Status: review-only concept art, not runtime assets.** This note tracks art prepared after the prior asset-generation conversation reached capacity. It is isolated to draft PR #192.
+**STATUS: REJECTED BY USER - DO NOT INTEGRATE, REUSE OR PRESENT AS MATCHING GAME ART.** The November 20 concept montage and attempted spark-bolt prototype are visually inconsistent with the actual approved Tunnel game. Preserve only as historical audit evidence; do not use them as references for future generation. This note tracks art prepared after the prior asset-generation conversation reached capacity. It is isolated to draft PR #192.
 
-## Source of truth
+## Rejection record
+
+User rejected the entire batch as not resembling the current game. Incorrect outputs include generic fantasy boss/character redesigns, card-like gate illustrations and noncanonical Rosie imagery. The supposed eight-frame Copperjack spark effect also lacks validated transparent registration and should not be integrated. The replacement process must **first** review actual running-game screenshots and original approved sprite binaries from the existing branch/Dropbox art archives. New effects must match the original art precisely and must remain isolated until visually accepted.
+
+## Rejected source package (historical only)
 
 Dropbox transfer path: `/Rosie-App-Transfer/Ember Tunnel Batch D - Ten Art Concepts and Spark Bolt.zip` (13,920,083 bytes).
 
@@ -33,4 +37,4 @@ The ZIP includes the untouched generated concept montage, ten cropped reference 
 
 ## Next technical production step
 
-Create standalone masters (not crops of the reference collage) for assets 02-10, refining VFX 01's glow on dark and light tunnel backgrounds. Import reviewed frame binaries to a **new** review-only directory and add frame registration and missing-image fallback tests before activating any feature. Keep this PR draft.
+**Do not develop from these concept images.** Inspect approved canonical source assets and live Tunnel screenshots first. Build a side-by-side visual spec, then create standalone replacement assets based on actual source art and verify at in-game scale. Keep PR draft and production unchanged.
