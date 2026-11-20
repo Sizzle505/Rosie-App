@@ -44,6 +44,7 @@ import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
 import RosieHaikuGarden from "./RosieHaikuGarden.jsx";
+import RosieMusicPlayer from "./RosieMusicPlayer.jsx";
 import RosieReminders from "./RosieReminders.jsx";
 import RosieCalculations from "./RosieCalculations.jsx";
 import RosieTimekeeper from "./RosieTimekeeper.jsx";
@@ -928,6 +929,14 @@ function CheeseMemoryGame() {
   const boardFocusTimersRef = useRef([]);
 
   const complete = matched.length === CHEESES.length;
+  const graduationMusicRef = useRef(false);
+  useEffect(() => {
+    if(!ceremonyVisible){graduationMusicRef.current=false;return;}
+    if(!graduationMusicRef.current){
+      graduationMusicRef.current=true;
+      window.dispatchEvent(new CustomEvent("rosieverse:music:achievement",{detail:{kind:"cheese-graduation"}}));
+    }
+  },[ceremonyVisible]);
   const hasBegun = started || (gameMode === "sprint" && challengePhase !== "ready");
   const currentReaction = ROSIE_REACTIONS[rosieMood];
   // Accuracy is based on resolved two-card attempts, not an unresolved flip.
@@ -1768,6 +1777,16 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const [eventKind, setEventKind] = useState("ball");
   const [phaseNotice, setPhaseNotice] = useState("");
   const [ended, setEnded] = useState(false);
+
+  // Game soundtrack state belongs to the single RosieVerse music player.
+  // Existing yacht pickup/impact SFX remain entirely independent.
+  useEffect(() => {
+    if (!running && !ended) return;
+    const state=ended?(completed?"victory":"ended"):paused?"paused":"playing";
+    window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
+      detail:{scene:"yacht",state,chapter:chapterIndex}
+    }));
+  },[running,paused,ended,completed,chapterIndex]);
 
   const laneRef = useRef(1);
   const courseFocusRef = useRef(null);
@@ -3446,6 +3465,7 @@ function App() {
         <div className="loading-copy">Consulting the ancient treat ledger…</div>
       </div>
 
+      <RosieMusicPlayer page={page} />
       <div className={`app-shell page-${page} ${loaded ? "app-shell-visible" : ""} ${page === "cheese" ? "is-cheese-page" : ""} ${page === "vault" ? "is-vault-page" : ""}`} onTouchStart={beginLandingSwipe} onTouchEnd={completeLandingSwipe}>
         {page === "captain" && <CaptainOuterAtmosphere />}
 
