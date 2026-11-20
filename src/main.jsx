@@ -2237,7 +2237,7 @@ function CaptainRosieGame({ soundOn }) {
           <div className="route-progress" style={{ width: routeProgress + "%" }} />
           <i className="route-yacht" style={{ left: routeProgress + "%" }}>◆</i>
         </div>
-        <div className="route-port route-destination"><b><RosiePawCrest className="route-paw-crest" /></b><span>SUNSET COVE</span></div>
+        <div className="route-port route-destination"><b><RosiePawCrest className="route-paw-crest" /></b><span>{chapter.destination}</span></div>
       </section>
 
       <section className="captain-hud" aria-label="Yacht game status">
@@ -2252,7 +2252,7 @@ function CaptainRosieGame({ soundOn }) {
         <div className="yacht-game-sign">
           <span className="captain-seal"><RosiePawCrest className="game-sign-paw" /></span>
           <div>
-            <strong>{phase.eyebrow} · {phase.name.toUpperCase()}</strong>
+            <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
           <b>ROSIE I</b>
@@ -2261,6 +2261,7 @@ function CaptainRosieGame({ soundOn }) {
         <div
           className={`yacht-course${running && !paused ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
           data-captain-level={level.id}
+          data-captain-chapter={chapter.id}
           data-captain-climate={level.climate}
           data-captain-passage={levelNumber + 1}
           style={{ "--course-pace": boost ? "1.25s" : running ? "3.1s" : "8s" }}
@@ -2308,7 +2309,7 @@ function CaptainRosieGame({ soundOn }) {
           </div>
 
           <div className="captain-course-banner">
-            <span>PASSAGE {levelNumber + 1} OF {CAPTAIN_LEVELS.length}</span>
+            <span>SCENE {levelNumber + 1} OF 5 · {chapter.name.toUpperCase()}</span>
             <strong>{level.name}</strong>
           </div>
 
@@ -2321,8 +2322,11 @@ function CaptainRosieGame({ soundOn }) {
               style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
               aria-label={item.label}
             >
-              {item.kind === "cheese" ? <GoldenCheeseIcon /> : <CaptainPickupIcon kind={item.kind} />}
+              {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
+                ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
               {item.kind === "cheese" && <small>GOLDEN</small>}
+              {item.driftTo !== undefined && !item.drifted &&
+                <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
             </div>
           ))}
 
@@ -2350,16 +2354,49 @@ function CaptainRosieGame({ soundOn }) {
                     <span><b>{bestStreak}</b> best streak</span>
                     <span><b>{collectedTotal}</b> cargo collected</span>
                     <span><b>{cheeses}</b> Golden Cheese</span>
+                    <span><b>{nearMisses}</b> near misses</span>
+                    <span><b>{rivalsPassed}</b> rival yachts passed</span>
                   </div>
-                  <button type="button" onClick={startGame}>SAIL AGAIN</button>
+                  <div className="yacht-result-actions">
+                    {completed && <button type="button" onClick={() => setShowVictoryArt(true)}>VIEW VICTORY</button>}
+                    {completed && chapterIndex < YACHT_CHAPTERS.length - 1 &&
+                      unlockedChapter >= chapterIndex + 1 && <button type="button"
+                        onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
+                    <button type="button" onClick={() => startGame()}>SAIL AGAIN</button>
+                    <button type="button" onClick={() => { setEnded(false); setCompleted(false); setShowVictoryArt(false); }}>CHOOSE LEVEL</button>
+                  </div>
                 </>
               ) : (
                 <>
                   <span>CAPTAIN ROSIE AWAITS YOUR ORDERS</span>
-                  <strong>Take the Helm</strong>
-                  <button type="button" onClick={startGame}>CAST OFF</button>
+                  <strong>{chapter.name}</strong>
+                  <p>{chapter.description}</p>
+                  <div className="yacht-chapter-picker" role="group" aria-label="Select Yacht Dash level">
+                    {YACHT_CHAPTERS.map((choice, index) => (
+                      <button key={choice.id} type="button"
+                        className={index === chapterIndex ? "is-selected" : ""}
+                        aria-pressed={index === chapterIndex}
+                        disabled={index > unlockedChapter}
+                        onClick={() => setChapterIndex(index)}>
+                        <b>{index + 1}. {choice.name}</b>
+                        {index > unlockedChapter && <small>LOCKED</small>}
+                      </button>
+                    ))}
+                  </div>
+                  <button type="button" className="yacht-cast-off" onClick={() => startGame()}>CAST OFF</button>
                 </>
               )}
+            </div>
+          )}
+          {ended && completed && showVictoryArt && (
+            <div className="yacht-victory-overlay" role="dialog" aria-label={chapter.name + " victory"}>
+              <img src={chapter.victory} alt={chapter.name + " victory - Captain Rosie receives her award"}
+                onError={() => setShowVictoryArt(false)} />
+              <div className="yacht-victory-actions">
+                <button type="button" onClick={() => setShowVictoryArt(false)}>VIEW CAPTAIN'S LOG</button>
+                {chapterIndex < YACHT_CHAPTERS.length - 1 && unlockedChapter >= chapterIndex + 1 &&
+                  <button type="button" onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
+              </div>
             </div>
           )}
         </div>
