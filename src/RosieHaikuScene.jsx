@@ -49,6 +49,18 @@ export function readSelectedScene() {
   }
 }
 
+export function RosieHaikuWisdom({ mode = "daily", mood = "zen", poem }) {
+  const currentMood = mode === "daily" ? "zen" : (mode === "journal" ? poem?.mood || "zen" : mood);
+  const caption = HAIKU_MESSAGES[currentMood] || HAIKU_MESSAGES.zen;
+  return (
+    <section className="haiku-scene-quote" aria-label="Rosie's Zen wisdom">
+      <span className="haiku-scene-quote-kicker">{caption[0]}</span>
+      <strong>{caption[1]}</strong>
+      <small>{caption[2]}</small>
+    </section>
+  );
+}
+
 export default function RosieHaikuScene({ scene = "field", onSceneChange, mode = "daily", mood = "zen", poem, reaction = null }) {
   const [rosieAvailable, setRosieAvailable] = useState(true);
   const currentMood = mode === "daily" ? "zen" : (mode === "journal" ? poem?.mood || "zen" : mood);
@@ -56,7 +68,7 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
   // The animated WebP exhibited a black rectangle in some browsers.
   // Use the proven alpha-transparent master and animate only its element.
   const characterSrc = (reaction && ROSIE_REACTIONS[reaction.type]) || basePose;
-  const caption = HAIKU_MESSAGES[currentMood] || HAIKU_MESSAGES.zen;
+
   function switchScene(next) {
     onSceneChange?.(next);
     try { localStorage.setItem("rosieHaikuSelectedScene", next); }
@@ -80,11 +92,6 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
               : "Rosie strikes a playful poetic pose in her pink-and-gold kimono"}
           />
         )}
-        <div className="haiku-scene-quote">
-          <span className="haiku-scene-quote-kicker">{caption[0]}</span>
-          <strong>{caption[1]}</strong>
-          <small>{caption[2]}</small>
-        </div>
       </div>
       <div className="haiku-scene-selector" role="group" aria-label="Choose meditation scenery">
         {HAIKU_SCENES.map((item) => (
