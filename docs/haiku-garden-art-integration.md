@@ -1,6 +1,6 @@
 # Haiku Garden art integration and QA
 
-**Completed.** The five production WebP/PNG assets were transferred from Dropbox into GitHub on the isolated `feature/rosie-haiku-garden` branch, with byte-for-byte SHA-256 verification in GitHub Actions. The original approved archive is preserved at `/Rosie-App-Transfer/RosieHaikuGardenScenePackFinal.zip`.
+**Completed.** The initial five production WebP/PNG assets were transferred from Dropbox into GitHub on the isolated `feature/rosie-haiku-garden` branch, with byte-for-byte SHA-256 verification in GitHub Actions. The original approved archive is preserved at `/Rosie-App-Transfer/RosieHaikuGardenScenePackFinal.zip`.
 
 The following production assets are committed under `public/rosieverse/haiku/`:
 
@@ -21,6 +21,21 @@ The following production assets are committed under `public/rosieverse/haiku/`:
 - `src/RosieHaikuGarden.jsx` inserts the stage above the poem and controls.
 - On missing art, the shipped view falls back to `/rosieverse/hero.webp` rather than exposing broken images.
 - `src/RosieHaikuGarden.css` uses the real transparent ornamental scroll beneath accessible live HTML poem text. The postcard generator draws the chosen scene, Rosie, and scroll onto a 1200 x 1600 PNG.
+
+## November 20: additional artwork integrated
+
+The newer art has now been copied into Dropbox and imported to the **same isolated feature branch**. There are now **27 committed image assets** under `public/rosieverse/haiku/`, including the original five assets and 22 new optimized WebP files.
+
+**Original files retained in Dropbox:**
+- `/Rosie-App-Transfer/RosieHaikuCharacters01-10.zip` - character pose originals, animation frames, and breathing loop
+- `/Rosie-App-Transfer/Haiku-*.png` - ten source art files for ornamental scrolls, desk, inkstone, canopy, atmosphere, menu/buttons, lantern and transitions
+- `/Rosie-App-Transfer/RosieHaikuGardenScenePackFinal.zip` - initial verified scenery and meditation master
+
+**Integrated UI elements:** The home lantern uses `lantern.webp`; the stage overlays `sakura-canopy.webp` and `garden-atmosphere.webp`, and selects new Rosie poses based on poem voice, while maintaining the original paws-up Rosie for the daily verse. The poetry studio displays `calligraphy-desk.webp`. Desktop and mobile scrolls use `scroll-grand.webp` and `scroll-mobile.webp` respectively, while text remains HTML. Postcards use the selected scenery, a mood-matched Rosie and the illustrated portrait scroll.
+
+**Staged for future animation/control work:** `brushstroke-sprites.webp`, `garden-ui-sheet.webp`, `inkstone-set.webp`, `enlightenment-transition.webp`, `rosie-meditation-frames.webp`, `rosie-meditation-breathing.webp` and remaining character expression variants. These assets are committed but are not presented as separately completed interactive features.
+
+The second one-time GitHub Actions transfer validated each source with SHA-256, optimized the images for delivery, committed them, and its temporary workflow was removed from the feature branch afterward.
 
 ## QA before merge
 
