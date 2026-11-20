@@ -468,3 +468,56 @@
 @media(prefers-reduced-motion:reduce) {
   .captain-game-page .sea-pickup.yacht-upstream-object{transition:none;}
 }
+
+
+/* Gameplay recovery: a restrained, readable protective wake. It conveys the
+   1.45-second grace period without obscuring hazards or flashing the screen. */
+.captain-game-page .captain-yacht.yacht-hull-recovering {
+  filter:drop-shadow(0 0 14px rgba(174,243,223,.72))
+    drop-shadow(0 7px 7px rgba(3,40,55,.25));
+}
+.captain-game-page .captain-yacht.yacht-hull-recovering::after {
+  content:"";position:absolute;z-index:25;
+  left:10%;right:10%;bottom:1%;height:48%;
+  pointer-events:none;
+  border:2px solid rgba(177,247,230,.64);
+  border-radius:50%;
+  background:radial-gradient(ellipse at 50% 45%,rgba(139,230,213,.15),transparent 72%);
+  box-shadow:0 0 16px rgba(123,231,207,.2);
+  animation:yachtProtectiveWake 820ms ease-in-out infinite alternate;
+}
+@keyframes yachtProtectiveWake {
+  from { opacity:.56;transform:scale(.94); }
+  to { opacity:.96;transform:scale(1.08); }
+}
+
+/* A rival changes lanes while moving forward; a short continuous turn is
+   much easier to anticipate than a sideways teleport. */
+.captain-game-page .sea-pickup.yacht-upstream-object.sea-pickup-rival {
+  transition:left 350ms cubic-bezier(.3,.8,.2,1),
+    top 84ms linear,transform 84ms linear,opacity 84ms linear;
+}
+
+/* Minimum viable hit area without reverting to a control overlay. */
+@media(max-width:720px) and (pointer:coarse) {
+  .captain-game-page .yacht-game-sign .captain-steering-toggle {
+    min-height:33px;height:33px;
+    min-width:64px;padding-inline:6px;
+    font-size:8px;
+  }
+  .captain-game-page .yacht-game-sign {
+    min-height:43px!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-sign{
+    min-height:43px!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-course{
+    touch-action:none!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .captain-game-page .captain-yacht.yacht-hull-recovering::after { animation:none; }
+  .captain-game-page .sea-pickup.yacht-upstream-object.sea-pickup-rival {
+    transition:none!important;
+  }
+}
