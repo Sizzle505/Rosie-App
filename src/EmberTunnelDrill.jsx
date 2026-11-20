@@ -27,6 +27,15 @@ function loadExpeditionArt(art,stageIndex){
     image.src=EXPANSION_ROOT+all[id].file;
     art[key]=image;
   }
+  // Load only the panorama for the selected advanced world. The Classic
+  // course and earlier approved backgrounds never request these files.
+  const transition={2:"ruby-clockwork",3:"clockwork-molten",4:"molten-treasury"}[stageIndex];
+  const key="exp-transition:"+transition;
+  if(transition&&!art[key]){
+    const image=new Image();image.decoding="async";
+    image.src=EXPANSION_ROOT+EMBER_EXPANSION_TRANSITIONS[transition];
+    art[key]=image;
+  }
 }
 const PASSAGES = [
   { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2, mission:"BREAK AN EARTH WALL" },
@@ -308,15 +317,27 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     document.addEventListener("keydown",onKeys);
     document.addEventListener("keyup",onKeys);
     window.addEventListener("blur",onBlur);
-    let raf=0,last=0,alive=true;
+    let raf=0,last=0,lastIdleDraw=0,alive=true;
     const render=(ts)=>{
       if(!alive)return;
-      const delta=last?Math.min((ts-last)/1000,.045):0;last=ts;
+      const delta=last?Math.min((ts-last)/1000,.20):0;last=ts;
       if(!onscreen.current||document.hidden){raf=requestAnimationFrame(render);return;}
+      // Pause screens do not need full-speed redraw. On low-frame-rate iPads
+      // the simulation uses 45ms substeps to preserve collision/warning order,
+      // but may advance up to 200ms of real time per actual rendered frame.
+      if(modeRef.current!=="running"&&ts-lastIdleDraw<65){
+        raf=requestAnimationFrame(render);return;
+      }
+      lastIdleDraw=ts;
       const s=frame.current;
       if(modeRef.current==="running"&&!document.hidden){
-        updateRun(s,delta,pressed.current.up,pressed.current.down);
-        for(const event of s.events){
+        const events=[];
+        const steps=Math.max(1,Math.ceil(delta/.045));
+        for(let i=0;i<steps&&s.running;i++){
+          updateRun(s,delta/steps,pressed.current.up,pressed.current.down);
+          events.push(...s.events);
+        }
+        for(const event of events){
            const cue=excavationNotice(event);
            if(cue){
              const activeNotice={...cue,until:s.time+cue.duration};
