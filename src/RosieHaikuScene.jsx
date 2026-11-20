@@ -11,6 +11,27 @@ export const HAIKU_SCENES = Object.freeze([
   { id: "temple", label: "Temple", short: "Temple", src: "/rosieverse/haiku/temple-sunrise.webp" }
 ]);
 const ROSIE_MEDITATING = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
+const ROSIE_EXPRESSIONS = Object.freeze({
+  zen: ROSIE_MEDITATING,
+  savage: "/rosieverse/haiku/rosie-smug.webp",
+  sweet: "/rosieverse/haiku/rosie-affectionate.webp",
+  existential: "/rosieverse/haiku/rosie-existential.webp"
+});
+function poseForPoem(mode, mood, poem) {
+  if (mode === "daily") return ROSIE_MEDITATING;
+  if (mode === "journal") {
+    return ROSIE_EXPRESSIONS[poem?.mood] || "/rosieverse/haiku/rosie-contemplative.webp";
+  }
+  if (mood === "savage" && /vacuum|door|bath|squirrel/.test(poem?.id || ""))
+    return "/rosieverse/haiku/rosie-indignant.webp";
+  return ROSIE_EXPRESSIONS[mood] || ROSIE_MEDITATING;
+}
+const HAIKU_MESSAGES = Object.freeze({
+  zen: ["THE WAY OF THE SHIBA", "Wisdom comes to those who sit.", "Preferably somewhere sunny."],
+  savage: ["A SHIBA'S DECREE", "I have spoken.", "You may now bring the treats."],
+  sweet: ["A LITTLE LOVE", "The world can wait.", "Stay here a little longer."],
+  existential: ["ROSIE PONDERS", "Where do the petals go?", "And is there cheese there?"]
+});
 const APPROVED_HERO = "/rosieverse/hero.webp";
 
 export function readSelectedScene() {
@@ -22,11 +43,14 @@ export function readSelectedScene() {
   }
 }
 
-export default function RosieHaikuScene({ scene = "field", onSceneChange }) {
+export default function RosieHaikuScene({ scene = "field", onSceneChange, mode = "daily", mood = "zen", poem }) {
   const [missing, setMissing] = useState({});
   const [rosieAvailable, setRosieAvailable] = useState(true);
   const selected = HAIKU_SCENES.find((item) => item.id === scene) || HAIKU_SCENES[0];
   const hasSceneArt = !missing[scene];
+  const currentMood = mode === "daily" ? "zen" : (mode === "journal" ? poem?.mood || "zen" : mood);
+  const characterSrc = poseForPoem(mode, currentMood, poem);
+  const caption = HAIKU_MESSAGES[currentMood] || HAIKU_MESSAGES.zen;
   function switchScene(next) {
     onSceneChange?.(next);
     try { localStorage.setItem("rosieHaikuSelectedScene", next); }
@@ -44,17 +68,26 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange }) {
         />
         {hasSceneArt && rosieAvailable && (
           <img
-            className="haiku-scene-rosie"
-            src={ROSIE_MEDITATING}
-            onError={() => setRosieAvailable(false)}
-            alt="Rosie, a black-and-tan Shiba Inu in a pink-and-gold kimono, meditates with both paws raised"
+            className={`haiku-scene-rosie${characterSrc === ROSIE_MEDITATING ? "" : " haiku-scene-rosie--expressive"}`}
+            key={characterSrc}
+            src={characterSrc}
+            onError={(event) => {
+              if (!event.currentTarget.src.endsWith("rosie-meditating-paws-up.webp")) {
+                event.currentTarget.src = ROSIE_MEDITATING;
+              } else setRosieAvailable(false);
+            }}
+            alt={characterSrc === ROSIE_MEDITATING
+              ? "Rosie, the black-and-tan Shiba Inu, meditates in her sakura kimono with both paws raised"
+              : "Rosie strikes a playful poetic pose in her pink-and-gold kimono"}
           />
         )}
+        <div className="haiku-scene-canopy" aria-hidden="true" />
+        <div className="haiku-scene-atmosphere" aria-hidden="true" />
         <div className="haiku-scene-haze" aria-hidden="true" />
         <div className="haiku-scene-quote">
-          <span className="haiku-scene-quote-kicker">THE WAY OF THE SHIBA</span>
-          <strong>Wisdom comes to those who sit.</strong>
-          <small>Preferably somewhere sunny.</small>
+          <span className="haiku-scene-quote-kicker">{caption[0]}</span>
+          <strong>{caption[1]}</strong>
+          <small>{caption[2]}</small>
         </div>
       </div>
       <div className="haiku-scene-selector" role="group" aria-label="Choose meditation scenery">
