@@ -1,0 +1,52 @@
+name: Ember Tunnel imported-art browser QA
+on:
+  push:
+    branches:
+      - work/ember-destructible-treasures-20261119
+    paths:
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberBreakable*.js"
+      - "src/emberDrillPainter.js"
+      - "src/ember-tunnel-drill.css"
+      - "public/ember-drill/breakables/**"
+      - "scripts/verify_ember_breakables.mjs"
+      - ".github/workflows/ember-breakables-visual.yml"
+  pull_request:
+    paths:
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberBreakable*.js"
+      - "src/emberDrillPainter.js"
+      - "src/ember-tunnel-drill.css"
+      - "public/ember-drill/breakables/**"
+      - "scripts/verify_ember_breakables.mjs"
+      - ".github/workflows/ember-breakables-visual.yml"
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run build
+      - name: Verify real art in mobile WebKit and Chromium
+        run: |
+          npm run preview -- --host 127.0.0.1 > /tmp/ember-breakables-preview.log 2>&1 &
+          sleep 4
+          node scripts/verify_ember_breakables.mjs
+      - name: Retain screenshots for visual review
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ember-breakables-visual-qa
+          path: artifacts/ember-breakables/
+          if-no-files-found: ignore
