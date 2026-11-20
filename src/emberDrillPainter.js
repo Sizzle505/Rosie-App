@@ -399,7 +399,15 @@ export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrect
   paintExcavationTip(c,s);
   for(const p of particles){
     c.save();c.globalAlpha=Math.max(0,p.life/p.max);
-    if((p.type==="rock-burst"||p.type==="hit-burst")&&artReady(assets.rockburst)){
+    if((p.type==="break-v2"||p.type==="crack-v2")&&artReady(assets.breakShatterVfx)){
+      const src=assets.breakShatterVfx;
+      const fraction=clamp(1-p.life/p.max,0,1);
+      const count=p.type==="crack-v2"?4:10;
+      const frame=Math.min(count-1,Math.floor(fraction*count));
+      const fw=src.naturalWidth/5,fh=src.naturalHeight/2;
+      const x=frame%5,y=Math.floor(frame/5);
+      c.drawImage(src,x*fw,y*fh,fw,fh,p.x-79,p.y-72,158,144);
+    } else if((p.type==="break-v2"||p.type==="crack-v2"||p.type==="rock-burst"||p.type==="hit-burst")&&artReady(assets.rockburst)){
       drawImageTrim(c,assets.rockburst,p.x-77,p.y-57,154,114,Math.min(1,p.life/p.max));
     } else if(p.type==="cache-burst"&&artReady(assets.cacheBurst)){
       const frame=Math.min(7,Math.floor((1-p.life/p.max)*8)), fw=assets.cacheBurst.naturalWidth/4,fh=assets.cacheBurst.naturalHeight/2;
