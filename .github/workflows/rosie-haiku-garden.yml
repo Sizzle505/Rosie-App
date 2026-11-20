@@ -8,6 +8,7 @@ on:
       - "src/RosieHaikuScene.css"
       - "public/rosieverse/haiku/**"
       - "src/RosieHaikuGarden.css"
+      - "src/RosieHaikuAtmosphere.css"
       - "src/RosieHome.jsx"
       - "src/RosieHome.module.css"
       - "src/main.jsx"
