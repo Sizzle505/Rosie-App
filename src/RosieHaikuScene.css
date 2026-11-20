@@ -14,5 +14,11 @@
 .haiku-scene-selector button.is-selected{color:#2f2433;background:linear-gradient(#ffe6b6,#cba070);border-color:#ffdb9e;box-shadow:0 0 0 1px #e3bd88a8;}
 .haiku-scene-selector button:focus-visible{outline:3px solid #fff4c4;outline-offset:3px;}
 @media(max-width:860px){.haiku-scene-stage{margin:0 auto 19px;}.haiku-scene-image{height:clamp(230px,40vw,365px);}.haiku-scene-rosie{left:55%;height:110%;max-width:45%;}.haiku-scene-quote{width:42%;}.haiku-scene-quote strong{font-size:clamp(23px,4.2vw,36px);}}
-@media(max-width:520px){.haiku-scene-image{height:270px;border-radius:11px;}.haiku-scene-landscape{object-position:48% 52%;}.haiku-scene-rosie{left:45%;height:98%;max-width:58%;bottom:-3%;}.haiku-scene-haze{background:linear-gradient(90deg,#241b36bd,transparent 71%),linear-gradient(0deg,#1a162955,transparent 55%);}.haiku-scene-quote{left:14px;top:44%;width:43%;gap:6px;}.haiku-scene-quote strong{font-size:clamp(21px,5.3vw,29px);}.haiku-scene-quote small{font-size:13px;}.haiku-scene-quote-kicker{font-size:9px;letter-spacing:.12em;}.haiku-scene-selector{gap:5px;}.haiku-scene-selector button{min-height:39px;padding:7px 10px;font-size:11px;}}
+@media(max-width:520px){.haiku-scene-image{height:270px;border-radius:11px;}.haiku-scene-landscape{object-position:48% 52%;}.haiku-scene-rosie{left:44%;height:89%;max-width:56%;bottom:-3%;}.haiku-scene-haze{background:linear-gradient(90deg,#241b36bd,transparent 71%),linear-gradient(0deg,#1a162955,transparent 55%);}.haiku-scene-quote{left:14px;top:44%;width:43%;gap:6px;}.haiku-scene-quote strong{font-size:clamp(21px,5.3vw,29px);}.haiku-scene-quote small{font-size:13px;}.haiku-scene-quote-kicker{font-size:9px;letter-spacing:.12em;}.haiku-scene-selector{gap:5px;}.haiku-scene-selector button{min-height:39px;padding:7px 10px;font-size:11px;}}
 @media(prefers-reduced-motion:reduce){.haiku-scene-selector button{transition:none;}}
+
+/* Compact phones: protect Rosie's raised paws and prevent her right edge being clipped. */
+@media(max-width:420px){
+  .haiku-scene-rosie{left:42%;height:85%;max-width:57%;}
+  .haiku-scene-quote{width:38%;}
+}
