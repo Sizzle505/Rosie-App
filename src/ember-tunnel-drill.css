@@ -362,3 +362,22 @@
 .ember-stick-toggle{position:absolute;right:5px;top:5px;width:30px;height:25px!important;padding:1px!important;z-index:2;border-radius:7px!important;font:700 10px Arial,sans-serif!important;opacity:.88}
 .ember-controls:not(:has(.axis-stick)) .ember-stick-toggle{top:-30px;right:0}
 @media(max-width:620px){.ember-controls:has(.axis-stick){grid-template-columns:72px minmax(0,1fr) 40px}}
+
+/* The new excavation report includes secrets and the Royal Bone Medallion.
+   Compress only the result state on narrow screens; the gameplay viewport is unchanged. */
+@media (max-width:620px) {
+  .ember-start-overlay.is-ended{
+    bottom:3%;width:92%;padding:9px 10px 10px;
+    max-height:95%;overflow-y:auto;
+    scrollbar-width:thin;
+  }
+  .ember-start-overlay.is-ended h3{font-size:clamp(23px,6vw,29px);margin:5px 0}
+  .ember-start-overlay.is-ended p{font-size:10px;margin-bottom:5px}
+  .ember-start-overlay.is-ended .ember-relic-reveal{
+    width:64px;height:64px;margin:0 auto 3px;
+  }
+  .ember-start-overlay.is-ended .ember-results{gap:4px 5px;margin:6px auto}
+  .ember-start-overlay.is-ended .ember-results span{font-size:7px}
+  .ember-start-overlay.is-ended .ember-results b{font-size:15px}
+  .ember-start-overlay.is-ended>small{font-size:8px;margin-top:5px}
+}
