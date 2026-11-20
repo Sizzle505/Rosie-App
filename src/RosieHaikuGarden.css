@@ -719,3 +719,46 @@
     margin-bottom:-110px;
   }
 }
+
+
+/* Approved manual layout export (4), 2026-11-20, 1920×1080 fullscreen.
+   Offsets match the playground's CSS translate/scale longhands.
+   Parent and child offsets deliberately compose; they are NOT layout margins.
+   Desktop-only: do not affect iPhone, iPad, or narrow desktop designs. */
+@media screen and (min-width: 1480px) {
+  .app-shell.page-haiku .haiku-scene-image {
+    translate: -102px 180px;
+    scale: 1.07;
+  }
+  .app-shell.page-haiku .haiku-scroll {
+    translate: -121px 52px;
+    scale: 1.08;
+  }
+  .app-shell.page-haiku .haiku-verse-actions {
+    translate: -123px 29px;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(1) {
+    translate: 8px 2px;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(2) {
+    translate: 5px 2px;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(3) {
+    translate: 0px 2px;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button:nth-child(1) {
+    translate: -70px 211px;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button:nth-child(2) {
+    translate: -69px 212px;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button:nth-child(3) {
+    translate: -70px 213px;
+  }
+  .app-shell.page-haiku .haiku-workbench {
+    translate: -107px 298px;
+  }
+  .app-shell.page-haiku .haiku-header {
+    translate: -4px 57px;
+  }
+}
