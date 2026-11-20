@@ -1,0 +1,41 @@
+name: Ember Character Art Import - temporary transfer
+on:
+  push:
+    branches:
+      - work/ember-destructible-treasures-20261119
+    paths:
+      - .github/workflows/ember-art-characters-20261120.yml
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Retrieve character atlases from Dropbox
+        shell: bash
+        env:
+          PACK_URL: "https://uc6a007ec74ba8f05dd47df3ac1b.dl.dropboxusercontent.com/cd/0/get/DMT4GRtgalG5r9819C4_5okTEw7KYauyVY3SaWY32aduP01qz5TCpCqk7ZjSN4G6lBNm7Yp7tI8kasILmkCD9Rj7Ymknkx5x4DEIxO0tH50k_uRudpFZ0WwJhYTss9CFSu5qkmgHXHen_2Cwl6LFSe1O-nw5-e6S3LJKcSQE34llFQ/file?c_luid=667ded1d"
+          CINDER_URL: "https://uc17b3b6db97e0ba164ff5d3f41e.dl.dropboxusercontent.com/cd/0/get/DMS5cCJXWYdyQ-_fhTdtjiXf7cEmCzgGU_k7GewWDeQO_7QtBjpDmSzn7AtwrDCzfhRDY2k800enNgu-59_MwpPitRQd6qZAGLQfP0hSVdnDb8Uv1x7cjINqUCofIHKPbrp9ohPdDj1ZoOPoS-a-OQsAjZkHtSI-3MUlTD0xLcrfbg/file?c_luid=667ded1d"
+        run: |
+          set -euo pipefail
+          curl -fL --silent --show-error --max-time 150 "$PACK_URL" -o /tmp/ember-characters.zip
+          curl -fL --silent --show-error --max-time 150 "$CINDER_URL" -o /tmp/ember-cinderclaw.zip
+          mkdir -p public/ember-drill/expansion-batch-c/atlases
+          unzip -p /tmp/ember-characters.zip "Ember Tunnel Character Animation Prototype Pack/copperjack/copperjack-atlas-4x3.webp" > public/ember-drill/expansion-batch-c/atlases/copperjack-atlas.webp
+          unzip -p /tmp/ember-cinderclaw.zip "Cinderclaw/cinderclaw-atlas-4x3.webp" > public/ember-drill/expansion-batch-c/atlases/cinderclaw-atlas.webp
+          for file in public/ember-drill/expansion-batch-c/atlases/{copperjack,cinderclaw}-atlas.webp; do
+            test "$(stat -c%s "$file")" -gt 250000
+            file "$file" | grep -q Web/P
+          done
+      - name: Commit two high-resolution boss atlases
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add public/ember-drill/expansion-batch-c/atlases/{copperjack,cinderclaw}-atlas.webp
+          git diff --cached --quiet && exit 0
+          git commit -m "Import Copperjack and Cinderclaw illustrated boss animation atlases"
+          git push origin HEAD:work/ember-destructible-treasures-20261119
