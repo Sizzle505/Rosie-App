@@ -1,0 +1,41 @@
+name: Verify hollow QR viewer in Chromium
+on:
+  push:
+    branches:
+      - fix/qr-viewer-finish-title-close-20261120
+    paths:
+      - scripts/qrHollowViewerBrowserCheck.mjs
+      - .github/workflows/qr-hollow-browser.yml
+      - src/RosieQrAtelier.jsx
+      - src/rosie-qr-viewer.css
+      - public/qr-atelier/rosie-qr/*-hollow.webp
+permissions:
+  contents: read
+jobs:
+  qr-viewer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Build app
+        run: npm run build
+      - name: Start local browser app
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/qr-hollow-vite.log 2>&1 &
+          sleep 5
+          curl --fail http://127.0.0.1:4173/ > /dev/null
+      - name: Inspect 4 frame assets with 5 palettes on iPhone
+        run: node scripts/qrHollowViewerBrowserCheck.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qr-hollow-browser-20-screenshots
+          path: qa-screenshots/qr-hollow/*.png
+          retention-days: 7
