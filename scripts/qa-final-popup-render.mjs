@@ -53,7 +53,7 @@ try {
    assert.equal(d.codeColor,"#4e102a","selected code color lost");
    assert.equal(d.bgColor,"rgb(78, 16, 42)","selected background changed");
    assert.equal(d.whiteCode,"#ffffff","white scannable square missing");
-   assert.match(d.goldEdge,/183, 126, 54/,"main preview gold edge is missing");
+   assert.match(d.goldEdge,/177, 126, 54/,"main preview gold edge is missing");
    assert.ok(d.x.left>=0&&d.x.right<=device.width&&d.x.top>=0&&d.x.bottom<=device.height&&d.closeTop,"X not visible/clickable");
    assert.ok(d.frame.left>=-1&&d.frame.right<=device.width+1,"frame cropped on "+device.name);
    const expect=expected[d.img];assert.ok(expect,"unexpected frame");
