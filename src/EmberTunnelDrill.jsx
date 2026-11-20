@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
+import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 
@@ -157,8 +158,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
-        particles=useRef([]),seed=useRef(1467);
+        particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null);
   const [mode,setMode]=useState("idle");
+  const [notice,setNotice]=useState(null);
   const [relicFound,setRelicFound]=useState(()=>{
     try{return localStorage.getItem("rosieEmberRoyalBoneFound")==="1"}catch(_){return false}
   });
@@ -169,6 +171,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     try {return Number(localStorage.getItem("rosieEmberDrillBest")||0)}catch(_){return 0}
   });
   const bestRef=useRef(best);
+  const [bestStars,setBestStars]=useState(()=>{
+    try{return Math.min(3,Math.max(0,Number(localStorage.getItem("rosieEmberExpeditionStars")||0)))}catch(_){return 0}
+  });
+  const bestStarsRef=useRef(bestStars);
   useEffect(()=>{bestRef.current=best},[best]);
 
   function audio() {
@@ -183,6 +189,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   function start() {
     const next=newRun(seed.current++);
     frame.current=next;particles.current=[];
+    noticeRef.current=null;setNotice(null);
     pressed.current.up=false;pressed.current.down=false;
     modeRef.current="running";setMode("running");setHud(snapshot(next));
     playSound(audio(),"start");
@@ -253,6 +260,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       if(modeRef.current==="running"&&!document.hidden){
         updateRun(s,delta,pressed.current.up,pressed.current.down);
         for(const event of s.events){
+           const cue=excavationNotice(event);
+           if(cue){
+             const activeNotice={...cue,until:s.time+cue.duration};
+             noticeRef.current=activeNotice;setNotice(activeNotice);
+           }
           if(event.type==="shatter"&&s.boostTime>0)s.tipBurstAt=s.time;
           if(event.type==="turbo"&&event.repaired){
             for(let i=0;i<14;i++){
@@ -296,11 +308,19 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             playSound(sound.current,event.type==="hit"?"hit":event.type==="break-wall"?"turbo":"pickup");lastSound.current=ts;
           }
         }
-        if(ts-lastUi.current>115){
+        if(noticeRef.current&&s.time>=noticeRef.current.until){
+           noticeRef.current=null;setNotice(null);
+         }
+         if(ts-lastUi.current>115){
           lastUi.current=ts;setHud(snapshot(s));
         }
         if(s.ended){
           modeRef.current="ended";setMode("ended");setHud(snapshot(s));
+           const stars=excavationStars(s);
+           if(stars>bestStarsRef.current){
+             bestStarsRef.current=stars;setBestStars(stars);
+             try{localStorage.setItem("rosieEmberExpeditionStars",String(stars))}catch(_){}
+           }
           if(s.score>bestRef.current) {
             bestRef.current=s.score;setBest(s.score);
             try{localStorage.setItem("rosieEmberDrillBest",String(s.score))}catch(_){}
@@ -375,6 +395,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
+         {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">GUIDE THE AUGER INTO WEAK EARTH · TURBO BREAKS CRYSTAL</div>}
+         {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind} role="status" aria-live="polite">
+           {notice.kind==="relic"&&<img src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="" />}
+           <span><strong>{notice.title}</strong><small>{notice.detail}</small></span>
+         </div>}
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
         {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p><button type="button" onClick={togglePause}>RESUME DIG</button></div>}
         {mode!=="running"&&mode!=="paused"&&
@@ -382,6 +407,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
+             {mode==="ended"&&<div className="ember-expedition-medals" aria-label={excavationStars(hud)+" of 3 expedition stars earned"}>
+               <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<excavationStars(hud)?"earned":""}>★</i>)}</span>
+               <small>FINISH · 2 WALLS · ROYAL RELIC</small>
+             </div>}
             {mode==="ended"&&(hud.relics>0||relicFound ?
               <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
               hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />)}
@@ -430,7 +459,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}
-        <span className="ember-best">BEST {best.toLocaleString()}</span></div>
+        <span className="ember-best">BEST {best.toLocaleString()}</span><span className="ember-best">EXPEDITION {"★".repeat(bestStars)}{"☆".repeat(3-bestStars)}</span></div>
     </section>
   );
 }
