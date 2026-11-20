@@ -28,7 +28,7 @@ export function updateCrystalShutters(s,tipWorldX,tipY,boosted,onHit,center,radi
     const screenX=h.x-s.scroll;
     if(!h.warned&&gap<=530&&gap>-130){
       h.warned=true;
-      s.events.push({type:"shutter-warning",id:h.id,x:screenX,y:edge});
+      s.events.push({type:"shutter-warning",id:h.id,side:h.side,x:screenX,y:edge});
     }
     // Near-tip, inward-pointing core. Never use the rectangular sprite bounds
     // to create a hidden hitbox, and never apply repeated damage from one shelf.
