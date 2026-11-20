@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -226,4 +226,16 @@ test("Mobile chapter selection captions are short and distinct",()=>{
  assert.equal(new Set(previews).size,4);
  assert.ok(previews.every(copy=>copy.length>15 && copy.length<=54));
  assert.ok(previews.every(copy=>copy.endsWith(".")));
+});
+
+test("Captain's Log provides the next attainable medal goal instead of generic praise",()=>{
+  const sailor={completed:true,score:0,lives:3,nearMisses:0,rivalsPassed:0};
+  assert.match(yachtNextMedalHint("typhoon",{...sailor,completed:false}),/Complete this passage/);
+  assert.match(yachtNextMedalHint("typhoon",sailor),/700 points/);
+  assert.match(yachtNextMedalHint("typhoon",{...sailor,score:900}),/1,350 points/);
+  assert.match(yachtNextMedalHint("typhoon",{...sailor,score:1500,lives:1}),/two or more hull/);
+  assert.match(yachtNextMedalHint("typhoon",{...sailor,score:1500}),/2 clean near misses/);
+  assert.match(yachtNextMedalHint("moonlight",{...sailor,score:1700,rivalsPassed:1}),/2 rival yachts/);
+  assert.match(yachtNextMedalHint("emperor",{...sailor,score:2100,nearMisses:2,rivalsPassed:2}),/All three medals/);
+  assert.equal(yachtNextMedalHint("unknown",sailor),"");
 });
