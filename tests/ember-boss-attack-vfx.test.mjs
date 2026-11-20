@@ -5,7 +5,7 @@ import {bossVfxBounds,paintBossAttackVfx} from "../src/emberBossAttackVfx.js";
 function fakeCanvas(){
  const clips=[];
  const c={clips,
-  save(){},restore(){},beginPath(){},clip(){},moveTo(){},lineTo(){},stroke(){},fill(){},arc(){},translate(){},rotate(){},
+  save(){},restore(){},beginPath(){},closePath(){},clip(){},moveTo(){},lineTo(){},stroke(){},fill(){},arc(){},translate(){},rotate(){},
   rect(...args){clips.push(args);},
   createRadialGradient(){return {addColorStop(){}}}
  };
