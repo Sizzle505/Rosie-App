@@ -9,7 +9,7 @@ const PROGRESS_KEY = "rosieHaikuZenSessionsV1";
 const ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
-  { id:"breathe", title:"Breathe with Rosie", label:"FOLLOW THE RHYTHM", description:"A slow five-second inhale and seven-second exhale. Adjust to what feels comfortable." },
+  { id:"breathe", title:"Breathe with Rosie", label:"FOLLOW THE RHYTHM", description:"A slow four-second inhale and six-second exhale. Adjust to what feels comfortable." },
   { id:"quiet", title:"Quiet Sit", label:"JUST BE HERE", description:"An unguided space for sitting quietly, with gentle written reminders." },
   { id:"guided", title:"A Little Calm", label:"GENTLE GUIDANCE", description:"A mindful reset, with optional guidance read aloud by your device." },
   { id:"unwind", title:"Evening Unwind", label:"SOFTEN THE DAY", description:"Release the day, relax your shoulders, and settle into restful quiet." },
@@ -106,9 +106,9 @@ export default function RosieZenMeditation({scene="field",poem}) {
   const totalMs = minutes*60000;
   const elapsed = Math.max(0,totalMs-remaining);
   const seconds = Math.floor(elapsed/1000);
-  const breatheAt = seconds%12;
-  const inhaling = breatheAt<5;
-  const breathSeconds = inhaling?5-breatheAt:12-breatheAt;
+  const breatheAt = seconds%10;
+  const inhaling = breatheAt<4;
+  const breathSeconds = inhaling?4-breatheAt:10-breatheAt;
   const cues = kind==="haiku"
     ? [
         "Settle in. Let Rosie's poem arrive gently.",
