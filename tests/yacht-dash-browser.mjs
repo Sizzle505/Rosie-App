@@ -220,7 +220,7 @@ try {
   await gateLabel.waitFor({state:"visible",timeout:1500});
   const safePassage=frame.locator(".yacht-safe-passage-cue");
   await safePassage.waitFor({state:"visible",timeout:2500});
-  assert.match(await safePassage.innerText(),/CENTER LANE OPEN/);
+  assert.match(await safePassage.textContent(),/CENTER LANE OPEN/);
   const safeBox=await safePassage.boundingBox();
   assert.ok(safeBox && safeBox.width>=140 && safeBox.height>=24,
     "The center-lane warning must remain legible on a phone");
