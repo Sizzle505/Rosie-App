@@ -2043,6 +2043,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
       let rivalPasses = 0;
       let hitRival = false;
       let supplyCaught = false;
+      let supplyRepairedHull = false;
+      let supplyExtendedBoost = false;
       const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
@@ -2165,11 +2167,18 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
         if (cheeseGain) setCheeses((current) => current + cheeseGain);
         if (supplyCaught) {
           setSuppliesCollected((current) => current + 1);
+          supplyRepairedHull = livesRef.current < 3;
           livesRef.current = Math.min(3, livesRef.current + 1);
           setLives(livesRef.current);
+          if (boostRef.current) {
+            boostRemainingRef.current = Math.min(6000, boostRemainingRef.current + 2500);
+            supplyExtendedBoost = true;
+          }
         }
         const phrase = lastHit === "supply"
-          ? "EMERGENCY SUPPLIES. +150 points, one hull repaired, and Turbo recharged."
+          ? "EMERGENCY SUPPLIES: +150 points, " +
+            (supplyRepairedHull ? "one hull repaired" : "hull already full") + ", " +
+            (supplyExtendedBoost ? "Turbo extended." : "Turbo recharged.")
           : lastHit === "cheese"
           ? "Golden Cheese aboard. Rosie has inventoried it as priceless cargo."
           : lastHit === "treat"
