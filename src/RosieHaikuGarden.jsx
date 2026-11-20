@@ -299,11 +299,20 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <div className="haiku-section-label">THE BOOK OF SMALL WISDOM</div>
                 <h2>Saved favorites</h2>
                 {journal.length === 0 ? (
-                  <><p>Your little poetry book is empty. Save a favorite verse to begin your collection.</p><button className="haiku-primary" type="button" onClick={openDaily}>Read Today's Haiku</button></>
+                  <>
+                    <img className="haiku-journal-art haiku-journal-art--closed"
+                      src="/rosieverse/haiku/final/journal-cover.webp" alt="" aria-hidden="true" loading="lazy"/>
+                    <p>Your little poetry book is empty. Save a favorite verse to begin your collection.</p>
+                    <button className="haiku-primary" type="button" onClick={openDaily}>Read Today's Haiku</button>
+                  </>
                 ) : (
-                  <div className="haiku-journal-list">
+                  <>
+                    <img className="haiku-journal-art haiku-journal-art--open"
+                      src="/rosieverse/haiku/final/journal-open.webp" alt="" aria-hidden="true" loading="lazy"/>
+                    <div className="haiku-journal-list">
                     {journal.map((entry, index) => <button type="button" key={poemKey(entry) + "-" + index} className={poemKey(entry) === poemKey(poem) ? "selected" : ""} onClick={() => openJournalEntry(entry)}><span>{entry.lines[0]}</span><small>{entry.title}</small></button>)}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
             )}
