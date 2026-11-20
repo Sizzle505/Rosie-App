@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "pet": {
+    "id": "example-dog",
+    "name": "Example Dog",
+    "species": "dog",
+    "breed": "",
+    "personality": ""
+  },
+  "features": {
+    "captain": false,
+    "cardVault": false
+  },
+  "assetBase": "assets",
+  "reviewStatus": "draft",
+  "backend": {
+    "accounts": false,
+    "cloudNotes": false,
+    "secretSanta": false,
+    "email": false
+  }
+}
