@@ -21,7 +21,7 @@ try{
     await page.getByRole("button",{name:"View QR in a Rosie frame"}).evaluate(button=>button.click()); // Atelier finish strip overlaps the desktop View hit target; isolate the popup test.
     const dlg=page.locator(".qa-rosie-viewer");
     await dlg.waitFor();
-    await page.waitForSelector(".qa-rosie-overlay-art");
+    await page.locator(".qa-rosie-viewer .qa-rosie-overlay-art").waitFor({state:"visible"});
     const frames=new Set();
     for(let i=0;i<4;i++){
       const state=await page.evaluate(()=>{
