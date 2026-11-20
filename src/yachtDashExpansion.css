@@ -769,3 +769,58 @@
     font-size:9px;
   }
 }
+
+
+/* Readable playtest preflight: the illustrated course remains visible around
+   a compact, dark enamel plaque. Text never sits directly on bright water. */
+@media(max-width:720px) and (pointer:coarse) {
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) {
+    isolation:isolate;
+    opacity:1!important;
+    mix-blend-mode:normal!important;
+    background-color:#08273a!important;
+    background-image:radial-gradient(circle at 50% 0%,
+      rgba(225,186,104,.15),transparent 44%),
+      linear-gradient(165deg,rgba(8,45,64,.99),rgba(3,25,40,.99))!important;
+    background-blend-mode:normal!important;
+    border:1px solid rgba(239,200,121,.85)!important;
+    box-shadow:0 19px 40px rgba(0,16,31,.62),
+      inset 0 0 0 3px rgba(240,206,140,.06)!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel)::before {
+    content:"";position:absolute;inset:5px;
+    pointer-events:none;border-radius:9px;
+    border:1px solid rgba(234,192,111,.14);
+    background:none!important;
+    z-index:-1;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) > p {
+    display:none!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-goal {
+    display:block!important;
+    max-width:300px;
+    margin:5px auto 4px!important;
+    color:#e4d6b8!important;
+    font-size:9px!important;
+    font-weight:500;
+    line-height:1.35!important;
+    text-wrap:pretty;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) > strong {
+    margin:4px auto 4px!important;
+    font-size:clamp(20px,5.5vw,25px)!important;
+    line-height:1.08!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) .start-panel-rosie{
+    margin:0 auto 3px!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-chapter-picker {
+    margin:7px auto 2px!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) .yacht-select-actions {
+    margin:7px auto 0!important;
+  }
+}
