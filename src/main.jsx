@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1759,6 +1759,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const hullGraceRemainingRef = useRef(0);
   const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
+  const bonusTreatClockRef = useRef(0);
   const spawnSequenceRef = useRef(0);
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
@@ -1903,6 +1904,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
+    bonusTreatClockRef.current = 0;
     spawnSequenceRef.current = 0;
     laneRef.current = 1;
     livesRef.current = 3;
@@ -2124,6 +2126,22 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 speed: 1.75 + secureIndex(8) / 10,
                 drifted: false, scoredPass: false });
             });
+          }
+        }
+
+        // A modest extra treat between major waves. Hazards retain exactly
+        // their existing cadence and no extra ball/cheese crowds the water.
+        if (chapter.id !== "sakura") {
+          bonusTreatClockRef.current += tickMs;
+          if (bonusTreatClockRef.current >= YACHT_EXTRA_TREAT_MS) {
+            const safeLane = yachtBonusTreatLane(next, secureIndex(3));
+            if (safeLane >= 0) {
+              bonusTreatClockRef.current -= YACHT_EXTRA_TREAT_MS;
+              const treat = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === "treat");
+              next.push({ ...treat, id: itemIdRef.current += 1,
+                lane: safeLane, y: -12, speed: 1.75 + secureIndex(8) / 10,
+                bonusTreat: true });
+            }
           }
         }
 
@@ -2465,7 +2483,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
           {items.map((item) => {
             const approaching = chapter.id !== "sakura";
-            const perspective = approaching ? yachtApproachAt(item.y) : null;
+            const perspective = approaching
+              ? (item.kind === "ball" || item.kind === "treat" || item.kind === "cheese"
+                ? yachtPickupApproachAt(item.y) : yachtApproachAt(item.y))
+              : null;
+            const artScale = yachtAssetScale(item.asset);
             const center = item.footprint === "arch" ? 50 :
               item.footprint === "wide" ? (item.lane + 1) * 33.333 :
                 16.666 + item.lane * 33.333;
@@ -2474,11 +2496,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               top: perspective.top + "%",
               ...(item.footprint === "arch" ? { width: "96%" } :
                 item.footprint === "wide" ? { width: "66.666%" } : {}),
-              "--approach-scale": perspective.scale *
+              "--approach-scale": perspective.scale * artScale *
                 (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
               // The gate's physical pillars straddle the two outside lanes.
               // Stretch its width with depth without exaggerating its height.
-              "--approach-scale-x": perspective.scale *
+              "--approach-scale-x": perspective.scale * artScale *
                 (item.footprint === "arch" ? 1.38 : item.footprint === "wide" ? 0.89 : 1),
               "--approach-opacity": perspective.opacity
             } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
