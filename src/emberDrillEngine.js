@@ -3,6 +3,8 @@ import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
 import {makeCrystalShutters,updateCrystalShutters} from "./emberCrystalShutters.js";
 import {getExpeditionStage,EXPEDITION_STAGE_SECONDS} from "./emberExpeditionStages.js";
 import {makeExpeditionHazards,updateExpeditionHazards} from "./emberExpeditionHazards.js";
+import {BOSS_INTRO_TIME,expeditionBossKind,startExpeditionBoss,updateExpeditionBoss,
+  finishExpeditionBossStage} from "./emberExpeditionBossStage.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -103,7 +105,7 @@ export function newRun(seed = 1467, stageIndex = null) {
   const stage=getExpeditionStage(stageIndex);
   const startX=stage?.startX||0;
   return { running: true, ended: false, time: 0, scroll: startX,
-    stageIndex:stage?stageIndex:null, stageStartX:startX, duration:stage?EXPEDITION_STAGE_SECONDS:RUN_DURATION,
+    stageIndex:stage?stageIndex:null, stageStartX:startX, duration:stage?(stage.duration||EXPEDITION_STAGE_SECONDS):RUN_DURATION,
     y: tunnelCenter(startX+DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
@@ -111,6 +113,7 @@ export function newRun(seed = 1467, stageIndex = null) {
     objects: makeCourse(seed), breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
     crystalShutters:makeCrystalShutters(), hazardsDodged:0,
     worldHazards:makeExpeditionHazards(stageIndex),worldObjective:false,
+    boss:null,bossY:null,bossDefeated:false,bossAttackHitCycle:-1,
     objectives:{barkroot:false,ruby:false}, objectiveBonus:0,
     formationHits: [], events: [], result: null, distance: 0 };
 }
@@ -138,6 +141,34 @@ export function updateRun(s, dt, up = false, down = false) {
   s.pitch += (target - s.pitch) * Math.min(1, dt * 6.5);
   s.y = clamp(s.y + Math.sin(s.pitch) * 330 * dt, 65, DRILL_HEIGHT - 65);
   const boosted = s.boostTime > 0;
+  // The two boss routes stop forward movement at their arenas. All existing
+  // collision and collection loops are skipped while a boss is active, so
+  // regular cave formations cannot inflict invisible damage in the battle.
+  if(s.hull>0&&expeditionBossKind(s.stageIndex)&&
+      (s.boss||s.time+dt>=BOSS_INTRO_TIME)){
+    s.time+=dt;
+    s.boostTime=Math.max(0,s.boostTime-dt);
+    s.hitCooldown=Math.max(0,s.hitCooldown-dt);
+    s.shock=Math.max(0,s.shock-dt);
+    if(!s.boss)startExpeditionBoss(s,tunnelCenter);
+    const tip=drillTipPosition(s);
+    updateExpeditionBoss(s,dt,{
+      tipX:tip.x,tipY:tip.y,boosted:s.boostTime>0,onHit:takeHit
+    });
+    if(s.bossDefeated){
+      if(s.damageTaken===0){
+        s.cleanBonus=500;s.score+=500;
+        s.events.push({type:"clean-run",x:DRILL_ANCHOR,y:s.y});
+      }
+      finishExpeditionBossStage(s);
+    }else if(s.hull<=0||s.time>=s.duration){
+      s.running=false;s.ended=true;
+      s.result=s.hull<=0?"hull":"boss-timeout";
+      s.time=Math.min(s.duration,s.time);
+      s.events.push({type:"end",result:s.result});
+    }
+    return s;
+  }
   const speed = boosted ? 480 : 310 + Math.min(42, s.time * 0.48);
   s.scroll += speed * dt;
   s.distance = s.scroll-(s.stageStartX||0);
