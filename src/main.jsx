@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { createPortal } from "react-dom";
 import "./styles.css";
 import "./fortune-effects.css";
 import "./visual-rebuild.css";
@@ -36,6 +37,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1491,6 +1493,18 @@ function CaptainPickupIcon({ kind }) {
     alt="" aria-hidden="true" draggable="false" />;
 }
 
+function YachtHazardArt({ item }) {
+  return <img
+    className="pickup-art yacht-hazard-art" src={item.asset || "/captain-pickup-buoy.webp"}
+    alt="" aria-hidden="true" draggable="false" decoding="async"
+    onError={(event) => {
+      // A broken asset never makes a hazard invisible.
+      if (!event.currentTarget.src.includes("/captain-pickup-buoy.webp")) {
+        event.currentTarget.src = "/captain-pickup-buoy.webp";
+      }
+    }} />;
+}
+
 function CaptainRosieIllustration({ className = "" }) {
   return (
     <img
@@ -1697,7 +1711,7 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
   );
 }
 
-function CaptainRosieGame({ soundOn }) {
+function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequence = 0 }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("yachtSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
   const [running, setRunning] = useState(false);
@@ -1706,13 +1720,42 @@ function CaptainRosieGame({ soundOn }) {
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(75);
   const [levelOrder, setLevelOrder] = useState(shuffleCaptainLevelOrder);
+  const [chapterIndex, setChapterIndex] = useState(0);
+  const [unlockedChapter, setUnlockedChapter] = useState(() => {
+    try { return yachtUnlockedLevel(localStorage.getItem("yachtDashUnlockedChapter")); }
+    catch { return 0; }
+  });
+  const [completed, setCompleted] = useState(false);
+  const [showVictoryArt, setShowVictoryArt] = useState(false);
+  useEffect(() => {
+    if (!showVictoryArt) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopImmediatePropagation?.();
+        setShowVictoryArt(false);
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape, true);
+    return () => document.removeEventListener("keydown", closeOnEscape, true);
+  }, [showVictoryArt]);
+  const [nearMisses, setNearMisses] = useState(0);
+  const [rivalsPassed, setRivalsPassed] = useState(0);
+  const [suppliesCollected, setSuppliesCollected] = useState(0);
+  const [hullRecovering, setHullRecovering] = useState(false);
+  const [chapterRecords, setChapterRecords] = useState(() => {
+    try { return parseYachtRecords(localStorage.getItem("yachtDashRecordsV1")); }
+    catch { return {}; }
+  });
   const [lane, setLane] = useState(1);
   const [items, setItems] = useState([]);
   const [catches, setCatches] = useState({ ball: 0, treat: 0, cheese: 0 });
   const [message, setMessage] = useState("Captain Rosie is on the bridge. The coastal passage is clear and the treats are somewhere ahead.");
   const [best, setBest] = useState(() => {
-    const value = Number(localStorage.getItem("captainRosieBest") || 0);
-    return Number.isFinite(value) ? value : 0;
+    try {
+      const value = Number(localStorage.getItem("captainRosieBest") || 0);
+      return Number.isFinite(value) ? value : 0;
+    } catch { return 0; }
   });
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
@@ -1726,12 +1769,18 @@ function CaptainRosieGame({ soundOn }) {
   const [ended, setEnded] = useState(false);
 
   const laneRef = useRef(1);
+  const courseFocusRef = useRef(null);
+  const livesRef = useRef(3);
+  const hullGraceRemainingRef = useRef(0);
   const itemsRef = useRef([]);
   const spawnClockRef = useRef(0);
+  const bonusTreatClockRef = useRef(0);
+  const spawnSequenceRef = useRef(0);
   const itemIdRef = useRef(0);
   const finishedRef = useRef(false);
   const boostRef = useRef(false);
   const boostDrainTimerRef = useRef(0);
+  const phaseNoticeTimerRef = useRef(0);
   const boostRemainingRef = useRef(0);
   const streakRef = useRef(0);
   const comboRef = useRef(1);
@@ -1740,13 +1789,15 @@ function CaptainRosieGame({ soundOn }) {
   const lastPhaseRef = useRef("harbor");
 
   const phaseKey = timeLeft > 50 ? "harbor" : timeLeft > 25 ? "riviera" : "sunset";
-  const phase = CAPTAIN_PHASES[phaseKey];
   const elapsed = 75 - timeLeft;
-  const levelNumber = Math.min(CAPTAIN_LEVELS.length - 1, Math.floor(elapsed / (75 / CAPTAIN_LEVELS.length)));
-  const level = CAPTAIN_LEVELS[levelOrder[levelNumber]];
-  const scenery = useCaptainSceneryTransition(level, true);
+  const chapter = YACHT_CHAPTERS[chapterIndex];
+  const phase = YACHT_CHAPTER_PHASES[chapter.id]?.[phaseKey] || CAPTAIN_PHASES[phaseKey];
+  const levelNumber = Math.min(4, Math.floor(elapsed / 15));
+  const level = yachtSceneFor(chapterIndex, elapsed, levelOrder);
+  const scenery = useCaptainSceneryTransition(level, true, !running && !ended);
   // Fetch only the NEXT painting in advance; no mounting or accumulating five layers.
-  const nextLevel = CAPTAIN_LEVELS[levelOrder[levelNumber + 1]] || null;
+  const nextLevel = levelNumber < 4
+    ? yachtSceneFor(chapterIndex, (levelNumber + 1) * 15, levelOrder) : null;
   useEffect(() => {
     if (!nextLevel) return undefined;
     const image = new Image();
@@ -1755,8 +1806,13 @@ function CaptainRosieGame({ soundOn }) {
     return () => { image.onload = null; };
   }, [nextLevel?.background]);
   const routeProgress = Math.min(100, Math.round(elapsed / 75 * 100));
-  const missionProgress = Math.min(100, Math.round(score / 15));
-  const collectedTotal = catches.ball + catches.treat + catches.cheese;
+  const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
+  const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
+  const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
+  const gateApproaching = running && items.some(item =>
+    // Keep instructions visible from first sight of the arch until its
+    // pillars have fully passed the hull, not just for its collision window.
+    item.footprint === "arch" && item.y >= -12 && item.y <= 108);
   const rank = captainRank(score);
 
   function audioContext() {
@@ -1801,13 +1857,21 @@ function CaptainRosieGame({ soundOn }) {
     setEventPulse((value) => value + 1);
   }
 
+  function announcePhase(text) {
+    window.clearTimeout(phaseNoticeTimerRef.current);
+    setPhaseNotice(text);
+    phaseNoticeTimerRef.current = window.setTimeout(() => setPhaseNotice(""), 1500);
+  }
+
+  useEffect(() => () => window.clearTimeout(phaseNoticeTimerRef.current), []);
+
   function moveCaptain(direction) {
     if (!running || paused) return;
-    setLane((current) => {
-      const next = Math.max(0, Math.min(2, current + direction));
-      laneRef.current = next;
-      return next;
-    });
+    // The collision loop reads laneRef synchronously. Waiting for React to
+    // commit an updater can incorrectly score a hit on iPhone.
+    const next = yachtClampLane(laneRef.current, direction);
+    laneRef.current = next;
+    setLane(next);
   }
 
   function steerTo(nextLane) {
@@ -1817,22 +1881,37 @@ function CaptainRosieGame({ soundOn }) {
     setLane(safeLane);
   }
 
-  function finishGame(reason) {
+  function finishGame(reason, success = false) {
     if (finishedRef.current) return;
+    setCompleted(success);
+    setShowVictoryArt(success);
     finishedRef.current = true;
     boostRef.current = false;
     boostRemainingRef.current = 0;
     window.clearInterval(boostDrainTimerRef.current);
     setBoost(false);
+    setHullRecovering(false);
+    hullGraceRemainingRef.current = 0;
     setPaused(false);
     setRunning(false);
+    window.clearTimeout(phaseNoticeTimerRef.current);
+    setPhaseNotice("");
     setEnded(true);
     setMessage(reason);
-    captainTone("finish");
+    if (success) captainTone("finish"); // A failed voyage never gets victory fanfare.
   }
 
-  function startGame() {
+  function startGame(targetChapter = chapterIndex) {
+    // Enter via the Cast Off tap while Safari still grants user activation.
+    // On iPhone, the shared game frame uses its fixed-viewport fallback when
+    // native Element fullscreen is not supported.
+    if (typeof navigator !== "undefined" && /iPhone|iPod/i.test(navigator.userAgent)) {
+      requestGameFullscreen?.();
+    }
     audioContext();
+    const chosen = typeof targetChapter === "number"
+      ? Math.max(0, Math.min(yachtPlayableLimit(unlockedChapter), targetChapter)) : chapterIndex;
+    if (chosen !== chapterIndex) setChapterIndex(chosen);
     if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
     boostRef.current = false;
@@ -1842,7 +1921,12 @@ function CaptainRosieGame({ soundOn }) {
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
+    bonusTreatClockRef.current = 0;
+    spawnSequenceRef.current = 0;
     laneRef.current = 1;
+    livesRef.current = 3;
+    hullGraceRemainingRef.current = 0;
+    setHullRecovering(false);
     lastPhaseRef.current = "harbor";
     setLane(1);
     itemsRef.current = [];
@@ -1857,12 +1941,27 @@ function CaptainRosieGame({ soundOn }) {
     setTurbo(0);
     setBoost(false);
     setCheeses(0);
+    setNearMisses(0);
+    setRivalsPassed(0);
+    setSuppliesCollected(0);
+    setCompleted(false);
+    setShowVictoryArt(false);
     setEnded(false);
-    setPhaseNotice("CAST OFF");
-    setMessage("Lines cast off. Tennis balls are 10, treats are 20, Golden Cheese is 40. Keep clear of the red buoys.");
+    announcePhase("CAST OFF");
+    setMessage(YACHT_CHAPTERS[chosen].description);
     setRunning(true);
-    window.setTimeout(() => setPhaseNotice(""), 1500);
   }
+
+  useEffect(() => {
+    if (!running) return undefined;
+    // The Cast Off button unmounts at launch, leaving document.body focused.
+    // Restore focus to this game so desktop arrow keys work immediately, yet
+    // do not summon a mobile keyboard or steal focus from other Captain games.
+    if (window.matchMedia?.("(pointer: coarse)").matches) return undefined;
+    const frame = window.requestAnimationFrame(() =>
+      courseFocusRef.current?.focus({ preventScroll: true }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [running]);
 
   function engageBoost() {
     if (!running || paused || boostRef.current || turbo < 100) return;
@@ -1902,14 +2001,24 @@ function CaptainRosieGame({ soundOn }) {
     setPaused(current => !current);
   }
 
+  useEffect(() => {
+    if (fullscreenExitSequence > 0 && running) {
+      setPaused(true);
+      setMessage("Voyage paused when leaving full screen. Resume from the helm.");
+    }
+    // The sequence changes only when the player closes this specific frame.
+  }, [fullscreenExitSequence]);
+
   function onCoursePointerDown(event) {
-    touchStartRef.current = { x: event.clientX, y: event.clientY };
+    touchStartRef.current = running && !paused
+      ? { x: event.clientX, y: event.clientY, pointerId: event.pointerId }
+      : null;
   }
 
   function onCoursePointerUp(event) {
-    if (!running || paused || !touchStartRef.current) return;
     const startPoint = touchStartRef.current;
     touchStartRef.current = null;
+    if (!running || paused || !startPoint || startPoint.pointerId !== event.pointerId) return;
     const deltaX = event.clientX - startPoint.x;
     if (Math.abs(deltaX) > 26) {
       moveCaptain(deltaX > 0 ? 1 : -1);
@@ -1922,27 +2031,45 @@ function CaptainRosieGame({ soundOn }) {
 
   useEffect(() => {
     if (!running || paused) return undefined;
-    const timer = window.setInterval(() => {
-      setTimeLeft((current) => {
-        if (current <= 1) {
-          finishGame("Port Rosie reached. Captain Rosie has entered the voyage in the official treat ledger.");
-          return 0;
-        }
-        return current - 1;
-      });
+    // A single timeout avoids firing React state updates from another state
+    // updater, and pauses cleanly when an iPhone is interrupted.
+    const timer = window.setTimeout(() => {
+      if (timeLeft <= 1) {
+        setTimeLeft(0);
+        finishGame(YACHT_CHAPTERS[chapterIndex].name +
+          " conquered. Captain Rosie has entered the voyage in the official treat ledger.", true);
+      } else {
+        setTimeLeft(timeLeft - 1);
+      }
     }, 1000);
-    return () => window.clearInterval(timer);
-  }, [running, paused]);
+    return () => window.clearTimeout(timer);
+  }, [running, paused, chapterIndex, timeLeft]);
+
+  useEffect(() => {
+    if (!running) return undefined;
+    // Phone calls, app-switching and browser tab changes must never consume
+    // hull or timer while the game is not visible.
+    const pauseWhenHidden = () => {
+      if (document.hidden) {
+        setPaused(true);
+        touchStartRef.current = null;
+      }
+    };
+    document.addEventListener("visibilitychange", pauseWhenHidden);
+    window.addEventListener("pagehide", pauseWhenHidden);
+    return () => {
+      document.removeEventListener("visibilitychange", pauseWhenHidden);
+      window.removeEventListener("pagehide", pauseWhenHidden);
+    };
+  }, [running]);
 
   useEffect(() => {
     if (!running || paused) return;
     if (phaseKey === lastPhaseRef.current) return;
     lastPhaseRef.current = phaseKey;
-    const next = CAPTAIN_PHASES[phaseKey];
-    setPhaseNotice(next.name.toUpperCase());
-    setMessage(next.copy);
+    announcePhase(phase.name.toUpperCase());
+    setMessage(phase.copy);
     captainTone(phaseKey === "sunset" ? "cheese" : "ball");
-    window.setTimeout(() => setPhaseNotice(""), 1500);
   }, [phaseKey, running]);
 
   useEffect(() => {
@@ -1954,10 +2081,24 @@ function CaptainRosieGame({ soundOn }) {
     const movementScale = tickMs / 70;
 
     const tick = window.setInterval(() => {
+      // A timer victory or hull loss can finish just before an interval fires.
+      // Never award post-finish cargo or apply another collision.
+      if (finishedRef.current) return;
+      if (hullGraceRemainingRef.current > 0) {
+        hullGraceRemainingRef.current = Math.max(0, hullGraceRemainingRef.current - tickMs);
+        if (hullGraceRemainingRef.current === 0) setHullRecovering(false);
+      }
       let scoreDelta = 0;
       let turboDelta = 0;
       let lifeLoss = 0;
       let cheeseGain = 0;
+      let bonusPoints = 0;
+      let closePasses = 0;
+      let rivalPasses = 0;
+      let hitRival = false;
+      let supplyCaught = false;
+      let supplyRepairedHull = false;
+      let supplyExtendedBoost = false;
       const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
@@ -1967,37 +2108,81 @@ function CaptainRosieGame({ soundOn }) {
       // setItems() immediately afterward previously lost earned points.
       {
         spawnClockRef.current += tickMs;
-        const phaseSpeed = phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75;
-        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + (item.speed + phaseSpeed) * movementScale }));
+        const phaseSpeed = (phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75) + chapter.pace;
+        const next = itemsRef.current.map((item) => {
+          const moved = { ...item, y: item.y + (item.speed + phaseSpeed) * movementScale };
+          // Signal the lane change far before the 77% collision zone.
+          if (moved.driftTo !== undefined && !moved.drifted && moved.y >= 43) {
+            moved.lane = moved.driftTo;
+            moved.drifted = true;
+          }
+          return moved;
+        });
 
-        const spawnEvery = phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485;
+        const spawnEvery = chapter.id === "sakura"
+          ? (phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485)
+          : chapter.cadence;
         if (spawnClockRef.current >= spawnEvery) {
           spawnClockRef.current = 0;
-          const roll = secureIndex(100);
-          const template = roll < 52
-            ? CAPTAIN_PICKUPS[0]
-            : roll < 77
-              ? CAPTAIN_PICKUPS[1]
-              : roll < 86
-                ? CAPTAIN_PICKUPS[2]
-                : CAPTAIN_PICKUPS[3];
-          next.push({
-            ...template,
-            id: itemIdRef.current += 1,
-            lane: secureIndex(3),
-            y: -12,
-            speed: 1.75 + secureIndex(8) / 10
-          });
+          if (chapter.id === "sakura") {
+            const roll = secureIndex(100);
+            const template = roll < 52 ? CAPTAIN_PICKUPS[0]
+              : roll < 77 ? CAPTAIN_PICKUPS[1] : roll < 86
+                ? CAPTAIN_PICKUPS[2] : CAPTAIN_PICKUPS[3];
+            next.push({ ...template, id: itemIdRef.current += 1,
+              lane: secureIndex(3), y: -12, speed: 1.75 + secureIndex(8) / 10 });
+          } else {
+            const wave = yachtWaveFor(chapter.id, spawnSequenceRef.current++, secureIndex);
+            if (wave.some((entry) => entry.footprint === "arch")) {
+              setMessage("TORII AHEAD: the center channel is OPEN. Sail beneath the overhead beam.");
+            }
+            wave.forEach((entry) => {
+              const standard = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === entry.kind);
+              next.push({ ...(standard || { label: entry.label, points: 0, turbo: 0 }),
+                ...entry, id: itemIdRef.current += 1, y: -12,
+                speed: 1.75 + secureIndex(8) / 10,
+                drifted: false, scoredPass: false });
+            });
+          }
+        }
+
+        // A modest extra treat between major waves. Hazards retain exactly
+        // their existing cadence and no extra ball/cheese crowds the water.
+        if (chapter.id !== "sakura") {
+          bonusTreatClockRef.current += tickMs;
+          if (bonusTreatClockRef.current >= YACHT_EXTRA_TREAT_MS) {
+            const safeLane = yachtBonusTreatLane(next, secureIndex(3));
+            if (safeLane >= 0) {
+              bonusTreatClockRef.current -= YACHT_EXTRA_TREAT_MS;
+              const treat = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === "treat");
+              next.push({ ...treat, id: itemIdRef.current += 1,
+                lane: safeLane, y: -12, speed: 1.75 + secureIndex(8) / 10,
+                bonusTreat: true });
+            }
+          }
         }
 
         const remaining = next.filter((item) => {
-          const inCatchZone = item.y >= 77 && item.y <= 92;
-          if (inCatchZone && item.lane === laneRef.current) {
-            if (item.kind === "buoy") {
-              lifeLoss += 1;
-              lastHit = "buoy";
-              streakRef.current = 0;
-              comboRef.current = 1;
+          const inCatchZone = item.y >= yachtCatchStart(item) && item.y <= 92;
+          if (inCatchZone && (isYachtHazard(item.kind)
+              ? yachtTouchesHazard(item, laneRef.current) : item.lane === laneRef.current)) {
+            if (isYachtHazard(item.kind)) {
+              if (yachtCanTakeHit(hullGraceRemainingRef.current, lifeLoss > 0)) {
+                lifeLoss = 1;
+                hitRival ||= item.kind === "rival";
+                lastHit = "buoy";
+                streakRef.current = 0;
+                comboRef.current = 1;
+              }
+              // Hazards never apply repeated damage while crossing the hull,
+              // including during the recovery interval.
+            } else if (item.kind === "supply") {
+              // Only one supply chest can spawn per chapter; never count it as a
+              // regular ball/treat/cheese or penalize players for missing it.
+              scoreDelta += item.points * (boostRef.current ? 2 : 1);
+              turboDelta += item.turbo;
+              supplyCaught = true;
+              lastHit = "supply";
             } else {
               streakRef.current += 1;
               comboRef.current = Math.min(4, 1 + Math.floor(streakRef.current / 4));
@@ -2010,8 +2195,19 @@ function CaptainRosieGame({ soundOn }) {
             }
             return false;
           }
+          if (isYachtHazard(item.kind) && !item.scoredPass && item.y >= 94) {
+            item.scoredPass = true;
+            if (yachtNearMiss(item, laneRef.current)) {
+              bonusPoints += 15;
+              closePasses++;
+            }
+            if (item.kind === "rival") {
+              bonusPoints += boostRef.current ? 120 : 70;
+              rivalPasses++;
+            }
+          }
           if (item.y >= 108) {
-            if (item.kind !== "buoy") missedGood = true;
+            if (!isYachtHazard(item.kind) && item.kind !== "supply") missedGood = true;
             return false;
           }
           return true;
@@ -2039,7 +2235,21 @@ function CaptainRosieGame({ soundOn }) {
         setBestStreak((current) => Math.max(current, streakRef.current));
         if (!boostRef.current) setTurbo((current) => Math.min(100, current + turboDelta));
         if (cheeseGain) setCheeses((current) => current + cheeseGain);
-        const phrase = lastHit === "cheese"
+        if (supplyCaught) {
+          setSuppliesCollected((current) => current + 1);
+          supplyRepairedHull = livesRef.current < 3;
+          livesRef.current = Math.min(3, livesRef.current + 1);
+          setLives(livesRef.current);
+          if (boostRef.current) {
+            boostRemainingRef.current = Math.min(6000, boostRemainingRef.current + 2500);
+            supplyExtendedBoost = true;
+          }
+        }
+        const phrase = lastHit === "supply"
+          ? "EMERGENCY SUPPLIES: +150 points, " +
+            (supplyRepairedHull ? "one hull repaired" : "hull already full") + ", " +
+            (supplyExtendedBoost ? "Turbo extended." : "Turbo recharged.")
+          : lastHit === "cheese"
           ? "Golden Cheese aboard. Rosie has inventoried it as priceless cargo."
           : lastHit === "treat"
             ? "Premium provisions aboard. Rosie considers this excellent leadership."
@@ -2047,54 +2257,74 @@ function CaptainRosieGame({ soundOn }) {
               ? "Clean pickup. The captain's streak is building."
               : "Tennis ball aboard. Course maintained.";
         setMessage(phrase);
-        pulse(lastHit);
-        captainTone(lastHit);
+        pulse(lastHit === "supply" ? "cheese" : lastHit);
+        captainTone(lastHit === "supply" ? "cheese" : lastHit);
         window.navigator.vibrate?.(lastHit === "cheese" ? [18, 24, 28] : 15);
+      }
+
+      if (bonusPoints) {
+        setScore((current) => current + bonusPoints);
+        if (closePasses) setNearMisses((current) => current + closePasses);
+        if (rivalPasses) setRivalsPassed((current) => current + rivalPasses);
+        if (!scoreDelta && !lifeLoss) setMessage(rivalPasses
+          ? "Rival yacht overtaken. The regatta trophy is in sight."
+          : "Clean near miss. Excellent seamanship earns bonus points.");
       }
 
       if (lifeLoss) {
         setStreak(0);
         setCombo(1);
-        setLives((current) => {
-          const next = Math.max(0, current - lifeLoss);
-          pulse("buoy");
-          captainTone("buoy");
-          if (next === 0) {
-            finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
-          } else {
-            setMessage("BUOY STRIKE. Rosie has issued a formal glare from the bridge.");
-            window.navigator.vibrate?.([55, 35, 55]);
-          }
-          return next;
-        });
+        livesRef.current = Math.max(0, livesRef.current - 1);
+        setLives(livesRef.current);
+        pulse("buoy");
+        captainTone("buoy");
+        if (livesRef.current === 0) {
+          finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
+        } else {
+          hullGraceRemainingRef.current = YACHT_IMPACT_GRACE_MS;
+          setHullRecovering(true);
+          setMessage(hitRival ? "RIVAL COLLISION. Temporary protective wake engaged."
+            : "OBSTACLE STRIKE. Brief protective wake engaged - steer clear.");
+          window.navigator.vibrate?.([55, 35, 55]);
+        }
       }
     }, tickMs);
 
     return () => window.clearInterval(tick);
-  }, [running, paused, phaseKey]);
+  }, [running, paused, phaseKey, chapter.id]);
 
   useEffect(() => {
     function onKeyDown(event) {
+      const yachtFrame = document.querySelector(".captain-fs-yacht");
+      // The Captain page also mounts Tunnel and Cosmic Odyssey. A global
+      // keyboard handler must never steal their arrows or Space/Turbo.
+      const isInYacht = yachtFrame?.contains(event.target);
+      const isYachtExpanded = yachtFrame?.classList.contains("is-expanded");
+      if (!isInYacht && !isYachtExpanded) return;
       if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
+      // Do not hijack native Enter / Space on selected chapter and result buttons.
+      if (!running && (event.key === "Enter" || event.key === " ") &&
+          event.target?.closest?.("button, a, [role='button']")) return;
       if ((event.key === "p" || event.key === "P") && running) {
         event.preventDefault();
         toggleYachtPause();
         return;
       }
       if (paused) {
-        if (event.key === " " || event.key === "Enter") {
+        if ((event.key === " " || event.key === "Enter") &&
+            !event.target?.closest?.("button, a, [role='button']")) {
           event.preventDefault();
           setPaused(false);
         }
         return;
       }
-      if (event.key === "ArrowLeft") {
+      if (event.key === "ArrowLeft" && running) {
         event.preventDefault();
-        moveCaptain(-1);
+        if (!event.repeat) moveCaptain(-1);
       }
-      if (event.key === "ArrowRight") {
+      if (event.key === "ArrowRight" && running) {
         event.preventDefault();
-        moveCaptain(1);
+        if (!event.repeat) moveCaptain(1);
       }
       if ((event.key === "ArrowUp" || event.key.toLowerCase() === "b") && running) {
         event.preventDefault();
@@ -2115,13 +2345,31 @@ function CaptainRosieGame({ soundOn }) {
   }, [running, paused, turbo]);
 
   useEffect(() => {
-    if (running || !ended) return;
-    setBest((current) => {
-      const next = Math.max(current, score);
-      localStorage.setItem("captainRosieBest", String(next));
+    if (!ended || !completed) return;
+    setUnlockedChapter((current) => {
+      const next = yachtNextUnlocked(current, chapterIndex);
+      try { localStorage.setItem("yachtDashUnlockedChapter", String(next)); } catch {}
       return next;
     });
+  }, [ended, completed, chapterIndex]);
+
+  useEffect(() => {
+    if (!ended) return;
+    setChapterRecords((current) => updateYachtRecords(current, chapter.id, score, chapterMedals));
+  }, [ended, score, chapter.id, chapterMedals]);
+
+  useEffect(() => {
+    try { localStorage.setItem("yachtDashRecordsV1", JSON.stringify(chapterRecords)); } catch {}
+  }, [chapterRecords]);
+
+  useEffect(() => {
+    if (running || !ended) return;
+    setBest((current) => Math.max(current, score));
   }, [running, ended, score]);
+
+  useEffect(() => {
+    try { localStorage.setItem("captainRosieBest", String(best)); } catch {}
+  }, [best]);
 
   return (
     <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
@@ -2157,7 +2405,7 @@ function CaptainRosieGame({ soundOn }) {
           <div className="route-progress" style={{ width: routeProgress + "%" }} />
           <i className="route-yacht" style={{ left: routeProgress + "%" }}>◆</i>
         </div>
-        <div className="route-port route-destination"><b><RosiePawCrest className="route-paw-crest" /></b><span>SUNSET COVE</span></div>
+        <div className="route-port route-destination"><b><RosiePawCrest className="route-paw-crest" /></b><span>{chapter.destination}</span></div>
       </section>
 
       <section className="captain-hud" aria-label="Yacht game status">
@@ -2172,21 +2420,33 @@ function CaptainRosieGame({ soundOn }) {
         <div className="yacht-game-sign">
           <span className="captain-seal"><RosiePawCrest className="game-sign-paw" /></span>
           <div>
-            <strong>{phase.eyebrow} · {phase.name.toUpperCase()}</strong>
+            <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
           <b>ROSIE I</b>
         </div>
+        <div className="yacht-steering-options" role="group" aria-label="Choose Yacht Dash steering controls">
+          <span>STEERING</span>
+          <button type="button" className="captain-steering-toggle"
+            aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
+            title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
+            onClick={toggleSteerMode}>{steerMode === "joystick" ? "D-PAD" : "JOYSTICK"}</button>
+        </div>
 
         <div
+          ref={courseFocusRef}
+          tabIndex={-1}
           className={`yacht-course${running && !paused ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
           data-captain-level={level.id}
+          data-captain-chapter={chapter.id}
           data-captain-climate={level.climate}
           data-captain-passage={levelNumber + 1}
           style={{ "--course-pace": boost ? "1.25s" : running ? "3.1s" : "8s" }}
           aria-label="Three-lane yacht course. Swipe, tap a lane, or use the controls below to steer."
           onPointerDown={onCoursePointerDown}
           onPointerUp={onCoursePointerUp}
+          onPointerCancel={() => { touchStartRef.current = null; }}
+          onLostPointerCapture={() => { touchStartRef.current = null; }}
         >
           <CaptainScenicPainting scene={scenery} />
           <CaptainCinematicEnvironment
@@ -2228,23 +2488,59 @@ function CaptainRosieGame({ soundOn }) {
           </div>
 
           <div className="captain-course-banner">
-            <span>PASSAGE {levelNumber + 1} OF {CAPTAIN_LEVELS.length}</span>
+            <span>SCENE {levelNumber + 1} OF 5 · {chapter.name.toUpperCase()}</span>
             <strong>{level.name}</strong>
           </div>
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
+          {gateApproaching && <div className="yacht-safe-passage-cue" role="status">
+            <strong>CENTER LANE OPEN</strong>
+            <small>PASS BENEATH THE TORII</small>
+          </div>}
 
-          {items.map((item) => (
-            <div
-              className={"sea-pickup sea-pickup-" + item.kind}
-              key={item.id}
-              style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
-              aria-label={item.label}
-            >
-              {item.kind === "cheese" ? <GoldenCheeseIcon /> : <CaptainPickupIcon kind={item.kind} />}
-              {item.kind === "cheese" && <small>GOLDEN</small>}
-            </div>
-          ))}
+          {items.map((item) => {
+            const approaching = chapter.id !== "sakura";
+            const perspective = approaching
+              ? (item.kind === "ball" || item.kind === "treat" || item.kind === "cheese"
+                ? yachtPickupApproachAt(item.y) : yachtApproachAt(item.y))
+              : null;
+            const artScale = yachtAssetScale(item.asset);
+            const center = item.footprint === "arch" ? 50 :
+              item.footprint === "wide" ? (item.lane + 1) * 33.333 :
+                16.666 + item.lane * 33.333;
+            const renderedStyle = approaching ? {
+              left: center + "%",
+              top: perspective.top + "%",
+              ...(item.footprint === "arch" ? { width: "96%" } :
+                item.footprint === "wide" ? { width: "66.666%" } : {}),
+              "--approach-scale": perspective.scale * artScale *
+                (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
+              // The gate's physical pillars straddle the two outside lanes.
+              // Stretch its width with depth without exaggerating its height.
+              "--approach-scale-x": perspective.scale * artScale *
+                (item.footprint === "arch" ? 1.38 : item.footprint === "wide" ? 0.89 : 1),
+              "--approach-opacity": perspective.opacity
+            } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
+            return (
+              <div
+                className={"sea-pickup sea-pickup-" + item.kind +
+                  (item.footprint ? " yacht-footprint-" + item.footprint : "") +
+                  (approaching ? " yacht-upstream-object" : "")}
+                key={item.id}
+                style={renderedStyle}
+                aria-label={item.label}
+              >
+                {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
+                  ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
+                {item.footprint === "arch" &&
+                  <span className="yacht-gate-passage" aria-hidden="true">CENTER CLEAR <b>↓ PASS UNDER</b></span>}
+                {item.kind === "cheese" && <small>GOLDEN</small>}
+                {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
+                {item.driftTo !== undefined && !item.drifted &&
+                  <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
+              </div>
+            );
+          })}
 
           {eventPulse > 0 && (
             <div className={"captain-burst burst-" + eventKind} key={eventPulse} aria-hidden="true">
@@ -2252,7 +2548,7 @@ function CaptainRosieGame({ soundOn }) {
             </div>
           )}
 
-          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "")}>
+          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "") + (hullRecovering ? " yacht-hull-recovering" : "")}>
             <CaptainYachtArt boost={boost} />
           </div>
 
@@ -2261,30 +2557,96 @@ function CaptainRosieGame({ soundOn }) {
               <CaptainRosieIllustration className="start-panel-rosie" idPrefix="startRosie" />
               {ended ? (
                 <>
-                  <span>CAPTAIN'S LOG · VOYAGE COMPLETE</span>
-                  <div className="voyage-grade">{rank.mark}</div>
-                  <strong>{rank.title}</strong>
-                  <p>{rank.copy}</p>
+                  <span>{completed ? "CAPTAIN'S LOG · VOYAGE COMPLETE" : "CAPTAIN'S LOG · RETURNED TO PORT"}</span>
+                  <div className="voyage-grade">{completed ? rank.mark : "⚓"}</div>
+                  <strong>{completed ? rank.title : "Passage Interrupted"}</strong>
+                  <p>{completed ? rank.copy : message}</p>
+                  <div className="yacht-medal-stars" aria-label={chapterMedals + " of 3 passage medals earned"}>
+                    {Array.from({ length: 3 }, (_, index) =>
+                      <span key={index} className={index < chapterMedals ? "is-awarded" : ""}>★</span>)}
+                  </div>
+                  <p className="yacht-objective-summary">
+                    {yachtNextMedalHint(chapter.id,
+                      { completed, score, lives, nearMisses, rivalsPassed })}
+                  </p>
                   <div className="voyage-stats">
                     <span><b>{score}</b> score</span>
                     <span><b>{bestStreak}</b> best streak</span>
                     <span><b>{collectedTotal}</b> cargo collected</span>
                     <span><b>{cheeses}</b> Golden Cheese</span>
+                    <span><b>{nearMisses}</b> near misses</span>
+                    <span><b>{rivalsPassed}</b> rival yachts passed</span>
+                    {chapter.id !== "sakura" && <span><b>{suppliesCollected}/1</b> supply chest</span>}
                   </div>
-                  <button type="button" onClick={startGame}>SAIL AGAIN</button>
+                  <div className="yacht-result-actions">
+                    {completed && <button type="button" onClick={() => setShowVictoryArt(true)}>VIEW VICTORY</button>}
+                    {completed && chapterIndex < YACHT_CHAPTERS.length - 1 &&
+                      (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) && <button type="button"
+                        onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
+                    <button type="button" onClick={() => startGame()}>SAIL AGAIN</button>
+                    <button type="button" onClick={() => { setEnded(false); setCompleted(false); setShowVictoryArt(false); }}>CHOOSE LEVEL</button>
+                  </div>
                 </>
               ) : (
                 <>
                   <span>CAPTAIN ROSIE AWAITS YOUR ORDERS</span>
-                  <strong>Take the Helm</strong>
-                  <button type="button" onClick={startGame}>CAST OFF</button>
+                  <strong>{chapter.name}</strong>
+                  <p>{chapter.description}</p>
+                  <small className="yacht-chapter-goal">{YACHT_CHAPTER_GOALS[chapter.id].preview}</small>
+                  <div className="yacht-chapter-picker" role="group" aria-label="Select Yacht Dash level">
+                    {YACHT_CHAPTERS.map((choice, index) => (
+                      <button key={choice.id} type="button"
+                        className={index === chapterIndex ? "is-selected" : ""}
+                        aria-pressed={index === chapterIndex}
+                        disabled={!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter}
+                        onClick={() => setChapterIndex(index)}>
+                        <b>{index + 1}. {choice.name}</b>
+                        {!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter ? <small>LOCKED</small> :
+                          <small className="yacht-stage-record">
+                            {chapterRecords[choice.id]?.best
+                              ? "BEST " + chapterRecords[choice.id].best.toLocaleString() + " · " + "★".repeat(chapterRecords[choice.id].medals || 0)
+                              : YACHT_PLAYTEST_ALL_LEVELS ? "READY TO TEST" : "READY"}
+                          </small>}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="yacht-select-actions">
+                    <button type="button" className="yacht-cast-off" onClick={() => startGame()}>CAST OFF</button>
+                    {YACHT_PLAYTEST_ALL_LEVELS && <button type="button" className="yacht-preview-victory"
+                      onClick={() => setShowVictoryArt(true)}>VIEW VICTORY ART</button>}
+                  </div>
                 </>
               )}
             </div>
           )}
         </div>
+        {!running && showVictoryArt && createPortal(
+          <div className="yacht-victory-overlay" role="dialog" aria-modal="true"
+            aria-label={chapter.name + " victory artwork"}>
+            <div className="yacht-victory-backdrop" aria-hidden="true"
+              style={{ backgroundImage: `url("${chapter.victory}")` }} />
+            <div className="yacht-victory-content">
+              <img className="yacht-victory-art" src={chapter.victory}
+                alt={chapter.name + " victory - Captain Rosie receives her award"}
+                onError={() => setShowVictoryArt(false)} />
+              <div className="yacht-victory-actions">
+                <button type="button" onClick={() => setShowVictoryArt(false)}>
+                  {ended ? "VIEW CAPTAIN'S LOG" : "BACK TO LEVELS"}
+                </button>
+                {chapterIndex < YACHT_CHAPTERS.length - 1 &&
+                  (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) &&
+                  <button type="button" onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
+              </div>
+            </div>
+          </div>,
+          document.fullscreenElement?.classList?.contains("captain-fs-yacht")
+            ? document.fullscreenElement : document.body
+        )}
 
-        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}>
+        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
+          onContextMenu={(event) => event.preventDefault()}
+          onSelectStart={(event) => event.preventDefault()}
+          onDragStart={(event) => event.preventDefault()}>
           {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" /> :
           <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
             <span>◀</span><small>PORT</small>
@@ -2307,11 +2669,10 @@ function CaptainRosieGame({ soundOn }) {
             </span>
           </button>
 
-          {steerMode==="joystick" ? <button className="captain-steering-toggle" type="button" aria-label="Use arrow buttons" title="Arrow buttons" onClick={toggleSteerMode}>◀▶</button> :
-          <button type="button" className="helm-button" onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
+          {steerMode==="buttons" && <button type="button" className="helm-button"
+            onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
             <span>▶</span><small>STARBOARD</small>
           </button>}
-          {steerMode==="buttons"&&<button className="captain-steering-toggle" type="button" aria-label="Use joystick" title="Joystick" onClick={toggleSteerMode}>◉</button>}
         </div>
 
         <div className="captain-cargo-key">
@@ -2319,7 +2680,7 @@ function CaptainRosieGame({ soundOn }) {
           <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
           <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
           <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
-          <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to Admiral target</em></span>
+          <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to {chapter.name} medal target</em></span>
         </div>
       </section>
     </main>
@@ -2329,14 +2690,20 @@ function CaptainRosieGame({ soundOn }) {
 
 function FullscreenGameFrame({ children, label, variant }) {
   const frameRef = useRef(null);
+  const hadNativeFullscreen = useRef(false);
   const [nativeFullscreen, setNativeFullscreen] = useState(false);
   const [fallbackFullscreen, setFallbackFullscreen] = useState(false);
+  const [fullscreenExitSequence, setFullscreenExitSequence] = useState(0);
   const expanded = nativeFullscreen || fallbackFullscreen;
 
   useEffect(() => {
     const syncFullscreen = () => {
-      const active = document.fullscreenElement || document.webkitFullscreenElement;
-      setNativeFullscreen(active === frameRef.current);
+      const active = (document.fullscreenElement || document.webkitFullscreenElement) === frameRef.current;
+      if (hadNativeFullscreen.current && !active && variant === "yacht") {
+        setFullscreenExitSequence((count) => count + 1);
+      }
+      hadNativeFullscreen.current = active;
+      setNativeFullscreen(active);
     };
     document.addEventListener("fullscreenchange", syncFullscreen);
     document.addEventListener("webkitfullscreenchange", syncFullscreen);
@@ -2367,9 +2734,27 @@ function FullscreenGameFrame({ children, label, variant }) {
     };
   }, [fallbackFullscreen]);
 
+  const enterGameFullscreen = () => {
+    if (expanded) return;
+    const element = frameRef.current;
+    if (!element) return;
+    const request = element.requestFullscreen || element.webkitRequestFullscreen;
+    if (request && document.fullscreenEnabled) {
+      try {
+        const result = request.call(element);
+        if (result?.catch) result.catch(() => setFallbackFullscreen(true));
+        return;
+      } catch {
+        // Native fullscreen is not available in this browser.
+      }
+    }
+    setFallbackFullscreen(true);
+  };
+
   const toggleFullscreen = async () => {
     if (fallbackFullscreen) {
       setFallbackFullscreen(false);
+      if (variant === "yacht") setFullscreenExitSequence((count) => count + 1);
       return;
     }
     if (nativeFullscreen) {
@@ -2379,19 +2764,7 @@ function FullscreenGameFrame({ children, label, variant }) {
       } else setNativeFullscreen(false);
       return;
     }
-    const element = frameRef.current;
-    if (!element) return;
-    const request = element.requestFullscreen || element.webkitRequestFullscreen;
-    if (request) {
-      try {
-        await request.call(element);
-        return;
-      } catch {
-        // Embedded web views and older iPhone browsers may reject element fullscreen.
-        // Keep the current game mounted and expand it with CSS instead.
-      }
-    }
-    setFallbackFullscreen(true);
+    enterGameFullscreen();
   };
 
   return (
@@ -2409,7 +2782,10 @@ function FullscreenGameFrame({ children, label, variant }) {
         <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
         <b>{expanded ? "EXIT FULL SCREEN" : "FULL SCREEN"}</b>
       </button>}
-      {children}
+      {variant === "yacht" && React.isValidElement(children)
+        ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen,
+            fullscreenExitSequence })
+        : children}
     </section>
   );
 }
