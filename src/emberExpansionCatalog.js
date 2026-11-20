@@ -22,6 +22,12 @@ export const EMBER_EXPANSION_ATLASES=immutable({
   "world-markers":immutable({file:"atlases/world-markers-atlas.webp",columns:3,rows:2,cell:512,frames:6}),
   "bonus-pickups":immutable({file:"atlases/bonus-pickups-atlas.webp",columns:3,rows:2,cell:512,frames:6})
 });
+// Boss animation sheets are supplied by the separately reviewed character packs.
+// They intentionally are not part of the original seven-atlas import manifest.
+export const EMBER_CHARACTER_ATLASES=immutable({
+  cinderclaw:immutable({file:"atlases/cinderclaw-atlas.webp",columns:4,rows:3,cell:384,frames:12}),
+  copperjack:immutable({file:"atlases/copperjack-atlas.webp",columns:4,rows:3,cell:512,frames:12})
+});
 export const EMBER_EXPANSION_TRANSITIONS=immutable({
   "ruby-clockwork":"transitions/ruby-clockwork.webp",
   "clockwork-molten":"transitions/clockwork-molten.webp",
@@ -29,7 +35,7 @@ export const EMBER_EXPANSION_TRANSITIONS=immutable({
 });
 export const expansionFileUrl=(relative)=>EXPANSION_ROOT+relative;
 export function atlasFrameRect(id,frame){
-  const a=EMBER_EXPANSION_ATLASES[id];
+  const a=EMBER_EXPANSION_ATLASES[id]||EMBER_CHARACTER_ATLASES[id];
   if(!a)throw new RangeError("Unknown Ember atlas: "+id);
   if(!Number.isInteger(frame)||frame<0||frame>=a.frames)throw new RangeError("Invalid "+id+" frame: "+frame);
   return immutable({sx:frame%a.columns*a.cell,sy:Math.floor(frame/a.columns)*a.cell,sw:a.cell,sh:a.cell});
