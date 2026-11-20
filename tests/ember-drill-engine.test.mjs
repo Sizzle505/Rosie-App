@@ -8,7 +8,7 @@ test("same seed gives reproducible treasure and hazard placement",()=>{
 });
 test("run begins centered with full hull and a genuine 75-second duration",()=>{
   const s=newRun();
-  assert.equal(s.hull,3);
+  assert.equal(s.hull,5);
   assert.equal(s.y,tunnelCenter(DRILL_ANCHOR));
   assert.equal(s.score,0);
   assert.equal(RUN_DURATION,75);
@@ -48,7 +48,7 @@ test("hazards cost a hull point, with a collision grace period",()=>{
   const x=s.scroll+DRILL_ANCHOR;
   s.objects=[{id:1,kind:"rock",x:x+DRILL_TIP_OFFSET+5,y:s.y,radius:40,taken:false},{id:2,kind:"spike",x:x+DRILL_TIP_OFFSET+9,y:s.y,radius:35,taken:false}];
   updateRun(s,.016);
-  assert.equal(s.hull,2);
+  assert.equal(s.hull,4);
   assert.ok(s.hitCooldown>0);
 });
 test("fully charged turbo is triggered by player and smashes hazards safely",()=>{
@@ -59,7 +59,7 @@ test("fully charged turbo is triggered by player and smashes hazards safely",()=
   const x=s.scroll+DRILL_ANCHOR;
   s.objects=[{id:1,kind:"spike",x:x+DRILL_TIP_OFFSET+5,y:s.y,radius:35,taken:false}];
   updateRun(s,.016);
-  assert.equal(s.hull,3);
+  assert.equal(s.hull,5);
   assert.ok(s.score>0);
 });
 test("run ends in a win after 75 seconds if hull survives",()=>{
@@ -77,9 +77,9 @@ test("run ends in a win after 75 seconds if hull survives",()=>{
   assert.equal(s.result,"complete");
   assert.equal(s.time,75);
 });
-test("run fails when all three hull points are lost",()=>{
+test("run fails when all five hull points are lost",()=>{
   const s=newRun();s.objects=[];
-  for(let i=0;i<3;i++){
+  for(let i=0;i<5;i++){
     s.hitCooldown=0;
     s.y=DRILL_HEIGHT-65;
     updateRun(s,.016);
