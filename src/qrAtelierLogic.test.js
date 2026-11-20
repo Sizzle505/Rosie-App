@@ -6,7 +6,7 @@ import {
 } from "./qrAtelierLogic.js";
 
 test("studio contains the eight approved QR types and five finishes",()=>{
-  assert.deepEqual(QR_TYPES.map(x=>x.id),["wifi","contact","website","zoom","event","payment","instagram","calling"]);
+  assert.deepEqual(QR_TYPES.map(x=>x.id),["website","wifi","instagram","zoom","contact","event","payment","calling"]);
   assert.deepEqual(QR_STYLES.map(x=>x.id),["emerald","obsidian","burgundy","champagne","sapphire"]);
   assert.equal(initialValues().event.timezone.length>0,true);
 });
