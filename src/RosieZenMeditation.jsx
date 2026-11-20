@@ -12,7 +12,8 @@ const PROGRAMS = [
   { id:"breathe", title:"Breathe with Rosie", label:"FOLLOW THE RHYTHM", description:"A slow five-second inhale and seven-second exhale. Adjust to what feels comfortable." },
   { id:"quiet", title:"Quiet Sit", label:"JUST BE HERE", description:"An unguided space for sitting quietly, with gentle written reminders." },
   { id:"guided", title:"A Little Calm", label:"GENTLE GUIDANCE", description:"A mindful reset, with optional guidance read aloud by your device." },
-  { id:"unwind", title:"Evening Unwind", label:"SOFTEN THE DAY", description:"Release the day, relax your shoulders, and settle into restful quiet." }
+  { id:"unwind", title:"Evening Unwind", label:"SOFTEN THE DAY", description:"Release the day, relax your shoulders, and settle into restful quiet." },
+  { id:"haiku", title:"Haiku Reflection", label:"THREE LINES · ONE QUIET MOMENT", description:"Slowly contemplate the poem on your scroll, one line at a time." }
 ];
 const SOUNDS = [
   {id:"off",label:"Silence"},{id:"wind",label:"Soft wind"},
@@ -81,7 +82,7 @@ function speechSay(text) {
   } catch {}
 }
 
-export default function RosieZenMeditation({scene="field"}) {
+export default function RosieZenMeditation({scene="field",poem}) {
   const [kind,setKind] = useState("breathe");
   const [minutes,setMinutes] = useState(5);
   const [ambience,setAmbience] = useState("wind");
@@ -108,7 +109,13 @@ export default function RosieZenMeditation({scene="field"}) {
   const breatheAt = seconds%12;
   const inhaling = breatheAt<5;
   const breathSeconds = inhaling?5-breatheAt:12-breatheAt;
-  const cues = CUES[kind] || CUES.quiet;
+  const cues = kind==="haiku"
+    ? [
+        "Settle in. Let Rosie's poem arrive gently.",
+        ...((poem?.lines?.length===3)?poem.lines: CUES.quiet.slice(1,4)),
+        "Let the last line fade into a little silence."
+      ]
+    : (CUES[kind] || CUES.quiet);
   const cueIndex = Math.min(cues.length-1,Math.floor(elapsed/Math.max(1,totalMs)*cues.length));
   const cue = cues[cueIndex];
   const completePercent = Math.min(100,Math.max(0,elapsed/totalMs*100));
@@ -165,8 +172,8 @@ export default function RosieZenMeditation({scene="field"}) {
     recorded.current=false;
     lastSpokenCue.current=-1;
     // Prime speech within the user's click gesture for Safari/iPhone.
-    if(voice && (kind==="guided"||kind==="unwind")) {
-      speechSay((CUES[kind]||CUES.guided)[0]);
+    if(voice && (kind==="guided"||kind==="unwind"||kind==="haiku")) {
+      speechSay(cues[0]);
       lastSpokenCue.current=0;
     }
     pausedMs.current=minutes*60000;
@@ -198,7 +205,7 @@ export default function RosieZenMeditation({scene="field"}) {
     return ()=>window.clearInterval(timer);
   },[opened,status,minutes]);
   useEffect(()=>{
-    if (!opened || status!=="running" || !voice || (kind!=="guided" && kind!=="unwind"))return;
+    if (!opened || status!=="running" || !voice || (kind!=="guided" && kind!=="unwind" && kind!=="haiku"))return;
     if (lastSpokenCue.current===cueIndex)return;
     lastSpokenCue.current=cueIndex;
     speechSay(cue);
@@ -242,7 +249,7 @@ export default function RosieZenMeditation({scene="field"}) {
         <input type="range" min="0" max="1" step=".05" value={volume}
           onChange={e=>setVolume(Number(e.target.value))} aria-label="Garden sound volume"/>
       </label>}
-      {(kind==="guided"||kind==="unwind")&&supportedSpeech&&
+      {(kind==="guided"||kind==="unwind"||kind==="haiku")&&supportedSpeech&&
         <label className="zen-voice">
           <input type="checkbox" checked={voice} onChange={e=>setVoice(e.target.checked)}/>
           Read guidance aloud <small>(device voice)</small>
