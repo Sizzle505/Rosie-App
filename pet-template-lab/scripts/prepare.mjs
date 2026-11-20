@@ -3,7 +3,7 @@
  * Private, local-only preparation utility. No network, GitHub, Vercel or Rosie runtime calls.
  * No content is written under the Rosie-App repository.
  */
-import { readFile, writeFile, mkdir, realpath, stat, lstat } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, realpath, lstat } from 'node:fs/promises';
 import { dirname, resolve, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -102,6 +102,8 @@ if (command === 'init') {
   await mkdir(folder); // No recursive creation and no existing directory overwrite.
   for (const sub of ['assets','photos','masters']) await mkdir(join(folder, sub));
   await writeFile(join(folder, 'profile.json'), JSON.stringify(profile, null, 2) + '\n', { flag: 'wx' });
+  const approvals = {version:1,petId:id,characterApproved:false,slots:Object.fromEntries(allSlots.map(slot => [slot.id,{state:'pending',notes:''}])),siteReview:{mobile:false,tablet:false,desktop:false,content:false}};
+  await writeFile(join(folder, 'approvals.json'), JSON.stringify(approvals,null,2) + '\n', { flag: 'wx' });
   await writeFile(join(folder, 'photos', 'README.md'), 'PRIVATE PHOTOS ONLY. See pet-template-lab/PHOTO-INTAKE.md. Do not commit or publish this directory.\n', { flag: 'wx' });
   console.log(JSON.stringify({ created: folder, id, photoDirectory: join(folder, 'photos'), assetDirectory: join(folder, 'assets'), accountServices: 'disabled' }, null, 2));
 } else if (['prompts','review','status'].includes(command)) {

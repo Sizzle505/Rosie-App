@@ -21,6 +21,7 @@ async function fixture() {
   await mkdir(join(repo,'public','demo'),{recursive:true});
   await copyFile(join(here,'prepare.mjs'),join(scripts,'prepare.mjs'));
   await copyFile(join(here,'validate.mjs'),join(scripts,'validate.mjs'));
+  await copyFile(join(here,'review-gate.mjs'),join(scripts,'review-gate.mjs'));
   const catalog={version:1,excludes:['captain','card-vault'],pages:[
     {id:'home',label:'Landing Page',slots:[
       {id:'home.hero',source:'public/demo/hero.webp',target:'home/hero.webp',required:true},
@@ -31,7 +32,7 @@ async function fixture() {
   await writeFile(join(lab,'examples','profile.example.json'),JSON.stringify({schemaVersion:1,pet:{id:'example-dog',name:'Example Dog',species:'dog',breed:'',personality:''},features:{captain:false,cardVault:false},assetBase:'assets',reviewStatus:'draft',backend:{accounts:false,cloudNotes:false,secretSanta:false,email:false}}));
   await writeFile(join(repo,'public','demo','hero.webp'),'mock');
   await writeFile(join(repo,'public','demo','title.png'),'mock');
-  return {root,repo,lab,script:join(scripts,'prepare.mjs'),validate:join(scripts,'validate.mjs'),destination:join(root,'private-dog')};
+  return {root,repo,lab,script:join(scripts,'prepare.mjs'),validate:join(scripts,'validate.mjs'),gate:join(scripts,'review-gate.mjs'),destination:join(root,'private-dog')};
 }
 
 test('Creates a private package without writing into the flagship repository', async t=>{
@@ -106,4 +107,29 @@ test('Read-only validator checks images and blocks shared backend configuration'
   profile.backend.email=true;
   await writeFile(file,JSON.stringify(profile));
   assert.throws(()=>run(f.validate,['--pack',f.destination]));
+});
+
+
+test('Manual approval gate fails closed and never authorizes deployment',async t=>{
+  const f=await fixture(); t.after(async()=>rm(f.root,{recursive:true,force:true}));
+  run(f.script,['init','--out',f.destination,'--id','buddy','--name','Buddy']);
+  assert.throws(()=>run(f.gate,['--pack',f.destination]));
+  const dataFile=join(f.destination,'approvals.json');
+  const data=JSON.parse(await readFile(dataFile,'utf8'));
+  assert.equal(data.characterApproved,false);
+  assert.equal(data.slots['home.hero'].state,'pending');
+  const profilePath=join(f.destination,'profile.json');
+  const profile=JSON.parse(await readFile(profilePath,'utf8'));
+  profile.reviewStatus='approved';
+  await writeFile(profilePath,JSON.stringify(profile));
+  data.characterApproved=true;
+  for (const type of ['mobile','tablet','desktop','content']) data.siteReview[type]=true;
+  data.slots['home.hero'].state='approved';
+  data.slots['home.title'].state='omit';
+  await writeFile(dataFile,JSON.stringify(data));
+  await mkdir(join(f.destination,'assets','home'),{recursive:true});
+  await writeFile(join(f.destination,'assets','home','hero.webp'),Buffer.concat([Buffer.from('RIFF'),Buffer.alloc(4),Buffer.from('WEBP'),Buffer.alloc(30)]));
+  const result=JSON.parse(run(f.gate,['--pack',f.destination]));
+  assert.equal(result.reviewPassed,true);
+  assert.equal(result.deployAuthorized,false);
 });
