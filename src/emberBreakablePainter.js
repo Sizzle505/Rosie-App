@@ -49,6 +49,8 @@ export function paintBreakables(c,s,assets,W) {
        c.moveTo(0,-33);c.lineTo(10,-3);c.lineTo(-12,23);c.stroke();c.restore();
      }
    }else if(!b.broken){
+     // Anchor intact rock/crystal roots into the actual ceiling when hanging above Rosie.
+     c.save();if(b.side===-1)c.scale(1,-1);
      const sprite=isCrystal
        ?(b.cracked?assets.breakCrystalCracked:assets.breakCrystalIntact)
        :(b.cracked?assets.breakEarthCracked:assets.breakEarthIntact);
@@ -67,6 +69,7 @@ export function paintBreakables(c,s,assets,W) {
          c.restore();
        }
      }
+     c.restore();
      if(isCrystal)hint(c,"TURBO",0,81,"#ffe19b");
    }else{
      const opacity=Math.max(0,1-(s.scroll-b.x)/200);
