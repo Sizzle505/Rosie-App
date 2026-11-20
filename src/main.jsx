@@ -1490,6 +1490,18 @@ function CaptainPickupIcon({ kind }) {
     alt="" aria-hidden="true" draggable="false" />;
 }
 
+function YachtHazardArt({ item }) {
+  return <img
+    className="pickup-art yacht-hazard-art" src={item.asset || "/captain-pickup-buoy.webp"}
+    alt="" aria-hidden="true" draggable="false" decoding="async"
+    onError={(event) => {
+      // A broken asset never makes a hazard invisible.
+      if (!event.currentTarget.src.includes("/captain-pickup-buoy.webp")) {
+        event.currentTarget.src = "/captain-pickup-buoy.webp";
+      }
+    }} />;
+}
+
 function CaptainRosieIllustration({ className = "" }) {
   return (
     <img
@@ -1979,6 +1991,10 @@ function CaptainRosieGame({ soundOn }) {
       let turboDelta = 0;
       let lifeLoss = 0;
       let cheeseGain = 0;
+      let bonusPoints = 0;
+      let closePasses = 0;
+      let rivalPasses = 0;
+      let hitRival = false;
       const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
@@ -1988,34 +2004,47 @@ function CaptainRosieGame({ soundOn }) {
       // setItems() immediately afterward previously lost earned points.
       {
         spawnClockRef.current += tickMs;
-        const phaseSpeed = phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75;
-        const next = itemsRef.current.map((item) => ({ ...item, y: item.y + (item.speed + phaseSpeed) * movementScale }));
+        const phaseSpeed = (phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75) + chapter.pace;
+        const next = itemsRef.current.map((item) => {
+          const moved = { ...item, y: item.y + (item.speed + phaseSpeed) * movementScale };
+          // Signal the lane change far before the 77% collision zone.
+          if (moved.driftTo !== undefined && !moved.drifted && moved.y >= 43) {
+            moved.lane = moved.driftTo;
+            moved.drifted = true;
+          }
+          return moved;
+        });
 
-        const spawnEvery = phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485;
+        const spawnEvery = chapter.id === "sakura"
+          ? (phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485)
+          : chapter.cadence;
         if (spawnClockRef.current >= spawnEvery) {
           spawnClockRef.current = 0;
-          const roll = secureIndex(100);
-          const template = roll < 52
-            ? CAPTAIN_PICKUPS[0]
-            : roll < 77
-              ? CAPTAIN_PICKUPS[1]
-              : roll < 86
-                ? CAPTAIN_PICKUPS[2]
-                : CAPTAIN_PICKUPS[3];
-          next.push({
-            ...template,
-            id: itemIdRef.current += 1,
-            lane: secureIndex(3),
-            y: -12,
-            speed: 1.75 + secureIndex(8) / 10
-          });
+          if (chapter.id === "sakura") {
+            const roll = secureIndex(100);
+            const template = roll < 52 ? CAPTAIN_PICKUPS[0]
+              : roll < 77 ? CAPTAIN_PICKUPS[1] : roll < 86
+                ? CAPTAIN_PICKUPS[2] : CAPTAIN_PICKUPS[3];
+            next.push({ ...template, id: itemIdRef.current += 1,
+              lane: secureIndex(3), y: -12, speed: 1.75 + secureIndex(8) / 10 });
+          } else {
+            const wave = yachtWaveFor(chapter.id, spawnSequenceRef.current++, secureIndex);
+            wave.forEach((entry) => {
+              const standard = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === entry.kind);
+              next.push({ ...(standard || { label: entry.label, points: 0, turbo: 0 }),
+                ...entry, id: itemIdRef.current += 1, y: -12,
+                speed: 1.75 + secureIndex(8) / 10,
+                drifted: false, scoredPass: false });
+            });
+          }
         }
 
         const remaining = next.filter((item) => {
           const inCatchZone = item.y >= 77 && item.y <= 92;
           if (inCatchZone && item.lane === laneRef.current) {
-            if (item.kind === "buoy") {
+            if (isYachtHazard(item.kind)) {
               lifeLoss += 1;
+              hitRival ||= item.kind === "rival";
               lastHit = "buoy";
               streakRef.current = 0;
               comboRef.current = 1;
@@ -2031,8 +2060,19 @@ function CaptainRosieGame({ soundOn }) {
             }
             return false;
           }
+          if (isYachtHazard(item.kind) && !item.scoredPass && item.y >= 94) {
+            item.scoredPass = true;
+            if (Math.abs(item.lane - laneRef.current) === 1) {
+              bonusPoints += 15;
+              closePasses++;
+            }
+            if (item.kind === "rival") {
+              bonusPoints += boostRef.current ? 120 : 70;
+              rivalPasses++;
+            }
+          }
           if (item.y >= 108) {
-            if (item.kind !== "buoy") missedGood = true;
+            if (!isYachtHazard(item.kind)) missedGood = true;
             return false;
           }
           return true;
@@ -2073,6 +2113,15 @@ function CaptainRosieGame({ soundOn }) {
         window.navigator.vibrate?.(lastHit === "cheese" ? [18, 24, 28] : 15);
       }
 
+      if (bonusPoints) {
+        setScore((current) => current + bonusPoints);
+        if (closePasses) setNearMisses((current) => current + closePasses);
+        if (rivalPasses) setRivalsPassed((current) => current + rivalPasses);
+        if (!scoreDelta && !lifeLoss) setMessage(rivalPasses
+          ? "Rival yacht overtaken. The regatta trophy is in sight."
+          : "Clean near miss. Excellent seamanship earns bonus points.");
+      }
+
       if (lifeLoss) {
         setStreak(0);
         setCombo(1);
@@ -2083,7 +2132,8 @@ function CaptainRosieGame({ soundOn }) {
           if (next === 0) {
             finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
           } else {
-            setMessage("BUOY STRIKE. Rosie has issued a formal glare from the bridge.");
+            setMessage(hitRival ? "RIVAL COLLISION. Rosie demands a formal inquiry."
+              : "OBSTACLE STRIKE. Rosie has issued a formal glare from the bridge.");
             window.navigator.vibrate?.([55, 35, 55]);
           }
           return next;
@@ -2092,7 +2142,7 @@ function CaptainRosieGame({ soundOn }) {
     }, tickMs);
 
     return () => window.clearInterval(tick);
-  }, [running, paused, phaseKey]);
+  }, [running, paused, phaseKey, chapter.id]);
 
   useEffect(() => {
     function onKeyDown(event) {
