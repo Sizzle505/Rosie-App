@@ -585,3 +585,125 @@
   background:rgba(26,25,44,.7);font:600 12px system-ui,sans-serif;cursor:pointer;}
 .haiku-page .haiku-secondary-entry:hover{background:rgba(113,70,81,.75);}
 @media(max-width:520px){.haiku-page .haiku-tabs button{font-size:10px;padding:6px 2px;}}
+
+
+/* Nov 20 - character-led Zen scene refinement. The 15% enlargement is
+   applied to the meditation master only, so reactive poses stay consistent. */
+.haiku-page .haiku-scene-rosie--slow-breath{
+  height:117.3%;
+  max-width:65.55%;
+  left:39%;
+  bottom:-13%;
+}
+.haiku-page .haiku-scene-stage .haiku-scene-selector{
+  position:relative;
+  width:69%;
+  max-width:100%;
+  margin:clamp(46px,3.8vw,66px) 0 0 auto;
+  justify-content:center;
+  gap:7px;
+}
+/* The Way of the Shiba now has a genuine full-width location at the bottom
+   of the page, away from Rosie, scene controls, scroll and studio. */
+.haiku-page .haiku-shell > .haiku-scene-quote{
+  position:relative;
+  grid-column:1 / -1;
+  grid-row:3;
+  justify-self:center;
+  align-items:center;
+  left:auto;
+  top:auto;
+  bottom:auto;
+  width:min(670px,100%);
+  max-width:100%;
+  margin:clamp(10px,2vw,28px) auto 0;
+  padding:12px 12px 20px;
+  transform:none;
+  text-align:center;
+  gap:6px;
+  text-shadow:0 2px 12px #110e1c,0 5px 25px #120d1e;
+}
+.haiku-page .haiku-shell > .haiku-scene-quote::before{
+  content:"✧";
+  display:block;
+  margin-bottom:1px;
+  font-size:18px;
+  line-height:1;
+  color:#f4d19f;
+}
+.haiku-page .haiku-shell > .haiku-scene-quote .haiku-scene-quote-kicker{
+  font-size:10px;
+  letter-spacing:.23em;
+}
+.haiku-page .haiku-shell > .haiku-scene-quote strong{
+  font:italic 500 clamp(24px,2.2vw,33px)/1.16 "Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Baskerville,Georgia,serif;
+  max-width:100%;
+}
+.haiku-page .haiku-shell > .haiku-scene-quote small{
+  font:italic 17px/1.4 "Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Baskerville,Georgia,serif;
+  color:#ffe0bd;
+}
+/* The poems retain three deliberately typeset lines. Use an elegant
+   literary italic with kerning and optical spacing, not a generic UI face. */
+.haiku-page .haiku-scroll .haiku-verse p{
+  font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Baskerville,Georgia,serif;
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(20px,2.15vw,28px);
+  line-height:1.35;
+  letter-spacing:.008em;
+  text-wrap:balance;
+  font-kerning:normal;
+}
+.haiku-page .haiku-scroll .haiku-scroll-signature{
+  font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Baskerville,Georgia,serif;
+  font-weight:400;
+  font-style:italic;
+  letter-spacing:.018em;
+}
+@media (min-width:900px) and (max-width:1479px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:118.45%;
+    max-width:59.8%;
+    left:43%;
+    bottom:-11%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    margin-top:clamp(43px,3.8vw,58px);
+    width:69%;
+  }
+}
+@media (min-width:601px) and (max-width:899px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:104.65%;
+    max-width:56.35%;
+    left:46%;
+    bottom:-10%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    width:65%;
+    margin-top:clamp(34px,4.7vw,48px);
+  }
+  .haiku-page .haiku-scroll .haiku-verse p{font-size:clamp(19px,2.65vw,24px);}
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:102%;
+    max-width:64.4%;
+    left:35.5%;
+    bottom:-13%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    width:78%;
+    margin-top:clamp(35px,9vw,44px);
+  }
+  .haiku-page .haiku-shell > .haiku-scene-quote{
+    padding:16px 6px 30px;
+    margin-top:16px;
+  }
+  .haiku-page .haiku-scroll .haiku-verse p{
+    font-size:clamp(15px,4.35vw,21px);
+    line-height:1.32;
+    letter-spacing:0;
+  }
+}
