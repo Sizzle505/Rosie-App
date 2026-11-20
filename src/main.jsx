@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1769,9 +1769,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const lastPhaseRef = useRef("harbor");
 
   const phaseKey = timeLeft > 50 ? "harbor" : timeLeft > 25 ? "riviera" : "sunset";
-  const phase = CAPTAIN_PHASES[phaseKey];
   const elapsed = 75 - timeLeft;
   const chapter = YACHT_CHAPTERS[chapterIndex];
+  const phase = YACHT_CHAPTER_PHASES[chapter.id]?.[phaseKey] || CAPTAIN_PHASES[phaseKey];
   const levelNumber = Math.min(4, Math.floor(elapsed / 15));
   const level = yachtSceneFor(chapterIndex, elapsed, levelOrder);
   const scenery = useCaptainSceneryTransition(level, true, !running && !ended);
@@ -2024,9 +2024,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     if (!running || paused) return;
     if (phaseKey === lastPhaseRef.current) return;
     lastPhaseRef.current = phaseKey;
-    const next = CAPTAIN_PHASES[phaseKey];
-    setPhaseNotice(next.name.toUpperCase());
-    setMessage(next.copy);
+    setPhaseNotice(phase.name.toUpperCase());
+    setMessage(phase.copy);
     captainTone(phaseKey === "sunset" ? "cheese" : "ball");
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }, [phaseKey, running]);
