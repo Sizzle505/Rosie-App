@@ -1,5 +1,6 @@
 import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunnelLayout.js";
 import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
+import {makeCrystalShutters,updateCrystalShutters} from "./emberCrystalShutters.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -102,6 +103,8 @@ export function newRun(seed = 1467) {
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
     boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
     objects: makeCourse(seed), breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
+    crystalShutters:makeCrystalShutters(), hazardsDodged:0,
+    objectives:{barkroot:false,ruby:false}, objectiveBonus:0,
     formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
@@ -147,6 +150,18 @@ export function updateRun(s, dt, up = false, down = false) {
   const tipWorldX = s.scroll + tip.x;
   const tipY = tip.y;
   drillBreakables(s,dt,{x:tipWorldX,y:tipY},boosted);
+  updateCrystalShutters(s,tipWorldX,tipY,boosted,takeHit,tunnelCenter,tunnelRadius);
+  // Each passage now has one optional expedition commission; completion is
+  // event-driven and pays once, independently of the three-star challenge.
+  if(!s.objectives.barkroot&&s.events.some(e=>e.type==="break-wall"&&e.material==="earth")){
+    s.objectives.barkroot=true;s.objectiveBonus+=250;s.score+=250;
+    s.events.push({type:"objective-complete",mission:"barkroot",points:250});
+  }
+  if(!s.objectives.ruby&&s.events.some(e=>
+    (e.type==="shutter-dodged"||e.type==="shutter-shatter")&&e.id==="ruby-shutter")){
+    s.objectives.ruby=true;s.objectiveBonus+=350;s.score+=350;
+    s.events.push({type:"objective-complete",mission:"ruby",points:350});
+  }
   for (const formation of FORMATION_LAYOUT) {
     if (!formation.obstacle || s.formationHits.includes(formation.at)) continue;
     if (!intersectsSculpture(formation, tipWorldX, tipY)) continue;
