@@ -2,6 +2,7 @@ import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunn
 import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
 import {makeCrystalShutters,updateCrystalShutters} from "./emberCrystalShutters.js";
 import {getExpeditionStage,EXPEDITION_STAGE_SECONDS} from "./emberExpeditionStages.js";
+import {makeExpeditionHazards,updateExpeditionHazards} from "./emberExpeditionHazards.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -109,6 +110,7 @@ export function newRun(seed = 1467, stageIndex = null) {
     boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
     objects: makeCourse(seed), breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
     crystalShutters:makeCrystalShutters(), hazardsDodged:0,
+    worldHazards:makeExpeditionHazards(stageIndex),worldObjective:false,
     objectives:{barkroot:false,ruby:false}, objectiveBonus:0,
     formationHits: [], events: [], result: null, distance: 0 };
 }
@@ -156,10 +158,12 @@ export function updateRun(s, dt, up = false, down = false) {
   const tipY = tip.y;
   drillBreakables(s,dt,{x:tipWorldX,y:tipY},boosted);
   updateCrystalShutters(s,tipWorldX,tipY,boosted,takeHit,tunnelCenter,tunnelRadius);
+  updateExpeditionHazards(s,tipWorldX,tipY,boosted,takeHit,tunnelCenter,tunnelRadius);
   // Each passage now has one optional expedition commission; completion is
   // event-driven and pays once, independently of the three-star challenge.
   if(!s.objectives.barkroot&&s.events.some(e=>e.type==="break-wall"&&e.material==="earth")){
     s.objectives.barkroot=true;s.objectiveBonus+=250;s.score+=250;
+    if(s.stageIndex===0)s.worldObjective=true;
     s.events.push({type:"objective-complete",mission:"barkroot",points:250});
   }
   if(!s.objectives.ruby&&s.events.some(e=>
