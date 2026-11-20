@@ -92,6 +92,15 @@ try {
     await page.screenshot({path:folder+"/iphone-stage-tap-error.png"});
     throw error;
   }
+  const chapterCopySpacing=await page.evaluate(()=>{
+    const panel=document.querySelector(".captain-fs-yacht .captain-start-panel:not(.captain-results-panel)");
+    const goal=panel.querySelector(".yacht-chapter-goal")?.getBoundingClientRect();
+    const buttons=panel.querySelector(".yacht-chapter-picker")?.getBoundingClientRect();
+    return {goalBottom:goal?.bottom,goalHeight:goal?.height,buttonsTop:buttons?.top};
+  });
+  console.log("Chapter goal spacing",JSON.stringify(chapterCopySpacing));
+  assert.ok(chapterCopySpacing.goalBottom + 2 <= chapterCopySpacing.buttonsTop,
+    "Level objectives must not overlap the four stage buttons");
   const toggle = frame.locator(".yacht-steering-options .captain-steering-toggle");
   console.log("Mode toggle visible before launch", await toggle.isVisible());
   console.log("Preflight layout details", JSON.stringify(await page.evaluate(() => {
