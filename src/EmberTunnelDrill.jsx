@@ -138,6 +138,7 @@ function snapshot(s) {
     wallsBroken:s.wallsBroken||0,secrets:s.secrets||0,relics:s.relics||0,
     hazardsDodged:s.hazardsDodged||0,objectiveBonus:s.objectiveBonus||0,
     stageIndex:s.stageIndex??null,duration:s.duration||RUN_DURATION,
+    worldObjective:s.worldObjective===true,worldHazardCount:s.worldHazards?.length||0,
     objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
     passage:s.stageIndex===null?Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))):s.stageIndex, result:s.result };
 }
@@ -276,7 +277,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
              noticeRef.current=activeNotice;setNotice(activeNotice);
            }
           if((event.type==="shatter"||event.type==="shutter-shatter")&&s.boostTime>0)s.tipBurstAt=s.time;
-          if(event.type==="shutter-shatter"){
+          if(event.type==="world-hazard-shatter"){
+             particles.current.push({type:"break-v2",x:event.x,y:event.y,vx:0,vy:0,
+               life:.56,max:.56,r:0,color:"#e9b46d"});
+           }
+           if(event.type==="shutter-shatter"){
             particles.current.push({type:"break-v2",x:event.x,y:event.y,vx:0,vy:0,
               life:.56,max:.56,r:0,color:"#ebb6f9"});
           }
@@ -329,9 +334,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           if(event.type==="hit"){
             if(navigator.vibrate)navigator.vibrate([34,20,34]);
           }
-          if(["pickup","hit","break-wall","secret-found","shutter-shatter","objective-complete"].includes(event.type)&&ts-lastSound.current>95){
+          if(["pickup","hit","break-wall","secret-found","shutter-shatter","objective-complete","world-hazard-shatter","world-objective-complete"].includes(event.type)&&ts-lastSound.current>95){
             playSound(sound.current,event.type==="hit"?"hit":
-              (event.type==="break-wall"||event.type==="shutter-shatter")?"turbo":"pickup");lastSound.current=ts;
+              (event.type==="break-wall"||event.type==="shutter-shatter"||event.type==="world-hazard-shatter")?"turbo":"pickup");lastSound.current=ts;
           }
         }
         if(noticeRef.current&&s.time>=noticeRef.current.until){
@@ -429,7 +434,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         {route.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
         <div className="ember-passage-mission" aria-live="off"><span>PASSAGE OBJECTIVE</span>
           <strong>{route[hud.passage].mission}</strong>
-          <em>{world?"STAGE PLAYTEST":(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
+          <em>{world?(hud.worldObjective?"COMPLETE":"IN PROGRESS"):(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
         </div>
       </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
@@ -451,7 +456,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <p>{subtitle}</p>
              {mode==="ended"&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 expedition stars earned"}>
                <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
-               <small>{world?"FINISH · ≤1 DAMAGE · 5 TREASURES":"FINISH · 2 WALLS · ROYAL RELIC"}</small>
+               <small>{world?"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · 2 WALLS · ROYAL RELIC"}</small>
              </div>}
             {mode==="ended"&&(hud.relics>0||relicFound ?
               <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
@@ -466,6 +471,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               <span><b>{hud.relics}</b> ROYAL RELICS</span>
               <span><b>{Number(hud.objectives.barkroot)+Number(hud.objectives.ruby)}/2</b> MISSIONS</span>
               <span><b>{hud.hazardsDodged}</b> CRYSTAL DODGES</span>
+               {world&&<span><b>{hud.worldObjective?"COMPLETE":"MISSED"}</b> WORLD MISSION</span>}
               <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
               {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
               <span><b>{best.toLocaleString()}</b> BEST</span>
@@ -487,7 +493,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
                <button className="ember-expedition-launch" type="button" onClick={()=>start(selectedWorld)}>
                  PLAY {EXPEDITION_STAGES[selectedWorld].name.toUpperCase()} · 15s
                </button>
-               <small>Stages 3-5 use approved placeholder terrain. Boss battles and new art are still in development.</small>
+               <small>Each world has a unique moving hazard. Approved scenery is in use; boss battles and final art remain in development.</small>
              </div>
              <button type="button" onClick={()=>start(null)}>{mode!=="ended"?"START DIGGING":world?"CLASSIC 75-SECOND DIG":"DIG AGAIN"}</button>
              {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
