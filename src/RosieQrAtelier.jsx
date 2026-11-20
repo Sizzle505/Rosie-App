@@ -9,18 +9,35 @@ import "./rosie-qr-viewer.css";
 
 const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
-// The original frame WebPs already have transparent openings. Render their
-// selected-color underlay BEHIND the original art, just like the main QR page.
-// Aperture contours were extracted from the central transparent component
-// of each original WebP at alpha < 230, rather than guessed ellipse geometry.
-// The art and QR render in the same order as the working main Atelier frame.
+// Some original frame WebPs have opaque matte pixels in the opening.
+// Cut a real transparent aperture from each frame before composing the
+// finish underneath and the scannable white square on top.
+// Aperture contours come from the original assets' central openings.
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 // Curious Rosie's original title sits 155 artwork pixels above her lowest
 // gold frame flourish. Apply that SAME rise to every frame's measured bottom tip.
 const ROSIE_TITLE_RISE=155;
-// Enlarge each colored opening 10% around the center of its measured contour.
-// The material stays UNDER the original frame art, never over its gilding.
+// One shared, enlarged aperture governs BOTH the jewel material and the
+// negative-space cutout. Never fake transparency by painting above frame art.
 const ROSIE_APERTURE_SCALE=1.1;
+const ROSIE_APERTURE_EDGE=6;
+function rosieHoleTransform(frame){
+  return 'translate('+frame.cx+' '+frame.cy+') scale('+ROSIE_APERTURE_SCALE+') translate('+(-frame.cx)+' '+(-frame.cy)+')';
+}
+function cutRosieFrame(ctx,frame){
+  // Operates on the isolated frame canvas ONLY, never the underlying finish.
+  const path=new Path2D(frame.openingPath);
+  ctx.save();
+  ctx.globalCompositeOperation='destination-out';
+  ctx.translate(frame.cx,frame.cy);
+  ctx.scale(ROSIE_APERTURE_SCALE,ROSIE_APERTURE_SCALE);
+  ctx.translate(-frame.cx,-frame.cy);
+  ctx.fill(path);
+  ctx.lineWidth=ROSIE_APERTURE_EDGE;
+  ctx.lineJoin='round';
+  ctx.stroke(path);
+  ctx.restore();
+}
 const ROSIE_FRAMES=[
   {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,bottomX:912,bottomY:1014,titleWidth:540,openingPath:"M886,229 849,242 801,271 765,305 733,351 714,393 700,450 698,516 704,556 715,591 744,633 780,669 820,697 862,716 909,727 929,724 939,710 944,712 953,725 958,724 961,727 993,723 1046,705 1089,680 1131,643 1160,605 1174,572 1183,526 1184,468 1178,428 1163,380 1142,339 1117,305 1073,265 1033,242 1000,231 993,236 983,234 976,244 970,245 968,255 959,259 943,276 929,258 924,258 918,253 917,245 905,234 896,236Z"},
   {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,bottomX:967,bottomY:1002,titleWidth:540,openingPath:"M882,252 836,271 795,299 766,333 737,384 723,424 714,476 714,524 723,576 737,616 756,648 770,659 771,665 798,691 842,722 890,744 936,755 987,756 1023,749 1076,727 1110,705 1148,671 1154,659 1162,654 1181,628 1201,576 1210,524 1210,476 1201,424 1187,384 1158,333 1129,299 1106,279 1102,279 1088,268 1049,253 1036,252 1028,259 1011,259 1002,264 995,274 990,274 971,293 932,259 917,259 902,250Z"},
@@ -69,7 +86,7 @@ function rosieFrameMaterialSVG(frame,finishId){
   const bands=material.bands.map((color,i)=>
     '<stop offset="'+(i/(material.bands.length-1)*100).toFixed(2)+'%" stop-color="'+color+'"/>'
   ).join("");
-  const transform='translate('+cx+' '+cy+') scale('+ROSIE_APERTURE_SCALE+') translate('+(-cx)+' '+(-cy)+')';
+  const transform=rosieHoleTransform(frame);
   const path=frame.openingPath;
   return '<svg xmlns="http://www.w3.org/2000/svg" width="'+ROSIE_ART_W+'" height="'+ROSIE_ART_H+'" viewBox="0 0 '+ROSIE_ART_W+' '+ROSIE_ART_H+'" aria-hidden="true">'+
     '<defs>'+
@@ -95,7 +112,7 @@ function rosieFrameMaterialSVG(frame,finishId){
       '</radialGradient>'+
     '</defs>'+
     '<g transform="'+transform+'">'+
-      '<path d="'+path+'" fill="url(#material)" stroke="url(#material)" stroke-width="6" stroke-linejoin="round"/>'+
+      '<path d="'+path+'" fill="url(#material)" stroke="url(#material)" stroke-width="'+ROSIE_APERTURE_EDGE+'" stroke-linejoin="round"/>'+
       '<path d="'+path+'" fill="url(#jewelLight)"/>'+
       '<path d="'+path+'" fill="url(#polishedSheen)"/>'+
       '<path d="'+path+'" fill="url(#jewelDepth)"/>'+
@@ -165,10 +182,17 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   ]);
   const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
-  // The 110%-scale jeweled background is strictly behind the original frame.
-  // Use the same SVG source as the browser preview for pixel-level consistency.
+  // Three physical layers: gem material, actually transparent frame, white QR.
+  // Remove matte pixels ONLY from a separate copy of the frame, so the selected
+  // finish can show through the enlarged oval without obscuring the gold trim.
+  const hollowFrame=document.createElement('canvas');
+  hollowFrame.width=ROSIE_ART_W*2;hollowFrame.height=ROSIE_ART_H*2;
+  const frameCtx=hollowFrame.getContext('2d');
+  frameCtx.scale(2,2);
+  frameCtx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  cutRosieFrame(frameCtx,frame);
   ctx.drawImage(material,0,0,ROSIE_ART_W,ROSIE_ART_H);
-  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  ctx.drawImage(hollowFrame,0,0,ROSIE_ART_W,ROSIE_ART_H);
   // Match the live/main-page QR inset: gold outer keyline, ivory inner edge,
   // then the white scannable QR square.
   ctx.fillStyle="#b17e36";
@@ -193,10 +217,23 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   return canvasBlob(canvas);
 }
 function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish="emerald",printOnly=false}){
+  const maskId=React.useId().replace(/:/g,'');
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={rosieFrameStyle(frame)}>
     <div className="qa-rosie-insert-underlay" aria-hidden="true"
       dangerouslySetInnerHTML={{__html:rosieFrameMaterialSVG(frame,finish)}}/>
-    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
+    <svg className="qa-rosie-overlay-art" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
+      preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <defs>
+        <mask id={maskId} maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse"
+          x="0" y="0" width={ROSIE_ART_W} height={ROSIE_ART_H} style={{maskType:"luminance"}}>
+          <rect x="0" y="0" width={ROSIE_ART_W} height={ROSIE_ART_H} fill="#fff"/>
+          <path d={frame.openingPath} transform={rosieHoleTransform(frame)}
+            fill="#000" stroke="#000" strokeWidth={ROSIE_APERTURE_EDGE} strokeLinejoin="round"/>
+        </mask>
+      </defs>
+      <image href={ROSIE_ASSET_ROOT+frame.file} x="0" y="0" width={ROSIE_ART_W}
+        height={ROSIE_ART_H} preserveAspectRatio="none" mask={"url(#"+maskId+")"}/>
+    </svg>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
       aria-label="Close QR preview and return to the Atelier" title="Close preview">
