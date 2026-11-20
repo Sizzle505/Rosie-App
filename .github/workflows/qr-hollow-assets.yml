@@ -1,0 +1,64 @@
+name: Generate hollow Rosie QR frame assets
+on:
+  push:
+    branches:
+      - fix/qr-viewer-finish-title-close-20261120
+    paths:
+      - scripts/make-qr-frames-hollow.py
+      - .github/workflows/qr-hollow-assets.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  hollow-frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/qr-viewer-finish-title-close-20261120
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image utilities
+        run: python -m pip install pillow numpy
+      - name: Create four real-alpha hollow frame files
+        run: python scripts/make-qr-frames-hollow.py
+      - name: Save transparent asset proof
+        run: |
+          python - <<'PY'
+          from PIL import Image,ImageDraw
+          from pathlib import Path
+          names=('seated','presenting','peeking','blank')
+          out=Image.new('RGB',(1448,2172),(42,47,53))
+          d=ImageDraw.Draw(out)
+          cell=30
+          for y in range(0,2172,cell):
+              for x in range(0,1448,cell):
+                  if ((x//cell)+(y//cell))%2: d.rectangle((x,y,x+cell,y+cell),fill=(98,106,112))
+          for i,n in enumerate(names):
+              im=Image.open(Path('public/qr-atelier/rosie-qr')/f'rosie-frame-{n}-hollow.webp').convert('RGBA')
+              im.thumbnail((724,1086))
+              ox=(i%2)*724
+              oy=(i//2)*1086
+              out.paste(im,(ox,oy),im)
+          out.save('/tmp/qr-hollow-preview.png')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: four-hollow-qr-frames
+          path: |
+            /tmp/qr-hollow-preview.png
+            public/qr-atelier/rosie-qr/rosie-frame-*.webp
+          retention-days: 7
+      - name: Commit cleaned frame assets to the existing PR branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/qr-atelier/rosie-qr/rosie-frame-*.webp
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add four truly hollow QR frame WebPs with preserved gold rims'
+            git push origin HEAD:fix/qr-viewer-finish-title-close-20261120
+          fi
