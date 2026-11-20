@@ -105,6 +105,15 @@ try {
       }
       await page.getByRole("button",{ name:"Compose", exact:true }).click();
       assert.ok(await page.locator("#haiku-topic").isVisible(), label + " compose input must be visible");
+      await page.locator("#haiku-topic").fill("birthday");
+      await page.getByRole("button", { name:"Unfurl a New Haiku" }).click();
+      await page.waitForFunction(() =>
+        document.querySelector(".haiku-scene-rosie")?.src.includes("/rosie-inspired.webp")
+      );
+      await page.getByRole("button", { name:/Save/ }).click();
+      await page.waitForFunction(() =>
+        document.querySelector(".haiku-scene-rosie")?.src.includes("/rosie-triumphant.webp")
+      );
       summary.push({ label, width, height, ...boxes });
       console.log("PASS " + label + ": " + JSON.stringify(boxes));
     } catch (err) {
