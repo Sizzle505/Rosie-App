@@ -14,6 +14,14 @@ async function inspect(browserName,browser,device){
     hasTouch:device.mobile,
     acceptDownloads:false
   });
+  await page.addInitScript(()=>{
+    window.__rosieMusicPlayCalls=[];
+    const original=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function(...args){
+      if(this.src?.includes("/rosie-music/"))window.__rosieMusicPlayCalls.push(new URL(this.src).pathname);
+      return original.apply(this,args);
+    };
+  });
   const failures=[];
   const requests=[];
   page.on("pageerror",error=>failures.push(error.message));
@@ -38,8 +46,8 @@ async function inspect(browserName,browser,device){
       await page.evaluate(page=>{location.hash="#"+page;},route);
       await page.waitForFunction(id=>document.querySelector(".rosie-music-dock")?.getAttribute("data-track")===id,id,{timeout:25000});
       await page.screenshot({path:directory+"/"+browserName+"-"+device.name+"-"+route+".png",fullPage:false});
-      const audio=await page.evaluate(()=>[...document.querySelectorAll("audio")].filter(x=>x.src.includes("/rosie-music/")).map(x=>({src:new URL(x.src).pathname,paused:x.paused,volume:x.volume,loop:x.loop})));
-      assert.ok(audio.some(x=>x.src==="/rosie-music/"+id+".mp3"),"Missing audio track for "+route+":"+JSON.stringify(audio));
+      const played=await page.evaluate(()=>window.__rosieMusicPlayCalls||[]);
+      assert.ok(played.includes("/rosie-music/"+id+".mp3"),"Missing audio playback request for "+route+":"+JSON.stringify(played));
     }
     await page.evaluate(()=>window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{detail:{scene:"tunnel",state:"playing"}})));
     await page.waitForFunction(()=>document.querySelector(".rosie-music-dock")?.getAttribute("data-track")==="ember-tunnel");
@@ -47,9 +55,8 @@ async function inspect(browserName,browser,device){
     await page.waitForFunction(()=>document.querySelector(".rosie-music-dock")?.getAttribute("data-track")==="pulse-arena");
     await page.evaluate(()=>window.dispatchEvent(new CustomEvent("rosieverse:music:achievement",{detail:{kind:"game-victory"}})));
     await page.waitForTimeout(180);
-    const fanfare=await page.evaluate(()=>[...document.querySelectorAll("audio")].some(x=>new URL(x.src).pathname==="/rosie-music/victory-fanfare.mp3"));
-    // HTML Audio made with new Audio() is not attached to the DOM; rely on network
-    // and the engine's deterministic Node test rather than DOM <audio> count.
+    const fanfare=await page.evaluate(()=>(window.__rosieMusicPlayCalls||[]).includes("/rosie-music/victory-fanfare.mp3"));
+    assert.ok(fanfare,"Victory cue was not requested");
     const panel=page.locator("#rosie-music-panel");
     const vol=panel.getByRole("slider",{name:"Soundtrack volume"});
     await vol.fill("32");
