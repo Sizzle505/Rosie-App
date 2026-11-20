@@ -38,16 +38,17 @@
   width:100%!important;height:100%!important;object-fit:contain!important;
   z-index:3;pointer-events:none;user-select:none;
 }
-/* The rear mat overscans under the gold frame so no scene-colored slivers
-   appear. The front mat hides opaque pale remnants baked into the WebP opening.
-   Both share the same measured aperture and selected finish color. */
-.qa-rosie-insert-underlay,.qa-rosie-insert-surface {
+/* The 110% jewel-finish aperture is a single artwork-sized SVG BEHIND the
+   original illustrated frame, not an overlay painted on its filigree. */
+.qa-rosie-insert-underlay {
   position:absolute!important;inset:0!important;
   width:100%!important;height:100%!important;
-  pointer-events:none;display:block!important;overflow:visible;
+  z-index:1;pointer-events:none;display:block!important;overflow:visible;
 }
-.qa-rosie-insert-underlay {z-index:1;}
-.qa-rosie-insert-surface {z-index:4;}
+.qa-rosie-insert-underlay svg {
+  display:block!important;width:100%!important;height:100%!important;
+  overflow:visible;pointer-events:none;
+}
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
@@ -128,9 +129,8 @@
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay,
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-surface {
-    /* Only the measured aperture paths carry color, not their SVG bounds. */
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay {
+    /* Only the scaled aperture paths carry color, not the SVG bounds. */
     background:transparent!important;
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
