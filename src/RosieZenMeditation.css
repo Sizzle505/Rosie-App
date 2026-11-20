@@ -53,10 +53,10 @@
 .zen-breath-portrait{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;}
 .zen-breath-portrait img{position:relative;z-index:1;max-width:100%;max-height:clamp(265px,55vh,525px);width:auto;height:auto;
   object-fit:contain;filter:drop-shadow(0 12px 20px rgba(22,12,28,.38));
-  transform-origin:50% 87%;animation:zen-rosie-breathe 12s ease-in-out infinite;}
+  transform-origin:50% 87%;animation:zen-rosie-breathe 10s ease-in-out infinite;}
 .zen-breath-halo{position:absolute;z-index:0;width:min(75%,430px);aspect-ratio:1;top:20%;border-radius:50%;
   background:radial-gradient(circle,rgba(248,220,158,.23),rgba(248,180,161,.07) 58%,transparent 73%);
-  filter:blur(12px);animation:zen-halo-breathe 12s ease-in-out infinite;}
+  filter:blur(12px);animation:zen-halo-breathe 10s ease-in-out infinite;}
 .zen-breath-portrait>p{margin:5px 0 0;text-align:center;font:italic 17px/1.4 Georgia,serif;color:#ffe7c5;text-shadow:0 3px 9px #201122;}
 .zen-eyebrow{font:700 10px system-ui,sans-serif;letter-spacing:.2em;color:#ffdaa7;}
 .zen-guidance{min-width:0;padding:16px 0;}
@@ -70,7 +70,7 @@
 .zen-breath-cue small{display:block;margin-top:9px;font:12px/1.45 system-ui,sans-serif;color:#e4c9ad;}
 .zen-breath-orb{width:63px;height:63px;flex-shrink:0;border-radius:50%;border:1px solid #fbe1bd;
   background:radial-gradient(circle at 36% 30%,#fff0d1,#e5a6aa 58%,#946b89);
-  box-shadow:0 0 30px #efbba87a;animation:zen-halo-breathe 12s ease-in-out infinite;}
+  box-shadow:0 0 30px #efbba87a;animation:zen-halo-breathe 10s ease-in-out infinite;}
 .zen-breath-count{margin-left:auto;align-self:center;color:#f7d2a2;font:normal 28px Georgia,serif;}
 .zen-session-controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;}
 .zen-action-primary,.zen-action-secondary{min-width:145px;min-height:48px;border-radius:10px;padding:11px 19px;
@@ -90,13 +90,13 @@
 .zen-complete .zen-complete-stats{font:12px/1.6 system-ui,sans-serif;color:#f2d3a9;margin-bottom:24px;}
 @keyframes zen-rosie-breathe{
   0%,100%{transform:translateY(0) scale(1)}
-  43%{transform:translateY(-4px) scale(1.021)}
-  50%{transform:translateY(-4px) scale(1.022)}
+  40%{transform:translateY(-4px) scale(1.021)}
+  47%{transform:translateY(-4px) scale(1.022)}
 }
 @keyframes zen-halo-breathe{
   0%,100%{transform:scale(.95);opacity:.56}
-  42%{transform:scale(1.17);opacity:1}
-  54%{transform:scale(1.17);opacity:1}
+  40%{transform:scale(1.17);opacity:1}
+  47%{transform:scale(1.17);opacity:1}
 }
 @media(max-width:900px){
  .zen-immersive{padding:12px;align-items:flex-start;}
