@@ -143,3 +143,60 @@
   .haiku-scroll .haiku-scroll-signature{font-size:18px;margin-top:5px;}
   .haiku-scroll .haiku-scroll-caption{font-size:9px;letter-spacing:.06em;}
 }
+
+/* Second art pass: separate landscape and portrait poetry scrolls. The text
+   remains HTML, selectable, accessible, and independent of every raster asset. */
+.haiku-scroll{
+  position:relative;
+  width:min(100%,560px);
+  height:auto;
+  min-height:0;
+  aspect-ratio:1448 / 1086;
+  padding:0;
+  background:transparent url("/rosieverse/haiku/scroll-grand.webp") center / 100% 100% no-repeat;
+}
+.haiku-scroll-inner{
+  position:absolute;
+  inset:15% 13% 17%;
+  box-sizing:border-box;
+  width:auto;height:auto;
+  padding:0;
+  justify-content:center;
+  overflow:hidden;
+}
+.haiku-scroll .haiku-verse p{font-size:clamp(19px,2.1vw,26px);line-height:1.25;margin-bottom:9px;}
+.haiku-scroll .haiku-ornament{font-size:17px;margin:2px 0 5px;}
+.haiku-scroll .haiku-metre{margin-top:2px;}
+.haiku-scroll .haiku-scroll-signature{font-size:19px;margin:7px 0 2px;}
+.haiku-desk-art{
+ display:block;width:100%;height:auto;max-height:154px;
+ object-fit:contain;margin:8px auto 4px;
+ filter:drop-shadow(0 6px 10px rgba(10,8,15,.45));
+ pointer-events:none;user-select:none;
+}
+.haiku-journal{background:radial-gradient(ellipse at 100% 100%,rgba(230,175,119,.14),transparent 62%);}
+.haiku-page .haiku-primary{position:relative;overflow:hidden;}
+.haiku-page .haiku-primary::after{
+ content:"✿";position:absolute;right:14px;top:50%;transform:translateY(-50%);
+ opacity:.6;font-size:18px;color:#6c3a43;pointer-events:none;
+}
+@media(max-width:860px){
+ .haiku-scroll{
+  width:min(100%,405px);
+  aspect-ratio:1122 / 1402;
+  background-image:url("/rosieverse/haiku/scroll-mobile.webp");
+ }
+ .haiku-scroll-inner{inset:13.5% 20.5% 13%;}
+ .haiku-scroll .haiku-verse p{font-size:clamp(17px,3.5vw,22px);line-height:1.26;margin:0 0 11px;}
+ .haiku-scroll .haiku-scroll-signature{margin-top:10px;}
+}
+@media(max-width:420px){
+ .haiku-scroll{width:min(100%,350px);}
+ .haiku-scroll-inner{inset:13.6% 20% 12.5%;padding:0;}
+ .haiku-scroll .haiku-verse p{font-size:clamp(15px,4.5vw,19px);line-height:1.23;margin:0 0 10px;}
+ .haiku-scroll .haiku-scroll-caption{font-size:9px;}
+ .haiku-scroll .haiku-ornament{margin:2px 0 3px;}
+ .haiku-scroll .haiku-scroll-signature{margin:5px 0 2px;font-size:17px;}
+ .haiku-scroll .haiku-metre{font-size:9px;}
+ .haiku-scroll .haiku-dedication{font-size:10px;line-height:1.25;}
+}
