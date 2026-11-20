@@ -50,11 +50,18 @@ try {
   assert.equal(await page.locator("#lp-page").inputValue(),"calculations");
   await frame.locator(".rc-tools-heading").waitFor({state:"visible",timeout:35000});
   await page.getByRole("button",{name:"The Pocket Toolkit heading",exact:true}).click();
-  const original = await frame.locator(".rc-tools-heading").boundingBox();
+  // Compare within the iframe's CSS-pixel coordinate system. The parent
+  // deliberately shrinks the preview, so Playwright boundingBox() measures
+  // screen pixels instead, and 19 CSS pixels can be fewer than 15 onscreen.
+  const original = await frame.locator(".rc-tools-heading").evaluate(el=>el.getBoundingClientRect().y);
   await page.locator(".lp-coordinates input").nth(1).fill("-19");
   await page.locator(".lp-coordinates input").nth(1).press("Tab");
-  const after = await frame.locator(".rc-tools-heading").boundingBox();
-  assert.ok(after.y < original.y-15,"Toolkit title should move by user-supplied offset");
+  await page.waitForFunction(previousY=>{
+    const el=document.querySelector(".lp-preview-viewport iframe")?.contentDocument?.querySelector(".rc-tools-heading");
+    return el && el.getBoundingClientRect().y < previousY-17;
+  },original,{timeout:8000});
+  const after = await frame.locator(".rc-tools-heading").evaluate(el=>el.getBoundingClientRect().y);
+  assert.ok(after < original-17,"Toolkit heading should move 19 CSS pixels up in the iframe");
   const buttons=["Tip Calculator button","Unit Conversions button","Date Calculator button",
     "Split Bill button","Percentages & Discounts button","Loan & Interest button","Currency Converter button"];
   for(const name of buttons){
