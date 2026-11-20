@@ -26,9 +26,9 @@ jobs:
           git merge --no-ff -X theirs origin/fix/qr-viewer-finish-title-close-20261120 -m 'Integrate QR framed viewer and selected finishes'
       - name: Import three approved frame PNGs from Dropbox
         env:
-          ROSIE_SEATED_URL: "https://uc741f4d9cfbda5b6a0fc8048cc3.dl.dropboxusercontent.com/cd/0/get/DMXiK9RslOai5wHP9oz51CJ7_uzitHB83D59j4eCoP26rzplhl1NhhC9qvhv0tq0bsr13A_Kadv8cLxwnoFr34NA5rozHUTCPh1tzalByuUG5L41gwWKDOJV2Tn31U4KNUHKpva6SGBKb_KakngzPauUpMy8v6I3rn1xEvkkcMt1tg/file?c_luid=667ded1d"
-          ROSIE_PRESENT_URL: "https://ucb46251ba3018493260db6fd28b.dl.dropboxusercontent.com/cd/0/get/DMVbbh0DYPrf_mVWx4XNU2EH21Zcm8yS8EU8R97y8FIb8y8MwuEWSjjnKSGCgkKYIAko0ZmwCaLTy6r5wuyiF_u8WeaSNiPSPTIz7EX738LDoiv_Wg2yu6F24a6BbRAYfFv-KDNaAO8W8F9l-SuSATF0tu0r9M4L-TEvpkBBJRzreg/file?c_luid=667ded1d"
-          ROSIE_GILDED_URL: "https://uc196b939f1af5ecce4ecd2549dd.dl.dropboxusercontent.com/cd/0/get/DMWSP3W5VcZ6uCCamBOhNSVL7BuQkFkdLTtH8GBj5i_EHixub1VRGCDIh-Y-Iyn-PslgO5iVyfFDeRMSytMsmohnQM2QQAva5aDGnyPmaeLsHzfcv67IP7w2JmOZKSOWHLNwSnFnkrFUUQkZrxbt7QmNAgswxYDrNtjoWMghcVhoNg/file?c_luid=667ded1d"
+          ROSIE_SEATED_URL: "https://ucc971a761cca067ef826039e2a2.dl.dropboxusercontent.com/cd/0/get/DMXmNBI6Af38wRHHEqnejcxJE-xiS82xnIFDbM0owrHeUzfHrU0m2H6yubEkWOeVasBwK38-Ppoew0rfCFD0FEO0IvbsVgjgFCS1m1nEMnhgyqq6R6VMdjxV53ulxYU7vHtBx39nGcgWOsXkcInuLpEBuqF-iV2rW8LuVrzhGSt5Jg/file?c_luid=667ded1d"
+          ROSIE_PRESENT_URL: "https://uc7341289d2a9865e4bb89544c39.dl.dropboxusercontent.com/cd/0/get/DMXYeBM33zjgUq-xMR-16wD83AXc8V4tBxCpohMGGVY9pnp397khWDERNEUcsCvML5Aef_c2BnVFCLCVFs-LxivwLDRKf_l-tZ8HTyiFKf6eEb9l_N8aZB-xuGRjNKtr2EONgH371TS3MZyHalzrhOJYP_C4b2d0gqpNZwPuPhMteQ/file?c_luid=667ded1d"
+          ROSIE_GILDED_URL: "https://uc0801aaa900c32e808b8c15a6de.dl.dropboxusercontent.com/cd/0/get/DMViWt78WQuY9rXicULK99EmjPPtWGsYyGapUswteyBqYrJNfosb8fQaXeAjh4GwNMq_nydblR_Zf078ixE_NV54uKWpg0nFd53umcezxz3lVg6PAz9H58h5X1KccHliOEC0NS48pNPe7s8CAyS0mCNadiW8idn9w0yZA7CH_3WPSA/file?c_luid=667ded1d"
         run: |
           set -euo pipefail
           python3 - <<'PY'
@@ -43,7 +43,7 @@ jobs:
               with urllib.request.urlopen(os.environ[key],timeout=60) as response: data=response.read()
               digest=hashlib.sha256(data).hexdigest()
               if digest!=expected: raise RuntimeError(name+' Dropbox SHA-256 mismatch: '+digest)
-              if not data.startswith(b'\\x89PNG\\r\\n\\x1a\\n'): raise RuntimeError(name+' is not PNG')
+              if not data.startswith(bytes((137,80,78,71,13,10,26,10))): raise RuntimeError(name+' is not PNG')
               (base/name).write_bytes(data)
               print('VERIFIED',name,len(data),digest)
           PY
