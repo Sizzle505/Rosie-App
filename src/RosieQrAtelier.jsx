@@ -11,10 +11,10 @@ const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
 // Aperture geometry is measured from the supplied transparent oval frame artwork.
 const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:919,titleY:867,titleWidth:540},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:969,titleY:879,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:804,titleY:930,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:745,titleY:914,titleWidth:555}
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:870,titleY:856,titleWidth:540},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:954,titleY:868,titleWidth:540},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:754,titleY:919,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:725,titleY:920,titleWidth:555}
 ];
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 function rosieFrameStyle(frame){
@@ -99,7 +99,7 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   ctx.save();
   ctx.globalCompositeOperation="destination-out";
   ctx.beginPath();
-  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.535,frame.insertH*.535,0,0,Math.PI*2);
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.56,frame.insertH*.56,0,0,Math.PI*2);
   ctx.fill();
   ctx.restore();
   ctx.save();
@@ -134,7 +134,7 @@ function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish
       <defs>
         <mask id={"qa-frame-hole-"+(printOnly?"print":"viewer")} maskUnits="userSpaceOnUse">
           <rect width={ROSIE_ART_W} height={ROSIE_ART_H} fill="white"/>
-          <ellipse cx={frame.insertX} cy={frame.insertY} rx={frame.insertW*.535} ry={frame.insertH*.535} fill="black"/>
+          <ellipse cx={frame.insertX} cy={frame.insertY} rx={frame.insertW*.56} ry={frame.insertH*.56} fill="black"/>
         </mask>
       </defs>
       <image href={ROSIE_ASSET_ROOT+frame.file} width={ROSIE_ART_W} height={ROSIE_ART_H}
