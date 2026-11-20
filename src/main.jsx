@@ -2456,7 +2456,10 @@ function CaptainRosieGame({ soundOn }) {
           )}
         </div>
 
-        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}>
+        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
+          onContextMenu={(event) => event.preventDefault()}
+          onSelectStart={(event) => event.preventDefault()}
+          onDragStart={(event) => event.preventDefault()}>
           {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" /> :
           <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
             <span>◀</span><small>PORT</small>
