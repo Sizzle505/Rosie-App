@@ -1,4 +1,4 @@
-// Battle bridge for the selectable Molten and Royal Treasury Expedition stages.
+// Battle bridge for the selectable Clockwork, Molten and Royal Treasury Expedition stages.
 // Physics stays deterministic and independent of React. The character art is
 // a procedural placeholder until reviewed sprite atlases are imported.
 import {
@@ -9,7 +9,7 @@ export const BOSS_INTRO_TIME=8.5;
 export const BOSS_SCREEN_X=482;
 
 export function expeditionBossKind(stageIndex){
-  return stageIndex===3?"cinderclaw":stageIndex===4?"mole-king":null;
+  return stageIndex===2?"copperjack":stageIndex===3?"cinderclaw":stageIndex===4?"mole-king":null;
 }
 export function startExpeditionBoss(s,center){
   const kind=expeditionBossKind(s.stageIndex);
@@ -27,6 +27,8 @@ export function bossAttackDanger(boss,tipY,bossY){
   const delta=tipY-bossY;
   switch(boss.attack){
     case "fireball":return Math.abs(delta)<96;
+    case "spark-bolt":return Math.abs(delta)<96;
+    case "gear-sweep":return delta>25;
     case "burrow":return delta>50;
     case "quake":return delta>25;
     case "earth-burst":return delta< -35;
@@ -56,7 +58,7 @@ export function updateExpeditionBoss(s,dt,{tipX,tipY,boosted,onHit}){
     for(const event of b.events.filter(e=>e.type==="boss-hit"||e.type==="boss-defeated"))
       s.events.push({...event});
     if(b.defeated){
-      const reward=b.kind==="mole-king"?2600:1750;
+      const reward=b.kind==="mole-king"?2600:b.kind==="copperjack"?1400:1750;
       s.bossDefeated=true;
       s.score+=reward;
       s.events.push({type:"boss-victory",boss:b.kind,points:reward});
