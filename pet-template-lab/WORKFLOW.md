@@ -1,13 +1,23 @@
-# Manual customization for 2-3 family pets per month
+# Manual customization - family/friends, 2-3 dogs per month
 
-1. Privately collect 10 high-quality reference photographs: front, side profiles, 3/4 views, standing, sitting, and distinct facial expressions. Record name, coloring, breed and personality. **Never place the photographs into public GitHub or public web assets.**
-2. Use interactive ChatGPT image generation to prepare a canonical approved dog character reference. Validate the muzzle, ears, proportions, markings, age, and general likeness before generating any themed art.
-3. Generate one page-specific batch at a time, using that master character reference and the Rosie-approved composition as inputs. Favor character insertion into reusable scenery rather than repainting intact backgrounds.
-4. Maintain an approval log outside this public repository. Keep versions and source artwork separate from optimized web images.
-5. Export approved assets using each `target` name in the catalog, converting to the specified file format. Keep them in a **private** folder under `assets/`; avoid committing them into the Rosie repository.
-6. Create `profile.json` from the sample profile, leaving Captain and Card Vault off. Run the validator. Manually review cropping, transparency, text, likeness, and appearance on all device classes.
-7. Use a separate pilot website, with explicit approval before public publication. Continue developing RosieVerse separately.
+**No image-generation API or automatic model billing needed.** ChatGPT image creation happens interactively. The Node tools are for naming, organizing and testing approved images, not unattended art generation.
 
-The inventory currently has 72 candidate slots: 45 essential and 27 optional. It is a planning and inspection tool, not a commitment to generate every asset.
+## Phase A - intake and likeness
+1. Receive the ten dog photos according to \`PHOTO-INTAKE.md\`; keep them private. Confirm use rights and name/breed/personality.
+2. Initialize a separate private pet package: \`node pet-template-lab/scripts/prepare.mjs init --out /private/pets/slug --id slug --name 'Dog Name'\`.
+3. Create the approved canonical dog master first. Do not continue until facial proportions, coat markings, ear shape, tail and apparent age are correct.
+4. Record manual approval of the canon in the private package's \`approvals.json\`; the scripts do not infer visual quality.
 
-The next engineering step should be a tenant-specific asset resolver and isolated pilot deployment; neither is connected to RosieVerse today.
+## Phase B - page artwork
+5. Run \`node pet-template-lab/scripts/prepare.mjs prompts --pack /private/pets/slug\` to generate page-by-page ChatGPT prompt drafts. Provide the original source image to ChatGPT alongside the approved canon when generating each asset.
+6. Generate art in \`PRODUCTION-BATCHES.md\` order. Save approved images to \`assets/<page>/<slot>.<extension>\` in the private package; keep full-size masters under \`masters/\`.
+7. After each batch, run \`prepare.mjs status --pack /private/pets/slug\` and \`prepare.mjs review --pack /private/pets/slug --replace\`. Open the **local** \`review.html\`; do not upload it publicly. Image presence does not constitute approval.
+8. Run \`validate.mjs --pack /private/pets/slug\` after essential slots are complete. Use \`--strict\` only when every optional slot has an exported file instead of being deliberately reused/omitted.
+
+## Phase C - separate pilot (not yet engineered)
+9. Build a **separate** copy/tenant preview with its own origin, with the Captain page and Card Vault routes disabled. Never copy flagship Supabase/Gmail credentials or connect to its customer data. Keep account, Secret Santa server and email functionality disabled until properly isolated.
+10. Test iPhone, iPad and desktop pages, navigation, cropped art, QR scanning, storage, any active backend routes and fallback behavior. Compare RosieVerse's baseline before/after to confirm no changes.
+11. Mark each slot in \`approvals.json\` as \`approved\`, \`reuse\` (with explicit written reason) or \`omit\` (optional only). Set \`profile.reviewStatus\` to \`approved\`, \`characterApproved\` to true, and the mobile/tablet/desktop/content review flags only after manual verification.
+12. Run \`review-gate.mjs --pack /private/pets/slug\` to check the artwork gate. **It never authorizes a deployment**. Publish only after separate runtime/backend isolation verification and explicit release authorization.
+
+Source assets in \`public/\` and \`src/\` belong to RosieVerse and are never overwritten. Asset duplication or publication is not an automated step.
