@@ -19,6 +19,13 @@ try{
       // The two recovered source archives must render as actual approved art.
       assert.equal(await page.locator(".haiku-tabs > button").count(),4,label+" should have four illustrated activities");
       for (const icon of await page.locator(".haiku-tabs > button img").all()) {
+        await icon.scrollIntoViewIfNeeded();
+        await icon.evaluate(async el=>{
+          if (!el.complete) await new Promise((resolve,reject)=>{
+            el.addEventListener("load",resolve,{once:true});
+            el.addEventListener("error",()=>reject(new Error("Unable to load "+el.src)),{once:true});
+          });
+        });
         assert.ok(await icon.evaluate(el=>el.complete&&el.naturalWidth>=200),
           label+" must load high-resolution activity icon");
       }
