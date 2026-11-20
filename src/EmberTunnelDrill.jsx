@@ -457,7 +457,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     if(modeRef.current!=="running")return;
     pressed.current[type]=on;
   };
-  const passageProgress=world?Math.min(100,hud.time/hud.duration*100):
+  const passageProgress=world?(hud.result==="complete"?100:Math.min(100,hud.time/hud.duration*100)):
     Math.min(100, ((hud.time-PASSAGES[hud.passage].start)/(PASSAGES[hud.passage].end-PASSAGES[hud.passage].start))*100);
   return (
     <section className="ember-suite" data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
