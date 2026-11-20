@@ -29,6 +29,49 @@ function crown(c){
    ellipse(c,x,y,4,4,"#ffedac");
  ellipse(c,0,-68,6,8,"#ee4762","#ffd3ad",2);
 }
+function copperjack(c,t){
+ c.save();c.translate(0,Math.sin(t*4)*3);
+ // Clockwork sentry: squat riveted copper automaton, teal monocular lamp,
+ // piston arms and drill-clamp feet. Standalone procedural review art.
+ const brass=c.createLinearGradient(-75,-70,75,90);
+ brass.addColorStop(0,"#f3d69a");brass.addColorStop(.29,"#ad753f");
+ brass.addColorStop(.55,"#644b3a");brass.addColorStop(.78,"#d7a85f");
+ brass.addColorStop(1,"#523c37");
+ shape(c,[[-59,35],[-75,85],[-25,85],[-10,50]],brass,"#e5c18a",3);
+ shape(c,[[20,45],[35,83],[80,83],[60,32]],brass,"#e5c18a",3);
+ ellipse(c,-52,79,29,13,"#40353a","#f2c67f",3);
+ ellipse(c,52,79,28,13,"#40353a","#f2c67f",3);
+ ellipse(c,0,23,71,59,brass,"#f4d08b",5);
+ ellipse(c,0,23,39,40,"#40373b","#e1aa65",4);
+ ellipse(c,0,23,20,20,"#79afad","#ffebb6",4);
+ ellipse(c,0,23,10,10,"#e7f3c6");
+ // Arms are mounted on the torso, with heavy pneumatic shafts.
+ for(const side of [-1,1]){
+  c.save();c.scale(side,1);
+  ellipse(c,61,-6,22,26,"#765343","#f4cb82",4);
+  shape(c,[[67,-7],[101,5],[117,43],[94,50],[75,22]],brass,"#f2d19b",3);
+  line(c,[[86,12],[110,37]],"#504049",10);
+  line(c,[[86,12],[110,37]],"#f1c77f",4);
+  ellipse(c,108,44,19,14,"#61535a","#e7bf73",3);
+  c.restore();
+ }
+ // Segmented steel head with a single oversized teal searchlight.
+ ellipse(c,0,-42,53,49,brass,"#ffe0a1",4);
+ shape(c,[[-49,-47],[-35,-74],[35,-74],[51,-47]],"#695357","#f1cb8e",3);
+ ellipse(c,0,-44,32,27,"#2c343b","#f0cb7e",4);
+ ellipse(c,0,-44,24,20,"#65b8b5","#e8f8d5",3);
+ ellipse(c,0,-44,12,12,"#d9fff4");
+ ellipse(c,0,-44,4,4,"#fffdd3");
+ for(let i=-2;i<=2;i++){
+   const x=i*19;
+   ellipse(c,x,60,3,3,"#ffe3a5");
+ }
+ // A small clock face replacing a chest badge.
+ ellipse(c,0,25,13,13,"#fff0bf","#6d453c",3);
+ line(c,[[0,25],[0,17]],"#8b4f42",2);
+ line(c,[[0,25],[7,28]],"#8b4f42",2);
+ c.restore();
+}
 function moleKing(c,t){
  c.save();c.translate(0,Math.sin(t*2.8)*3);
  // cape and ermine mantle; royal colors recall the character sheets
@@ -95,8 +138,8 @@ function cinderclaw(c,t){
 function telegraph(c,s,W,H,attack,phase){
  if(phase!=="warning"&&phase!=="active")return;
  const y=s.bossY,t=s.time,active=phase==="active";
- const top=attack==="fireball"?y-96:attack==="burrow"||attack==="quake"?y+25:0;
- const bottom=attack==="fireball"?y+96:attack==="burrow"?H:attack==="quake"?H:y-35;
+ const top=(attack==="fireball"||attack==="spark-bolt")?y-96:(attack==="burrow"||attack==="quake"||attack==="gear-sweep")?y+25:0;
+ const bottom=(attack==="fireball"||attack==="spark-bolt")?y+96:(attack==="burrow"||attack==="quake"||attack==="gear-sweep")?H:y-35;
  const a=Math.max(0,Math.min(H,top)),b=Math.max(0,Math.min(H,bottom));
  if(b<=a)return;
  c.save();
@@ -136,12 +179,13 @@ export function paintExpeditionBoss(c,s,W,H){
    c.setLineDash([]);
  }
  if(boss.kind==="mole-king")moleKing(c,s.time);
+ else if(boss.kind==="copperjack")copperjack(c,s.time);
  else cinderclaw(c,s.time);
  c.restore();
  // Health pips are in Canvas so all three viewports get matching game-space sizing.
  c.save();c.textAlign="right";c.font="bold 15px Georgia,serif";
  c.fillStyle="#ffe5a9";c.shadowColor="#161018";c.shadowBlur=7;
- c.fillText(boss.kind==="mole-king"?"THE MOLE KING":"CINDERCLAW",W-24,78);
+ c.fillText(boss.kind==="mole-king"?"THE MOLE KING":boss.kind==="copperjack"?"COPPERJACK":"CINDERCLAW",W-24,78);
  for(let i=0;i<boss.maxHealth;i++){
    c.fillStyle=i<boss.health?"#ebae5f":"#54474b";
    c.strokeStyle="#f1d8ab";c.lineWidth=1.5;
