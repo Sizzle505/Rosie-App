@@ -279,8 +279,61 @@ try {
   assert.equal(await deskFrame.locator(".captain-yacht.lane-0").count(),1,
     "Keyboard must not steer Yacht when focus is outside its frame");
   await deskPage.screenshot({path:folder+"/desktop-emperor-underway.png",fullPage:false});
+
+  // On a desktop monitor fullscreen must actually use the landscape viewport,
+  // not the legacy fixed 500-630px portrait cabinet.
+  await deskFrame.locator(":scope > .captain-fullscreen-toggle").click();
+  await deskPage.waitForFunction(() => document.querySelector(
+    ".captain-fs-yacht")?.classList.contains("is-expanded"),null,{timeout:4000});
+  const wide = await deskPage.evaluate(() => {
+    const box = (selector) => {
+      const r=document.querySelector(selector)?.getBoundingClientRect();
+      return r ? {width:r.width,height:r.height,left:r.left,right:r.right,bottom:r.bottom} : null;
+    };
+    return {viewport:innerWidth,frame:box(".captain-fs-yacht"),
+      course:box(".captain-fs-yacht .yacht-course"),
+      cabinet:box(".captain-fs-yacht .yacht-game-shell"),
+      controls:box(".captain-fs-yacht .captain-command-deck")};
+  });
+  console.log("Desktop fullscreen landscape geometry",JSON.stringify(wide));
+  assert.ok(wide.cabinet.width>=800 && wide.course.width>=780,
+    "Desktop fullscreen must not be restricted to a narrow portrait column");
+  assert.ok(wide.course.height>=380 && wide.course.height<=900,
+    "Desktop fullscreen must leave a usable-height river and controls");
+  assert.ok(wide.controls.bottom<=900+10,"Fullscreen helm controls cannot be below the viewport");
+  await deskPage.screenshot({path:folder+"/desktop-wide-fullscreen.png",fullPage:false});
+  await deskFrame.locator(":scope > .captain-fullscreen-toggle").click();
+
+  // Victory artwork is portrait. Viewing it from the NORMAL (non-fullscreen)
+  // desktop layout must present its entire height in a viewport-level viewer.
+  await deskPage.reload({waitUntil:"domcontentloaded"});
+  const pickerAgain=deskPage.locator(".captain-fs-yacht .yacht-chapter-picker button");
+  await pickerAgain.nth(3).waitFor({timeout:12000});
+  await pickerAgain.nth(3).click();
+  await deskPage.locator(".captain-fs-yacht .yacht-preview-victory").click();
+  const modal=deskPage.locator("body > .yacht-victory-overlay");
+  await modal.waitFor({state:"visible",timeout:3000});
+  const portrait=modal.locator(".yacht-victory-art");
+  await portrait.evaluate(img => img.decode());
+  const artGeometry=await portrait.evaluate(img=>{
+    const r=img.getBoundingClientRect(),m=img.closest(".yacht-victory-overlay").getBoundingClientRect();
+    return {objectFit:getComputedStyle(img).objectFit,top:r.top,bottom:r.bottom,
+      width:r.width,height:r.height,overlayWidth:m.width,overlayHeight:m.height,
+      naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight};
+  });
+  console.log("Normal desktop victory portrait",JSON.stringify(artGeometry));
+  assert.equal(artGeometry.objectFit,"contain","Never crop approved victory artwork");
+  assert.ok(artGeometry.naturalHeight>artGeometry.naturalWidth,"Portrait asset expected");
+  assert.ok(artGeometry.overlayWidth>=1400,
+    "Victory viewer must not be trapped inside the embedded course");
+  assert.ok(artGeometry.top>=0 && artGeometry.bottom<=900,
+    "Full victory image must fit vertically in the desktop viewport");
+  await deskPage.screenshot({path:folder+"/desktop-uncropped-victory.png",fullPage:false});
+  await modal.getByRole("button",{name:"BACK TO LEVELS"}).click();
+  assert.equal(await deskPage.locator(".yacht-victory-overlay").count(),0);
+
   await desktop.close();
-  console.log("PASS Yacht Dash iPhone and desktop smoke checks");
+  console.log("PASS Yacht Dash iPhone and desktop landscape/victory checks");
 } finally {
   await browser.close();
 }
