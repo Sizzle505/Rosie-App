@@ -1,0 +1,78 @@
+/* Existing approved Haiku illustrations, applied only to the feature's garden.
+   Keep ambient artwork below selectable poetry and interactive controls. */
+.haiku-page .haiku-scene .haiku-scene-canopy,
+.haiku-page .haiku-scene .haiku-scene-atmosphere {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  user-select:none;
+}
+.haiku-page .haiku-scene .haiku-scene-atmosphere {
+  z-index:1;
+  background:url("/rosieverse/haiku/garden-atmosphere.webp") center 45% / cover no-repeat;
+  opacity:.075;
+  mix-blend-mode:screen;
+  animation:haiku-ambient-shift 22s ease-in-out infinite alternate;
+}
+.haiku-page .haiku-scene .haiku-scene-canopy {
+  z-index:2;
+  background:url("/rosieverse/haiku/sakura-canopy.webp") center top / min(1320px,94vw) auto no-repeat;
+  opacity:.12;
+  transform-origin:50% 0;
+  animation:haiku-gentle-canopy 17s ease-in-out infinite alternate;
+}
+.haiku-page .haiku-scene--zen .haiku-scene-canopy { opacity:.055; }
+.haiku-page .haiku-scene--temple .haiku-scene-canopy { opacity:.095; }
+.haiku-page .haiku-scene--temple .haiku-scene-atmosphere { opacity:.06; }
+/* Illustrated lotus is behind the original transparent, paws-up Rosie.
+   The known-safe static Rosie remains the character; no opaque animation frames. */
+.haiku-scene-stage .haiku-scene-aura {
+  position:absolute;
+  z-index:1;
+  width:min(54%,330px);
+  aspect-ratio:1;
+  left:46%;
+  bottom:2%;
+  pointer-events:none;
+  background:url("/rosieverse/haiku/final/lotus-breath-halo.webp") center / contain no-repeat;
+  opacity:.3;
+  transform-origin:50% 50%;
+  animation:haiku-aura-pulse 10s ease-in-out infinite;
+}
+@keyframes haiku-gentle-canopy {
+  from { transform:translateX(-.4%) rotate(-.3deg); }
+  to { transform:translateX(.5%) rotate(.3deg); }
+}
+@keyframes haiku-ambient-shift {
+  from { transform:translateX(-1%) scale(1.015); opacity:.055; }
+  to { transform:translateX(1%) scale(1.03); opacity:.095; }
+}
+@keyframes haiku-aura-pulse {
+  0%,100% { transform:scale(.95);opacity:.24; }
+  42%,52% { transform:scale(1.06);opacity:.37; }
+}
+@media(max-width:860px) {
+  .haiku-page .haiku-scene .haiku-scene-canopy {
+    background-position:60% top;
+    background-size:auto min(35vh,320px);
+    opacity:.09;
+  }
+  .haiku-scene-stage .haiku-scene-aura {left:40%;bottom:2%;width:59%;opacity:.26;}
+}
+@media(max-width:520px) {
+  .haiku-page .haiku-scene .haiku-scene-canopy {
+    background-position:65% top;
+    background-size:auto min(25vh,205px);
+    opacity:.075;
+  }
+  .haiku-page .haiku-scene .haiku-scene-atmosphere{opacity:.05;}
+  .haiku-scene-stage .haiku-scene-aura{left:37%;width:61%;bottom:1%;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .haiku-page .haiku-scene .haiku-scene-canopy,
+  .haiku-page .haiku-scene .haiku-scene-atmosphere,
+  .haiku-scene-stage .haiku-scene-aura {
+    animation:none!important;
+    transform:none!important;
+  }
+}
