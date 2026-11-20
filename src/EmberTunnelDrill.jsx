@@ -381,7 +381,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
-            {mode==="ended"&&hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />}
+            {mode==="ended"&&(hud.relics>0||relicFound ?
+              <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
+              hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />)}
             {mode==="ended"&&<div className="ember-results">
               <span><b>{hud.score.toLocaleString()}</b> POINTS</span>
               <span><b>{hud.distance.toLocaleString()}m</b> EXCAVATED</span>
@@ -426,7 +428,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <button className="ember-icon-action" type="button" onClick={start} aria-label="Replay run" title="Replay run">↻</button>
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
-      <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>
+      <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}
         <span className="ember-best">BEST {best.toLocaleString()}</span></div>
     </section>
   );
