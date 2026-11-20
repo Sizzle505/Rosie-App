@@ -293,7 +293,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <p className="haiku-small-note">Rosie draws from her hand-crafted verse collection. Familiar subjects get a special verse; other dedications receive a poem in your chosen mood.</p>
               </form>
             ) : mode === "meditate" ? (
-              <RosieZenMeditation scene={scene} />
+              <RosieZenMeditation scene={scene} poem={poem} />
             ) : (
               <div className="haiku-panel haiku-journal">
                 <div className="haiku-section-label">THE BOOK OF SMALL WISDOM</div>
