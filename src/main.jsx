@@ -2355,26 +2355,41 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
 
-          {items.map((item) => (
-            <div
-              className={"sea-pickup sea-pickup-" + item.kind +
-                (item.footprint ? " yacht-footprint-" + item.footprint : "")}
-              key={item.id}
-              style={item.footprint === "arch"
-                ? { left: "-9%", width: "118%", top: item.y + "%" }
-                : item.footprint === "wide"
-                  ? { left: item.lane * 33.333 + "%", width: "66.666%", top: item.y + "%" }
-                  : { left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
-              aria-label={item.label}
-            >
-              {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
-                ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
-              {item.kind === "cheese" && <small>GOLDEN</small>}
-              {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
-              {item.driftTo !== undefined && !item.drifted &&
-                <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
-            </div>
-          ))}
+          {items.map((item) => {
+            const approaching = chapter.id !== "sakura";
+            const perspective = approaching ? yachtApproachAt(item.y) : null;
+            const center = item.footprint === "arch" ? 50 :
+              item.footprint === "wide" ? (item.lane + 1) * 33.333 :
+                16.666 + item.lane * 33.333;
+            const renderedStyle = approaching ? {
+              left: center + "%",
+              top: perspective.top + "%",
+              ...(item.footprint === "arch" ? { width: "96%" } :
+                item.footprint === "wide" ? { width: "66.666%" } : {}),
+              "--approach-scale": perspective.scale *
+                (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
+              "--approach-opacity": perspective.opacity
+            } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
+            return (
+              <div
+                className={"sea-pickup sea-pickup-" + item.kind +
+                  (item.footprint ? " yacht-footprint-" + item.footprint : "") +
+                  (approaching ? " yacht-upstream-object" : "")}
+                key={item.id}
+                style={renderedStyle}
+                aria-label={item.label}
+              >
+                {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
+                  ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
+                {item.footprint === "arch" &&
+                  <span className="yacht-gate-passage" aria-hidden="true">CENTER CLEAR <b>↓ PASS UNDER</b></span>}
+                {item.kind === "cheese" && <small>GOLDEN</small>}
+                {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
+                {item.driftTo !== undefined && !item.drifted &&
+                  <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
+              </div>
+            );
+          })}
 
           {eventPulse > 0 && (
             <div className={"captain-burst burst-" + eventKind} key={eventPulse} aria-hidden="true">
