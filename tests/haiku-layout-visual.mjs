@@ -44,6 +44,26 @@ try {
       assert.ok(boxes.scroll.width > 230, label + " poem must be legible: " + boxes.scroll.width);
       assert.ok(boxes.garden.width > 300 || width < 600, label + " garden too small");
       assert.ok(boxes.scrollWidth <= width+4, label + " horizontal page overflow: " + boxes.scrollWidth);
+      if (width === 1440) {
+        assert.ok(boxes.scroll.width >= 475, "Standard desktop scroll shrank below legible reading width: " + boxes.scroll.width);
+      }
+      if (width >= 601) {
+        const verseLineBoxes = await page.locator(".haiku-verse p").evaluateAll((nodes) =>
+          nodes.map((node) => ({ text:node.textContent, height:node.getBoundingClientRect().height,
+            lineHeight:parseFloat(getComputedStyle(node).lineHeight) }))
+        );
+        for (const line of verseLineBoxes) {
+          assert.ok(line.height <= line.lineHeight * 1.25, label + " haiku line wraps awkwardly: " + line.text);
+        }
+      }
+      if (width >= 601 && width < 900) {
+        const positions = await page.evaluate(() => {
+          const stage = document.querySelector(".haiku-scene-image").getBoundingClientRect();
+          const rosie = document.querySelector(".haiku-scene-rosie").getBoundingClientRect();
+          return { stageTop:stage.top, rosieTop:rosie.top };
+        });
+        assert.ok(positions.rosieTop >= positions.stageTop - 1, label + " Rosie ears are cropped by garden stage");
+      }
       if (width >= 1024) {
         assert.ok(boxes.title.y > 68, label + " title intrudes into desktop global navigation: " + boxes.title.y);
         assert.ok(boxes.scroll.y < Math.round(height*.55), label + " poem starts below initial view: " + boxes.scroll.y);
