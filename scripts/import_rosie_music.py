@@ -60,25 +60,24 @@ def render(index,entry):
   length=duration(src)
   if length<8:raise RuntimeError(f"Audio unexpectedly short: {slug}")
   if loop:
-    # Rotate loop by four seconds. The last four seconds crossfade into the
-    # first four, then land at the exact sample where the next loop starts.
-    overlap=4.
-    seam=length-overlap
+    # Stream the same master twice. The first copy begins 5 seconds into the
+    # song, and its final 4 seconds crossfade with the first 4 seconds of the
+    # second copy. It then plays the remaining 1 second of the second copy,
+    # ending at exactly the sample where the first copy begins. This produces
+    # a near-transparent repeat and does not alter the gold-master WAV.
     filtergraph=(
-      f"[0:a]asplit=3[h0][b0][t0];"
-      f"[b0]atrim=start={overlap}:end={seam},asetpts=PTS-STARTPTS[body];"
-      f"[t0]atrim=start={seam}:end={length},asetpts=PTS-STARTPTS[tail];"
-      f"[h0]atrim=start=0:end={overlap},asetpts=PTS-STARTPTS[head];"
-      f"[tail][head]acrossfade=d={overlap}:c1=tri:c2=tri[seam];"
-      f"[body][seam]concat=n=2:v=0:a=1,"
-      f"loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
+      "[0:a]atrim=start=5,asetpts=PTS-STARTPTS[body];"
+      "[1:a]atrim=start=0:end=5,asetpts=PTS-STARTPTS[head];"
+      "[body][head]acrossfade=d=4:c1=tri:c2=tri,"
+      "loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
     )
   else:
     fade_at=max(.0,length-.25)
     filtergraph=f"[0:a]afade=t=in:st=0:d=.07,afade=t=out:st={fade_at}:d=.25,loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
   subprocess.run([
     "ffmpeg","-hide_banner","-nostdin","-loglevel","error","-y",
-    "-i",str(src),"-filter_complex",filtergraph,"-map","[out]",
+    "-i",str(src),*(["-i",str(src)] if loop else []),
+    "-filter_complex",filtergraph,"-map","[out]",
     "-c:a","libmp3lame","-b:a","128k","-ar","44100",
     "-metadata",f"title={title}","-metadata","artist=RosieVerse Original Soundtrack",
     "-id3v2_version","3",str(out)
