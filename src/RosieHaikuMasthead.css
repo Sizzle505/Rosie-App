@@ -1,11 +1,11 @@
 /* Haiku Zen Garden: original transparent mastheads with real searchable text.
    This stylesheet is imported last and changes only the Haiku page. */
 .haiku-page .haiku-header {
-  --haiku-banner-width:min(660px,68vw);
+  --haiku-banner-width:min(590px,68vw);
   position:relative;
   display:block;
-  height:239px;
-  min-height:239px;
+  height:215px;
+  min-height:215px;
   padding:0;
   margin:0;
   overflow:visible;
@@ -35,7 +35,7 @@
   z-index:1;
   display:block;
   left:50%;
-  top:111px;
+  top:98px;
   transform:translate(-50%,-50%);
   width:min(410px,53vw);
   padding:0;
@@ -58,7 +58,7 @@
   position:absolute;
   z-index:1;
   left:50%;
-  top:219px;
+  top:195px;
   margin:0;
   transform:translateX(-50%);
   color:#fff2dd;
@@ -89,7 +89,7 @@
     grid-template-columns:minmax(0,1.14fr) minmax(0,1.0fr) minmax(0,.86fr);
     column-gap:clamp(18px,1.4vw,28px);
   }
-  .haiku-page .haiku-scene-image{height:clamp(345px,28vw,405px);}
+  .haiku-page .haiku-scene-image{height:clamp(348px,41vh,425px);}
   .haiku-page .haiku-scene-selector{
     margin-top:clamp(28px,2.5vw,42px);
   }
