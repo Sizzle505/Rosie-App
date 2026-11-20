@@ -9,19 +9,20 @@ try {
   await page.goto("http://127.0.0.1:4173/#qr-atelier",{waitUntil:"domcontentloaded"});
   await page.locator(".qa-inputs input").first().fill("https://rosie.example.com");
   await page.locator(".qa-svg svg").waitFor();
+  const viewer=page.locator(".qa-rosie-viewer");
   for (const finish of ["emerald","burgundy","obsidian","champagne","sapphire"]) {
     await page.locator(".qa-palette-"+finish).click();
     await page.getByRole("button",{name:"View QR in a Rosie frame"}).click();
-    await page.locator(".qa-rosie-overlay-art").waitFor({state:"visible"});
+    await viewer.locator(".qa-rosie-overlay-art").waitFor({state:"visible"});
     for (let frame=0;frame<4;frame++) {
       await page.waitForFunction(()=>{
         const im=document.querySelector(".qa-rosie-viewer .qa-rosie-overlay-art");
         return im instanceof HTMLImageElement&&im.complete&&im.naturalWidth===1448;
       });
-      const asset=await page.locator(".qa-rosie-overlay-art").getAttribute("src");
+      const asset=await viewer.locator(".qa-rosie-overlay-art").getAttribute("src");
       assert.match(asset,/rosie-frame-(seated|presenting|peeking|blank)-hollow\.webp$/,asset);
       const frameIndex=await page.locator(".qa-rosie-frame-controls span").textContent();
-      await page.locator(".qa-rosie-composition").screenshot({
+      await viewer.locator(".qa-rosie-composition").screenshot({
         path:"qa-screenshots/qr-hollow/"+finish+"-"+frame+".png"
       });
       console.log("SCREENSHOT",finish,frameIndex,asset);
