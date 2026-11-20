@@ -444,3 +444,39 @@
   .ember-passage-mission strong{font-size:8px}
   .ember-passage-mission em{font-size:7px}
 }
+
+/* Optional five-world Expedition playtesting; the existing Classic run is unchanged. */
+.ember-expedition-pick{display:flex;flex-direction:column;gap:8px;margin:9px 0 10px;padding:9px;
+  border:1px solid rgba(225,182,107,.35);border-radius:12px;background:rgba(8,24,34,.5)}
+.ember-expedition-pick-heading{display:block;color:#f4d391;font:700 9px/1.3 Georgia,serif;letter-spacing:.065em}
+.ember-world-select{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 1px 5px;
+  scrollbar-width:thin;overscroll-behavior-inline:contain}
+.ember-start-overlay .ember-world-choice{flex:0 0 111px;width:111px;height:69px;padding:5px;
+  border-radius:8px;border:1px solid rgba(215,172,94,.65);background-color:#22212e;
+  background-position:center;background-size:cover;box-shadow:none;display:flex;align-items:center;
+  justify-content:space-between;flex-direction:column;text-align:center;scroll-snap-align:center;
+  color:#f7e2b5;font:700 10px/1.2 Georgia,serif;letter-spacing:0}
+.ember-world-choice strong{max-width:100%;text-shadow:0 2px 7px #05080c;font:700 10px/1.1 Georgia,serif}
+.ember-world-choice small{font:14px/1 Georgia,serif;color:#f7c766;text-shadow:0 2px 4px #05080c}
+.ember-start-overlay .ember-world-choice.selected{border:2px solid #ffe6a8;box-shadow:inset 0 0 8px #f5ba57,0 0 8px rgba(251,201,117,.2)}
+.ember-start-overlay .ember-expedition-launch{width:100%;height:36px;font-size:12px;letter-spacing:.02em}
+.ember-expedition-pick>small{font:9px/1.3 Georgia,serif;color:#d9c9a9}
+.ember-start-overlay{max-height:calc(100% - 24px);overflow-y:auto;overscroll-behavior:contain}
+.ember-expedition.is-world-route{display:flex;flex-wrap:wrap;justify-content:space-between}
+.ember-expedition.is-world-route .ember-route-track{flex:1;min-width:100px}
+.ember-expedition.is-world-route>span:not(.ember-route-label){max-width:31%;overflow:hidden;text-overflow:ellipsis}
+.ember-expedition.is-world-route .ember-passage-mission{width:100%;order:2}
+@media(max-width:620px){
+ .ember-start-overlay{max-height:calc(100% - 17px);bottom:5%;padding:11px 9px}
+ .ember-expedition-pick{margin:6px 0;padding:7px;gap:5px}
+ .ember-expedition-pick-heading{font-size:7px}
+ .ember-start-overlay .ember-world-choice{flex-basis:93px;width:93px;height:59px;padding:4px}
+ .ember-world-choice strong{font-size:9px}
+ .ember-world-choice small{font-size:11px}
+ .ember-start-overlay .ember-expedition-launch{height:31px;font-size:10px}
+ .ember-expedition-pick>small{font-size:8px}
+ .ember-expedition.is-world-route{justify-content:flex-start;gap:4px 7px}
+ .ember-expedition.is-world-route .ember-route-track{min-width:36%;order:0;grid-column:auto}
+ .ember-expedition.is-world-route>span:not(.ember-route-label){max-width:45%;font-size:7px}
+ .ember-expedition.is-world-route .ember-passage-mission{order:3}
+}
