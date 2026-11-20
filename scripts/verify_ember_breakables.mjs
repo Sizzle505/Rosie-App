@@ -51,6 +51,9 @@ for(const [name,engine,viewport,mobile] of [
     if(checks.some(x=>!x.ok))throw new Error("Broken imported imagery: "+JSON.stringify(checks));
     await suite.screenshot({path:`artifacts/ember-breakables/${name}-idle.png`});
     await page.getByRole("button",{name:"START DIGGING"}).click();
+    await page.locator(".ember-dig-hint").waitFor({state:"visible",timeout:3500});
+    const achievements=await suite.locator(".ember-caption").innerText();
+    if(!achievements.includes("EXPEDITION"))throw new Error("Expedition progress missing");
     await page.locator(".ember-stage").scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>window.__emberBreakablePaints.includes("01-earth-wall-intact.webp"),null,{timeout:20000});
     await page.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-drilling.png`});
