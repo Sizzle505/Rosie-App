@@ -1,5 +1,16 @@
 name: Yacht Dash - interactive iPhone and desktop smoke QA
 on:
+  push:
+    branches: [feature/yacht-dash-four-chapters-20261119]
+    paths:
+      - src/main.jsx
+      - src/yachtDashExpansion.js
+      - src/yachtDashExpansion.css
+      - src/yachtDashExpansion.test.js
+      - src/yachtDashArt.test.js
+      - tests/yacht-dash-browser.mjs
+      - .github/workflows/yacht-dash-expansion.yml
+      - .github/workflows/yacht-dash-browser.yml
   pull_request:
     branches: [main]
     paths:
@@ -13,7 +24,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: yacht-dash-browser-${{ github.head_ref }}
+  group: yacht-dash-browser-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 jobs:
   browser:
