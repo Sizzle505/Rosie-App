@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync, statSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   ROSIE_HAIKUS, ROSIE_HAIKU_MOODS, poemForDay,
   poemForTopic, localDayKey, formatHaiku
@@ -45,4 +48,22 @@ test("unknown subjects remain visible as dedications, with safe length and varia
   assert.notEqual(first.id, second.id);
   assert.equal(poemForTopic("x".repeat(500), "zen").topic.length, 100);
   assert.ok(formatHaiku(first).includes(first.lines.join("\n")));
+});
+
+test("the five production art files ship with the branch and have valid image headers", () => {
+  const artDir = resolve(dirname(fileURLToPath(import.meta.url)), "../public/rosieverse/haiku");
+  for (const asset of [
+    "field-sunrise.webp", "zen-sunrise.webp", "temple-sunrise.webp",
+    "rosie-meditating-paws-up.webp", "haiku-scroll-isolated.png"
+  ]) {
+    const path = resolve(artDir, asset);
+    assert.ok(statSync(path).size > 100_000, asset + " must be genuine full-resolution art");
+    const head = readFileSync(path).subarray(0, 12);
+    if (asset.endsWith(".webp")) {
+      assert.equal(head.subarray(0, 4).toString("ascii"), "RIFF", asset);
+      assert.equal(head.subarray(8, 12).toString("ascii"), "WEBP", asset);
+    } else {
+      assert.equal(head.subarray(0, 8).toString("hex"), "89504e470d0a1a0a", asset);
+    }
+  }
 });
