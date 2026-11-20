@@ -1,0 +1,18 @@
+{
+  "sourceArchive": "Ember Tunnel Art Integration Pack 2026-11-20.zip",
+  "exportedOn": "2026-11-20",
+  "imageStatus": "art-review",
+  "activation": "No new stage/enemy/hazard is activated by importing these images.",
+  "files": [
+    "atlases/mole-king-atlas.webp",
+    "atlases/gear-crusher-atlas.webp",
+    "atlases/lava-geyser-atlas.webp",
+    "atlases/falling-basalt-atlas.webp",
+    "atlases/royal-earth-burst-atlas.webp",
+    "atlases/world-markers-atlas.webp",
+    "atlases/bonus-pickups-atlas.webp",
+    "transitions/ruby-clockwork.webp",
+    "transitions/clockwork-molten.webp",
+    "transitions/molten-treasury.webp"
+  ]
+}
