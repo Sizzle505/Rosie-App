@@ -25,7 +25,7 @@ try {
     assert.equal(await picker.nth(i).isEnabled(), true, "Level "+i+" should be playable");
   }
   await picker.nth(1).click();
-  const toggle = frame.locator(".yacht-game-sign .captain-steering-toggle");
+  const toggle = frame.locator(".yacht-steering-options .captain-steering-toggle");
   console.log("Mode toggle visible before launch", await toggle.isVisible());
   await page.screenshot({ path:folder+"/iphone-stage-picker.png" });
   await frame.locator(".yacht-cast-off").click();
@@ -101,7 +101,7 @@ try {
   assert.equal(await deskFrame.locator(".yacht-course").getAttribute("data-captain-chapter"),"emperor");
   // Yacht keyboard controls must not interfere with Tunnel or Cosmic Odyssey
   // when focus leaves the Yacht cabinet on the multi-game Captain page.
-  await deskFrame.locator(".yacht-game-sign .captain-steering-toggle").focus();
+  await deskFrame.locator(".yacht-steering-options .captain-steering-toggle").focus();
   await deskPage.keyboard.press("ArrowLeft");
   await deskFrame.locator(".captain-yacht.lane-0").waitFor({timeout:1500});
   await deskPage.evaluate(() => document.activeElement?.blur?.());
