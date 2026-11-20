@@ -164,6 +164,11 @@ export default function RosieZenMeditation({scene="field"}) {
     previouslyFocused.current=document.activeElement;
     recorded.current=false;
     lastSpokenCue.current=-1;
+    // Prime speech within the user's click gesture for Safari/iPhone.
+    if(voice && (kind==="guided"||kind==="unwind")) {
+      speechSay((CUES[kind]||CUES.guided)[0]);
+      lastSpokenCue.current=0;
+    }
     pausedMs.current=minutes*60000;
     endAt.current=Date.now()+pausedMs.current;
     setRemaining(pausedMs.current);
