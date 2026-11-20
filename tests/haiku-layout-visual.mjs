@@ -54,6 +54,28 @@ try {
       assert.equal(sceneAppearance.background, "rgba(0, 0, 0, 0)", label + " scene panel must be transparent");
       assert.ok(boxes.garden.width > 300 || width < 600, label + " garden too small");
       assert.ok(boxes.scrollWidth <= width+4, label + " horizontal page overflow: " + boxes.scrollWidth);
+      const newZenGeometry = await page.evaluate(() => {
+        const area = r => { const b=r.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height,right:b.right,bottom:b.bottom}; };
+        const rosie = document.querySelector(".haiku-scene-rosie--slow-breath");
+        const selector = document.querySelector(".haiku-scene-selector");
+        const wisdom = document.querySelector(".haiku-scene-quote");
+        const verse = document.querySelector(".haiku-verse p");
+        return {rosie:area(rosie),selector:area(selector),wisdom:area(wisdom),
+          breathDuration:getComputedStyle(rosie).animationDuration,
+          verseFont:getComputedStyle(verse).fontFamily,
+          verseItalic:getComputedStyle(verse).fontStyle
+        };
+      });
+      assert.equal(newZenGeometry.breathDuration,"10s",label+" Rosie must breathe on a ten-second rhythm");
+      assert.equal(newZenGeometry.verseItalic,"italic",label+" poem must use the literary italic font");
+      assert.ok(Math.abs(newZenGeometry.wisdom.x+newZenGeometry.wisdom.width/2-width/2)<Math.max(32,width*.07),
+        label+" The Way of the Shiba must be horizontally centered in the page");
+      assert.ok(newZenGeometry.wisdom.y >= boxes.garden.y+boxes.garden.height-10,
+        label+" Zen wisdom must appear below Rosie's scenery");
+      assert.ok(newZenGeometry.selector.y >= newZenGeometry.rosie.bottom-30,
+        label+" background selectors should sit beneath Rosie's paws");
+      assert.ok(Math.abs(newZenGeometry.selector.x+newZenGeometry.selector.width/2-(newZenGeometry.rosie.x+newZenGeometry.rosie.width/2))<Math.max(65,width*.07),
+        label+" selector buttons must align under Rosie");
       if (width === 1440) {
         assert.ok(boxes.scroll.width >= 475, "Standard desktop scroll shrank below legible reading width: " + boxes.scroll.width);
       }
@@ -135,6 +157,26 @@ try {
       assert.ok(await room.getByRole("button",{name:"Pause",exact:true}).isVisible(),label+" resume must work");
       await room.getByRole("button",{name:"End session",exact:true}).click();
       await room.waitFor({state:"hidden"});
+      if (label==="user-desktop" || label==="desktop") {
+        await page.goto(base+"/#calculations",{waitUntil:"domcontentloaded",timeout:60000});
+        await page.locator(".rc-tools-heading").waitFor({state:"visible",timeout:20000});
+        const offsets = await page.evaluate(() => {
+          const top = selector=>getComputedStyle(document.querySelector(selector)).top;
+          const left = selector=>getComputedStyle(document.querySelector(selector)).left;
+          return {
+            heading:top(".rc-workspace .rc-tools-heading"),
+            grid:top(".rc-workspace .rc-tool-grid"),
+            cardCount:document.querySelectorAll(".rc-tool-grid .rc-tool-card").length,
+            tip:left(".rc-tool-card--tip"),
+            split:left(".rc-tool-card--split"),
+            date:left(".rc-tool-card--date"),
+            loan:left(".rc-tool-card--loan")
+          };
+        });
+        assert.deepEqual(offsets,{heading:"-15px",grid:"-25px",cardCount:7,tip:"10px",split:"10px",date:"-10px",loan:"-10px"},
+          label+" must honor exact Pocket Toolkit position changes");
+        await page.screenshot({path:"artifacts/haiku-layout/"+label+"-calculations-toolkit.png",fullPage:false,animations:"disabled"});
+      }
       summary.push({ label, width, height, ...boxes });
       console.log("PASS " + label + ": " + JSON.stringify(boxes));
     } catch (err) {
