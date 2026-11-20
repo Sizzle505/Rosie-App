@@ -1754,6 +1754,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const [ended, setEnded] = useState(false);
 
   const laneRef = useRef(1);
+  const courseFocusRef = useRef(null);
   const livesRef = useRef(3);
   const hullGraceRemainingRef = useRef(0);
   const itemsRef = useRef([]);
@@ -1921,6 +1922,17 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setRunning(true);
     window.setTimeout(() => setPhaseNotice(""), 1500);
   }
+
+  useEffect(() => {
+    if (!running) return undefined;
+    // The Cast Off button unmounts at launch, leaving document.body focused.
+    // Restore focus to this game so desktop arrow keys work immediately, yet
+    // do not summon a mobile keyboard or steal focus from other Captain games.
+    if (window.matchMedia?.("(pointer: coarse)").matches) return undefined;
+    const frame = window.requestAnimationFrame(() =>
+      courseFocusRef.current?.focus({ preventScroll: true }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [running]);
 
   function engageBoost() {
     if (!running || paused || boostRef.current || turbo < 100) return;
@@ -2262,13 +2274,13 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         }
         return;
       }
-      if (event.key === "ArrowLeft") {
+      if (event.key === "ArrowLeft" && running) {
         event.preventDefault();
-        moveCaptain(-1);
+        if (!event.repeat) moveCaptain(-1);
       }
-      if (event.key === "ArrowRight") {
+      if (event.key === "ArrowRight" && running) {
         event.preventDefault();
-        moveCaptain(1);
+        if (!event.repeat) moveCaptain(1);
       }
       if ((event.key === "ArrowUp" || event.key.toLowerCase() === "b") && running) {
         event.preventDefault();
@@ -2378,6 +2390,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         </div>
 
         <div
+          ref={courseFocusRef}
+          tabIndex={-1}
           className={`yacht-course${running && !paused ? " is-underway" : ""}${boost ? " is-boosting" : ""}`}
           data-captain-level={level.id}
           data-captain-chapter={chapter.id}
