@@ -9,7 +9,7 @@
     display: grid !important;
     grid-template-columns: minmax(0, 1.17fr) minmax(290px, .83fr) !important;
     grid-template-rows: auto auto auto !important;
-    align-items: start;
+    align-items: start; align-content: start !important;
     gap: 14px clamp(14px, 2vw, 24px) !important;
     width: min(calc(100% - 40px), 1240px) !important;
     max-width: 1240px !important;
@@ -64,7 +64,10 @@
     margin: 0 !important; opacity: 1 !important; transform: none !important;
     translate: none !important; overflow: visible !important;
   }
-  .app-shell.page-fortune .fortune-waiting-card { display: flex !important; min-height: 185px; }
+  .app-shell.page-fortune .fortune-waiting-card {
+    display: grid !important; min-height: 185px;
+    place-content: center; justify-items: center; text-align: center;
+  }
   .app-shell.page-fortune .fortune-page .bottom-omens {
     position: relative !important; inset: auto !important;
     grid-column: 1; grid-row: 2;
