@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import { readFileSync, mkdirSync } from "node:fs";
 import { chromium } from "playwright";
 
-// The second uploaded user export is cumulative. Its Haiku state is identical
-// to export (3), and it additionally contains Calculations. Do not sum them.
+// Historical Haiku positions are retained in the fixture for provenance.
+// The new user-requested masthead/layout revision supersedes those offsets
+// on the Haiku page only; Calculations keeps its approved coordinates.
 const approved = JSON.parse(readFileSync(new URL("./fixtures/approved-layout-export-2026-11-20.json", import.meta.url)));
 const base = process.env.HAIKU_QA_URL || "http://127.0.0.1:4173";
 const targets = {
@@ -86,9 +87,10 @@ try {
           const actual = computed.data[id];
           const [x,y] = parseTranslate(actual.translate);
           const scale=parseScale(actual.scale);
-          // Only calibrate 1480px+ screens. Existing 1440, iPad, and iPhone
-          // page layouts are intentionally unchanged by the uploaded preset.
-          const active=width>=1480;
+          // Calculations retains the user-approved 1480px+ adjustments.
+          // The Haiku layout has been intentionally reflowed and all its
+          // outdated additive shifts are now reset to zero.
+          const active=width>=1480 && section==="calculations";
           near(x,active?expected.x:0,name+"/"+section+"/"+id+" X");
           near(y,active?expected.y:0,name+"/"+section+"/"+id+" Y");
           near(scale,active?expected.scale:1,name+"/"+section+"/"+id+" scale");
