@@ -575,3 +575,13 @@
 @media(prefers-reduced-motion:reduce){
   .haiku-page .haiku-page-landscape{animation:none;}
 }
+
+
+/* Haiku Zen Garden meditation navigation and entry points. */
+.haiku-page .haiku-tabs{grid-template-columns:repeat(4,minmax(0,1fr));}
+.haiku-page .haiku-tabs button{min-width:0;padding:8px 4px;font-size:clamp(10px,.9vw,12px);}
+.haiku-page .haiku-secondary-entry{display:block;width:100%;min-height:35px;margin:9px auto 0;
+  border:1px solid #dab88978;border-radius:8px;color:#f4dfc4;
+  background:rgba(26,25,44,.7);font:600 12px system-ui,sans-serif;cursor:pointer;}
+.haiku-page .haiku-secondary-entry:hover{background:rgba(113,70,81,.75);}
+@media(max-width:520px){.haiku-page .haiku-tabs button{font-size:10px;padding:6px 2px;}}
