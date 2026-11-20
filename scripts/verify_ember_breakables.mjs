@@ -54,6 +54,14 @@ for(const [name,engine,viewport,mobile] of [
     await page.locator(".ember-dig-hint").waitFor({state:"visible",timeout:3500});
     const achievements=await suite.locator(".ember-caption").innerText();
     if(!achievements.includes("EXPEDITION"))throw new Error("Expedition progress missing");
+    const mission=page.locator(".ember-passage-mission");
+    await mission.waitFor({state:"visible",timeout:3000});
+    if(!(await mission.innerText()).includes("BREAK AN EARTH WALL"))
+      throw new Error("The Barkroot passage objective is missing");
+    const stageRect=await page.locator(".ember-stage").boundingBox();
+    const missionRect=await mission.boundingBox();
+    if(stageRect&&missionRect&&missionRect.y+missionRect.height>stageRect.y+3)
+      throw new Error("The objective panel overlaps the playable tunnel");
     await page.locator(".ember-stage").scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>window.__emberBreakablePaints.includes("01-earth-wall-intact.webp"),null,{timeout:20000});
     await page.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-drilling.png`});
