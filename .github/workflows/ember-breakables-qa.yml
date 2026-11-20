@@ -1,0 +1,39 @@
+name: Ember Tunnel destructible terrain QA
+on:
+  push:
+    branches:
+      - work/ember-destructible-treasures-20261119
+    paths:
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberBreakable*.js"
+      - "src/emberDrillEngine.js"
+      - "src/emberDrillPainter.js"
+      - "tests/ember-*.test.mjs"
+      - ".github/workflows/ember-breakables-qa.yml"
+  pull_request:
+    paths:
+      - "src/EmberTunnelDrill.jsx"
+      - "src/emberBreakable*.js"
+      - "src/emberDrillEngine.js"
+      - "src/emberDrillPainter.js"
+      - "tests/ember-*.test.mjs"
+      - ".github/workflows/ember-breakables-qa.yml"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Verify existing drill and new excavations
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs
+      - name: Verify Vite production build
+        run: npm run build
