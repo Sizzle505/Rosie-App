@@ -82,6 +82,8 @@ for(const [name,engine,viewport,mobile] of [
     await stagePage.locator(".ember-world-choice").nth(2).click();
     await stagePage.locator(".ember-expedition-launch").click();
     await stagePage.locator(".ember-course-plaque").getByText("Clockwork Catacombs").waitFor({state:"visible",timeout:3500});
+    // Warning must arrive before Rosie's auger reaches the first piston.
+    await stagePage.getByText("CLOCKWORK PISTON AHEAD").waitFor({state:"visible",timeout:8500});
     const stageTime=await stagePage.locator(".ember-stats").innerText();
     if(!stageTime.includes("15s")&&!stageTime.includes("14s"))throw new Error("Selected route did not start at 15 seconds");
     await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
