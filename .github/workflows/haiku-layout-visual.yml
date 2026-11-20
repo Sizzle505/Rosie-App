@@ -4,6 +4,7 @@ on:
     paths:
       - src/RosieHaikuGarden.css
       - src/RosieHaikuArchiveArt.css
+      - src/RosieHaikuMasthead.css
       - src/RosieHaikuAtmosphere.css
       - public/rosieverse/haiku/ornaments/**
       - public/rosieverse/haiku/living-garden/**
