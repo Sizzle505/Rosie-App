@@ -20,6 +20,7 @@ async function fixture() {
   await mkdir(join(lab,'examples'));
   await mkdir(join(repo,'public','demo'),{recursive:true});
   await copyFile(join(here,'prepare.mjs'),join(scripts,'prepare.mjs'));
+  await copyFile(join(here,'validate.mjs'),join(scripts,'validate.mjs'));
   const catalog={version:1,excludes:['captain','card-vault'],pages:[
     {id:'home',label:'Landing Page',slots:[
       {id:'home.hero',source:'public/demo/hero.webp',target:'home/hero.webp',required:true},
@@ -30,7 +31,7 @@ async function fixture() {
   await writeFile(join(lab,'examples','profile.example.json'),JSON.stringify({schemaVersion:1,pet:{id:'example-dog',name:'Example Dog',species:'dog',breed:'',personality:''},features:{captain:false,cardVault:false},assetBase:'assets',reviewStatus:'draft',backend:{accounts:false,cloudNotes:false,secretSanta:false,email:false}}));
   await writeFile(join(repo,'public','demo','hero.webp'),'mock');
   await writeFile(join(repo,'public','demo','title.png'),'mock');
-  return {root,repo,lab,script:join(scripts,'prepare.mjs'),destination:join(root,'private-dog')};
+  return {root,repo,lab,script:join(scripts,'prepare.mjs'),validate:join(scripts,'validate.mjs'),destination:join(root,'private-dog')};
 }
 
 test('Creates a private package without writing into the flagship repository', async t=>{
@@ -84,4 +85,25 @@ test('Rejects asset directory symlink into an external or Rosie folder',async t=
   await rm(join(f.destination,'assets'),{recursive:true});
   await symlink(join(f.repo,'public'),join(f.destination,'assets'));
   assert.throws(()=>run(f.script,['status','--pack',f.destination]));
+});
+
+
+test('Read-only validator checks images and blocks shared backend configuration',async t=>{
+  const f=await fixture(); t.after(async()=>rm(f.root,{recursive:true,force:true}));
+  run(f.script,['init','--out',f.destination,'--id','buddy','--name','Buddy']);
+  const original=JSON.parse(run(f.validate,['--catalog']));
+  assert.equal(original.passed,true);
+  assert.throws(()=>run(f.validate,['--pack',f.destination]));
+  await mkdir(join(f.destination,'assets','home'),{recursive:true});
+  const webp=Buffer.concat([Buffer.from('RIFF'),Buffer.alloc(4),Buffer.from('WEBP'),Buffer.alloc(30)]);
+  await writeFile(join(f.destination,'assets','home','hero.webp'),webp);
+  assert.equal(JSON.parse(run(f.validate,['--pack',f.destination])).passed,true);
+  assert.throws(()=>run(f.validate,['--pack',f.destination,'--strict']));
+  const png=Buffer.concat([Buffer.from([137,80,78,71,13,10,26,10]),Buffer.alloc(30)]);
+  await writeFile(join(f.destination,'assets','home','title.png'),png);
+  assert.equal(JSON.parse(run(f.validate,['--pack',f.destination,'--strict'])).passed,true);
+  const file=join(f.destination,'profile.json'), profile=JSON.parse(await readFile(file,'utf8'));
+  profile.backend.email=true;
+  await writeFile(file,JSON.stringify(profile));
+  assert.throws(()=>run(f.validate,['--pack',f.destination]));
 });
