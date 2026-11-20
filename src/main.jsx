@@ -2043,6 +2043,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
               lane: secureIndex(3), y: -12, speed: 1.75 + secureIndex(8) / 10 });
           } else {
             const wave = yachtWaveFor(chapter.id, spawnSequenceRef.current++, secureIndex);
+            if (wave.some((entry) => entry.footprint === "arch")) {
+              setMessage("TORII AHEAD: the center channel is OPEN. Sail beneath the overhead beam.");
+            }
             wave.forEach((entry) => {
               const standard = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === entry.kind);
               next.push({ ...(standard || { label: entry.label, points: 0, turbo: 0 }),
