@@ -28,6 +28,10 @@ test("ordinary auger breaks earth and awards treasure charge",()=>{
   assert.equal(s.wallsBroken,1);
   assert.ok(s.charge>0);
   assert.ok(s.score>=125);
+  const drops=s.objects.filter(o=>o.id>=91000&&o.kind==="gem");
+  assert.equal(drops.length,2,"earth should spill two follow-up gems");
+  assert.ok(drops.every(o=>o.x>b.x),"gems should appear ahead of the auger");
+  assert.ok(drops.every(o=>o.y<b.y),"floor/roof deposits lead toward the safe center");
 });
 test("crystals reject ordinary drilling but break under Turbo",()=>{
   const s=newRun();
@@ -42,6 +46,10 @@ test("crystals reject ordinary drilling but break under Turbo",()=>{
   moveThrough(s,8);
   assert.equal(b.broken,true);
   assert.equal(s.wallsBroken,1);
+  const drops=s.objects.filter(o=>o.id>=91000&&o.kind==="gem");
+  assert.equal(drops.length,3,"a crystal should release three gems");
+  moveThrough(s,3);
+  assert.equal(s.objects.filter(o=>o.id>=91000).length,3,"a broken wall must not pay twice");
 });
 test("digging a hidden chamber unlocks one relic and spawns treasure",()=>{
   const s=newRun();
