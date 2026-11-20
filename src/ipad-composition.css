@@ -167,6 +167,12 @@
     min-width: 0 !important;
     margin: 0 !important;
   }
+  .app-shell.page-calculations main.rc-page .rc-active-tool-close {
+    position: fixed !important;
+    top: 18px !important;
+    right: 84px !important;
+    z-index: 10010 !important;
+  }
 
   /* QR: restore natural flow and remove inherited visual translations.
      The editing controls must stay reachable even when the form grows. */
