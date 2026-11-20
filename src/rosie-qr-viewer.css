@@ -9,7 +9,7 @@
   background-color:#04140f!important;
   background-image:linear-gradient(180deg,rgba(0,13,8,.08),rgba(0,11,7,.22)),
     url("/qr-atelier/rosie-qr/rosie-popup-desktop.webp")!important;
-  background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important;
+  background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;
 }
 .qa-rosie-viewer .qa-rosie-close {
   position:absolute!important;z-index:5;top:max(12px,env(safe-area-inset-top));left:50%;
@@ -33,26 +33,45 @@
   width:100%!important;height:100%!important;object-fit:contain!important;
   z-index:2;pointer-events:none;user-select:none;
 }
+/* Fill the full oval behind the artwork, then cover any image artifacts within
+   the inset without painting over the decorative gilded border. */
+.qa-rosie-insert-underlay {
+  position:absolute!important;
+  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
+  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
+  border-radius:50%;clip-path:ellipse(50% 50% at 50% 50%);
+  transform:scale(1.14);transform-origin:center;
+  z-index:1;background:var(--rosie-code-bg,#fff)!important;
+  pointer-events:none;
+}
+.qa-rosie-insert-backdrop {
+  position:absolute!important;
+  left:var(--rosie-insert-left)!important;top:var(--rosie-insert-top)!important;
+  width:var(--rosie-insert-width)!important;height:var(--rosie-insert-height)!important;
+  border-radius:50%;clip-path:ellipse(50% 50% at 50% 50%);
+  z-index:3;background:var(--rosie-code-bg,#fff)!important;
+  pointer-events:none;
+}
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
-  z-index:1;background:white;overflow:hidden;
+  z-index:4;background:#ffffff!important;overflow:hidden;
 }
-.qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#fff;}
+.qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#ffffff!important;}
 .qa-rosie-title-field,.qa-rosie-printed-title {
-  position:absolute!important;z-index:4;
+  position:absolute!important;z-index:5;
   left:var(--rosie-title-x)!important;top:var(--rosie-title-y)!important;
   transform:translate(-50%,-50%)!important;
   width:var(--rosie-title-width)!important;height:8%!important;
   padding:0 1%;box-sizing:border-box;
   border:1px solid transparent;border-radius:5px;background:transparent;
   color:#4e301e;text-align:center;
-  font:italic 500 clamp(12px,1.8vw,26px)/1.15 "Iowan Old Style","Palatino Linotype",Georgia,serif!important;
+  font:italic 500 clamp(14px,2.05vw,30px)/1.15 "Iowan Old Style","Palatino Linotype",Georgia,serif!important;
   text-shadow:0 1px 1px #fff5d9;
 }
 .qa-rosie-title-field::placeholder{color:#765a39;opacity:.67}
 .qa-rosie-title-field:focus {outline:2px solid #d5a55e;background:rgba(255,248,225,.48);}
-.qa-rosie-printed-title{display:grid;place-items:center;white-space:nowrap;overflow:hidden;font-size:clamp(12px,1.7vw,25px)!important;}
+.qa-rosie-printed-title{display:grid;place-items:center;white-space:nowrap;overflow:hidden;font-size:clamp(14px,2vw,29px)!important;}
 .qa-rosie-frame-controls {display:flex;align-items:center;justify-content:center;gap:13px;margin:0 auto 8px;min-height:36px;}
 .qa-rosie-frame-controls span {min-width:170px;text-align:center;font:500 clamp(11px,1.25vw,14px)/1.2 Georgia,serif;color:#f5e4bf;text-shadow:0 2px 6px #001;}
 .qa-rosie-frame-controls .qa-rosie-arrow {
@@ -81,7 +100,7 @@
   }
   .qa-rosie-viewer-content {width:100vw!important;}
   .qa-rosie-composition {width:min(110vw,480px)!important;max-width:none!important;}
-  .qa-rosie-title-field {font-size:clamp(10px,2.8vw,16px)!important;}
+  .qa-rosie-title-field {font-size:clamp(12px,3.3vw,19px)!important;}
   .qa-rosie-frame-controls{gap:10px;}
   .qa-rosie-frame-controls span{min-width:142px;font-size:11px;}
   .qa-rosie-viewer-actions button {padding:8px 10px;font-size:11px;}
@@ -90,7 +109,7 @@
 /* The selected frame is printed as foreground image content, never as a page background. */
 .qa-print-sheet.qa-rosie-print-sheet{display:none;}
 @media print {
-  @page {size:auto;margin:12mm;}
+  @page {size:auto;margin:4mm;}
   .qa-rosie-viewer.qa-fullscreen {display:none!important;}
   .qa-print-sheet.qa-rosie-print-sheet {
     position:fixed!important;inset:0!important;z-index:999999!important;
@@ -100,15 +119,23 @@
   }
   .qa-print-sheet.qa-rosie-print-sheet * {visibility:visible!important;}
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-composition {
-    width:min(180mm,100%)!important;height:auto!important;margin:0 auto!important;
+    width:min(198mm,100%)!important;height:auto!important;margin:0 auto!important;
   }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay,
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-backdrop {
+    background:var(--rosie-code-bg,#fff)!important;
+    print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
+  }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr,
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr svg {background:white!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;}
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr svg {
+    background:#ffffff!important;
+    print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
+  }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-printed-title {
-    font-size:18pt!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
+    font-size:22pt!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
 }
 

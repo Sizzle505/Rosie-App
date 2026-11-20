@@ -275,7 +275,7 @@
     justify-items:center!important;
     align-items:center!important;
     column-gap:clamp(6.3px,.58vw,10.5px)!important;
-    row-gap:clamp(4.7px,.42vw,7.9px)!important;
+    row-gap:clamp(1.175px,.105vw,1.975px)!important;
   }
   .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tools-heading {
     width:100%!important;max-width:100%!important;
@@ -284,5 +284,34 @@
     font-size:clamp(18px,1.55vw,26px)!important;
     line-height:1.1!important;
     letter-spacing:.012em!important;
+  }
+}
+
+@media screen and (min-width:1200px) {
+  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tool-grid {
+    column-gap:clamp(.95px,.0875vw,1.575px)!important;
+    position:relative;top:-40px;
+  }
+  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) .rc-workspace .rc-tools-heading {
+    position:relative;top:-25px;
+  }
+}
+@media screen and (min-width:1200px) {
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-grid {
+    column-gap:clamp(.95px,.0875vw,1.575px)!important;
+    position:relative!important;top:-40px!important;
+  }
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tools-heading {
+    position:relative!important;top:-25px!important;
+  }
+}
+
+/* Pocket Toolkit follow-up: button artwork has transparent margins, so halving
+   grid-gap alone barely affects the visible separation. Close those margins
+   without changing grid/heading anchors, centered layout, or click targets. */
+@media screen and (min-width:1200px) {
+  .app-shell.page-calculations main.rc-page .rc-workspace .rc-tool-grid .rc-tool-card img.rc-tool-art {
+    transform:scale(1.14)!important;
+    transform-origin:center top!important;
   }
 }

@@ -9,18 +9,24 @@ import "./rosie-qr-viewer.css";
 
 const ART="/qr-atelier/";
 const ROSIE_ASSET_ROOT=ART+"rosie-qr/";
+// Aperture geometry is measured from the supplied transparent oval frame artwork.
 const ROSIE_FRAMES=[
-  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,titleX:904,titleY:857,titleWidth:540},
-  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,titleX:892,titleY:853,titleWidth:540},
-  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:824,cy:500,titleX:793,titleY:866,titleWidth:525},
-  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,titleX:722,titleY:875,titleWidth:555}
+  {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,insertX:941,insertY:488,insertW:512,insertH:508,titleX:904,titleY:857,titleWidth:540},
+  {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,insertX:962,insertY:500,insertW:540,insertH:510,titleX:892,titleY:853,titleWidth:540},
+  {id:"peeking",label:"Curious Rosie",file:"rosie-frame-peeking.webp",cx:829,cy:531,codeSize:376,insertX:829,insertY:534,insertW:558,insertH:510,titleX:793,titleY:880,titleWidth:525},
+  {id:"blank",label:"The Gilded Frame",file:"rosie-frame-blank.webp",cx:722,cy:496,insertX:722,insertY:506,insertW:518,insertH:506,titleX:722,titleY:889,titleWidth:555}
 ];
 const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 function rosieFrameStyle(frame){
+  const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
   return {
-    "--rosie-code-left":((frame.cx-ROSIE_CODE_SIZE/2)/ROSIE_ART_W*100)+"%",
-    "--rosie-code-top":((frame.cy-ROSIE_CODE_SIZE/2)/ROSIE_ART_H*100)+"%",
-    "--rosie-code-size":(ROSIE_CODE_SIZE/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-left":((frame.insertX-frame.insertW/2)/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-top":((frame.insertY-frame.insertH/2)/ROSIE_ART_H*100)+"%",
+    "--rosie-insert-width":(frame.insertW/ROSIE_ART_W*100)+"%",
+    "--rosie-insert-height":(frame.insertH/ROSIE_ART_H*100)+"%",
+    "--rosie-code-left":((frame.cx-codeSize/2)/ROSIE_ART_W*100)+"%",
+    "--rosie-code-top":((frame.cy-codeSize/2)/ROSIE_ART_H*100)+"%",
+    "--rosie-code-size":(codeSize/ROSIE_ART_W*100)+"%",
     "--rosie-title-x":(frame.titleX/ROSIE_ART_W*100)+"%",
     "--rosie-title-y":(frame.titleY/ROSIE_ART_H*100)+"%",
     "--rosie-title-width":(frame.titleWidth/ROSIE_ART_W*100)+"%"
@@ -42,7 +48,7 @@ function makeQr(payload,style="emerald"){
   const modules=[];
   for(let row=0;row<count;row++)for(let col=0;col<count;col++)
     if(qr.isDark(row,col))modules.push("M"+(col+quiet)+" "+(row+quiet)+"h1v1h-1z");
-  // Unlike palette-only finishes, the QR modules use the selected dark color.
+  // The QR modules use the selected dark color; the quiet zone and entire QR square stay pure white.
   const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+dimension+' '+dimension+'" shape-rendering="crispEdges"><rect width="'+dimension+'" height="'+dimension+'" fill="#ffffff"/><path d="'+modules.join("")+'" fill="'+theme.dark+'"/></svg>';
   return {svg,modules:count};
 }
@@ -75,29 +81,50 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   // Render exactly the active viewer composition: transparent canvas, QR plus Rosie and inscription.
   const frame=ROSIE_FRAMES.find(x=>x.id===frameId)||ROSIE_FRAMES[0];
   const canvas=document.createElement("canvas");
-  canvas.width=ROSIE_ART_W;canvas.height=ROSIE_ART_H;
+  canvas.width=ROSIE_ART_W*2;canvas.height=ROSIE_ART_H*2;
   const ctx=canvas.getContext("2d");
+  ctx.scale(2,2);
   const qr=await qrImage(svg),art=await loadImage(ROSIE_ASSET_ROOT+frame.file);
-  const x=frame.cx-ROSIE_CODE_SIZE/2,y=frame.cy-ROSIE_CODE_SIZE/2;
-  ctx.fillStyle="#ffffff";ctx.fillRect(x,y,ROSIE_CODE_SIZE,ROSIE_CODE_SIZE);
-  ctx.imageSmoothingEnabled=false;
-  ctx.drawImage(qr,x,y,ROSIE_CODE_SIZE,ROSIE_CODE_SIZE);
-  ctx.imageSmoothingEnabled=true;
+  const codeSize=frame.codeSize||ROSIE_CODE_SIZE;
+  const finish=QR_STYLES.find(item=>item.id===style)||QR_STYLES[0];
+  const x=frame.cx-codeSize/2,y=frame.cy-codeSize/2;
+  // Fill the entire opening behind the artwork (including the dark crescent),
+  // then clean up any opaque artwork remnants inside the safe inner ellipse.
+  // The QR is a separate white square, exactly as in the unframed preview.
+  ctx.fillStyle=finish.light;
+  ctx.beginPath();
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW*.57,frame.insertH*.57,0,0,Math.PI*2);
+  ctx.fill();
   ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(frame.insertX,frame.insertY,frame.insertW/2,frame.insertH/2,0,0,Math.PI*2);
+  ctx.clip();
+  ctx.fillStyle=finish.light;
+  ctx.fillRect(frame.insertX-frame.insertW/2,frame.insertY-frame.insertH/2,frame.insertW,frame.insertH);
+  ctx.restore();
+  ctx.fillStyle="#ffffff";
+  ctx.fillRect(x,y,codeSize,codeSize);
+  ctx.imageSmoothingEnabled=false;
+  ctx.drawImage(qr,x,y,codeSize,codeSize);
+  ctx.imageSmoothingEnabled=true;
   const inscription=String(caption||"").trim().slice(0,48);
   if(inscription){
     ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
-    let fontSize=41;
+    let fontSize=49;
     do{ctx.font="italic "+fontSize+"px Georgia,serif";fontSize-=2;}
-    while(fontSize>23&&ctx.measureText(inscription).width>frame.titleWidth);
+    while(fontSize>27&&ctx.measureText(inscription).width>frame.titleWidth);
     ctx.fillStyle="#50351f";ctx.shadowColor="#fff5d9";ctx.shadowBlur=2;
     ctx.fillText(inscription,frame.titleX,frame.titleY,frame.titleWidth);
     ctx.restore();
   }
   return canvasBlob(canvas);
 }
-function RosieFrameComposition({frame,svg,caption,onCaptionChange,printOnly=false}){
-  return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={rosieFrameStyle(frame)}>
+function RosieFrameComposition({frame,svg,caption,onCaptionChange,finish="emerald",printOnly=false}){
+  const background=(QR_STYLES.find(item=>item.id===finish)||QR_STYLES[0]).light;
+  return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
+    <div className="qa-rosie-insert-underlay" aria-hidden="true"/>
+    <div className="qa-rosie-insert-backdrop" aria-hidden="true"/>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
     <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
     {printOnly?<span className="qa-rosie-printed-title">{caption}</span>:
@@ -451,14 +478,14 @@ export default function RosieQrAtelier(){
         </div></>}
       </section>
       {ready&&<section className="qa-print-sheet qa-rosie-print-sheet" aria-label="Print Rosie frame and QR without background">
-        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} printOnly/>
+        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} finish={style} printOnly/>
       </section>}
       <p className="qa-status" role="status" aria-live="polite">{toast}</p>
     </div>
     {fullScreen&&ready&&<div className="qa-fullscreen qa-rosie-viewer" role="dialog" aria-modal="true" aria-label="Rosie framed scannable QR code">
       <button type="button" className="qa-close qa-rosie-close" onClick={()=>setFullScreen(false)}>Close ×</button>
       <div className="qa-rosie-viewer-content">
-        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} onCaptionChange={setFrameCaption}/>
+        <RosieFrameComposition frame={activeRosieFrame} svg={output.svg} caption={frameCaption} finish={style} onCaptionChange={setFrameCaption}/>
         <div className="qa-rosie-frame-controls" role="group" aria-label="Choose the Rosie frame">
           <button type="button" className="qa-rosie-arrow" aria-label="Previous Rosie frame" onClick={()=>setRosieFrameIndex(i=>(i-1+ROSIE_FRAMES.length)%ROSIE_FRAMES.length)}>‹</button>
           <span>{activeRosieFrame.label} · {rosieFrameIndex+1} / {ROSIE_FRAMES.length}</span>
