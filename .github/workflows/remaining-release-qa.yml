@@ -48,7 +48,7 @@ jobs:
           b=Image.open(root/'iphone-burgundy-rosie-frame-blank-hollow.png').convert('RGB')
           # The transparent opening's left side, outside the white QR square.
           # These snapshots are cropped to the composition at 2x iPhone DPR.
-          x,y=520,540
+          x,y=260,270
           emerald=e.getpixel((x,y));burgundy=b.getpixel((x,y))
           print('MATERIAL PIXEL', (x,y), 'emerald',emerald,'burgundy',burgundy)
           diff=sum(abs(a-z) for a,z in zip(emerald,burgundy))
