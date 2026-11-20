@@ -99,8 +99,8 @@ try {
     return {goalBottom:goal?.bottom,goalHeight:goal?.height,buttonsTop:buttons?.top};
   });
   console.log("Chapter goal spacing",JSON.stringify(chapterCopySpacing));
-  assert.ok(chapterCopySpacing.goalBottom + 2 <= chapterCopySpacing.buttonsTop,
-    "Level objectives must not overlap the four stage buttons");
+  assert.ok(chapterCopySpacing.goalBottom + 10 <= chapterCopySpacing.buttonsTop,
+    "Level objectives need at least 10px of clear space above stage buttons");
   const toggle = frame.locator(".yacht-steering-options .captain-steering-toggle");
   console.log("Mode toggle visible before launch", await toggle.isVisible());
   console.log("Preflight layout details", JSON.stringify(await page.evaluate(() => {
