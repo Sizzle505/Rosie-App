@@ -43,3 +43,20 @@ The pure `src/emberExpansionCatalog.js` enumerates all five planned worlds (unlo
 6. Keep PR #192 in draft until reviewed; never merge or promote to production without explicit approval.
 
 **Deferred:** All victory/finale Rosie art remains out of scope; previous victory images did not match the game's approved illustrated style.
+
+
+## November 20 subsequent development: five selectable route playtests
+
+The same draft PR now includes `src/emberExpeditionStages.js` and selected-world routing in `src/EmberTunnelDrill.jsx`.
+
+- Each of five stages can be selected immediately from the game's launch screen (none locked) and starts at its own cave world position.
+- Every route is currently a **15-second terrain/playability test**. The original 75-second Classic course remains available and is not replaced.
+- Each route has a separate timer, stage heading, approved existing-art scenic theme, score report and 0-3 stars saved under `rosieEmberFiveWorldStarsV1` in localStorage.
+- The first star requires completion; the second requires no more than one collision; the third requires at least five collected treasures. Failed runs receive no stars.
+- There is no claim that completed boss fights, unique Clockwork/Molten/Royal mechanics, or the ten new binary images are active. In particular, `emberBossEncounter.js` remains independent until future game integration.
+- Old gameplay is isolated by the optional `stageIndex` parameter of `newRun`; its default remains classic `RUN_DURATION = 75`.
+- Dedicated Node tests and cross-browser Playwright smoke tests cover stage selection, individual starting coordinates, classic backward compatibility and reward persistence.
+
+**Remaining gate:** Ten new WebP binaries are still in the downloadable ChatGPT integration archive and not committed to GitHub. The guarded importer and metadata are ready; the artwork cannot be shown in-app until the image transfer is completed and reviewed.
+
+**Caution:** The new stage map and backdrop treatment are initial playtesting scaffolds, not finished bespoke 5-level art or five distinct mechanical campaigns. Leave this PR in draft.
