@@ -1,0 +1,62 @@
+// Optional, intentionally placed excavation discoveries. The surrounding course remains playable
+// if the player ignores every wall; these are bonuses, not mandatory damage gates.
+export const BREAKABLE_LAYOUT = Object.freeze([
+  {x:1120, side:-1, material:"earth", id:"barkroot-earth"},
+  {x:6030, side: 1, material:"earth", id:"ruby-earth"},
+  {x:10380,side:-1, material:"crystal",id:"ruby-crystal"},
+  {x:15240,side: 1, material:"crystal",id:"temple-crystal"},
+  {x:20000,side: 1, material:"entrance",id:"royal-hidden-chamber"},
+]);
+
+const toughness = material => material==="crystal" ? 6 : material==="entrance" ? 4 : 3;
+export function makeBreakables(center,radius) {
+  return BREAKABLE_LAYOUT.map(item=>{
+    const maxIntegrity=toughness(item.material);
+    return {...item,y:center(item.x)+item.side*(radius(item.x)-75),
+      maxIntegrity,integrity:maxIntegrity,cracked:false,broken:false,hardWarning:false};
+  });
+}
+export function drillBreakables(s,dt,tip,boosted) {
+  if(!s.breakables)return;
+  for(const b of s.breakables){
+    if(b.broken || Math.abs(b.x-tip.x)>90 || Math.abs(b.y-tip.y)>79)continue;
+    // Crystals require charged Turbo; ordinary earth and entrances can be excavated normally.
+    if(b.material==="crystal"&&!boosted){
+      if(!b.hardWarning){
+        b.hardWarning=true;
+        s.events.push({type:"hard-rock",material:b.material,x:b.x-s.scroll,y:b.y});
+      }
+      continue;
+    }
+    b.integrity=Math.max(0,b.integrity-(boosted?29:13)*dt);
+    if(!b.cracked && b.integrity<=b.maxIntegrity*.55){
+      b.cracked=true;
+      s.events.push({type:"crack-wall",material:b.material,x:b.x-s.scroll,y:b.y});
+    }
+    if(b.integrity>0)continue;
+    b.broken=true;
+    const found=b.material==="entrance";
+    s.score+=found?750:b.material==="crystal"?250:125;
+    s.charge=Math.min(100,s.charge+(found?30:10));
+    s.wallsBroken=(s.wallsBroken||0)+1;
+    s.events.push({type:found?"secret-found":"break-wall",material:b.material,x:b.x-s.scroll,y:b.y});
+    if(found){
+      s.secrets=(s.secrets||0)+1;
+      s.relics=(s.relics||0)+1;
+      // A chest of collectibles appears just beyond the revealed doorway.
+      s.objects.push({id:90000+s.secrets,kind:"cache",x:b.x+205,y:b.y-b.side*36,radius:27,taken:false});
+    }else{
+      // Every smashed formation opens a short, attainable treasure sweep
+      // toward the tunnel's safer center. Reward the risk of drilling rather
+      // than treating a wall as another static point target.
+      const count=b.material==="crystal"?3:2;
+      for(let i=0;i<count;i++){
+        s.objects.push({
+          id:91000+s.wallsBroken*10+i,kind:"gem",
+          x:b.x+100+i*43,y:b.y-b.side*(30+i*13),
+          radius:20,taken:false
+        });
+      }
+    }
+  }
+}
