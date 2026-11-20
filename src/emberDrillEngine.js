@@ -120,7 +120,10 @@ export function newRun(seed = 1467, stageIndex = null) {
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
   const repaired = s.hull < 5;
-  s.boostTime = TURBO_DURATION; s.charge = 0;
+  // In boss arenas each press is a deliberate strike. The classic 4.8s
+  // excavation shield would otherwise auto-hit several later recovery phases
+  // from a single Turbo press.
+  s.boostTime = s.boss ? 0.72 : TURBO_DURATION; s.charge = 0;
   s.hull = Math.min(5, s.hull + 1);
   s.boosts++;
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y, repaired });
