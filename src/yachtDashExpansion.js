@@ -83,6 +83,60 @@ export function yachtNextUnlocked(current, completedChapter) {
   return Math.min(3, Math.max(yachtUnlockedLevel(current), completedChapter + 1));
 }
 
+/** Stage medal targets reward performance, but do not restrict playtesting access. */
+export const YACHT_CHAPTER_GOALS = Object.freeze({
+  sakura: { score: 650, expert: 1450, nearMisses: 0, rivals: 0,
+    description: "Reach Sakura Cove. Golden Cheese and clean cargo streaks earn medals." },
+  typhoon: { score: 850, expert: 1700, nearMisses: 2, rivals: 0,
+    description: "Survive the storm. Expert captains earn two clean near misses." },
+  moonlight: { score: 950, expert: 1900, nearMisses: 0, rivals: 2,
+    description: "Outrace the regatta fleet. Two yacht passes earn the highest honor." },
+  emperor: { score: 1200, expert: 2300, nearMisses: 2, rivals: 2,
+    description: "Earn the imperial medal: survive, pass rivals, and sail with precision." }
+});
+
+export function yachtMedalsFor(chapterId, stats) {
+  const goal = YACHT_CHAPTER_GOALS[chapterId];
+  if (!goal || !stats.completed) return 0;
+  const score = Number(stats.score) || 0;
+  const lives = Number(stats.lives) || 0;
+  const nearMisses = Number(stats.nearMisses) || 0;
+  const rivalsPassed = Number(stats.rivalsPassed) || 0;
+  let stars = 1;
+  if (score >= goal.score) stars++;
+  if (score >= goal.expert && lives >= 2 &&
+      nearMisses >= goal.nearMisses && rivalsPassed >= goal.rivals) stars++;
+  return stars;
+}
+
+/** Store only known chapter keys and bounded numeric stats from local storage. */
+export function parseYachtRecords(serialized) {
+  let input;
+  try { input = JSON.parse(serialized || "{}"); } catch { return {}; }
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  const records = {};
+  for (const { id } of YACHT_CHAPTERS) {
+    const record = input[id];
+    if (!record || typeof record !== "object") continue;
+    const best = Number(record.best);
+    const medals = Number(record.medals);
+    records[id] = {
+      best: Number.isFinite(best) ? Math.max(0, Math.min(9999999, Math.floor(best))) : 0,
+      medals: Number.isFinite(medals) ? Math.max(0, Math.min(3, Math.floor(medals))) : 0
+    };
+  }
+  return records;
+}
+
+export function updateYachtRecords(records, chapterId, score, medals) {
+  if (!YACHT_CHAPTERS.some((stage) => stage.id === chapterId)) return records;
+  const previous = records[chapterId] || { best: 0, medals: 0 };
+  const best = Math.max(previous.best, Math.max(0, Number(score) || 0));
+  const nextMedals = Math.max(previous.medals, Math.max(0, Number(medals) || 0));
+  if (best === previous.best && nextMedals === previous.medals) return records;
+  return { ...records, [chapterId]: { best, medals: nextMedals } };
+}
+
 export function isYachtHazard(kind) {
   return kind === "buoy" || kind === "obstacle" || kind === "rival";
 }
