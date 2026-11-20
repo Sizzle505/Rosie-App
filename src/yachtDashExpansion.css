@@ -625,3 +625,64 @@
     padding:7px 8px!important;margin:0!important;
   }
 }
+
+
+/* Restore the intended three-part mobile Yacht cabinet. An older responsive
+   stylesheet defines exactly TWO grid rows (course + command deck); the
+   new independent steering row became an implicit grid child and compressed
+   the actual course to a few pixels. Keep everything within one viewport. */
+@media(max-width:720px) and (pointer:coarse) {
+  .captain-fs-yacht .captain-game-page .yacht-game-shell {
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:none!important;
+    grid-template-rows:none!important;
+    align-content:initial!important;
+    justify-content:flex-start!important;
+    min-height:0!important;
+    height:100%!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht .captain-game-page .yacht-steering-options {
+    flex:0 0 32px!important;
+    order:1;
+    display:flex!important;
+    height:32px!important;
+    min-height:32px!important;
+    margin:3px 0 0!important;
+  }
+  .captain-fs-yacht .captain-game-page .yacht-course {
+    flex:1 1 0!important;
+    order:2;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    width:100%!important;
+    margin:4px 0 0!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht .captain-game-page .captain-command-deck {
+    flex:0 0 60px!important;
+    order:3;
+    min-height:60px!important;
+    height:60px!important;
+    margin:5px 0 0!important;
+  }
+  .captain-fs-yacht .captain-game-page .yacht-steering-options .captain-steering-toggle {
+    box-sizing:border-box!important;
+    flex:0 0 90px!important;
+    width:90px!important;
+    min-width:90px!important;
+    max-width:90px!important;
+    height:29px!important;
+    min-height:29px!important;
+    padding:0 8px!important;
+    white-space:nowrap!important;
+    font-size:9px!important;
+    text-align:center;
+    overflow:hidden;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-game-page .yacht-game-shell {
+    height:100%!important;
+  }
+}
