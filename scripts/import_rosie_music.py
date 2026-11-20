@@ -73,7 +73,7 @@ def render(index,entry):
     )
   else:
     fade_at=max(.0,length-.25)
-    filtergraph=f"[0:a]afade=t=in:st=0:d=.07,afade=t=out:st={fade_at}:d=.25,loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
+    filtergraph=f"[0:a]afade=t=in:st=0:d=0.07,afade=t=out:st={fade_at}:d=0.25,loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
   subprocess.run([
     "ffmpeg","-hide_banner","-nostdin","-loglevel","error","-y",
     "-i",str(src),*(["-i",str(src)] if loop else []),
