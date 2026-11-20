@@ -99,7 +99,7 @@
   .haiku-page .haiku-workbench{width:100%;}
   .haiku-page .haiku-shell > .haiku-scene-quote {
     transform:none;
-    margin:-52px auto 0;
+    margin:0 auto;
     padding:2px 12px 6px;
     gap:2px;
   }
