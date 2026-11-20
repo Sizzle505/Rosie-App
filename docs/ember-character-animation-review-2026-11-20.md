@@ -31,3 +31,18 @@ All frames align at a baseline of y=94% with centering on x=50%. Individual RGBA
 6. Keep draft PR #192 isolated from main; no merge or Vercel production promotion without review.
 
 The historical concept montages are not a replacement for distinct assets. Do not count resized/upscaled crops as independently drawn 512px sprites.
+
+## Additional environmental animation prototypes (same ChatGPT pack)
+
+The follow-on archive is named **Ember Tunnel Five Animation Prototypes.zip** in the ChatGPT conversation. It contains the above three character candidates plus:
+
+| Hazard | Frames | Grid | Cell size | Intended level |
+|---|---:|---|---|---|
+| Lava geyser | 6 | 3 x 2 | 384 x 384 RGBA PNG | Molten Depths |
+| Falling basalt | 8 | 4 x 2 | 384 x 384 RGBA PNG | Molten Depths |
+
+Both were extracted from ChatGPT-generated concept artwork and given consistent canvas registration, lossless WebP atlases and GIF previews. They **are not native-resolution production sprites**. Before gameplay use, remove residual conceptual edges, repaint at proper source resolution, and compare every hazard animation's visible active frame with its physics warnings and hitbox.
+
+**QA recorded:** Validated five sprite atlases and all 42 separate RGBA frames for uniform dimensions, nonempty image content and transparent pixels. ZIP integrity check passed (66 members). This is structural validation, not visual art approval or gameplay QA.
+
+No image binaries were imported to GitHub in this pass. Draft PR remains isolated from production.
