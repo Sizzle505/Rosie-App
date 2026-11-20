@@ -106,6 +106,24 @@ try {
     return {shell:metric(shell),children:[...shell.children].map(metric),
       panel:metric(panel),picker:metric(panel.querySelector(".yacht-chapter-picker"))};
   })));
+  // Chapter selection changes the painting immediately, not after a gameplay
+  // crossfade. Await the corresponding decoded artwork before capturing.
+  await page.waitForFunction(() => {
+    const image=document.querySelector(
+      ".captain-fs-yacht .captain-level-painting .captain-backdrop-incoming");
+    return image?.getAttribute("src")==="/yacht-dash/typhoon/01-approaching-squall.webp" &&
+      image.complete && image.naturalWidth > 0;
+  },null,{timeout:12000});
+  const preflightStyle=await frame.locator(".captain-start-panel:not(.captain-results-panel)")
+    .evaluate(element=>{
+      const css=getComputedStyle(element);
+      return {background:css.backgroundColor,opacity:css.opacity,
+        backgroundImage:css.backgroundImage};
+    });
+  assert.equal(preflightStyle.opacity,"1","Preflight text must not be translucent");
+  assert.notEqual(preflightStyle.background,"rgba(0, 0, 0, 0)",
+    "Preflight needs its own opaque backing over the bright painting");
+  console.log("Selected chapter art and panel",JSON.stringify(preflightStyle));
   await page.screenshot({ path:folder+"/iphone-stage-picker.png" });
   await frame.locator(".yacht-cast-off").click();
   await page.waitForFunction(() => {
@@ -174,6 +192,12 @@ try {
   },null,{timeout:6500});
   const gateLabel=gate.locator(".yacht-gate-passage");
   await gateLabel.waitFor({state:"visible",timeout:1500});
+  const safePassage=frame.locator(".yacht-safe-passage-cue");
+  await safePassage.waitFor({state:"visible",timeout:2500});
+  assert.match(await safePassage.innerText(),/CENTER LANE OPEN/);
+  const safeBox=await safePassage.boundingBox();
+  assert.ok(safeBox && safeBox.width>=140 && safeBox.height>=24,
+    "The center-lane warning must remain legible on a phone");
   const [gateBounds,gateMessageBounds,courseBounds]=await Promise.all([
     gate.boundingBox(),gateLabel.boundingBox(),frame.locator(".yacht-course").boundingBox()
   ]);
