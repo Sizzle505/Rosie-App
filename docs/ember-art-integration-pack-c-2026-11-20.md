@@ -60,3 +60,25 @@ The same draft PR now includes `src/emberExpeditionStages.js` and selected-world
 **Remaining gate:** Ten new WebP binaries are still in the downloadable ChatGPT integration archive and not committed to GitHub. The guarded importer and metadata are ready; the artwork cannot be shown in-app until the image transfer is completed and reviewed.
 
 **Caution:** The new stage map and backdrop treatment are initial playtesting scaffolds, not finished bespoke 5-level art or five distinct mechanical campaigns. Leave this PR in draft.
+
+## November 20 additional gameplay - distinct world hazards
+
+The five selectable 15-second Expedition previews now have dedicated, collision-aligned moving hazards. These are **procedural placeholder illustrations**, not the unimported ChatGPT image binaries.
+
+| Stage | New hazard | First contact | World objective bonus |
+|---|---|---|---:|
+| Barkroot | Existing drillable earth wall | x 1120 | +250 |
+| Ruby | Crystal spikes from ceiling | x 7330 | +300 |
+| Clockwork | Brass piston mechanisms | x 12180, 13870 | +375 |
+| Molten | Volcanic geysers | x 17650, 18200 | +425 |
+| Treasury | Royal earth bursts | x 23720, 24230 | +500 |
+
+- Selected-world obstacles do **not** appear in Classic mode; its 75-second duration, approved Rosie art and physics remain unchanged.
+- All new hazards have 470px advance warnings, smoothly extending geometry, an inward-only solid core and automatic retraction. Each has a matching procedural Canvas painter.
+- Successfully navigating a hazard yields +125 score and +10 Turbo charge. Turbo shatters it for +175. One success per stage unlocks the stage objective, with the above additional bonus.
+- Starting behind a hazard never awards a free dodge or bonus; repeated contacts cannot farm points. The source checks structural collisions against the same wall geometry used to draw the hazard.
+- The third star now requires the stage's own objective, not a generic treasure threshold. The first star requires finishing; the second requires no more than one hull hit.
+- `tests/ember-expedition-hazards.test.mjs` exercises placement, warning, damage, Turbo shattering, and one-time rewards. Browser smoke QA explicitly waits for the Clockwork warning after selecting that stage.
+
+### Visual review still necessary
+These effects are immediately testable without additional art imports, but their final appearance will be replaced selectively by the high-resolution assets after manual registration. Stage 3-5 bosses are **not active**. This remains an isolated draft PR pending desktop, iPhone WebKit and iPad review.
