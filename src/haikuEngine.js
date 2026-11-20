@@ -42,7 +42,10 @@ function hashSeed(value) {
 }
 export function poemForDay(date = new Date()) {
   const day = localDayKey(date);
-  const index = hashSeed(day) % ROSIE_HAIKUS.length;
+  // A coprime step guarantees that consecutive calendar days show different
+  // verses and that the entire collection is visited before any repeat.
+  const ordinal = Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
+  const index = (ordinal * 5 + 7) % ROSIE_HAIKUS.length;
   return { ...ROSIE_HAIKUS[index], title: "Haiku of the Day", day, source: "collection" };
 }
 export function poemForTopic(topic, mood = "zen", variation = 0) {
