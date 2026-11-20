@@ -297,7 +297,7 @@
 /* Upstream perspective: objects are discovered in the water at the distant
    horizon, then grow toward the helm rather than falling from the sky. */
 .captain-game-page .sea-pickup.yacht-upstream-object {
-  transform:translate(-50%,-50%) scale(var(--approach-scale,1))!important;
+  transform:translate(-50%,-50%) scale(var(--approach-scale-x,var(--approach-scale,1)),var(--approach-scale,1))!important;
   transform-origin:center 58%;
   opacity:var(--approach-opacity,1);
   transition:top 72ms linear,transform 72ms linear,opacity 72ms linear;
@@ -738,4 +738,34 @@
 }
 .captain-game-page .sea-pickup.yacht-upstream-object .yacht-hazard-art{
   position:relative;z-index:1;
+}
+
+/* The arch's collision footprint is the TWO outer lanes. The artwork now
+   widens into those margins, while the water passage remains the center lane.
+   Keep the guidance below the beam rather than decorating the beam itself. */
+.captain-game-page .sea-pickup.yacht-footprint-arch .yacht-gate-passage {
+  top:72%!important;
+  min-width:112px;
+  max-width:65%;
+  padding:5px 8px 6px;
+  border-color:rgba(192,252,225,.92);
+  background:linear-gradient(180deg,rgba(4,51,57,.94),rgba(2,37,49,.9));
+  box-shadow:0 0 13px rgba(139,248,211,.38);
+  color:#fff0c7;
+  font-size:10px;
+  line-height:1.12;
+}
+.captain-game-page .sea-pickup.yacht-footprint-arch::after {
+  top:89%;
+  height:57%;
+  border-left:2px dashed rgba(170,252,229,.76);
+  filter:drop-shadow(0 0 5px rgba(190,255,235,.6));
+}
+@media(max-width:720px){
+  .captain-game-page .sea-pickup.yacht-footprint-arch .yacht-gate-passage{
+    top:72%!important;
+    min-width:98px;
+    padding:4px 6px 5px;
+    font-size:9px;
+  }
 }
