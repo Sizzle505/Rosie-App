@@ -26,7 +26,7 @@ export const YACHT_CHAPTERS = Object.freeze([
   },
   {
     id: "typhoon", name: "Typhoon Passage", destination: "STORMBREAK PORT",
-    description: "Ride out the squall. Reef rocks, wreckage, and changing channels demand precision.",
+    description: "Ride out the squall. Wide reefs, fallen logs and a torii with a clear center passage. One supply chest restores hull and Turbo.",
     climate: "storm", cadence: 2250, pace: .13, unlockedBy: "sakura",
     victory: art("victories", "typhoon"),
     scenes: [
@@ -37,7 +37,7 @@ export const YACHT_CHAPTERS = Object.freeze([
   },
   {
     id: "moonlight", name: "Moonlight Regatta", destination: "MOONLIGHT QUAY",
-    description: "A lantern-lit night race. Outmaneuver the rival yacht and collect the regatta prizes.",
+    description: "A lantern-lit race with larger floating barriers and rival yachts. One supply chest restores hull and Turbo.",
     climate: "moonlit", cadence: 2150, pace: .19, unlockedBy: "typhoon",
     victory: art("victories", "moonlight"),
     scenes: [
@@ -48,7 +48,7 @@ export const YACHT_CHAPTERS = Object.freeze([
   },
   {
     id: "emperor", name: "The Emperor's Finale", destination: "IMPERIAL MARINA",
-    description: "The imperial championship. Brave the combined hazards to earn the emperor's honor.",
+    description: "The imperial championship combines large barriers, arch passages and rival yachts. One supply chest restores hull and Turbo.",
     climate: "sunlit", cadence: 2050, pace: .28, unlockedBy: "moonlight",
     victory: art("victories", "emperor"),
     scenes: [
