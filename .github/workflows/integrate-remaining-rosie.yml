@@ -1,0 +1,70 @@
+name: Integrate remaining Rosie game branches
+on:
+  push:
+    branches: [release/20261120-remaining-games-qr-finish]
+    paths: [.github/workflows/integrate-remaining-rosie.yml]
+permissions:
+  contents: write
+jobs:
+  combine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge Yacht Dash, Ember Tunnel, Cosmic soundtrack code, isolated template
+        run: |
+          set -euo pipefail
+          git config user.name 'Rosie release integration'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin feature/yacht-dash-four-chapters-20261119 work/ember-destructible-treasures-20261119 feature/cosmic-odyssey-soundtrack work/pet-template-isolated-foundation-20261119
+          git merge --no-ff -X ours origin/feature/yacht-dash-four-chapters-20261119 -m 'Integrate Yacht Dash four-level expansion'
+          git merge --no-ff -X theirs origin/work/ember-destructible-treasures-20261119 -m 'Integrate latest Ember Tunnel five-world gameplay'
+          git merge --no-ff -X ours origin/feature/cosmic-odyssey-soundtrack -m 'Integrate Cosmic soundtrack hooks with gameplay preserved'
+          git merge --no-ff -X ours origin/work/pet-template-isolated-foundation-20261119 -m 'Retain inert pet template lab code'
+      - name: Keep missing soundtrack assets disabled and pet lab outside runtime
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          game=Path('public/cosmic-odyssey/game.js')
+          js=game.read_text()
+          original='const music=window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:\'music\'}):null;'
+          disabled='const music=window.ROSIE_COSMIC_SOUNDTRACK_READY && window.RosieMusicDirector?new window.RosieMusicDirector({baseUrl:\'music\'}):null;'
+          if original in js:
+              js=js.replace(original,disabled)
+          elif disabled not in js:
+              print('WARNING: soundtrack game controller not yet merged; retained director asset for later activation')
+          target="const musicButton=$('music-toggle');"
+          if target in js and "musicButton.style.display='none'" not in js:
+              js=js.replace(target,target+"\n if(musicButton&&!music)musicButton.style.display='none';")
+          game.write_text(js)
+          index=Path('public/cosmic-odyssey/index.html')
+          html=index.read_text()
+          if 'rosie-music-director.js' not in html:
+              assert '<script src="game.js"></script>' in html
+              html=html.replace('<script src="game.js"></script>','<script src="rosie-music-director.js"></script><script src="game.js"></script>')
+              index.write_text(html)
+          assert Path('public/cosmic-odyssey/rosie-music-director.js').exists()
+          assert Path('pet-template-lab/scripts/prepare.mjs').exists()
+          print('Soundtrack controller stored but disabled pending missing licensed music files; template lab remains offline')
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Run build and game logic checks
+        run: |
+          npm ci
+          npm run build
+          node --test src/yachtDashExpansion.test.js
+          node --test tests/ember-drill-engine.test.mjs tests/ember-expedition-stages.test.mjs tests/ember-boss-encounter.test.mjs
+          node --test pet-template-lab/scripts/test-prepare.mjs
+      - name: Commit verified integration
+        run: |
+          set -euo pipefail
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m 'Keep soundtrack unloaded until files exist and isolate pet lab'
+          fi
+          git push origin HEAD:release/20261120-remaining-games-qr-finish
