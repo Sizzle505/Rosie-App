@@ -138,3 +138,9 @@
  .zen-breath-portrait img,.zen-breath-halo,.zen-breath-orb{animation:none !important;}
  .zen-timeline span{transition:none;}
 }
+
+/* Let the fifth program (Haiku Reflection) breathe across the full selector. */
+.zen-program-grid .zen-program:last-child:nth-child(odd){
+  grid-column:1 / -1;
+  min-height:58px;
+}
