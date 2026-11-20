@@ -2,6 +2,26 @@
 // The messages do not affect physics, and no generated character portraits are used.
 export function excavationNotice(event) {
   if(!event)return null;
+  if(event.type==="boss-spawn")return {
+    kind:"tip",title:event.boss==="mole-king"?"THE MOLE KING AWAKENS":"CINDERCLAW EMERGES",
+    detail:"Dodge attacks. Strike with Turbo when the guardian recovers.",duration:2.4
+  };
+  if(event.type==="boss-warning")return {
+    kind:"tip",title:"BOSS ATTACK INCOMING",
+    detail:event.text||"Read the danger zone and steer away.",duration:1.3
+  };
+  if(event.type==="boss-vulnerable")return {
+    kind:"success",title:"BOSS VULNERABLE",
+    detail:"Turbo is recharged - align the auger and strike!",duration:1.0
+  };
+  if(event.type==="boss-hit")return {
+    kind:"success",title:"DIRECT HIT",
+    detail:event.health+" health remaining",duration:.85
+  };
+  if(event.type==="boss-victory")return {
+    kind:"success",title:event.boss==="mole-king"?"THE KING SURRENDERS":"CINDERCLAW DEFEATED",
+    detail:"Boss reward +"+event.points+" points",duration:3.0
+  };
   const hazardNames={crystal:"CRYSTAL SPIKES",piston:"CLOCKWORK PISTON",geyser:"MOLTEN GEYSER",quake:"ROYAL ROCK BURST"};
   if(event.type==="world-hazard-warning")return {
     kind:"tip",placement:event.side<0?"bottom":"top",
