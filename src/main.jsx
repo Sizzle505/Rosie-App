@@ -2493,10 +2493,6 @@ function CaptainRosieGame({ soundOn }) {
           <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>
           <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
           <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
-          {chapter.id !== "sakura" && <span className="yacht-supply-key">
-            <b className="cargo-supply"><img src="/yacht-dash/obstacles/cargo-crate.webp" alt="" draggable="false" /></b>
-            <i>+150</i>Supplies <small>×{suppliesCollected}</small>
-          </span>}
           <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to {chapter.name} medal target</em></span>
         </div>
