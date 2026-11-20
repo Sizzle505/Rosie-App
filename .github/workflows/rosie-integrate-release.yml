@@ -1,0 +1,83 @@
+name: Rosie integrated release - QR, Timekeepers, Haiku
+on:
+  push:
+    branches:
+      - release/20261120-qr-timekeeper-haiku
+    paths:
+      - .github/workflows/rosie-integrate-release.yml
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge compatible development branches
+        run: |
+          set -euo pipefail
+          git config user.name 'Rosie App integration'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin timekeeper-desktop-collection feature/rosie-haiku-garden fix/qr-viewer-finish-title-close-20261120
+          git merge --no-ff -X theirs origin/timekeeper-desktop-collection -m 'Integrate Timekeepers desktop collection and controls'
+          git merge --no-ff -X theirs origin/feature/rosie-haiku-garden -m 'Integrate latest Haiku Garden and Calculations offsets'
+          git merge --no-ff -X theirs origin/fix/qr-viewer-finish-title-close-20261120 -m 'Integrate QR framed viewer and selected finishes'
+      - name: Import three approved frame PNGs from Dropbox
+        env:
+          ROSIE_SEATED_URL: "https://uc741f4d9cfbda5b6a0fc8048cc3.dl.dropboxusercontent.com/cd/0/get/DMXiK9RslOai5wHP9oz51CJ7_uzitHB83D59j4eCoP26rzplhl1NhhC9qvhv0tq0bsr13A_Kadv8cLxwnoFr34NA5rozHUTCPh1tzalByuUG5L41gwWKDOJV2Tn31U4KNUHKpva6SGBKb_KakngzPauUpMy8v6I3rn1xEvkkcMt1tg/file?c_luid=667ded1d"
+          ROSIE_PRESENT_URL: "https://ucb46251ba3018493260db6fd28b.dl.dropboxusercontent.com/cd/0/get/DMVbbh0DYPrf_mVWx4XNU2EH21Zcm8yS8EU8R97y8FIb8y8MwuEWSjjnKSGCgkKYIAko0ZmwCaLTy6r5wuyiF_u8WeaSNiPSPTIz7EX738LDoiv_Wg2yu6F24a6BbRAYfFv-KDNaAO8W8F9l-SuSATF0tu0r9M4L-TEvpkBBJRzreg/file?c_luid=667ded1d"
+          ROSIE_GILDED_URL: "https://uc196b939f1af5ecce4ecd2549dd.dl.dropboxusercontent.com/cd/0/get/DMWSP3W5VcZ6uCCamBOhNSVL7BuQkFkdLTtH8GBj5i_EHixub1VRGCDIh-Y-Iyn-PslgO5iVyfFDeRMSytMsmohnQM2QQAva5aDGnyPmaeLsHzfcv67IP7w2JmOZKSOWHLNwSnFnkrFUUQkZrxbt7QmNAgswxYDrNtjoWMghcVhoNg/file?c_luid=667ded1d"
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, pathlib, hashlib, urllib.request
+          base=pathlib.Path('public/qr-atelier/rosie-qr')
+          assets=[
+              ('ROSIE_SEATED_URL','rosie-frame-seated-hollow.png','62d782ae2125e9a9a1407cb7295f5d934b4ae019f2fd1de82c6c6dea2b854674'),
+              ('ROSIE_PRESENT_URL','rosie-frame-presenting-hollow.png','54f7e99807992b86d586a48c084b12ccb5abf5d30a0098e8cda07252a0368505'),
+              ('ROSIE_GILDED_URL','rosie-frame-blank-hollow.png','893aef5c3ce3f105487a283ad467049938e289a649d363649d2362c7c155ae6e'),
+          ]
+          for key,name,expected in assets:
+              with urllib.request.urlopen(os.environ[key],timeout=60) as response: data=response.read()
+              digest=hashlib.sha256(data).hexdigest()
+              if digest!=expected: raise RuntimeError(name+' Dropbox SHA-256 mismatch: '+digest)
+              if not data.startswith(b'\\x89PNG\\r\\n\\x1a\\n'): raise RuntimeError(name+' is not PNG')
+              (base/name).write_bytes(data)
+              print('VERIFIED',name,len(data),digest)
+          PY
+      - name: Use only approved frames and preserve original Curious Rosie
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('src/RosieQrAtelier.jsx')
+          s=path.read_text()
+          for name in ('seated','presenting','blank'):
+              old='rosie-frame-'+name+'-hollow.webp'
+              assert s.count(old)==1,(old,s.count(old))
+              s=s.replace(old,'rosie-frame-'+name+'-hollow.png')
+          old='rosie-frame-peeking-hollow.webp'
+          assert s.count(old)==1
+          s=s.replace(old,'rosie-frame-peeking.webp')
+          if 'cutRosieFrame' in s or 'rosieHoleTransform' in s or 'maskId=' in s:
+              raise RuntimeError('Unsafe browser-side frame carving remains')
+          path.write_text(s)
+          PY
+          git rm -f public/qr-atelier/rosie-qr/rosie-frame-seated-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-presenting-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-blank-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-peeking-hollow.webp
+          git rm -f .github/workflows/qr-hollow-assets.yml .github/workflows/qr-hollow-browser.yml scripts/make-qr-frames-hollow.py scripts/qrHollowViewerBrowserCheck.mjs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Validate production bundle
+        run: |
+          npm ci
+          npm run build
+      - name: Commit integrated and tested branch
+        run: |
+          set -euo pipefail
+          git add -A
+          git commit -m 'Release candidate: Haiku, Timekeepers and three approved QR frame assets'
+          git push origin HEAD:release/20261120-qr-timekeeper-haiku
