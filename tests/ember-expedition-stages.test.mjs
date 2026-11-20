@@ -30,7 +30,7 @@ test("stage routes start in the selected world and end at 15 seconds",()=>{
    assert.equal(s.scroll,EXPEDITION_STAGES[i].startX);
    assert.equal(s.y,tunnelCenter(s.scroll+DRILL_ANCHOR));
    assert.equal(s.duration,EXPEDITION_STAGE_SECONDS);
-   s.objects=[];s.breakables=[];s.crystalShutters=[];
+   s.objects=[];s.breakables=[];s.crystalShutters=[];s.worldHazards=[];
    s.hitCooldown=30;s.hull=5;
    for(let t=0;t<400&&s.running;t++)updateRun(s,.045);
    assert.equal(s.running,false);
@@ -40,11 +40,11 @@ test("stage routes start in the selected world and end at 15 seconds",()=>{
  }
 });
 test("three-star stage grading cannot be earned from a failed run",()=>{
- assert.equal(expeditionStarCount({stageIndex:2,result:"hull",damageTaken:0,gems:10}),0);
- assert.equal(expeditionStarCount({stageIndex:null,result:"complete",damageTaken:0,gems:10}),0);
- assert.equal(expeditionStarCount({stageIndex:2,result:"complete",damageTaken:3,gems:1}),1);
- assert.equal(expeditionStarCount({stageIndex:2,result:"complete",damageTaken:0,gems:0}),2);
- assert.equal(expeditionStarCount({stageIndex:2,result:"complete",damageTaken:1,gems:5}),3);
+ assert.equal(expeditionStarCount({stageIndex:2,result:"hull",damageTaken:0,worldObjective:true}),0);
+ assert.equal(expeditionStarCount({stageIndex:null,result:"complete",damageTaken:0,worldObjective:true}),0);
+ assert.equal(expeditionStarCount({stageIndex:2,result:"complete",damageTaken:3,worldObjective:false}),1);
+ assert.equal(expeditionStarCount({stageIndex:2,result:"complete",damageTaken:0,worldObjective:false}),2);
+ assert.equal(expeditionStarCount({stageIndex:2,result:"complete",damageTaken:1,worldObjective:true}),3);
 });
 test("saved stage progress is bounded and robust to invalid localStorage values",()=>{
  assert.deepEqual(safeStoredExpeditionStars("broken"),{});
