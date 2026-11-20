@@ -3,6 +3,10 @@ on:
   pull_request:
     paths:
       - src/RosieHaikuGarden.css
+      - src/RosieHaikuArchiveArt.css
+      - src/RosieHaikuAtmosphere.css
+      - public/rosieverse/haiku/ornaments/**
+      - public/rosieverse/haiku/living-garden/**
       - src/RosieCalculationsDesktop.css
       - tests/fixtures/approved-layout-export-2026-11-20.json
       - tests/haiku-calculations-approved-layout.mjs
