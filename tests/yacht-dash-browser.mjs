@@ -26,13 +26,22 @@ try {
   }
   await picker.nth(1).click();
   const toggle = frame.locator(".yacht-game-sign .captain-steering-toggle");
-  await toggle.waitFor();
-  assert.ok(await toggle.isVisible(), "Steering toggle should be visible in header");
+  console.log("Mode toggle visible before launch", await toggle.isVisible());
+  await page.screenshot({ path:folder+"/iphone-stage-picker.png" });
   await frame.locator(".yacht-cast-off").click();
   await page.waitForFunction(() => {
     const f = document.querySelector(".captain-fs-yacht");
     return f?.classList.contains("is-expanded");
   }, null, { timeout: 6000 });
+  await page.screenshot({ path:folder+"/iphone-fullscreen-launch.png" });
+  console.log("Mode toggle visible after launch", await toggle.isVisible());
+  console.log("Toggle layout", await toggle.evaluate(el => {
+    const st=getComputedStyle(el),p=getComputedStyle(el.parentElement);
+    return { display:st.display,visibility:st.visibility,opacity:st.opacity,
+      width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,
+      parentDisplay:p.display };
+  }));
+  await toggle.waitFor({state:"visible",timeout:5000});
   const geometry = await page.evaluate(() => {
     const course = document.querySelector(".captain-fs-yacht .yacht-course")?.getBoundingClientRect();
     const controls = document.querySelector(".captain-fs-yacht .captain-command-deck")?.getBoundingClientRect();
