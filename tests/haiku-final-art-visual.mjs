@@ -29,8 +29,13 @@ try{
         assert.ok(await icon.evaluate(el=>el.complete&&el.naturalWidth>=200),
           label+" must load high-resolution activity icon");
       }
-      const crest=await page.locator(".haiku-header-mark").evaluate(el=>getComputedStyle(el).backgroundImage);
-      assert.ok(crest.includes("imperial-paw-crest.webp"),label+" must use imperial Rosie crest");
+      const masthead=await page.locator(".haiku-masthead-art img").evaluate(img=>({
+        loaded:img.complete&&img.naturalWidth>1000,
+        src:img.currentSrc
+      }));
+      assert.ok(masthead.loaded,label+" must load the original illustrated paw masthead");
+      assert.ok(masthead.src.includes(width<=600?"masthead-compact.webp":"masthead-grand.webp"),
+        label+" must use the correct desktop/phone masthead");
       assert.equal(await page.locator(".haiku-archive-petal").count(),12,label+" twelve separate petal artworks");
       assert.equal(await page.locator(".haiku-archive-sunbeams").count(),1,label+" Field sunbeams");
       assert.equal(await page.locator(".haiku-archive-pollen").count(),1,label+" Field pollen");
