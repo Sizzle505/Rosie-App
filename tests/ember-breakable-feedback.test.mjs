@@ -29,3 +29,20 @@ test("three expedition medals require surviving, excavation and the royal relic"
  assert.equal(excavationStars({result:"complete",wallsBroken:2,relics:1}),3);
  assert.equal(excavationStars({result:"complete",wallsBroken:1,relics:1}),2);
 });
+
+test("shutter warnings land on the opposite side from approaching crystals",()=>{
+ const ceiling=excavationNotice({type:"shutter-warning",side:-1});
+ const floor=excavationNotice({type:"shutter-warning",side:1});
+ assert.equal(ceiling.placement,"bottom");
+ assert.equal(floor.placement,"top");
+ assert.match(ceiling.detail,/Turbo/);
+});
+test("new moving hazards and passage goals explain their earned bonuses",()=>{
+ assert.match(excavationNotice({type:"shutter-dodged"}).detail,/100/);
+ assert.match(excavationNotice({type:"shutter-shatter"}).detail,/150/);
+ const barkroot=excavationNotice({type:"objective-complete",mission:"barkroot",points:250});
+ const ruby=excavationNotice({type:"objective-complete",mission:"ruby",points:350});
+ assert.match(barkroot.title,/BARKROOT/);
+ assert.match(ruby.title,/RUBY/);
+ assert.match(ruby.detail,/350/);
+});
