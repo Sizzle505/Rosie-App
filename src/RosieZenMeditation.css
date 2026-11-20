@@ -144,3 +144,49 @@
   grid-column:1 / -1;
   min-height:58px;
 }
+
+
+/* Final Haiku art pass (Nov 20). Preserve real HTML controls and accessible
+   program names. These images decorate the existing buttons only. */
+.zen-program{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:10px;
+  min-height:86px;
+  padding:9px 10px;
+}
+.zen-program-emblem{
+  display:block;
+  flex:0 0 clamp(43px,4vw,59px);
+  width:clamp(43px,4vw,59px);
+  height:clamp(43px,4vw,59px);
+  object-fit:contain;
+  filter:drop-shadow(0 3px 7px rgba(14,9,18,.34));
+  pointer-events:none;
+}
+.zen-program-caption{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1;}
+.zen-program-caption strong{font:500 clamp(13px,1.13vw,16px)/1.18 Georgia,serif;}
+.zen-program-caption small{font:650 9px/1.32 system-ui,sans-serif;letter-spacing:.06em;color:#e5c5a2;}
+.zen-program.selected .zen-program-emblem{filter:drop-shadow(0 2px 9px rgba(248,205,149,.45));}
+.zen-breath-halo{
+  background:
+    url("/rosieverse/haiku/final/lotus-breath-halo.webp") center / contain no-repeat,
+    radial-gradient(circle,rgba(248,220,158,.18),rgba(248,180,161,.08) 60%,transparent 75%);
+  opacity:.56;
+  filter:blur(2px);
+  border-radius:0;
+}
+/* The illustration itself does not replace the visual breathing animation. */
+@media (max-width:900px){
+  .zen-program{min-height:80px;padding:8px;gap:7px;}
+  .zen-program-emblem{width:46px;height:46px;flex-basis:46px;}
+  .zen-program-caption strong{font-size:13px;}
+}
+@media (max-width:540px){
+  .zen-program{min-height:78px;padding:8px 7px;gap:6px;}
+  .zen-program-emblem{width:39px;height:39px;flex-basis:39px;}
+  .zen-program-caption strong{font-size:12px;line-height:1.18;}
+  .zen-program-caption small{font-size:7px;letter-spacing:0;}
+}
+/* The previous reduced-motion rule also stops the new halo animation. */
