@@ -1048,3 +1048,26 @@
     min-height:38px;padding:8px 11px;font-size:9px;
   }
 }
+
+
+/* Keep the iPhone preflight objective as a measurable text line. Older generic
+   small-element rules collapsed its line box, which also crowded the cards. */
+@media(max-width:720px) and (pointer:coarse){
+  .captain-fs-yacht .captain-game-page
+  .captain-start-panel:not(.captain-results-panel) .yacht-chapter-goal {
+    display:block!important;
+    box-sizing:border-box!important;
+    height:auto!important;
+    min-height:14px!important;max-height:none!important;
+    overflow:visible!important;
+    white-space:normal!important;
+    font-size:10px!important;
+    line-height:1.35!important;
+    margin:5px auto 18px!important;
+    padding:0 5px 4px!important;
+  }
+  .captain-fs-yacht .captain-game-page
+  .captain-start-panel:not(.captain-results-panel) .yacht-chapter-picker{
+    margin-top:6px!important;
+  }
+}
