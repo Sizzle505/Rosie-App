@@ -27,7 +27,7 @@ export const YACHT_CHAPTERS = Object.freeze([
   {
     id: "typhoon", name: "Typhoon Passage", destination: "STORMBREAK PORT",
     description: "Ride out the squall. Reef rocks, wreckage, and changing channels demand precision.",
-    climate: "storm", cadence: 600, pace: .13, unlockedBy: "sakura",
+    climate: "storm", cadence: 2250, pace: .13, unlockedBy: "sakura",
     victory: art("victories", "typhoon"),
     scenes: [
       art("typhoon", "01-approaching-squall"), art("typhoon", "02-temple-cliffs"),
@@ -38,7 +38,7 @@ export const YACHT_CHAPTERS = Object.freeze([
   {
     id: "moonlight", name: "Moonlight Regatta", destination: "MOONLIGHT QUAY",
     description: "A lantern-lit night race. Outmaneuver the rival yacht and collect the regatta prizes.",
-    climate: "moonlit", cadence: 570, pace: .19, unlockedBy: "typhoon",
+    climate: "moonlit", cadence: 2150, pace: .19, unlockedBy: "typhoon",
     victory: art("victories", "moonlight"),
     scenes: [
       art("moonlight", "01-regatta-arrival"), art("moonlight", "02-torii-moonrise"),
@@ -49,7 +49,7 @@ export const YACHT_CHAPTERS = Object.freeze([
   {
     id: "emperor", name: "The Emperor's Finale", destination: "IMPERIAL MARINA",
     description: "The imperial championship. Brave the combined hazards to earn the emperor's honor.",
-    climate: "sunlit", cadence: 545, pace: .28, unlockedBy: "moonlight",
+    climate: "sunlit", cadence: 2050, pace: .28, unlockedBy: "moonlight",
     victory: art("victories", "emperor"),
     scenes: [
       art("emperor", "01-imperial-harbor"), art("emperor", "02-ceremonial-waterway"),
@@ -140,51 +140,93 @@ export function isYachtHazard(kind) {
   return kind === "buoy" || kind === "obstacle" || kind === "rival";
 }
 
-const HAZARDS = Object.freeze({
-  typhoon: ["storm-buoy", "driftwood", "reef-rocks", "whirlpool",
-    "fishing-skiff", "cargo-crate", "storm-torii", "barrel-raft", "drift-net",
-    "harbor-pylons", "fallen-stone-lantern"],
-  moonlight: ["lantern-raft", "moonlight-race-buoy", "taiko-barge",
-    "fan-raft", "regatta-beacon"],
-  emperor: ["storm-buoy", "reef-rocks", "lantern-raft", "storm-torii",
-    "drift-net", "moonlight-race-buoy", "regatta-beacon", "barrel-raft"]
+/*
+ * Larger, sparser hazards: a wide obstruction is one visual entity, with its
+ * collision footprint explicitly mapped to two lanes. The gate's two pillars
+ * occupy lanes 0 and 2; the center lane remains open under the beam.
+ */
+const SMALL_HAZARDS = Object.freeze({
+  typhoon: ["storm-buoy", "fishing-skiff", "drift-net", "fallen-stone-lantern"],
+  moonlight: ["moonlight-race-buoy", "regatta-beacon", "fan-raft"],
+  emperor: ["storm-buoy", "regatta-beacon", "fallen-stone-lantern"]
+});
+const WIDE_HAZARDS = Object.freeze({
+  typhoon: ["reef-rocks", "driftwood"],
+  moonlight: ["lantern-raft", "taiko-barge"],
+  emperor: ["reef-rocks", "driftwood", "barrel-raft"]
+});
+const collection = (kind, lane) => ({ kind, lane });
+const obstacle = (asset, lane, options = {}) => ({
+  kind: "obstacle", lane, asset: art("obstacles", asset),
+  label: "Avoid " + asset.replaceAll("-", " "),
+  ...options
+});
+const spanObstacle = (asset, side) => obstacle(asset, side, {
+  footprint: "wide", blockedLanes: [side, side + 1]
+});
+const toriiGate = () => obstacle("storm-torii", 1, {
+  footprint: "arch", blockedLanes: [0, 2],
+  label: "Broken torii gate - steer through the middle"
 });
 
-const pickup = (kind, lane) => ({ kind, lane });
-const hazard = (chapter, idx, lane, driftTo) => ({
-  kind: "obstacle", lane,
-  label: "Avoid " + HAZARDS[chapter][idx % HAZARDS[chapter].length].replaceAll("-", " "),
-  asset: art("obstacles", HAZARDS[chapter][idx % HAZARDS[chapter].length]),
-  ...(driftTo === undefined ? {} : { driftTo })
-});
+export function yachtOccupiedLanes(item) {
+  return item.blockedLanes ?? [item.lane];
+}
 
-/** Never blocks all 3 lanes. Drifting hazards switch before the collision zone. */
+export function yachtTouchesHazard(item, lane) {
+  return isYachtHazard(item.kind) && yachtOccupiedLanes(item).includes(lane);
+}
+
+export function yachtNearMiss(item, lane) {
+  return isYachtHazard(item.kind) &&
+    !yachtTouchesHazard(item, lane) &&
+    yachtOccupiedLanes(item).some((blocked) => Math.abs(blocked - lane) === 1);
+}
+
+/* Exactly one emergency cargo chest may appear per new chapter, after the
+ * first major obstacles. It repairs one hull, recharges Turbo and awards points.
+ * The original Sakura game and its pickup frequencies are left intact. */
 export function yachtWaveFor(chapterId, sequence, randomIndex) {
   if (chapterId === "sakura") return [];
+  if (!SMALL_HAZARDS[chapterId]) return [collection("ball", randomIndex(3))];
+
   const lane = randomIndex(3);
-  const adjacent = (lane + 1) % 3;
-  const safe = (lane + 2) % 3;
+  const side = lane === 2 ? 1 : lane;
+  const safeLane = side === 0 ? 2 : 0;
   const cargo = sequence % 7 === 0 ? "cheese" : sequence % 3 === 0 ? "treat" : "ball";
-  const pool = chapterId === "emperor" ? "emperor" : chapterId;
-  if (!HAZARDS[pool]) return [pickup(cargo,lane)];
-  if (chapterId === "moonlight" && sequence % 7 === 3) {
+
+  if (sequence === 12) {
     return [{
-      kind:"rival", lane, driftTo: adjacent, label: "Rival yacht",
-      asset:art("obstacles","rival-yacht-front")
-    }, pickup("cheese",safe)];
+      kind: "supply", lane, label: "Emergency supplies - restore one hull and recharge Turbo",
+      asset: art("obstacles", "cargo-crate"),
+      points: 150, turbo: 60
+    }];
   }
-  if (chapterId === "emperor" && sequence % 8 === 4) {
+
+  if ((chapterId === "typhoon" || chapterId === "emperor") &&
+      (sequence === 6 || sequence === 22)) return [toriiGate()];
+
+  // The rival yacht is a single, readable encounter, not one of several
+  // small hazards appearing in the same frame.
+  if ((chapterId === "moonlight" && sequence % 9 === 4) ||
+      (chapterId === "emperor" && sequence % 10 === 4)) {
     return [{
-      kind:"rival", lane, driftTo: adjacent, label:"Imperial rival yacht",
-      asset:art("obstacles","rival-yacht-turn")
-    }, pickup("cheese",safe)];
+      kind: "rival", lane, driftTo: (lane + 1) % 3,
+      label: "Rival yacht",
+      asset: art("obstacles", sequence % 2 ? "rival-yacht-turn" : "rival-yacht-front")
+    }];
   }
-  if (sequence % (chapterId === "typhoon" ? 6 : 5) === 2) {
-    return [hazard(pool,sequence,lane),hazard(pool,sequence+3,adjacent),pickup("cheese",safe)];
+
+  if (sequence % 5 === 2) {
+    const choices = WIDE_HAZARDS[chapterId];
+    return [spanObstacle(choices[Math.floor(sequence / 5) % choices.length], side)];
   }
-  if (sequence % 3 === 1) {
-    const driftTo=chapterId==="moonlight" ? adjacent : undefined;
-    return [hazard(pool,sequence,lane,driftTo),pickup("treat",safe)];
+
+  if (sequence % 7 === 1) {
+    const choices = SMALL_HAZARDS[chapterId];
+    return [obstacle(choices[Math.floor(sequence / 7) % choices.length], lane)];
   }
-  return [pickup(cargo,lane)];
+
+  // One reward per wave, with breathing room between large obstacles.
+  return [collection(cargo, sequence % 4 === 0 ? safeLane : lane)];
 }
