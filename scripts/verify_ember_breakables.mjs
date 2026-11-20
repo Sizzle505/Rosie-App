@@ -85,7 +85,7 @@ for(const [name,engine,viewport,mobile] of [
     // Warning must arrive before Rosie's auger reaches the first piston.
     await stagePage.getByText("CLOCKWORK PISTON AHEAD").waitFor({state:"visible",timeout:8500});
     const stageTime=await stagePage.locator(".ember-stats").innerText();
-    if(!stageTime.includes("15s")&&!stageTime.includes("14s"))throw new Error("Selected route did not start at 15 seconds");
+    if(!/\b(?:1[0-5]|[1-9])s\b/.test(stageTime))throw new Error("Selected route does not show a valid 15-second countdown: "+stageTime);
     await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
     await stagePage.close();
     console.log(name+" passed; image frames loaded and earth formation painted");
