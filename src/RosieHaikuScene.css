@@ -1,0 +1,18 @@
+/* New scene is intentionally independent of the existing poem/journal UI. */
+.haiku-scene-stage{width:min(100%,1080px);margin:0 auto 28px;position:relative;}
+.haiku-scene-image{position:relative;isolation:isolate;width:100%;height:clamp(230px,30vw,385px);overflow:hidden;border:2px solid #e1b883;border-radius:14px;box-shadow:inset 0 0 30px #1c1029,0 20px 50px #0a0e1eaf;background:#845f6b;box-sizing:border-box;}
+.haiku-scene-landscape{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;display:block;user-select:none;pointer-events:none;}
+.haiku-scene-rosie{position:absolute;z-index:2;bottom:-5%;left:53%;width:auto;height:min(112%,430px);max-width:50%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 9px 12px #2a1e3180);user-select:none;pointer-events:none;}
+.haiku-scene-haze{position:absolute;z-index:3;inset:0;pointer-events:none;background:linear-gradient(90deg,#292037bd 0%,#251f306b 32%,transparent 58%),linear-gradient(180deg,#30234229 0%,transparent 35%,#20162d33 100%);}
+.haiku-scene-quote{position:absolute;z-index:4;left:clamp(20px,4.2%,52px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:9px;width:min(40%,360px);color:#fff1d3;text-shadow:0 3px 8px #131326c0;pointer-events:none;}
+.haiku-scene-quote-kicker{font:700 clamp(9px,1vw,12px) system-ui,sans-serif;letter-spacing:.23em;color:#f8cd9b;}
+.haiku-scene-quote strong{font:normal clamp(25px,3vw,43px)/1.12 Georgia,"Times New Roman",serif;}
+.haiku-scene-quote small{font:italic clamp(14px,1.6vw,18px)/1.5 Georgia,serif;color:#ffe3ca;}
+.haiku-scene-selector{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:13px auto 0;}
+.haiku-scene-selector button{min-height:39px;padding:9px 16px;background:linear-gradient(#272637,#1b1e2c);border:1px solid #ddba8c8c;border-radius:999px;color:#e9dcc7;cursor:pointer;font:600 12px system-ui,sans-serif;letter-spacing:.025em;transition:background .18s,transform .18s;}
+.haiku-scene-selector button:hover{background:#564353;transform:translateY(-1px);}
+.haiku-scene-selector button.is-selected{color:#2f2433;background:linear-gradient(#ffe6b6,#cba070);border-color:#ffdb9e;box-shadow:0 0 0 1px #e3bd88a8;}
+.haiku-scene-selector button:focus-visible{outline:3px solid #fff4c4;outline-offset:3px;}
+@media(max-width:860px){.haiku-scene-stage{margin:0 auto 19px;}.haiku-scene-image{height:clamp(230px,40vw,365px);}.haiku-scene-rosie{left:55%;height:110%;max-width:45%;}.haiku-scene-quote{width:42%;}.haiku-scene-quote strong{font-size:clamp(23px,4.2vw,36px);}}
+@media(max-width:520px){.haiku-scene-image{height:270px;border-radius:11px;}.haiku-scene-landscape{object-position:48% 52%;}.haiku-scene-rosie{left:45%;height:98%;max-width:58%;bottom:-3%;}.haiku-scene-haze{background:linear-gradient(90deg,#241b36bd,transparent 71%),linear-gradient(0deg,#1a162955,transparent 55%);}.haiku-scene-quote{left:14px;top:44%;width:43%;gap:6px;}.haiku-scene-quote strong{font-size:clamp(21px,5.3vw,29px);}.haiku-scene-quote small{font-size:13px;}.haiku-scene-quote-kicker{font-size:9px;letter-spacing:.12em;}.haiku-scene-selector{gap:5px;}.haiku-scene-selector button{min-height:39px;padding:7px 10px;font-size:11px;}}
+@media(prefers-reduced-motion:reduce){.haiku-scene-selector button{transition:none;}}
