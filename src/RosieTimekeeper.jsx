@@ -13,7 +13,7 @@ function applyApprovedDefaultsOnce() {
     const defaults = {
       "rosie-timekeeper-dial": "sunburst",
       "rosie-timekeeper-bezel": "gold",
-      "rosie-timekeeper-hands": "dauphine",
+      "rosie-timekeeper-hands": "regent",
       "rosie-timekeeper-color": "garnet",
       "rosie-timekeeper-hand-origin-v1": "1",
       "rosie-timekeeper-luxury-default-v2": "1",
@@ -58,8 +58,12 @@ const DIAL_FRAMES = [
   { id: "deco", label: "Art Deco", symbol: "◆" },
   { id: "moonlight", label: "Moonlight", symbol: "☽" },
   { id: "pearl-baroque", label: "Pearl", symbol: "❈" },
-  { id: "emerald-filigree", label: "Emerald", symbol: "✧" },
-  { id: "celestial", label: "Celestial", symbol: "☾" }
+  { id: "celestial", label: "Celestial", symbol: "☾" },
+  { id: "astrolabe", label: "Astrolabe", symbol: "Ⅻ", ext: "svg" },
+  { id: "marquetry", label: "Marquetry", symbol: "✦", ext: "svg" },
+  { id: "midnight-compass", label: "Compass", symbol: "✧", ext: "svg" },
+  { id: "versailles-lace", label: "Versailles", symbol: "Ⅻ", ext: "svg" },
+  { id: "solstice", label: "Solstice", symbol: "☼", ext: "svg" }
 ];
 const LUXURY_ASSETS = "/rosieverse/timekeeper/midnight-observatory/luxury/";
 const DIAL_COLORS = [
@@ -77,7 +81,12 @@ const BEZEL_STYLES = [
   {id:"artdeco",label:"Sapphire Art Deco",file:"bezel-options/artdeco.webp"},
   {id:"baroque",label:"Ruby Baroque",file:"bezel-options/baroque.webp"},
   {id:"celestial",label:"Celestial Observatory",file:"bezel-options/celestial.webp"},
-  {id:"pearl",label:"Ivory Pearl",file:"bezel-options/pearl.webp"}
+  {id:"pearl",label:"Ivory Pearl",file:"bezel-options/pearl.webp"},
+  {id:"imperial-sapphire",label:"Imperial Sapphire",file:"bezel-options/imperial-sapphire.webp"},
+  {id:"gilded-laurel",label:"Gilded Laurel",file:"bezel-options/gilded-laurel.webp"},
+  {id:"rose-garnet",label:"Rose Garnet",file:"bezel-options/rose-garnet.webp"},
+  {id:"aurora-enamel",label:"Aurora Enamel",file:"bezel-options/aurora-enamel.webp"},
+  {id:"ivory-moonstone",label:"Ivory Moonstone",file:"bezel-options/ivory-moonstone.webp"}
 ];
 const TIMER_SETS_KEY = "rosie-timekeeper-sets-v1";
 const MAX_TIMER_MS = 99 * 3600000 + 59 * 60000 + 59000;
@@ -86,10 +95,17 @@ const formatStep = ms => {
  return (sec>=3600?Math.floor(sec/3600)+"h ":"")+(sec%3600>=60?Math.floor(sec%3600/60)+"m ":"")+(sec%60?sec%60+"s":sec<60?"0s":"");
 };
 const HAND_STYLES = [
-  { id:"dauphine",label:"Gold" },
-  { id:"filigree",label:"Filigree" },
-  { id:"blued",label:"Blued Steel" },
-  { id:"observatory",label:"Gilded Observatory" }
+  { id:"breguet",label:"Breguet" },
+  { id:"classic",label:"Original Ornate" },
+  { id:"cathedral",label:"Cathedral" },
+  { id:"skeleton",label:"Skeleton" }
+];
+const HAND_METALS = [
+  {id:"gold",label:"Yellow Gold",light:"#fff5c1",mid:"#db9f41",dark:"#8c4c19",edge:"#4a2712"},
+  {id:"rose",label:"Rose Gold",light:"#ffe1cb",mid:"#d98970",dark:"#85465b",edge:"#45243b"},
+  {id:"steel",label:"Blued Steel",light:"#b5e8fb",mid:"#3e9bc9",dark:"#16477f",edge:"#09264c"},
+  {id:"silver",label:"Polished Silver",light:"#ffffff",mid:"#bfdddf",dark:"#668b99",edge:"#304b58"},
+  {id:"ruthenium",label:"Black Ruthenium",light:"#c8c9d0",mid:"#5e6173",dark:"#29283a",edge:"#10111c"}
 ];
 const WORLD_CITIES = [
   {city:"New York", zone:"America/New_York"},
@@ -173,7 +189,8 @@ export default function RosieTimekeeper() {
   });
   const [dialPickerOpen, setDialPickerOpen] = useState(false);
   const [worldZone,setWorldZone] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-zone");return WORLD_CITIES.some(c=>c.zone===saved)?saved:"America/New_York";}catch{return "America/New_York";}});
-  const [handStyle,setHandStyle] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hands");if(localStorage.getItem("rosie-timekeeper-hand-origin-v1")!=="1")return "dauphine";return HAND_STYLES.some(c=>c.id===saved)?saved:"dauphine";}catch{return "dauphine";}});
+  const [handStyle,setHandStyle] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hands");return HAND_STYLES.some(c=>c.id===saved)?saved:"breguet";}catch{return "breguet";}});
+  const [handMetal,setHandMetal] = useState(() => {try {const saved=localStorage.getItem("rosie-timekeeper-hand-metal");return HAND_METALS.some(c=>c.id===saved)?saved:"gold";}catch{return "gold";}});
   const [worldNow,setWorldNow] = useState(()=>Date.now());
   const [runnerEpoch,setRunnerEpoch] = useState(0);
 
@@ -212,8 +229,8 @@ export default function RosieTimekeeper() {
   }, [dialFrame,dialColor]);
 
   useEffect(() => {
-    try {localStorage.setItem("rosie-timekeeper-zone",worldZone);localStorage.setItem("rosie-timekeeper-hands",handStyle);localStorage.setItem("rosie-timekeeper-bezel",bezelStyle);localStorage.setItem("rosie-timekeeper-hand-origin-v1","1");}catch{}
-  },[worldZone,handStyle,bezelStyle]);
+    try {localStorage.setItem("rosie-timekeeper-zone",worldZone);localStorage.setItem("rosie-timekeeper-hands",handStyle);localStorage.setItem("rosie-timekeeper-hand-metal",handMetal);localStorage.setItem("rosie-timekeeper-bezel",bezelStyle);localStorage.setItem("rosie-timekeeper-hand-origin-v1","1");}catch{}
+  },[worldZone,handStyle,handMetal,bezelStyle]);
   useEffect(()=>{try{localStorage.setItem(TIMER_SETS_KEY,JSON.stringify(savedSets));}catch{}},[savedSets]);
   useEffect(() => {
     if(mode!=="world")return undefined;
@@ -453,6 +470,8 @@ export default function RosieTimekeeper() {
   }
 
   const selectedColor = DIAL_COLORS.find(item => item.id === dialColor) || DIAL_COLORS[0];
+  const selectedHandMetal = HAND_METALS.find(item => item.id === handMetal) || HAND_METALS[0];
+  const handMetalVars = {"--rtk-hand-light":selectedHandMetal.light,"--rtk-hand-mid":selectedHandMetal.mid,"--rtk-hand-dark":selectedHandMetal.dark,"--rtk-hand-edge":selectedHandMetal.edge};
   const selectedFrame = DIAL_FRAMES.find(item => item.id === dialFrame) || DIAL_FRAMES[0];
   const selectedBezel=BEZEL_STYLES.find(item=>item.id===bezelStyle)||BEZEL_STYLES[0];
   const chosenWorldCity=WORLD_CITIES.find(c=>c.zone===worldZone)||WORLD_CITIES[0];
@@ -518,16 +537,16 @@ export default function RosieTimekeeper() {
             "--rtk-bezel-image": `url("/rosieverse/timekeeper/midnight-observatory/${selectedBezel.file}")` }}
           aria-label="Working stopwatch and countdown">
           <span className="rtk-face-base" aria-hidden="true" />
-          <span className={"rtk-face-overlay is-"+selectedFrame.id} style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.webp")` }} aria-hidden="true" />
+          <span className={"rtk-face-overlay is-"+selectedFrame.id} style={{ backgroundImage: `url("${DIAL_ASSET_ROOT}${selectedFrame.id}.${selectedFrame.ext||"webp"}")` }} aria-hidden="true" />
           <span className="rtk-bezel" aria-hidden="true" />
-          {mode==="world" && <span className="rtk-world-hands" aria-hidden="true">
+          {mode==="world" && <span className="rtk-world-hands" style={handMetalVars} aria-hidden="true">
             {[
               ["hour",worldHours],
               ["minute",worldMinutes],
               ["second",worldSeconds]
             ].map(([part,angle])=><span key={part} className={"rtk-world-hand is-"+part}
-              style={{backgroundImage:`url("${LUXURY_ASSETS}world-clock-hands/${handStyle}-${part}.webp")`,transform:`rotate(${angle}deg)`}} />)}
-            <span className="rtk-world-pivot" style={{backgroundImage:`url("${LUXURY_ASSETS}world-clock-hands/${handStyle}-pivot.webp")`}} />
+              style={{maskImage:`url("${LUXURY_ASSETS}world-clock-hands/${handStyle}-${part}.svg")`,WebkitMaskImage:`url("${LUXURY_ASSETS}world-clock-hands/${handStyle}-${part}.svg")`,transform:`rotate(${angle}deg)`}} />)}
+            <span className="rtk-world-pivot" />
           </span>}
           <div className="rtk-ornate-track" aria-hidden="true" />
           <svg className={"rtk-progress-ring" + (mode === "world" ? " is-world" : "") + (running ? " is-animating" : "") + (mode === "countdown" ? " is-reverse" : "")}
@@ -659,6 +678,11 @@ export default function RosieTimekeeper() {
                 onChange={e=>setWorldZone(e.target.value)}>
                 {WORLD_CITIES.map(item=><option value={item.zone} key={item.zone}>{item.city} · {worldTimeParts(worldNow,item.zone).abbr}</option>)}
               </select>
+              <div className="rtk-world-shortcuts" role="group" aria-label="Quick world clock cities">
+                {WORLD_CITIES.filter(item=>["America/New_York","Europe/London","Asia/Tokyo","Australia/Sydney"].includes(item.zone)).map(item=><button type="button" key={item.zone}
+                  className={worldZone===item.zone?"chosen":""} aria-pressed={worldZone===item.zone}
+                  onClick={()=>setWorldZone(item.zone)}>{item.city}</button>)}
+              </div>
               <div className="rtk-world-city-plaque">
                 <strong>{world.day}, {world.month} {world.date}</strong>
               </div>
@@ -757,36 +781,44 @@ export default function RosieTimekeeper() {
         {dialPickerOpen && <div className="rtk-customization-overlay" role="presentation">
           <button type="button" className="rtk-customization-scrim" aria-label="Dismiss clock customization" onClick={()=>setDialPickerOpen(false)} />
           <div className="rtk-customization-dialog" role="dialog" aria-modal="true" aria-label="Clock customization">
-            <div className="rtk-dial-picker" role="group" aria-label="Clock face and color">
+            <div className="rtk-dial-picker" role="group" aria-label="Clock face and color" style={handMetalVars}>
             <div className="rtk-dial-picker-head">
-              <span>Clock faces</span>
+              <span>Customize the clock</span>
               <button type="button" aria-label="Close clock face chooser" onClick={() => setDialPickerOpen(false)}>×</button>
             </div>
-            <div className="rtk-frame-choices">
-              {DIAL_FRAMES.map(item => <button type="button" key={item.id}
-                className={dialFrame === item.id ? "chosen" : ""}
-                aria-label={item.label + " clock face"} aria-pressed={dialFrame === item.id}
-                title={item.label} onClick={() => setDialFrame(item.id)}>
-                <span aria-hidden="true">{item.symbol}</span><small>{item.label}</small>
-              </button>)}
-            </div>
-            <div className="rtk-bezel-choices" role="group" aria-label="Clock bezel finish">
-              <span>Bezel</span>{BEZEL_STYLES.map(item=><button type="button" key={item.id}
-                className={bezelStyle===item.id?"chosen":""} aria-label={item.label+" bezel"} aria-pressed={bezelStyle===item.id}
-                onClick={()=>setBezelStyle(item.id)}>{item.label}</button>)}
-            </div>
-            <div className="rtk-hand-choices" role="group" aria-label="Clock hand style">
-              <span>Hands</span>{HAND_STYLES.map(item=><button type="button" key={item.id}
-                aria-label={item.label+" clock hands"} aria-pressed={handStyle===item.id}
-                className={handStyle===item.id?"chosen":""} onClick={()=>setHandStyle(item.id)}>{item.label}</button>)}
-            </div>
-            <div className="rtk-color-choices">
+            <div className="rtk-color-choices" role="group" aria-label="Clock enamel color">
               <span>Enamel</span>
               {DIAL_COLORS.map(item => <button type="button" key={item.id}
                 className={dialColor === item.id ? "chosen" : ""} title={item.label}
                 aria-label={item.label + " clock color"} aria-pressed={dialColor === item.id}
                 onClick={() => setDialColor(item.id)}
                 style={{ "--swatch": item.center }} />)}
+            </div>
+            <div className="rtk-choice-label">Clock faces</div>
+            <div className="rtk-frame-choices">
+              {DIAL_FRAMES.map(item => <button type="button" key={item.id}
+                className={dialFrame === item.id ? "chosen" : ""}
+                aria-label={item.label + " clock face"} aria-pressed={dialFrame === item.id}
+                title={item.label} onClick={() => setDialFrame(item.id)}>
+                <span className="rtk-option-art" style={{backgroundImage:`url("${DIAL_ASSET_ROOT}${item.id}.${item.ext||"webp"}")`}} aria-hidden="true" /><small>{item.label}</small>
+              </button>)}
+            </div>
+            <div className="rtk-bezel-choices" role="group" aria-label="Clock bezel finish">
+              <span>Bezel</span>{BEZEL_STYLES.map(item=><button type="button" key={item.id}
+                className={bezelStyle===item.id?"chosen":""} aria-label={item.label+" bezel"} aria-pressed={bezelStyle===item.id}
+                onClick={()=>setBezelStyle(item.id)}><span className="rtk-option-art" style={{backgroundImage:`url("/rosieverse/timekeeper/midnight-observatory/${item.file}")`}} aria-hidden="true"/><small>{item.label}</small></button>)}
+            </div>
+            <div className="rtk-hand-choices" role="group" aria-label="Clock hand style">
+              <span>Hand shape</span>{HAND_STYLES.map(item=><button type="button" key={item.id}
+                aria-label={item.label+" clock hands"} aria-pressed={handStyle===item.id}
+                className={handStyle===item.id?"chosen":""} onClick={()=>setHandStyle(item.id)}><span className="rtk-hand-sample" style={{maskImage:`url("${LUXURY_ASSETS}world-clock-hands/${item.id}-minute.svg")`,WebkitMaskImage:`url("${LUXURY_ASSETS}world-clock-hands/${item.id}-minute.svg")`}} aria-hidden="true"/><small>{item.label}</small></button>)}
+            </div>
+            <div className="rtk-metal-choices" role="group" aria-label="Clock hand metal color">
+              <span>Hand color</span>
+              {HAND_METALS.map(item=><button type="button" key={item.id}
+                className={handMetal===item.id?"chosen":""} aria-label={item.label+" hand color"} aria-pressed={handMetal===item.id}
+                onClick={()=>setHandMetal(item.id)} title={item.label}
+                style={{"--metal-light":item.light,"--metal-mid":item.mid,"--metal-dark":item.dark}}><i aria-hidden="true"/><small>{item.label}</small></button>)}
             </div>
             </div>
           </div>
