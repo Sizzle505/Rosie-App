@@ -132,9 +132,13 @@ try {
         const positions = await page.evaluate(() => {
           const stage = document.querySelector(".haiku-scene-image").getBoundingClientRect();
           const rosie = document.querySelector(".haiku-scene-rosie").getBoundingClientRect();
-          return { stageTop:stage.top, rosieTop:rosie.top };
+          return { stageTop:stage.top, rosieTop:rosie.top,
+            stageOverflow:getComputedStyle(document.querySelector(".haiku-scene-image")).overflow };
         });
-        assert.ok(positions.rosieTop >= positions.stageTop - 1, label + " Rosie ears are cropped by garden stage");
+        // Rosie is deliberately larger, and the full-bleed stage allows the
+        // ears to extend ABOVE its logical bounds without visual clipping.
+        assert.equal(positions.stageOverflow,"visible",label+" must not crop Rosie");
+        assert.ok(positions.rosieTop >= 0,label+" enlarged Rosie ears must remain in the viewport");
       }
       if (width >= 1024) {
         assert.ok(boxes.title.y > 68, label + " title intrudes into desktop global navigation: " + boxes.title.y);
