@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1726,6 +1726,7 @@ function CaptainRosieGame({ soundOn }) {
   const [showVictoryArt, setShowVictoryArt] = useState(false);
   const [nearMisses, setNearMisses] = useState(0);
   const [rivalsPassed, setRivalsPassed] = useState(0);
+  const [suppliesCollected, setSuppliesCollected] = useState(0);
   const [chapterRecords, setChapterRecords] = useState(() => {
     try { return parseYachtRecords(localStorage.getItem("yachtDashRecordsV1")); }
     catch { return {}; }
@@ -1784,7 +1785,7 @@ function CaptainRosieGame({ soundOn }) {
   const routeProgress = Math.min(100, Math.round(elapsed / 75 * 100));
   const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
-  const collectedTotal = catches.ball + catches.treat + catches.cheese;
+  const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
   const rank = captainRank(score);
 
   function audioContext() {
@@ -1893,6 +1894,7 @@ function CaptainRosieGame({ soundOn }) {
     setCheeses(0);
     setNearMisses(0);
     setRivalsPassed(0);
+    setSuppliesCollected(0);
     setCompleted(false);
     setShowVictoryArt(false);
     setEnded(false);
@@ -2000,6 +2002,7 @@ function CaptainRosieGame({ soundOn }) {
       let closePasses = 0;
       let rivalPasses = 0;
       let hitRival = false;
+      let supplyCaught = false;
       const pickupsCaught = { ball: 0, treat: 0, cheese: 0 };
       let lastHit = "";
       let missedGood = false;
@@ -2046,13 +2049,21 @@ function CaptainRosieGame({ soundOn }) {
 
         const remaining = next.filter((item) => {
           const inCatchZone = item.y >= 77 && item.y <= 92;
-          if (inCatchZone && item.lane === laneRef.current) {
+          if (inCatchZone && (isYachtHazard(item.kind)
+              ? yachtTouchesHazard(item, laneRef.current) : item.lane === laneRef.current)) {
             if (isYachtHazard(item.kind)) {
               lifeLoss += 1;
               hitRival ||= item.kind === "rival";
               lastHit = "buoy";
               streakRef.current = 0;
               comboRef.current = 1;
+            } else if (item.kind === "supply") {
+              // Only one supply chest can spawn per chapter; never count it as a
+              // regular ball/treat/cheese or penalize players for missing it.
+              scoreDelta += item.points * (boostRef.current ? 2 : 1);
+              turboDelta += item.turbo;
+              supplyCaught = true;
+              lastHit = "supply";
             } else {
               streakRef.current += 1;
               comboRef.current = Math.min(4, 1 + Math.floor(streakRef.current / 4));
@@ -2067,7 +2078,7 @@ function CaptainRosieGame({ soundOn }) {
           }
           if (isYachtHazard(item.kind) && !item.scoredPass && item.y >= 94) {
             item.scoredPass = true;
-            if (Math.abs(item.lane - laneRef.current) === 1) {
+            if (yachtNearMiss(item, laneRef.current)) {
               bonusPoints += 15;
               closePasses++;
             }
@@ -2077,7 +2088,7 @@ function CaptainRosieGame({ soundOn }) {
             }
           }
           if (item.y >= 108) {
-            if (!isYachtHazard(item.kind)) missedGood = true;
+            if (!isYachtHazard(item.kind) && item.kind !== "supply") missedGood = true;
             return false;
           }
           return true;
@@ -2105,7 +2116,13 @@ function CaptainRosieGame({ soundOn }) {
         setBestStreak((current) => Math.max(current, streakRef.current));
         if (!boostRef.current) setTurbo((current) => Math.min(100, current + turboDelta));
         if (cheeseGain) setCheeses((current) => current + cheeseGain);
-        const phrase = lastHit === "cheese"
+        if (supplyCaught) {
+          setSuppliesCollected((current) => current + 1);
+          setLives((current) => Math.min(3, current + 1));
+        }
+        const phrase = lastHit === "supply"
+          ? "EMERGENCY SUPPLIES. +150 points, one hull repaired, and Turbo recharged."
+          : lastHit === "cheese"
           ? "Golden Cheese aboard. Rosie has inventoried it as priceless cargo."
           : lastHit === "treat"
             ? "Premium provisions aboard. Rosie considers this excellent leadership."
@@ -2113,8 +2130,8 @@ function CaptainRosieGame({ soundOn }) {
               ? "Clean pickup. The captain's streak is building."
               : "Tennis ball aboard. Course maintained.";
         setMessage(phrase);
-        pulse(lastHit);
-        captainTone(lastHit);
+        pulse(lastHit === "supply" ? "cheese" : lastHit);
+        captainTone(lastHit === "supply" ? "cheese" : lastHit);
         window.navigator.vibrate?.(lastHit === "cheese" ? [18, 24, 28] : 15);
       }
 
@@ -2331,14 +2348,20 @@ function CaptainRosieGame({ soundOn }) {
 
           {items.map((item) => (
             <div
-              className={"sea-pickup sea-pickup-" + item.kind}
+              className={"sea-pickup sea-pickup-" + item.kind +
+                (item.footprint ? " yacht-footprint-" + item.footprint : "")}
               key={item.id}
-              style={{ left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
+              style={item.footprint === "arch"
+                ? { left: "-9%", width: "118%", top: item.y + "%" }
+                : item.footprint === "wide"
+                  ? { left: item.lane * 33.333 + "%", width: "66.666%", top: item.y + "%" }
+                  : { left: "calc(" + (16.666 + item.lane * 33.333) + "% - 23px)", top: item.y + "%" }}
               aria-label={item.label}
             >
               {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
                 ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
               {item.kind === "cheese" && <small>GOLDEN</small>}
+              {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
               {item.driftTo !== undefined && !item.drifted &&
                 <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
             </div>
@@ -2377,6 +2400,7 @@ function CaptainRosieGame({ soundOn }) {
                     <span><b>{cheeses}</b> Golden Cheese</span>
                     <span><b>{nearMisses}</b> near misses</span>
                     <span><b>{rivalsPassed}</b> rival yachts passed</span>
+                    {chapter.id !== "sakura" && <span><b>{suppliesCollected}/1</b> supply chest</span>}
                   </div>
                   <div className="yacht-result-actions">
                     {completed && <button type="button" onClick={() => setShowVictoryArt(true)}>VIEW VICTORY</button>}
@@ -2466,6 +2490,10 @@ function CaptainRosieGame({ soundOn }) {
           <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>
           <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
           <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
+          {chapter.id !== "sakura" && <span className="yacht-supply-key">
+            <b className="cargo-supply"><img src="/yacht-dash/obstacles/cargo-crate.webp" alt="" draggable="false" /></b>
+            <i>+150</i>Supplies <small>×{suppliesCollected}</small>
+          </span>}
           <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to {chapter.name} medal target</em></span>
         </div>
