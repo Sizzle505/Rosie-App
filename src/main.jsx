@@ -2485,10 +2485,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               <CaptainRosieIllustration className="start-panel-rosie" idPrefix="startRosie" />
               {ended ? (
                 <>
-                  <span>CAPTAIN'S LOG · VOYAGE COMPLETE</span>
-                  <div className="voyage-grade">{rank.mark}</div>
-                  <strong>{rank.title}</strong>
-                  <p>{rank.copy}</p>
+                  <span>{completed ? "CAPTAIN'S LOG · VOYAGE COMPLETE" : "CAPTAIN'S LOG · RETURNED TO PORT"}</span>
+                  <div className="voyage-grade">{completed ? rank.mark : "⚓"}</div>
+                  <strong>{completed ? rank.title : "Passage Interrupted"}</strong>
+                  <p>{completed ? rank.copy : message}</p>
                   <div className="yacht-medal-stars" aria-label={chapterMedals + " of 3 passage medals earned"}>
                     {Array.from({ length: 3 }, (_, index) =>
                       <span key={index} className={index < chapterMedals ? "is-awarded" : ""}>★</span>)}
