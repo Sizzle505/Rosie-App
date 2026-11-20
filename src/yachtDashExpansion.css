@@ -695,3 +695,17 @@
     padding-bottom:28px!important;
   }
 }
+
+
+/* Legacy iPhone layout also set bottom:8px on the centered absolute panel.
+   Combining bottom with top:50% forced half-height and clipped Cast Off.
+   Explicit auto bottom/height restores content-based sizing with no scrolling. */
+@media(max-width:720px) and (pointer:coarse) {
+  .captain-fs-yacht .captain-game-page .captain-start-panel:not(.captain-results-panel) {
+    bottom:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:calc(100% - 14px)!important;
+    padding-bottom:18px!important;
+  }
+}
