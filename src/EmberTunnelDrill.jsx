@@ -423,7 +423,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <div><small>HULL</small><strong className="ember-hull">{Array.from({length:5},(_,n)=><i key={n} className={n<hud.hull?"intact":""}>●</i>)}</strong></div>
         <div><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
-      <div className="ember-expedition" aria-label={`Excavation route: passage ${hud.passage+1} of ${route.length}`}>
+      <div className={"ember-expedition"+(world?" is-world-route":"")} aria-label={`Excavation route: passage ${hud.passage+1} of ${route.length}`}>
         <span className="ember-route-label">EXCAVATION ROUTE</span>
         <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / route.length) * 100}%`}} /></div>
         {route.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
@@ -489,7 +489,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
                </button>
                <small>Stages 3-5 use approved placeholder terrain. Boss battles and new art are still in development.</small>
              </div>
-             <button type="button" onClick={()=>start(null)}>{mode==="ended"&&!world?"DIG AGAIN":"CLASSIC 75-SECOND DIG"}</button>
+             <button type="button" onClick={()=>start(null)}>{mode!=="ended"?"START DIGGING":world?"CLASSIC 75-SECOND DIG":"DIG AGAIN"}</button>
              {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
             <small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>
           </div>}
