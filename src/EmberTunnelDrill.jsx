@@ -7,8 +7,8 @@ import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 
 const PASSAGES = [
-  { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2 },
-  { label: "Ruby Temple Galleries", start: RUN_DURATION / 2, end: RUN_DURATION },
+  { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2, mission:"BREAK AN EARTH WALL" },
+  { label: "Ruby Temple Galleries", start: RUN_DURATION / 2, end: RUN_DURATION, mission:"BEAT THE CRYSTAL SHUTTER" },
 ];
 const DRILL_ART = {
   breakEarthIntact:"breakables/v2/01-earth-wall-intact.webp",
@@ -135,6 +135,8 @@ function snapshot(s) {
     cheese:s.cheese, combo:s.combo, boost:s.boostTime, boosts:s.boosts, shards:s.shards,
     damageTaken:s.damageTaken, cleanBonus:s.cleanBonus, distance:Math.round(s.distance/10),
     wallsBroken:s.wallsBroken||0,secrets:s.secrets||0,relics:s.relics||0,
+    hazardsDodged:s.hazardsDodged||0,objectiveBonus:s.objectiveBonus||0,
+    objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
     passage:Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))), result:s.result };
 }
 function playSound(context,kind) {
@@ -265,7 +267,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
              const activeNotice={...cue,until:s.time+cue.duration};
              noticeRef.current=activeNotice;setNotice(activeNotice);
            }
-          if(event.type==="shatter"&&s.boostTime>0)s.tipBurstAt=s.time;
+          if((event.type==="shatter"||event.type==="shutter-shatter")&&s.boostTime>0)s.tipBurstAt=s.time;
+          if(event.type==="shutter-shatter"){
+            particles.current.push({type:"break-v2",x:event.x,y:event.y,vx:0,vy:0,
+              life:.56,max:.56,r:0,color:"#ebb6f9"});
+          }
           if(event.type==="turbo"&&event.repaired){
             for(let i=0;i<14;i++){
               const angle=(i/14)*Math.PI*2;
@@ -315,8 +321,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           if(event.type==="hit"){
             if(navigator.vibrate)navigator.vibrate([34,20,34]);
           }
-          if(["pickup","hit","break-wall","secret-found"].includes(event.type)&&ts-lastSound.current>95){
-            playSound(sound.current,event.type==="hit"?"hit":event.type==="break-wall"?"turbo":"pickup");lastSound.current=ts;
+          if(["pickup","hit","break-wall","secret-found","shutter-shatter","objective-complete"].includes(event.type)&&ts-lastSound.current>95){
+            playSound(sound.current,event.type==="hit"?"hit":
+              (event.type==="break-wall"||event.type==="shutter-shatter")?"turbo":"pickup");lastSound.current=ts;
           }
         }
         if(noticeRef.current&&s.time>=noticeRef.current.until){
@@ -400,6 +407,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         <span className="ember-route-label">EXCAVATION ROUTE</span>
         <div className="ember-route-track"><i style={{width:`${((hud.passage + passageProgress / 100) / PASSAGES.length) * 100}%`}} /></div>
         {PASSAGES.map((passage,index)=><span key={passage.label} className={index < hud.passage ? "complete" : index === hud.passage ? "current" : ""}>{index+1}. {passage.label}</span>)}
+        <div className="ember-passage-mission" aria-live="off"><span>PASSAGE OBJECTIVE</span>
+          <strong>{PASSAGES[hud.passage].mission}</strong>
+          <em>{(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
+        </div>
       </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
         <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {PASSAGES.length}</small><strong>{PASSAGES[hud.passage].label}</strong></div>
@@ -433,6 +444,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
               <span><b>{hud.shards+hud.wallsBroken}</b> ROCKS SHATTERED</span>
               <span><b>{hud.secrets}</b> SECRET CHAMBERS</span>
               <span><b>{hud.relics}</b> ROYAL RELICS</span>
+              <span><b>{Number(hud.objectives.barkroot)+Number(hud.objectives.ruby)}/2</b> MISSIONS</span>
+              <span><b>{hud.hazardsDodged}</b> CRYSTAL DODGES</span>
               <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
               {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
               <span><b>{best.toLocaleString()}</b> BEST</span>
