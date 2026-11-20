@@ -18,6 +18,10 @@ const ROSIE_ART_W=1448,ROSIE_ART_H=1086,ROSIE_CODE_SIZE=352;
 // Curious Rosie's original title sits 155 artwork pixels above her lowest
 // gold frame flourish. Apply that SAME rise to every frame's measured bottom tip.
 const ROSIE_TITLE_RISE=155;
+// Both masks use the measured aperture: the rear overscan prevents scene-color
+// slivers, while the front mat covers opaque/white WebP remnants inside the rim.
+const ROSIE_APERTURE_REAR_OVERLAP=64;
+const ROSIE_APERTURE_FRONT_OVERLAP=32;
 const ROSIE_FRAMES=[
   {id:"seated",label:"Rosie at the Atelier",file:"rosie-frame-seated.webp",cx:941,cy:492,bottomX:912,bottomY:1014,titleWidth:540,openingPath:"M886,229 849,242 801,271 765,305 733,351 714,393 700,450 698,516 704,556 715,591 744,633 780,669 820,697 862,716 909,727 929,724 939,710 944,712 953,725 958,724 961,727 993,723 1046,705 1089,680 1131,643 1160,605 1174,572 1183,526 1184,468 1178,428 1163,380 1142,339 1117,305 1073,265 1033,242 1000,231 993,236 983,234 976,244 970,245 968,255 959,259 943,276 929,258 924,258 918,253 917,245 905,234 896,236Z"},
   {id:"presenting",label:"Rosie Presents",file:"rosie-frame-presenting.webp",cx:962,cy:500,bottomX:967,bottomY:1002,titleWidth:540,openingPath:"M882,252 836,271 795,299 766,333 737,384 723,424 714,476 714,524 723,576 737,616 756,648 770,659 771,665 798,691 842,722 890,744 936,755 987,756 1023,749 1076,727 1110,705 1148,671 1154,659 1162,654 1181,628 1201,576 1210,524 1210,476 1201,424 1187,384 1158,333 1129,299 1106,279 1102,279 1088,268 1049,253 1036,252 1028,259 1011,259 1002,264 995,274 990,274 971,293 932,259 917,259 902,250Z"},
@@ -102,7 +106,16 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   const aperture=new Path2D(frame.openingPath);
   ctx.fill(aperture);
   ctx.strokeStyle=finish.dark;
-  ctx.lineWidth=2;
+  ctx.lineWidth=ROSIE_APERTURE_REAR_OVERLAP;
+  ctx.lineJoin="round";
+  ctx.stroke(aperture);
+  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
+  // The original WebPs contain pale, partially opaque matte pixels at the
+  // inner oval. A solid front-facing insert conceals them without tinting the
+  // illustrated metalwork outside the measured opening.
+  ctx.fillStyle=finish.dark;
+  ctx.fill(aperture);
+  ctx.lineWidth=ROSIE_APERTURE_FRONT_OVERLAP;
   ctx.stroke(aperture);
   // Match the live/main-page QR inset: gold outer keyline, ivory inner edge,
   // then the white scannable QR square.
@@ -115,7 +128,6 @@ async function exportQR(svg,style="emerald",caption="",frameId="seated"){
   ctx.imageSmoothingEnabled=false;
   ctx.drawImage(qr,x,y,codeSize,codeSize);
   ctx.imageSmoothingEnabled=true;
-  ctx.drawImage(art,0,0,ROSIE_ART_W,ROSIE_ART_H);
   const inscription=String(caption||"").trim().slice(0,48);
   if(inscription){
     ctx.save();ctx.textAlign="center";ctx.textBaseline="middle";
@@ -133,10 +145,14 @@ function RosieFrameComposition({frame,svg,caption,onCaptionChange,onClose,finish
   return <div className={"qa-rosie-composition"+(printOnly?" qa-rosie-for-print":"")} style={{...rosieFrameStyle(frame),"--rosie-code-bg":background}}>
     <svg className="qa-rosie-insert-underlay" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
       preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d={frame.openingPath} fill="var(--rosie-code-bg)" stroke="var(--rosie-code-bg)" strokeWidth="2" strokeLinejoin="round"/>
+      <path d={frame.openingPath} fill="var(--rosie-code-bg)" stroke="var(--rosie-code-bg)" strokeWidth={ROSIE_APERTURE_REAR_OVERLAP} strokeLinejoin="round"/>
+    </svg>
+    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
+    <svg className="qa-rosie-insert-surface" viewBox={"0 0 "+ROSIE_ART_W+" "+ROSIE_ART_H}
+      preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d={frame.openingPath} fill="var(--rosie-code-bg)" stroke="var(--rosie-code-bg)" strokeWidth={ROSIE_APERTURE_FRONT_OVERLAP} strokeLinejoin="round"/>
     </svg>
     <div className="qa-rosie-live-qr" dangerouslySetInnerHTML={{__html:svg}} role="img" aria-label="Scannable QR code"/>
-    <img className="qa-rosie-overlay-art" src={ROSIE_ASSET_ROOT+frame.file} alt="" draggable="false"/>
     {onClose&&<button type="button" className="qa-rosie-close" onClick={onClose}
       aria-label="Close QR preview and return to the Atelier" title="Close preview">
       <span aria-hidden="true">×</span>
