@@ -1,5 +1,8 @@
 name: Rosie Haiku Garden QA
 on:
+  push:
+    branches:
+      - feature/rosie-haiku-garden
   pull_request:
     paths:
       - "src/haikuEngine.js"
