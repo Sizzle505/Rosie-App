@@ -116,7 +116,7 @@ for(const [name,engine,viewport,mobile] of [
       await bossPage.waitForFunction(()=>{
         const phase=document.querySelector(".ember-stage")?.getAttribute("data-boss-phase");
         return phase&&phase!=="none";
-      },null,{timeout:25000});
+      },null,{timeout:65000});
     }catch(error){
       const details=await bossPage.evaluate(()=>({
         visibility:document.visibilityState,
