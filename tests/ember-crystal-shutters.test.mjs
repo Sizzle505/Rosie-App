@@ -5,8 +5,8 @@ import {DRILL_ANCHOR,DRILL_TIP_OFFSET,DRILL_TIP_VERTICAL_OFFSET,newRun,
 import {makeCrystalShutters,shutterReach} from "../src/emberCrystalShutters.js";
 import {FORMATION_LAYOUT,formationClearance} from "../src/emberTunnelLayout.js";
 
-function approach(run,h,gap=48,nearWall=true){
- run.objects=[];run.breakables=[];
+function approach(run,h,gap=48,nearWall=true,clearWalls=true){
+ run.objects=[];if(clearWalls)run.breakables=[];
  run.scroll=h.x-DRILL_ANCHOR-DRILL_TIP_OFFSET-gap;
  const edge=tunnelCenter(h.x)+h.side*tunnelRadius(h.x);
  const tipY=nearWall ? edge-h.side*124 : tunnelCenter(h.x);
@@ -84,8 +84,9 @@ test("safe maneuver earns one-time dodge points and mission bonus in Ruby",()=>{
 });
 test("Barkroot mission rewards the first earth excavation only once",()=>{
  const s=newRun(),b=s.breakables.find(b=>b.material==="earth");
- approach(s,b,48,true);
+ approach(s,b,48,true,false);
  s.y=b.y-DRILL_TIP_VERTICAL_OFFSET;
+ s.hitCooldown=100;
  for(let i=0;i<12;i++)updateRun(s,.045);
  assert.equal(b.broken,true);
  assert.equal(s.objectives.barkroot,true);
