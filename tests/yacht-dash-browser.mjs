@@ -24,7 +24,21 @@ try {
   for (let i = 0; i < 4; i++) {
     assert.equal(await picker.nth(i).isEnabled(), true, "Level "+i+" should be playable");
   }
-  await picker.nth(1).click();
+  try {
+    await picker.nth(1).click({timeout:10000});
+  } catch (error) {
+    console.error("iPhone stage tap failed", await picker.nth(1).evaluate(el => {
+      const r = el.getBoundingClientRect();
+      const panel = el.closest(".captain-start-panel");
+      const p = panel.getBoundingClientRect();
+      const top = document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+      return { button: r.toJSON(), panel: p.toJSON(),
+        panelScrollTop:panel.scrollTop, panelScrollHeight:panel.scrollHeight,
+        blocker:top?.className || top?.tagName };
+    }));
+    await page.screenshot({path:folder+"/iphone-stage-tap-error.png"});
+    throw error;
+  }
   const toggle = frame.locator(".yacht-steering-options .captain-steering-toggle");
   console.log("Mode toggle visible before launch", await toggle.isVisible());
   await page.screenshot({ path:folder+"/iphone-stage-picker.png" });
