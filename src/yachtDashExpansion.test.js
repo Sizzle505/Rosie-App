@@ -220,3 +220,10 @@ test("New chapters use themed and distinct stage messages without changing Sakur
  assert.equal(YACHT_CHAPTER_PHASES.moonlight.sunset.name,"Midnight Sprint");
  assert.equal(YACHT_CHAPTER_PHASES.emperor.sunset.name,"Royal Finish");
 });
+
+test("Mobile chapter selection captions are short and distinct",()=>{
+ const previews=YACHT_CHAPTERS.map(stage=>YACHT_CHAPTER_GOALS[stage.id].preview);
+ assert.equal(new Set(previews).size,4);
+ assert.ok(previews.every(copy=>copy.length>15 && copy.length<=54));
+ assert.ok(previews.every(copy=>copy.endsWith(".")));
+});
