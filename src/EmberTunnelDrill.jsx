@@ -447,7 +447,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           <em>{world?(hud.worldObjective?"COMPLETE":"IN PROGRESS"):(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
         </div>
       </div>
-      <div ref={stage} className={"ember-stage"+(active?" is-active":"")} >
+      <div ref={stage} className={"ember-stage"+(active?" is-active":"")} data-world-warnings={hud.worldWarnings} data-boss-phase={hud.boss?.phase||"none"} >
         <div className="ember-course-plaque"><small>PASSAGE {hud.passage+1} OF {route.length}</small><strong>{route[hud.passage].label}</strong></div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
