@@ -1,0 +1,38 @@
+name: Yacht Dash chapter expansion - build and engine tests
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - src/main.jsx
+      - src/yachtDashExpansion.js
+      - src/yachtDashExpansion.css
+      - src/yachtDashExpansion.test.js
+      - src/yachtDashArt.test.js
+      - src/CaptainSceneryTransition.jsx
+      - src/CaptainOuterAtmosphere.jsx
+      - public/yacht-dash/**
+      - .github/workflows/yacht-dash-expansion.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate scene order, safe lanes and unlock behavior
+        run: node --test src/yachtDashExpansion.test.js src/yachtDashArt.test.js
+      - name: Build Vite app
+        run: npm run build
+      - name: Confirm full approved artwork import
+        run: |
+          test "$(find public/yacht-dash -name '*.webp' | wc -l)" -eq 39
+          echo "All 39 approved Yacht Dash images are present."

@@ -1,0 +1,48 @@
+name: Yacht Dash - interactive iPhone and desktop smoke QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - src/main.jsx
+      - src/yachtDashExpansion.js
+      - src/yachtDashExpansion.css
+      - src/AxisJoystick.jsx
+      - src/AxisJoystick.css
+      - tests/yacht-dash-browser.mjs
+      - .github/workflows/yacht-dash-browser.yml
+permissions:
+  contents: read
+concurrency:
+  group: yacht-dash-browser-${{ github.head_ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Use matching Playwright runtime and preinstalled Chromium
+        run: npm install --no-save --package-lock=false playwright@1.56.1
+      - name: Run and inspect Yacht Dash on iPhone viewport and desktop
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/yacht-preview.log 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:4173/ > /dev/null; then break; fi
+            sleep .5
+          done
+          node tests/yacht-dash-browser.mjs
+      - name: Preserve screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yacht-dash-iphone-and-desktop
+          path: artifacts/yacht-dash-qa/
+          if-no-files-found: ignore
