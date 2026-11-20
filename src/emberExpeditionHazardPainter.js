@@ -47,6 +47,21 @@ function geyser(c,r,t){
  }
  base(c,"#8b5341");
 }
+function basalt(c,r,t){
+ // Ceiling-attached stone cracks and falls into the passage; all motion
+ // remains coupled to the engine's protrusion reach and attack warning.
+ const stone=c.createLinearGradient(-50,-r,50,20);
+ stone.addColorStop(0,"#b6a299");stone.addColorStop(.38,"#584c4f");
+ stone.addColorStop(1,"#2b3039");
+ path(c,[[-69,-3],[-51,-r*.32],[-27,-r*.76],[-6,-r-7],
+   [21,-r*.73],[51,-r*.43],[70,-3]],stone,"#d5aa82");
+ c.strokeStyle="#f5b67f";c.lineWidth=3;
+ c.beginPath();c.moveTo(-4,-r*.88);c.lineTo(8,-r*.52);
+ c.lineTo(-8,-r*.32);c.lineTo(12,0);c.stroke();
+ const wobble=Math.sin(t*9)*2;
+ oval(c,-35+wobble,-r*.30,7,6,"#b78861");
+ oval(c,43-wobble,-r*.43,6,7,"#a5826b");
+}
 function quake(c,r,t){
  const rock=c.createLinearGradient(-50,-r,50,24);
  rock.addColorStop(0,"#ab7c50");rock.addColorStop(.5,"#5b433b");rock.addColorStop(1,"#372934");
@@ -61,7 +76,7 @@ function quake(c,r,t){
 // never alpha boundaries or decorative glow. Unloaded review art falls back.
 function paintIllustratedHazard(c,h,reach,assets){
  const atlasId=h.kind==="piston"?"gear-crusher":h.kind==="geyser"?"lava-geyser":
-   h.kind==="quake"?"royal-earth-burst":null;
+   h.kind==="quake"?"royal-earth-burst":h.kind==="basalt"?"falling-basalt":null;
  if(!atlasId)return false;
  const img=assets?.["exp:"+atlasId];
  const extension=Math.max(0,Math.min(1,(reach-18)/Math.max(1,h.maxReach-18)));
@@ -103,6 +118,7 @@ export function paintExpeditionHazards(c,s,width,assets={}){
     if(h.kind==="piston")piston(c,r);
     else if(h.kind==="geyser")geyser(c,r,s.time);
     else if(h.kind==="quake")quake(c,r,s.time);
+    else if(h.kind==="basalt")basalt(c,r,s.time);
     else crystal(c,r);
   }
   c.restore();
