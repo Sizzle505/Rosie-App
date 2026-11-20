@@ -1,0 +1,63 @@
+name: Haiku Original Art Import - One Time
+on:
+  push:
+    branches:
+      - feature/rosie-haiku-garden
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/rosie-haiku-garden
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image processing
+        run: python -m pip install pillow==11.3.0
+      - name: Download and verify original approved Dropbox masters
+        env:
+          HAIKU_ZIP_FIRST: "https://ucd48a44191e8ecaa4446e70cffd.dl.dropboxusercontent.com/cd/0/get/DMXD94NdPeQsKWzy0gHtVHVOf4d4lE16I0C5578oVvkiw--OMzDg38SRPTypE3RsvMqYLrGnQeKSFT0786tyVfd0SIRSUMdiSI_kqjsKIP0ISXXIv_QAUyj-azCe7hh_Dxv-sbBjo4VzLuIksiegQ_hMlKHK5blBf2F1xDsIsd3vTA/file?c_luid=667ded1d"
+          HAIKU_ZIP_SECOND: "https://uc37251530d25ba288393f18e61d.dl.dropboxusercontent.com/cd/0/get/DMVcAkIj4Ge3t38lmCfA6nQxYweW0Y8PVjdjRf5F_w2AzPcrXNMQGcw9jvMosA2c92rB6UkMg8vPh074OzRj4T1Q8e-WUMdvO8itBwvJ4jy0KDkeHgQX2qMBrAIws9PpzOLow42tx2NiQuB5sUUL41a6H1kuGQ_BgllXXSID0b29jg/file?c_luid=667ded1d"
+        run: |
+          python - <<'PY'
+          import hashlib,os,urllib.request
+          expected=[
+            ('HAIKU_ZIP_FIRST','/tmp/haiku-01-10.zip','8ed7fc88d980d4ad4310a58d2df74af6c82add3bab440755b45e8abc172cb338'),
+            ('HAIKU_ZIP_SECOND','/tmp/haiku-11-20.zip','8405cc95b5920b47d325fea9ce4e531c78ce090a4ee50a74fa44190fd4a4c5e4'),
+          ]
+          for env,path,sha in expected:
+            request=urllib.request.Request(os.environ[env],headers={'User-Agent':'RosieVerseHaikuArtImport/1.0'})
+            with urllib.request.urlopen(request,timeout=180) as src,open(path,'wb') as out:
+              while True:
+                chunk=src.read(1048576)
+                if not chunk:break
+                out.write(chunk)
+            data=open(path,'rb').read()
+            digest=hashlib.sha256(data).hexdigest()
+            if digest!=sha:raise RuntimeError(f'Archive checksum mismatch: {path}')
+            print('Verified original archive',path,len(data))
+          PY
+      - name: Create optimized faithful WebP assets
+        run: python scripts/import-haiku-archive-art.py /tmp/haiku-01-10.zip /tmp/haiku-11-20.zip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Verify application build
+        run: |
+          npm ci
+          node --test tests/haikuGarden.test.mjs
+          npm run build
+      - name: Commit art and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/rosieverse/haiku/ornaments public/rosieverse/haiku/living-garden public/rosieverse/haiku/archive-source-manifest.json
+          git rm -- .github/workflows/haiku-original-import-once.yml
+          git commit -m "Haiku: import 39 approved original artwork assets with verified source hashes"
+          git push origin HEAD:feature/rosie-haiku-garden
