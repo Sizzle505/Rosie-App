@@ -31,3 +31,12 @@ Contains three source-derived eight-frame (4x2, 448px cell) lossless WebP atlase
 2. Ensure warning-only light does not appear to hit, active effects are clipped to physics, and recovery remains attack-free.
 3. Compare any sprite candidate against the existing native game art at in-game scale, including all alpha edges.
 4. Keep rejected Batch D collages excluded. No character redesign, no asset activation, no production merge or promotion without visual acceptance.
+
+
+## New source-consistent environment candidate
+
+Dropbox: `/Rosie-App-Transfer/ember-passage-arrival-lantern-gate.png` (597,806 bytes; transparent 700×700 PNG, SHA-256 `7afeb3e2a0c777ba97e103be6d5acfc5c925b3ecffa1644c3ffc2636914b229d`).
+
+A rootstone-and-bark cavern arch with two warm amber lanterns, scattered ruby/amber crystals and an unobstructed, **truly transparent** center. This deliberately follows the original brief's `ember-passage-arrival-lantern-gate` slot. It is environment scenery, not a character sprite, label, card or standalone background. Approximately 54% of the registered image is fully transparent. The generated master and dark-cave preview have been inspected and the 700px PNG has been exported.
+
+**Hold for screenshot acceptance at actual gameplay scale before activating.** Specifically check that it can be embedded into the 2D tunnel without looking pasted on, that the open center aligns with the passage, and that it creates no new collision or UI occlusion. The Classic course remains unaffected.
