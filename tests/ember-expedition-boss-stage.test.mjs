@@ -95,6 +95,23 @@ test("Cinderclaw accepts exactly one Turbo strike per recovery, then can be defe
   assert.equal(s.boss.health,0);
   assert.equal(s.running,false);
 });
+test("one Turbo activation cannot auto-hit a second recovery opening",()=>{
+  const s=intoBoss(3);
+  let fired=false;
+  for(let i=0;i<240&&s.running;i++){
+    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
+    if(!fired&&s.boss.phase==="recovery"){
+      assert.equal(triggerTurbo(s),true);
+      assert.ok(s.boostTime<1,"boss Turbo must be a brief, deliberate strike");
+      fired=true;
+    }
+    updateRun(s,.045);
+  }
+  assert.equal(fired,true);
+  assert.equal(s.boss.stats.successfulHits,1);
+  assert.equal(s.boss.health,2);
+  assert.equal(s.bossDefeated,false);
+});
 test("Mole King requires four distinct recovery hits and grants royal reward",()=>{
   const s=intoBoss(4);
   const initialScore=s.score;
