@@ -16,6 +16,25 @@ try{
     try{
       await page.goto(base+"/#haiku",{waitUntil:"domcontentloaded",timeout:60000});
       await page.getByRole("heading",{name:"Haiku Zen Garden"}).waitFor({timeout:20000});
+      // The two recovered source archives must render as actual approved art.
+      assert.equal(await page.locator(".haiku-tabs > button").count(),4,label+" should have four illustrated activities");
+      for (const icon of await page.locator(".haiku-tabs > button img").all()) {
+        assert.ok(await icon.evaluate(el=>el.complete&&el.naturalWidth>=200),
+          label+" must load high-resolution activity icon");
+      }
+      const crest=await page.locator(".haiku-header-mark").evaluate(el=>getComputedStyle(el).backgroundImage);
+      assert.ok(crest.includes("imperial-paw-crest.webp"),label+" must use imperial Rosie crest");
+      assert.equal(await page.locator(".haiku-archive-petal").count(),12,label+" twelve separate petal artworks");
+      assert.equal(await page.locator(".haiku-archive-sunbeams").count(),1,label+" Field sunbeams");
+      assert.equal(await page.locator(".haiku-archive-pollen").count(),1,label+" Field pollen");
+      await page.getByRole("button",{name:"Zen Garden"}).click();
+      assert.equal(await page.locator(".haiku-archive-zen-sand").count(),1,label+" Zen sand light sweep");
+      assert.equal(await page.locator(".haiku-archive-sunbeams").count(),0,label+" Field sunbeams absent in Zen");
+      await page.getByRole("button",{name:"Temple",exact:true}).click();
+      assert.equal(await page.locator(".haiku-archive-temple-lantern").count(),1,label+" Temple lantern");
+      assert.equal(await page.locator(".haiku-archive-zen-sand").count(),0,label+" Zen sand absent in Temple");
+      await page.getByRole("button",{name:"Flower Field"}).click();
+
       // The approved atmospheric overlays must be present, below controls, and image-backed.
       assert.equal(await page.locator(".haiku-scene-canopy").count(),1,label+" sakura layer");
       assert.equal(await page.locator(".haiku-scene-atmosphere").count(),1,label+" atmosphere layer");
