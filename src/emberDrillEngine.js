@@ -1,6 +1,7 @@
 import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunnelLayout.js";
 import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
 import {makeCrystalShutters,updateCrystalShutters} from "./emberCrystalShutters.js";
+import {getExpeditionStage,EXPEDITION_STAGE_SECONDS} from "./emberExpeditionStages.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -97,8 +98,12 @@ export function makeCourse(seed = 1467) {
     radius:52,taken:false});
   return objects;
 }
-export function newRun(seed = 1467) {
-  return { running: true, ended: false, time: 0, scroll: 0, y: tunnelCenter(DRILL_ANCHOR), pitch: 0,
+export function newRun(seed = 1467, stageIndex = null) {
+  const stage=getExpeditionStage(stageIndex);
+  const startX=stage?.startX||0;
+  return { running: true, ended: false, time: 0, scroll: startX,
+    stageIndex:stage?stageIndex:null, stageStartX:startX, duration:stage?EXPEDITION_STAGE_SECONDS:RUN_DURATION,
+    y: tunnelCenter(startX+DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
     boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
@@ -133,12 +138,12 @@ export function updateRun(s, dt, up = false, down = false) {
   const boosted = s.boostTime > 0;
   const speed = boosted ? 480 : 310 + Math.min(42, s.time * 0.48);
   s.scroll += speed * dt;
-  s.distance = s.scroll;
+  s.distance = s.scroll-(s.stageStartX||0);
   s.time += dt;
   s.boostTime = Math.max(0, s.boostTime - dt);
   s.hitCooldown = Math.max(0, s.hitCooldown - dt);
   s.shock = Math.max(0, s.shock - dt);
-  s.passage = clamp(1 + Math.floor(s.time / 15), 1, 5);
+  s.passage = s.stageIndex===null ? clamp(1 + Math.floor(s.time / 15), 1, 5) : s.stageIndex+1;
   const worldX = s.scroll + DRILL_ANCHOR;
   const routeMid = tunnelCenter(worldX);
   const outside = Math.abs(s.y - routeMid) > tunnelRadius(worldX) - 43;
@@ -200,14 +205,14 @@ export function updateRun(s, dt, up = false, down = false) {
     else if (obj.kind === "gem" || obj.kind === "cache") s.gems++;
     s.events.push({ type: "pickup", kind: obj.kind, x: DRILL_ANCHOR + deltaX, y: obj.y, combo: s.combo });
   }
-  if (s.hull <= 0 || s.time >= RUN_DURATION) {
+  if (s.hull <= 0 || s.time >= (s.duration||RUN_DURATION)) {
     if (s.hull > 0 && s.damageTaken === 0) {
       s.cleanBonus = 500; s.score += s.cleanBonus;
       s.events.push({ type: "clean-run", x: DRILL_ANCHOR, y: s.y });
     }
     s.running = false; s.ended = true;
     s.result = s.hull > 0 ? "complete" : "hull";
-    s.time = Math.min(RUN_DURATION, s.time);
+    s.time = Math.min(s.duration||RUN_DURATION, s.time);
     s.events.push({ type: "end", result: s.result });
   }
   return s;
