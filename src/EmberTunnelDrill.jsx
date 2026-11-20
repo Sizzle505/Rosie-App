@@ -374,7 +374,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             <small>Hold ▲ / ▼ to steer. Space ignites Turbo.</small>
           </div>}
       </div>
-      <div className="ember-controls">
+      <div className="ember-controls"
+        onContextMenu={(event) => event.preventDefault()}
+        onSelectStart={(event) => event.preventDefault()}
+        onDragStart={(event) => event.preventDefault()}>
         {steerMode==="joystick" ? <AxisJoystick axis="vertical" label="Drill pitch" disabled={!active}
           onDirection={sign=>{pressed.current.up=sign<0;pressed.current.down=sign>0;}}
           onRelease={resetHold} /> :
