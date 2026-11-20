@@ -54,6 +54,34 @@ for name in NAMES:
     neutral_matte = (chroma < 32) & (np.min(rgb,axis=2) > 112)
     rgba[:,:,3][fringe & neutral_matte] = 0
 
+    # The originals also have a very thin neutral matte halo against the inner
+    # lip. Identify the actual connected transparent opening, then clear only
+    # neutral-color remnants immediately adjacent to it. Saturated gilding,
+    # shadows and Rosie's details stay untouched.
+    cx, cy = {
+        "seated": (941, 492), "presenting": (962, 500),
+        "peeking": (829, 531), "blank": (722, 496)
+    }[name]
+    hole_candidates = Image.fromarray(
+        (rgba[:,:,3] < 25).astype(np.uint8)*255, "L"
+    ).copy()
+    ImageDraw.floodfill(hole_candidates, (cx, cy), 128, thresh=0)
+    actual_hole = np.asarray(hole_candidates) == 128
+    if int(actual_hole.sum()) < 150000:
+        raise RuntimeError(f"{name}: could not isolate transparent oval")
+    ring_fringe = np.asarray(
+        Image.fromarray((actual_hole.astype(np.uint8)*255), "L")
+        .filter(ImageFilter.MaxFilter(35))
+    ) > 0
+    source_rgb = original_px[:,:,:3].astype(np.int16)
+    matte_neutral = (
+        (np.max(source_rgb,axis=2)-np.min(source_rgb,axis=2)<35)
+        & (np.min(source_rgb,axis=2)>115)
+    )
+    halo = ring_fringe & matte_neutral & ~actual_hole & (rgba[:,:,3]>0)
+    rgba[:,:,3][halo] = 0
+    print(f"MATTE {name}: removed {int(halo.sum())} residual edge pixels")
+
     # Remove hidden RGB garbage from completely transparent pixels.
     rgba[rgba[:,:,3] == 0,:3] = 0
     dest = FRAMES / f"rosie-frame-{name}-hollow.webp"
