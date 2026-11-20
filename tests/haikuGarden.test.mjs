@@ -76,3 +76,32 @@ test("all integrated Haiku Garden art files ship with valid image headers", () =
     }
   }
 });
+
+test("all 39 recovered original Haiku image assets are committed with real WebP bytes", () => {
+  const artDir = resolve(dirname(fileURLToPath(import.meta.url)), "../public/rosieverse/haiku");
+  const manifest = JSON.parse(readFileSync(resolve(artDir, "archive-source-manifest.json"), "utf8"));
+  assert.equal(manifest.total_assets, 39);
+  assert.equal(manifest.assets.length, 39);
+  const unique = new Set(manifest.assets.map((asset) => asset.path));
+  assert.equal(unique.size, 39);
+  let bytes = 0;
+  for (const item of manifest.assets) {
+    assert.match(item.path, /^(ornaments|living-garden)\/[a-z0-9-]+\.webp$/);
+    const imagePath = resolve(artDir, item.path);
+    assert.ok(statSync(imagePath).size > 1000, "missing or empty " + item.path);
+    assert.equal(statSync(imagePath).size, item.bytes, item.path + " byte size changed");
+    const head = readFileSync(imagePath).subarray(0, 12);
+    assert.equal(head.subarray(0, 4).toString("ascii"), "RIFF", item.path);
+    assert.equal(head.subarray(8, 12).toString("ascii"), "WEBP", item.path);
+    bytes += item.bytes;
+  }
+  assert.equal(manifest.bytes, bytes);
+  for (const name of [
+    "ornaments/imperial-paw-crest.webp",
+    "ornaments/tab-daily.webp","ornaments/tab-compose.webp",
+    "ornaments/tab-meditate.webp","ornaments/tab-journal.webp",
+    "living-garden/field-sunbeams.webp","living-garden/golden-pollen.webp",
+    "living-garden/zen-sand-sheen.webp","living-garden/temple-lantern.webp",
+    "living-garden/petal-01.webp","living-garden/petal-12.webp"
+  ]) assert.ok(unique.has(name), name);
+});
