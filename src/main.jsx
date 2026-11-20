@@ -2527,7 +2527,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                   <span>CAPTAIN ROSIE AWAITS YOUR ORDERS</span>
                   <strong>{chapter.name}</strong>
                   <p>{chapter.description}</p>
-                  <small className="yacht-chapter-goal">{YACHT_CHAPTER_GOALS[chapter.id].description}</small>
+                  <small className="yacht-chapter-goal">{YACHT_CHAPTER_GOALS[chapter.id].preview}</small>
                   <div className="yacht-chapter-picker" role="group" aria-label="Select Yacht Dash level">
                     {YACHT_CHAPTERS.map((choice, index) => (
                       <button key={choice.id} type="button"
