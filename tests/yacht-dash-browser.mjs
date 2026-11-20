@@ -54,6 +54,12 @@ try {
       courseBottom:course?.bottom };
   });
   console.log("Preflight geometry assertion",JSON.stringify(preflight));
+  const noPanelScroll=await page.evaluate(() => {
+    const p=document.querySelector(".captain-fs-yacht .captain-start-panel:not(.captain-results-panel)");
+    return {scrollHeight:p.scrollHeight,clientHeight:p.clientHeight};
+  });
+  assert.ok(noPanelScroll.scrollHeight <= noPanelScroll.clientHeight + 2,
+    "Level picker must fit without internal scrolling");
   console.log("Preflight child measurements",JSON.stringify(await page.evaluate(() => {
     const base=document.querySelector(".captain-fs-yacht .captain-start-panel:not(.captain-results-panel)");
     const map=el=>{if(!el)return null;const r=el.getBoundingClientRect(),c=getComputedStyle(el);return{
@@ -67,8 +73,8 @@ try {
   assert.ok(preflight.panelTop >= preflight.courseTop - 5 &&
     preflight.panelBottom <= preflight.courseBottom + 5,
     "Preflight content must fit inside the water course");
-  assert.ok(preflight.castOffBottom <= preflight.panelBottom + 12,
-    "Cast Off must be within the preflight panel, allowing a small visual border inset");
+  assert.ok(preflight.castOffBottom <= preflight.panelBottom - 3,
+    "Cast Off must be fully visible inside the preflight panel");
   await page.screenshot({path:folder+"/iphone-preflight-before-selection.png"});
   try {
     await picker.nth(1).click({timeout:10000});
