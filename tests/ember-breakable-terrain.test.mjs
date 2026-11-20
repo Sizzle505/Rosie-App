@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
 import {DRILL_ANCHOR,DRILL_TIP_OFFSET,DRILL_TIP_VERTICAL_OFFSET,newRun,triggerTurbo,updateRun} from "../src/emberDrillEngine.js";
+import {FORMATION_LAYOUT,formationClearance} from "../src/emberTunnelLayout.js";
 
 function approach(s,b){
   s.objects=[];
@@ -51,4 +52,18 @@ test("digging a hidden chamber unlocks one relic and spawns treasure",()=>{
   assert.equal(s.secrets,1);
   assert.equal(s.relics,1);
   assert.ok(s.objects.some(o=>o.kind==="cache"));
+});
+
+test("the full visible footprint of every dig site avoids existing solid same-side formations",()=>{
+  const run=newRun();
+  for(const b of run.breakables){
+    const half=b.material==="entrance"?122:86;
+    for(const f of FORMATION_LAYOUT){
+      if(!f.obstacle||f.side!==b.side)continue;
+      for(const x of [b.x-half,b.x,b.x+half]){
+        assert.equal(formationClearance(f,x),0,
+          b.id+" overlaps original "+f.key+" at "+x);
+      }
+    }
+  }
 });
