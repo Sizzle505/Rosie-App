@@ -12,6 +12,8 @@ on:
       - "src/emberBossEncounter.js"
       - "src/emberExpansionCatalog.js"
       - "src/emberExpeditionStages.js"
+      - "src/emberExpeditionHazards.js"
+      - "src/emberExpeditionHazardPainter.js"
       - "scripts/import-ember-expansion.mjs"
       - "tests/ember-*.test.mjs"
       - ".github/workflows/ember-breakables-qa.yml"
@@ -24,6 +26,8 @@ on:
       - "src/emberBossEncounter.js"
       - "src/emberExpansionCatalog.js"
       - "src/emberExpeditionStages.js"
+      - "src/emberExpeditionHazards.js"
+      - "src/emberExpeditionHazardPainter.js"
       - "scripts/import-ember-expansion.mjs"
       - "tests/ember-*.test.mjs"
       - ".github/workflows/ember-breakables-qa.yml"
@@ -43,6 +47,6 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Verify existing drill and new excavations
-        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs tests/ember-boss-encounter.test.mjs tests/ember-expansion-catalog.test.mjs tests/ember-expedition-stages.test.mjs
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs tests/ember-boss-encounter.test.mjs tests/ember-expansion-catalog.test.mjs tests/ember-expedition-stages.test.mjs tests/ember-expedition-hazards.test.mjs
       - name: Verify Vite production build
         run: npm run build
