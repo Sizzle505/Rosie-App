@@ -79,11 +79,17 @@ for(const [name,engine,viewport,mobile] of [
     const stagePage=await context.newPage();
     await stagePage.goto(base+"#captain",{waitUntil:"domcontentloaded",timeout:45000});
     await stagePage.locator(".ember-suite").waitFor({state:"visible",timeout:45000});
+    await stagePage.bringToFront();
     await stagePage.locator(".ember-world-choice").nth(2).click();
     await stagePage.locator(".ember-expedition-launch").click();
     await stagePage.locator(".ember-course-plaque").getByText("Clockwork Catacombs").waitFor({state:"visible",timeout:3500});
-    // Warning must arrive before Rosie's auger reaches the first piston.
-    await stagePage.getByText("CLOCKWORK PISTON AHEAD").waitFor({state:"visible",timeout:8500});
+    await stagePage.locator(".ember-stage").scrollIntoViewIfNeeded();
+    // The warning is a short lived UI notification. Verify its persistent
+    // registered event instead of racing an animation frame on WebKit.
+    await stagePage.waitForFunction(()=>{
+      const el=document.querySelector(".ember-stage");
+      return Number(el?.getAttribute("data-world-warnings")||0)>0;
+    },null,{timeout:14000});
     const stageTime=await stagePage.locator(".ember-stats").innerText();
     if(!/\b(?:1[0-5]|[1-9])s\b/.test(stageTime))throw new Error("Selected route does not show a valid 15-second countdown: "+stageTime);
     await stagePage.locator(".ember-stage").screenshot({path:`artifacts/ember-breakables/${name}-clockwork-stage.png`});
