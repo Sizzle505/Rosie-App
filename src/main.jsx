@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1708,7 +1708,7 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
   );
 }
 
-function CaptainRosieGame({ soundOn }) {
+function CaptainRosieGame({ soundOn, requestGameFullscreen }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("yachtSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
   const [running, setRunning] = useState(false);
@@ -1863,6 +1863,12 @@ function CaptainRosieGame({ soundOn }) {
   }
 
   function startGame(targetChapter = chapterIndex) {
+    // Enter via the Cast Off tap while Safari still grants user activation.
+    // On iPhone, the shared game frame uses its fixed-viewport fallback when
+    // native Element fullscreen is not supported.
+    if (typeof navigator !== "undefined" && /iPhone|iPod/i.test(navigator.userAgent)) {
+      requestGameFullscreen?.();
+    }
     audioContext();
     const chosen = typeof targetChapter === "number"
       ? Math.max(0, Math.min(yachtPlayableLimit(unlockedChapter), targetChapter)) : chapterIndex;
@@ -2286,7 +2292,10 @@ function CaptainRosieGame({ soundOn }) {
             <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
-          <b>ROSIE I</b>
+          <button type="button" className="captain-steering-toggle"
+            aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
+            title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
+            onClick={toggleSteerMode}>{steerMode === "joystick" ? "D-PAD" : "JOYSTICK"}</button>
         </div>
 
         <div
@@ -2482,11 +2491,10 @@ function CaptainRosieGame({ soundOn }) {
             </span>
           </button>
 
-          {steerMode==="joystick" ? <button className="captain-steering-toggle" type="button" aria-label="Use arrow buttons" title="Arrow buttons" onClick={toggleSteerMode}>◀▶</button> :
-          <button type="button" className="helm-button" onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
+          {steerMode==="buttons" && <button type="button" className="helm-button"
+            onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
             <span>▶</span><small>STARBOARD</small>
           </button>}
-          {steerMode==="buttons"&&<button className="captain-steering-toggle" type="button" aria-label="Use joystick" title="Joystick" onClick={toggleSteerMode}>◉</button>}
         </div>
 
         <div className="captain-cargo-key">
@@ -2542,6 +2550,23 @@ function FullscreenGameFrame({ children, label, variant }) {
     };
   }, [fallbackFullscreen]);
 
+  const enterGameFullscreen = () => {
+    if (expanded) return;
+    const element = frameRef.current;
+    if (!element) return;
+    const request = element.requestFullscreen || element.webkitRequestFullscreen;
+    if (request && document.fullscreenEnabled) {
+      try {
+        const result = request.call(element);
+        if (result?.catch) result.catch(() => setFallbackFullscreen(true));
+        return;
+      } catch {
+        // Native fullscreen is not available in this browser.
+      }
+    }
+    setFallbackFullscreen(true);
+  };
+
   const toggleFullscreen = async () => {
     if (fallbackFullscreen) {
       setFallbackFullscreen(false);
@@ -2554,19 +2579,7 @@ function FullscreenGameFrame({ children, label, variant }) {
       } else setNativeFullscreen(false);
       return;
     }
-    const element = frameRef.current;
-    if (!element) return;
-    const request = element.requestFullscreen || element.webkitRequestFullscreen;
-    if (request) {
-      try {
-        await request.call(element);
-        return;
-      } catch {
-        // Embedded web views and older iPhone browsers may reject element fullscreen.
-        // Keep the current game mounted and expand it with CSS instead.
-      }
-    }
-    setFallbackFullscreen(true);
+    enterGameFullscreen();
   };
 
   return (
@@ -2584,7 +2597,9 @@ function FullscreenGameFrame({ children, label, variant }) {
         <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
         <b>{expanded ? "EXIT FULL SCREEN" : "FULL SCREEN"}</b>
       </button>}
-      {children}
+      {variant === "yacht" && React.isValidElement(children)
+        ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen })
+        : children}
     </section>
   );
 }
