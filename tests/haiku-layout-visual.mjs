@@ -25,6 +25,7 @@ try {
       // capture the splash screen and misrepresent it as a checked layout.
       await page.locator(".loading-screen").waitFor({ state: "hidden", timeout: 15000 });
       await page.locator(".app-shell-visible").waitFor({ state: "visible", timeout: 15000 });
+      await page.locator(".haiku-page-landscape").evaluate((image) => image.decode());
       const boxes = await page.evaluate(() => {
         const box = (selector) => {
           const el = document.querySelector(selector);
@@ -35,13 +36,21 @@ try {
         };
         return {
           page:box(".haiku-page"), header:box(".haiku-header"), title:box(".haiku-heading h1"),
-          garden:box(".haiku-scene-image"), scroll:box(".haiku-scroll"), studio:box(".haiku-workbench"),
+          garden:box(".haiku-scene-image"), backdrop:box(".haiku-scene"), scroll:box(".haiku-scroll"), studio:box(".haiku-workbench"),
           navbar:document.querySelector(".bottom-nav")?.getBoundingClientRect()?.toJSON() || null,
           scrollWidth:document.documentElement.scrollWidth
         };
       });
       assert.ok(boxes.page.width >= width-2, label + " must fill available viewport rather than cap at 980px: " + boxes.page.width);
       assert.ok(boxes.scroll.width > 230, label + " poem must be legible: " + boxes.scroll.width);
+      assert.ok(boxes.backdrop.width >= width-2, label + " background must fill viewport horizontally");
+      assert.ok(boxes.backdrop.height >= height-2, label + " background must fill viewport vertically");
+      const sceneAppearance = await page.locator(".haiku-scene-image").evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { border:parseFloat(style.borderTopWidth), background:style.backgroundColor };
+      });
+      assert.equal(sceneAppearance.border, 0, label + " must not reintroduce a framed scene panel");
+      assert.equal(sceneAppearance.background, "rgba(0, 0, 0, 0)", label + " scene panel must be transparent");
       assert.ok(boxes.garden.width > 300 || width < 600, label + " garden too small");
       assert.ok(boxes.scrollWidth <= width+4, label + " horizontal page overflow: " + boxes.scrollWidth);
       if (width === 1440) {
@@ -84,7 +93,15 @@ try {
       }
       for (const [text, expected] of [["Flower Field","field-sunrise.webp"],["Zen Garden","zen-sunrise.webp"],["Temple","temple-sunrise.webp"]]) {
         await page.getByRole("button",{ name:text, exact:true }).click();
-        await page.waitForFunction((substring) => document.querySelector(".haiku-scene-landscape")?.src.includes(substring), expected);
+        await page.waitForFunction((substring) => document.querySelector(".haiku-page-landscape")?.src.includes(substring), expected);
+        await page.locator(".haiku-page-landscape").evaluate((image) => image.decode());
+        if (label === "user-desktop") {
+          await page.screenshot({
+            path: `artifacts/haiku-layout/garden-${expected.replace(".webp","")}.png`,
+            fullPage: false,
+            animations: "disabled"
+          });
+        }
       }
       await page.getByRole("button",{ name:"Compose", exact:true }).click();
       assert.ok(await page.locator("#haiku-topic").isVisible(), label + " compose input must be visible");
