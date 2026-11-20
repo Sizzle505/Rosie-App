@@ -87,7 +87,8 @@ export default function RosieMusicPlayer({page}){
     engineRef.current?.setVolume(next);
   };
   const title=ROSIE_MUSIC[status.id]?.title||"RosieVerse";
-  return <div className={"rosie-music-dock"+(open?" is-open":"")} aria-label="RosieVerse music controls">
+  return <div className={"rosie-music-dock"+(open?" is-open":"")} aria-label="RosieVerse music controls"
+    data-track={status.id} data-unlocked={status.unlocked?"yes":"no"} data-enabled={enabled?"yes":"no"}>
     <button className="rosie-music-launch" type="button"
       aria-label="Open RosieVerse soundtrack settings"
       aria-controls="rosie-music-panel" aria-expanded={open}
