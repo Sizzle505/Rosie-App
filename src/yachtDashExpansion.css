@@ -215,3 +215,81 @@
   .captain-game-page .captain-results-panel .yacht-objective-summary {display:none;}
   .captain-game-page .yacht-chapter-picker .yacht-stage-record {font-size:6px;}
 }
+
+
+/* Large obstacles are single wide sprites with matching multi-lane hitboxes.
+   The torii pillars visually flank a clear, steerable center lane. */
+.captain-game-page .sea-pickup.yacht-footprint-wide {
+  height:clamp(105px,24%,190px);
+  max-width:none;
+  border:0!important;border-radius:0!important;background:none!important;
+  box-shadow:none!important;
+  transform:translateY(-48%);
+  pointer-events:none;
+}
+.captain-game-page .sea-pickup.yacht-footprint-arch {
+  height:clamp(145px,37%,255px);
+  max-width:none;
+  border:0!important;border-radius:0!important;background:none!important;
+  box-shadow:none!important;
+  transform:translateY(-48%);
+  pointer-events:none;
+}
+.captain-game-page .sea-pickup.yacht-footprint-wide .yacht-hazard-art,
+.captain-game-page .sea-pickup.yacht-footprint-arch .yacht-hazard-art {
+  width:100%;height:100%;max-width:none;max-height:none;
+  object-fit:fill; /* fit wide floating debris and the arch's two outer pillars */
+}
+.captain-game-page .sea-pickup-obstacle:not(.yacht-footprint-wide):not(.yacht-footprint-arch) {
+  width:80px;height:75px;
+}
+.captain-game-page .sea-pickup-rival {width:98px;height:87px;}
+.captain-game-page .sea-pickup-supply {
+  width:75px;height:75px;
+  border:0!important;border-radius:0!important;
+  background:none!important;box-shadow:none!important;
+  filter:drop-shadow(0 0 9px rgba(249,211,124,.52));
+}
+.captain-game-page .sea-pickup-supply .yacht-hazard-art {width:100%;height:100%;object-fit:contain;}
+.captain-game-page .sea-pickup .yacht-supply-caption {
+  position:absolute;left:-6px;right:-6px;bottom:-6px;
+  font:800 8px/1.4 Georgia,serif;letter-spacing:.07em;
+  color:#ffeda7;text-align:center;text-shadow:0 1px 3px #14202b;
+  background:rgba(15,39,54,.79);border:1px solid rgba(241,208,134,.6);
+  border-radius:5px;
+}
+.captain-game-page .captain-cargo-key .cargo-supply img {
+  width:29px;height:29px;display:block;object-fit:contain;
+}
+.captain-game-page .captain-command-deck,
+.captain-game-page .captain-command-deck *,
+.captain-game-page .captain-command-deck button,
+.captain-game-page .captain-yacht-actions,
+.captain-game-page .captain-yacht-actions * {
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-tap-highlight-color:transparent;
+}
+.captain-game-page .captain-command-deck button,
+.captain-game-page .captain-yacht-actions button {
+  touch-action:manipulation;
+}
+.captain-game-page .captain-command-deck .axis-stick,
+.captain-game-page .captain-command-deck .axis-stick * {
+  touch-action:none;
+}
+@media(max-width:720px) {
+  .captain-game-page .sea-pickup.yacht-footprint-wide {
+    height:clamp(95px,24%,135px);
+  }
+  .captain-game-page .sea-pickup.yacht-footprint-arch {
+    height:clamp(145px,38%,190px);
+  }
+  .captain-game-page .sea-pickup-obstacle:not(.yacht-footprint-wide):not(.yacht-footprint-arch) {
+    width:65px;height:61px;
+  }
+  .captain-game-page .sea-pickup-rival {width:76px;height:70px;}
+  .captain-game-page .sea-pickup-supply {width:62px;height:62px;}
+  .captain-game-page .sea-pickup .yacht-supply-caption {font-size:7px;}
+}
