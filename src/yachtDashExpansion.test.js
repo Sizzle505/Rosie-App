@@ -187,3 +187,22 @@ test("All three new stages have attainable medal scores after sparse hazards",()
    assert.ok(goal.expert <= possible+150, id+" gold medal is out of range");
  }
 });
+
+
+test("Every chapter has distinct scene names matching its five artworks",()=>{
+ const used = new Set();
+ for (const chapter of YACHT_CHAPTERS.filter(c=>c.id!=="sakura")) {
+   assert.equal(chapter.sceneTitles.length,5);
+   assert.equal(new Set(chapter.sceneTitles).size,5);
+   for(let index=0;index<5;index++){
+     const scene=yachtSceneFor(YACHT_CHAPTERS.findIndex(c=>c.id===chapter.id),index*15);
+     assert.equal(scene.name,chapter.sceneTitles[index]);
+     assert.equal(scene.background,chapter.scenes[index]);
+     used.add(scene.name);
+   }
+ }
+ assert.equal(used.size,15);
+ const sakura=yachtSceneFor(0,0,[0,1,2,3,4]);
+ assert.equal(sakura.name,"Torii Sunrise");
+ assert.equal(sakura.background,"/captain-levels/sunrise-across-torii-sea.webp");
+});
