@@ -9,6 +9,7 @@ on:
       - "src/emberCrystalShutters*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
+      - "src/emberBossEncounter.js"
       - "tests/ember-*.test.mjs"
       - ".github/workflows/ember-breakables-qa.yml"
   pull_request:
@@ -17,6 +18,7 @@ on:
       - "src/emberBreakable*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
+      - "src/emberBossEncounter.js"
       - "tests/ember-*.test.mjs"
       - ".github/workflows/ember-breakables-qa.yml"
 permissions:
@@ -35,6 +37,6 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Verify existing drill and new excavations
-        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs tests/ember-boss-encounter.test.mjs
       - name: Verify Vite production build
         run: npm run build
