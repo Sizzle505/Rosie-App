@@ -35,7 +35,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, isYachtHazard } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, isYachtHazard } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1859,7 +1859,7 @@ function CaptainRosieGame({ soundOn }) {
   function startGame(targetChapter = chapterIndex) {
     audioContext();
     const chosen = typeof targetChapter === "number"
-      ? Math.max(0, Math.min(unlockedChapter, targetChapter)) : chapterIndex;
+      ? Math.max(0, Math.min(yachtPlayableLimit(unlockedChapter), targetChapter)) : chapterIndex;
     if (chosen !== chapterIndex) setChapterIndex(chosen);
     if (ended) setLevelOrder(shuffleCaptainLevelOrder());
     finishedRef.current = false;
@@ -2360,7 +2360,7 @@ function CaptainRosieGame({ soundOn }) {
                   <div className="yacht-result-actions">
                     {completed && <button type="button" onClick={() => setShowVictoryArt(true)}>VIEW VICTORY</button>}
                     {completed && chapterIndex < YACHT_CHAPTERS.length - 1 &&
-                      unlockedChapter >= chapterIndex + 1 && <button type="button"
+                      (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) && <button type="button"
                         onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
                     <button type="button" onClick={() => startGame()}>SAIL AGAIN</button>
                     <button type="button" onClick={() => { setEnded(false); setCompleted(false); setShowVictoryArt(false); }}>CHOOSE LEVEL</button>
@@ -2376,10 +2376,10 @@ function CaptainRosieGame({ soundOn }) {
                       <button key={choice.id} type="button"
                         className={index === chapterIndex ? "is-selected" : ""}
                         aria-pressed={index === chapterIndex}
-                        disabled={index > unlockedChapter}
+                        disabled={!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter}
                         onClick={() => setChapterIndex(index)}>
                         <b>{index + 1}. {choice.name}</b>
-                        {index > unlockedChapter && <small>LOCKED</small>}
+                        {!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter && <small>LOCKED</small>}
                       </button>
                     ))}
                   </div>
@@ -2394,7 +2394,7 @@ function CaptainRosieGame({ soundOn }) {
                 onError={() => setShowVictoryArt(false)} />
               <div className="yacht-victory-actions">
                 <button type="button" onClick={() => setShowVictoryArt(false)}>VIEW CAPTAIN'S LOG</button>
-                {chapterIndex < YACHT_CHAPTERS.length - 1 && unlockedChapter >= chapterIndex + 1 &&
+                {chapterIndex < YACHT_CHAPTERS.length - 1 && (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) &&
                   <button type="button" onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
               </div>
             </div>
