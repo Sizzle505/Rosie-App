@@ -64,7 +64,7 @@ const ROSIE_FRAME_MATERIALS={
 // The material is a real painted oval, behind the original transparent image.
 // Source image pixels are never cut or recolored at runtime.
 function rosieMaterialBounds(frame){
-  const points=[...frame.openingPath.matchAll(/(\\d+),(\\d+)/g)].map(m=>[+m[1],+m[2]]);
+  const points=[...frame.openingPath.matchAll(/(\d+),(\d+)/g)].map(m=>[+m[1],+m[2]]);
   const xs=points.map(point=>point[0]),ys=points.map(point=>point[1]);
   const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
   return {cx:(minX+maxX)/2,cy:(minY+maxY)/2,rx:(maxX-minX)*.55,ry:(maxY-minY)*.55};
