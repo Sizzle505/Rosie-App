@@ -11,12 +11,17 @@
     url("/qr-atelier/rosie-qr/rosie-popup-desktop.webp")!important;
   background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;
 }
-.qa-rosie-viewer .qa-rosie-close {
-  position:absolute!important;z-index:5;top:max(12px,env(safe-area-inset-top));left:50%;
-  transform:translateX(-50%);
-  margin:0!important;min-height:35px!important;padding:5px 19px!important;
-  border:1px solid #d4ad65;background:#102b22!important;color:#fbe5b4!important;
+.qa-rosie-composition .qa-rosie-close {
+  /* Anchor to the composition, not the page header. Visible on every device. */
+  position:absolute!important;top:8%!important;right:7%!important;left:auto!important;
+  z-index:20!important;transform:none!important;display:grid!important;place-items:center!important;
+  box-sizing:border-box!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;
+  margin:0!important;padding:0!important;border:2px solid #e8bf72!important;border-radius:50%!important;
+  background:#122b24f7!important;color:#ffe9b3!important;box-shadow:0 3px 15px #000c,inset 0 1px 2px #ffebad55!important;
+  font:normal 30px/1 Georgia,serif!important;cursor:pointer!important;touch-action:manipulation;
 }
+.qa-rosie-composition .qa-rosie-close:hover {background:#26533f!important;}
+.qa-rosie-composition .qa-rosie-close:focus-visible {outline:3px solid #ffe2a4!important;outline-offset:3px!important;}
 .qa-rosie-viewer-content {
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   width:100%;min-height:0;max-width:1000px;margin:auto;
@@ -31,7 +36,18 @@
 .qa-rosie-overlay-art {
   position:absolute!important;inset:0!important;display:block!important;
   width:100%!important;height:100%!important;object-fit:contain!important;
-  z-index:2;pointer-events:none;user-select:none;
+  z-index:3;pointer-events:none;user-select:none;
+}
+/* The 110% jewel-finish aperture is a single artwork-sized SVG BEHIND the
+   original illustrated frame, not an overlay painted on its filigree. */
+.qa-rosie-insert-underlay {
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  z-index:1;pointer-events:none;display:block!important;overflow:visible;
+}
+.qa-rosie-insert-underlay svg {
+  display:block!important;width:100%!important;height:100%!important;
+  overflow:visible;pointer-events:none;
 }
 /* Fill the full oval behind the artwork, then cover any image artifacts within
    the inset without painting over the decorative gilded border. */
@@ -55,11 +71,13 @@
 .qa-rosie-live-qr {
   position:absolute!important;left:var(--rosie-code-left)!important;top:var(--rosie-code-top)!important;
   width:var(--rosie-code-size)!important;height:auto!important;aspect-ratio:1;
-  z-index:4;background:#ffffff!important;overflow:hidden;
+  z-index:5;background:#fffef8!important;overflow:visible;
+  /* Reuse the main QR preview's white inset and fine gold edging. */
+  box-shadow:0 0 0 4px #fffef7,0 0 0 7px #b17e36,0 0 18px #f3c76577,0 8px 24px #0007!important;
 }
 .qa-rosie-live-qr svg {display:block;width:100%;height:100%;shape-rendering:crispEdges;background:#ffffff!important;}
 .qa-rosie-title-field,.qa-rosie-printed-title {
-  position:absolute!important;z-index:5;
+  position:absolute!important;z-index:6;
   left:var(--rosie-title-x)!important;top:var(--rosie-title-y)!important;
   transform:translate(-50%,-50%)!important;
   width:var(--rosie-title-width)!important;height:8%!important;
@@ -68,6 +86,10 @@
   color:#4e301e;text-align:center;
   font:italic 500 clamp(14px,2.05vw,30px)/1.15 "Iowan Old Style","Palatino Linotype",Georgia,serif!important;
   text-shadow:0 1px 1px #fff5d9;
+}
+.qa-rosie-title-field {
+  padding:0!important;line-height:1.1!important;
+  transform:translate(-50%,-50%)!important;
 }
 .qa-rosie-title-field::placeholder{color:#765a39;opacity:.67}
 .qa-rosie-title-field:focus {outline:2px solid #d5a55e;background:rgba(255,248,225,.48);}
@@ -99,7 +121,9 @@
     background-position:center top!important;background-size:cover!important;
   }
   .qa-rosie-viewer-content {width:100vw!important;}
-  .qa-rosie-composition {width:min(110vw,480px)!important;max-width:none!important;}
+  .qa-rosie-composition {width:min(98vw,480px)!important;max-width:100vw!important;}
+  /* The phone composition intentionally extends past the viewport; keep the X inside the actual screen. */
+  .qa-rosie-composition .qa-rosie-close {right:6%!important;}
   .qa-rosie-title-field {font-size:clamp(12px,3.3vw,19px)!important;}
   .qa-rosie-frame-controls{gap:10px;}
   .qa-rosie-frame-controls span{min-width:142px;font-size:11px;}
@@ -124,9 +148,9 @@
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-overlay-art {
     display:block!important;print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay,
-  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-backdrop {
-    background:var(--rosie-code-bg,#fff)!important;
+  .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-insert-underlay {
+    /* Only the scaled aperture paths carry color, not the SVG bounds. */
+    background:transparent!important;
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important;
   }
   .qa-print-sheet.qa-rosie-print-sheet .qa-rosie-live-qr,
