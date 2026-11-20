@@ -54,7 +54,10 @@ export function updateExpeditionBoss(s,dt,{tipX,tipY,boosted,onHit}){
     if(s.hitCooldown<=0)onHit(s);
     s.events.push({type:"boss-attack-contact",boss:b.kind,attack:b.attack});
   }
-  const inRange=Math.abs(tipX-BOSS_SCREEN_X)<140&&Math.abs(tipY-s.bossY)<112;
+  // Pitching downward shifts the auger tip rearward in screen space. Turbo's
+  // 200px reach prevents a visually aligned downward strike from missing on
+  // a horizontal-only technicality; vertical aiming still matters.
+  const inRange=Math.abs(tipX-BOSS_SCREEN_X)<200&&Math.abs(tipY-s.bossY)<112;
   if(hitBossDuringRecovery(b,{turbo:boosted,inRange})){
     // hitBossDuringRecovery appends events after advance's transitions.
     for(const event of b.events.filter(e=>e.type==="boss-hit"||e.type==="boss-defeated"))
