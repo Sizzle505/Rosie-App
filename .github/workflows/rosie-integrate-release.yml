@@ -26,16 +26,16 @@ jobs:
           git merge --no-ff -X theirs origin/fix/qr-viewer-finish-title-close-20261120 -m 'Integrate QR framed viewer and selected finishes'
       - name: Import three approved frame PNGs from Dropbox
         env:
-          ROSIE_SEATED_URL: "https://ucc971a761cca067ef826039e2a2.dl.dropboxusercontent.com/cd/0/get/DMXmNBI6Af38wRHHEqnejcxJE-xiS82xnIFDbM0owrHeUzfHrU0m2H6yubEkWOeVasBwK38-Ppoew0rfCFD0FEO0IvbsVgjgFCS1m1nEMnhgyqq6R6VMdjxV53ulxYU7vHtBx39nGcgWOsXkcInuLpEBuqF-iV2rW8LuVrzhGSt5Jg/file?c_luid=667ded1d"
-          ROSIE_PRESENT_URL: "https://uc7341289d2a9865e4bb89544c39.dl.dropboxusercontent.com/cd/0/get/DMXYeBM33zjgUq-xMR-16wD83AXc8V4tBxCpohMGGVY9pnp397khWDERNEUcsCvML5Aef_c2BnVFCLCVFs-LxivwLDRKf_l-tZ8HTyiFKf6eEb9l_N8aZB-xuGRjNKtr2EONgH371TS3MZyHalzrhOJYP_C4b2d0gqpNZwPuPhMteQ/file?c_luid=667ded1d"
-          ROSIE_GILDED_URL: "https://uc0801aaa900c32e808b8c15a6de.dl.dropboxusercontent.com/cd/0/get/DMViWt78WQuY9rXicULK99EmjPPtWGsYyGapUswteyBqYrJNfosb8fQaXeAjh4GwNMq_nydblR_Zf078ixE_NV54uKWpg0nFd53umcezxz3lVg6PAz9H58h5X1KccHliOEC0NS48pNPe7s8CAyS0mCNadiW8idn9w0yZA7CH_3WPSA/file?c_luid=667ded1d"
+          ROSIE_SEATED_URL: "https://uc48fd3881264eed0885217cb6c3.dl.dropboxusercontent.com/cd/0/get/DMU504SEsO6SeKjJfAVnj-4MfVSBaN3x6J8SiETWsR1jK8wolKD83Th09vYTgZzeYPcLwY-mDqYhAElDd9A85BAWnWm2SNc-ykpfxSowFoppvYwdGT9Q4mzIggmobGhNVHiCKOTTBItmJNAV-1WbB8qOMO-HJe6ulAM7gH-aipqfjQ/file?c_luid=667ded1d"
+          ROSIE_PRESENT_URL: "https://ucf4bed7194688ba10c8438993a8.dl.dropboxusercontent.com/cd/0/get/DMVi6fAa2NDJvf2J66KFMbLOg6w2iIFodO_IaMEfAAOkTD9f2ex7wauIE0JMv1lXrGCCo_2Hufh0F6v42C_oUmA9-1ZPoJrRGWUb9t7TU5KVpf1J3SpvedwbKUkgU-ooWm-qq7jLrnu2NhXpSvwPVDFUlN_7yCo7XvXCHn4cAp5-bg/file?c_luid=667ded1d"
+          ROSIE_GILDED_URL: "https://uc93a32d867fe43d924bf9d4510f.dl.dropboxusercontent.com/cd/0/get/DMX0Wq_yQz81__TqW_-zSdU6wB65ToUK1tl2hTskvFKhA5uW72x-hvJt2yhJwBxWuIpozKk_VhJ20fctzZSRsmwdMRdXOON63ynQekoarNimcWuQEoq_xdXfI-XRvHEnaMVzT58Ku-a2Ag_VdmXTzkn2RE4x6BiimFKtf_EQOPaEjA/file?c_luid=667ded1d"
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import os, pathlib, hashlib, urllib.request
           base=pathlib.Path('public/qr-atelier/rosie-qr')
           assets=[
-              ('ROSIE_SEATED_URL','rosie-frame-seated-hollow.png','62d782ae2125e9a9a1407cb7295f5d934b4ae019f2fd1de82c6c6dea2b854674'),
+              ('ROSIE_SEATED_URL','rosie-frame-seated-hollow.png','402aa1e5718d8f4efa821ed3f0a68a8a55d30cd6b4d61380534d9efd86ab826c'),
               ('ROSIE_PRESENT_URL','rosie-frame-presenting-hollow.png','54f7e99807992b86d586a48c084b12ccb5abf5d30a0098e8cda07252a0368505'),
               ('ROSIE_GILDED_URL','rosie-frame-blank-hollow.png','893aef5c3ce3f105487a283ad467049938e289a649d363649d2362c7c155ae6e'),
           ]
@@ -56,17 +56,18 @@ jobs:
           s=path.read_text()
           for name in ('seated','presenting','blank'):
               old='rosie-frame-'+name+'-hollow.webp'
-              assert s.count(old)==1,(old,s.count(old))
-              s=s.replace(old,'rosie-frame-'+name+'-hollow.png')
+              new='rosie-frame-'+name+'-hollow.png'
+              if old in s: s=s.replace(old,new)
+              assert s.count(new)==1,(new,s.count(new))
           old='rosie-frame-peeking-hollow.webp'
-          assert s.count(old)==1
-          s=s.replace(old,'rosie-frame-peeking.webp')
+          if old in s: s=s.replace(old,'rosie-frame-peeking.webp')
+          assert s.count('rosie-frame-peeking.webp')==1
           if 'cutRosieFrame' in s or 'rosieHoleTransform' in s or 'maskId=' in s:
               raise RuntimeError('Unsafe browser-side frame carving remains')
           path.write_text(s)
           PY
-          git rm -f public/qr-atelier/rosie-qr/rosie-frame-seated-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-presenting-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-blank-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-peeking-hollow.webp
-          git rm -f .github/workflows/qr-hollow-assets.yml .github/workflows/qr-hollow-browser.yml scripts/make-qr-frames-hollow.py scripts/qrHollowViewerBrowserCheck.mjs
+          git rm -f --ignore-unmatch public/qr-atelier/rosie-qr/rosie-frame-seated-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-presenting-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-blank-hollow.webp public/qr-atelier/rosie-qr/rosie-frame-peeking-hollow.webp
+          git rm -f --ignore-unmatch .github/workflows/qr-hollow-assets.yml .github/workflows/qr-hollow-browser.yml scripts/make-qr-frames-hollow.py scripts/qrHollowViewerBrowserCheck.mjs
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
