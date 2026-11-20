@@ -138,6 +138,25 @@ export function yachtMedalsFor(chapterId, stats) {
   return stars;
 }
 
+/** A single next goal makes the medal rules understandable during playtests. */
+export function yachtNextMedalHint(chapterId, stats) {
+  const goal = YACHT_CHAPTER_GOALS[chapterId];
+  if (!goal) return "";
+  if (!stats.completed) return "Complete this passage to earn the first medal.";
+  const score = Number(stats.score) || 0;
+  const lives = Number(stats.lives) || 0;
+  const nearMisses = Number(stats.nearMisses) || 0;
+  const rivalsPassed = Number(stats.rivalsPassed) || 0;
+  if (score < goal.score) return `Next medal: reach ${goal.score.toLocaleString()} points.`;
+  if (score < goal.expert) return `Gold: reach ${goal.expert.toLocaleString()} points.`;
+  if (lives < 2) return "Gold: finish with two or more hull points intact.";
+  if (nearMisses < goal.nearMisses)
+    return `Gold: make ${goal.nearMisses} clean near misses.`;
+  if (rivalsPassed < goal.rivals)
+    return `Gold: pass ${goal.rivals} rival yachts without colliding.`;
+  return "All three medals earned. An exemplary voyage.";
+}
+
 /** Store only known chapter keys and bounded numeric stats from local storage. */
 export function parseYachtRecords(serialized) {
   let input;
