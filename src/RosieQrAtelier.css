@@ -1440,7 +1440,9 @@
     z-index:4!important;
     pointer-events:none!important;
   }
-  .app-shell.page-qr-atelier .qa-preview-actions,
+  .app-shell.page-qr-atelier .qa-preview-actions {
+    pointer-events:none!important;
+  }
   .app-shell.page-qr-atelier .qa-preview-actions button {
     pointer-events:auto!important;
   }
