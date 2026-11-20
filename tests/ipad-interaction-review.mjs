@@ -23,7 +23,9 @@ for (const [engine, browserType] of [["webkit", webkit], ["chromium", chromium]]
               return { label: element.getAttribute("aria-label"), x: Math.round(box.x), y: Math.round(box.y), width: Math.round(box.width), height: Math.round(box.height), display: style.display, gridColumn: style.gridColumn, imageLoaded: !!element.querySelector("img")?.naturalWidth };
             }));
             console.log(engine, device, "calculator choices", JSON.stringify(cards));
+            if (cards.some(card => card.width < 100 || card.height < 44)) throw new Error("A calculator choice is not usable on " + device);
             await page.locator(".rc-tool-card--units").click();
+            await page.locator(".rc-device-original-art").evaluate(image => image.decode());
           }
           if (route === "qr-atelier") {
             await page.locator('.qa-panel input[type="url"]').fill("https://example.com");
