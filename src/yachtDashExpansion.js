@@ -3,6 +3,8 @@ import { CAPTAIN_LEVELS } from "./captainLevels.js";
 const art = (chapter, file) => "/yacht-dash/" + chapter + "/" + file + ".webp";
 const SCENE_SECONDS = 15;
 export const YACHT_RUN_SECONDS = 75;
+export const YACHT_EXTRA_TREAT_MS = 8500; // One additional treat about every 8.5s in expanded levels.
+
 // Playtest mode: all chapters are immediately selectable, without progression locks.
 export const YACHT_PLAYTEST_ALL_LEVELS = true;
 export function yachtPlayableLimit(unlockedLevel) {
@@ -233,6 +235,37 @@ export function yachtApproachAt(y) {
     scale: 0.30 + 0.70 * t,
     opacity: Math.min(1, 0.62 + t)
   };
+}
+
+/** Treats remain legible upstream without growing beyond their existing near-yacht size. */
+export function yachtPickupApproachAt(y) {
+  const approach = yachtApproachAt(y);
+  return { ...approach,
+    scale: 0.56 + (approach.scale - 0.30) / 0.70 * 0.44,
+    opacity: Math.min(1, 0.82 + (approach.opacity - 0.62) / 0.38 * 0.18)
+  };
+}
+
+/** Avoid adding a bonus treat to a lane already occupied by a newly spawned hazard. */
+export function yachtBonusTreatLane(items, preferred) {
+  const occupied = new Set(items.filter(item =>
+    isYachtHazard(item.kind) && item.y >= -12 && item.y <= 25
+  ).flatMap(item => [...yachtOccupiedLanes(item),
+    ...(item.driftTo === undefined ? [] : [item.driftTo])]));
+  for (let offset = 0; offset < 3; offset++) {
+    const lane = (Math.max(0, Math.floor(preferred || 0)) + offset) % 3;
+    if (!occupied.has(lane)) return lane;
+  }
+  return -1;
+}
+
+/** Selective art scaling for props whose transparent masters read too small. */
+export function yachtAssetScale(asset) {
+  if (typeof asset !== "string") return 1;
+  if (asset.endsWith("/fishing-skiff.webp")) return 1.48;
+  if (asset.endsWith("/moonlight-race-buoy.webp") ||
+      asset.endsWith("/regatta-beacon.webp")) return 1.38;
+  return 1;
 }
 
 /** Use the authoritative lane ref for instantaneous touch/keyboard response. */
