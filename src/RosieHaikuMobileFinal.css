@@ -1,0 +1,251 @@
+/* iPhone Haiku review: restore visual centering, give existing artwork space
+   and keep all prose as accessible HTML. This layer follows earlier CSS. */
+
+/* The old breathing keyframes replaced transform every frame. Bake centering
+   into every keyframe, so not a single outfit drifts to the right in Safari. */
+@keyframes haiku-rosie-iphone-centered-breath {
+  0%,100% { transform:translate3d(-50%,-20px,0) scale(1); }
+  40%,47% { transform:translate3d(-50%,-24px,0) scale(1.018); }
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scene-image > img.haiku-scene-rosie {
+    left:50%!important;
+    right:auto!important;
+    translate:none!important;
+    transform:translate3d(-50%,-20px,0)!important;
+    transform-origin:50% 88%!important;
+    width:auto!important;
+    max-width:90%!important;
+    object-position:50% 100%!important;
+  }
+  .haiku-page .haiku-scene-image > img.haiku-scene-rosie--slow-breath {
+    animation:haiku-rosie-iphone-centered-breath 10s ease-in-out infinite!important;
+  }
+  .haiku-page .haiku-scene-image > img.haiku-scene-rosie--expressive {
+    animation:none!important;
+    transform:translate3d(-50%,-20px,0)!important;
+  }
+  /* The two outfit arrows share a single balanced, centered coordinate system. */
+  .haiku-page .haiku-scene-image .haiku-portrait-outfit-arrows{
+    left:50%!important;
+    right:auto!important;
+    top:48%!important;
+    width:min(82%,340px)!important;
+    transform:translate(-50%,-50%)!important;
+    justify-content:space-between!important;
+  }
+  /* Original illustrated scenes, 20% larger. Keep only their image artwork. */
+  .haiku-page .haiku-scene-selector{
+    gap:1px!important;
+    width:100%!important;
+    transform:none!important;
+    overflow:visible!important;
+  }
+  .haiku-page .haiku-scene-selector button{
+    padding:0!important;
+    overflow:visible!important;
+  }
+  .haiku-page .haiku-scene-selector button img.haiku-scene-choice-art{
+    width:clamp(106px,33.96vw,148px)!important;
+    height:clamp(106px,33.96vw,148px)!important;
+    max-width:none!important;
+    object-fit:contain!important;
+    border:0!important;
+    outline:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+  }
+  /* Tabs use larger original symbols, while their label font stays unchanged. */
+  .haiku-page .haiku-tabs{
+    gap:0!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+  .haiku-page .haiku-tabs > button{
+    gap:4px!important;
+    min-height:142px!important;
+    min-width:0;
+  }
+  .haiku-page .haiku-tabs > button img{
+    width:min(25vw,105px)!important;
+    height:min(25vw,105px)!important;
+    max-width:96%!important;
+    flex:0 0 auto;
+  }
+  /* Text remains 11px, not enlarged with the ornaments. */
+  .haiku-page .haiku-tabs .haiku-tab-label{
+    font-size:11px!important;
+    line-height:1.2!important;
+  }
+}
+
+/* Center headings within the glass panel, not every body paragraph. */
+.haiku-page .haiku-workbench-body > .haiku-panel > .haiku-section-label,
+.haiku-page .haiku-workbench-body > .haiku-panel > h2,
+.haiku-page .zen-panel > .haiku-section-label,
+.haiku-page .zen-panel > h2 {
+  text-align:center!important;
+  text-wrap:balance;
+}
+
+/* Elegant, compact two-column meditation gallery with big medallions above
+   the words. The final fifth card is balanced on a centered new row. */
+@media(max-width:600px){
+  .haiku-page .zen-panel .zen-program-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:11px!important;
+    align-items:stretch;
+  }
+  .haiku-page .zen-panel .zen-program-grid > .zen-program{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+    gap:6px!important;
+    min-width:0!important;
+    min-height:182px!important;
+    width:100%!important;
+    padding:11px 6px 12px!important;
+    text-align:center!important;
+  }
+  .haiku-page .zen-panel .zen-program-grid .zen-program-emblem{
+    display:block!important;
+    flex:0 0 auto!important;
+    width:clamp(96px,28vw,123px)!important;
+    height:clamp(96px,28vw,123px)!important;
+    max-width:96%!important;
+    object-fit:contain!important;
+    transform:none!important;
+  }
+  .haiku-page .zen-panel .zen-program-grid .zen-program-caption{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex:0 0 auto!important;
+    min-width:0!important;
+    width:100%!important;
+    gap:3px!important;
+    text-align:center!important;
+  }
+  .haiku-page .zen-panel .zen-program-grid .zen-program-caption strong{
+    font:600 15px/1.16 Georgia,serif!important;
+    text-wrap:balance;
+    overflow-wrap:normal;
+  }
+  .haiku-page .zen-panel .zen-program-grid .zen-program-caption small{
+    font:700 9px/1.22 system-ui,sans-serif!important;
+    letter-spacing:.045em!important;
+    text-wrap:balance;
+  }
+  .haiku-page .zen-panel .zen-program-grid > .zen-program:last-child:nth-child(odd){
+    grid-column:1/-1!important;
+    width:min(100%,190px)!important;
+    justify-self:center!important;
+    min-height:182px!important;
+  }
+}
+
+/* The original illustrated scrolls have transparent edges. Remove the old
+   rectangular parchment box-shadow which showed up as a cropped rectangle.
+   Keep an alpha-aware drop-shadow following the gilded scroll silhouette. */
+.haiku-page .haiku-scroll[data-scroll-style]{
+  box-shadow:none!important;
+  border:0!important;
+  outline:0!important;
+  background-color:transparent!important;
+  background-size:contain!important;
+  overflow:visible!important;
+  filter:drop-shadow(0 12px 14px rgba(17,10,29,.35));
+}
+.haiku-page .haiku-scroll[data-scroll-style]::before,
+.haiku-page .haiku-scroll[data-scroll-style]::after{
+  content:none!important;display:none!important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-inner{
+  box-shadow:none!important;
+  border:0!important;
+  overflow:hidden;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse p{
+  overflow-wrap:break-word;
+  hyphens:auto;
+  text-wrap:balance;
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scroll[data-verse-density="long"] .haiku-verse p{
+    font-size:clamp(14px,4.3vw,18px)!important;
+    line-height:1.19!important;
+    margin-bottom:5px!important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"][data-verse-density="long"] .haiku-verse p{
+    font-size:clamp(13px,3.6vw,15px)!important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="imperial"] .haiku-scroll-inner{
+    inset:15% 14.5% 15.5%!important;
+  }
+}
+
+/* Meditation-only scene arrows have a distinct turquoise/silver palette from
+   gold outfit arrows. They cycle the seven already-integrated panoramas. */
+.zen-immersive .zen-backdrop-cycle{
+  position:relative;
+  z-index:4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  width:min(100%,360px);
+  min-height:42px;
+  margin:8px auto 5px;
+  padding:3px 8px;
+  border:1px solid rgba(139,222,218,.63);
+  border-radius:999px;
+  background:rgba(8,47,56,.64);
+  box-shadow:0 3px 14px rgba(8,20,31,.35);
+}
+.zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-name{
+  display:block;
+  flex:1;
+  min-width:0;
+  text-align:center;
+  color:#e1f9f4;
+  font:600 13px/1.2 Georgia,serif;
+  text-shadow:0 1px 6px #071e2c;
+}
+.zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-arrow{
+  display:grid;
+  place-items:center;
+  flex:0 0 35px;
+  width:35px;
+  height:35px;
+  min-height:35px;
+  padding:0;
+  border:1px solid #b6f4eb;
+  border-radius:50%;
+  background:linear-gradient(145deg,#316e7b,#125266);
+  color:#f1ffff;
+  font:normal 27px/1 Georgia,serif;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-arrow:focus-visible{
+  outline:3px solid #f2dd9b;
+  outline-offset:2px;
+}
+@media(max-width:540px){
+  .zen-immersive .zen-backdrop-cycle{
+    width:min(100%,330px);
+    margin:5px auto 2px;
+    min-height:41px;
+  }
+  .zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-name{
+    font-size:12px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .haiku-page .haiku-scene-image > img.haiku-scene-rosie--slow-breath{
+    animation:none!important;
+    transform:translate3d(-50%,-20px,0)!important;
+  }
+}
