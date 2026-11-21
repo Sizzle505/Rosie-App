@@ -324,13 +324,12 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
           <span className="zen-ornament-corners" aria-hidden="true" />
           <header className="zen-immersive-header">
-            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN · {selectedView.label.toUpperCase()}</span><h2 id="zen-session-title">{selected.title}</h2></div>
+            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
             <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
           </header>
           {status!=="complete"&&<div className="zen-backdrop-cycle" role="group" aria-label="Change meditation scenery">
             <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Previous meditation background"
               title="Previous meditation landscape" onClick={()=>cycleMeditationBackdrop(-1)}>‹</button>
-            <span aria-live="polite" className="zen-backdrop-cycle-name">{selectedView.label}</span>
             <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Next meditation background"
               title="Next meditation landscape" onClick={()=>cycleMeditationBackdrop(1)}>›</button>
           </div>}
