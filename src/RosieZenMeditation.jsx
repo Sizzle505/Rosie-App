@@ -317,7 +317,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       <p className="zen-privacy">Your quiet moments are saved privately in this browser.</p>
     </div>
     {opened && createPortal(
-      <div className="zen-immersive">
+      <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`}}>
         <div className="zen-immersive-scenery" aria-hidden="true"><img src={sceneSrc} alt=""/></div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
