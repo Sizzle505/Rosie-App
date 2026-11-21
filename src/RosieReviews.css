@@ -128,3 +128,9 @@
    gap:20px 16px!important;
  }
 }
+
+
+/* iPhone: lower the entire Reviews composition 30px, leave desktop unchanged. */
+@media(max-width:600px){
+ .app-shell.page-reviews .rosie-reviews{padding-top:30px!important;box-sizing:border-box;}
+}
