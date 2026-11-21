@@ -24,7 +24,7 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Verify touch unlock, multi-select drag, multi-page save and exact-width isolation
         env:
-          BASE_URL: https://rosie-app-qvlffxa6c-apex-7488.vercel.app
+          BASE_URL: https://rosie-app-git.vercel.app
         run: node scripts/verify-secret-layout-studio.mjs
       - uses: actions/upload-artifact@v4
         if: always()

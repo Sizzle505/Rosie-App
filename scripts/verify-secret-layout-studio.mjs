@@ -36,6 +36,8 @@ try {
   await page.locator('.rle-elements .rle-element').filter({ hasText: 'Background button group' }).locator('input').check();
   assert.match(await page.getByRole('button', { name: /Hide elements/ }).innerText(), /2/);
   log('PASS: Touch-target group selection of independent art elements');
+  await page.locator('.haiku-scroll').evaluate(el => el.scrollIntoView({block:'center'}));
+  await page.waitForTimeout(120);
   const before = await page.locator('.haiku-scroll').evaluate(el => {
     const rect=el.getBoundingClientRect();
     return { x:rect.x,y:rect.y };
@@ -45,8 +47,6 @@ try {
     return { x:rect.x,y:rect.y };
   });
   await page.getByRole('button', { name: 'Minimize Layout Studio' }).click();
-  await page.locator('.haiku-scroll').evaluate(el => el.scrollIntoView({block:'center'}));
-  await page.waitForTimeout(120);
   const target = await page.locator('.haiku-scroll').boundingBox();
   assert.ok(target?.width && target?.height,'Poetry scroll has real dimensions');
   let x=Math.min(695,Math.max(15,target.x+Math.min(35,target.width/4)));
