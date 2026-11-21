@@ -68,7 +68,8 @@ export default async function handler(req, res) {
     const answer = await generateRosieAnswer({ feature, input, key });
     if (feature === "haiku") {
       return putJson(res, 200, {
-        feature, id: "ai-" + randomUUID(), lines: answer.lines, revised: answer.revised
+        feature, id: "ai-" + randomUUID(), lines: answer.lines, revised: answer.revised,
+        metre: answer.metre, counts: answer.counts
       });
     }
     return putJson(res, 200, { feature, ...answer, id: "ai-" + randomUUID() });
