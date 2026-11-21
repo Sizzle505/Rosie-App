@@ -185,7 +185,7 @@ try {
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
       await room.waitFor({state:"visible"});
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
-         img.complete && img.naturalWidth > 200 && /meditating-.*\\.webp$/.test(new URL(img.src).pathname)
+         img.complete && img.naturalWidth > 200 && img.src.includes("/new/characters/meditating-") && img.src.endsWith(".webp")
        ), label+" meditation must use an approved transparent Rosie kimono master");
        assert.ok(await page.locator(".zen-immersive-scenery img").evaluate(img =>
          img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/")
