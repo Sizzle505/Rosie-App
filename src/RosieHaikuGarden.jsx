@@ -331,7 +331,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
               <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Daily</span></button>
               <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Compose</span></button>
               <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
-              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal <span>{journal.length}</span></span></button>
+              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal</span></button>
             </nav>
             <div className="haiku-workbench-body">
             {mode === "daily" ? (
