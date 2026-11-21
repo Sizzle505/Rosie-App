@@ -375,7 +375,7 @@
   }
   .haikuLantern{
     top:8px!important;right:8px!important;bottom:auto!important;
-    width:clamp(55px,16vw,69px);height:clamp(70px,20vw,88px);
+    width:clamp(72px,20.8vw,90px);height:clamp(91px,26vw,114px);
     z-index:6;
   }
   .worldGrid{flex:none;margin-top:-23px;}
