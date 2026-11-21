@@ -185,8 +185,11 @@ try {
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
       await room.waitFor({state:"visible"});
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
-        img.src.endsWith("/rosie-meditating-paws-up.webp")
-      ), label+" meditation must use the alpha-transparent image, not the black-box animated WebP");
+         img.complete && img.naturalWidth > 200 && /meditating-.*\\.webp$/.test(new URL(img.src).pathname)
+       ), label+" meditation must use an approved transparent Rosie kimono master");
+       assert.ok(await page.locator(".zen-immersive-scenery img").evaluate(img =>
+         img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/")
+       ), label+" meditation must load an approved sanctuary background");
       if(label==="user-desktop"||label==="iphone") {
         await page.screenshot({path:"artifacts/haiku-layout/"+label+"-meditation.png",fullPage:false,animations:"disabled"});
       }
