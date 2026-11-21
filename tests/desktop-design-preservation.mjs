@@ -82,6 +82,19 @@ try {
           assert(info.calculator.right<=info.workspace.x+24,label+" calculator collided with instruments "+JSON.stringify(info));
         }
         if(route==="haiku"&&width===1920&&height===1080){
+          const diagnostic=await page.evaluate(()=>{
+            const el=document.querySelector(".haiku-scene-image");
+            const st=el?getComputedStyle(el):null;
+            return {
+              validCss:CSS.supports("translate","clamp(-102px, -5.3125vw, -78px) clamp(116px, 16.6667dvh, 180px)"),
+              media:matchMedia("(min-width:1480px) and (hover:hover) and (pointer:fine)").matches,
+              count:document.querySelectorAll(".haiku-scene-image").length,
+              inside:!!el?.closest(".app-shell.page-haiku"),
+              className:el?.className, translate:st?.translate, transform:st?.transform,
+              scrollTranslate:getComputedStyle(document.querySelector(".haiku-scroll")).translate
+            };
+          });
+          console.log("HAIKU DIAGNOSTIC "+JSON.stringify(diagnostic));
           const match=info.poemMove?.match(/(-?\d+(?:\.\d+)?)px\s+(-?\d+(?:\.\d+)?)px/);
           assert(match&&nearly(Number(match[1]),-102,1)&&nearly(Number(match[2]),180,1),
             "1920x1080 must preserve the approved Haiku scene offset: "+info.poemMove);
