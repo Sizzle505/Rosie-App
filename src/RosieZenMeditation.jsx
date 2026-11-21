@@ -333,8 +333,9 @@ export default function RosieZenMeditation({scene="field",poem}) {
         <div className="zen-immersive-scenery" aria-hidden="true"><img src={sceneSrc} alt=""/></div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
+          <span className="zen-ornament-corners" aria-hidden="true" />
           <header className="zen-immersive-header">
-            <div><span>ROSIE'S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
+            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN · {selectedView.label.toUpperCase()}</span><h2 id="zen-session-title">{selected.title}</h2></div>
             <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
           </header>
           {status==="complete"?
@@ -344,6 +345,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
                 <span className="zen-eyebrow">A LITTLE MOMENT OF PEACE</span>
                 <h3>Beautifully done.</h3>
                 <p>You gave yourself {minutes} minutes of gentle attention. Rosie is quietly impressed.</p>
+                <div className="zen-enlightenment-reward">
+                  <img src={NEW_ART+"ui/enlightenment-seal.webp"} alt="Rosie's Seal of Enlightenment" className="zen-enlightenment-seal"/>
+                  <img src={NEW_ART+"characters/sensei-bowing.webp"} alt="Sensei Rosie bows in congratulations" className="zen-sensei-bowing"/>
+                </div>
                 <p className="zen-complete-stats">{progress.sessions} sessions · {progress.minutes} peaceful minutes</p>
                 <button type="button" className="zen-action-primary" onClick={close}>Return to the garden</button>
               </div>
@@ -351,7 +356,7 @@ export default function RosieZenMeditation({scene="field",poem}) {
             <div className="zen-immersive-body">
               <div className={"zen-breath-portrait"+(status==="paused"?" paused":"")}>
                 <div className="zen-breath-halo" aria-hidden="true"/>
-                <img src={ROSIE} alt="Rosie meditates peacefully with her paws up"/>
+                <img src={rosieSrc} alt={"Rosie meditates peacefully in her "+selectedOutfit.label+" with her paws up"}/>
                 <p>{kind==="breathe"?"Breathe in peace. Breathe out the fuss.":"Nothing to do. Nowhere to be."}</p>
               </div>
               <div className="zen-guidance">
