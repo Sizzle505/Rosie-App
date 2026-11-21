@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import test from "node:test";
 import handler from "../api/rosie-ai.js";
+import { relevantRosieBackground, rosiePersonaFor, ROSIE_BACKGROUND } from "../api/_lib/rosiePersona.js";
+import { makeRosiePrompt } from "../api/_lib/rosiePrompts.js";
 
 async function invoke(body, method = "POST") {
   const res = {
@@ -75,7 +77,90 @@ test("rejects malformed upstream output rather than passing it to the UI", async
   try {
     const res = await invoke({ feature: "oracle", question: "What next?" });
     assert.equal(res.code, 503);
-    assert.equal(res.payload.error, "ai_unavailable");
+    assert.equal(res.payload.error, "invalid_json");
+  } finally {
+    if (originalKey === undefined) delete process.env.VENICE_API_KEY;
+    else process.env.VENICE_API_KEY = originalKey;
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("Rosie's background contains all canonical facets without flooding generic responses", () => {
+  const archive = ROSIE_BACKGROUND.map(item => item.fact).join(" ");
+  for (const clue of [
+    "Doctor of Cheese", "treats", "naps", "digging", "squirrels", "cats",
+    "baths", "vacuum", "mail carrier", "sheds", "pedigree",
+    "thunder and fireworks", "Japan", "South Florida", "garbage",
+    "leash", "belly scratches", "tail wags"
+  ]) assert.match(archive, new RegExp(clue, "i"), clue);
+  const neutral = rosiePersonaFor("What should I do about my next job interview?");
+  assert.match(neutral, /genius Shiba Inu/);
+  assert.match(neutral, /extraordinary longevity/);
+  assert.doesNotMatch(neutral, /Doctor of Cheese|squirrels|mail carrier|vacuum/);
+  const cheese = rosiePersonaFor("Does aged Manchego taste better than Gouda?");
+  assert.match(cheese, /Doctor of Cheese/);
+  assert.doesNotMatch(cheese, /mail carrier|baths|squirrels/);
+  assert.deepEqual(relevantRosieBackground("How do I prepare for a job interview?"), []);
+  assert.ok(relevantRosieBackground("Should I nap, eat cheese, or chase a cat?").length <= 2);
+});
+
+test("haiku and Oracle prompts prioritize the actual subject, not a dedication", () => {
+  const haiku = makeRosiePrompt("haiku", {
+    topic: "Rosie hides from a thunderstorm", mood: "zen", variation: 3
+  });
+  assert.match(haiku.system, /subject is NOT a dedication/i);
+  assert.match(haiku.user, /HAIKU SUBJECT - WRITE ABOUT THIS/);
+  assert.match(haiku.user, /thunderstorm/);
+  assert.match(haiku.system, /thunder and fireworks frighten her/);
+  assert.doesNotMatch(haiku.system, /Doctor of Cheese|mail carrier/);
+  const oracle = makeRosiePrompt("oracle", { question: "What should I do about my promotion?" });
+  assert.match(oracle.system, /central dilemma/);
+  assert.doesNotMatch(oracle.system, /Doctor of Cheese|mail carrier|squirrels/);
+  assert.match(oracle.user, /promotion/);
+});
+
+test("off-meter haiku triggers one subject-preserving revision before display", async () => {
+  const originalKey = process.env.VENICE_API_KEY;
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  process.env.VENICE_API_KEY = "test-key-do-not-deploy";
+  globalThis.fetch = async (_url, init) => {
+    calls++;
+    const payload = JSON.parse(init.body);
+    if (calls === 2) assert.match(payload.messages[1].content, /thunderstorm/);
+    const poem = calls === 1
+      ? { lines: ["Clouds", "Dogs", "Rain"] }
+      : { lines: ["Thunder shakes the pines", "Rosie sleeps beside the fire", "Rain fades into dawn"] };
+    return { ok: true, json: async () => ({ choices: [{ message: { content: JSON.stringify(poem) } }] }) };
+  };
+  try {
+    const res = await invoke({ feature: "haiku", topic: "Rosie sleeping during a thunderstorm", mood: "sweet", variation: 1 });
+    assert.equal(res.code, 200);
+    assert.equal(calls, 2);
+    assert.equal(res.payload.revised, true);
+    assert.match(res.payload.lines.join(" "), /Thunder/);
+  } finally {
+    if (originalKey === undefined) delete process.env.VENICE_API_KEY;
+    else process.env.VENICE_API_KEY = originalKey;
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("two invalid poems fail explicitly, never substitute curated material", async () => {
+  const originalKey = process.env.VENICE_API_KEY;
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  process.env.VENICE_API_KEY = "test-key-do-not-deploy";
+  globalThis.fetch = async () => {
+    calls++;
+    return { ok: true, json: async () => ({ choices: [{ message: { content: JSON.stringify({ lines: ["Rain", "Dog", "Sun"] }) } }] }) };
+  };
+  try {
+    const res = await invoke({ feature: "haiku", topic: "The dentist", mood: "existential", variation: 0 });
+    assert.equal(calls, 2);
+    assert.equal(res.code, 503);
+    assert.equal(res.payload.error, "invalid_metre");
+    assert.equal(res.payload.lines, undefined);
   } finally {
     if (originalKey === undefined) delete process.env.VENICE_API_KEY;
     else process.env.VENICE_API_KEY = originalKey;
