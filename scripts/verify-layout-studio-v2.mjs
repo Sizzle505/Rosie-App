@@ -58,6 +58,7 @@ try{
  await page.locator('.haiku-scroll').evaluate(el=>el.scrollIntoView({block:'center'}));
  await page.waitForTimeout(180);
  const original=await page.locator('.haiku-scroll').boundingBox();
+ const partnerOriginal=await page.locator('.haiku-scene-selector').boundingBox();
  const outline=page.locator('.rle-outline[data-target-id=scroll]');
  await outline.waitFor();
  const rect=await outline.boundingBox();
@@ -65,8 +66,9 @@ try{
  await page.mouse.down();await page.mouse.move(rect.x+Math.min(35,rect.width/4)+26,rect.y+55,{steps:5});await page.mouse.up();
  const final=await page.locator('.haiku-scroll').boundingBox();
  assert.ok(Math.abs(final.x-original.x-26)<4,'Dragging a selected group moves the scroll');
- const movedPartner=await page.locator('.haiku-scene-selector').evaluate(el=>el.style.translate);
- assert.ok(movedPartner.includes('26px'),'Group partner follows movement');
+ const movedPartner=await page.locator('.haiku-scene-selector').boundingBox();
+ assert.ok(Math.abs((movedPartner.x-partnerOriginal.x)-(final.x-original.x))<2.5,
+   'Group partner follows exact snapped movement: '+JSON.stringify({scroll:final.x-original.x,partner:movedPartner.x-partnerOriginal.x}));
  console.log('PASS multi-item drag and selected midpoint guides');
 
  const rect2=await outline.boundingBox();
