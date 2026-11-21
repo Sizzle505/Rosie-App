@@ -1922,12 +1922,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   }
 
   function startGame(targetChapter = chapterIndex) {
-    // Enter via the Cast Off tap while Safari still grants user activation.
-    // On iPhone, the shared game frame uses its fixed-viewport fallback when
-    // native Element fullscreen is not supported.
-    if (typeof navigator !== "undefined" && /iPhone|iPod/i.test(navigator.userAgent)) {
-      requestGameFullscreen?.();
-    }
+    // Launch in fullscreen from the player's gesture on every device.
+    // iPhone uses the existing fixed-viewport fallback.
+    requestGameFullscreen?.();
     audioContext();
     const chosen = typeof targetChapter === "number"
       ? Math.max(0, Math.min(yachtPlayableLimit(unlockedChapter), targetChapter)) : chapterIndex;
@@ -2771,21 +2768,31 @@ function FullscreenGameFrame({ children, label, variant }) {
     setFallbackFullscreen(true);
   };
 
-  const toggleFullscreen = async () => {
+  const exitGameFullscreen = () => {
     if (fallbackFullscreen) {
       setFallbackFullscreen(false);
-      if (variant === "yacht") setFullscreenExitSequence((count) => count + 1);
+      if (variant === "yacht") setFullscreenExitSequence(count => count + 1);
       return;
     }
     if (nativeFullscreen) {
       const exit = document.exitFullscreen || document.webkitExitFullscreen;
       if (exit) {
-        try { await exit.call(document); } catch { setNativeFullscreen(false); }
+        try { Promise.resolve(exit.call(document)).catch(() => setNativeFullscreen(false)); }
+        catch { setNativeFullscreen(false); }
       } else setNativeFullscreen(false);
-      return;
     }
-    enterGameFullscreen();
   };
+
+  // Cosmic Odyssey's LAUNCH click occurs inside a same-origin iframe.
+  // A synchronous parent event retains its user activation for fullscreen.
+  useEffect(() => {
+    if (variant !== "cosmic") return undefined;
+    const launch = event => {
+      if (event.detail?.variant === "cosmic") enterGameFullscreen();
+    };
+    window.addEventListener("rosieverse:captain-start", launch);
+    return () => window.removeEventListener("rosieverse:captain-start", launch);
+  }, [variant, expanded]);
 
   return (
     <section
@@ -2793,18 +2800,9 @@ function FullscreenGameFrame({ children, label, variant }) {
       className={`captain-fullscreen-frame captain-fs-${variant}${expanded ? " is-expanded" : ""}${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
       aria-label={`${label} game`}
     >
-      {variant !== "cheese" && <button type="button" className="captain-fullscreen-toggle"
-        onClick={toggleFullscreen}
-        aria-label={expanded ? `Exit full screen for ${label}` : `Enter full screen for ${label}`}
-        title={expanded ? "Exit full screen (Esc)" : "Full screen"}
-        aria-pressed={expanded}
-      >
-        <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
-        <b>{expanded ? "EXIT FULL SCREEN" : "FULL SCREEN"}</b>
-      </button>}
-      {variant === "yacht" && React.isValidElement(children)
+      {["yacht", "tunnel", "captain2"].includes(variant) && React.isValidElement(children)
         ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen,
-            fullscreenExitSequence })
+            exitGameFullscreen, fullscreenExitSequence })
         : children}
     </section>
   );
