@@ -124,6 +124,7 @@ export function newRun(seed = 1467, stageIndex = null) {
     crystalShutters:makeCrystalShutters(), hazardsDodged:0,
     worldHazards:makeExpeditionHazards(stageIndex),worldObjective:false,
     boss:null,bossY:null,bossDefeated:false,bossAttackHitCycle:-1,
+    bossVictoryHold:0,bossCleanBonusApplied:false,
     objectives:{barkroot:false,ruby:false}, objectiveBonus:0,
     formationHits: [], events: [], result: null, distance: 0 };
 }
@@ -150,6 +151,13 @@ export function updateRun(s, dt, up = false, down = false) {
   if (!s.running) return s;
   dt = clamp(dt, 0, 0.045);
   s.events.length = 0;
+  // Keep the defeated boss artwork visible without advancing game time,
+  // steering or collisions until the brief victory flourish is complete.
+  if(s.bossDefeated){
+    s.bossVictoryHold=Math.max(0,s.bossVictoryHold-dt);
+    if(s.bossVictoryHold<=0)finishExpeditionBossStage(s);
+    return s;
+  }
   const target = up && !down ? -0.72 : down && !up ? 0.72 : 0;
   s.pitch += (target - s.pitch) * Math.min(1, dt * 6.5);
   s.y = clamp(s.y + Math.sin(s.pitch) * 330 * dt, 65, DRILL_HEIGHT - 65);
@@ -169,11 +177,15 @@ export function updateRun(s, dt, up = false, down = false) {
       tipX:tip.x,tipY:tip.y,boosted:s.boostTime>0,onHit:takeHit
     });
     if(s.bossDefeated){
-      if(s.damageTaken===0){
-        s.cleanBonus=500;s.score+=500;
-        s.events.push({type:"clean-run",x:DRILL_ANCHOR,y:s.y});
+      // Perfection is paid once; the defeated frame is held until the
+      // victory countdown finishes on a later simulation step.
+      if(!s.bossCleanBonusApplied){
+        s.bossCleanBonusApplied=true;
+        if(s.damageTaken===0){
+          s.cleanBonus=500;s.score+=500;
+          s.events.push({type:"clean-run",x:DRILL_ANCHOR,y:s.y});
+        }
       }
-      finishExpeditionBossStage(s);
     }else if(s.hull<=0||s.time>=s.duration){
       s.running=false;s.ended=true;
       s.result=s.hull<=0?"hull":"boss-timeout";
