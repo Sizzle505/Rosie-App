@@ -57,3 +57,40 @@ test("player is user-gesture gated; mute and volume do not affect game SFX",()=>
   assert.equal(engine.decks.filter(x=>x&&!x.paused).length,0);
   engine.dispose();
 });
+
+test("Safari keeps one gesture-authorized audio element through rapid page changes",async()=>{
+  let now=0,created=0;
+  const songs=[];
+  class FakeAudio {
+    constructor(){created++;this.paused=true;this.volume=0;this.src="";this.loop=false;}
+    play(){this.paused=false;songs.push(this.src);return Promise.resolve();}
+    pause(){this.paused=true;}
+    removeAttribute(){}
+    load(){}
+  }
+  const engine=new RosieMusicEngine({
+    audioFactory:()=>new FakeAudio(),clock:()=>now,
+    frame:()=>1,cancelFrame:()=>{}
+  });
+  engine.singleDeck=true;
+  engine.setDesired("whimsical-journey");
+  assert.equal(created,0,"No sound or network before user gesture");
+  engine.unlock();
+  for(const id of ["oracle-secret","haiku-garden","clockwork-nostalgia","cheese-heist"]){
+    now+=50;
+    engine.setDesired(id);
+    assert.equal(engine.activeId,id);
+    assert.equal(engine.decks.filter(Boolean).length,1,"Safari must reuse the authorized element");
+    assert.equal(engine.decks[0].src,musicUrl(id));
+    assert.equal(engine.decks[0].paused,false);
+  }
+  await Promise.resolve();
+  assert.equal(engine.error,null);
+  assert.equal(songs.length,5);
+  engine.setEnabled(false);
+  assert.equal(engine.decks[0].paused,true);
+  engine.setEnabled(true);
+  assert.equal(engine.decks[0].paused,false);
+  assert.equal(created,1);
+  engine.dispose();
+});
