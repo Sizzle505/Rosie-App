@@ -316,12 +316,6 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
           Read guidance aloud <small>(device voice)</small>
         </label>}
       <button type="button" className="haiku-primary zen-begin" onClick={begin}>Begin {minutes}-minute meditation</button>
-      <div className="zen-progress-note">
-        <span><strong>{progress.sessions}</strong> sessions</span>
-        <span><strong>{progress.minutes}</strong> minutes</span>
-        <span><strong>{dayStreak(progress.days)}</strong> day streak</span>
-      </div>
-      <p className="zen-privacy">Your quiet moments are saved privately in this browser.</p>
     </div>
     {opened && createPortal(
       <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`}}>
