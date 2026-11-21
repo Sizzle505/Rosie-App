@@ -10,7 +10,7 @@ const visit=async(route,selector)=>{
   await page.locator(".loading-screen").waitFor({state:"hidden",timeout:15000});
 };
 try{
-  await visit("home","[data-layout-target='home-hero'] img");
+  await visit("home","[data-layout-target='home-hero'] > img");
   const home=await page.locator("[data-layout-target='home-hero']").evaluate(node=>{
     const im=node.querySelector("img"),a=node.getBoundingClientRect(),b=im.getBoundingClientRect();
     return {gap:Math.abs(a.height-b.height),natural:im.naturalWidth/im.naturalHeight,
