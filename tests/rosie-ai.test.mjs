@@ -4,6 +4,7 @@ import test from "node:test";
 import handler from "../api/rosie-ai.js";
 import { relevantRosieBackground, rosiePersonaFor, ROSIE_BACKGROUND } from "../api/_lib/rosiePersona.js";
 import { makeRosiePrompt } from "../api/_lib/rosiePrompts.js";
+import { assessHaikuMeter, pronunciationOptions } from "../api/_lib/rosieMeter.js";
 
 async function invoke(body, method = "POST") {
   const res = {
@@ -146,7 +147,7 @@ test("off-meter haiku triggers one subject-preserving revision before display", 
   }
 });
 
-test("two off-meter originals still succeed and never become canned poems", async () => {
+test("repeated off-meter originals remain real poems with honest metre metadata", async () => {
   const originalKey = process.env.VENICE_API_KEY;
   const originalFetch = globalThis.fetch;
   let calls = 0;
@@ -157,10 +158,11 @@ test("two off-meter originals still succeed and never become canned poems", asyn
   };
   try {
     const res = await invoke({ feature: "haiku", topic: "The dentist", mood: "existential", variation: 0 });
-    assert.equal(calls, 2);
+    assert.equal(calls, 3);
     assert.equal(res.code, 200);
     assert.deepEqual(res.payload.lines, ["Rain", "Dog", "Sun"]);
-    assert.equal(res.payload.metre, undefined); // No false 5/7/5 certification on the API.
+    assert.equal(res.payload.metre, "approximate");
+    assert.notDeepEqual(res.payload.counts, [5,7,5]);
     assert.equal(res.payload.revised, false);
   } finally {
     if (originalKey === undefined) delete process.env.VENICE_API_KEY;
@@ -204,4 +206,49 @@ test("haiku prompts carry a discernible Rosie perspective without obligatory dog
   assert.match(a.system, /not formulaic references to paws, cheese, fur or barking/);
   assert.match(a.user, /distant comet/);
   assert.doesNotMatch(a.system, /Doctor of Cheese|She pursues squirrels/);
+});
+
+
+test("North American dictionary recognizes genuine 5/7/5 and pronunciation alternatives", () => {
+  const exact = assessHaikuMeter([
+    "Bright stars crown the night",
+    "My nose finds the hidden path",
+    "Cheese waits on the plate"
+  ]);
+  assert.deepEqual(exact.counts, [5,7,5]);
+  assert.equal(exact.verified, true);
+  assert.equal(pronunciationOptions("Rosie").counts[0], 2);
+  assert.ok(pronunciationOptions("every").counts.includes(2));
+  const wrong = assessHaikuMeter(["Rain", "Dogs", "Sky"]);
+  assert.equal(wrong.verified, false);
+  assert.ok(wrong.score > 0);
+});
+
+test("phonetic repair tells Venice the line and spoken syllable counts", async () => {
+  const oldKey = process.env.VENICE_API_KEY;
+  const oldFetch = globalThis.fetch;
+  process.env.VENICE_API_KEY = "test-key-do-not-deploy";
+  const calls = [];
+  globalThis.fetch = async (_url, opts) => {
+    const request = JSON.parse(opts.body);
+    calls.push(request);
+    const poem = calls.length === 1
+      ? { lines: ["One", "Far far", "Night"] }
+      : { lines: ["Bright stars crown the night", "My nose finds the hidden path", "Cheese waits on the plate"] };
+    return { ok: true, json: async () => ({ choices: [{ message: { content: JSON.stringify(poem) } }] }) };
+  };
+  try {
+    const result = await invoke({ feature: "haiku", topic: "Rosie under the stars", mood: "zen", variation: 2 });
+    assert.equal(result.code, 200);
+    assert.equal(result.payload.metre, "verified");
+    assert.equal(result.payload.revised, true);
+    assert.equal(calls.length, 2);
+    assert.match(calls[1].messages[1].content, /phonetic syllable counts/i);
+    assert.match(calls[1].messages[1].content, /TARGET 5/);
+    assert.match(calls[1].messages[1].content, /Rosie under the stars/);
+  } finally {
+    if (oldKey === undefined) delete process.env.VENICE_API_KEY;
+    else process.env.VENICE_API_KEY = oldKey;
+    globalThis.fetch = oldFetch;
+  }
 });
