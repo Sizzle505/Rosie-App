@@ -72,6 +72,8 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     normalizedScreenLayouts(readStored(localStorage, PUBLISHED_PREFIX + screenSignature()))
   );
   const [open, setOpen] = useState(false);
+  // The canvas remains editable when the toolbar is minimized.
+  const [active, setActive] = useState(false);
   const [editing, setEditing] = useState(true);
   const [multi, setMulti] = useState(false);
   const [showElements, setShowElements] = useState(false);
@@ -233,6 +235,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
   function hideEditor() {
     if (dirty && !window.confirm('Hide Layout Studio? Your unpublished adjustments will remain as a session draft.')) return;
     setOpen(false);
+    setActive(false);
     setSelected([]);
     api({ action: 'hide' }).catch(() => {});
     onHide();
@@ -258,12 +261,12 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
   }
 
   useEffect(() => {
-    document.body.classList.toggle('rle-active', open && editing && unlocked);
+    document.body.classList.toggle('rle-active', active && editing && unlocked);
     return () => document.body.classList.remove('rle-active');
-  }, [open, editing, unlocked]);
+  }, [active, editing, unlocked]);
 
   useEffect(() => {
-    if (!open || !editing || !unlocked) return undefined;
+    if (!active || !editing || !unlocked) return undefined;
     const root = document.createElement('div');
     root.className = 'rle-guides rle-ui';
     document.body.appendChild(root);
@@ -414,7 +417,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       root.remove();
       overlayRef.current = null;
     };
-  }, [page, screenKey, open, editing, unlocked, multi]);
+  }, [page, screenKey, active, editing, unlocked, multi]);
 
   useEffect(() => {
     overlayRef.current?.dispatchEvent(new Event('rle-refresh'));
@@ -427,7 +430,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
   const editedPages = Object.keys(working).filter(key => Object.keys(working[key] || {}).length).length;
   if (!unlocked) return null;
   return <>
-    {!open && <button type='button' className='rle-launch rle-ui' onClick={() => { setOpen(true); setEditing(true); }} aria-label='Open secret Layout Studio'>Arrange</button>}
+    {!open && <button type='button' className='rle-launch rle-ui' onClick={() => { setOpen(true); setActive(true); setEditing(true); }} aria-label='Open secret Layout Studio'>Arrange</button>}
     {open && <section className='rle-panel rle-ui' aria-label='Rosie Layout Studio'>
       <header className='rle-header'>
         <div><strong>ROSIE LAYOUT STUDIO</strong><small>Exact screen: {screenKey}</small></div>
