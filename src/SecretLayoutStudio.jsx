@@ -585,7 +585,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         stage(workingRef.current);
       } else {
         history.current.pop();
-        if(multi){
+        if(multi || selectedRef.current.length>1){
           const id=drag.moving.find(id=>id===event.target.closest?.('[data-target-id]')?.dataset.targetId)||
             drag.rects.find(item=>item.node.contains(event.target))?.id||drag.moving[0];
           setSelected(current=>current.includes(id)?current.filter(value=>value!==id):[...current,id]);
