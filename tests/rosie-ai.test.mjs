@@ -146,7 +146,7 @@ test("off-meter haiku triggers one subject-preserving revision before display", 
   }
 });
 
-test("two invalid poems fail explicitly, never substitute curated material", async () => {
+test("two off-meter originals still succeed and never become canned poems", async () => {
   const originalKey = process.env.VENICE_API_KEY;
   const originalFetch = globalThis.fetch;
   let calls = 0;
@@ -158,12 +158,50 @@ test("two invalid poems fail explicitly, never substitute curated material", asy
   try {
     const res = await invoke({ feature: "haiku", topic: "The dentist", mood: "existential", variation: 0 });
     assert.equal(calls, 2);
-    assert.equal(res.code, 503);
-    assert.equal(res.payload.error, "invalid_metre");
-    assert.equal(res.payload.lines, undefined);
+    assert.equal(res.code, 200);
+    assert.deepEqual(res.payload.lines, ["Rain", "Dog", "Sun"]);
+    assert.equal(res.payload.metre, undefined); // No false 5/7/5 certification on the API.
+    assert.equal(res.payload.revised, true);
   } finally {
     if (originalKey === undefined) delete process.env.VENICE_API_KEY;
     else process.env.VENICE_API_KEY = originalKey;
     globalThis.fetch = originalFetch;
   }
+});
+
+test("consecutive haiku generations return originals instead of failing after the first", async () => {
+  const originalKey = process.env.VENICE_API_KEY;
+  const originalFetch = globalThis.fetch;
+  let requests = 0;
+  process.env.VENICE_API_KEY = "test-key-do-not-deploy";
+  globalThis.fetch = async (_url, init) => {
+    requests++;
+    const body = JSON.parse(init.body);
+    assert.match(body.messages[1].content, /sunflowers/i);
+    // Deliberately imperfect metre, structurally valid and specific.
+    const lines = ["Sunflowers lean in", "A watcher at the garden gate", "I approve this sun"];
+    return { ok: true, json: async () => ({ choices: [{ message: { content: JSON.stringify({ lines }) } }] }) };
+  };
+  try {
+    for (let variation = 0; variation < 3; variation++) {
+      const res = await invoke({ feature: "haiku", topic: "sunflowers in the garden", mood: "savage", variation });
+      assert.equal(res.code, 200);
+      assert.equal(res.payload.feature, "haiku");
+      assert.equal(res.payload.lines.length, 3);
+    }
+    assert.ok(requests >= 3);
+  } finally {
+    if (originalKey === undefined) delete process.env.VENICE_API_KEY;
+    else process.env.VENICE_API_KEY = originalKey;
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("haiku prompts carry a discernible Rosie perspective without obligatory dog clichés", () => {
+  const a = makeRosiePrompt("haiku", { topic: "a distant comet", mood: "existential", variation: 0 });
+  assert.match(a.system, /intelligent Shiba Inu|brilliant Shiba Inu/);
+  assert.match(a.system, /Rosie's own sensibility/);
+  assert.match(a.system, /not formulaic references to paws, cheese, fur or barking/);
+  assert.match(a.user, /distant comet/);
+  assert.doesNotMatch(a.system, /Doctor of Cheese|She pursues squirrels/);
 });
