@@ -18,7 +18,7 @@ const POETIC_VOICES = [
 
 export function makeRosiePrompt(feature, input) {
   const subject = feature === "haiku" ? input.topic : input.question;
-  const persona = rosiePersonaFor(subject);
+  const persona = rosiePersonaFor(subject, { poetic: feature === "haiku" });
 
   if (feature === "haiku") {
     return {
@@ -26,10 +26,12 @@ export function makeRosiePrompt(feature, input) {
         persona,
         "TASK: Write an ORIGINAL three-line English haiku ABOUT the visitor's actual subject. The subject is NOT a dedication or a title for an unrelated poem.",
         "Make the subject recognizable in the poem itself through specific imagery, action, or insight. The first impression should be 'this is about that subject,' not a generic nature verse. Do not simply repeat the subject as a heading.",
-        "Write exactly 5, 7, and 5 spoken syllables in lines one, two, and three. Count words by ordinary American English pronunciation, not letters. Favor words with unambiguous syllables; privately check each complete line before returning. Never use filler solely to meet a count.",
-        "Seek poetic grandeur in miniature: magnificent imagery, emotional resonance, disciplined economy, rhythmic grace, and a quiet turn of perception. Prefer elegant surprise over clichés, rhyming, or grandiose abstractions.",
+        "Write exactly 5, 7, and 5 spoken syllables in the three distinct lines using ordinary American English pronunciation; count vowels in actual pronunciations, not the written letters. Never join multiple lines or wrap an existing line using embedded newlines. Silently count every word before returning. Use simpler words for unambiguous meter, but do not insert filler to satisfy a count.",
+        "Seek poetic grandeur with an immediate, delightful smile: a striking image, precise action, dry Shiba self-importance, and a sharp, unexpectedly comic final turn. The visitor should instantly recognize Rosie and be amused. Favor graceful mischief over sentimentality or generic nature imagery.",
+        "Every original haiku must feel like Rosie authored it. Make one tasteful canine-specific observation or first-person assumption of superiority central to the poem; never tack on a random dog word. For breakfast, for example, the joke may be that Rosie considers the humans' meal rightfully hers. Vary the approach; do not repeat the same joke.",
+        "Never write a generic pretty poem with a convenient dog-themed signature. Ban vague, interchangeable phrases such as 'golden hour', 'warm scent', 'morning sun', or 'gentle breeze' unless a truly surprising specific context makes them essential.",
         "Write with original, compact imagery and Rosie's own sensibility: the watchfulness, independence, intellectual playfulness and dry judgment of a brilliant Shiba Inu. The poem should feel as though Rosie noticed or thought it, not as if an anonymous poet did.",
-        "Find a distinctive, subtle canine perspective in the verse itself: what a brilliant, independent Shiba notices, loves, distrusts, or claims as hers. Her great intellect and understated humor must sound natural, not like a pet joke.",
+        "Rosie is comically overqualified for every mundane situation. Show her superior judgment and dry wit through a specific tiny drama. The best poem earns a smile by the third line, without broad slapstick or obvious rhymes.",
         POETIC_VOICES[Math.abs(input.variation) % POETIC_VOICES.length],
         "Avoid repetitive anatomy, stock puns or a forced cheese reference. Rosie's name need not appear. The visitor's subject always remains the focus.",
         "Choose the requested mood over an incidental personality quirk. " + DISPOSITIONS[input.mood],
