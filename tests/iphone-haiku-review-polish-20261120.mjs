@@ -129,7 +129,7 @@ try {
       const note=page.locator(".rosie-music-launch");
       await note.waitFor({state:"visible"});
       assert.equal((await note.innerText()).trim(),"","Global music launcher icon-only");
-      assert.equal(await note.locator("svg").count(),1);
+      assert.equal(await note.locator("img[src*=\"rosie-music-medallion\"]").count(),1,"Shared music icon is the new purple/gold medallion");
       if(route==="home"){
         const width=await page.locator("button[class*='haikuLantern']").evaluate(el=>el.getBoundingClientRect().width);
         assert.ok(width>=79&&width<=91,"Landing Zen lantern enlarged 30%");
