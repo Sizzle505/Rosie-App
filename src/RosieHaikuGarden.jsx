@@ -3,6 +3,7 @@ import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS }
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
+import {imperialScrollWithoutChecker} from "./haikuScrollMatte.js";
 import { ROSIE_HAIKU_OUTFIT_KEY, readRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 import "./RosieHaikuAtmosphere.css";
 import "./RosieHaikuArchiveArt.css";
@@ -12,6 +13,7 @@ import "./RosieHaikuNewArt.css";
 import "./RosieHaikuPolishHold.css";
 import "./RosieHaikuIphoneRefinement.css";
 import "./RosieHaikuMobileFinal.css";
+import "./RosieHaikuReviewFinal.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
@@ -157,6 +159,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [scene, setScene] = useState(readSelectedScene);
   const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
   const [scrollStyle,setScrollStyle]=useState(readScrollStyle);
+  const [cleanImperialScroll,setCleanImperialScroll]=useState(null);
+  useEffect(()=>{
+    if(scrollStyle!=="imperial"||cleanImperialScroll)return;
+    let alive=true;
+    imperialScrollWithoutChecker().then(url=>{if(alive&&url)setCleanImperialScroll(url);});
+    return()=>{alive=false;};
+  },[scrollStyle,cleanImperialScroll]);
   const cycleScroll=step=>{
     const index=HAIKU_SCROLL_STYLES.findIndex(style=>style.id===scrollStyle);
     setScrollStyle(HAIKU_SCROLL_STYLES[(index+step+HAIKU_SCROLL_STYLES.length)%HAIKU_SCROLL_STYLES.length].id);
@@ -295,7 +304,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll-display">
-            <div className="haiku-scroll" data-scroll-style={scrollStyle} data-verse-density={poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}>
+            <div className="haiku-scroll" data-scroll-style={scrollStyle} data-verse-density={poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}
+              style={scrollStyle==="imperial"&&cleanImperialScroll?{backgroundImage:`url("${cleanImperialScroll}")`}:undefined}>
               <div className="haiku-scroll-inner">
                 <span className="haiku-scroll-caption">{mode === "daily" ? "TODAY IN THE GARDEN" : mode === "journal" ? "FROM THE POETRY JOURNAL" : "A ROSIE ORIGINAL"}</span>
                 <span className="haiku-ornament" aria-hidden="true">❀</span>
