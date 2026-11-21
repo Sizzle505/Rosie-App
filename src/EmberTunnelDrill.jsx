@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
+import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, turboMeterPercent, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
@@ -163,7 +163,7 @@ const DRILL_ART = {
 const formatTime = (t,duration=RUN_DURATION) => Math.max(0, Math.ceil(duration - t)) + "s";
 function snapshot(s) {
   return { score:s.score, time:s.time, hull:s.hull, charge:s.charge, gems:s.gems, bones:s.bones,
-    cheese:s.cheese, combo:s.combo, boost:s.boostTime, boosts:s.boosts, shards:s.shards,
+    cheese:s.cheese, combo:s.combo, boost:s.boostTime, boostPercent:turboMeterPercent(s), boosts:s.boosts, shards:s.shards,
     damageTaken:s.damageTaken, cleanBonus:s.cleanBonus, distance:Math.round(s.distance/10),
     wallsBroken:s.wallsBroken||0,secrets:s.secrets||0,relics:s.relics||0,
     hazardsDodged:s.hazardsDodged||0,objectiveBonus:s.objectiveBonus||0,
@@ -171,7 +171,7 @@ function snapshot(s) {
     worldObjective:s.worldObjective===true,worldHazardCount:s.worldHazards?.length||0,
     worldWarnings:(s.worldHazards||[]).filter(h=>h.warned).length,
     boss:s.boss?{kind:s.boss.kind,health:s.boss.health,maxHealth:s.boss.maxHealth,
-      phase:s.boss.phase,attack:s.boss.attack,defeated:s.boss.defeated}:null,
+      phase:s.boss.phase,attack:s.boss.attack,hitThisRecovery:!!s.boss.hitThisRecovery,defeated:s.boss.defeated}:null,
     bossDefeated:s.bossDefeated===true,
     objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
     passage:s.stageIndex===null?Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))):s.stageIndex, result:s.result };
@@ -307,12 +307,21 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     },{rootMargin:"150px"});
     if(canvas.current)observer.observe(canvas.current);
     const onKeys=e=>{
-      if(modeRef.current!=="running")return;
       const key=e.key.toLowerCase();
-      if(["arrowup","arrowdown","w","s"," "].includes(key))e.preventDefault();
-      if(key==="arrowup"||key==="w")pressed.current.up=e.type==="keydown";
-      if(key==="arrowdown"||key==="s")pressed.current.down=e.type==="keydown";
-      if(key===" "&&e.type==="keydown"&&!e.repeat)turbo();
+      const up=key==="arrowup"||key==="w",down=key==="arrowdown"||key==="s";
+      // Release held steering even after scrolling away or focusing an input.
+      if(e.type==="keyup"){
+        if(up)pressed.current.up=false;
+        if(down)pressed.current.down=false;
+        return;
+      }
+      if(modeRef.current!=="running"||!onscreen.current)return;
+      const target=e.target;
+      if(target?.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName||""))return;
+      if(up||down||key===" ")e.preventDefault();
+      if(up)pressed.current.up=true;
+      if(down)pressed.current.down=true;
+      if(key===" "&&!e.repeat)turbo();
     };
     const onBlur=()=>resetHold();
     document.addEventListener("keydown",onKeys);
@@ -551,7 +560,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
         {hud.boss&&active&&<span className="ember-boss-accessible" role="status" aria-live="off">
           {hud.boss.kind==="mole-king"?"Mole King":hud.boss.kind==="copperjack"?"Copperjack":"Cinderclaw"}: {hud.boss.health} of {hud.boss.maxHealth} health,
-          {hud.boss.phase==="recovery"?" vulnerable to Turbo":hud.boss.phase==="warning"?" attack incoming":hud.boss.phase==="active"?" attacking":" defeated"}
+          {hud.boss.phase==="recovery"?(hud.boss.hitThisRecovery?" recovering - already struck":" vulnerable to Turbo"):hud.boss.phase==="warning"?" attack incoming":hud.boss.phase==="active"?" attacking":" defeated"}
         </span>}
          {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">GUIDE THE AUGER INTO WEAK EARTH · TURBO BREAKS CRYSTAL</div>}
          {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
@@ -630,8 +639,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <span className="ember-boost-symbol">✦</span>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
-            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
-            <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
+            <i className="ember-charge"><i style={{width:hud.boostPercent+"%"}} /></i>
+            <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.boss?(hud.charge>=100?"STRIKE DURING RECOVERY · REPAIRS 1 HULL":"RECHARGES AT RECOVERY"):hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">▲▼</button> :
         <button className="ember-angle" type="button" disabled={!active}
