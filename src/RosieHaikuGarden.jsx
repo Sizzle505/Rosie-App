@@ -173,10 +173,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
     const offset = placement === "top" ? 16 : Math.max(12, (usableHeight - rect.height) / 2);
     window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - offset), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   };
-  function openComposePanel() {
-    setMode("compose");
+  function jumpToPanel(nextMode) {
+    setMode(nextMode);
     window.requestAnimationFrame(() => scrollMobileTo(workbenchRef.current, "top"));
   }
+  function openComposePanel() { jumpToPanel("compose"); }
+  function openMeditationPanel() { jumpToPanel("meditate"); }
+  function openJournalPanel() { jumpToPanel("journal"); }
   const [scene, setScene] = useState(readSelectedScene);
   const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
   const [scrollStyle,setScrollStyle]=useState(readScrollStyle);
@@ -233,9 +236,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
         if (!Number.isFinite(baseline)) return;
         let size = baseline;
         const available = inner.clientHeight * (scrollStyle === "grand" ? .55 : .57);
-        const minSize = scrollStyle === "grand" ? 12 : 14;
-        for (let step = 0; step < 18 && verse.scrollHeight > available && size > minSize; step++) {
-          size = Math.max(minSize, size - 1);
+        const minSize = scrollStyle === "grand" ? 11.5 : 12;
+        const lines = [...verse.querySelectorAll("p")];
+        for (let step = 0; step < 27 && size > minSize; step++) {
+          const tooTall = verse.scrollHeight > available;
+          const tooWide = lines.some(row => row.scrollWidth > row.clientWidth + 1);
+          if (!tooTall && !tooWide) break;
+          size = Math.max(minSize, size - .65);
           scroll.style.setProperty("--haiku-fit-size", size + "px");
         }
       });
@@ -266,6 +273,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     setPoem(refreshed);
     setMode("daily");
     setNotice("");
+    window.requestAnimationFrame(() => scrollMobileTo(workbenchRef.current, "top"));
   }
   async function compose(event, regenerate = false) {
     event?.preventDefault();
@@ -453,8 +461,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
             <nav className="haiku-tabs" aria-label="Haiku activities">
               <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Daily</span></button>
               <button type="button" className={mode === "compose" ? "selected" : ""} onClick={openComposePanel}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Compose</span></button>
-              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
-              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal</span></button>
+              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { openMeditationPanel(); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
+              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={openJournalPanel}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal</span></button>
             </nav>
             <div className="haiku-workbench-body">
             {mode === "daily" ? (
@@ -463,7 +471,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <h2>Today's little wisdom</h2>
                 <p>One new verse each day, chosen from Rosie's own collection. A quiet moment, with just a hint of Shiba judgment.</p>
                 <div className="haiku-date">{localDayKey()} <span> · </span> {["winter","winter","spring","spring","spring","summer","summer","summer","autumn","autumn","autumn","winter"][new Date().getMonth()]} in the garden</div>
-                <button type="button" className="haiku-primary" onClick={() => setMode("meditate")}>Meditate with Rosie</button>
+                <button type="button" className="haiku-primary" onClick={openMeditationPanel}>Meditate with Rosie</button>
                 <button type="button" className="haiku-secondary-entry" onClick={openComposePanel}>Or ask her to compose a haiku</button>
               </div>
             ) : mode === "compose" ? (
