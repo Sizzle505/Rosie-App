@@ -11,6 +11,7 @@ import "./RosieHaikuConceptLayout.css";
 import "./RosieHaikuNewArt.css";
 import "./RosieHaikuPolishHold.css";
 import "./RosieHaikuIphoneRefinement.css";
+import "./RosieHaikuMobileFinal.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
@@ -296,7 +297,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll-display">
-            <div className="haiku-scroll" data-scroll-style={scrollStyle} key={poemKey(poem)+"-"+scrollStyle}>
+            <div className="haiku-scroll" data-scroll-style={scrollStyle} data-verse-density={poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}>
               <div className="haiku-scroll-inner">
                 <span className="haiku-scroll-caption">{mode === "daily" ? "TODAY IN THE GARDEN" : mode === "journal" ? "FROM THE POETRY JOURNAL" : "A ROSIE ORIGINAL"}</span>
                 <span className="haiku-ornament" aria-hidden="true">❀</span>
