@@ -211,13 +211,14 @@ function playBossAudio(context,kind){
     }
   }catch(_){}
 }
-export default function EmberTunnelDrill({ soundOn=true }) {
+const BOSS_VICTORY_REVEAL_DELAY_MS = 2500;
+export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, exitGameFullscreen }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
   const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
-        particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null);
+        particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null),bossVictoryTimer=useRef(null);
   const [mode,setMode]=useState("idle");
   const [notice,setNotice]=useState(null);
   const [selectedWorld,setSelectedWorld]=useState(0);
@@ -257,6 +258,10 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     }catch(_){return null}
   }
   function start(requestedStage=undefined) {
+    // Synchronous launch: preserve the user gesture for native/iOS fullscreen.
+    requestGameFullscreen?.();
+    window.clearTimeout(bossVictoryTimer.current);
+    bossVictoryTimer.current=null;
     const targetStage=Number.isInteger(requestedStage)?requestedStage:
       requestedStage===null?null:(modeRef.current==="ended"?frame.current.stageIndex:null);
     const next=newRun(seed.current++,targetStage);
@@ -272,6 +277,8 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     // from the viewport top. Native scrolling avoids a second smooth-scroll
     // pass landing noticeably below the requested position on iOS.
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      // Fullscreen owns scroll positioning after the launch tap.
+      if(requestGameFullscreen)return;
       const top=stage.current?.getBoundingClientRect().top;
       if(typeof top!=="number")return;
       const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
@@ -298,7 +305,23 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     setMode(next);
     if (next === "paused") playSound(audio(), "hit");
   }
+  function returnToLevelMenu() {
+    window.clearTimeout(bossVictoryTimer.current);
+    bossVictoryTimer.current=null;
+    resetHold();
+    const worldIndex=frame.current.stageIndex;
+    if(Number.isInteger(worldIndex))setSelectedWorld(worldIndex);
+    modeRef.current="idle";
+    setMode("idle");
+    noticeRef.current=null;
+    setNotice(null);
+    window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
+      detail:{scene:"tunnel",state:"ended",world:worldIndex}
+    }));
+    exitGameFullscreen?.();
+  }
   function resetHold(){pressed.current.up=false;pressed.current.down=false}
+  useEffect(()=>()=>window.clearTimeout(bossVictoryTimer.current),[]);
   useEffect(()=>{
     const img=new Image();img.src="/captain-rosie-illustrated.webp";portrait.current=img;
     const art={};
@@ -436,7 +459,25 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           lastUi.current=ts;setHud(snapshot(s));
         }
         if(s.ended){
-          modeRef.current="ended";setMode("ended");setHud(snapshot(s));
+          // Keep the canvas and boss defeat particles visible for 2.5 seconds
+          // after victory; no results overlay until the animation has played.
+          const defeatedBoss=s.result==="complete" && s.bossDefeated===true;
+          if(defeatedBoss){
+            modeRef.current="victory-hold";
+            setMode("victory-hold");
+            window.clearTimeout(bossVictoryTimer.current);
+            bossVictoryTimer.current=window.setTimeout(()=>{
+              if(modeRef.current==="victory-hold"){
+                modeRef.current="ended";
+                setMode("ended");
+              }
+              bossVictoryTimer.current=null;
+            },BOSS_VICTORY_REVEAL_DELAY_MS);
+          }else{
+            modeRef.current="ended";
+            setMode("ended");
+          }
+          setHud(snapshot(s));
           if(s.result==="complete")window.dispatchEvent(
             new CustomEvent("rosieverse:music:scene",{detail:{scene:"tunnel",state:"victory",world:s.stageIndex}})
           );
@@ -496,6 +537,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     if(canvas.current)obs.observe(canvas.current);
     resize();raf=requestAnimationFrame(render);
     return ()=>{alive=false;cancelAnimationFrame(raf);obs.disconnect();observer.disconnect();
+      window.clearTimeout(bossVictoryTimer.current);
       document.removeEventListener("keydown",onKeys);document.removeEventListener("keyup",onKeys);
       window.removeEventListener("blur",onBlur);sound.current?.close?.();
     };
@@ -569,8 +611,11 @@ export default function EmberTunnelDrill({ soundOn=true }) {
            <span><strong>{notice.title}</strong><small>{notice.detail}</small></span>
          </div>}
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
-        {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p><button type="button" onClick={togglePause}>RESUME DIG</button></div>}
-        {mode!=="running"&&mode!=="paused"&&
+        {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p>
+          <button type="button" onClick={togglePause}>RESUME DIG</button>
+          <button type="button" className="ember-return-levels" onClick={returnToLevelMenu}>RETURN TO LEVEL MENU</button>
+        </div>
+        {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
           <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
