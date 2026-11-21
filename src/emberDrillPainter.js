@@ -10,6 +10,7 @@ import {paintCrystalShutters} from "./emberCrystalShuttersPainter.js";
 import {paintExpeditionHazards} from "./emberExpeditionHazardPainter.js";
 import {paintExpeditionBoss} from "./emberExpeditionBossPainter.js";
 import {drawExpansionFrame} from "./emberExpansionCatalog.js";
+import {paintBarkrootArrival,paintRecoveredTurboTrail} from "./emberRecoveredArtAccents.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -347,6 +348,8 @@ function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
     c.save();c.translate(DRILL_ANCHOR,s.y);c.scale(horizontalCorrection,1);c.rotate(s.pitch);
     if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha=.52;
     const boosted=s.boostTime>0;
+    // Only the recovered flame tail is used, never its duplicate drill head.
+    paintRecoveredTurboTrail(c,s,assets);
     // Exhaust and travel streaks live behind the intact Rosie/engine sprite.
     paintOriginalBoostExhaust(c,s,assets);
     for(let i=0;i<9;i++){
@@ -430,6 +433,9 @@ function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
 export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrection=1) {
   c.clearRect(0,0,W,H);
   scenery(c,s,assets);
+  // A distant Barkroot doorway passes behind Rosie at the beginning of the
+  // optional Expedition route, without inventing a dangerous hitbox.
+  paintBarkrootArrival(c,s,assets,W);
   wallDepth(c,s);
   // Establish the continuous wall first. The sculptural obstacle pass must be
   // last within terrain painting; the old ordering drew a ribbon over every
