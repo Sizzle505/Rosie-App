@@ -14,6 +14,7 @@ import "./RosieHaikuPolishHold.css";
 import "./RosieHaikuIphoneRefinement.css";
 import "./RosieHaikuMobileFinal.css";
 import "./RosieHaikuReviewFinal.css";
+import "./RosieHaikuReleasePolish.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
@@ -310,8 +311,10 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <span className="haiku-scroll-caption">{mode === "daily" ? "TODAY IN THE GARDEN" : mode === "journal" ? "FROM THE POETRY JOURNAL" : "A ROSIE ORIGINAL"}</span>
                 <span className="haiku-ornament" aria-hidden="true">❀</span>
                 <div className="haiku-verse" aria-label="Haiku poem">{poem.lines.map((line, index) => <p key={index} style={{ "--line-order": index }}>{line}</p>)}</div>
-                <span className="haiku-metre">5 · 7 · 5</span>
-                <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
+                <div className="haiku-scroll-meta" aria-label="Five seven five. Rosie.">
+                  <span className="haiku-metre">5 · 7 · 5</span>
+                  <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
+                </div>
                 {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
               </div>
               <div className="haiku-scroll-cycle" role="group" aria-label="Change poetry scroll artwork">
@@ -320,6 +323,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </div>
             </div>
             </div>
+            <p role="status" aria-live="polite" className="haiku-status">{notice || "Small poems. Deep breaths. Grand opinions."}</p>
             <div className="haiku-verse-actions">
               <button type="button" onClick={toggleSave} className={saved?"haiku-action-saved":""} aria-label={saved?"Remove verse from favorites":"Save verse"} title={saved?"Saved - remove":"Save verse"}>
                 <img src="/rosieverse/haiku/new/ui/save-scroll.webp" alt="" aria-hidden="true" loading="lazy"/>
@@ -332,7 +336,6 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <img src="/rosieverse/haiku/new/ui/postcard.webp" alt="" aria-hidden="true" loading="lazy"/>
               </button>
             </div>
-            <p role="status" aria-live="polite" className="haiku-status">{notice || "Small poems. Deep breaths. Grand opinions."}</p>
           </div>
           <aside className="haiku-workbench" aria-label="Poetry studio">
             <nav className="haiku-tabs" aria-label="Haiku activities">
