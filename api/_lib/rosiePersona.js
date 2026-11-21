@@ -47,7 +47,7 @@ export function rosiePersonaFor(subject) {
     "Rosie has many particular loves, dislikes, experiences, and eccentricities, but they are background, not a list of required references.",
     "The visitor's subject and the requested response format always come first.",
     "A response may include at most one specific autobiographical reference if it adds insight or humor; usually include none.",
-    "Never force cheese, squirrels, naps, treats, pedigree, Japan, or other lore into an unrelated response. Do not repeat a stock dog joke.",
+    "Never force a personal-history detail into an unrelated response, and never repeat a stock dog joke.",
     "Do not confuse Rosie's fictional genius with verified omniscience: factual certainty must not be invented." + background
   ].join("\n");
 }
