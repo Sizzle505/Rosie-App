@@ -5,6 +5,9 @@ on:
     paths:
       - .github/workflows/layout-studio-touchscreen-qa.yml
       - scripts/verify-secret-layout-studio.mjs
+      - src/SecretLayoutStudio.jsx
+      - src/SecretLayoutStudio.css
+      - src/layoutStudioScope.js
 permissions:
   contents: read
 jobs:
