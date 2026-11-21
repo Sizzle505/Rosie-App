@@ -61,6 +61,7 @@ import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
 // Load last to preserve approved desktop compositions across monitor ratios.
 import "./desktop-design-preservation.css";
+import "./fortune-verse-scroll.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -310,12 +311,42 @@ function FortuneLens({
   const dismissing = revealStage === "dismissing";
   const showAnswer = Boolean(answer && !answerDismissed);
   const interactive = showAnswer && revealStage === "revealed";
+  const verseViewportRef = useRef(null);
+  const verseContentRef = useRef(null);
+  const [verseTravel, setVerseTravel] = useState(0);
+
+  // Measure wrapped text, not character counts, to preserve the original glass.
+  useLayoutEffect(() => {
+    if (!showAnswer) { setVerseTravel(0); return undefined; }
+    const viewport = verseViewportRef.current;
+    const content = verseContentRef.current;
+    if (!viewport || !content) return undefined;
+    let frame = 0;
+    const measure = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const distance = Math.max(0, Math.ceil(content.scrollHeight - viewport.clientHeight + 2));
+        setVerseTravel(previous => Math.abs(previous - distance) > 2 ? distance : previous);
+      });
+    };
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    observer?.observe(viewport);
+    observer?.observe(content);
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      observer?.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", measure);
+    };
+  }, [showAnswer, answer?.id]);
 
   const state = [
     consulting ? "is-consulting" : "",
     manifesting ? "is-manifesting" : "",
     dismissing ? "is-dismissing" : "",
-    showAnswer ? `has-answer tone-${answer.tone}` : ""
+    showAnswer ? `has-answer tone-${answer.tone}` : "",
+    verseTravel > 3 ? "is-long-verse" : ""
   ].filter(Boolean).join(" ");
 
   function handleKeyDown(event) {
@@ -333,7 +364,11 @@ function FortuneLens({
       role={interactive ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
       aria-label={interactive ? "Dismiss Rosie's answer with magic" : undefined}
-      onPointerUp={interactive ? onDismiss : undefined}
+      onPointerUp={interactive ? (event) => {
+        if (verseTravel > 3 && window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+            event.target.closest?.(".lens-verse-window")) return;
+        onDismiss?.();
+      } : undefined}
       onClick={interactive ? (event) => {
         if (event.detail === 0) onDismiss?.();
       } : undefined}
@@ -350,13 +385,18 @@ function FortuneLens({
       )}
 
       {showAnswer && (
-        <div className="lens-answer" key={answer.id}>
+        <div className="lens-answer" key={answer.id} style={{
+          "--oracle-verse-travel": `${verseTravel}px`,
+          "--oracle-verse-duration": `${Math.min(32, Math.max(15, 12 + verseTravel * .18))}s`
+        }}>
           <span className="answer-spark-field" aria-hidden="true">
             <i /><i /><i /><i /><i /><i /><i /><i />
           </span>
           <span className="answer-sigil" aria-hidden="true">✦</span>
           <span className="answer-kicker">THE PAW HAS SPOKEN</span>
-          <strong>{answer.text}</strong>
+          <div className="lens-verse-window" ref={verseViewportRef}>
+            <strong className="lens-verse-text" ref={verseContentRef}>{answer.text}</strong>
+          </div>
           <small>Madame Rosie’s ruling is final.</small>
         </div>
       )}
