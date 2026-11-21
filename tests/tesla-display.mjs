@@ -88,9 +88,7 @@ try {
   }
 
   // A child navigation must update the visible browser route and keep stage.
-  await child.locator(".app-shell.page-qr-atelier").evaluate(() => {
-    window.history.pushState(null, "", "#calculations");
-  });
+  await child.getByRole("button", { name: "Open Rosie’s Calculations" }).click();
   await page.waitForFunction(() => location.hash === "#calculations");
   await child.locator(".app-shell.page-calculations").waitFor({ timeout: 10000 });
   assert.equal(await stage.count(), 1);
