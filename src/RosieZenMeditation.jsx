@@ -362,7 +362,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                 <div className="zen-session-toolbar">
                   <div className="zen-session-timer" role="timer" aria-label={"Time remaining "+timeLabel(remaining)}>{timeLabel(remaining)}</div>
                   <div className="zen-session-controls">
-                    <button type="button" className="zen-action-primary zen-icon-control" aria-label={status==="paused"?"Resume meditation":"Pause meditation"} title={status==="paused"?"Resume":"Pause"} onClick={status==="paused"?resume:pause}><span aria-hidden="true">{status==="paused"?"▶":"Ⅱ"}</span></button>
+                    <button type="button" className="zen-action-primary zen-icon-control" aria-label={status==="paused"?"Resume meditation":"Pause meditation"} title={status==="paused"?"Resume":"Pause"} onClick={status==="paused"?resume:pause}><span aria-hidden="true">{status==="paused"?"▶":"⏸"}</span></button>
                     <button type="button" className="zen-action-secondary zen-icon-control" aria-label="End meditation" title="End meditation" onClick={close}><span aria-hidden="true">×</span></button>
                   </div>
                 </div>
