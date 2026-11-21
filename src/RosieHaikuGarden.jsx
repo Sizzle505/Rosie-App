@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
@@ -15,6 +15,7 @@ import "./RosieHaikuIphoneRefinement.css";
 import "./RosieHaikuMobileFinal.css";
 import "./RosieHaikuReviewFinal.css";
 import "./RosieHaikuReleasePolish.css";
+import "./RosieHaikuIphoneNov21.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
@@ -157,6 +158,21 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [today, setToday] = useState(() => poemForDay());
   const [poem, setPoem] = useState(() => poemForDay());
   const [mode, setMode] = useState("daily");
+  const scrollDisplayRef = useRef(null);
+  const workbenchRef = useRef(null);
+  const scrollMobileTo = (element, placement = "center") => {
+    if (!element || !window.matchMedia("(max-width: 600px)").matches) return;
+    const rect = element.getBoundingClientRect();
+    const nav = document.querySelector(".bottom-nav");
+    const navTop = nav?.getBoundingClientRect().top ?? window.innerHeight - 86;
+    const usableHeight = Math.max(250, navTop);
+    const offset = placement === "top" ? 16 : Math.max(12, (usableHeight - rect.height) / 2);
+    window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - offset), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  };
+  function openComposePanel() {
+    setMode("compose");
+    window.requestAnimationFrame(() => scrollMobileTo(workbenchRef.current, "top"));
+  }
   const [scene, setScene] = useState(readSelectedScene);
   const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
   const [scrollStyle,setScrollStyle]=useState(readScrollStyle);
@@ -207,6 +223,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     setVariation(nextVariation);
     setPoem(poemForTopic(topic, mood, nextVariation));
     setMode("compose");
+    window.requestAnimationFrame(() => scrollMobileTo(scrollDisplayRef.current));
     announce("From Rosie's hand-curated poetry collection.");
     setReaction({ type: "inspired" });
   }
@@ -258,7 +275,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     announce("");
   }
   return (
-    <main className="haiku-page" aria-label="Haiku Zen Garden">
+    <main className="haiku-page" data-haiku-mode={mode} aria-label="Haiku Zen Garden">
       <div className={`haiku-scene haiku-scene--${scene}`} aria-hidden="true">
         <img
           key={selectedBackground.src}
@@ -304,7 +321,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
         <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} outfitId={outfitId} onOutfitChange={setOutfitId} />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
-            <div className="haiku-scroll-display">
+            <div className="haiku-scroll-display" ref={scrollDisplayRef}>
             <div className="haiku-scroll" data-scroll-style={scrollStyle} data-verse-density={poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}
               style={scrollStyle==="imperial"&&cleanImperialScroll?{backgroundImage:`url("${cleanImperialScroll}")`}:undefined}>
               <div className="haiku-scroll-inner">
@@ -337,10 +354,10 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </button>
             </div>
           </div>
-          <aside className="haiku-workbench" aria-label="Poetry studio">
+          <aside className="haiku-workbench" ref={workbenchRef} aria-label="Poetry studio">
             <nav className="haiku-tabs" aria-label="Haiku activities">
               <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Daily</span></button>
-              <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Compose</span></button>
+              <button type="button" className={mode === "compose" ? "selected" : ""} onClick={openComposePanel}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Compose</span></button>
               <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
               <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal</span></button>
             </nav>
@@ -352,13 +369,15 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <p>One new verse each day, chosen from Rosie's own collection. A quiet moment, with just a hint of Shiba judgment.</p>
                 <div className="haiku-date">{localDayKey()} <span> · </span> {["winter","winter","spring","spring","spring","summer","summer","summer","autumn","autumn","autumn","winter"][new Date().getMonth()]} in the garden</div>
                 <button type="button" className="haiku-primary" onClick={() => setMode("meditate")}>Meditate with Rosie</button>
-                <button type="button" className="haiku-secondary-entry" onClick={() => setMode("compose")}>Or ask her to compose a haiku</button>
+                <button type="button" className="haiku-secondary-entry" onClick={openComposePanel}>Or ask her to compose a haiku</button>
               </div>
             ) : mode === "compose" ? (
               <form className="haiku-panel haiku-compose" onSubmit={compose}>
                 <div className="haiku-section-label">ROSIE'S POETRY DESK</div>
-                <img className="haiku-desk-art" src="/rosieverse/haiku/calligraphy-desk.webp" alt="" aria-hidden="true" loading="lazy" />
-                <h2>A poem for anything</h2>
+                <div className="haiku-desk-feature">
+                  <img className="haiku-desk-art" src="/rosieverse/haiku/calligraphy-desk.webp" alt="" aria-hidden="true" loading="lazy" />
+                  <h2>A Poem for Everything</h2>
+                </div>
                 <label htmlFor="haiku-topic">Your subject or dedication</label>
                 <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); }} placeholder="Cheese, birthdays, the vacuum…" />
                 <label>Rosie's disposition</label>
