@@ -1,0 +1,167 @@
+/* Nov 21 iPhone-specific refinements. Keep desktop/iPad geometry untouched. */
+/* The live timer belongs to the title plaque, not in the scenery below. */
+.zen-immersive .zen-session-header-tools{min-width:0;flex:0 1 500px;}
+.zen-immersive .zen-session-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;}
+.zen-immersive .zen-session-toolbar .zen-session-timer{
+  flex:0 0 auto;margin:0;font:normal clamp(35px,3.9vw,53px)/1 Georgia,serif;
+  font-variant-numeric:tabular-nums;letter-spacing:.02em;
+}
+.zen-immersive .zen-session-toolbar .zen-session-controls{
+  margin:0;display:flex;flex-wrap:nowrap;gap:6px;align-items:center;
+}
+.zen-immersive .zen-session-toolbar .zen-session-controls button{
+  flex:0 0 auto;min-width:0;min-height:36px;padding:6px 12px;
+  border-radius:9px;font-size:12px;white-space:nowrap;
+}
+.zen-immersive .zen-session-header-tools .zen-timeline{margin:6px 0 0;height:3px;}
+.zen-immersive .zen-guidance{padding-top:4px;}
+/* Place the small turquoise scenery arrows level with the portrait's maxim,
+   independently of the gold outfit arrows positioned beside Rosie's kimono. */
+.zen-immersive .zen-breath-portrait .zen-backdrop-cycle{
+  position:absolute!important;top:auto!important;bottom:0!important;
+  left:0!important;right:0!important;transform:none!important;
+  width:100%!important;max-width:none!important;height:32px!important;min-height:0!important;
+  margin:0!important;padding:0 4px!important;display:flex!important;
+  justify-content:space-between!important;align-items:center!important;
+  border:0!important;background:none!important;box-shadow:none!important;
+  pointer-events:none;z-index:5!important;
+}
+.zen-immersive .zen-breath-portrait>p{position:relative;z-index:2;max-width:100%;padding:0 39px;box-sizing:border-box;min-height:32px;display:grid;place-items:center;}
+.zen-immersive .zen-breath-portrait .zen-backdrop-cycle button{pointer-events:auto;}
+
+@media(max-width:600px){
+  /* Move all live page content, never the fixed full-bleed garden background. */
+  .haiku-page .haiku-shell{padding-top:50px!important;}
+  .haiku-page .haiku-shell>.haiku-header{transform:translateY(8px);}
+
+  /* Only the painted seals remain: no opaque/blurry rectangular button mats. */
+  .haiku-page .haiku-scroll-column{gap:2px!important;}
+  .haiku-page .haiku-status{
+    min-height:0!important;margin:3px auto 1px!important;line-height:1.25!important;
+  }
+  .haiku-page .haiku-verse-actions{
+    gap:3px!important;margin:0 auto!important;padding:0!important;
+    background:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  }
+  .haiku-page .haiku-verse-actions button{
+    background:none!important;background-color:transparent!important;
+    backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+    border:0!important;box-shadow:none!important;
+  }
+
+  /* The compose desk rises immediately below Rosie's portrait and controls;
+     the completed verse remains available immediately beneath the desk. */
+  .haiku-page[data-haiku-mode="compose"] .haiku-content{
+    display:flex!important;flex-direction:column!important;gap:7px!important;
+  }
+  .haiku-page[data-haiku-mode="compose"] .haiku-workbench{
+    order:-1;margin-top:-18px!important;
+  }
+  .haiku-page[data-haiku-mode="compose"] .haiku-scroll-column{order:1;}
+  .haiku-page .haiku-compose{padding-top:12px!important;}
+  .haiku-page .haiku-compose>.haiku-section-label{margin-bottom:0!important;}
+  .haiku-page .haiku-desk-feature{
+    position:relative;isolation:isolate;width:100%;max-width:440px;
+    margin:0 auto 14px;min-height:214px;
+  }
+  .haiku-page .haiku-desk-feature .haiku-desk-art{
+    width:116%!important;max-width:none!important;max-height:240px!important;
+    height:240px!important;object-fit:contain!important;
+    margin:0 0 0 -8%!important;filter:drop-shadow(0 8px 10px rgba(20,10,24,.35));
+  }
+  .haiku-page .haiku-desk-feature h2{
+    position:absolute;left:10%;right:10%;bottom:1%;
+    margin:0!important;z-index:2;
+    font:normal clamp(21px,6vw,28px)/1.14 "Iowan Old Style",Palatino,Georgia,serif!important;
+    color:#ffe7b9;text-shadow:0 2px 7px #1b0b18,0 0 13px #1b0b18;
+    text-align:center!important;text-wrap:balance;
+  }
+  .haiku-page .haiku-compose>label:first-of-type{margin-top:7px!important;}
+
+  /* Proportionately larger original book artwork, whether closed or open. */
+  .haiku-page .haiku-journal-art--closed{max-height:232px!important;max-width:100%!important;}
+  .haiku-page .haiku-journal-art--open{max-height:200px!important;max-width:100%!important;}
+
+  /* Enlarged Sensei Rosie stays beside succinct welcome copy, with less air. */
+  .haiku-page .zen-panel{padding-top:12px!important;}
+  .haiku-page .zen-panel>.haiku-section-label{margin:0!important;}
+  .haiku-page .zen-panel>h2{margin:3px 0 1px!important;line-height:1.1!important;}
+  .haiku-page .zen-sensei-intro{margin:0 0 4px!important;gap:6px!important;min-height:232px!important;align-items:center!important;}
+  .haiku-page .zen-sensei-intro .zen-sensei-welcome{
+    width:min(200px,52vw)!important;height:232px!important;max-width:55%!important;
+    object-fit:contain!important;object-position:center bottom!important;
+  }
+  .haiku-page .zen-sensei-intro .zen-panel-intro{font-size:12px;line-height:1.52!important;margin:0!important;}
+
+  /* All seven portrait paintings are real iPhone source files, not blurred
+     duplicates of landscape art. Backdrop is also a fallback if <picture> fails. */
+  .zen-immersive{
+    min-height:100dvh!important;background-color:#252039!important;
+    background-image:var(--zen-mobile-image)!important;
+    background-position:center center!important;background-size:cover!important;
+    background-repeat:no-repeat!important;
+  }
+  .zen-immersive .zen-immersive-scenery{
+    position:fixed!important;inset:0!important;z-index:0!important;
+    width:100%!important;height:100dvh!important;overflow:hidden!important;
+    pointer-events:none!important;
+  }
+  .zen-immersive .zen-immersive-scenery picture{
+    display:block!important;position:absolute!important;inset:0!important;
+    width:100%!important;height:100%!important;
+  }
+  .zen-immersive .zen-immersive-scenery picture img{
+    display:block!important;position:absolute!important;inset:0!important;
+    width:100%!important;height:100%!important;
+    object-fit:cover!important;object-position:center center!important;
+    filter:none!important;opacity:1!important;
+    mask-image:none!important;-webkit-mask-image:none!important;
+  }
+  .zen-immersive .zen-immersive-scenery::before,
+  .zen-immersive .zen-immersive-scenery::after{display:none!important;content:none!important;}
+  .zen-immersive .zen-immersive-dialog{
+    position:relative!important;z-index:2!important;min-height:100dvh!important;
+    background:transparent!important;backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    padding-left:12px!important;padding-right:12px!important;
+  }
+  .zen-immersive .zen-immersive-header{
+    display:flex;flex-wrap:nowrap;align-items:center;gap:7px;
+    padding:9px 10px!important;
+    background:rgba(19,17,31,.27)!important;
+  }
+  .zen-immersive .zen-session-heading{min-width:0;flex:1;}
+  .zen-immersive .zen-session-heading>span{font-size:8px;letter-spacing:.14em;}
+  .zen-immersive .zen-immersive-header h2{margin:3px 0 0;font-size:clamp(21px,5.3vw,27px);line-height:1.08;}
+  .zen-immersive .zen-session-header-tools{flex:0 0 auto;max-width:52%;align-self:center;}
+  .zen-immersive .zen-session-toolbar{gap:6px;}
+  .zen-immersive .zen-session-toolbar .zen-session-timer{
+    font-size:clamp(25px,6.2vw,32px)!important;letter-spacing:0;margin:0!important;
+  }
+  .zen-immersive .zen-session-toolbar .zen-session-controls{gap:3px!important;margin:0!important;}
+  .zen-immersive .zen-session-toolbar .zen-session-controls button{
+    min-height:32px!important;min-width:0!important;padding:5px 6px!important;
+    font-size:10px!important;border-radius:7px!important;
+  }
+  .zen-immersive .zen-session-header-tools .zen-timeline{margin:4px 0 0;}
+  .zen-immersive .zen-immersive-body{gap:3px!important;min-height:0!important;}
+  .zen-immersive .zen-breath-portrait{min-height:0;}
+  .zen-immersive .zen-breath-portrait>p{font-size:14px;line-height:1.2;margin:0!important;}
+  .zen-immersive .zen-breath-portrait .zen-backdrop-cycle{
+    bottom:0!important;padding:0 5px!important;
+  }
+  .zen-immersive .zen-guidance{
+    margin:0!important;padding:8px 11px!important;
+    background:linear-gradient(180deg,rgba(19,15,36,.38),rgba(19,15,36,.50))!important;
+  }
+  .zen-immersive .zen-guidance-copy{min-height:55px;}
+  .zen-immersive .zen-breath-cue{min-height:71px;margin:0;}
+  .zen-immersive .zen-breath-cue strong{font-size:18px;}
+  .zen-immersive .zen-breath-cue small{margin-top:3px;}
+}
+@media(max-width:360px){
+  .zen-immersive .zen-immersive-header{flex-wrap:wrap;}
+  .zen-immersive .zen-session-heading{flex:1 1 100%;}
+  .zen-immersive .zen-session-header-tools{max-width:100%;width:100%;flex:1 1 100%;}
+  .zen-immersive .zen-session-toolbar{justify-content:space-between;}
+}
