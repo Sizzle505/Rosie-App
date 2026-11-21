@@ -84,6 +84,12 @@ for(const [name,engine,viewport,mobile] of [
     if(failed.length)throw new Error("Asset requests failed: "+JSON.stringify(failed));
     const hud=await suite.locator(".ember-stats").innerText();
     if(!hud.includes("HULL")||!hud.includes("TIME"))throw new Error("HUD missing");
+    // Pause/resume must work from the keyboard without ending the run.
+    await page.locator(".ember-stage").scrollIntoViewIfNeeded();
+    await page.keyboard.press("p");
+    await page.locator(".ember-pause-overlay").waitFor({state:"visible",timeout:4000});
+    await page.keyboard.press("p");
+    await page.locator(".ember-pause-overlay").waitFor({state:"hidden",timeout:4000});
     // In particular on iPad WebKit, two separate 2x-resolution canvases can
     // starve the later page's animation loop. Close Classic after validating it.
     await page.close();
