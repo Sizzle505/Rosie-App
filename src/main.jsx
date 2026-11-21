@@ -387,7 +387,7 @@ function FortuneLens({
       {showAnswer && (
         <div className="lens-answer" key={answer.id} style={{
           "--oracle-verse-travel": `${verseTravel}px`,
-          "--oracle-verse-duration": `${Math.min(32, Math.max(15, 12 + verseTravel * .18))}s`
+          "--oracle-verse-duration": `${Math.min(19, Math.max(9, 7 + verseTravel * .11))}s`
         }}>
           <span className="answer-spark-field" aria-hidden="true">
             <i /><i /><i /><i /><i /><i /><i /><i />
