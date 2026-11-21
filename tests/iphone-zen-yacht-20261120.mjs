@@ -43,7 +43,7 @@ try {
         assert.ok(choice.label&&choice.loaded,"Scenery image and accessible name");
         assert.equal(choice.text,"","Image-only scenery choices");
         assert.equal(choice.border,"0px","No scenery frames");
-        assert.ok(choice.width>=86&&choice.width<=137,"Large scenic illustrations");
+        assert.ok(choice.width>=103&&choice.width<=168,"Scenic illustrations enlarged approximately 20%");
       }
       const originalOutfit=await page.locator(".haiku-scene-rosie").getAttribute("src");
       await page.getByRole("button",{name:"Next Rosie outfit"}).first().click();
