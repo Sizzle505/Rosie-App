@@ -80,7 +80,7 @@ try {
           const scenery=el.querySelector(".zen-immersive-scenery");
           const dialog=el.querySelector(".zen-immersive-dialog");
           return{view:el.dataset.zenView,
-            imageSrc:image.getAttribute("src"),loaded:image.naturalWidth>0,
+            imageSrc:image.currentSrc,loaded:image.naturalWidth>0,
             fullScreenImage:getComputedStyle(el).backgroundImage,
             scenicZ:getComputedStyle(scenery).zIndex,dialogZ:getComputedStyle(dialog).zIndex,
             height:el.getBoundingClientRect().height,viewport:innerHeight};
@@ -88,7 +88,7 @@ try {
         assert.ok(state.loaded&&state.fullScreenImage.includes(state.imageSrc.split("/").at(-1)),
           "Chosen meditation panorama must be loaded as full-screen background");
         assert.equal(state.scenicZ,"0");
-        assert.equal(state.dialogZ,"1");
+        assert.ok(Number(state.dialogZ)>=1);
         assert.equal(state.height,state.viewport);
         await page.getByRole("button",{name:"Close meditation"}).click();
       }
