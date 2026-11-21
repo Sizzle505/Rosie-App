@@ -28,11 +28,14 @@ function offset(baseValue, amount) {
   return 'calc(' + baseValue + (amount > 0 ? ' + ' : ' - ') + Math.abs(amount) + 'px)';
 }
 function positionNode(node, value) {
-  const original = baseFor(node);
   const shift = normalizeOffset(value);
-  if (!shift.x && !shift.y && shift.scale === 1) {
-    node.style.translate = original.inlineTranslate;
-    node.style.scale = original.inlineScale;
+  const isDefault = !shift.x && !shift.y && shift.scale === 1;
+  // A never-edited element must retain its ordinary React/CSS behavior.
+  if (isDefault && !baseline.has(node)) return;
+  const original = baseFor(node);
+  if (isDefault) {
+    if (node.style.translate !== original.inlineTranslate) node.style.translate = original.inlineTranslate;
+    if (node.style.scale !== original.inlineScale) node.style.scale = original.inlineScale;
   } else {
     node.style.translate = offset(original.x, shift.x) + ' ' + offset(original.y, shift.y);
     node.style.scale = original.scales.map(n => Number((n * shift.scale).toFixed(6))).join(' ');
