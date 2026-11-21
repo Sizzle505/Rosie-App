@@ -18,13 +18,13 @@ const PROGRAM_ART = {
 };
 const NEW_ART="/rosieverse/haiku/new/";
 const MEDITATION_VIEWS=Object.freeze([
-  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp"},
-  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp"},
-  {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp"},
-  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp"},
-  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp"},
-  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp"},
-  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp"}
+  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/lotus-portrait.webp"},
+  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/sakura-portrait.webp"},
+  {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp",mobileImage:"meditation/iphone/raked-portrait.webp"},
+  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp",mobileImage:"meditation/iphone/tea-portrait.webp"},
+  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp",mobileImage:"meditation/iphone/mist-portrait.webp"},
+  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp",mobileImage:"meditation/iphone/twilight-portrait.webp"},
+  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp",mobileImage:"meditation/iphone/moonlit-portrait.webp"}
 ]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
@@ -136,6 +136,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   }
   const selectedOutfit=ROSIE_HAIKU_OUTFITS.find(v=>v.id===outfitId)||ROSIE_HAIKU_OUTFITS[0];
   const sceneSrc=NEW_ART+selectedView.image;
+  const mobileSceneSrc=NEW_ART+selectedView.mobileImage;
   const rosieSrc=selectedOutfit.image;
   const totalMs = minutes*60000;
   const elapsed = Math.max(0,totalMs-remaining);
@@ -318,8 +319,8 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       <button type="button" className="haiku-primary zen-begin" onClick={begin}>Begin {minutes}-minute meditation</button>
     </div>
     {opened && createPortal(
-      <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`}}>
-        <div className="zen-immersive-scenery" aria-hidden="true"><img src={sceneSrc} alt=""/></div>
+      <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
+        <div className="zen-immersive-scenery" aria-hidden="true"><picture><source media="(max-width:600px)" srcSet={mobileSceneSrc}/><img src={sceneSrc} alt="" decoding="async" fetchPriority="high"/></picture></div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
           <span className="zen-ornament-corners" aria-hidden="true" />
