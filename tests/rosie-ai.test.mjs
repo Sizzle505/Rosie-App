@@ -201,7 +201,7 @@ test("haiku prompts carry a discernible Rosie perspective without obligatory dog
   const a = makeRosiePrompt("haiku", { topic: "a distant comet", mood: "existential", variation: 0 });
   assert.match(a.system, /intelligent Shiba Inu|brilliant Shiba Inu/);
   assert.match(a.system, /Rosie's own sensibility/);
-  assert.match(a.system, /subtle canine perspective|understated Shiba perspective/);
+  assert.match(a.system, /distinctively Shiba point of view|canine-specific observation/);
   assert.match(a.user, /distant comet/);
   assert.doesNotMatch(a.system, /Doctor of Cheese|She pursues squirrels/);
 });
