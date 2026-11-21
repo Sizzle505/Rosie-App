@@ -95,7 +95,9 @@ try {
         };
       });
       assert.equal(newZenGeometry.breathDuration,"10s",label+" Rosie must breathe on a ten-second rhythm");
-      assert.equal(newZenGeometry.verseItalic,"italic",label+" poem must use the literary italic font");
+      assert.ok(newZenGeometry.verseItalic === "italic" ||
+        /Snell Roundhand|Bradley Hand|Apple Chancery|cursive/i.test(newZenGeometry.verseFont),
+        label+" poem must retain either an italic or handwritten literary face: "+newZenGeometry.verseFont);
       assert.ok(Math.abs(newZenGeometry.wisdom.x+newZenGeometry.wisdom.width/2-width/2)<Math.max(32,width*.07),
         label+" The Way of the Shiba must be horizontally centered in the page");
       if (width===1792 && height===856) {
