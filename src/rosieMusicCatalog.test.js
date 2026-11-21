@@ -94,3 +94,34 @@ test("Safari keeps one gesture-authorized audio element through rapid page chang
   assert.equal(created,1);
   engine.dispose();
 });
+
+test("Safari stale-media AbortError is handled without unhandled promise rejection",async()=>{
+  const pending=[];
+  class DeferredAudio{
+    constructor(){this.paused=true;this.loop=false;this.volume=0;this.src="";}
+    play(){
+      this.paused=false;
+      let resolve,reject;
+      const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});
+      pending.push({resolve,reject,promise,src:this.src});
+      return promise;
+    }
+    pause(){this.paused=true;}
+    removeAttribute(){}
+    load(){}
+  }
+  const engine=new RosieMusicEngine({audioFactory:()=>new DeferredAudio(),
+    clock:()=>0,frame:()=>1,cancelFrame:()=>{}});
+  engine.singleDeck=true;
+  engine.unlock();
+  engine.setDesired("oracle-secret");
+  assert.equal(pending.length,2);
+  const error=Object.assign(new Error("Previous stream cancelled"),{name:"AbortError"});
+  pending[0].reject(error);
+  pending[1].resolve();
+  await Promise.allSettled(pending.map(x=>x.promise));
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(engine.activeId,"oracle-secret");
+  assert.equal(engine.error,null);
+  engine.dispose();
+});
