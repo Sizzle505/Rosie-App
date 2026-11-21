@@ -4,6 +4,8 @@ on:
     paths:
       - 'src/SecretLayoutStudio.*'
       - 'src/layoutStudioScope.js'
+      - 'src/layoutStudioGeometry.js'
+      - 'src/layoutStudioGeometry.test.js'
       - 'src/layoutStudioScope.test.js'
       - 'src/layoutTargets.js'
       - 'api/layout-presets.js'
@@ -30,5 +32,5 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: node --test src/layoutStudioScope.test.js
+      - run: node --test src/layoutStudioScope.test.js src/layoutStudioGeometry.test.js
       - run: npm run build
