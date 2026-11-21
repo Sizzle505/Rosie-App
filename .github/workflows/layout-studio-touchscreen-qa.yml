@@ -5,6 +5,9 @@ on:
     paths:
       - .github/workflows/layout-studio-touchscreen-qa.yml
       - scripts/verify-secret-layout-studio.mjs
+      - scripts/verify-layout-studio-v2.mjs
+      - src/layoutStudioGeometry.js
+      - src/layoutTargets.js
       - src/SecretLayoutStudio.jsx
       - src/SecretLayoutStudio.css
       - src/layoutStudioScope.js
@@ -25,10 +28,13 @@ jobs:
         run: |
           npm install --no-save --package-lock=false playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Verify touch unlock, multi-select drag, multi-page save and exact-width isolation
+      - name: Verify advanced touchscreen interactions in isolated local browser
         env:
-          BASE_URL: https://rosie-app-git.vercel.app
-        run: node scripts/verify-secret-layout-studio.mjs
+          BASE_URL: http://127.0.0.1:5173
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/rosie-layout-vite.log 2>&1 &
+          sleep 4
+          node scripts/verify-layout-studio-v2.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
