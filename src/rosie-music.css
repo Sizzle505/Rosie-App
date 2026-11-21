@@ -42,3 +42,28 @@
 }
 @media print{.rosie-music-dock{display:none!important;}}
 :root:has(:fullscreen) .rosie-music-dock{display:none!important;}
+
+/* Single note-only soundtrack launcher on every page; settings panel retains
+   its descriptive text and accessible button name. */
+.rosie-music-launch{
+  width:43px;
+  height:43px;
+  min-width:43px;
+  min-height:43px;
+  padding:8px!important;
+  gap:0!important;
+  border-radius:50%;
+}
+.rosie-music-launch svg{
+  width:23px;
+  height:23px;
+}
+@media(max-width:700px){
+  .rosie-music-launch{
+    width:42px;
+    height:42px;
+    min-width:42px;
+    min-height:42px;
+    padding:8px!important;
+  }
+}
