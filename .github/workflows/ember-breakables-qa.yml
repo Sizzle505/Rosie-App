@@ -12,6 +12,7 @@ on:
       - "src/emberCrystalShutters*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
+      - "src/emberRecoveredArtAccents.js"
       - "src/emberBossEncounter.js"
       - "src/emberExpeditionBossPainter.js"
       - "src/emberBossAttackVfx.js"
@@ -29,6 +30,7 @@ on:
       - "src/emberBreakable*.js"
       - "src/emberDrillEngine.js"
       - "src/emberDrillPainter.js"
+      - "src/emberRecoveredArtAccents.js"
       - "src/emberBossEncounter.js"
       - "src/emberExpeditionBossPainter.js"
       - "src/emberExpeditionBossStage.js"
@@ -55,6 +57,6 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Verify existing drill and new excavations
-        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs tests/ember-boss-encounter.test.mjs tests/ember-expansion-catalog.test.mjs tests/ember-expedition-stages.test.mjs tests/ember-expedition-hazards.test.mjs tests/ember-expedition-boss-stage.test.mjs tests/ember-boss-telegraph-geometry.test.mjs tests/ember-boss-attack-vfx.test.mjs
+        run: node --test tests/ember-drill-engine.test.mjs tests/ember-breakable-terrain.test.mjs tests/ember-breakable-feedback.test.mjs tests/ember-crystal-shutters.test.mjs tests/ember-boss-encounter.test.mjs tests/ember-expansion-catalog.test.mjs tests/ember-expedition-stages.test.mjs tests/ember-expedition-hazards.test.mjs tests/ember-expedition-boss-stage.test.mjs tests/ember-boss-telegraph-geometry.test.mjs tests/ember-boss-attack-vfx.test.mjs tests/ember-recovered-art-accents.test.mjs
       - name: Verify Vite production build
         run: npm run build
