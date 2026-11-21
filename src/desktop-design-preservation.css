@@ -1,0 +1,139 @@
+/*
+ * Desktop Design Preservation System - 2026-11-21
+ *
+ * Reference: the approved 1920 x 1080 desktop compositions.
+ * Do not turn the bespoke pages into a common stretched template.
+ * Only fine-pointer desktops >=1200px participate; tablet and phone CSS
+ * remain under their own existing stylesheets. Keep this imported LAST.
+ */
+@media screen and (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+  :root {
+    --rosie-desktop-preservation: active;
+    --rosie-desktop-stage-limit: 1920px;
+    --rosie-desktop-stage-width: min(100vw, var(--rosie-desktop-stage-limit));
+    --rosie-desktop-stage-inset: max(0px, calc((100vw - var(--rosie-desktop-stage-limit)) / 2));
+  }
+
+  /* Calculations is a designed two-column instrument, not an elastic
+     3440px-wide calculator. The velvet background remains full bleed. */
+  .app-shell.page-calculations main.rc-page {
+    max-width: var(--rosie-desktop-stage-limit) !important;
+    margin-inline: auto !important;
+  }
+
+  /* The three-dimensional cookbook scene and its right-hand reading desk
+     keep their relationship when there is additional monitor width. */
+  .app-shell.page-recipes > .recipes-page {
+    max-width: var(--rosie-desktop-stage-limit);
+    margin-inline: auto !important;
+  }
+
+  /* Haiku's approved playground offsets are tuned for 1920x1080.
+     Their horizontal movement follows desktop width and their vertical
+     movement follows available height. At the reference size each value
+     is EXACTLY the existing approved value, including all element scales.
+     These overrides begin at 1480px, like the original manual export. */
+}
+@media screen and (min-width: 1480px) and (hover: hover) and (pointer: fine) {
+  /* The newer masthead stylesheet clears translations/scales with
+     !important. Reinstate only the most recently approved 1920px playground
+     composition, preserving its exact baseline and not touching tablet CSS. */
+  .app-shell.page-haiku .haiku-scene-image {
+    translate: clamp(-102px, -5.3125vw, -78px) clamp(116px, 16.6667dvh, 180px) !important;
+    scale: 1.07 !important;
+  }
+  .app-shell.page-haiku .haiku-scroll {
+    translate: clamp(-121px, -6.3021vw, -93px) clamp(34px, 4.8148dvh, 52px) !important;
+    scale: 1.08 !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions {
+    translate: clamp(-123px, -6.4063vw, -94px) clamp(19px, 2.6852dvh, 29px) !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(1) {
+    translate: 8px 2px !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(2) {
+    translate: 5px 2px !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(3) {
+    translate: 0px 2px !important;
+  }
+  .app-shell.page-haiku .haiku-workbench {
+    translate: clamp(-107px, -5.5729vw, -82px) clamp(192px, 27.5926dvh, 298px) !important;
+  }
+  .app-shell.page-haiku .haiku-header {
+    translate: clamp(-4px, -.2083vw, -3px) clamp(37px, 5.2778dvh, 57px) !important;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button:nth-child(1) {
+    translate: clamp(-70px, -3.6458vw, -54px) clamp(137px, 19.537dvh, 211px) !important;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button:nth-child(2) {
+    translate: clamp(-69px, -3.5938vw, -53px) clamp(138px, 19.6296dvh, 212px) !important;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button:nth-child(3) {
+    translate: clamp(-70px, -3.6458vw, -54px) clamp(139px, 19.7222dvh, 213px) !important;
+  }
+}
+
+/*
+ * Extra-wide desktops: center the COMPLETE approved composition in a
+ * 1920px stage. The theater/atelier scenery continues edge-to-edge.
+ * Fix viewport-positioned artwork and controls that otherwise drift toward
+ * the physical monitor's left edge.
+ */
+@media screen and (min-width: 1921px) and (hover: hover) and (pointer: fine) {
+  .app-shell.page-qr-atelier .qa-scene {
+    width: 100% !important;
+    max-width: var(--rosie-desktop-stage-limit) !important;
+    margin-inline: auto !important;
+    min-height: calc(1920px * 941 / 1672 + 380px) !important;
+    background-position: center top, center calc(1920px * 941 / 1672 - 90px) !important;
+  }
+  body .app-shell.page-qr-atelier .qa-scene::before {
+    left: var(--rosie-desktop-stage-inset) !important;
+    width: calc(var(--rosie-desktop-stage-limit) * .47) !important;
+    background-size: 1920px auto, 1920px 100dvh !important;
+  }
+  .app-shell.page-qr-atelier .qa-scene::after,
+  body .app-shell.page-qr-atelier .qa-scene::after {
+    top: calc(1920px * 941 / 1672 - 90px) !important;
+  }
+  .app-shell.page-qr-atelier .qa-title {
+    left: calc(var(--rosie-desktop-stage-inset) + 120px) !important;
+  }
+
+  .app-shell.page-recipes .recipes-top-scene,
+  .app-shell.page-recipes .recipes-desktop-discovery,
+  .app-shell.page-recipes .recipes-desktop-controls {
+    left: calc(var(--rosie-desktop-stage-inset) + 58px) !important;
+  }
+  .app-shell.page-recipes .recipes-body {
+    width: calc(1920px * .53 - 58px) !important;
+    margin-right: 58px !important;
+  }
+}
+
+/* Short desktop monitors: make the recipe filters reachable without forcing
+   the chef illustration to shrink until its detail is illegible. This is
+   deliberately limited to desktops with short vertical space. */
+@media screen and (min-width: 1200px) and (max-height: 720px) and (hover: hover) and (pointer: fine) {
+  .app-shell.page-recipes .recipes-desktop-controls {
+    position: absolute !important;
+    top: calc(clamp(240px, 26vh, 260px) + min(22vw, 380px) + 12px) !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .app-shell.page-recipes .recipes-desktop-discovery,
+  .app-shell.page-recipes .recipes-top-scene {
+    position: absolute !important;
+  }
+}
+/* When the left cookbook cluster becomes document-positioned, its origin is
+   the already-centered 1920px page rather than the physical viewport. */
+@media screen and (min-width: 1921px) and (max-height: 720px) and (hover: hover) and (pointer: fine) {
+  .app-shell.page-recipes .recipes-top-scene,
+  .app-shell.page-recipes .recipes-desktop-discovery,
+  .app-shell.page-recipes .recipes-desktop-controls {
+    left: 58px !important;
+  }
+}
