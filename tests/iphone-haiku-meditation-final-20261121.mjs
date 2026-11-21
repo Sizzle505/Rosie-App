@@ -57,7 +57,7 @@ try{
        cleanWidth:image.naturalWidth};
    });
    assert.ok(matte.inside,"Scroll arrows overlay the scroll itself");
-   assert.equal(matte.name,"‹\n›".replace(/\n/g," ").trim().replace(/\s+/g," ").replace(" "," ").trim() /* arrow text only */); // checked again below
+   assert.equal(matte.name.replace(/\s+/g,""),"‹›","Only arrows, no scroll-name label");
    assert.ok(matte.arrowCenters.every(x=>x.y<matte.rect.bottom&&x.y>matte.rect.bottom-85),
      "Scroll arrows align with lower artwork and do not add layout height");
    assert.equal(matte.cleanWidth,1228);
