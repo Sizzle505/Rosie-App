@@ -7,7 +7,6 @@ import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExped
 import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT} from "./emberExpansionCatalog.js";
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
-import EmberTunnelPrologue from "./EmberTunnelPrologue.jsx";
 
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
@@ -220,9 +219,6 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null);
   const [mode,setMode]=useState("idle");
-  const prologueSeenRef=useRef((()=>{try{return localStorage.getItem("rosieEmberPrologueSeenV1")==="1"}catch{return false}})());
-  const pendingPrologueStart=useRef(null);
-  const [showPrologue,setShowPrologue]=useState(false);
   const [notice,setNotice]=useState(null);
   const [selectedWorld,setSelectedWorld]=useState(0);
   useEffect(()=>{
@@ -260,24 +256,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       return sound.current;
     }catch(_){return null}
   }
-  function completePrologue() {
-    const pending=pendingPrologueStart.current;
-    pendingPrologueStart.current=null;
-    prologueSeenRef.current=true;
-    try{localStorage.setItem("rosieEmberPrologueSeenV1","1")}catch(_){}
-    setShowPrologue(false);
-    if(pending?.launch)start(pending.requestedStage,true);
-  }
-  function replayPrologue() {
-    pendingPrologueStart.current={launch:false};
-    setShowPrologue(true);
-  }
-  function start(requestedStage=undefined,skipPrologue=false) {
-    if(!skipPrologue&&!prologueSeenRef.current){
-      pendingPrologueStart.current={launch:true,requestedStage};
-      setShowPrologue(true);
-      return;
-    }
+  function start(requestedStage=undefined) {
     const targetStage=Number.isInteger(requestedStage)?requestedStage:
       requestedStage===null?null:(modeRef.current==="ended"?frame.current.stageIndex:null);
     const next=newRun(seed.current++,targetStage);
@@ -542,7 +521,6 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     Math.min(100, ((hud.time-PASSAGES[hud.passage].start)/(PASSAGES[hud.passage].end-PASSAGES[hud.passage].start))*100);
   return (
     <section className="ember-suite" data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
-      {showPrologue&&<EmberTunnelPrologue visible onComplete={completePrologue} soundOn={soundOn} />}
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
       <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
         <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
@@ -627,7 +605,6 @@ export default function EmberTunnelDrill({ soundOn=true }) {
             </div>}
             <div className="ember-expedition-pick" aria-label="Choose a world to playtest">
                <span className="ember-expedition-pick-heading">FIVE WORLD EXPEDITION · ALL LEVELS AVAILABLE FOR PLAYTESTING</span>
-               <button className="ember-intro-replay" type="button" onClick={replayPrologue}>WATCH THE OPENING COMIC</button>
                <div className="ember-world-select">
                  {EXPEDITION_STAGES.map((w,i)=><button type="button" key={w.id}
                    className={"ember-world-choice"+(selectedWorld===i?" selected":"")}

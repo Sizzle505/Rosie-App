@@ -515,7 +515,3 @@
 @media(max-width:620px){
   .ember-start-overlay .ember-expedition-next{min-height:34px;font-size:10px;margin-bottom:6px}
 }
-
-/* Comic prologue replay is secondary to the selected world launch. */
-.ember-expedition-pick .ember-intro-replay{display:block;margin:7px auto 11px;padding:6px 13px;border:1px solid rgba(222,183,119,.55);border-radius:999px;background:rgba(36,24,33,.72);color:#f4d294;font:700 10px/1.2 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-.ember-expedition-pick .ember-intro-replay:hover{background:rgba(83,54,51,.88)}
