@@ -615,7 +615,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p>
           <button type="button" onClick={togglePause}>RESUME DIG</button>
           <button type="button" className="ember-return-levels" onClick={returnToLevelMenu}>RETURN TO LEVEL MENU</button>
-        </div>
+        </div>}
         {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
           <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
