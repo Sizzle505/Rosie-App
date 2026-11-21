@@ -68,6 +68,10 @@ export default function RosieHome({ onNavigate }) {
             <span className={styles.activeSheen} aria-hidden="true" />
           </button>
         ))}
+        <button type="button" className={`${styles.world} ${styles.resourcesWorld}`}
+          aria-label="Open Rosie's Resources" onClick={() => onNavigate("resources")}>
+          <img src="/rosieverse/buttons/resources.png" alt="" loading="lazy" draggable="false"/>
+        </button>
       </nav>
       <nav className={styles.toolDock} aria-label="Rosie's tools">
         {tools.map((tool) => (
