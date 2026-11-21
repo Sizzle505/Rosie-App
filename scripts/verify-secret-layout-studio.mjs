@@ -78,7 +78,9 @@ try {
   await page.locator('.rle-page-label select').selectOption('fortune');
   await page.locator('.question-card').waitFor({ state: 'attached', timeout: 20000 });
   await page.locator('.rle-elements .rle-element').filter({ hasText: 'Question form' }).locator('input').check();
-  await page.locator('.rle-scale input[type=range]').fill('1.15');
+  const scale = page.locator('.rle-scale input[type=range]');
+  await scale.focus();
+  for (let i = 0; i < 3; i += 1) await scale.press('ArrowRight');
   log('PASS: Multiple pages edited before publication');
   assert.match(await page.locator('.rle-last-row').innerText(), /Unpublished edits/);
   await page.getByRole('button', { name: 'Save all pages' }).click();
