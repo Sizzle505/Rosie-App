@@ -12,6 +12,11 @@ export class RosieMusicEngine {
     this.decks=[null,null];this.active=-1;this.activeId=null;this.desired="whimsical-journey";
     this.volume=.26;this.enabled=true;this.unlocked=false;this.hidden=false;this.ducked=false;
     this.fadeHandle=0;this.generation=0;this.fanfare=null;this.error=null;
+    // Reuse one user-activated HTMLAudioElement on Safari; its second
+    // alternating deck can stall after several rapid page transitions.
+    this.singleDeck=typeof navigator!=="undefined" &&
+      /AppleWebKit/i.test(navigator.userAgent) &&
+      !/Chrome|Chromium|CriOS|Edg|FxiOS/i.test(navigator.userAgent);
   }
   _notify(){this.onStatus({id:this.activeId||this.desired,unlocked:this.unlocked,enabled:this.enabled,error:this.error});}
   _cancelFade(){++this.generation;if(this.fadeHandle)this.cancelFrame(this.fadeHandle);this.fadeHandle=0;}
@@ -31,18 +36,8 @@ export class RosieMusicEngine {
     }
     this.unlocked=true;
     if(this.enabled&&!this.hidden){
-      // Grant both alternating decks a real user-gesture play() on WebKit.
-      // Keep the spare silent, and never play it over the current track.
-      const webkit=typeof navigator!=="undefined" &&
-        /AppleWebKit/i.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//i.test(navigator.userAgent);
-      if(webkit){
-        const spare=this.decks[1]||(this.decks[1]=this.audioFactory());
-        spare.src=musicUrl(this.desired);spare.preload="metadata";spare.volume=0;
-        try{
-          const attempt=spare.play();
-          attempt?.then?.(()=>{if(this.active!==1)spare.pause();}).catch?.(()=>{});
-        }catch{}
-      }
+      // Never prime a spare stream on Safari: it can interrupt the
+      // current user-authorized media element.
       this._playDesired();
     }else this._notify();
   }
@@ -50,6 +45,22 @@ export class RosieMusicEngine {
     if(!this.enabled||!this.unlocked||this.hidden)return;
     const id=this.desired;
     if(!ROSIE_MUSIC[id])return;
+    if(this.singleDeck){
+      // Native iOS media playback permissions follow this persistent
+      // player across routes. Avoid pause/load on every source switch.
+      this._cancelFade();
+      const song=this.decks[0]||(this.decks[0]=this.audioFactory());
+      this.active=0;this.activeId=id;this.error=null;
+      song.preload="auto";song.loop=ROSIE_MUSIC[id].loop;
+      if(!song.src.endsWith(musicUrl(id)))song.src=musicUrl(id);
+      song.volume=Math.max(0,Math.min(1,this._gain()));
+      song.onended=()=>{if(this.activeId===id&&!song.loop){this.activeId=null;this._notify();}};
+      song.onerror=()=>{if(this.activeId===id){this.error="Media error";this._notify();}};
+      const playback=song.play();
+      playback?.then?.(()=>{if(this.activeId===id){this.error=null;this._notify();}});
+      playback?.catch?.(e=>{if(this.activeId===id){this.error=e?.name||"Playback blocked";this._notify();}});
+      this._notify();return;
+    }
     if(this.activeId===id&&this.active>=0){
       const song=this.decks[this.active];
       this.error=null;
