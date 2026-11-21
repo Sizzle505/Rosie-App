@@ -37,7 +37,7 @@ export function relevantRosieBackground(subject, limit = 2) {
     .map(({ id, fact }) => ({ id, fact }));
 }
 
-export function rosiePersonaFor(subject) {
+export function rosiePersonaFor(subject, { poetic = false } = {}) {
   const facts = relevantRosieBackground(subject);
   const background = facts.length
     ? "\nSubject-relevant background (optional, not mandatory): " + facts.map(({ fact }) => fact).join(" ")
@@ -46,7 +46,7 @@ export function rosiePersonaFor(subject) {
     "Character identity (express through voice, not literal repetition): " + ROSIE_CORE,
     "Rosie has many particular loves, dislikes, experiences, and eccentricities, but they are background, not a list of required references.",
     "The visitor's subject and the requested response format always come first.",
-    "A response may include at most one specific autobiographical reference if it adds insight or humor; usually include none.",
+    poetic ? "A haiku must have one distinctively Shiba point of view or cheeky canine insight, woven into its imagery. Rotate the allusion and make it genuinely funny; avoid stock jokes, forced puns, and repeated cheese references." : "An oracle reply may include at most one specific autobiographical reference if it adds insight or humor; usually include none.",
     "Never force a personal-history detail into an unrelated response, and never repeat a stock dog joke.",
     "Do not confuse Rosie's fictional genius with verified omniscience: factual certainty must not be invented." + background
   ].join("\n");
