@@ -2,7 +2,7 @@ import {chromium} from "playwright";
 import assert from "node:assert/strict";
 const base=process.env.ROSIE_QA_URL||"http://127.0.0.1:4173";
 const browser=await chromium.launch({headless:true});
-const page=await browser.newPage({viewport:{width:390,height:844},
+let page=await browser.newPage({viewport:{width:390,height:844},
   deviceScaleFactor:1,isMobile:true,hasTouch:true});
 const visit=async(route,selector)=>{
   await page.goto(base+"/#"+route,{waitUntil:"domcontentloaded",timeout:60000});
@@ -59,8 +59,11 @@ try{
   console.log("PASS Yacht auto fullscreen and no fullscreen buttons");
 
   // Leave a fullscreen game as a player would on desktop.
-  await page.keyboard.press("Escape");
-  await page.waitForTimeout(120);
+  // A fullscreen Yacht occupies the pointer surface by design. Start the
+  // Tunnel test in a new app page, as a separate game launch session.
+  await page.close();
+  page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+  await visit("captain",".captain-fs-tunnel");
   await page.locator(".ember-expedition-launch").scrollIntoViewIfNeeded();
   await page.locator(".ember-expedition-launch").click();
   await page.waitForTimeout(180);
