@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
+import { generateRosieText } from "./rosieAI.js";
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
@@ -194,6 +195,9 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [mood, setMood] = useState("zen");
   const [topic, setTopic] = useState("");
   const [variation, setVariation] = useState(0);
+  const [isComposing, setIsComposing] = useState(false);
+  const [composeError, setComposeError] = useState("");
+  const composeSequenceRef = useRef(0);
   const [journal, setJournal] = useState(readJournal);
   const [notice, setNotice] = useState("");
   const [working, setWorking] = useState(false);
@@ -211,21 +215,57 @@ export default function RosieHaikuGarden({ onNavigate }) {
     catch { announce("Your browser could not save the journal."); }
   };
   function openDaily() {
+    composeSequenceRef.current += 1;
+    setIsComposing(false);
+    setComposeError("");
     const refreshed = poemForDay();
     setToday(refreshed);
     setPoem(refreshed);
     setMode("daily");
     setNotice("");
   }
-  function compose(event) {
+  async function compose(event) {
     event?.preventDefault();
+    if (isComposing) return;
+    const subject = topic.trim();
+    if (!subject) {
+      setComposeError("Give Rosie a subject to write about first.");
+      announce("Enter a subject to request a new poem.");
+      return;
+    }
     const nextVariation = mode === "compose" ? variation + 1 : 0;
+    const metadata = poemForTopic(subject, mood, nextVariation);
+    const sequence = ++composeSequenceRef.current;
     setVariation(nextVariation);
-    setPoem(poemForTopic(topic, mood, nextVariation));
     setMode("compose");
-    window.requestAnimationFrame(() => scrollMobileTo(scrollDisplayRef.current));
-    announce("From Rosie's hand-curated poetry collection.");
-    setReaction({ type: "inspired" });
+    setComposeError("");
+    setIsComposing(true);
+    announce("Rosie is composing a new haiku about your subject…");
+    try {
+      const created = await generateRosieText(
+        { feature: "haiku", topic: subject, mood, variation: nextVariation },
+        27000
+      );
+      if (sequence !== composeSequenceRef.current) return;
+      if (!Array.isArray(created.lines) || created.lines.length !== 3 ||
+          created.lines.some(line => typeof line !== "string" || !line.trim())) {
+        throw new Error("invalid_poem");
+      }
+      setPoem({
+        ...metadata, id: created.id || `ai-${Date.now()}`,
+        lines: created.lines, title: `On ${subject}`, source: "ai"
+      });
+      announce(created.revised ? "Rosie refined a new poem for your subject." : "A new original haiku about your subject.");
+      setReaction({ type: "inspired" });
+      window.requestAnimationFrame(() => scrollMobileTo(scrollDisplayRef.current));
+    } catch {
+      if (sequence !== composeSequenceRef.current) return;
+      // Never masquerade a catalogue poem as the original the user requested.
+      setComposeError("Rosie couldn't compose a new verse this time. The previous poem is unchanged. Please try again.");
+      announce("No new haiku was generated; your previous poem is unchanged.");
+    } finally {
+      if (sequence === composeSequenceRef.current) setIsComposing(false);
+    }
   }
   function toggleSave() {
     if (saved) {
@@ -270,6 +310,9 @@ export default function RosieHaikuGarden({ onNavigate }) {
     } finally { setWorking(false); }
   }
   function openJournalEntry(entry) {
+    composeSequenceRef.current += 1;
+    setIsComposing(false);
+    setComposeError("");
     setPoem(entry);
     setMode("journal");
     announce("");
@@ -378,14 +421,15 @@ export default function RosieHaikuGarden({ onNavigate }) {
                   <img className="haiku-desk-art" src="/rosieverse/haiku/calligraphy-desk.webp" alt="" aria-hidden="true" loading="lazy" />
                   <h2>A Poem for Everything</h2>
                 </div>
-                <label htmlFor="haiku-topic">Your subject or dedication</label>
-                <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); }} placeholder="Cheese, birthdays, the vacuum…" />
+                <label htmlFor="haiku-topic">What should Rosie write about?</label>
+                <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); setComposeError(""); }} placeholder="A thunderstorm, a rival cat, an ordinary Tuesday…" />
                 <label>Rosie's disposition</label>
                 <div className="haiku-moods" role="group" aria-label="Choose mood">
                   {ROSIE_HAIKU_MOODS.map((option) => <button type="button" key={option.id} className={mood === option.id ? "selected" : ""} aria-pressed={mood === option.id} onClick={() => { setMood(option.id); setVariation(0); }}>{option.label}</button>)}
                 </div>
-                <button type="submit" className="haiku-primary">Unfurl a New Haiku</button>
-                <p className="haiku-small-note">Rosie draws from her hand-crafted verse collection. Familiar subjects get a special verse; other dedications receive a poem in your chosen mood.</p>
+                <button type="submit" className="haiku-primary" disabled={isComposing}>{isComposing ? "Rosie is composing…" : composeError ? "Try Composing Again" : "Unfurl a New Haiku"}</button>
+                {composeError && <p className="haiku-small-note" role="alert">{composeError}</p>}
+                <p className="haiku-small-note">Every new verse is about your subject and written in Rosie's selected disposition. Her curated daily collection remains available separately.</p>
               </form>
             ) : mode === "meditate" ? (
               <RosieZenMeditation scene={scene} poem={poem} outfitId={outfitId} onOutfitChange={setOutfitId} />
