@@ -25,15 +25,15 @@ test('desktop viewport dimensions are exact, not breakpoint approximations', () 
   assert.notEqual(reference, screenSignature(screen({touch:false,width:1439,height:900,dpr:1})));
 });
 test('normalizeOffset constrains values and rejects nonfinite numbers', () => {
-  assert.deepEqual(normalizeOffset({x:5000,y:-5000,scale:8}), {x:2500,y:-2500,scale:3});
-  assert.deepEqual(normalizeOffset({x:'oops',y:Infinity,scale:NaN}), {x:0,y:0,scale:1});
+  assert.deepEqual(normalizeOffset({x:5000,y:-5000,scale:8}), {x:2500,y:-2500,scale:3,rotate:0});
+  assert.deepEqual(normalizeOffset({x:'oops',y:Infinity,scale:NaN}), {x:0,y:0,scale:1,rotate:0});
 });
 test('layouts never add unknown pages or selectors', () => {
   const targets = {haiku:[['scroll','Scroll','.haiku-scroll']],fortune:[['machine','Machine','.machine']]};
   const result = normalizedLayouts({
-    haiku:{scroll:{x:20,y:10,scale:1},unknown:{x:500,y:30,scale:2}},
+    haiku:{scroll:{x:20,y:10,scale:1,rotate:0},unknown:{x:500,y:30,scale:2}},
     fortune:{machine:{x:0,y:0,scale:1}},
     private:{secret:{x:100,y:0,scale:1}}
   }, targets);
-  assert.deepEqual(result,{haiku:{scroll:{x:20,y:10,scale:1}}});
+  assert.deepEqual(result,{haiku:{scroll:{x:20,y:10,scale:1,rotate:0}}});
 });

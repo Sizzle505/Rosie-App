@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { STUDIO_PAGES, TARGETS } from './layoutTargets.js';
 import { screenSignature, normalizeOffset, normalizedLayouts, PUBLISHED_PREFIX, DRAFT_PREFIX } from './layoutStudioScope.js';
+import { alignmentSnap, boxFromPoints, clamp, distribute, edgeSpeed, filterNestedSelection, pickMarquee, unionRects } from './layoutStudioGeometry.js';
 import './SecretLayoutStudio.css';
 
 const baseline = new WeakMap();
@@ -16,6 +17,8 @@ function baseFor(node) {
   const value = {
     inlineTranslate: node.style.translate,
     inlineScale: node.style.scale,
+    inlineRotate: node.style.rotate,
+    angle: Number(css.rotate.match(/-?\d+(?:\.\d+)?(?=deg)/)?.[0] || 0),
     x: translate[0] || '0px',
     y: translate[1] || '0px',
     scales: scales.length && scales.every(Number.isFinite) ? scales : [1]
@@ -29,29 +32,46 @@ function offset(baseValue, amount) {
 }
 function positionNode(node, value) {
   const shift = normalizeOffset(value);
-  const isDefault = !shift.x && !shift.y && shift.scale === 1;
+  const isDefault = !shift.x && !shift.y && shift.scale === 1 && !shift.rotate;
   // A never-edited element must retain its ordinary React/CSS behavior.
   if (isDefault && !baseline.has(node)) return;
   const original = baseFor(node);
   if (isDefault) {
     if (node.style.translate !== original.inlineTranslate) node.style.translate = original.inlineTranslate;
     if (node.style.scale !== original.inlineScale) node.style.scale = original.inlineScale;
+    if (node.style.rotate !== original.inlineRotate) node.style.rotate = original.inlineRotate;
   } else {
     node.style.translate = offset(original.x, shift.x) + ' ' + offset(original.y, shift.y);
     node.style.scale = original.scales.map(n => Number((n * shift.scale).toFixed(6))).join(' ');
+    node.style.rotate = shift.rotate ? (original.angle + shift.rotate) + 'deg' : original.inlineRotate;
   }
 }
 function applyPage(page, layouts) {
   const pageValues = layouts[page] || {};
   for (const [id, , selector] of TARGETS[page] || []) {
+    if (page === 'haiku' && id.startsWith('scroll-')) continue;
     const node = document.querySelector(selector);
-    if (node) positionNode(node, pageValues[id]);
+    if (!node) continue;
+    if (page === 'haiku' && id === 'scroll') {
+      const base = normalizeOffset(pageValues.scroll);
+      const variantId = 'scroll-' + (node.dataset.scrollStyle || 'sakura');
+      const individual = normalizeOffset(pageValues[variantId]);
+      positionNode(node, {
+        x: base.x + individual.x, y: base.y + individual.y,
+        scale: base.scale * individual.scale, rotate: base.rotate + individual.rotate
+      });
+    } else positionNode(node, pageValues[id]);
   }
 }
-function elementsFor(page) {
-  return (TARGETS[page] || []).map(([id, label, selector, group]) => ({
-    id, label, selector, group, node: document.querySelector(selector)
-  }));
+function elementsFor(page, scrollMode = 'linked') {
+  return (TARGETS[page] || []).map(([id, label, selector, group]) => {
+    let node = document.querySelector(selector);
+    if (page === 'haiku') {
+      if (id === 'scroll' && scrollMode === 'individual') node = null;
+      if (id.startsWith('scroll-') && scrollMode === 'linked') node = null;
+    }
+    return {id, label, selector, group, node};
+  });
 }
 function normalizedScreenLayouts(raw) { return normalizedLayouts(raw, TARGETS); }
 function api(body) {
@@ -72,6 +92,18 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     normalizedScreenLayouts(readStored(localStorage, PUBLISHED_PREFIX + screenSignature()))
   );
   const [open, setOpen] = useState(false);
+  const [panelPos, setPanelPos] = useState(null);
+  const [lasso, setLasso] = useState(false);
+  const [showGuides, setShowGuides] = useState(true);
+  const [snapOn, setSnapOn] = useState(true);
+  const [scrollMode, setScrollMode] = useState('linked');
+  const [spacingGap, setSpacingGap] = useState(14);
+  const [spacingAxis, setSpacingAxis] = useState('x');
+  const [snapMarker, setSnapMarker] = useState(null);
+  const panelRef = useRef(null);
+  const miniRef = useRef(null);
+  const panelDrag = useRef(null);
+  const previewClickRef = useRef(false);
   // The canvas remains editable when the toolbar is minimized.
   const [active, setActive] = useState(false);
   const [editing, setEditing] = useState(true);
@@ -114,6 +146,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     workingRef.current = staged || cached;
     setWorking(workingRef.current);
     setSelected([]);
+    setPanelPos(readStored(localStorage, 'rosieverse.layout-studio.panel.' + screenKey));
     history.current = [];
     setStatus('');
     // Publishing is a single database operation; drafts never leave sessionStorage.
@@ -202,7 +235,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     if (current.includes(id)) setSelected(current.filter(value => value !== id));
     else {
       // Parent/child pairs should not be transformed simultaneously.
-      const parts = elementsFor(page);
+      const parts = elementsFor(page, scrollMode);
       const picked = parts.find(item => item.id === id)?.node;
       const rest = current.filter(existingId => {
         const old = parts.find(item => item.id === existingId)?.node;
@@ -260,181 +293,390 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     stage(next);
   }
 
-  useEffect(() => {
-    document.body.classList.toggle('rle-active', active && editing && unlocked);
-    return () => document.body.classList.remove('rle-active');
-  }, [active, editing, unlocked]);
+
+  function updatePanelPosition(event) {
+    const drag = panelDrag.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    setPanelPos({
+      x: Math.round(clamp(drag.left + event.clientX - drag.startX, 5, Math.max(5, window.innerWidth - drag.width - 5))),
+      y: Math.round(clamp(drag.top + event.clientY - drag.startY, 5, Math.max(5, window.innerHeight - drag.height - 5)))
+    });
+  }
+  function startPanelMove(event) {
+    if (event.target.closest?.('button,select,input,label')) return;
+    const node = event.currentTarget.closest('.rle-panel,.rle-mini');
+    if (!node) return;
+    const rect = node.getBoundingClientRect();
+    panelDrag.current = {pointerId:event.pointerId, startX:event.clientX,startY:event.clientY,
+      left:rect.left,top:rect.top,width:rect.width,height:rect.height};
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  }
+  function finishPanelMove(event) {
+    if (!panelDrag.current || panelDrag.current.pointerId !== event.pointerId) return;
+    panelDrag.current = null;
+    try {
+      const current=panelRef.current || miniRef.current;
+      const rect=current?.getBoundingClientRect();
+      if(rect) localStorage.setItem('rosieverse.layout-studio.panel.'+screenKey,
+        JSON.stringify({x:Math.round(rect.left),y:Math.round(rect.top)}));
+    } catch {}
+  }
+  function panelStyle(expanded) {
+    if (!panelPos) return undefined;
+    const width=expanded ? Math.min(480,window.innerWidth-12) : Math.min(310,window.innerWidth-12);
+    const height=expanded ? Math.min(650,window.innerHeight*0.75) : 54;
+    return {left:clamp(panelPos.x,5,Math.max(5,window.innerWidth-width-5)),
+      top:clamp(panelPos.y,5,Math.max(5,window.innerHeight-height-5)),
+      right:'auto',bottom:'auto'};
+  }
+  function chooseScroll(direction) {
+    previewClickRef.current=true;
+    try {
+      document.querySelector('.haiku-scroll-cycle button:nth-child('+ (direction>0?2:1) +')')?.click();
+    } finally { previewClickRef.current=false; }
+  }
+  function changeRotation(value) {
+    if (!selected.length) return;
+    snapshot();
+    const next=clean(workingRef.current);
+    next[page]={...(next[page]||{})};
+    selected.forEach(id=>{
+      const v=normalizeOffset(next[page][id]);
+      next[page][id]={...v,rotate:clamp(Number(value),-360,360)};
+    });
+    stage(next);
+  }
+  function changeRotationBy(amount) {
+    const current=selected.length===1?normalizeOffset(workingRef.current[page]?.[selected[0]]).rotate:0;
+    changeRotation(current+amount);
+  }
+  function spaceSelection(axis, gap=null) {
+    const parts=elementsFor(page,scrollMode);
+    const moving=parts.filter(item=>selectedRef.current.includes(item.id)&&item.node);
+    const kept=filterNestedSelection(moving,moving.map(item=>item.id));
+    const rows=moving.filter(item=>kept.includes(item.id)).map(item=>({...item,rect:item.node.getBoundingClientRect()}));
+    if(rows.length<2){setStatus('Select at least two separate visible elements to normalize spacing.');return;}
+    const offsets=distribute(rows,axis,gap);
+    if(!offsets.length)return;
+    snapshot();
+    const next=clean(workingRef.current);
+    next[page]={...(next[page]||{})};
+    offsets.forEach(item=>{
+      const v=normalizeOffset(next[page][item.id]);
+      next[page][item.id]={...v,[axis]:clamp(v[axis]+item.delta,-2500,2500)};
+    });
+    stage(next);
+    setSpacingAxis(axis);
+    setStatus('Spacing adjusted for '+rows.length+' selected elements.');
+  }
 
   useEffect(() => {
-    if (!active || !editing || !unlocked) return undefined;
-    const root = document.createElement('div');
-    root.className = 'rle-guides rle-ui';
+    document.body.classList.toggle('rle-active',active&&editing&&unlocked);
+    return () => document.body.classList.remove('rle-active');
+  },[active,editing,unlocked]);
+
+  useEffect(() => {
+    if(!active||!editing||!unlocked)return undefined;
+    const root=document.createElement('div');
+    root.className='rle-guides rle-ui';
     document.body.appendChild(root);
-    overlayRef.current = root;
-    const boxes = new Map();
-    let drag = null;
-    let frame = 0;
-    const visible = () => elementsFor(page).filter(item => selectedRef.current.includes(item.id) && item.node);
-    const draw = () => {
-      frame = 0;
-      const active = visible();
-      const keys = new Set(active.map(item => item.id));
-      for (const [id, box] of boxes) {
-        if (!keys.has(id)) { box.remove(); boxes.delete(id); }
-      }
-      active.forEach(item => {
-        const rect = item.node.getBoundingClientRect();
-        if (!rect.width || !rect.height) return;
-        let box = boxes.get(item.id);
-        if (!box) {
-          box = document.createElement('div');
-          box.className = 'rle-outline';
-          box.addEventListener('pointerdown', event => {
-            event.preventDefault();
-            event.stopPropagation();
-            startDrag(event, item.id, false);
-          });
-          const caption = document.createElement('span');
-          caption.className = 'rle-outline-label';
-          caption.textContent = item.label;
-          box.appendChild(caption);
-          const grip = document.createElement('button');
-          grip.type = 'button';
-          grip.className = 'rle-resize rle-ui';
-          grip.textContent = '↘';
-          grip.setAttribute('aria-label', 'Resize ' + item.label);
-          grip.addEventListener('pointerdown', event => {
-            event.preventDefault();
-            event.stopPropagation();
-            startDrag(event, item.id, true, box.getBoundingClientRect().width);
-          });
-          box.appendChild(grip);
-          root.appendChild(box);
-          boxes.set(item.id, box);
-        }
-        box.style.left = rect.left + 'px';
-        box.style.top = rect.top + 'px';
-        box.style.width = rect.width + 'px';
-        box.style.height = rect.height + 'px';
+    overlayRef.current=root;
+    const outlines=new Map();
+    const marquee=document.createElement('div');
+    marquee.className='rle-marquee';
+    root.appendChild(marquee);
+    const snapV=document.createElement('div'),snapH=document.createElement('div');
+    snapV.className='rle-snap-guide rle-snap-guide-v';
+    snapH.className='rle-snap-guide rle-snap-guide-h';
+    root.append(snapV,snapH);
+    const guideField=document.createElement('div');
+    guideField.className='rle-guide-field';
+    if(showGuides) {
+      ['v25','v50','v75','h25','h50','h75'].forEach(mark=>{
+        const line=document.createElement('div');
+        line.className='rle-page-guide rle-'+mark;
+        guideField.appendChild(line);
       });
+    }
+    root.appendChild(guideField);
+    let drag=null,paintFrame=0,autoFrame=0;
+    const getParts=()=>elementsFor(page,scrollMode);
+    const eligible=()=>getParts().filter(item=>selectedRef.current.includes(item.id)&&item.node);
+    const clearSnap=()=>{
+      snapV.style.display='none';
+      snapH.style.display='none';
     };
-    const redraw = () => { if (!frame) frame = requestAnimationFrame(draw); };
-    function startDrag(event, id, resize, width) {
-      if (event.button !== 0 && event.pointerType !== 'touch') return;
-      const moving = selectedRef.current.includes(id) ? [...selectedRef.current] : [id];
-      if (!selectedRef.current.includes(id)) setSelected(moving);
-      snapshot();
-      const starts = Object.fromEntries(moving.map(key => [key, normalizeOffset(workingRef.current[page]?.[key])]));
-      drag = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, resize, width: width || 150, moving, starts, moved: false };
+    const draw=()=>{
+      paintFrame=0;
+      const items=eligible();
+      const ids=new Set(items.map(item=>item.id));
+      for(const [id,node] of outlines){
+        if(!ids.has(id)){node.remove();outlines.delete(id);}
+      }
+      for(const item of items){
+        const bounds=item.node.getBoundingClientRect();
+        if(bounds.width<1||bounds.height<1)continue;
+        let box=outlines.get(item.id);
+        if(!box){
+          box=document.createElement('div');
+          box.className='rle-outline';
+          box.dataset.targetId=item.id;
+          box.addEventListener('pointerdown',event=>{
+            if(event.target.closest('.rle-resize,.rle-spin'))return;
+            event.preventDefault();event.stopPropagation();
+            startDrag(event,item.id,'move');
+          });
+          const caption=document.createElement('span');
+          caption.className='rle-outline-label';
+          caption.textContent=item.label;
+          box.appendChild(caption);
+          const resize=document.createElement('button');
+          resize.className='rle-resize rle-ui';
+          resize.type='button';
+          resize.textContent='↘';
+          resize.setAttribute('aria-label','Resize '+item.label);
+          resize.addEventListener('pointerdown',event=>{
+            event.preventDefault();event.stopPropagation();
+            startDrag(event,item.id,'resize',bounds.width);
+          });
+          const spin=document.createElement('button');
+          spin.className='rle-spin rle-ui';
+          spin.type='button';
+          spin.textContent='⟳';
+          spin.setAttribute('aria-label','Rotate '+item.label);
+          spin.addEventListener('pointerdown',event=>{
+            event.preventDefault();event.stopPropagation();
+            startDrag(event,item.id,'rotate');
+          });
+          box.append(resize,spin);
+          root.appendChild(box);
+          outlines.set(item.id,box);
+        }
+        box.style.left=bounds.left+'px';
+        box.style.top=bounds.top+'px';
+        box.style.width=bounds.width+'px';
+        box.style.height=bounds.height+'px';
+      }
+    };
+    const redraw=()=>{if(!paintFrame)paintFrame=requestAnimationFrame(draw);};
+    function startDrag(event,id,kind='move',width=160) {
+      if(event.button!==0&&event.pointerType!=='touch')return;
+      const existing=selectedRef.current.includes(id);
+      const moving=existing?[...selectedRef.current]:[id];
+      if(!existing)setSelected(moving);
+      const parts=getParts();
+      const nodes=parts.filter(item=>moving.includes(item.id)&&item.node);
+      const valid=filterNestedSelection(nodes,nodes.map(item=>item.id));
+      const rects=nodes.filter(item=>valid.includes(item.id)).map(item=>({...item,rect:item.node.getBoundingClientRect()}));
+      const box=rects.find(item=>item.id===id)?.rect;
+      const center=box?{x:(box.left+box.right)/2,y:(box.top+box.bottom)/2}:null;
+      if(kind==='move'||kind==='resize'||kind==='rotate')snapshot();
+      drag={kind,pointerId:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,
+        startScrollY:window.scrollY,startScrollX:window.scrollX,width:width||160,moving,valid,
+        rects,bounds:unionRects(rects.map(item=>item.rect)),center,
+        anchorAngle:center?Math.atan2(event.clientY-center.y,event.clientX-center.x)*180/Math.PI:0,
+        starts:Object.fromEntries(moving.map(key=>[key,normalizeOffset(workingRef.current[page]?.[key])])),
+        moved:false};
+      clearSnap();
+    }
+    function beginMarquee(event){
+      event.preventDefault();event.stopImmediatePropagation();
+      drag={kind:'marquee',pointerId:event.pointerId,x:event.clientX,y:event.clientY,
+        lastX:event.clientX,lastY:event.clientY,startScrollY:window.scrollY,
+        startScrollX:window.scrollX,moved:false};
+      marquee.style.display='block';
+      clearSnap();
+      updateGesture();
     }
     function onDown(event) {
-      if (event.button !== 0 && event.pointerType !== 'touch') return;
-      if (event.target.closest?.('.rle-ui')) return;
-      const candidates = elementsFor(page).filter(item => item.node && item.node.contains(event.target));
-      if (!candidates.length) return;
-      candidates.sort((a,b) => a.node.contains(b.node) ? 1 : b.node.contains(a.node) ? -1 : 0);
-      // A selected parent stays draggable even when its child is also a target.
-      // Without this priority, touching artwork inside a selected group switches
-      // selection to the child and silently cancels the intended group drag.
-      const selectedCandidates = candidates.filter(item => selectedRef.current.includes(item.id));
-      const id = (selectedCandidates[0] || candidates[0]).id;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      if (multi && !selectedRef.current.includes(id)) { choose(id); return; }
-      if (!multi) setSelected([id]);
-      startDrag(event, id, false);
+      if(event.button!==0&&event.pointerType!=='touch')return;
+      if(event.target.closest?.('.rle-ui'))return;
+      if(lasso){beginMarquee(event);return;}
+      const hits=getParts().filter(item=>item.node&&item.node.contains(event.target));
+      if(!hits.length)return;
+      hits.sort((x,y)=>x.node.contains(y.node)?1:y.node.contains(x.node)?-1:0);
+      const picked=hits.find(item=>selectedRef.current.includes(item.id))||hits[0];
+      const id=picked.id;
+      event.preventDefault();event.stopImmediatePropagation();
+      if(multi&&!selectedRef.current.includes(id)){
+        choose(id);return;
+      }
+      if(!multi)setSelected([id]);
+      startDrag(event,id,'move');
+    }
+    function updateGesture(){
+      if(!drag)return;
+      const x=drag.lastX,y=drag.lastY;
+      const scrollDelta=window.scrollY-drag.startScrollY;
+      if(drag.kind==='marquee'){
+        const bounds=boxFromPoints(drag.x,drag.y+drag.startScrollY,x,y+window.scrollY);
+        marquee.style.left=bounds.left-window.scrollX+'px';
+        marquee.style.top=bounds.top-window.scrollY+'px';
+        marquee.style.width=Math.max(1,bounds.right-bounds.left)+'px';
+        marquee.style.height=Math.max(1,bounds.bottom-bounds.top)+'px';
+        return;
+      }
+      const dx=x-drag.x,dy=y-drag.y;
+      const next={...workingRef.current,[page]:{...(workingRef.current[page]||{})}};
+      let sx=0,sy=0;
+      if(drag.kind==='move'&&snapOn&&drag.bounds){
+        const proposed={left:drag.bounds.left+dx,right:drag.bounds.right+dx,
+          top:drag.bounds.top+dy,bottom:drag.bounds.bottom+dy};
+        const selectedNodes=drag.rects.map(item=>item.node);
+        const surroundings=getParts().filter(item=>item.node&&!drag.moving.includes(item.id)&&
+          !selectedNodes.some(node=>node===item.node||node.contains(item.node)||item.node.contains(node)))
+          .map(item=>item.node.getBoundingClientRect())
+          .filter(rect=>rect.width>5&&rect.height>5&&rect.width*rect.height<window.innerWidth*window.innerHeight*.7);
+        const guide=alignmentSnap(proposed,surroundings,8);
+        sx=guide.dx;sy=guide.dy;
+        snapV.style.display=guide.xLine===null?'none':'block';
+        snapH.style.display=guide.yLine===null?'none':'block';
+        if(guide.xLine!==null)snapV.style.left=guide.xLine+'px';
+        if(guide.yLine!==null)snapH.style.top=guide.yLine+'px';
+      }else clearSnap();
+      for(const id of drag.moving){
+        const start=drag.starts[id];
+        if(drag.kind==='rotate'&&drag.center){
+          const angle=Math.atan2(y-drag.center.y,x-drag.center.x)*180/Math.PI;
+          let diff=angle-drag.anchorAngle;
+          if(diff>180)diff-=360;
+          if(diff< -180)diff+=360;
+          const raw=clamp(start.rotate+diff,-360,360);
+          next[page][id]={...start,rotate:snapOn?Math.round(raw/5)*5:Math.round(raw)};
+        }else if(drag.kind==='resize'){
+          next[page][id]={...start,scale:Math.round(clamp(start.scale*(1+(dx+dy)/Math.max(80,drag.width)),.3,3)*100)/100};
+        }else {
+          next[page][id]={...start,x:Math.round(clamp(start.x+dx+sx,-2500,2500)),
+            y:Math.round(clamp(start.y+dy+scrollDelta+sy,-2500,2500))};
+        }
+      }
+      workingRef.current=next;
+      applyPage(page,next);
+      redraw();
     }
     function onMove(event) {
-      if (!drag || event.pointerId !== drag.pointerId) return;
-      const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
-      if (Math.abs(dx) + Math.abs(dy) < 2 && !drag.moved) return;
-      drag.moved = true;
+      if(!drag||event.pointerId!==drag.pointerId)return;
+      drag.lastX=event.clientX;drag.lastY=event.clientY;
+      if(Math.abs(drag.lastX-drag.x)+Math.abs(drag.lastY-drag.y)>3)drag.moved=true;
       event.preventDefault();
-      const next = { ...workingRef.current, [page]: { ...(workingRef.current[page] || {}) } };
-      for (const id of drag.moving) {
-        const start = drag.starts[id];
-        next[page][id] = drag.resize
-          ? { ...start, scale: Math.round(Math.min(3, Math.max(0.3, start.scale * (1 + (dx + dy) / Math.max(80, drag.width)))) * 100) / 100 }
-          : { ...start, x: Math.round(start.x + dx), y: Math.round(start.y + dy) };
-      }
-      workingRef.current = next;
-      applyPage(page, next);
-      redraw();
+      updateGesture();
     }
     function onUp(event) {
-      if (!drag || event.pointerId !== drag.pointerId) return;
-      if (drag.moved) stage(workingRef.current);
-      else history.current.pop();
-      drag = null;
-      redraw();
+      if(!drag||event.pointerId!==drag.pointerId)return;
+      if(drag.kind==='marquee'){
+        marquee.style.display='none';
+        if(drag.moved){
+          const area=boxFromPoints(drag.x,drag.y+drag.startScrollY,drag.lastX,drag.lastY+window.scrollY);
+          const visible=getParts().filter(item=>item.node).map(item=>{
+            const r=item.node.getBoundingClientRect();
+            return {...item,rect:{left:r.left+window.scrollX,right:r.right+window.scrollX,
+              top:r.top+window.scrollY,bottom:r.bottom+window.scrollY,width:r.width,height:r.height}};
+          });
+          const ids=pickMarquee(visible,area);
+          const additions=multi?[...selectedRef.current,...ids]:ids;
+          const unique=[...new Set(additions)];
+          setSelected(filterNestedSelection(visible,unique));
+        }
+      } else if(drag.moved){
+        stage(workingRef.current);
+      } else {
+        history.current.pop();
+        if(multi){
+          const id=drag.moving.find(id=>id===event.target.closest?.('[data-target-id]')?.dataset.targetId)||
+            drag.rects.find(item=>item.node.contains(event.target))?.id||drag.moving[0];
+          setSelected(current=>current.includes(id)?current.filter(value=>value!==id):[...current,id]);
+        }
+      }
+      drag=null;
+      clearSnap();redraw();
     }
-    function onClick(event) {
-      if (event.target.closest?.('.rle-ui')) return;
-      if (elementsFor(page).some(item => item.node && item.node.contains(event.target))) {
-        event.preventDefault(); event.stopImmediatePropagation();
+    function onClick(event){
+      if(previewClickRef.current)return;
+      if(event.target.closest?.('.rle-ui'))return;
+      if(getParts().some(item=>item.node&&item.node.contains(event.target))||lasso){
+        event.preventDefault();event.stopImmediatePropagation();
       }
     }
-    function onKeys(event) {
-      if (event.key === 'Escape') { setEditing(false); return; }
-      if (event.target?.matches?.('input,select,textarea,[contenteditable]')) return;
-      if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key) || !selectedRef.current.length) return;
-      event.preventDefault();
-      snapshot();
-      const dx = (event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0) * (event.shiftKey ? 10 : 1);
-      const dy = (event.key === 'ArrowUp' ? -1 : event.key === 'ArrowDown' ? 1 : 0) * (event.shiftKey ? 10 : 1);
-      const next = clean(workingRef.current);
-      next[page] = { ...(next[page] || {}) };
-      selectedRef.current.forEach(id => {
-        const v = normalizeOffset(next[page][id]);
-        next[page][id] = { ...v, x: v.x + dx, y: v.y + dy };
+    function onKeys(event){
+      if(event.key==='Escape'){setEditing(false);return;}
+      if(event.target?.matches?.('input,textarea,select,[contenteditable]'))return;
+      if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)||!selectedRef.current.length)return;
+      event.preventDefault();snapshot();
+      const size=event.shiftKey?10:1;
+      const dx=(event.key==='ArrowLeft'?-size:event.key==='ArrowRight'?size:0);
+      const dy=(event.key==='ArrowUp'?-size:event.key==='ArrowDown'?size:0);
+      const next=clean(workingRef.current);next[page]={...(next[page]||{})};
+      selectedRef.current.forEach(id=>{
+        const v=normalizeOffset(next[page][id]);
+        next[page][id]={...v,x:clamp(v.x+dx,-2500,2500),y:clamp(v.y+dy,-2500,2500)};
       });
       stage(next);
     }
-    root.addEventListener('rle-refresh', redraw);
-    const observer = new MutationObserver(redraw);
-    const app = document.querySelector('.app-shell');
-    if (app) observer.observe(app, { childList: true, subtree: true });
-    document.addEventListener('pointerdown', onDown, true);
-    window.addEventListener('pointermove', onMove, { capture: true, passive: false });
-    window.addEventListener('pointerup', onUp, true);
-    window.addEventListener('pointercancel', onUp, true);
-    document.addEventListener('click', onClick, true);
-    window.addEventListener('scroll', redraw, true);
-    window.addEventListener('resize', redraw);
-    document.addEventListener('keydown', onKeys, true);
-    draw();
-    return () => {
+    function autoScroll(){
+      if(drag&&(drag.kind==='move'||drag.kind==='marquee'||drag.kind==='resize')){
+        const speed=edgeSpeed(drag.lastY,window.innerHeight,66);
+        if(speed&&document.scrollingElement?.scrollHeight>window.innerHeight+3){
+          const before=window.scrollY;
+          window.scrollBy({top:speed,behavior:'instant'});
+          if(before!==window.scrollY){updateGesture();redraw();}
+        }
+      }
+      autoFrame=requestAnimationFrame(autoScroll);
+    }
+    const observer=new MutationObserver(redraw);
+    const app=document.querySelector('.app-shell');
+    if(app)observer.observe(app,{childList:true,subtree:true});
+    document.addEventListener('pointerdown',onDown,true);
+    window.addEventListener('pointermove',onMove,{capture:true,passive:false});
+    window.addEventListener('pointerup',onUp,true);
+    window.addEventListener('pointercancel',onUp,true);
+    document.addEventListener('click',onClick,true);
+    document.addEventListener('keydown',onKeys,true);
+    window.addEventListener('scroll',redraw,true);
+    window.addEventListener('resize',redraw);
+    root.addEventListener('rle-refresh',redraw);
+    draw();autoFrame=requestAnimationFrame(autoScroll);
+    return ()=>{
       observer.disconnect();
-      document.removeEventListener('pointerdown', onDown, true);
-      window.removeEventListener('pointermove', onMove, true);
-      window.removeEventListener('pointerup', onUp, true);
-      window.removeEventListener('pointercancel', onUp, true);
-      document.removeEventListener('click', onClick, true);
-      window.removeEventListener('scroll', redraw, true);
-      window.removeEventListener('resize', redraw);
-      document.removeEventListener('keydown', onKeys, true);
-      if (frame) cancelAnimationFrame(frame);
-      root.remove();
-      overlayRef.current = null;
+      document.removeEventListener('pointerdown',onDown,true);
+      window.removeEventListener('pointermove',onMove,true);
+      window.removeEventListener('pointerup',onUp,true);
+      window.removeEventListener('pointercancel',onUp,true);
+      document.removeEventListener('click',onClick,true);
+      document.removeEventListener('keydown',onKeys,true);
+      window.removeEventListener('scroll',redraw,true);
+      window.removeEventListener('resize',redraw);
+      cancelAnimationFrame(autoFrame);
+      if(paintFrame)cancelAnimationFrame(paintFrame);
+      root.remove();overlayRef.current=null;
     };
-  }, [page, screenKey, active, editing, unlocked, multi]);
+  },[page,screenKey,active,editing,unlocked,multi,lasso,snapOn,showGuides,scrollMode]);
 
-  useEffect(() => {
+  useEffect(()=>{
     overlayRef.current?.dispatchEvent(new Event('rle-refresh'));
-  }, [selected]);
+  },[selected]);
 
   const targets = TARGETS[page] || [];
   const visibleTargets = targets.filter(([, label, , group]) =>
     (label + ' ' + (group || '')).toLowerCase().includes(filter.toLowerCase()));
   const chosenScale = selected.length === 1 ? normalizeOffset(working[page]?.[selected[0]]).scale : 1;
+  const chosenRotation = selected.length === 1 ? normalizeOffset(working[page]?.[selected[0]]).rotate : 0;
   const editedPages = Object.keys(working).filter(key => Object.keys(working[key] || {}).length).length;
   if (!unlocked) return null;
   return <>
-    {!open && <button type='button' className='rle-launch rle-ui' onClick={() => { setOpen(true); setActive(true); setEditing(true); }} aria-label='Open secret Layout Studio'>Arrange</button>}
-    {open && <section className='rle-panel rle-ui' aria-label='Rosie Layout Studio'>
-      <header className='rle-header'>
+    {!open && <div className='rle-mini rle-ui' ref={miniRef} style={panelStyle(false)}>
+      <span className='rle-mini-grip' onPointerDown={startPanelMove} onPointerMove={updatePanelPosition} onPointerUp={finishPanelMove} onPointerCancel={finishPanelMove}>⠿</span>
+      <button type='button' className={active && editing ? 'rle-on' : ''} onClick={() => {setActive(true);setEditing(true)}}>Arrange</button>
+      <button type='button' className={active && !editing ? 'rle-on' : ''} onClick={() => {setActive(true);setEditing(false)}}>Interact</button>
+      <button type='button' className='rle-expand' aria-label='Open full Layout Studio' onClick={() => setOpen(true)}>⌄</button>
+    </div>}
+    {open && <section className='rle-panel rle-ui' ref={panelRef} style={panelStyle(true)} aria-label='Rosie Layout Studio'>
+      <header className='rle-header rle-drag-header' onPointerDown={startPanelMove} onPointerMove={updatePanelPosition} onPointerUp={finishPanelMove} onPointerCancel={finishPanelMove}>
+        <span className='rle-grip' aria-hidden='true'>⠿</span>
         <div><strong>ROSIE LAYOUT STUDIO</strong><small>Exact screen: {screenKey}</small></div>
-        <button type='button' onClick={() => setOpen(false)} aria-label='Minimize Layout Studio'>−</button>
+        <button type='button' onClick={() => setOpen(false)} aria-label='Minimize Layout Studio'>⌃</button>
       </header>
       <div className='rle-row rle-row-primary'>
         <label className='rle-page-label'>Page
@@ -442,38 +684,67 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
             {STUDIO_PAGES.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
           </select>
         </label>
-        <button type='button' className={editing ? 'rle-on' : ''} onClick={() => setEditing(current => !current)}>
-          {editing ? 'Arrange' : 'Scroll / interact'}
-        </button>
-        <button type='button' className={multi ? 'rle-on' : ''} onClick={() => { setMulti(value => !value); }}>
-          {multi ? 'Group ON' : 'Group select'}
-        </button>
+        <button type='button' className={editing && active ? 'rle-on' : ''} onClick={() => {setActive(true);setEditing(true)}}>Arrange</button>
+        <button type='button' className={!editing && active ? 'rle-on' : ''} onClick={() => {setActive(true);setEditing(false)}}>Interact</button>
+      </div>
+      <div className='rle-row rle-tools'>
+        <button type='button' className={multi ? 'rle-on' : ''} onClick={() => setMulti(v => !v)}>{multi ? 'Group ON' : 'Group select'}</button>
+        <button type='button' className={lasso ? 'rle-on' : ''} aria-pressed={lasso} onClick={() => {setLasso(v=>!v);setActive(true);setEditing(true)}}>{lasso ? 'Marquee ON' : 'Marquee select'}</button>
+        <button type='button' className={snapOn ? 'rle-on' : ''} aria-pressed={snapOn} onClick={() => setSnapOn(v=>!v)}>Snap {snapOn?'on':'off'}</button>
+        <button type='button' className={showGuides ? 'rle-on' : ''} aria-pressed={showGuides} onClick={() => setShowGuides(v=>!v)}>Guides {showGuides?'on':'off'}</button>
       </div>
       <div className='rle-row'>
         <button type='button' onClick={() => setShowElements(state => !state)}>{showElements ? 'Hide elements' : 'Choose elements'} ({selected.length})</button>
         <button type='button' onClick={() => setSelected([])} disabled={!selected.length}>Clear selection</button>
         <button type='button' onClick={undo} disabled={!history.current.length}>Undo</button>
       </div>
+      {page==='haiku' && <div className='rle-linked'>
+        <div className='rle-subhead'><strong>Scroll artwork</strong><small>Position linked designs or just the visible design</small></div>
+        <div className='rle-row'>
+          <button type='button' className={scrollMode==='linked'?'rle-on':''} onClick={() => {setScrollMode('linked');setSelected([])}}>All scroll designs</button>
+          <button type='button' className={scrollMode==='individual'?'rle-on':''} onClick={() => {setScrollMode('individual');setSelected([])}}>Current design only</button>
+          <button type='button' aria-label='Previous scroll design' onClick={() => chooseScroll(-1)}>‹</button>
+          <button type='button' aria-label='Next scroll design' onClick={() => chooseScroll(1)}>›</button>
+        </div>
+      </div>}
       {showElements && <div className='rle-elements'>
         <input aria-label='Find elements' value={filter} onChange={event => setFilter(event.target.value)} placeholder='Find an element...' />
         {visibleTargets.map(([id,label]) => <label key={id} className='rle-element'>
-          <input type='checkbox' checked={selected.includes(id)} onChange={() => choose(id)}/>
+          <input type='checkbox' checked={selected.includes(id)} onChange={() => {if(page==='haiku'&&id==='scroll')setScrollMode('linked');if(page==='haiku'&&id.startsWith('scroll-'))setScrollMode('individual');choose(id)}}/>
           <span>{label}</span>
         </label>)}
       </div>}
-      {selected.length > 0 && <div className='rle-scale'>
-        <label>Size {Math.round(chosenScale * 100)}% {selected.length > 1 ? '(group)' : ''}
-          <input type='range' min='0.3' max='3' step='0.05' value={chosenScale}
-            onChange={event => setScale(event.target.value)} />
+      {selected.length > 0 && <div className='rle-range-grid'>
+        <label>Size <b>{Math.round(chosenScale * 100)}%</b>
+          <input type='range' min='0.3' max='3' step='0.05' value={chosenScale} onChange={event => setScale(event.target.value)} />
         </label>
-        <button type='button' onClick={resetSelected}>Reset selection</button>
+        <label>Rotation <b>{Math.round(chosenRotation)}°</b>
+          <input type='range' min='-180' max='180' step='1' value={chosenRotation} onChange={event => changeRotation(event.target.value)} />
+        </label>
+        <div className='rle-row rle-rotate-actions'>
+          <button type='button' onClick={() => changeRotationBy(-15)}>↶ −15°</button>
+          <button type='button' onClick={() => changeRotation(0)}>0°</button>
+          <button type='button' onClick={() => changeRotationBy(15)}>↷ +15°</button>
+          <button type='button' onClick={resetSelected}>Reset selected</button>
+        </div>
+      </div>}
+      {selected.length >= 2 && <div className='rle-spacing'>
+        <div className='rle-subhead'><strong>Even spacing</strong><small>Align a group in a row or column</small></div>
+        <div className='rle-row'>
+          <button type='button' onClick={() => spaceSelection('x',null)}>Equalize row ↔</button>
+          <button type='button' onClick={() => spaceSelection('y',null)}>Equalize column ↕</button>
+        </div>
+        <label>Gap {spacingGap}px ({spacingAxis==='x'?'horizontal':'vertical'})
+          <input type='range' min='0' max='120' step='1' value={spacingGap}
+            onChange={event => {setSpacingGap(Number(event.target.value));spaceSelection(spacingAxis,Number(event.target.value))}} />
+        </label>
       </div>}
       <div className='rle-row rle-footer'>
         <button type='button' onClick={resetPage}>Reset page</button>
         <button type='button' onClick={exportDraft}>Export</button>
         <button type='button' className='rle-save' onClick={saveAll} disabled={saving}>{saving ? 'Saving...' : 'Save all pages'}</button>
       </div>
-      <small className='rle-help'>Tap to select; drag to move; drag ↘ to resize. Group select lets you tap several elements and drag them together. Switch to Scroll / interact to use page controls. Changes remain private until Save.</small>
+      <small className='rle-help'>Drag the header to move the controls. Drag ↘ to resize or ⟳ to rotate; marquee-select multiple objects, then drag them together. With Group ON, tap any selected item to remove only that item. Drag near the screen edge to scroll. Snap and guides are optional. Save once for all pages.</small>
       <div className='rle-last-row'>
         <span>{dirty ? 'Unpublished edits' : 'Saved view'} · {editedPages} customized page{editedPages === 1 ? '' : 's'}</span>
         <button type='button' onClick={hideEditor}>Hide secret button</button>

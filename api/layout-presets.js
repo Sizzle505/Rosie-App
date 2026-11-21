@@ -35,9 +35,9 @@ function safeLayouts(source) {
     const clean = {};
     for (const [id, value] of Object.entries(elements)) {
       if (!/^[a-z0-9-]{1,50}$/.test(id) || !value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid element.');
-      const x = Number(value.x), y = Number(value.y), scale = Number(value.scale);
-      if (![x,y,scale].every(Number.isFinite) || Math.abs(x) > 2500 || Math.abs(y) > 2500 || scale < 0.3 || scale > 3) throw new Error('Invalid position.');
-      if (x || y || scale !== 1) clean[id] = { x, y, scale };
+      const x = Number(value.x), y = Number(value.y), scale = Number(value.scale), rotate = value.rotate === undefined ? 0 : Number(value.rotate);
+      if (![x,y,scale,rotate].every(Number.isFinite) || Math.abs(x) > 2500 || Math.abs(y) > 2500 || scale < 0.3 || scale > 3 || Math.abs(rotate) > 360) throw new Error('Invalid position.');
+      if (x || y || scale !== 1 || rotate) clean[id] = { x, y, scale, ...(rotate ? { rotate } : {}) };
     }
     if (Object.keys(clean).length) output[page] = clean;
   }

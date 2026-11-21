@@ -29,7 +29,8 @@ export function normalizeOffset(raw) {
   return {
     x: between(item.x, -2500, 2500, 0),
     y: between(item.y, -2500, 2500, 0),
-    scale: between(item.scale, 0.3, 3, 1)
+    scale: between(item.scale, 0.3, 3, 1),
+    rotate: between(item.rotate, -360, 360, 0)
   };
 }
 
@@ -44,7 +45,7 @@ export function normalizedLayouts(raw, targetMap) {
     for (const [id, value] of Object.entries(values)) {
       if (!permitted.has(id)) continue;
       const normalized = normalizeOffset(value);
-      if (normalized.x || normalized.y || normalized.scale !== 1) pageResult[id] = normalized;
+      if (normalized.x || normalized.y || normalized.scale !== 1 || normalized.rotate) pageResult[id] = normalized;
     }
     if (Object.keys(pageResult).length) result[page] = pageResult;
   }
