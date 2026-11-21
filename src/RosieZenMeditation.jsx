@@ -343,7 +343,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       <button type="button" className="haiku-primary zen-begin" onClick={begin}>Begin {minutes}-minute meditation</button>
     </div>
     {opened && createPortal(
-      <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
+      <div className="zen-immersive" data-zen-view={viewId} data-zen-status={status} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
         <div className="zen-immersive-scenery" aria-hidden="true">
           <img className="zen-scenery-desktop" src={sceneSrc} alt="" decoding="async" fetchPriority="high"/>
           <img className="zen-scenery-phone" src={mobileSceneSrc} alt="" decoding="async" fetchPriority="high"/>
@@ -373,15 +373,18 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
 
           {status==="complete"?
             <div className="zen-complete">
-              <img src={FINAL_ART + "rosie-enlightened.webp"} alt="Rosie celebrates your peaceful meditation with a delighted smile"/>
-              <div className="zen-complete-copy">
-                <span className="zen-eyebrow">A LITTLE MOMENT OF PEACE</span>
-                <h3>Beautifully done.</h3>
-                <p>You gave yourself {minutes} minutes of gentle attention. Rosie is quietly impressed.</p>
+              <div className="zen-complete-stage">
+                <div className="zen-complete-aura" aria-hidden="true" />
+                <img className="zen-victory-rosie" src={FINAL_ART + "rosie-enlightened.webp"} alt="Rosie beams with delight at your completed meditation"/>
                 <div className="zen-enlightenment-reward">
                   <img src={NEW_ART+"ui/enlightenment-seal.webp"} alt="Rosie's Seal of Enlightenment" className="zen-enlightenment-seal"/>
                   <img src={NEW_ART+"characters/sensei-bowing.webp"} alt="Sensei Rosie bows in congratulations" className="zen-sensei-bowing"/>
                 </div>
+              </div>
+              <div className="zen-complete-copy">
+                <span className="zen-eyebrow">A MOMENT OF PERFECT PEACE</span>
+                <h3>Beautifully done.</h3>
+                <p>For {minutes} quiet minutes, the world waited. Rosie considers this excellent judgment.</p>
                 <p className="zen-complete-stats">{progress.sessions} sessions · {progress.minutes} peaceful minutes</p>
                 <button type="button" className="zen-action-primary" onClick={close}>Return to the garden</button>
               </div>
