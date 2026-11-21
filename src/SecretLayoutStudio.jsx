@@ -238,6 +238,8 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       const parts = elementsFor(page, scrollMode);
       const picked = parts.find(item => item.id === id)?.node;
       const rest = current.filter(existingId => {
+        if (id === 'scroll' && existingId.startsWith('scroll-')) return false;
+        if (id.startsWith('scroll-') && existingId === 'scroll') return false;
         const old = parts.find(item => item.id === existingId)?.node;
         return !(picked && old && (picked.contains(old) || old.contains(picked)));
       });
