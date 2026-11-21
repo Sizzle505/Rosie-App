@@ -16,7 +16,7 @@
 
   /* Calculations is a designed two-column instrument, not an elastic
      3440px-wide calculator. The velvet background remains full bleed. */
-  .app-shell.page-calculations main.rc-page:not(.rc-page--tool-open) {
+  .app-shell.page-calculations main.rc-page {
     max-width: var(--rosie-desktop-stage-limit) !important;
     margin-inline: auto !important;
   }
