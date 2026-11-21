@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { HAIKU_SCENES } from "./RosieHaikuScene.jsx";
+import RosieZenAmbient from "./RosieZenAmbient.jsx";
 import { ROSIE_HAIKU_OUTFITS, nextRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 import { localDayKey } from "./haikuEngine.js";
 import { createZenAudio } from "./rosieZenAudio.js";
@@ -348,6 +349,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
           <img className="zen-scenery-desktop" src={sceneSrc} alt="" decoding="async" fetchPriority="high"/>
           <img className="zen-scenery-phone" src={mobileSceneSrc} alt="" decoding="async" fetchPriority="high"/>
           <div className="zen-scenery-atmosphere" aria-hidden="true"/>
+          <RosieZenAmbient scene={viewId} mode="meditation" status={status} />
         </div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
