@@ -67,3 +67,47 @@
     padding:8px!important;
   }
 }
+
+/* Generated enamel-and-gold music medallion matches the RosieVerse paw control.
+   This one shared component appears on every page, retaining accessibility. */
+.rosie-music-launch{
+  appearance:none!important;
+  width:58px!important;
+  height:58px!important;
+  min-width:58px!important;
+  min-height:58px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:transparent!important;
+  color:inherit!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  filter:drop-shadow(0 3px 5px rgba(16,8,30,.63));
+  transition:transform .18s ease,filter .18s ease;
+}
+.rosie-music-launch img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:100%;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.rosie-music-launch:hover,
+.rosie-music-launch[aria-expanded="true"]{
+  transform:scale(1.04);
+  filter:drop-shadow(0 0 8px rgba(255,206,130,.68));
+}
+@media(max-width:700px){
+  .rosie-music-launch{
+    width:54px!important;height:54px!important;
+    min-width:54px!important;min-height:54px!important;
+  }
+  .rosie-music-dock{
+    top:calc(env(safe-area-inset-top,0px) + 63px);
+    right:7px;
+  }
+}
