@@ -1071,3 +1071,20 @@
     margin-top:6px!important;
   }
 }
+
+
+/* iPhone Yacht victory: frame dimensions follow the artwork's actual
+   intrinsic aspect ratio rather than a 100%-high letterboxed image box. */
+@media(max-width:720px){
+ .yacht-victory-overlay .yacht-victory-content{
+   grid-template-rows:minmax(0,1fr) auto;
+   gap:clamp(5px,1svh,10px)!important;
+   padding:max(6px,env(safe-area-inset-top,0px)) 7px max(7px,env(safe-area-inset-bottom,0px))!important;}
+ .yacht-victory-overlay .yacht-victory-art{
+   display:block!important;width:auto!important;height:auto!important;
+   max-width:calc(100vw - 14px)!important;
+   max-height:calc(100dvh - 108px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;
+   min-width:0!important;min-height:0!important;object-fit:contain!important;object-position:center!important;
+   align-self:end;justify-self:center;border:1px solid rgba(242,204,129,.85)!important;background:transparent!important;}
+ .yacht-victory-overlay .yacht-victory-actions{align-self:start;margin:0;}
+}
