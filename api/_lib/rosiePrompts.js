@@ -29,7 +29,7 @@ export function makeRosiePrompt(feature, input) {
       user: [
         "HAIKU SUBJECT - WRITE ABOUT THIS:",
         input.topic,
-        "Dispositon: " + input.mood,
+        "Disposition: " + input.mood,
         "Variation: " + input.variation + ". Write a fresh interpretation, distinct from any previous poem."
       ].join("\n")
     };
