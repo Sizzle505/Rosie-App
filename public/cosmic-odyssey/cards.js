@@ -14,6 +14,8 @@
   const prev=document.getElementById('card-detail-prev');
   const next=document.getElementById('card-detail-next');
   const position=document.getElementById('card-detail-position');
+  const launchFromCard=document.getElementById('card-detail-launch');
+  const launchFromDeck=document.getElementById('mobile-card-launch');
   if(!veil||!launcher||!gallery||!deck||!dialog||!closeButton||!display||!front||!back)return;
   const cards=Array.from(gallery.querySelectorAll('.fiend-flip-card'));
   const names={rosie:'Captain Rosie',jett:'Jett Scroundrel',kitty:'Kitty Xenovese',chip:'Chip Scurrio'};
@@ -76,6 +78,15 @@
   function dismissCard(){
     if(dialog.open)dialog.close();
   }
+  function launchFromProfiles(){
+    // The original mission launcher owns game state and parent fullscreen.
+    // Invoke it synchronously within this tap to retain Safari user activation.
+    dismissCard();
+    document.getElementById('cosmic-app')?.scrollIntoView({block:'start',behavior:'instant'});
+    document.getElementById('start')?.click();
+  }
+  launchFromCard?.addEventListener('click',launchFromProfiles);
+  launchFromDeck?.addEventListener('click',launchFromProfiles);
   cards.forEach(card=>{
     card.setAttribute('aria-pressed','false');
     const name=names[card.dataset.fiend]||'Character';
