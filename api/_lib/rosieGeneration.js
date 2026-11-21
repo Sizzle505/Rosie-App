@@ -10,6 +10,10 @@ export function estimateSyllables(line) {
 }
 export const meterAssessment = assessHaikuMeter;
 
+export class RosieAIError extends Error {
+  constructor(code) { super(code); this.code = code; }
+}
+
 function parseJson(raw) {
   if (typeof raw !== "string" || !raw.trim()) throw new RosieAIError("empty_response");
   const text = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
