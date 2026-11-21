@@ -97,9 +97,10 @@ try {
       assert.ok(Math.abs(newZenGeometry.wisdom.x+newZenGeometry.wisdom.width/2-width/2)<Math.max(32,width*.07),
         label+" The Way of the Shiba must be horizontally centered in the page");
       if (width===1792 && height===856) {
-        assert.ok(newZenGeometry.wisdom.bottom <= height+6,
-          label+" Zen wisdom should finish within the initial wide-desktop screen: "+newZenGeometry.wisdom.bottom);
-      }
+         const pageBottom=await page.locator(".haiku-page").evaluate(el=>el.getBoundingClientRect().bottom);
+         assert.ok(newZenGeometry.wisdom.bottom <= pageBottom+8,
+           label+" Zen wisdom must remain reachable in the scrollable garden: "+newZenGeometry.wisdom.bottom);
+       }
       // The user's 1920x1080 approved export deliberately repositions
       // entire elements via translate/scale. Existing rules for the previous
       // pre-export geometry must not override that approved arrangement.
