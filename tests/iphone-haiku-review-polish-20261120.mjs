@@ -79,6 +79,7 @@ try {
       await page.getByRole("button",{name:"Next meditation background"}).click();
       const after=await page.locator(".zen-immersive").getAttribute("data-zen-view");
       assert.notEqual(after,before,"New turquoise backdrop arrows cycle scenery");
+      await page.locator(".zen-immersive-scenery img").evaluate(img=>img.decode());
       const scene=await page.locator(".zen-immersive").evaluate(el=>{
         const img=el.querySelector(".zen-immersive-scenery img");
         return{backdrop:getComputedStyle(el).backgroundImage,
