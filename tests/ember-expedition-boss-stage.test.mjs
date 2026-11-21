@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
 import {newRun,updateRun,triggerTurbo,turboMeterPercent,TURBO_DURATION,BOSS_TURBO_DURATION,DRILL_TIP_VERTICAL_OFFSET} from "../src/emberDrillEngine.js";
-import {BOSS_INTRO_TIME,expeditionBossKind,bossAttackDanger} from "../src/emberExpeditionBossStage.js";
+import {BOSS_INTRO_TIME,BOSS_VICTORY_HOLD,expeditionBossKind,bossAttackDanger} from "../src/emberExpeditionBossStage.js";
 import {excavationNotice} from "../src/emberBreakableFeedback.js";
 
 function intoBoss(index){
@@ -179,4 +179,42 @@ test("a boss recovery strike is registered so UI does not announce a second vuln
   assert.equal(s.boss.hitThisRecovery,true);
   assert.equal(s.boss.phase,"recovery");
   assert.equal(s.boss.health,1);
+});
+
+test("boss defeat pose and particles remain visible before the results appear",()=>{
+  const s=intoBoss(2);
+  for(let i=0;i<600&&s.running&&!s.bossDefeated;i++){
+    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
+    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0&&s.charge>=100)
+      triggerTurbo(s);
+    updateRun(s,.045);
+  }
+  assert.equal(s.bossDefeated,true);
+  assert.equal(s.boss.phase,"defeated");
+  assert.equal(s.ended,false);
+  assert.equal(s.running,true);
+  assert.equal(s.bossVictoryHold,BOSS_VICTORY_HOLD);
+  const score=s.score,time=s.time,y=s.y;
+  assert.equal(s.cleanBonus,500);
+  for(let i=0;i<10;i++)updateRun(s,.045,true);
+  assert.equal(s.boss.phase,"defeated");
+  assert.equal(s.score,score,"the clean-run award cannot repeat");
+  assert.equal(s.time,time,"the victory clock must freeze");
+  assert.equal(s.y,y,"steering must freeze during the victory");
+  assert.equal(s.ended,false);
+  for(let i=0;i<35&&s.running;i++)updateRun(s,.045);
+  assert.equal(s.running,false);
+  assert.equal(s.result,"complete");
+  assert.equal(s.score,score);
+  assert.equal(s.events.filter(e=>e.type==="end").length,1);
+});
+test("boss victory near the deadline is never overridden by timeout",()=>{
+  const s=intoBoss(4);
+  s.bossDefeated=true;
+  s.boss.defeated=true;s.boss.phase="defeated";
+  s.bossVictoryHold=BOSS_VICTORY_HOLD;
+  s.time=s.duration-.02;
+  for(let i=0;i<35&&s.running;i++)updateRun(s,.045);
+  assert.equal(s.result,"complete");
+  assert.equal(s.time,s.duration-.02);
 });
