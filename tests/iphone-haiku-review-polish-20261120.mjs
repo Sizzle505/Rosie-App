@@ -83,7 +83,7 @@ try {
       const scene=await page.locator(".zen-immersive").evaluate(el=>{
         const img=el.querySelector(".zen-immersive-scenery img");
         return{backdrop:getComputedStyle(el).backgroundImage,
-          source:img.getAttribute("src"),loaded:img.naturalWidth>0,
+          source:img.currentSrc,loaded:img.naturalWidth>0,
           arrows:el.querySelectorAll(".zen-backdrop-cycle-arrow").length};
       });
       assert.equal(scene.arrows,2);
