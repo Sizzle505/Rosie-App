@@ -184,6 +184,8 @@ try {
       await page.locator(".zen-begin").click();
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
       await room.waitFor({state:"visible"});
+      await room.locator(".zen-breath-portrait img").evaluate(img => img.decode());
+      await page.locator(".zen-immersive-scenery img").evaluate(img => img.decode());
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
          img.complete && img.naturalWidth > 200 && img.src.includes("/new/characters/meditating-") && img.src.endsWith(".webp")
        ), label+" meditation must use an approved transparent Rosie kimono master");
