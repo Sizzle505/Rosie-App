@@ -1,0 +1,223 @@
+{
+  "title": "Rosie Haiku 2026-11-20 approved originals",
+  "source": "Dropbox /Rosie-App-Transfer/Haiku-20261120-*.png",
+  "count": 24,
+  "assets": [
+    {
+      "name": "day-lotus-lake",
+      "production_path": "meditation/day-lotus-lake.webp",
+      "source_sha256": "fa7fa444c90534720e3738f03c0178b3ad2336829c15787f3654cb8e398fabd2",
+      "production_sha256": "1b9c0a544b38aa4f447d79e04a9663dbc3b0260ee3e97fbf2ad792981ea78a25",
+      "width": 1672,
+      "height": 941,
+      "bytes": 290366
+    },
+    {
+      "name": "day-sakura-garden",
+      "production_path": "meditation/day-sakura-garden.webp",
+      "source_sha256": "41d1e1e133ce1e8c5a3e36e1c624c44deef0550be3e923176db79ecd45f1c677",
+      "production_sha256": "fb16534540dfa1bb4fb4bcd22f77dcc03dcef0f70b97465f690e2c6b6c4eaa09",
+      "width": 1672,
+      "height": 941,
+      "bytes": 468956
+    },
+    {
+      "name": "day-raked-sand",
+      "production_path": "meditation/day-raked-sand.webp",
+      "source_sha256": "8d2462ae9286d03da7a4ff71fc1f559e47206b9635d66f70e906708e5b19eeba",
+      "production_sha256": "c8113674ad724978075393f1024343b0926b64d6601f0c86e2c78e11a8acbf35",
+      "width": 1672,
+      "height": 941,
+      "bytes": 443912
+    },
+    {
+      "name": "day-mountain-tea",
+      "production_path": "meditation/day-mountain-tea.webp",
+      "source_sha256": "45c8772717e22f7b8a98f74ca1c9d7cc7d0cd95f8f5285e8e6731dc5c39562aa",
+      "production_sha256": "8e91fb34a47f75338a76b58f0e62a4b0e1f02d0a47804f7be0aeffaaf12c14d8",
+      "width": 1672,
+      "height": 941,
+      "bytes": 402202
+    },
+    {
+      "name": "dawn-misty-garden",
+      "production_path": "meditation/dawn-misty-garden.webp",
+      "source_sha256": "12fbaf6b328a22d7d67013f0175096aef51d52cf82a5800d9597e44b5e798613",
+      "production_sha256": "6855299fd9fea976e9b627cf5d254f9c6cdf5453ec8e59888e514447895f547d",
+      "width": 1672,
+      "height": 941,
+      "bytes": 230672
+    },
+    {
+      "name": "evening-twilight",
+      "production_path": "meditation/evening-twilight.webp",
+      "source_sha256": "07bbe22bd594a9a143d09396489ff53546d55732608f5306a9f97a4f6923a329",
+      "production_sha256": "4e862ee75c03e63a1a0ab410bb5be6df22767ca70ca04565feecdff245e43b13",
+      "width": 1672,
+      "height": 941,
+      "bytes": 248054
+    },
+    {
+      "name": "night-moonlit-veranda",
+      "production_path": "meditation/night-moonlit-veranda.webp",
+      "source_sha256": "5fa5f113fc0d9ba0fac1ea0b8b41a5321f6201d65c42d7015e7699cbfb84b73d",
+      "production_sha256": "6ce75d8550ef101c4cbe8f74da48ba0f231ed5d5a9d442a2987bbdfdcad62460",
+      "width": 1672,
+      "height": 941,
+      "bytes": 251076
+    },
+    {
+      "name": "meditating-pink-sakura",
+      "production_path": "characters/meditating-pink-sakura.webp",
+      "source_sha256": "78d9ae89aa327b7dcf684f657b32032f8c986690a8c8d303e5fc2082a57afa70",
+      "production_sha256": "3c7dad62a873f4d850078335713980b10e4469122de6ff45e8da9e6b5ef3d4ac",
+      "width": 1199,
+      "height": 1312,
+      "bytes": 476826
+    },
+    {
+      "name": "meditating-saffron-cream",
+      "production_path": "characters/meditating-saffron-cream.webp",
+      "source_sha256": "7b4d36e8c5d26382371b70c81d5a926dfb3a2c9d4feef5510c3452e08ee98fc5",
+      "production_sha256": "3e7438510657215eda6c69aa275bf44059451d523575dcf8e15b374709a1b9c3",
+      "width": 1184,
+      "height": 1328,
+      "bytes": 427810
+    },
+    {
+      "name": "meditating-plum-hakama",
+      "production_path": "characters/meditating-plum-hakama.webp",
+      "source_sha256": "aa2fe0ef18c918f6ebcec762881311e1a185ca3d89f65c3fa431a4459211a7a4",
+      "production_sha256": "95e811e40fbe5f772ad117d6f224da84c7725102204bcb8f0835ed785b4b2ff6",
+      "width": 1200,
+      "height": 1311,
+      "bytes": 482916
+    },
+    {
+      "name": "meditating-indigo",
+      "production_path": "characters/meditating-indigo.webp",
+      "source_sha256": "8200abd22f9cb5825054d5f384a21594f86227e595d7e0387e5ff6f1cc033c46",
+      "production_sha256": "e82029dd9ab67d846ea4de4b29ebde6c5214fbb2686fbc25f091654575320206",
+      "width": 1186,
+      "height": 1327,
+      "bytes": 469966
+    },
+    {
+      "name": "sensei-greeting",
+      "production_path": "characters/sensei-greeting.webp",
+      "source_sha256": "6315f250bb5594c05373c23fbcc08ab5893738e56f1ef851222255f38beb8f41",
+      "production_sha256": "4702bd3710cde245aefebfdc9d2cdcde86e54a24ea320b9a2e219c99293626b5",
+      "width": 1184,
+      "height": 1328,
+      "bytes": 397086
+    },
+    {
+      "name": "sensei-bowing",
+      "production_path": "characters/sensei-bowing.webp",
+      "source_sha256": "4b0ba87bc3a972f14a097e48c511c475c7ccd289e32dc92297b13da559ffe122",
+      "production_sha256": "583f41333e73a103a02e2fa5bf02b0eefc0af2aab24342f3f8bd6b18cb6a9a36",
+      "width": 534,
+      "height": 576,
+      "bytes": 90258
+    },
+    {
+      "name": "scene-flower-field",
+      "production_path": "ui/scene-flower-field.webp",
+      "source_sha256": "fb6b1bd8e04abb87fc088dfda1a43f9e3540f061ca2d5146e1ea36857f66a62d",
+      "production_sha256": "d6b07666e0100e3b6703e5b82b37ce51dedfe588c78ea2c88874ebbe862f9469",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 392770
+    },
+    {
+      "name": "scene-zen-garden",
+      "production_path": "ui/scene-zen-garden.webp",
+      "source_sha256": "442fddc4c68c4f1ccef8d3365fe49186eafe79e8f21af81d8a2623bbf4e38b1b",
+      "production_sha256": "1d3f98ab0531678bb9d905f790fe15dcd1a65ecb5d8028bc46d454f64e689cdc",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 386052
+    },
+    {
+      "name": "scene-temple",
+      "production_path": "ui/scene-temple.webp",
+      "source_sha256": "aa6964f6bebc5c88a4577f0a0d01c09a21a2e6d48ca0670ca7d775b96581a607",
+      "production_sha256": "512803cb0a7ba4d68439b9403e0189084b05351c75f85b687ee9643780b7473a",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 327816
+    },
+    {
+      "name": "save-scroll",
+      "production_path": "ui/save-scroll.webp",
+      "source_sha256": "49da286addf5810d41ec4c9c7adc4633ef9a5f8de2c1a7776457373ff7e6e097",
+      "production_sha256": "1dbbabf7e361fd4297a13d05a3310d22adc2e5882afb123a5873d432cc2e2957",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 270686
+    },
+    {
+      "name": "share-verse",
+      "production_path": "ui/share-verse.webp",
+      "source_sha256": "d11db0de519a6490cd97de7eb5822dcc6082cb3f506aab18448d96c310c4fc11",
+      "production_sha256": "850b2233174240a9cff2ec3e7454966548115484f3bb23e49283744bb26612dd",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 326102
+    },
+    {
+      "name": "postcard",
+      "production_path": "ui/postcard.webp",
+      "source_sha256": "00c59056fb6a6e1ae7edc6f895e53cdf9b97a40e21cc695353a2621c359d7606",
+      "production_sha256": "2454ca141bbb6114d822be2d16f23f8aa3e429b1a2f5e7775aad4b6dcd13e011",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 274328
+    },
+    {
+      "name": "zen-landing-lantern",
+      "production_path": "ui/zen-landing-lantern.webp",
+      "source_sha256": "1b20e1b1b783edc012600de3054d05bcb2eb1b27efa073f7545d30daf466cf1e",
+      "production_sha256": "a2ceeb2bc8114c05a0cbda4f9776c4ce360e955fe4f28d5b309b32be07702877",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 268224
+    },
+    {
+      "name": "meditation-breathing-ring",
+      "production_path": "ui/meditation-breathing-ring.webp",
+      "source_sha256": "0d67c60f786effd77a9805408832926f26881c7e80782f50ca7bda5a7d89d6eb",
+      "production_sha256": "46ede2028c870f3b35bd9a1e52412f39b538de2e340a6cf543345305ded35957",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 322858
+    },
+    {
+      "name": "ornate-corners",
+      "production_path": "ui/ornate-corners.webp",
+      "source_sha256": "1b6371ee5aca4db21bc7bd133f0e7af0308f3f054385cc9eb7165008ef658d9a",
+      "production_sha256": "d681bea0a34fb349a429c3e56799c1370e67eaf6ae27838a17e15bac704f5edf",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 337492
+    },
+    {
+      "name": "golden-petal-flourish",
+      "production_path": "ui/golden-petal-flourish.webp",
+      "source_sha256": "a88a207aa98a0023f5cdd549f0fb9c734ee23e96b32bca4524c2f75b9f6142a6",
+      "production_sha256": "31f2a04b965b88cc69690986507f255b0476824c35977683a139c4bbaa4e8a9e",
+      "width": 2172,
+      "height": 724,
+      "bytes": 323956
+    },
+    {
+      "name": "enlightenment-seal",
+      "production_path": "ui/enlightenment-seal.webp",
+      "source_sha256": "202f639c47c50d39d7a215433d8dc9f339f9aa42c368289f4a8feabf2452bb23",
+      "production_sha256": "bf45fe62afa6ec4473eba29de3551af09a3593297bf4834f55b23d94bd9335b4",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 400256
+    }
+  ]
+}
