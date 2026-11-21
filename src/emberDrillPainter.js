@@ -251,8 +251,8 @@ function wallDepth(c,s){
 function pickup(c,o,s,assets={}){
   // Newly illustrated bonus icons are limited to the five optional worlds.
   // Classic collectibles retain their already-approved appearances.
-  if(s.stageIndex!==null&&!o.taken&&["bone","cheese","gem"].includes(o.kind)){
-    const frame=o.kind==="bone"?0:o.kind==="cheese"?1:o.id%3===0?2:3;
+  if(s.stageIndex!==null&&!o.taken&&["bone","cheese","gem","time","canister"].includes(o.kind)){
+    const frame=o.kind==="bone"?0:o.kind==="cheese"?1:o.kind==="time"?4:o.kind==="canister"?5:o.id%3===0?2:3;
     const x=o.x-s.scroll,y=o.y+Math.sin(s.time*5+o.id)*2;
     if(x>=-70&&x<=W+70){
       const size=74;
@@ -280,6 +280,12 @@ function pickup(c,o,s,assets={}){
     polygon(c,[-19,17,-19,-7,18,-20,23,18],"#f6ba31");
     polygon(c,[-19,-7,18,-20,23,-5,-12,6],"#ffe27c");
     circle(c,6,5,5,"#b97a25");circle(c,-9,-1,3,"#b97a25");
+  } else if(o.kind==="time"||o.kind==="canister"){
+    // Graceful fallback if the six-cell illustration has not decoded.
+    circle(c,0,0,27,o.kind==="time"?"#2d5661":"#7b4829");
+    circle(c,0,0,23,o.kind==="time"?"#77ccdf":"#ffc46a");
+    c.fillStyle="#1c2930";c.textAlign="center";c.font="bold 19px Georgia,serif";
+    c.fillText(o.kind==="time"?"+3":"✦",0,7);
   } else if(o.kind==="gem"||isCache){
     c.fillStyle=isCache?"#ffb94e":"#fb4472";
     polygon(c,[0,-22,17,-9,13,12,0,24,-17,10,-16,-9],c.fillStyle);
