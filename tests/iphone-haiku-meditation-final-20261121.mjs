@@ -82,8 +82,8 @@ try{
        rectWidth:el.getBoundingClientRect().width};
    });
    assert.ok(Math.abs(mobile.artWidth-width)<2,"Sharp landscape art displays full uncropped width");
-   assert.equal(mobile.imgFit,"contain");
-   assert.ok(mobile.beforeImage.includes("/meditation/"),"Soft scenic extension fills portrait viewport");
+   assert.equal(mobile.imgFit,"cover","Portrait artwork fills the iPhone screen");
+   assert.equal(mobile.beforeImage,"none","No blurry duplicated scenic extension behind the portrait");
    await page.getByRole("button",{name:"Next meditation background"}).click();
    const advanced=await page.locator(".zen-immersive").getAttribute("data-zen-view");
    assert.notEqual(advanced,mobile.view,"Backdrops still cycle within meditation");
