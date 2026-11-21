@@ -17,6 +17,8 @@ try {
   page.on('pageerror', error => console.error('PAGE ERROR', error.message));
   await page.goto(base + '/#fortune', { waitUntil: 'domcontentloaded', timeout: 55000 });
   await page.locator('#question').waitFor({ state: 'visible', timeout: 45000 });
+  await page.locator('.loading-screen-hidden').waitFor({ state: 'attached', timeout: 15000 });
+  await page.waitForTimeout(450);
   const unlockBefore = await page.locator('.rle-launch').count();
   assert.equal(unlockBefore, 0, 'Hidden layout button must not appear before unlock.');
   await page.locator('#question').fill('manchego');

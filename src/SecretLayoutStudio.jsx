@@ -286,6 +286,11 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         if (!box) {
           box = document.createElement('div');
           box.className = 'rle-outline';
+          box.addEventListener('pointerdown', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            startDrag(event, item.id, false);
+          });
           const caption = document.createElement('span');
           caption.className = 'rle-outline-label';
           caption.textContent = item.label;
