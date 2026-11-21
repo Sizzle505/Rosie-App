@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
-import {newRun,updateRun,triggerTurbo,DRILL_TIP_VERTICAL_OFFSET} from "../src/emberDrillEngine.js";
+import {newRun,updateRun,triggerTurbo,turboMeterPercent,TURBO_DURATION,BOSS_TURBO_DURATION,DRILL_TIP_VERTICAL_OFFSET} from "../src/emberDrillEngine.js";
 import {BOSS_INTRO_TIME,expeditionBossKind,bossAttackDanger} from "../src/emberExpeditionBossStage.js";
 import {excavationNotice} from "../src/emberBreakableFeedback.js";
 
@@ -141,4 +141,42 @@ test("boss recovery text explains how to strike",()=>{
  const n=excavationNotice({type:"boss-vulnerable"});
  assert.match(n.detail,/Turbo/i);
  assert.match(excavationNotice({type:"boss-victory",boss:"mole-king",points:2600}).detail,/2600/);
+});
+
+test("Turbo meter shows the correct full-length boss strike instead of 15 percent",()=>{
+  const classic=newRun();
+  classic.charge=100;
+  assert.equal(turboMeterPercent(classic),100);
+  assert.equal(triggerTurbo(classic),true);
+  assert.equal(classic.boostTime,TURBO_DURATION);
+  assert.equal(turboMeterPercent(classic),100);
+  classic.boostTime=TURBO_DURATION/2;
+  assert.equal(turboMeterPercent(classic),50);
+
+  const boss=intoBoss(2);
+  assert.equal(triggerTurbo(boss),true);
+  assert.equal(boss.boostTime,BOSS_TURBO_DURATION);
+  assert.equal(turboMeterPercent(boss),100);
+  boss.boostTime=BOSS_TURBO_DURATION/2;
+  assert.equal(turboMeterPercent(boss),50);
+  boss.boostTime=0;
+  boss.charge=100;
+  assert.equal(turboMeterPercent(boss),100);
+  boss.charge=170;
+  assert.equal(turboMeterPercent(boss),100);
+  boss.charge=-4;
+  assert.equal(turboMeterPercent(boss),0);
+});
+test("a boss recovery strike is registered so UI does not announce a second vulnerability",()=>{
+  const s=intoBoss(2);
+  for(let i=0;i<250&&s.running;i++){
+    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
+    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.charge>=100){
+      triggerTurbo(s);updateRun(s,.045);break;
+    }
+    updateRun(s,.045);
+  }
+  assert.equal(s.boss.hitThisRecovery,true);
+  assert.equal(s.boss.phase,"recovery");
+  assert.equal(s.boss.health,1);
 });
