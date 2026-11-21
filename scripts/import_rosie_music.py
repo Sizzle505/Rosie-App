@@ -60,15 +60,20 @@ def render(index,entry):
   length=duration(src)
   if length<8:raise RuntimeError(f"Audio unexpectedly short: {slug}")
   if loop:
-    # Stream the same master twice. The first copy begins 5 seconds into the
-    # song, and its final 4 seconds crossfade with the first 4 seconds of the
-    # second copy. It then plays the remaining 1 second of the second copy,
-    # ending at exactly the sample where the first copy begins. This produces
-    # a near-transparent repeat and does not alter the gold-master WAV.
+    # Preserve the entire original 0-5 second opening. The previous master
+    # skipped these five seconds on EVERY page entry, often starting mid-phrase.
+    #
+    # Layout: intact first five seconds + (original 5s->end crossfaded with
+    # original 0s->5s). The last sample corresponds to source t=5, which
+    # exactly meets the sample when the player seeks to loop_start_seconds=5.
+    # Safari loops with a SINGLE gesture-authorized HTMLAudioElement.
     filtergraph=(
-      "[0:a]atrim=start=5,asetpts=PTS-STARTPTS[body];"
-      "[1:a]atrim=start=0:end=5,asetpts=PTS-STARTPTS[head];"
-      "[body][head]acrossfade=d=4:c1=tri:c2=tri,"
+      "[0:a]atrim=start=0:end=5,asetpts=PTS-STARTPTS[intro];"
+      "[1:a]atrim=start=5,asetpts=PTS-STARTPTS[body];"
+      "[2:a]atrim=start=0:end=5,asetpts=PTS-STARTPTS[head];"
+      "[body][head]acrossfade=d=4:c1=tri:c2=tri[loop];"
+      "[intro][loop]concat=n=2:v=0:a=1,"
+      "afade=t=in:st=0:d=0.15,"
       "loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
     )
   else:
@@ -76,21 +81,23 @@ def render(index,entry):
     filtergraph=f"[0:a]afade=t=in:st=0:d=0.07,afade=t=out:st={fade_at}:d=0.25,loudnorm=I=-18:TP=-1.5:LRA=9,aresample=44100[out]"
   subprocess.run([
     "ffmpeg","-hide_banner","-nostdin","-loglevel","error","-y",
-    "-i",str(src),*(["-i",str(src)] if loop else []),
+    "-i",str(src),*(["-i",str(src),"-i",str(src)] if loop else []),
     "-filter_complex",filtergraph,"-map","[out]",
     "-c:a","libmp3lame","-b:a","128k","-ar","44100",
     "-metadata",f"title={title}","-metadata","artist=RosieVerse Original Soundtrack",
     "-id3v2_version","3",str(out)
   ],check=True)
   length_out=duration(out)
-  expected_length=length-(4 if loop else 0)
+  expected_length=length+(1 if loop else 0)
   if abs(length_out-expected_length)>1.5:raise RuntimeError(f"Bad encode duration {slug}: {length_out}")
   size=out.stat().st_size
   if size<15000 or size>8*1024*1024:raise RuntimeError(f"Unexpected output size: {slug}: {size}")
   print(f"ENCODED {slug}: {size} bytes ({length_out:.2f}s)",flush=True)
   return {"id":slug,"title":title,"original":original,
           "master_sha256":expected,"duration":round(length_out,2),
-          "filename":out.name,"sha256":sha256(out),"bytes":size,"loop":loop}
+          "filename":out.name,"sha256":sha256(out),"bytes":size,"loop":loop,
+          "opening_preserved":True,"loop_start_seconds":5 if loop else 0,
+          "start_fade_seconds":0.15 if loop else 0.07}
 
 def main():
   MASTER_DIR.mkdir(parents=True,exist_ok=True)
@@ -103,6 +110,8 @@ def main():
     "loudness":"-18 LUFS; -1.5 dBTP",
     "format":"MP3 128kbps stereo, 44.1kHz",
     "loop_crossfade_seconds":4,
+    "natural_opening":True,
+    "looping_instruction":"Play from 0 on entry; after first end seek to loop_start_seconds",
     "tracks":catalog
   },ensure_ascii=False,indent=2)+"\n",encoding="utf8")
   print(f"SUCCESS: {len(catalog)} tracks, {sum(t['bytes'] for t in catalog)} bytes",flush=True)
