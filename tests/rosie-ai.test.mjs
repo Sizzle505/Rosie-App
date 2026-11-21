@@ -161,7 +161,7 @@ test("two off-meter originals still succeed and never become canned poems", asyn
     assert.equal(res.code, 200);
     assert.deepEqual(res.payload.lines, ["Rain", "Dog", "Sun"]);
     assert.equal(res.payload.metre, undefined); // No false 5/7/5 certification on the API.
-    assert.equal(res.payload.revised, true);
+    assert.equal(res.payload.revised, false);
   } finally {
     if (originalKey === undefined) delete process.env.VENICE_API_KEY;
     else process.env.VENICE_API_KEY = originalKey;
