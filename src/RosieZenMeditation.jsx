@@ -267,6 +267,18 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   function close() {
     stopSound();setOpened(false);setStatus("idle");
   }
+  function chooseMeditation(nextKind) {
+    setKind(nextKind);
+    window.requestAnimationFrame(() => {
+      if (!window.matchMedia("(max-width: 600px)").matches) return;
+      const footer = document.querySelector(".haiku-workbench-footer");
+      if (!footer) return;
+      const nav = document.querySelector(".bottom-nav");
+      const navTop = nav?.getBoundingClientRect().top ?? window.innerHeight - 85;
+      const target = window.scrollY + footer.getBoundingClientRect().bottom - (navTop - 30);
+      window.scrollTo({top: Math.max(0,target),behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth"});
+    });
+  }
   return <>
     <div className="zen-panel">
       <div className="haiku-section-label">YOUR LITTLE SANCTUARY</div>
@@ -277,7 +289,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       </div>
       <div className="zen-program-grid" role="group" aria-label="Meditation programs">
         {PROGRAMS.map(p=><button type="button" key={p.id} className={"zen-program"+(kind===p.id?" selected":"")}
-          aria-pressed={kind===p.id} onClick={()=>setKind(p.id)}>
+          aria-pressed={kind===p.id} onClick={()=>chooseMeditation(p.id)}>
           <img className="zen-program-emblem" src={FINAL_ART + PROGRAM_ART[p.id]}
             alt="" aria-hidden="true" width="62" height="62" decoding="async" loading="lazy"/>
           <span className="zen-program-caption"><strong>{p.title}</strong><small>{p.label}</small></span>
@@ -335,15 +347,23 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
           <span className="zen-ornament-corners" aria-hidden="true" />
           <header className="zen-immersive-header">
-            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
-            <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
+            <div className="zen-session-heading"><span>ROSIE&#39;S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
+            {status==="complete" ? (
+              <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
+            ) : (
+              <div className="zen-session-header-tools">
+                <div className="zen-session-toolbar">
+                  <div className="zen-session-timer" role="timer" aria-label={"Time remaining "+timeLabel(remaining)}>{timeLabel(remaining)}</div>
+                  <div className="zen-session-controls">
+                    <button type="button" className="zen-action-primary" onClick={status==="paused"?resume:pause}>{status==="paused"?"Resume":"Pause"}</button>
+                    <button type="button" className="zen-action-secondary" onClick={close}>End</button>
+                  </div>
+                </div>
+                <div className="zen-timeline" aria-hidden="true"><span style={{width:completePercent+"%"}}/></div>
+              </div>
+            )}
           </header>
-          {status!=="complete"&&<div className="zen-backdrop-cycle" role="group" aria-label="Change meditation scenery">
-            <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Previous meditation background"
-              title="Previous meditation landscape" onClick={()=>cycleMeditationBackdrop(-1)}>‹</button>
-            <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Next meditation background"
-              title="Next meditation landscape" onClick={()=>cycleMeditationBackdrop(1)}>›</button>
-          </div>}
+
           {status==="complete"?
             <div className="zen-complete">
               <img src={FINAL_ART + "rosie-enlightened.webp"} alt="Rosie celebrates your peaceful meditation with a delighted smile"/>
@@ -368,11 +388,12 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                   <button type="button" className="zen-outfit-arrow" aria-label="Next Rosie outfit" title="Next outfit" onClick={()=>onOutfitChange?.(nextRosieHaikuOutfit(outfitId,1))}>›</button>
                 </div>
                 <p>{kind==="breathe"?"Breathe in peace. Breathe out the fuss.":"Nothing to do. Nowhere to be."}</p>
+                <div className="zen-backdrop-cycle" role="group" aria-label="Change meditation scenery">
+                  <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Previous meditation background" title="Previous meditation landscape" onClick={()=>cycleMeditationBackdrop(-1)}>‹</button>
+                  <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Next meditation background" title="Next meditation landscape" onClick={()=>cycleMeditationBackdrop(1)}>›</button>
+                </div>
               </div>
               <div className="zen-guidance">
-                <span className="zen-eyebrow">{status==="paused"?"A MOMENT'S PAUSE":selected.label}</span>
-                <div className="zen-session-timer" role="timer" aria-label={"Time remaining "+timeLabel(remaining)}>{timeLabel(remaining)}</div>
-                <div className="zen-timeline" aria-hidden="true"><span style={{width:completePercent+"%"}}/></div>
                 {kind==="breathe"?
                   <div className={"zen-breath-cue"+(status==="paused"?" paused":"")}>
                     <span className="zen-breath-orb" aria-hidden="true"/>
@@ -383,14 +404,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                   <div className="zen-guidance-copy" aria-live="off">
                     <p>{status==="paused"?"The garden will be here when you return.":cue}</p>
                   </div>}
-                <div className="zen-session-controls">
-                  <button type="button" className="zen-action-primary" onClick={status==="paused"?resume:pause}>
-                    {status==="paused"?"Resume":"Pause"}
-                  </button>
-                  <button type="button" className="zen-action-secondary" onClick={close}>End session</button>
-                </div>
                 {audioUnavailable&&<p className="zen-audio-note" role="status">Sound isn't available here. The meditation will continue quietly.</p>}
-                <p className="zen-session-note">A gentle suggestion, not a rule. Breathe comfortably.</p>
               </div>
             </div>}
         </section>
