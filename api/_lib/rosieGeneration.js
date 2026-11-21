@@ -109,7 +109,7 @@ export async function generateRosieAnswer({ feature, input, key }) {
       const first = await complete({ key, feature, prompt, signal: controller.signal });
       firstLines = validateHaikuContent(first);
       firstMetre = meterAssessment(firstLines);
-      if (firstMetre.acceptable) return { lines: firstLines, revised: false };
+      if (firstMetre.acceptable) return { lines: firstLines, revised: false, metre: "approximate" };
     } catch (error) {
       firstError = error;
       if (!(error instanceof RosieAIError)) throw error;
@@ -126,13 +126,21 @@ export async function generateRosieAnswer({ feature, input, key }) {
         key, feature, prompt: repairedPrompt, signal: controller.signal, temperature: 0.57
       }));
       const repairedMetre = meterAssessment(revised);
-      if (repairedMetre.acceptable) return { lines: revised, revised: true };
+      if (repairedMetre.acceptable) return { lines: revised, revised: true, metre: "approximate" };
       // Do not mistake a weak syllable heuristic for proof the poem is defective.
-      if (firstLines && firstMetre.score < repairedMetre.score && firstMetre.score <= 3) {
-        return { lines: firstLines, revised: false };
+      // The heuristic is advisory, not authoritative. Preserve a valid,
+      // original three-line poem even if both attempts miss estimated metre.
+      // Favor the draft closest to 5/7/5, without claiming an exact count.
+      if (firstLines && firstMetre.score <= repairedMetre.score) {
+        return { lines: firstLines, revised: false, metre: "approximate" };
       }
-      throw new RosieAIError("invalid_metre");
+      return { lines: revised, revised: true, metre: "approximate" };
     } catch (error) {
+      // If the revision itself fails but the original had three valid lines,
+      // still return the original. Do not lose the poem over a second-pass error.
+      if (firstLines && firstMetre) {
+        return { lines: firstLines, revised: false, metre: "approximate" };
+      }
       if (firstError && error?.code === "invalid_json") throw firstError;
       throw error;
     }
