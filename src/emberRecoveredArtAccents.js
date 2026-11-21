@@ -1,3 +1,5 @@
+import {tunnelCenter} from "./emberDrillEngine.js";
+
 // Art-only accents from assets already committed to Ember Tunnel.
 // The entrance remains background scenery: it never creates a new hitbox.
 // Turbo artwork is deliberately limited to its trailing glow; a complete
@@ -16,7 +18,8 @@ export function paintBarkrootArrival(c,s,assets,W){
   const sy=Math.round(im.naturalHeight*.275);
   const sw=Math.round(im.naturalWidth*.40);
   const sh=Math.round(im.naturalHeight*.45);
-  const y=typeof s.gateY==="number"?s.gateY:440;
+  // Sit in a shallow far-wall alcove, above the real center of the route.
+  const y=tunnelCenter(BARKROOT_GATE_WORLD_X)-122;
   c.save();
   c.globalAlpha=.41;
   c.translate(x,y);
