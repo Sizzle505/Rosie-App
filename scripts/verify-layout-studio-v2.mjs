@@ -40,7 +40,7 @@ try{
  const header=page.locator('.rle-header');
  const h=await header.boundingBox();
  await page.mouse.move(h.x+80,h.y+12);await page.mouse.down();
- await page.mouse.move(h.x+115,h.y+32,{steps:5});await page.mouse.up();
+ await page.mouse.move(h.x+35,h.y+32,{steps:5});await page.mouse.up();
  const moved=await panel.boundingBox();
  assert.ok(Math.abs(moved.x-first.x)>15,'Panel header is draggable');
  console.log('PASS floating movable studio and compact Arrange/Interact/caret');
