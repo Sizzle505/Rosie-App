@@ -1,6 +1,6 @@
-/* Captain Rosie: Cosmic Odyssey music player. Audio is a separate channel from game SFX.
- * Place the exported .ogg and .mp3 files under ./music/ before enabling in production.
- */
+/* Captain Rosie: Cosmic Odyssey standalone player. MP3 recordings live at
+ * /rosie-music/. When embedded, music is controlled by the parent app instead.
+ * Game sound effects continue to use their own separate audio channel. */
 (() => {
   'use strict';
   class RosieMusicDirector {
@@ -15,11 +15,11 @@
       this.request=0;
       this.buffers=new Map();
       this.cues={
-        menu:{file:'cosmic-title-theme',loop:false},
-        playing:{file:'cosmic-gameplay-loop',loop:true},
-        alternate:{file:'cosmic-alternate-loop',loop:true},
-        win:{file:'cosmic-victory-fanfare',loop:false},
-        'level-clear':{file:'cosmic-victory-fanfare',loop:false}
+        menu:{file:'galactic-march',loop:true},
+        playing:{file:'cosmic-arpeggio',loop:true},
+        alternate:{file:'cosmic-interlude',loop:true},
+        win:{file:'victory-fanfare',loop:false},
+        'level-clear':{file:'victory-fanfare',loop:false}
       };
     }
     async unlock(){
@@ -36,9 +36,8 @@
     async getBuffer(file){
       if(this.buffers.has(file))return this.buffers.get(file);
       const promise=(async()=>{
-        const audio=document.createElement('audio');
-        const ogg=!!audio.canPlayType?.('audio/ogg; codecs="vorbis"');
-        const formats=ogg?['ogg','mp3']:['mp3','ogg'];
+        // MP3 is the verified distribution format; don't request absent OGGs.
+        const formats=['mp3'];
         let lastError;
         for(const ext of formats){
           try{
