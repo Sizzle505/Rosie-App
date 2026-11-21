@@ -515,6 +515,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   },[soundOn]);
   const active=mode==="running";
   const paused=mode==="paused";
+  const bossStrikeReady=Boolean(hud.boss&&!hud.bossDefeated&&
+    hud.boss.phase==="recovery"&&!hud.boss.hitThisRecovery&&
+    hud.boost<=0&&hud.charge>=100);
   const world=getExpeditionStage(hud.stageIndex);
   const route=world?EXPEDITION_STAGES.map(w=>({label:w.name,mission:w.objective})):PASSAGES;
   const title=mode==="ended" ?
@@ -648,13 +651,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
           onPointerDown={e=>hold("up",true,e)} onPointerUp={e=>hold("up",false,e)}
           onPointerCancel={e=>hold("up",false,e)} onLostPointerCapture={e=>hold("up",false,e)}
           aria-label="Angle the drill upward"><span>▲</span></button>}
-        <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
-          disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
-          aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
+        <button className={"ember-boost"+(hud.bossDefeated?" is-victorious":bossStrikeReady?" is-strike-window":hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
+          disabled={!active||hud.bossDefeated||hud.charge<100||hud.boost>0} onClick={turbo}
+          aria-label={hud.bossDefeated?"Guardian defeated":bossStrikeReady?"Strike vulnerable guardian with Burrow Turbo":hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <span className="ember-boost-symbol">✦</span>
-          <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
+          <span><b>{hud.bossDefeated?"VICTORY!":bossStrikeReady?"STRIKE NOW":hud.boost>0?"TURBO ACTIVE":hud.boss&&hud.charge>=100?"TURBO READY":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
             <i className="ember-charge"><i style={{width:hud.boostPercent+"%"}} /></i>
-            <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.boss?(hud.charge>=100?"STRIKE DURING RECOVERY · REPAIRS 1 HULL":"RECHARGES AT RECOVERY"):hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
+            <small>{hud.bossDefeated?"GUARDIAN DEFEATED":bossStrikeReady?"ALIGN THE AUGER · TAP TO STRIKE":hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.boss?(hud.charge>=100?"SHIELD OR WAIT FOR OPENING":"RECHARGES AT RECOVERY"):hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">▲▼</button> :
         <button className="ember-angle" type="button" disabled={!active}
