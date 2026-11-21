@@ -2,37 +2,13 @@ import { makeHaikuRepairPrompt, makeRosiePrompt } from "./rosiePrompts.js";
 
 const ENDPOINT = "https://api.venice.ai/api/v1/chat/completions";
 const MODEL = "olafangensan-glm-4.7-flash-heretic";
-const TARGET_METRE = [5, 7, 5];
-const KNOWN_SYLLABLES = {
-  rosie: 2, quiet: 2, fire: 1, hour: 1, every: 2, flower: 2,
-  poem: 2, squirrel: 1, beautiful: 3, people: 2, sometimes: 2,
-  everything: 3, ocean: 2, family: 3, journey: 2, thunder: 2,
-  fireworks: 2, vacation: 3, japanese: 3, florida: 3
-};
-
-export class RosieAIError extends Error {
-  constructor(code) { super(code); this.code = code; }
-}
+// Use the pronunciation dictionary, never a count of written vowel groups.
+import { assessHaikuMeter, lineSyllableAssessment } from "./rosieMeter.js";
 
 export function estimateSyllables(line) {
-  return line.split(/\s+/).reduce((total, raw) => {
-    const word = raw.toLowerCase().replace(/[^a-z]/g, "");
-    if (!word) return total;
-    if (KNOWN_SYLLABLES[word]) return total + KNOWN_SYLLABLES[word];
-    if (word.length <= 3) return total + 1;
-    let count = (word.match(/[aeiouy]+/g) || []).length;
-    if (word.endsWith("e") && !/[^aeiouy]le$/.test(word) && !/ee$/.test(word)) count -= 1;
-    if (/[^aeiouy]es$/.test(word) && !/(ses|zes|ches|shes)$/.test(word)) count -= 1;
-    if (/ed$/.test(word) && !/(ted|ded)$/.test(word)) count -= 1;
-    return total + Math.max(1, count);
-  }, 0);
+  return lineSyllableAssessment(line, 5).count;
 }
-
-export function meterAssessment(lines) {
-  const counts = lines.map(estimateSyllables);
-  const deltas = counts.map((count, index) => Math.abs(count - TARGET_METRE[index]));
-  return { counts, acceptable: deltas.every(delta => delta <= 1), score: deltas.reduce((a, b) => a + b, 0) };
-}
+export const meterAssessment = assessHaikuMeter;
 
 function parseJson(raw) {
   if (typeof raw !== "string" || !raw.trim()) throw new RosieAIError("empty_response");
@@ -95,55 +71,54 @@ async function complete({ key, feature, prompt, signal, temperature }) {
 
 export async function generateRosieAnswer({ feature, input, key }) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), feature === "haiku" ? 24500 : 17500);
+  const timer = setTimeout(() => controller.abort(), feature === "haiku" ? 26000 : 17500);
   try {
-    const prompt = makeRosiePrompt(feature, input);
+    const firstPrompt = makeRosiePrompt(feature, input);
     if (feature === "oracle") {
-      return validateOracleContent(await complete({ key, feature, prompt, signal: controller.signal }));
+      return validateOracleContent(await complete({ key, feature, prompt: firstPrompt, signal: controller.signal }));
     }
 
-    let firstLines = null;
-    let firstError = null;
-    let firstMetre = null;
-    try {
-      const first = await complete({ key, feature, prompt, signal: controller.signal });
-      firstLines = validateHaikuContent(first);
-      firstMetre = meterAssessment(firstLines);
-      if (firstMetre.acceptable) return { lines: firstLines, revised: false, metre: "approximate" };
-    } catch (error) {
-      firstError = error;
-      if (!(error instanceof RosieAIError)) throw error;
-      // Provider outages and timeouts should not trigger a second billable call.
-      if (!["invalid_json", "invalid_poem", "empty_response", "truncated_response"].includes(error.code)) throw error;
-    }
+    let best = null;
+    let lastFormatError = null;
+    let attemptedRepair = false;
 
-    // One bounded second attempt for malformed output or off-metre poetry.
-    const repairedPrompt = makeHaikuRepairPrompt(
-      input, firstLines || [], firstMetre?.counts || [], firstLines ? "metre" : "format"
-    );
-    try {
-      const revised = validateHaikuContent(await complete({
-        key, feature, prompt: repairedPrompt, signal: controller.signal, temperature: 0.57
-      }));
-      const repairedMetre = meterAssessment(revised);
-      if (repairedMetre.acceptable) return { lines: revised, revised: true, metre: "approximate" };
-      // Do not mistake a weak syllable heuristic for proof the poem is defective.
-      // The heuristic is advisory, not authoritative. Preserve a valid,
-      // original three-line poem even if both attempts miss estimated metre.
-      // Favor the draft closest to 5/7/5, without claiming an exact count.
-      if (firstLines && firstMetre.score <= repairedMetre.score) {
-        return { lines: firstLines, revised: false, metre: "approximate" };
+    // Three attempts maximum. CMU pronunciation entries determine metre;
+    // the model gets exact per-word feedback for revisions.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const prompt = attempt === 0
+        ? firstPrompt
+        : makeHaikuRepairPrompt(input, best?.lines || [], best?.meter?.rows || [], best ? "metre" : "format");
+      if (attempt > 0) attemptedRepair = true;
+      try {
+        const output = await complete({
+          key, feature, prompt, signal: controller.signal,
+          temperature: attempt === 0 ? 0.84 : 0.46
+        });
+        const lines = validateHaikuContent(output);
+        const meter = meterAssessment(lines);
+        const candidate = { lines, meter, attempt };
+        if (!best || meter.score < best.meter.score ||
+            (meter.score === best.meter.score && meter.verified && !best.meter.verified)) best = candidate;
+        if (meter.verified) return {
+          lines, revised: attempt > 0, metre: "verified",
+          counts: meter.counts
+        };
+      } catch (error) {
+        if (!(error instanceof RosieAIError)) throw error;
+        if (["provider_error", "provider_rate_limit", "timeout"].includes(error.code)) {
+          if (!best) throw error;
+          break;
+        }
+        lastFormatError = error;
+        // Best poem survives a malformed revision; don't lose an original.
       }
-      return { lines: revised, revised: true, metre: "approximate" };
-    } catch (error) {
-      // If the revision itself fails but the original had three valid lines,
-      // still return the original. Do not lose the poem over a second-pass error.
-      if (firstLines && firstMetre) {
-        return { lines: firstLines, revised: false, metre: "approximate" };
-      }
-      if (firstError && error?.code === "invalid_json") throw firstError;
-      throw error;
     }
+    if (!best) throw lastFormatError || new RosieAIError("invalid_poem");
+    return {
+      lines: best.lines, revised: attemptedRepair && best.attempt > 0,
+      metre: best.meter.verified ? "verified" : "approximate",
+      counts: best.meter.counts
+    };
   } finally {
     clearTimeout(timer);
   }
