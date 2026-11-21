@@ -147,7 +147,7 @@ test("off-meter haiku triggers one subject-preserving revision before display", 
   }
 });
 
-test("repeated off-meter originals remain real poems with honest metre metadata", async () => {
+test("off-meter generation is rejected rather than presented as verified 5-7-5", async () => {
   const originalKey = process.env.VENICE_API_KEY;
   const originalFetch = globalThis.fetch;
   let calls = 0;
@@ -159,11 +159,9 @@ test("repeated off-meter originals remain real poems with honest metre metadata"
   try {
     const res = await invoke({ feature: "haiku", topic: "The dentist", mood: "existential", variation: 0 });
     assert.equal(calls, 3);
-    assert.equal(res.code, 200);
-    assert.deepEqual(res.payload.lines, ["Rain", "Dog", "Sun"]);
-    assert.equal(res.payload.metre, "approximate");
-    assert.notDeepEqual(res.payload.counts, [5,7,5]);
-    assert.equal(res.payload.revised, false);
+    assert.equal(res.code, 503);
+    assert.equal(res.payload.error, "invalid_metre");
+    assert.equal(res.payload.lines, undefined);
   } finally {
     if (originalKey === undefined) delete process.env.VENICE_API_KEY;
     else process.env.VENICE_API_KEY = originalKey;
@@ -181,7 +179,7 @@ test("consecutive haiku generations return originals instead of failing after th
     const body = JSON.parse(init.body);
     assert.match(body.messages[1].content, /sunflowers/i);
     // Deliberately imperfect metre, structurally valid and specific.
-    const lines = ["Sunflowers lean in", "A watcher at the garden gate", "I approve this sun"];
+    const lines = ["Sunflowers lean in", "I inspect the garden gate", "I approve this sun"];
     return { ok: true, json: async () => ({ choices: [{ message: { content: JSON.stringify({ lines }) } }] }) };
   };
   try {
