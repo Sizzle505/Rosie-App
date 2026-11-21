@@ -84,7 +84,6 @@ export async function generateRosieAnswer({ feature, input, key }) {
 
     let best = null;
     let lastFormatError = null;
-    let attemptedRepair = false;
 
     // Three attempts maximum. CMU pronunciation entries determine metre;
     // the model gets exact per-word feedback for revisions.
@@ -92,7 +91,6 @@ export async function generateRosieAnswer({ feature, input, key }) {
       const prompt = attempt === 0
         ? firstPrompt
         : makeHaikuRepairPrompt(input, best?.lines || [], best?.meter?.rows || [], best ? "metre" : "format");
-      if (attempt > 0) attemptedRepair = true;
       try {
         const output = await complete({
           key, feature, prompt, signal: controller.signal,
@@ -117,12 +115,10 @@ export async function generateRosieAnswer({ feature, input, key }) {
         // Best poem survives a malformed revision; don't lose an original.
       }
     }
+    // Strict means strict: never publish a 6/6/6 poem as a 5/7/5 haiku.
+    // A genuine generation failure is more honest than an inaccurately metered verse.
     if (!best) throw lastFormatError || new RosieAIError("invalid_poem");
-    return {
-      lines: best.lines, revised: attemptedRepair && best.attempt > 0,
-      metre: best.meter.verified ? "verified" : "approximate",
-      counts: best.meter.counts
-    };
+    throw new RosieAIError("invalid_metre");
   } finally {
     clearTimeout(timer);
   }
