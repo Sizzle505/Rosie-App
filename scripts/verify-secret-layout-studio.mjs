@@ -45,10 +45,14 @@ try {
     return { x:rect.x,y:rect.y };
   });
   await page.getByRole('button', { name: 'Minimize Layout Studio' }).click();
+  await page.locator('.haiku-scroll').evaluate(el => el.scrollIntoView({block:'center'}));
+  await page.waitForTimeout(120);
   const target = await page.locator('.haiku-scroll').boundingBox();
   assert.ok(target?.width && target?.height,'Poetry scroll has real dimensions');
   let x=Math.min(695,Math.max(15,target.x+Math.min(35,target.width/4)));
   let y=Math.min(955,Math.max(20,target.y+Math.min(35,target.height/4)));
+  const hit = await page.evaluate(({x,y}) => document.elementFromPoint(x,y)?.className || document.elementFromPoint(x,y)?.tagName || '', {x,y});
+  log('Drag gesture hit target:', String(hit).slice(0,120));
   await page.mouse.move(x,y);
   await page.mouse.down();
   await page.mouse.move(x+28,y+19,{steps:5});

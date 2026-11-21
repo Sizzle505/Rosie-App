@@ -325,7 +325,11 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       const candidates = elementsFor(page).filter(item => item.node && item.node.contains(event.target));
       if (!candidates.length) return;
       candidates.sort((a,b) => a.node.contains(b.node) ? 1 : b.node.contains(a.node) ? -1 : 0);
-      const id = candidates[0].id;
+      // A selected parent stays draggable even when its child is also a target.
+      // Without this priority, touching artwork inside a selected group switches
+      // selection to the child and silently cancels the intended group drag.
+      const selectedCandidates = candidates.filter(item => selectedRef.current.includes(item.id));
+      const id = (selectedCandidates[0] || candidates[0]).id;
       event.preventDefault();
       event.stopImmediatePropagation();
       if (multi && !selectedRef.current.includes(id)) { choose(id); return; }
