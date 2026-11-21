@@ -94,6 +94,23 @@ try{
 
  await page.locator('.rle-page-label select').selectOption('fortune');
  await page.getByRole('button',{name:'Marquee select'}).click();
+ await page.locator('.question-card').scrollIntoViewIfNeeded();
+ await page.waitForTimeout(200);
+ const card=await page.locator('.question-card').boundingBox();
+ await page.getByRole('button',{name:'Minimize Layout Studio'}).click();
+ const sx=Math.max(8,card.x-7),sy=Math.max(10,card.y-7);
+ const ex=Math.min(700,card.x+Math.min(card.width,280));
+ const ey=Math.min(947,card.y+Math.min(card.height,220));
+ await page.mouse.move(sx,sy);await page.mouse.down();
+ await page.mouse.move(ex,ey,{steps:6});
+ assert.equal(await page.locator('.rle-marquee').evaluate(el=>getComputedStyle(el).display),'block');
+ await page.mouse.up();
+ await page.getByRole('button',{name:'Open full Layout Studio'}).click();
+ const textSelection=await page.getByRole('button',{name:/Hide elements/}).innerText();
+ assert.ok(Number(textSelection.match(/\\d+/)?.[0]||0)>=1,'Marquee drag must select at least one canvas target: '+textSelection);
+ console.log('PASS direct marquee gesture adds selected canvas targets');
+ await page.getByRole('button',{name:'Clear selection'}).click();
+
  await page.getByRole('button',{name:'Snap on'}).click();
  await page.getByRole('button',{name:'Guides on'}).click();
  assert.equal(await page.locator('.rle-page-guide').count(),0);
