@@ -97,6 +97,7 @@
     align-items:stretch;
   }
   .haiku-page .zen-panel .zen-program-grid > .zen-program{
+    grid-column:auto!important;
     display:flex!important;
     flex-direction:column!important;
     justify-content:flex-start!important;
