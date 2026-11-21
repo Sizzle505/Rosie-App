@@ -17,3 +17,9 @@
 .ember-prologue-next{position:absolute;z-index:4;bottom:calc(env(safe-area-inset-bottom) + 16px);right:25px;background:none;border:none;font:700 10px system-ui,sans-serif;letter-spacing:.17em;color:#e7c082;cursor:pointer}
 @media(max-width:650px){.ember-prologue-top{top:calc(env(safe-area-inset-top) + 26px);left:17px;right:16px;font-size:10px;letter-spacing:.07em}.ember-prologue-top button{font-size:10px;padding:7px 10px}.ember-prologue-caption{left:24px;right:23px;bottom:calc(env(safe-area-inset-bottom) + 75px)}.ember-prologue-caption h2{font-size:clamp(30px,9.5vw,52px)}.ember-prologue-caption p{font-size:16px}.ember-prologue-next{bottom:calc(env(safe-area-inset-bottom) + 23px);font-size:9px}}
 @media(prefers-reduced-motion:reduce){.ember-prologue-scene>img,.ember-prologue-caption{animation:none}}
+
+/* Portrait camera passes reveal the setting first, then settle on Rosie and the machine. */
+@media(max-width:650px){
+ .ember-prologue-scene>img{animation-name:ember-comic-portrait-pan;animation-timing-function:ease-in-out}
+ @keyframes ember-comic-portrait-pan{from{object-position:var(--from) center;transform:scale(1.015)}to{object-position:var(--focus) center;transform:scale(1.06)}}
+}

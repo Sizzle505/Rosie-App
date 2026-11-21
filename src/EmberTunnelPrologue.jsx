@@ -4,14 +4,14 @@ import './ember-tunnel-prologue.css';
 // The illustrations in this package belong under public/ember-drill/prologue/.
 const ROOT = '/ember-drill/prologue/';
 const PAGES = Object.freeze([
-  {image:'01-dog-park.webp',heading:'BESIDE THE DOG PARK',text:'It began with a perfectly ordinary afternoon...',ms:3300,focus:62},
-  {image:'02-the-discovery.webp',heading:'A CURIOUS DISCOVERY',text:'But Rosie was never very good at leaving a mystery alone.',ms:2500,focus:62},
-  {image:'03-hidden-cavern.webp',heading:'THE WORLD BENEATH',text:'Some holes lead to extraordinary places.',ms:4000,focus:26},
-  {image:'04-the-driller.webp',heading:'WAITING IN THE DARK',text:'And some discoveries seem to be waiting just for you.',ms:3200,focus:46},
-  {image:'05-captain-boards.webp',heading:'CAPTAIN AT THE CONTROLS',text:'One brave paw. One enormous red lever.',ms:3000,focus:47},
-  {image:'06-drill-awakens.webp',heading:'FULL POWER',text:'CLICK! WHIRRRRR! BRRRRRRR!',ms:3100,focus:54},
-  {image:'07-foes-ahead.webp',heading:'WONDERS AND DANGERS AHEAD',text:'Barkroot. Ruby Temple. Clockwork. Molten Depths. The Royal Treasury.',ms:4100,focus:36},
-  {image:'08-adventure-begins.webp',heading:'THE ADVENTURE BEGINS',text:'An extraordinary journey starts here.',ms:2800,focus:56},
+  {image:'01-dog-park.webp',heading:'BESIDE THE DOG PARK',text:'It began with a perfectly ordinary afternoon...',ms:3300,focus:62,from:18},
+  {image:'02-the-discovery.webp',heading:'A CURIOUS DISCOVERY',text:'But Rosie was never very good at leaving a mystery alone.',ms:2500,focus:62,from:40},
+  {image:'03-hidden-cavern.webp',heading:'THE WORLD BENEATH',text:'Some holes lead to extraordinary places.',ms:4000,focus:55,from:18},
+  {image:'04-the-driller.webp',heading:'WAITING IN THE DARK',text:'And some discoveries seem to be waiting just for you.',ms:3200,focus:68,from:24},
+  {image:'05-captain-boards.webp',heading:'CAPTAIN AT THE CONTROLS',text:'One brave paw. One enormous red lever.',ms:3000,focus:58,from:35},
+  {image:'06-drill-awakens.webp',heading:'FULL POWER',text:'CLICK! WHIRRRRR! BRRRRRRR!',ms:3100,focus:75,from:30},
+  {image:'07-foes-ahead.webp',heading:'WONDERS AND DANGERS AHEAD',text:'Barkroot. Ruby Temple. Clockwork. Molten Depths. The Royal Treasury.',ms:4100,focus:100,from:0},
+  {image:'08-adventure-begins.webp',heading:'THE ADVENTURE BEGINS',text:'An extraordinary journey starts here.',ms:2800,focus:86,from:14},
 ]);
 
 export default function EmberTunnelPrologue({visible, onComplete, soundOn = true}) {
@@ -97,7 +97,7 @@ export default function EmberTunnelPrologue({visible, onComplete, soundOn = true
     </span>)}</div>
     <div className="ember-prologue-scene" onClick={advance} title="Tap to advance">
       <img key={page} src={ROOT+current.image} alt="" draggable="false"
-        style={{'--focus':`${current.focus}%`, '--duration':`${current.ms/1000}s`,animationPlayState:paused?'paused':'running'}} />
+        style={{'--focus':`${current.focus}%`, '--from':`${current.from}%`, '--duration':`${current.ms/1000}s`,animationPlayState:paused?'paused':'running'}} />
       <div className="ember-prologue-vignette" />
       <div className="ember-prologue-frame" aria-hidden="true" />
     </div>
