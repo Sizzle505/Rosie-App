@@ -281,10 +281,12 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   }
   return <>
     <div className="zen-panel">
-      <div className="haiku-section-label">YOUR LITTLE SANCTUARY</div>
-      <h2>Find your stillness.</h2>
-      <div className="zen-sensei-intro">
-        <p className="zen-panel-intro">Rosie has mastered doing absolutely nothing. She would be delighted to teach you.</p>
+      <div className="zen-panel-hero zen-sensei-intro">
+        <div className="zen-panel-hero-copy">
+          <div className="haiku-section-label">YOUR LITTLE SANCTUARY</div>
+          <h2>Find your stillness.</h2>
+          <p className="zen-panel-intro">Rosie has mastered doing absolutely nothing. She would be delighted to teach you.</p>
+        </div>
         <img src={NEW_ART+"characters/sensei-greeting.webp"} alt="" aria-hidden="true" loading="lazy" className="zen-sensei-welcome"/>
       </div>
       <div className="zen-program-grid" role="group" aria-label="Meditation programs">
@@ -304,7 +306,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
             {MEDITATION_VIEWS.map(v=><button key={v.id} type="button"
               className={viewId===v.id?"selected":""} aria-pressed={viewId===v.id}
               aria-label={v.label} title={v.label} onClick={()=>setViewId(v.id)}>
-              <img src={NEW_ART+v.image} alt="" loading="lazy"/><span>{v.label}</span>
+              <picture><source media="(max-width:600px)" srcSet={NEW_ART+v.mobileImage}/><img src={NEW_ART+v.image} alt="" loading="lazy"/></picture><span>{v.label}</span>
             </button>)}
           </div>
           <div className="zen-art-picker-label">Rosie's kimono</div>
@@ -342,10 +344,15 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
     </div>
     {opened && createPortal(
       <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
-        <div className="zen-immersive-scenery" aria-hidden="true"><picture><source media="(max-width:600px)" srcSet={mobileSceneSrc}/><img src={sceneSrc} alt="" decoding="async" fetchPriority="high"/></picture></div>
+        <div className="zen-immersive-scenery" aria-hidden="true">
+          <img className="zen-scenery-desktop" src={sceneSrc} alt="" decoding="async" fetchPriority="high"/>
+          <img className="zen-scenery-phone" src={mobileSceneSrc} alt="" decoding="async" fetchPriority="high"/>
+          <div className="zen-scenery-atmosphere" aria-hidden="true"/>
+        </div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
           <span className="zen-ornament-corners" aria-hidden="true" />
+          <div className="zen-session-frame">
           <header className="zen-immersive-header">
             <div className="zen-session-heading"><span>ROSIE&#39;S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
             {status==="complete" ? (
@@ -355,8 +362,8 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                 <div className="zen-session-toolbar">
                   <div className="zen-session-timer" role="timer" aria-label={"Time remaining "+timeLabel(remaining)}>{timeLabel(remaining)}</div>
                   <div className="zen-session-controls">
-                    <button type="button" className="zen-action-primary" onClick={status==="paused"?resume:pause}>{status==="paused"?"Resume":"Pause"}</button>
-                    <button type="button" className="zen-action-secondary" onClick={close}>End</button>
+                    <button type="button" className="zen-action-primary zen-icon-control" aria-label={status==="paused"?"Resume meditation":"Pause meditation"} title={status==="paused"?"Resume":"Pause"} onClick={status==="paused"?resume:pause}><span aria-hidden="true">{status==="paused"?"▶":"Ⅱ"}</span></button>
+                    <button type="button" className="zen-action-secondary zen-icon-control" aria-label="End meditation" title="End meditation" onClick={close}><span aria-hidden="true">×</span></button>
                   </div>
                 </div>
                 <div className="zen-timeline" aria-hidden="true"><span style={{width:completePercent+"%"}}/></div>
@@ -407,6 +414,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                 {audioUnavailable&&<p className="zen-audio-note" role="status">Sound isn't available here. The meditation will continue quietly.</p>}
               </div>
             </div>}
+          </div>
         </section>
       </div>, document.body
     )}
