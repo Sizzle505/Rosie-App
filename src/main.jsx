@@ -2741,6 +2741,7 @@ function FullscreenGameFrame({ children, label, variant }) {
         event.preventDefault();
         event.stopPropagation();
         setFallbackFullscreen(false);
+        if (variant === "yacht") setFullscreenExitSequence(count => count + 1);
       }
     };
     document.addEventListener("keydown", escape, true);
@@ -2749,7 +2750,7 @@ function FullscreenGameFrame({ children, label, variant }) {
       document.body.style.overflow = previousOverflow;
       document.body.classList.remove("captain-fullscreen-fallback-active");
     };
-  }, [fallbackFullscreen]);
+  }, [fallbackFullscreen, variant]);
 
   const enterGameFullscreen = () => {
     if (expanded) return;
@@ -2804,6 +2805,15 @@ function FullscreenGameFrame({ children, label, variant }) {
         ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen,
             exitGameFullscreen, fullscreenExitSequence })
         : children}
+      {["yacht", "tunnel", "cosmic", "captain2"].includes(variant) && (
+        <button type="button" className="captain-fullscreen-toggle"
+          onClick={expanded ? exitGameFullscreen : enterGameFullscreen}
+          aria-label={expanded ? "Exit fullscreen game" : "Expand game to fullscreen"}
+          title={expanded ? "Exit fullscreen game" : "Play fullscreen"}>
+          <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
+          <b>{expanded ? "Exit game" : "Fullscreen"}</b>
+        </button>
+      )}
     </section>
   );
 }
