@@ -79,7 +79,7 @@ try{
       await page.locator(".zen-begin").click();
       await page.locator(".zen-breath-halo").waitFor({state:"visible",timeout:12000});
       const bg=await page.locator(".zen-breath-halo").evaluate(el=>getComputedStyle(el).backgroundImage);
-      assert.ok(bg.includes("lotus-breath-halo.webp"),label+" should render illustrated halo");
+      assert.ok(bg.includes("meditation-breathing-ring.webp"),label+" should render the latest breathing ring illustration");
       await page.getByRole("button",{name:"Close meditation"}).click();
       await page.locator(".zen-immersive").waitFor({state:"hidden"});
       await page.locator(".haiku-tabs button").filter({hasText:"Journal"}).click();
