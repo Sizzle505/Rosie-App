@@ -7,6 +7,7 @@ import {
 
 export const BOSS_INTRO_TIME=8.5;
 export const BOSS_SCREEN_X=482;
+export const BOSS_VICTORY_HOLD=1.2;
 
 export function expeditionBossKind(stageIndex){
   return stageIndex===2?"copperjack":stageIndex===3?"cinderclaw":stageIndex===4?"mole-king":null;
@@ -71,6 +72,7 @@ export function updateExpeditionBoss(s,dt,{tipX,tipY,boosted,onHit}){
     if(b.defeated){
       const reward=b.kind==="mole-king"?2600:b.kind==="copperjack"?1400:1750;
       s.bossDefeated=true;
+      s.bossVictoryHold=BOSS_VICTORY_HOLD;
       s.score+=reward;
       s.events.push({type:"boss-victory",boss:b.kind,points:reward});
     }
