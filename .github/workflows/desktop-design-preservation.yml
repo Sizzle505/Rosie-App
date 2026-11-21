@@ -1,0 +1,52 @@
+name: Rosie desktop composition preservation
+on:
+  pull_request:
+    paths:
+      - 'src/desktop-design-preservation.css'
+      - 'src/main.jsx'
+      - 'src/RosieHaikuGarden.css'
+      - 'src/RosieQrAtelier.css'
+      - 'src/RosieRecipesAssetLayout.css'
+      - 'src/RosieCalculationsDesktop.css'
+      - 'tests/desktop-design-preservation.mjs'
+      - '.github/workflows/desktop-design-preservation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  desktop-ratios:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install application and visual test runner
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify production compilation
+        run: npm run build
+      - name: Start local RosieVerse
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/rosie-desktop.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-desktop.log
+          exit 1
+      - name: Verify desktop ratios and tablet/phone isolation
+        run: node tests/desktop-design-preservation.mjs
+        env:
+          ROSIE_QA_URL: http://127.0.0.1:4173
+      - name: Preserve visual reference evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rosie-desktop-ratio-screenshots
+          path: artifacts/desktop-preservation
+          retention-days: 10
