@@ -10,7 +10,7 @@ test('marquee selects crossed elements while leaving others untouched',()=>{
 test('snap aligns centers and edges within tolerance only',()=>{
  const snap=alignmentSnap(box(111,85,40,30),[box(100,100,60,30)],9);
  assert.equal(snap.dx,-1);assert.equal(snap.dy,0); // center lines coincide within tolerance
- assert.equal(alignmentSnap(box(117,110,40,30),[box(100,100,60,30)],9).dx,-7);
+ assert.equal(alignmentSnap(box(117,110,40,30),[box(100,100,60,30)],9).dx,3);
 });
 test('spacing normalization preserves order and supports manual gap',()=>{
  const a=[{id:'a',rect:box(0,0,20,10)},{id:'b',rect:box(40,0,20,10)},{id:'c',rect:box(100,0,20,10)}];
