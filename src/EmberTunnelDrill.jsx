@@ -221,6 +221,13 @@ export default function EmberTunnelDrill({ soundOn=true }) {
   const [mode,setMode]=useState("idle");
   const [notice,setNotice]=useState(null);
   const [selectedWorld,setSelectedWorld]=useState(0);
+  useEffect(()=>{
+    if(mode==="idle")return;
+    const state=mode==="running"?"playing":mode==="paused"?"paused":"ended";
+    window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
+      detail:{scene:"tunnel",state,world:selectedWorld}
+    }));
+  },[mode,selectedWorld]);
   const [stageStars,setStageStars]=useState(()=>{
     try{return safeStoredExpeditionStars(localStorage.getItem("rosieEmberFiveWorldStarsV1"))}catch{return {}}
   });
@@ -430,6 +437,9 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         }
         if(s.ended){
           modeRef.current="ended";setMode("ended");setHud(snapshot(s));
+          if(s.result==="complete")window.dispatchEvent(
+            new CustomEvent("rosieverse:music:scene",{detail:{scene:"tunnel",state:"victory",world:s.stageIndex}})
+          );
            const stage=getExpeditionStage(s.stageIndex);
            if(stage){
              const earned=expeditionStarCount(s);

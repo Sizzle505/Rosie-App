@@ -1,0 +1,77 @@
+name: RosieVerse original soundtrack release QA
+on:
+  push:
+    branches:
+      - release/20261120-rosieverse-original-soundtrack
+    paths:
+      - .github/workflows/rosie-soundtrack-qa.yml
+      - src/rosieMusicEngine.js
+      - src/RosieMusicPlayer.jsx
+      - src/rosieMusicCatalog.js
+      - src/rosieMusicCatalog.test.js
+      - scripts/rosieMusicBrowserQA.mjs
+      - scripts/rosieMusicQuickQA.mjs
+      - public/cosmic-odyssey/game.js
+      - public/cosmic-odyssey/rosie-music-director.js
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install exact application dependencies
+        run: npm ci
+      - name: Check music controller, QR and game logic
+        run: |
+          set -e
+          node --test src/rosieMusicCatalog.test.js src/qrAtelierLogic.test.js
+          node --test src/yachtDashExpansion.test.js
+          node --test tests/ember-drill-engine.test.mjs
+          npm run build
+      - name: Validate all 13 shipped audio binaries against import manifest
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          import crypto from "node:crypto";
+          import assert from "node:assert/strict";
+          const path="public/rosie-music";
+          const catalog=JSON.parse(fs.readFileSync(path+"/catalog.json","utf8"));
+          const files=fs.readdirSync(path).filter(x=>x.endsWith(".mp3"));
+          assert.equal(files.length,13);
+          assert.equal(catalog.tracks.length,13);
+          let bytes=0;
+          for(const item of catalog.tracks){
+            assert.ok(files.includes(item.filename));
+            const file=fs.readFileSync(path+"/"+item.filename);
+            assert.equal(crypto.createHash("sha256").update(file).digest("hex"),item.sha256);
+            assert.equal(file.length,item.bytes);
+            assert.ok(item.duration>20&&item.duration<240);
+            bytes+=file.length;
+          }
+          console.log("VERIFIED 13 MP3s",bytes,"bytes; every SHA-256 matches imported master manifest");
+          NODE
+      - name: Install browser QA
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium webkit
+      - name: Serve production bundle
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/rosie-music-preview.log 2>&1 &
+          sleep 6
+          curl --fail http://127.0.0.1:4173/ >/dev/null
+      - name: Inspect iPhone, iPad, desktop music playback and UI
+        run: node scripts/rosieMusicQuickQA.mjs
+      - name: Preserve real browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rosie-soundtrack-visual-qa
+          path: artifacts/rosie-music-quick-qa/*.png
+          retention-days: 7
