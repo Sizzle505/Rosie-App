@@ -75,6 +75,10 @@
       const gain=this.context.createGain();
       source.buffer=buffer;
       source.loop=cue.loop;
+      // Web Audio has sample-accurate loop regions: the first play includes
+      // the entire natural opening, while repeats start at the stitched
+      // phrase boundary rather than replaying the five-second introduction.
+      if(cue.loop){source.loopStart=5;source.loopEnd=buffer.duration;}
       source.connect(gain);
       gain.connect(this.master);
       const time=this.context.currentTime;
