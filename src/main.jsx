@@ -44,6 +44,7 @@ import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
 import RosieHome from "./RosieHome.jsx";
 import RosieHaikuGarden from "./RosieHaikuGarden.jsx";
+import { generateRosieText } from "./rosieAI.js";
 import RosieMusicPlayer from "./RosieMusicPlayer.jsx";
 import RosieReminders from "./RosieReminders.jsx";
 import RosieCalculations from "./RosieCalculations.jsx";
@@ -3350,7 +3351,7 @@ function App() {
     }
   }
 
-  function askRosie(event) {
+  async function askRosie(event) {
     event.preventDefault();
     if (consulting) return;
 
@@ -3374,12 +3375,25 @@ function App() {
     setRevealStage("consulting");
     setConsulting(true);
 
-    const result = chooseFortune();
+    const fallback = chooseFortune();
     setSubmittedQuestion(askedQuestion);
     setQuestion("");
-    // Show a new, non-repeating set immediately after each submitted fortune.
+    // Preserve Rosie's existing fortune library as the no-network fallback.
     reshufflePrompts();
-    const delay = 1350 + secureIndex(650);
+    const started = Date.now();
+    let result = fallback;
+    try {
+      const generated = await generateRosieText({ feature: "oracle", question: askedQuestion });
+      if (typeof generated.text !== "string" || !generated.text.trim()) throw new Error("Invalid fortune");
+      result = {
+        id: generated.id || `ai-${Date.now()}`,
+        tone: ["positive", "uncertain", "negative"].includes(generated.tone) ? generated.tone : "uncertain",
+        text: generated.text.trim()
+      };
+    } catch {
+      // The crystal ball still works even if Venice is unavailable.
+    }
+    const delay = Math.max(0, 1350 + secureIndex(650) - (Date.now() - started));
 
     revealTimerRef.current = window.setTimeout(() => {
       setAnswer(result);
