@@ -59,7 +59,17 @@ async function verify(name,browser,viewport){
       }
     }
     await page.screenshot({path:out+"/"+name+"-"+viewport.label+".png",timeout:15000});
-    const failed=musicResponses.filter(r=>![200,206,304].includes(r.status));
+    // WebKit emits status 0 when it cancels obsolete media byte-range requests
+    // during a source switch. Accept it only if that same MP3 also has a
+    // successful HTTP response; genuine failures remain release blockers.
+    const good=new Set(musicResponses.filter(r=>[200,206,304].includes(r.status)).map(r=>r.url));
+    for(const id of ["whimsical-journey","oracle-secret","haiku-garden","clockwork-nostalgia"]){
+      assert.ok(good.has(base+"/rosie-music/"+id+".mp3"),"Expected successful MP3 response: "+id);
+    }
+    const failed=musicResponses.filter(r=>
+      ![200,206,304].includes(r.status) &&
+      !(name==="webkit"&&r.status===0&&good.has(r.url))
+    );
     assert.deepEqual(failed,[],"Invalid music file response");
     assert.deepEqual(errors,[],"Browser JavaScript exceptions");
     console.log("PASS",name,viewport.label,musicResponses.length,"audio responses");
