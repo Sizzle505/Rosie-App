@@ -53,6 +53,8 @@ import RosieQrAtelier from "./RosieQrAtelier.jsx";
 import RosieRecipes from "./RosieRecipes.jsx";
 import RosieReviews from "./RosieReviews.jsx";
 import LayoutPlayground, { LayoutPreviewBridge } from "./LayoutPlayground.jsx";
+import SecretLayoutStudio from "./SecretLayoutStudio.jsx";
+import { LAYOUT_UNLOCK_KEY } from "./layoutStudioScope.js";
 import { AccountProvider } from "./private/AccountContext.jsx";
 import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
@@ -2922,6 +2924,14 @@ function App() {
     };
   }, []);
 
+  const [layoutUnlocked, setLayoutUnlocked] = useState(() => {
+    try { return localStorage.getItem(LAYOUT_UNLOCK_KEY) === "1"; } catch { return false; }
+  });
+  function unlockLayoutStudio() {
+    try { localStorage.setItem(LAYOUT_UNLOCK_KEY, "1"); } catch {}
+    setLayoutUnlocked(true);
+    setQuestion("");
+  }
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
@@ -3367,6 +3377,10 @@ function App() {
       return;
     }
     const askedQuestion = question.trim();
+    if (askedQuestion.toLowerCase() === "manchego") {
+      unlockLayoutStudio();
+      return;
+    }
 
     primeAudio();
     window.clearTimeout(revealTimerRef.current);
@@ -3528,6 +3542,10 @@ function App() {
                     id="question"
                     value={question}
                     onChange={(event) => {
+                      if (event.target.value.trim().toLowerCase() === "manchego") {
+                        unlockLayoutStudio();
+                        return;
+                      }
                       setQuestion(event.target.value);
                       if (dictationStatus === "captured") setDictationStatus("idle");
                     }}
@@ -3709,6 +3727,15 @@ function App() {
         <AccountPortal />
       </div>
 
+      <SecretLayoutStudio
+        page={page}
+        unlocked={layoutUnlocked}
+        onNavigate={navigateTo}
+        onHide={() => {
+          try { localStorage.removeItem(LAYOUT_UNLOCK_KEY); } catch {}
+          setLayoutUnlocked(false);
+        }}
+      />
       <div className={`toast ${toast ? "toast-visible" : ""}`}>{toast}</div>
     </>
   );
