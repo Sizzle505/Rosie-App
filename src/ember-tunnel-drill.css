@@ -515,3 +515,18 @@
 @media(max-width:620px){
   .ember-start-overlay .ember-expedition-next{min-height:34px;font-size:10px;margin-bottom:6px}
 }
+
+/* Expedition boss windows are readable on a phone without relying on tiny
+ * Canvas-only lettering. All changes reuse the existing Turbo control. */
+.ember-controls .ember-boost.is-strike-window{
+  border-color:#fff0b3;
+  background:linear-gradient(160deg,#795022,#3c2d22 78%);
+  box-shadow:inset 0 1px rgba(255,247,198,.45),0 0 0 2px rgba(249,210,124,.17),0 0 17px rgba(232,167,72,.36);
+}
+.ember-controls .ember-boost.is-strike-window b{color:#fff2bf;text-shadow:0 0 8px rgba(255,227,143,.45)}
+.ember-controls .ember-boost.is-strike-window small{color:#fff0d5}
+.ember-controls .ember-boost.is-victorious,
+.ember-controls .ember-boost.is-victorious:disabled{
+  opacity:1;border-color:#dfc28d;background:linear-gradient(150deg,#54422c,#293c34);
+}
+.ember-controls .ember-boost.is-victorious b{color:#ffe4aa}
