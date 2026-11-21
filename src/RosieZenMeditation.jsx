@@ -4,6 +4,7 @@ import { HAIKU_SCENES } from "./RosieHaikuScene.jsx";
 import { localDayKey } from "./haikuEngine.js";
 import { createZenAudio } from "./rosieZenAudio.js";
 import "./RosieZenMeditation.css";
+import "./RosieZenNewArt.css";
 
 const PROGRESS_KEY = "rosieHaikuZenSessionsV1";
 const ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
@@ -15,6 +16,22 @@ const PROGRAM_ART = {
   unwind: "evening-unwind.webp",
   haiku: "haiku-reflection.webp"
 };
+const NEW_ART="/rosieverse/haiku/new/";
+const MEDITATION_VIEWS=Object.freeze([
+  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp"},
+  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp"},
+  {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp"},
+  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp"},
+  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp"},
+  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp"},
+  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp"}
+]);
+const ROSIE_OUTFITS=Object.freeze([
+  {id:"pink",label:"Sakura Kimono",image:"characters/meditating-pink-sakura.webp"},
+  {id:"saffron",label:"Saffron Robes",image:"characters/meditating-saffron-cream.webp"},
+  {id:"plum",label:"Plum Hakama",image:"characters/meditating-plum-hakama.webp"},
+  {id:"indigo",label:"Indigo Kimono",image:"characters/meditating-indigo.webp"}
+]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
   { id:"breathe", title:"Breathe with Rosie", label:"FOLLOW THE RHYTHM", description:"A slow four-second inhale and six-second exhale. Adjust to what feels comfortable." },
@@ -101,6 +118,16 @@ export default function RosieZenMeditation({scene="field",poem}) {
   const [status,setStatus] = useState("idle");
   const [remaining,setRemaining] = useState(300000);
   const [audioUnavailable,setAudioUnavailable] = useState(false);
+  const [viewId,setViewId] = useState(() => {
+    try { const v=window.localStorage.getItem("rosieZenBackdropV1");
+      if(MEDITATION_VIEWS.some(x=>x.id===v))return v; }catch{}
+    return scene==="zen"?"raked":scene==="temple"?"tea":"lotus";
+  });
+  const [outfitId,setOutfitId] = useState(() => {
+    try { const v=window.localStorage.getItem("rosieZenRosieOutfitV1");
+      if(ROSIE_OUTFITS.some(x=>x.id===v))return v; }catch{}
+    return "pink";
+  });
   const endAt = useRef(0);
   const pausedMs = useRef(300000);
   const recorded = useRef(false);
@@ -110,7 +137,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
   const dialog = useRef(null);
   const previouslyFocused = useRef(null);
   const selected = PROGRAMS.find(p=>p.id===kind) || PROGRAMS[0];
-  const sceneSrc = HAIKU_SCENES.find(p=>p.id===scene)?.src || HAIKU_SCENES[0].src;
+  const selectedView=MEDITATION_VIEWS.find(v=>v.id===viewId)||MEDITATION_VIEWS[0];
+  const selectedOutfit=ROSIE_OUTFITS.find(v=>v.id===outfitId)||ROSIE_OUTFITS[0];
+  const sceneSrc=NEW_ART+selectedView.image;
+  const rosieSrc=NEW_ART+selectedOutfit.image;
   const totalMs = minutes*60000;
   const elapsed = Math.max(0,totalMs-remaining);
   const seconds = Math.floor(elapsed/1000);
@@ -138,6 +168,8 @@ export default function RosieZenMeditation({scene="field",poem}) {
     };
   },[]);
   useEffect(()=>{audio.current?.setVolume(volume)},[volume]);
+  useEffect(()=>{try{window.localStorage.setItem("rosieZenBackdropV1",viewId)}catch{}},[viewId]);
+  useEffect(()=>{try{window.localStorage.setItem("rosieZenRosieOutfitV1",outfitId)}catch{}},[outfitId]);
   useEffect(() => {
     if (!opened) return undefined;
     const oldOverflow = document.body.style.overflow;
