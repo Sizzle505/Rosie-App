@@ -195,3 +195,35 @@
     filter: none !important;
   }
 }
+
+/* Never display one generated haiku line as two visual lines. The measured
+   fitting loop sets --haiku-fit-size from the actual glyph widths. */
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse p {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  text-wrap: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style]:has(.haiku-dedication) .haiku-scroll-meta {
+  bottom: 24% !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication {
+  bottom: 10% !important;
+  left: 8% !important;
+  right: 8% !important;
+  max-width: 84% !important;
+  color: #754a4b !important;
+  text-shadow: 0 1px 0 rgba(255,246,214,.5);
+}
+@media (max-width:600px) {
+  .haiku-page .haiku-scroll[data-scroll-style]:has(.haiku-dedication) .haiku-scroll-meta {
+    bottom: 23% !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication {
+    bottom: 9.5% !important;
+  }
+}
