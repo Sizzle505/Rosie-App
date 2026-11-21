@@ -157,7 +157,6 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [scene, setScene] = useState(readSelectedScene);
   const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
   const [scrollStyle,setScrollStyle]=useState(readScrollStyle);
-  const selectedScroll=HAIKU_SCROLL_STYLES.find(style=>style.id===scrollStyle)||HAIKU_SCROLL_STYLES[0];
   const cycleScroll=step=>{
     const index=HAIKU_SCROLL_STYLES.findIndex(style=>style.id===scrollStyle);
     setScrollStyle(HAIKU_SCROLL_STYLES[(index+step+HAIKU_SCROLL_STYLES.length)%HAIKU_SCROLL_STYLES.length].id);
@@ -282,7 +281,6 @@ export default function RosieHaikuGarden({ onNavigate }) {
 
       <div className="haiku-shell">
         <header className="haiku-header">
-          <button className="haiku-back" type="button" onClick={() => onNavigate("home")} aria-label="Back to RosieVerse">← <span>RosieVerse</span></button>
           <picture className="haiku-masthead-art" aria-hidden="true">
             <source media="(max-width: 600px)" srcSet="/rosieverse/haiku/ornaments/masthead-compact.webp" />
             <img src="/rosieverse/haiku/ornaments/masthead-grand.webp" alt="" decoding="async" />
@@ -306,11 +304,10 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
                 {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
               </div>
-            </div>
-            <div className="haiku-scroll-cycle" role="group" aria-label="Change poetry scroll artwork">
-              <button type="button" onClick={()=>cycleScroll(-1)} aria-label="Previous poetry scroll" title="Previous scroll">‹</button>
-              <span className="haiku-scroll-cycle-name" aria-live="polite">{selectedScroll.label}</span>
-              <button type="button" onClick={()=>cycleScroll(1)} aria-label="Next poetry scroll" title="Next scroll">›</button>
+              <div className="haiku-scroll-cycle" role="group" aria-label="Change poetry scroll artwork">
+                <button type="button" onClick={()=>cycleScroll(-1)} aria-label="Previous poetry scroll" title="Previous scroll">‹</button>
+                <button type="button" onClick={()=>cycleScroll(1)} aria-label="Next poetry scroll" title="Next scroll">›</button>
+              </div>
             </div>
             </div>
             <div className="haiku-verse-actions">
