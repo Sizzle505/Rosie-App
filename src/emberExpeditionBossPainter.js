@@ -242,6 +242,17 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
    c.strokeStyle="#f1d8ab";c.lineWidth=1.5;
    c.fillRect(x-10,151,20,15);c.strokeRect(x-10,151,20,15);
  }
+ // The phase cue is framed with existing boss health art, not new character art.
+ const phaseLabel=p.phase==="defeated"?"GUARDIAN DEFEATED":
+   p.phase==="warning"?"ATTACK CHARGING":
+   p.phase==="active"?"DODGE ATTACK":
+   p.vulnerable?"TURBO STRIKE NOW":"RECOVERING";
+ c.textAlign="center";c.font="bold 10px Georgia,serif";
+ c.fillStyle=p.vulnerable?"#f8e7a2":p.phase==="active"?"#ffc3a1":"#e8cf9c";
+ c.fillText(phaseLabel,panelX+94,179);
+ c.fillStyle="rgba(102,77,59,.65)";c.fillRect(panelX+25,183,138,3);
+ c.fillStyle=p.vulnerable?"#f9df8d":p.phase==="active"?"#f3a06d":"#dfb879";
+ c.fillRect(panelX+25,183,138*Math.max(0,Math.min(1,p.progress)),3);
  if(p.vulnerable){
   c.textAlign="center";c.font="bold 15px Georgia,serif";
   c.fillStyle="#ffe7a7";
