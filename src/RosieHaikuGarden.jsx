@@ -9,8 +9,22 @@ import "./RosieHaikuArchiveArt.css";
 import "./RosieHaikuMasthead.css";
 import "./RosieHaikuConceptLayout.css";
 import "./RosieHaikuNewArt.css";
+import "./RosieHaikuPolishHold.css";
+import "./RosieHaikuIphoneRefinement.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
+const SCROLL_KEY = "rosieHaikuScrollDesignV1";
+export const HAIKU_SCROLL_STYLES = Object.freeze([
+  {id:"sakura",label:"Sakura Scroll"},
+  {id:"imperial",label:"Imperial Scroll"},
+  {id:"grand",label:"Grand Scroll"}
+]);
+function readScrollStyle(){
+  try{
+    const saved=window.localStorage.getItem(SCROLL_KEY);
+    return HAIKU_SCROLL_STYLES.some(style=>style.id===saved)?saved:"sakura";
+  }catch{return "sakura";}
+}
 const HERO = "/rosieverse/hero.webp";
 const readJournal = () => {
   try {
@@ -141,6 +155,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [mode, setMode] = useState("daily");
   const [scene, setScene] = useState(readSelectedScene);
   const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
+  const [scrollStyle,setScrollStyle]=useState(readScrollStyle);
+  const selectedScroll=HAIKU_SCROLL_STYLES.find(style=>style.id===scrollStyle)||HAIKU_SCROLL_STYLES[0];
+  const cycleScroll=step=>{
+    const index=HAIKU_SCROLL_STYLES.findIndex(style=>style.id===scrollStyle);
+    setScrollStyle(HAIKU_SCROLL_STYLES[(index+step+HAIKU_SCROLL_STYLES.length)%HAIKU_SCROLL_STYLES.length].id);
+  };
+  useEffect(()=>{try{window.localStorage.setItem(SCROLL_KEY,scrollStyle)}catch{}},[scrollStyle]);
   useEffect(()=>{try{window.localStorage.setItem(ROSIE_HAIKU_OUTFIT_KEY,outfitId);}catch{}},[outfitId]);
   const [backgroundUnavailable, setBackgroundUnavailable] = useState({});
   const selectedBackground = HAIKU_SCENES.find((item) => item.id === scene) || HAIKU_SCENES[0];
@@ -269,12 +290,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
             <div className="haiku-overline">ROSIE'S GARDEN OF SMALL WISDOM</div>
             <h1>Haiku Zen Garden</h1>
           </div>
-          <p className="haiku-masthead-tagline">Small poems. Deep breaths. Grand opinions.</p>
+          {/* The garden tagline lives beneath the poem, not across the sky. */}
         </header>
         <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} outfitId={outfitId} onOutfitChange={setOutfitId} />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
-            <div className="haiku-scroll" key={poemKey(poem)}>
+            <div className="haiku-scroll-display">
+            <div className="haiku-scroll" data-scroll-style={scrollStyle} key={poemKey(poem)+"-"+scrollStyle}>
               <div className="haiku-scroll-inner">
                 <span className="haiku-scroll-caption">{mode === "daily" ? "TODAY IN THE GARDEN" : mode === "journal" ? "FROM THE POETRY JOURNAL" : "A ROSIE ORIGINAL"}</span>
                 <span className="haiku-ornament" aria-hidden="true">❀</span>
@@ -283,6 +305,12 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
                 {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
               </div>
+            </div>
+            <div className="haiku-scroll-cycle" role="group" aria-label="Change poetry scroll artwork">
+              <button type="button" onClick={()=>cycleScroll(-1)} aria-label="Previous poetry scroll" title="Previous scroll">‹</button>
+              <span className="haiku-scroll-cycle-name" aria-live="polite">{selectedScroll.label}</span>
+              <button type="button" onClick={()=>cycleScroll(1)} aria-label="Next poetry scroll" title="Next scroll">›</button>
+            </div>
             </div>
             <div className="haiku-verse-actions">
               <button type="button" onClick={toggleSave} className={saved?"haiku-action-saved":""} aria-label={saved?"Remove verse from favorites":"Save verse"} title={saved?"Saved - remove":"Save verse"}>
@@ -296,7 +324,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <img src="/rosieverse/haiku/new/ui/postcard.webp" alt="" aria-hidden="true" loading="lazy"/>
               </button>
             </div>
-            <p role="status" aria-live="polite" className="haiku-status">{notice || "Each verse is composed in the traditional three-line, 5-7-5 form."}</p>
+            <p role="status" aria-live="polite" className="haiku-status">{notice || "Small poems. Deep breaths. Grand opinions."}</p>
           </div>
           <aside className="haiku-workbench" aria-label="Poetry studio">
             <nav className="haiku-tabs" aria-label="Haiku activities">
@@ -305,6 +333,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
               <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
               <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal <span>{journal.length}</span></span></button>
             </nav>
+            <div className="haiku-workbench-body">
             {mode === "daily" ? (
               <div className="haiku-panel">
                 <div className="haiku-section-label">A MOMENT WITH ROSIE</div>
@@ -353,6 +382,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </div>
             )}
             <div className="haiku-workbench-footer">A Shiba's perspective on an extraordinarily human world.</div>
+            </div>
           </aside>
         </section>
         <RosieHaikuWisdom mode={mode} mood={mood} poem={poem} />
