@@ -1,5 +1,5 @@
 import React,{useEffect,useRef,useState} from "react";
-import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack} from "./rosieMusicCatalog.js";
+import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack,musicContextGain} from "./rosieMusicCatalog.js";
 import {RosieMusicEngine} from "./rosieMusicEngine.js";
 import "./rosie-music.css";
 
@@ -21,7 +21,9 @@ export default function RosieMusicPlayer({page}){
   useEffect(()=>{
     const engine=new RosieMusicEngine({onStatus:setStatus});
     engineRef.current=engine;
-    engine.enabled=readEnabled();engine.volume=readVolume();engine.setDesired(pageMusicTrack(pageRef.current));
+    engine.enabled=readEnabled();engine.volume=readVolume();
+    engine.setContextGain(musicContextGain(pageRef.current));
+    engine.setDesired(pageMusicTrack(pageRef.current));
     const unlock=()=>{
       if(engine.enabled)engine.unlock();
     };
@@ -32,6 +34,7 @@ export default function RosieMusicPlayer({page}){
       if(pageRef.current!=="captain"||!["yacht","tunnel","cosmic"].includes(scene))return;
       if(state==="playing"||state==="start"||state==="menu"){
         sceneRef.current=scene;engine.setDuck(false);
+        engine.setContextGain(state==="playing"?1:0.72);
         const song=sceneMusicTrack(scene,state,{level});
         if(song)engine.setDesired(song);
       }else if(sceneRef.current===scene){
@@ -46,6 +49,9 @@ export default function RosieMusicPlayer({page}){
     const onGameScene=event=>handleScene(event.detail||{});
     const onGameMessage=event=>{
       if(event.origin!==window.location.origin||event.data?.type!=="rosieverse:music:scene")return;
+      // The hidden Cosmic iframe initializes a menu when Captain opens.
+      // Never let that offscreen event replace Yacht's opening soundtrack.
+      if(event.data.state==="start"||event.data.state==="menu")return;
       const frame=document.querySelector("#cosmic-odyssey-arcade iframe");
       if(!frame||event.source!==frame.contentWindow)return;
       handleScene({scene:"cosmic",state:event.data.state,level:event.data.level});
@@ -70,7 +76,11 @@ export default function RosieMusicPlayer({page}){
   useEffect(()=>{
     sceneRef.current=null;
     const engine=engineRef.current;
-    if(engine){engine.setDuck(false);engine.setDesired(pageMusicTrack(page));}
+    if(engine){
+      engine.setDuck(false);
+      engine.setContextGain(musicContextGain(page));
+      engine.setDesired(pageMusicTrack(page));
+    }
     else setStatus(s=>({...s,id:pageMusicTrack(page)}));
   },[page]);
 
