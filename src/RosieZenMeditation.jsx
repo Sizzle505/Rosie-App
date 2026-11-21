@@ -127,6 +127,13 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   const previouslyFocused = useRef(null);
   const selected = PROGRAMS.find(p=>p.id===kind) || PROGRAMS[0];
   const selectedView=MEDITATION_VIEWS.find(v=>v.id===viewId)||MEDITATION_VIEWS[0];
+  function cycleMeditationBackdrop(step){
+    setViewId(current=>{
+      const index=MEDITATION_VIEWS.findIndex(view=>view.id===current);
+      const next=(Math.max(0,index)+step+MEDITATION_VIEWS.length)%MEDITATION_VIEWS.length;
+      return MEDITATION_VIEWS[next].id;
+    });
+  }
   const selectedOutfit=ROSIE_HAIKU_OUTFITS.find(v=>v.id===outfitId)||ROSIE_HAIKU_OUTFITS[0];
   const sceneSrc=NEW_ART+selectedView.image;
   const rosieSrc=selectedOutfit.image;
@@ -326,6 +333,13 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
             <div><span>ROSIE&#39;S HAIKU ZEN GARDEN · {selectedView.label.toUpperCase()}</span><h2 id="zen-session-title">{selected.title}</h2></div>
             <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
           </header>
+          {status!=="complete"&&<div className="zen-backdrop-cycle" role="group" aria-label="Change meditation scenery">
+            <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Previous meditation background"
+              title="Previous meditation landscape" onClick={()=>cycleMeditationBackdrop(-1)}>‹</button>
+            <span aria-live="polite" className="zen-backdrop-cycle-name">{selectedView.label}</span>
+            <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Next meditation background"
+              title="Next meditation landscape" onClick={()=>cycleMeditationBackdrop(1)}>›</button>
+          </div>}
           {status==="complete"?
             <div className="zen-complete">
               <img src={FINAL_ART + "rosie-enlightened.webp"} alt="Rosie celebrates your peaceful meditation with a delighted smile"/>
