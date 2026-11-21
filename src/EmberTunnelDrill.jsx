@@ -7,6 +7,7 @@ import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExped
 import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT} from "./emberExpansionCatalog.js";
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
+import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
 
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
@@ -211,7 +212,6 @@ function playBossAudio(context,kind){
     }
   }catch(_){}
 }
-const BOSS_VICTORY_REVEAL_DELAY_MS = 2500;
 export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, exitGameFullscreen }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
@@ -435,7 +435,8 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
               const angle=i/count*Math.PI*2,v=80+Math.random()*210;
               particles.current.push({x:482,y:s.bossY||s.y,
                 vx:Math.cos(angle)*v,vy:Math.sin(angle)*v-60,
-                life:.6+Math.random()*.35,max:.95,r:2+Math.random()*3.5,
+                life:event.type==="boss-victory"?1.6+Math.random()*.9:.6+Math.random()*.35,
+                max:event.type==="boss-victory"?2.5:.95,r:2+Math.random()*3.5,
                 color:i%3===0?"#fff1b0":i%3===1?"#f3b35a":"#f0d794"});
             }
             if(navigator.vibrate)navigator.vibrate(event.type==="boss-victory"?[40,30,40,30,70]:[24,16,24]);
@@ -461,7 +462,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         if(s.ended){
           // Keep the canvas and boss defeat particles visible for 2.5 seconds
           // after victory; no results overlay until the animation has played.
-          const defeatedBoss=s.result==="complete" && s.bossDefeated===true;
+          const defeatedBoss=shouldHoldBossVictory(s);
           if(defeatedBoss){
             modeRef.current="victory-hold";
             setMode("victory-hold");
