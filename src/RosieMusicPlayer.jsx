@@ -56,11 +56,15 @@ export default function RosieMusicPlayer({page}){
       if(!frame||event.source!==frame.contentWindow)return;
       handleScene({scene:"cosmic",state:event.data.state,level:event.data.level});
     };
+    const onMeditation=event=>{
+      if(pageRef.current==="haiku")engine.setDuck(Boolean(event.detail?.active));
+    };
     const onAchievement=()=>engine.playFanfare();
     const onVisibility=()=>engine.setHidden(document.hidden);
     window.addEventListener("rosieverse:music:scene",onGameScene);
     window.addEventListener("message",onGameMessage);
     window.addEventListener("rosieverse:music:achievement",onAchievement);
+    window.addEventListener("rosieverse:music:meditation",onMeditation);
     document.addEventListener("visibilitychange",onVisibility);
     return()=>{
       document.removeEventListener("pointerdown",unlock,true);
@@ -68,6 +72,7 @@ export default function RosieMusicPlayer({page}){
       window.removeEventListener("rosieverse:music:scene",onGameScene);
       window.removeEventListener("message",onGameMessage);
       window.removeEventListener("rosieverse:music:achievement",onAchievement);
+      window.removeEventListener("rosieverse:music:meditation",onMeditation);
       document.removeEventListener("visibilitychange",onVisibility);
       engine.dispose();engineRef.current=null;
     };
