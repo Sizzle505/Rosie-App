@@ -11,7 +11,7 @@ import AxisJoystick from "./AxisJoystick.jsx";
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
 const EXPEDITION_ART_BY_STAGE={
-  0:["world-markers"],1:["world-markers"],
+  0:["world-markers","bonus-pickups"],1:["world-markers","bonus-pickups"],
   2:["gear-crusher","copperjack","world-markers","bonus-pickups"],
   3:["lava-geyser","falling-basalt","cinderclaw","world-markers","bonus-pickups"],
   4:["royal-earth-burst","mole-king","world-markers","bonus-pickups"]
