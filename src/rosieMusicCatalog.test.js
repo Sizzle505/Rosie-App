@@ -125,3 +125,56 @@ test("Safari stale-media AbortError is handled without unhandled promise rejecti
   assert.equal(engine.error,null);
   engine.dispose();
 });
+
+test("every background track starts with original opening then repeats from the stitch",async()=>{
+  class Song{
+    constructor(){this.paused=true;this.volume=0;this.currentTime=0;this.loop=false;this.src="";}
+    play(){this.paused=false;return Promise.resolve();}
+    pause(){this.paused=true;}
+    load(){}
+    removeAttribute(){}
+  }
+  const queue=[];const engine=new RosieMusicEngine({
+    audioFactory:()=>new Song(),clock:()=>0,
+    frame:callback=>{queue.push(callback);return queue.length;},cancelFrame:()=>{}
+  });
+  for(const [id,item] of Object.entries(ROSIE_MUSIC)){
+    assert.equal(item.loop?item.loopStartSeconds:0,item.loop?5:0,id);
+  }
+  engine.singleDeck=true;
+  engine.setDesired("haiku-garden");engine.unlock();
+  const first=engine.decks[0];
+  assert.equal(first.currentTime,0,"Page entry must begin at true zero");
+  assert.equal(first.loop,false,"Native loop would repeat the intro");
+  first.onended();
+  assert.equal(first.currentTime,5,"End must seek into the prepared continuous loop");
+  assert.equal(first.paused,false,"Loop must resume playback");
+  engine.setDesired("oracle-secret");
+  assert.equal(engine.activeId,"oracle-secret");
+  await Promise.resolve();
+  engine.dispose();
+});
+test("subtle page music gain does not affect independent game sound effects",async()=>{
+  let now=0,callbacks=[];
+  class Song {
+    constructor(){this.volume=0;this.loop=false;this.paused=true;this.src="";}
+    play(){this.paused=false;return Promise.resolve();}
+    pause(){this.paused=true;}
+    load(){}
+    removeAttribute(){}
+  }
+  const engine=new RosieMusicEngine({
+    audioFactory:()=>new Song(),
+    frame:callback=>{callbacks.push(callback);return callbacks.length;},
+    cancelFrame:()=>{},clock:()=>now
+  });
+  engine.setContextGain(0.36);
+  engine.setDesired("clockwork-nostalgia");
+  engine.unlock();
+  now+=2000;
+  for(const callback of callbacks.splice(0))callback(now);
+  assert.ok(engine.decks[engine.active].volume<0.1,"Utilities should remain discreet");
+  engine.setContextGain(1);
+  assert.ok(engine.decks[engine.active].volume>0.2,"Active games retain musical presence");
+  engine.dispose();
+});
