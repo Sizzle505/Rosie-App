@@ -136,20 +136,12 @@ if (params.has("rosieTeslaInternal")) {
     root.style.display = "";
     document.body.style.overflow = normalBodyOverflow;
     if (!mounted) {
-      const next = await loadRegularAppModule();
-      if (myGeneration !== generation || DESKTOP_ART_PAGES.has(pageName())) {
-        next.unmount();
-        return;
-      }
-      mounted = next;
+      const { mountRosieVerse } = await import("./main.jsx");
+      if (myGeneration !== generation || DESKTOP_ART_PAGES.has(pageName())) return;
+      mounted = mountRosieVerse(root);
     }
   }
-
-  // Import and mount only when needed: no second background RosieVerse,
-  // doubled soundtrack, or competing React application under the iframe.
-  async function loadRegularAppModule() {
-    return loadRegularApp();
-  }
+  // The non-active mode has no background React tree or competing soundtrack.
 
   function syncMode() {
     if (DESKTOP_ART_PAGES.has(pageName())) showFrame();
