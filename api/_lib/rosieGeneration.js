@@ -52,7 +52,7 @@ async function complete({ key, feature, prompt, signal, temperature }) {
         stream: false,
         store: false,
         temperature: temperature ?? (feature === "haiku" ? 0.77 : 0.72),
-        max_tokens: feature === "haiku" ? 260 : 230,
+        max_tokens: feature === "haiku" ? 460 : 230,
         response_format: { type: "json_object" },
         venice_parameters: { disable_thinking: true, enable_web_search: "off" },
         messages: [{ role: "system", content: prompt.system }, { role: "user", content: prompt.user }]
@@ -96,15 +96,23 @@ export async function generateRosieAnswer({ feature, input, key }) {
           key, feature, prompt, signal: controller.signal,
           temperature: attempt === 0 ? 0.84 : 0.46
         });
-        const lines = validateHaikuContent(output);
-        const meter = meterAssessment(lines);
-        const candidate = { lines, meter, attempt };
-        if (!best || meter.score < best.meter.score ||
-            (meter.score === best.meter.score && meter.verified && !best.meter.verified)) best = candidate;
-        if (meter.verified) return {
-          lines, revised: attempt > 0, metre: "verified",
-          counts: meter.counts
-        };
+        const options = Array.isArray(output?.poems) ? output.poems.slice(0, 3) : [output];
+        let usable = 0;
+        for (const option of options) {
+          let lines;
+          try { lines = validateHaikuContent(option); }
+          catch { continue; }
+          usable++;
+          const meter = meterAssessment(lines);
+          const candidate = { lines, meter, attempt };
+          if (!best || meter.score < best.meter.score ||
+              (meter.score === best.meter.score && meter.verified && !best.meter.verified)) best = candidate;
+          if (meter.verified) return {
+            lines, revised: attempt > 0, metre: "verified",
+            counts: meter.counts
+          };
+        }
+        if (!usable) throw new RosieAIError("invalid_poem");
       } catch (error) {
         if (!(error instanceof RosieAIError)) throw error;
         if (["provider_error", "provider_rate_limit", "timeout"].includes(error.code)) {
