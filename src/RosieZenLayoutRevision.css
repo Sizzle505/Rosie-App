@@ -1,0 +1,253 @@
+/* Meditation iPhone art and compact, unified Zen interface.
+   Loaded last so earlier desktop & iPhone refinements remain intact. */
+
+/* Put the heading BESIDE Sensei Rosie, never underneath her illustration. */
+.haiku-page .zen-panel .zen-panel-hero.zen-sensei-intro {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(90px,32%);
+  align-items:center;
+  min-height:0;
+  margin:0 0 10px !important;
+  gap:8px;
+}
+.haiku-page .zen-panel .zen-panel-hero-copy {
+  min-width:0;align-self:center;
+}
+.haiku-page .zen-panel .zen-panel-hero-copy .haiku-section-label { margin:0 0 3px !important; }
+.haiku-page .zen-panel .zen-panel-hero-copy h2 {
+  text-wrap:balance;
+  margin:0 0 6px !important;
+}
+.haiku-page .zen-panel .zen-panel-hero-copy .zen-panel-intro {
+  max-width:100%;font:13px/1.38 Georgia,serif !important;
+  margin:0 !important;
+}
+.haiku-page .zen-panel .zen-panel-hero .zen-sensei-welcome {
+  width:100% !important;max-width:100% !important;
+  height:clamp(115px,13vw,190px) !important;
+  object-fit:contain;object-position:center bottom;
+  align-self:end;
+}
+
+/* The same ornate surface contains header, portrait, and guidance. */
+.zen-immersive .zen-session-frame { position:relative; isolation:isolate; }
+.zen-immersive .zen-session-header-tools { min-width:0; }
+.zen-immersive .zen-session-toolbar { display:flex;align-items:center;justify-content:space-between;gap:9px; }
+.zen-immersive .zen-session-controls {
+  display:flex;flex-wrap:nowrap;align-items:center;gap:7px;margin:0;
+}
+.zen-immersive .zen-session-controls .zen-icon-control {
+  display:grid !important;place-items:center !important;
+  flex:0 0 38px !important;width:38px !important;height:38px !important;
+  min-width:38px !important;min-height:38px !important;
+  padding:0 !important;border-radius:50% !important;
+  background:rgba(30,19,48,.36) !important;
+  border:1px solid rgba(244,218,182,.38) !important;
+  color:#f6dfc4 !important;
+  font:normal 20px/1 Georgia,serif !important;
+  box-shadow:inset 0 0 9px rgba(255,223,184,.05);
+}
+.zen-immersive .zen-session-controls .zen-icon-control span {
+  display:block !important;font:inherit !important;color:inherit !important;letter-spacing:0 !important;
+}
+.zen-immersive .zen-session-controls .zen-icon-control:is(:hover,:focus-visible) {
+  background:rgba(91,60,100,.66) !important;
+  border-color:#ffe2ba !important;
+  outline:2px solid rgba(255,224,163,.7);
+  outline-offset:2px;
+}
+.zen-immersive .zen-session-timer { font-variant-numeric:tabular-nums; }
+
+/* Directly loaded assets: desktop landscape and seven purpose-made iPhone
+   portrait paintings. No stretched/blurred desktop substitute on phones. */
+.zen-immersive .zen-immersive-scenery img.zen-scenery-phone { display:none; }
+.zen-immersive .zen-immersive-scenery img.zen-scenery-desktop {
+  display:block;width:100%;height:100%;object-fit:cover;
+  object-position:center 42%;
+  filter:saturate(1.08) contrast(1.05) brightness(1.05);
+}
+.zen-immersive .zen-immersive-scenery .zen-scenery-atmosphere {
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 45%,transparent 25%,rgba(14,11,26,.19) 100%);
+}
+.zen-immersive .zen-breath-portrait::before {
+  content:"";position:absolute;inset:5% 0 7%;z-index:0;
+  background-image:var(--zen-backdrop-image);
+  background-position:30% 52%;
+  background-size:165% auto;
+  background-repeat:no-repeat;
+  opacity:.17;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 0%,#000 19%,transparent 76%);
+  mask-image:radial-gradient(ellipse at center,#000 0%,#000 19%,transparent 76%);
+  pointer-events:none;
+}
+.zen-immersive .zen-immersive-dialog {
+  background:linear-gradient(145deg,rgba(40,34,51,.54),rgba(22,25,42,.57));
+}
+
+@media (max-width:600px) {
+  .haiku-page .zen-panel .zen-panel-hero.zen-sensei-intro {
+    grid-template-columns:minmax(0,1fr) minmax(110px,43%);
+    min-height:0 !important;
+    height:175px !important;
+    margin:0 0 5px !important;
+    gap:1px;
+    align-items:center !important;
+  }
+  .haiku-page .zen-panel .zen-panel-hero-copy { align-self:center; }
+  .haiku-page .zen-panel .zen-panel-hero-copy h2 {
+    font-size:clamp(21px,5.4vw,27px) !important;
+    line-height:1.09;margin:3px 0 5px !important;
+  }
+  .haiku-page .zen-panel .zen-panel-hero-copy .haiku-section-label {
+    font-size:9px !important;line-height:1.3;
+  }
+  .haiku-page .zen-panel .zen-panel-hero-copy .zen-panel-intro {
+    font-size:clamp(11px,2.9vw,13px) !important;line-height:1.36 !important;
+  }
+  .haiku-page .zen-panel .zen-panel-hero .zen-sensei-welcome {
+    height:185px !important;width:100% !important;
+    max-width:100% !important;align-self:end;
+    object-position:center bottom;
+  }
+
+  .zen-immersive .zen-immersive-scenery { z-index:0 !important; }
+  .zen-immersive .zen-immersive-scenery img.zen-scenery-desktop { display:none !important; }
+  .zen-immersive .zen-immersive-scenery img.zen-scenery-phone {
+    display:block !important;
+    position:absolute !important;inset:0 !important;
+    width:100% !important;height:100% !important;
+    object-fit:cover !important;
+    object-position:var(--zen-focal-x,50%) var(--zen-focal-y,48%) !important;
+    filter:saturate(1.19) contrast(1.08) brightness(1.1) !important;
+    opacity:1 !important;
+    -webkit-mask-image:none !important;mask-image:none !important;
+    transform:scale(1.055);
+    transform-origin:center center;
+  }
+  .zen-immersive[data-zen-view="lotus"] { --zen-focal-x:46%;--zen-focal-y:43%; }
+  .zen-immersive[data-zen-view="sakura"] { --zen-focal-x:55%;--zen-focal-y:42%; }
+  .zen-immersive[data-zen-view="raked"] { --zen-focal-x:48%;--zen-focal-y:50%; }
+  .zen-immersive[data-zen-view="tea"] { --zen-focal-x:57%;--zen-focal-y:45%; }
+  .zen-immersive[data-zen-view="mist"] { --zen-focal-x:44%;--zen-focal-y:47%; }
+  .zen-immersive[data-zen-view="twilight"] { --zen-focal-x:51%;--zen-focal-y:45%; }
+  .zen-immersive[data-zen-view="moonlit"] { --zen-focal-x:54%;--zen-focal-y:42%; }
+  .zen-immersive .zen-immersive-scenery .zen-scenery-atmosphere {
+    background:linear-gradient(180deg,rgba(14,10,30,.18),transparent 25%,transparent 64%,rgba(13,10,28,.28)) !important;
+  }
+  .zen-immersive .zen-immersive-dialog {
+    background:transparent !important;backdrop-filter:none !important;
+    padding:calc(env(safe-area-inset-top,0px) + 9px) 10px calc(env(safe-area-inset-bottom,0px) + 15px) !important;
+  }
+  .zen-immersive .zen-session-frame {
+    display:flex;flex-direction:column;
+    border:1px solid rgba(241,197,146,.32);
+    border-radius:17px;
+    padding:0 9px 8px;
+    background:linear-gradient(180deg,rgba(32,22,49,.29),rgba(32,22,49,.07) 30%,rgba(26,18,44,.14) 73%,rgba(32,20,51,.34));
+    box-shadow:0 8px 35px rgba(9,7,22,.16);
+    backdrop-filter:none;
+  }
+  .zen-immersive .zen-immersive-header {
+    display:grid !important;grid-template-columns:minmax(0,1fr) !important;
+    align-items:start !important;gap:3px !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:11px 9px 6px !important;
+    background:transparent !important;
+    border-bottom:1px solid rgba(251,223,178,.31) !important;
+  }
+  .zen-immersive .zen-session-heading {
+    flex:initial !important;width:100% !important;min-width:0 !important;
+  }
+  .zen-immersive .zen-session-heading>span {
+    font-size:8px !important;letter-spacing:.12em !important;
+  }
+  .zen-immersive .zen-session-heading h2 {
+    font-size:clamp(24px,6.4vw,32px) !important;
+    line-height:1.07 !important;max-width:100%;
+    margin:2px 0 0 !important;text-wrap:balance;
+  }
+  .zen-immersive .zen-session-header-tools {
+    width:100% !important;max-width:none !important;
+    flex:initial !important;align-self:stretch !important;
+  }
+  .zen-immersive .zen-session-toolbar {
+    display:flex !important;justify-content:space-between !important;
+    align-items:center !important;gap:8px !important;
+  }
+  .zen-immersive .zen-session-toolbar .zen-session-timer {
+    flex:0 0 auto !important;
+    font-size:clamp(44px,12.2vw,66px) !important;
+    line-height:1 !important;
+    letter-spacing:.012em !important;
+    margin:2px 0 0 !important;
+  }
+  .zen-immersive .zen-session-toolbar .zen-session-controls {
+    margin:0 !important;gap:9px !important;
+  }
+  .zen-immersive .zen-session-toolbar .zen-session-controls .zen-icon-control {
+    flex:0 0 38px !important;
+    width:38px !important;height:38px !important;
+    min-width:38px !important;min-height:38px !important;
+    padding:0 !important;font-size:20px !important;
+  }
+  .zen-immersive .zen-session-header-tools .zen-timeline {
+    height:3px !important;margin:6px 0 0 !important;
+  }
+  .zen-immersive .zen-immersive-body {
+    display:flex !important;flex-direction:column !important;
+    gap:0 !important;align-items:stretch !important;
+  }
+  .zen-immersive .zen-breath-portrait {
+    min-height:0 !important;
+    margin-top:clamp(16px,3.2vh,35px) !important;
+    margin-bottom:0 !important;
+    padding:0 0 2px;
+  }
+  .zen-immersive .zen-breath-portrait>img {
+    display:block;max-height:min(43vh,410px) !important;
+    width:auto;height:auto;max-width:92%;
+    object-fit:contain;object-position:center bottom;
+  }
+  .zen-immersive .zen-breath-portrait::before {
+    background-image:var(--zen-mobile-image);
+    background-size:175% auto;background-position:72% 47%;
+    opacity:.19;
+  }
+  .zen-immersive .zen-breath-portrait .zen-backdrop-cycle {
+    bottom:0 !important;z-index:4;
+  }
+  .zen-immersive .zen-guidance {
+    margin:0 !important;
+    padding:9px 10px 6px !important;
+    border-top:1px solid rgba(249,218,175,.30);
+    border-radius:0 0 12px 12px;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+  .zen-immersive .zen-guidance-copy {
+    min-height:0 !important;
+    padding:2px 1px 5px;
+  }
+  .zen-immersive .zen-guidance-copy p {
+    font-size:clamp(17px,4.7vw,21px) !important;
+    line-height:1.28 !important;
+  }
+  .zen-immersive .zen-breath-cue { min-height:64px !important; }
+  .zen-immersive .zen-close { padding:5px 11px !important;min-height:36px !important; }
+  .zen-art-options .zen-backdrop-picker button picture,
+  .zen-art-options .zen-backdrop-picker button picture img {
+    display:block;width:100%;height:64px;object-fit:cover;
+  }
+}
+
+@media (max-width:360px) {
+  .zen-immersive .zen-immersive-header { display:grid !important; }
+  .zen-immersive .zen-session-header-tools { width:100% !important;max-width:100% !important; }
+  .zen-immersive .zen-session-toolbar { justify-content:space-between !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .zen-immersive .zen-immersive-scenery img.zen-scenery-phone { transform:none !important; }
+}
