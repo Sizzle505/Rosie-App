@@ -57,8 +57,13 @@ export class RosieMusicEngine {
       song.onended=()=>{if(this.activeId===id&&!song.loop){this.activeId=null;this._notify();}};
       song.onerror=()=>{if(this.activeId===id){this.error="Media error";this._notify();}};
       const playback=song.play();
-      playback?.then?.(()=>{if(this.activeId===id){this.error=null;this._notify();}});
-      playback?.catch?.(e=>{if(this.activeId===id){this.error=e?.name||"Playback blocked";this._notify();}});
+      // A separate .then() without a rejection handler creates a second,
+      // unhandled promise when WebKit aborts an obsolete byte-range stream.
+      // Handle fulfillment and rejection on ONE promise chain.
+      playback?.then?.(
+        ()=>{if(this.activeId===id){this.error=null;this._notify();}},
+        e=>{if(this.activeId===id){this.error=e?.name||"Playback blocked";this._notify();}}
+      );
       this._notify();return;
     }
     if(this.activeId===id&&this.active>=0){
