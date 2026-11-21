@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { HAIKU_SCENES } from "./RosieHaikuScene.jsx";
+import { ROSIE_HAIKU_OUTFITS, nextRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 import { localDayKey } from "./haikuEngine.js";
 import { createZenAudio } from "./rosieZenAudio.js";
 import "./RosieZenMeditation.css";
 import "./RosieZenNewArt.css";
 
 const PROGRESS_KEY = "rosieHaikuZenSessionsV1";
-const ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
 const FINAL_ART = "/rosieverse/haiku/final/";
 const PROGRAM_ART = {
   breathe: "breathe-with-rosie.webp",
@@ -25,12 +25,6 @@ const MEDITATION_VIEWS=Object.freeze([
   {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp"},
   {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp"},
   {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp"}
-]);
-const ROSIE_OUTFITS=Object.freeze([
-  {id:"pink",label:"Sakura Kimono",image:"characters/meditating-pink-sakura.webp"},
-  {id:"saffron",label:"Saffron Robes",image:"characters/meditating-saffron-cream.webp"},
-  {id:"plum",label:"Plum Hakama",image:"characters/meditating-plum-hakama.webp"},
-  {id:"indigo",label:"Indigo Kimono",image:"characters/meditating-indigo.webp"}
 ]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
@@ -107,7 +101,7 @@ function speechSay(text) {
   } catch {}
 }
 
-export default function RosieZenMeditation({scene="field",poem}) {
+export default function RosieZenMeditation({scene="field",poem,outfitId="classic",onOutfitChange}) {
   const [kind,setKind] = useState("breathe");
   const [minutes,setMinutes] = useState(5);
   const [ambience,setAmbience] = useState("wind");
@@ -123,11 +117,6 @@ export default function RosieZenMeditation({scene="field",poem}) {
       if(MEDITATION_VIEWS.some(x=>x.id===v))return v; }catch{}
     return scene==="zen"?"raked":scene==="temple"?"tea":"lotus";
   });
-  const [outfitId,setOutfitId] = useState(() => {
-    try { const v=window.localStorage.getItem("rosieZenRosieOutfitV1");
-      if(ROSIE_OUTFITS.some(x=>x.id===v))return v; }catch{}
-    return "pink";
-  });
   const endAt = useRef(0);
   const pausedMs = useRef(300000);
   const recorded = useRef(false);
@@ -138,9 +127,9 @@ export default function RosieZenMeditation({scene="field",poem}) {
   const previouslyFocused = useRef(null);
   const selected = PROGRAMS.find(p=>p.id===kind) || PROGRAMS[0];
   const selectedView=MEDITATION_VIEWS.find(v=>v.id===viewId)||MEDITATION_VIEWS[0];
-  const selectedOutfit=ROSIE_OUTFITS.find(v=>v.id===outfitId)||ROSIE_OUTFITS[0];
+  const selectedOutfit=ROSIE_HAIKU_OUTFITS.find(v=>v.id===outfitId)||ROSIE_HAIKU_OUTFITS[0];
   const sceneSrc=NEW_ART+selectedView.image;
-  const rosieSrc=NEW_ART+selectedOutfit.image;
+  const rosieSrc=selectedOutfit.image;
   const totalMs = minutes*60000;
   const elapsed = Math.max(0,totalMs-remaining);
   const seconds = Math.floor(elapsed/1000);
@@ -169,7 +158,6 @@ export default function RosieZenMeditation({scene="field",poem}) {
   },[]);
   useEffect(()=>{audio.current?.setVolume(volume)},[volume]);
   useEffect(()=>{try{window.localStorage.setItem("rosieZenBackdropV1",viewId)}catch{}},[viewId]);
-  useEffect(()=>{try{window.localStorage.setItem("rosieZenRosieOutfitV1",outfitId)}catch{}},[outfitId]);
   useEffect(() => {
     if (!opened) return undefined;
     const oldOverflow = document.body.style.overflow;
@@ -291,10 +279,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
           </div>
           <div className="zen-art-picker-label">Rosie's kimono</div>
           <div className="zen-outfit-picker" role="group" aria-label="Choose meditating Rosie outfit">
-            {ROSIE_OUTFITS.map(v=><button key={v.id} type="button"
+            {ROSIE_HAIKU_OUTFITS.map(v=><button key={v.id} type="button"
               className={outfitId===v.id?"selected":""} aria-pressed={outfitId===v.id}
-              aria-label={v.label} title={v.label} onClick={()=>setOutfitId(v.id)}>
-              <img src={NEW_ART+v.image} alt="" loading="lazy"/><span>{v.label}</span>
+              aria-label={v.label} title={v.label} onClick={()=>onOutfitChange?.(v.id)}>
+              <img src={v.image} alt="" loading="lazy"/><span>{v.label}</span>
             </button>)}
           </div>
         </div>
@@ -357,6 +345,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
               <div className={"zen-breath-portrait"+(status==="paused"?" paused":"")}>
                 <div className="zen-breath-halo" aria-hidden="true"/>
                 <img src={rosieSrc} alt={"Rosie meditates peacefully in her "+selectedOutfit.label+" with her paws up"}/>
+                <div className="zen-portrait-outfit-arrows" role="group" aria-label="Change Rosie's outfit">
+                  <button type="button" className="zen-outfit-arrow" aria-label="Previous Rosie outfit" title="Previous outfit" onClick={()=>onOutfitChange?.(nextRosieHaikuOutfit(outfitId,-1))}>‹</button>
+                  <button type="button" className="zen-outfit-arrow" aria-label="Next Rosie outfit" title="Next outfit" onClick={()=>onOutfitChange?.(nextRosieHaikuOutfit(outfitId,1))}>›</button>
+                </div>
                 <p>{kind==="breathe"?"Breathe in peace. Breathe out the fuss.":"Nothing to do. Nowhere to be."}</p>
               </div>
               <div className="zen-guidance">

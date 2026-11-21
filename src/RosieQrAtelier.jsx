@@ -570,6 +570,17 @@ export default function RosieQrAtelier(){
           <button type="button" onClick={()=>window.print()}>Print</button>
           <button type="button" onClick={()=>exportFile("png")} disabled={working}>Download PNG</button>
         </div>
+        {/* Viewer-only controls: not children of the exported art or printable sheet. */}
+        <div className="qa-rosie-viewer-color-bar" role="group" aria-label="Change QR and frame color">
+          <span className="qa-rosie-viewer-color-heading">Color</span>
+          {QR_STYLES.map(finish=><button key={finish.id} type="button"
+            className={"qa-rosie-viewer-color qa-rosie-viewer-color-"+finish.id+(style===finish.id?" selected":"")}
+            aria-label={finish.label+" color"} aria-pressed={style===finish.id}
+            title={finish.label} onClick={()=>setStyle(finish.id)}>
+            <span aria-hidden="true" className="qa-rosie-viewer-color-swatch"/>
+            <span className="qa-rosie-viewer-color-name">{finish.label}</span>
+          </button>)}
+        </div>
         <span className="qa-rosie-ready">{QR_TYPES.find(t=>t.id===type)?.label} · Ready to Scan</span>
         <span className="qa-rosie-viewer-toast" role="status" aria-live="polite">{toast}</span>
       </div>

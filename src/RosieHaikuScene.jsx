@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./RosieHaikuScene.css";
+import "./RosieHaikuOutfitArrows.css";
+import { ROSIE_HAIKU_OUTFITS, nextRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 
 // Each garden is a full-page background; this component only places the
 // expression-matched transparent Rosie layer and the selector above it.
@@ -61,13 +63,16 @@ export function RosieHaikuWisdom({ mode = "daily", mood = "zen", poem }) {
   );
 }
 
-export default function RosieHaikuScene({ scene = "field", onSceneChange, mode = "daily", mood = "zen", poem, reaction = null }) {
+export default function RosieHaikuScene({ scene = "field", onSceneChange, mode = "daily", mood = "zen", poem, reaction = null, outfitId = "classic", onOutfitChange }) {
   const [rosieAvailable, setRosieAvailable] = useState(true);
   const currentMood = mode === "daily" ? "zen" : (mode === "journal" ? poem?.mood || "zen" : mood);
-  const basePose = poseForPoem(mode, currentMood, poem);
+  const selectedOutfit=ROSIE_HAIKU_OUTFITS.find(o=>o.id===outfitId)||ROSIE_HAIKU_OUTFITS[0];
+  const meditatingMode=mode==="daily"||mode==="meditate";
+  const basePose=meditatingMode?selectedOutfit.image:poseForPoem(mode,currentMood,poem);
   // The animated WebP exhibited a black rectangle in some browsers.
   // Use the proven alpha-transparent master and animate only its element.
   const characterSrc = (reaction && ROSIE_REACTIONS[reaction.type]) || basePose;
+  const breathingPose=meditatingMode && !reaction;
 
   function switchScene(next) {
     onSceneChange?.(next);
@@ -77,10 +82,10 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
   return (
     <section className="haiku-scene-stage" aria-label="Rosie's meditation garden">
       <div className={`haiku-scene-image haiku-scene-image--${scene}`}>
-        {rosieAvailable && characterSrc === ROSIE_MEDITATING && <div className="haiku-scene-aura" aria-hidden="true" />}
+        {rosieAvailable && breathingPose && <div className="haiku-scene-aura" aria-hidden="true" />}
         {rosieAvailable && (
           <img
-            className={`haiku-scene-rosie${characterSrc === ROSIE_MEDITATING ? " haiku-scene-rosie--slow-breath" : " haiku-scene-rosie--expressive"}`}
+            className={`haiku-scene-rosie${breathingPose ? " haiku-scene-rosie--slow-breath" : " haiku-scene-rosie--expressive"}`}
             key={characterSrc}
             src={characterSrc}
             onError={(event) => {
@@ -88,11 +93,15 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
                 event.currentTarget.src = ROSIE_MEDITATING;
               } else setRosieAvailable(false);
             }}
-            alt={characterSrc === ROSIE_MEDITATING
-              ? "Rosie, the black-and-tan Shiba Inu, meditates in her sakura kimono with both paws raised"
+            alt={breathingPose
+              ? "Rosie, the black-and-tan Shiba Inu, meditates in her "+selectedOutfit.label+" with both paws raised"
               : "Rosie strikes a playful poetic pose in her pink-and-gold kimono"}
           />
         )}
+        {meditatingMode && <div className="haiku-portrait-outfit-arrows" role="group" aria-label="Change Rosie's outfit">
+          <button type="button" aria-label="Previous Rosie outfit" title="Previous outfit" onClick={()=>onOutfitChange?.(nextRosieHaikuOutfit(outfitId,-1))}>‹</button>
+          <button type="button" aria-label="Next Rosie outfit" title="Next outfit" onClick={()=>onOutfitChange?.(nextRosieHaikuOutfit(outfitId,1))}>›</button>
+        </div>}
       </div>
       <div className="haiku-scene-selector" role="group" aria-label="Choose meditation scenery">
         {HAIKU_SCENES.map((item) => (

@@ -188,8 +188,16 @@ try {
       await room.locator(".zen-breath-portrait img").evaluate(img => img.decode());
       await page.locator(".zen-immersive-scenery img").evaluate(img => img.decode());
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
-         img.complete && img.naturalWidth > 200 && img.src.includes("/new/characters/meditating-") && img.src.endsWith(".webp")
-       ), label+" meditation must use an approved transparent Rosie kimono master");
+         img.complete && img.naturalWidth > 200 && (
+           img.src.endsWith("/rosie-meditating-paws-up.webp") ||
+           (img.src.includes("/new/characters/meditating-") && img.src.endsWith(".webp"))
+         )
+       ), label+" meditation must use a transparent Rosie outfit master");
+       await room.getByRole("button",{name:"Next Rosie outfit",exact:true}).click();
+       await room.locator(".zen-breath-portrait img").evaluate(img=>img.decode());
+       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img=>img.src.includes("/new/characters/meditating-pink-sakura.webp")),
+         label+" outfit arrow should display the next Rosie kimono");
+       await room.getByRole("button",{name:"Previous Rosie outfit",exact:true}).click();
        assert.ok(await page.locator(".zen-immersive-scenery img").evaluate(img =>
          img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/")
        ), label+" meditation must load an approved sanctuary background");

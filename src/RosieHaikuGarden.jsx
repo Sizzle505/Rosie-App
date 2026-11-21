@@ -3,6 +3,7 @@ import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS }
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
+import { ROSIE_HAIKU_OUTFIT_KEY, readRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 import "./RosieHaikuAtmosphere.css";
 import "./RosieHaikuArchiveArt.css";
 import "./RosieHaikuMasthead.css";
@@ -139,6 +140,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [poem, setPoem] = useState(() => poemForDay());
   const [mode, setMode] = useState("daily");
   const [scene, setScene] = useState(readSelectedScene);
+  const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
+  useEffect(()=>{try{window.localStorage.setItem(ROSIE_HAIKU_OUTFIT_KEY,outfitId);}catch{}},[outfitId]);
   const [backgroundUnavailable, setBackgroundUnavailable] = useState({});
   const selectedBackground = HAIKU_SCENES.find((item) => item.id === scene) || HAIKU_SCENES[0];
   const [mood, setMood] = useState("zen");
@@ -268,7 +271,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
           </div>
           <p className="haiku-masthead-tagline">Small poems. Deep breaths. Grand opinions.</p>
         </header>
-        <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} />
+        <RosieHaikuScene scene={scene} onSceneChange={setScene} mode={mode} mood={mood} poem={poem} reaction={reaction} outfitId={outfitId} onOutfitChange={setOutfitId} />
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll" key={poemKey(poem)}>
@@ -326,7 +329,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <p className="haiku-small-note">Rosie draws from her hand-crafted verse collection. Familiar subjects get a special verse; other dedications receive a poem in your chosen mood.</p>
               </form>
             ) : mode === "meditate" ? (
-              <RosieZenMeditation scene={scene} poem={poem} />
+              <RosieZenMeditation scene={scene} poem={poem} outfitId={outfitId} onOutfitChange={setOutfitId} />
             ) : (
               <div className="haiku-panel haiku-journal">
                 <div className="haiku-section-label">THE BOOK OF SMALL WISDOM</div>

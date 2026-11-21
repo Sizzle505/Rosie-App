@@ -1,0 +1,26 @@
+/* Rosie's outfit changes are optional, not a separate toolbar. */
+.haiku-page .haiku-portrait-outfit-arrows{
+  position:absolute;z-index:7;left:48%;right:1.5%;top:45%;
+  display:flex;align-items:center;justify-content:space-between;
+  pointer-events:none;transform:translateY(-50%);
+}
+.haiku-page .haiku-portrait-outfit-arrows button{
+  pointer-events:auto;display:grid;place-items:center;
+  width:clamp(29px,2.8vw,38px);height:clamp(29px,2.8vw,38px);
+  padding:0;border:1px solid rgba(248,216,168,.6);
+  border-radius:50%;background:rgba(27,20,36,.34);color:#ffeac7;
+  font:normal 27px/1 Georgia,serif;cursor:pointer;
+  opacity:.65;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  text-shadow:0 1px 5px #211629b8;
+  transition:opacity .18s ease,background .18s ease,transform .18s ease;
+}
+.haiku-page .haiku-portrait-outfit-arrows button:hover,
+.haiku-page .haiku-portrait-outfit-arrows button:focus-visible{
+  opacity:1;background:rgba(75,45,67,.85);transform:scale(1.06);
+  outline:2px solid #ffe3ad;outline-offset:2px;
+}
+@media(max-width:600px){
+ .haiku-page .haiku-portrait-outfit-arrows{left:36%;right:0.5%;top:52%;}
+ .haiku-page .haiku-portrait-outfit-arrows button{width:30px;height:30px;font-size:24px;opacity:.82;}
+}
+@media(prefers-reduced-motion:reduce){.haiku-page .haiku-portrait-outfit-arrows button{transition:none;}}
