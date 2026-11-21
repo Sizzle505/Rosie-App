@@ -595,3 +595,24 @@ body.captain-fullscreen-fallback-active .nav-family-toggle{
     min-height:0!important;max-height:none!important;
   }
 }
+
+/* A persistent, deliberately small exit target remains above every Captain
+   game's content, including the embedded Cosmic iframe on iPhone Safari. */
+.captain-fullscreen-frame:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{
+  position:fixed!important;
+  top:max(9px,env(safe-area-inset-top))!important;
+  right:max(9px,env(safe-area-inset-right))!important;
+  z-index:2147483645!important;
+  width:40px!important;height:40px!important;
+  min-width:40px!important;min-height:40px!important;
+  padding:5px!important;gap:0!important;border-radius:12px!important;
+  background:rgba(16,23,49,.75)!important;
+}
+.captain-fullscreen-frame:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle b{display:none!important;}
+.captain-fullscreen-frame:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle>span{font-size:24px!important;}
+@media(max-width:759px) and (orientation:portrait){
+  /* Keep Cosmic's exit away from its native Pause/Retry controls. */
+  .captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{
+    right:48px!important;
+  }
+}
