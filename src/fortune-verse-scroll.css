@@ -1,0 +1,118 @@
+/*
+ * Long prophecies fit the registered crystal chamber without changing its
+ * dimensions or disrupting the original portrait and dismissal animations.
+ * Text only moves when an actual measured overflow is present.
+ */
+.fortune-page .crystal-chamber .lens-answer {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 87% !important;
+  height: 85% !important;
+  max-width: 87% !important;
+  min-height: 0;
+  gap: clamp(2px, .36vw, 5px) !important;
+}
+
+.fortune-page .crystal-chamber .lens-answer .answer-sigil,
+.fortune-page .crystal-chamber .lens-answer .answer-kicker,
+.fortune-page .crystal-chamber .lens-answer small {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.fortune-page .crystal-chamber .lens-answer .answer-sigil {
+  font-size: clamp(12px, 1.8vw, 22px) !important;
+}
+
+.fortune-page .crystal-chamber .lens-answer .answer-kicker {
+  line-height: 1.15;
+}
+
+.fortune-page .crystal-chamber .lens-verse-window {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 59%;
+  max-height: 59%;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.fortune-page .crystal-chamber .lens-verse-text {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100% !important;
+  font-size: clamp(10px, 1.12vw, 17px) !important;
+  line-height: 1.18 !important;
+  letter-spacing: .012em !important;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  text-align: center;
+  margin: 0;
+  will-change: auto;
+}
+
+.fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-window {
+  justify-content: flex-start;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+}
+
+.fortune-page .crystal-chamber .fortune-lens.is-long-verse:not(.is-manifesting):not(.is-dismissing) .lens-verse-text {
+  animation: rosieOracleVerseRead var(--oracle-verse-duration, 18s) ease-in-out 1.3s infinite both !important;
+  will-change: transform;
+}
+
+@keyframes rosieOracleVerseRead {
+  0%, 15% { transform: translate3d(0, 0, 0); }
+  49%, 74% { transform: translate3d(0, calc(-1 * var(--oracle-verse-travel, 0px)), 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* The glass stays fixed on phones; only its typography becomes more compact. */
+@media (max-width: 620px) {
+  .fortune-page .crystal-chamber .lens-answer {
+    width: 90% !important;
+    max-width: 90% !important;
+    height: 86% !important;
+    gap: 2px !important;
+  }
+  .fortune-page .crystal-chamber .lens-answer .answer-sigil {
+    font-size: clamp(11px, 3.4vw, 16px) !important;
+  }
+  .fortune-page .crystal-chamber .lens-verse-text {
+    font-size: clamp(8.5px, 2.38vw, 11px) !important;
+    line-height: 1.16 !important;
+    letter-spacing: 0 !important;
+  }
+  .fortune-page .crystal-chamber .lens-verse-window {
+    height: 60%;
+    max-height: 60%;
+  }
+}
+
+/* Accessible reading: the moving verse stops and becomes manually scrollable. */
+@media (prefers-reduced-motion: reduce) {
+  .fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-window {
+    overflow-y: auto;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-window::-webkit-scrollbar {
+    display: none;
+  }
+  .fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-text {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
