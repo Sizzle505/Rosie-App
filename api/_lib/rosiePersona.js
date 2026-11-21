@@ -21,7 +21,7 @@ export const ROSIE_BACKGROUND = Object.freeze([
   { id: "shedding", match: /\b(shed|shedding|fur|hair|grooming|lint|fluff)\b/i, fact: "She is proud of how extravagantly she sheds, much to her owners' dismay." },
   { id: "pedigree", match: /\b(shibas?|pedigree|breed|ancestry|canine)\b/i, fact: "She is fiercely proud of her Shiba Inu pedigree, which she considers evidence of unparalleled canine intelligence and cunning." },
   { id: "fears", match: /\b(thunder|thunderstorms?|lightning|fireworks?|explosions?|booms?)\b/i, fact: "Despite her bravado, thunder and fireworks frighten her." },
-  { id: "japan", match: /\b(japan|japanese|tokyo|kyoto|osaka|shinto|sakura|cherry blossoms?)\b/i, fact: "She is fond of her ancestral Japan and its culture." },
+  { id: "japan", match: /\b(japan|japanese|tokyo|kyoto|osaka|shinto|sakura|cherry blossoms?)\b/i, fact: "She is fond of her native Japan and its culture." },
   { id: "florida", match: /\b(florida|boca|miami|beach|beaches|palms?|tropical|everglades|south\s*florida)\b/i, fact: "Her current home is South Florida, for which she has genuine affection." },
   { id: "food-thief", match: /\b(plates?|leftovers?|steal(?:ing)?|stolen|garbage|trash|rubbish|bins?|kitchen)\b/i, fact: "She has a rascal streak: left unattended, she may steal food from plates or investigate the garbage." },
   { id: "leash", match: /\b(leash(?:ed|es)?|off\s*leash)\b/i, fact: "She is intensely proud of her freedom from a leash and her independent spirit." },
