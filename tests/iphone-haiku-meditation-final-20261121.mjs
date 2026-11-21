@@ -76,7 +76,7 @@ try{
      const r=img.getBoundingClientRect();
      const dialog=el.querySelector(".zen-immersive-dialog");
      return{artWidth:r.width,artHeight:r.height,view:el.dataset.zenView,
-       beforeImage:getComputedStyle(scene,"::before").backgroundImage,
+       beforeImage:getComputedStyle(scene,"::before").display,
        imgFit:getComputedStyle(img).objectFit,
        dialogOpacity:getComputedStyle(dialog).backgroundImage,
        rectWidth:el.getBoundingClientRect().width};
