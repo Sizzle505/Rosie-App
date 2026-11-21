@@ -56,6 +56,8 @@ import LayoutPlayground, { LayoutPreviewBridge } from "./LayoutPlayground.jsx";
 import { AccountProvider } from "./private/AccountContext.jsx";
 import AccountPortal from "./private/AccountPortal.jsx";
 import captainWindSprite from "./captainWindSprite.js";
+// Load last to preserve approved desktop compositions across monitor ratios.
+import "./desktop-design-preservation.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
