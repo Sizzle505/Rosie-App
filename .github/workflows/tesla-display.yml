@@ -1,0 +1,49 @@
+name: Rosie Tesla desktop composition
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'src/main.jsx'
+      - 'src/tesla-display-entry.js'
+      - 'tests/tesla-display.mjs'
+      - '.github/workflows/tesla-display.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tesla-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install and prepare Chromium
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Compile production app
+        run: npm run build
+      - name: Start app
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/rosie-tesla.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rosie-tesla.log
+          exit 1
+      - name: Test Tesla and device isolation
+        run: node tests/tesla-display.mjs
+        env:
+          ROSIE_QA_URL: http://127.0.0.1:4173
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rosie-tesla-desktop-screenshots
+          path: artifacts/tesla-display
+          retention-days: 14
