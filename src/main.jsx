@@ -3740,11 +3740,17 @@ function App() {
     </>
   );
 }
-const layoutParams = new URLSearchParams(window.location.search);
-const isLayoutStudio = layoutParams.has("layout");
-const isLayoutPreview = layoutParams.has("layoutPreview");
-createRoot(document.getElementById("root")).render(
-  isLayoutStudio
-    ? <LayoutPlayground />
-    : <AccountProvider><App />{isLayoutPreview && <LayoutPreviewBridge />}</AccountProvider>
-);
+// Mount/unmount is explicit so the Tesla-only desktop stage can replace
+// its regular view without keeping a second music-playing app in the DOM.
+export function mountRosieVerse(container = document.getElementById("root")) {
+  const layoutParams = new URLSearchParams(window.location.search);
+  const isLayoutStudio = layoutParams.has("layout");
+  const isLayoutPreview = layoutParams.has("layoutPreview");
+  const root = createRoot(container);
+  root.render(
+    isLayoutStudio
+      ? <LayoutPlayground />
+      : <AccountProvider><App />{isLayoutPreview && <LayoutPreviewBridge />}</AccountProvider>
+  );
+  return root;
+}
