@@ -35,29 +35,43 @@
      These overrides begin at 1480px, like the original manual export. */
 }
 @media screen and (min-width: 1480px) and (hover: hover) and (pointer: fine) {
+  /* The newer masthead stylesheet clears translations/scales with
+     !important. Reinstate only the most recently approved 1920px playground
+     composition, preserving its exact baseline and not touching tablet CSS. */
   .app-shell.page-haiku .haiku-scene-image {
-    translate: clamp(-102px, -5.3125vw, -78px) clamp(116px, 16.6667dvh, 180px);
+    translate: clamp(-102px, -5.3125vw, -78px) clamp(116px, 16.6667dvh, 180px) !important;
+    scale: 1.07 !important;
   }
   .app-shell.page-haiku .haiku-scroll {
-    translate: clamp(-121px, -6.3021vw, -93px) clamp(34px, 4.8148dvh, 52px);
+    translate: clamp(-121px, -6.3021vw, -93px) clamp(34px, 4.8148dvh, 52px) !important;
+    scale: 1.08 !important;
   }
   .app-shell.page-haiku .haiku-verse-actions {
-    translate: clamp(-123px, -6.4063vw, -94px) clamp(19px, 2.6852dvh, 29px);
+    translate: clamp(-123px, -6.4063vw, -94px) clamp(19px, 2.6852dvh, 29px) !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(1) {
+    translate: 8px 2px !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(2) {
+    translate: 5px 2px !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:nth-child(3) {
+    translate: 0px 2px !important;
   }
   .app-shell.page-haiku .haiku-workbench {
-    translate: clamp(-107px, -5.5729vw, -82px) clamp(192px, 27.5926dvh, 298px);
+    translate: clamp(-107px, -5.5729vw, -82px) clamp(192px, 27.5926dvh, 298px) !important;
   }
   .app-shell.page-haiku .haiku-header {
-    translate: clamp(-4px, -.2083vw, -3px) clamp(37px, 5.2778dvh, 57px);
+    translate: clamp(-4px, -.2083vw, -3px) clamp(37px, 5.2778dvh, 57px) !important;
   }
   .app-shell.page-haiku .haiku-scene-selector button:nth-child(1) {
-    translate: clamp(-70px, -3.6458vw, -54px) clamp(137px, 19.537dvh, 211px);
+    translate: clamp(-70px, -3.6458vw, -54px) clamp(137px, 19.537dvh, 211px) !important;
   }
   .app-shell.page-haiku .haiku-scene-selector button:nth-child(2) {
-    translate: clamp(-69px, -3.5938vw, -53px) clamp(138px, 19.6296dvh, 212px);
+    translate: clamp(-69px, -3.5938vw, -53px) clamp(138px, 19.6296dvh, 212px) !important;
   }
   .app-shell.page-haiku .haiku-scene-selector button:nth-child(3) {
-    translate: clamp(-70px, -3.6458vw, -54px) clamp(139px, 19.7222dvh, 213px);
+    translate: clamp(-70px, -3.6458vw, -54px) clamp(139px, 19.7222dvh, 213px) !important;
   }
 }
 
