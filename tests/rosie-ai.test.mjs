@@ -96,7 +96,7 @@ test("Rosie's background contains all canonical facets without flooding generic 
   const neutral = rosiePersonaFor("What should I do about my next job interview?");
   assert.match(neutral, /genius Shiba Inu/);
   assert.match(neutral, /extraordinary longevity/);
-  assert.doesNotMatch(neutral, /Doctor of Cheese|pursues squirrels|mail carrier|vacuum/);
+  assert.doesNotMatch(neutral, /Doctor of Cheese|cheese|squirrels|treats|naps|mail carrier|vacuum|Japan/i);
   const cheese = rosiePersonaFor("Does aged Manchego taste better than Gouda?");
   assert.match(cheese, /Doctor of Cheese/);
   assert.doesNotMatch(cheese, /mail carrier|baths|pursues squirrels/);
@@ -115,7 +115,7 @@ test("haiku and Oracle prompts prioritize the actual subject, not a dedication",
   assert.doesNotMatch(haiku.system, /Doctor of Cheese|mail carrier/);
   const oracle = makeRosiePrompt("oracle", { question: "What should I do about my promotion?" });
   assert.match(oracle.system, /central dilemma/);
-  assert.doesNotMatch(oracle.system, /Doctor of Cheese|mail carrier|pursues squirrels/);
+  assert.doesNotMatch(oracle.system, /Doctor of Cheese|cheese|treats|mail carrier|squirrels|naps/i);
   assert.match(oracle.user, /promotion/);
 });
 
