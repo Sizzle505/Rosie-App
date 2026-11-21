@@ -43,7 +43,9 @@ test("player is user-gesture gated; mute and volume do not affect game SFX",()=>
   assert.equal(played.length,0,"Must not start before interaction");
   engine.unlock();
   assert.deepEqual(played,["/rosie-music/oracle-secret.mp3"]);
-  const flush=()=>{const jobs=queued;queued=[];now+=1000;for(const j of jobs)j(now);};
+  // Allow the full 1.35-second cinematic fade to complete before asserting
+  // that the prior deck is silent. During a crossfade two decks overlap by design.
+  const flush=()=>{const jobs=queued;queued=[];now+=1800;for(const j of jobs)j(now);};
   flush();
   engine.setDesired("cheese-heist");
   flush();
