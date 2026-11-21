@@ -1,0 +1,229 @@
+/*
+ * Quiet living ink and scroll-aware typography. Keep the existing painted
+ * scroll assets and all designer-positioned desktop stages untouched.
+ */
+.haiku-page .haiku-scroll[data-scroll-style] {
+  --haiku-verse-base: clamp(17px, 2.15vw, 27px);
+}
+.haiku-page .haiku-scroll[data-scroll-style="grand"] {
+  --haiku-verse-base: clamp(15px, 1.7vw, 23px);
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-inner {
+  isolation: isolate;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-caption {
+  position: absolute !important;
+  left: 2%;
+  right: 2%;
+  top: 3%;
+  margin: 0 !important;
+  text-align: center;
+  font: 600 clamp(7px, .72vw, 10px)/1.18 Georgia,serif !important;
+  letter-spacing: .15em !important;
+  color: #78533d;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  z-index: 3;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-ornament {
+  position: absolute !important;
+  top: 13%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 !important;
+  font-size: clamp(12px, 1.3vw, 17px) !important;
+  line-height: 1;
+  opacity: .78;
+  z-index: 3;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto !important;
+  transform: translateY(-7%) !important;
+  text-align: center !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-verse {
+  transform: translateY(-9%) !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse p {
+  font-size: var(--haiku-fit-size, var(--haiku-verse-base)) !important;
+  line-height: 1.23 !important;
+  margin: 0 0 clamp(4px, .65vw, 9px) !important;
+  font-kerning: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: none !important;
+  text-wrap: balance;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse p:last-child {
+  margin-bottom: 0 !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta {
+  bottom: 5.5% !important;
+  gap: 2px !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-scroll-meta {
+  bottom: 2% !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style]:has(.haiku-dedication) .haiku-scroll-meta {
+  bottom: 15% !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta .haiku-metre {
+  font-size: clamp(8px, .8vw, 10px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: .16em !important;
+  max-width: 100%;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta .haiku-scroll-signature {
+  font-size: clamp(15px, 1.65vw, 21px) !important;
+  line-height: 1.1 !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication {
+  left: 5% !important;
+  right: 5% !important;
+  bottom: 0 !important;
+  max-width: 90% !important;
+  margin: auto !important;
+  font: italic clamp(8px, .86vw, 11px)/1.2 "Iowan Old Style",Palatino,Georgia,serif !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+}
+/* Gentle illumination is behind the live verse, never an extra image. */
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-ink-ripple {
+  position: absolute;
+  z-index: 1;
+  inset: 20% 2% 18%;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 48%, rgba(143,91,104,.13), rgba(178,136,152,.09) 35%, transparent 72%);
+  mix-blend-mode: multiply;
+}
+.haiku-page .haiku-scroll[data-ink-state="fresh"] .haiku-ink-ripple {
+  animation: rosieInkRipple 5.5s ease-in-out 1.4s infinite;
+}
+@keyframes rosieInkRipple {
+  0%, 100% { opacity: 0; transform: scale(.8); }
+  47% { opacity: .52; transform: scale(1.07); }
+  69% { opacity: .2; transform: scale(1.18); }
+}
+.haiku-page .haiku-scroll[data-ink-state="fresh"] .haiku-verse p {
+  animation: rosieBrushWrite 1.18s cubic-bezier(.16,.7,.24,1) both;
+  animation-delay: calc(.08s + var(--line-order) * .68s);
+}
+@keyframes rosieBrushWrite {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); filter: blur(2px); }
+  45% { opacity: .75; filter: blur(.55px); }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); filter: none; }
+}
+/* An unobtrusive shortcut appears only after an AI-authored haiku. */
+.haiku-page .haiku-regenerate {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 6px 13px;
+  margin: 3px auto 1px;
+  border: 1px solid rgba(244,211,151,.62);
+  border-radius: 999px;
+  background: rgba(39,25,49,.55);
+  color: #f6e4c9;
+  box-shadow: 0 3px 14px rgba(21,13,32,.13);
+  font: italic 12px/1.2 "Iowan Old Style",Palatino,Georgia,serif;
+  letter-spacing: .015em;
+  cursor: pointer;
+}
+.haiku-page .haiku-regenerate > span {
+  font: normal 18px/1 Georgia,serif;
+}
+.haiku-page .haiku-regenerate:is(:hover,:focus-visible) {
+  color: #fff4e3;
+  border-color: #ffe6b0;
+  background: rgba(68,38,69,.65);
+}
+.haiku-page .haiku-regenerate:disabled { opacity: .5; cursor: wait; }
+
+@media (max-width: 600px) {
+  .haiku-page .haiku-scroll[data-scroll-style] {
+    --haiku-verse-base: clamp(17px, 4.65vw, 21px);
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] {
+    --haiku-verse-base: clamp(13px, 3.65vw, 17px);
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-caption {
+    top: 4%;
+    font-size: clamp(7px, 2vw, 9px) !important;
+    letter-spacing: .08em !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-ornament {
+    top: 13%;
+    font-size: 13px !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-verse {
+    transform: translateY(-6%) !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-verse {
+    transform: translateY(-9%) !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-verse p {
+    margin-bottom: 6px !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta .haiku-scroll-signature {
+    font-size: clamp(14px, 3.8vw, 17px) !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication {
+    font-size: clamp(8px, 2.2vw, 10px) !important;
+  }
+  .haiku-page .haiku-regenerate {
+    min-height: 33px;
+    margin: 2px auto 0;
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .haiku-page .haiku-scroll[data-ink-state="fresh"] .haiku-ink-ripple,
+  .haiku-page .haiku-scroll[data-ink-state="fresh"] .haiku-verse p {
+    animation: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+}
+
+/* Never display one generated haiku line as two visual lines. The measured
+   fitting loop sets --haiku-fit-size from the actual glyph widths. */
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse p {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  text-wrap: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style]:has(.haiku-dedication) .haiku-scroll-meta {
+  bottom: 24% !important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication {
+  bottom: 10% !important;
+  left: 8% !important;
+  right: 8% !important;
+  max-width: 84% !important;
+  color: #754a4b !important;
+  text-shadow: 0 1px 0 rgba(255,246,214,.5);
+}
+@media (max-width:600px) {
+  .haiku-page .haiku-scroll[data-scroll-style]:has(.haiku-dedication) .haiku-scroll-meta {
+    bottom: 23% !important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication {
+    bottom: 9.5% !important;
+  }
+}

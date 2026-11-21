@@ -1,0 +1,177 @@
+/*
+ * Existing non-character RosieVerse assets, deliberately rendered at the
+ * periphery of each garden. Never affects layout, clicks, text or Rosie art.
+ */
+.rosie-ambient {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  pointer-events:none;
+  user-select:none;
+  z-index:2;
+  contain:paint;
+  isolation:isolate;
+}
+.rosie-ambient img {
+  position:absolute;
+  display:block;
+  height:auto;
+  pointer-events:none;
+  -webkit-user-drag:none;
+}
+.rosie-ambient-water {
+  position:absolute;
+  width:82%;
+  height:25%;
+  left:9%;
+  top:64%;
+  background:url("/rosieverse/haiku/living-garden/zen-water-ripples.webp")
+    center/100% 100% no-repeat;
+  opacity:.31;
+  animation:rosie-ambient-ripple 12s ease-in-out infinite;
+  mix-blend-mode:screen;
+}
+.rosie-ambient[data-scene="sakura"] .rosie-ambient-water,
+.rosie-ambient[data-scene="moonlit"] .rosie-ambient-water {
+  top:70%;opacity:.24;
+}
+.rosie-ambient[data-scene="temple"] .rosie-ambient-water {
+  top:77%;opacity:.19;
+}
+.rosie-ambient-sand {
+  position:absolute;
+  width:84%;
+  height:32%;
+  bottom:5%;
+  left:8%;
+  background:url("/rosieverse/haiku/living-garden/zen-sand-sheen.webp")
+    center/100% 100% no-repeat;
+  opacity:.23;
+  animation:rosie-ambient-light 16s ease-in-out infinite;
+}
+.rosie-ambient-pollen {
+  position:absolute;
+  inset:0;
+  background:url("/rosieverse/haiku/living-garden/golden-pollen.webp")
+    center/cover no-repeat;
+  opacity:.4;
+  animation:rosie-ambient-glimmer 21s ease-in-out infinite;
+}
+.rosie-ambient[data-scene="moonlit"] .rosie-ambient-pollen,
+.rosie-ambient[data-scene="twilight"] .rosie-ambient-pollen {
+  opacity:.65;
+}
+.rosie-ambient-petal {
+  width:var(--ambient-size,16px);
+  left:var(--ambient-x,35%);
+  top:-10%;
+  opacity:.67;
+  filter:drop-shadow(0 1px 2px rgba(29,19,41,.16));
+  animation:rosie-ambient-petals var(--ambient-time,22s) linear
+    var(--ambient-delay,0s) infinite;
+}
+.rosie-ambient-lantern {
+  width:clamp(52px,7vw,100px);
+  opacity:.67;
+  filter:drop-shadow(0 0 13px rgba(255,186,122,.4));
+  animation:rosie-ambient-lantern-float 12s ease-in-out infinite;
+}
+.rosie-ambient-lantern--0 { left:3%;top:25%; }
+.rosie-ambient-lantern--1 {
+  right:3%;left:auto;top:39%;
+  width:clamp(38px,5vw,73px);
+  opacity:.46;
+  animation-delay:-6s;
+}
+.rosie-ambient-butterfly {
+  position:absolute;
+  display:block;
+  left:var(--butterfly-x,14%);
+  top:var(--butterfly-y,32%);
+  width:var(--butterfly-size,32px);
+  aspect-ratio:240/158;
+  opacity:.83;
+  animation:rosie-ambient-butterfly-flight var(--butterfly-time,21s)
+    ease-in-out var(--butterfly-delay,0s) infinite;
+}
+.rosie-ambient-butterfly img {
+  position:relative;
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 2px 3px rgba(40,25,47,.28));
+  transform-origin:center;
+  animation:rosie-ambient-wingbeat .62s ease-in-out infinite;
+}
+.rosie-ambient-butterfly--1 img { filter:hue-rotate(27deg) drop-shadow(0 2px 3px rgba(39,23,41,.2)); }
+.rosie-ambient-butterfly--2 img { filter:hue-rotate(-25deg) drop-shadow(0 2px 3px rgba(39,23,41,.2)); }
+.rosie-ambient[data-scene="tea"] .rosie-ambient-butterfly { opacity:.56; }
+.rosie-ambient--haiku {
+  z-index:2;
+}
+.rosie-ambient--haiku .rosie-ambient-butterfly {
+  opacity:.57;
+}
+.rosie-ambient--haiku .rosie-ambient-water {
+  top:69%;opacity:.18;
+}
+@keyframes rosie-ambient-butterfly-flight {
+  0%,100% { transform:translate3d(0,0,0) rotate(-10deg); }
+  25% { transform:translate3d(26px,-9px,0) rotate(9deg); }
+  52% { transform:translate3d(47px,-36px,0) rotate(-13deg); }
+  74% { transform:translate3d(19px,-19px,0) rotate(7deg); }
+}
+@keyframes rosie-ambient-wingbeat {
+  0%,100% { transform:scaleX(1); }
+  50% { transform:scaleX(.6); }
+}
+@keyframes rosie-ambient-petals {
+  0% { transform:translate3d(0,-7vh,0) rotate(-18deg);opacity:0; }
+  8% { opacity:.67; }
+  87% { opacity:.6; }
+  100% { transform:translate3d(var(--ambient-sway,55px),110vh,0) rotate(415deg);opacity:0; }
+}
+@keyframes rosie-ambient-lantern-float {
+  0%,100% { transform:translate3d(0,5px,0) rotate(-3deg);filter:drop-shadow(0 0 9px rgba(255,193,122,.24)); }
+  48% { transform:translate3d(5px,-20px,0) rotate(4deg);filter:drop-shadow(0 0 18px rgba(255,193,122,.5)); }
+}
+@keyframes rosie-ambient-ripple {
+  0%,100% { opacity:.15;transform:scale(.95); }
+  50% { opacity:.36;transform:scale(1.05); }
+}
+@keyframes rosie-ambient-light {
+  0%,100% { opacity:.14;transform:translateX(-2%); }
+  55% { opacity:.32;transform:translateX(2%); }
+}
+@keyframes rosie-ambient-glimmer {
+  0%,100% { opacity:.27;transform:translateY(0); }
+  50% { opacity:.6;transform:translateY(-7px); }
+}
+.rosie-ambient[data-ambient-status="paused"] *,
+.rosie-ambient[data-ambient-status="paused"] *::before,
+.rosie-ambient[data-ambient-status="paused"] *::after {
+  animation-play-state:paused !important;
+}
+@media (max-width:600px) {
+  .rosie-ambient-lantern--0 { left:-1%;top:30%;width:65px;opacity:.66; }
+  .rosie-ambient-lantern--1 { right:-1%;top:50%;width:49px;opacity:.39; }
+  .rosie-ambient-petal { opacity:.51;width:calc(var(--ambient-size,16px) * .88); }
+  .rosie-ambient-butterfly { width:calc(var(--butterfly-size,32px) * .85);opacity:.67; }
+  .rosie-ambient-butterfly--0 { left:3%;top:32%; }
+  .rosie-ambient-butterfly--1 { left:84%;top:62%; }
+  .rosie-ambient-butterfly--2 { left:76%;top:21%; }
+  .rosie-ambient-water { top:69%;width:100%;left:0;opacity:.22; }
+  .rosie-ambient-pollen { opacity:.31; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .rosie-ambient *,
+  .rosie-ambient *::before,
+  .rosie-ambient *::after {
+    animation:none !important;
+  }
+  .rosie-ambient-butterfly,
+  .rosie-ambient-petal { display:none !important; }
+  .rosie-ambient-lantern { opacity:.3 !important; }
+  .rosie-ambient-water { opacity:.12 !important; }
+}

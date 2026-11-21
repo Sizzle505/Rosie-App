@@ -1,0 +1,198 @@
+/*
+ * Long prophecies fit the registered crystal chamber without changing its
+ * dimensions or disrupting the original portrait and dismissal animations.
+ * Text only moves when an actual measured overflow is present.
+ */
+.fortune-page .crystal-chamber .lens-answer {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 87% !important;
+  height: 85% !important;
+  max-width: 87% !important;
+  min-height: 0;
+  gap: clamp(2px, .36vw, 5px) !important;
+}
+
+.fortune-page .crystal-chamber .lens-answer .answer-sigil,
+.fortune-page .crystal-chamber .lens-answer .answer-kicker,
+.fortune-page .crystal-chamber .lens-answer small {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.fortune-page .crystal-chamber .lens-answer .answer-sigil {
+  font-size: clamp(12px, 1.8vw, 22px) !important;
+}
+
+.fortune-page .crystal-chamber .lens-answer .answer-kicker {
+  line-height: 1.15;
+}
+
+.fortune-page .crystal-chamber .lens-verse-window {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 59%;
+  max-height: 59%;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.fortune-page .crystal-chamber .lens-verse-text {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100% !important;
+  font-size: clamp(10px, 1.12vw, 17px) !important;
+  line-height: 1.18 !important;
+  letter-spacing: .012em !important;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  text-align: center;
+  margin: 0;
+  will-change: auto;
+}
+
+.fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-window {
+  justify-content: flex-start;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+}
+
+.fortune-page .crystal-chamber .fortune-lens.is-long-verse:not(.is-manifesting):not(.is-dismissing) .lens-verse-text {
+  animation: rosieOracleVerseRead var(--oracle-verse-duration, 11s) ease-in-out .25s infinite both !important;
+  will-change: transform;
+}
+
+@keyframes rosieOracleVerseRead {
+  0%, 5% { transform: translate3d(0, 0, 0); }
+  48%, 70% { transform: translate3d(0, calc(-1 * var(--oracle-verse-travel, 0px)), 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* The glass stays fixed on phones; only its typography becomes more compact. */
+@media (max-width: 620px) {
+  .fortune-page .crystal-chamber .lens-answer {
+    width: 90% !important;
+    max-width: 90% !important;
+    height: 86% !important;
+    gap: 2px !important;
+  }
+  .fortune-page .crystal-chamber .lens-answer .answer-sigil {
+    font-size: clamp(11px, 3.4vw, 16px) !important;
+  }
+  .fortune-page .crystal-chamber .lens-verse-text {
+    font-size: clamp(8.5px, 2.38vw, 11px) !important;
+    line-height: 1.16 !important;
+    letter-spacing: 0 !important;
+  }
+  .fortune-page .crystal-chamber .lens-verse-window {
+    height: 60%;
+    max-height: 60%;
+  }
+}
+
+/* Accessible reading: the moving verse stops and becomes manually scrollable. */
+@media (prefers-reduced-motion: reduce) {
+  .fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-window {
+    overflow-y: auto;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-window::-webkit-scrollbar {
+    display: none;
+  }
+  .fortune-page .crystal-chamber .fortune-lens.is-long-verse .lens-verse-text {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+
+/* Preview option: magnify the *optical glass*, not the illustration behind it.
+   Original stage registration is untouched and Flow remains the default. */
+.fortune-page .crystal-chamber.oracle-expanded {
+  transform: translate(-50%, -50%) scale(1.42) !important;
+  transform-origin: center center;
+  z-index: 26 !important;
+  overflow: visible;
+  transition: transform .62s cubic-bezier(.2,.78,.24,1), filter .62s ease;
+  filter: drop-shadow(0 0 19px rgba(203,155,253,.34));
+}
+.fortune-page .crystal-chamber.oracle-expanded::before {
+  content: "";
+  position: absolute;
+  inset: -1.5%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 36% 21%, rgba(255,242,255,.26), rgba(95,50,144,.18) 37%, rgba(34,12,64,.29) 73%, rgba(11,7,31,.7) 100%);
+  box-shadow: inset 0 0 8px rgba(255,243,204,.5), 0 0 34px rgba(161,100,233,.3);
+  z-index: 0;
+}
+.fortune-page .crystal-chamber.oracle-expanded .lens-answer {
+  height: 90% !important;
+}
+.fortune-page .crystal-chamber.oracle-expanded .lens-verse-window {
+  height: 69%;
+  max-height: 69%;
+}
+.fortune-page .crystal-chamber.oracle-expanded .lens-verse-text {
+  font-size: clamp(9px, .98vw, 14px) !important;
+}
+.fortune-page .oracle-glass-choices {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: -4px 0 8px;
+  position: relative;
+  z-index: 4;
+}
+.fortune-page .oracle-glass-choices span {
+  margin-right: 3px;
+  font: 600 8px/1.2 Georgia,serif;
+  letter-spacing: .15em;
+  color: rgba(235,199,146,.7);
+}
+.fortune-page .oracle-glass-choices button {
+  min-height: 27px;
+  border: 1px solid rgba(211,170,224,.35);
+  border-radius: 100px;
+  background: rgba(28,17,48,.32);
+  color: rgba(250,224,207,.84);
+  padding: 4px 13px;
+  font: normal 11px/1.1 Georgia,serif;
+  cursor: pointer;
+}
+.fortune-page .oracle-glass-choices button.is-selected {
+  color: #ffe6b0;
+  border-color: rgba(245,203,143,.75);
+  background: rgba(91,54,111,.43);
+}
+.fortune-page .oracle-glass-choices button:focus-visible {
+  outline: 2px solid #ffe0a7;
+  outline-offset: 2px;
+}
+@media (max-width: 620px) {
+  .fortune-page .crystal-chamber.oracle-expanded {
+    transform: translate(-50%, -50%) scale(1.23) !important;
+  }
+  .fortune-page .crystal-chamber.oracle-expanded .lens-verse-text {
+    font-size: clamp(8.5px, 2.2vw, 10.5px) !important;
+  }
+  .fortune-page .oracle-glass-choices {
+    margin-top: -6px;
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .fortune-page .crystal-chamber.oracle-expanded { transition: none !important; }
+}

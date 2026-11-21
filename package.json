@@ -5,16 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-rosieverse-icons.mjs && node scripts/build-santa-email-previews.mjs && vite build",
+    "build": "npm run test:ai && node scripts/generate-rosieverse-icons.mjs && node scripts/build-santa-email-previews.mjs && vite build",
     "preview": "vite preview",
-    "icons:generate": "node scripts/generate-rosieverse-icons.mjs"
+    "icons:generate": "node scripts/generate-rosieverse-icons.mjs",
+    "test:ai": "node --test tests/rosie-ai.test.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.4",
     "vite": "^7.1.9",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "qrcode-generator": "^1.4.4"
+    "qrcode-generator": "^1.4.4",
+    "cmu-pronouncing-dictionary": "^3.0.0"
   },
   "devDependencies": {}
 }

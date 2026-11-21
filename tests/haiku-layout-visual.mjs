@@ -18,6 +18,12 @@ try {
   for (const { width, height, label } of sizes) {
     const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
     try {
+      await page.route("**/api/rosie-ai", async route => route.fulfill({
+        status: 200, contentType: "application/json",
+        body: JSON.stringify({feature:"haiku",id:"qa-original-"+label,
+          lines:["Bright stars crown the night","My nose finds the hidden path","Cheese waits on the plate"],
+          revised:false,metre:"verified",counts:[5,7,5]})
+      }));
       await page.goto(base + "/#haiku", { waitUntil: "domcontentloaded", timeout: 60000 });
       await page.locator(".haiku-scene-image").waitFor({ state: "visible", timeout: 20000 });
       assert.equal(await page.locator(".haiku-heading h1").innerText(),"Haiku Zen Garden");
@@ -31,7 +37,7 @@ try {
       const masthead = page.locator(".haiku-masthead-art img");
       await masthead.evaluate(image=>image.decode());
       const headerGeometry = await page.evaluate(() => {
-        const rect = selector => document.querySelector(selector).getBoundingClientRect().toJSON();
+        const rect = selector => document.querySelector(selector)?.getBoundingClientRect()?.toJSON() ?? null;
         const image = document.querySelector(".haiku-masthead-art img");
         return {banner:rect(".haiku-masthead-art"), title:rect(".haiku-heading h1"),
           tagline:rect(".haiku-masthead-tagline"), back:rect(".haiku-back"),
@@ -46,12 +52,8 @@ try {
       assert.ok(headerGeometry.title.y>headerGeometry.banner.y+headerGeometry.banner.height*.28 &&
         headerGeometry.title.bottom<headerGeometry.banner.bottom-headerGeometry.banner.height*.13,
         label+" masthead title must avoid the ornamental paw and bottom border");
-      assert.ok(headerGeometry.tagline.y>=headerGeometry.banner.bottom-12,
-        label+" subtitle must be below, not painted across the ornamental plaque");
-      if(width<=600) {
-        assert.ok(headerGeometry.back.bottom<=headerGeometry.banner.y+6,
-          label+" back button must sit above compact banner rather than cover lanterns");
-      }
+      assert.equal(headerGeometry.tagline,null,label+" legacy tagline must remain absent");
+      assert.equal(headerGeometry.back,null,label+" redundant back button must remain absent");
 
       const boxes = await page.evaluate(() => {
         const box = (selector) => {
@@ -93,7 +95,9 @@ try {
         };
       });
       assert.equal(newZenGeometry.breathDuration,"10s",label+" Rosie must breathe on a ten-second rhythm");
-      assert.equal(newZenGeometry.verseItalic,"italic",label+" poem must use the literary italic font");
+      assert.ok(newZenGeometry.verseItalic === "italic" ||
+        /Snell Roundhand|Bradley Hand|Apple Chancery|cursive/i.test(newZenGeometry.verseFont),
+        label+" poem must retain either an italic or handwritten literary face: "+newZenGeometry.verseFont);
       assert.ok(Math.abs(newZenGeometry.wisdom.x+newZenGeometry.wisdom.width/2-width/2)<Math.max(32,width*.07),
         label+" The Way of the Shiba must be horizontally centered in the page");
       if (width===1792 && height===856) {
@@ -186,7 +190,8 @@ try {
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
       await room.waitFor({state:"visible"});
       await room.locator(".zen-breath-portrait img").evaluate(img => img.decode());
-      await page.locator(".zen-immersive-scenery img").evaluate(img => img.decode());
+      const scenery = page.locator(width <= 600 ? ".zen-scenery-phone" : ".zen-scenery-desktop");
+      await scenery.evaluate(img => img.decode());
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
          img.complete && img.naturalWidth > 200 && (
            img.src.endsWith("/rosie-meditating-paws-up.webp") ||
@@ -198,17 +203,20 @@ try {
        assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img=>img.src.includes("/new/characters/meditating-pink-sakura.webp")),
          label+" outfit arrow should display the next Rosie kimono");
        await room.getByRole("button",{name:"Previous Rosie outfit",exact:true}).click();
-       assert.ok(await page.locator(".zen-immersive-scenery img").evaluate(img =>
-         img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/")
-       ), label+" meditation must load an approved sanctuary background");
+       assert.ok(await scenery.evaluate(img =>
+         img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/") &&
+         (width > 600 || img.src.includes("/iphone/"))
+       ), label+" meditation must display approved device-specific sanctuary background");
+      assert.equal(await page.locator(".zen-immersive .rosie-ambient").count(),1,
+        label+" meditation effects must render exactly once");
       if(label==="user-desktop"||label==="iphone") {
         await page.screenshot({path:"artifacts/haiku-layout/"+label+"-meditation.png",fullPage:false,animations:"disabled"});
       }
-      await room.getByRole("button",{name:"Pause",exact:true}).click();
-      assert.ok(await room.getByRole("button",{name:"Resume",exact:true}).isVisible(),label+" pause must work");
-      await room.getByRole("button",{name:"Resume",exact:true}).click();
-      assert.ok(await room.getByRole("button",{name:"Pause",exact:true}).isVisible(),label+" resume must work");
-      await room.getByRole("button",{name:"End session",exact:true}).click();
+      await room.getByRole("button",{name:"Pause meditation",exact:true}).click();
+      assert.ok(await room.getByRole("button",{name:"Resume meditation",exact:true}).isVisible(),label+" pause must work");
+      await room.getByRole("button",{name:"Resume meditation",exact:true}).click();
+      assert.ok(await room.getByRole("button",{name:"Pause meditation",exact:true}).isVisible(),label+" resume must work");
+      await room.getByRole("button",{name:"End meditation",exact:true}).click();
       await room.waitFor({state:"hidden"});
       if (label==="user-desktop" || label==="desktop") {
         await page.goto(base+"/#calculations",{waitUntil:"domcontentloaded",timeout:60000});

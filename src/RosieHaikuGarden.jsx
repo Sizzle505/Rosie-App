@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
+import { generateRosieText } from "./rosieAI.js";
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
+import RosieZenAmbient from "./RosieZenAmbient.jsx";
 import {imperialScrollWithoutChecker} from "./haikuScrollMatte.js";
 import { ROSIE_HAIKU_OUTFIT_KEY, readRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 import "./RosieHaikuAtmosphere.css";
@@ -16,6 +18,8 @@ import "./RosieHaikuMobileFinal.css";
 import "./RosieHaikuReviewFinal.css";
 import "./RosieHaikuReleasePolish.css";
 import "./RosieHaikuIphoneNov21.css";
+import "./RosieHaikuPoetryPolish.css";
+import "./RosieZenLayoutRevision.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
@@ -159,6 +163,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [poem, setPoem] = useState(() => poemForDay());
   const [mode, setMode] = useState("daily");
   const scrollDisplayRef = useRef(null);
+  const poemScrollRef = useRef(null);
+  const lastComposeKeyRef = useRef("");
   const workbenchRef = useRef(null);
   const scrollMobileTo = (element, placement = "center") => {
     if (!element || !window.matchMedia("(max-width: 600px)").matches) return;
@@ -169,10 +175,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
     const offset = placement === "top" ? 16 : Math.max(12, (usableHeight - rect.height) / 2);
     window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - offset), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   };
-  function openComposePanel() {
-    setMode("compose");
+  function jumpToPanel(nextMode) {
+    setMode(nextMode);
     window.requestAnimationFrame(() => scrollMobileTo(workbenchRef.current, "top"));
   }
+  function openComposePanel() { jumpToPanel("compose"); }
+  function openMeditationPanel() { jumpToPanel("meditate"); }
+  function openJournalPanel() { jumpToPanel("journal"); }
   const [scene, setScene] = useState(readSelectedScene);
   const [outfitId,setOutfitId] = useState(readRosieHaikuOutfit);
   const [scrollStyle,setScrollStyle]=useState(readScrollStyle);
@@ -194,6 +203,9 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [mood, setMood] = useState("zen");
   const [topic, setTopic] = useState("");
   const [variation, setVariation] = useState(0);
+  const [isComposing, setIsComposing] = useState(false);
+  const [composeError, setComposeError] = useState("");
+  const composeSequenceRef = useRef(0);
   const [journal, setJournal] = useState(readJournal);
   const [notice, setNotice] = useState("");
   const [working, setWorking] = useState(false);
@@ -204,6 +216,50 @@ export default function RosieHaikuGarden({ onNavigate }) {
     return () => window.clearTimeout(timeout);
   }, [reaction]);
   const saved = useMemo(() => journal.some((entry) => poemKey(entry) === poemKey(poem)), [journal, poem]);
+  const canRegenerate = mode === "compose" && poem.source === "ai" &&
+    poem.topic === topic.trim() && poem.mood === mood;
+
+  // The three painted scrolls have different aspect ratios and distinct text
+  // footprints. Fit the actual rendered lines, preserving legibility and the
+  // attribution space on every device instead of using character-count guesses.
+  useLayoutEffect(() => {
+    const scroll = poemScrollRef.current;
+    if (!scroll) return undefined;
+    const inner = scroll.querySelector(".haiku-scroll-inner");
+    const verse = scroll.querySelector(".haiku-verse");
+    const line = verse?.querySelector("p");
+    if (!inner || !verse || !line) return undefined;
+    let frame = 0;
+    const fit = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        scroll.style.removeProperty("--haiku-fit-size");
+        const baseline = Number.parseFloat(getComputedStyle(line).fontSize);
+        if (!Number.isFinite(baseline)) return;
+        let size = baseline;
+        const available = inner.clientHeight * (scrollStyle === "grand" ? .55 : .57);
+        const minSize = scrollStyle === "grand" ? 11.5 : 12;
+        const lines = [...verse.querySelectorAll("p")];
+        for (let step = 0; step < 27 && size > minSize; step++) {
+          const tooTall = verse.scrollHeight > available;
+          const tooWide = lines.some(row => row.scrollWidth > row.clientWidth + 1);
+          if (!tooTall && !tooWide) break;
+          size = Math.max(minSize, size - .65);
+          scroll.style.setProperty("--haiku-fit-size", size + "px");
+        }
+      });
+    };
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fit) : null;
+    observer?.observe(inner);
+    window.addEventListener("resize", fit);
+    fit();
+    document.fonts?.ready?.then(fit).catch(() => {});
+    return () => {
+      observer?.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", fit);
+    };
+  }, [poem, scrollStyle]);
   const announce = (message) => setNotice(message);
   const saveEntries = (next) => {
     setJournal(next);
@@ -211,21 +267,61 @@ export default function RosieHaikuGarden({ onNavigate }) {
     catch { announce("Your browser could not save the journal."); }
   };
   function openDaily() {
+    composeSequenceRef.current += 1;
+    setIsComposing(false);
+    setComposeError("");
     const refreshed = poemForDay();
     setToday(refreshed);
     setPoem(refreshed);
     setMode("daily");
     setNotice("");
+    window.requestAnimationFrame(() => scrollMobileTo(workbenchRef.current, "top"));
   }
-  function compose(event) {
+  async function compose(event, regenerate = false) {
     event?.preventDefault();
-    const nextVariation = mode === "compose" ? variation + 1 : 0;
+    if (isComposing) return;
+    const subject = topic.trim();
+    if (!subject) {
+      setComposeError("Give Rosie a subject to write about first.");
+      announce("Enter a subject to request a new poem.");
+      return;
+    }
+    const composeKey = JSON.stringify([subject, mood]);
+    const nextVariation = lastComposeKeyRef.current === composeKey ? variation + 1 : 0;
+    lastComposeKeyRef.current = composeKey;
+    const metadata = poemForTopic(subject, mood, nextVariation);
+    const sequence = ++composeSequenceRef.current;
     setVariation(nextVariation);
-    setPoem(poemForTopic(topic, mood, nextVariation));
     setMode("compose");
-    window.requestAnimationFrame(() => scrollMobileTo(scrollDisplayRef.current));
-    announce("From Rosie's hand-curated poetry collection.");
-    setReaction({ type: "inspired" });
+    setComposeError("");
+    setIsComposing(true);
+    announce("Rosie is composing a new haiku about your subject…");
+    try {
+      const created = await generateRosieText(
+        { feature: "haiku", topic: subject, mood, variation: nextVariation },
+        27000
+      );
+      if (sequence !== composeSequenceRef.current) return;
+      if (!Array.isArray(created.lines) || created.lines.length !== 3 ||
+          created.lines.some(line => typeof line !== "string" || !line.trim())) {
+        throw new Error("invalid_poem");
+      }
+      setPoem({
+        ...metadata, id: created.id || `ai-${Date.now()}`,
+        lines: created.lines, title: `On ${subject}`, source: "ai",
+        metre: created.metre || "approximate", syllableCounts: created.counts || []
+      });
+      announce(created.revised ? "Rosie refined a new poem for your subject." : "A new original haiku about your subject.");
+      setReaction({ type: "inspired" });
+      window.requestAnimationFrame(() => scrollMobileTo(scrollDisplayRef.current));
+    } catch {
+      if (sequence !== composeSequenceRef.current) return;
+      // Never masquerade a catalogue poem as the original the user requested.
+      setComposeError("Rosie couldn't compose a new verse this time. The previous poem is unchanged. Please try again.");
+      announce("No new haiku was generated; your previous poem is unchanged.");
+    } finally {
+      if (sequence === composeSequenceRef.current) setIsComposing(false);
+    }
   }
   function toggleSave() {
     if (saved) {
@@ -270,6 +366,9 @@ export default function RosieHaikuGarden({ onNavigate }) {
     } finally { setWorking(false); }
   }
   function openJournalEntry(entry) {
+    composeSequenceRef.current += 1;
+    setIsComposing(false);
+    setComposeError("");
     setPoem(entry);
     setMode("journal");
     announce("");
@@ -304,6 +403,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
             }} />
           ))}
         </div>
+        <RosieZenAmbient scene={scene} mode="haiku" />
       </div>
 
       <div className="haiku-shell">
@@ -322,17 +422,18 @@ export default function RosieHaikuGarden({ onNavigate }) {
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll-display" ref={scrollDisplayRef}>
-            <div className="haiku-scroll" data-scroll-style={scrollStyle} data-verse-density={poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}
+            <div className="haiku-scroll" ref={poemScrollRef} data-scroll-style={scrollStyle} data-ink-state={poem.source==="ai"?"fresh":"still"} data-verse-density={poem.lines.some(line=>line.length>38)?"dense":poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}
               style={scrollStyle==="imperial"&&cleanImperialScroll?{backgroundImage:`url("${cleanImperialScroll}")`}:undefined}>
               <div className="haiku-scroll-inner">
                 <span className="haiku-scroll-caption">{mode === "daily" ? "TODAY IN THE GARDEN" : mode === "journal" ? "FROM THE POETRY JOURNAL" : "A ROSIE ORIGINAL"}</span>
                 <span className="haiku-ornament" aria-hidden="true">❀</span>
+                <span className="haiku-ink-ripple" aria-hidden="true" />
                 <div className="haiku-verse" aria-label="Haiku poem">{poem.lines.map((line, index) => <p key={index} style={{ "--line-order": index }}>{line}</p>)}</div>
                 <div className="haiku-scroll-meta" aria-label="Five seven five. Rosie.">
-                  <span className="haiku-metre">5 · 7 · 5</span>
+                  <span className="haiku-metre">{poem.source === "ai" && poem.metre !== "verified" ? "ROSIE’S VERSE" : "5 · 7 · 5"}</span>
                   <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
                 </div>
-                {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
+                {mode !== "daily" && <p className="haiku-dedication" title={poem.title}>{poem.title?.length > 46 ? poem.title.slice(0,43) + "…" : poem.title}</p>}
               </div>
               <div className="haiku-scroll-cycle" role="group" aria-label="Change poetry scroll artwork">
                 <button type="button" onClick={()=>cycleScroll(-1)} aria-label="Previous poetry scroll" title="Previous scroll">‹</button>
@@ -340,6 +441,11 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </div>
             </div>
             </div>
+            {canRegenerate && (
+              <button type="button" className="haiku-regenerate" onClick={() => compose(undefined, true)} disabled={isComposing} aria-label="Regenerate a fresh haiku about the same subject in the same style">
+                <span aria-hidden="true">↻</span> Another verse · Same subject &amp; style
+              </button>
+            )}
             <p role="status" aria-live="polite" className="haiku-status">{notice || "Small poems. Deep breaths. Grand opinions."}</p>
             <div className="haiku-verse-actions">
               <button type="button" onClick={toggleSave} className={saved?"haiku-action-saved":""} aria-label={saved?"Remove verse from favorites":"Save verse"} title={saved?"Saved - remove":"Save verse"}>
@@ -358,8 +464,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
             <nav className="haiku-tabs" aria-label="Haiku activities">
               <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Daily</span></button>
               <button type="button" className={mode === "compose" ? "selected" : ""} onClick={openComposePanel}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Compose</span></button>
-              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
-              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal</span></button>
+              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { openMeditationPanel(); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
+              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={openJournalPanel}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal</span></button>
             </nav>
             <div className="haiku-workbench-body">
             {mode === "daily" ? (
@@ -368,7 +474,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <h2>Today's little wisdom</h2>
                 <p>One new verse each day, chosen from Rosie's own collection. A quiet moment, with just a hint of Shiba judgment.</p>
                 <div className="haiku-date">{localDayKey()} <span> · </span> {["winter","winter","spring","spring","spring","summer","summer","summer","autumn","autumn","autumn","winter"][new Date().getMonth()]} in the garden</div>
-                <button type="button" className="haiku-primary" onClick={() => setMode("meditate")}>Meditate with Rosie</button>
+                <button type="button" className="haiku-primary" onClick={openMeditationPanel}>Meditate with Rosie</button>
                 <button type="button" className="haiku-secondary-entry" onClick={openComposePanel}>Or ask her to compose a haiku</button>
               </div>
             ) : mode === "compose" ? (
@@ -378,14 +484,15 @@ export default function RosieHaikuGarden({ onNavigate }) {
                   <img className="haiku-desk-art" src="/rosieverse/haiku/calligraphy-desk.webp" alt="" aria-hidden="true" loading="lazy" />
                   <h2>A Poem for Everything</h2>
                 </div>
-                <label htmlFor="haiku-topic">Your subject or dedication</label>
-                <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); }} placeholder="Cheese, birthdays, the vacuum…" />
+                <label htmlFor="haiku-topic">What should Rosie write about?</label>
+                <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); setComposeError(""); }} placeholder="A thunderstorm, a rival cat, an ordinary Tuesday…" />
                 <label>Rosie's disposition</label>
                 <div className="haiku-moods" role="group" aria-label="Choose mood">
                   {ROSIE_HAIKU_MOODS.map((option) => <button type="button" key={option.id} className={mood === option.id ? "selected" : ""} aria-pressed={mood === option.id} onClick={() => { setMood(option.id); setVariation(0); }}>{option.label}</button>)}
                 </div>
-                <button type="submit" className="haiku-primary">Unfurl a New Haiku</button>
-                <p className="haiku-small-note">Rosie draws from her hand-crafted verse collection. Familiar subjects get a special verse; other dedications receive a poem in your chosen mood.</p>
+                <button type="submit" className="haiku-primary" disabled={isComposing}>{isComposing ? "Rosie is composing…" : composeError ? "Try Composing Again" : "Unfurl a New Haiku"}</button>
+                {composeError && <p className="haiku-small-note" role="alert">{composeError}</p>}
+                <p className="haiku-small-note">Every new verse is about your subject and written in Rosie's selected disposition. Her curated daily collection remains available separately.</p>
               </form>
             ) : mode === "meditate" ? (
               <RosieZenMeditation scene={scene} poem={poem} outfitId={outfitId} onOutfitChange={setOutfitId} />
