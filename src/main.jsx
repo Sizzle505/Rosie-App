@@ -3387,7 +3387,7 @@ function App() {
     setRevealStage("consulting");
     setConsulting(true);
 
-    const fallback = chooseFortune();
+    const fallback = { ...chooseFortune(), source: "collection" };
     setSubmittedQuestion(askedQuestion);
     setQuestion("");
     // Preserve Rosie's existing fortune library as the no-network fallback.
@@ -3400,7 +3400,8 @@ function App() {
       result = {
         id: generated.id || `ai-${Date.now()}`,
         tone: ["positive", "uncertain", "negative"].includes(generated.tone) ? generated.tone : "uncertain",
-        text: generated.text.trim()
+        text: generated.text.trim(),
+        source: "ai"
       };
     } catch {
       // The crystal ball still works even if Venice is unavailable.
@@ -3634,7 +3635,7 @@ function App() {
                 <div className="ticket-topline">
                   <span>FORTUNE № {String(consultations).padStart(3, "0")}</span>
                   <strong>MADAME ROSIE</strong>
-                  <span>PRIVATE ORACLE</span>
+                  <span>{answer.source === "collection" ? "CLASSIC FORTUNE" : "PRIVATE ORACLE"}</span>
                 </div>
 
                 <div className="ticket-oracle-mark" aria-hidden="true">
