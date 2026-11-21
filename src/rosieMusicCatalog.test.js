@@ -43,7 +43,9 @@ test("player is user-gesture gated; mute and volume do not affect game SFX",()=>
   assert.equal(played.length,0,"Must not start before interaction");
   engine.unlock();
   assert.deepEqual(played,["/rosie-music/oracle-secret.mp3"]);
-  const flush=()=>{const jobs=queued;queued=[];now+=1000;for(const j of jobs)j(now);};
+  // Allow the full 1.35-second cinematic fade to complete before asserting
+  // that the prior deck is silent. During a crossfade two decks overlap by design.
+  const flush=()=>{const jobs=queued;queued=[];now+=1800;for(const j of jobs)j(now);};
   flush();
   engine.setDesired("cheese-heist");
   flush();
@@ -123,5 +125,58 @@ test("Safari stale-media AbortError is handled without unhandled promise rejecti
   await new Promise(resolve=>setImmediate(resolve));
   assert.equal(engine.activeId,"oracle-secret");
   assert.equal(engine.error,null);
+  engine.dispose();
+});
+
+test("every background track starts with original opening then repeats from the stitch",async()=>{
+  class Song{
+    constructor(){this.paused=true;this.volume=0;this.currentTime=0;this.loop=false;this.src="";}
+    play(){this.paused=false;return Promise.resolve();}
+    pause(){this.paused=true;}
+    load(){}
+    removeAttribute(){}
+  }
+  const queue=[];const engine=new RosieMusicEngine({
+    audioFactory:()=>new Song(),clock:()=>0,
+    frame:callback=>{queue.push(callback);return queue.length;},cancelFrame:()=>{}
+  });
+  for(const [id,item] of Object.entries(ROSIE_MUSIC)){
+    assert.equal(item.loop?item.loopStartSeconds:0,item.loop?5:0,id);
+  }
+  engine.singleDeck=true;
+  engine.setDesired("haiku-garden");engine.unlock();
+  const first=engine.decks[0];
+  assert.equal(first.currentTime,0,"Page entry must begin at true zero");
+  assert.equal(first.loop,false,"Native loop would repeat the intro");
+  first.onended();
+  assert.equal(first.currentTime,5,"End must seek into the prepared continuous loop");
+  assert.equal(first.paused,false,"Loop must resume playback");
+  engine.setDesired("oracle-secret");
+  assert.equal(engine.activeId,"oracle-secret");
+  await Promise.resolve();
+  engine.dispose();
+});
+test("subtle page music gain does not affect independent game sound effects",async()=>{
+  let now=0,callbacks=[];
+  class Song {
+    constructor(){this.volume=0;this.loop=false;this.paused=true;this.src="";}
+    play(){this.paused=false;return Promise.resolve();}
+    pause(){this.paused=true;}
+    load(){}
+    removeAttribute(){}
+  }
+  const engine=new RosieMusicEngine({
+    audioFactory:()=>new Song(),
+    frame:callback=>{callbacks.push(callback);return callbacks.length;},
+    cancelFrame:()=>{},clock:()=>now
+  });
+  engine.setContextGain(0.36);
+  engine.setDesired("clockwork-nostalgia");
+  engine.unlock();
+  now+=2000;
+  for(const callback of callbacks.splice(0))callback(now);
+  assert.ok(engine.decks[engine.active].volume<0.1,"Utilities should remain discreet");
+  engine.setContextGain(1);
+  assert.ok(engine.decks[engine.active].volume>0.2,"Active games retain musical presence");
   engine.dispose();
 });

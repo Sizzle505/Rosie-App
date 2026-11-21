@@ -157,6 +157,16 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
     };
   },[]);
   useEffect(()=>{audio.current?.setVolume(volume)},[volume]);
+  // Wind, water and temple ambience already accompany active meditation.
+  // Keep the shared soundtrack gently underneath rather than layering
+  // two full-volume musical beds over the timed breathing session.
+  useEffect(()=>{
+    const active=opened&&status==="running"&&ambience!=="off";
+    window.dispatchEvent(new CustomEvent("rosieverse:music:meditation",{detail:{active}}));
+    return ()=>{
+      if(active)window.dispatchEvent(new CustomEvent("rosieverse:music:meditation",{detail:{active:false}}));
+    };
+  },[opened,status,ambience]);
   useEffect(()=>{try{window.localStorage.setItem("rosieZenBackdropV1",viewId)}catch{}},[viewId]);
   useEffect(() => {
     if (!opened) return undefined;

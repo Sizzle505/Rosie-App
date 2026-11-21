@@ -1,0 +1,77 @@
+name: RosieVerse music natural openings and context QA
+on:
+  push:
+    branches: [release/20261121-music-natural-openings]
+    paths:
+      - .github/workflows/rosie-music-natural-qa.yml
+      - src/rosieMusicEngine.js
+      - src/rosieMusicCatalog.js
+      - src/rosieMusicCatalog.test.js
+      - src/RosieMusicPlayer.jsx
+      - src/RosieZenMeditation.jsx
+      - public/cosmic-odyssey/rosie-music-director.js
+      - public/rosie-music/**
+      - scripts/rosieMusicNaturalQA.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install exact dependencies
+        run: npm ci
+      - name: Check loop behavior, page music policy and existing game/QR logic
+        run: |
+          set -e
+          node --test src/rosieMusicCatalog.test.js src/qrAtelierLogic.test.js
+          node --test src/yachtDashExpansion.test.js
+          node --test tests/ember-drill-engine.test.mjs
+          npm run build
+      - name: Verify all thirteen natural opening master hashes and MP3 assets
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          import crypto from "node:crypto";
+          import assert from "node:assert/strict";
+          const folder="public/rosie-music";
+          const cat=JSON.parse(fs.readFileSync(folder+"/catalog.json","utf8"));
+          assert.equal(cat.natural_opening,true);
+          assert.equal(cat.tracks.length,13);
+          let total=0;
+          for(const track of cat.tracks){
+            const bytes=fs.readFileSync(folder+"/"+track.filename);
+            assert.equal(track.filename,track.id+".mp3");
+            assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),track.sha256);
+            assert.equal(bytes.length,track.bytes);
+            assert.equal(track.opening_preserved,true);
+            assert.equal(track.loop_start_seconds,track.loop?5:0);
+            assert.ok(track.duration>20&&track.duration<240);
+            total+=bytes.length;
+          }
+          console.log("PASS: 13 remastered originals, preserved openings and matching SHA256, bytes",total);
+          NODE
+      - name: Install browsers
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium webkit
+      - name: Serve production Vite bundle
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/rosie-natural-preview.log 2>&1 &
+          sleep 6
+          curl --fail http://127.0.0.1:4173/ >/dev/null
+      - name: Verify zero-time entrances across Chromium and WebKit devices
+        run: node scripts/rosieMusicNaturalQA.mjs
+      - name: Preserve cross-device screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rosie-natural-music-qa
+          path: artifacts/rosie-music-natural-qa/*.png
+          retention-days: 7
