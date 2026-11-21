@@ -114,13 +114,20 @@ export function makeCourse(seed = 1467) {
 export function newRun(seed = 1467, stageIndex = null) {
   const stage=getExpeditionStage(stageIndex);
   const startX=stage?.startX||0;
+  const objects=makeCourse(seed);
+  // Two previously unused original icon cells become one-off rewards,
+  // isolated to the optional introductory worlds. No Classic pickups change.
+  if(stageIndex===0)objects.push({id:-101,kind:"canister",x:startX+620,
+    y:tunnelCenter(startX+620),radius:23,taken:false});
+  if(stageIndex===1)objects.push({id:-102,kind:"time",x:startX+630,
+    y:tunnelCenter(startX+630),radius:23,taken:false});
   return { running: true, ended: false, time: 0, scroll: startX,
     stageIndex:stage?stageIndex:null, stageStartX:startX, duration:stage?(stage.duration||EXPEDITION_STAGE_SECONDS):RUN_DURATION,
     y: tunnelCenter(startX+DRILL_ANCHOR), pitch: 0,
     score: 0, hull: 5, charge: 0, boostTime: 0, combo: 0, lastCatch: -10,
     gems: 0, bones: 0, cheese: 0, passage: 1, hitCooldown: 0, shock: 0,
     boosts: 0, shards: 0, damageTaken: 0, cleanBonus: 0,
-    objects: makeCourse(seed), breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
+    objects, breakables:makeBreakables(tunnelCenter,tunnelRadius), wallsBroken:0, secrets:0, relics:0,
     crystalShutters:makeCrystalShutters(), hazardsDodged:0,
     worldHazards:makeExpeditionHazards(stageIndex),worldObjective:false,
     boss:null,bossY:null,bossDefeated:false,bossAttackHitCycle:-1,
@@ -252,6 +259,16 @@ export function updateRun(s, dt, up = false, down = false) {
         s.score += 125; s.shards++;
         s.events.push({ type: "shatter", x: (rock ? tip.x : DRILL_ANCHOR) + deltaX, y: obj.y });
       } else if (s.hitCooldown <= 0) takeHit(s);
+      continue;
+    }
+    if(obj.kind==="time"||obj.kind==="canister"){
+      const isTime=obj.kind==="time",points=isTime?200:175;
+      if(isTime)s.duration+=3;
+      else s.charge=clamp(s.charge+65,0,100);
+      s.score+=points;
+      s.events.push({type:"pickup",kind:obj.kind,x:DRILL_ANCHOR+deltaX,y:obj.y,combo:s.combo});
+      s.events.push({type:isTime?"bonus-time":"bonus-canister",seconds:isTime?3:0,
+        points,x:DRILL_ANCHOR+deltaX,y:obj.y});
       continue;
     }
     if (s.time - s.lastCatch > 2.3) s.combo = 0;
