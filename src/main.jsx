@@ -435,7 +435,7 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
   );
 }
 
-function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst }) {
+function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, orbView }) {
   const manifesting = revealStage === "manifesting";
   const stageRef = useRef(null);
   const stageArtRef = useRef(null);
@@ -587,7 +587,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             </div>
           )}
 
-          <div className="crystal-chamber">
+          <div className={`crystal-chamber ${orbView === "expand" && answer && !answerDismissed ? "oracle-expanded" : ""}`}>
             <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
             <FortuneLens
               consulting={consulting}
@@ -2976,6 +2976,7 @@ function App() {
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
+  const [orbView, setOrbView] = useState("flow");
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
   const [flipped, setFlipped] = useState(false);
@@ -3561,11 +3562,19 @@ function App() {
               flipped={flipped}
               turning={turning}
               flipBurst={flipBurst}
+              orbView={orbView}
             />
 
             <div className="console-caption">
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
             </div>
+            {answer && !answerDismissed && revealStage === "revealed" && (
+              <div className="oracle-glass-choices" role="group" aria-label="Choose how the crystal ball presents longer fortunes">
+                <span>THE GLASS</span>
+                <button type="button" className={orbView === "flow" ? "is-selected" : ""} aria-pressed={orbView === "flow"} onClick={() => setOrbView("flow")}>Flow</button>
+                <button type="button" className={orbView === "expand" ? "is-selected" : ""} aria-pressed={orbView === "expand"} onClick={() => setOrbView("expand")}>Expand</button>
+              </div>
+            )}
 
             <form className="question-card" onSubmit={askRosie}>
               <div className="console-rivets" aria-hidden="true"><i /><i /><i /><i /></div>
