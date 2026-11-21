@@ -103,7 +103,7 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
         </div>}
       </div>
       <div className="haiku-scene-selector" role="group" aria-label="Choose meditation scenery">
-        {HAIKU_SCENES.map((item) => (
+        {[...HAIKU_SCENES].reverse().map((item) => (
           <button type="button" key={item.id} className={scene === item.id ? "is-selected" : ""} aria-label={item.label} title={item.label} aria-pressed={scene === item.id} onClick={() => switchScene(item.id)}>
             <img className="haiku-scene-choice-art" src={item.icon} alt="" aria-hidden="true" loading="lazy" decoding="async"/>
           </button>
