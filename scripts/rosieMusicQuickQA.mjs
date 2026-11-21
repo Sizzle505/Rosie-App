@@ -30,6 +30,17 @@ async function verify(name,browser,viewport){
     await homeFetch;
     assert.equal(await dock.getAttribute("data-unlocked"),"yes");
     console.log("HOME PLAYED",name,viewport.label);
+    // Test actual toggle and volume on the light home view. WebKit can
+    // defer synthetic clicks while Timekeepers animates its clock, even
+    // though all four MP3 resource switches have already succeeded.
+    const slider=dock.locator("#rosie-music-volume");
+    await slider.focus();
+    await slider.press("ArrowRight");
+    assert.equal(await page.evaluate(()=>localStorage.getItem("rosieverse.music.volume.v1")),"0.27");
+    await page.getByRole("button",{name:"Mute soundtrack"}).click();
+    assert.equal(await dock.getAttribute("data-enabled"),"no");
+    await page.getByRole("button",{name:"Enable soundtrack"}).click();
+    assert.equal(await dock.getAttribute("data-enabled"),"yes");
     const routes=[["fortune","oracle-secret"],["haiku","haiku-garden"],["timekeeper","clockwork-nostalgia"]];
     for(const [route,track] of routes){
       console.log("ROUTE",name,viewport.label,route,track);
@@ -47,14 +58,6 @@ async function verify(name,browser,viewport){
         throw error;
       }
     }
-    const slider=dock.locator("#rosie-music-volume");
-    await slider.focus();
-    await slider.press("ArrowRight");
-    assert.equal(await page.evaluate(()=>localStorage.getItem("rosieverse.music.volume.v1")),"0.27");
-    await page.getByRole("button",{name:"Mute soundtrack"}).click();
-    assert.equal(await dock.getAttribute("data-enabled"),"no");
-    await page.getByRole("button",{name:"Enable soundtrack"}).click();
-    assert.equal(await dock.getAttribute("data-enabled"),"yes");
     await page.screenshot({path:out+"/"+name+"-"+viewport.label+".png",timeout:15000});
     const failed=musicResponses.filter(r=>![200,206,304].includes(r.status));
     assert.deepEqual(failed,[],"Invalid music file response");
@@ -64,7 +67,7 @@ async function verify(name,browser,viewport){
 }
 const testCases=[
  {name:"chromium",engine:chromium,views:[{label:"iphone",width:393,height:852,mobile:true},{label:"ipad",width:820,height:1180,mobile:true},{label:"desktop",width:1440,height:900,mobile:false}]},
- {name:"webkit",engine:webkit,views:[{label:"iphone",width:393,height:852,mobile:true}]}
+ {name:"webkit",engine:webkit,views:[{label:"iphone",width:393,height:852,mobile:true},{label:"ipad",width:820,height:1180,mobile:true}]}
 ];
 for(const group of testCases){
   const browser=await group.engine.launch({headless:true,args:group.name==="chromium"?["--no-sandbox"]:[]});
