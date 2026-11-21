@@ -515,3 +515,10 @@
 @media(max-width:620px){
   .ember-start-overlay .ember-expedition-next{min-height:34px;font-size:10px;margin-bottom:6px}
 }
+
+
+/* Secondary pause action returns directly to the five-world level menu. */
+.ember-pause-overlay .ember-return-levels{
+ margin-top:11px;background:linear-gradient(180deg,#194b64,#0c2c43);
+ color:#ffe2ad;border-color:rgba(251,205,139,.8);
+}
