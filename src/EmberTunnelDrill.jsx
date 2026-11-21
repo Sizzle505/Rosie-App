@@ -315,17 +315,30 @@ export default function EmberTunnelDrill({ soundOn=true }) {
         if(down)pressed.current.down=false;
         return;
       }
-      if(modeRef.current!=="running"||!onscreen.current)return;
+      if(!onscreen.current)return;
       const target=e.target;
       if(target?.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName||""))return;
+      // P works both ways; Escape is left alone for browser fullscreen.
+      if(key==="p"&&(modeRef.current==="running"||modeRef.current==="paused")){
+        e.preventDefault();if(!e.repeat)togglePause();return;
+      }
+      if(modeRef.current!=="running")return;
       if(up||down||key===" ")e.preventDefault();
       if(up)pressed.current.up=true;
       if(down)pressed.current.down=true;
       if(key===" "&&!e.repeat)turbo();
     };
     const onBlur=()=>resetHold();
+    const onVisibility=()=>{
+      // Switching apps, locking the phone or hiding the browser pauses the
+      // expedition instead of silently resuming into an attack on return.
+      if(document.hidden&&modeRef.current==="running"){
+        resetHold();modeRef.current="paused";setMode("paused");
+      }
+    };
     document.addEventListener("keydown",onKeys);
     document.addEventListener("keyup",onKeys);
+    document.addEventListener("visibilitychange",onVisibility);
     window.addEventListener("blur",onBlur);
     let raf=0,last=0,lastIdleDraw=0,alive=true;
     const render=(ts)=>{
@@ -496,6 +509,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
     resize();raf=requestAnimationFrame(render);
     return ()=>{alive=false;cancelAnimationFrame(raf);obs.disconnect();observer.disconnect();
       document.removeEventListener("keydown",onKeys);document.removeEventListener("keyup",onKeys);
+      document.removeEventListener("visibilitychange",onVisibility);
       window.removeEventListener("blur",onBlur);sound.current?.close?.();
     };
   },[soundOn]);
@@ -652,7 +666,7 @@ export default function EmberTunnelDrill({ soundOn=true }) {
       {active&&<div className="ember-run-actions">
         <button className="ember-icon-action" type="button" onClick={togglePause} aria-label="Pause run" title="Pause run">❚❚</button>
         <button className="ember-icon-action" type="button" onClick={()=>start(frame.current.stageIndex)} aria-label="Replay run" title="Replay run">↻</button>
-        <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
+        <span>Hold ▲ / ▼ to steer · Space for Turbo · P to pause</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}
         <span className="ember-best">BEST {best.toLocaleString()}</span><span className="ember-best">EXPEDITION {"★".repeat(bestStars)}{"☆".repeat(3-bestStars)}</span></div>
