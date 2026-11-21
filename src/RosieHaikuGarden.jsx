@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { formatHaiku, localDayKey, poemForDay, poemForTopic, ROSIE_HAIKU_MOODS } from "./haikuEngine.js";
 import { generateRosieText } from "./rosieAI.js";
 import "./RosieHaikuGarden.css";
@@ -17,6 +17,7 @@ import "./RosieHaikuMobileFinal.css";
 import "./RosieHaikuReviewFinal.css";
 import "./RosieHaikuReleasePolish.css";
 import "./RosieHaikuIphoneNov21.css";
+import "./RosieHaikuPoetryPolish.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
@@ -160,6 +161,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
   const [poem, setPoem] = useState(() => poemForDay());
   const [mode, setMode] = useState("daily");
   const scrollDisplayRef = useRef(null);
+  const poemScrollRef = useRef(null);
+  const lastComposeKeyRef = useRef("");
   const workbenchRef = useRef(null);
   const scrollMobileTo = (element, placement = "center") => {
     if (!element || !window.matchMedia("(max-width: 600px)").matches) return;
@@ -208,6 +211,46 @@ export default function RosieHaikuGarden({ onNavigate }) {
     return () => window.clearTimeout(timeout);
   }, [reaction]);
   const saved = useMemo(() => journal.some((entry) => poemKey(entry) === poemKey(poem)), [journal, poem]);
+  const canRegenerate = mode === "compose" && poem.source === "ai" &&
+    poem.topic === topic.trim() && poem.mood === mood;
+
+  // The three painted scrolls have different aspect ratios and distinct text
+  // footprints. Fit the actual rendered lines, preserving legibility and the
+  // attribution space on every device instead of using character-count guesses.
+  useLayoutEffect(() => {
+    const scroll = poemScrollRef.current;
+    if (!scroll) return undefined;
+    const inner = scroll.querySelector(".haiku-scroll-inner");
+    const verse = scroll.querySelector(".haiku-verse");
+    const line = verse?.querySelector("p");
+    if (!inner || !verse || !line) return undefined;
+    let frame = 0;
+    const fit = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        scroll.style.removeProperty("--haiku-fit-size");
+        const baseline = Number.parseFloat(getComputedStyle(line).fontSize);
+        if (!Number.isFinite(baseline)) return;
+        let size = baseline;
+        const available = inner.clientHeight * (scrollStyle === "grand" ? .55 : .57);
+        const minSize = scrollStyle === "grand" ? 12 : 14;
+        for (let step = 0; step < 18 && verse.scrollHeight > available && size > minSize; step++) {
+          size = Math.max(minSize, size - 1);
+          scroll.style.setProperty("--haiku-fit-size", size + "px");
+        }
+      });
+    };
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fit) : null;
+    observer?.observe(inner);
+    window.addEventListener("resize", fit);
+    fit();
+    document.fonts?.ready?.then(fit).catch(() => {});
+    return () => {
+      observer?.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", fit);
+    };
+  }, [poem, scrollStyle]);
   const announce = (message) => setNotice(message);
   const saveEntries = (next) => {
     setJournal(next);
@@ -224,7 +267,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
     setMode("daily");
     setNotice("");
   }
-  async function compose(event) {
+  async function compose(event, regenerate = false) {
     event?.preventDefault();
     if (isComposing) return;
     const subject = topic.trim();
@@ -233,7 +276,9 @@ export default function RosieHaikuGarden({ onNavigate }) {
       announce("Enter a subject to request a new poem.");
       return;
     }
-    const nextVariation = mode === "compose" ? variation + 1 : 0;
+    const composeKey = JSON.stringify([subject, mood]);
+    const nextVariation = lastComposeKeyRef.current === composeKey ? variation + 1 : 0;
+    lastComposeKeyRef.current = composeKey;
     const metadata = poemForTopic(subject, mood, nextVariation);
     const sequence = ++composeSequenceRef.current;
     setVariation(nextVariation);
@@ -253,7 +298,8 @@ export default function RosieHaikuGarden({ onNavigate }) {
       }
       setPoem({
         ...metadata, id: created.id || `ai-${Date.now()}`,
-        lines: created.lines, title: `On ${subject}`, source: "ai"
+        lines: created.lines, title: `On ${subject}`, source: "ai",
+        metre: created.metre || "approximate", syllableCounts: created.counts || []
       });
       announce(created.revised ? "Rosie refined a new poem for your subject." : "A new original haiku about your subject.");
       setReaction({ type: "inspired" });
@@ -365,17 +411,18 @@ export default function RosieHaikuGarden({ onNavigate }) {
         <section className="haiku-content">
           <div className="haiku-scroll-column">
             <div className="haiku-scroll-display" ref={scrollDisplayRef}>
-            <div className="haiku-scroll" data-scroll-style={scrollStyle} data-verse-density={poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}
+            <div className="haiku-scroll" ref={poemScrollRef} data-scroll-style={scrollStyle} data-ink-state={poem.source==="ai"?"fresh":"still"} data-verse-density={poem.lines.some(line=>line.length>38)?"dense":poem.lines.some(line=>line.length>28)?"long":"normal"} key={poemKey(poem)+"-"+scrollStyle}
               style={scrollStyle==="imperial"&&cleanImperialScroll?{backgroundImage:`url("${cleanImperialScroll}")`}:undefined}>
               <div className="haiku-scroll-inner">
                 <span className="haiku-scroll-caption">{mode === "daily" ? "TODAY IN THE GARDEN" : mode === "journal" ? "FROM THE POETRY JOURNAL" : "A ROSIE ORIGINAL"}</span>
                 <span className="haiku-ornament" aria-hidden="true">❀</span>
+                <span className="haiku-ink-ripple" aria-hidden="true" />
                 <div className="haiku-verse" aria-label="Haiku poem">{poem.lines.map((line, index) => <p key={index} style={{ "--line-order": index }}>{line}</p>)}</div>
                 <div className="haiku-scroll-meta" aria-label="Five seven five. Rosie.">
-                  <span className="haiku-metre">5 · 7 · 5</span>
+                  <span className="haiku-metre">{poem.source === "ai" && poem.metre !== "verified" ? "ROSIE’S VERSE" : "5 · 7 · 5"}</span>
                   <div className="haiku-scroll-signature">— Rosie <span aria-hidden="true">✿</span></div>
                 </div>
-                {mode !== "daily" && <p className="haiku-dedication">{poem.title}</p>}
+                {mode !== "daily" && <p className="haiku-dedication" title={poem.title}>{poem.title?.length > 46 ? poem.title.slice(0,43) + "…" : poem.title}</p>}
               </div>
               <div className="haiku-scroll-cycle" role="group" aria-label="Change poetry scroll artwork">
                 <button type="button" onClick={()=>cycleScroll(-1)} aria-label="Previous poetry scroll" title="Previous scroll">‹</button>
@@ -383,6 +430,11 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </div>
             </div>
             </div>
+            {canRegenerate && (
+              <button type="button" className="haiku-regenerate" onClick={() => compose(undefined, true)} disabled={isComposing} aria-label="Regenerate a fresh haiku about the same subject in the same style">
+                <span aria-hidden="true">↻</span> Another verse · Same subject &amp; style
+              </button>
+            )}
             <p role="status" aria-live="polite" className="haiku-status">{notice || "Small poems. Deep breaths. Grand opinions."}</p>
             <div className="haiku-verse-actions">
               <button type="button" onClick={toggleSave} className={saved?"haiku-action-saved":""} aria-label={saved?"Remove verse from favorites":"Save verse"} title={saved?"Saved - remove":"Save verse"}>
