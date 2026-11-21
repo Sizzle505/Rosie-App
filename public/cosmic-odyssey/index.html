@@ -23,7 +23,7 @@
 </div></div>
 </div>
 <section class="mobile-card-deck" id="mobile-card-deck" aria-label="Captain Rosie and Galaxy's Most Wanted character cards">
-  <div class="mobile-card-deck-title"><span>PROFILES IN COURAGE</span><h2>Captain Rosie &amp; the Fiends</h2><p>Choose a character to view the full dossier.</p></div>
+  <div class="mobile-card-deck-title"><span>PROFILES IN COURAGE</span><h2>Captain Rosie &amp; the Fiends</h2><p>Choose a character to view the full dossier.</p><button type="button" class="card-launch-link" id="mobile-card-launch">Launch Cosmic Odyssey</button></div>
 </section>
 <dialog class="card-detail-modal" id="card-detail-modal" aria-label="Character profile viewer">
   <button type="button" class="card-detail-close" id="card-detail-close" aria-label="Close character profile">✕ <span>CLOSE</span></button>
@@ -38,6 +38,7 @@
     <span id="card-detail-position" class="card-detail-position" aria-live="polite"></span>
     <button type="button" class="card-detail-cycle" id="card-detail-next" aria-label="Next character card" title="Next character (Right arrow)">›</button>
   </div>
+  <button type="button" class="card-detail-launch card-launch-link" id="card-detail-launch">Play Cosmic Odyssey</button>
   <div class="card-detail-hint" aria-hidden="true">CLICK CARD TO FLIP · ← → CYCLE · ESC CLOSE</div>
 </dialog>
 <div id="victory-overlay" class="victory-overlay" role="dialog" aria-modal="true" aria-labelledby="victory-title" hidden>
