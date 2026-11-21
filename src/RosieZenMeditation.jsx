@@ -265,7 +265,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
     <div className="zen-panel">
       <div className="haiku-section-label">YOUR LITTLE SANCTUARY</div>
       <h2>Find your stillness.</h2>
-      <p className="zen-panel-intro">Rosie has mastered doing absolutely nothing. She would be delighted to teach you.</p>
+      <div className="zen-sensei-intro">
+        <p className="zen-panel-intro">Rosie has mastered doing absolutely nothing. She would be delighted to teach you.</p>
+        <img src={NEW_ART+"characters/sensei-greeting.webp"} alt="" aria-hidden="true" loading="lazy" className="zen-sensei-welcome"/>
+      </div>
       <div className="zen-program-grid" role="group" aria-label="Meditation programs">
         {PROGRAMS.map(p=><button type="button" key={p.id} className={"zen-program"+(kind===p.id?" selected":"")}
           aria-pressed={kind===p.id} onClick={()=>setKind(p.id)}>
@@ -275,6 +278,27 @@ export default function RosieZenMeditation({scene="field",poem}) {
         </button>)}
       </div>
       <p className="zen-selected-description">{selected.description}</p>
+      <details className="zen-art-options">
+        <summary><img src={sceneSrc} alt="" loading="lazy"/><span>Choose scenery and Rosie's kimono</span><span aria-hidden="true" className="zen-options-chevron">⌄</span></summary>
+        <div className="zen-art-options-inner">
+          <div className="zen-art-picker-label">Garden scenery</div>
+          <div className="zen-backdrop-picker" role="group" aria-label="Choose meditation background">
+            {MEDITATION_VIEWS.map(v=><button key={v.id} type="button"
+              className={viewId===v.id?"selected":""} aria-pressed={viewId===v.id}
+              aria-label={v.label} title={v.label} onClick={()=>setViewId(v.id)}>
+              <img src={NEW_ART+v.image} alt="" loading="lazy"/><span>{v.label}</span>
+            </button>)}
+          </div>
+          <div className="zen-art-picker-label">Rosie's kimono</div>
+          <div className="zen-outfit-picker" role="group" aria-label="Choose meditating Rosie outfit">
+            {ROSIE_OUTFITS.map(v=><button key={v.id} type="button"
+              className={outfitId===v.id?"selected":""} aria-pressed={outfitId===v.id}
+              aria-label={v.label} title={v.label} onClick={()=>setOutfitId(v.id)}>
+              <img src={NEW_ART+v.image} alt="" loading="lazy"/><span>{v.label}</span>
+            </button>)}
+          </div>
+        </div>
+      </details>
       <fieldset className="zen-options"><legend>Session length</legend>
         <div className="zen-choice-row">
           {DURATIONS.map(n=><button type="button" key={n} className={minutes===n?"selected":""}
