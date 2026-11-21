@@ -107,7 +107,7 @@ try{
  await page.mouse.up();
  await page.getByRole('button',{name:'Open full Layout Studio'}).click();
  const textSelection=await page.getByRole('button',{name:/Hide elements/}).innerText();
- assert.ok(Number(textSelection.match(/\\d+/)?.[0]||0)>=1,'Marquee drag must select at least one canvas target: '+textSelection);
+ assert.ok(Number(textSelection.match(/\d+/)?.[0]||0)>=1,'Marquee drag must select at least one canvas target: '+textSelection);
  console.log('PASS direct marquee gesture adds selected canvas targets');
  await page.getByRole('button',{name:'Clear selection'}).click();
 
