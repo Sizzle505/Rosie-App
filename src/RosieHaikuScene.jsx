@@ -82,7 +82,6 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
   return (
     <section className="haiku-scene-stage" aria-label="Rosie's meditation garden">
       <div className={`haiku-scene-image haiku-scene-image--${scene}`}>
-        {rosieAvailable && breathingPose && <div className="haiku-scene-aura" aria-hidden="true" />}
         {rosieAvailable && (
           <img
             className={`haiku-scene-rosie${breathingPose ? " haiku-scene-rosie--slow-breath" : " haiku-scene-rosie--expressive"}`}
@@ -105,8 +104,8 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
       </div>
       <div className="haiku-scene-selector" role="group" aria-label="Choose meditation scenery">
         {HAIKU_SCENES.map((item) => (
-          <button type="button" key={item.id} className={scene === item.id ? "is-selected" : ""} aria-label={item.label} aria-pressed={scene === item.id} onClick={() => switchScene(item.id)}>
-            <img src={item.icon} alt="" aria-hidden="true" loading="lazy"/><span>{item.label}</span>
+          <button type="button" key={item.id} className={scene === item.id ? "is-selected" : ""} aria-label={item.label} title={item.label} aria-pressed={scene === item.id} onClick={() => switchScene(item.id)}>
+            <img className="haiku-scene-choice-art" src={item.icon} alt="" aria-hidden="true" loading="lazy" decoding="async"/>
           </button>
         ))}
       </div>
