@@ -59,6 +59,12 @@ export function excavationNotice(event) {
   if(event.type==="break-wall")return event.material==="crystal"
     ?{kind:"success",title:"CRYSTAL SHATTERED",detail:"+250 points · Turbo charge earned",duration:1.6}
     :{kind:"success",title:"EARTH CLEARED",detail:"+125 points · Turbo charge earned",duration:1.5};
+  if(event.type==="bonus-time")return {
+    kind:"success",title:"TIME DISCOVERED",detail:"+3 seconds · +"+event.points+" points",duration:1.65
+  };
+  if(event.type==="bonus-canister")return {
+    kind:"success",title:"TURBO CANISTER",detail:"+65 Turbo charge · +"+event.points+" points",duration:1.65
+  };
   if(event.type==="secret-found")return {
     kind:"relic",title:"ROYAL CHAMBER FOUND",detail:"Royal Bone Medallion recovered! +750",duration:3.0
   };
