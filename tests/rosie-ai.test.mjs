@@ -4,7 +4,7 @@ import test from "node:test";
 import handler from "../api/rosie-ai.js";
 import { relevantRosieBackground, rosiePersonaFor, ROSIE_BACKGROUND } from "../api/_lib/rosiePersona.js";
 import { makeRosiePrompt } from "../api/_lib/rosiePrompts.js";
-import { assessHaikuMeter, pronunciationOptions } from "../api/_lib/rosieMeter.js";
+import { assessHaikuMeter, pronunciationOptions, lineSyllableAssessment } from "../api/_lib/rosieMeter.js";
 
 async function invoke(body, method = "POST") {
   const res = {
@@ -244,6 +244,53 @@ test("phonetic repair tells Venice the line and spoken syllable counts", async (
     assert.match(calls[1].messages[1].content, /phonetic syllable counts/i);
     assert.match(calls[1].messages[1].content, /TARGET 5/);
     assert.match(calls[1].messages[1].content, /Rosie under the stars/);
+  } finally {
+    if (oldKey === undefined) delete process.env.VENICE_API_KEY;
+    else process.env.VENICE_API_KEY = oldKey;
+    globalThis.fetch = oldFetch;
+  }
+});
+
+test("screenshots' six-syllable breakfast opening is not labeled as five", () => {
+  const row = lineSyllableAssessment("A rich warm scent floats in", 5);
+  assert.equal(row.count, 6);
+  assert.equal(row.matches, false);
+});
+
+test("choose a verified 5-7-5 haiku from several creative candidates without an extra provider call", async () => {
+  const oldKey = process.env.VENICE_API_KEY;
+  const oldFetch = globalThis.fetch;
+  process.env.VENICE_API_KEY = "test-key-do-not-deploy";
+  let requests = 0;
+  globalThis.fetch = async (_url, options) => {
+    requests++;
+    const body = JSON.parse(options.body);
+    assert.match(body.messages[0].content, /THREE distinct candidate haikus/);
+    return {
+      ok: true,
+      json: async () => ({
+        choices: [{
+          message: {
+            content: JSON.stringify({
+              poems: [
+                { lines: ["A rich warm scent floats in", "on wooden floor", "I claim this golden hour"] },
+                { lines: ["Bright stars crown the night", "My nose finds the hidden path", "Cheese waits on the plate"] },
+                { lines: ["One", "The sun", "Two"] }
+              ]
+            })
+          }
+        }]
+      })
+    };
+  };
+  try {
+    const response = await invoke({ feature: "haiku", topic: "a breakfast feast", mood: "savage", variation: 0 });
+    assert.equal(response.code, 200);
+    assert.equal(response.payload.metre, "verified");
+    assert.deepEqual(response.payload.counts, [5, 7, 5]);
+    assert.deepEqual(response.payload.lines,
+      ["Bright stars crown the night", "My nose finds the hidden path", "Cheese waits on the plate"]);
+    assert.equal(requests, 1);
   } finally {
     if (oldKey === undefined) delete process.env.VENICE_API_KEY;
     else process.env.VENICE_API_KEY = oldKey;
