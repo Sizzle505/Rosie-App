@@ -1,0 +1,497 @@
+/* Haiku Zen Garden: concept-led art arrangement using EXISTING assets only.
+   Deliberately last in the cascade. No generated images, no changes to other worlds.
+   The main studio enclosure is transparent so its garden backdrop remains visible;
+   individual controls retain translucent surfaces for contrast/accessibility. */
+
+.haiku-page .haiku-shell{
+  max-width:1700px;
+  width:min(100%,1700px);
+}
+.haiku-page .haiku-workbench{
+  background:transparent!important;
+  background-image:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border:1px solid rgba(242,195,135,.72);
+  border-radius:23px;
+  box-shadow:inset 0 0 0 1px rgba(255,233,193,.12),0 12px 34px rgba(17,13,28,.19);
+  overflow:hidden;
+}
+.haiku-page .haiku-tabs{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  align-items:stretch;
+  padding:7px 7px 9px;
+  border-bottom:1px solid rgba(244,204,145,.62);
+  background:linear-gradient(180deg,rgba(25,18,41,.48),rgba(31,19,44,.28));
+}
+.haiku-page .haiku-tabs > button{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-height:132px;
+  min-width:0;
+  padding:8px 2px 5px;
+  border:0;
+  border-right:1px solid rgba(242,200,145,.12);
+  color:#ffefd5;
+  background:transparent;
+  box-shadow:none;
+  text-shadow:0 2px 5px rgba(10,7,19,.8);
+}
+.haiku-page .haiku-tabs > button:last-child{border-right:0;}
+.haiku-page .haiku-tabs > button img{
+  display:block;
+  flex:0 0 auto;
+  width:clamp(64px,5vw,88px);
+  height:clamp(64px,5vw,88px);
+  object-fit:contain;
+  filter:drop-shadow(0 4px 7px rgba(16,9,24,.55));
+  transform:scale(1.06);
+  transition:transform .18s ease,filter .18s ease;
+}
+.haiku-page .haiku-tabs > button:is(:hover,:focus-visible) img,
+.haiku-page .haiku-tabs > button.selected img {
+  transform:scale(1.12);
+  filter:drop-shadow(0 0 9px rgba(255,199,131,.54));
+}
+.haiku-page .haiku-tabs > button.selected,
+.haiku-page .haiku-tabs > button:hover {
+  color:#fff4de;
+  background:rgba(111,70,86,.23);
+  box-shadow:none;
+}
+.haiku-page .haiku-tabs .haiku-tab-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  min-height:29px;
+  margin:0;
+  padding:4px 9px;
+  border-radius:999px;
+  background:rgba(20,13,31,.18);
+  color:#fff1d6;
+  font:700 clamp(12px,1vw,15px)/1.12 Georgia,serif;
+  letter-spacing:0;
+  white-space:nowrap;
+  text-shadow:0 2px 4px rgba(10,7,16,.55);
+}
+.haiku-page .haiku-tabs > button.selected .haiku-tab-label {
+  color:#37272f;
+  background:linear-gradient(180deg,#ffedd0 0%,#e9be83 68%,#d29a62);
+  box-shadow:0 2px 12px rgba(242,184,118,.48),inset 0 0 0 1px rgba(255,243,216,.75);
+  text-shadow:none;
+}
+.haiku-page .haiku-tabs .haiku-tab-journal-text{
+  background:rgba(20,13,31,.18);
+  border-radius:999px;
+  padding:4px 9px;
+  color:#fff1d6;
+}
+.haiku-page .haiku-tabs > button.selected .haiku-tab-journal-text{
+  color:#37272f;
+  background:linear-gradient(180deg,#ffedd0,#d9a36e);
+}
+.haiku-page .haiku-tabs .haiku-tab-journal-text > span {
+  padding:0 3px;
+  margin:0;
+  color:inherit;
+  background:transparent;
+  font:700 10px system-ui,sans-serif;
+}
+/* Keep the glass enclosure almost clear; strengthen only textual controls. */
+.haiku-page .haiku-panel,
+.haiku-page .zen-panel {
+  background:linear-gradient(180deg,rgba(19,15,34,.25),rgba(25,19,41,.12));
+  color:#fff2df;
+}
+.haiku-page .haiku-panel{
+  padding:22px clamp(17px,1.5vw,25px);
+}
+.haiku-page .haiku-panel h2,
+.haiku-page .zen-panel h2 {
+  margin:7px 0 10px;
+  font-size:clamp(26px,2.1vw,34px);
+  line-height:1.13;
+  color:#fff2d8;
+  text-shadow:0 2px 12px #171021;
+}
+.haiku-page .haiku-panel p,
+.haiku-page .zen-panel-intro{
+  color:#fff0e4;
+  line-height:1.48;
+  text-shadow:0 2px 8px rgba(12,8,18,.92);
+}
+.haiku-page .haiku-workbench-footer{
+  padding:12px 16px;
+  border-top:1px solid rgba(235,192,131,.4);
+  background:rgba(15,13,28,.28);
+  color:#ffdfbe;
+  text-shadow:0 1px 5px #120b1a;
+}
+.haiku-page .zen-panel{
+  padding:17px clamp(14px,1.5vw,25px) 18px;
+}
+.haiku-page .zen-panel .zen-panel-intro{
+  margin:0 0 13px;
+  font-size:13px;
+  line-height:1.5;
+}
+.haiku-page .zen-panel .zen-program-grid{
+  gap:10px;
+}
+.haiku-page .zen-panel .zen-program {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  min-height:106px;
+  padding:8px;
+  border:1px solid rgba(244,203,151,.65);
+  border-radius:14px;
+  background:rgba(23,17,37,.65);
+  color:#fff3e5;
+  box-shadow:inset 0 0 0 1px rgba(255,221,183,.065),0 3px 10px rgba(13,9,21,.18);
+}
+.haiku-page .zen-panel .zen-program:hover,
+.haiku-page .zen-panel .zen-program.selected {
+  background:rgba(107,58,74,.75);
+  border-color:#f6c88c;
+  box-shadow:0 0 0 1px rgba(255,221,159,.35),0 0 15px rgba(235,167,112,.19);
+}
+.haiku-page .zen-panel .zen-program-emblem {
+  flex:0 0 clamp(69px,5.3vw,86px);
+  width:clamp(69px,5.3vw,86px);
+  height:clamp(69px,5.3vw,86px);
+  max-width:none;
+  object-fit:contain;
+  transform:scale(1.09);
+  filter:drop-shadow(0 4px 6px rgba(9,8,21,.4));
+}
+.haiku-page .zen-panel .zen-program-caption{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+  flex:1 1 auto;
+  min-width:0;
+}
+.haiku-page .zen-panel .zen-program-caption strong{
+  font:600 clamp(14px,1.1vw,18px)/1.16 Georgia,serif;
+  text-wrap:balance;
+}
+.haiku-page .zen-panel .zen-program-caption small{
+  font:750 clamp(8px,.58vw,10px)/1.3 system-ui,sans-serif;
+  letter-spacing:.055em;
+  color:#f3c89c;
+}
+.haiku-page .zen-panel .zen-program-grid .zen-program:last-child:nth-child(odd){
+  grid-column:1 / -1;
+  min-height:93px;
+  justify-content:flex-start;
+}
+.haiku-page .zen-panel .zen-selected-description{
+  min-height:0;
+  margin:13px 0;
+  font-size:12px;
+  line-height:1.5;
+  text-shadow:0 2px 6px #120c1c;
+}
+/* The scenery controls become first-class illustrated choices. */
+.haiku-page .haiku-scene-stage .haiku-scene-selector{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  gap:10px;
+  width:100%;
+  max-width:none;
+  margin:36px 0 0;
+  padding:0 4px;
+  box-sizing:border-box;
+}
+.haiku-page .haiku-scene-selector button{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  min-width:0;
+  min-height:78px;
+  padding:7px 4px;
+  border-radius:16px;
+  border:1px solid rgba(236,187,129,.8);
+  background:rgba(22,19,37,.78);
+  box-shadow:0 4px 13px rgba(17,11,25,.3);
+  color:#fff3dc;
+  font:600 clamp(12px,1vw,14px)/1.2 Georgia,serif;
+  letter-spacing:0;
+  white-space:nowrap;
+}
+.haiku-page .haiku-scene-selector button:before{
+  display:block;
+  flex:0 0 auto;
+  width:39px;
+  height:39px;
+  line-height:39px;
+  font-size:34px;
+  color:#f7b9c7;
+  text-shadow:0 0 9px #c56b7b;
+}
+.haiku-page .haiku-scene-selector button:nth-child(1):before {
+  content:"❀";
+}
+.haiku-page .haiku-scene-selector button:nth-child(2):before {
+  content:"";
+  background:url("/rosieverse/haiku/ornaments/tab-meditate.webp") center/contain no-repeat;
+}
+.haiku-page .haiku-scene-selector button:nth-child(3):before {
+  content:"";
+  background:url("/rosieverse/haiku/living-garden/temple-lantern.webp") center/contain no-repeat;
+}
+.haiku-page .haiku-scene-selector button.is-selected {
+  color:#382c33;
+  background:linear-gradient(180deg,#ffefd4,#edcd97 73%,#d5a874);
+  border-color:#ffe3b1;
+  box-shadow:0 4px 12px rgba(20,12,24,.4),inset 0 0 0 1px rgba(255,239,200,.72);
+}
+.haiku-page .haiku-verse-actions{
+  display:grid;
+  grid-template-columns:.75fr 1fr 1.36fr;
+  gap:9px;
+  width:min(100%,540px);
+  margin:3px auto 0;
+}
+.haiku-page .haiku-verse-actions button{
+  min-height:48px;
+  padding:9px 7px;
+  border:1px solid rgba(245,199,145,.86);
+  border-radius:12px;
+  background:rgba(26,22,42,.85);
+  box-shadow:0 3px 9px rgba(12,9,23,.22);
+  color:#fff1d9;
+  font:600 clamp(11px,.84vw,14px)/1.15 Georgia,serif;
+  white-space:nowrap;
+}
+.haiku-page .haiku-verse-actions button:nth-child(2):before{
+  content:"↗";
+  font-size:19px;
+  margin-right:7px;
+  color:#f6cfa6;
+}
+.haiku-page .haiku-verse-actions button:nth-child(3):before{
+  content:"▧";
+  font-size:19px;
+  margin-right:7px;
+  color:#f6cfa6;
+}
+.haiku-page .haiku-status {
+  max-width:540px;
+  color:#ffead1;
+  text-shadow:0 2px 7px #140e21;
+  font-style:italic;
+  font-size:12px;
+}
+@media(min-width:1480px){
+  .haiku-page .haiku-shell{
+    width:min(100%,1700px);
+    max-width:1700px;
+    grid-template-columns:minmax(0,1.07fr) minmax(0,1.14fr) minmax(0,1.10fr);
+    column-gap:clamp(15px,1.16vw,22px);
+  }
+  .haiku-page .haiku-scene-stage{
+    min-width:0;
+    width:100%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{margin-top:60px;}
+  .haiku-page .haiku-scene-image{
+    height:clamp(395px,48vh,475px);
+  }
+  .haiku-page .haiku-scene-rosie--slow-breath {
+    left:4%;
+    max-width:94%;
+    height:119%;
+    bottom:-12%;
+  }
+  .haiku-page .haiku-scene-rosie--expressive{
+    left:12%;
+    max-width:87%;
+    height:112%;
+    bottom:-9%;
+  }
+  .haiku-page .haiku-scroll-column{
+    width:100%;
+    gap:10px;
+    min-width:0;
+  }
+  .haiku-page .haiku-scroll{
+    width:min(100%,562px);
+    max-width:100%;
+    margin:0 auto;
+  }
+  .haiku-page .haiku-content{display:contents;}
+  .haiku-page .haiku-workbench{
+    width:100%;
+    align-self:start;
+    min-width:0;
+  }
+  /* The serene proverb is still centered below the content; it no longer
+     steals the scarce room needed to show full-sized original artwork. */
+  .haiku-page .haiku-shell > .haiku-scene-quote{
+    margin:16px auto 0;
+  }
+}
+@media(min-width:900px) and (max-width:1479px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{margin-top:37px;}
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    left:15%;
+    max-width:85%;
+    height:115%;
+    bottom:-11%;
+  }
+  .haiku-page .haiku-scene-rosie--expressive{
+    left:24%;
+    max-width:76%;
+    height:108%;
+    bottom:-9%;
+  }
+  .haiku-page .haiku-tabs > button{min-height:116px;}
+  .haiku-page .haiku-tabs > button img{width:72px;height:72px;}
+  .haiku-page .zen-panel .zen-program{min-height:98px;}
+  .haiku-page .zen-panel .zen-program-emblem{width:73px;height:73px;flex-basis:73px;}
+}
+@media(min-width:601px) and (max-width:899px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    left:25%;
+    max-width:70%;
+    height:101%;
+    bottom:-3%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    width:min(100%,630px);
+    margin:15px auto 0;
+  }
+  .haiku-page .haiku-tabs > button{min-height:123px;}
+  .haiku-page .haiku-tabs > button img{width:77px;height:77px;}
+  .haiku-page .zen-panel .zen-program-emblem{width:80px;height:80px;flex-basis:80px;}
+}
+@media(max-width:600px){
+  .haiku-page .haiku-workbench{
+    border-radius:17px;
+    width:100%;
+  }
+  .haiku-page .haiku-tabs{padding:4px 3px 7px;}
+  .haiku-page .haiku-tabs > button{
+    min-height:102px;
+    padding:8px 0 5px;
+    gap:3px;
+  }
+  .haiku-page .haiku-tabs > button img{
+    width:clamp(48px,14vw,61px);
+    height:clamp(48px,14vw,61px);
+    transform:scale(1.02);
+  }
+  .haiku-page .haiku-tabs .haiku-tab-label,
+  .haiku-page .haiku-tabs .haiku-tab-journal-text {
+    min-height:24px;
+    padding:4px 7px;
+    font-size:clamp(10px,2.6vw,12px);
+  }
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    left:25%;
+    max-width:74%;
+    height:104%;
+    bottom:-11%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    gap:6px;
+    padding:0;
+    margin:28px auto 0;
+  }
+  .haiku-page .haiku-scene-selector button{
+    min-height:64px;
+    border-radius:12px;
+    font-size:clamp(10px,2.8vw,12px);
+    padding:4px 1px;
+  }
+  .haiku-page .haiku-scene-selector button:before{
+    width:28px;height:28px;line-height:28px;font-size:25px;
+  }
+  .haiku-page .zen-panel{padding:16px 12px 19px;}
+  /* Each program becomes an easy-to-tap illustrated row on narrow screens. */
+  .haiku-page .zen-panel .zen-program-grid{grid-template-columns:1fr;gap:8px;}
+  .haiku-page .zen-panel .zen-program{
+    grid-column:1 / -1;
+    min-height:86px;
+    gap:12px;
+    padding:8px 11px;
+  }
+  .haiku-page .zen-panel .zen-program-emblem{
+    width:70px;height:70px;flex-basis:70px;
+  }
+  .haiku-page .zen-panel .zen-program-caption strong{font-size:16px;}
+  .haiku-page .zen-panel .zen-program-caption small{font-size:10px;}
+  .haiku-page .haiku-verse-actions{
+    width:100%;
+    gap:5px;
+    grid-template-columns:.76fr 1fr 1.34fr;
+  }
+  .haiku-page .haiku-verse-actions button{
+    min-height:43px;
+    padding:8px 4px;
+    font-size:clamp(9px,2.7vw,12px);
+  }
+  .haiku-page .haiku-verse-actions button:nth-child(2):before,
+  .haiku-page .haiku-verse-actions button:nth-child(3):before{
+    display:none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .haiku-page .haiku-tabs > button img{transition:none;transform:none;}
+}
+
+/* Conventional desktop also receives the reference's three aligned zones.
+   Keep 1024px iPad landscape in two columns, and iPad portrait/phone stacked. */
+@media(min-width:1360px) and (max-width:1479px){
+  .haiku-page .haiku-shell{
+    display:grid;
+    grid-template-columns:minmax(0,.94fr) minmax(0,1.17fr) minmax(0,1.03fr);
+    column-gap:16px;
+    row-gap:14px;
+    width:min(100%,1370px);
+    max-width:1370px;
+    align-items:start;
+  }
+  .haiku-page .haiku-header{grid-column:1 / -1;grid-row:1;}
+  .haiku-page .haiku-scene-stage{
+    grid-column:1;
+    grid-row:2;
+    width:100%;
+    min-width:0;
+  }
+  .haiku-page .haiku-content{display:contents;}
+  .haiku-page .haiku-scroll-column{
+    grid-column:2;
+    grid-row:2;
+    min-width:0;
+    width:100%;
+  }
+  .haiku-page .haiku-workbench{
+    grid-column:3;
+    grid-row:2;
+    width:100%;
+  }
+  .haiku-page .haiku-scroll{width:min(100%,520px);}
+  .haiku-page .haiku-scene-image{height:clamp(385px,36vw,455px);}
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{margin-top:54px;}
+  .haiku-page .haiku-tabs > button{min-height:115px;}
+  .haiku-page .haiku-tabs > button img{width:72px;height:72px;}
+  .haiku-page .zen-panel .zen-program-emblem{
+    width:69px;height:69px;flex-basis:69px;
+  }
+  .haiku-page .zen-panel .zen-program{min-height:99px;}
+}
