@@ -1,0 +1,214 @@
+/* Release polish: matching sound control, poetic scroll attribution, and
+   direct portrait art for iPhone timed meditation. Loaded last in Haiku. */
+
+/* Account paw uses 44 x 44 at safe-top+5, right 6.
+   Identical footprint/center for the music medallion one row below. */
+.rosie-music-launch{
+  width:44px!important;height:44px!important;
+  min-width:44px!important;min-height:44px!important;
+  transform-origin:center center;
+}
+.rosie-music-dock{
+  top:calc(env(safe-area-inset-top,0px) + 59px)!important;
+  right:9px!important;
+}
+@media(max-width:700px){
+  .rosie-music-launch{
+    width:44px!important;height:44px!important;
+    min-width:44px!important;min-height:44px!important;
+  }
+  .rosie-music-dock{
+    top:calc(env(safe-area-inset-top,0px) + 57px)!important;
+    right:6px!important;
+  }
+}
+@media(min-width:721px) and (max-width:1199px) and (pointer:coarse){
+  .rosie-music-launch{
+    width:52px!important;height:52px!important;
+    min-width:52px!important;min-height:52px!important;
+  }
+  .rosie-music-dock{
+    top:calc(env(safe-area-inset-top,0px) + 74px)!important;
+    right:18px!important;
+  }
+}
+
+/* Separate poetic text from the attribution on each real painted scroll.
+   The attribution sits on its own lower line of the parchment. */
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-inner{
+  position:absolute!important;
+  justify-content:center!important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-verse{
+  position:relative!important;
+  flex:0 0 auto;
+  margin:0 auto!important;
+  width:100%;
+  text-align:center!important;
+  transform:translateY(-17%)!important;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta{
+  position:absolute!important;
+  left:0!important;
+  right:0!important;
+  bottom:5%!important;
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  gap:2px!important;
+  text-align:center!important;
+  color:#895e4e;
+  font-size:11px;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta .haiku-metre{
+  display:block!important;
+  position:static!important;
+  margin:0!important;
+  font:normal 10px/1.1 Georgia,serif!important;
+  letter-spacing:.24em;
+  color:#8c6557;
+}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta .haiku-scroll-signature{
+  position:static!important;
+  display:block!important;
+  margin:0!important;
+  font-size:clamp(17px,2vw,21px)!important;
+  line-height:1.05!important;
+  color:#8c6157;
+}
+.haiku-page .haiku-scroll[data-scroll-style="sakura"] .haiku-scroll-meta{bottom:5%!important;}
+.haiku-page .haiku-scroll[data-scroll-style="imperial"] .haiku-scroll-meta{bottom:4%!important;}
+.haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-scroll-meta{bottom:1%!important;}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-dedication{
+  position:absolute!important;
+  bottom:0!important;
+  left:0!important;right:0!important;
+  text-align:center!important;
+  margin:0!important;
+  color:#8c6157;
+  font-size:10px!important;
+}
+.haiku-page .haiku-scroll[data-scroll-style]:has(.haiku-dedication) .haiku-scroll-meta{
+  bottom:13%!important;
+}
+.haiku-page .haiku-status{
+  margin:11px auto 7px!important;
+  text-align:center!important;
+  font:italic clamp(13px,3.5vw,17px)/1.3 "Iowan Old Style",Palatino,Georgia,serif!important;
+  color:#fff0cd;
+  text-shadow:0 2px 7px rgba(19,8,31,.83);
+}
+.haiku-page .haiku-verse-actions{
+  margin:0 auto 2px!important;
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-verse{
+    transform:translateY(-13%)!important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-verse{
+    transform:translateY(-10%)!important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-meta .haiku-scroll-signature{
+    font-size:clamp(15px,4vw,17px)!important;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-scroll-meta .haiku-scroll-signature{
+    font-size:14px!important;
+  }
+}
+
+/* Quiet scenic arrows: no panorama name or bulky settings bar. */
+.zen-immersive .zen-backdrop-cycle{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  top:calc(env(safe-area-inset-top,0px) + 90px)!important;
+  z-index:9!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:0!important;
+  height:0!important;
+  padding:0 13px!important;
+  margin:0!important;
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:none!important;
+  box-shadow:none!important;
+  pointer-events:none;
+}
+.zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-arrow{
+  display:grid!important;
+  place-items:center!important;
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  min-height:28px!important;
+  border:1px solid rgba(179,221,213,.40)!important;
+  border-radius:50%!important;
+  background:rgba(17,37,48,.29)!important;
+  color:#e7f3ed!important;
+  box-shadow:0 2px 5px rgba(5,11,18,.18)!important;
+  opacity:.58;
+  font:normal 22px/1 Georgia,serif!important;
+  pointer-events:auto;
+}
+.zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-arrow:hover,
+.zen-immersive .zen-backdrop-cycle .zen-backdrop-cycle-arrow:focus-visible{
+  opacity:1;
+  background:rgba(24,59,72,.76)!important;
+}
+
+/* Mobile 9:16 artwork is an actual file for each of the seven scenes.
+   No duplicated blur, landscape strip, masking, or painted panel obscuration. */
+@media(max-width:600px){
+ .zen-immersive{
+   background:var(--zen-mobile-image) 50% 50% / cover no-repeat!important;
+ }
+ .zen-immersive .zen-immersive-scenery{
+   position:fixed!important;inset:0!important;
+   z-index:0!important;isolation:isolate;
+   overflow:hidden!important;
+ }
+ .zen-immersive .zen-immersive-scenery::before,
+ .zen-immersive .zen-immersive-scenery::after{
+   display:none!important;content:none!important;
+ }
+ .zen-immersive .zen-immersive-scenery img,
+ .zen-immersive .zen-immersive-scenery picture,
+ .zen-immersive .zen-immersive-scenery picture img{
+   display:block!important;
+   position:absolute!important;
+   inset:0!important;
+   width:100%!important;height:100%!important;
+   max-width:none!important;max-height:none!important;
+   object-fit:cover!important;
+   object-position:50% 50%!important;
+   filter:none!important;
+   opacity:1!important;
+   -webkit-mask-image:none!important;
+   mask-image:none!important;
+ }
+ .zen-immersive .zen-immersive-dialog{
+   background:transparent!important;
+   box-shadow:none!important;
+   backdrop-filter:none!important;
+   -webkit-backdrop-filter:none!important;
+ }
+ .zen-immersive .zen-immersive-header{
+   background:rgba(17,13,28,.28)!important;
+   border:1px solid rgba(253,218,175,.21)!important;
+ }
+ .zen-immersive .zen-guidance{
+   background:linear-gradient(180deg,rgba(18,14,34,.58),rgba(18,15,32,.75))!important;
+   border:1px solid rgba(240,215,181,.24)!important;
+   box-shadow:0 4px 16px rgba(14,9,26,.18)!important;
+ }
+ .zen-immersive .zen-backdrop-cycle{
+   top:calc(env(safe-area-inset-top,0px) + 108px)!important;
+ }
+}

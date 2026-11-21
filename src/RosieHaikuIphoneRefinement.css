@@ -1,0 +1,338 @@
+/* Existing-asset refinements for iPhone Haiku and the meditation session.
+   Imported after the earlier Haiku polished layout. No new raster art. */
+
+/* One central portrait anchor, and a symmetric pair of outfit controls. */
+@media(max-width:600px){
+  .haiku-page .haiku-scene-stage{
+    width:100%;
+    max-width:100%;
+    margin-inline:auto;
+  }
+  .haiku-page .haiku-scene-image{
+    position:relative;
+    height:clamp(260px,75vw,342px);
+    overflow:visible!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+  }
+  .haiku-page .haiku-scene-image .haiku-scene-rosie{
+    position:absolute!important;
+    left:50%!important;
+    right:auto!important;
+    translate:-50% 0!important;
+    width:auto!important;
+    height:113%!important;
+    max-width:90%!important;
+    bottom:-10%!important;
+    object-fit:contain!important;
+    object-position:center bottom!important;
+  }
+  .haiku-page .haiku-scene-image .haiku-scene-rosie--expressive{
+    height:103%!important;
+    max-width:85%!important;
+    bottom:-6%!important;
+  }
+  .haiku-page .haiku-scene-image .haiku-portrait-outfit-arrows{
+    position:absolute;
+    z-index:7;
+    width:min(100%,360px);
+    left:50%!important;
+    right:auto!important;
+    top:48%!important;
+    transform:translate(-50%,-50%)!important;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    pointer-events:none;
+  }
+  .haiku-page .haiku-portrait-outfit-arrows button{
+    flex:0 0 36px;
+    width:36px;height:36px;
+    font-size:26px;
+    opacity:.83;
+    pointer-events:auto;
+    touch-action:manipulation;
+  }
+}
+
+/* Three real scenic medallions; the art is the entire button. */
+.haiku-page .haiku-scene-stage .haiku-scene-selector{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  justify-items:center;
+  align-items:center;
+  width:min(100%,465px);
+  max-width:100%;
+  gap:clamp(6px,1vw,16px);
+  margin:17px auto 0!important;
+  padding:0!important;
+  transform:none!important;
+}
+.haiku-page .haiku-scene-selector button,
+.haiku-page .haiku-scene-selector button.is-selected{
+  display:grid!important;
+  place-items:center;
+  min-width:0!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:2px!important;
+  border:0!important;
+  background:none!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  transform:none;
+  color:inherit;
+  touch-action:manipulation;
+}
+.haiku-page .haiku-scene-selector button::before,
+.haiku-page .haiku-scene-selector button span{content:none!important;display:none!important;}
+.haiku-page .haiku-scene-selector button img.haiku-scene-choice-art{
+  width:clamp(86px,8vw,134px)!important;
+  height:clamp(86px,8vw,134px)!important;
+  max-width:100%;
+  aspect-ratio:1;
+  object-fit:contain!important;
+  border:0!important;
+  outline:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 5px 11px rgba(11,7,26,.52));
+  transition:transform .19s ease,filter .19s ease;
+}
+.haiku-page .haiku-scene-selector button.is-selected img.haiku-scene-choice-art{
+  transform:scale(1.055);
+  filter:drop-shadow(0 0 10px rgba(255,206,132,.84));
+}
+.haiku-page .haiku-scene-selector button:hover img.haiku-scene-choice-art{
+  transform:scale(1.06);
+  filter:drop-shadow(0 0 13px rgba(255,214,159,.9));
+}
+.haiku-page .haiku-scene-selector button:focus-visible{
+  outline:2px solid #ffe7ad!important;
+  outline-offset:2px;
+  border-radius:12px!important;
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    width:100%;
+    gap:4px;
+    margin:11px auto 0!important;
+  }
+  .haiku-page .haiku-scene-selector button img.haiku-scene-choice-art{
+    width:clamp(88px,28.3vw,123px)!important;
+    height:clamp(88px,28.3vw,123px)!important;
+  }
+}
+
+/* Keep the original image-only Save/Share/Postcard actions and the glass
+   workbench arrangement from the previously approved refinement. */
+.haiku-page .haiku-verse-actions{
+  justify-content:center;
+  margin:6px auto 0;
+}
+.haiku-page .haiku-workbench .haiku-tabs > button{
+  flex-direction:column-reverse;
+}
+.haiku-page .haiku-workbench-body{
+  position:relative;
+  overflow:hidden;
+}
+
+/* A three-way carousel of EXISTING illustrated scrolls. Poetry stays live
+   HTML; preserve the correct safe text insets for each original illustration. */
+.haiku-page .haiku-scroll-display{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  margin:0 auto;
+}
+.haiku-page .haiku-scroll[data-scroll-style]{
+  box-sizing:border-box;
+  position:relative;
+  height:auto;
+  min-height:0;
+  margin:0 auto;
+  padding:0;
+  background-color:transparent;
+  background-position:center;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+}
+.haiku-page .haiku-scroll[data-scroll-style="sakura"]{
+  width:min(100%,405px);
+  aspect-ratio:1122 / 1402;
+  background-image:url("/rosieverse/haiku/scroll-mobile.webp");
+}
+.haiku-page .haiku-scroll[data-scroll-style="sakura"] .haiku-scroll-inner{inset:13.5% 20% 13%;}
+.haiku-page .haiku-scroll[data-scroll-style="imperial"]{
+  width:min(100%,500px);
+  aspect-ratio:1228 / 1281;
+  background-image:url("/rosieverse/haiku/haiku-scroll-isolated.png");
+}
+.haiku-page .haiku-scroll[data-scroll-style="imperial"] .haiku-scroll-inner{inset:15.5% 14% 16%;}
+.haiku-page .haiku-scroll[data-scroll-style="grand"]{
+  width:min(100%,560px);
+  aspect-ratio:1448 / 1086;
+  background-image:url("/rosieverse/haiku/scroll-grand.webp");
+}
+.haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-scroll-inner{inset:15% 13% 17%;}
+.haiku-page .haiku-scroll[data-scroll-style] .haiku-scroll-inner{
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:auto;
+  width:auto;
+  min-height:0;
+  padding:0 1px;
+  overflow:hidden;
+  border:0;
+  box-shadow:none;
+}
+.haiku-page .haiku-scroll-cycle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(9px,2vw,18px);
+  padding:0 6px;
+  margin:0 auto;
+  min-height:37px;
+  color:#ffe4b9;
+  text-shadow:0 2px 9px #160e20;
+}
+.haiku-page .haiku-scroll-cycle button{
+  width:32px;
+  height:32px;
+  flex:0 0 32px;
+  border:1px solid rgba(255,224,169,.62);
+  border-radius:50%;
+  background:rgba(31,20,37,.45);
+  color:#ffe8c7;
+  font:normal 27px/1 Georgia,serif;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.haiku-page .haiku-scroll-cycle button:focus-visible{
+  outline:3px solid #fff0bb;
+  outline-offset:2px;
+}
+.haiku-page .haiku-scroll-cycle-name{
+  min-width:116px;
+  text-align:center;
+  font:italic 14px/1.2 "Iowan Old Style",Palatino,Georgia,serif;
+  letter-spacing:.03em;
+}
+.haiku-page .haiku-scroll .haiku-verse p{
+  font-family:"Snell Roundhand","Bradley Hand","Apple Chancery","Segoe Print",Palatino,Georgia,serif!important;
+  font-style:normal!important;
+  font-weight:400!important;
+  line-height:1.3;
+  letter-spacing:.012em;
+  font-kerning:normal;
+  text-wrap:balance;
+}
+.haiku-page .haiku-scroll .haiku-scroll-signature{
+  font-family:"Snell Roundhand","Bradley Hand","Apple Chancery",Palatino,Georgia,serif!important;
+  font-weight:400;
+  font-style:normal;
+  font-size:clamp(20px,2.2vw,25px);
+}
+.haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-verse p{
+  font-size:clamp(15px,1.65vw,24px);
+  line-height:1.24;
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scroll[data-scroll-style="sakura"]{
+    width:min(100%,365px);
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="imperial"]{
+    width:min(100%,365px);
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"]{
+    width:100%;
+  }
+  .haiku-page .haiku-scroll .haiku-verse p{
+    font-size:clamp(18px,5.15vw,22px)!important;
+    line-height:1.27;
+    margin-bottom:8px;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-verse p{
+    font-size:clamp(15px,3.9vw,17px)!important;
+    line-height:1.2;
+    margin-bottom:5px;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-scroll-signature{
+    margin:3px 0;
+    font-size:17px;
+  }
+  .haiku-page .haiku-scroll[data-scroll-style="grand"] .haiku-metre{margin:2px 0;font-size:9px;}
+}
+
+/* Original selected meditation panorama must actually fill the screen, even
+   when the dialog is portaled to document.body and Safari creates separate
+   stacking contexts. Its scenery is never behind an opaque root/background. */
+.zen-immersive{
+  background-color:#1c1b2e!important;
+  background-image:var(--zen-backdrop-image)!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  isolation:isolate;
+}
+.zen-immersive .zen-immersive-scenery{
+  position:fixed!important;
+  inset:0!important;
+  z-index:0!important;
+  overflow:hidden;
+  pointer-events:none;
+}
+.zen-immersive .zen-immersive-scenery img{
+  display:block!important;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.zen-immersive .zen-immersive-scenery::after{
+  background:linear-gradient(180deg,rgba(17,13,30,.09),rgba(12,11,25,.19) 70%,rgba(12,10,24,.29));
+}
+.zen-immersive .zen-immersive-dialog{
+  position:relative;
+  z-index:1!important;
+  background:linear-gradient(140deg,rgba(26,20,38,.28),rgba(24,19,39,.38))!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.zen-immersive .zen-immersive-header h2,
+.zen-immersive .zen-guidance,
+.zen-immersive .zen-breath-portrait>p{
+  text-shadow:0 2px 9px rgba(9,8,23,.9),0 0 17px rgba(10,10,27,.56);
+}
+@media(max-width:540px){
+  .zen-immersive .zen-immersive-dialog{
+    background:linear-gradient(180deg,rgba(25,18,38,.10),rgba(15,15,30,.12) 33%,rgba(18,15,31,.31))!important;
+    box-shadow:none;
+  }
+  .zen-immersive .zen-immersive-header{
+    padding:9px 8px 13px;
+    background:rgba(16,12,27,.24);
+    border-radius:13px;
+  }
+  .zen-immersive .zen-guidance{
+    padding:10px 12px 14px;
+    border-radius:17px;
+    background:linear-gradient(180deg,rgba(18,14,28,.37),rgba(15,12,29,.54));
+  }
+  .zen-immersive .zen-ornament-corners{opacity:.15;}
+}
+@media(prefers-reduced-motion:reduce){
+  .haiku-page .haiku-scene-selector button img.haiku-scene-choice-art{transition:none;}
+}

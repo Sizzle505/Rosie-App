@@ -1,0 +1,310 @@
+/* Nov 20 Haiku refinements - existing artwork only. No production rollout.
+   This stylesheet follows the concept sheet and is deliberately scoped to Haiku. */
+.haiku-page .haiku-masthead-tagline{display:none!important;}
+/* Three visual scene settings, directly under the character. */
+.haiku-page .haiku-scene-stage .haiku-scene-selector{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  justify-items:center;
+  align-items:center;
+  gap:clamp(8px,1.4vw,20px);
+  box-sizing:border-box;
+  width:min(420px,95%);
+  max-width:95%;
+  padding:0;
+  margin:clamp(50px,4vw,68px) auto 0;
+}
+.haiku-page .haiku-scene-selector button,
+.haiku-page .haiku-scene-selector button.is-selected{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:none!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0;
+  color:inherit;
+  padding:3px;
+  margin:0;
+  width:100%;
+  min-height:0;
+  cursor:pointer;
+}
+.haiku-page .haiku-scene-selector button:before{content:none!important;display:none!important;}
+.haiku-page .haiku-scene-choice-art{
+  display:block;
+  width:clamp(82px,7.3vw,122px);
+  max-width:100%;
+  aspect-ratio:1;
+  height:auto;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:center;
+  border:2px solid rgba(232,186,123,.9);
+  box-sizing:border-box;
+  box-shadow:0 6px 16px rgba(11,9,24,.65),inset 0 0 0 3px rgba(255,239,207,.8);
+  outline:2px solid rgba(27,18,31,.36);
+  filter:drop-shadow(0 2px 5px rgba(5,4,12,.3));
+  transition:filter .18s,transform .18s,box-shadow .18s;
+}
+.haiku-page .haiku-scene-selector button.is-selected .haiku-scene-choice-art{
+  border:3px solid #ffe6af;
+  outline:3px solid rgba(255,200,113,.95);
+  box-shadow:0 0 20px rgba(244,190,122,.62),0 7px 17px rgba(10,8,21,.55);
+  filter:brightness(1.1);
+}
+.haiku-page .haiku-scene-selector button:hover .haiku-scene-choice-art{
+  transform:translateY(-3px);
+  filter:brightness(1.15);
+}
+.haiku-page .haiku-scene-selector button:focus-visible{
+  outline:3px solid #fff0bd!important;
+  outline-offset:4px;
+  border-radius:50%;
+}
+/* Icon-only poem controls, centered below the paper scroll. */
+.haiku-page .haiku-verse-actions{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(12px,2vw,27px);
+  justify-content:center;
+  align-items:center;
+  width:min(360px,85%);
+  margin:0 auto;
+}
+.haiku-page .haiku-verse-actions .haiku-icon-action{
+  display:grid;
+  place-items:center;
+  min-height:72px;
+  min-width:0;
+  width:100%;
+  padding:6px;
+  margin:0;
+  border:0!important;
+  border-radius:14px;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  color:#ffdfab;
+  cursor:pointer;
+  line-height:0;
+  transition:transform .2s,color .2s;
+}
+.haiku-page .haiku-verse-actions .haiku-icon-action:is(:hover,:focus-visible){
+  color:#fff4d8;
+  transform:translateY(-2px);
+  outline:2px solid rgba(255,218,152,.72);
+  outline-offset:1px;
+  background:rgba(36,22,39,.26)!important;
+}
+.haiku-page .haiku-verse-actions .haiku-icon-action.is-active{
+  color:#ffe19c;
+}
+.haiku-page .haiku-verse-actions .haiku-icon-action:disabled{opacity:.55;cursor:wait;}
+.haiku-page .haiku-verse-actions .haiku-icon-action svg{
+  display:block;
+  width:clamp(46px,4.5vw,60px);
+  height:clamp(46px,4.5vw,60px);
+  filter:drop-shadow(0 4px 7px rgba(10,7,24,.72));
+}
+.haiku-page .haiku-verse-actions button:nth-child(2):before,
+.haiku-page .haiku-verse-actions button:nth-child(3):before{
+  content:none!important;display:none!important;
+}
+.haiku-page .haiku-status{
+  max-width:100%;
+  min-height:24px;
+  margin:0 auto;
+  color:#ffe9ce;
+  text-align:center;
+  font:italic clamp(13px,1.05vw,17px)/1.4 Georgia,serif;
+  text-shadow:0 2px 7px #130b21,0 4px 15px #0f0a19;
+}
+/* Unframe the four illustrated menu items. The actual panel STARTS BELOW
+   them; it retains a light, translucent border and readable content. */
+.haiku-page .haiku-workbench{
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  background-image:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.haiku-page .haiku-tabs{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  align-items:stretch;
+  gap:0;
+  margin:0 0 7px;
+  padding:0;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.haiku-page .haiku-tabs > button{
+  display:flex;
+  flex-direction:column-reverse; /* accessible text is rendered ABOVE its existing art */
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+  min-height:148px;
+  margin:0;
+  padding:5px 0;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.haiku-page .haiku-tabs > button:hover,
+.haiku-page .haiku-tabs > button.selected{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.haiku-page .haiku-tabs > button img{
+  flex:0 0 auto;
+  width:clamp(83px,6.25vw,112px);
+  height:clamp(83px,6.25vw,112px);
+  max-width:95%;
+  object-fit:contain;
+  transform:scale(1);
+  filter:drop-shadow(0 4px 7px rgba(11,7,18,.68));
+}
+.haiku-page .haiku-tabs > button.selected img{
+  transform:scale(1.05);
+  filter:drop-shadow(0 0 10px rgba(251,205,135,.75));
+}
+.haiku-page .haiku-tabs .haiku-tab-label,
+.haiku-page .haiku-tabs .haiku-tab-journal-text{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 2px;
+  min-height:19px;
+  color:#fff1d7;
+  background:transparent!important;
+  border-radius:0;
+  box-shadow:none!important;
+  font:700 clamp(12px,.9vw,15px)/1.2 Georgia,serif;
+  letter-spacing:0;
+  text-shadow:0 2px 6px rgba(8,6,19,.85);
+}
+.haiku-page .haiku-tabs > button.selected .haiku-tab-label,
+.haiku-page .haiku-tabs > button.selected .haiku-tab-journal-text{
+  background:transparent!important;
+  color:#ffe8ae;
+  border-bottom:2px solid #edc891;
+  text-shadow:0 0 8px rgba(10,7,18,.9);
+}
+.haiku-page .haiku-workbench-body{
+  border:1px solid rgba(236,192,130,.75);
+  border-radius:21px;
+  background:linear-gradient(150deg,rgba(27,18,43,.20),rgba(34,23,45,.13));
+  box-shadow:0 13px 30px rgba(18,10,24,.16),inset 0 0 0 1px rgba(255,229,182,.055);
+  overflow:hidden;
+}
+.haiku-page .haiku-workbench-body > .haiku-panel,
+.haiku-page .haiku-workbench-body > .zen-panel{
+  padding-top:22px;
+  background:linear-gradient(180deg,rgba(16,13,29,.12),rgba(17,12,28,.06));
+}
+.haiku-page .haiku-workbench-body > .haiku-workbench-footer{
+  margin:0;
+}
+@media(min-width:1360px){
+  .haiku-page .haiku-workbench{margin-top:-38px;}
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:130.9%;
+    max-width:100%;
+    left:-1%;
+    bottom:-12%;
+  }
+}
+@media(min-width:900px) and (max-width:1359px){
+  .haiku-page .haiku-workbench{margin-top:-12px;}
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:126.5%;
+    max-width:93.5%;
+    left:9%;
+    bottom:-11%;
+  }
+}
+@media(min-width:1360px) and (max-width:1479px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:126.5%;
+    max-width:93.5%;
+    left:9%;
+    bottom:-11%;
+  }
+}
+@media(min-width:601px) and (max-width:899px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:111.1%;
+    max-width:77%;
+    left:20%;
+    bottom:-3%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{margin:26px auto 0;}
+  .haiku-page .haiku-tabs > button{min-height:142px;}
+  .haiku-page .haiku-tabs > button img{width:100px;height:100px;}
+  .haiku-page .haiku-workbench{margin-top:0;}
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scene-rosie--slow-breath{
+    height:114.4%;
+    max-width:81%;
+    left:20%;
+    bottom:-11%;
+  }
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{
+    width:min(330px,100%);
+    margin:34px auto 0;
+    gap:8px;
+  }
+  .haiku-page .haiku-scene-choice-art{
+    width:min(25vw,92px);
+  }
+  .haiku-page .haiku-verse-actions{
+    width:min(310px,92%);
+    gap:15px;
+  }
+  .haiku-page .haiku-verse-actions .haiku-icon-action{min-height:58px;}
+  .haiku-page .haiku-verse-actions .haiku-icon-action svg{width:49px;height:49px;}
+  .haiku-page .haiku-workbench{margin-top:0;}
+  .haiku-page .haiku-tabs > button{min-height:121px;gap:4px;padding:3px 0;}
+  .haiku-page .haiku-tabs > button img{width:min(20vw,75px);height:min(20vw,75px);}
+  .haiku-page .haiku-tabs .haiku-tab-label,
+  .haiku-page .haiku-tabs .haiku-tab-journal-text{font-size:11px;min-height:18px;padding:0;}
+  .haiku-page .haiku-workbench-body{border-radius:16px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .haiku-page .haiku-scene-choice-art,
+  .haiku-page .haiku-tabs > button img,
+  .haiku-page .haiku-verse-actions .haiku-icon-action{
+    transition:none!important;
+  }
+}
+
+/* Align the image-only scenery choices with the actual transparent Rosie
+   artwork, not the center of an otherwise empty stage. */
+@media(min-width:1851px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-6%);}
+}
+@media(min-width:1480px) and (max-width:1850px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-14%);}
+}
+@media(min-width:1360px) and (max-width:1479px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(5.5%);}
+}
+@media(min-width:900px) and (max-width:1359px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-10%);}
+}
+@media(min-width:601px) and (max-width:899px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(-20%);}
+}
+@media(max-width:600px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{transform:translateX(4.5%);}
+}

@@ -18,13 +18,13 @@ const PROGRAM_ART = {
 };
 const NEW_ART="/rosieverse/haiku/new/";
 const MEDITATION_VIEWS=Object.freeze([
-  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp"},
-  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp"},
-  {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp"},
-  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp"},
-  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp"},
-  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp"},
-  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp"}
+  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/lotus-portrait.webp"},
+  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/sakura-portrait.webp"},
+  {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp",mobileImage:"meditation/iphone/raked-portrait.webp"},
+  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp",mobileImage:"meditation/iphone/tea-portrait.webp"},
+  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp",mobileImage:"meditation/iphone/mist-portrait.webp"},
+  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp",mobileImage:"meditation/iphone/twilight-portrait.webp"},
+  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp",mobileImage:"meditation/iphone/moonlit-portrait.webp"}
 ]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
@@ -127,8 +127,16 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   const previouslyFocused = useRef(null);
   const selected = PROGRAMS.find(p=>p.id===kind) || PROGRAMS[0];
   const selectedView=MEDITATION_VIEWS.find(v=>v.id===viewId)||MEDITATION_VIEWS[0];
+  function cycleMeditationBackdrop(step){
+    setViewId(current=>{
+      const index=MEDITATION_VIEWS.findIndex(view=>view.id===current);
+      const next=(Math.max(0,index)+step+MEDITATION_VIEWS.length)%MEDITATION_VIEWS.length;
+      return MEDITATION_VIEWS[next].id;
+    });
+  }
   const selectedOutfit=ROSIE_HAIKU_OUTFITS.find(v=>v.id===outfitId)||ROSIE_HAIKU_OUTFITS[0];
   const sceneSrc=NEW_ART+selectedView.image;
+  const mobileSceneSrc=NEW_ART+selectedView.mobileImage;
   const rosieSrc=selectedOutfit.image;
   const totalMs = minutes*60000;
   const elapsed = Math.max(0,totalMs-remaining);
@@ -319,23 +327,23 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
           Read guidance aloud <small>(device voice)</small>
         </label>}
       <button type="button" className="haiku-primary zen-begin" onClick={begin}>Begin {minutes}-minute meditation</button>
-      <div className="zen-progress-note">
-        <span><strong>{progress.sessions}</strong> sessions</span>
-        <span><strong>{progress.minutes}</strong> minutes</span>
-        <span><strong>{dayStreak(progress.days)}</strong> day streak</span>
-      </div>
-      <p className="zen-privacy">Your quiet moments are saved privately in this browser.</p>
     </div>
     {opened && createPortal(
-      <div className="zen-immersive">
-        <div className="zen-immersive-scenery" aria-hidden="true"><img src={sceneSrc} alt=""/></div>
+      <div className="zen-immersive" data-zen-view={viewId} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
+        <div className="zen-immersive-scenery" aria-hidden="true"><picture><source media="(max-width:600px)" srcSet={mobileSceneSrc}/><img src={sceneSrc} alt="" decoding="async" fetchPriority="high"/></picture></div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
           <span className="zen-ornament-corners" aria-hidden="true" />
           <header className="zen-immersive-header">
-            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN · {selectedView.label.toUpperCase()}</span><h2 id="zen-session-title">{selected.title}</h2></div>
+            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
             <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
           </header>
+          {status!=="complete"&&<div className="zen-backdrop-cycle" role="group" aria-label="Change meditation scenery">
+            <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Previous meditation background"
+              title="Previous meditation landscape" onClick={()=>cycleMeditationBackdrop(-1)}>‹</button>
+            <button type="button" className="zen-backdrop-cycle-arrow" aria-label="Next meditation background"
+              title="Next meditation landscape" onClick={()=>cycleMeditationBackdrop(1)}>›</button>
+          </div>}
           {status==="complete"?
             <div className="zen-complete">
               <img src={FINAL_ART + "rosie-enlightened.webp"} alt="Rosie celebrates your peaceful meditation with a delighted smile"/>

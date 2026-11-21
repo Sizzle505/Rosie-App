@@ -375,7 +375,7 @@
   }
   .haikuLantern{
     top:8px!important;right:8px!important;bottom:auto!important;
-    width:clamp(55px,16vw,69px);height:clamp(70px,20vw,88px);
+    width:clamp(72px,20.8vw,90px);height:clamp(91px,26vw,114px);
     z-index:6;
   }
   .worldGrid{flex:none;margin-top:-23px;}
@@ -397,4 +397,17 @@
 }
 @media(min-width:601px){
   .world.resourcesWorld{display:none;}
+}
+
+
+/* iPhone: natural-height Rosie portrait removes dead space inside its frame,
+   preserving her head/ears without any cover cropping. */
+@media(max-width:600px){
+ .hero{flex:0 0 auto!important;display:block!important;width:100%!important;
+   height:auto!important;min-height:0!important;max-height:none!important;
+   aspect-ratio:auto!important;margin:1px 0!important;padding:0!important;overflow:hidden;}
+ .hero > img{display:block!important;width:100%!important;height:auto!important;
+   object-fit:contain!important;object-position:center!important;}
+ /* Lift only the Resources plaque, not the five other destinations. */
+ .world.resourcesWorld{top:-20px!important;}
 }

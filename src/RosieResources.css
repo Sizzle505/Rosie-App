@@ -214,3 +214,26 @@
   }
   .rr-hub-button { min-width: 0; }
 }
+
+
+/* iPhone: larger resources crest; six identically sized and spaced plaques.
+   On short devices the gallery scrolls instead of shrinking or clipping. */
+@media(max-width:700px){
+ .app-shell.page-resources > main.rr-hub-page{
+   height:auto!important;min-height:100svh!important;overflow-x:hidden!important;overflow-y:auto!important;}
+ .rr-hub-content{
+   height:auto!important;min-height:calc(100svh - 82px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;
+   padding:6px 0 18px!important;justify-content:flex-start!important;gap:0;transform:none!important;}
+ .rr-hub-header{flex:0 0 auto;height:clamp(104px,14svh,137px)!important;overflow:visible;}
+ .rr-hub-crest{width:min(92vw,460px)!important;height:100%;max-width:none;
+   object-fit:contain;transform:scale(1.16);transform-origin:center;}
+ .rr-hub-buttons{display:grid!important;flex:0 0 auto!important;
+   grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(6,auto)!important;
+   align-content:start!important;width:min(78vw,336px)!important;
+   gap:clamp(11px,1.5svh,17px)!important;margin:clamp(6px,1svh,13px) auto 0!important;}
+ .rr-hub-button{display:block!important;width:100%!important;height:auto!important;
+   aspect-ratio:3/1!important;padding:0!important;margin:0!important;flex:none!important;line-height:0;}
+ .rr-hub-button img{display:block!important;width:100%!important;height:100%!important;
+   aspect-ratio:3/1!important;object-fit:contain!important;object-position:center!important;
+   filter:drop-shadow(0 5px 8px rgba(0,0,0,.55));}
+}

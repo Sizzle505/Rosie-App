@@ -1071,3 +1071,75 @@
     margin-top:6px!important;
   }
 }
+
+
+/* iPhone Yacht victory: frame dimensions follow the artwork's actual
+   intrinsic aspect ratio rather than a 100%-high letterboxed image box. */
+@media(max-width:720px){
+ .yacht-victory-overlay .yacht-victory-content{
+   grid-template-rows:minmax(0,1fr) auto;
+   gap:clamp(5px,1svh,10px)!important;
+   padding:max(6px,env(safe-area-inset-top,0px)) 7px max(7px,env(safe-area-inset-bottom,0px))!important;}
+ .yacht-victory-overlay .yacht-victory-art{
+   display:block!important;width:auto!important;height:auto!important;
+   max-width:calc(100vw - 14px)!important;
+   max-height:calc(100dvh - 108px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;
+   min-width:0!important;min-height:0!important;object-fit:contain!important;object-position:center!important;
+   align-self:end;justify-self:center;border:1px solid rgba(242,204,129,.85)!important;background:transparent!important;}
+ .yacht-victory-overlay .yacht-victory-actions{align-self:start;margin:0;}
+}
+
+/* Fullscreen Yacht Dash: retain the live voyage progress track on iPhone.
+   It occupies its own 14px row between the HUD and river without covering
+   gameplay or stealing space from the helm. */
+@media(max-width:720px) and (pointer:coarse){
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) > .captain-game-page{
+    grid-template-rows:auto 15px minmax(0,1fr)!important;
+    row-gap:4px!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip{
+    display:grid!important;
+    grid-column:1!important;
+    grid-row:2!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    align-items:center!important;
+    width:100%!important;
+    height:15px!important;
+    min-height:15px!important;
+    max-height:15px!important;
+    margin:0!important;
+    padding:1px 8px!important;
+    overflow:visible!important;
+    box-sizing:border-box;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip .route-port{
+    display:none!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip .route-line{
+    display:block!important;
+    position:relative!important;
+    width:100%!important;
+    height:8px!important;
+    min-height:8px!important;
+    margin:0!important;
+    border:1px solid rgba(251,214,143,.56);
+    border-radius:100px;
+    background:rgba(4,26,41,.9);
+    overflow:visible;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip .route-progress{
+    display:block!important;
+    min-height:4px!important;
+    background:linear-gradient(90deg,#47b2d0,#f2d18c)!important;
+    box-shadow:0 0 7px rgba(250,211,142,.48);
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-route-strip .route-yacht{
+    display:block!important;
+    font-size:9px;
+    margin-left:-4px;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-game-shell{
+    grid-column:1!important;
+    grid-row:3!important;
+  }
+}

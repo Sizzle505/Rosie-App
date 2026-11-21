@@ -71,7 +71,7 @@ function tone(context, notes, duration = 0.22) {
   });
 }
 
-export default function Captain2Game({ soundOn = true }) {
+export default function Captain2Game({ soundOn = true, requestGameFullscreen }) {
   const [running, setRunning] = useState(false);
   const [ended, setEnded] = useState(false);
   const [won, setWon] = useState(false);
@@ -112,6 +112,7 @@ export default function Captain2Game({ soundOn = true }) {
     window.navigator.vibrate?.(8);
   }
   function startRun() {
+    requestGameFullscreen?.();
     setRunning(true); setEnded(false); setWon(false); setLane(1); setScore(0); setCheese(0); setLives(3); setShield(false); setScout(false); setBoost(false); setBoostEnergy(35); setElapsed(0); setObjects([]);
     spawnRef.current = 0;
     setMessage("Lines cast off. Collect 10 Golden Cheeses before Rosie reaches the Torii Passage.");

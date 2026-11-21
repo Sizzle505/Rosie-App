@@ -606,6 +606,18 @@
   const aura=document.createElement('img');aura.id='cosmic-shield';aura.className='shield-aura';aura.src=asset('shield');aura.alt='';aura.draggable=false;board.append(aura);
   changeScene(LEVELS[level-1].scene);resize();for(const e of entities)position(e);position(player);positionShield();ui();}
  function start(){
+  // Request parent arcade fullscreen directly from the launch click,
+  // including the iPhone fixed-viewport fallback. New-tab mode is unchanged.
+  try{
+    if(window.parent && window.parent!==window){
+      window.parent.dispatchEvent(new window.parent.CustomEvent("rosieverse:captain-start",{
+        detail:{variant:"cosmic"}
+      }));
+    }else if(document.fullscreenEnabled && !document.fullscreenElement){
+      const result=document.documentElement.requestFullscreen?.();
+      result?.catch?.(()=>{});
+    }
+  }catch(_){}
   if(victoryOverlay)victoryOverlay.hidden=true;
   if(phase==='paused'){
     const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;if(boostUntil>pausedAt)boostUntil+=delta;
