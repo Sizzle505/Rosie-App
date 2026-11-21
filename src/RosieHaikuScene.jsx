@@ -4,9 +4,9 @@ import "./RosieHaikuScene.css";
 // Each garden is a full-page background; this component only places the
 // expression-matched transparent Rosie layer and the selector above it.
 export const HAIKU_SCENES = Object.freeze([
-  { id: "field", label: "Flower Field", short: "Field", src: "/rosieverse/haiku/field-sunrise.webp" },
-  { id: "zen", label: "Zen Garden", short: "Zen Garden", src: "/rosieverse/haiku/zen-sunrise.webp" },
-  { id: "temple", label: "Temple", short: "Temple", src: "/rosieverse/haiku/temple-sunrise.webp" }
+  { id: "field", label: "Flower Field", short: "Field", icon: "/rosieverse/haiku/new/ui/scene-flower-field.webp", src: "/rosieverse/haiku/field-sunrise.webp" },
+  { id: "zen", label: "Zen Garden", short: "Zen Garden", icon: "/rosieverse/haiku/new/ui/scene-zen-garden.webp", src: "/rosieverse/haiku/zen-sunrise.webp" },
+  { id: "temple", label: "Temple", short: "Temple", icon: "/rosieverse/haiku/new/ui/scene-temple.webp", src: "/rosieverse/haiku/temple-sunrise.webp" }
 ]);
 const ROSIE_MEDITATING = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
 const ROSIE_REACTIONS = Object.freeze({
@@ -96,8 +96,8 @@ export default function RosieHaikuScene({ scene = "field", onSceneChange, mode =
       </div>
       <div className="haiku-scene-selector" role="group" aria-label="Choose meditation scenery">
         {HAIKU_SCENES.map((item) => (
-          <button type="button" key={item.id} className={scene === item.id ? "is-selected" : ""} aria-pressed={scene === item.id} onClick={() => switchScene(item.id)}>
-            {item.label}
+          <button type="button" key={item.id} className={scene === item.id ? "is-selected" : ""} aria-label={item.label} aria-pressed={scene === item.id} onClick={() => switchScene(item.id)}>
+            <img src={item.icon} alt="" aria-hidden="true" loading="lazy"/><span>{item.label}</span>
           </button>
         ))}
       </div>

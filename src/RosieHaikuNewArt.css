@@ -1,0 +1,80 @@
+/* Original Haiku UI images replace placeholder symbols and pill buttons.
+   Keep native HTML controls, focus outlines, and accessible names intact. */
+.haiku-page .haiku-scene-stage .haiku-scene-selector{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;
+  justify-items:stretch;align-items:stretch;
+}
+.haiku-page .haiku-scene-selector button{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;min-height:115px;padding:7px 5px 9px;
+  border-radius:16px;color:#fff4e3;
+  background:rgba(26,21,41,.52);border:1px solid rgba(241,191,141,.54);
+  font:600 13px/1.15 Georgia,serif;
+  text-shadow:0 2px 8px rgba(15,8,25,.65);
+  white-space:normal;
+}
+.haiku-page .haiku-scene-selector button:before{display:none!important;content:none!important;background:none!important;}
+.haiku-page .haiku-scene-selector button img{
+  display:block;width:clamp(70px,6.1vw,96px);height:clamp(70px,6.1vw,96px);
+  object-fit:contain;pointer-events:none;
+  filter:drop-shadow(0 4px 6px rgba(17,9,21,.35));
+}
+.haiku-page .haiku-scene-selector button span{font:600 12px/1.1 Georgia,serif;white-space:nowrap;}
+.haiku-page .haiku-scene-selector button.is-selected{
+  background:rgba(87,62,75,.6);color:#fff0d2;border:2px solid #ffe2af;
+  box-shadow:0 0 15px rgba(239,192,132,.4);
+  text-shadow:0 2px 6px rgba(15,9,20,.7);
+}
+.haiku-page .haiku-verse-actions{
+  display:flex!important;align-items:center;justify-content:center;
+  width:min(100%,550px);gap:clamp(8px,1vw,18px);margin:2px auto 0;
+}
+.haiku-page .haiku-verse-actions button{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  flex:0 1 clamp(72px,6.8vw,102px);width:clamp(72px,6.8vw,102px);
+  min-height:clamp(70px,7vw,102px);height:clamp(70px,7vw,102px);
+  padding:0;border:0;border-radius:0;box-shadow:none;
+  color:transparent;font-size:0;background:transparent!important;
+  transition:transform .18s ease,filter .18s ease;overflow:visible;
+}
+.haiku-page .haiku-verse-actions button:before{display:none!important;content:none!important;}
+.haiku-page .haiku-verse-actions button img{
+  width:100%;height:100%;object-fit:contain;display:block;
+  pointer-events:none;filter:drop-shadow(0 5px 8px rgba(13,8,25,.35));
+}
+.haiku-page .haiku-verse-actions button:hover,
+.haiku-page .haiku-verse-actions button:focus-visible{
+  transform:translateY(-4px) scale(1.04);filter:brightness(1.12);
+  background:transparent;outline:2px solid #ffe3aa;outline-offset:3px;
+}
+.haiku-page .haiku-verse-actions button:disabled{opacity:.6;cursor:wait;}
+.haiku-page .haiku-action-flourish{
+  pointer-events:none;position:absolute;inset:-20px;
+  background:url("/rosieverse/haiku/new/ui/golden-petal-flourish.webp") center/contain no-repeat;
+  opacity:.32;animation:haiku-art-save-glow 3s ease-in-out infinite alternate;
+}
+@keyframes haiku-art-save-glow{from{opacity:.16;transform:scale(.92)}to{opacity:.52;transform:scale(1.07)}}
+@media(min-width:900px) and (max-width:1479px){
+  .haiku-page .haiku-scene-selector button{min-height:106px;}
+  .haiku-page .haiku-scene-selector button img{width:79px;height:79px;}
+  .haiku-page .haiku-verse-actions button{min-height:82px;height:82px;flex-basis:83px;width:83px;}
+}
+@media(max-width:899px){
+  .haiku-page .haiku-scene-selector button{min-height:91px;}
+  .haiku-page .haiku-scene-selector button img{width:70px;height:70px;}
+  .haiku-page .haiku-verse-actions button{min-height:79px;height:79px;flex-basis:80px;width:80px;}
+}
+@media(max-width:520px){
+  .haiku-page .haiku-scene-stage .haiku-scene-selector{gap:4px;}
+  .haiku-page .haiku-scene-selector button{
+    min-height:81px;padding:3px 2px 5px;gap:1px;border-radius:10px;
+  }
+  .haiku-page .haiku-scene-selector button img{width:61px;height:61px;}
+  .haiku-page .haiku-scene-selector button span{font-size:10px;}
+  .haiku-page .haiku-verse-actions{gap:6px;}
+  .haiku-page .haiku-verse-actions button{height:68px;min-height:68px;width:70px;flex-basis:70px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .haiku-page .haiku-action-flourish{animation:none!important;}
+  .haiku-page .haiku-verse-actions button{transition:none;}
+}

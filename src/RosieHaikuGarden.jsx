@@ -6,6 +6,8 @@ import RosieZenMeditation from "./RosieZenMeditation.jsx";
 import "./RosieHaikuAtmosphere.css";
 import "./RosieHaikuArchiveArt.css";
 import "./RosieHaikuMasthead.css";
+import "./RosieHaikuConceptLayout.css";
+import "./RosieHaikuNewArt.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const HERO = "/rosieverse/hero.webp";
@@ -280,18 +282,25 @@ export default function RosieHaikuGarden({ onNavigate }) {
               </div>
             </div>
             <div className="haiku-verse-actions">
-              <button type="button" onClick={toggleSave}>{saved ? "♥ Saved" : "♡ Save"}</button>
-              <button type="button" onClick={sharePoem}>Share Verse</button>
-              <button type="button" onClick={postcard} disabled={working}>{working ? "Painting…" : "Picture Postcard"}</button>
+              <button type="button" onClick={toggleSave} className={saved?"haiku-action-saved":""} aria-label={saved?"Remove verse from favorites":"Save verse"} title={saved?"Saved - remove":"Save verse"}>
+                <img src="/rosieverse/haiku/new/ui/save-scroll.webp" alt="" aria-hidden="true" loading="lazy"/>
+                {saved&&<span className="haiku-action-flourish" aria-hidden="true"/>}
+              </button>
+              <button type="button" onClick={sharePoem} aria-label="Share Verse" title="Share Verse">
+                <img src="/rosieverse/haiku/new/ui/share-verse.webp" alt="" aria-hidden="true" loading="lazy"/>
+              </button>
+              <button type="button" onClick={postcard} disabled={working} aria-label={working?"Painting postcard":"Picture Postcard"} title="Picture Postcard">
+                <img src="/rosieverse/haiku/new/ui/postcard.webp" alt="" aria-hidden="true" loading="lazy"/>
+              </button>
             </div>
             <p role="status" aria-live="polite" className="haiku-status">{notice || "Each verse is composed in the traditional three-line, 5-7-5 form."}</p>
           </div>
           <aside className="haiku-workbench" aria-label="Poetry studio">
             <nav className="haiku-tabs" aria-label="Haiku activities">
-              <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" />Daily</button>
-              <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" />Compose</button>
-              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" />Meditate</button>
-              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-journal-text">Journal <span>{journal.length}</span></span></button>
+              <button type="button" className={mode === "daily" ? "selected" : ""} onClick={openDaily}><img src="/rosieverse/haiku/ornaments/tab-daily.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Daily</span></button>
+              <button type="button" className={mode === "compose" ? "selected" : ""} onClick={() => setMode("compose")}><img src="/rosieverse/haiku/ornaments/tab-compose.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Compose</span></button>
+              <button type="button" className={mode === "meditate" ? "selected" : ""} onClick={() => { setMode("meditate"); setReaction(null); }}><img src="/rosieverse/haiku/ornaments/tab-meditate.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label">Meditate</span></button>
+              <button type="button" className={mode === "journal" ? "selected" : ""} onClick={() => setMode("journal")}><img src="/rosieverse/haiku/ornaments/tab-journal.webp" alt="" aria-hidden="true" loading="lazy" /><span className="haiku-tab-label haiku-tab-journal-text">Journal <span>{journal.length}</span></span></button>
             </nav>
             {mode === "daily" ? (
               <div className="haiku-panel">

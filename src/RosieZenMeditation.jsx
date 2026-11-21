@@ -4,6 +4,7 @@ import { HAIKU_SCENES } from "./RosieHaikuScene.jsx";
 import { localDayKey } from "./haikuEngine.js";
 import { createZenAudio } from "./rosieZenAudio.js";
 import "./RosieZenMeditation.css";
+import "./RosieZenNewArt.css";
 
 const PROGRESS_KEY = "rosieHaikuZenSessionsV1";
 const ROSIE = "/rosieverse/haiku/rosie-meditating-paws-up.webp";
@@ -15,6 +16,22 @@ const PROGRAM_ART = {
   unwind: "evening-unwind.webp",
   haiku: "haiku-reflection.webp"
 };
+const NEW_ART="/rosieverse/haiku/new/";
+const MEDITATION_VIEWS=Object.freeze([
+  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp"},
+  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp"},
+  {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp"},
+  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp"},
+  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp"},
+  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp"},
+  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp"}
+]);
+const ROSIE_OUTFITS=Object.freeze([
+  {id:"pink",label:"Sakura Kimono",image:"characters/meditating-pink-sakura.webp"},
+  {id:"saffron",label:"Saffron Robes",image:"characters/meditating-saffron-cream.webp"},
+  {id:"plum",label:"Plum Hakama",image:"characters/meditating-plum-hakama.webp"},
+  {id:"indigo",label:"Indigo Kimono",image:"characters/meditating-indigo.webp"}
+]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
   { id:"breathe", title:"Breathe with Rosie", label:"FOLLOW THE RHYTHM", description:"A slow four-second inhale and six-second exhale. Adjust to what feels comfortable." },
@@ -101,6 +118,16 @@ export default function RosieZenMeditation({scene="field",poem}) {
   const [status,setStatus] = useState("idle");
   const [remaining,setRemaining] = useState(300000);
   const [audioUnavailable,setAudioUnavailable] = useState(false);
+  const [viewId,setViewId] = useState(() => {
+    try { const v=window.localStorage.getItem("rosieZenBackdropV1");
+      if(MEDITATION_VIEWS.some(x=>x.id===v))return v; }catch{}
+    return scene==="zen"?"raked":scene==="temple"?"tea":"lotus";
+  });
+  const [outfitId,setOutfitId] = useState(() => {
+    try { const v=window.localStorage.getItem("rosieZenRosieOutfitV1");
+      if(ROSIE_OUTFITS.some(x=>x.id===v))return v; }catch{}
+    return "pink";
+  });
   const endAt = useRef(0);
   const pausedMs = useRef(300000);
   const recorded = useRef(false);
@@ -110,7 +137,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
   const dialog = useRef(null);
   const previouslyFocused = useRef(null);
   const selected = PROGRAMS.find(p=>p.id===kind) || PROGRAMS[0];
-  const sceneSrc = HAIKU_SCENES.find(p=>p.id===scene)?.src || HAIKU_SCENES[0].src;
+  const selectedView=MEDITATION_VIEWS.find(v=>v.id===viewId)||MEDITATION_VIEWS[0];
+  const selectedOutfit=ROSIE_OUTFITS.find(v=>v.id===outfitId)||ROSIE_OUTFITS[0];
+  const sceneSrc=NEW_ART+selectedView.image;
+  const rosieSrc=NEW_ART+selectedOutfit.image;
   const totalMs = minutes*60000;
   const elapsed = Math.max(0,totalMs-remaining);
   const seconds = Math.floor(elapsed/1000);
@@ -138,6 +168,8 @@ export default function RosieZenMeditation({scene="field",poem}) {
     };
   },[]);
   useEffect(()=>{audio.current?.setVolume(volume)},[volume]);
+  useEffect(()=>{try{window.localStorage.setItem("rosieZenBackdropV1",viewId)}catch{}},[viewId]);
+  useEffect(()=>{try{window.localStorage.setItem("rosieZenRosieOutfitV1",outfitId)}catch{}},[outfitId]);
   useEffect(() => {
     if (!opened) return undefined;
     const oldOverflow = document.body.style.overflow;
@@ -233,7 +265,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
     <div className="zen-panel">
       <div className="haiku-section-label">YOUR LITTLE SANCTUARY</div>
       <h2>Find your stillness.</h2>
-      <p className="zen-panel-intro">Rosie has mastered doing absolutely nothing. She would be delighted to teach you.</p>
+      <div className="zen-sensei-intro">
+        <p className="zen-panel-intro">Rosie has mastered doing absolutely nothing. She would be delighted to teach you.</p>
+        <img src={NEW_ART+"characters/sensei-greeting.webp"} alt="" aria-hidden="true" loading="lazy" className="zen-sensei-welcome"/>
+      </div>
       <div className="zen-program-grid" role="group" aria-label="Meditation programs">
         {PROGRAMS.map(p=><button type="button" key={p.id} className={"zen-program"+(kind===p.id?" selected":"")}
           aria-pressed={kind===p.id} onClick={()=>setKind(p.id)}>
@@ -243,6 +278,27 @@ export default function RosieZenMeditation({scene="field",poem}) {
         </button>)}
       </div>
       <p className="zen-selected-description">{selected.description}</p>
+      <details className="zen-art-options">
+        <summary><img src={sceneSrc} alt="" loading="lazy"/><span>Choose scenery and Rosie's kimono</span><span aria-hidden="true" className="zen-options-chevron">⌄</span></summary>
+        <div className="zen-art-options-inner">
+          <div className="zen-art-picker-label">Garden scenery</div>
+          <div className="zen-backdrop-picker" role="group" aria-label="Choose meditation background">
+            {MEDITATION_VIEWS.map(v=><button key={v.id} type="button"
+              className={viewId===v.id?"selected":""} aria-pressed={viewId===v.id}
+              aria-label={v.label} title={v.label} onClick={()=>setViewId(v.id)}>
+              <img src={NEW_ART+v.image} alt="" loading="lazy"/><span>{v.label}</span>
+            </button>)}
+          </div>
+          <div className="zen-art-picker-label">Rosie's kimono</div>
+          <div className="zen-outfit-picker" role="group" aria-label="Choose meditating Rosie outfit">
+            {ROSIE_OUTFITS.map(v=><button key={v.id} type="button"
+              className={outfitId===v.id?"selected":""} aria-pressed={outfitId===v.id}
+              aria-label={v.label} title={v.label} onClick={()=>setOutfitId(v.id)}>
+              <img src={NEW_ART+v.image} alt="" loading="lazy"/><span>{v.label}</span>
+            </button>)}
+          </div>
+        </div>
+      </details>
       <fieldset className="zen-options"><legend>Session length</legend>
         <div className="zen-choice-row">
           {DURATIONS.map(n=><button type="button" key={n} className={minutes===n?"selected":""}
@@ -277,8 +333,9 @@ export default function RosieZenMeditation({scene="field",poem}) {
         <div className="zen-immersive-scenery" aria-hidden="true"><img src={sceneSrc} alt=""/></div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
+          <span className="zen-ornament-corners" aria-hidden="true" />
           <header className="zen-immersive-header">
-            <div><span>ROSIE'S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
+            <div><span>ROSIE&#39;S HAIKU ZEN GARDEN · {selectedView.label.toUpperCase()}</span><h2 id="zen-session-title">{selected.title}</h2></div>
             <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
           </header>
           {status==="complete"?
@@ -288,6 +345,10 @@ export default function RosieZenMeditation({scene="field",poem}) {
                 <span className="zen-eyebrow">A LITTLE MOMENT OF PEACE</span>
                 <h3>Beautifully done.</h3>
                 <p>You gave yourself {minutes} minutes of gentle attention. Rosie is quietly impressed.</p>
+                <div className="zen-enlightenment-reward">
+                  <img src={NEW_ART+"ui/enlightenment-seal.webp"} alt="Rosie's Seal of Enlightenment" className="zen-enlightenment-seal"/>
+                  <img src={NEW_ART+"characters/sensei-bowing.webp"} alt="Sensei Rosie bows in congratulations" className="zen-sensei-bowing"/>
+                </div>
                 <p className="zen-complete-stats">{progress.sessions} sessions · {progress.minutes} peaceful minutes</p>
                 <button type="button" className="zen-action-primary" onClick={close}>Return to the garden</button>
               </div>
@@ -295,7 +356,7 @@ export default function RosieZenMeditation({scene="field",poem}) {
             <div className="zen-immersive-body">
               <div className={"zen-breath-portrait"+(status==="paused"?" paused":"")}>
                 <div className="zen-breath-halo" aria-hidden="true"/>
-                <img src={ROSIE} alt="Rosie meditates peacefully with her paws up"/>
+                <img src={rosieSrc} alt={"Rosie meditates peacefully in her "+selectedOutfit.label+" with her paws up"}/>
                 <p>{kind==="breathe"?"Breathe in peace. Breathe out the fuss.":"Nothing to do. Nowhere to be."}</p>
               </div>
               <div className="zen-guidance">

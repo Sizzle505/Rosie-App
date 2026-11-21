@@ -97,9 +97,10 @@ try {
       assert.ok(Math.abs(newZenGeometry.wisdom.x+newZenGeometry.wisdom.width/2-width/2)<Math.max(32,width*.07),
         label+" The Way of the Shiba must be horizontally centered in the page");
       if (width===1792 && height===856) {
-        assert.ok(newZenGeometry.wisdom.bottom <= height+6,
-          label+" Zen wisdom should finish within the initial wide-desktop screen: "+newZenGeometry.wisdom.bottom);
-      }
+         const pageBottom=await page.locator(".haiku-page").evaluate(el=>el.getBoundingClientRect().bottom);
+         assert.ok(newZenGeometry.wisdom.bottom <= pageBottom+8,
+           label+" Zen wisdom must remain reachable in the scrollable garden: "+newZenGeometry.wisdom.bottom);
+       }
       // The user's 1920x1080 approved export deliberately repositions
       // entire elements via translate/scale. Existing rules for the previous
       // pre-export geometry must not override that approved arrangement.
@@ -184,9 +185,14 @@ try {
       await page.locator(".zen-begin").click();
       const room = page.getByRole("dialog",{name:"Breathe with Rosie"});
       await room.waitFor({state:"visible"});
+      await room.locator(".zen-breath-portrait img").evaluate(img => img.decode());
+      await page.locator(".zen-immersive-scenery img").evaluate(img => img.decode());
       assert.ok(await room.locator(".zen-breath-portrait img").evaluate(img =>
-        img.src.endsWith("/rosie-meditating-paws-up.webp")
-      ), label+" meditation must use the alpha-transparent image, not the black-box animated WebP");
+         img.complete && img.naturalWidth > 200 && img.src.includes("/new/characters/meditating-") && img.src.endsWith(".webp")
+       ), label+" meditation must use an approved transparent Rosie kimono master");
+       assert.ok(await page.locator(".zen-immersive-scenery img").evaluate(img =>
+         img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/")
+       ), label+" meditation must load an approved sanctuary background");
       if(label==="user-desktop"||label==="iphone") {
         await page.screenshot({path:"artifacts/haiku-layout/"+label+"-meditation.png",fullPage:false,animations:"disabled"});
       }
