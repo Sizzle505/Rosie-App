@@ -147,3 +147,46 @@
 }
 
 .qa-rosie-viewer-toast{display:block;min-height:19px;margin:6px auto 0;color:#fff1c5;text-align:center;font:500 12px/1.2 Georgia,serif;text-shadow:0 2px 4px #000}
+
+/* Viewer-only, immediately live material/QR color selection. Never exported. */
+.qa-rosie-viewer .qa-rosie-viewer-color-bar{
+  display:flex;align-items:center;justify-content:center;gap:clamp(6px,1vw,13px);
+  flex-wrap:wrap;width:min(92vw,710px);margin:10px auto 2px;
+  padding:9px 13px;border:1px solid rgba(234,194,125,.42);
+  border-radius:14px;background:rgba(10,29,25,.74);
+  box-shadow:0 5px 20px #0005;
+}
+.qa-rosie-viewer-color-heading{
+  font:700 11px/1.2 Georgia,serif;letter-spacing:.08em;text-transform:uppercase;
+  color:#efd1a0;margin-right:5px;
+}
+.qa-rosie-viewer .qa-rosie-viewer-color{
+  display:flex;align-items:center;gap:6px;cursor:pointer;
+  border:1px solid transparent;border-radius:9px;
+  background:transparent;color:#f1ddba;padding:5px 6px;
+  min-height:38px;font:600 11px/1.2 Georgia,serif;
+}
+.qa-rosie-viewer-color-swatch{
+  display:block;flex:none;width:25px;height:25px;border-radius:50%;
+  border:2px solid #e6c996;box-shadow:inset 0 0 8px #0006,0 2px 4px #0006;
+}
+.qa-rosie-viewer-color-emerald .qa-rosie-viewer-color-swatch{background:conic-gradient(#05261c,#27a27c,#12563e,#a69551,#05261c);}
+.qa-rosie-viewer-color-obsidian .qa-rosie-viewer-color-swatch{background:conic-gradient(#080e16,#7d929b,#172434,#c5ccd2,#080e16);}
+.qa-rosie-viewer-color-burgundy .qa-rosie-viewer-color-swatch{background:conic-gradient(#400a20,#b53e60,#5f1437,#ebb18a,#400a20);}
+.qa-rosie-viewer-color-champagne .qa-rosie-viewer-color-swatch{background:conic-gradient(#ad843f,#fff2cf,#c79c4e,#f5dc9b,#ad843f);}
+.qa-rosie-viewer-color-sapphire .qa-rosie-viewer-color-swatch{background:conic-gradient(#091a49,#3a75bc,#133265,#aad9fa,#091a49);}
+.qa-rosie-viewer .qa-rosie-viewer-color.selected{
+  border-color:#ffdda1;background:rgba(191,153,89,.2);color:#ffebbd;
+}
+.qa-rosie-viewer .qa-rosie-viewer-color:focus-visible{
+  outline:3px solid #ffe5b0;outline-offset:2px;
+}
+@media(max-width:700px){
+  .qa-rosie-viewer .qa-rosie-viewer-color-bar{gap:3px;padding:6px 4px;width:min(98vw,500px);}
+  .qa-rosie-viewer-color-heading{width:100%;text-align:center;font-size:10px;margin:0;}
+  .qa-rosie-viewer .qa-rosie-viewer-color{flex-direction:column;gap:3px;min-height:46px;padding:3px 5px;font-size:9px;}
+  .qa-rosie-viewer-color-swatch{width:23px;height:23px;}
+}
+@media print{
+  .qa-rosie-viewer-color-bar,.qa-rosie-viewer-color{display:none!important;}
+}
