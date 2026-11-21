@@ -4,6 +4,7 @@ import { generateRosieText } from "./rosieAI.js";
 import "./RosieHaikuGarden.css";
 import RosieHaikuScene, { RosieHaikuWisdom, HAIKU_SCENES, readSelectedScene } from "./RosieHaikuScene.jsx";
 import RosieZenMeditation from "./RosieZenMeditation.jsx";
+import RosieZenAmbient from "./RosieZenAmbient.jsx";
 import {imperialScrollWithoutChecker} from "./haikuScrollMatte.js";
 import { ROSIE_HAIKU_OUTFIT_KEY, readRosieHaikuOutfit } from "./rosieHaikuOutfits.js";
 import "./RosieHaikuAtmosphere.css";
@@ -402,6 +403,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
             }} />
           ))}
         </div>
+        <RosieZenAmbient scene={scene} mode="haiku" />
       </div>
 
       <div className="haiku-shell">
