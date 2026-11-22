@@ -94,7 +94,14 @@ await patchText('src/RosieQrAtelier.jsx',[
 ]);
 await patchText('src/RosieRandomizers.jsx',[['Rosie accepts no appeals','Teddy accepts no appeals']]);
 await patchText('src/RosieRecipes.jsx',[["Rosie’s","Teddy’s"],["Rosie cooking","Teddy cooking"],["rosie-recipes-favorites-v1","teddy-recipes-favorites-v1"]]);
-await patchText('src/RosieSecretSanta.jsx',[["Rosie's Secret Santa","Teddy's Secret Santa"]]);
+await patchText('src/RosieSecretSanta.jsx',[
+ ["Rosie's Secret Santa","Teddy's Secret Santa"],
+ ["Rosie’s Secret Santa","Teddy’s Secret Santa"],
+ ['rosie-secret-santa-links-v1','teddy-secret-santa-links-v1'],
+ ['<p>From <strong>RosieVerse750@gmail.com</strong></p>','<p><strong>Email notifications are unavailable in this TeddyVerse preview.</strong></p>'],
+ ['Rosie could not complete','TeddyVerse could not complete'],
+ ['Rosie has not drawn','Teddy has not drawn']
+]);
 await write('public/offline-api.json',Buffer.from(JSON.stringify({ok:false,error:'Network services disabled for isolated TeddyVerse preview'})));
 await write('pet-template-lab/teddyverse/overlay-result.json',Buffer.from(JSON.stringify({verified:72,stagedAt:new Date().toISOString(),assets:audit},null,2)));
 console.log('TEDDY_OVERLAY_ALL_72_SHA_VERIFIED AND_QR_MASKED');
