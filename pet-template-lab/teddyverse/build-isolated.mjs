@@ -104,5 +104,9 @@ await patchText('src/RosieSecretSanta.jsx',[
 ]);
 await write('public/offline-api.json',Buffer.from(JSON.stringify({ok:false,error:'Network services disabled for isolated TeddyVerse preview'})));
 await write('pet-template-lab/teddyverse/overlay-result.json',Buffer.from(JSON.stringify({verified:72,stagedAt:new Date().toISOString(),assets:audit},null,2)));
+const pkg=JSON.parse((await read('package.json')).toString('utf8'));
+if(!pkg.scripts?.build?.includes('vite build'))throw Error('Unexpected isolated build script');
+pkg.scripts.build += ' && TEDDY_ISOLATED_STAGE=1 node pet-template-lab/teddyverse/brand-pwa.mjs';
+await write('package.json',Buffer.from(JSON.stringify(pkg,null,2)+'\n'));
 await import('./rebrand-isolated.mjs');
 console.log('TEDDY_OVERLAY_ALL_72_SHA_VERIFIED AND_QR_MASKED');
