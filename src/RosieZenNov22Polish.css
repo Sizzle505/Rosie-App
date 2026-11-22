@@ -1,0 +1,314 @@
+/*
+ * Targeted RosieVerse iPhone refinement.
+ * Keeps approved backgrounds and character art untouched. This stylesheet
+ * follows the earlier Haiku/Zen layers to avoid conflicting global rules.
+ */
+
+/* Fine metalwork rather than platform emoji for the session controls. */
+.zen-immersive .zen-session-controls .zen-icon-control,
+.zen-immersive .zen-complete-dismiss {
+  display:inline-grid !important;
+  place-items:center !important;
+  padding:0 !important;
+  width:41px !important;
+  height:41px !important;
+  min-width:41px !important;
+  min-height:41px !important;
+  flex:0 0 41px !important;
+  border:1px solid rgba(250,216,161,.7) !important;
+  border-radius:50% !important;
+  color:#f8dfad !important;
+  background:radial-gradient(circle at 36% 18%,rgba(116,72,107,.85),rgba(42,26,59,.9) 67%) !important;
+  box-shadow:0 3px 12px rgba(19,9,34,.24),inset 0 1px 0 rgba(255,232,186,.32),inset 0 -3px 8px rgba(19,12,31,.36) !important;
+  text-shadow:none !important;
+  transition:background .22s ease,border-color .22s ease,transform .22s ease !important;
+}
+.zen-immersive .zen-session-controls .zen-icon-control svg,
+.zen-immersive .zen-complete-dismiss svg {
+  display:block !important;
+  position:static !important;
+  width:20px !important;
+  height:20px !important;
+  min-width:20px;
+  min-height:20px;
+  color:inherit !important;
+  overflow:visible;
+  filter:drop-shadow(0 1px 1px rgba(16,8,25,.5));
+}
+.zen-immersive .zen-session-controls .zen-end-control {
+  color:#f4c6c0 !important;
+  background:radial-gradient(circle at 36% 18%,rgba(90,52,85,.74),rgba(35,25,51,.85) 67%) !important;
+  border-color:rgba(233,194,180,.53) !important;
+}
+.zen-immersive .zen-session-controls .zen-icon-control:is(:hover,:focus-visible),
+.zen-immersive .zen-complete-dismiss:is(:hover,:focus-visible) {
+  transform:translateY(-1px) !important;
+  background:radial-gradient(circle at 36% 18%,rgba(149,98,131,.9),rgba(56,31,69,.92) 70%) !important;
+  border-color:#ffe8bb !important;
+  outline:2px solid rgba(253,224,165,.85) !important;
+  outline-offset:2px !important;
+}
+.zen-immersive .zen-session-controls .zen-icon-control:active,
+.zen-immersive .zen-complete-dismiss:active { transform:scale(.94) !important; }
+.zen-immersive .zen-close-label { margin-right:6px; }
+
+/* Illuminate the existing SMALL sprite ornaments. Never stretch them:
+   the existing separate background/ambient-scene layers do all sizing. */
+.zen-immersive .rosie-ambient { opacity:.95 !important; }
+.zen-immersive .rosie-ambient--meditation .rosie-ambient-butterfly {
+  width:calc(var(--butterfly-size,32px) * 1.16) !important;
+  opacity:.90 !important;
+  filter:brightness(1.08) saturate(1.12);
+}
+.zen-immersive .rosie-ambient--meditation .rosie-ambient-petal {
+  width:calc(var(--ambient-size,16px) * 1.12) !important;
+  filter:brightness(1.08) saturate(1.12) drop-shadow(0 1px 2px rgba(35,17,43,.25));
+}
+.zen-immersive .rosie-ambient--meditation .rosie-ambient-lantern--0 {
+  width:67px !important;
+  opacity:.83 !important;
+  filter:brightness(1.11) drop-shadow(0 0 11px rgba(255,178,98,.56));
+}
+.zen-immersive .rosie-ambient--meditation .rosie-ambient-lantern--1 {
+  width:48px !important;
+  opacity:.65 !important;
+  filter:brightness(1.12) drop-shadow(0 0 9px rgba(255,175,104,.48));
+}
+.zen-immersive .rosie-ambient--meditation .rosie-ambient-water {
+  opacity:.32;
+  filter:brightness(1.12);
+}
+
+/* The reward stage is a single illustration, flanked by two subordinate
+   elements. The writing plaque is short, softly lacquered and readable. */
+.zen-immersive .zen-complete-stats {
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:clamp(13px,4vw,32px);
+  margin:10px auto 13px !important;
+  color:#f6d6a3 !important;
+  font:inherit;
+  text-align:center;
+}
+.zen-immersive .zen-complete-stats span {
+  display:grid;
+  grid-template-columns:auto auto;
+  gap:5px;
+  align-items:baseline;
+  color:#f6d6a3;
+}
+.zen-immersive .zen-complete-stats strong {
+  font:600 19px/1 Georgia,serif;
+  color:#ffebba;
+}
+.zen-immersive .zen-complete-stats small {
+  font:500 11px/1.2 system-ui,sans-serif;
+  color:#f1d5b2;
+  white-space:nowrap;
+}
+.zen-immersive .zen-complete-stats i {
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(242,212,170,.8);
+  flex:0 0 3px;
+}
+.zen-immersive .zen-complete-copy {
+  background:linear-gradient(155deg,rgba(35,24,52,.93),rgba(39,24,51,.88)) !important;
+  box-shadow:0 10px 23px rgba(11,6,23,.27),inset 0 1px 0 rgba(255,231,193,.18) !important;
+}
+
+/* Correct the composition of the real calligraphy desk, not its source art. */
+.haiku-page .haiku-desk-feature h2 .haiku-desk-title-first,
+.haiku-page .haiku-desk-feature h2 .haiku-desk-title-second {
+  display:block;
+}
+.haiku-page .haiku-desk-feature h2 .haiku-desk-title-first {
+  font-size:.82em;
+  font-weight:400;
+  letter-spacing:.06em;
+}
+.haiku-page .haiku-desk-feature h2 .haiku-desk-title-second {
+  font-size:1.1em;
+  font-weight:400;
+  font-style:italic;
+  line-height:1.08;
+  letter-spacing:.005em;
+}
+
+@media (max-width:600px) {
+  /* Outrank older 38px square/emoji rules. */
+  .zen-immersive .zen-session-toolbar .zen-session-controls .zen-icon-control {
+    width:41px !important;height:41px !important;
+    min-width:41px !important;min-height:41px !important;
+    flex:0 0 41px !important;
+    padding:0 !important;border-radius:50% !important;
+  }
+  .zen-immersive .zen-session-toolbar .zen-session-controls {
+    gap:9px !important;
+  }
+
+  .zen-immersive[data-zen-status="complete"] .zen-immersive-header {
+    padding:7px 11px 5px !important;
+    min-height:0 !important;
+    border-radius:11px 11px 0 0 !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-session-heading h2 {
+    font-size:clamp(20px,5.4vw,26px) !important;
+  }
+  .zen-immersive .zen-complete-dismiss {
+    width:39px !important;height:39px !important;
+    min-width:39px !important;min-height:39px !important;
+    flex:0 0 39px !important;
+  }
+  .zen-immersive .zen-complete-dismiss .zen-close-label {display:none !important;}
+  .zen-immersive .zen-complete-dismiss svg {width:18px !important;height:18px !important;}
+
+  .zen-immersive[data-zen-status="complete"] .zen-session-frame {
+    padding:0 8px 11px !important;
+    background:linear-gradient(180deg,rgba(28,19,44,.39),rgba(29,20,49,.015) 25%,rgba(25,18,41,.015) 70%,rgba(25,18,41,.24)) !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete {
+    display:grid !important;
+    flex:1 1 auto !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    grid-template-rows:minmax(0,1fr) auto !important;
+    justify-items:center !important;
+    align-items:stretch !important;
+    gap:3px !important;
+    width:100% !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 3px 7px !important;
+    overflow:hidden !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage {
+    position:relative !important;
+    display:grid !important;
+    place-items:end center !important;
+    grid-row:1;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    max-height:none !important;
+    margin:0 auto !important;
+    padding:0 !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage > img.zen-victory-rosie {
+    height:95% !important;
+    max-height:100% !important;
+    width:auto !important;
+    max-width:89% !important;
+    margin:0 auto !important;
+    object-position:center bottom !important;
+    filter:drop-shadow(0 7px 15px rgba(30,14,31,.31)) !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage .zen-complete-aura {
+    width:72% !important;left:14% !important;top:6% !important;
+    opacity:.55 !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage img.zen-enlightenment-seal {
+    top:auto !important;
+    bottom:12% !important;
+    left:auto !important;
+    right:1.5% !important;
+    width:clamp(67px,18vw,89px) !important;
+    max-width:23% !important;
+    transform:rotate(8deg);
+    filter:drop-shadow(0 2px 9px rgba(22,12,35,.31));
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage img.zen-sensei-bowing {
+    top:auto !important;
+    bottom:8% !important;
+    left:2% !important;
+    width:clamp(69px,19vw,90px) !important;
+    max-width:24% !important;
+    transform:rotate(-5deg);
+    opacity:.95;
+  }
+
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy {
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    flex:0 0 auto !important;
+    width:100% !important;
+    max-width:500px !important;
+    min-width:0 !important;
+    margin:0 auto !important;
+    padding:13px 15px 14px !important;
+    border-radius:17px !important;
+    border:1px solid rgba(251,218,167,.65) !important;
+    background:linear-gradient(160deg,rgba(33,21,48,.93),rgba(42,25,52,.89)) !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy .zen-eyebrow {
+    font-size:9px !important;
+    letter-spacing:.16em !important;
+    color:#ffe0a1 !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy h3 {
+    font-size:clamp(28px,7.3vw,35px) !important;
+    margin:3px 0 5px !important;
+    line-height:1.05 !important;
+    color:#fff1d6 !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy > p {
+    max-width:35ch !important;
+    font-size:clamp(13px,3.45vw,15px) !important;
+    line-height:1.33 !important;
+    margin:0 auto !important;
+    color:#ffebda !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stats {
+    margin:10px auto 12px !important;
+    gap:17px !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stats strong {font-size:17px !important;}
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stats small {font-size:10px !important;}
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy .zen-action-primary {
+    min-height:38px !important;
+    padding:8px 20px !important;
+    font-size:13px !important;
+    align-self:center !important;
+    margin:0 auto !important;
+  }
+
+  /* The desk has an open niche *between* its legs. Keep the two title
+     lines entirely within that niche rather than across the legs. */
+  .haiku-page .haiku-desk-feature {
+    margin-bottom:2px !important;
+  }
+  .haiku-page .haiku-desk-feature h2 {
+    position:absolute !important;
+    left:19% !important;
+    right:19% !important;
+    bottom:2% !important;
+    width:62% !important;
+    margin:0 !important;
+    padding:0 !important;
+    font:normal clamp(18px,4.7vw,22px)/1.11 "Iowan Old Style",Palatino,Georgia,serif !important;
+    color:#ffe4b2 !important;
+    text-align:center !important;
+    text-shadow:0 1px 5px rgba(20,8,27,.9),0 2px 10px rgba(10,5,16,.83) !important;
+    white-space:normal !important;
+    text-wrap:nowrap !important;
+    pointer-events:none;
+  }
+  .haiku-page .haiku-compose > label:first-of-type {
+    margin-top:5px !important;
+  }
+}
+@media (max-width:600px) and (max-height:735px) {
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy {
+    padding:10px 12px 11px !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy h3 {
+    font-size:28px !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stats {margin:6px auto 8px !important;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .zen-immersive .zen-session-controls .zen-icon-control,
+  .zen-immersive .zen-complete-dismiss {
+    transition:none !important;
+  }
+}
