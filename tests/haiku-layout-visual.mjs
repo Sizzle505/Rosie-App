@@ -205,7 +205,7 @@ try {
        await room.getByRole("button",{name:"Previous Rosie outfit",exact:true}).click();
        assert.ok(await scenery.evaluate(img =>
          img.complete && img.naturalWidth >= 700 && img.src.includes("/new/meditation/") &&
-         (width > 600 || img.src.includes("/iphone/"))
+         (window.innerWidth > 600 || img.src.includes("/iphone/"))
        ), label+" meditation must display approved device-specific sanctuary background");
       assert.equal(await page.locator(".zen-immersive .rosie-ambient").count(),1,
         label+" meditation effects must render exactly once");
