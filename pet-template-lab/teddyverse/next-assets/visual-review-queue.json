@@ -1,0 +1,3600 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-22",
+  "total": 171,
+  "status": "not visually reviewed; each candidate requires a reuse/replace decision",
+  "policy": "Any SVG with embedded imagery must preserve its vector geometry and safe masks.",
+  "assets": [
+    {
+      "id": "RV001",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/field-sunrise.webp",
+      "sourceGitBlobSHA": "6a78f15fbb8c39e576858125e6f9282d18ddb963",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV002",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/meditation-controls.webp",
+      "sourceGitBlobSHA": "1b3e6f7e5b266bd2cdd3f2b3ce201325959fe198",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 467,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV003",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/haiku-scroll-isolated.png",
+      "sourceGitBlobSHA": "ddb2b58a7b5638ea3e0f6af9c50d1432b95b8d94",
+      "sourceDimensions": {
+        "width": 1228,
+        "height": 1281,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV004",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/field-meadow.webp",
+      "sourceGitBlobSHA": "4d60701f5450380e2c494a8de3842cb189071858",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 467,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV005",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/field-sunbeams.webp",
+      "sourceGitBlobSHA": "adb489dcbbab40f73b6bfb2fb64ca7601ca7908b",
+      "sourceDimensions": {
+        "width": 1920,
+        "height": 1080,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV006",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/golden-pollen.webp",
+      "sourceGitBlobSHA": "ada84296e1b045fe151a1552191ee3a7a00e90c2",
+      "sourceDimensions": {
+        "width": 1920,
+        "height": 1080,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV007",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/meditation-halo-alternate.webp",
+      "sourceGitBlobSHA": "c9d787b5ebf6e57b352f6e9182a5635b531a5895",
+      "sourceDimensions": {
+        "width": 1200,
+        "height": 1200,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV008",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-01.webp",
+      "sourceGitBlobSHA": "98d5399dac66a8277f043ec9383f7ba2e1137c46",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV009",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-02.webp",
+      "sourceGitBlobSHA": "06c08284508c16d3086db466594acaec1e23bbd7",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV010",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-03.webp",
+      "sourceGitBlobSHA": "8111d03c77baeee3b7d0f8bf5e8264d1a30c9b87",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV011",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-04.webp",
+      "sourceGitBlobSHA": "675d12d207533a9bfbfec030cd15d21565c5f60d",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV012",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-05.webp",
+      "sourceGitBlobSHA": "0752320650bb32e0fd3cbcd0b5dc6290aa8d5c76",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV013",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-06.webp",
+      "sourceGitBlobSHA": "fd725c2a77991289fb1353d02e34deb7204c4515",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV014",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-07.webp",
+      "sourceGitBlobSHA": "614896f43959ba3c4ce46918a62606e29008fd00",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV015",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-08.webp",
+      "sourceGitBlobSHA": "1b6324012b5f8aaeb3c428a08c694eb12d5185ae",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV016",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-09.webp",
+      "sourceGitBlobSHA": "c9b793a0f4bbcb8f700fe18f95034ac6664bc40c",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV017",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-10.webp",
+      "sourceGitBlobSHA": "0478c513b379c7c2c955029465910c4c5a9ed625",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV018",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-11.webp",
+      "sourceGitBlobSHA": "a18a874dc01e18d4bf602ee422c805951e989200",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV019",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petal-12.webp",
+      "sourceGitBlobSHA": "f52f40dd4a7dd95c18f2c2797e07e4d2d1b79837",
+      "sourceDimensions": {
+        "width": 222,
+        "height": 222,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV020",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/petals-atlas.webp",
+      "sourceGitBlobSHA": "6bf35e387ab68754a733a442f6f4585dc17494c2",
+      "sourceDimensions": {
+        "width": 888,
+        "height": 666,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV021",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/sakura-left.webp",
+      "sourceGitBlobSHA": "48f50b090eaf41292fa1c1c2348407621f97ed7a",
+      "sourceDimensions": {
+        "width": 825,
+        "height": 721,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV022",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/sakura-right.webp",
+      "sourceGitBlobSHA": "0e5d1364721e32a06a5a488a1c61018259d9c449",
+      "sourceDimensions": {
+        "width": 843,
+        "height": 846,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV023",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/temple-lantern.webp",
+      "sourceGitBlobSHA": "a01efc85920f8414a1b341e2878c71210f1c655b",
+      "sourceDimensions": {
+        "width": 1051,
+        "height": 1448,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV024",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/zen-sand-sheen.webp",
+      "sourceGitBlobSHA": "c4b902f7a808de5e4e1934b1f95e826f23fafa51",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV025",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/living-garden/zen-water-ripples.webp",
+      "sourceGitBlobSHA": "de25f340e617ee214fc72850d9937b6ba25c72f6",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 420,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV026",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/dawn-misty-garden.webp",
+      "sourceGitBlobSHA": "6736b83ecc1a2d4ef559207fd066b1e4a9979c1c",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV027",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/day-lotus-lake.webp",
+      "sourceGitBlobSHA": "38e59453fbe395d976b8cada9187a33eb976dee8",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV028",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/day-mountain-tea.webp",
+      "sourceGitBlobSHA": "9db61ac3e8b1289ca1c586d34cb810979645b5d1",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV029",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/day-raked-sand.webp",
+      "sourceGitBlobSHA": "739a2ebc3aa42da7c839630f8eddf1aff0c82ae6",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV030",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/day-sakura-garden.webp",
+      "sourceGitBlobSHA": "f87d12fe3870479d54440b49020fc28db4b89154",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV031",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/evening-twilight.webp",
+      "sourceGitBlobSHA": "b02c6ba8229f44d7dd81c8be4ea5205cfe5516b0",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV032",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/approved/lantern-dusk.avif",
+      "sourceGitBlobSHA": "786ba367d7bafd267bf2e5be1e5a1c7d422a330e",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV033",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/approved/lotus-sunrise.avif",
+      "sourceGitBlobSHA": "5920674a3370459e0d544feddbc73e15bc0146a1",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV034",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/approved/misty-tea.avif",
+      "sourceGitBlobSHA": "af2b006ca98c4cd681f1b8e9b3a0c32bc81669f6",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV035",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/approved/moonlit-retreat.avif",
+      "sourceGitBlobSHA": "93b3a142a5c8de6d1e824638fd037f6060644ff2",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV036",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/approved/sakura-spring.avif",
+      "sourceGitBlobSHA": "2fe9a879e0ce63840aac50acde96e8606bf2fd03",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV037",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/lotus-portrait.webp",
+      "sourceGitBlobSHA": "85c56a8fcf91b7a199e2279917aef5d1978ba80c",
+      "sourceDimensions": {
+        "width": 640,
+        "height": 1136,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV038",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/mist-portrait.webp",
+      "sourceGitBlobSHA": "fc9be5151bfcd6f74f7cf9fb8f6c04e9b4181706",
+      "sourceDimensions": {
+        "width": 640,
+        "height": 1136,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV039",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/moonlit-portrait.webp",
+      "sourceGitBlobSHA": "dcb12afc8bff50b5a6a695017f973706105c096e",
+      "sourceDimensions": {
+        "width": 540,
+        "height": 958,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV040",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/raked-portrait.webp",
+      "sourceGitBlobSHA": "b0fc5bb726699596f8f9450bd5b9ed79a4e1b8b7",
+      "sourceDimensions": {
+        "width": 480,
+        "height": 852,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV041",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/sakura-portrait.webp",
+      "sourceGitBlobSHA": "48ca025992facb58fe0eb25893976638d8f44c2a",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 639,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV042",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/tea-portrait.webp",
+      "sourceGitBlobSHA": "75fe63dc1dc31b08887c0b041bd4f25e0b79fcd4",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 745,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV043",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/iphone/twilight-portrait.webp",
+      "sourceGitBlobSHA": "d3f05f82c15f0b9d02c2f04c831bc6b32a037361",
+      "sourceDimensions": {
+        "width": 540,
+        "height": 958,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV044",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/meditation/night-moonlit-veranda.webp",
+      "sourceGitBlobSHA": "5f2a8e7087162a7bf18aaa857c266bac250dffc2",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV045",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/enlightenment-seal.webp",
+      "sourceGitBlobSHA": "099e203375a21c9b6583394e2c84744724cdf98a",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV046",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/golden-petal-flourish.webp",
+      "sourceGitBlobSHA": "2af702ff37b268811c721b6d93d97d62fee339b5",
+      "sourceDimensions": {
+        "width": 2172,
+        "height": 724,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV047",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/meditation-breathing-ring.webp",
+      "sourceGitBlobSHA": "ded514f70bdbbbcd2c71899b7038e965862bf604",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV048",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/ornate-corners.webp",
+      "sourceGitBlobSHA": "3ee69f793cb7feead89fb84734ba9a83dce859a9",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV049",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/postcard.webp",
+      "sourceGitBlobSHA": "7fb08d231366ff1f75a1a61612b05fa8a8c4333a",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV050",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/save-scroll.webp",
+      "sourceGitBlobSHA": "f298fe593794d244730b230128ed7814cea8e0fd",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV051",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/scene-flower-field.webp",
+      "sourceGitBlobSHA": "8022c6946e5ad9ee83112293ad099b6ac27f323f",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV052",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/scene-temple.webp",
+      "sourceGitBlobSHA": "cd9c8900f0d9725fc3e53b2a014d25690b28e40f",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV053",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/scene-zen-garden.webp",
+      "sourceGitBlobSHA": "2599cf89e81939c760ddb659b386990dfb0aa11b",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV054",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/share-verse.webp",
+      "sourceGitBlobSHA": "75a4ed9e2ae876746f7a9156dbe204e16a26d6cf",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV055",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/ui/zen-landing-lantern.webp",
+      "sourceGitBlobSHA": "013bc44a7c1ee336d12e6927a250a1a3cca71342",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV056",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/imperial-paw-crest.webp",
+      "sourceGitBlobSHA": "89874b58831fe82e4e7c49573e10e2e59444d3a6",
+      "sourceDimensions": {
+        "width": 1391,
+        "height": 1016,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV057",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/masthead-compact.webp",
+      "sourceGitBlobSHA": "9d67a6fcd131d279b58b864f80cea5672195f44e",
+      "sourceDimensions": {
+        "width": 2114,
+        "height": 707,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV058",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/masthead-grand.webp",
+      "sourceGitBlobSHA": "9be412c5297e1b9f6b29b2f8e76eaae08fb5ee1e",
+      "sourceDimensions": {
+        "width": 2170,
+        "height": 712,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV059",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/meditation-breathe.webp",
+      "sourceGitBlobSHA": "34db25a0d0b2111b5e18c663ee6d376a000384e6",
+      "sourceDimensions": {
+        "width": 433,
+        "height": 460,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV060",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/meditation-calm.webp",
+      "sourceGitBlobSHA": "c08b5185e2796f99ca77b0ea0b465271b0a9cf76",
+      "sourceDimensions": {
+        "width": 433,
+        "height": 460,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV061",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/meditation-quiet.webp",
+      "sourceGitBlobSHA": "421d6ea6e850d7e5ba6e65934641437e63a8455e",
+      "sourceDimensions": {
+        "width": 433,
+        "height": 460,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV062",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/meditation-reflect.webp",
+      "sourceGitBlobSHA": "1aa35df8714553e02d40ac7df53a6f043f959eb4",
+      "sourceDimensions": {
+        "width": 433,
+        "height": 462,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV063",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/meditation-unwind.webp",
+      "sourceGitBlobSHA": "6674312d1b74ea5eb74f1b8004cb309913da6e3d",
+      "sourceDimensions": {
+        "width": 433,
+        "height": 460,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV064",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/shoji-frame-original.webp",
+      "sourceGitBlobSHA": "528db302412d6dc536659ba69b250be965043f84",
+      "sourceDimensions": {
+        "width": 1536,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV065",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/shoji-frame-refined.webp",
+      "sourceGitBlobSHA": "dd0ac819b71da34a717e6de6d7df3219fb6de91d",
+      "sourceDimensions": {
+        "width": 1536,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV066",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/tab-compose.webp",
+      "sourceGitBlobSHA": "033923cff58b608350a3ad28f15f5635fd278b0c",
+      "sourceDimensions": {
+        "width": 543,
+        "height": 724,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV067",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/tab-daily.webp",
+      "sourceGitBlobSHA": "5facb3db93c35de3f7e078b3d3e50924a5f9da17",
+      "sourceDimensions": {
+        "width": 543,
+        "height": 724,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV068",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/tab-journal.webp",
+      "sourceGitBlobSHA": "6a2b8b6e395106f84bb3f8392bf9ca24f0994eb6",
+      "sourceDimensions": {
+        "width": 543,
+        "height": 724,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV069",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/tab-meditate.webp",
+      "sourceGitBlobSHA": "4768bea409ff1948632c1143fc533ea5c52d8ebf",
+      "sourceDimensions": {
+        "width": 543,
+        "height": 724,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV070",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/washi-paper-original.webp",
+      "sourceGitBlobSHA": "fe97dfb493d54b6bc0508b4638103aa461fece04",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV071",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/washi-paper-refined.webp",
+      "sourceGitBlobSHA": "2aedb927ff7a2f388e8237626e0a05de66bb8f22",
+      "sourceDimensions": {
+        "width": 1536,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV072",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/sakura-canopy.webp",
+      "sourceGitBlobSHA": "3ef0269480e05934b8dd94641d3a1949589f99d3",
+      "sourceDimensions": {
+        "width": 1300,
+        "height": 975,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV073",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/scroll-grand.webp",
+      "sourceGitBlobSHA": "fc3db4c9f0ae5ee5ba4ce17eeeef3de811538946",
+      "sourceDimensions": {
+        "width": 1300,
+        "height": 975,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV074",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/scroll-mobile.webp",
+      "sourceGitBlobSHA": "c2b970b29dd74cab095d2ba065047ed01f2eb5f0",
+      "sourceDimensions": {
+        "width": 1040,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV075",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/temple-sunrise.webp",
+      "sourceGitBlobSHA": "b7ad28cab58d69c32a89889a6e47e5f4e65411d8",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV076",
+      "module": "haiku",
+      "sourcePath": "public/rosieverse/haiku/zen-sunrise.webp",
+      "sourceGitBlobSHA": "aa0cff0495c37d0d187694b2246a0152554c3273",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV077",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/01-Captain-Arcade-Three-Worlds-Desktop.webp",
+      "sourceGitBlobSHA": "5006f9fcb185f04cd4d99df9f5ebc92937229b0c",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV078",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/02-Captain-Arcade-Three-Worlds-Mobile.webp",
+      "sourceGitBlobSHA": "4c98704d9cf2c40088a12008d889ea2e1c01684c",
+      "sourceDimensions": {
+        "width": 1152,
+        "height": 2048,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV079",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/03-Ember-Tunnel-Molten-Foundry.webp",
+      "sourceGitBlobSHA": "69d65878aa2a8a022e8ef5b29a41fd5d4be54ee1",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV080",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/04-Ember-Tunnel-Crystal-Vault.webp",
+      "sourceGitBlobSHA": "370981df5934a14ffca20f9cc0ff6450da3c2ec1",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV081",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/05-Ember-Tunnel-Excavation-Control.webp",
+      "sourceGitBlobSHA": "d19d39134267111ed9ff6efe7e707b3f721b0de6",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV082",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp",
+      "sourceGitBlobSHA": "f0a8efd7a303bb2b762da8df84374057e9268312",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV083",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/07-Cosmic-Odyssey-Black-Hole-Observatory.webp",
+      "sourceGitBlobSHA": "c22746399e5579973a280d4cc863e76755622adf",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV084",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/08-Cosmic-Odyssey-Lunar-Starport.webp",
+      "sourceGitBlobSHA": "90c626b42178bd23cf3bcd6fa895ce150eeeda09",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV085",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/09-Cosmic-Odyssey-Starship-Passage.webp",
+      "sourceGitBlobSHA": "426378fb696793995b64145dfe505a1df253697a",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV086",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/10-Captain-Arcade-Navy-Gold-Quiet.webp",
+      "sourceGitBlobSHA": "fdf14d55d655e02d8f4ddcf833846a38ac979a6a",
+      "sourceDimensions": {
+        "width": 2048,
+        "height": 1152,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV087",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/tunnel-desktop-20261118.webp",
+      "sourceGitBlobSHA": "14efbfdcfe4de10786ab3da028806df035b7edd0",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV088",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/victory-celebration-20261118.webp",
+      "sourceGitBlobSHA": "6d9afc80ca39943075c1b178f087c1924969940d",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV089",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-arcade-backgrounds/yacht-desktop-20261118.webp",
+      "sourceGitBlobSHA": "40417124d3b09661c6692be002840acbdbfc72e3",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV090",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/golden-misty-isles.webp",
+      "sourceGitBlobSHA": "ac304208b2d1ee52e8987242128848aff56c550b",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV091",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/golden-reflections.webp",
+      "sourceGitBlobSHA": "97306843719acf8d0c02a9d9838ca3d87b002c29",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV092",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/lightning.webp",
+      "sourceGitBlobSHA": "d85227145dae4fd12c1908010ea7d425e6f90247",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV093",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/lotus-watercolor.svg",
+      "sourceGitBlobSHA": "bf1c54e4db4feb781e338a54efb0bfc42d09beb0",
+      "sourceDimensions": {
+        "width": 120,
+        "height": 110,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV094",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/moonlit-shrine-valley.webp",
+      "sourceGitBlobSHA": "d5a8bf974b721cc0661026384bc0c152bab7f850",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV095",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/ocean-mist.webp",
+      "sourceGitBlobSHA": "7043510dc1a385a31a26ec9f6c7ebcf4c96a3a45",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV096",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/ocean-wave-frame.webp",
+      "sourceGitBlobSHA": "bab024ab0751aa882e1cd36d0816ae4adcff46f6",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV097",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/ocean-wave-wide.webp",
+      "sourceGitBlobSHA": "eacd31ddc1a9e2fee6c04cc3fcad777e3812fdd3",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV098",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/rain-spray.webp",
+      "sourceGitBlobSHA": "a3d96c04975c0d7d42f1f87725dd063269c22c51",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV099",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/sakura-petals.webp",
+      "sourceGitBlobSHA": "168318e0dad33f5bb4b8a73522ab027e6b113255",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV100",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/sunrise-across-torii-sea.webp",
+      "sourceGitBlobSHA": "200d2310ad57bb65d9e48001bd38485ebd1a468f",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV101",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/tempest-gate.webp",
+      "sourceGitBlobSHA": "c1f5e41a006561421edf0b44e85a5f808711636e",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV102",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/twilight-sakura-harbor.webp",
+      "sourceGitBlobSHA": "fe0c2854b3abd621cc7277bff6452c993f76cf4e",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV103",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-levels/wake-splash.webp",
+      "sourceGitBlobSHA": "6462071891db14be0b89a02e9d8bfb4892eeaee6",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV104",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-motion/captain-portrait-cloud.webp",
+      "sourceGitBlobSHA": "4d41d42060ebdfd0ffcee22a1745ee8715a6a991",
+      "sourceDimensions": {
+        "width": 720,
+        "height": 1280,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV105",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-motion/captain-portrait-mist.webp",
+      "sourceGitBlobSHA": "26e2914f7ab3a5ad8ea7f9d51cea4a1e15757684",
+      "sourceDimensions": {
+        "width": 720,
+        "height": 1280,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV106",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-motion/captain-wide-cloud.webp",
+      "sourceGitBlobSHA": "51320451854add905f9614afbeedbfc86ae815db",
+      "sourceDimensions": {
+        "width": 1280,
+        "height": 720,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV107",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-motion/captain-wide-mist.webp",
+      "sourceGitBlobSHA": "fa0fadf83a2c10febec3d163debdbed5af3c8738",
+      "sourceDimensions": {
+        "width": 1280,
+        "height": 720,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV108",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-motion/maple-leaf.svg",
+      "sourceGitBlobSHA": "ffa5718362b36045db9fce5eac443cf44efef060",
+      "sourceDimensions": {
+        "width": 30,
+        "height": 31,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV109",
+      "module": "captain-yacht",
+      "sourcePath": "public/captain-motion/sakura-petal.svg",
+      "sourceGitBlobSHA": "8b27cab73821b3176b89e1ff57864120367d5b13",
+      "sourceDimensions": {
+        "width": 26,
+        "height": 26,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV110",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-pickup-bone.webp",
+      "sourceGitBlobSHA": "1c14b3f6f96061150fd260221ad820d040fba55f",
+      "sourceDimensions": {
+        "width": 416,
+        "height": 416,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV111",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-pickup-buoy.webp",
+      "sourceGitBlobSHA": "785cbb5cc37e8a27900dc8191a51bb9bb700ee8f",
+      "sourceDimensions": {
+        "width": 416,
+        "height": 416,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV112",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-pickup-tennis.webp",
+      "sourceGitBlobSHA": "c3644c2d0f1f1b923c049806cb1c4e9ece1b6922",
+      "sourceDimensions": {
+        "width": 416,
+        "height": 416,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV113",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-sakura-banner.webp",
+      "sourceGitBlobSHA": "44754dca670b515136d8a0ccdb579b5ec389c549",
+      "sourceDimensions": {
+        "width": 1536,
+        "height": 864,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV114",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-sakura-course-portrait.webp",
+      "sourceGitBlobSHA": "01250a634d005a9e847a581618e7a98c4896def1",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV115",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-sakura-course-wide.webp",
+      "sourceGitBlobSHA": "d6533d1c99dc20063cda299b9c814a753a887e32",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV116",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-tsushima-coast.svg",
+      "sourceGitBlobSHA": "844d25d28d3d9e2c2c12af3319ac1ed44f7d0812",
+      "sourceDimensions": {
+        "width": 1440,
+        "height": 950,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV117",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/blackhole.webp",
+      "sourceGitBlobSHA": "08c3f34193be47ccecf820bed837bbf6aaef6ceb",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV118",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/crystal.webp",
+      "sourceGitBlobSHA": "eed56e2c2d6a943ef8e23181de4d2f63490faae4",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV119",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/derelict.webp",
+      "sourceGitBlobSHA": "f2b9cf3370e506f3a389e8b01d91e6f204bc2dc1",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV120",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/foundry.webp",
+      "sourceGitBlobSHA": "da50193f93fd28639c02b9b27ae7d71c6d5943ec",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV121",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/garden.webp",
+      "sourceGitBlobSHA": "95aba0091331d53508d796597d914621dd8b4557",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV122",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/ice.webp",
+      "sourceGitBlobSHA": "6958edb3c1729aabc70a1ca5203326e2fde94976",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV123",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/lunar.webp",
+      "sourceGitBlobSHA": "f6794a489e42292f338603749f3178c3130eda33",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV124",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/meteor.webp",
+      "sourceGitBlobSHA": "310dd516f228a3c74ef22f5449403d515a643ca1",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV125",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/nebula.webp",
+      "sourceGitBlobSHA": "c86cb4d67a09fc4b94c00eb8df37b9847c18e5fc",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV126",
+      "module": "captain-hub",
+      "sourcePath": "public/captain-victory-backdrops/ruins.webp",
+      "sourceGitBlobSHA": "be69cd03e7643d0ad39b0bd1c5e65fb0f9f73ee1",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV127",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/cosmic-banner.webp",
+      "sourceGitBlobSHA": "c5a7e0b9de69c733175ef331dd276246a68cb590",
+      "sourceDimensions": {
+        "width": 2172,
+        "height": 724,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV128",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/life.webp",
+      "sourceGitBlobSHA": "3d7d55ad845de142db6f3bc0778e4cd74a4c4f22",
+      "sourceDimensions": {
+        "width": 130,
+        "height": 130,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV129",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/crystal_victory_in_cosmic_skies.webp",
+      "sourceGitBlobSHA": "7408b85fc44e3c832424bb96c4eb9e606e2c2935",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV130",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/chip-back.webp",
+      "sourceGitBlobSHA": "18c6041bb62ae556aa00c3336f7fe544574de2f9",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV131",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/chip-front.webp",
+      "sourceGitBlobSHA": "da6b816ce595421666978ef214764d003a0fccd9",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV132",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/jett-back.webp",
+      "sourceGitBlobSHA": "ce98af417ed582426ef0d33f66d0fe08d8be4801",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV133",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/jett-front.webp",
+      "sourceGitBlobSHA": "718b72405b0dd15cd6266994282a11368df42bf3",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV134",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/kitty-back.webp",
+      "sourceGitBlobSHA": "550cbeee8b3512a47bb172393f4a02b2b368dd7f",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV135",
+      "module": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/kitty-front.webp",
+      "sourceGitBlobSHA": "718c2ea5a0e9d589ea35f27c8f42707a889b0082",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV136",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/drill-body.webp",
+      "sourceGitBlobSHA": "80890d3bb1027a550335890fced0a21aad0379f4",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV137",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/golden_drill_impact_effect_sprite_sheet.webp",
+      "sourceGitBlobSHA": "cceba55993a4400259d82fd9f6c13496e0e50dcb",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 700,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV138",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/golden_jet_flame_vfx_sprite_sheet.webp",
+      "sourceGitBlobSHA": "cf4d1f3f103dc08e7f535d31c0f88b1d924510e6",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 467,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV139",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/ornate_steampunk_brass_coupling.webp",
+      "sourceGitBlobSHA": "fde34951af197166b829f97b0a5967f5ce51be3e",
+      "sourceDimensions": {
+        "width": 1000,
+        "height": 1000,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV140",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/steampunk_corgi_captain_drill_vehicle.webp",
+      "sourceGitBlobSHA": "084d7a7508f52ac5d404ffb14737105e4866a9e0",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 800,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV141",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/steampunk_dog_captain_drillcraft.webp",
+      "sourceGitBlobSHA": "b8be324819aaf51620b7967a973f729eb232eb8f",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 788,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV142",
+      "module": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/steampunk_golden_drill_sprite_sheet.webp",
+      "sourceGitBlobSHA": "81c769ddb4197c96dd4e7b96796527ba664b2736",
+      "sourceDimensions": {
+        "width": 1223,
+        "height": 1000,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV143",
+      "module": "captain-yacht",
+      "sourcePath": "public/yacht-dash/victories/emperor.webp",
+      "sourceGitBlobSHA": "e244411423be02de5d62539124bf42a883bd1ba3",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV144",
+      "module": "captain-yacht",
+      "sourcePath": "public/yacht-dash/victories/moonlight.webp",
+      "sourceGitBlobSHA": "8bd5b229b99cd50d837286f222bf9f992a5a2b83",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV145",
+      "module": "captain-yacht",
+      "sourcePath": "public/yacht-dash/victories/sakura.webp",
+      "sourceGitBlobSHA": "0d816a85794e200234d54fe0bea1f82ec304a0f5",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV146",
+      "module": "captain-yacht",
+      "sourcePath": "public/yacht-dash/victories/typhoon.webp",
+      "sourceGitBlobSHA": "039afb85687c8e18d88364e911439fe950f7d535",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV147",
+      "module": "other-public",
+      "sourcePath": "public/barkbridge-examiner-desktop-20261113.webp",
+      "sourceGitBlobSHA": "316ee897c7632ba34ecf36f0b5d21efb8f22a6a8",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV148",
+      "module": "cheese",
+      "sourcePath": "public/barkbridge/diploma/barkbridge-full-gold-frame-v3.png",
+      "sourceGitBlobSHA": "a0ae25984fe370461badade545b7973d21fd396a",
+      "sourceDimensions": {
+        "width": 768,
+        "height": 512,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV149",
+      "module": "cheese",
+      "sourcePath": "public/barkbridge/diploma/gleaming-gold-frame.png",
+      "sourceGitBlobSHA": "5ac7dd428122b087943a1352b92050e5cae0840a",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV150",
+      "module": "cheese",
+      "sourcePath": "public/barkbridge/diploma/ornate-frame.png",
+      "sourceGitBlobSHA": "809294f2166846651b71b826644ca43777086d95",
+      "sourceDimensions": {
+        "width": 1200,
+        "height": 920,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV151",
+      "module": "other-public",
+      "sourcePath": "public/calculations/hero.avif",
+      "sourceGitBlobSHA": "d5788cb79804248a13f1759a5b91e4c78afef911",
+      "sourceDimensions": {
+        "width": 400,
+        "height": 300,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV152",
+      "module": "other-public",
+      "sourcePath": "public/home/rosie-grand-salon.svg",
+      "sourceGitBlobSHA": "4131b939518c40df8dcadf635fa9470786652c1c",
+      "sourceDimensions": {
+        "width": 1600,
+        "height": 1000,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV153",
+      "module": "qr-atelier",
+      "sourcePath": "public/qr-atelier/collection-frame.webp",
+      "sourceGitBlobSHA": "d370afaf1818f9f905be14aba1c15b604f1e0a9d",
+      "sourceDimensions": {
+        "width": 1200,
+        "height": 411,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV154",
+      "module": "qr-atelier",
+      "sourcePath": "public/qr-atelier/qr-frame.webp",
+      "sourceGitBlobSHA": "59bdc9f46ab21041bfd1ac8daacd14007389e92b",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV155",
+      "module": "qr-atelier",
+      "sourcePath": "public/qr-atelier/workbench-frame.webp",
+      "sourceGitBlobSHA": "3d6bcb5250a844110d2f16571ebffadc62531d0b",
+      "sourceDimensions": {
+        "width": 983,
+        "height": 1379,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV156",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/desktop-casino-header-20261112.webp",
+      "sourceGitBlobSHA": "8cd7ab359d7167b7dca71214190c633d5287d2a0",
+      "sourceDimensions": {
+        "width": 2021,
+        "height": 778,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV157",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-retina.svg",
+      "sourceGitBlobSHA": "39f1758d1cbcfc979b48f999378e4f049959e0c4",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 960,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV158",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-tail-retina.svg",
+      "sourceGitBlobSHA": "e9986a0f9dbb8c43e5877ea8062f8dbab3c7e1b5",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 960,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV159",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/roulette/originals/wheel-frame-stationary.png",
+      "sourceGitBlobSHA": "586b28559bcb0c62c77eb27fe51586f6a8b874b8",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV160",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/roulette/wheel-frame-stationary.webp",
+      "sourceGitBlobSHA": "3959da4bd6a82aa11c37ce2f12d9d7549d3bee5a",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV161",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/secret-santa/02-secret-santa-header.webp",
+      "sourceGitBlobSHA": "6533a1ba471e201f93f79fcd7341e542bb3cedce",
+      "sourceDimensions": {
+        "width": 2172,
+        "height": 724,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV162",
+      "module": "randomizers",
+      "sourcePath": "public/randomizers/secret-santa/10-ornamental-frame.webp",
+      "sourceGitBlobSHA": "6a959ebce9374eb7dd8a4f505d979bc6140dd5a8",
+      "sourceDimensions": {
+        "width": 486,
+        "height": 328,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV163",
+      "module": "other-public",
+      "sourcePath": "public/rosie-turn-head.svg",
+      "sourceGitBlobSHA": "98f754e46e3e905c8b14c640c80eb5d5069e27fb",
+      "sourceDimensions": {
+        "width": 1260,
+        "height": 1260,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV164",
+      "module": "calculations",
+      "sourcePath": "public/rosieverse/calculations/calculator/frame-outer-nine-slice.webp",
+      "sourceGitBlobSHA": "cad6b3b6407a60dca45e56c33302e0d883c085d2",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV165",
+      "module": "calculations",
+      "sourcePath": "public/rosieverse/calculations/desktop-20261029/desktop-golden-header.webp",
+      "sourceGitBlobSHA": "20363e72079b6e4ecdc835b214d82b9e34673c60",
+      "sourceDimensions": {
+        "width": 1900,
+        "height": 633,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV166",
+      "module": "calculations",
+      "sourcePath": "public/rosieverse/calculations/hero/calculations-desktop-hero-v1.webp",
+      "sourceGitBlobSHA": "dedb422ba2375ff4434c4753d2af6d7352c56c8b",
+      "sourceDimensions": {
+        "width": 1760,
+        "height": 754,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV167",
+      "module": "calculations",
+      "sourcePath": "public/rosieverse/calculations/hero/hero-mobile-16x9.webp",
+      "sourceGitBlobSHA": "cd1e60b2a25d1f4ea1f3c622a516455b00f27a90",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 814,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV168",
+      "module": "shared-rosieverse",
+      "sourcePath": "public/rosieverse/cheese/honey-maple-reaction.svg",
+      "sourceGitBlobSHA": "b95269da0fe736bf61f057fc93e8cbd54ef88b4a",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 500,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": true
+    },
+    {
+      "id": "RV169",
+      "module": "recipes",
+      "sourcePath": "public/rosieverse/recipes/recipes-card-frame.webp",
+      "sourceGitBlobSHA": "f3c411107734bef8159e5bd7dd04b7a6162645d5",
+      "sourceDimensions": {
+        "width": 1086,
+        "height": 1448,
+        "hasAlpha": true
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV170",
+      "module": "recipes",
+      "sourcePath": "public/rosieverse/recipes/recipes-desktop-hero-v1.webp",
+      "sourceGitBlobSHA": "ce9edc55029faf73d4e33173dd27ec2dd5d92200",
+      "sourceDimensions": {
+        "width": 1439,
+        "height": 810,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV171",
+      "module": "shared-rosieverse",
+      "sourcePath": "public/rosieverse/refresh/secret-santa-salon.webp",
+      "sourceGitBlobSHA": "c76a4fe9b80ea9319154a1ab61bcff1d4a8336a6",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "priority": 3,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    }
+  ]
+}
