@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "created": "2026-11-22",
+  "policy": "All expansions remain disabled until artwork is approved and independent device QA is recorded. This file is preparatory; the current public app has Captain, Haiku and Vault excluded.",
+  "features": {
+    "captain": {
+      "enabled": false,
+      "modules": [
+        "captain-hub",
+        "captain-cosmic",
+        "captain-yacht",
+        "captain-tunnel"
+      ],
+      "requiredChecks": [
+        "iphone",
+        "desktop",
+        "tesla",
+        "gameplay-yacht",
+        "gameplay-cosmic",
+        "gameplay-tunnel",
+        "collision-and-controls",
+        "vfx-and-victory"
+      ],
+      "comment": "Never enable on public TeddyVerse before full Captain reskin; do not alter original Fiends without explicit request."
+    },
+    "haiku": {
+      "enabled": false,
+      "modules": [
+        "haiku"
+      ],
+      "requiredChecks": [
+        "iphone",
+        "desktop",
+        "tablet",
+        "poem-render",
+        "meditation-backgrounds",
+        "breathing-animation",
+        "scroll-transparency",
+        "save-share"
+      ],
+      "comment": "Include Compose, Zen Garden, Journal, meditation, post-card and character outfits."
+    },
+    "vault": {
+      "enabled": false,
+      "modules": [
+        "card-vault"
+      ],
+      "requiredChecks": [
+        "iphone",
+        "desktop",
+        "cards-flip",
+        "front-back-accuracy",
+        "unique-art-approval"
+      ],
+      "comment": "Separate 311-file collection originally excluded from first 72; do not bulk-generate without a separate vault signoff."
+    }
+  }
+}
