@@ -6,6 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "@babel/parser";
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../..");
+const expansion=JSON.parse(await fs.readFile(path.join(repo,"pet-template-lab/teddyverse/next-assets/feature-gates.json"),"utf8")).features;
+const enabled=id=>expansion?.[id]?.enabled===true;
 if(process.env.TEDDY_ISOLATED_STAGE!=="1")throw Error("Not an isolated Teddy stage");
 if(!process.env.VERCEL && process.env.TEDDY_ALLOW_LOCAL_DISPOSABLE!=="1")throw Error("Refusing non-CI rewrite without TEDDY_ALLOW_LOCAL_DISPOSABLE=1");
 const replace=s=>s.replaceAll("RosieVerse","TeddyVerse")
@@ -65,8 +67,8 @@ for(const filename of await scan(path.join(repo,"src"))){
 const mainFile=path.join(repo,"src/main.jsx");
 let main=await fs.readFile(mainFile,"utf8");
 const remove=(description,pattern)=>{if(!pattern.test(main))throw Error("Missing "+description);main=main.replace(pattern,"")};
-remove("dead Captain bottom navigation",/<button type="button" aria-label="Open Captain (?:Rosie|Teddy)"[\s\S]*?<\/button>/);
-remove("dead Vault bottom navigation",/<button type="button" className=\{[^>]+vault-nav-button[^>]*>[\s\S]*?<\/button>/);
+if(!enabled("captain"))remove("dead Captain bottom navigation",/<button type="button" aria-label="Open Captain (?:Rosie|Teddy)"[\s\S]*?<\/button>/);
+if(!enabled("vault"))remove("dead Vault bottom navigation",/<button type="button" className=\{[^>]+vault-nav-button[^>]*>[\s\S]*?<\/button>/);
 remove("disabled AccountPortal",/<AccountPortal\s*\/>/);
 remove("disabled SecretLayoutStudio",/<SecretLayoutStudio\b[\s\S]*?\/>/);
 if(!main.includes("isLayoutStudio"))throw Error("Unexpected mount function");
