@@ -1,3 +1,5 @@
+> **MUSE TAKEOVER:** [Read the authoritative Muse handoff](MUSE-HANDOFF-20261122.md). The matching [shared PetVerse Art Studio handoff](https://chatgpt.com/space/page_26390150665081918c0cd20cde569ba7) includes the B01 start assignment and private reference-photo access instructions. No artwork approval or production deployment is implied.
+
 # TeddyVerse - remaining artwork production groundwork
 **Prepared:** 22 November 2026  
 **Source:** `Sizzle505/Rosie-App`, isolated branch `work/teddyverse-isolated-integration-20261122`  
