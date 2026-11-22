@@ -8,6 +8,8 @@ const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../..");
 if(process.env.TEDDY_ISOLATED_STAGE!=="1")throw Error("Refusing to write app icons outside Teddy stage");
 const src=path.join(repo,"public/rosieverse/resources/crest.webp");
 const out=path.join(repo,"dist"),icons=path.join(out,"icons");
+const expansion=JSON.parse(await fs.readFile(path.join(repo,"pet-template-lab/teddyverse/next-assets/feature-gates.json"),"utf8")).features;
+const enabled=name=>expansion?.[name]?.enabled===true;
 await fs.access(path.join(out,"index.html"));await fs.access(src);
 await fs.mkdir(icons,{recursive:true});
 for(const size of [32,180,192,512]){
@@ -37,16 +39,16 @@ html=html.replaceAll('RosieVerse','TeddyVerse').replaceAll('Rosie’s','Teddy’
 await fs.writeFile(indexPath,html);
 for(const name of ["teddyverse-32.png","teddyverse-180.png","teddyverse-192.png","teddyverse-512.png","teddyverse-maskable-512.png"])await fs.access(path.join(icons,name));
 const excludedStatic=[
- "card-vault","ember-drill","cosmic-odyssey","yacht-dash",
- "captain-levels","captain-arcade-backgrounds","captain-motion","captain-victory-backdrops",
- "rosieverse/haiku","rosieverse/captain.webp","rosieverse/vault.webp",
- "rosieverse/buttons/captain.webp","rosieverse/buttons/vault.webp",
+ ...(!enabled("vault")?["card-vault","rosieverse/vault.webp","rosieverse/buttons/vault.webp"]:[]),
+ ...(!enabled("captain")?["ember-drill","cosmic-odyssey","yacht-dash","captain-levels","captain-arcade-backgrounds","captain-motion","captain-victory-backdrops","rosieverse/captain.webp","rosieverse/buttons/captain.webp"]:[]),
+ ...(!enabled("haiku")?["rosieverse/haiku"]:[]),
  "randomizers/secret-santa/email/preview-draw.html",
  "randomizers/secret-santa/email/preview-registration.html"
 ];
 for(const relative of excludedStatic)await fs.rm(path.join(out,relative),{recursive:true,force:true});
-for(const relative of ["card-vault","ember-drill","cosmic-odyssey","rosieverse/haiku"]){
- try{await fs.access(path.join(out,relative));throw Error("Excluded assets survived: "+relative)}catch(e){if(e.code!=="ENOENT")throw e}
+for(const relative of excludedStatic){
+ try{await fs.access(path.join(out,relative));throw Error("Excluded Teddy feature survived static purge: "+relative)}
+ catch(e){if(e.code!=="ENOENT")throw e}
 }
 console.log("TEDDY_EXCLUDED_STATIC_PURGE "+JSON.stringify({paths:excludedStatic.length,retainedApp:"TeddyVerse"}));
 console.log("TEDDY_PWA_BRANDING_READY "+JSON.stringify({icons:5,manifest:manifest.name,source:"resources.crest"}));
