@@ -483,7 +483,7 @@ export default function RosieHaikuGarden({ onNavigate }) {
                 <div className="haiku-section-label">ROSIE'S POETRY DESK</div>
                 <div className="haiku-desk-feature">
                   <img className="haiku-desk-art" src="/rosieverse/haiku/calligraphy-desk.webp" alt="" aria-hidden="true" loading="lazy" />
-                  <h2>A Poem for Everything</h2>
+                  <h2 aria-label="A Poem for Everything"><span className="haiku-desk-title-first">A Poem for</span><span className="haiku-desk-title-second">Everything</span></h2>
                 </div>
                 <label htmlFor="haiku-topic">What should Rosie write about?</label>
                 <input id="haiku-topic" maxLength={100} value={topic} onChange={(event) => { setTopic(event.target.value); setVariation(0); setComposeError(""); }} placeholder="A thunderstorm, a rival cat, an ordinary Tuesday…" />
