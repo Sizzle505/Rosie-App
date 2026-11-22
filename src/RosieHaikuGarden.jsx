@@ -21,6 +21,7 @@ import "./RosieHaikuIphoneNov21.css";
 import "./RosieHaikuPoetryPolish.css";
 import "./RosieZenLayoutRevision.css";
 import "./RosieZenApprovedPhone.css";
+import "./RosieZenNov22Polish.css";
 
 const JOURNAL_KEY = "rosieHaikuGardenJournalV1";
 const SCROLL_KEY = "rosieHaikuScrollDesignV1";
