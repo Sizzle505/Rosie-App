@@ -10,9 +10,9 @@ A Git tree enumeration found **1,202 images**, including the **72** already in t
 |---|---:|---|
 | First Teddy handoff | 72 | Existing export; nine correction images still await final visual approval |
 | Likely replacement illustrations | **98** | Each has a uniquely numbered generation brief, measured source dimensions and a proposed PNG master |
-| Must inspect before deciding | **171** | Review whether the art actually depicts Rosie, contains embedded branding, or is reusable |
-| Likely reusable generic art | **550** | Reuse conservatively; remaining candidates can be promoted after visual review |
-| Card Vault | **311** | Dedicated, separately gated inventory; not equivalent to 311 unique new artworks |
+| Must inspect before deciding | **173** | Review whether the art actually depicts Rosie, contains embedded branding, or is reusable |
+| Likely reusable generic art | **546** | Reuse conservatively; remaining candidates can be promoted after visual review |
+| Card Vault | **313** | Dedicated, separately gated inventory; not equivalent to 311 unique new artworks |
 | **Total** | **1,202** | Source-tree inventory reconciles exactly |
 
 Nine initially queued SVGs were investigated: five are reusable decorative graphics; four require vector-safe inspection or derivation from approved Teddy material. They are **not** sent to the raster image generator.
@@ -21,10 +21,10 @@ Nine initially queued SVGs were investigated: five are reusable decorative graph
 
 | Section | New art queued | Visual inspections | Release status |
 |---|---:|---:|---|
-| Captain arcade, Cosmic Odyssey, Yacht Dash, Ember Tunnel | **39** | **70** | OFF, gated |
+| Captain arcade, Cosmic Odyssey, Yacht Dash, Ember Tunnel | **39** | **72** | OFF, gated |
 | Haiku, Zen Garden, Compose, Journal and Meditations | **26** | **76** | OFF, gated |
 | All other active features | **33** | **25** | Existing live routes stay as-is |
-| Card Vault | Inventory of **311** | Independent review | OFF, separate scope |
+| Card Vault | Inventory of **313** | Independent review | OFF, separate scope |
 
 **Captain's artwork sequence:** hero/helmsman portraits and ship views; Cosmic Odyssey gameplay sprites (directions, boost, banking, dodge, damage, laser, rockets and rear/forward views); front/back Captain character cards; completed-sector/victory illustrations; Yacht Dash portraits and win scenes; Ember Tunnel pilot, drillcraft and celebration sprites. Keep Jett, Kitty and Chip unchanged unless a specific asset review establishes Rosie is embedded in it. Environmental obstacles, walls, lasers, oceans and scenery are reusable when they do not depict Rosie.
 
@@ -34,8 +34,8 @@ Nine initially queued SVGs were investigated: five are reusable decorative graph
 
 ## Production assets and handoff format
 - [generation-queue.json](generation-queue.json): **107 original candidate slots**, of which **98** are actionable raster artwork requests and **nine** are documented SVG reuse/derivation exceptions. Slot IDs (TV001...) remain stable; do not renumber.
-- [visual-review-queue.json](visual-review-queue.json): 171 original image candidates with exact dimensions, alpha metadata and individual review IDs (RV001...).
-- [vault-scope-inventory.json](vault-scope-inventory.json): 311 individually identified Card Vault source files, held separately.
+- [visual-review-queue.json](visual-review-queue.json): 173 original image candidates with exact dimensions, alpha metadata and individual review IDs (RV001...).
+- [vault-scope-inventory.json](vault-scope-inventory.json): 313 Card Vault-related source files (311 card-vault files plus two entry images), held separately.
 - [approval-ledger.json](approval-ledger.json): empty, audit-ready signoff ledger; **no approvals fabricated**.
 - [feature-gates.json](feature-gates.json): Captain, Haiku and Vault flags **all false**, with required device and functional QA checks.
 - [check-readiness.mjs](check-readiness.mjs): fail-closed readiness report.
@@ -59,7 +59,7 @@ Work through **B01-B07 first** (Captain and Haiku, plus a few adjoining source a
 
 After generation, create a side-by-side and iPhone-sized proof. Inspect the pet's coat, ears, muzzle and proportions; retained environmental characters; frame alignment; transparency edges; mobile crop; and animation registration. Record reviewer, timestamp and SHA-256 in `approval-ledger.json` only after actual signoff. Next resolve RV decisions: **reuse**, **generate**, **derive from approved art**, or **rebuild vector**. Any newly discovered pet image gets an appended TV ID, never an overwrite of an earlier one.
 
-Use B08-B11 for remaining active-site imagery after the core game/meditation work. Card Vault has its own independent future batch program; no mass generation is assumed.
+Use B08-B11 for remaining active-site imagery after the core game/meditation work. Card Vault includes two navigation-entry images in addition to 311 card-vault files and has its own independent future batch program; no mass generation is assumed.
 
 ## Isolated integration and release gates
 From a **disposable clone of the isolated branch**, with Sharp installed:
