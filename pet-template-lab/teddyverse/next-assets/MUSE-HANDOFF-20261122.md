@@ -12,20 +12,20 @@ Generate all remaining **Teddy** artwork for the isolated TeddyVerse app. This *
 
 The first 72 Teddy assets were already integrated in the current isolated site; **do not recreate or overwrite them**. Nine late corrections from that package still retain pending visual-approval metadata - they are not automatically approved references.
 
-The November 19 instructions in this Space excluded Captain and Haiku. **For TeddyVerse specifically, this November 22 handoff supersedes those exclusions: Captain and Haiku are now included in image production but NOT re-enabled in the public app.** Card Vault remains inventory-only pending a separate production decision.
+The November 19 instructions in this Space excluded Captain and Card Vault and did not address Haiku. **For TeddyVerse specifically, this November 22 handoff supersedes those exclusions: Captain and Haiku are now included in image production but NOT re-enabled in the public app.** Card Vault remains inventory-only pending a separate production decision.
 
 ## 2. Where everything is
 
 - **Current public TeddyVerse (reference only):** https://teddyverse26.vercel.app
 - **GitHub source/production briefs - isolated Teddy branch (read only for Muse):** https://github.com/Sizzle505/Rosie-App/tree/work/teddyverse-isolated-integration-20261122/pet-template-lab/teddyverse/next-assets
-- **Production instructions and scope:** [next-assets/README.md](next-assets/README.md)
-- **All numbered artwork tasks, prompts, dimensions and alpha status:** [generation-queue.json](next-assets/generation-queue.json)
-- **Individual batch briefs B01-B11:** [batches/](next-assets/batches/)
-- **First batch:** [B01.md](next-assets/batches/B01.md)
-- **Visual review queue (173):** [visual-review-queue.json](next-assets/visual-review-queue.json)
-- **Source-wide inventory (1,202):** [source-inventory.json](next-assets/source-inventory.json)
-- **Canonical identity, Captain sprites and Haiku standards:** [CHARACTER-STANDARD.md](next-assets/CHARACTER-STANDARD.md)
-- **Approval status:** [approval-ledger.json](next-assets/approval-ledger.json) (empty, because none of the next-stage images have been approved)
+- **Production instructions and scope:** [README.md](README.md)
+- **All numbered artwork tasks, prompts, dimensions and alpha status:** [generation-queue.json](generation-queue.json)
+- **Individual batch briefs B01-B11:** [batches/](batches/)
+- **First batch:** [B01.md](batches/B01.md)
+- **Visual review queue (173):** [visual-review-queue.json](visual-review-queue.json)
+- **Source-wide inventory (1,202):** [source-inventory.json](source-inventory.json)
+- **Canonical identity, Captain sprites and Haiku standards:** [CHARACTER-STANDARD.md](CHARACTER-STANDARD.md)
+- **Approval status:** [approval-ledger.json](approval-ledger.json) (empty, because none of the next-stage images have been approved)
 - **Private photo-upload page:** https://chatgpt.com/space/page_467c05f55d688191a97220d14cc9e9c3
 
 The private photo-upload Page has ZIP and JPEG references attached. **Verify you can actually open and inspect Teddy's photographs before generating.** Merely reading the filenames, a prompt or old Rosie artwork is insufficient. If that photo pack is not accessible from Muse's account, request access to the private shared project; do not guess Teddy's appearance. Keep the pet photographs, full-resolution artwork and review composites off public GitHub.
@@ -55,7 +55,7 @@ Name the finished masters **TV001.png ... TV010.png**. Each must be its own imag
 
 **Before requesting approval:** supply a compact visual proof for B01 with each generated Teddy image beside its original source, noting dimensions, alpha, fidelity and any issues. The proof is for review only; the ten original PNG files remain individually deliverable. Do not say a batch is approved until the user explicitly approves it.
 
-Detailed individualized prompts and full file references: [B01.md](next-assets/batches/B01.md). Continue B02-B04 for remaining Cosmic Odyssey and Ember Tunnel, B04-B07 for Haiku characters and meditation artwork, and B07-B11 for remaining cross-app work. Use the actual [generation queue](next-assets/generation-queue.json) as the authoritative slot order because batches cross module boundaries.
+Detailed individualized prompts and full file references: [B01.md](batches/B01.md). Continue B02-B04 for remaining Cosmic Odyssey and Ember Tunnel, B04-B07 for Haiku characters and meditation artwork, and B07-B11 for remaining cross-app work. Use the actual [generation queue](generation-queue.json) as the authoritative slot order because batches cross module boundaries.
 
 ## 4. Haiku is mandatory, not an optional cosmetic pass
 
@@ -78,7 +78,7 @@ For animated breathing or sequential action sprites: preserve character position
 
 **Absolutely no changes** to RosieVerse `main`, Rosie App production, the live TeddyVerse domain, Vercel, Supabase, mail systems, payments, repositories, login behavior or design logic. Never upload pet photos to the public repository. Do not expose secret URLs or private access tokens.
 
-Captain, Haiku and Card Vault remain disabled in the current public TeddyVerse. Only the development account can enable them, **after** approved art, visual-review decisions, iPhone/desktop and relevant tablet/Tesla checks, game-controls/VFX/physics for Captain, meditation/poem-scroll QA for Haiku and zero cross-app requests. The [feature-gates.json](next-assets/feature-gates.json) file intentionally has all three disabled.
+Captain, Haiku and Card Vault remain disabled in the current public TeddyVerse. Only the development account can enable them, **after** approved art, visual-review decisions, iPhone/desktop and relevant tablet/Tesla checks, game-controls/VFX/physics for Captain, meditation/poem-scroll QA for Haiku and zero cross-app requests. The [feature-gates.json](feature-gates.json) file intentionally has all three disabled.
 
 The user has requested artwork **groundwork and takeover**. That does **not** authorize automatic mass generation charges, access-sharing changes or publication. Muse may proceed with the 10-item B01 work using accessible private references and its normal image tools, then present artwork for review.
 
