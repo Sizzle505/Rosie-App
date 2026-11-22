@@ -91,7 +91,7 @@ await patchText('src/RosieQrAtelier.jsx',[
  ['label:"Rosie Presents"','label:"Teddy Presents"']
 ]);
 await patchText('src/RosieRandomizers.jsx',[['Rosie accepts no appeals','Teddy accepts no appeals']]);
-await patchText('src/RosieRecipes.jsx',[["Rosie's Recipes","Teddy's Recipes"]]);
+await patchText('src/RosieRecipes.jsx',[["Rosie’s","Teddy’s"],["Rosie cooking","Teddy cooking"],["rosie-recipes-favorites-v1","teddy-recipes-favorites-v1"]]);
 await patchText('src/RosieSecretSanta.jsx',[["Rosie's Secret Santa","Teddy's Secret Santa"]]);
 await write('public/offline-api.json',Buffer.from(JSON.stringify({ok:false,error:'Network services disabled for isolated TeddyVerse preview'})));
 await write('pet-template-lab/teddyverse/overlay-result.json',Buffer.from(JSON.stringify({verified:72,stagedAt:new Date().toISOString(),assets:audit},null,2)));
