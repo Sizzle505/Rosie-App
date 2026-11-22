@@ -9,6 +9,14 @@
 - A separate Vercel SHA-256 gallery has verified **72 of 72 files (62,929,395 bytes)**. It is a QA gallery, not the app.
 - Nine correction-round files are marked pending final visual review in the source manifest, despite passing file-hash verification.
 
+## Durable protected QA source
+
+The 72 source art files are also retained in the separate **teddyverse-asset-qa** Vercel project's immutable verified deployment. The static gallery has Vercel Authentication enabled. Each file is available at `https://teddyverse-asset-qa.vercel.app/assets/<exported_filename>` only with authorized access.
+
+The isolated **teddyverse-rebuilt-staging** project holds its own encrypted `TEDDY_QA_BYPASS_SECRET`, created for this exact QA project. The asset fetcher sends this credential only to that exact hostname, does not follow redirects, and verifies the complete SHA-256 against the manifest before modifying a disposable source checkout. Neither the credential nor temporary Dropbox links belong in GitHub.
+
+Verified reproducible staging deployment (November 22, 2026): **72/72 source hashes passed, Vite build passed, 14 automated application tests passed, Vercel READY**. This build is **not yet approved as a fully branded, visually verified public release**.
+
 ## Two integration paths
 
 `integrate-assets.py` applies and audits replacement artwork against an **already built**, separately extracted TeddyVerse `dist/`. It is dry-run-first and preserves QR apertures.
