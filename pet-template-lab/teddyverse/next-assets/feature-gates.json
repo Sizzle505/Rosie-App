@@ -19,7 +19,10 @@
         "gameplay-cosmic",
         "gameplay-tunnel",
         "collision-and-controls",
-        "vfx-and-victory"
+        "vfx-and-victory",
+        "asset-import-verified",
+        "no-original-pet-art",
+        "no-cross-app-network-requests"
       ],
       "comment": "Never enable on public TeddyVerse before full Captain reskin; do not alter original Fiends without explicit request."
     },
@@ -36,7 +39,10 @@
         "meditation-backgrounds",
         "breathing-animation",
         "scroll-transparency",
-        "save-share"
+        "save-share",
+        "asset-import-verified",
+        "no-original-pet-art",
+        "no-cross-app-network-requests"
       ],
       "comment": "Include Compose, Zen Garden, Journal, meditation, post-card and character outfits."
     },
@@ -50,9 +56,13 @@
         "desktop",
         "cards-flip",
         "front-back-accuracy",
-        "unique-art-approval"
+        "unique-art-approval",
+        "asset-import-verified",
+        "no-original-pet-art",
+        "no-cross-app-network-requests"
       ],
       "comment": "Separate 311-file collection originally excluded from first 72; do not bulk-generate without a separate vault signoff."
     }
-  }
+  },
+  "note": "Expansion flags remain OFF in production; the isolated builder runs --enforce before allowing a flag to activate."
 }
