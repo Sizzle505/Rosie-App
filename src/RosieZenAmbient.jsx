@@ -6,7 +6,7 @@ import "./RosieZenAmbient.css";
 // original sakura-butterfly SVG.
 const ROOT = "/rosieverse/haiku/living-garden/";
 const BUTTERFLY = "/rosieverse/haiku/effects/sakura-butterfly.svg";
-const PETALS = [1, 2, 3, 4, 5, 6, 7, 8];
+const PETALS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const BUTTERFLIES = [
   { x: "8%", y: "34%", size: "36px", delay: "-4s", duration: "19s" },
   { x: "87%", y: "61%", size: "29px", delay: "-9s", duration: "23s" },
