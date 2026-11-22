@@ -7,8 +7,14 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const manifest = JSON.parse(await fs.readFile(path.join(repo, 'pet-template-lab/teddyverse/asset-manifest.json'), 'utf8'));
+const flagsFile=path.join(repo,'pet-template-lab/teddyverse/next-assets/feature-gates.json');
+const featureGates=JSON.parse(await fs.readFile(flagsFile,'utf8')).features;
+const isEnabled=name=>featureGates?.[name]?.enabled===true;
+// Mandatory fail-closed check even when this is the first 72-asset build.
+execFileSync(process.execPath,[path.join(repo,'pet-template-lab/teddyverse/next-assets/check-readiness.mjs'),'--enforce'],{cwd:repo,stdio:'inherit'});
 const args = process.argv.slice(2);
 const opt = name => { const index = args.indexOf('--' + name); return index < 0 ? null : args[index + 1] };
 if(process.env.TEDDY_ISOLATED_STAGE!=='1')throw Error('Refusing to run without TEDDY_ISOLATED_STAGE=1');
@@ -74,20 +80,25 @@ async function patchText(rel,changes){
  for(const [from,to] of changes){if(!s.includes(from))throw Error('Missing source marker '+rel+': '+from);s=s.replaceAll(from,to)}
  await write(rel,Buffer.from(s));
 }
+const navRemovals=[];
+if(!isEnabled('captain'))navRemovals.push(['  { id: "captain", name: "Captain Rosie", art: "buttons/captain.webp" },\n','']);
+if(!isEnabled('vault'))navRemovals.push(['  { id: "vault", name: "Card Vault", art: "buttons/vault.webp" },\n','']);
 await patchText('src/RosieHome.jsx',[
- ['  { id: "captain", name: "Captain Rosie", art: "buttons/captain.webp" },\n',''],
- ['  { id: "vault", name: "Card Vault", art: "buttons/vault.webp" },\n',''],
+ ...navRemovals,
  ["RosieVerse - discover Rosie's worlds","TeddyVerse - discover Teddy's worlds"],
  ['>RosieVerse</h1>','>TeddyVerse</h1>'],
  ['RosieVerse - Play, Explore, Discover - A Brighter Day with Rosie','TeddyVerse - Play, Explore, Discover - A Brighter Day with Teddy']
 ]);
-let home=(await read('src/RosieHome.jsx')).toString('utf8');
-const haiku=/<button type="button" className=\{styles\.haikuLantern\}[\s\S]*?<\/button>/;
-if(!haiku.test(home))throw Error('Cannot locate unconverted Haiku navigation');
-home=home.replace(haiku,'');await write('src/RosieHome.jsx',Buffer.from(home));
-await patchText('src/main.jsx',[
- ['"home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "haiku", "reminders"','"home", "fortune", "cheese", "randomizers", "reminders"']
-]);
+if(!isEnabled('haiku')){
+ let home=(await read('src/RosieHome.jsx')).toString('utf8');
+ const haiku=/<button type="button" className=\{styles\.haikuLantern\}[\s\S]*?<\/button>/;
+ if(!haiku.test(home))throw Error('Cannot locate excluded Haiku navigation');
+ home=home.replace(haiku,'');
+ await write('src/RosieHome.jsx',Buffer.from(home));
+}
+const routeSource='"home", "fortune", "cheese", "captain", "captain2", "vault", "randomizers", "haiku", "reminders"';
+const routeDest=['home','fortune','cheese',...(isEnabled('captain')?['captain']:[]),...(isEnabled('vault')?['vault']:[]),'randomizers',...(isEnabled('haiku')?['haiku']:[]),'reminders'].map(s=>'"'+s+'"').join(', ');
+await patchText('src/main.jsx',[[routeSource,routeDest]]);
 await patchText('src/RosieQrAtelier.jsx',[
  ['label:"Rosie at the Atelier"','label:"Teddy at the Atelier"'],
  ['label:"Rosie Presents"','label:"Teddy Presents"']
