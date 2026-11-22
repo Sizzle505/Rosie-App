@@ -107,7 +107,7 @@
     filter:blur(18px) brightness(.76) saturate(1.12);
     transform:scale(1.04);
   }
-  .zen-immersive .zen-immersive-scenery img{
+  .zen-immersive .zen-immersive-scenery > img{
     display:block!important;
     position:absolute!important;
     left:0!important;

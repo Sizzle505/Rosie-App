@@ -295,7 +295,7 @@
   overflow:hidden;
   pointer-events:none;
 }
-.zen-immersive .zen-immersive-scenery img{
+.zen-immersive .zen-immersive-scenery > img{
   display:block!important;
   width:100%;height:100%;
   object-fit:cover;
