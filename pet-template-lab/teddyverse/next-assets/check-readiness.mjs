@@ -21,7 +21,7 @@ const gen=queue.assets.filter(a=>a.state==="awaiting-generation");
 const review=reviews.assets;
 const ids=new Set([...queue.assets.map(a=>a.id),...review.map(a=>a.id),...vault.assets.map(a=>a.id)]);
 if(ids.size!==queue.assets.length+review.length+vault.assets.length)throw Error("Duplicate asset IDs");
-if(queue.assets.length!==107||gen.length!==98||review.length!==171||vault.assets.length!==311)throw Error("Teddy asset queue count changed; reconcile before releasing");
+if(queue.assets.length!==107||gen.length!==98||review.length!==173||vault.assets.length!==313)throw Error("Teddy asset queue count changed; reconcile before releasing");
 const result={generatedAt:new Date().toISOString(),baseline:72,newArtQueue:gen.length,visualReviewQueue:review.length,cardVaultFiles:vault.assets.length,features:{}};
 for(const [name,setting] of Object.entries(gates.features)){
  const selected=gen.filter(a=>setting.modules.includes(a.section));
