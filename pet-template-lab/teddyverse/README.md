@@ -1,3 +1,9 @@
+## Next artwork production program
+
+**Captain, Haiku and all remaining asset preparation:** [next-assets/README.md](next-assets/README.md). This includes 1,202 source files inventoried, 98 proposed new illustrations, 173 visual reviews, 546 likely reusable files, 313 gated Card Vault images and the original 72 exports. The [11 batch briefs](next-assets/batches/B01.md), [Teddy character standard](next-assets/CHARACTER-STANDARD.md), [local review gallery](next-assets/review-gallery.mjs), [approval ledger](next-assets/approval-ledger.json), [hash-checked importer](next-assets/stage-approved.mjs) and [feature gates](next-assets/feature-gates.json) are prepared on this branch. All expansion flags remain OFF and the live TeddyVerse build is not changed by this preparation.
+
+Run `node --test pet-template-lab/teddyverse/next-assets/inventory.test.mjs` to verify the frozen inventory, and `node pet-template-lab/teddyverse/next-assets/check-readiness.mjs --enforce` to confirm no unapproved tab can be activated.
+
 # TeddyVerse - isolated, reproducible source overlay
 
 **Scope:** Teddy-only staging. This directory lives on the branch `work/teddyverse-isolated-integration-20261122`. Neither RosieVerse `main` nor its production deployment is modified by this branch.
