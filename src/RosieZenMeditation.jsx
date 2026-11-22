@@ -18,14 +18,16 @@ const PROGRAM_ART = {
   haiku: "haiku-reflection.webp"
 };
 const NEW_ART="/rosieverse/haiku/new/";
+// Five approved 941×1672 original iPhone compositions, imported at native resolution.
+// Raked sand retains its scene-matched portrait until a corresponding master exists.
 const MEDITATION_VIEWS=Object.freeze([
-  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/lotus-portrait.webp"},
-  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/sakura-portrait.webp"},
+  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/approved/lotus-sunrise.avif"},
+  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/approved/sakura-spring.avif"},
   {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp",mobileImage:"meditation/iphone/raked-portrait.webp"},
-  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp",mobileImage:"meditation/iphone/tea-portrait.webp"},
-  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp",mobileImage:"meditation/iphone/mist-portrait.webp"},
-  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp",mobileImage:"meditation/iphone/twilight-portrait.webp"},
-  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp",mobileImage:"meditation/iphone/moonlit-portrait.webp"}
+  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp",mobileImage:"meditation/iphone/approved/misty-tea.avif"},
+  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp",mobileImage:"meditation/iphone/approved/misty-tea.avif"},
+  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp",mobileImage:"meditation/iphone/approved/lantern-dusk.avif"},
+  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp",mobileImage:"meditation/iphone/approved/moonlit-retreat.avif"}
 ]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
@@ -300,7 +302,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       </div>
       <p className="zen-selected-description">{selected.description}</p>
       <details className="zen-art-options">
-        <summary><img src={sceneSrc} alt="" loading="lazy"/><span>Choose scenery and Rosie's kimono</span><span aria-hidden="true" className="zen-options-chevron">⌄</span></summary>
+        <summary><picture><source media="(max-width:600px)" srcSet={mobileSceneSrc}/><img src={sceneSrc} alt="" loading="lazy"/></picture><span>Choose scenery and Rosie's kimono</span><span aria-hidden="true" className="zen-options-chevron">⌄</span></summary>
         <div className="zen-art-options-inner">
           <div className="zen-art-picker-label">Garden scenery</div>
           <div className="zen-backdrop-picker" role="group" aria-label="Choose meditation background">
@@ -347,7 +349,16 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       <div className="zen-immersive" data-zen-view={viewId} data-zen-status={status} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
         <div className="zen-immersive-scenery" aria-hidden="true">
           <img className="zen-scenery-desktop" src={sceneSrc} alt="" decoding="async" fetchPriority="high"/>
-          <img className="zen-scenery-phone" src={mobileSceneSrc} alt="" decoding="async" fetchPriority="high"/>
+          <img className="zen-scenery-phone" key={viewId} src={mobileSceneSrc} alt=""
+            decoding="async" fetchPriority="high"
+            onError={event => {
+              // The older scene-matched WebP remains a local fallback for browsers
+              // that cannot decode AVIF; never fall back to a desktop panorama.
+              const image=event.currentTarget;
+              if (image.dataset.zenFallbackUsed) return;
+              image.dataset.zenFallbackUsed="true";
+              image.src=NEW_ART+"meditation/iphone/"+viewId+"-portrait.webp";
+            }}/>
           <div className="zen-scenery-atmosphere" aria-hidden="true"/>
           <RosieZenAmbient scene={viewId} mode="meditation" status={status} />
         </div>
