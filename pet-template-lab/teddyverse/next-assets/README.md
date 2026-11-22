@@ -12,7 +12,7 @@ A Git tree enumeration found **1,202 images**, including the **72** already in t
 | Likely replacement illustrations | **98** | Each has a uniquely numbered generation brief, measured source dimensions and a proposed PNG master |
 | Must inspect before deciding | **173** | Review whether the art actually depicts Rosie, contains embedded branding, or is reusable |
 | Likely reusable generic art | **546** | Reuse conservatively; remaining candidates can be promoted after visual review |
-| Card Vault | **313** | Dedicated, separately gated inventory; not equivalent to 311 unique new artworks |
+| Card Vault | **313** | Dedicated, separately gated inventory; not equivalent to 313 required new illustrations |
 | **Total** | **1,202** | Source-tree inventory reconciles exactly |
 
 Nine initially queued SVGs were investigated: five are reusable decorative graphics; four require vector-safe inspection or derivation from approved Teddy material. They are **not** sent to the raster image generator.
@@ -30,7 +30,7 @@ Nine initially queued SVGs were investigated: five are reusable decorative graph
 
 **Haiku's artwork sequence:** the core Teddy facial-expression and calligraphy variants; four meditation outfit poses, greeting/bowing sensei variants, breathing and enlightened states; meditation entry scenes, scroll and journal, postcard and save/share decorations. Review iPhone-specific meditation backdrops and full-height crops individually. Existing petals, butterflies, lanterns, sand/water effects and similar generic garden imagery should be retained whenever possible rather than regenerated.
 
-**Important:** The 26 + 39 counts represent high-confidence filename-derived replacement candidates, not the entire completeness test. Each of the 146 associated visual-review decisions can reveal additional illustration work, especially large backgrounds and grouped hero art.
+**Important:** The 26 + 39 counts represent high-confidence filename-derived replacement candidates, not the entire completeness test. Each of the 148 associated visual-review decisions can reveal additional illustration work, especially large backgrounds and grouped hero art.
 
 ## Production assets and handoff format
 - [generation-queue.json](generation-queue.json): **107 original candidate slots**, of which **98** are actionable raster artwork requests and **nine** are documented SVG reuse/derivation exceptions. Slot IDs (TV001...) remain stable; do not renumber.
@@ -39,8 +39,23 @@ Nine initially queued SVGs were investigated: five are reusable decorative graph
 - [approval-ledger.json](approval-ledger.json): empty, audit-ready signoff ledger; **no approvals fabricated**.
 - [feature-gates.json](feature-gates.json): Captain, Haiku and Vault flags **all false**, with required device and functional QA checks.
 - [check-readiness.mjs](check-readiness.mjs): fail-closed readiness report.
+- [audit-runtime-references.mjs](audit-runtime-references.mjs): scans 187 application source text files for literal asset references; **absence of a literal reference is not proof the asset is unused**.
+- [review-gallery.mjs](review-gallery.mjs): a local, read-only contact-sheet interface for inspecting original assets and exporting an unverified decision worksheet.
+- [CHARACTER-STANDARD.md](CHARACTER-STANDARD.md): Teddy likeness, Captain game-sprite consistency, Haiku meditation states and acceptance criteria.
 - [stage-approved.mjs](stage-approved.mjs): offline, dry-run-first SHA-256-verified importer with an isolated-branch check and rollback backups.
 - [batches/B01.md](batches/B01.md) through [batches/B11.md](batches/B11.md): 11 production briefs containing output filenames, source image paths, pixel dimensions, transparency rules, reference instructions and a copyable prompt for each asset.
+
+### Visual triage workstation
+
+From a local disposable checkout run:
+
+```sh
+node pet-template-lab/teddyverse/next-assets/review-gallery.mjs
+# Open http://127.0.0.1:4174 (local computer only)
+node pet-template-lab/teddyverse/next-assets/audit-runtime-references.mjs
+```
+
+Filter by module (Captain, Haiku, etc.), inspect source art and record "reuse / replace / derive / vector" decisions. The gallery is **not** an image-generation tool and it exports only an unapproved review worksheet. Actual QA signoffs remain separate.
 
 ### Private destination layout (reserved, not created in Dropbox)
 ```text
