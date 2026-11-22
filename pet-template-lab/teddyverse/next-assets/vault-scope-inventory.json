@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "date": "2026-11-22",
-  "total": 311,
+  "total": 313,
   "status": "separate scoped inventory - no Card Vault generation authorized by this file",
-  "note": "May contain image variants, card backs and supporting designs. Inventory is not a count of 311 required new images.",
+  "note": "311 card-vault/ files plus two separate Vault navigation images; not a count of 313 required generations.",
   "assets": [
     {
       "id": "CV001",
@@ -2803,6 +2803,24 @@
       "status": "inventory-only",
       "cardDesignInspection": "pending",
       "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV312",
+      "sourcePath": "public/rosieverse/vault.webp",
+      "sourceGitBlobSHA": "3cee0e611e52ea1b5419f8dbf85766ee08556866",
+      "sourceBytes": 474476,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault entry art; gate with 311 vault source images."
+    },
+    {
+      "id": "CV313",
+      "sourcePath": "public/rosieverse/buttons/vault.webp",
+      "sourceGitBlobSHA": "7f076e71cdafe19641c7372219d26c23ccfff6d3",
+      "sourceBytes": 543932,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault entry art; gate with 311 vault source images."
     }
   ]
 }
