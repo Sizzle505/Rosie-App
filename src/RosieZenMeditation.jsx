@@ -18,14 +18,14 @@ const PROGRAM_ART = {
   haiku: "haiku-reflection.webp"
 };
 const NEW_ART="/rosieverse/haiku/new/";
-const MEDITATION_VIEWS=Object.freeze([
-  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/lotus-portrait.webp"},
-  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/sakura-portrait.webp"},
+// Five approved 941×1672 original iPhone compositions, imported at native resolution.\n// Raked sand retains its scene-matched portrait until a corresponding master exists.\nconst MEDITATION_VIEWS=Object.freeze([
+  {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/approved/lotus-sunrise.avif"},
+  {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/approved/sakura-spring.avif"},
   {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp",mobileImage:"meditation/iphone/raked-portrait.webp"},
-  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp",mobileImage:"meditation/iphone/tea-portrait.webp"},
-  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp",mobileImage:"meditation/iphone/mist-portrait.webp"},
-  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp",mobileImage:"meditation/iphone/twilight-portrait.webp"},
-  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp",mobileImage:"meditation/iphone/moonlit-portrait.webp"}
+  {id:"tea",label:"Mountain Tea Garden",image:"meditation/day-mountain-tea.webp",mobileImage:"meditation/iphone/approved/misty-tea.avif"},
+  {id:"mist",label:"Misty Dawn",image:"meditation/dawn-misty-garden.webp",mobileImage:"meditation/iphone/approved/misty-tea.avif"},
+  {id:"twilight",label:"Twilight",image:"meditation/evening-twilight.webp",mobileImage:"meditation/iphone/approved/lantern-dusk.avif"},
+  {id:"moonlit",label:"Moonlit Veranda",image:"meditation/night-moonlit-veranda.webp",mobileImage:"meditation/iphone/approved/moonlit-retreat.avif"}
 ]);
 const DURATIONS = [3,5,10,15,20];
 const PROGRAMS = [
