@@ -83,6 +83,12 @@ await fs.writeFile(path.join(repo,"src/private/AccountContext.jsx"),"import Reac
 let qr=await fs.readFile(path.join(repo,"src/RosieQrAtelier.jsx"),"utf8");
 qr=qr.replace("PRODID:-//RosieVerse//QR Atelier//EN","PRODID:-//TeddyVerse//QR Atelier//EN").replace('UID:rosie-','UID:teddy-').replace('@rosieverse.','@teddyverse.local.');
 await fs.writeFile(path.join(repo,"src/RosieQrAtelier.jsx"),qr);
+let recipes=await fs.readFile(path.join(repo,"src/RosieRecipes.jsx"),"utf8");
+const imageIdToken='${recipe.id}.webp';
+const imageFallbackToken='${recipe.id.replace(/^teddy-s-/, "rosie-s-")}.webp';
+if(!recipes.includes(imageIdToken))throw Error("Missing recipe image reference");
+recipes=recipes.replace(imageIdToken,imageFallbackToken);
+await fs.writeFile(path.join(repo,"src/RosieRecipes.jsx"),recipes);
 const htmlFile=path.join(repo,"index.html");
 let html=await fs.readFile(htmlFile,"utf8");
 html=replace(html);await fs.writeFile(htmlFile,html);
