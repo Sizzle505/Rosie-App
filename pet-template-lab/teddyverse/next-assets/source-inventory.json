@@ -11,15 +11,15 @@
     "sourceImageCount": 1202,
     "coveredFirst72": 72,
     "counts": {
-      "reuse-generic-candidate": 545,
+      "reuse-generic-candidate": 550,
       "covered-first-72": 72,
-      "review-for-pet-content": 167,
-      "generate-pet-art": 107,
+      "review-for-pet-content": 171,
+      "generate-pet-art": 98,
       "separate-vault-scope": 311
     },
     "categoryNotes": {
       "generate-pet-art": "Probable personalized artwork based on filename; verify content and actual runtime use before generation.",
-      "review-for-pet-content": "Artwork may contain Rosie or embedded text; require visual inspection before deciding to regenerate.",
+      "review-for-pet-content": "Artwork may contain Rosie or embedded text; require visual inspection before deciding to regenerate. Includes 4 SVG vector/embedded-image exceptions requiring geometry-safe handling.",
       "reuse-generic-candidate": "Reuse candidate, NOT proof that image is generic or safe.",
       "separate-vault-scope": "Card Vault is inventoried; generation and activation are gated by its own approval due to extensive unique art.",
       "covered-first-72": "Replacement exists in original export package; not all 72 have final visual approval."
@@ -7148,11 +7148,12 @@
       "sourceGitBlobSHA": "4131b939518c40df8dcadf635fa9470786652c1c",
       "sourceBytes": 7873,
       "module": "other-public",
-      "classification": "generate-pet-art",
+      "classification": "review-for-pet-content",
       "priority": 2,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG with vector geometry or an embedded image needs safe reconstruction; do not blindly rasterize"
     },
     {
       "path": "public/icons/rosieverse-180.png",
@@ -7577,22 +7578,24 @@
       "sourceGitBlobSHA": "39f1758d1cbcfc979b48f999378e4f049959e0c4",
       "sourceBytes": 23095,
       "module": "randomizers",
-      "classification": "generate-pet-art",
+      "classification": "review-for-pet-content",
       "priority": 2,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG with vector geometry or an embedded image needs safe reconstruction; do not blindly rasterize"
     },
     {
       "path": "public/randomizers/rosie-coin-tail-retina.svg",
       "sourceGitBlobSHA": "e9986a0f9dbb8c43e5877ea8062f8dbab3c7e1b5",
       "sourceBytes": 22287,
       "module": "randomizers",
-      "classification": "generate-pet-art",
+      "classification": "review-for-pet-content",
       "priority": 2,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG with vector geometry or an embedded image needs safe reconstruction; do not blindly rasterize"
     },
     {
       "path": "public/randomizers/rosie-coin-tail.webp",
@@ -7720,22 +7723,24 @@
       "sourceGitBlobSHA": "496ce462f535043248d4580f1c78a0eb62407000",
       "sourceBytes": 70066,
       "module": "randomizers",
-      "classification": "generate-pet-art",
-      "priority": 2,
+      "classification": "reuse-generic-candidate",
+      "priority": 5,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG decorative texture or frame with no subject; retain unless visual inspection finds Rosie"
     },
     {
       "path": "public/randomizers/rosie-ivory-gold-marble-texture.svg",
       "sourceGitBlobSHA": "06da2c1624a2476dd24a03b282e4ef9223210709",
       "sourceBytes": 7941,
       "module": "randomizers",
-      "classification": "generate-pet-art",
-      "priority": 2,
+      "classification": "reuse-generic-candidate",
+      "priority": 5,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG decorative texture or frame with no subject; retain unless visual inspection finds Rosie"
     },
     {
       "path": "public/randomizers/rosie-randomizers-casino-header-safe-fit.webp",
@@ -7764,11 +7769,12 @@
       "sourceGitBlobSHA": "9910b574d043b9602cf3e97746133d7f772dc465",
       "sourceBytes": 4493,
       "module": "randomizers",
-      "classification": "generate-pet-art",
-      "priority": 2,
+      "classification": "reuse-generic-candidate",
+      "priority": 5,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG decorative texture or frame with no subject; retain unless visual inspection finds Rosie"
     },
     {
       "path": "public/randomizers/rosie-signet.webp",
@@ -8369,11 +8375,12 @@
       "sourceGitBlobSHA": "98f754e46e3e905c8b14c640c80eb5d5069e27fb",
       "sourceBytes": 505043,
       "module": "other-public",
-      "classification": "generate-pet-art",
+      "classification": "review-for-pet-content",
       "priority": 2,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG with vector geometry or an embedded image needs safe reconstruction; do not blindly rasterize"
     },
     {
       "path": "public/rosieverse/account/rosie-account-entry.svg",
@@ -8391,22 +8398,24 @@
       "sourceGitBlobSHA": "fda95c93f2ddb585c1e829268ae4d131f7b698d4",
       "sourceBytes": 1296,
       "module": "shared-rosieverse",
-      "classification": "generate-pet-art",
-      "priority": 2,
+      "classification": "reuse-generic-candidate",
+      "priority": 5,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG decorative texture or frame with no subject; retain unless visual inspection finds Rosie"
     },
     {
       "path": "public/rosieverse/account/rosie-paw-divider.svg",
       "sourceGitBlobSHA": "e310712061e8dceba1334c7fb9d1057a3377d90d",
       "sourceBytes": 740,
       "module": "shared-rosieverse",
-      "classification": "generate-pet-art",
-      "priority": 2,
+      "classification": "reuse-generic-candidate",
+      "priority": 5,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "SVG decorative texture or frame with no subject; retain unless visual inspection finds Rosie"
     },
     {
       "path": "public/rosieverse/buttons/captain.webp",
