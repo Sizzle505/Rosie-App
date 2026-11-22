@@ -1,0 +1,2808 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-22",
+  "total": 311,
+  "status": "separate scoped inventory - no Card Vault generation authorized by this file",
+  "note": "May contain image variants, card backs and supporting designs. Inventory is not a count of 311 required new images.",
+  "assets": [
+    {
+      "id": "CV001",
+      "sourcePath": "public/card-vault/rc-057.webp",
+      "sourceGitBlobSHA": "1a4faefbfd4dd45c97ac21b197d3ef27e3e9f2a4",
+      "sourceBytes": 312104,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV002",
+      "sourcePath": "public/card-vault/rc-058.webp",
+      "sourceGitBlobSHA": "5a90111810780f1beaa84239c166e910d0f5391e",
+      "sourceBytes": 284610,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV003",
+      "sourcePath": "public/card-vault/rc-059.webp",
+      "sourceGitBlobSHA": "eed1672565c3566570387fe46e19ef48c07ad6ca",
+      "sourceBytes": 309126,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV004",
+      "sourcePath": "public/card-vault/rc-060.webp",
+      "sourceGitBlobSHA": "81d7151e11f90abc1fdb7e1d186126e6f2a42eb6",
+      "sourceBytes": 269290,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV005",
+      "sourcePath": "public/card-vault/rc-061.webp",
+      "sourceGitBlobSHA": "923478594849e6c956220643263f332598f728b4",
+      "sourceBytes": 294472,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV006",
+      "sourcePath": "public/card-vault/rc-062.webp",
+      "sourceGitBlobSHA": "41ab70bb2dccfe777ec0cd48adb173c958843f3e",
+      "sourceBytes": 282760,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV007",
+      "sourcePath": "public/card-vault/rc-063.webp",
+      "sourceGitBlobSHA": "e7f904a411fb22167a67b6912cc21f566a43d324",
+      "sourceBytes": 311504,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV008",
+      "sourcePath": "public/card-vault/rc-064.webp",
+      "sourceGitBlobSHA": "a7715c3a62b32616616ad87f880c105d99909e8b",
+      "sourceBytes": 329466,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV009",
+      "sourcePath": "public/card-vault/rc-065.webp",
+      "sourceGitBlobSHA": "14493486e22aa3b321b637ef302c299a218b9d0c",
+      "sourceBytes": 287028,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV010",
+      "sourcePath": "public/card-vault/rc-066.webp",
+      "sourceGitBlobSHA": "9099f077e3847c2cd858c904f6c320297dfd9600",
+      "sourceBytes": 280800,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV011",
+      "sourcePath": "public/card-vault/rc-067.webp",
+      "sourceGitBlobSHA": "c9167ae8479dee16a87e16e6b81aebc4c631b798",
+      "sourceBytes": 336018,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV012",
+      "sourcePath": "public/card-vault/rc-068.webp",
+      "sourceGitBlobSHA": "b4326e4ee228b78e84b29ff22c1902acf338543c",
+      "sourceBytes": 273134,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV013",
+      "sourcePath": "public/card-vault/rc-069.webp",
+      "sourceGitBlobSHA": "aa6cea903d4cd1fcab7c5a014eb702a9268e1a9d",
+      "sourceBytes": 298362,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV014",
+      "sourcePath": "public/card-vault/rc-070.webp",
+      "sourceGitBlobSHA": "f098bdf91ea1a3c0d2146f5f157f20c755c8d41b",
+      "sourceBytes": 413826,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV015",
+      "sourcePath": "public/card-vault/rc-071.webp",
+      "sourceGitBlobSHA": "2a6faac584b39e8ae1a2c3e163fef2477a5ee686",
+      "sourceBytes": 291838,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV016",
+      "sourcePath": "public/card-vault/rc-072-therapist-rosie.webp",
+      "sourceGitBlobSHA": "bfdf5e12a17d12d180afc6b45dcbe23ec8b71f13",
+      "sourceBytes": 280184,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV017",
+      "sourcePath": "public/card-vault/rc-073-painter-rosie.webp",
+      "sourceGitBlobSHA": "422dc553e2638107b646b554107bcf7033fd707d",
+      "sourceBytes": 295982,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV018",
+      "sourcePath": "public/card-vault/rc-074-jazz-player-rosie.webp",
+      "sourceGitBlobSHA": "9178198427e8d26577d54505d53a189775f6bc76",
+      "sourceBytes": 258244,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV019",
+      "sourcePath": "public/card-vault/rc-075-acrobat-rosie.webp",
+      "sourceGitBlobSHA": "09c4d768ad07b0b9b0ab9301ed075b8318d898c7",
+      "sourceBytes": 268248,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV020",
+      "sourcePath": "public/card-vault/rc-076-roastmaster-rosie.webp",
+      "sourceGitBlobSHA": "fe71afe0ba63c6324feff34e5b0cad83c5525507",
+      "sourceBytes": 277526,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV021",
+      "sourcePath": "public/card-vault/rc-077-dj-rosie.webp",
+      "sourceGitBlobSHA": "101ca1069f8fb2e837d0ebcc2a3f55deed619ae2",
+      "sourceBytes": 280470,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV022",
+      "sourcePath": "public/card-vault/rc-078-rocket-scientist-rosie.webp",
+      "sourceGitBlobSHA": "2f05e2eca32c426169cdb61653fbe0a6ced45703",
+      "sourceBytes": 267440,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV023",
+      "sourcePath": "public/card-vault/rc-079-valet-rosie.webp",
+      "sourceGitBlobSHA": "e9c4b10194c5092ab697d36ec3f1ac9ae6ab4b03",
+      "sourceBytes": 238482,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV024",
+      "sourcePath": "public/card-vault/rc-080-news-anchor-rosie.webp",
+      "sourceGitBlobSHA": "7834ca401e12e78b202e1f3ca4b05b3ee9b45034",
+      "sourceBytes": 318928,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV025",
+      "sourcePath": "public/card-vault/rc-081-greaser-rosie.webp",
+      "sourceGitBlobSHA": "894e32cc2ed258f759057b3c4fe00d02590a5403",
+      "sourceBytes": 288006,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV026",
+      "sourcePath": "public/card-vault/rc-082-ai-rosie.webp",
+      "sourceGitBlobSHA": "d420167f53a1490ec1f2f7e9ad9888dc3f622ade",
+      "sourceBytes": 274122,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV027",
+      "sourcePath": "public/card-vault/rc-083-grill-master-rosie.webp",
+      "sourceGitBlobSHA": "f44aff7bbd9bc3395828e8e17140e0702a8d58ab",
+      "sourceBytes": 285400,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV028",
+      "sourcePath": "public/card-vault/rc-084-hair-stylist-rosie.webp",
+      "sourceGitBlobSHA": "8d826f02d1b8bbd76e64a21ebeecf78c7ae22b92",
+      "sourceBytes": 242990,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV029",
+      "sourcePath": "public/card-vault/rc-085-robotics-rosie.webp",
+      "sourceGitBlobSHA": "1d4bc1511d46039d6443396d5fa29b837e030406",
+      "sourceBytes": 315388,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV030",
+      "sourcePath": "public/card-vault/rc-086-kayak-rosie.webp",
+      "sourceGitBlobSHA": "11883ee4ee1562e74f0c39d9f2e4c35a41374bbc",
+      "sourceBytes": 274824,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV031",
+      "sourcePath": "public/card-vault/rc-087-ballerina-rosie.webp",
+      "sourceGitBlobSHA": "6f309c8dedcb23b7b04711bd4abf8ed1aa93867e",
+      "sourceBytes": 254812,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV032",
+      "sourcePath": "public/card-vault/rc-088-vegas-rosie.webp",
+      "sourceGitBlobSHA": "9022cc30f309830fef707a3f8348e917a69e4eee",
+      "sourceBytes": 263994,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV033",
+      "sourcePath": "public/card-vault/rc-089-professor-rosie.webp",
+      "sourceGitBlobSHA": "2865d24b2531e69a2733f876918c74f4e63b7ef3",
+      "sourceBytes": 304272,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV034",
+      "sourcePath": "public/card-vault/rc-090-podcaster-rosie.webp",
+      "sourceGitBlobSHA": "c984c039bfb3c44ee24a531c41577135365f0fe1",
+      "sourceBytes": 284988,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV035",
+      "sourcePath": "public/card-vault/rc-091-lion-tamer-rosie.webp",
+      "sourceGitBlobSHA": "4478f27be6fcdd5ecae6d7a21e3f23dd045c2d3d",
+      "sourceBytes": 254646,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV036",
+      "sourcePath": "public/card-vault/rc-092-safe-cracker-rosie.webp",
+      "sourceGitBlobSHA": "e288c526b08d53752d6cc473529c9c6c9a9c649f",
+      "sourceBytes": 290400,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV037",
+      "sourcePath": "public/card-vault/rc-093-crab-fisher-rosie.webp",
+      "sourceGitBlobSHA": "55c8f08c8748704e43c2ab2c5d0b1b1f1405e789",
+      "sourceBytes": 241064,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV038",
+      "sourcePath": "public/card-vault/rc-094-marionettist-rosie.webp",
+      "sourceGitBlobSHA": "0795858a688250dd34a61423fea757055e1bb1b6",
+      "sourceBytes": 297958,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV039",
+      "sourcePath": "public/card-vault/rc-095-paragliding-rosie.webp",
+      "sourceGitBlobSHA": "fe8db5dd0c4ce99daa35924b225947bd6d292f18",
+      "sourceBytes": 264852,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV040",
+      "sourcePath": "public/card-vault/rc-096-jeopardy-rosie.webp",
+      "sourceGitBlobSHA": "f3488de571042e39455e4e76138dd52378a7aec9",
+      "sourceBytes": 331996,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV041",
+      "sourcePath": "public/card-vault/rc-097-wolverine-rosie.webp",
+      "sourceGitBlobSHA": "66cc2e7414ac852fbc6fff14835a27d192398eeb",
+      "sourceBytes": 233086,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV042",
+      "sourcePath": "public/card-vault/rc-098-taekwondo-rosie.webp",
+      "sourceGitBlobSHA": "4e93d0aa5ea8bf21139a20a442260bc0d9f0bd06",
+      "sourceBytes": 334710,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV043",
+      "sourcePath": "public/card-vault/rc-099-escape-artist-rosie.webp",
+      "sourceGitBlobSHA": "840b4d4efd62271b8d91b3205adb8fc75b2289cf",
+      "sourceBytes": 287732,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV044",
+      "sourcePath": "public/card-vault/rc-100-helicopter-rosie.webp",
+      "sourceGitBlobSHA": "9c8bfdb3d735751d38bad65d9bfa0e038dbca9f3",
+      "sourceBytes": 273082,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV045",
+      "sourcePath": "public/card-vault/rc-101-corsair-rosie.webp",
+      "sourceGitBlobSHA": "20d712fd274ac495279b88372f475226bf42d7da",
+      "sourceBytes": 290562,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV046",
+      "sourcePath": "public/card-vault/rc-102-maid-rosie.webp",
+      "sourceGitBlobSHA": "38825b46c30bf98cd4efa665bf57860eea63c46b",
+      "sourceBytes": 278318,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV047",
+      "sourcePath": "public/card-vault/rc-103-ice-sculptor-rosie.webp",
+      "sourceGitBlobSHA": "f95edcf55530cb2258a179a4a4a8193581a58ad0",
+      "sourceBytes": 235188,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV048",
+      "sourcePath": "public/card-vault/rc-104-international-rosie-of-mystery.webp",
+      "sourceGitBlobSHA": "ec7e7f5b69a20895d95e68c3b10ea4e94741cef0",
+      "sourceBytes": 297390,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV049",
+      "sourcePath": "public/card-vault/rc-105-cozy-cabin-rosie.webp",
+      "sourceGitBlobSHA": "113556372472db2663b44912b73321aeccd6098d",
+      "sourceBytes": 277662,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV050",
+      "sourcePath": "public/card-vault/rc-106-submarine-commander-rosie.webp",
+      "sourceGitBlobSHA": "079ff611245d4803eedc8afb6b1e4cfea259012c",
+      "sourceBytes": 270874,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV051",
+      "sourcePath": "public/card-vault/rc-107-stunt-plane-rosie.webp",
+      "sourceGitBlobSHA": "5cbc995892acd0b59ecf742251673c0762fb207e",
+      "sourceBytes": 318434,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV052",
+      "sourcePath": "public/card-vault/rc-108-pro-gamer-rosie.webp",
+      "sourceGitBlobSHA": "d7a757a52475e2abdb7e439e4c1a4a7f7a877334",
+      "sourceBytes": 287500,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV053",
+      "sourcePath": "public/card-vault/rc-109-ascended-rosie.webp",
+      "sourceGitBlobSHA": "e9ce47a5bd24b6e6bd67ca55766c75600a2dac80",
+      "sourceBytes": 315396,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV054",
+      "sourcePath": "public/card-vault/rc-110-bugatti-rosie.webp",
+      "sourceGitBlobSHA": "0a3a8262a7e2bc987b438fea48e126cd1f16a4e6",
+      "sourceBytes": 296846,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV055",
+      "sourcePath": "public/card-vault/rc-111-master-chef-rosie.webp",
+      "sourceGitBlobSHA": "4906deff872ad97a0cc2703a50e0288e765d7d72",
+      "sourceBytes": 331152,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV056",
+      "sourcePath": "public/card-vault/rc-112-philosopher-rosie.webp",
+      "sourceGitBlobSHA": "1cb3353356c1159493671cfa7f3939723029ff33",
+      "sourceBytes": 310762,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV057",
+      "sourcePath": "public/card-vault/rc-113-thespian-rosie.webp",
+      "sourceGitBlobSHA": "3072e8a3bad2c61ae433624315616bfc801ec18f",
+      "sourceBytes": 287860,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV058",
+      "sourcePath": "public/card-vault/rc-114-volcanologist-rosie.webp",
+      "sourceGitBlobSHA": "33a605ecb0fadacd0fd3e2330a2e0901abb2acf0",
+      "sourceBytes": 326978,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV059",
+      "sourcePath": "public/card-vault/rc-115-looksmaxxer-rosie.webp",
+      "sourceGitBlobSHA": "ef9155383d5983c5c64d6bba1396032661b89a58",
+      "sourceBytes": 286776,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV060",
+      "sourcePath": "public/card-vault/rc-116-lumberjack-rosie.webp",
+      "sourceGitBlobSHA": "12609222f804b003b03665ef2861d212a594c795",
+      "sourceBytes": 277314,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV061",
+      "sourcePath": "public/card-vault/rc-117-skateboard-rosie.webp",
+      "sourceGitBlobSHA": "3e249a761db2884173f0aaaeef6ff83816b893d8",
+      "sourceBytes": 303546,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV062",
+      "sourcePath": "public/card-vault/rc-118-cliffjumping-rosie.webp",
+      "sourceGitBlobSHA": "3f307e59faea79bef8bf2b26a486e695b4efa435",
+      "sourceBytes": 344320,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV063",
+      "sourcePath": "public/card-vault/rc-119-nsa-rosie.webp",
+      "sourceGitBlobSHA": "697dfd645309e6c6b87b192a5b00ecbf6e6f51fc",
+      "sourceBytes": 305016,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV064",
+      "sourcePath": "public/card-vault/rc-120-warden-rosie.webp",
+      "sourceGitBlobSHA": "b04d3b27b576dde5beb35eb0a0173cc0d9a051da",
+      "sourceBytes": 333382,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV065",
+      "sourcePath": "public/card-vault/rc-121-safari-rosie.webp",
+      "sourceGitBlobSHA": "30d4665f17e4a4485c0b1ff5a8cd8b20c6365321",
+      "sourceBytes": 362536,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV066",
+      "sourcePath": "public/card-vault/rc-122-slam-dunk-rosie.webp",
+      "sourceGitBlobSHA": "2751319934c7f0b4dacbbaae6b3593e1d1449ebb",
+      "sourceBytes": 307198,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV067",
+      "sourcePath": "public/card-vault/rc-123-bermuda-triangle-rosie.webp",
+      "sourceGitBlobSHA": "0ef7f849918d053fe8178da5fbb31d993b87a4d2",
+      "sourceBytes": 327252,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV068",
+      "sourcePath": "public/card-vault/rc-124-bayou-rosie.webp",
+      "sourceGitBlobSHA": "76dbf227dc240f7a8143e96dec683270fc3ed9fe",
+      "sourceBytes": 280092,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV069",
+      "sourcePath": "public/card-vault/rc-125-galapagos-rosie.webp",
+      "sourceGitBlobSHA": "333c3cce5b3a611891404b272405bdaa1aa41d8e",
+      "sourceBytes": 283488,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV070",
+      "sourcePath": "public/card-vault/rc-126-diamond-in-the-ruff-rosie.webp",
+      "sourceGitBlobSHA": "c3370b895e5c0f34928603656052d8a8e7bc5445",
+      "sourceBytes": 300896,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV071",
+      "sourcePath": "public/card-vault/rc-127-herald-rosie.webp",
+      "sourceGitBlobSHA": "f39da36616958ea9513384cad22a3c6df67c7015",
+      "sourceBytes": 312896,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV072",
+      "sourcePath": "public/card-vault/rc-128-gladiator-rosie.webp",
+      "sourceGitBlobSHA": "58bad6892f980f9459e11d153c97dca111d47df8",
+      "sourceBytes": 298634,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV073",
+      "sourcePath": "public/card-vault/rc-129-mayor-rosie.webp",
+      "sourceGitBlobSHA": "5848aaf5d02b67f0f70c905b66954bda6e73d9ad",
+      "sourceBytes": 316726,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV074",
+      "sourcePath": "public/card-vault/rc-130-patriot-rosie.webp",
+      "sourceGitBlobSHA": "cd777f47b950a273cf80c2e9f60babeb0189121f",
+      "sourceBytes": 287054,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV075",
+      "sourcePath": "public/card-vault/rc-131-wine-expert-rosie.webp",
+      "sourceGitBlobSHA": "0c6687277d6013ef84a5002e23dd66724af90c9c",
+      "sourceBytes": 255254,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV076",
+      "sourcePath": "public/card-vault/rc-132-fastball-rosie.webp",
+      "sourceGitBlobSHA": "a4a033713f487de56487f31bd5bc9da88b410fc9",
+      "sourceBytes": 282456,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV077",
+      "sourcePath": "public/card-vault/rc-133-abstract-rosie.webp",
+      "sourceGitBlobSHA": "21db79996b980442737451b678914505cb719450",
+      "sourceBytes": 315488,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV078",
+      "sourcePath": "public/card-vault/rc-134-formula-1-rosie.webp",
+      "sourceGitBlobSHA": "7d89b1ccc9e29ab0debea5bb8351c773d143f941",
+      "sourceBytes": 301000,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV079",
+      "sourcePath": "public/card-vault/rc-135-elite-protection-rosie.webp",
+      "sourceGitBlobSHA": "a87947f42df5a79436e8df133d877e28c4dca357",
+      "sourceBytes": 302774,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV080",
+      "sourcePath": "public/card-vault/rc-136-talent-show-rosie.webp",
+      "sourceGitBlobSHA": "26738fd1d78c2d0055954823edb2f99f14ee6c19",
+      "sourceBytes": 289092,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV081",
+      "sourcePath": "public/card-vault/rc-137.webp",
+      "sourceGitBlobSHA": "3810a0c464585af5193493542c7cd225683a9fbb",
+      "sourceBytes": 283754,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV082",
+      "sourcePath": "public/card-vault/rc-138.webp",
+      "sourceGitBlobSHA": "171978b0c0fea981bcd150309190ed4a96ed6826",
+      "sourceBytes": 289998,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV083",
+      "sourcePath": "public/card-vault/rc-139.webp",
+      "sourceGitBlobSHA": "be6d99d4d2b05a1e5c164d5eee6a80100d8a9000",
+      "sourceBytes": 309202,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV084",
+      "sourcePath": "public/card-vault/rc-140.webp",
+      "sourceGitBlobSHA": "f9cad4bc89a86de3e37f8f9918b318d43d907998",
+      "sourceBytes": 280192,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV085",
+      "sourcePath": "public/card-vault/rc-141.webp",
+      "sourceGitBlobSHA": "a15d7e8d19abf6f9e97167d39b12ebfcc2c099b9",
+      "sourceBytes": 337356,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV086",
+      "sourcePath": "public/card-vault/rc-142.webp",
+      "sourceGitBlobSHA": "0ec0b8d3ac8d92e8eaee623d9f272534cfdf45da",
+      "sourceBytes": 270854,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV087",
+      "sourcePath": "public/card-vault/rc-143.webp",
+      "sourceGitBlobSHA": "ef55b471f030eea5939a5fdc8a9ae9d4b8fe1ce8",
+      "sourceBytes": 273970,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV088",
+      "sourcePath": "public/card-vault/rc-144.webp",
+      "sourceGitBlobSHA": "0790aaa2688bd41d70689efcf12a06596ec07726",
+      "sourceBytes": 255350,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV089",
+      "sourcePath": "public/card-vault/rc-145.webp",
+      "sourceGitBlobSHA": "150557d14284e8e8dcc1b9fdb7d97fda251fa12f",
+      "sourceBytes": 300836,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV090",
+      "sourcePath": "public/card-vault/rc-146.webp",
+      "sourceGitBlobSHA": "c662f7ebb38f1e573bc6249ca0fc0f41044934ec",
+      "sourceBytes": 293470,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV091",
+      "sourcePath": "public/card-vault/rc-147.webp",
+      "sourceGitBlobSHA": "6090ec3dcef4afe60e26bf48a2ed44edd2d5c8d5",
+      "sourceBytes": 274970,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV092",
+      "sourcePath": "public/card-vault/rc-148.webp",
+      "sourceGitBlobSHA": "56f6c4c3a8a3356d2f91ff29fc20e710a3406757",
+      "sourceBytes": 275780,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV093",
+      "sourcePath": "public/card-vault/rc-149.webp",
+      "sourceGitBlobSHA": "69ac45e80b8e1be69af500c9807de546123d8057",
+      "sourceBytes": 352502,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV094",
+      "sourcePath": "public/card-vault/rc-150.webp",
+      "sourceGitBlobSHA": "2919793c7b3451461403c94796b57a04b6c1cda6",
+      "sourceBytes": 267946,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV095",
+      "sourcePath": "public/card-vault/rc-151.webp",
+      "sourceGitBlobSHA": "278464119a334410c71c4ab84384bedbcec8a8af",
+      "sourceBytes": 293082,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV096",
+      "sourcePath": "public/card-vault/rc-152.webp",
+      "sourceGitBlobSHA": "cf39a8fbc31c0d50673daaa7fc18e99b19dc79f9",
+      "sourceBytes": 292790,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV097",
+      "sourcePath": "public/card-vault/rc-153-dayclub-rosie.webp",
+      "sourceGitBlobSHA": "c08195b388480612f8be19984e8c1baf66283d0f",
+      "sourceBytes": 512554,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV098",
+      "sourcePath": "public/card-vault/rc-154-dr-phil-rosie.webp",
+      "sourceGitBlobSHA": "ddee56305fd11ad8d0b4df081f090fdf3f2f353b",
+      "sourceBytes": 375054,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV099",
+      "sourcePath": "public/card-vault/rc-155-retirement-rosie.webp",
+      "sourceGitBlobSHA": "f4eb4ee1d636a8bb53d421362f9878d7a89959d1",
+      "sourceBytes": 472068,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV100",
+      "sourcePath": "public/card-vault/rc-156-judo-rosie.webp",
+      "sourceGitBlobSHA": "556403adc19223321edb6140bbd5ef1c6ce6a4d3",
+      "sourceBytes": 438280,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV101",
+      "sourcePath": "public/card-vault/rc-157-bubble-bath-rosie.webp",
+      "sourceGitBlobSHA": "87083171bae6a54866d45ec44f09b337891b2846",
+      "sourceBytes": 432776,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV102",
+      "sourcePath": "public/card-vault/rc-158-camper-rosie.webp",
+      "sourceGitBlobSHA": "7666ff40c59260fe7edbb5f44ccae711d83d9a5e",
+      "sourceBytes": 437032,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV103",
+      "sourcePath": "public/card-vault/rc-159-popcorn-rosie.webp",
+      "sourceGitBlobSHA": "9b848f80e81ae34754ed468c3cfc0cc6710598c9",
+      "sourceBytes": 361102,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV104",
+      "sourcePath": "public/card-vault/rc-160-woodcarving-rosie.webp",
+      "sourceGitBlobSHA": "5cac1ad56b1d0a290884c1a402c074f473930c81",
+      "sourceBytes": 410926,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV105",
+      "sourcePath": "public/card-vault/rc-161-crepe-master-rosie.webp",
+      "sourceGitBlobSHA": "9416c7e5544c8c2399624435e826ebf894984798",
+      "sourceBytes": 425778,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV106",
+      "sourcePath": "public/card-vault/rc-162-triathlon-rosie.webp",
+      "sourceGitBlobSHA": "75513f130aa18a057c2dcbd0a12c34f4b143a5de",
+      "sourceBytes": 495624,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV107",
+      "sourcePath": "public/card-vault/rc-163-rio-de-janeiro-rosie.webp",
+      "sourceGitBlobSHA": "31b2f0e50f17813f30600ad3df79f357cf8225b1",
+      "sourceBytes": 534940,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV108",
+      "sourcePath": "public/card-vault/rc-164-pompeii-rosie.webp",
+      "sourceGitBlobSHA": "4184f16f7bd51f8a39e302e9ebf3c73325350f91",
+      "sourceBytes": 559532,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV109",
+      "sourcePath": "public/card-vault/rc-165-self-driving-rosie.webp",
+      "sourceGitBlobSHA": "50404dc75418d3a89718206695bef3de73e8d04a",
+      "sourceBytes": 418176,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV110",
+      "sourcePath": "public/card-vault/rc-166-alani-rosie.webp",
+      "sourceGitBlobSHA": "4f0ce5db84e64eb5a6752fe6fb1885bbf5a61e45",
+      "sourceBytes": 480068,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV111",
+      "sourcePath": "public/card-vault/rc-167-flu-rosie.webp",
+      "sourceGitBlobSHA": "8ff2485cf8ff6fad737a97d29137e95dd8d43f57",
+      "sourceBytes": 398124,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV112",
+      "sourcePath": "public/card-vault/rc-168-halo-rosie.webp",
+      "sourceGitBlobSHA": "151a4cf352401e75233250f88ce63c81ed0a6892",
+      "sourceBytes": 464228,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV113",
+      "sourcePath": "public/card-vault/rc-169-fighter-jet-rosie.webp",
+      "sourceGitBlobSHA": "e2229763985e52949025f647d74d7b70c4c28276",
+      "sourceBytes": 436594,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV114",
+      "sourcePath": "public/card-vault/rc-170-counterfeiter-rosie.webp",
+      "sourceGitBlobSHA": "8b6b28f90447160972ef4965d121a788c04f03a8",
+      "sourceBytes": 478234,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV115",
+      "sourcePath": "public/card-vault/rc-171-casanova-rosie.webp",
+      "sourceGitBlobSHA": "feba5a29b668bd82a705f39e5e962167aecaf06c",
+      "sourceBytes": 500962,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV116",
+      "sourcePath": "public/card-vault/rc-172-xochimilco-rosie.webp",
+      "sourceGitBlobSHA": "e9fe75534fc9adcf2f0942ea7294bd64b588c296",
+      "sourceBytes": 525490,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV117",
+      "sourcePath": "public/card-vault/rc-173-tax-accountant-rosie.webp",
+      "sourceGitBlobSHA": "dd856c479605d46562bbacd675640922c0619beb",
+      "sourceBytes": 454214,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV118",
+      "sourcePath": "public/card-vault/rc-174-dark-future-rosie.webp",
+      "sourceGitBlobSHA": "f8bb6c2d67854e2c3a3375965d52388ba67f8b70",
+      "sourceBytes": 527834,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV119",
+      "sourcePath": "public/card-vault/rc-175-hot-ones-rosie.webp",
+      "sourceGitBlobSHA": "0e634cf62ebc0b03f0d177f91105897ef41aa6bf",
+      "sourceBytes": 450370,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV120",
+      "sourcePath": "public/card-vault/rc-176-parkour-rosie.webp",
+      "sourceGitBlobSHA": "2d0d264640148f0bf5233056481250531d28a6dc",
+      "sourceBytes": 423632,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV121",
+      "sourcePath": "public/card-vault/rc-177-garden-of-eden-rosie.webp",
+      "sourceGitBlobSHA": "09e43c205e9d8a12004e29d559c95f93bfe9916e",
+      "sourceBytes": 590548,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV122",
+      "sourcePath": "public/card-vault/rc-178-hydrofoil-rosie.webp",
+      "sourceGitBlobSHA": "a99e6e894bbefd001099145f4a17f089475c9b61",
+      "sourceBytes": 516010,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV123",
+      "sourcePath": "public/card-vault/rc-179-quantum-rosie.webp",
+      "sourceGitBlobSHA": "c1fdfd9cf3cd657c07b58bdf35d57929a3bba611",
+      "sourceBytes": 465982,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV124",
+      "sourcePath": "public/card-vault/rc-180-whoville-rosie.webp",
+      "sourceGitBlobSHA": "0bb90194adadaa27c4a97e872baf33ba07c0f180",
+      "sourceBytes": 534378,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV125",
+      "sourcePath": "public/card-vault/rc-181-axe-throwing-rosie.webp",
+      "sourceGitBlobSHA": "6161b663aa309c576a5888617bc4c5d0fa6a47bc",
+      "sourceBytes": 433240,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV126",
+      "sourcePath": "public/card-vault/rc-182-golfer-rosie.webp",
+      "sourceGitBlobSHA": "b035816e20baa148aee4f52e2f011e0fff6dc870",
+      "sourceBytes": 412148,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV127",
+      "sourcePath": "public/card-vault/rc-183-dog-the-bounty-hunter-rosie.webp",
+      "sourceGitBlobSHA": "94139c234f67b1cc8cc1c4617d77a73e911afb0a",
+      "sourceBytes": 490428,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV128",
+      "sourcePath": "public/card-vault/rc-184-pentagon-rosie.webp",
+      "sourceGitBlobSHA": "70c2d036dfe4216a3f373387d87525b165697348",
+      "sourceBytes": 463752,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV129",
+      "sourcePath": "public/card-vault/rc-185-vaporwave-rosie.webp",
+      "sourceGitBlobSHA": "ccf93a5cce116e4d8a06147439f1df6bff156526",
+      "sourceBytes": 446806,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV130",
+      "sourcePath": "public/card-vault/rc-186-rosie-and-the-living-dead.webp",
+      "sourceGitBlobSHA": "994f8307fec5a16ca7078f4956d7f1ca42de4e4c",
+      "sourceBytes": 437160,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV131",
+      "sourcePath": "public/card-vault/rc-187-mecharosie.webp",
+      "sourceGitBlobSHA": "a60008cdf4275ee84e73a981ddce4a95ba85001c",
+      "sourceBytes": 493964,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV132",
+      "sourcePath": "public/card-vault/rc-188-oregon-trail-rosie.webp",
+      "sourceGitBlobSHA": "bb1f0de0e3249554597ff3c3fe2eb59a969ec4f8",
+      "sourceBytes": 530432,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV133",
+      "sourcePath": "public/card-vault/rc-189-rambo-rosie.webp",
+      "sourceGitBlobSHA": "4ff9e45ce8c960202c6482619a824270790fbf2a",
+      "sourceBytes": 502066,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV134",
+      "sourcePath": "public/card-vault/rc-190-teriyaki-chicken-rosie.webp",
+      "sourceGitBlobSHA": "fa81d92759580317ac8300a9887667a2f4e44106",
+      "sourceBytes": 484220,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV135",
+      "sourcePath": "public/card-vault/rc-191-macys-day-parade-rosie.webp",
+      "sourceGitBlobSHA": "13d1036083758ad0fb739a1398f4b2ca81d59d4c",
+      "sourceBytes": 517552,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV136",
+      "sourcePath": "public/card-vault/rc-192-viking-rosie.webp",
+      "sourceGitBlobSHA": "8234ffad735ab2968c8606b0e7e50acd7c43c92d",
+      "sourceBytes": 553790,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV137",
+      "sourcePath": "public/card-vault/rc-193-cherokee-rosie.webp",
+      "sourceGitBlobSHA": "43d92d904905da7d0a04cfc4cdac5b96557d35cc",
+      "sourceBytes": 595960,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV138",
+      "sourcePath": "public/card-vault/rc-194-highlander-rosie.webp",
+      "sourceGitBlobSHA": "e7d837254b7bd1d4f7e62de8b6702e8460c95480",
+      "sourceBytes": 570150,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV139",
+      "sourcePath": "public/card-vault/rc-196-insomnia-rosie.webp",
+      "sourceGitBlobSHA": "975dbec7dcd26193f98bf7abe611d6c6e3ea8d82",
+      "sourceBytes": 506142,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV140",
+      "sourcePath": "public/card-vault/rc-197-disco-rosie.webp",
+      "sourceGitBlobSHA": "073999614c58cd9d79eef3e2478c6550f3b47148",
+      "sourceBytes": 571220,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV141",
+      "sourcePath": "public/card-vault/rc-198-pumpkin-patch-rosie.webp",
+      "sourceGitBlobSHA": "6ac5fc6354695fed72b54852c417004a895919d2",
+      "sourceBytes": 541380,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV142",
+      "sourcePath": "public/card-vault/rc-199-ferris-wheel-rosie.webp",
+      "sourceGitBlobSHA": "b249f1bf5f27d7b85eafa3c735c9640e52f319b4",
+      "sourceBytes": 512726,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV143",
+      "sourcePath": "public/card-vault/rc-200-infomercial-rosie.webp",
+      "sourceGitBlobSHA": "35e231af696ce80ba2e4b4ce86d59b97f41760d1",
+      "sourceBytes": 458902,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV144",
+      "sourcePath": "public/card-vault/rc-201-cryogenic-rosie.webp",
+      "sourceGitBlobSHA": "a0cd2efd8e9b220b0de9cfda5654af5712ecfa8c",
+      "sourceBytes": 544008,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV145",
+      "sourcePath": "public/card-vault/rc-202-anesthesiologist-rosie.webp",
+      "sourceGitBlobSHA": "729057dcfee5badb5c77f47aa33b84f5a2ed52ae",
+      "sourceBytes": 399984,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV146",
+      "sourcePath": "public/card-vault/rc-203-rock-em-sock-em-rosie.webp",
+      "sourceGitBlobSHA": "56e0cfd1ed5239eaf608af4a56138b71661cb796",
+      "sourceBytes": 505964,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV147",
+      "sourcePath": "public/card-vault/rc-204-trojan-horse-rosie.webp",
+      "sourceGitBlobSHA": "19ec092b57f64bfd9ee4fce69508e131983ad3bf",
+      "sourceBytes": 582002,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV148",
+      "sourcePath": "public/card-vault/rc-205-maine-lobster-rosie.webp",
+      "sourceGitBlobSHA": "b4aa1fcc1807e6da12c4a4423dfd4a3d6c3989cb",
+      "sourceBytes": 545228,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV149",
+      "sourcePath": "public/card-vault/rc-206-tesla-coil-rosie.webp",
+      "sourceGitBlobSHA": "9dd1ca215642374e7429e152c6afe2773633a369",
+      "sourceBytes": 576410,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV150",
+      "sourcePath": "public/card-vault/rc-207-mars-rover-rosie.webp",
+      "sourceGitBlobSHA": "63db37c619a4656b40b8997933ac23a4c5721267",
+      "sourceBytes": 533448,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV151",
+      "sourcePath": "public/card-vault/rc-208-2008-recession-rosie.webp",
+      "sourceGitBlobSHA": "c0e89557b879d99603a5141a6d9b7d5a4b3641da",
+      "sourceBytes": 429052,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV152",
+      "sourcePath": "public/card-vault/rc-209-pizza-parlor-rosie.webp",
+      "sourceGitBlobSHA": "e617db2367793b87dabf9923025e1e0a86489a97",
+      "sourceBytes": 472334,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV153",
+      "sourcePath": "public/card-vault/rc-210-exodus-rosie.webp",
+      "sourceGitBlobSHA": "435e53233b43765080f6384acde744cd016a2cc8",
+      "sourceBytes": 554794,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV154",
+      "sourcePath": "public/card-vault/rc-211-the-godfather-rosie.webp",
+      "sourceGitBlobSHA": "eb7cd133048a7f4e08c5f9115128d1399d294d9e",
+      "sourceBytes": 411972,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV155",
+      "sourcePath": "public/card-vault/rc-212-spacex-rosie.webp",
+      "sourceGitBlobSHA": "d8d147a98a3313c07b9bdb95d2d3d548292d4ee9",
+      "sourceBytes": 428460,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV156",
+      "sourcePath": "public/card-vault/rc-213-silence-of-the-lambs-rosie.webp",
+      "sourceGitBlobSHA": "f5b098dff9f4ae78dac92282ede3b9570d7e4a25",
+      "sourceBytes": 404270,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV157",
+      "sourcePath": "public/card-vault/rc-214-fast-and-furious-rosie.webp",
+      "sourceGitBlobSHA": "a6869c2dce89a671aff03105b75faebc6ee5505b",
+      "sourceBytes": 468466,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV158",
+      "sourcePath": "public/card-vault/rc-215-napoleon-rosie.webp",
+      "sourceGitBlobSHA": "7eee67c271a2296bcb35df5daab602920cca6607",
+      "sourceBytes": 482544,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV159",
+      "sourcePath": "public/card-vault/rc-216-the-once-and-future-rosie.webp",
+      "sourceGitBlobSHA": "9e9083c3bf6304d60b75ebddde48acefcd2f0f1d",
+      "sourceBytes": 524232,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV160",
+      "sourcePath": "public/card-vault/rc-217-zoot-suit-rosie.webp",
+      "sourceGitBlobSHA": "8d94e89af62359ae80730c91e9464116710f8feb",
+      "sourceBytes": 427362,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV161",
+      "sourcePath": "public/card-vault/rc-218-rap-battle-rosie.webp",
+      "sourceGitBlobSHA": "c2b9ee9ca6d1356f73641cf7db00d8ab89ec9dc7",
+      "sourceBytes": 480454,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV162",
+      "sourcePath": "public/card-vault/rc-219-terminator-rosie.webp",
+      "sourceGitBlobSHA": "8f9949cf493b8f9c47c22a24096b7efde835fdc5",
+      "sourceBytes": 475202,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV163",
+      "sourcePath": "public/card-vault/rc-220-nixon-rosie.webp",
+      "sourceGitBlobSHA": "5b53a19ba184123916312df2e3f781423cbaf01a",
+      "sourceBytes": 418370,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV164",
+      "sourcePath": "public/card-vault/rc-221-breaking-bad-rosie.webp",
+      "sourceGitBlobSHA": "04b86b8edb6b35f4b66aa37eaf5527983b1435a0",
+      "sourceBytes": 478426,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV165",
+      "sourcePath": "public/card-vault/rc-222-3d-printing-rosie.webp",
+      "sourceGitBlobSHA": "79924feb77959b23ed9304449f93ad4ab3113f13",
+      "sourceBytes": 507984,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV166",
+      "sourcePath": "public/card-vault/rc-223-puzzle-master-rosie.webp",
+      "sourceGitBlobSHA": "bb2b0cb1d9fa5366f8c665a9f8c3da7e47ebf3d7",
+      "sourceBytes": 512988,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV167",
+      "sourcePath": "public/card-vault/rc-224-spartan-race-rosie.webp",
+      "sourceGitBlobSHA": "4e42f1c1df4892f340f9523623dcb52ea8c34be3",
+      "sourceBytes": 530068,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV168",
+      "sourcePath": "public/card-vault/rc-225-minecraft-rosie.webp",
+      "sourceGitBlobSHA": "8bc9d77c984ed6972e328442ed31d0a1c9ab56a5",
+      "sourceBytes": 420958,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV169",
+      "sourcePath": "public/card-vault/rc-226-bellhop-rosie.webp",
+      "sourceGitBlobSHA": "2f524efad7df52fcd59b7de9edc06fff1f83bcda",
+      "sourceBytes": 485648,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV170",
+      "sourcePath": "public/card-vault/rc-227-welder-rosie.webp",
+      "sourceGitBlobSHA": "c211cf0213855a55fd90d3b9c402544656ba0eae",
+      "sourceBytes": 492214,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV171",
+      "sourcePath": "public/card-vault/rc-228-miner-rosie.webp",
+      "sourceGitBlobSHA": "5a71129045ccb0ee051e5ec4747e2df73f7906f6",
+      "sourceBytes": 496364,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV172",
+      "sourcePath": "public/card-vault/rc-229-bouncer-rosie.webp",
+      "sourceGitBlobSHA": "d7b8e5aaa93f55c822f4c87e062f407bf0a92aae",
+      "sourceBytes": 406776,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV173",
+      "sourcePath": "public/card-vault/rc-230-bartender-rosie.webp",
+      "sourceGitBlobSHA": "b989cf906adfb05728065feb763b0ddbd927fb6c",
+      "sourceBytes": 418646,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV174",
+      "sourcePath": "public/card-vault/rc-231-pharaoh-rosie.webp",
+      "sourceGitBlobSHA": "6bce13c1f8ca902b42e7833f76060545d038da53",
+      "sourceBytes": 485936,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV175",
+      "sourcePath": "public/card-vault/rc-232-sister-nun-rosie.webp",
+      "sourceGitBlobSHA": "110d6c47ae3610d1c60b82f8d361e5f54530ad43",
+      "sourceBytes": 471986,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV176",
+      "sourcePath": "public/card-vault/rc-233-chernobyl-rosie.webp",
+      "sourceGitBlobSHA": "218f4b0f42f5abb39b2a08f5c048955c1d9cd092",
+      "sourceBytes": 491434,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV177",
+      "sourcePath": "public/card-vault/rc-234-faustian-rosie.webp",
+      "sourceGitBlobSHA": "546f8a15c07457dabf073a636c58d1d274e20953",
+      "sourceBytes": 473500,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV178",
+      "sourcePath": "public/card-vault/rc-235-shakespearean-rosie.webp",
+      "sourceGitBlobSHA": "b9f0f6b7b79a56a6081e20b7e01927950e3bb8fb",
+      "sourceBytes": 471984,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV179",
+      "sourcePath": "public/card-vault/rc-236-lasik-rosie.webp",
+      "sourceGitBlobSHA": "99d16b4f69f3b8ff21dcf2cf591029f2d4e46cc4",
+      "sourceBytes": 378274,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV180",
+      "sourcePath": "public/card-vault/rc-237-moon-landing-rosie.webp",
+      "sourceGitBlobSHA": "990a104216a3f3eceb7f941303f6a39c6d8d8d86",
+      "sourceBytes": 522800,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV181",
+      "sourcePath": "public/card-vault/rc-238-sheriff-rosie.webp",
+      "sourceGitBlobSHA": "b5873d154e91a4ca1c7d356695cd45207df0bc89",
+      "sourceBytes": 532994,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV182",
+      "sourcePath": "public/card-vault/rc-239-yard-work-rosie.webp",
+      "sourceGitBlobSHA": "304f6c133c55c1b42e3e0629ff0309dab088a9c1",
+      "sourceBytes": 492974,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV183",
+      "sourcePath": "public/card-vault/rc-240-lazy-river-rosie.webp",
+      "sourceGitBlobSHA": "33ae1fae103928aceacd5ae673a57a4fe9d63e01",
+      "sourceBytes": 526770,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV184",
+      "sourcePath": "public/card-vault/rc-241-jag-rosie.webp",
+      "sourceGitBlobSHA": "85bd54bf45309164ec97b1496c32c0a73bb52c7c",
+      "sourceBytes": 437374,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV185",
+      "sourcePath": "public/card-vault/rc-242-test-pilot-rosie.webp",
+      "sourceGitBlobSHA": "6c251f1b92caac168b11fc6672a1c895a00fe84b",
+      "sourceBytes": 507276,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV186",
+      "sourcePath": "public/card-vault/rc-243-navy-seal-rosie.webp",
+      "sourceGitBlobSHA": "5bc4e15f7e08cd1558f376770ed6420037e7ec00",
+      "sourceBytes": 465278,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV187",
+      "sourcePath": "public/card-vault/rc-244-quarterback-rosie.webp",
+      "sourceGitBlobSHA": "c59ee5aca7f448dfb9a37cde8f3b595afaeb2ba3",
+      "sourceBytes": 455914,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV188",
+      "sourcePath": "public/card-vault/rc-245-valedictorian-rosie.webp",
+      "sourceGitBlobSHA": "91032888ee02a1f9aad1889db9fad2d078d8001d",
+      "sourceBytes": 459774,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV189",
+      "sourcePath": "public/card-vault/rc-246-ragnarok-rosie.webp",
+      "sourceGitBlobSHA": "434e904174b389aa0694db969c980211096631ff",
+      "sourceBytes": 637736,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV190",
+      "sourcePath": "public/card-vault/rc-247-the-rosie-of-notre-dame.webp",
+      "sourceGitBlobSHA": "0742a94d91cfc4452cd55a4939f1fdfef9b6eb35",
+      "sourceBytes": 534832,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV191",
+      "sourcePath": "public/card-vault/rc-248-longshoreman-rosie.webp",
+      "sourceGitBlobSHA": "da6feb177e035c465d608561a54d26152ac748e5",
+      "sourceBytes": 483610,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV192",
+      "sourcePath": "public/card-vault/rc-249-stylist-rosie.webp",
+      "sourceGitBlobSHA": "a24a5db61007423162a0211b78fc2bc20cd28427",
+      "sourceBytes": 468602,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV193",
+      "sourcePath": "public/card-vault/rc-250-rosie-the-crocodile-hunter.webp",
+      "sourceGitBlobSHA": "86488f75802456de83fc0d0322f0f47bb3d29ffa",
+      "sourceBytes": 499116,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV194",
+      "sourcePath": "public/card-vault/rc-251-chinatown-rosie.webp",
+      "sourceGitBlobSHA": "1362094ec006f21037d77708f7d50cba45d37a8b",
+      "sourceBytes": 520286,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV195",
+      "sourcePath": "public/card-vault/rc-252-tsar-rosienov.webp",
+      "sourceGitBlobSHA": "b194d2ef1b8d26379329fe52b2a610b98b61fb12",
+      "sourceBytes": 516416,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV196",
+      "sourcePath": "public/card-vault/rc-253-saving-private-rosie.webp",
+      "sourceGitBlobSHA": "31b09c014d85242da102a818f45e595e05ac2fd0",
+      "sourceBytes": 468744,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV197",
+      "sourcePath": "public/card-vault/rc-254-smokejumper-rosie.webp",
+      "sourceGitBlobSHA": "3d7c8ff92818ae13599777dba238b65f7209517a",
+      "sourceBytes": 483098,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV198",
+      "sourcePath": "public/card-vault/rc-255-jungle-temple-rosie.webp",
+      "sourceGitBlobSHA": "d5f5514320ed0c6e309bd5cd476ff6b4f55cc8ab",
+      "sourceBytes": 624492,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV199",
+      "sourcePath": "public/card-vault/rc-256-carcassonne-rosie.webp",
+      "sourceGitBlobSHA": "ef0359a4762feb1f70f79361667a0f9cf6998a18",
+      "sourceBytes": 527508,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV200",
+      "sourcePath": "public/card-vault/rc-257-boston-tea-party-rosie.webp",
+      "sourceGitBlobSHA": "c5a136dbc00ac0382d598cc75f5cce14f3942e92",
+      "sourceBytes": 485028,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV201",
+      "sourcePath": "public/card-vault/rc-258-bank-heist-rosie.webp",
+      "sourceGitBlobSHA": "36be18e6827c6ca6dbc0230d522ab5968b82192f",
+      "sourceBytes": 446350,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV202",
+      "sourcePath": "public/card-vault/rc-259-bootlegger-rosie.webp",
+      "sourceGitBlobSHA": "e6ad599779e41acd21556e6b7116328a3c06167d",
+      "sourceBytes": 488488,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV203",
+      "sourcePath": "public/card-vault/rc-260-wingsuit-rosie.webp",
+      "sourceGitBlobSHA": "746a175da4aa34e89437f4b0b760469c75acfa08",
+      "sourceBytes": 477072,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV204",
+      "sourcePath": "public/card-vault/rc-261-rosies-new-groove.webp",
+      "sourceGitBlobSHA": "e8f550da23ccecd52f5eb554926841885843fa89",
+      "sourceBytes": 554486,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV205",
+      "sourcePath": "public/card-vault/rc-262-rosie-shingle-creek.webp",
+      "sourceGitBlobSHA": "82894fa7601cbf4242169425e3070863c91c54cf",
+      "sourceBytes": 527092,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV206",
+      "sourcePath": "public/card-vault/rc-263-time-paradox-rosie.webp",
+      "sourceGitBlobSHA": "76dc59768dd741cb43c978ec12c655c5786f89ec",
+      "sourceBytes": 620486,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV207",
+      "sourcePath": "public/card-vault/rc-264-the-rosie-who-knew-too-much.webp",
+      "sourceGitBlobSHA": "329c87647a713c735f1bef2a3305348d3c5e9c83",
+      "sourceBytes": 466734,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV208",
+      "sourcePath": "public/card-vault/rc-265-rosie-flew-over-the-cuckoos-nest.webp",
+      "sourceGitBlobSHA": "c6c266b9947c5ee5895457b83333d091531ad963",
+      "sourceBytes": 404440,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV209",
+      "sourcePath": "public/card-vault/rc-266-frankenstein-rosie.webp",
+      "sourceGitBlobSHA": "c3d10b4d7428a4936504c36a08212b8977de5fe0",
+      "sourceBytes": 534572,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV210",
+      "sourcePath": "public/card-vault/rc-267-ben-hur-rosie.webp",
+      "sourceGitBlobSHA": "9c9a26ac001d1b013ea571f1b28123bc57395f35",
+      "sourceBytes": 517502,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV211",
+      "sourcePath": "public/card-vault/rc-268-whistleblower-rosie.webp",
+      "sourceGitBlobSHA": "b948480307ae2a9398eda6d7f3a05fcacb61a2a4",
+      "sourceBytes": 395594,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV212",
+      "sourcePath": "public/card-vault/rc-269-steampunk-rosie.webp",
+      "sourceGitBlobSHA": "37f96e28a364bd1f84fb94f2435ef25db53f1527",
+      "sourceBytes": 545380,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV213",
+      "sourcePath": "public/card-vault/rc-270-dracula-rosie.webp",
+      "sourceGitBlobSHA": "47a461e63554a21904b52f549d25ed1c8584022d",
+      "sourceBytes": 496550,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV214",
+      "sourcePath": "public/card-vault/rc-271-mummy-rosie.webp",
+      "sourceGitBlobSHA": "46523d2a551a75970d456e564963827f338b7953",
+      "sourceBytes": 544752,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV215",
+      "sourcePath": "public/card-vault/rc-272-star-fox-rosie.webp",
+      "sourceGitBlobSHA": "e0f75ad89de443ef5abcb558dc0d0d286d5b3e17",
+      "sourceBytes": 498904,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV216",
+      "sourcePath": "public/card-vault/rc-273-the-invisible-rosie.webp",
+      "sourceGitBlobSHA": "0cd57a984e29325a012c0a1669fff6058b7e5fd4",
+      "sourceBytes": 489908,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV217",
+      "sourcePath": "public/card-vault/rc-274-avatar-navi-rosie.webp",
+      "sourceGitBlobSHA": "4aaa1d993728cf7b7ac270cb486a5429b6663960",
+      "sourceBytes": 593148,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV218",
+      "sourcePath": "public/card-vault/rc-275-beatnik-rosie.webp",
+      "sourceGitBlobSHA": "5b1f749cd5b0c10ab720b03bd0f0e0ccff80b4d6",
+      "sourceBytes": 477376,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV219",
+      "sourcePath": "public/card-vault/rc-276-billboard-rosie.webp",
+      "sourceGitBlobSHA": "2cfc9b2eeb0359cd5734759a957863e4e05dd201",
+      "sourceBytes": 526578,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV220",
+      "sourcePath": "public/card-vault/rc-277-hostile-takeover-rosie.webp",
+      "sourceGitBlobSHA": "df6d70d5f34eeba6be104db12c2b46eb81f11fe3",
+      "sourceBytes": 388338,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV221",
+      "sourcePath": "public/card-vault/rc-279-inuit-rosie.webp",
+      "sourceGitBlobSHA": "006f4a0a8197f98e19cda4bb2128a1b2e7f9bbd3",
+      "sourceBytes": 491582,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV222",
+      "sourcePath": "public/card-vault/rc-280-bowling-league-rosie.webp",
+      "sourceGitBlobSHA": "ea177343b844c17e46206ef987bf93e3706937af",
+      "sourceBytes": 417050,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV223",
+      "sourcePath": "public/card-vault/rc-281-dalai-lama-rosie.webp",
+      "sourceGitBlobSHA": "f013bb528e920f7f633308b3810ef24bfe45c528",
+      "sourceBytes": 517596,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV224",
+      "sourcePath": "public/card-vault/rc-282-stone-age-rosie.webp",
+      "sourceGitBlobSHA": "16386dc4c2f680d91f49d18033c57ee9b2078059",
+      "sourceBytes": 507994,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV225",
+      "sourcePath": "public/card-vault/rc-283-museum-heist-rosie.webp",
+      "sourceGitBlobSHA": "67f7411959af1499d70dc33433e3bbe13051f394",
+      "sourceBytes": 429862,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV226",
+      "sourcePath": "public/card-vault/rc-284-nba-rosie.webp",
+      "sourceGitBlobSHA": "56a5bbeb538aa5e7c4ad6c222044694c3459f38f",
+      "sourceBytes": 469912,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV227",
+      "sourcePath": "public/card-vault/rc-285-treehouse-rosie.webp",
+      "sourceGitBlobSHA": "bbfc59cd99fdc0d12973a802a4d2139a8f695725",
+      "sourceBytes": 510640,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV228",
+      "sourcePath": "public/card-vault/rc-286-pillow-fort-rosie.webp",
+      "sourceGitBlobSHA": "1571f21bf52b8831e62ab850259af1f51e8daeb1",
+      "sourceBytes": 473324,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV229",
+      "sourcePath": "public/card-vault/rc-287-the-good-the-bad-and-the-rosie.webp",
+      "sourceGitBlobSHA": "643af0b9c5c87ca80bc372340c12ac20e05d9ad7",
+      "sourceBytes": 449876,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV230",
+      "sourcePath": "public/card-vault/rc-288-kid-cudi-car-bomb-rosie.webp",
+      "sourceGitBlobSHA": "922cca1bb33af99ab2065488bd1d72ea21503a42",
+      "sourceBytes": 468756,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV231",
+      "sourcePath": "public/card-vault/rc-289-v-for-vendetta-rosie.webp",
+      "sourceGitBlobSHA": "36d6492da4ff10b887b56022d98f9c1e7034ac99",
+      "sourceBytes": 468544,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV232",
+      "sourcePath": "public/card-vault/rc-290-ghostbuster-rosie.webp",
+      "sourceGitBlobSHA": "a87dd4c474a17282fc704b11e5fcad2b709cc08b",
+      "sourceBytes": 465574,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV233",
+      "sourcePath": "public/card-vault/rc-291-luau-rosie.webp",
+      "sourceGitBlobSHA": "c51e46d3b95ac15b542ad8c4a0a3c119344796a3",
+      "sourceBytes": 479728,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV234",
+      "sourcePath": "public/card-vault/rc-292-havana-rosie.webp",
+      "sourceGitBlobSHA": "a9786f3ebcb0db80a4d79a6f71f292c480f86339",
+      "sourceBytes": 473706,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV235",
+      "sourcePath": "public/card-vault/rc-293-art-basel-miami-rosie.webp",
+      "sourceGitBlobSHA": "f686b7462255fd31b289322c3a4a0eacccd587c1",
+      "sourceBytes": 459460,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV236",
+      "sourcePath": "public/card-vault/rc-294-foosball-rosie.webp",
+      "sourceGitBlobSHA": "598eae84ae064e126fa8789f6eeb3e7bb7d2463f",
+      "sourceBytes": 415864,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV237",
+      "sourcePath": "public/card-vault/rc-295-jumanji-rosie.webp",
+      "sourceGitBlobSHA": "a9c0119fc7990c53780d92fbf5fc51631320cdf8",
+      "sourceBytes": 509734,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV238",
+      "sourcePath": "public/card-vault/rc-296-nascar-rosie.webp",
+      "sourceGitBlobSHA": "6e1c4a370042e7d351ac05f0750dbf7ecd5706d8",
+      "sourceBytes": 488356,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV239",
+      "sourcePath": "public/card-vault/rc-297-knights-templar-rosie.webp",
+      "sourceGitBlobSHA": "4899b9c342cb40ddcb9c65b7dfe753d223e77f6e",
+      "sourceBytes": 465998,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV240",
+      "sourcePath": "public/card-vault/rc-298-escape-from-alcatraz-rosie.webp",
+      "sourceGitBlobSHA": "44c9e62a5d91e618002a1c8f5781084dba6130ae",
+      "sourceBytes": 520726,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV241",
+      "sourcePath": "public/card-vault/rc-299-somnambulism-rosie.webp",
+      "sourceGitBlobSHA": "f61b00f0720da6d1bd350b03e5e79b4c3cf2da4b",
+      "sourceBytes": 410988,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV242",
+      "sourcePath": "public/card-vault/rc-300-rip-van-winkle-rosie.webp",
+      "sourceGitBlobSHA": "518ae53dd2f61b74952aa97bf7751df220efb5c7",
+      "sourceBytes": 492268,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV243",
+      "sourcePath": "public/card-vault/rc-301-sleepy-hollow-rosie.webp",
+      "sourceGitBlobSHA": "acb387ddc330eae3e000cedd35852f142353725e",
+      "sourceBytes": 483852,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV244",
+      "sourcePath": "public/card-vault/rc-302-claymation-rosie.webp",
+      "sourceGitBlobSHA": "ea4cd8e2789660874c39b3a3e30eb920d1db19d3",
+      "sourceBytes": 419962,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV245",
+      "sourcePath": "public/card-vault/rc-303-minimalist-rosie.webp",
+      "sourceGitBlobSHA": "89f4a036b004a88c4854afdd4269f8580b8cb869",
+      "sourceBytes": 379274,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV246",
+      "sourcePath": "public/card-vault/rc-304-ted-talk-rosie.webp",
+      "sourceGitBlobSHA": "1d8ef3602fc81b9d9bf389cf243fea36ddd3f25a",
+      "sourceBytes": 356926,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV247",
+      "sourcePath": "public/card-vault/rc-305-ponce-de-leon-rosie.webp",
+      "sourceGitBlobSHA": "24e5081013871ce3472f9d20e24f782b175019dd",
+      "sourceBytes": 552050,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV248",
+      "sourcePath": "public/card-vault/rc-306-mortal-kombat-rosie.webp",
+      "sourceGitBlobSHA": "0ca5d5f863b39cb33ea485a9c8ad0ae1eebcd523",
+      "sourceBytes": 574250,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV249",
+      "sourcePath": "public/card-vault/rc-307-csi-rosie.webp",
+      "sourceGitBlobSHA": "891a01c7ea1d9f0ffcab2592cfed014c23844707",
+      "sourceBytes": 455450,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV250",
+      "sourcePath": "public/card-vault/rc-308-stealth-bomber-rosie.webp",
+      "sourceGitBlobSHA": "31c40a6096884f368bfdab13af5124989008b4c0",
+      "sourceBytes": 423892,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV251",
+      "sourcePath": "public/card-vault/rc-309-shawshank-redemption-rosie.webp",
+      "sourceGitBlobSHA": "a190116004255098d80b856b62922d986b5a0057",
+      "sourceBytes": 481306,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV252",
+      "sourcePath": "public/card-vault/rc-310-theranos-rosie.webp",
+      "sourceGitBlobSHA": "1e03646741cb9df45cd27dc5b033381e00fc1217",
+      "sourceBytes": 360338,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV253",
+      "sourcePath": "public/card-vault/rc-311-bellagio-rosie.webp",
+      "sourceGitBlobSHA": "b1f7235116d5095ac6dadb6fe441afd131d57345",
+      "sourceBytes": 442408,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV254",
+      "sourcePath": "public/card-vault/rc-312-silicon-valley-rosie.webp",
+      "sourceGitBlobSHA": "d9cb22cb2bace9cc1974ad7491a06bbfbcd96b90",
+      "sourceBytes": 379442,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV255",
+      "sourcePath": "public/card-vault/rc-313-doomsday-bunker-rosie.webp",
+      "sourceGitBlobSHA": "60f55547a53133c2b52a1dd7693021439b81cfba",
+      "sourceBytes": 493758,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV256",
+      "sourcePath": "public/card-vault/rc-314-shrek-rosie.webp",
+      "sourceGitBlobSHA": "627ffe6778b9fbb2d1185d8c2d26ab99870a8065",
+      "sourceBytes": 443138,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV257",
+      "sourcePath": "public/card-vault/rc-315-air-force-one-rosie.webp",
+      "sourceGitBlobSHA": "0e66781746e042076ff9b949ca5bc8c1bbc6f84c",
+      "sourceBytes": 460182,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV258",
+      "sourcePath": "public/card-vault/rc-316-streamer-rosie.webp",
+      "sourceGitBlobSHA": "7f29d2227c810ed2b9d799d81771dddaeec59656",
+      "sourceBytes": 439488,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV259",
+      "sourcePath": "public/card-vault/rc-317-malibu-beach-house-rosie.webp",
+      "sourceGitBlobSHA": "53eae28f528174065244b17cfce6f37da53d43cc",
+      "sourceBytes": 460634,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV260",
+      "sourcePath": "public/card-vault/rc-318-feng-shui-rosie.webp",
+      "sourceGitBlobSHA": "a7f8c28fd8285f27bd3e09be939628693d7f25f0",
+      "sourceBytes": 446360,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV261",
+      "sourcePath": "public/card-vault/rc-319-all-bran-buds-rosie.webp",
+      "sourceGitBlobSHA": "6ba6df809c70c15ca51f3471494a167ea410c913",
+      "sourceBytes": 425882,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV262",
+      "sourcePath": "public/card-vault/rc-320-vincent-van-rosie.webp",
+      "sourceGitBlobSHA": "900b9d8fb1c0c3a3c758119a050ab329311e99eb",
+      "sourceBytes": 591086,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV263",
+      "sourcePath": "public/card-vault/rc-321-seussical-rosie.webp",
+      "sourceGitBlobSHA": "2db7bce209fb0a9208b99f920fd082a3008c564e",
+      "sourceBytes": 407606,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV264",
+      "sourcePath": "public/card-vault/rc-322-vertigo-rosie.webp",
+      "sourceGitBlobSHA": "9e8e09d62663cbf4b50d6e9d773f5d4936a0ab60",
+      "sourceBytes": 429754,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV265",
+      "sourcePath": "public/card-vault/rc-323-lion-king-rosie.webp",
+      "sourceGitBlobSHA": "9cab819e6fcc44090b84b9dca234fbd1a183d61a",
+      "sourceBytes": 432886,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV266",
+      "sourcePath": "public/card-vault/rc-324-rosie-fett.webp",
+      "sourceGitBlobSHA": "b4b67b26ae50270cd8268951693011bb66dae7a1",
+      "sourceBytes": 464806,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV267",
+      "sourcePath": "public/card-vault/rc-325-hall-of-mirrors-rosie.webp",
+      "sourceGitBlobSHA": "6588a2113f2a04211d78ad6b5131fce4d226c228",
+      "sourceBytes": 504468,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV268",
+      "sourcePath": "public/card-vault/rc-326-minotaur-labyrinth-rosie.webp",
+      "sourceGitBlobSHA": "95be63670e28373783964ede8b4462b9f7338f44",
+      "sourceBytes": 444188,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV269",
+      "sourcePath": "public/card-vault/rc-327-gordian-knot-rosie.webp",
+      "sourceGitBlobSHA": "1cf9a43b0f5e1409a9923b1125129d78c3bc8039",
+      "sourceBytes": 492540,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV270",
+      "sourcePath": "public/card-vault/rc-328-ozymandias-rosie.webp",
+      "sourceGitBlobSHA": "60abfb5853ede7f12dd8203d40273200baf62fa0",
+      "sourceBytes": 522962,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV271",
+      "sourcePath": "public/card-vault/rc-329-wonka-rosie.webp",
+      "sourceGitBlobSHA": "1dd410878486d2b2bdf0715d17fd783eecd95439",
+      "sourceBytes": 501522,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV272",
+      "sourcePath": "public/card-vault/rc-330-marlboro-rosie.webp",
+      "sourceGitBlobSHA": "493d3d15a96f730c2943161c546af5265a37f041",
+      "sourceBytes": 487530,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV273",
+      "sourcePath": "public/card-vault/rc-331-gyrocopter-rosie.webp",
+      "sourceGitBlobSHA": "f4f047bd6e804d0e51918843b1a121a9a3244613",
+      "sourceBytes": 471458,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV274",
+      "sourcePath": "public/card-vault/rc-332-rabbi-rosie.webp",
+      "sourceGitBlobSHA": "5073f0bd8d5bcea7507dddfe6523c133b9dcf2b2",
+      "sourceBytes": 405010,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV275",
+      "sourcePath": "public/card-vault/rc-333-saxophone-rosie.webp",
+      "sourceGitBlobSHA": "a823f30ca534d8d1f80c0b7fc2324a2fde97aeed",
+      "sourceBytes": 345694,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV276",
+      "sourcePath": "public/card-vault/rc-334-clawed-monet.webp",
+      "sourceGitBlobSHA": "702b6d8543262ed49d4a9be932bca3f96960f51b",
+      "sourceBytes": 518846,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV277",
+      "sourcePath": "public/card-vault/rc-335-kaleidoscope-rosie.webp",
+      "sourceGitBlobSHA": "7c5e159452c017e8fdeb3baf306fdb2836af28c5",
+      "sourceBytes": 525004,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV278",
+      "sourcePath": "public/card-vault/rc-336-knit-rosie.webp",
+      "sourceGitBlobSHA": "31af44e8f1f64a48be2032af1797672992bc9611",
+      "sourceBytes": 412190,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV279",
+      "sourcePath": "public/card-vault/rc-337-castaway-rosie.webp",
+      "sourceGitBlobSHA": "4164f948a94e1b02e63497247fb5719791cf2cda",
+      "sourceBytes": 494556,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV280",
+      "sourcePath": "public/card-vault/rc-338-thor-rosie.webp",
+      "sourceGitBlobSHA": "509e9bcc1d517af13b060214fa7c3199867397b4",
+      "sourceBytes": 532668,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV281",
+      "sourcePath": "public/card-vault/rc-339-the-rosie-in-the-iron-mask.webp",
+      "sourceGitBlobSHA": "2d80af96f90cf06585c3a74e0bd275db0ced820c",
+      "sourceBytes": 447746,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV282",
+      "sourcePath": "public/card-vault/rc-340-maitre-d-rosie.webp",
+      "sourceGitBlobSHA": "4d11064a0a8fd1ae27d34e076a464a36437c3c30",
+      "sourceBytes": 338730,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV283",
+      "sourcePath": "public/card-vault/rc-341-the-rosie-of-tomorrow.webp",
+      "sourceGitBlobSHA": "297a92ec9831600c281b01d37e9ae20d02dec2ec",
+      "sourceBytes": 466122,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV284",
+      "sourcePath": "public/card-vault/rc-342-master-and-commander-rosie.webp",
+      "sourceGitBlobSHA": "ee35803727831f1deece82f3c0dd1397bc792ed5",
+      "sourceBytes": 465472,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV285",
+      "sourcePath": "public/card-vault/rc-343-free-solo-rosie.webp",
+      "sourceGitBlobSHA": "e23fd4be0a5ba2e127f683e21813782e036610ce",
+      "sourceBytes": 464854,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV286",
+      "sourcePath": "public/card-vault/rc-344-kibbutz-rosie.webp",
+      "sourceGitBlobSHA": "e483fe57760924e004c43f915abeba91d0628ed8",
+      "sourceBytes": 495524,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV287",
+      "sourcePath": "public/card-vault/rc-345-harvard-rosie.webp",
+      "sourceGitBlobSHA": "5638d49efe5173e582290ea15869b0d11d3c6882",
+      "sourceBytes": 455864,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV288",
+      "sourcePath": "public/card-vault/rc-346-avant-garde-rosie.webp",
+      "sourceGitBlobSHA": "c8072436f7174c0ca8e3ff86a4d42c3edb4542a9",
+      "sourceBytes": 459084,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV289",
+      "sourcePath": "public/card-vault/rc-347-plur-rosie.webp",
+      "sourceGitBlobSHA": "e9466033b74c3c79c8ea14051f83bf2cfb53a49a",
+      "sourceBytes": 513536,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV290",
+      "sourcePath": "public/card-vault/rc-349-noahs-ark-rosie.webp",
+      "sourceGitBlobSHA": "57c498b1f27c05df4aeee4233ea836a5fb49e031",
+      "sourceBytes": 530688,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV291",
+      "sourcePath": "public/card-vault/rc-350-hypnotist-rosie.webp",
+      "sourceGitBlobSHA": "36b9638a11403907f1d8fd7df82e395b9fd953e1",
+      "sourceBytes": 421848,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV292",
+      "sourcePath": "public/card-vault/rc-351-fu-manchu-rosie.webp",
+      "sourceGitBlobSHA": "236165277200a692d6ecfe72654d3fbcedfa220a",
+      "sourceBytes": 475970,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV293",
+      "sourcePath": "public/card-vault/rc-352-retro-future-rosie.webp",
+      "sourceGitBlobSHA": "b504b834b2370121245b7e626c913772b021d6ec",
+      "sourceBytes": 483564,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV294",
+      "sourcePath": "public/card-vault/rc-353-costco-rosie.webp",
+      "sourceGitBlobSHA": "ecfa4c9841ba96a780703cc0f3fa051b02be14c2",
+      "sourceBytes": 489418,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV295",
+      "sourcePath": "public/card-vault/rc-354-curious-rosie.webp",
+      "sourceGitBlobSHA": "be0f72360e5d989f4373e2e30d0a0e6272bcf68d",
+      "sourceBytes": 442654,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV296",
+      "sourcePath": "public/card-vault/rc-355-scientology-rosie.webp",
+      "sourceGitBlobSHA": "84484f3bde972ac2925296ddcfd414e9e64c6a5a",
+      "sourceBytes": 440466,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV297",
+      "sourcePath": "public/card-vault/rc-356-portal-rosie.webp",
+      "sourceGitBlobSHA": "6cbce91c3ac1f8325ab425492dab0ec678d36b4c",
+      "sourceBytes": 428982,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV298",
+      "sourcePath": "public/card-vault/rc-357-scrooge-mcshiba-rosie.webp",
+      "sourceGitBlobSHA": "f62f7362eb29d819a53226ca254bf1ae6990343f",
+      "sourceBytes": 533458,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV299",
+      "sourcePath": "public/card-vault/rc-358-found-footage-rosie.webp",
+      "sourceGitBlobSHA": "1a6453c54423101423e40507a75e3675169d1675",
+      "sourceBytes": 441408,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV300",
+      "sourcePath": "public/card-vault/rc-359-the-shiba-of-wall-street.webp",
+      "sourceGitBlobSHA": "ba612ccff71bf505d3b426c5e3c720eb398e655f",
+      "sourceBytes": 499404,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV301",
+      "sourcePath": "public/card-vault/rc-360-project-warpspeed-rosie.webp",
+      "sourceGitBlobSHA": "ea3f7f5316580427e8fac1b5503ccd190199acc6",
+      "sourceBytes": 445040,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV302",
+      "sourcePath": "public/card-vault/rc-361-transcendental-meditation-rosie.webp",
+      "sourceGitBlobSHA": "a82ed66923aad588b037cf3a049a691e1fdfc420",
+      "sourceBytes": 485928,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV303",
+      "sourcePath": "public/card-vault/rc-362-beowulf-rosie.webp",
+      "sourceGitBlobSHA": "9cd8027cdb607afc62633ae88476ea62f8567e23",
+      "sourceBytes": 562188,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV304",
+      "sourcePath": "public/card-vault/rc-363-ufo-encounter-rosie.webp",
+      "sourceGitBlobSHA": "9d8f94c2ae2d78095ec44a1c59b6eccdc48242b8",
+      "sourceBytes": 422686,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV305",
+      "sourcePath": "public/card-vault/rc-364-mount-rushmore-rosie.webp",
+      "sourceGitBlobSHA": "5f6c48ef5c8778f1838ad3f5688079eb3b0e452f",
+      "sourceBytes": 572440,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV306",
+      "sourcePath": "public/card-vault/rc-365-lucky-charms-rosie.webp",
+      "sourceGitBlobSHA": "ca275da0635a2d8bf37e807a3fb7dcbc89b71bfd",
+      "sourceBytes": 521136,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV307",
+      "sourcePath": "public/card-vault/rc-366-panathenaic-stadium-rosie.webp",
+      "sourceGitBlobSHA": "c6e1536b6031ff80c750ba55700fbfbe9e23ebbc",
+      "sourceBytes": 474580,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV308",
+      "sourcePath": "public/card-vault/rc-367-predator-rosie.webp",
+      "sourceGitBlobSHA": "9422333b98f6832fbc36650fff98dd40c6cb3528",
+      "sourceBytes": 504216,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV309",
+      "sourcePath": "public/card-vault/rc-368-constellation-rosie.webp",
+      "sourceGitBlobSHA": "1f176a8bb7c0450ba4862624ecd71d4256b039b8",
+      "sourceBytes": 514654,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV310",
+      "sourcePath": "public/card-vault/vault-collector-header.webp",
+      "sourceGitBlobSHA": "a348f2c591e8ee2057c70d54c7ef0800b59a2004",
+      "sourceBytes": 455008,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    },
+    {
+      "id": "CV311",
+      "sourcePath": "public/card-vault/vault-polished-gunmetal-tile.webp",
+      "sourceGitBlobSHA": "fdd1a41bb68fc75c2a8dc8b7a0e05b5eb87af460",
+      "sourceBytes": 139516,
+      "status": "inventory-only",
+      "cardDesignInspection": "pending",
+      "note": "Card Vault was excluded from first public TeddyVerse. Do not publish or bulk-generate until the isolated Card Vault scope is approved; generic frames/backs can be shared."
+    }
+  ]
+}
