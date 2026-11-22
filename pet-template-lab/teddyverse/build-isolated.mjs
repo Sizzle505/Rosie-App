@@ -23,7 +23,9 @@ const read=async rel=>fs.readFile(path.join(repo,rel));
 async function fetchAsset(slot){
   if(assetsDir)return fs.readFile(path.join(assetsDir,slot.asset));
   const u=sources[slot.id];if(typeof u!=='string'||!u.startsWith('https://'))throw Error('Missing HTTPS URL '+slot.id);
-  const r=await fetch(u,{redirect:'follow',signal:AbortSignal.timeout(150000)});
+  const secureQa=(new URL(u).hostname==='teddyverse-asset-qa.vercel.app');
+  const headers=secureQa&&process.env.TEDDY_QA_BYPASS_SECRET?{'x-vercel-protection-bypass':process.env.TEDDY_QA_BYPASS_SECRET}:{};
+  const r=await fetch(u,{redirect:secureQa?'manual':'follow',headers,signal:AbortSignal.timeout(150000)});
   if(!r.ok)throw Error('Download failed '+slot.id+' HTTP '+r.status);
   return Buffer.from(await r.arrayBuffer());
 }
