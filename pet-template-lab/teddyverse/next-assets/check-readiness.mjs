@@ -26,7 +26,7 @@ const result={generatedAt:new Date().toISOString(),baseline:72,newArtQueue:gen.l
 for(const [name,setting] of Object.entries(gates.features)){
  const selected=gen.filter(a=>setting.modules.includes(a.section));
  const checks=review.filter(a=>setting.modules.includes(a.module));
- const missingArt=selected.filter(a=>{const p=ledger.approvedAssets[a.id];return !p||!validSha(p.sha256)||!p.approvedBy||!validDate(p.approvedAt)||p.dimensionsVerified!==true||p.alphaVerified!==true}).map(a=>a.id);
+ const missingArt=selected.filter(a=>{const p=ledger.approvedAssets[a.id];return !p||p.approved!==true||!validSha(p.sha256)||!p.approvedBy||!validDate(p.approvedAt)||p.dimensionsVerified!==true||p.alphaVerified!==true}).map(a=>a.id);
  const undecided=checks.filter(a=>{const p=ledger.reviewDecisions[a.id];return !p||!["reuse-unchanged","derive-from-approved-art","vector-rebuild","promote-to-generation"].includes(p.decision)||!p.reviewedBy||!validDate(p.reviewedAt)||p.decision==="promote-to-generation"&&!p.linkedAssetId||p.decision==="vector-rebuild"&&!p.linkedAssetId||p.decision==="derive-from-approved-art"&&!p.verifiedDerivedSHA}).map(a=>a.id);
  const vaultOpen=name==="vault"?vault.assets.filter(x=>!ledger.approvedAssets[x.id]||!ledger.approvedAssets[x.id].approvedBy).map(x=>x.id):[];
  const qaMissing=setting.requiredChecks.filter(c=>{const z=ledger.qaEvidence[name]?.[c];return !z||z.passed!==true||!z.checkedBy||!validDate(z.checkedAt)} );
