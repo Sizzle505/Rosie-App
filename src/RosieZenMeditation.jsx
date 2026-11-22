@@ -18,7 +18,9 @@ const PROGRAM_ART = {
   haiku: "haiku-reflection.webp"
 };
 const NEW_ART="/rosieverse/haiku/new/";
-// Five approved 941×1672 original iPhone compositions, imported at native resolution.\n// Raked sand retains its scene-matched portrait until a corresponding master exists.\nconst MEDITATION_VIEWS=Object.freeze([
+// Five approved 941×1672 original iPhone compositions, imported at native resolution.
+// Raked sand retains its scene-matched portrait until a corresponding master exists.
+const MEDITATION_VIEWS=Object.freeze([
   {id:"lotus",label:"Lotus Lake",image:"meditation/day-lotus-lake.webp",mobileImage:"meditation/iphone/approved/lotus-sunrise.avif"},
   {id:"sakura",label:"Sakura Garden",image:"meditation/day-sakura-garden.webp",mobileImage:"meditation/iphone/approved/sakura-spring.avif"},
   {id:"raked",label:"Sunlit Zen Garden",image:"meditation/day-raked-sand.webp",mobileImage:"meditation/iphone/raked-portrait.webp"},
