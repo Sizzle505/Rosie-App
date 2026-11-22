@@ -115,6 +115,15 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   const [status,setStatus] = useState("idle");
   const [remaining,setRemaining] = useState(300000);
   const [audioUnavailable,setAudioUnavailable] = useState(false);
+  const [compactGarden,setCompactGarden] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const query=window.matchMedia("(max-width: 600px)");
+    const sync=()=>setCompactGarden(query.matches);
+    sync();
+    query.addEventListener("change",sync);
+    return ()=>query.removeEventListener("change",sync);
+  }, []);
   const [viewId,setViewId] = useState(() => {
     try { const v=window.localStorage.getItem("rosieZenBackdropV1");
       if(MEDITATION_VIEWS.some(x=>x.id===v))return v; }catch{}
@@ -129,12 +138,16 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   const dialog = useRef(null);
   const previouslyFocused = useRef(null);
   const selected = PROGRAMS.find(p=>p.id===kind) || PROGRAMS[0];
-  const selectedView=MEDITATION_VIEWS.find(v=>v.id===viewId)||MEDITATION_VIEWS[0];
+  // The old raked-sand placeholder is too indistinct at iPhone size.
+  // The desktop raked scene remains available and otherwise unchanged.
+  const availableViews=compactGarden ? MEDITATION_VIEWS.filter(v=>v.id!=="raked") : MEDITATION_VIEWS;
+  const activeViewId=availableViews.some(v=>v.id===viewId)?viewId:availableViews[0].id;
+  const selectedView=availableViews.find(v=>v.id===activeViewId)||availableViews[0];
   function cycleMeditationBackdrop(step){
     setViewId(current=>{
-      const index=MEDITATION_VIEWS.findIndex(view=>view.id===current);
-      const next=(Math.max(0,index)+step+MEDITATION_VIEWS.length)%MEDITATION_VIEWS.length;
-      return MEDITATION_VIEWS[next].id;
+      const index=availableViews.findIndex(view=>view.id===current);
+      const next=((index<0?0:index)+step+availableViews.length)%availableViews.length;
+      return availableViews[next].id;
     });
   }
   const selectedOutfit=ROSIE_HAIKU_OUTFITS.find(v=>v.id===outfitId)||ROSIE_HAIKU_OUTFITS[0];
@@ -306,8 +319,8 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
         <div className="zen-art-options-inner">
           <div className="zen-art-picker-label">Garden scenery</div>
           <div className="zen-backdrop-picker" role="group" aria-label="Choose meditation background">
-            {MEDITATION_VIEWS.map(v=><button key={v.id} type="button"
-              className={viewId===v.id?"selected":""} aria-pressed={viewId===v.id}
+            {availableViews.map(v=><button key={v.id} type="button"
+              className={activeViewId===v.id?"selected":""} aria-pressed={activeViewId===v.id}
               aria-label={v.label} title={v.label} onClick={()=>setViewId(v.id)}>
               <picture><source media="(max-width:600px)" srcSet={NEW_ART+v.mobileImage}/><img src={NEW_ART+v.image} alt="" loading="lazy"/></picture><span>{v.label}</span>
             </button>)}
@@ -346,7 +359,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       <button type="button" className="haiku-primary zen-begin" onClick={begin}>Begin {minutes}-minute meditation</button>
     </div>
     {opened && createPortal(
-      <div className="zen-immersive" data-zen-view={viewId} data-zen-status={status} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
+      <div className="zen-immersive" data-zen-view={activeViewId} data-zen-status={status} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
         <div className="zen-immersive-scenery" aria-hidden="true">
           <img className="zen-scenery-desktop" src={sceneSrc} alt="" decoding="async" fetchPriority="high"/>
           <img className="zen-scenery-phone" key={viewId} src={mobileSceneSrc} alt=""
@@ -357,10 +370,10 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
               const image=event.currentTarget;
               if (image.dataset.zenFallbackUsed) return;
               image.dataset.zenFallbackUsed="true";
-              image.src=NEW_ART+"meditation/iphone/"+viewId+"-portrait.webp";
+              image.src=NEW_ART+"meditation/iphone/"+selectedView.id+"-portrait.webp";
             }}/>
           <div className="zen-scenery-atmosphere" aria-hidden="true"/>
-          <RosieZenAmbient scene={viewId} mode="meditation" status={status} />
+          <RosieZenAmbient scene={activeViewId} mode="meditation" status={status} />
         </div>
         <section className="zen-immersive-dialog" role="dialog" aria-modal="true"
           aria-labelledby="zen-session-title" tabIndex={-1} ref={dialog}>
@@ -369,14 +382,18 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
           <header className="zen-immersive-header">
             <div className="zen-session-heading"><span>ROSIE&#39;S HAIKU ZEN GARDEN</span><h2 id="zen-session-title">{selected.title}</h2></div>
             {status==="complete" ? (
-              <button type="button" onClick={close} className="zen-close" aria-label="Close meditation">Close <span aria-hidden="true">×</span></button>
+              <button type="button" onClick={close} className="zen-close zen-complete-dismiss" aria-label="Close meditation"><span className="zen-close-label">Close</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" aria-hidden="true"><path d="M6.7 6.7 17.3 17.3M17.3 6.7 6.7 17.3"/></svg></button>
             ) : (
               <div className="zen-session-header-tools">
                 <div className="zen-session-toolbar">
                   <div className="zen-session-timer" role="timer" aria-label={"Time remaining "+timeLabel(remaining)}>{timeLabel(remaining)}</div>
                   <div className="zen-session-controls">
-                    <button type="button" className="zen-action-primary zen-icon-control" aria-label={status==="paused"?"Resume meditation":"Pause meditation"} title={status==="paused"?"Resume":"Pause"} onClick={status==="paused"?resume:pause}><span aria-hidden="true">{status==="paused"?"▶":"⏸"}</span></button>
-                    <button type="button" className="zen-action-secondary zen-icon-control" aria-label="End meditation" title="End meditation" onClick={close}><span aria-hidden="true">×</span></button>
+                    <button type="button" className="zen-action-primary zen-icon-control" aria-label={status==="paused"?"Resume meditation":"Pause meditation"} title={status==="paused"?"Resume":"Pause"} onClick={status==="paused"?resume:pause}>
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{status==="paused"?<path d="M9.2 5.8a1 1 0 0 1 1.5-.84l8.2 6.1a1.2 1.2 0 0 1 0 1.88l-8.2 6.1a1 1 0 0 1-1.5-.84V5.8Z"/>:<><rect x="7" y="5.2" width="3.5" height="13.6" rx="1"/><rect x="13.5" y="5.2" width="3.5" height="13.6" rx="1"/></>}</svg>
+                    </button>
+                    <button type="button" className="zen-action-secondary zen-icon-control zen-end-control" aria-label="End meditation" title="End meditation" onClick={close}>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" aria-hidden="true"><path d="M6.7 6.7 17.3 17.3M17.3 6.7 6.7 17.3"/></svg>
+                    </button>
                   </div>
                 </div>
                 <div className="zen-timeline" aria-hidden="true"><span style={{width:completePercent+"%"}}/></div>
@@ -398,7 +415,11 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                 <span className="zen-eyebrow">A MOMENT OF PERFECT PEACE</span>
                 <h3>Beautifully done.</h3>
                 <p>For {minutes} quiet minutes, the world waited. Rosie considers this excellent judgment.</p>
-                <p className="zen-complete-stats">{progress.sessions} sessions · {progress.minutes} peaceful minutes</p>
+                <div className="zen-complete-stats" aria-label={progress.sessions+" meditation sessions, "+progress.minutes+" peaceful minutes"}>
+                  <span><strong>{progress.sessions}</strong><small>sessions</small></span>
+                  <i aria-hidden="true" />
+                  <span><strong>{progress.minutes}</strong><small>peaceful minutes</small></span>
+                </div>
                 <button type="button" className="zen-action-primary" onClick={close}>Return to the garden</button>
               </div>
             </div>:
