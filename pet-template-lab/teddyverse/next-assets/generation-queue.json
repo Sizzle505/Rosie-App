@@ -1,0 +1,2957 @@
+{
+  "schemaVersion": 1,
+  "createdDate": "2026-11-22",
+  "sourceInventory": "source-inventory.json",
+  "status": "planned - no new artwork generated",
+  "total": 107,
+  "masterFormat": "PNG",
+  "storageRule": "Keep private Teddy photos and generated master binaries out of GitHub",
+  "batches": [
+    {
+      "id": "B01",
+      "slotIds": [
+        "TV001",
+        "TV002",
+        "TV003",
+        "TV004",
+        "TV005",
+        "TV006",
+        "TV007",
+        "TV008",
+        "TV009",
+        "TV010"
+      ]
+    },
+    {
+      "id": "B02",
+      "slotIds": [
+        "TV011",
+        "TV012",
+        "TV013",
+        "TV014",
+        "TV015",
+        "TV016",
+        "TV017",
+        "TV018",
+        "TV019",
+        "TV020"
+      ]
+    },
+    {
+      "id": "B03",
+      "slotIds": [
+        "TV021",
+        "TV022",
+        "TV023",
+        "TV024",
+        "TV025",
+        "TV026",
+        "TV027",
+        "TV028",
+        "TV029",
+        "TV030"
+      ]
+    },
+    {
+      "id": "B04",
+      "slotIds": [
+        "TV031",
+        "TV032",
+        "TV033",
+        "TV034",
+        "TV035",
+        "TV036",
+        "TV037",
+        "TV038",
+        "TV039",
+        "TV040"
+      ]
+    },
+    {
+      "id": "B05",
+      "slotIds": [
+        "TV041",
+        "TV042",
+        "TV043",
+        "TV044",
+        "TV045",
+        "TV046",
+        "TV047",
+        "TV048",
+        "TV049",
+        "TV050"
+      ]
+    },
+    {
+      "id": "B06",
+      "slotIds": [
+        "TV051",
+        "TV052",
+        "TV053",
+        "TV054",
+        "TV055",
+        "TV056",
+        "TV057",
+        "TV058",
+        "TV059",
+        "TV060"
+      ]
+    },
+    {
+      "id": "B07",
+      "slotIds": [
+        "TV061",
+        "TV062",
+        "TV063",
+        "TV064",
+        "TV065",
+        "TV066",
+        "TV067",
+        "TV068",
+        "TV069",
+        "TV070"
+      ]
+    },
+    {
+      "id": "B08",
+      "slotIds": [
+        "TV071",
+        "TV072",
+        "TV073",
+        "TV074",
+        "TV075",
+        "TV076",
+        "TV077",
+        "TV078",
+        "TV079",
+        "TV080"
+      ]
+    },
+    {
+      "id": "B09",
+      "slotIds": [
+        "TV081",
+        "TV082",
+        "TV083",
+        "TV084",
+        "TV085",
+        "TV086",
+        "TV087",
+        "TV088",
+        "TV089",
+        "TV090"
+      ]
+    },
+    {
+      "id": "B10",
+      "slotIds": [
+        "TV091",
+        "TV092",
+        "TV093",
+        "TV094",
+        "TV095",
+        "TV096",
+        "TV097",
+        "TV098",
+        "TV099",
+        "TV100"
+      ]
+    },
+    {
+      "id": "B11",
+      "slotIds": [
+        "TV101",
+        "TV102",
+        "TV103",
+        "TV104",
+        "TV105",
+        "TV106",
+        "TV107"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "id": "TV001",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sectionLabel": "Captain arcade",
+      "sourcePath": "public/captain-rosie-deck.webp",
+      "sourceGitBlobSHA": "667480cdfadf59eb0804e1b0fd4aa94fd33e1654",
+      "sourceDimensions": {
+        "width": 207,
+        "height": 240,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV001.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 207 x 240 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV002",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sectionLabel": "Captain arcade",
+      "sourcePath": "public/captain-rosie-illustrated.webp",
+      "sourceGitBlobSHA": "ebe9fa38206042dfb3981a760d14079b01800ada",
+      "sourceDimensions": {
+        "width": 207,
+        "height": 240,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV002.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 207 x 240 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV003",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sectionLabel": "Captain arcade",
+      "sourcePath": "public/captain-rosie-ship.webp",
+      "sourceGitBlobSHA": "5c8a510e019e2ef943c5e8485cf8d1866774dad6",
+      "sourceDimensions": {
+        "width": 364,
+        "height": 631,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV003.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 364 x 631 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV004",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sectionLabel": "Captain arcade",
+      "sourcePath": "public/captain-rosie.webp",
+      "sourceGitBlobSHA": "438d1f63982c2eb68f5fbd48be702dca7dfa5178",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 345,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV004.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 345 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV005",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-bank-left.webp",
+      "sourceGitBlobSHA": "4a7b31f5739f0a5144c7821fda2964ed166f9951",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV005.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV006",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-bank-right.webp",
+      "sourceGitBlobSHA": "684ce4b5d936a1854cc8acef71984192492f6a41",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV006.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV007",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-boost.webp",
+      "sourceGitBlobSHA": "d514dd580706299f927f68d71a54a1260cf6fa51",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV007.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV008",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-cruise.webp",
+      "sourceGitBlobSHA": "fd5fb9a68daad46b575fdb481edb4ec1f908e780",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV008.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV009",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-damage.webp",
+      "sourceGitBlobSHA": "5c5bedff2a8e174e7c0b740278c394a1f01d1b75",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV009.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 420 x 280 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV010",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-dodge.webp",
+      "sourceGitBlobSHA": "d9e7d607c9c939dcf55e9627738b1f217cd33483",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV010.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV011",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-front.webp",
+      "sourceGitBlobSHA": "c9fe92e42c6dbb724785d6f84c90f7d527ef4960",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV011.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 420 x 280 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV012",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-laser.webp",
+      "sourceGitBlobSHA": "56d466d7fcb6665c07dd91000666123d20aba638",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV012.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV013",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-projectile.webp",
+      "sourceGitBlobSHA": "4e41fa88e5a75384f544ffa7fd2a5efd101d3540",
+      "sourceDimensions": {
+        "width": 380,
+        "height": 285,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV013.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 380 x 285 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV014",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-rear.webp",
+      "sourceGitBlobSHA": "41b6896bee7f2b15a9a66ad6d608a2f7ff74e23d",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 285,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV014.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 420 x 285 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV015",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-rocket.webp",
+      "sourceGitBlobSHA": "f71c5dbaa368e3d1eafb065af807b584980be851",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV015.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 600 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV016",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-up.webp",
+      "sourceGitBlobSHA": "a2198d03a87f5769c30c9faa0bdf4e0fe4602c79",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV016.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 420 x 280 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV017",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie.webp",
+      "sourceGitBlobSHA": "35847687d71ffd093b742e77ae6855ed7e2b5087",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV017.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy's pilot sprite or craft in identical gameplay bounds, camera orientation, canopy and attack state. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 420 x 280 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV018",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_molten_foundry_assault.webp",
+      "sourceGitBlobSHA": "c29db26cd79ac94fe4c16e77cc0d12cd57cc3d1e",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV018.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV019",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_cosmic_custody.webp",
+      "sourceGitBlobSHA": "5dab592e50d2b61b8a104f7b925e9f25cdca9fac",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV019.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV020",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_cosmic_perp_walk.webp",
+      "sourceGitBlobSHA": "999a7e5b19a56b603e915c50ea13a3a7a933a0c2",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV020.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV021",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_cosmic_victory.webp",
+      "sourceGitBlobSHA": "be7f8a4c16cbe871b9e94d7977b9fb3e3f3e7a78",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV021.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV022",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_crystal_sky_victory.webp",
+      "sourceGitBlobSHA": "9e68120780f5cbe10cf5b329f9fdcd85fc235427",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV022.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV023",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_crystal_victory.webp",
+      "sourceGitBlobSHA": "a5876b85bd08f2ede42fcd2e2b5bc2e722634cb5",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV023.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV024",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_electrifying_escape.webp",
+      "sourceGitBlobSHA": "2b56049ccf6b74fdf44cfd2892d9b4f0ba3c71d6",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV024.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV025",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_lunar_victory.webp",
+      "sourceGitBlobSHA": "078a9c880bf86846c7f9f71e23f0b8129fb41712",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV025.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV026",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_molten_victory_escort.webp",
+      "sourceGitBlobSHA": "7600e465bb6efe220c9e779c0ae4b0b3ac7b5a91",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV026.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV027",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_orbital_victory_custody.webp",
+      "sourceGitBlobSHA": "b47cd85cc79a0eb74cdd5b386a14683e8bb2484a",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV027.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV028",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_ricochet_victory.webp",
+      "sourceGitBlobSHA": "7fc448bdd86268d67df02f9d09950dff405ce5f9",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV028.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV029",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_victory_in_the_starship_graveyard.webp",
+      "sourceGitBlobSHA": "dff9459fa5c49b5b94fb84deaa9218bde400243d",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV029.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV030",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_volcanic_foundry_victory.webp",
+      "sourceGitBlobSHA": "137ef983ff15b7a744b7aa545fc8ffab8c6a72f1",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV030.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV031",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/nebula_pursuit_captain_rosie_strikes_back.webp",
+      "sourceGitBlobSHA": "37dfdacf6b616c0d45a6dcfb0a0f5c275bdd29ab",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV031.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV032",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/rosie_s_triumphant_crystal_chase.webp",
+      "sourceGitBlobSHA": "7e16bf653bd2d7ed774ec39d72213edfe8fa9732",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV032.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1100 x 1100 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV033",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/cards/rosie-back.webp",
+      "sourceGitBlobSHA": "83a16cddb532ae03044250722fd273d6b8942c33",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV033.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1024 x 1536 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV034",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sectionLabel": "Cosmic Odyssey",
+      "sourcePath": "public/cosmic-odyssey/cards/rosie-front.webp",
+      "sourceGitBlobSHA": "495455f467c79458e8d5e2ee183b62baa7ee4bf8",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV034.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Captain Teddy in this dramatic space poster/card, retaining the original Fiends and environment. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1024 x 1536 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV035",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sectionLabel": "Ember Tunnel",
+      "sourcePath": "public/ember-drill/breakables/v2/07-rosie-drilling-effort.webp",
+      "sourceGitBlobSHA": "50b096be389b751fbfe02b30cbbf12ab0c0b027e",
+      "sourceDimensions": {
+        "width": 700,
+        "height": 772,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV035.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 700 x 772 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV036",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sectionLabel": "Ember Tunnel",
+      "sourcePath": "public/ember-drill/breakables/v2/08-rosie-excited-discovery.webp",
+      "sourceGitBlobSHA": "e72b6cfb052c6df4e13b43f410ff5ced0e615601",
+      "sourceDimensions": {
+        "width": 700,
+        "height": 772,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV036.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 700 x 772 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV037",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sectionLabel": "Ember Tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/captain_rosie_s_steampunk_drill_submarine.webp",
+      "sourceGitBlobSHA": "89d3c41020c1fc1d97b1638f6a8cc514f4d78e6c",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 800,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV037.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1400 x 800 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV038",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sectionLabel": "Ember Tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/captain_rosie_s_steampunk_drillcraft.webp",
+      "sourceGitBlobSHA": "bf2c9bb3a468ac987c02e6f4cac282e081043772",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 788,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV038.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1400 x 788 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV039",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sectionLabel": "Ember Tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/steampunk_captain_rosie_in_flight.webp",
+      "sourceGitBlobSHA": "9a446725583edeb1f201dcbd6634caa6bcf5eee5",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 788,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV039.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy as captain in the original naval or drillcraft composition, preserving its vehicle and camera orientation. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1400 x 788 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV040",
+      "batch": "B04",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/final/a-little-calm.webp",
+      "sourceGitBlobSHA": "5881085ec797e42810744dbe56d55ac462a198b9",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV040.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 440 x 440 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV041",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/final/breathe-with-rosie.webp",
+      "sourceGitBlobSHA": "2964da4fdfcad891302158598f21dff8ebb5b132",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV041.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 440 x 440 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV042",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/final/evening-unwind.webp",
+      "sourceGitBlobSHA": "08648698726811b25abfb83cbbc6729fb2a440cd",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV042.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 440 x 440 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV043",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/final/haiku-reflection.webp",
+      "sourceGitBlobSHA": "d4843d3efced908875772cec78b9c746aa32a55f",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV043.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 440 x 440 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV044",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/final/quiet-sit.webp",
+      "sourceGitBlobSHA": "aca7aa89ed357b95223fe67f09fe4447e3b89bc8",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV044.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 440 x 440 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV045",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/final/rosie-enlightened.webp",
+      "sourceGitBlobSHA": "1f5c70aaa67d0cda0efdd9ff811ff5f61da1e7d0",
+      "sourceDimensions": {
+        "width": 688,
+        "height": 860,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV045.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 688 x 860 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV046",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-indigo.webp",
+      "sourceGitBlobSHA": "981f28e243b9ac83ecdb180d5686d662d846e951",
+      "sourceDimensions": {
+        "width": 1186,
+        "height": 1327,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV046.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1186 x 1327 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV047",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-pink-sakura.webp",
+      "sourceGitBlobSHA": "8b99946e9ab4eeb7bb2f8465e14d58f548c70cb8",
+      "sourceDimensions": {
+        "width": 1199,
+        "height": 1312,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV047.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1199 x 1312 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV048",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-plum-hakama.webp",
+      "sourceGitBlobSHA": "d224aeb50a7620ca6a9f2dd4a7b7292034bc9a83",
+      "sourceDimensions": {
+        "width": 1200,
+        "height": 1311,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV048.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1200 x 1311 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV049",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-saffron-cream.webp",
+      "sourceGitBlobSHA": "a607e2d2fa0b71ebabce26175547d562222f6c78",
+      "sourceDimensions": {
+        "width": 1184,
+        "height": 1328,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV049.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1184 x 1328 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV050",
+      "batch": "B05",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/new/characters/sensei-bowing.webp",
+      "sourceGitBlobSHA": "efcf9a353ba8eb06814be93b5dc3bc0fdb6c5335",
+      "sourceDimensions": {
+        "width": 534,
+        "height": 576,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV050.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 534 x 576 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV051",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/new/characters/sensei-greeting.webp",
+      "sourceGitBlobSHA": "f226b6cf7cef711af0ac1b341e239a746c644bbb",
+      "sourceDimensions": {
+        "width": 1184,
+        "height": 1328,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV051.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1184 x 1328 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV052",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/ornaments/rosie-enlightened-refined.webp",
+      "sourceGitBlobSHA": "d3aa1dc49d55da69a32e60b53f42296a5ca3a04e",
+      "sourceDimensions": {
+        "width": 1122,
+        "height": 1402,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV052.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1122 x 1402 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV053",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-affectionate.webp",
+      "sourceGitBlobSHA": "4888af7919275abfa7aa8f40a773b8a0ab86967f",
+      "sourceDimensions": {
+        "width": 1197,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV053.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the original poetic/garden pose and scale. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1197 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV054",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-bestowing-wisdom.webp",
+      "sourceGitBlobSHA": "a50d2c6bb3ca9432c307423f517f2d70fb8815d3",
+      "sourceDimensions": {
+        "width": 1040,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV054.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1040 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV055",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-calligrapher.webp",
+      "sourceGitBlobSHA": "1bb20ce77bdb86fffe3b7d926450e7af15255b8e",
+      "sourceDimensions": {
+        "width": 1300,
+        "height": 1188,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV055.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1300 x 1188 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV056",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-contemplative.webp",
+      "sourceGitBlobSHA": "2f4989503814a45527a2f0bfb18e8cbdd60c01db",
+      "sourceDimensions": {
+        "width": 1212,
+        "height": 1298,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV056.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1212 x 1298 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV057",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-existential.webp",
+      "sourceGitBlobSHA": "61b927bc26afb7946dd30367527f5373461236ca",
+      "sourceDimensions": {
+        "width": 1206,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV057.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1206 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV058",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-indignant.webp",
+      "sourceGitBlobSHA": "211cf5ae5b8570777d5a743ea75d729354975a95",
+      "sourceDimensions": {
+        "width": 1197,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV058.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1197 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV059",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-inspired.webp",
+      "sourceGitBlobSHA": "abef0844f0398990f5b732447ef4bbfc88f568d7",
+      "sourceDimensions": {
+        "width": 1188,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV059.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1188 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV060",
+      "batch": "B06",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditating-animation.webp",
+      "sourceGitBlobSHA": "3741658af47ba649a06f773c265bba89ddfac728",
+      "sourceDimensions": {
+        "width": 1040,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV060.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1040 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV061",
+      "batch": "B07",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditating-paws-up.webp",
+      "sourceGitBlobSHA": "a82714bae1b846c166871e18f458715e472e678c",
+      "sourceDimensions": {
+        "width": 1122,
+        "height": 1402,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV061.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1122 x 1402 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV062",
+      "batch": "B07",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditation-breathing.webp",
+      "sourceGitBlobSHA": "d0e0c2ac2f00bfc97f05f0f01aed1eee9de73e50",
+      "sourceDimensions": {
+        "width": 530,
+        "height": 644,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV062.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 530 x 644 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV063",
+      "batch": "B07",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditation-frames.webp",
+      "sourceGitBlobSHA": "abc0a8e25f2eda342afeebfb4e63365ad205b0bc",
+      "sourceDimensions": {
+        "width": 1800,
+        "height": 1093,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV063.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy in the sensei meditation pose, maintaining breathing state, robe, placement and framing. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1800 x 1093 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV064",
+      "batch": "B07",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-smug.webp",
+      "sourceGitBlobSHA": "ebb004d8244896543b367435fa7e657a76abc604",
+      "sourceDimensions": {
+        "width": 1191,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV064.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1191 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV065",
+      "batch": "B07",
+      "section": "haiku",
+      "sectionLabel": "Haiku and meditation",
+      "sourcePath": "public/rosieverse/haiku/rosie-triumphant.webp",
+      "sourceGitBlobSHA": "1e50da03e8a65675d76c9e0f7d680e748dbdce63",
+      "sourceDimensions": {
+        "width": 1188,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV065.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy performing the named expressive or calligraphy pose with exactly the source costume and gesture. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1188 x 1300 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV066",
+      "batch": "B07",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/home/rosie-grand-salon.svg",
+      "sourceGitBlobSHA": "4131b939518c40df8dcadf635fa9470786652c1c",
+      "sourceDimensions": {
+        "width": 1600,
+        "height": 1000,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV066.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1600 x 1000 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV067",
+      "batch": "B07",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-doctor-cheese.webp",
+      "sourceGitBlobSHA": "894606c50ebd2fae2438e743aa92316b20f37afd",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 254,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV067.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 254 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV068",
+      "batch": "B07",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-amused.webp",
+      "sourceGitBlobSHA": "a0f0374e4fbfecebe125ab40f51550b19e90d814",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV068.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 430 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV069",
+      "batch": "B07",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-distraught.webp",
+      "sourceGitBlobSHA": "cded48438b68e597affa1d080541a6d2ff51730d",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV069.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 430 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV070",
+      "batch": "B07",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-elated.webp",
+      "sourceGitBlobSHA": "c27b83254c35bbd5b34deb071ed115928488075b",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV070.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 430 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV071",
+      "batch": "B08",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-embarrassed.webp",
+      "sourceGitBlobSHA": "01de82c2955a960d3f51981b891af0600397b14d",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV071.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 430 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV072",
+      "batch": "B08",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-focused.webp",
+      "sourceGitBlobSHA": "f749dacd0441a2375491ef7e406d35a656f4f1a5",
+      "sourceDimensions": {
+        "width": 900,
+        "height": 1125,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV072.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 900 x 1125 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV073",
+      "batch": "B08",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-pleased.webp",
+      "sourceGitBlobSHA": "22f39777c1a1b91b1054eb83735d2e460feeaeca",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV073.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 360 x 430 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV074",
+      "batch": "B08",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-proud.webp",
+      "sourceGitBlobSHA": "f19d05a2b2025e194435fc394af0dbca8e88d60f",
+      "sourceDimensions": {
+        "width": 900,
+        "height": 1125,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV074.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 900 x 1125 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV075",
+      "batch": "B08",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-mood-watching.webp",
+      "sourceGitBlobSHA": "6960ea8b4fb0854470572043f6a55f55dde5cc68",
+      "sourceDimensions": {
+        "width": 1122,
+        "height": 1402,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV075.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1122 x 1402 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV076",
+      "batch": "B08",
+      "section": "other-public",
+      "sectionLabel": "Shared app art",
+      "sourcePath": "public/rosie-turn-head.svg",
+      "sourceGitBlobSHA": "98f754e46e3e905c8b14c640c80eb5d5069e27fb",
+      "sourceDimensions": {
+        "width": 1260,
+        "height": 1260,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV076.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1260 x 1260 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV077",
+      "batch": "B08",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-retina.svg",
+      "sourceGitBlobSHA": "39f1758d1cbcfc979b48f999378e4f049959e0c4",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 960,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV077.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 960 x 960 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV078",
+      "batch": "B08",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-tail-retina.svg",
+      "sourceGitBlobSHA": "e9986a0f9dbb8c43e5877ea8062f8dbab3c7e1b5",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 960,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV078.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 960 x 960 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV079",
+      "batch": "B08",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-tail.webp",
+      "sourceGitBlobSHA": "9b729bf5951c223d6a43e38cd688b6fa1d910ebd",
+      "sourceDimensions": {
+        "width": 240,
+        "height": 236,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV079.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 240 x 236 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV080",
+      "batch": "B08",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-coin.webp",
+      "sourceGitBlobSHA": "654319be076218ef5de91cf1f3eca6c437978c22",
+      "sourceDimensions": {
+        "width": 240,
+        "height": 240,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV080.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 240 x 240 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV081",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-die-sprites-clean.webp",
+      "sourceGitBlobSHA": "ed0a1ba9a871511f974994091dd9d8d3ecf3aef7",
+      "sourceDimensions": {
+        "width": 480,
+        "height": 320,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV081.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 480 x 320 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV082",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-garnet-satin-4k.svg",
+      "sourceGitBlobSHA": "496ce462f535043248d4580f1c78a0eb62407000",
+      "sourceDimensions": {
+        "width": 4096,
+        "height": 2304,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV082.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 4096 x 2304 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV083",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-ivory-gold-marble-texture.svg",
+      "sourceGitBlobSHA": "06da2c1624a2476dd24a03b282e4ef9223210709",
+      "sourceDimensions": {
+        "width": 480,
+        "height": 480,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV083.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 480 x 480 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV084",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-randomizers-casino-header.webp",
+      "sourceGitBlobSHA": "ef6b284c49895bc5107ce225e880273b87ac12da",
+      "sourceDimensions": {
+        "width": 1375,
+        "height": 907,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV084.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1375 x 907 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV085",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/rosie-salon-burgundy-texture.svg",
+      "sourceGitBlobSHA": "9910b574d043b9602cf3e97746133d7f772dc465",
+      "sourceDimensions": {
+        "width": 720,
+        "height": 720,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV085.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 720 x 720 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV086",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/secret-santa/01-rosie-secret-santa-host.webp",
+      "sourceGitBlobSHA": "3ca10a53740ff648820873c3de3c7a1930dfab8f",
+      "sourceDimensions": {
+        "width": 1536,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV086.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1536 x 1024 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV087",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/secret-santa/email/rosie-crest.png",
+      "sourceGitBlobSHA": "694a14f802933f1df2c6bcd2e16991f39bc985d8",
+      "sourceDimensions": {
+        "width": 260,
+        "height": 277,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV087.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 260 x 277 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV088",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/secret-santa/email/rosie-holiday-banner.jpg",
+      "sourceGitBlobSHA": "58e10807caa1b3b0e009e4e47d1b740d6c0285f3",
+      "sourceDimensions": {
+        "width": 1060,
+        "height": 288,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV088.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1060 x 288 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV089",
+      "batch": "B09",
+      "section": "randomizers",
+      "sectionLabel": "Randomizers",
+      "sourcePath": "public/randomizers/secret-santa/email/rosie-plaque.png",
+      "sourceGitBlobSHA": "e164a2ce3e9417f4542a0e0187245b67f9c528a1",
+      "sourceDimensions": {
+        "width": 740,
+        "height": 406,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV089.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 740 x 406 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV090",
+      "batch": "B09",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-blank-hollow.png",
+      "sourceGitBlobSHA": "977bf1e056a41e1304f68b484725995b8d304608",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV090.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV091",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-blank.png",
+      "sourceGitBlobSHA": "e608970447f81fce9c12bc4c01907bc635a1ccb3",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV091.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV092",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-peeking.png",
+      "sourceGitBlobSHA": "61e1938937a7962ac5a18ffe9bc7165d0270a799",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV092.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV093",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-presenting-hollow.png",
+      "sourceGitBlobSHA": "15e3361f0b2ab99eb944adf59f05e9eaa6dc7ba5",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV093.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV094",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-presenting.png",
+      "sourceGitBlobSHA": "802ce019a97db498e3f7f5c329f2559ee3bcc100",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV094.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV095",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-seated-hollow.png",
+      "sourceGitBlobSHA": "4e3f8a16a54f46933123b8aa0ce349c4f8d7a42e",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV095.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV096",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-seated.png",
+      "sourceGitBlobSHA": "1555762e79a125f67bafe286adcd9602e5b49b8d",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV096.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV097",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-popup-desktop.webp",
+      "sourceGitBlobSHA": "dd3a0115af86c9e657c77def0a810233292ac57f",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV097.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1672 x 941 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV098",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-popup-ipad.webp",
+      "sourceGitBlobSHA": "bec774acd69ffdf1c7557075056a2e388b0fa8f9",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV098.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1448 x 1086 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV099",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sectionLabel": "QR Atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-popup-iphone.webp",
+      "sourceGitBlobSHA": "3402a933ef8ea4d861b508b0701301c99704de6a",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV099.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 941 x 1672 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV100",
+      "batch": "B10",
+      "section": "recipes",
+      "sectionLabel": "Recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/rosie-s-strawberry-pawfait.webp",
+      "sourceGitBlobSHA": "fa997581e9d035946f8d29b6d85c0df5fa394d55",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV100.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 800 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV101",
+      "batch": "B11",
+      "section": "recipes",
+      "sectionLabel": "Recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/rosie-s-sunday-walk.webp",
+      "sourceGitBlobSHA": "9846436d77e0b027b9c7e6ef105af8678d5aa601",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV101.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 800 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV102",
+      "batch": "B11",
+      "section": "recipes",
+      "sectionLabel": "Recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/shiba-sunrise-hash.webp",
+      "sourceGitBlobSHA": "6f7ea814d4179f074686239961952ad14bdcb747",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV102.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 800 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV103",
+      "batch": "B11",
+      "section": "recipes",
+      "sectionLabel": "Recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/the-top-dog-smash-burger.webp",
+      "sourceGitBlobSHA": "aa28b084fdad7e7040ac866ae9d2125979e87ea9",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "masterFilename": "TV103.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  the original coherent background - do not introduce fake transparency. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 800 x 800 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV104",
+      "batch": "B11",
+      "section": "shared-rosieverse",
+      "sectionLabel": "Shared resources",
+      "sourcePath": "public/rosieverse/account/rosie-gold-action.svg",
+      "sourceGitBlobSHA": "fda95c93f2ddb585c1e829268ae4d131f7b698d4",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 160,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV104.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 960 x 160 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV105",
+      "batch": "B11",
+      "section": "shared-rosieverse",
+      "sectionLabel": "Shared resources",
+      "sourcePath": "public/rosieverse/account/rosie-paw-divider.svg",
+      "sourceGitBlobSHA": "e310712061e8dceba1334c7fb9d1057a3377d90d",
+      "sourceDimensions": {
+        "width": 700,
+        "height": 90,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV105.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 700 x 90 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV106",
+      "batch": "B11",
+      "section": "shared-rosieverse",
+      "sectionLabel": "Shared resources",
+      "sourcePath": "public/rosieverse/ui/rosie-music-medallion.webp",
+      "sourceGitBlobSHA": "6015e4313bccb372ab14559ebf6ed9406f1dc89f",
+      "sourceDimensions": {
+        "width": 96,
+        "height": 96,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV106.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 96 x 96 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    },
+    {
+      "id": "TV107",
+      "batch": "B11",
+      "section": "timekeeper",
+      "sectionLabel": "Timekeepers",
+      "sourcePath": "public/rosieverse/timekeeper/midnight-observatory/rosie-connected-lever-drive.webp",
+      "sourceGitBlobSHA": "9fc2043d722de6d198e26d593e1e36a710b84897",
+      "sourceDimensions": {
+        "width": 3150,
+        "height": 900,
+        "hasAlpha": true
+      },
+      "masterFilename": "TV107.png",
+      "state": "awaiting-generation",
+      "visualSourceInspected": false,
+      "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
+      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 3150 x 900 or larger in the same aspect ratio.",
+      "acceptance": [
+        "Teddy likeness approved against actual photos",
+        "camera/pose/scale match source",
+        "correct alpha and clean edges",
+        "no Rosie artwork contamination",
+        "separate visual approval",
+        "output SHA256 verified before isolated integration"
+      ]
+    }
+  ]
+}
