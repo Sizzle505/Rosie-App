@@ -178,7 +178,7 @@
  .zen-immersive .zen-immersive-scenery::after{
    display:none!important;content:none!important;
  }
- .zen-immersive .zen-immersive-scenery img,
+ .zen-immersive .zen-immersive-scenery > img,
  .zen-immersive .zen-immersive-scenery picture,
  .zen-immersive .zen-immersive-scenery picture img{
    display:block!important;

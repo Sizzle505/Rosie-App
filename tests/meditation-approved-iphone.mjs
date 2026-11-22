@@ -66,7 +66,13 @@ try {
             duplicateBackdrop: getComputedStyle(portrait, "::before").content,
             dialog: rect(dialog), frame: rect(frame), guidance: rect(guidance),
             viewport: window.innerHeight,
-            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            decorations: [...document.querySelectorAll(".zen-immersive-scenery .rosie-ambient img")]
+              .filter(node => getComputedStyle(node).display !== "none")
+              .map(node => {
+                const box = node.getBoundingClientRect();
+                return { kind: node.className, width: box.width, height: box.height };
+              })
           };
         });
         assert.ok(layout.image.includes("/iphone/approved/" + basename),
@@ -85,6 +91,11 @@ try {
           label + " guidance must remain inside the viewport");
         assert.ok(layout.overflow <= 2,
           label + " must not scroll horizontally: " + layout.overflow);
+        assert.ok(layout.decorations.length >= 3,
+          label + " " + view + " must retain small ambient decorations");
+        assert.ok(layout.decorations.every(item => item.width <= 90 && item.height <= 110),
+          label + " " + view + " must never scale a butterfly, petal or lantern " +
+          "to screen size: " + JSON.stringify(layout.decorations));
         await page.screenshot({
           path: "artifacts/meditation-iphone/" + label + "-" + view + ".png",
           animations: "disabled", fullPage: false
