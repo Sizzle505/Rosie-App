@@ -11,11 +11,11 @@
     "sourceImageCount": 1202,
     "coveredFirst72": 72,
     "counts": {
-      "reuse-generic-candidate": 550,
+      "reuse-generic-candidate": 546,
       "covered-first-72": 72,
-      "review-for-pet-content": 171,
+      "review-for-pet-content": 173,
       "generate-pet-art": 98,
-      "separate-vault-scope": 311
+      "separate-vault-scope": 313
     },
     "categoryNotes": {
       "generate-pet-art": "Probable personalized artwork based on filename; verify content and actual runtime use before generation.",
@@ -8421,12 +8421,13 @@
       "path": "public/rosieverse/buttons/captain.webp",
       "sourceGitBlobSHA": "ead19269218e7ceb95e24d00e6da3cd02f3c7844",
       "sourceBytes": 544482,
-      "module": "shared-rosieverse",
-      "classification": "reuse-generic-candidate",
-      "priority": 5,
+      "module": "captain-hub",
+      "classification": "review-for-pet-content",
+      "priority": 2,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "Captain entry art or navigation button may depict original Rosie; verify visual content before enabling"
     },
     {
       "path": "public/rosieverse/buttons/cheese.webp",
@@ -8476,12 +8477,13 @@
       "path": "public/rosieverse/buttons/vault.webp",
       "sourceGitBlobSHA": "7f076e71cdafe19641c7372219d26c23ccfff6d3",
       "sourceBytes": 543932,
-      "module": "shared-rosieverse",
-      "classification": "reuse-generic-candidate",
-      "priority": 5,
+      "module": "card-vault",
+      "classification": "separate-vault-scope",
+      "priority": 4,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "Card Vault entry art or button, not part of 311 images physically under card-vault/"
     },
     {
       "path": "public/rosieverse/calculations/burgundy-satin.png",
@@ -8872,12 +8874,13 @@
       "path": "public/rosieverse/captain.webp",
       "sourceGitBlobSHA": "cbf59ad44b310722ee3a8e59c2ce832f7ad5336f",
       "sourceBytes": 474882,
-      "module": "shared-rosieverse",
-      "classification": "reuse-generic-candidate",
-      "priority": 5,
+      "module": "captain-hub",
+      "classification": "review-for-pet-content",
+      "priority": 2,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "Captain entry art or navigation button may depict original Rosie; verify visual content before enabling"
     },
     {
       "path": "public/rosieverse/cheese.webp",
@@ -12788,12 +12791,13 @@
       "path": "public/rosieverse/vault.webp",
       "sourceGitBlobSHA": "3cee0e611e52ea1b5419f8dbf85766ee08556866",
       "sourceBytes": 474476,
-      "module": "shared-rosieverse",
-      "classification": "reuse-generic-candidate",
-      "priority": 5,
+      "module": "card-vault",
+      "classification": "separate-vault-scope",
+      "priority": 4,
       "first72Slot": null,
       "handoffApproval": null,
-      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed"
+      "verification": "filename/path heuristic only - image content and runtime use not yet visually confirmed",
+      "reviewReason": "Card Vault entry art or button, not part of 311 images physically under card-vault/"
     },
     {
       "path": "public/yacht-dash/emperor/01-imperial-harbor.webp",
