@@ -1,0 +1,1236 @@
+{
+  "schemaVersion": 1,
+  "pet": "Teddy",
+  "count": 72,
+  "package": "Dropbox: /Rosie App/TeddyVerse-72-Final",
+  "created": "2026-11-22",
+  "status": "staged-not-certified-deployed",
+  "notes": [
+    "Artwork originals remain in private Dropbox; no customer photos or image binaries are committed to the public repo.",
+    "The catalog's target_path is an inventory hint; runtime source_path must be reconciled against actual application references.",
+    "Never modify RosieVerse main or use RosieVerse production backends."
+  ],
+  "slots": [
+    {
+      "id": "home.hero",
+      "page": "home",
+      "required": true,
+      "source": "public/rosieverse/hero.webp",
+      "target": "home/hero.webp",
+      "asset": "home.hero.png",
+      "sha256": "34ecd5d610b053d0f0862c6f6295f4276568ac1f9390a23a58fd98556f0eab3c",
+      "originalSha256": "e6a03207c2ad29bbbd1305ee340efd293b3f9a6ca5ec5f065f2547c7d09b7f15",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "home.title",
+      "page": "home",
+      "required": true,
+      "source": "public/rosieverse/title.webp",
+      "target": "home/title.webp",
+      "asset": "home.title.png",
+      "sha256": "081dc0164c9f0e1c8d37f52194908718b9224eaaf7d47201a56d204664b082d7",
+      "originalSha256": "0e1afc8897f9cef8087e5374c6b3b0e5c99e460ee1eb34504fadfa2d99cb3a4a",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "home.nav-fortune",
+      "page": "home",
+      "required": true,
+      "source": "public/rosieverse/buttons/fortune.webp",
+      "target": "home/nav-fortune.webp",
+      "asset": "home.nav-fortune.webp",
+      "sha256": "4bdcccc4355770555c0cda806531eed05f8bc8693116f67077a89714364772fe",
+      "originalSha256": "4bdcccc4355770555c0cda806531eed05f8bc8693116f67077a89714364772fe",
+      "dimensions": [
+        1412,
+        1063
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-cheese",
+      "page": "home",
+      "required": true,
+      "source": "public/rosieverse/buttons/cheese.webp",
+      "target": "home/nav-cheese.webp",
+      "asset": "home.nav-cheese.webp",
+      "sha256": "9f004a798266fbf90242de420815c6bb8af44a9ac3d4f9abd7a304b7d17dc760",
+      "originalSha256": "9f004a798266fbf90242de420815c6bb8af44a9ac3d4f9abd7a304b7d17dc760",
+      "dimensions": [
+        1394,
+        1063
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-randomizers",
+      "page": "home",
+      "required": true,
+      "source": "public/rosieverse/buttons/randomizers.webp",
+      "target": "home/nav-randomizers.webp",
+      "asset": "home.nav-randomizers.webp",
+      "sha256": "e6d06eebf46d77cc76b9b8237b9a2415606f60a98fa533e63ab078af972bdee0",
+      "originalSha256": "e6d06eebf46d77cc76b9b8237b9a2415606f60a98fa533e63ab078af972bdee0",
+      "dimensions": [
+        1246,
+        1245
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-reminders",
+      "page": "home",
+      "required": false,
+      "source": "public/rosieverse/resources/reminders.webp",
+      "target": "home/nav-reminders.webp",
+      "asset": "nav-reminders.webp",
+      "sha256": "2e6faa187ddfa73190e23a9279af3bedf795c286f52df32e7c00e59afd7f13c3",
+      "originalSha256": "2e6faa187ddfa73190e23a9279af3bedf795c286f52df32e7c00e59afd7f13c3",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-qr",
+      "page": "home",
+      "required": false,
+      "source": "public/rosieverse/refresh/qr-button.webp",
+      "target": "home/nav-qr.webp",
+      "asset": "nav-qr.webp",
+      "sha256": "7e162c7da13230b52029d2e144b6559714bbb43427d1518ca98eb5b8181b3060",
+      "originalSha256": "7e162c7da13230b52029d2e144b6559714bbb43427d1518ca98eb5b8181b3060",
+      "dimensions": [
+        1079,
+        305
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-calculations",
+      "page": "home",
+      "required": false,
+      "source": "public/rosieverse/resources/calculations.webp",
+      "target": "home/nav-calculations.webp",
+      "asset": "nav-calculations.webp",
+      "sha256": "7b099aff35ffa51bc8ec684c122f4fe40de62c51ee63a46890c3fb92c0f5beea",
+      "originalSha256": "7b099aff35ffa51bc8ec684c122f4fe40de62c51ee63a46890c3fb92c0f5beea",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-recipes",
+      "page": "home",
+      "required": false,
+      "source": "public/rosieverse/resources/recipes.png",
+      "target": "home/nav-recipes.png",
+      "asset": "nav-recipes.png",
+      "sha256": "20aa907fc9643ec5ca7aef03af70630858c55657609483747953164f5b14571c",
+      "originalSha256": "f67f0876d49c7c4ec2fa1e40eb0a277dc89d38fc134d15c5d465d07decc2bbeb",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "home.nav-timekeeper",
+      "page": "home",
+      "required": false,
+      "source": "public/rosieverse/resources/timekeeper.webp",
+      "target": "home/nav-timekeeper.webp",
+      "asset": "nav-timekeeper.webp",
+      "sha256": "c6dfd13398e22f15e2e7031a4cce0a6dd5cc6975cac2754adea45f9dec58795e",
+      "originalSha256": "c6dfd13398e22f15e2e7031a4cce0a6dd5cc6975cac2754adea45f9dec58795e",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "home.nav-reviews",
+      "page": "home",
+      "required": false,
+      "source": "public/rosieverse/resources/reviews-crimson-20261018.webp",
+      "target": "home/nav-reviews.webp",
+      "asset": "nav-reviews.png",
+      "sha256": "96654a4912e4a2a4cbdc7575bf530f48cf1620cfb7cccf97cae431cf4824a566",
+      "originalSha256": "4a338d3189f4490d618a67e6d7a9e47c702c86aa763f954bb402932c81be4bfe",
+      "dimensions": [
+        640,
+        214
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "generated"
+    },
+    {
+      "id": "fortune.portrait",
+      "page": "fortune",
+      "required": true,
+      "source": "public/rosie-fortune-stage.webp",
+      "target": "fortune/portrait.webp",
+      "asset": "fortune.portrait.png",
+      "sha256": "8f303b710c20090189dfe1e23becb36b2fba68c4ca8df99104c7f264006c0394",
+      "originalSha256": "c80cd6e66e7f9e8de142c0afe9d622337bc7703385a25f0391286b717c812c9d",
+      "dimensions": [
+        1522,
+        1430
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "fortune.turn",
+      "page": "fortune",
+      "required": true,
+      "source": "public/rosie-fortune-turn-side.webp",
+      "target": "fortune/turn.webp",
+      "asset": "fortune.turn.png",
+      "sha256": "51021ca2419dbd0f7a5dd55896115f670186d652d90376ac34ccde0e5dd59cc3",
+      "originalSha256": "7feae1488024468007d1289fda19f6f7d49c0521301e026436996f497b20860d",
+      "dimensions": [
+        720,
+        677
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "fortune.tent",
+      "page": "fortune",
+      "required": false,
+      "source": "public/rosieverse/refresh/fortune-tent.webp",
+      "target": "fortune/tent.webp",
+      "asset": "tent.webp",
+      "sha256": "7e38a8d2b1cec4dee66b6c5c5e5d57405ed43ccfa12042ecb60fa95f6d83e7fc",
+      "originalSha256": "7e38a8d2b1cec4dee66b6c5c5e5d57405ed43ccfa12042ecb60fa95f6d83e7fc",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "cheese.reaction-watching",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-watching.webp",
+      "target": "cheese/reaction-watching.webp",
+      "asset": "cheese.reaction-watching.png",
+      "sha256": "1fa09d9f679572e7490313ff8412e1bc76b08908e0330460b7a8a7e2aac6daad",
+      "originalSha256": "bc7305dc02dbc2d44093bc39cd4295aa10b3cc7c21f6d448606208db7de92f6a",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-intrigued",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-intrigued.webp",
+      "target": "cheese/reaction-intrigued.webp",
+      "asset": "cheese.reaction-intrigued.png",
+      "sha256": "88b1fc4098922e80407098cf5eb90ce677bd2ae3e04e92ca83cc36160a57756f",
+      "originalSha256": "c11cf20d1115f9a5cd949722da28279235e505d796cdd7fff536eb2b3500eb81",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-pleased",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-pleased.webp",
+      "target": "cheese/reaction-pleased.webp",
+      "asset": "cheese.reaction-pleased.png",
+      "sha256": "f202993251b1f6773fd5b6cdbb5db6d2bfc7d28bee0eb9eb158cbe4130c47e43",
+      "originalSha256": "603f312ba82f82f72d50c5ca64b00b8ec232ff55161a9fa9a6b7dd57058b9e06",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-concerned",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-concerned.webp",
+      "target": "cheese/reaction-concerned.webp",
+      "asset": "cheese.reaction-concerned.png",
+      "sha256": "b4f6808c2d9073b206cc046a5ebf77211328fe1b69521a50fb9ef047f8b3608c",
+      "originalSha256": "c13ee6d5e9581bd5bd6a0a8c2b217c18362ebf67e595712d97c27325cab0dfcd",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-triumphant",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-triumphant.webp",
+      "target": "cheese/reaction-triumphant.webp",
+      "asset": "cheese.reaction-triumphant.png",
+      "sha256": "73c58f0a3e6dd16b02930ece040ca18a55c72c256509d7d560779277c726439d",
+      "originalSha256": "66656fb67687e031ee8c149ec6b8415d1f58acc2bf9b52366a0c96cdeb5d021f",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-amused",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-amused.webp",
+      "target": "cheese/reaction-amused.webp",
+      "asset": "cheese.reaction-amused.png",
+      "sha256": "46646a57d718f9012abc19877ab7b41a20bb6b322334a0792ad332dd4148ff5c",
+      "originalSha256": "f73ac2790337d0fcb1d9259ea10045d810be8dfb19ff0ed26c9895be83cc6c1d",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-focused",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-focused.webp",
+      "target": "cheese/reaction-focused.webp",
+      "asset": "cheese.reaction-focused.png",
+      "sha256": "c1656660071f351af7ffd071dbd24bee0e88a391085efb357f5811a4cee114cc",
+      "originalSha256": "944ad9303d545faf7aef59f0bb3a0d98b10a6055b689f8640a8387673807962a",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-unimpressed",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-unimpressed.webp",
+      "target": "cheese/reaction-unimpressed.webp",
+      "asset": "cheese.reaction-unimpressed.png",
+      "sha256": "8e89bb008db45f127a25670c3acb14bfbbc0392f10e65f936e92922d67c54eed",
+      "originalSha256": "62ce899ed3285f8eb7fe2aefd022daf2502fc06016241156f5741a366e01c408",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-proud",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-proud.webp",
+      "target": "cheese/reaction-proud.webp",
+      "asset": "cheese.reaction-proud.png",
+      "sha256": "c16f8fe52984a7ecf17c9f6439eb941d20ce64af1c71a71abd718ecc518944e6",
+      "originalSha256": "13897c86e446596485a81c33cf61ce106758e5477fe0829631d4852f81d15c3b",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.reaction-elated",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-reaction-elated.webp",
+      "target": "cheese/reaction-elated.webp",
+      "asset": "cheese.reaction-elated.png",
+      "sha256": "579cf1035c43f18f883a10d237e824b16144470c19c18c08d5c1f20dda799a14",
+      "originalSha256": "452402da965ef6ae5a9f5fd78b0cfb180d23ce8ccbe97373611a196d546fea93",
+      "dimensions": [
+        384,
+        480
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.doctor",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-doctor-cheese-hero.webp",
+      "target": "cheese/doctor.webp",
+      "asset": "cheese.doctor.png",
+      "sha256": "5446ac638a14b96b1f52c02053c1d7493b6f82fa791372eb8c787d56b51980c9",
+      "originalSha256": "ab62ad1f8706d5bbebc4ad645106421cedf86064809aeef262e41c5764b1478c",
+      "dimensions": [
+        800,
+        450
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.graduate",
+      "page": "cheese",
+      "required": true,
+      "source": "public/rosie-barkbridge-graduate.webp",
+      "target": "cheese/graduate.webp",
+      "asset": "cheese.graduate.png",
+      "sha256": "fdd177107041b6628db4929f5f3c3eca22b197329443cfcdb9d5b2bd9c6a36a0",
+      "originalSha256": "c314005accd1a61f020333905f629b0a0e27c0e104fc6adec5095716a1e5270d",
+      "dimensions": [
+        1122,
+        1402
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.cap",
+      "page": "cheese",
+      "required": true,
+      "source": "public/barkbridge-premium-cap.webp",
+      "target": "cheese/cap.webp",
+      "asset": "cheese.cap.webp",
+      "sha256": "2d31dacbf5e23d47f36dbaf464d311d9dab4b628efcc3bd6d241c9bb6c9b9ceb",
+      "originalSha256": "2d31dacbf5e23d47f36dbaf464d311d9dab4b628efcc3bd6d241c9bb6c9b9ceb",
+      "dimensions": [
+        640,
+        640
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "cheese.seal",
+      "page": "cheese",
+      "required": true,
+      "source": "public/barkbridge-premium-seal.webp",
+      "target": "cheese/seal.webp",
+      "asset": "cheese.seal.webp",
+      "sha256": "b45f72881fee87dd8f411ef9eda9c693c8a8b1e25de35dae1a678272dfc119cf",
+      "originalSha256": "b45f72881fee87dd8f411ef9eda9c693c8a8b1e25de35dae1a678272dfc119cf",
+      "dimensions": [
+        640,
+        640
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "cheese.card-back",
+      "page": "cheese",
+      "required": true,
+      "source": "public/cheese-card-back-approved.webp",
+      "target": "cheese/card-back.webp",
+      "asset": "cheese.card-back.webp",
+      "sha256": "54b6acefd8bcef510a3aed1c98c4106b100af82e3a0c463e4e8412c89f61e823",
+      "originalSha256": "70cb015f5b5fca615d01f452d3a7a6e2921495586dc01ae043b47b2f28198486",
+      "dimensions": [
+        256,
+        256
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "cheese.still-life",
+      "page": "cheese",
+      "required": false,
+      "source": "public/barkbridge-cheese-exam-still-life-20261113.webp",
+      "target": "cheese/still-life.webp",
+      "asset": "still-life.webp",
+      "sha256": "dcc7e44d9090940522222889d59c79feb78391a9030a443a7b94864fd498583a",
+      "originalSha256": "dcc7e44d9090940522222889d59c79feb78391a9030a443a7b94864fd498583a",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "cheese.crest",
+      "page": "cheese",
+      "required": false,
+      "source": "public/barkbridge/diploma/canine-crest.png",
+      "target": "cheese/crest.png",
+      "asset": "crest.png",
+      "sha256": "f598a15f0d3c33470496250d564d0ff56131356203b0454196890d2d27d1975d",
+      "originalSha256": "fef1e871b2a5ee824c60aff2d4d8429faaeebbc250d8411a17ffa1e8a69e474c",
+      "dimensions": [
+        256,
+        256
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "generated"
+    },
+    {
+      "id": "randomizers.header",
+      "page": "randomizers",
+      "required": true,
+      "source": "public/randomizers/rosie-randomizers-casino-header-safe-fit.webp",
+      "target": "randomizers/header.webp",
+      "asset": "randomizers.header.png",
+      "sha256": "8bac34497e10270a6d819bb3754ee405c403462b3c90d6dd782c23519da8b87f",
+      "originalSha256": "51e6bde422a327e45148905008f59b88be6a9fe4b04d30ce48bb669d9161dc06",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "randomizers.coin-heads",
+      "page": "randomizers",
+      "required": true,
+      "source": "public/randomizers/rosie-coin-heads-hd.webp",
+      "target": "randomizers/coin-heads.webp",
+      "asset": "randomizers.coin-heads.png",
+      "sha256": "ed139f0ba9e647dd0a54cac4db7b79a393b366764054cc1e282a253272cc8157",
+      "originalSha256": "1ece5dcbcb06d73fc4c39d51a12f24b66a38099471e3aba90601d5968a09b16b",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "randomizers.coin-tails",
+      "page": "randomizers",
+      "required": true,
+      "source": "public/randomizers/rosie-coin-tails-hd.webp",
+      "target": "randomizers/coin-tails.webp",
+      "asset": "randomizers.coin-tails.png",
+      "sha256": "8f175d46e04bed2c9ddc076e72293c55fefdd47e65469f88b43c1dc1a4874acd",
+      "originalSha256": "833503235949f13639f78bf50637785d7f3ef2755291e54dcb21af64cc6b1dbc",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "randomizers.die-1",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-die-1.webp",
+      "target": "randomizers/die-1.webp",
+      "asset": "die-1.webp",
+      "sha256": "3036ba472648c8b42c2a7438136b4d6939d7b8c7d98691fec937d302e42ea3f4",
+      "originalSha256": "3036ba472648c8b42c2a7438136b4d6939d7b8c7d98691fec937d302e42ea3f4",
+      "dimensions": [
+        320,
+        320
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "randomizers.die-2",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-die-2.webp",
+      "target": "randomizers/die-2.webp",
+      "asset": "die-2.webp",
+      "sha256": "c88f7b436b9c8936bf8a156ff16fac4b1aff573096263d24befa45757fc83ff7",
+      "originalSha256": "c88f7b436b9c8936bf8a156ff16fac4b1aff573096263d24befa45757fc83ff7",
+      "dimensions": [
+        320,
+        320
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "randomizers.die-3",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-die-3.webp",
+      "target": "randomizers/die-3.webp",
+      "asset": "die-3.webp",
+      "sha256": "d7e459184a7d575176de9479fe786a9a6a974eb18222e047812474b0205faba2",
+      "originalSha256": "d7e459184a7d575176de9479fe786a9a6a974eb18222e047812474b0205faba2",
+      "dimensions": [
+        320,
+        320
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "randomizers.die-4",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-die-4.webp",
+      "target": "randomizers/die-4.webp",
+      "asset": "die-4.webp",
+      "sha256": "350d5c08cea4b25c67a5a102a59cf68c7de5fb70e62226ab14758ffa1041c178",
+      "originalSha256": "350d5c08cea4b25c67a5a102a59cf68c7de5fb70e62226ab14758ffa1041c178",
+      "dimensions": [
+        320,
+        320
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "randomizers.die-5",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-die-5.webp",
+      "target": "randomizers/die-5.webp",
+      "asset": "die-5.webp",
+      "sha256": "897bb39385f772320f6d691acc61439cf7cbbb67d46de8ae30d44132be673800",
+      "originalSha256": "897bb39385f772320f6d691acc61439cf7cbbb67d46de8ae30d44132be673800",
+      "dimensions": [
+        320,
+        320
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "randomizers.die-6",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-die-6.webp",
+      "target": "randomizers/die-6.webp",
+      "asset": "die-6.webp",
+      "sha256": "c84e8cff432f64bdbb56c12546f18da7aca4f75817629c6b5cf82a12ee39babe",
+      "originalSha256": "c84e8cff432f64bdbb56c12546f18da7aca4f75817629c6b5cf82a12ee39babe",
+      "dimensions": [
+        320,
+        320
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "randomizers.signet",
+      "page": "randomizers",
+      "required": true,
+      "source": "public/randomizers/rosie-signet.webp",
+      "target": "randomizers/signet.webp",
+      "asset": "randomizers.signet.webp",
+      "sha256": "fe684cfcf2f5455fccc42a80e5a065ab6f37b6b50b2b4da0c63cd9599849e7c2",
+      "originalSha256": "92253c64b89b9bcea388666dcc01dab7d0bd687bc7b732c75d8672d8f528524a",
+      "dimensions": [
+        320,
+        317
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "randomizers.decorative-die",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-decorative-die.webp",
+      "target": "randomizers/decorative-die.webp",
+      "asset": "decorative-die.png",
+      "sha256": "3ba87972fee4298fb33a115fa1f473da554cde4d1e26709f412ec2535185c08d",
+      "originalSha256": "2132b4051fb369982be618efdf2a5ac16854b5423423a0b35d8dea5e2b78a59a",
+      "dimensions": [
+        180,
+        176
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "generated"
+    },
+    {
+      "id": "randomizers.casino",
+      "page": "randomizers",
+      "required": false,
+      "source": "public/randomizers/rosie-casino.webp",
+      "target": "randomizers/casino.webp",
+      "asset": "casino.png",
+      "sha256": "f254fa79bae473780e5618ac345154ca2b5d9f295654448fab351b2566e3213a",
+      "originalSha256": "bd5946facb132620e2b5f83132b748979079f20e52ebe13631150388f7b1621d",
+      "dimensions": [
+        300,
+        348
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "santa.banner",
+      "page": "santa",
+      "required": true,
+      "source": "public/randomizers/secret-santa/11-preferred-banner.webp",
+      "target": "santa/banner.webp",
+      "asset": "santa.banner.png",
+      "sha256": "d0d4c2d060b675d8b47d6067e9f86babc305abb9f3449aa11ed1474ef419630c",
+      "originalSha256": "f0ee66a3a46bb8d37ab5bf6b632f935bbacc4ebcefcc5dd17b4a673362021005",
+      "dimensions": [
+        1536,
+        418
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "santa.host",
+      "page": "santa",
+      "required": true,
+      "source": "public/randomizers/secret-santa/12-preferred-rosie.webp",
+      "target": "santa/host.webp",
+      "asset": "santa.host.png",
+      "sha256": "b191a243f7975a3c46585b6d7692e77b86c8574e1dbbe7c6edc463726400b01d",
+      "originalSha256": "547730006fc4cf360cedde5944fc800b958f2b3f5171e360ebf96da509455c6a",
+      "dimensions": [
+        775,
+        418
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "santa.marquee",
+      "page": "santa",
+      "required": false,
+      "source": "public/randomizers/secret-santa/13-preferred-marquee.webp",
+      "target": "santa/marquee.webp",
+      "asset": "marquee.png",
+      "sha256": "ab3a3e92a2ac112ee13175d2f469bebd3998e50c01cfa6a91f33d5dd1e9c90b8",
+      "originalSha256": "0bd168085684e8eedb85ce0d4925be06075e351e658f85e3cb47ac433d86a4b2",
+      "dimensions": [
+        761,
+        418
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "santa.envelope",
+      "page": "santa",
+      "required": false,
+      "source": "public/randomizers/secret-santa/03-sealed-envelope.webp",
+      "target": "santa/envelope.webp",
+      "asset": "envelope.webp",
+      "sha256": "ec32feccb5d88ac6bbf4b2f32ddc291f9d4c0b3394a275f1dcbd50496a796e6b",
+      "originalSha256": "ec32feccb5d88ac6bbf4b2f32ddc291f9d4c0b3394a275f1dcbd50496a796e6b",
+      "dimensions": [
+        1508,
+        981
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "santa.recipient",
+      "page": "santa",
+      "required": false,
+      "source": "public/randomizers/secret-santa/06-recipient-card.webp",
+      "target": "santa/recipient.webp",
+      "asset": "recipient.webp",
+      "sha256": "52112681e419031f6f8350020f952cea61610d633c06c156bb9c237d0cdddc25",
+      "originalSha256": "52112681e419031f6f8350020f952cea61610d633c06c156bb9c237d0cdddc25",
+      "dimensions": [
+        1500,
+        1024
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "santa.gifts",
+      "page": "santa",
+      "required": false,
+      "source": "public/randomizers/secret-santa/07-gift-collection.webp",
+      "target": "santa/gifts.webp",
+      "asset": "gifts.webp",
+      "sha256": "15c6e897fa19faa5e1709ceae9e728a347d3e596bfd04dd8a2b8b44eeb66454c",
+      "originalSha256": "15c6e897fa19faa5e1709ceae9e728a347d3e596bfd04dd8a2b8b44eeb66454c",
+      "dimensions": [
+        432,
+        326
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "santa.scroll",
+      "page": "santa",
+      "required": false,
+      "source": "public/randomizers/secret-santa/08-invitation-scroll.webp",
+      "target": "santa/scroll.webp",
+      "asset": "scroll.webp",
+      "sha256": "a5433f1fabf5fa950e3a92133a564592f905d26f3513ea24236b84be00063888",
+      "originalSha256": "a5433f1fabf5fa950e3a92133a564592f905d26f3513ea24236b84be00063888",
+      "dimensions": [
+        348,
+        341
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "santa.emblem",
+      "page": "santa",
+      "required": true,
+      "source": "public/randomizers/secret-santa/09-secret-santa-emblem.webp",
+      "target": "santa/emblem.webp",
+      "asset": "santa.emblem.webp",
+      "sha256": "d2e30485113678f424273ab71331c8faf8e4ec5138571ff99c0248b87753ccbd",
+      "originalSha256": "d2e30485113678f424273ab71331c8faf8e4ec5138571ff99c0248b87753ccbd",
+      "dimensions": [
+        265,
+        282
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "santa.email-portrait",
+      "page": "santa",
+      "required": true,
+      "source": "public/randomizers/secret-santa/email/rosie-portrait.png",
+      "target": "santa/email-portrait.png",
+      "asset": "santa.email-portrait.png",
+      "sha256": "4a61bf39d0a5e99bb46fb87274e6b835f279f37197080c4fbc4696caad5a48ab",
+      "originalSha256": "a7128c0604445c1db58fb35b3fdf36595e376cb986e9c9f68d726a6fe039ddfe",
+      "dimensions": [
+        420,
+        227
+      ],
+      "approval": "awaiting final approval",
+      "origin": "fix-round",
+      "method": "generated"
+    },
+    {
+      "id": "calculations.hero",
+      "page": "calculations",
+      "required": true,
+      "source": "public/rosieverse/calculations/hero/hero-full-resolution.webp",
+      "target": "calculations/hero.webp",
+      "asset": "PILOT-002-calculations-final.png",
+      "sha256": "d17b887aafcfc1982883f5b0fbee56448a47582423d32516ef14681a5ce2e8fb",
+      "originalSha256": "717725c979d23b17c6a96f8520a093e8d4be98e884d33b8bc0c7e7ee039a221e",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "approved",
+      "origin": "pilot",
+      "method": "generated"
+    },
+    {
+      "id": "calculations.toolkit",
+      "page": "calculations",
+      "required": true,
+      "source": "public/rosieverse/calculations/toolkit/housing-shiba.webp",
+      "target": "calculations/toolkit.webp",
+      "asset": "calculations.toolkit.png",
+      "sha256": "033de357383bc4dad7725e0f7325510b6fb4d81ede9542a548dcd4843bd54ba9",
+      "originalSha256": "ce5dfce6e27bc6b220bf94de15fc40525a2aaa6882aa83f61564a0378464a1bc",
+      "dimensions": [
+        210,
+        219
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "timekeeper.lever-ready",
+      "page": "timekeeper",
+      "required": true,
+      "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-levers-ready.webp",
+      "target": "timekeeper/lever-ready.webp",
+      "asset": "timekeeper.lever-ready.png",
+      "sha256": "ec510e15f462507825ed1f1e967b356292e9a9a8604848794690d2657ac226ab",
+      "originalSha256": "4a73be6715b8f82035d33be915e45217cba47ad3895dd6e73ffe30097c9761ea",
+      "dimensions": [
+        724,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "timekeeper.lever-working",
+      "page": "timekeeper",
+      "required": true,
+      "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-levers-working.webp",
+      "target": "timekeeper/lever-working.webp",
+      "asset": "timekeeper.lever-working.png",
+      "sha256": "ee13636caf32a28821e60e01908c6ede1f166044b4ddfc030d9a035b822f94ac",
+      "originalSha256": "ac2ac6b868f91526ab8389d548f8a76cd1cf9f8baed288ede4dd4afa26b216fc",
+      "dimensions": [
+        724,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "timekeeper.lever-pull",
+      "page": "timekeeper",
+      "required": true,
+      "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-levers-pull.webp",
+      "target": "timekeeper/lever-pull.webp",
+      "asset": "timekeeper.lever-pull.png",
+      "sha256": "e6eafc417c2cba9e5a9f3d1af35d75b1f7ebc67ea93b23259c7d2ece71033d8c",
+      "originalSha256": "0eeeb3b33f49c6638367709da8609ab5becbb1003972e722a59b26811c92c228",
+      "dimensions": [
+        724,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "timekeeper.lever-integrated",
+      "page": "timekeeper",
+      "required": false,
+      "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-integrated-levers.webp",
+      "target": "timekeeper/lever-integrated.webp",
+      "asset": "lever-integrated.png",
+      "sha256": "9b72bffcaae0553bee4cb5933f70ec4a1640da51024c6c999ac6ce77e23e8039",
+      "originalSha256": "3e82082355b677ccbbddbaf5e1e1bf73cf1edadaf7d5a91656128e97d8e42762",
+      "dimensions": [
+        2700,
+        870
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "generated"
+    },
+    {
+      "id": "timekeeper.atlas",
+      "page": "timekeeper",
+      "required": false,
+      "source": "public/rosieverse/timekeeper/midnight-observatory/rosie-original-atlas.webp",
+      "target": "timekeeper/atlas.webp",
+      "asset": "atlas.png",
+      "sha256": "83015c188943824fe7fc5c3a42895f8e3fbf01b968156a55fbb444d71b8bd3f4",
+      "originalSha256": "37b00ddc103a8e30c4295085a7647b2537b8c25faa55c0efd6170dd17446731d",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "generated"
+    },
+    {
+      "id": "qr.frame-blank",
+      "page": "qr",
+      "required": true,
+      "source": "public/qr-atelier/rosie-qr/rosie-frame-blank.webp",
+      "target": "qr/frame-blank.webp",
+      "asset": "qr.frame-blank.webp",
+      "sha256": "11560d379df589ef34ee485efb2affcc29a868efdcd9c434e44d83e4e4552920",
+      "originalSha256": "11560d379df589ef34ee485efb2affcc29a868efdcd9c434e44d83e4e4552920",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "qr.frame-peeking",
+      "page": "qr",
+      "required": true,
+      "source": "public/qr-atelier/rosie-qr/rosie-frame-peeking.webp",
+      "target": "qr/frame-peeking.webp",
+      "asset": "qr.frame-peeking.png",
+      "sha256": "89df72aae92ad2eaaa277e030205ce3b3a5221acc6217555546b6588e923cc81",
+      "originalSha256": "06d31ea5bba769a525f56b71ef3f89ac0815530f758c0c9b41164231d380a649",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "qr.frame-presenting",
+      "page": "qr",
+      "required": true,
+      "source": "public/qr-atelier/rosie-qr/rosie-frame-presenting.webp",
+      "target": "qr/frame-presenting.webp",
+      "asset": "qr.frame-presenting.png",
+      "sha256": "9649fe80b324c009a18cb1a155c7de2238c50fc0ce0288b93d042d1d2cdf8cbf",
+      "originalSha256": "6ec6064fa5a3d08d47b192ca7abe19985be435d4140c251eca4d50df79328b26",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "qr.frame-seated",
+      "page": "qr",
+      "required": true,
+      "source": "public/qr-atelier/rosie-qr/rosie-frame-seated.webp",
+      "target": "qr/frame-seated.webp",
+      "asset": "qr.frame-seated.png",
+      "sha256": "2a749ceb399540973e1530945c7aaea0b42b03a313102fc39d42fdc8a2a4635c",
+      "originalSha256": "4dbbcbdb0da7e18e9448dc73ed1c37a6dc141c4330e994014cce59d283d9d6de",
+      "dimensions": [
+        1448,
+        1086
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "qr.header",
+      "page": "qr",
+      "required": false,
+      "source": "public/qr-atelier/header-sign.webp",
+      "target": "qr/header.webp",
+      "asset": "header.webp",
+      "sha256": "12e18101cda769ae137918e8c8ef9d54d0a638a29276c08e8494524c0eb099c7",
+      "originalSha256": "12e18101cda769ae137918e8c8ef9d54d0a638a29276c08e8494524c0eb099c7",
+      "dimensions": [
+        1200,
+        400
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "qr.idle-paw",
+      "page": "qr",
+      "required": false,
+      "source": "public/qr-atelier/idle-paw.webp",
+      "target": "qr/idle-paw.webp",
+      "asset": "idle-paw.webp",
+      "sha256": "1b3aece178d2e52a378671870611336eac410bd9e09f61f24fdf4e07654490e4",
+      "originalSha256": "1b3aece178d2e52a378671870611336eac410bd9e09f61f24fdf4e07654490e4",
+      "dimensions": [
+        360,
+        369
+      ],
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    },
+    {
+      "id": "recipes.kitchen",
+      "page": "recipes",
+      "required": true,
+      "source": "public/rosieverse/recipes/recipes-hero.webp",
+      "target": "recipes/kitchen.webp",
+      "asset": "recipes.kitchen.png",
+      "sha256": "6e26a7a117bb27fddfd52fe7ea1140907df4720dceb2aa9497e16012fdcc3844",
+      "originalSha256": "42d0c08919bd16fe877fbfdfeed7e19016daf6646cc14b8a77efa7fd0880a5fb",
+      "dimensions": [
+        821,
+        1916
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "recipes.title",
+      "page": "recipes",
+      "required": true,
+      "source": "public/rosieverse/recipes/recipes-title.webp",
+      "target": "recipes/title.webp",
+      "asset": "recipes.title.png",
+      "sha256": "279d6be7dbef1febae309853107be4bb63a40461eaecae1d3ba027bf81f44e89",
+      "originalSha256": "620f78f0aec6506ff3edec46c506dfe9772ccdf093394277cb88f7911c2721a5",
+      "dimensions": [
+        2172,
+        724
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "reviews.header",
+      "page": "reviews",
+      "required": true,
+      "source": "public/rosieverse/reviews/rosies-reviews-header.jpg",
+      "target": "reviews/header.jpg",
+      "asset": "PILOT-001-reviews-final.png",
+      "sha256": "d112c935035e9de7ae690658932bfe7b1aa00464c2e67fbb01698739afc4aabc",
+      "originalSha256": "f5d240be095ff23f56778ffcdfbbe78ce4e3db7c21d5ed265ad732ff2f0c8a16",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "approval": "approved",
+      "origin": "pilot",
+      "method": "generated"
+    },
+    {
+      "id": "reminders.desktop",
+      "page": "reminders",
+      "required": true,
+      "source": "public/rosieverse/reminders/hero-desktop.webp",
+      "target": "reminders/desktop.webp",
+      "asset": "PILOT-003-reminders-final.png",
+      "sha256": "a5489e27c5bd718f57bf1dff3a4538c852de55f9af18d00320b9fb0c4d62a347",
+      "originalSha256": "c44eba94001d1a2acaf09769fd2a4a9f696fc6830066b1a3db98e92464a01bf4",
+      "dimensions": [
+        1200,
+        1028
+      ],
+      "approval": "approved",
+      "origin": "pilot",
+      "method": "generated"
+    },
+    {
+      "id": "reminders.mobile",
+      "page": "reminders",
+      "required": true,
+      "source": "public/rosieverse/reminders/hero-mobile.webp",
+      "target": "reminders/mobile.webp",
+      "asset": "PILOT-003b-reminders-mobile-final.png",
+      "sha256": "2d2372724c08409e18aa78d9635eb2cc1cc9c35c1fcf33412e0142b177f6bdcf",
+      "originalSha256": "4ffc3c2bf9ebbf4e41b192345570d9894526b2c2a1c2ef58544bc9d9d4f775c2",
+      "dimensions": [
+        1355,
+        1161
+      ],
+      "approval": "approved",
+      "origin": "pilot",
+      "method": "generated"
+    },
+    {
+      "id": "resources.crest",
+      "page": "resources",
+      "required": true,
+      "source": "public/rosieverse/resources/crest.webp",
+      "target": "resources/crest.webp",
+      "asset": "resources.crest.png",
+      "sha256": "b0a968855c6e25beaf3cc5a355d416fa84f65c17cde0cc4071dce743c5209b9b",
+      "originalSha256": "a6e009c8ca255db73fcae9ca462a2e1760d0054137b51ee6ed4c9bd57db7a9f0",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "approval": "approved",
+      "origin": "run-45",
+      "method": "generated"
+    },
+    {
+      "id": "account.entry",
+      "page": "account",
+      "required": false,
+      "source": "public/rosieverse/account/rosie-account-entry.svg",
+      "target": "account/entry.svg",
+      "asset": "entry.svg",
+      "sha256": "9c9cc8108dbfac03ed5cf7b9db254fc636234601812bec2ff69a05f101d387fe",
+      "originalSha256": "9c9cc8108dbfac03ed5cf7b9db254fc636234601812bec2ff69a05f101d387fe",
+      "dimensions": null,
+      "approval": "approved",
+      "origin": "run-27",
+      "method": "copied-as-is"
+    }
+  ]
+}
