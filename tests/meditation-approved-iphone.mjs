@@ -46,7 +46,7 @@ try {
           await page.locator(".zen-immersive").getAttribute("data-zen-view"), view,
           label + " must be able to select " + view
         );
-        const scene = room.locator(".zen-scenery-phone");
+        const scene = page.locator(".zen-scenery-phone");
         await scene.evaluate(async img => { await img.decode(); });
         const layout = await page.evaluate(() => {
           const image = document.querySelector(".zen-scenery-phone");
