@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "date": "2026-11-22",
-  "total": 171,
+  "total": 173,
   "status": "not visually reviewed; each candidate requires a reuse/replace decision",
   "policy": "Any SVG with embedded imagery must preserve its vector geometry and safe masks.",
   "assets": [
@@ -3594,6 +3594,48 @@
         "rebuild-vector-preserving-geometry"
       ],
       "instructions": "Inspect the actual source image, not filename alone. Does it contain Rosie, a dog-specific portrait, baked-in 'Rosie' text, coat pattern or branded mascot? If no, reuse unchanged. If yes, create a Teddy-specific replacement brief with identical proportions, transparency, orientation, composition, source path and reference photos.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV172",
+      "module": "captain-hub",
+      "sourcePath": "public/rosieverse/captain.webp",
+      "sourceGitBlobSHA": "cbf59ad44b310722ee3a8e59c2ce832f7ad5336f",
+      "sourceDimensions": {
+        "width": 1254,
+        "height": 1254,
+        "hasAlpha": false
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect Captain navigation illustration. If Rosie or a Rosie-specific uniform is depicted, replace with matching Captain Teddy artwork before enabling the tab.",
+      "specialVectorHandling": false
+    },
+    {
+      "id": "RV173",
+      "module": "captain-hub",
+      "sourcePath": "public/rosieverse/buttons/captain.webp",
+      "sourceGitBlobSHA": "ead19269218e7ceb95e24d00e6da3cd02f3c7844",
+      "sourceDimensions": {
+        "width": 1244,
+        "height": 1247,
+        "hasAlpha": true
+      },
+      "priority": 2,
+      "decision": "pending-visual-review",
+      "options": [
+        "reuse-unchanged",
+        "promote-to-new-Teddy-generation",
+        "derive-from-existing-approved-art",
+        "rebuild-vector-preserving-geometry"
+      ],
+      "instructions": "Inspect Captain navigation illustration. If Rosie or a Rosie-specific uniform is depicted, replace with matching Captain Teddy artwork before enabling the tab.",
       "specialVectorHandling": false
     }
   ]
