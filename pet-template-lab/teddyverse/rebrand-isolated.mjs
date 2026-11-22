@@ -65,7 +65,7 @@ for(const filename of await scan(path.join(repo,"src"))){
 const mainFile=path.join(repo,"src/main.jsx");
 let main=await fs.readFile(mainFile,"utf8");
 const remove=(description,pattern)=>{if(!pattern.test(main))throw Error("Missing "+description);main=main.replace(pattern,"")};
-remove("dead Captain bottom navigation",/<button type="button" aria-label="Open Captain Rosie"[\s\S]*?<\/button>/);
+remove("dead Captain bottom navigation",/<button type="button" aria-label="Open Captain (?:Rosie|Teddy)"[\s\S]*?<\/button>/);
 remove("dead Vault bottom navigation",/<button type="button" className=\{[^>]+vault-nav-button[^>]*>[\s\S]*?<\/button>/);
 remove("disabled AccountPortal",/<AccountPortal\s*\/>/);
 remove("disabled SecretLayoutStudio",/<SecretLayoutStudio\b[\s\S]*?\/>/);
