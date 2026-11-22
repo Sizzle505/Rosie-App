@@ -302,7 +302,7 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       </div>
       <p className="zen-selected-description">{selected.description}</p>
       <details className="zen-art-options">
-        <summary><img src={sceneSrc} alt="" loading="lazy"/><span>Choose scenery and Rosie's kimono</span><span aria-hidden="true" className="zen-options-chevron">⌄</span></summary>
+        <summary><picture><source media="(max-width:600px)" srcSet={mobileSceneSrc}/><img src={sceneSrc} alt="" loading="lazy"/></picture><span>Choose scenery and Rosie's kimono</span><span aria-hidden="true" className="zen-options-chevron">⌄</span></summary>
         <div className="zen-art-options-inner">
           <div className="zen-art-picker-label">Garden scenery</div>
           <div className="zen-backdrop-picker" role="group" aria-label="Choose meditation background">
