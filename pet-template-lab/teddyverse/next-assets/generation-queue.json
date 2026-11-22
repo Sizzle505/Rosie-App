@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "createdDate": "2026-11-22",
   "sourceInventory": "source-inventory.json",
-  "status": "planned - no new artwork generated",
+  "status": "98 raster images scheduled; 4 SVGs require special handling; 5 decorative SVGs reusable",
   "total": 107,
   "masterFormat": "PNG",
   "storageRule": "Keep private Teddy photos and generated master binaries out of GitHub",
@@ -20,7 +20,9 @@
         "TV008",
         "TV009",
         "TV010"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B02",
@@ -35,7 +37,9 @@
         "TV018",
         "TV019",
         "TV020"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B03",
@@ -50,7 +54,9 @@
         "TV028",
         "TV029",
         "TV030"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B04",
@@ -65,7 +71,9 @@
         "TV038",
         "TV039",
         "TV040"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B05",
@@ -80,7 +88,9 @@
         "TV048",
         "TV049",
         "TV050"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B06",
@@ -95,7 +105,9 @@
         "TV058",
         "TV059",
         "TV060"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B07",
@@ -110,7 +122,9 @@
         "TV068",
         "TV069",
         "TV070"
-      ]
+      ],
+      "generateCount": 9,
+      "vectorReviewCount": 1
     },
     {
       "id": "B08",
@@ -125,7 +139,9 @@
         "TV078",
         "TV079",
         "TV080"
-      ]
+      ],
+      "generateCount": 7,
+      "vectorReviewCount": 3
     },
     {
       "id": "B09",
@@ -140,7 +156,9 @@
         "TV088",
         "TV089",
         "TV090"
-      ]
+      ],
+      "generateCount": 7,
+      "vectorReviewCount": 0
     },
     {
       "id": "B10",
@@ -155,7 +173,9 @@
         "TV098",
         "TV099",
         "TV100"
-      ]
+      ],
+      "generateCount": 10,
+      "vectorReviewCount": 0
     },
     {
       "id": "B11",
@@ -167,7 +187,9 @@
         "TV105",
         "TV106",
         "TV107"
-      ]
+      ],
+      "generateCount": 5,
+      "vectorReviewCount": 0
     }
   ],
   "assets": [
@@ -1873,11 +1895,11 @@
         "height": 1000,
         "hasAlpha": true
       },
-      "masterFilename": "TV066.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "vector-reconstruction-or-derivation-review",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1600 x 1000 or larger in the same aspect ratio.",
+      "prompt": "SVG-based visual or embedded raster - inspect original vector and preserve its geometry, mask, filters and source links. Prepare a vector-safe replacement only after the visual source has been reviewed.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -1885,7 +1907,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "vector-review"
     },
     {
       "id": "TV067",
@@ -2133,11 +2156,11 @@
         "height": 1260,
         "hasAlpha": true
       },
-      "masterFilename": "TV076.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "vector-reconstruction-or-derivation-review",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 1260 x 1260 or larger in the same aspect ratio.",
+      "prompt": "SVG-based visual or embedded raster - inspect original vector and preserve its geometry, mask, filters and source links. Prepare a vector-safe replacement only after the visual source has been reviewed.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2145,7 +2168,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "vector-review"
     },
     {
       "id": "TV077",
@@ -2159,11 +2183,11 @@
         "height": 960,
         "hasAlpha": true
       },
-      "masterFilename": "TV077.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "vector-reconstruction-or-derivation-review",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 960 x 960 or larger in the same aspect ratio.",
+      "prompt": "SVG-based visual or embedded raster - inspect original vector and preserve its geometry, mask, filters and source links. Derive from the existing approved Teddy coin artwork rather than commissioning a new illustration.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2171,7 +2195,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "vector-review"
     },
     {
       "id": "TV078",
@@ -2185,11 +2210,11 @@
         "height": 960,
         "hasAlpha": true
       },
-      "masterFilename": "TV078.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "vector-reconstruction-or-derivation-review",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 960 x 960 or larger in the same aspect ratio.",
+      "prompt": "SVG-based visual or embedded raster - inspect original vector and preserve its geometry, mask, filters and source links. Derive from the existing approved Teddy coin artwork rather than commissioning a new illustration.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2197,7 +2222,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "vector-review"
     },
     {
       "id": "TV079",
@@ -2289,11 +2315,11 @@
         "height": 2304,
         "hasAlpha": true
       },
-      "masterFilename": "TV082.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "reuse-original-decorative",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 4096 x 2304 or larger in the same aspect ratio.",
+      "prompt": "No Teddy-specific art required. Preserve the original decorative vector unchanged.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2301,7 +2327,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "reuse"
     },
     {
       "id": "TV083",
@@ -2315,11 +2342,11 @@
         "height": 480,
         "hasAlpha": true
       },
-      "masterFilename": "TV083.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "reuse-original-decorative",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 480 x 480 or larger in the same aspect ratio.",
+      "prompt": "No Teddy-specific art required. Preserve the original decorative vector unchanged.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2327,7 +2354,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "reuse"
     },
     {
       "id": "TV084",
@@ -2367,11 +2395,11 @@
         "height": 720,
         "hasAlpha": true
       },
-      "masterFilename": "TV085.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "reuse-original-decorative",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 720 x 720 or larger in the same aspect ratio.",
+      "prompt": "No Teddy-specific art required. Preserve the original decorative vector unchanged.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2379,7 +2407,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "reuse"
     },
     {
       "id": "TV086",
@@ -2861,11 +2890,11 @@
         "height": 160,
         "hasAlpha": true
       },
-      "masterFilename": "TV104.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "reuse-original-decorative",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 960 x 160 or larger in the same aspect ratio.",
+      "prompt": "No Teddy-specific art required. Preserve the original decorative vector unchanged.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2873,7 +2902,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "reuse"
     },
     {
       "id": "TV105",
@@ -2887,11 +2917,11 @@
         "height": 90,
         "hasAlpha": true
       },
-      "masterFilename": "TV105.png",
-      "state": "awaiting-generation",
+      "masterFilename": null,
+      "state": "reuse-original-decorative",
       "visualSourceInspected": false,
       "referenceSet": "Private original Teddy photos and approved TeddyVerse-72 character artwork; original sourcePath for composition",
-      "prompt": "Depict the actual Teddy from the supplied multi-angle pet photographs and approved character references, not a generic Shiba or Rosie lookalike. Preserve Teddy's unique ears, coat, muzzle, eyes and body proportions. Teddy replacing ONLY Rosie in the original illustration, leaving other characters and scene objects untouched. Maintain original perspective, palette, framing, separation between animation states, and  true smooth alpha transparency - no faux checkerboard or halo. No extra characters, limbs, text, watermarks or crop. Render the PNG master at 700 x 90 or larger in the same aspect ratio.",
+      "prompt": "No Teddy-specific art required. Preserve the original decorative vector unchanged.",
       "acceptance": [
         "Teddy likeness approved against actual photos",
         "camera/pose/scale match source",
@@ -2899,7 +2929,8 @@
         "no Rosie artwork contamination",
         "separate visual approval",
         "output SHA256 verified before isolated integration"
-      ]
+      ],
+      "vectorHandling": "reuse"
     },
     {
       "id": "TV106",
@@ -2953,5 +2984,8 @@
         "output SHA256 verified before isolated integration"
       ]
     }
-  ]
+  ],
+  "totalGenerationRequired": 98,
+  "vectorAdaptationsAwaitingReview": 4,
+  "vectorReusables": 5
 }
