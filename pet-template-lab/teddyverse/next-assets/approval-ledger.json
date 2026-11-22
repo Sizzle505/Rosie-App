@@ -6,7 +6,7 @@
   "reviewDecisions": {},
   "qaEvidence": {},
   "legend": {
-    "approvedAssets": "Map TV id to {sha256,approvedBy,approvedAt,masterFilename,dimensionsVerified:true,alphaVerified:true}",
+    "approvedAssets": "Map each TV id to {approved:true,sha256,approvedBy,approvedAt,masterFilename,dimensionsVerified:true,alphaVerified:true}; hash and actual file required",
     "reviewDecisions": "Map RV id to {decision:'reuse-unchanged'|'promote-to-generation'|'derive-from-approved-art'|'vector-rebuild',reviewedBy,reviewedAt,note}",
     "qaEvidence": "Map module to {checkName:{passed:true,checkedBy,checkedAt,report}}"
   },
