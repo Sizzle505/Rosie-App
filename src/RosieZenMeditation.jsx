@@ -347,7 +347,16 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
       <div className="zen-immersive" data-zen-view={viewId} data-zen-status={status} style={{"--zen-backdrop-image":`url("${sceneSrc}")`,"--zen-mobile-image":`url("${mobileSceneSrc}")`}}>
         <div className="zen-immersive-scenery" aria-hidden="true">
           <img className="zen-scenery-desktop" src={sceneSrc} alt="" decoding="async" fetchPriority="high"/>
-          <img className="zen-scenery-phone" src={mobileSceneSrc} alt="" decoding="async" fetchPriority="high"/>
+          <img className="zen-scenery-phone" key={viewId} src={mobileSceneSrc} alt=""
+            decoding="async" fetchPriority="high"
+            onError={event => {
+              // The older scene-matched WebP remains a local fallback for browsers
+              // that cannot decode AVIF; never fall back to a desktop panorama.
+              const image=event.currentTarget;
+              if (image.dataset.zenFallbackUsed) return;
+              image.dataset.zenFallbackUsed="true";
+              image.src=NEW_ART+"meditation/iphone/"+viewId+"-portrait.webp";
+            }}/>
           <div className="zen-scenery-atmosphere" aria-hidden="true"/>
           <RosieZenAmbient scene={viewId} mode="meditation" status={status} />
         </div>
