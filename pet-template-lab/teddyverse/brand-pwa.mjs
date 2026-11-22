@@ -36,4 +36,17 @@ html=html.replace(/(<meta name="description" content=")[^"]*(")/,'$1Enter TeddyV
 html=html.replaceAll('RosieVerse','TeddyVerse').replaceAll('Rosie’s','Teddy’s');
 await fs.writeFile(indexPath,html);
 for(const name of ["teddyverse-32.png","teddyverse-180.png","teddyverse-192.png","teddyverse-512.png","teddyverse-maskable-512.png"])await fs.access(path.join(icons,name));
+const excludedStatic=[
+ "card-vault","ember-drill","cosmic-odyssey","yacht-dash",
+ "captain-levels","captain-arcade-backgrounds","captain-motion","captain-victory-backdrops",
+ "rosieverse/haiku","rosieverse/captain.webp","rosieverse/vault.webp",
+ "rosieverse/buttons/captain.webp","rosieverse/buttons/vault.webp",
+ "randomizers/secret-santa/email/preview-draw.html",
+ "randomizers/secret-santa/email/preview-registration.html"
+];
+for(const relative of excludedStatic)await fs.rm(path.join(out,relative),{recursive:true,force:true});
+for(const relative of ["card-vault","ember-drill","cosmic-odyssey","rosieverse/haiku"]){
+ try{await fs.access(path.join(out,relative));throw Error("Excluded assets survived: "+relative)}catch(e){if(e.code!=="ENOENT")throw e}
+}
+console.log("TEDDY_EXCLUDED_STATIC_PURGE "+JSON.stringify({paths:excludedStatic.length,retainedApp:"TeddyVerse"}));
 console.log("TEDDY_PWA_BRANDING_READY "+JSON.stringify({icons:5,manifest:manifest.name,source:"resources.crest"}));
