@@ -11,7 +11,7 @@ if(!process.env.VERCEL && process.env.TEDDY_ALLOW_LOCAL_DISPOSABLE!=="1")throw E
 const replace=s=>s.replaceAll("RosieVerse","TeddyVerse")
  .replaceAll("ROSIEVERSE","TEDDYVERSE").replaceAll("Rosie’s","Teddy’s")
  .replaceAll("Rosie's","Teddy's").replaceAll("ROSIE’S","TEDDY’S")
- .replaceAll("ROSIE'S","TEDDY'S").replaceAll("Rosie","Teddy");
+ .replaceAll("ROSIE'S","TEDDY'S").replaceAll("Rosie","Teddy").replaceAll("ROSIE","TEDDY");
 const noPath=s=>!/(?:https?:|@|\.jsx?\b|\.css\b|\.mjs\b|\.webp\b|\.png\b|\.jpe?g\b|\.svg\b|\/|\\)/i.test(s);
 let filesChanged=0,editsMade=0,changedByFile=[];
 async function scan(dir){let out=[];for(const entry of await fs.readdir(dir,{withFileTypes:true})){
@@ -72,12 +72,17 @@ remove("disabled SecretLayoutStudio",/<SecretLayoutStudio\b[\s\S]*?\/>/);
 if(!main.includes("isLayoutStudio"))throw Error("Unexpected mount function");
 const oldMount='isLayoutStudio\n      ? <LayoutPlayground />\n      : <AccountProvider><App />{isLayoutPreview && <LayoutPreviewBridge />}</AccountProvider>';
 if(!main.includes(oldMount))throw Error("Unexpected account/layout mount expression");
-main=main.replace(oldMount,"<App />");
+main=main.replace(oldMount,"<AccountProvider><App /></AccountProvider>");
 const navSeal='onClick={() => navigateTo("resources")}>R</button>';
 if(!main.includes(navSeal))throw Error("Missing Rosie resource seal");
 main=main.replace(navSeal,'onClick={() => navigateTo("resources")}>T</button>');
+if(main.includes("<AccountPortal />")||main.includes("<SecretLayoutStudio"))throw Error("Offline UI surface still exposed");
 parse(main,{sourceType:"module",plugins:["jsx"]});
 await fs.writeFile(mainFile,main);
+await fs.writeFile(path.join(repo,"src/private/AccountContext.jsx"),"import React, {createContext,useContext} from \"react\";\nconst offlineError = () => new Error(\"TeddyVerse account services are disabled in this preview.\");\nexport async function rosieRequest() { throw offlineError(); }\nconst absent = async () => { throw offlineError(); };\nconst offline = Object.freeze({user:null,checking:false,connectionError:\"\",refresh:async()=>null,login:absent,register:absent,logout:async()=>null});\nconst Context = createContext(offline);\nexport function AccountProvider({children}) { return <Context.Provider value={offline}>{children}</Context.Provider>; }\nexport function useRosieAccount() { return useContext(Context); }\n");
+let qr=await fs.readFile(path.join(repo,"src/RosieQrAtelier.jsx"),"utf8");
+qr=qr.replace("PRODID:-//RosieVerse//QR Atelier//EN","PRODID:-//TeddyVerse//QR Atelier//EN").replace('UID:rosie-','UID:teddy-').replace('@rosieverse.','@teddyverse.local.');
+await fs.writeFile(path.join(repo,"src/RosieQrAtelier.jsx"),qr);
 const htmlFile=path.join(repo,"index.html");
 let html=await fs.readFile(htmlFile,"utf8");
 html=replace(html);await fs.writeFile(htmlFile,html);
