@@ -6,6 +6,10 @@ on:
       - .github/workflows/layout-studio-touchscreen-qa.yml
       - scripts/verify-secret-layout-studio.mjs
       - scripts/verify-layout-studio-v2.mjs
+      - scripts/verify-layout-studio-desktop.mjs
+      - src/layoutStudioAutoTargets.js
+      - src/layoutTargets.js
+      - src/RosieHome.jsx
       - src/layoutStudioGeometry.js
       - src/layoutTargets.js
       - src/SecretLayoutStudio.jsx
@@ -35,6 +39,7 @@ jobs:
           npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/rosie-layout-vite.log 2>&1 &
           sleep 4
           node scripts/verify-layout-studio-v2.mjs
+          node scripts/verify-layout-studio-desktop.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
