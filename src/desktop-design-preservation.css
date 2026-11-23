@@ -28,50 +28,81 @@
     margin-inline: auto !important;
   }
 
-  /* Haiku's approved playground offsets are tuned for 1920x1080.
-     Their horizontal movement follows desktop width and their vertical
-     movement follows available height. At the reference size each value
-     is EXACTLY the existing approved value, including all element scales.
-     These overrides begin at 1480px, like the original manual export. */
-}
-@media screen and (min-width: 1480px) and (hover: hover) and (pointer: fine) {
-  /* The newer masthead stylesheet clears translations/scales with
-     !important. Reinstate only the most recently approved 1920px playground
-     composition, preserving its exact baseline and not touching tablet CSS. */
-  .app-shell.page-haiku .haiku-scene-image {
-    translate: clamp(-102px, -5.3125vw, -78px) clamp(116px, 16.6667dvh, 180px) !important;
-    scale: 1.07 !important;
+ }
+
+/* Desktop Zen Garden: keep artwork and controls in the same layout flow.
+   Fixed playground translations separated the scene buttons from Rosie and
+   pushed the studio below short desktop viewports. */
+@media screen and (min-width:1200px) and (hover:hover) and (pointer:fine) {
+  .app-shell.page-haiku > main.haiku-page {
+    padding:76px clamp(24px,3vw,58px) 30px;
+    overflow:clip;
   }
-  .app-shell.page-haiku .haiku-scroll {
-    translate: clamp(-121px, -6.3021vw, -93px) clamp(34px, 4.8148dvh, 52px) !important;
-    scale: 1.08 !important;
+  .app-shell.page-haiku .haiku-shell {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.12fr);
+    width:min(100%,1700px);
+    max-width:1700px;
+    column-gap:clamp(24px,2.6vw,50px);
+    row-gap:14px;
+    align-items:start;
   }
-  .app-shell.page-haiku .haiku-verse-actions {
-    translate: clamp(-123px, -6.4063vw, -94px) clamp(19px, 2.6852dvh, 29px) !important;
-  }
-  .app-shell.page-haiku .haiku-verse-actions button:nth-child(1) {
-    translate: 8px 2px !important;
-  }
-  .app-shell.page-haiku .haiku-verse-actions button:nth-child(2) {
-    translate: 5px 2px !important;
-  }
-  .app-shell.page-haiku .haiku-verse-actions button:nth-child(3) {
-    translate: 0px 2px !important;
-  }
-  .app-shell.page-haiku .haiku-workbench {
-    translate: clamp(-107px, -5.5729vw, -82px) clamp(192px, 27.5926dvh, 298px) !important;
-  }
+  .app-shell.page-haiku .haiku-content { display:contents; }
   .app-shell.page-haiku .haiku-header {
-    translate: clamp(-4px, -.2083vw, -3px) clamp(37px, 5.2778dvh, 57px) !important;
+    grid-column:1 / -1;
+    grid-row:1;
+    height:clamp(140px,18dvh,190px);
+    min-height:0;
+    --haiku-banner-width:clamp(440px,30vw,570px);
   }
-  .app-shell.page-haiku .haiku-scene-selector button:nth-child(1) {
-    translate: clamp(-70px, -3.6458vw, -54px) clamp(137px, 19.537dvh, 211px) !important;
+  .app-shell.page-haiku .haiku-heading {
+    top:calc(clamp(440px,30vw,570px) * .166);
+    width:clamp(300px,23vw,410px);
   }
-  .app-shell.page-haiku .haiku-scene-selector button:nth-child(2) {
-    translate: clamp(-69px, -3.5938vw, -53px) clamp(138px, 19.6296dvh, 212px) !important;
+  .app-shell.page-haiku .haiku-heading h1 { font-size:clamp(27px,2vw,36px); }
+  .app-shell.page-haiku .haiku-scene-stage { grid-column:1;grid-row:2;margin:0;min-width:0;width:100%; }
+  .app-shell.page-haiku .haiku-scroll-column { grid-column:2;grid-row:2;min-width:0;width:100%;gap:6px; }
+  .app-shell.page-haiku .haiku-workbench { grid-column:3;grid-row:2;margin:0;width:100%;min-width:0; }
+  .app-shell.page-haiku .haiku-header,
+  .app-shell.page-haiku .haiku-scene-image,
+  .app-shell.page-haiku .haiku-scroll,
+  .app-shell.page-haiku .haiku-verse-actions,
+  .app-shell.page-haiku .haiku-verse-actions button,
+  .app-shell.page-haiku .haiku-scene-selector button,
+  .app-shell.page-haiku .haiku-workbench {
+    translate:none !important;
+    scale:none !important;
   }
-  .app-shell.page-haiku .haiku-scene-selector button:nth-child(3) {
-    translate: clamp(-70px, -3.6458vw, -54px) clamp(139px, 19.7222dvh, 213px) !important;
+  .app-shell.page-haiku .haiku-scene-image { height:clamp(310px,49dvh,530px); }
+  .app-shell.page-haiku .haiku-scene-rosie {
+    left:0;bottom:0;width:100%;max-width:100%;height:100%;object-fit:contain;object-position:center bottom;
+  }
+  .app-shell.page-haiku .haiku-scene-stage .haiku-scene-selector {
+    width:min(100%,360px);max-width:100%;margin:14px auto 0;transform:none;gap:12px;
+  }
+  .app-shell.page-haiku .haiku-scene-selector button { min-height:0;padding:0; }
+  .app-shell.page-haiku .haiku-scene-selector button img { width:clamp(70px,5.3vw,96px);height:clamp(70px,5.3vw,96px); }
+  .app-shell.page-haiku .haiku-scroll-display { width:100%;display:flex;justify-content:center; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] {
+    width:min(100%,calc(clamp(340px,54dvh,560px) * .8));margin:0 auto;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style="imperial"] { width:min(100%,calc(clamp(340px,54dvh,560px) * .9586)); }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style="grand"] { width:100%; }
+  .app-shell.page-haiku .haiku-status { margin:6px auto 0 !important;font-size:14px !important;min-height:19px; }
+  .app-shell.page-haiku .haiku-verse-actions { width:min(100%,300px);gap:14px;margin:0 auto !important; }
+  .app-shell.page-haiku .haiku-verse-actions button { width:72px;height:72px;min-height:72px;flex-basis:72px; }
+  .app-shell.page-haiku .haiku-tabs { padding:0 0 12px; }
+  .app-shell.page-haiku .haiku-tabs > button { min-height:112px;padding:0 2px; }
+  .app-shell.page-haiku .haiku-tabs > button img { width:80px;height:80px; }
+  .app-shell.page-haiku .haiku-workbench-body {
+    background:linear-gradient(145deg,rgba(38,27,46,.86),rgba(27,26,39,.82));
+    backdrop-filter:blur(8px);
+  }
+  .app-shell.page-haiku .haiku-panel { min-height:0;padding:22px 24px; }
+  .app-shell.page-haiku .haiku-panel p { font-size:14px;line-height:1.6; }
+  .app-shell.page-haiku .haiku-date { margin:18px 0; }
+  .app-shell.page-haiku .haiku-shell > .haiku-scene-quote {
+    grid-column:1 / -1;grid-row:3;transform:none;margin:8px auto 0;padding:4px 12px 12px;
   }
 }
 
