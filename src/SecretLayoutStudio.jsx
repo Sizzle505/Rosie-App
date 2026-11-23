@@ -751,7 +751,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       <span className='rle-mini-grip' onPointerDown={startPanelMove} onPointerMove={updatePanelPosition} onPointerUp={finishPanelMove} onPointerCancel={finishPanelMove}>⠿</span>
       <button type='button' className={active && editing ? 'rle-on' : ''} onClick={() => {setActive(true);setEditing(true)}}>Arrange</button>
       <button type='button' className={active && !editing ? 'rle-on' : ''} onClick={() => {setActive(true);setEditing(false)}}>Interact</button>
-      <button type='button' className='rle-expand' aria-label='Open full Layout Studio' onClick={() => setOpen(true)}>⌄</button>
+      <button type='button' className='rle-expand' aria-label='Open full Layout Studio' onClick={() => {setOpen(true);if(!active){setActive(true);setEditing(true)}}}>⌄</button>
     </div>}
     {open && <section className='rle-panel rle-ui' ref={panelRef} style={panelStyle(true)} aria-label='Rosie Layout Studio'>
       <header className='rle-header rle-drag-header' onPointerDown={startPanelMove} onPointerMove={updatePanelPosition} onPointerUp={finishPanelMove} onPointerCancel={finishPanelMove}>
