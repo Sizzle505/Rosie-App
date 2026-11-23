@@ -80,7 +80,7 @@ try {
  await page.mouse.up();
  const naturalEnd=await lantern.boundingBox();
  assert.ok(Math.abs(naturalEnd.x-naturalStart.x-24)<4,'Drag on actual selected artwork must work even while marquee mode is enabled');
- assert.ok(Math.abs(naturalEnd.y-naturalStart.y-14)<4,'Selected artwork should follow the mouse vertically');
+ assert.ok(Math.abs(naturalEnd.y-naturalStart.y-14)<4,'Selected artwork should follow the mouse vertically '+JSON.stringify({before:naturalStart,after:naturalEnd,viewport:await page.evaluate(()=>({scrollY:scrollY,innerHeight:innerHeight}))}));
  await page.getByRole('button',{name:'Open full Layout Studio'}).click();
  await page.getByRole('button',{name:'Marquee ON'}).click();
  console.log('PASS: drag selected artwork directly despite marquee mode and disabled outline');
