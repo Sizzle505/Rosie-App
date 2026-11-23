@@ -113,6 +113,19 @@ for(const [relative,changes] of Object.entries(copyFixes)){
  for(const [oldText,newText] of changes){if(!value.includes(oldText))throw Error("Expected Teddy copy marker missing: "+relative+" / "+oldText);value=value.replaceAll(oldText,newText)}
  parse(value,{sourceType:"unambiguous",plugins:["jsx"]});await fs.writeFile(filename,value);
 }
+// Rename the recipe's visible Teddy title while retaining its original static dish asset ID.
+const recipeDataFile=path.join(repo,"src/rosieRecipesData.js");
+let recipeData=await fs.readFile(recipeDataFile,"utf8");
+if(!recipeData.includes('"Shiba Sunrise Hash"'))throw Error("Expected source recipe title absent");
+recipeData=recipeData.replace('"Shiba Sunrise Hash"','"Teddy Sunrise Hash"');
+await fs.writeFile(recipeDataFile,recipeData);
+const recipeComponent=path.join(repo,"src/RosieRecipes.jsx");
+let recipeComponentText=await fs.readFile(recipeComponent,"utf8");
+const expectedImageLookup='recipe.id.replace(/^teddy-s-/, "rosie-s-")';
+if(!recipeComponentText.includes(expectedImageLookup))throw Error("Expected recipe image fallback missing");
+recipeComponentText=recipeComponentText.replace(expectedImageLookup,'recipe.id.replace(/^teddy-s-/, "rosie-s-").replace(/^teddy-sunrise-hash$/, "shiba-sunrise-hash")');
+parse(recipeComponentText,{sourceType:"module",plugins:["jsx"]});
+await fs.writeFile(recipeComponent,recipeComponentText);
 const htmlFile=path.join(repo,"index.html");
 let html=await fs.readFile(htmlFile,"utf8");
 html=replace(html);await fs.writeFile(htmlFile,html);
