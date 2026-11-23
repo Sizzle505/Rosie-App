@@ -38,7 +38,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1986,8 +1986,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setRestartConfirm(false);
     streakRef.current = 0;
     comboRef.current = 1;
-    spawnClockRef.current = 0;
-    bonusTreatClockRef.current = 0;
+    // First cargo arrives promptly; later intervals have breathing room.
+    spawnClockRef.current = chosen === 0 ? 350 : 850;
+    bonusTreatClockRef.current = 2500;
     spawnSequenceRef.current = 0;
     laneRef.current = 1;
     livesRef.current = 3;
@@ -2201,35 +2202,40 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           return moved;
         });
 
-        const spawnEvery = chapter.id === "sakura"
-          ? (phaseKey === "harbor" ? 650 : phaseKey === "riviera" ? 560 : 485)
-          : chapter.cadence;
+        const spawnEvery = yachtSpawnInterval(chapter.id, phaseKey, spawnSequenceRef.current);
         if (spawnClockRef.current >= spawnEvery) {
-          spawnClockRef.current = 0;
+          // Keep fractional elapsed time: clearing the whole clock made phone
+          // ticks accumulate measurable cadence drift across a 75-second run.
+          spawnClockRef.current -= spawnEvery;
+          const sequence = spawnSequenceRef.current++;
           if (chapter.id === "sakura") {
-            const roll = secureIndex(100);
-            const template = roll < 52 ? CAPTAIN_PICKUPS[0]
-              : roll < 77 ? CAPTAIN_PICKUPS[1] : roll < 86
-                ? CAPTAIN_PICKUPS[2] : CAPTAIN_PICKUPS[3];
+            const delivery = yachtSakuraDelivery(sequence, secureIndex);
+            const template = CAPTAIN_PICKUPS.find(pickup => pickup.kind === delivery.kind);
             next.push({ ...template, id: itemIdRef.current += 1,
-              lane: secureIndex(3), y: -12, speed: 1.75 + secureIndex(8) / 10 });
+              lane: delivery.lane, y: -12,
+              speed: yachtObjectSpeed(chapter.id, delivery.kind, secureIndex) });
           } else {
-            const wave = yachtWaveFor(chapter.id, spawnSequenceRef.current++, secureIndex);
+            const wave = yachtWaveFor(chapter.id, sequence, secureIndex);
             if (wave.some((entry) => entry.footprint === "arch")) {
               setMessage("TORII AHEAD: the center channel is OPEN. Sail beneath the overhead beam.");
             }
             wave.forEach((entry) => {
               const standard = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === entry.kind);
+              // A regular cargo wave must also avoid a fresh bonus treat or
+              // an obstacle currently entering the same release corridor.
+              const openLane = isYachtHazard(entry.kind)
+                ? -1 : yachtBonusTreatLane(next, entry.lane);
               next.push({ ...(standard || { label: entry.label, points: 0, turbo: 0 }),
                 ...entry, id: itemIdRef.current += 1, y: -12,
-                speed: 1.75 + secureIndex(8) / 10,
+                lane: openLane >= 0 ? openLane : entry.lane,
+                speed: yachtObjectSpeed(chapter.id, entry.kind, secureIndex),
                 drifted: false, scoredPass: false });
             });
           }
         }
 
-        // A modest extra treat between major waves. Hazards retain exactly
-        // their existing cadence and no extra ball/cheese crowds the water.
+        // Deliver an occasional extra treat into genuinely open water. If all
+        // three lanes are occupied, hold it rather than dropping unfair cargo.
         if (chapter.id !== "sakura") {
           bonusTreatClockRef.current += tickMs;
           if (bonusTreatClockRef.current >= YACHT_EXTRA_TREAT_MS) {
@@ -2238,7 +2244,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               bonusTreatClockRef.current -= YACHT_EXTRA_TREAT_MS;
               const treat = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === "treat");
               next.push({ ...treat, id: itemIdRef.current += 1,
-                lane: safeLane, y: -12, speed: 1.75 + secureIndex(8) / 10,
+                lane: safeLane, y: -12,
+                speed: yachtObjectSpeed(chapter.id, "treat", secureIndex),
                 bonusTreat: true });
             }
           }
