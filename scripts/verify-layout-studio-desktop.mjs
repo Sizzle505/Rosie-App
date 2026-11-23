@@ -74,8 +74,7 @@ try {
  await page.locator('button[aria-label="Open Fortune Teller"]').scrollIntoViewIfNeeded();
  const art=page.locator('button[aria-label="Open Fortune Teller"] img');
  await art.click({force:true});
- const selected=await page.locator('.rle-outline[data-target-id^="auto-"]').count();
- assert.ok(selected>=1,'Unregistered artwork must be selectable in Pick any mode');
+ await page.locator('.rle-outline[data-target-id^="auto-"]').first().waitFor({state:'visible',timeout:10000});
  const autoId=await page.locator('.rle-outline[data-target-id^="auto-"]').first().getAttribute('data-target-id');
  await page.keyboard.press('ArrowRight');
  const actual=await art.evaluate(el=>el.style.translate);
