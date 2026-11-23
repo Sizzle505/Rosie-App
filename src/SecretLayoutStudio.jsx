@@ -244,7 +244,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     if (current.includes(id)) setSelected(current.filter(value => value !== id));
     else {
       // Parent/child pairs should not be transformed simultaneously.
-      const parts = elementsFor(page, scrollMode);
+      const parts = elementsFor(page, scrollMode, pickAny || id.startsWith('auto-') || current.some(key=>key.startsWith('auto-')));
       const picked = parts.find(item => item.id === id)?.node;
       const rest = current.filter(existingId => {
         if (id === 'scroll' && existingId.startsWith('scroll-')) return false;
