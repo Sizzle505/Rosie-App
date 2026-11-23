@@ -4,6 +4,7 @@ on:
     branches: [fix/layout-studio-reliable-direct-drag-20261123, main]
     paths:
       - 'src/SecretLayoutStudio.jsx'
+      - 'src/layoutStudioAutoTargets.js'
       - 'src/SecretLayoutStudio.css'
       - 'scripts/verify-layout-studio-desktop.mjs'
       - 'scripts/verify-layout-studio-v2.mjs'
