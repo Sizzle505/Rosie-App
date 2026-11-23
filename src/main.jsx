@@ -1555,11 +1555,15 @@ function YachtHazardArt({ item }) {
     className="pickup-art yacht-hazard-art" src={source}
     alt="" aria-hidden="true" draggable="false" decoding="async"
     onError={(event) => {
-      // Fall back to verified, real artwork rather than an invisible image
-      // whose CSS water-contact ring looks like a horizontal broken sprite.
+      // Preserve the obstacle's silhouette and footprint if an asset fails
+      // to decode instead of showing an invisible horizontal remnant.
       const img = event.currentTarget;
       img.onerror = null;
-      img.src = "/yacht-dash/obstacles/storm-buoy.webp";
+      img.src = item.footprint === "arch" ? "/yacht-dash/kuroi/torii-passage.webp"
+        : item.footprint === "wide" ? "/yacht-dash/obstacles/reef-rocks.webp"
+        : item.kind === "rival" ? "/yacht-dash/kuroi/kuroi-charge.webp"
+        : item.kind === "supply" ? "/yacht-dash/obstacles/cargo-crate.webp"
+        : "/yacht-dash/obstacles/storm-buoy.webp";
     }} />;
 }
 
@@ -2683,6 +2687,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             const artScale = yachtAssetScale(item.asset);
             const incomingAttackLane = item.kind === "rival" && !item.drifted
               ? yachtRivalAttackLane(item.lane, laneRef.current) : item.driftTo;
+            // Only at the physical passage does the arch move in front of the
+            // ship; the transparent center stays open and the beam passes above.
+            const sailingUnderGate = item.footprint === "arch" && item.y >= 60;
             const center = item.footprint === "arch" ? 50 :
               item.footprint === "wide" ? (item.lane + 1) * 33.333 :
                 16.666 + item.lane * 33.333;
@@ -2693,17 +2700,18 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 item.footprint === "wide" ? { width: "66.666%" } : {}),
               "--approach-scale": perspective.scale * artScale *
                 (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
-              // The gate's physical pillars straddle the two outside lanes.
-              // Stretch its width with depth without exaggerating its height.
+              // Keep the torii pillars centered over the outside two lanes.
+              // Its tall opening can then actually frame Rosie sailing below.
               "--approach-scale-x": perspective.scale * artScale *
-                (item.footprint === "arch" ? 1.38 : item.footprint === "wide" ? 0.89 : 1),
+                (item.footprint === "arch" ? 0.94 : item.footprint === "wide" ? 0.89 : 1),
               "--approach-opacity": perspective.opacity
             } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
             return (
               <div
                 className={"sea-pickup sea-pickup-" + item.kind +
                   (item.footprint ? " yacht-footprint-" + item.footprint : "") +
-                  (approaching ? " yacht-upstream-object" : "")}
+                  (approaching ? " yacht-upstream-object" : "") +
+                  (sailingUnderGate ? " yacht-gate-overpassing" : "")}
                 key={item.id}
                 style={renderedStyle}
                 data-yacht-art={item.asset?.split("/").pop()?.replace(".webp", "")}

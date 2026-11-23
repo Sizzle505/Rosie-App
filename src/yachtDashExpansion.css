@@ -1463,3 +1463,24 @@
     height:clamp(108px,24%,145px);
   }
 }
+
+/* Make the approved transparent torii read as an actual overpass. Keep its
+   pillars over the two outer lanes; the transparent middle is the safe route.
+   The arch sits behind Rosie on approach and crosses in front of her ONLY
+   while she sails through it. No fake 'pass here' lettering is needed. */
+.captain-game-page .sea-pickup.yacht-footprint-arch {
+  height:clamp(220px,38%,330px);
+}
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-footprint-arch.yacht-gate-overpassing {
+  z-index:24;
+}
+.captain-game-page .sea-pickup.yacht-footprint-arch .yacht-hazard-art {
+  object-fit:fill;
+  opacity:1;
+  visibility:visible;
+}
+@media(max-width:720px) {
+  .captain-game-page .sea-pickup.yacht-footprint-arch {
+    height:clamp(175px,40%,260px);
+  }
+}
