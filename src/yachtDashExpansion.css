@@ -1444,3 +1444,22 @@
   .captain-game-page .yacht-kuroi-recoil{opacity:0;}
   .captain-game-page .yacht-kuroi-impact-foam{opacity:.7;}
 }
+
+/* Driftwood's approved 1:1 master had been squeezed into the shallow
+   two-lane obstacle box, visually reducing the fallen log to a thin strip.
+   Give it enough vertical depth without changing its two-lane hitbox. */
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-footprint-wide[data-yacht-art="driftwood"]{
+  height:clamp(145px,28%,190px);
+}
+.captain-game-page .sea-pickup.yacht-footprint-wide[data-yacht-art="driftwood"] .yacht-hazard-art{
+  display:block;
+  visibility:visible;
+  opacity:1;
+  object-fit:fill;
+  filter:drop-shadow(0 5px 7px rgba(0,12,23,.52));
+}
+@media(max-width:720px){
+  .captain-game-page .sea-pickup.yacht-upstream-object.yacht-footprint-wide[data-yacht-art="driftwood"]{
+    height:clamp(108px,24%,145px);
+  }
+}
