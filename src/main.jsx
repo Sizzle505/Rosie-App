@@ -1537,6 +1537,54 @@ function GoldenCheeseIcon({ compact = false }) {
   );
 }
 
+function YachtGoldenCheeseIcon() {
+  // Yacht Dash-only collectible: a glossy Swiss cheese wedge, not a medal,
+  // emblem or framed icon. Three restrained glints signal Turbo power.
+  return (
+    <svg className="yacht-golden-cheese-art" viewBox="0 0 100 100" aria-hidden="true"
+      focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="yacht-cheese-top" x1="0" y1="0" x2=".9" y2="1">
+          <stop offset="0" stopColor="#fff6a8" />
+          <stop offset=".35" stopColor="#ffdd4e" />
+          <stop offset="1" stopColor="#f49b16" />
+        </linearGradient>
+        <linearGradient id="yacht-cheese-side" x1="0" y1="0" x2=".85" y2="1">
+          <stop offset="0" stopColor="#ffc62e" />
+          <stop offset=".6" stopColor="#ef8a13" />
+          <stop offset="1" stopColor="#b75a0b" />
+        </linearGradient>
+        <radialGradient id="yacht-cheese-hole">
+          <stop offset="0" stopColor="#a95209" />
+          <stop offset=".64" stopColor="#d67a0d" />
+          <stop offset="1" stopColor="#f4ae20" />
+        </radialGradient>
+      </defs>
+      <path d="M12 55 65 20q4-3 8 1l17 29-43 35-35-17z"
+        fill="url(#yacht-cheese-top)" stroke="#c77913" strokeWidth="2.4" strokeLinejoin="round" />
+      <path d="M12 55 47 85v11L12 69Z"
+        fill="#e28b0d" stroke="#ab580c" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M47 85 90 50v14L47 96Z"
+        fill="url(#yacht-cheese-side)" stroke="#a95f0d" strokeWidth="2.4" strokeLinejoin="round" />
+      <path d="M18 55 66 23 83 48" fill="none" stroke="#fff7b6"
+        strokeWidth="3" strokeLinecap="round" opacity=".9" />
+      <ellipse cx="59" cy="40" rx="8.5" ry="5.7" transform="rotate(-27 59 40)"
+        fill="url(#yacht-cheese-hole)" stroke="#ee9d1b" strokeWidth="1.3" />
+      <ellipse cx="39" cy="58" rx="5.9" ry="4.5" transform="rotate(-18 39 58)"
+        fill="url(#yacht-cheese-hole)" stroke="#eda22b" strokeWidth="1" />
+      <ellipse cx="67" cy="63" rx="6.8" ry="5" transform="rotate(-35 67 63)"
+        fill="url(#yacht-cheese-hole)" stroke="#eda22b" strokeWidth="1" />
+      <ellipse cx="32" cy="79" rx="4.2" ry="3.5" fill="#b86a09" opacity=".74" />
+      <ellipse cx="72" cy="80" rx="5.2" ry="4.2" transform="rotate(-30 72 80)"
+        fill="#ae560b" opacity=".84" />
+      <path d="M19 48v-8m-4 4h8M88 29v-8m-4 4h8M84 89v-7m-3.5 3.5h7"
+        fill="none" stroke="#fff5bc" strokeWidth="2.6" strokeLinecap="round" />
+      <circle cx="21" cy="29" r="1.7" fill="#ffdf7b"/>
+      <circle cx="95" cy="74" r="1.4" fill="#fff7ca"/>
+    </svg>
+  );
+}
+
 function CaptainPickupIcon({ kind }) {
   const images = {
     ball: "/captain-pickup-tennis.webp",
@@ -2715,9 +2763,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 data-yacht-art={item.asset?.split("/").pop()?.replace(".webp", "")}
                 aria-label={item.label}
               >
-                {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
+                {item.kind === "cheese" ? <YachtGoldenCheeseIcon /> : item.asset
                   ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
-                 {item.kind === "cheese" && <small>GOLDEN</small>}
                 {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
                 {incomingAttackLane !== undefined && incomingAttackLane !== item.lane && !item.drifted &&
                   <span className="yacht-drift-warning" aria-hidden="true">{incomingAttackLane > item.lane ? "→" : "←"}</span>}
