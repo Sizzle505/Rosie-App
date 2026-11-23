@@ -1,10 +1,10 @@
-// One-time import of the approved Tunnel opening into the immutable Vercel deployment.
-// Do not depend on the signed source for subsequent deployments: switch to the archived
-// immutable production deployment URL after the first verified build.
+// Re-bundle the approved Tunnel opening from a verified immutable Rosie production build.
+// The original 48-second soundtrack is muxed into the H.264 video. SHA256 verification
+// prevents a missing, substituted, or expired source from shipping a broken introduction.
 import {createHash} from "node:crypto";
 import {mkdir,writeFile,readFile} from "node:fs/promises";
 import {join} from "node:path";
-const url="https://d2jqrm6oza8nb6.cloudfront.net/datasets/507123b0-2aa6-490f-92b5-04ba606bd6c2.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNzRiNzUxMzA4MmNjZDcwMyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NTU2NjEyOH0.JDVIB6Em3Kif-nANTBhbR69XK8j0mJosSVh222euyek";
+const url="https://rosie-app-gelogtwbq-apex-7488.vercel.app/ember-drill/rosie-tunnel-opening.mp4";
 const expected="bfeaf6b48ece51b27dbe106d337ba1b2678b31ce6d500dc4bce380e7c23b60d4";
 const dest=join(process.cwd(),"public/ember-drill/rosie-tunnel-opening.mp4");
 let file;

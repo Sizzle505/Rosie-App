@@ -232,6 +232,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     const video=introVideoRef.current;
     if(video){video.pause();video.currentTime=0;}
     setIntroOpen(false);setIntroPlaying(false);
+    window.dispatchEvent(new CustomEvent("rosieverse:music:cinematic",{detail:{active:false}}));
     try{localStorage.setItem(TUNNEL_OPENING_SEEN,"1")}catch{}
   }
   function openOpening(){
@@ -714,7 +715,8 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             <video ref={introVideoRef} className="ember-opening-film"
               src={TUNNEL_OPENING_VIDEO} poster="/ember-drill/drill-header.webp"
               preload="metadata" playsInline controls={introPlaying}
-              onPlay={()=>setIntroPlaying(true)} onPause={()=>setIntroPlaying(false)}
+              onPlay={()=>{setIntroPlaying(true);window.dispatchEvent(new CustomEvent("rosieverse:music:cinematic",{detail:{active:true}}))}}
+              onPause={()=>{setIntroPlaying(false);window.dispatchEvent(new CustomEvent("rosieverse:music:cinematic",{detail:{active:false}}))}}
               onEnded={closeOpening} onError={()=>setIntroError(true)}
               aria-label="Animated story introducing Rosie and the five underground kingdoms" />
             {introError&&<p className="ember-opening-error" role="status">The introduction is temporarily unavailable. You can still play.</p>}
