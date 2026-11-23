@@ -38,7 +38,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1771,6 +1771,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
   const [running, setRunning] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [restartConfirm, setRestartConfirm] = useState(false);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(75);
@@ -1878,6 +1879,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     // Keep instructions visible from first sight of the arch until its
     // pillars have fully passed the hull, not just for its collision window.
     item.footprint === "arch" && item.y >= -12 && item.y <= 108);
+  const threatForecast = yachtThreatForecast(items);
   const rank = captainRank(score);
 
   function audioContext() {
@@ -1958,6 +1960,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setHullRecovering(false);
     hullGraceRemainingRef.current = 0;
     setPaused(false);
+    setRestartConfirm(false);
     setRunning(false);
     window.clearTimeout(phaseNoticeTimerRef.current);
     setPhaseNotice("");
@@ -1980,6 +1983,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     boostRemainingRef.current = 0;
     window.clearInterval(boostDrainTimerRef.current);
     setPaused(false);
+    setRestartConfirm(false);
     streakRef.current = 0;
     comboRef.current = 1;
     spawnClockRef.current = 0;
@@ -2060,7 +2064,18 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
   function toggleYachtPause() {
     if (!running || ended) return;
+    setRestartConfirm(false);
     setPaused(current => !current);
+  }
+
+  function requestYachtRestart() {
+    if (!running || ended) {
+      startGame();
+      return;
+    }
+    // Do not destroy a live run from a stray touch beside the pause control.
+    setPaused(true);
+    setRestartConfirm(true);
   }
 
   useEffect(() => {
@@ -2072,7 +2087,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   }, [fullscreenExitSequence]);
 
   function onCoursePointerDown(event) {
-    touchStartRef.current = running && !paused
+    touchStartRef.current = running && !paused &&
+      (event.pointerType !== "mouse" || event.button === 0)
       ? { x: event.clientX, y: event.clientY, pointerId: event.pointerId }
       : null;
   }
@@ -2082,11 +2098,15 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     touchStartRef.current = null;
     if (!running || paused || !startPoint || startPoint.pointerId !== event.pointerId) return;
     const deltaX = event.clientX - startPoint.x;
-    if (Math.abs(deltaX) > 26) {
-      moveCaptain(deltaX > 0 ? 1 : -1);
+    const deltaY = event.clientY - startPoint.y;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const steps = yachtSwipeSteps(deltaX, deltaY, rect.width);
+    if (steps) {
+      moveCaptain(steps);
       return;
     }
-    const rect = event.currentTarget.getBoundingClientRect();
+    // A vertical scroll or an imprecise drag is not a lane selection.
+    if (Math.hypot(deltaX, deltaY) > 18) return;
     const ratio = (event.clientX - rect.left) / rect.width;
     steerTo(ratio < .333 ? 0 : ratio > .666 ? 2 : 1);
   }
@@ -2360,9 +2380,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       const yachtFrame = document.querySelector(".captain-fs-yacht");
       // The Captain page also mounts Tunnel and Cosmic Odyssey. A global
       // keyboard handler must never steal their arrows or Space/Turbo.
-      const isInYacht = yachtFrame?.contains(event.target);
-      const isYachtExpanded = yachtFrame?.classList.contains("is-expanded");
-      if (!isInYacht && !isYachtExpanded) return;
+      // Fullscreen by itself is not keyboard ownership: the player may have
+      // focused another Captain game or deliberately blurred this cabinet.
+      // Launch restores focus to the yacht course, so normal play still works.
+      if (!yachtFrame?.contains(event.target)) return;
       if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
       // Do not hijack native Enter / Space on selected chapter and result buttons.
       if (!running && (event.key === "Enter" || event.key === " ") &&
@@ -2376,7 +2397,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         if ((event.key === " " || event.key === "Enter") &&
             !event.target?.closest?.("button, a, [role='button']")) {
           event.preventDefault();
-          setPaused(false);
+          toggleYachtPause();
         }
         return;
       }
@@ -2487,8 +2508,20 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           </div>
           <b>ROSIE I</b>
         </div>
-        <div className="yacht-steering-options" role="group" aria-label="Choose Yacht Dash steering controls">
+        <div className="yacht-steering-options" role="group" aria-label="Yacht Dash steering and upcoming hazards">
           <span>STEERING</span>
+          <div className={"yacht-lane-forecast" + (threatForecast ? " has-threat" : "")}
+            role="img"
+            aria-label={threatForecast
+              ? "Hazard ahead. Open lanes: " + threatForecast.open.map(index => ["port", "center", "starboard"][index]).join(", ")
+              : "No immediate hazards ahead"}>
+            <small>{threatForecast ? "OPEN" : "LANES"}</small>
+            {[0, 1, 2].map(index =>
+              <i key={index} className={(threatForecast?.blocked.includes(index) ? " is-blocked" : "") +
+                (lane === index ? " is-current" : "")} aria-hidden="true">
+                {["P", "C", "S"][index]}
+              </i>)}
+          </div>
           <button type="button" className="captain-steering-toggle"
             aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
             title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
@@ -2527,16 +2560,23 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
               aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
               title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}>{paused ? "▶" : "❚❚"}</button>
-            <button className="ember-icon-action" type="button" onClick={startGame}
-              aria-label="Reset Yacht Dash" title="Reset Yacht Dash">↻</button>
+            <button className="ember-icon-action" type="button" onClick={requestYachtRestart}
+              aria-label="Restart Yacht Dash" title="Restart Yacht Dash">↻</button>
           </div>
           {paused && (
             <div className="captain-yacht-pause-overlay" role="status">
               <div>
                 <span>CAPTAIN'S ORDERS</span>
-                <strong>VOYAGE PAUSED</strong>
-                <p>Your time, treats, and boost charge are preserved.</p>
-                <button type="button" onClick={toggleYachtPause}>RESUME VOYAGE</button>
+                <strong>{restartConfirm ? "RESTART VOYAGE?" : "VOYAGE PAUSED"}</strong>
+                <p>{restartConfirm
+                  ? "Restarting clears this run's score and cargo."
+                  : "Your time, treats, and boost charge are preserved."}</p>
+                {restartConfirm ? (
+                  <div className="yacht-restart-actions">
+                    <button type="button" onClick={toggleYachtPause}>KEEP SAILING</button>
+                    <button type="button" onClick={() => startGame()}>RESTART</button>
+                  </div>
+                ) : <button type="button" onClick={toggleYachtPause}>RESUME VOYAGE</button>}
               </div>
             </div>
           )}
@@ -2709,7 +2749,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           onContextMenu={(event) => event.preventDefault()}
           onSelectStart={(event) => event.preventDefault()}
           onDragStart={(event) => event.preventDefault()}>
-          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" /> :
+          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" repeatDelayMs={320} /> :
           <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
             <span>◀</span><small>PORT</small>
           </button>}

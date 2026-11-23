@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -144,6 +144,36 @@ test("Objects arrive from the distant WATERLINE and enlarge toward the yacht",()
  assert.equal(near.scale,1);
  assert.deepEqual(yachtApproachAt(-100),far,"Offscreen initial spawn is clamped");
  assert.deepEqual(yachtApproachAt(900),near,"Past-ship position is clamped");
+});
+
+test("Course gestures distinguish taps, one-lane swipes, two-lane flicks and vertical drags", () => {
+  assert.equal(yachtSwipeSteps(35, 3, 320), 1);
+  assert.equal(yachtSwipeSteps(-35, 1, 320), -1);
+  assert.equal(yachtSwipeSteps(150, 4, 320), 2);
+  assert.equal(yachtSwipeSteps(-150, 0, 320), -2);
+  assert.equal(yachtSwipeSteps(8, 80, 320), 0);
+  assert.equal(yachtSwipeSteps(30, 70, 320), 0);
+  assert.equal(yachtSwipeSteps(14, 2, 320), 0);
+  assert.equal(yachtSwipeSteps(100, 1, 1200), 1);
+  assert.equal(yachtSwipeSteps(100, 1, 0), 0);
+  assert.equal(yachtClampLane(0, yachtSwipeSteps(160, 2, 320)), 2);
+});
+
+test("Forecast shows the nearest imminent hazard and accounts for rival drift", () => {
+  assert.equal(yachtThreatForecast(null), null);
+  assert.equal(yachtThreatForecast([{kind:"buoy",lane:0,y:5}]), null);
+  assert.deepEqual(yachtThreatForecast([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:62}]),
+    {kind:"obstacle",blocked:[0,1],open:[2]});
+  assert.deepEqual(yachtThreatForecast([{kind:"obstacle",lane:1,blockedLanes:[0,2],y:60}]),
+    {kind:"obstacle",blocked:[0,2],open:[1]});
+  assert.deepEqual(yachtThreatForecast([{kind:"rival",lane:0,driftTo:1,drifted:false,y:38}]),
+    {kind:"rival",blocked:[1],open:[0,2]});
+  assert.deepEqual(yachtThreatForecast([{kind:"rival",lane:1,driftTo:2,drifted:true,y:54}]),
+    {kind:"rival",blocked:[1],open:[0,2]});
+  assert.deepEqual(yachtThreatForecast([
+    {kind:"buoy",lane:0,y:35},{kind:"obstacle",lane:2,y:74},
+    {kind:"ball",lane:1,y:88}
+  ]),{kind:"obstacle",blocked:[2],open:[0,1]});
 });
 
 test("Steering lane changes are synchronous, bounded and accept repeated taps",()=>{

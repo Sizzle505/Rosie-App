@@ -268,6 +268,34 @@ export function yachtAssetScale(asset) {
   return 1;
 }
 
+/** Make course gestures intentional: a long horizontal flick crosses two lanes,
+ * while vertical scrolling never changes the helm. */
+export function yachtSwipeSteps(deltaX, deltaY, courseWidth) {
+  const x = Number(deltaX), y = Number(deltaY), width = Number(courseWidth);
+  if (![x, y, width].every(Number.isFinite) || width <= 0) return 0;
+  if (Math.abs(y) > 24 && Math.abs(y) >= Math.abs(x)) return 0;
+  if (Math.abs(x) < 28) return 0;
+  return Math.sign(x) * (Math.abs(x) >= Math.max(96, width * .34) ? 2 : 1);
+}
+
+/** Read the leading approaching hazard rather than flashing warnings for
+ * distant obstacles. A rival's signaled drift is its upcoming occupied lane. */
+export function yachtThreatForecast(items) {
+  if (!Array.isArray(items)) return null;
+  const imminent = items.filter(item => isYachtHazard(item?.kind) &&
+    Number.isFinite(item.y) && item.y >= 18 && item.y <= 91)
+    .sort((a, b) => b.y - a.y)[0];
+  if (!imminent) return null;
+  const occupied = imminent.driftTo !== undefined && !imminent.drifted
+    ? [imminent.driftTo] : yachtOccupiedLanes(imminent);
+  const blocked = [0, 1, 2].filter(lane => occupied.includes(lane));
+  return {
+    kind: imminent.kind,
+    blocked,
+    open: [0, 1, 2].filter(lane => !blocked.includes(lane))
+  };
+}
+
 /** Use the authoritative lane ref for instantaneous touch/keyboard response. */
 export function yachtClampLane(current, direction) {
   const base = Number.isFinite(Number(current)) ? Number(current) : 1;

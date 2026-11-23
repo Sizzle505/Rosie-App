@@ -1,15 +1,18 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "./AxisJoystick.css";
 
 /** Single-axis, pointer-captured controller shared by Yacht Dash and Tunnel Drill.
  * A direction fires on entering a side, and an explicit release clears holds.
  * Switching modes never changes the game's keyboard or existing mechanics. */
-export default function AxisJoystick({axis="horizontal",onDirection,onRelease,disabled=false,label="Joystick"}){
+export default function AxisJoystick({axis="horizontal",onDirection,onRelease,disabled=false,label="Joystick",repeatDelayMs=0}){
   const pointer=useRef(null),active=useRef(0),handlers=useRef({onDirection,onRelease});
   const [knob,setKnob]=useState(0);
+  const holdTimer=useRef(null);
+  const stopHold=()=>{if(holdTimer.current!==null){window.clearTimeout(holdTimer.current);holdTimer.current=null;}};
   handlers.current={onDirection,onRelease};
   const vertical=axis==="vertical";
   const reset=()=>{
+    stopHold();
     pointer.current=null;
     if(active.current){active.current=0;handlers.current.onRelease?.();}
     setKnob(0);
@@ -22,11 +25,25 @@ export default function AxisJoystick({axis="horizontal",onDirection,onRelease,di
     setKnob(Math.max(-max,Math.min(max,amount)));
     const next=Math.abs(amount)>10?Math.sign(amount):0;
     if(next!==active.current){
+      stopHold();
       if(active.current)handlers.current.onRelease?.();
       active.current=next;
-      if(next)handlers.current.onDirection?.(next);
+      if(next){
+        handlers.current.onDirection?.(next);
+        // A Yacht-only hold crosses the second lane without repeated taps.
+        // Tunnel retains its existing single-step movement by default.
+        if(repeatDelayMs>0)holdTimer.current=window.setTimeout(()=>{
+          holdTimer.current=null;
+          if(pointer.current!==null&&active.current===next)
+            handlers.current.onDirection?.(next);
+        },repeatDelayMs);
+      }
     }
   };
+  useEffect(()=>{
+    if(disabled)reset();
+    return ()=>stopHold();
+  },[disabled]);
   return <div className={"axis-stick"+(vertical?" axis-stick-vertical":"")} role="group"
       onContextMenu={e=>e.preventDefault()}
       onSelectStart={e=>e.preventDefault()}

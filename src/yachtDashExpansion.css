@@ -1143,3 +1143,94 @@
     grid-row:3!important;
   }
 }
+
+
+/* Yacht Dash helm clarity: three compact lane markers use the existing
+   steering row, so iPhone fullscreen keeps exactly the same course height. */
+.captain-game-page .yacht-steering-options .yacht-lane-forecast {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  min-width:0;
+  margin-right:auto;
+  white-space:nowrap;
+}
+.captain-game-page .yacht-lane-forecast small {
+  font:700 8px/1 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.09em;
+  color:#b5cdd0;
+  margin-right:3px;
+}
+.captain-game-page .yacht-lane-forecast i {
+  display:grid;
+  place-items:center;
+  box-sizing:border-box;
+  width:21px;
+  height:21px;
+  border:1px solid rgba(174,209,211,.34);
+  border-radius:6px;
+  background:rgba(20,67,72,.5);
+  color:#b6dce0;
+  font:800 10px/1 ui-sans-serif,system-ui,sans-serif;
+  font-style:normal;
+  transition:background .16s ease,border-color .16s ease;
+}
+.captain-game-page .yacht-lane-forecast.has-threat i:not(.is-blocked){
+  background:rgba(26,102,82,.9);
+  border-color:#89dcac;
+  color:#e4fff0;
+}
+.captain-game-page .yacht-lane-forecast i.is-blocked {
+  background:rgba(139,45,40,.95);
+  border-color:#f6a58a;
+  color:#fff0dc;
+}
+.captain-game-page .yacht-lane-forecast i.is-current {
+  outline:2px solid #ffe6a1;
+  outline-offset:1px;
+}
+.captain-game-page .captain-yacht-pause-overlay .yacht-restart-actions {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:9px;
+}
+.captain-game-page .captain-yacht-pause-overlay .yacht-restart-actions button {
+  min-width:0;
+  padding-inline:11px;
+}
+.captain-game-page .captain-yacht-pause-overlay .yacht-restart-actions button:last-child{
+  background:linear-gradient(180deg,#994736,#762a24);
+  border-color:#efc48d;
+}
+@media(max-width:380px){
+  .captain-game-page .yacht-steering-options>span {display:none!important;}
+  .captain-game-page .yacht-lane-forecast small {font-size:7px;margin-right:1px;}
+  .captain-game-page .yacht-steering-options .yacht-lane-forecast {gap:3px;}
+  .captain-game-page .yacht-lane-forecast i {width:20px;height:20px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .captain-game-page .yacht-lane-forecast i {transition:none;}
+}
+
+/* Desktop native fullscreen: on some embedded Chromium builds 100dvh
+   resolves larger than window.innerHeight. Fixed inset sizing is tied to the
+   actual containing viewport, so the command deck stays on-screen. */
+@media (min-width:900px) and (min-height:650px) and (orientation:landscape) {
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) {
+    position:fixed!important;
+    inset:0!important;
+    box-sizing:border-box!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) > .captain-game-page {
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+  }
+}

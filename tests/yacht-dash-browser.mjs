@@ -293,7 +293,10 @@ try {
       const r=document.querySelector(selector)?.getBoundingClientRect();
       return r ? {width:r.width,height:r.height,left:r.left,right:r.right,bottom:r.bottom} : null;
     };
-    return {viewport:innerWidth,frame:box(".captain-fs-yacht"),
+    // Native fullscreen may resize the browser viewport on headless Chrome.
+    // Compare against the actual fullscreen height, never the original 900px.
+    return {viewportWidth:innerWidth,viewportHeight:innerHeight,
+      frame:box(".captain-fs-yacht"),
       course:box(".captain-fs-yacht .yacht-course"),
       cabinet:box(".captain-fs-yacht .yacht-game-shell"),
       controls:box(".captain-fs-yacht .captain-command-deck")};
@@ -303,7 +306,8 @@ try {
     "Desktop fullscreen must not be restricted to a narrow portrait column");
   assert.ok(wide.course.height>=380 && wide.course.height<=900,
     "Desktop fullscreen must leave a usable-height river and controls");
-  assert.ok(wide.controls.bottom<=900+10,"Fullscreen helm controls cannot be below the viewport");
+  assert.ok(wide.controls.bottom<=wide.viewportHeight+10,
+    "Fullscreen helm controls cannot be below the actual fullscreen viewport");
   await deskPage.screenshot({path:folder+"/desktop-wide-fullscreen.png",fullPage:false});
   await deskFrame.locator(":scope > .captain-fullscreen-toggle").click();
 
