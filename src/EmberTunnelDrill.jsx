@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
+import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, BOSS_TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
@@ -8,6 +8,7 @@ import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITI
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
+import {getBossCombatCue} from "./emberBossCombatCue.js";
 
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
@@ -172,7 +173,8 @@ function snapshot(s) {
     worldObjective:s.worldObjective===true,worldHazardCount:s.worldHazards?.length||0,
     worldWarnings:(s.worldHazards||[]).filter(h=>h.warned).length,
     boss:s.boss?{kind:s.boss.kind,health:s.boss.health,maxHealth:s.boss.maxHealth,
-      phase:s.boss.phase,attack:s.boss.attack,defeated:s.boss.defeated}:null,
+      phase:s.boss.phase,attack:s.boss.attack,defeated:s.boss.defeated,
+       hitThisRecovery:s.boss.hitThisRecovery}:null,
     bossDefeated:s.bossDefeated===true,
     objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
     passage:s.stageIndex===null?Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))):s.stageIndex, result:s.result };
@@ -337,16 +339,35 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     },{rootMargin:"150px"});
     if(canvas.current)observer.observe(canvas.current);
     const onKeys=e=>{
-      if(modeRef.current!=="running")return;
+      // Keep game shortcuts out of text fields and other interactive editors.
+      if(e.target?.closest?.('input,textarea,select,[contenteditable="true"]'))return;
       const key=e.key.toLowerCase();
+      if(modeRef.current!=="running"&&modeRef.current!=="paused")return;
+      if(key==="p"&&e.type==="keydown"&&!e.repeat){
+        e.preventDefault();togglePause();return;
+      }
+      if(modeRef.current!=="running")return;
+      if(key==="r"&&e.type==="keydown"&&!e.repeat){
+        e.preventDefault();start(frame.current.stageIndex);return;
+      }
       if(["arrowup","arrowdown","w","s"," "].includes(key))e.preventDefault();
       if(key==="arrowup"||key==="w")pressed.current.up=e.type==="keydown";
       if(key==="arrowdown"||key==="s")pressed.current.down=e.type==="keydown";
       if(key===" "&&e.type==="keydown"&&!e.repeat)turbo();
     };
     const onBlur=()=>resetHold();
+    // A phone call, app switch or backgrounded browser should never silently
+    // resume an in-progress run when the player returns.
+    const onVisibility=()=>{
+      if(!document.hidden)return;
+      resetHold();
+      if(modeRef.current==="running"){
+        modeRef.current="paused";setMode("paused");
+      }
+    };
     document.addEventListener("keydown",onKeys);
     document.addEventListener("keyup",onKeys);
+    document.addEventListener("visibilitychange",onVisibility);
     window.addEventListener("blur",onBlur);
     let raf=0,last=0,lastIdleDraw=0,alive=true;
     const render=(ts)=>{
@@ -540,11 +561,14 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     return ()=>{alive=false;cancelAnimationFrame(raf);obs.disconnect();observer.disconnect();
       window.clearTimeout(bossVictoryTimer.current);
       document.removeEventListener("keydown",onKeys);document.removeEventListener("keyup",onKeys);
-      window.removeEventListener("blur",onBlur);sound.current?.close?.();
+      window.removeEventListener("blur",onBlur);
+      document.removeEventListener("visibilitychange",onVisibility);
+      sound.current?.close?.();
     };
   },[soundOn]);
   const active=mode==="running";
   const paused=mode==="paused";
+  const combatCue=getBossCombatCue(hud.boss);
   const world=getExpeditionStage(hud.stageIndex);
   const route=world?EXPEDITION_STAGES.map(w=>({label:w.name,mission:w.objective})):PASSAGES;
   const title=mode==="ended" ?
@@ -602,6 +626,10 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
+        {combatCue&&(active||mode==="victory-hold")&&
+          <div className={"ember-combat-cue is-"+combatCue.tone} role="status" aria-live="polite" aria-atomic="true">
+            <strong>{combatCue.title}</strong><small>{combatCue.detail}</small>
+          </div>}
         {hud.boss&&active&&<span className="ember-boss-accessible" role="status" aria-live="off">
           {hud.boss.kind==="mole-king"?"Mole King":hud.boss.kind==="copperjack"?"Copperjack":"Cinderclaw"}: {hud.boss.health} of {hud.boss.maxHealth} health,
           {hud.boss.phase==="recovery"?" vulnerable to Turbo":hud.boss.phase==="warning"?" attack incoming":hud.boss.phase==="active"?" attacking":" defeated"}
@@ -614,6 +642,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
         {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p>
           <button type="button" onClick={togglePause}>RESUME DIG</button>
+          <button type="button" className="ember-return-levels" onClick={()=>start(frame.current.stageIndex)}>RESTART {world?"WORLD":"CLASSIC DIG"}</button>
           <button type="button" className="ember-return-levels" onClick={returnToLevelMenu}>RETURN TO LEVEL MENU</button>
         </div>}
         {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
@@ -670,7 +699,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
              </div>
              <button type="button" onClick={()=>start(null)}>{mode!=="ended"?"START DIGGING":world?"CLASSIC 75-SECOND DIG":"DIG AGAIN"}</button>
              {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
-            <small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>
+            <small>Hold ▲ / ▼ to steer. Space activates Turbo. P pauses; R restarts.</small>
           </div>}
       </div>
       <div className="ember-controls"
@@ -689,7 +718,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <span className="ember-boost-symbol">✦</span>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
-            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
+            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/(hud.boss?BOSS_TURBO_DURATION:TURBO_DURATION)*100):hud.charge)+"%"}} /></i>
             <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">▲▼</button> :
@@ -702,7 +731,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
       {active&&<div className="ember-run-actions">
         <button className="ember-icon-action" type="button" onClick={togglePause} aria-label="Pause run" title="Pause run">❚❚</button>
         <button className="ember-icon-action" type="button" onClick={()=>start(frame.current.stageIndex)} aria-label="Replay run" title="Replay run">↻</button>
-        <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
+        <span>Hold ▲ / ▼ to steer · Space Turbo · P pause · R restart</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}
         <span className="ember-best">BEST {best.toLocaleString()}</span><span className="ember-best">EXPEDITION {"★".repeat(bestStars)}{"☆".repeat(3-bestStars)}</span></div>
