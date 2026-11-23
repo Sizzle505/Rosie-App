@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { DRILL_ANCHOR, DRILL_TIP_OFFSET, DRILL_HEIGHT, RUN_DURATION, makeCourse, newRun, tunnelCenter, triggerTurbo, updateRun } from "../src/emberDrillEngine.js";
+import { DRILL_ANCHOR, DRILL_TIP_OFFSET, DRILL_HEIGHT, RUN_DURATION, BOSS_TURBO_DURATION, makeCourse, newRun, tunnelCenter, triggerTurbo, updateRun } from "../src/emberDrillEngine.js";
 
 test("same seed gives reproducible treasure and hazard placement",()=>{
   assert.deepEqual(makeCourse(15),makeCourse(15));
@@ -86,4 +86,13 @@ test("run fails when all five hull points are lost",()=>{
   }
   assert.equal(s.ended,true);
   assert.equal(s.result,"hull");
+});
+
+test("boss Turbo duration matches the HUD's full-charge countdown",()=>{
+  const s=newRun(14,2);
+  s.charge=100;
+  s.boss={kind:"copperjack"};
+  assert.equal(triggerTurbo(s),true);
+  assert.equal(s.boostTime,BOSS_TURBO_DURATION);
+  assert.equal(BOSS_TURBO_DURATION,0.72);
 });
