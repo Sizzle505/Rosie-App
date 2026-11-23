@@ -337,3 +337,101 @@
   .zen-immersive[data-zen-status="complete"] .zen-complete-copy > p { font-size:16px !important;line-height:1.5 !important; }
   .zen-immersive[data-zen-status="complete"] .zen-complete-dismiss .zen-close-label { display:none !important; }
 }
+
+/* Desktop garden follow-up: generous painted-paper safe areas, compact
+   activity headers and completion awards beside the congratulation heading. */
+.zen-complete-heading-image,
+.rosie-ambient-butterfly--desktop-extra { display:none; }
+@media screen and (min-width:1200px) and (hover:hover) and (pointer:fine) {
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style="sakura"] .haiku-scroll-inner { inset:18% 22% 20% !important; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style="imperial"] .haiku-scroll-inner { inset:18% 19% 22% !important; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style="grand"] .haiku-scroll-inner { inset:18% 16% 23% !important; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-inner { gap:7px; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-verse p {
+    line-height:1.25 !important;overflow:visible;clip-path:none !important;
+    animation:none !important;opacity:1 !important;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-signature {
+    font-size:20px !important;line-height:1.1 !important;
+  }
+  .app-shell.page-haiku .haiku-scroll-column { gap:0; }
+  .app-shell.page-haiku .haiku-scroll-display { margin-bottom:0;min-height:0; }
+  .app-shell.page-haiku .haiku-status { margin:-9px auto 0 !important;position:relative;z-index:3; }
+  .app-shell.page-haiku .haiku-scroll-column:has([data-scroll-style="grand"]) .haiku-status { margin-top:-18px !important; }
+  .app-shell.page-haiku .haiku-verse-actions { margin:-2px auto 0 !important;gap:10px; }
+  .app-shell.page-haiku .haiku-verse-actions button {
+    width:64px;height:64px;min-height:64px;flex-basis:64px;
+    backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+    background:none !important;box-shadow:none !important;
+  }
+  .app-shell.page-haiku .haiku-verse-actions button:hover,
+  .app-shell.page-haiku .haiku-verse-actions button:focus-visible {
+    background:none !important;backdrop-filter:none !important;
+  }
+  .app-shell.page-haiku .haiku-action-flourish { display:none; }
+
+  /* Shorten Sensei's introductory area without shrinking the useful controls. */
+  .app-shell.page-haiku .zen-panel { display:flex;flex-direction:column; }
+  .app-shell.page-haiku .zen-panel .zen-panel-hero.zen-sensei-intro {
+    order:0;height:148px !important;min-height:0 !important;
+    grid-template-columns:minmax(0,1fr) 122px;
+    margin:0 0 7px !important;gap:8px;
+  }
+  .app-shell.page-haiku .zen-panel .zen-panel-hero .zen-sensei-welcome {
+    height:150px !important;width:122px !important;align-self:start;
+    margin-top:-8px;object-position:center top;
+  }
+  .app-shell.page-haiku .zen-panel .zen-panel-hero-copy h2 { margin:3px 0 5px !important;font-size:29px; }
+  .app-shell.page-haiku .zen-panel .zen-program-grid { order:1; }
+  .app-shell.page-haiku .zen-panel .zen-selected-description { order:2;margin:9px 0 5px; }
+  .app-shell.page-haiku .zen-panel .zen-begin { order:3;margin:6px 0 13px; }
+  .app-shell.page-haiku .zen-panel .zen-options { order:4; }
+  .app-shell.page-haiku .zen-panel .zen-volume { order:5; }
+  .app-shell.page-haiku .zen-panel .zen-voice { order:6; }
+  .app-shell.page-haiku .zen-panel .zen-art-options { order:7;margin:4px 0 0; }
+  .app-shell.page-haiku .haiku-page[data-haiku-mode="meditate"] .haiku-workbench-body {
+    height:calc(100dvh - 275px);max-height:calc(100dvh - 275px);
+  }
+
+  /* The two title lines occupy the open niche between the enlarged desk legs. */
+  .app-shell.page-haiku .haiku-compose { padding-top:15px; }
+  .app-shell.page-haiku .haiku-desk-feature {
+    position:relative;width:min(100%,360px);height:auto;aspect-ratio:4/3;
+    margin:0 auto 4px;padding:0;
+  }
+  .app-shell.page-haiku .haiku-desk-feature .haiku-desk-art {
+    display:block;width:100% !important;height:100% !important;
+    max-height:none !important;max-width:none !important;object-fit:contain;
+    margin:0;
+  }
+  .app-shell.page-haiku .haiku-desk-feature h2 {
+    position:absolute !important;left:23% !important;right:23% !important;
+    bottom:5.5% !important;top:auto !important;
+    width:54% !important;margin:0 !important;padding:0 !important;
+    font:normal 24px/1.02 "Palatino Linotype",Palatino,Georgia,serif !important;
+    text-align:center !important;text-wrap:nowrap;white-space:nowrap;
+    color:#ffe8bc;text-shadow:0 2px 5px #241129;
+  }
+  .app-shell.page-haiku .haiku-desk-feature h2 .haiku-desk-title-first { font-size:.75em;line-height:1.05;letter-spacing:.025em; }
+  .app-shell.page-haiku .haiku-desk-feature h2 .haiku-desk-title-second { font-size:1em;line-height:1.05; }
+  .app-shell.page-haiku .haiku-compose > label:first-of-type { margin-top:5px; }
+
+  .zen-immersive[data-zen-status="complete"] .zen-enlightenment-reward { display:none !important; }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-heading {
+    display:grid;grid-template-columns:66px minmax(0,1fr) 66px;
+    align-items:center;gap:8px;margin:0 0 10px;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-heading-image {
+    position:static;display:block;width:66px;height:80px;
+    max-width:100% !important;max-height:80px !important;
+    margin:0 !important;object-fit:contain;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-heading .zen-eyebrow {
+    font-size:8px;letter-spacing:.13em;line-height:1.3;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-heading h3 {
+    font-size:31px !important;line-height:1.05 !important;
+    margin:5px 0 0 !important;
+  }
+  .rosie-ambient--haiku .rosie-ambient-butterfly--desktop-extra { display:block;opacity:.78; }
+}

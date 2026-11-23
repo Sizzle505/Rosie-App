@@ -412,8 +412,11 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                 </div>
               </div>
               <div className="zen-complete-copy">
-                <span className="zen-eyebrow">A MOMENT OF PERFECT PEACE</span>
-                <h3>Beautifully done.</h3>
+                <div className="zen-complete-heading">
+                  <img className="zen-complete-heading-image zen-complete-heading-bow" src={NEW_ART+"characters/sensei-bowing.webp"} alt="" aria-hidden="true"/>
+                  <div><span className="zen-eyebrow">A MOMENT OF PERFECT PEACE</span><h3>Beautifully done.</h3></div>
+                  <img className="zen-complete-heading-image zen-complete-heading-seal" src={NEW_ART+"ui/enlightenment-seal.webp"} alt="" aria-hidden="true"/>
+                </div>
                 <p>For {minutes} quiet minutes, the world waited. Rosie considers this excellent judgment.</p>
                 <div className="zen-complete-stats" aria-label={progress.sessions+" meditation sessions, "+progress.minutes+" peaceful minutes"}>
                   <span><strong>{progress.sessions}</strong><small>sessions</small></span>

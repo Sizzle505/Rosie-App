@@ -46,6 +46,14 @@ export default function RosieZenAmbient({ scene = "lotus", mode = "meditation", 
             "--ambient-size": (12 + (index % 3) * 5) + "px",
           }} />
       ))}
+      {!meditation && showButterflies && [
+        {x:"49%",y:"88%",size:"31px",delay:"-6s"},
+        {x:"91%",y:"17%",size:"29px",delay:"-13s"}
+      ].map((item,index) => <span key={"desktop-butterfly-"+index}
+        className="rosie-ambient-butterfly rosie-ambient-butterfly--desktop-extra"
+        style={{"--butterfly-x":item.x,"--butterfly-y":item.y,"--butterfly-size":item.size,"--butterfly-delay":item.delay,"--butterfly-time":"25s"}}>
+        <img src={BUTTERFLY} alt="" draggable="false"/>
+      </span>)}
       {showButterflies && BUTTERFLIES.slice(0, meditation ? 3 : 2).map((item, index) => (
         <span key={"butterfly-" + index}
           className={"rosie-ambient-butterfly rosie-ambient-butterfly--" + index}

@@ -239,15 +239,24 @@ export default function RosieHaikuGarden({ onNavigate }) {
         const baseline = Number.parseFloat(getComputedStyle(line).fontSize);
         if (!Number.isFinite(baseline)) return;
         let size = baseline;
-        // Desktop uses actual grid rows for poem, attribution and dedication.
-        // Preserve the approved mobile fitting path below without changes.
+        // Measure glyph bounds, including italic overhang, inside the painted
+        // parchment. Element scrollWidth misses ink extending past the left edge.
         if (window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches) {
           const rows = [...verse.querySelectorAll("p")];
-          for (let step = 0; step < 80; step++) {
-            const widest = Math.max(...rows.map(row => row.scrollWidth / Math.max(1,row.clientWidth)));
-            const heightRatio = verse.scrollHeight / Math.max(1,verse.clientHeight);
-            if (widest <= 1.005 && heightRatio <= 1.005) break;
-            size = Math.max(1, size * Math.min(.96, .985 / Math.max(widest,heightRatio)));
+          const textWidth = Math.max(1, verse.clientWidth - 16);
+          for (let step = 0; step < 48; step++) {
+            const widest = Math.max(...rows.map(row => {
+              const range = document.createRange();
+              range.selectNodeContents(row);
+              return range.getBoundingClientRect().width / textWidth;
+            }));
+            const contentHeight = rows.reduce((sum, row) => {
+              const css = getComputedStyle(row);
+              return sum + row.getBoundingClientRect().height + parseFloat(css.marginTop || 0) + parseFloat(css.marginBottom || 0);
+            }, 0);
+            const heightRatio = contentHeight / Math.max(1, verse.clientHeight - 10);
+            if (widest <= 1 && heightRatio <= 1) break;
+            size = Math.max(1, size * Math.min(.96, .98 / Math.max(widest, heightRatio)));
             scroll.style.setProperty("--haiku-fit-size", size + "px");
           }
           return;
@@ -266,6 +275,13 @@ export default function RosieHaikuGarden({ onNavigate }) {
     };
     const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fit) : null;
     observer?.observe(inner);
+    const desktop = window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches;
+    if (desktop) {
+      observer?.observe(verse);
+      const meta = scroll.querySelector(".haiku-scroll-meta");
+      if (meta) observer?.observe(meta);
+      document.fonts?.addEventListener?.("loadingdone", fit);
+    }
     window.addEventListener("resize", fit);
     fit();
     document.fonts?.ready?.then(fit).catch(() => {});
@@ -273,8 +289,9 @@ export default function RosieHaikuGarden({ onNavigate }) {
       observer?.disconnect();
       window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", fit);
+      document.fonts?.removeEventListener?.("loadingdone", fit);
     };
-  }, [poem, scrollStyle]);
+  }, [poem, scrollStyle, mode]);
   const announce = (message) => setNotice(message);
   const saveEntries = (next) => {
     setJournal(next);
