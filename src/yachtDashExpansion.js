@@ -248,17 +248,81 @@ export function yachtPickupApproachAt(y) {
   };
 }
 
-/** Avoid adding a bonus treat to a lane already occupied by a newly spawned hazard. */
+/**
+ * Keep new rewards out of the same release corridor as another fresh reward,
+ * an approaching obstacle, or either a rival's current/future drift lane.
+ * Later hazards are already separated in depth and need not block a delivery.
+ */
 export function yachtBonusTreatLane(items, preferred) {
-  const occupied = new Set(items.filter(item =>
-    isYachtHazard(item.kind) && item.y >= -12 && item.y <= 25
-  ).flatMap(item => [...yachtOccupiedLanes(item),
-    ...(item.driftTo === undefined ? [] : [item.driftTo])]));
+  const occupied = new Set();
+  for (const item of items || []) {
+    if (!Number.isFinite(item?.y) || item.y < -12 || item.y > 32) continue;
+    if (isYachtHazard(item.kind)) {
+      for (const lane of yachtOccupiedLanes(item)) occupied.add(lane);
+      if (item.driftTo !== undefined && !item.drifted) occupied.add(item.driftTo);
+    } else if (["ball", "treat", "cheese", "supply"].includes(item.kind)) {
+      occupied.add(item.lane);
+    }
+  }
+  const start = Math.max(0, Math.floor(preferred || 0)) % 3;
   for (let offset = 0; offset < 3; offset++) {
-    const lane = (Math.max(0, Math.floor(preferred || 0)) + offset) % 3;
+    const lane = (start + offset) % 3;
     if (!occupied.has(lane)) return lane;
   }
   return -1;
+}
+
+/**
+ * A gentle pickup-led opening teaches the helm before Sakura's first buoy.
+ * Further cargo varies by roll, but buoys never arrive back-to-back and
+ * Golden Cheese periodically returns to keep Turbo attainable.
+ */
+export function yachtSakuraDelivery(sequence, randomIndex) {
+  const step = Math.max(0, Math.floor(sequence));
+  if (step < 3) return {
+    kind: ["ball", "treat", "cheese"][step], lane: 1
+  };
+  const lane = randomIndex(3);
+  if (step % 10 === 7) return { kind: "buoy", lane };
+  if (step % 9 === 0) return { kind: "cheese", lane };
+  if (step % 3 === 0) return { kind: "treat", lane };
+  const roll = randomIndex(100);
+  return { kind: roll < 58 ? "ball" : roll < 91 ? "treat" : "cheese", lane };
+}
+
+/**
+ * Prevent fast random obstacles from catching a slower treat as it nears the
+ * hull. There is still slight variety, but objects share a coherent flow.
+ */
+export function yachtObjectSpeed(chapterId, kind, randomIndex) {
+  const isDanger = isYachtHazard(kind);
+  const base = isDanger ? 1.98 : chapterId === "sakura" ? 2.04 : 2.08;
+  return base + Math.max(0, Math.min(4, randomIndex(5))) * .035;
+}
+
+/**
+ * Chapter-aware beats: generous opening water, increasingly brisk finish,
+ * and extra warning time before imposing hazards. Every chapter stays well
+ * below a visually crowded conveyor of sprites.
+ */
+export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
+  const step = Math.max(0, Math.floor(Number(sequence) || 0));
+  const swing = [0, 55, -45, 35, -30][step % 5];
+  if (chapterId === "sakura") {
+    const base = phaseKey === "harbor" ? 1160 :
+      phaseKey === "riviera" ? 1050 : 950;
+    return base + swing;
+  }
+  const stage = YACHT_CHAPTERS.find(chapter => chapter.id === chapterId);
+  const base = stage?.cadence ?? 2200;
+  const factor = phaseKey === "harbor" ? 1.07 :
+    phaseKey === "sunset" ? .94 : 1;
+  const encounter = yachtWaveFor(chapterId, step, () => 1)[0];
+  const margin = encounter?.footprint === "arch" ? 440 :
+    encounter?.footprint === "wide" ? 280 :
+    encounter?.kind === "rival" ? 190 :
+    isYachtHazard(encounter?.kind) ? 100 : -95;
+  return Math.round(base * factor + margin + swing);
 }
 
 /** Selective art scaling for props whose transparent masters read too small. */
