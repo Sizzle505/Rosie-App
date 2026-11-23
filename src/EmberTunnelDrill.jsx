@@ -213,7 +213,7 @@ function playBossAudio(context,kind){
   }catch(_){}
 }
 const TUNNEL_OPENING_VIDEO="/ember-drill/rosie-tunnel-opening.mp4";
-const TUNNEL_OPENING_SEEN="rosieTunnelOpeningSeen20261123";
+const TUNNEL_OPENING_SEEN="rosieTunnelOpeningSeen20261123V2";
 export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, exitGameFullscreen }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
