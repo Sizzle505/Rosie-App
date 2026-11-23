@@ -1484,3 +1484,61 @@
     height:clamp(175px,40%,260px);
   }
 }
+
+/* Yacht high-resolution obstacle corrections.
+   The masters are square; formerly an 80px image was rasterized first and
+   then magnified by up to 3.3x in a continuously transformed CSS layer.
+   Allocate the final pixels in layout, and reserve transforms for depth only. */
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-native-resolution.sea-pickup-obstacle:not(.yacht-footprint-wide):not(.yacht-footprint-arch) {
+  width:calc(80px * var(--yacht-asset-multiplier, 1));
+  height:calc(80px * var(--yacht-asset-multiplier, 1));
+}
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-native-resolution.sea-pickup-rival {
+  width:calc(98px * var(--yacht-asset-multiplier, 1));
+  height:calc(98px * var(--yacht-asset-multiplier, 1));
+}
+.captain-game-page .sea-pickup.yacht-native-resolution .yacht-hazard-art {
+  object-fit:contain;
+  image-rendering:auto;
+  backface-visibility:hidden;
+}
+/* A wide hazard can occupy two lanes without stretching its square artwork
+   into a flat red or dark strip. Height is determined by the art itself. */
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-footprint-wide .yacht-hazard-art,
+.captain-game-page .sea-pickup.yacht-footprint-wide[data-yacht-art="driftwood"] .yacht-hazard-art {
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:100%;
+  height:auto;
+  aspect-ratio:1 / 1;
+  object-fit:contain;
+  transform:translate(-50%,-50%);
+  max-width:none;
+  max-height:none;
+}
+/* The torii source is 4:3. Keep that ratio at every depth, instead of forcing
+   it through a viewport-dependent shallow rectangle. The second copy fades
+   across Rosie's yacht only while she is actually beneath the lintel. */
+.captain-game-page .sea-pickup.yacht-footprint-arch {
+  height:auto;
+  aspect-ratio:4 / 3;
+}
+.captain-game-page .sea-pickup.yacht-footprint-arch .yacht-hazard-art {
+  object-fit:contain;
+}
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-footprint-arch.yacht-torii-foreground {
+  z-index:24;
+  pointer-events:none;
+}
+.captain-game-page .yacht-course-lane-cues {display:none!important;}
+@media(max-width:720px) {
+  .captain-game-page .sea-pickup.yacht-upstream-object.yacht-native-resolution.sea-pickup-obstacle:not(.yacht-footprint-wide):not(.yacht-footprint-arch) {
+    width:calc(65px * var(--yacht-asset-multiplier, 1));
+    height:calc(65px * var(--yacht-asset-multiplier, 1));
+  }
+  .captain-game-page .sea-pickup.yacht-upstream-object.yacht-native-resolution.sea-pickup-rival {
+    width:calc(76px * var(--yacht-asset-multiplier, 1));
+    height:calc(76px * var(--yacht-asset-multiplier, 1));
+  }
+}
