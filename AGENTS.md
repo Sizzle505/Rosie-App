@@ -77,3 +77,6 @@ This preflight should be silent unless something actually fails.
 
 A signed-out Work browser is not a failed preflight.
 
+## 7. Visual asset generation and editing
+
+Before generating or modifying RosieVerse illustrations, read `docs/ART_REFERENCE_REGISTRY.md` and `docs/art-reference-registry.json`. Use at most one character identity reference, one context-specific style reference, and (only if needed) one action/composition reference. Do not use a whole folder as an undifferentiated style prompt. Resolve and visually inspect the **actual image files**, then provide their visual data to the generation/editing tool; a file path alone is not an image reference. If the authoritative source is unresolved (notably the new Kuroi master), stop substituting generic characters. Preserve approved character/vehicle artwork through editing when possible. New files are not automatically approved by existence; compare to canon and do not merge or deploy art without the requested review.
