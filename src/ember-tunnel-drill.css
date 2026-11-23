@@ -522,3 +522,40 @@
  margin-top:11px;background:linear-gradient(180deg,#194b64,#0c2c43);
  color:#ffe2ad;border-color:rgba(251,205,139,.8);
 }
+
+/* Tunnel Drill optional first-visit cinematic; contained within the playfield. */
+.ember-stage .ember-opening-cover{
+  position:absolute;inset:0;z-index:130;display:flex;align-items:center;justify-content:center;
+  box-sizing:border-box;padding:clamp(8px,2.5vw,22px);overflow:auto;overscroll-behavior:contain;
+  background:rgba(8,9,18,.92);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.ember-opening-panel{box-sizing:border-box;width:min(100%,485px);max-height:100%;min-height:0;
+  display:flex;flex-direction:column;align-items:center;gap:9px;padding:clamp(10px,2vw,18px);
+  background:linear-gradient(165deg,#29263c,#110f1b 72%);
+  color:#f9e6b4;border:2px solid #b7904e;border-radius:15px;
+  box-shadow:0 12px 50px rgba(0,0,0,.55),inset 0 0 0 1px #f1d392;}
+.ember-opening-heading{text-align:center;display:flex;flex-direction:column;gap:4px;}
+.ember-opening-heading small{font-size:clamp(9px,1.6vw,12px);letter-spacing:.15em;}
+.ember-opening-heading strong{font-size:clamp(17px,2.2vw,24px);line-height:1.15;letter-spacing:.035em;}
+.ember-opening-film{display:block;width:auto;max-width:100%;max-height:min(63vh,520px);
+  aspect-ratio:9/16;object-fit:contain;min-height:0;border:1px solid #a8844d;
+  border-radius:7px;background:#090a10;}
+.ember-opening-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;}
+.ember-opening-actions button,.ember-watch-opening{
+  cursor:pointer;border:1px solid #d7b570;border-radius:8px;
+  background:linear-gradient(180deg,#f3d697,#b88c46);
+  color:#201626;font-weight:800;letter-spacing:.035em;padding:10px 13px;
+  font-size:clamp(11px,1.6vw,14px);min-height:39px;
+}
+.ember-opening-actions button:last-child{background:#29253a;color:#f6e4bd;}
+.ember-opening-actions button:focus-visible,.ember-watch-opening:focus-visible{
+  outline:3px solid #ffe4a5;outline-offset:3px;
+}
+.ember-opening-error{margin:0;color:#ffd8b5;font-size:13px;text-align:center;}
+.ember-watch-opening{margin:7px auto 10px;display:inline-block;}
+@media(max-width:650px){
+  .ember-opening-panel{padding:8px;gap:6px;}
+  .ember-opening-heading strong{font-size:17px;}
+  .ember-opening-film{max-height:min(62dvh,460px);}
+  .ember-opening-actions button{padding:7px 10px;font-size:11px;min-height:35px;}
+}

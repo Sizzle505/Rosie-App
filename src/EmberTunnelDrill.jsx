@@ -212,6 +212,8 @@ function playBossAudio(context,kind){
     }
   }catch(_){}
 }
+const TUNNEL_OPENING_VIDEO="/ember-drill/rosie-tunnel-opening.mp4";
+const TUNNEL_OPENING_SEEN="rosieTunnelOpeningSeen20261123";
 export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, exitGameFullscreen }) {
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
@@ -220,6 +222,37 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null),bossVictoryTimer=useRef(null);
   const [mode,setMode]=useState("idle");
+  const introVideoRef=useRef(null);
+  const [introOpen,setIntroOpen]=useState(()=>{
+    try{return localStorage.getItem(TUNNEL_OPENING_SEEN)!=="1"}catch{return true}
+  });
+  const [introPlaying,setIntroPlaying]=useState(false);
+  const [introError,setIntroError]=useState(false);
+  function closeOpening(){
+    const video=introVideoRef.current;
+    if(video){video.pause();video.currentTime=0;}
+    setIntroOpen(false);setIntroPlaying(false);
+    try{localStorage.setItem(TUNNEL_OPENING_SEEN,"1")}catch{}
+  }
+  function openOpening(){
+    if(modeRef.current!=="idle"&&modeRef.current!=="ended")return;
+    setIntroError(false);setIntroPlaying(false);setIntroOpen(true);
+  }
+  function playOpening(){
+    const video=introVideoRef.current;
+    if(!video)return;
+    video.currentTime=0;
+    const promise=video.play();
+    setIntroPlaying(true);
+    promise?.catch?.(()=>setIntroPlaying(false));
+  }
+  useEffect(()=>{
+    if(!introOpen)return;
+    const onKey=(event)=>{if(event.key==="Escape"){event.preventDefault();closeOpening()}};
+    window.addEventListener("keydown",onKey);
+    return ()=>window.removeEventListener("keydown",onKey);
+  },[introOpen]);
+
   const [notice,setNotice]=useState(null);
   const [selectedWorld,setSelectedWorld]=useState(0);
   useEffect(()=>{
@@ -258,6 +291,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     }catch(_){return null}
   }
   function start(requestedStage=undefined) {
+    if(introOpen)closeOpening();
     // Synchronous launch: preserve the user gesture for native/iOS fullscreen.
     requestGameFullscreen?.();
     window.clearTimeout(bossVictoryTimer.current);
@@ -621,6 +655,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
+            <button type="button" className="ember-watch-opening" onClick={openOpening}>WATCH OPENING FILM</button>
              {mode==="ended"&&world&&hud.result==="complete"&&hud.stageIndex<EXPEDITION_STAGES.length-1&&
                <button className="ember-expedition-next" type="button"
                  onClick={()=>start(hud.stageIndex+1)}>
@@ -672,6 +707,23 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
              {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
             <small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>
           </div>}
+
+        {introOpen&&(mode==="idle"||mode==="ended")&&<div className="ember-opening-cover" role="dialog" aria-modal="true" aria-label="The Kingdom Awakens - Tunnel Drill opening">
+          <div className="ember-opening-panel">
+            <div className="ember-opening-heading"><small>CAPTAIN ROSIE · THE LOST DOG CITY</small><strong>THE KINGDOM AWAKENS</strong></div>
+            <video ref={introVideoRef} className="ember-opening-film"
+              src={TUNNEL_OPENING_VIDEO} poster="/ember-drill/drill-header.webp"
+              preload="metadata" playsInline controls={introPlaying}
+              onPlay={()=>setIntroPlaying(true)} onPause={()=>setIntroPlaying(false)}
+              onEnded={closeOpening} onError={()=>setIntroError(true)}
+              aria-label="Animated story introducing Rosie and the five underground kingdoms" />
+            {introError&&<p className="ember-opening-error" role="status">The introduction is temporarily unavailable. You can still play.</p>}
+            <div className="ember-opening-actions">
+              {!introPlaying&&!introError&&<button type="button" onClick={playOpening}>WATCH OPENING · 48 SECONDS</button>}
+              <button type="button" onClick={closeOpening}>{introPlaying?"SKIP INTRO":"SKIP · PLAY GAME"}</button>
+            </div>
+          </div>
+        </div>}
       </div>
       <div className="ember-controls"
         onContextMenu={(event) => event.preventDefault()}
