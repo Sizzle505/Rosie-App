@@ -120,7 +120,7 @@ test("The red phantom obstacle bar is removed without losing helm threat forecas
   const game = readFileSync(new URL("../src/main.jsx", import.meta.url), "utf8");
   assert.doesNotMatch(game, /className="yacht-course-lane-cues"/);
   assert.match(game, /yacht-lane-forecast/);
-  assert.match(game, /threatForecast\.blocked\.includes\(index\)/);
+  assert.match(game, /threatForecast\?\.blocked\.includes\(index\)/);
 });
 
 test("Torii maintains 4:3 proportions and fades above Rosie rather than popping forward", () => {
