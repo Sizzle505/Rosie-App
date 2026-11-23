@@ -1,0 +1,2356 @@
+{
+  "package": "TeddyVerse next-phase masters (B01-B11, TV001-TV107)",
+  "built": "2026-11-23",
+  "approved_by_owner": "2026-11-22 (B01-B11 program) and 2026-11-23 (close-out: TV033 v3, TV066, TV076, TV088, TV107)",
+  "updated": "2026-11-23",
+  "total_slots": 107,
+  "masters_included": 107,
+  "approved_masters": 107,
+  "unresolved_slots": [],
+  "spend": {
+    "b01_b11_generations_spend": 8.5071,
+    "closeout_spend": 0.4255,
+    "true_total_spent_all_phases": 12.6225,
+    "cap_total": 15,
+    "remaining": 2.3775
+  },
+  "character_sheet": "character-sheet/CAPTAIN-TEDDY-SHEET.png (approved by owner 2026-11-22)",
+  "flags": [
+    "TV088 (aspect 3.68) and TV107 (aspect 3.50) were resolved by split generation + stitching in the 2026-11-23 close-out; both approved.",
+    "TV066 grand salon: pure-vector dog redrawn golden-orange (close-out 2026-11-23); approved.",
+    "TV076/077/078 SVG wrappers: embedded Rosie rasters swapped for Teddy (TV077/078 from approved coins TV080/TV079; TV076 from a new Teddy render); all approved.",
+    "TV082 (4096x2304): brief said generate at 3840x2160, but the authoritative queue marks it reuse — queue followed, no generation.",
+    "TV033 profile now reads 'A legendary spacefaring Spitz' (v3, close-out 2026-11-23); approved.",
+    "TV062 master is composited onto black (original effectively opaque despite hasAlpha=True).",
+    "TV107 stitched master has a larger opaque footprint than its original (Teddy's fluff fills more frame); corners still transparent."
+  ],
+  "slots": [
+    {
+      "id": "TV001",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sourcePath": "public/captain-rosie-deck.webp",
+      "sourceGitBlobSHA": "667480cdfadf59eb0804e1b0fd4aa94fd33e1654",
+      "sourceDimensions": {
+        "width": 207,
+        "height": 240,
+        "hasAlpha": true
+      },
+      "master": "TV001.png",
+      "masterSha256": "4410563f8037e79251e9c92e70abd0dadb64e5b602de782e8193425d44446cba",
+      "masterDimensions": [
+        207,
+        240
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV002",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sourcePath": "public/captain-rosie-illustrated.webp",
+      "sourceGitBlobSHA": "ebe9fa38206042dfb3981a760d14079b01800ada",
+      "sourceDimensions": {
+        "width": 207,
+        "height": 240,
+        "hasAlpha": false
+      },
+      "master": "TV002.png",
+      "masterSha256": "e5d0e82668e267ba76cbae8d30e102078ef35a19ab55dd1759065b610bc48272",
+      "masterDimensions": [
+        207,
+        240
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV003",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sourcePath": "public/captain-rosie-ship.webp",
+      "sourceGitBlobSHA": "5c8a510e019e2ef943c5e8485cf8d1866774dad6",
+      "sourceDimensions": {
+        "width": 364,
+        "height": 631,
+        "hasAlpha": true
+      },
+      "master": "TV003.png",
+      "masterSha256": "23dba212558a6caa3252435448f95a1a060710839ebef15cbaee356af2b838b9",
+      "masterDimensions": [
+        364,
+        631
+      ],
+      "version": 2,
+      "qc": "7/7 (v2)",
+      "status": "approved",
+      "notes": "pass — v1 was 6/7 (captain faced camera); v2 correction: captain seen from behind at the helm, as in the original"
+    },
+    {
+      "id": "TV004",
+      "batch": "B01",
+      "section": "captain-hub",
+      "sourcePath": "public/captain-rosie.webp",
+      "sourceGitBlobSHA": "438d1f63982c2eb68f5fbd48be702dca7dfa5178",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 345,
+        "hasAlpha": false
+      },
+      "master": "TV004.png",
+      "masterSha256": "eb4214b3518bf81e97a1e781bc3f99443363930e1d97327bd2290d0fcf0a1b40",
+      "masterDimensions": [
+        360,
+        345
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV005",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-bank-left.webp",
+      "sourceGitBlobSHA": "4a7b31f5739f0a5144c7821fda2964ed166f9951",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV005.png",
+      "masterSha256": "9b8c7b0610f0329b94004834d7ac93ef2a851a1026406394672b6ef470309e63",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV006",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-bank-right.webp",
+      "sourceGitBlobSHA": "684ce4b5d936a1854cc8acef71984192492f6a41",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV006.png",
+      "masterSha256": "c6cbb400579941cadd8308ec388e42205719a9fd20de9e696bb2cb7dae381be6",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV007",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-boost.webp",
+      "sourceGitBlobSHA": "d514dd580706299f927f68d71a54a1260cf6fa51",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV007.png",
+      "masterSha256": "2bf0003f9a21a068e73c24a2788bcf126cf94946579ff40c2fc1c1605fd9f3d0",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV008",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-cruise.webp",
+      "sourceGitBlobSHA": "fd5fb9a68daad46b575fdb481edb4ec1f908e780",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV008.png",
+      "masterSha256": "44f5488aed60aed5a0793ba813538a16e8df45ccef407367195da4dff303da06",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV009",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-damage.webp",
+      "sourceGitBlobSHA": "5c5bedff2a8e174e7c0b740278c394a1f01d1b75",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "master": "TV009.png",
+      "masterSha256": "0e233eae8bc7ceabe7545f24d04b46ef1235859cd5cef99fd641d0060cda4bfe",
+      "masterDimensions": [
+        420,
+        280
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — note: Teddy smiles in the damage state while the original Rosie looks worried; smoke + hull spark carry the damage read"
+    },
+    {
+      "id": "TV010",
+      "batch": "B01",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-dodge.webp",
+      "sourceGitBlobSHA": "d9e7d607c9c939dcf55e9627738b1f217cd33483",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV010.png",
+      "masterSha256": "ff161a38c68777ff7641a1115fa0ac75fa8fdff99daad70a42d9ab2bad2747a7",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": 1,
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV011",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-front.webp",
+      "sourceGitBlobSHA": "c9fe92e42c6dbb724785d6f84c90f7d527ef4960",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "master": "TV011.png",
+      "masterSha256": "be0dd419f2e116ba572026aff4e4104c40747ac6cb0fc9ea75acb8d22a069feb",
+      "masterDimensions": [
+        420,
+        280
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV012",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-laser.webp",
+      "sourceGitBlobSHA": "56d466d7fcb6665c07dd91000666123d20aba638",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV012.png",
+      "masterSha256": "99e8321677e1a16fd9f2973f574a9cbdacb50c8f4695fabc5332c567117d0928",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV013",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-projectile.webp",
+      "sourceGitBlobSHA": "4e41fa88e5a75384f544ffa7fd2a5efd101d3540",
+      "sourceDimensions": {
+        "width": 380,
+        "height": 285,
+        "hasAlpha": true
+      },
+      "master": "TV013.png",
+      "masterSha256": "b5211dc525eacdf3ebcec2915a8c4a3be94ce402e6d0af01200aad61546c7375",
+      "masterDimensions": [
+        380,
+        285
+      ],
+      "version": "copy",
+      "qc": "copied as-is",
+      "status": "approved",
+      "notes": "no pet in the original — it is a plain rocket projectile with no canopy and no pilot. v1 generation added a bubble canopy with Teddy, which deviates from the original; the faithful master is the original itself, converted webp to PNG at the same 380x285 with transparency. v1 kept in work/ as rejected."
+    },
+    {
+      "id": "TV014",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-rear.webp",
+      "sourceGitBlobSHA": "41b6896bee7f2b15a9a66ad6d608a2f7ff74e23d",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 285,
+        "hasAlpha": true
+      },
+      "master": "TV014.png",
+      "masterSha256": "6116035d01631ce6cda84878f615211b6061af005c1aa8e211c56b5e0b2cd1b4",
+      "masterDimensions": [
+        420,
+        285
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV015",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-rocket.webp",
+      "sourceGitBlobSHA": "f71c5dbaa368e3d1eafb065af807b584980be851",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 600,
+        "hasAlpha": true
+      },
+      "master": "TV015.png",
+      "masterSha256": "99a7661c37fa5158918911bc806438eea2646ffa03fb98bad4659a19f2f9b017",
+      "masterDimensions": [
+        800,
+        600
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — automated alpha flag cleared: a single bottom-left corner pixel at alpha 1/255, invisible; corner tolerance in the generator scripts corrected to alpha <= 2"
+    },
+    {
+      "id": "TV016",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie-up.webp",
+      "sourceGitBlobSHA": "a2198d03a87f5769c30c9faa0bdf4e0fe4602c79",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "master": "TV016.png",
+      "masterSha256": "349f766458f835bd21bba2e33a3d92a67dc8f4aa81bbed2769fbbe0dceba54c7",
+      "masterDimensions": [
+        420,
+        280
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV017",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/rosie.webp",
+      "sourceGitBlobSHA": "35847687d71ffd093b742e77ae6855ed7e2b5087",
+      "sourceDimensions": {
+        "width": 420,
+        "height": 280,
+        "hasAlpha": true
+      },
+      "master": "TV017.png",
+      "masterSha256": "caefa9e37a156f4b6ecb7d9ac04295a6314ab1b940c507b15197c388af809e6a",
+      "masterDimensions": [
+        420,
+        280
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV018",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_molten_foundry_assault.webp",
+      "sourceGitBlobSHA": "c29db26cd79ac94fe4c16e77cc0d12cd57cc3d1e",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV018.png",
+      "masterSha256": "de4ba8e53555d97c3a1b5d09eefa51b833dde311036079ebede54c123b631220",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV019",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_cosmic_custody.webp",
+      "sourceGitBlobSHA": "5dab592e50d2b61b8a104f7b925e9f25cdca9fac",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV019.png",
+      "masterSha256": "a160f247bec35d951ec58c6e6ad3af5ade56af9923adbb2af0702db3f4224965",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV020",
+      "batch": "B02",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_cosmic_perp_walk.webp",
+      "sourceGitBlobSHA": "999a7e5b19a56b603e915c50ea13a3a7a933a0c2",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV020.png",
+      "masterSha256": "ec3abdc4a62f6038f7a1bbfc09cd80f3d3b35891b8ca6db309335f30f9237381",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV021",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_cosmic_victory.webp",
+      "sourceGitBlobSHA": "be7f8a4c16cbe871b9e94d7977b9fb3e3f3e7a78",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV021.png",
+      "masterSha256": "c6bac440d2dd16c217702370e0c7add5fb542c303254ac0679067a5f3c8c7963",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV022",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_crystal_sky_victory.webp",
+      "sourceGitBlobSHA": "9e68120780f5cbe10cf5b329f9fdcd85fc235427",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV022.png",
+      "masterSha256": "1011fc92682bf75ddce79a0f139c1e761e2fa69d48b2c402ed5502cd66e4eebf",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV023",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_crystal_victory.webp",
+      "sourceGitBlobSHA": "a5876b85bd08f2ede42fcd2e2b5bc2e722634cb5",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV023.png",
+      "masterSha256": "c4ae68e6659b792a68a873aaedd2d93787945e1ad40e99641dcecc4948560ffa",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV024",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_electrifying_escape.webp",
+      "sourceGitBlobSHA": "2b56049ccf6b74fdf44cfd2892d9b4f0ba3c71d6",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV024.png",
+      "masterSha256": "f6494af9b03084300c6e9be15774310bb0721451838953c8d388038a352344ac",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV025",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_lunar_victory.webp",
+      "sourceGitBlobSHA": "078a9c880bf86846c7f9f71e23f0b8129fb41712",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV025.png",
+      "masterSha256": "af38378367993109cbcce8069ae90e7a5b3f0df338915c160f7be3720fee15d1",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV026",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_molten_victory_escort.webp",
+      "sourceGitBlobSHA": "7600e465bb6efe220c9e779c0ae4b0b3ac7b5a91",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV026.png",
+      "masterSha256": "289211530f3c1370092c059147ef1c9087f4415a75752fba03424ff8e41fbc7d",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV027",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_orbital_victory_custody.webp",
+      "sourceGitBlobSHA": "b47cd85cc79a0eb74cdd5b386a14683e8bb2484a",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV027.png",
+      "masterSha256": "c57c8c948e34581f53647a0873aee13209e88e986b3c97e44722c3a604c1eaff",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV028",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_ricochet_victory.webp",
+      "sourceGitBlobSHA": "7fc448bdd86268d67df02f9d09950dff405ce5f9",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV028.png",
+      "masterSha256": "51c2421e5cca1bda22ab6545efff0a44f13a0067b624e5ea6a9fac68a6d59d9a",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV029",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_victory_in_the_starship_graveyard.webp",
+      "sourceGitBlobSHA": "dff9459fa5c49b5b94fb84deaa9218bde400243d",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV029.png",
+      "masterSha256": "17fdbcc1e692565b451fd332bcc16dfa51902500be4bfb81aaf4aecf7b0e49d7",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV030",
+      "batch": "B03",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/captain_rosie_s_volcanic_foundry_victory.webp",
+      "sourceGitBlobSHA": "137ef983ff15b7a744b7aa545fc8ffab8c6a72f1",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV030.png",
+      "masterSha256": "a4facbc2bb4176dff4d71688fe792651ffab0608dd8538cebe2a94854b51adf9",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV031",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/nebula_pursuit_captain_rosie_strikes_back.webp",
+      "sourceGitBlobSHA": "37dfdacf6b616c0d45a6dcfb0a0f5c275bdd29ab",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV031.png",
+      "masterSha256": "f1a0add047fa87fcc475050c9641dbd6e07c63cd109485513e3cb2fd090384e9",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV032",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/assets/victories/rosie_s_triumphant_crystal_chase.webp",
+      "sourceGitBlobSHA": "7e16bf653bd2d7ed774ec39d72213edfe8fa9732",
+      "sourceDimensions": {
+        "width": 1100,
+        "height": 1100,
+        "hasAlpha": false
+      },
+      "master": "TV032.png",
+      "masterSha256": "35a9c7694a541910339dc5a4938d4faf6dbf2a208966ca72e38b638de1ef1193",
+      "masterDimensions": [
+        1100,
+        1100
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Fiends and environment preserved, Jett/Kitty/Chip unaltered"
+    },
+    {
+      "id": "TV033",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/rosie-back.webp",
+      "sourceGitBlobSHA": "83a16cddb532ae03044250722fd273d6b8942c33",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "master": "TV033.png",
+      "masterSha256": "7aacc196ce5f8e284d4dd72bfb046985a644d05a45f98c7f1bd5cad3845b3bd6",
+      "masterDimensions": [
+        1024,
+        1536
+      ],
+      "version": "v3",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Profile now opens \"A legendary spacefaring Spitz\". v2 backed up in work/."
+    },
+    {
+      "id": "TV034",
+      "batch": "B04",
+      "section": "captain-cosmic",
+      "sourcePath": "public/cosmic-odyssey/cards/rosie-front.webp",
+      "sourceGitBlobSHA": "495455f467c79458e8d5e2ee183b62baa7ee4bf8",
+      "sourceDimensions": {
+        "width": 1024,
+        "height": 1536,
+        "hasAlpha": false
+      },
+      "master": "TV034.png",
+      "masterSha256": "55eac13ebbab9cf887641ea720d2d855c874780fd6679c2dcc2c5e6806e638ff",
+      "masterDimensions": [
+        1024,
+        1536
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — title correctly CAPTAIN TEDDY, all other text unchanged"
+    },
+    {
+      "id": "TV035",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sourcePath": "public/ember-drill/breakables/v2/07-rosie-drilling-effort.webp",
+      "sourceGitBlobSHA": "50b096be389b751fbfe02b30cbbf12ab0c0b027e",
+      "sourceDimensions": {
+        "width": 700,
+        "height": 772,
+        "hasAlpha": true
+      },
+      "master": "TV035.png",
+      "masterSha256": "fadec933f514185f3babe61c80ffd144a4f8265b79b0fc5e5e7e0a7fedf58d40",
+      "masterDimensions": [
+        700,
+        772
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the effort state: gritted-teeth strained expression now matches the original and reads distinct from TV036 excited discovery (v1 smiled happily)"
+    },
+    {
+      "id": "TV036",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sourcePath": "public/ember-drill/breakables/v2/08-rosie-excited-discovery.webp",
+      "sourceGitBlobSHA": "e72b6cfb052c6df4e13b43f410ff5ced0e615601",
+      "sourceDimensions": {
+        "width": 700,
+        "height": 772,
+        "hasAlpha": true
+      },
+      "master": "TV036.png",
+      "masterSha256": "3b9c358f833055f6e8b65440be5674b4f6f40f690e3d2103f9f4dc524c78c7b3",
+      "masterDimensions": [
+        700,
+        772
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — excited-discovery state matches the original"
+    },
+    {
+      "id": "TV037",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/captain_rosie_s_steampunk_drill_submarine.webp",
+      "sourceGitBlobSHA": "89d3c41020c1fc1d97b1638f6a8cc514f4d78e6c",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 800,
+        "hasAlpha": true
+      },
+      "master": "TV037.png",
+      "masterSha256": "a8f77ee2a02a37038291e1518156ebd3bafd74c0b9fa8ca9170bb0300133b8a1",
+      "masterDimensions": [
+        1400,
+        800
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV038",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/captain_rosie_s_steampunk_drillcraft.webp",
+      "sourceGitBlobSHA": "bf2c9bb3a468ac987c02e6f4cac282e081043772",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 788,
+        "hasAlpha": true
+      },
+      "master": "TV038.png",
+      "masterSha256": "31befd7a8e2b3483f09cb2350aac45c4d0b66302957dbc875fba385d016d6105",
+      "masterDimensions": [
+        1400,
+        788
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV039",
+      "batch": "B04",
+      "section": "captain-tunnel",
+      "sourcePath": "public/ember-drill/new-assets/drill-candidates/steampunk_captain_rosie_in_flight.webp",
+      "sourceGitBlobSHA": "9a446725583edeb1f201dcbd6634caa6bcf5eee5",
+      "sourceDimensions": {
+        "width": 1400,
+        "height": 788,
+        "hasAlpha": true
+      },
+      "master": "TV039.png",
+      "masterSha256": "8fc33580ff53a749210a1eb0a4189fa4287a8717c001a5001cd5437835e7a148",
+      "masterDimensions": [
+        1400,
+        788
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass"
+    },
+    {
+      "id": "TV040",
+      "batch": "B04",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/a-little-calm.webp",
+      "sourceGitBlobSHA": "5881085ec797e42810744dbe56d55ac462a198b9",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "master": "TV040.png",
+      "masterSha256": "0406757555449ed720a9daff32ad6bbcf518502b5c7eb7dff5cd6962bacd6a66",
+      "masterDimensions": [
+        440,
+        440
+      ],
+      "version": "copy",
+      "qc": "copied as-is",
+      "status": "approved",
+      "notes": "no pet in the original — a serene bamboo-fountain scene with no Rosie. v1 wrongly added Captain Teddy and removed part of the fountain; v1 kept in work/ as rejected. The faithful master is the original itself, converted webp to PNG at the same 440x440 with transparency."
+    },
+    {
+      "id": "TV041",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/breathe-with-rosie.webp",
+      "sourceGitBlobSHA": "2964da4fdfcad891302158598f21dff8ebb5b132",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "master": "TV041.png",
+      "masterSha256": "541738ec3c57a5048abe82aecae6bd8008caf5484f0c58a3c9227a1d687dc831",
+      "masterDimensions": [
+        440,
+        440
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the meditation expression to serene, eyes closed, gentle closed-mouth smile (v1 laughed)"
+    },
+    {
+      "id": "TV042",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/evening-unwind.webp",
+      "sourceGitBlobSHA": "08648698726811b25abfb83cbbc6729fb2a440cd",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "master": "TV042.png",
+      "masterSha256": "aa77432b03255fefdde3a04165ee92668ade437f1d681ad790d347196f25fc2d",
+      "masterDimensions": [
+        440,
+        440
+      ],
+      "version": "copy",
+      "qc": "copied as-is",
+      "status": "approved",
+      "notes": "no pet in the original — an evening lantern landscape medallion. v1 wrongly added Captain Teddy; v1 kept in work/ as rejected. Master is the original, converted webp to PNG at 440x440 with transparency."
+    },
+    {
+      "id": "TV043",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/haiku-reflection.webp",
+      "sourceGitBlobSHA": "d4843d3efced908875772cec78b9c746aa32a55f",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "master": "TV043.png",
+      "masterSha256": "af8e8f158c755cf13a82374276eace8cb0133b9ce1863147db37dc74ffbdd0d6",
+      "masterDimensions": [
+        440,
+        440
+      ],
+      "version": "copy",
+      "qc": "copied as-is",
+      "status": "approved",
+      "notes": "no pet in the original — a calligraphy scroll, brush and inkstone medallion. v1 wrongly added Teddy leaning on the scroll; v1 kept in work/ as rejected. Master is the original, converted webp to PNG at 440x440 with transparency."
+    },
+    {
+      "id": "TV044",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/quiet-sit.webp",
+      "sourceGitBlobSHA": "aca7aa89ed357b95223fe67f09fe4447e3b89bc8",
+      "sourceDimensions": {
+        "width": 440,
+        "height": 440,
+        "hasAlpha": true
+      },
+      "master": "TV044.png",
+      "masterSha256": "bdbc17868bc0cd1f805ec7bc799e3c902a11b98bdb2de0a719ad4ffc183ba4ce",
+      "masterDimensions": [
+        440,
+        440
+      ],
+      "version": "copy",
+      "qc": "copied as-is",
+      "status": "approved",
+      "notes": "no pet in the original — a zen garden with stacked stones medallion. v1 wrongly added Captain Teddy; v1 kept in work/ as rejected. Master is the original, converted webp to PNG at 440x440 with transparency."
+    },
+    {
+      "id": "TV045",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/final/rosie-enlightened.webp",
+      "sourceGitBlobSHA": "1f5c70aaa67d0cda0efdd9ff811ff5f61da1e7d0",
+      "sourceDimensions": {
+        "width": 688,
+        "height": 860,
+        "hasAlpha": true
+      },
+      "master": "TV045.png",
+      "masterSha256": "4b172115b34d2b9614aee0553b93069c133a9b9c28d010242d13aa96ad8d4544",
+      "masterDimensions": [
+        688,
+        860
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the enlightened expression to serene, eyes closed, gentle closed-mouth smile, paws together (v1 laughed)"
+    },
+    {
+      "id": "TV046",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-indigo.webp",
+      "sourceGitBlobSHA": "981f28e243b9ac83ecdb180d5686d662d846e951",
+      "sourceDimensions": {
+        "width": 1186,
+        "height": 1327,
+        "hasAlpha": true
+      },
+      "master": "TV046.png",
+      "masterSha256": "5889d8d4a3f2ff2c43bd1fb885015881a4f2b33fb50cdda1a7c32140e6a88826",
+      "masterDimensions": [
+        1186,
+        1327
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — serene meditation matches the original"
+    },
+    {
+      "id": "TV047",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-pink-sakura.webp",
+      "sourceGitBlobSHA": "8b99946e9ab4eeb7bb2f8465e14d58f548c70cb8",
+      "sourceDimensions": {
+        "width": 1199,
+        "height": 1312,
+        "hasAlpha": true
+      },
+      "master": "TV047.png",
+      "masterSha256": "3f11bf67801d4bf2a31c84f89a89c537f7331c73ee12d0752473a57a42061a3f",
+      "masterDimensions": [
+        1199,
+        1312
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — serene meditation matches the original"
+    },
+    {
+      "id": "TV048",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-plum-hakama.webp",
+      "sourceGitBlobSHA": "d224aeb50a7620ca6a9f2dd4a7b7292034bc9a83",
+      "sourceDimensions": {
+        "width": 1200,
+        "height": 1311,
+        "hasAlpha": true
+      },
+      "master": "TV048.png",
+      "masterSha256": "a29e7983345a9b16aa9c9e1b4fbef0dbf9eb2abb0ec01d282a5311b8005d9175",
+      "masterDimensions": [
+        1200,
+        1311
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — serene meditation matches the original"
+    },
+    {
+      "id": "TV049",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/characters/meditating-saffron-cream.webp",
+      "sourceGitBlobSHA": "a607e2d2fa0b71ebabce26175547d562222f6c78",
+      "sourceDimensions": {
+        "width": 1184,
+        "height": 1328,
+        "hasAlpha": true
+      },
+      "master": "TV049.png",
+      "masterSha256": "2ece663285bc7f943a7be582a4d60848211784a09dea0c759e90403287c9a44d",
+      "masterDimensions": [
+        1184,
+        1328
+      ],
+      "version": "v3",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to serene; v2 made the background worse (dark smoky wash, corner alpha 137); v3 removed the wash and the background is fully transparent. Final is v3."
+    },
+    {
+      "id": "TV050",
+      "batch": "B05",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/characters/sensei-bowing.webp",
+      "sourceGitBlobSHA": "efcf9a353ba8eb06814be93b5dc3bc0fdb6c5335",
+      "sourceDimensions": {
+        "width": 534,
+        "height": 576,
+        "hasAlpha": true
+      },
+      "master": "TV050.png",
+      "masterSha256": "621220daf72e1be19d058f271c8ec500735c95cb0b372d7b9668049e3cdd97b0",
+      "masterDimensions": [
+        534,
+        576
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 restored the round spectacles and the serene bowed expression (v1 had no spectacles and a laughing mouth)"
+    },
+    {
+      "id": "TV051",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/new/characters/sensei-greeting.webp",
+      "sourceGitBlobSHA": "f226b6cf7cef711af0ac1b341e239a746c644bbb",
+      "sourceDimensions": {
+        "width": 1184,
+        "height": 1328,
+        "hasAlpha": true
+      },
+      "master": "TV051.png",
+      "masterSha256": "2a60223337f119cad64e0df2599fd20dcbe968d9052c365d987c77391bdcc315",
+      "masterDimensions": [
+        1184,
+        1328
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass with note — expression livelier than the original's serene greeting (open laughing smile vs closed-eye calm), but a happy greeting is contextually appropriate"
+    },
+    {
+      "id": "TV052",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/ornaments/rosie-enlightened-refined.webp",
+      "sourceGitBlobSHA": "d3aa1dc49d55da69a32e60b53f42296a5ca3a04e",
+      "sourceDimensions": {
+        "width": 1122,
+        "height": 1402,
+        "hasAlpha": true
+      },
+      "master": "TV052.png",
+      "masterSha256": "766eed750045d911a233c842196929ce9d145892d04de69b3e15b62652fdca7e",
+      "masterDimensions": [
+        1122,
+        1402
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — joyful expression matches the original"
+    },
+    {
+      "id": "TV053",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-affectionate.webp",
+      "sourceGitBlobSHA": "4888af7919275abfa7aa8f40a773b8a0ab86967f",
+      "sourceDimensions": {
+        "width": 1197,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV053.png",
+      "masterSha256": "165e38fa5511bbbcdc51a96c52871cf51da1d69800df8f50648c02972ad38c66",
+      "masterDimensions": [
+        1197,
+        1300
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass with note — expression livelier than the original's gentle affectionate smile (open laughing mouth), but joyful affection is contextually appropriate"
+    },
+    {
+      "id": "TV054",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-bestowing-wisdom.webp",
+      "sourceGitBlobSHA": "a50d2c6bb3ca9432c307423f517f2d70fb8815d3",
+      "sourceDimensions": {
+        "width": 1040,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV054.png",
+      "masterSha256": "075dd5be2917a5a7f341b2c2a2fe458c23aa1e77c37fac0cabb69cad481d605a",
+      "masterDimensions": [
+        1040,
+        1300
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to a calm sage with a gentle closed-mouth smile (v1 laughed)"
+    },
+    {
+      "id": "TV055",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-calligrapher.webp",
+      "sourceGitBlobSHA": "1bb20ce77bdb86fffe3b7d926450e7af15255b8e",
+      "sourceDimensions": {
+        "width": 1300,
+        "height": 1188,
+        "hasAlpha": true
+      },
+      "master": "TV055.png",
+      "masterSha256": "9729f5b0fe7a68417f6bc65ed644f17a8696c55e6de31f9a4915a5b32fab681b",
+      "masterDimensions": [
+        1300,
+        1188
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to thoughtful, gentle closed-mouth smile, paw on chin (v1 laughed)"
+    },
+    {
+      "id": "TV056",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-contemplative.webp",
+      "sourceGitBlobSHA": "2f4989503814a45527a2f0bfb18e8cbdd60c01db",
+      "sourceDimensions": {
+        "width": 1212,
+        "height": 1298,
+        "hasAlpha": true
+      },
+      "master": "TV056.png",
+      "masterSha256": "36949756e40cd4c6274749d57894d6894dfb9fa49e4c74401eee32af0cbe1500",
+      "masterDimensions": [
+        1212,
+        1298
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to contemplative, gentle closed-mouth smile, gaze upward (v1 laughed)"
+    },
+    {
+      "id": "TV057",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-existential.webp",
+      "sourceGitBlobSHA": "61b927bc26afb7946dd30367527f5373461236ca",
+      "sourceDimensions": {
+        "width": 1206,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV057.png",
+      "masterSha256": "427db91dd3bc7c2bd1d5dfa6a0c77b69571e519886025310b82435ca58a9a3f9",
+      "masterDimensions": [
+        1206,
+        1300
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to thoughtful/wistful, gentle closed-mouth smile (v1 laughed)"
+    },
+    {
+      "id": "TV058",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-indignant.webp",
+      "sourceGitBlobSHA": "211cf5ae5b8570777d5a743ea75d729354975a95",
+      "sourceDimensions": {
+        "width": 1197,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV058.png",
+      "masterSha256": "c52e094d319f7f07b71f166e32b2d6cad3ed8e297c3181734d27f9ef7f2fdde0",
+      "masterDimensions": [
+        1197,
+        1300
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to indignant — narrowed eyes, firm closed mouth, haughty look (v1 laughed, inverting the state)"
+    },
+    {
+      "id": "TV059",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-inspired.webp",
+      "sourceGitBlobSHA": "abef0844f0398990f5b732447ef4bbfc88f568d7",
+      "sourceDimensions": {
+        "width": 1188,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV059.png",
+      "masterSha256": "5fe628be1aa0f9d644a15d5642593706610efb3d292f1e86f675abfb353e57af",
+      "masterDimensions": [
+        1188,
+        1300
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — inspired joy matches the original"
+    },
+    {
+      "id": "TV060",
+      "batch": "B06",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditating-animation.webp",
+      "sourceGitBlobSHA": "3741658af47ba649a06f773c265bba89ddfac728",
+      "sourceDimensions": {
+        "width": 1040,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV060.png",
+      "masterSha256": "83d4247028b63590964fe18692c648dc422296182cc4167ab2c81cacf6d6a8ae",
+      "masterDimensions": [
+        1040,
+        1300
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to serene meditation, eyes closed, gentle closed-mouth smile (v1 laughed)"
+    },
+    {
+      "id": "TV061",
+      "batch": "B07",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditating-paws-up.webp",
+      "sourceGitBlobSHA": "a82714bae1b846c166871e18f458715e472e678c",
+      "sourceDimensions": {
+        "width": 1122,
+        "height": 1402,
+        "hasAlpha": true
+      },
+      "master": "TV061.png",
+      "masterSha256": "62577f5440efae2eb7b1b3becfedf7ba02adb10379f3c16a937c27a71c4b7025",
+      "masterDimensions": [
+        1122,
+        1402
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to serene meditation, eyes closed, gentle closed-mouth smile (v1 laughed)"
+    },
+    {
+      "id": "TV062",
+      "batch": "B07",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditation-breathing.webp",
+      "sourceGitBlobSHA": "d0e0c2ac2f00bfc97f05f0f01aed1eee9de73e50",
+      "sourceDimensions": {
+        "width": 530,
+        "height": 644,
+        "hasAlpha": true
+      },
+      "master": "TV062.png",
+      "masterSha256": "b01c1e57f839f1f3b1c1264634549d7bec789e6d6be5b6eb459ec2a755b1a007",
+      "masterDimensions": [
+        530,
+        644
+      ],
+      "version": "v2-black",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to serene meditation. MASTER COMPOSITED ONTO BLACK: the original is effectively opaque (flat black background, only 15 transparent pixels in the whole file) despite hasAlpha=True; the transparent v2 is retained in work/ and the master reproduces the original black backdrop."
+    },
+    {
+      "id": "TV063",
+      "batch": "B07",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-meditation-frames.webp",
+      "sourceGitBlobSHA": "abc0a8e25f2eda342afeebfb4e63365ad205b0bc",
+      "sourceDimensions": {
+        "width": 1800,
+        "height": 1093,
+        "hasAlpha": true
+      },
+      "master": "TV063.png",
+      "masterSha256": "4c2382cfed5fbb27c820572ba0a8a7943cb20c0babf987c78561f4fdd2856e0d",
+      "masterDimensions": [
+        1800,
+        1093
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to serene in all 8 frames (v1 laughed in every frame)"
+    },
+    {
+      "id": "TV064",
+      "batch": "B07",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-smug.webp",
+      "sourceGitBlobSHA": "ebb004d8244896543b367435fa7e657a76abc604",
+      "sourceDimensions": {
+        "width": 1191,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV064.png",
+      "masterSha256": "c6623665a806c18d1f01e81dc9f6b0621cbfcaf01b714fad0bc544b8597078ef",
+      "masterDimensions": [
+        1191,
+        1300
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to smug — sly sideways glance, closed-mouth smirk, chin raised (v1 laughed)"
+    },
+    {
+      "id": "TV065",
+      "batch": "B07",
+      "section": "haiku",
+      "sourcePath": "public/rosieverse/haiku/rosie-triumphant.webp",
+      "sourceGitBlobSHA": "1e50da03e8a65675d76c9e0f7d680e748dbdce63",
+      "sourceDimensions": {
+        "width": 1188,
+        "height": 1300,
+        "hasAlpha": true
+      },
+      "master": "TV065.png",
+      "masterSha256": "a2f2fdeceb6f2870138e8a5ddcc9e8476b6925335cd5da7e9b33b482cab9a696",
+      "masterDimensions": [
+        1188,
+        1300
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — triumphant joy matches the original"
+    },
+    {
+      "id": "TV066",
+      "batch": "B07",
+      "section": "other-public",
+      "sourcePath": "public/home/rosie-grand-salon.svg",
+      "sourceGitBlobSHA": "4131b939518c40df8dcadf635fa9470786652c1c",
+      "sourceDimensions": {
+        "width": 1600,
+        "height": 1000,
+        "hasAlpha": true
+      },
+      "master": "TV066.svg",
+      "masterSha256": "813c91898b3749cc0954522a8280d9d97f52657dae02618e0faa66780bc22500",
+      "masterDimensions": null,
+      "version": "v1",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Vector redraw approved by owner 2026-11-23 (\"approve, finalize\"). Golden-orange Spitz, small fluffy ears, gray grizzled muzzle; room untouched. Rendered + inspected visually."
+    },
+    {
+      "id": "TV067",
+      "batch": "B07",
+      "section": "other-public",
+      "sourcePath": "public/rosie-doctor-cheese.webp",
+      "sourceGitBlobSHA": "894606c50ebd2fae2438e743aa92316b20f37afd",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 254,
+        "hasAlpha": false
+      },
+      "master": "TV067.png",
+      "masterSha256": "456afe160f2de8afa9c3ec87b4741668e9f9c1f170cf71301d61d3bcc955df1f",
+      "masterDimensions": [
+        360,
+        254
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass with tolerance — diploma small print is garbled pseudo-text (original reads \"Rosie the Shiba\" / \"University of Barkarooq\"); illegible at the 360x254 display size"
+    },
+    {
+      "id": "TV068",
+      "batch": "B07",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-amused.webp",
+      "sourceGitBlobSHA": "a0f0374e4fbfecebe125ab40f51550b19e90d814",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "master": "TV068.png",
+      "masterSha256": "f71dea250628b7e713bf2ceed0b457a947430f703ee810e15fdfbce4f555633f",
+      "masterDimensions": [
+        360,
+        430
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to sly amused closed-mouth smile, paw on chin (v1 laughed, nearly identical to elated TV070)"
+    },
+    {
+      "id": "TV069",
+      "batch": "B07",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-distraught.webp",
+      "sourceGitBlobSHA": "cded48438b68e597affa1d080541a6d2ff51730d",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "master": "TV069.png",
+      "masterSha256": "36cff5e9ae049071b2b71497db27c03ba8d082dd3b319eec14274940c00102b1",
+      "masterDimensions": [
+        360,
+        430
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — distraught (wide eyes, open mouth, paws on cheeks) matches the original"
+    },
+    {
+      "id": "TV070",
+      "batch": "B07",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-elated.webp",
+      "sourceGitBlobSHA": "c27b83254c35bbd5b34deb071ed115928488075b",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "master": "TV070.png",
+      "masterSha256": "932c21907ee2e50909df02e8e9f9a78ec5a12e573f01d088cb043fc3d8818313",
+      "masterDimensions": [
+        360,
+        430
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — elated (eyes shut, big laugh, raised paw, confetti) matches the original"
+    },
+    {
+      "id": "TV071",
+      "batch": "B08",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-embarrassed.webp",
+      "sourceGitBlobSHA": "01de82c2955a960d3f51981b891af0600397b14d",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "master": "TV071.png",
+      "masterSha256": "bfc155873df57e4b1338734a97f4ee45fa31e7226d2686f71c5cb994d145d787",
+      "masterDimensions": [
+        360,
+        430
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to shy embarrassed (sideways glance, blush, closed-mouth smile, paws at chin); v1 laughed"
+    },
+    {
+      "id": "TV072",
+      "batch": "B08",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-focused.webp",
+      "sourceGitBlobSHA": "f749dacd0441a2375491ef7e406d35a656f4f1a5",
+      "sourceDimensions": {
+        "width": 900,
+        "height": 1125,
+        "hasAlpha": false
+      },
+      "master": "TV072.png",
+      "masterSha256": "7f42311d4fb6d483091ae1d1843c289e8c94c57f73a38c8bc52de6e70ff98966",
+      "masterDimensions": [
+        900,
+        1125
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to serious focus through the magnifying glass, mouth closed; v1 laughed"
+    },
+    {
+      "id": "TV073",
+      "batch": "B08",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-pleased.webp",
+      "sourceGitBlobSHA": "22f39777c1a1b91b1054eb83735d2e460feeaeca",
+      "sourceDimensions": {
+        "width": 360,
+        "height": 430,
+        "hasAlpha": false
+      },
+      "master": "TV073.png",
+      "masterSha256": "eadc3596395becf4b869ef2127f26d34941375588fa60033ec072002aa240080",
+      "masterDimensions": [
+        360,
+        430
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to quiet pleased contentment (eyes gently closed, soft closed-mouth smile); v1 laughed"
+    },
+    {
+      "id": "TV074",
+      "batch": "B08",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-proud.webp",
+      "sourceGitBlobSHA": "f19d05a2b2025e194435fc394af0dbca8e88d60f",
+      "sourceDimensions": {
+        "width": 900,
+        "height": 1125,
+        "hasAlpha": false
+      },
+      "master": "TV074.png",
+      "masterSha256": "c506e35c1478dce332dad248571f8c4f47ab51f6ff24fa66bed7aaf2a4fddd33",
+      "masterDimensions": [
+        900,
+        1125
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — proud joy with the gold paw medallion and confetti matches the original"
+    },
+    {
+      "id": "TV075",
+      "batch": "B08",
+      "section": "other-public",
+      "sourcePath": "public/rosie-mood-watching.webp",
+      "sourceGitBlobSHA": "6960ea8b4fb0854470572043f6a55f55dde5cc68",
+      "sourceDimensions": {
+        "width": 1122,
+        "height": 1402,
+        "hasAlpha": false
+      },
+      "master": "TV075.png",
+      "masterSha256": "3b27240991bd22b473b6e90a565c0b00d94859683df7375a1be256eaee1621ed",
+      "masterDimensions": [
+        1122,
+        1402
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the expression to calm attentive watching (gentle closed-mouth smile, paw on chin); v1 laughed"
+    },
+    {
+      "id": "TV076",
+      "batch": "B08",
+      "section": "other-public",
+      "sourcePath": "public/rosie-turn-head.svg",
+      "sourceGitBlobSHA": "98f754e46e3e905c8b14c640c80eb5d5069e27fb",
+      "sourceDimensions": {
+        "width": 1260,
+        "height": 1260,
+        "hasAlpha": true
+      },
+      "master": "TV076.svg",
+      "masterSha256": "cb3ac51e13c9e00d73d7ede4a4e4ba2c729258ad9ec9983aec6d1bbe4a07736b",
+      "masterDimensions": null,
+      "version": "v1",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Raster swap approved by owner 2026-11-23 (\"approve, finalize\"). Embedded Rosie raster replaced with new Teddy seer render."
+    },
+    {
+      "id": "TV077",
+      "batch": "B08",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-retina.svg",
+      "sourceGitBlobSHA": "39f1758d1cbcfc979b48f999378e4f049959e0c4",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 960,
+        "hasAlpha": true
+      },
+      "master": "TV077.svg",
+      "masterSha256": "faa0b5d93544066b79feda7e04927d9f1428a1c88616a0b0ec6ff8a45152c68e",
+      "masterDimensions": null,
+      "version": "v1",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Vector swap: embedded Rosie raster replaced with approved Teddy coin master (TV080 for TV077, TV079 for TV078). Verified: XML parses, non-payload text byte-identical to original, all visible pixels identical to approved master."
+    },
+    {
+      "id": "TV078",
+      "batch": "B08",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-tail-retina.svg",
+      "sourceGitBlobSHA": "e9986a0f9dbb8c43e5877ea8062f8dbab3c7e1b5",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 960,
+        "hasAlpha": true
+      },
+      "master": "TV078.svg",
+      "masterSha256": "d8895251c0fd51afbd7522ee0c81825a98509dbe0f3a959af03af9e3f4805903",
+      "masterDimensions": null,
+      "version": "v1",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Vector swap: embedded Rosie raster replaced with approved Teddy coin master (TV080 for TV077, TV079 for TV078). Verified: XML parses, non-payload text byte-identical to original, all visible pixels identical to approved master."
+    },
+    {
+      "id": "TV079",
+      "batch": "B08",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-coin-tail.webp",
+      "sourceGitBlobSHA": "9b729bf5951c223d6a43e38cd688b6fa1d910ebd",
+      "sourceDimensions": {
+        "width": 240,
+        "height": 236,
+        "hasAlpha": true
+      },
+      "master": "TV079.png",
+      "masterSha256": "7df346037b45b73510b0c4dbb9dcd0a0697fbe1046bc632b852f5171e8cacd06",
+      "masterDimensions": [
+        240,
+        236
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the coin: a single round gold medallion with a golden curled Teddy plume tail in the black center, red enamel ring with gold filigree — v1 was a six-panel character-sheet grid (the model reproduced the attached character sheet) and fully opaque; v2 is a proper coin with transparent corners"
+    },
+    {
+      "id": "TV080",
+      "batch": "B08",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-coin.webp",
+      "sourceGitBlobSHA": "654319be076218ef5de91cf1f3eca6c437978c22",
+      "sourceDimensions": {
+        "width": 240,
+        "height": 240,
+        "hasAlpha": true
+      },
+      "master": "TV080.png",
+      "masterSha256": "c9572cb039be1758ab32e5d8ca093637497de2d778f70f64e3ee73d0e63c8f02",
+      "masterDimensions": [
+        240,
+        240
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the coin: a single round gold medallion with a golden relief Teddy portrait, bow tie, and a small round gold medallion marked T (per the R-to-T rule) — v1 was a six-panel character-sheet grid and fully opaque; v2 is a proper coin with transparent corners"
+    },
+    {
+      "id": "TV081",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-die-sprites-clean.webp",
+      "sourceGitBlobSHA": "ed0a1ba9a871511f974994091dd9d8d3ecf3aef7",
+      "sourceDimensions": {
+        "width": 480,
+        "height": 320,
+        "hasAlpha": false
+      },
+      "master": "TV081.png",
+      "masterSha256": "db88463008cbc749d769c86ff40e0f633b576a9977b010151f52853f24e14008",
+      "masterDimensions": [
+        480,
+        320
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (sprite sheet of six dice); v1 was a six-panel Captain Teddy character-sheet grid and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV082",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-garnet-satin-4k.svg",
+      "sourceGitBlobSHA": "496ce462f535043248d4580f1c78a0eb62407000",
+      "sourceDimensions": {
+        "width": 4096,
+        "height": 2304,
+        "hasAlpha": true
+      },
+      "master": "TV082.svg",
+      "masterSha256": "07d9cd20f109708d6763f903341109cfb69368320563e202b8a9ed3649da62ae",
+      "masterDimensions": null,
+      "version": "original",
+      "qc": "reuse-original-decorative",
+      "status": "approved",
+      "notes": "Reuse per the queue: garnet-satin-4k.svg is a decorative texture with no pet; the original SVG is preserved unchanged as the master."
+    },
+    {
+      "id": "TV083",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-ivory-gold-marble-texture.svg",
+      "sourceGitBlobSHA": "06da2c1624a2476dd24a03b282e4ef9223210709",
+      "sourceDimensions": {
+        "width": 480,
+        "height": 480,
+        "hasAlpha": true
+      },
+      "master": "TV083.svg",
+      "masterSha256": "4f00f11730ed54c0bd1bc8dd8646e244de9e96110aa7337aa071f100d9e7c5d5",
+      "masterDimensions": null,
+      "version": "original",
+      "qc": "reuse-original-decorative",
+      "status": "approved",
+      "notes": "Reuse per the queue: ivory-gold-marble-texture.svg is a decorative texture with no pet; the original SVG is preserved unchanged as the master."
+    },
+    {
+      "id": "TV084",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-randomizers-casino-header.webp",
+      "sourceGitBlobSHA": "ef6b284c49895bc5107ce225e880273b87ac12da",
+      "sourceDimensions": {
+        "width": 1375,
+        "height": 907,
+        "hasAlpha": false
+      },
+      "master": "TV084.png",
+      "masterSha256": "9c40b90b723ac9e1f5538ab41486974c16b9398f82a91c8f9105390a6f214fd0",
+      "masterDimensions": [
+        1375,
+        907
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed all name/monogram text to Teddy: \"TEDDY'S PRIVATE SALON\", \"Teddy's Randomizers\", top-right medallion T, bottom-right chip T (v1 kept Rosie's name and R monograms)"
+    },
+    {
+      "id": "TV085",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/rosie-salon-burgundy-texture.svg",
+      "sourceGitBlobSHA": "9910b574d043b9602cf3e97746133d7f772dc465",
+      "sourceDimensions": {
+        "width": 720,
+        "height": 720,
+        "hasAlpha": true
+      },
+      "master": "TV085.svg",
+      "masterSha256": "06174e3a7377adeeead61e8d41d46d0350722e8c07be093534bc5ee8971899b0",
+      "masterDimensions": null,
+      "version": "original",
+      "qc": "reuse-original-decorative",
+      "status": "approved",
+      "notes": "Reuse per the queue: salon-burgundy-texture.svg is a decorative texture with no pet; the original SVG is preserved unchanged as the master."
+    },
+    {
+      "id": "TV086",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/secret-santa/01-rosie-secret-santa-host.webp",
+      "sourceGitBlobSHA": "3ca10a53740ff648820873c3de3c7a1930dfab8f",
+      "sourceDimensions": {
+        "width": 1536,
+        "height": 1024,
+        "hasAlpha": true
+      },
+      "master": "TV086.png",
+      "masterSha256": "5c6460a6a196e4c5b696d91643c623be6d1e3293f16ab88aaa0bc617dfed06c8",
+      "masterDimensions": [
+        1536,
+        1024
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — the v1 alpha flag is a false positive (the original's bottom corners are also opaque: the red table, alpha 245/219); the candidate matches the original's corner pattern. Teddy's joyful expression is contextually appropriate for the festive Santa host."
+    },
+    {
+      "id": "TV087",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/secret-santa/email/rosie-crest.png",
+      "sourceGitBlobSHA": "694a14f802933f1df2c6bcd2e16991f39bc985d8",
+      "sourceDimensions": {
+        "width": 260,
+        "height": 277,
+        "hasAlpha": true
+      },
+      "master": "TV087.png",
+      "masterSha256": "b9271ab1df876854a9881e6313fbd71537f70c97c864de81f9f8e3dac1f3ce8e",
+      "masterDimensions": [
+        260,
+        277
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (crest: gift box, gold bow, paw print); v1 added Captain Teddy sitting on the gift box and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV088",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/secret-santa/email/rosie-holiday-banner.jpg",
+      "sourceGitBlobSHA": "58e10807caa1b3b0e009e4e47d1b740d6c0285f3",
+      "sourceDimensions": {
+        "width": 1060,
+        "height": 288,
+        "hasAlpha": false
+      },
+      "master": "TV088.png",
+      "masterSha256": "caa964e612a4c9fb3e68ff275bdd721085ebc1dbe69d379d60c60bc0ac16240d",
+      "masterDimensions": [
+        1060,
+        288
+      ],
+      "version": "v1",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Split-run master approved by owner 2026-11-23 (\"approve, finalize\"). Sign reads \"TEDDY'S Secret Santa\". Seam feathered once."
+    },
+    {
+      "id": "TV089",
+      "batch": "B09",
+      "section": "randomizers",
+      "sourcePath": "public/randomizers/secret-santa/email/rosie-plaque.png",
+      "sourceGitBlobSHA": "e164a2ce3e9417f4542a0e0187245b67f9c528a1",
+      "sourceDimensions": {
+        "width": 740,
+        "height": 406,
+        "hasAlpha": false
+      },
+      "master": "TV089.png",
+      "masterSha256": "dad0edadf6d9383a7f2729b9fb9e0b23c9ebfac6f1e2aafb2c741d16caf70b88",
+      "masterDimensions": [
+        740,
+        406
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 fixed the plaque name to \"TEDDY'S Secret Santa\" and removed the invented Teddy head peeking over the top (v1 kept \"ROSIE'S\" and added the head); the original plaque has no pet"
+    },
+    {
+      "id": "TV090",
+      "batch": "B09",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-blank-hollow.png",
+      "sourceGitBlobSHA": "977bf1e056a41e1304f68b484725995b8d304608",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV090.png",
+      "masterSha256": "1a4884b5eb4dce802687e57f5401569e333a96b85d96b240837ff62459d62753",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (blank hollow gold QR frame); v1 was a six-panel Captain Teddy character-sheet grid, fully opaque, and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV091",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-blank.png",
+      "sourceGitBlobSHA": "e608970447f81fce9c12bc4c01907bc635a1ccb3",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV091.png",
+      "masterSha256": "0da3edcb38add8928e8d3ab0ce83afce3a02c49939e5a2ebf4c91f0838999312",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (blank hollow gold frame, same frame as TV090); v1 was a six-panel Captain Teddy character-sheet grid and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV092",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-peeking.png",
+      "sourceGitBlobSHA": "61e1938937a7962ac5a18ffe9bc7165d0270a799",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV092.png",
+      "masterSha256": "1cddd8c12bd0315fc7b36f9729c6c2cd873edd373dd65af1095bb7abb4994e7d",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "v2",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "v2 restored the hollow transparent oval opening (v1 had filled it with a solid cream panel); center alpha is 0, 858,267 transparent pixels. Teddy in the green/gold outfit with goggles matches the original."
+    },
+    {
+      "id": "TV093",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-presenting-hollow.png",
+      "sourceGitBlobSHA": "15e3361f0b2ab99eb944adf59f05e9eaa6dc7ba5",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV093.png",
+      "masterSha256": "ba68abca490eb3ae2fa397cb52142b3e8a842844e42003b3a1530b932609d440",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Teddy in the green/gold outfit with goggles matches the original's presenting pose; the frame's hollow oval stays transparent"
+    },
+    {
+      "id": "TV094",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-presenting.png",
+      "sourceGitBlobSHA": "802ce019a97db498e3f7f5c329f2559ee3bcc100",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV094.png",
+      "masterSha256": "e16ccaa863e413a5c24ebf65782e0d804fa03073e162f2b5a2afc753cb1650b5",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — same as TV093 (distinct source file: rosie-frame-presenting.png vs presenting-hollow); Teddy matches, hollow oval transparent"
+    },
+    {
+      "id": "TV095",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-seated-hollow.png",
+      "sourceGitBlobSHA": "4e3f8a16a54f46933123b8aa0ce349c4f8d7a42e",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV095.png",
+      "masterSha256": "de1ef3c4c689bfa7140384ba7ddf2eb3fa09895f1615858b1b435e7b082b30a3",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — Teddy in the green/gold outfit with goggles matches the original's seated pose; hollow oval transparent"
+    },
+    {
+      "id": "TV096",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-frame-seated.png",
+      "sourceGitBlobSHA": "1555762e79a125f67bafe286adcd9602e5b49b8d",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": true
+      },
+      "master": "TV096.png",
+      "masterSha256": "0867c44e1c1971d11b4e7ea3aa601b1c87394d11b80aaa9a48ae231cb8270ca3",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "v1",
+      "qc": "7/7",
+      "status": "approved",
+      "notes": "pass — same as TV095 (distinct source file: rosie-frame-seated.png vs seated-hollow); Teddy matches, hollow oval transparent"
+    },
+    {
+      "id": "TV097",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-popup-desktop.webp",
+      "sourceGitBlobSHA": "dd3a0115af86c9e657c77def0a810233292ac57f",
+      "sourceDimensions": {
+        "width": 1672,
+        "height": 941,
+        "hasAlpha": false
+      },
+      "master": "TV097.png",
+      "masterSha256": "75d13ee7f5c0e30cfca9d44951bdab0608d04e4f8e698576c127585e600c9b1e",
+      "masterDimensions": [
+        1672,
+        941
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (empty library popup background, desktop); v1 added Captain Teddy sitting in the center where popup content goes. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV098",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-popup-ipad.webp",
+      "sourceGitBlobSHA": "bec774acd69ffdf1c7557075056a2e388b0fa8f9",
+      "sourceDimensions": {
+        "width": 1448,
+        "height": 1086,
+        "hasAlpha": false
+      },
+      "master": "TV098.png",
+      "masterSha256": "dd507e70fa33da9e0d9502e64b328660ab4adae1df6b196ab125005a6430983d",
+      "masterDimensions": [
+        1448,
+        1086
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (empty library popup background, iPad); v1 added Captain Teddy standing on the table in the center. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV099",
+      "batch": "B10",
+      "section": "qr-atelier",
+      "sourcePath": "public/qr-atelier/rosie-qr/rosie-popup-iphone.webp",
+      "sourceGitBlobSHA": "3402a933ef8ea4d861b508b0701301c99704de6a",
+      "sourceDimensions": {
+        "width": 941,
+        "height": 1672,
+        "hasAlpha": false
+      },
+      "master": "TV099.png",
+      "masterSha256": "1d2f2f9990bb1a6ec911dc1cf6290e6cda8475ee8f4c5ce9e279a9dd9e170c46",
+      "masterDimensions": [
+        941,
+        1672
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (empty library popup background, iPhone); v1 added Captain Teddy lying on the table in the center. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV100",
+      "batch": "B10",
+      "section": "recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/rosie-s-strawberry-pawfait.webp",
+      "sourceGitBlobSHA": "fa997581e9d035946f8d29b6d85c0df5fa394d55",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "master": "TV100.png",
+      "masterSha256": "c3ea40c7119ff2db1a846620d3fa58cc42719ba3f42786bc7c41ad9ebaaf38e9",
+      "masterDimensions": [
+        800,
+        800
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (strawberry parfait food photo); v1 was a six-panel Captain Teddy character-sheet grid. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV101",
+      "batch": "B11",
+      "section": "recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/rosie-s-sunday-walk.webp",
+      "sourceGitBlobSHA": "9846436d77e0b027b9c7e6ef105af8678d5aa601",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "master": "TV101.png",
+      "masterSha256": "50c665b7f0442ec899924153a611d9dadedf4d98975cf6ec1e489ccbcda6655b",
+      "masterDimensions": [
+        800,
+        800
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (rosie-s-sunday-walk is a meatball dish food photo); v1 was a six-panel Captain Teddy character-sheet grid and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV102",
+      "batch": "B11",
+      "section": "recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/shiba-sunrise-hash.webp",
+      "sourceGitBlobSHA": "6f7ea814d4179f074686239961952ad14bdcb747",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "master": "TV102.png",
+      "masterSha256": "052a018669480075ebcb63eaa9b079298551044b3e38b4ee210b778eac7a024a",
+      "masterDimensions": [
+        800,
+        800
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (shiba-sunrise-hash is a skillet hash food photo); v1 was a six-panel Captain Teddy character-sheet grid and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV103",
+      "batch": "B11",
+      "section": "recipes",
+      "sourcePath": "public/rosieverse/recipes/dishes/the-top-dog-smash-burger.webp",
+      "sourceGitBlobSHA": "aa28b084fdad7e7040ac866ae9d2125979e87ea9",
+      "sourceDimensions": {
+        "width": 800,
+        "height": 800,
+        "hasAlpha": false
+      },
+      "master": "TV103.png",
+      "masterSha256": "517ca024896db68ff963f53e587bbc6e9cf3784018dfd3f20af0ed46e1c499c3",
+      "masterDimensions": [
+        800,
+        800
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (the-top-dog-smash-burger is a burger food photo); v1 was a six-panel Captain Teddy character-sheet grid and was rejected. Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV104",
+      "batch": "B11",
+      "section": "shared-rosieverse",
+      "sourcePath": "public/rosieverse/account/rosie-gold-action.svg",
+      "sourceGitBlobSHA": "fda95c93f2ddb585c1e829268ae4d131f7b698d4",
+      "sourceDimensions": {
+        "width": 960,
+        "height": 160,
+        "hasAlpha": true
+      },
+      "master": "TV104.svg",
+      "masterSha256": "70120f907313678a12f402395e15dff0b75a1aae15e8dd176024cc228eeb9521",
+      "masterDimensions": null,
+      "version": "original",
+      "qc": "reuse-original-decorative",
+      "status": "approved",
+      "notes": "Reuse per the queue: rosie-gold-action.svg is a tiny pure-vector decorative element (1,296 bytes, 1 path, no raster, no text, no pet); the original SVG is preserved unchanged as the master."
+    },
+    {
+      "id": "TV105",
+      "batch": "B11",
+      "section": "shared-rosieverse",
+      "sourcePath": "public/rosieverse/account/rosie-paw-divider.svg",
+      "sourceGitBlobSHA": "e310712061e8dceba1334c7fb9d1057a3377d90d",
+      "sourceDimensions": {
+        "width": 700,
+        "height": 90,
+        "hasAlpha": true
+      },
+      "master": "TV105.svg",
+      "masterSha256": "990faa996e9b09f6f7a8fea639556864deeb8daf64f27a1226dec027e971a862",
+      "masterDimensions": null,
+      "version": "original",
+      "qc": "reuse-original-decorative",
+      "status": "approved",
+      "notes": "Reuse per the queue: rosie-paw-divider.svg is a tiny pure-vector decorative divider (740 bytes, 2 paths, no raster, no text, no pet); the original SVG is preserved unchanged as the master."
+    },
+    {
+      "id": "TV106",
+      "batch": "B11",
+      "section": "shared-rosieverse",
+      "sourcePath": "public/rosieverse/ui/rosie-music-medallion.webp",
+      "sourceGitBlobSHA": "6015e4313bccb372ab14559ebf6ed9406f1dc89f",
+      "sourceDimensions": {
+        "width": 96,
+        "height": 96,
+        "hasAlpha": true
+      },
+      "master": "TV106.png",
+      "masterSha256": "6e61bfb9d97cccf4ce9853e83c5f7851e4463c445d431825868c81bebd9507a3",
+      "masterDimensions": [
+        96,
+        96
+      ],
+      "version": "original",
+      "qc": "copied-as-is",
+      "status": "approved",
+      "notes": "No pet in the original (rosie-music-medallion is a purple/gold music-note medallion); v1 was a six-panel Captain Teddy character-sheet grid at 96x96 and was rejected (its one corner alpha of 12 is moot — the v1 is unusable). Original copied as-is per the no-pet rule."
+    },
+    {
+      "id": "TV107",
+      "batch": "B11",
+      "section": "timekeeper",
+      "sourcePath": "public/rosieverse/timekeeper/midnight-observatory/rosie-connected-lever-drive.webp",
+      "sourceGitBlobSHA": "9fc2043d722de6d198e26d593e1e36a710b84897",
+      "sourceDimensions": {
+        "width": 3150,
+        "height": 900,
+        "hasAlpha": true
+      },
+      "master": "TV107.png",
+      "masterSha256": "cf9d5a38890e5ad1c2aa1f4431778439e239bdc0527f83a8fdbd298ef2df9b9e",
+      "masterDimensions": [
+        3150,
+        900
+      ],
+      "version": "v1",
+      "qc": "APPROVED by owner 2026-11-23",
+      "status": "approved",
+      "notes": "Split-run master approved by owner 2026-11-23 (\"approve, finalize\"). Three panels stitched at transparent seams."
+    }
+  ]
+}
