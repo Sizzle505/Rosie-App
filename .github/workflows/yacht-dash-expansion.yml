@@ -45,5 +45,6 @@ jobs:
         run: npm run build
       - name: Confirm full approved artwork import
         run: |
-          test "$(find public/yacht-dash -name '*.webp' | wc -l)" -eq 39
-          echo "All 39 approved Yacht Dash images are present."
+          test "$(find public/yacht-dash -path '*/kuroi/*' -prune -o -name '*.webp' -print | wc -l)" -eq 39
+          test "$(find public/yacht-dash/kuroi -maxdepth 1 -name '*.webp' | wc -l)" -eq 7
+          echo "All 39 original Yacht Dash images and 7 new approved collision sprites are present."
