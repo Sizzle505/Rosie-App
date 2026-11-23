@@ -91,6 +91,28 @@ const imageFallbackToken='${recipe.id.replace(/^teddy-s-/, "rosie-s-")}.webp';
 if(!recipes.includes(imageIdToken))throw Error("Missing recipe image reference");
 recipes=recipes.replace(imageIdToken,imageFallbackToken);
 await fs.writeFile(path.join(repo,"src/RosieRecipes.jsx"),recipes);
+// Correct source-only pet/breed references on the newly enabled Teddy surfaces.
+// Keep Card Vault's separately-gated canonical card titles and source paths unchanged.
+const copyFixes={
+ "src/RosieHaikuGarden.jsx":[
+  ["Shiba judgment","Spitz judgment"],
+  ["Or ask her to compose a haiku","Or ask Teddy to compose a haiku"],
+  ["A Shiba's perspective","Teddy's perspective"]
+ ],
+ "src/RosieHaikuScene.jsx":[
+  ["THE WAY OF THE SHIBA","THE WAY OF TEDDY"],
+  ["Teddy, the black-and-tan Shiba Inu, meditates in her ","Teddy, the golden Spitz, meditates in "]
+ ],
+ "src/EmberTunnelDrill.jsx":[
+  ["CAPTAIN TEDDY AWAITS HER ORDERS","CAPTAIN TEDDY AWAITS YOUR ORDERS"]
+ ],
+ "src/main.jsx":[["Shiba Inu","Spitz"]]
+};
+for(const [relative,changes] of Object.entries(copyFixes)){
+ const filename=path.join(repo,relative);let value=await fs.readFile(filename,"utf8");
+ for(const [oldText,newText] of changes){if(!value.includes(oldText))throw Error("Expected Teddy copy marker missing: "+relative+" / "+oldText);value=value.replaceAll(oldText,newText)}
+ parse(value,{sourceType:"unambiguous",plugins:["jsx"]});await fs.writeFile(filename,value);
+}
 const htmlFile=path.join(repo,"index.html");
 let html=await fs.readFile(htmlFile,"utf8");
 html=replace(html);await fs.writeFile(htmlFile,html);
