@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -281,6 +281,59 @@ test("Captain's Log provides the next attainable medal goal instead of generic p
   assert.equal(yachtNextMedalHint("unknown",sailor),"");
 });
 
+test("Sakura begins with an approachable, rewarding cargo tutorial", () => {
+  assert.deepEqual([0,1,2].map(n => yachtSakuraDelivery(n, () => 2)),
+    [{kind:"ball",lane:1},{kind:"treat",lane:1},{kind:"cheese",lane:1}]);
+  for(let seq=3;seq<100;seq++) {
+    const delivery=yachtSakuraDelivery(seq,n=>seq % n);
+    assert.ok(["ball","treat","cheese","buoy"].includes(delivery.kind));
+    assert.ok(delivery.lane>=0 && delivery.lane<=2);
+    if(delivery.kind==="buoy"){
+      assert.ok(seq>=7, "no hazard before the controls are learned");
+      assert.notEqual(yachtSakuraDelivery(seq-1,()=>0).kind,"buoy");
+      assert.notEqual(yachtSakuraDelivery(seq+1,()=>0).kind,"buoy");
+    }
+  }
+  assert.ok(Array.from({length:80},(_,i)=>yachtSakuraDelivery(i,()=>0))
+    .filter(drop=>drop.kind==="cheese").length >= 8,
+    "Golden Cheese must appear often enough to build meaningful Turbo");
+});
+test("Wave rhythm eases the opening, accelerates the finale, and spaces major hazards", () => {
+  const early=yachtSpawnInterval("sakura","harbor",0);
+  const late=yachtSpawnInterval("sakura","sunset",0);
+  assert.ok(early>=1050 && early<=1300);
+  assert.ok(late>=880 && late<early);
+  const sakuraSeconds=["harbor","riviera","sunset"]
+    .reduce((sum,phase)=>sum+25,0);
+  assert.equal(sakuraSeconds,75);
+  for(const chapter of ["typhoon","moonlight","emperor"]){
+    for(const phase of ["harbor","riviera","sunset"]){
+      for(let seq=0;seq<40;seq++){
+        const interval=yachtSpawnInterval(chapter,phase,seq);
+        assert.ok(interval>=1700 && interval<=3200,chapter+" cadence outside fair bounds");
+      }
+      const gateSequence=chapter==="moonlight"?-1:6;
+      if(gateSequence>=0){
+        assert.ok(yachtSpawnInterval(chapter,phase,gateSequence) >
+          yachtSpawnInterval(chapter,phase,gateSequence-1)+300,
+          "Torii needs extra approach spacing");
+      }
+    }
+    assert.ok(yachtSpawnInterval(chapter,"harbor",0) >
+      yachtSpawnInterval(chapter,"sunset",0));
+  }
+});
+test("Travel speed variation is tight and obstacles cannot run down fresh treats", () => {
+  for(const chapter of ["sakura","typhoon","moonlight","emperor"]){
+    const hazards=Array.from({length:5},(_,seed)=>yachtObjectSpeed(chapter,"obstacle",()=>seed));
+    const treats=Array.from({length:5},(_,seed)=>yachtObjectSpeed(chapter,"treat",()=>seed));
+    assert.ok(Math.max(...hazards)-Math.min(...hazards)<.15);
+    assert.ok(Math.max(...treats)-Math.min(...treats)<.15);
+    assert.ok(Math.max(...hazards) < Math.min(...treats),
+      "A new hazard must never catch a slower collectible on approach");
+    assert.ok(Math.min(...hazards)>=1.9 && Math.max(...treats)<=2.25);
+  }
+});
 test("Supplemental treat cadence is moderate and does not increase hazards",()=>{
  assert.ok(YACHT_EXTRA_TREAT_MS>=7500 && YACHT_EXTRA_TREAT_MS<=10000);
  const extra=Math.floor(75000 / YACHT_EXTRA_TREAT_MS);
@@ -310,6 +363,15 @@ test("Extra treats choose a safe lane when new multi-lane or drifting hazards ar
  assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:3},
    {kind:"rival",lane:2,y:5}],0),-1);
  assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:50}],0),0);
+ assert.equal(yachtBonusTreatLane([{kind:"cheese",lane:1,y:5}],1),2,
+   "Do not stack a bonus treat onto fresh cheese");
+ assert.equal(yachtBonusTreatLane([{kind:"cheese",lane:0,y:0},
+   {kind:"treat",lane:1,y:6},{kind:"ball",lane:2,y:20}],0),-1,
+   "If all release corridors are full, defer the bonus treat");
+ assert.equal(yachtBonusTreatLane([{kind:"treat",lane:0,y:44}],0),0,
+   "Distant rewards cannot indefinitely block the next wave");
+ assert.equal(yachtBonusTreatLane([{kind:"rival",lane:0,driftTo:1,drifted:true,y:10}],0),1,
+   "A rival that already drifted must not reserve its former target lane");
 });
 test("Only the approved undersized skiff and crescent props receive selective scaling",()=>{
  assert.equal(yachtAssetScale("/yacht-dash/obstacles/fishing-skiff.webp"),1.48);

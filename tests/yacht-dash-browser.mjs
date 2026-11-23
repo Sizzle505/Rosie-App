@@ -140,6 +140,13 @@ try {
     return f?.classList.contains("is-expanded");
   }, null, { timeout: 6000 });
   await page.screenshot({ path:folder+"/iphone-fullscreen-launch.png" });
+  // The new chapter must begin with obvious, collectible Golden Cheese,
+  // not an obstacle immediately obscuring the launch lane.
+  const openingCargo = frame.locator(".sea-pickup-cheese").first();
+  await openingCargo.waitFor({ state:"visible", timeout:7000 });
+  assert.equal(await frame.locator(".sea-pickup-buoy, .sea-pickup-obstacle, .sea-pickup-rival").count(),0,
+    "The opening reward must appear before the first hazard");
+  console.log("Opening cargo delivery", await openingCargo.getAttribute("aria-label"));
   console.log("Mode toggle visible after launch", await toggle.isVisible());
   console.log("Toggle layout", await toggle.evaluate(el => {
     const st=getComputedStyle(el),p=getComputedStyle(el.parentElement);
