@@ -74,7 +74,7 @@ test("Latest Yacht Dash sizing changes are exact relative to the previous releas
   }
   for (const phase of ["kuroi-charge", "kuroi-turn-port", "kuroi-turn-starboard"]) {
     assert.ok(Math.abs(yachtAssetScale(`/yacht-dash/kuroi/${phase}.webp`) -
-      (1.35 * 1.65)) < 1e-9,
+      (1.35 * 1.65 * 1.20)) < 1e-9,
       `${phase} must not shrink when Kuroi starts turning`);
   }
 });
@@ -98,13 +98,39 @@ test("All authored Yacht Dash hazards have real WebP files, not invisible sprite
   }
 });
 
-test("Torii foreground layering activates only at the actual ship passage", () => {
+test("Lantern raft is 35% smaller, while all Kuroi attack frames are 20% larger", () => {
+  assert.equal(yachtAssetScale(asset("lantern-raft")), .65);
+  for (const name of ["kuroi-charge", "kuroi-turn-port", "kuroi-turn-starboard"]) {
+    assert.ok(Math.abs(yachtAssetScale(`/yacht-dash/kuroi/${name}.webp`) - 2.673) < 1e-9);
+  }
+});
+
+test("Native-resolution render for fan, crescent markers and Kuroi preserves image proportions", () => {
   const game = readFileSync(new URL("../src/main.jsx", import.meta.url), "utf8");
   const css = readFileSync(new URL("../src/yachtDashExpansion.css", import.meta.url), "utf8");
-  assert.match(game, /sailingUnderGate = item\.footprint === "arch" && item\.y >= 60/);
-  assert.match(game, /sailingUnderGate \? " yacht-gate-overpassing"/);
-  assert.match(css, /\.yacht-footprint-arch\.yacht-gate-overpassing\s*\{\s*z-index:24;/);
-  assert.match(game, /item\.footprint === "arch" \? 0\.94/);
+  assert.match(game, /const nativeResArt = item.kind === "rival"/);
+  assert.match(game, /"fan-raft.webp", "moonlight-race-buoy.webp", "regatta-beacon.webp"/);
+  assert.match(game, /const visualScale = nativeResArt \? 1 : artScale/);
+  assert.match(css, /yacht-native-resolution\.sea-pickup-rival/);
+  assert.match(css, /width:calc\(98px \* var\(--yacht-asset-multiplier, 1\)\)/);
+  assert.match(css, /object-fit:contain/);
+});
+
+test("The red phantom obstacle bar is removed without losing helm threat forecasts", () => {
+  const game = readFileSync(new URL("../src/main.jsx", import.meta.url), "utf8");
+  assert.doesNotMatch(game, /className="yacht-course-lane-cues"/);
+  assert.match(game, /yacht-lane-forecast/);
+  assert.match(game, /threatForecast\.blocked\.includes\(index\)/);
+});
+
+test("Torii maintains 4:3 proportions and fades above Rosie rather than popping forward", () => {
+  const game = readFileSync(new URL("../src/main.jsx", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../src/yachtDashExpansion.css", import.meta.url), "utf8");
+  assert.match(game, /item\.footprint === "arch" && item\.y >= 54 && item\.y < 108/);
+  assert.match(game, /foregroundOpacity = Math\.min\(1, Math\.max\(0, \(item\.y - 54\) \/ 19\)\)/);
+  assert.match(game, /yacht-torii-foreground/);
+  assert.match(css, /aspect-ratio:4 \/ 3/);
+  assert.match(css, /\.yacht-footprint-arch\.yacht-torii-foreground\s*\{\s*z-index:24;/);
 });
 
 test("Driftwood master is present and is a valid RIFF WebP image", () => {
