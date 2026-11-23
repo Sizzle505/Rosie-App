@@ -389,10 +389,10 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
                   <div className="zen-session-timer" role="timer" aria-label={"Time remaining "+timeLabel(remaining)}>{timeLabel(remaining)}</div>
                   <div className="zen-session-controls">
                     <button type="button" className="zen-action-primary zen-icon-control" aria-label={status==="paused"?"Resume meditation":"Pause meditation"} title={status==="paused"?"Resume":"Pause"} onClick={status==="paused"?resume:pause}>
-                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{status==="paused"?<path d="M9.2 5.8a1 1 0 0 1 1.5-.84l8.2 6.1a1.2 1.2 0 0 1 0 1.88l-8.2 6.1a1 1 0 0 1-1.5-.84V5.8Z"/>:<><rect x="7" y="5.2" width="3.5" height="13.6" rx="1"/><rect x="13.5" y="5.2" width="3.5" height="13.6" rx="1"/></>}</svg>
+                      <img src={"/rosieverse/haiku/new/ui/meditation-"+(status==="paused"?"resume":"pause")+"-circle.svg"} alt="" aria-hidden="true" draggable="false"/>
                     </button>
                     <button type="button" className="zen-action-secondary zen-icon-control zen-end-control" aria-label="End meditation" title="End meditation" onClick={close}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" aria-hidden="true"><path d="M6.7 6.7 17.3 17.3M17.3 6.7 6.7 17.3"/></svg>
+                      <img src="/rosieverse/haiku/new/ui/meditation-end-circle.svg" alt="" aria-hidden="true" draggable="false"/>
                     </button>
                   </div>
                 </div>
