@@ -414,6 +414,15 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     document.body.appendChild(root);
     overlayRef.current=root;
     const outlines=new Map();
+    const frozen=new Map();
+    const unfreeze=id=>{
+      const entry=frozen.get(id);
+      if(!entry)return;
+      entry.node.classList.remove('rle-selected-target');
+      if(entry.prior)entry.node.style.setProperty('--rle-selected-transform',entry.prior);
+      else entry.node.style.removeProperty('--rle-selected-transform');
+      frozen.delete(id);
+    };
     const marquee=document.createElement('div');
     marquee.className='rle-marquee';
     root.appendChild(marquee);
@@ -452,7 +461,20 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       for(const [id,node] of outlines){
         if(!ids.has(id)){node.remove();outlines.delete(id);}
       }
+      for(const [id,entry] of frozen){
+        if(!ids.has(id) || !items.some(item=>item.id===id&&item.node===entry.node)) unfreeze(id);
+      }
       for(const item of items){
+        if(!frozen.has(item.id)){
+          const node=item.node;
+          const prior=node.style.getPropertyValue('--rle-selected-transform');
+          const transform=getComputedStyle(node).transform;
+          node.style.setProperty('--rle-selected-transform',transform==='none'?'none':transform);
+          node.classList.add('rle-selected-target');
+          frozen.set(item.id,{node,prior});
+        }else{
+          item.node.classList.add('rle-selected-target');
+        }
         const bounds=item.node.getBoundingClientRect();
         if(bounds.width<1||bounds.height<1)continue;
         let box=outlines.get(item.id);
@@ -750,6 +772,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       window.removeEventListener('resize',redraw);
       cancelAnimationFrame(autoFrame);
       if(paintFrame)cancelAnimationFrame(paintFrame);
+      for(const id of [...frozen.keys()])unfreeze(id);
       root.removeEventListener('rle-start-selected-drag',startSelectedFromControl);
       root.remove();overlayRef.current=null;
     };
