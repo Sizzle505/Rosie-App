@@ -2380,9 +2380,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       const yachtFrame = document.querySelector(".captain-fs-yacht");
       // The Captain page also mounts Tunnel and Cosmic Odyssey. A global
       // keyboard handler must never steal their arrows or Space/Turbo.
-      const isInYacht = yachtFrame?.contains(event.target);
-      const isYachtExpanded = yachtFrame?.classList.contains("is-expanded");
-      if (!isInYacht && !isYachtExpanded) return;
+      // Fullscreen by itself is not keyboard ownership: the player may have
+      // focused another Captain game or deliberately blurred this cabinet.
+      // Launch restores focus to the yacht course, so normal play still works.
+      if (!yachtFrame?.contains(event.target)) return;
       if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
       // Do not hijack native Enter / Space on selected chapter and result buttons.
       if (!running && (event.key === "Enter" || event.key === " ") &&
