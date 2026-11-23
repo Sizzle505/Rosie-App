@@ -240,31 +240,6 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   const arcadeBackdrops=[{id:"foundry",label:"MOLTEN FOUNDRY"},{id:"crystal",label:"CRYSTAL VAULT"},{id:"control",label:"EXCAVATION CONTROL"}];
   const [hud,setHud]=useState(()=>snapshot(frame.current));
 
-  // TEMPORARY QA CAPTURE HOOK - preview branch only, remove after screenshots.
-  // Render a real React victory state without waiting through an entire level.
-  useEffect(()=>{
-    const params=new URLSearchParams(window.location.search);
-    if(!params.has("emberVictoryPreview"))return;
-    const index=Number(params.get("emberVictoryPreview"));
-    if(!Number.isInteger(index)||index<0||index>=EXPEDITION_STAGES.length)return;
-    const run=newRun(1467,index);
-    run.score=9840+index*2400;
-    run.time=run.duration;
-    run.result="complete";
-    run.worldObjective=true;
-    run.objectives={barkroot:true,ruby:true};
-    run.distance=6420;
-    run.gems=18+index*4;
-    run.boosts=4;
-    run.shards=8;
-    run.wallsBroken=3;
-    run.hazardsDodged=5;
-    run.relics=index===4?1:0;
-    run.bossDefeated=index>=2;
-    if(run.boss){run.boss.health=0;run.boss.defeated=true;run.boss.phase="defeated";}
-    frame.current=run;modeRef.current="ended";
-    setMode("ended");setHud(snapshot(run));setSelectedWorld(index);
-  },[]);
 
   const [best,setBest]=useState(()=>{
     try {return Number(localStorage.getItem("rosieEmberDrillBest")||0)}catch(_){return 0}
