@@ -329,7 +329,8 @@ test("Travel speed variation is tight and obstacles cannot run down fresh treats
     const treats=Array.from({length:5},(_,seed)=>yachtObjectSpeed(chapter,"treat",()=>seed));
     assert.ok(Math.max(...hazards)-Math.min(...hazards)<.15);
     assert.ok(Math.max(...treats)-Math.min(...treats)<.15);
-    assert.ok(Math.max(...hazards) < Math.max(...treats));
+    assert.ok(Math.max(...hazards) < Math.min(...treats),
+      "A new hazard must never catch a slower collectible on approach");
     assert.ok(Math.min(...hazards)>=1.9 && Math.max(...treats)<=2.25);
   }
 });
