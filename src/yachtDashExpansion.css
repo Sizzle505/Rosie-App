@@ -1213,3 +1213,24 @@
 @media(prefers-reduced-motion:reduce){
   .captain-game-page .yacht-lane-forecast i {transition:none;}
 }
+
+/* Desktop native fullscreen: on some embedded Chromium builds 100dvh
+   resolves larger than window.innerHeight. Fixed inset sizing is tied to the
+   actual containing viewport, so the command deck stays on-screen. */
+@media (min-width:900px) and (min-height:650px) and (orientation:landscape) {
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) {
+    position:fixed!important;
+    inset:0!important;
+    box-sizing:border-box!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) > .captain-game-page {
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+  }
+}
