@@ -336,14 +336,18 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
 export function yachtAssetScale(asset) {
   if (typeof asset !== "string") return 1;
   const scaleByAsset = {
-    "fishing-skiff.webp": 2.7, // Rowboat: larger than the previous 2.072x
-    "fan-raft.webp": 1.27,
-    "moonlight-race-buoy.webp": 2.76, // Crescent moon pillars
-    "regatta-beacon.webp": 2.76,
-    "barrel-raft.webp": 0.78,
-    "taiko-barge.webp": 0.80,
-    "kuroi-charge.webp": 1.35,
-    "cargo-crate.webp": 1.20,
+    "fishing-skiff.webp": 3.51, // Rowboat +30%
+    "fan-raft.webp": 1.778, // Fan +40%
+    "moonlight-race-buoy.webp": 3.312, // Crescent pillars +20%
+    "regatta-beacon.webp": 3.312,
+    "barrel-raft.webp": 0.585, // Barrel -25%
+    "taiko-barge.webp": 0.64, // Drum -20% (latest requested adjustment)
+    "kuroi-charge.webp": 2.2275, // Kuroi +65%; keep turn frames identical
+    "kuroi-turn-port.webp": 2.2275,
+    "kuroi-turn-starboard.webp": 2.2275,
+    "cargo-crate.webp": 1.50, // Supplies +25%
+    "drift-net.webp": 1.65, // Net +65%
+    "torii-passage.webp": 1.16, // Taller underpass; width is tuned separately
     "driftwood.webp": 1.08
   };
   const name = asset.slice(asset.lastIndexOf("/") + 1);
