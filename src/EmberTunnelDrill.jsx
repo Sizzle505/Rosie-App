@@ -7,6 +7,7 @@ import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExped
 import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT} from "./emberExpansionCatalog.js";
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
+import {victoryBackdropForStage, EMBER_CANONICAL_DRILL} from "./emberCanonicalVictory.js";
 import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
 
 // Art loads only for the selected challenge, keeping the original Classic
@@ -546,6 +547,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   const active=mode==="running";
   const paused=mode==="paused";
   const world=getExpeditionStage(hud.stageIndex);
+  const canonicalVictoryBackdrop=world&&mode==="ended"&&hud.result==="complete" ? victoryBackdropForStage(hud.stageIndex) : null;
   const route=world?EXPEDITION_STAGES.map(w=>({label:w.name,mission:w.objective})):PASSAGES;
   const title=mode==="ended" ?
     (hud.result==="complete"?(world?world.name.toUpperCase()+" COMPLETE":"THE DIG IS DONE"):
@@ -601,6 +603,10 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         </div>
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
+        {canonicalVictoryBackdrop&&<div className="ember-canonical-victory" aria-hidden="true"
+          style={{backgroundImage:`linear-gradient(180deg,rgba(9,19,25,.04),rgba(10,18,25,.25)),url("${canonicalVictoryBackdrop}")`}}>
+          <img src={EMBER_CANONICAL_DRILL} alt="" className="ember-canonical-victory-drill" draggable="false"/>
+        </div>}
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
         {hud.boss&&active&&<span className="ember-boss-accessible" role="status" aria-live="off">
           {hud.boss.kind==="mole-king"?"Mole King":hud.boss.kind==="copperjack"?"Copperjack":"Cinderclaw"}: {hud.boss.health} of {hud.boss.maxHealth} health,
@@ -617,7 +623,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           <button type="button" className="ember-return-levels" onClick={returnToLevelMenu}>RETURN TO LEVEL MENU</button>
         </div>}
         {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
-          <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>
+          <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")+(canonicalVictoryBackdrop?" has-canonical-victory":"")}>
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
             <p>{subtitle}</p>
