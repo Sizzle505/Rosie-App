@@ -239,6 +239,19 @@ export default function RosieHaikuGarden({ onNavigate }) {
         const baseline = Number.parseFloat(getComputedStyle(line).fontSize);
         if (!Number.isFinite(baseline)) return;
         let size = baseline;
+        // Desktop uses actual grid rows for poem, attribution and dedication.
+        // Preserve the approved mobile fitting path below without changes.
+        if (window.matchMedia("(min-width:1200px) and (hover:hover) and (pointer:fine)").matches) {
+          const rows = [...verse.querySelectorAll("p")];
+          for (let step = 0; step < 80; step++) {
+            const widest = Math.max(...rows.map(row => row.scrollWidth / Math.max(1,row.clientWidth)));
+            const heightRatio = verse.scrollHeight / Math.max(1,verse.clientHeight);
+            if (widest <= 1.005 && heightRatio <= 1.005) break;
+            size = Math.max(1, size * Math.min(.96, .985 / Math.max(widest,heightRatio)));
+            scroll.style.setProperty("--haiku-fit-size", size + "px");
+          }
+          return;
+        }
         const available = inner.clientHeight * (scrollStyle === "grand" ? .55 : .57);
         const minSize = scrollStyle === "grand" ? 11.5 : 12;
         const lines = [...verse.querySelectorAll("p")];
