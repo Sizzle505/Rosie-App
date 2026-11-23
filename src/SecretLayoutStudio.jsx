@@ -739,10 +739,13 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     (label + ' ' + (group || '')).toLowerCase().includes(filter.toLowerCase()));
   const chosenScale = selected.length === 1 ? normalizeOffset(working[page]?.[selected[0]]).scale : 1;
   const chosenRotation = selected.length === 1 ? normalizeOffset(working[page]?.[selected[0]]).rotate : 0;
-  const selectedAutos=selected.some(id=>id.startsWith('auto-'))
-    ? automaticTargets().filter(item=>selected.includes(item.id)).map(item=>[item.id,item.label])
+  const autoLookup=(pickAny && showElements && filter.trim().length>=2) || selected.some(id=>id.startsWith('auto-'))
+    ? automaticTargets()
     : [];
-  const listTargets=[...visibleTargets,...selectedAutos];
+  const matchingAuto=pickAny && showElements && filter.trim().length>=2
+    ? autoLookup.filter(item=>item.label.toLowerCase().includes(filter.trim().toLowerCase())).slice(0,80)
+    : autoLookup.filter(item=>selected.includes(item.id));
+  const listTargets=[...visibleTargets,...matchingAuto.map(item=>[item.id,item.label])];
   const chosenXY=selected.length===1?normalizeOffset(working[page]?.[selected[0]]):null;
   const editedPages = Object.keys(working).filter(key => Object.keys(working[key] || {}).length).length;
   if (!unlocked) return null;
@@ -832,7 +835,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         <button type='button' onClick={exportDraft}>Export</button>
         <button type='button' className='rle-save' onClick={saveAll} disabled={saving}>{saving ? 'Saving...' : 'Save all pages'}</button>
       </div>
-      <small className='rle-help'>Desktop: click an object, Ctrl/Cmd-click to add or remove it, Shift-drag to marquee-select, arrow keys to nudge 1px (Shift = 10px), [ / ] to rotate, Delete to reset, Ctrl/Cmd+Z to undo, Ctrl/Cmd+S to save. Enable Pick any to select images, search fields and other unlisted elements. Drag the header to move the controls. Touch: marquee, group, ↘ resize and ⟳ rotate remain available. Save once for all pages.</small>
+      <small className='rle-help'>Desktop: click an object, Ctrl/Cmd-click to add or remove it, Shift-drag to marquee-select, arrow keys to nudge 1px (Shift = 10px), [ / ] to rotate, Delete to reset, Ctrl/Cmd+Z to undo, Ctrl/Cmd+S to save. Enable Pick any to click images, search fields and other unlisted elements; use Choose elements to search for them by name. Drag the header to move the controls. Touch: marquee, group, ↘ resize and ⟳ rotate remain available. Save once for all pages.</small>
       <div className='rle-last-row'>
         <span>{dirty ? 'Unpublished edits' : 'Saved view'} · {editedPages} customized page{editedPages === 1 ? '' : 's'}</span>
         <button type='button' onClick={hideEditor}>Hide secret button</button>
