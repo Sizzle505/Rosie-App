@@ -1328,3 +1328,119 @@
 @media(prefers-reduced-motion:reduce){
   .captain-game-page .yacht-course-lane-cues span.is-blocked{animation:none;}
 }
+
+
+/* Approved 2026-11-23 Yacht Dash integration.
+   The progress bar remains visible in every chapter and fullscreen cabinet. */
+.captain-game-page .yacht-voyage-progress{
+  display:flex!important;align-items:center;gap:8px;
+  width:calc(100% - 12px);height:18px;min-height:18px;
+  margin:2px 6px 5px;flex:0 0 18px;
+  position:relative;z-index:7;
+  pointer-events:none;
+}
+.captain-game-page .yacht-voyage-progress-track{
+  flex:1;min-width:0;height:9px;position:relative;
+  overflow:hidden;border:1px solid rgba(255,218,152,.86);
+  border-radius:99px;background:rgba(2,26,41,.92);
+  box-shadow:inset 0 0 5px rgba(0,0,0,.5),0 0 7px rgba(250,225,151,.15);
+}
+.captain-game-page .yacht-voyage-progress-fill{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#4ccdb9 0%,#b9e19c 50%,#f6c46b 100%);
+  box-shadow:0 0 7px rgba(231,226,138,.6);
+  transition:width .35s linear;
+}
+.captain-game-page .yacht-voyage-progress-marks{
+  position:absolute;inset:0;display:flex;justify-content:space-evenly;
+  pointer-events:none;
+}
+.captain-game-page .yacht-voyage-progress-marks i{
+  display:block;width:1px;height:100%;
+  background:rgba(9,40,55,.65);
+}
+.captain-game-page .yacht-voyage-progress small{
+  flex:0 0 auto;font:700 8px/1.1 Georgia,serif;
+  white-space:nowrap;letter-spacing:.08em;
+  color:#ffe4a2;text-shadow:0 1px 3px #001a25;
+}
+.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-voyage-progress{
+  display:flex!important;flex:0 0 16px!important;
+  height:16px!important;min-height:16px!important;
+  margin:0 3px 3px!important;width:calc(100% - 6px)!important;
+}
+@media(max-width:720px){
+  .captain-game-page .yacht-voyage-progress-track{height:8px;}
+  .captain-game-page .yacht-voyage-progress small{font-size:7px;}
+}
+
+/* The old decorative water-contact pseudo-element sometimes remained visible
+   as a lone horizontal line if an image had not painted yet. Each approved
+   obstacle and Kuroi sprite already contains its own photographic waterline. */
+.captain-game-page .sea-pickup.yacht-upstream-object:is(.sea-pickup-obstacle,.sea-pickup-rival)::before{
+  display:none!important;content:none!important;
+}
+.captain-game-page .sea-pickup.yacht-footprint-arch::after{
+  display:none!important;content:none!important;
+}
+
+/* Kuroi's approved collision art is an independent, transient event.
+   Damage applies only in the existing hit-test, not in this presentation. */
+.captain-game-page .yacht-kuroi-collision{
+  position:absolute;left:50%;bottom:12%;width:clamp(132px,24%,205px);
+  aspect-ratio:1/1;transform:translateX(-50%);
+  z-index:31;pointer-events:none;isolation:isolate;
+}
+.captain-game-page .yacht-kuroi-collision-lane-0{left:16.666%;}
+.captain-game-page .yacht-kuroi-collision-lane-1{left:50%;}
+.captain-game-page .yacht-kuroi-collision-lane-2{left:83.333%;}
+.captain-game-page .yacht-kuroi-collision img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  border:0;background:transparent;pointer-events:none;
+  filter:drop-shadow(0 4px 7px rgba(1,26,40,.42));
+}
+.captain-game-page .yacht-kuroi-hit-yacht{
+  animation:yachtKuroiHit 1.4s both;
+}
+.captain-game-page .yacht-kuroi-impact-foam{
+  animation:yachtKuroiSplash 1.4s both;
+}
+.captain-game-page .yacht-kuroi-recoil{
+  animation:yachtKuroiRecoil 1.4s both;
+}
+.captain-game-page .captain-yacht.yacht-kuroi-rammed .yacht-illustration{
+  animation:yachtKuroiRock .7s ease-out both;
+}
+@keyframes yachtKuroiHit{
+  0%{opacity:0;transform:translateY(-24px) scale(.65)}
+  9%,31%{opacity:1;transform:translateY(0) scale(1)}
+  48%{opacity:.65;transform:translate(9px,7px) rotate(10deg) scale(1.03)}
+  62%,100%{opacity:0;transform:translate(16px,13px) rotate(14deg) scale(.82)}
+}
+@keyframes yachtKuroiSplash{
+  0%,6%{opacity:0;transform:scale(.4)}
+  16%{opacity:1;transform:scale(.85)}
+  37%{opacity:.95;transform:scale(1.25)}
+  63%,100%{opacity:0;transform:scale(1.5)}
+}
+@keyframes yachtKuroiRecoil{
+  0%,43%{opacity:0;transform:translate(10px,8px) rotate(12deg) scale(.78)}
+  58%{opacity:1;transform:translate(0,0) rotate(5deg) scale(.9)}
+  79%{opacity:.9;transform:translate(-11px,4px) rotate(-9deg) scale(.8)}
+  100%{opacity:0;transform:translate(-28px,18px) rotate(-17deg) scale(.7)}
+}
+@keyframes yachtKuroiRock{
+  0%{transform:translateX(0) rotate(0deg)}
+  13%{transform:translateX(-12px) rotate(-8deg)}
+  34%{transform:translateX(9px) rotate(6deg)}
+  62%{transform:translateX(-4px) rotate(-2deg)}
+  100%{transform:translateX(0) rotate(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .captain-game-page .yacht-kuroi-collision img,
+  .captain-game-page .captain-yacht.yacht-kuroi-rammed .yacht-illustration{
+    animation:none!important;
+  }
+  .captain-game-page .yacht-kuroi-recoil{opacity:0;}
+  .captain-game-page .yacht-kuroi-impact-foam{opacity:.7;}
+}

@@ -42,3 +42,32 @@ test("Every new scene and victory screen is in the approved package",()=>{
   assert.equal(new Set(YACHT_CHAPTERS.flatMap(c=>c.scenes||[])).size,15);
   assert.equal(CAPTAIN_LEVELS.length,5);
 });
+
+
+test("Approved Kuroi collision and replacement torii files are intact transparent WebP assets",()=>{
+  const packPath=path.join(root,"yacht-dash","kuroi","asset-manifest.json");
+  assert.ok(fs.existsSync(packPath),"Approved Kuroi manifest missing");
+  const pack=JSON.parse(fs.readFileSync(packPath,"utf-8"));
+  assert.equal(pack.assets.length,7);
+  const approved=new Set([
+    "torii-passage.webp","kuroi-charge.webp","kuroi-turn-port.webp",
+    "kuroi-turn-starboard.webp","kuroi-impact.webp","kuroi-recoil.webp",
+    "kuroi-collision-splash.webp"
+  ]);
+  for(const asset of pack.assets){
+    const name=path.basename(asset.file);
+    assert.ok(approved.delete(name),"Unexpected or duplicate new sprite: "+name);
+    const filename=path.join(root,asset.file.slice(1));
+    assert.ok(fs.existsSync(filename),"Missing Kuroi art: "+filename);
+    const bytes=fs.readFileSync(filename);
+    assert.ok(bytes.length>30000,"Sprite unexpectedly tiny: "+filename);
+    assert.equal(bytes.length,asset.size,"Sprite byte count mismatch: "+filename);
+    assert.equal(bytes.toString("ascii",0,4),"RIFF");
+    assert.equal(bytes.toString("ascii",8,12),"WEBP");
+    assert.equal(bytes.toString("ascii",12,16),"VP8X");
+    assert.ok(bytes[20]&0x10,"Sprite must have real alpha transparency: "+filename);
+    assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),
+      asset.sha256,"Changed approved sprite without updating manifest: "+filename);
+  }
+  assert.equal(approved.size,0,"Missing planned assets from manifest");
+});

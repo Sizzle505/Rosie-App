@@ -38,7 +38,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1549,14 +1549,17 @@ function CaptainPickupIcon({ kind }) {
 }
 
 function YachtHazardArt({ item }) {
+  const source = item.kind === "rival" ? yachtRivalSpriteFor(item)
+    : item.asset || "/yacht-dash/obstacles/storm-buoy.webp";
   return <img
-    className="pickup-art yacht-hazard-art" src={item.asset || "/captain-pickup-buoy.webp"}
+    className="pickup-art yacht-hazard-art" src={source}
     alt="" aria-hidden="true" draggable="false" decoding="async"
     onError={(event) => {
-      // A broken asset never makes a hazard invisible.
-      if (!event.currentTarget.src.includes("/captain-pickup-buoy.webp")) {
-        event.currentTarget.src = "/captain-pickup-buoy.webp";
-      }
+      // Fall back to verified, real artwork rather than an invisible image
+      // whose CSS water-contact ring looks like a horizontal broken sprite.
+      const img = event.currentTarget;
+      img.onerror = null;
+      img.src = "/yacht-dash/obstacles/storm-buoy.webp";
     }} />;
 }
 
@@ -1821,6 +1824,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const [cheeses, setCheeses] = useState(0);
   const [eventPulse, setEventPulse] = useState(0);
   const [eventKind, setEventKind] = useState("ball");
+  const [ramImpact, setRamImpact] = useState(null);
   const [phaseNotice, setPhaseNotice] = useState("");
   const [ended, setEnded] = useState(false);
 
@@ -1876,10 +1880,6 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
-  const gateApproaching = running && items.some(item =>
-    // Keep instructions visible from first sight of the arch until its
-    // pillars have fully passed the hull, not just for its collision window.
-    item.footprint === "arch" && item.y >= -12 && item.y <= 108);
   const threatForecast = yachtThreatForecast(items);
   const rank = captainRank(score);
 
@@ -1932,6 +1932,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   }
 
   useEffect(() => () => window.clearTimeout(phaseNoticeTimerRef.current), []);
+  useEffect(() => {
+    if (!ramImpact) return undefined;
+    const timer = window.setTimeout(() => setRamImpact(null), 1400);
+    return () => window.clearTimeout(timer);
+  }, [ramImpact]);
 
   function moveCaptain(direction) {
     if (!running || paused) return;
@@ -1996,6 +2001,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     livesRef.current = 3;
     hullGraceRemainingRef.current = 0;
     setHullRecovering(false);
+    setRamImpact(null);
     lastPhaseRef.current = "harbor";
     setLane(1);
     itemsRef.current = [];
@@ -2223,9 +2229,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               chapter.id, sequence, secureIndex, livesRef.current);
             const followUpLane = yachtFollowUpRewardLane(
               lastWaveRef.current, laneRef.current);
-            if (wave.some((entry) => entry.footprint === "arch")) {
-              setMessage("TORII AHEAD: the center channel is OPEN. Sail beneath the overhead beam.");
-            }
+            // The replacement torii uses its open architecture to communicate
+            // the passage. Do not obscure the channel with instructional text.
             wave.forEach((entry) => {
               const standard = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === entry.kind);
               // A regular cargo wave must also avoid a fresh bonus treat or
@@ -2383,6 +2388,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       }
 
       if (lifeLoss) {
+        if (hitRival) setRamImpact({
+          lane: laneRef.current, id: itemIdRef.current += 1
+        });
         setStreak(0);
         setCombo(1);
         livesRef.current = Math.max(0, livesRef.current - 1);
@@ -2544,6 +2552,15 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           </div>
           <b>ROSIE I</b>
         </div>
+        <div className="yacht-voyage-progress" role="progressbar"
+          aria-label={chapter.name + " voyage progress"}
+          aria-valuemin={0} aria-valuemax={100} aria-valuenow={routeProgress}>
+          <div className="yacht-voyage-progress-track">
+            <div className="yacht-voyage-progress-fill" style={{ width: routeProgress + "%" }} />
+            <div className="yacht-voyage-progress-marks" aria-hidden="true"><i /><i /><i /><i /></div>
+          </div>
+          <small>SCENE {levelNumber + 1}/5</small>
+        </div>
         <div className="yacht-steering-options" role="group" aria-label="Yacht Dash steering and upcoming hazards">
           <span>STEERING</span>
           <div className={"yacht-lane-forecast" + (threatForecast ? " has-threat" : "")}
@@ -2643,12 +2660,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           </div>
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
-          {gateApproaching && <div className="yacht-safe-passage-cue" role="status">
-            <strong>CENTER LANE OPEN</strong>
-            <small>PASS BENEATH THE TORII</small>
-          </div>}
-
-          {items.map((item) => {
+           {items.map((item) => {
             const approaching = chapter.id !== "sakura";
             const perspective = approaching
               ? (item.kind === "ball" || item.kind === "treat" || item.kind === "cheese"
@@ -2682,9 +2694,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               >
                 {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
                   ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
-                {item.footprint === "arch" &&
-                  <span className="yacht-gate-passage" aria-hidden="true">CENTER CLEAR <b>↓ PASS UNDER</b></span>}
-                {item.kind === "cheese" && <small>GOLDEN</small>}
+                 {item.kind === "cheese" && <small>GOLDEN</small>}
                 {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
                 {item.driftTo !== undefined && !item.drifted &&
                   <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
@@ -2698,9 +2708,19 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             </div>
           )}
 
-          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "") + (hullRecovering ? " yacht-hull-recovering" : "")}>
+          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "") +
+            (hullRecovering ? " yacht-hull-recovering" : "") +
+            (ramImpact ? " yacht-kuroi-rammed" : "")}>
             <CaptainYachtArt boost={boost} />
           </div>
+          {ramImpact && (
+            <div className={"yacht-kuroi-collision yacht-kuroi-collision-lane-" + ramImpact.lane}
+              key={ramImpact.id} aria-hidden="true">
+              <img className="yacht-kuroi-hit-yacht" src="/yacht-dash/kuroi/kuroi-impact.webp" alt="" />
+              <img className="yacht-kuroi-impact-foam" src="/yacht-dash/kuroi/kuroi-collision-splash.webp" alt="" />
+              <img className="yacht-kuroi-recoil" src="/yacht-dash/kuroi/kuroi-recoil.webp" alt="" />
+            </div>
+          )}
 
           {!running && (
             <div className={"captain-start-panel" + (ended ? " captain-results-panel" : "")}>

@@ -140,6 +140,13 @@ try {
     return f?.classList.contains("is-expanded");
   }, null, { timeout: 6000 });
   await page.screenshot({ path:folder+"/iphone-fullscreen-launch.png" });
+  const progress=frame.locator(".yacht-voyage-progress");
+  await progress.waitFor({state:"visible",timeout:1800});
+  assert.equal(await progress.getAttribute("role"),"progressbar");
+  assert.equal(await progress.getAttribute("aria-valuemax"),"100");
+  const progressBox=await progress.boundingBox();
+  assert.ok(progressBox && progressBox.height>=12 && progressBox.width>180,
+    "Each voyage must show a readable progress bar even in iPhone fullscreen");
   // The new chapter must begin with obvious, collectible Golden Cheese,
   // not an obstacle immediately obscuring the launch lane.
   const openingCargo = frame.locator(".sea-pickup-cheese").first();
@@ -205,7 +212,14 @@ try {
   console.log("Upstream approach", JSON.stringify({ before, after }));
   assert.ok(before.topFraction > .22, "First obstacle/pickup should appear on the water, not from the sky");
   assert.ok(after.topFraction > before.topFraction, "Object should travel toward the yacht");
-  assert.ok(after.scale > before.scale, "Object should grow as it approaches");
+  const isTreat = await object.evaluate(el =>
+    ["ball","treat","cheese"].some(kind=>el.classList.contains("sea-pickup-"+kind)));
+  if (isTreat) {
+    assert.equal(before.scale,1,"Expanded-chapter treats must start at full size");
+    assert.equal(after.scale,1,"Expanded-chapter treats must stay the same size");
+  } else {
+    assert.ok(after.scale > before.scale,"Obstacles should still grow as they approach");
+  }
 
   // Switching steering layout must not place the toggle on top of the stick.
   await toggle.click();
@@ -234,38 +248,28 @@ try {
   assert.equal(touchControlStyles.switch?.userSelect,"none",
     "Yacht steering toggle must not be selectable");
 
-  // The torii must read as a recognizable passage, not a solid overhead wall.
+  // The new gate itself communicates the open center passage without
+  // text masks, arrows or instructional placards obscuring the artwork.
   const gate=frame.locator(".yacht-footprint-arch");
   await gate.waitFor({state:"visible",timeout:20000});
-  // Capture the gate instruction when it FIRST appears. Waiting for the
-  // gate to reach the yacht before reading the notice makes this test race
-  // against the 75-second game clock.
-  const safePassage=frame.locator(".yacht-safe-passage-cue");
-  await safePassage.waitFor({state:"visible",timeout:2500});
-  assert.match(await safePassage.textContent(),/CENTER LANE OPEN/);
-  const safeBox=await safePassage.boundingBox();
-  assert.ok(safeBox && safeBox.width>=140 && safeBox.height>=24,
-    "The center-lane warning must remain legible on a phone");
+  assert.equal(await frame.locator(".yacht-safe-passage-cue,.yacht-gate-passage").count(),0);
   await page.waitForFunction(() => {
     const el=document.querySelector(".captain-fs-yacht .yacht-footprint-arch");
     return el && parseFloat(el.style.getPropertyValue("--approach-scale")) >= .70;
   },null,{timeout:6500});
-  const gateLabel=gate.locator(".yacht-gate-passage");
-  await gateLabel.waitFor({state:"visible",timeout:1500});
-  const [gateBounds,gateMessageBounds,courseBounds]=await Promise.all([
-    gate.boundingBox(),gateLabel.boundingBox(),frame.locator(".yacht-course").boundingBox()
+  const gateImage=gate.locator(".yacht-hazard-art");
+  assert.equal(await gateImage.getAttribute("src"),"/yacht-dash/kuroi/torii-passage.webp");
+  const dimensions=await gateImage.evaluate(img=>({
+    width:img.naturalWidth,height:img.naturalHeight,complete:img.complete
+  }));
+  assert.ok(dimensions.complete && dimensions.width>=600 && dimensions.height>=450,
+    "New approved torii must render as a real, decoded image");
+  const [gateBounds,courseBounds]=await Promise.all([
+    gate.boundingBox(),frame.locator(".yacht-course").boundingBox()
   ]);
-  assert.ok(gateBounds && gateMessageBounds && courseBounds);
+  assert.ok(gateBounds && courseBounds);
   assert.ok(gateBounds.width >= courseBounds.width*.72,
     "Torii pillars must visually span the two OUTER lanes near the collision zone");
-  assert.ok(gateMessageBounds.y > gateBounds.y + gateBounds.height*.55,
-    "Safe passage cue must be beneath the crossbeam, not on top of it");
-  assert.ok(gateMessageBounds.x+gateMessageBounds.width/2 >
-    courseBounds.x+courseBounds.width*.4 &&
-    gateMessageBounds.x+gateMessageBounds.width/2 <
-    courseBounds.x+courseBounds.width*.6,
-    "The safe-channel label must be centered within the gate");
-  assert.match(await gateLabel.textContent(),/PASS UNDER/);
   await page.screenshot({path:folder+"/iphone-gate-safe-passage.png"});
 
   await frame.locator(":scope > .captain-fullscreen-toggle").click();
@@ -283,6 +287,8 @@ try {
   await deskFrame.locator(".yacht-cast-off").click();
   assert.ok(await deskFrame.locator(".yacht-course.is-underway").isVisible(),
     "Emperor chapter must run on desktop");
+  assert.ok(await deskFrame.locator(".yacht-voyage-progress").isVisible(),
+    "Every expanded chapter must keep its voyage progress bar visible");
   assert.equal(await deskFrame.locator(".yacht-course").getAttribute("data-captain-chapter"),"emperor");
   // Cast Off removes its own button. Give the game focus automatically so a
   // player can steer immediately without an extra click into the course.

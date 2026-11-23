@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "approved": "2026-11-23",
+  "description": "Transparent replacement gate and approved Kuroi Yacht Dash charge/turn/collision art",
+  "assets": [
+    {
+      "file": "/yacht-dash/kuroi/torii-passage.webp",
+      "size": 218318,
+      "width": 900,
+      "height": 675,
+      "sha256": "b4fb18aad0ec3f4fe48bb79dc7bd25e4dc2b5d1dd43b62a7b86761fd626f4cb5"
+    },
+    {
+      "file": "/yacht-dash/kuroi/kuroi-charge.webp",
+      "size": 169366,
+      "width": 640,
+      "height": 640,
+      "sha256": "fe2c5085927181b4e6d04742d154b36e22b154ba49f8a06a54c3f997425315ef"
+    },
+    {
+      "file": "/yacht-dash/kuroi/kuroi-turn-port.webp",
+      "size": 205696,
+      "width": 640,
+      "height": 640,
+      "sha256": "7bd6625c8d1c8eb4dadeefaae9c6b133ea55290b655052e94287b7481b794b58"
+    },
+    {
+      "file": "/yacht-dash/kuroi/kuroi-turn-starboard.webp",
+      "size": 199420,
+      "width": 640,
+      "height": 640,
+      "sha256": "e7c375db5fad0929ea5f16ebd8073bf749109737ba771072a9ebf0978455afab"
+    },
+    {
+      "file": "/yacht-dash/kuroi/kuroi-impact.webp",
+      "size": 231652,
+      "width": 640,
+      "height": 640,
+      "sha256": "74c3d9372da010d96fc75c58fdb39a7384d6ebc629d74f3a91594e26032bf96c"
+    },
+    {
+      "file": "/yacht-dash/kuroi/kuroi-recoil.webp",
+      "size": 209474,
+      "width": 640,
+      "height": 640,
+      "sha256": "240920162be100916bbaefe1224dd7df1a6cac8ce5bd71b4cff98490bca989d5"
+    },
+    {
+      "file": "/yacht-dash/kuroi/kuroi-collision-splash.webp",
+      "size": 214156,
+      "width": 640,
+      "height": 640,
+      "sha256": "2f5a7103c87f509fffddddf62048b7c04f5fea3eb7a9f2ed55df4cec203e2d05"
+    }
+  ]
+}

@@ -217,9 +217,12 @@ const obstacle = (asset, lane, options = {}) => ({
 const spanObstacle = (asset, side) => obstacle(asset, side, {
   footprint: "wide", blockedLanes: [side, side + 1]
 });
-const toriiGate = () => obstacle("storm-torii", 1, {
-  footprint: "arch", blockedLanes: [0, 2],
-  label: "Broken torii gate - steer through the middle"
+const toriiGate = () => ({
+  ...obstacle("storm-torii", 1, {
+    footprint: "arch", blockedLanes: [0, 2],
+    label: "Torii passage"
+  }),
+  asset: art("kuroi", "torii-passage")
 });
 
 /** Large art overlaps the ship earlier than a small 46px collectible.
@@ -239,13 +242,10 @@ export function yachtApproachAt(y) {
   };
 }
 
-/** Treats remain legible upstream without growing beyond their existing near-yacht size. */
+/** In the three expanded chapters, collectibles retain a fixed visual size.
+ * Their vertical position still communicates travel; hazards retain depth scaling. */
 export function yachtPickupApproachAt(y) {
-  const approach = yachtApproachAt(y);
-  return { ...approach,
-    scale: 0.56 + (approach.scale - 0.30) / 0.70 * 0.44,
-    opacity: Math.min(1, 0.82 + (approach.opacity - 0.62) / 0.38 * 0.18)
-  };
+  return { ...yachtApproachAt(y), scale: 1, opacity: 1 };
 }
 
 /**
@@ -328,9 +328,9 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
 /** Selective art scaling for props whose transparent masters read too small. */
 export function yachtAssetScale(asset) {
   if (typeof asset !== "string") return 1;
-  if (asset.endsWith("/fishing-skiff.webp")) return 1.48;
+  if (asset.endsWith("/fishing-skiff.webp")) return 1.48 * 1.4;
   if (asset.endsWith("/moonlight-race-buoy.webp") ||
-      asset.endsWith("/regatta-beacon.webp")) return 1.38;
+      asset.endsWith("/regatta-beacon.webp")) return 1.38 * 1.6;
   return 1;
 }
 
@@ -423,9 +423,9 @@ export function yachtWaveFor(chapterId, sequence, randomIndex) {
   if ((chapterId === "moonlight" && sequence % 9 === 4) ||
       (chapterId === "emperor" && sequence % 10 === 4)) {
     return [{
-      kind: "rival", lane, driftTo: (lane + 1) % 3,
-      label: "Rival yacht",
-      asset: art("obstacles", sequence % 2 ? "rival-yacht-turn" : "rival-yacht-front")
+      kind: "rival", lane, driftFrom: lane, driftTo: (lane + 1) % 3,
+      label: "Kuroi - rival yacht ramming attack",
+      asset: art("kuroi", "kuroi-charge")
     }];
   }
 
@@ -502,4 +502,14 @@ export function yachtFollowUpRewardLane(previousWave, captainLane = 1) {
   const open = [0, 1, 2].filter(lane => !blocked.includes(lane));
   if (!open.length) return null;
   return open.sort((a, b) => Math.abs(a - preferred) - Math.abs(b - preferred))[0];
+}
+
+
+/** Kuroi has one recognisable yacht in every attack phase.
+ * Flip direction by the actual committed lane change, not animation timing. */
+export function yachtRivalSpriteFor(item) {
+  if (item?.kind !== "rival") return item?.asset;
+  if (!item.drifted) return art("kuroi", "kuroi-charge");
+  const from = Number.isInteger(item.driftFrom) ? item.driftFrom : item.lane;
+  return art("kuroi", item.driftTo < from ? "kuroi-turn-port" : "kuroi-turn-starboard");
 }
