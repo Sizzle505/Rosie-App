@@ -2632,13 +2632,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           <CaptainLevelScenery scene={scenery} underway={running && !paused} boost={boost} />
           <CaptainLotusGust underway={running && !paused} />
           <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />
-          {running && threatForecast?.urgent && !paused && (
-            <div className="yacht-course-lane-cues" aria-hidden="true">
-              {[0, 1, 2].map(index =>
-                <span key={index}
-                  className={threatForecast.blocked.includes(index) ? " is-blocked" : " is-open"} />)}
-            </div>
-          )}
+          {/* Obstacle warnings remain in the helm's lane forecast above.
+              The old in-water red bars mimicked invisible hazards. */}
           <div className="captain-yacht-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
             <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
               aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
@@ -2685,11 +2680,14 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 ? yachtPickupApproachAt(item.y) : yachtApproachAt(item.y))
               : null;
             const artScale = yachtAssetScale(item.asset);
+            // Raster at the final displayed pixel size, not at the small
+            // base box size before a large compositor transform.
+            const nativeResArt = item.kind === "rival" ||
+              ["fan-raft.webp", "moonlight-race-buoy.webp", "regatta-beacon.webp"]
+                .some(name => item.asset?.endsWith("/" + name));
+            const visualScale = nativeResArt ? 1 : artScale;
             const incomingAttackLane = item.kind === "rival" && !item.drifted
               ? yachtRivalAttackLane(item.lane, laneRef.current) : item.driftTo;
-            // Only at the physical passage does the arch move in front of the
-            // ship; the transparent center stays open and the beam passes above.
-            const sailingUnderGate = item.footprint === "arch" && item.y >= 60;
             const center = item.footprint === "arch" ? 50 :
               item.footprint === "wide" ? (item.lane + 1) * 33.333 :
                 16.666 + item.lane * 33.333;
@@ -2698,12 +2696,12 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               top: perspective.top + "%",
               ...(item.footprint === "arch" ? { width: "96%" } :
                 item.footprint === "wide" ? { width: "66.666%" } : {}),
-              "--approach-scale": perspective.scale * artScale *
+              "--yacht-asset-multiplier": artScale,
+              "--approach-scale": perspective.scale * visualScale *
                 (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
-              // Keep the torii pillars centered over the outside two lanes.
-              // Its tall opening can then actually frame Rosie sailing below.
-              "--approach-scale-x": perspective.scale * artScale *
-                (item.footprint === "arch" ? 0.94 : item.footprint === "wide" ? 0.89 : 1),
+              // Equal depth scaling in both axes preserves the original art.
+              "--approach-scale-x": perspective.scale * visualScale *
+                (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
               "--approach-opacity": perspective.opacity
             } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
             return (
@@ -2711,7 +2709,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 className={"sea-pickup sea-pickup-" + item.kind +
                   (item.footprint ? " yacht-footprint-" + item.footprint : "") +
                   (approaching ? " yacht-upstream-object" : "") +
-                  (sailingUnderGate ? " yacht-gate-overpassing" : "")}
+                  (nativeResArt ? " yacht-native-resolution" : "")}
                 key={item.id}
                 style={renderedStyle}
                 data-yacht-art={item.asset?.split("/").pop()?.replace(".webp", "")}
@@ -2738,6 +2736,28 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             (ramImpact ? " yacht-kuroi-rammed" : "")}>
             <CaptainYachtArt boost={boost} />
           </div>
+          {/* Draw the original torii behind Rosie, then gradually fade in
+              the same transparent art in front as she sails under the beam. */}
+          {chapter.id !== "sakura" && items
+            .filter(item => item.footprint === "arch" && item.y >= 54 && item.y < 108)
+            .map(item => {
+              const perspective = yachtApproachAt(item.y);
+              const scale = perspective.scale * yachtAssetScale(item.asset) * 0.97;
+              const foregroundOpacity = Math.min(1, Math.max(0, (item.y - 54) / 19));
+              return (
+                <div key={"torii-front-" + item.id}
+                  className="sea-pickup sea-pickup-obstacle yacht-footprint-arch yacht-upstream-object yacht-torii-foreground"
+                  style={{
+                    left:"50%",top:perspective.top + "%",width:"96%",
+                    "--approach-scale":scale,
+                    "--approach-scale-x":scale,
+                    "--approach-opacity":perspective.opacity * foregroundOpacity
+                  }}
+                  aria-hidden="true">
+                  <YachtHazardArt item={item} />
+                </div>
+              );
+            })}
           {ramImpact && (
             <div className={"yacht-kuroi-collision yacht-kuroi-collision-lane-" + ramImpact.lane}
               key={ramImpact.id} aria-hidden="true">
