@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-23",
+  "project": "Rosie App / RosieVerse flagship",
+  "purpose": "Small curated lookup for visual references; not a full asset inventory, approval database, or model training set.",
+  "verification_note": "File paths confirmed against repository directories. Actual image pixels were not visually reviewed during this initial registry pass; candidate anchors require visual confirmation before being treated as final canon.",
+  "reference_selection": {
+    "max_identity_references": 1,
+    "max_style_references": 1,
+    "max_optional_action_or_layout_references": 1,
+    "max_total_references": 3,
+    "task_rule": "Use only the references relevant to the requested character, app section, and action. One strong image can be enough.",
+    "noncharacter_rule": "For environment-only artwork do not add a character reference.",
+    "variation_rule": "Style samples are interchangeable by chapter and visual need; never force every new illustration to copy a reference's pose, arrangement, lighting, or scenery.",
+    "hard_rule": "A file path, text description, or connected folder is not a visual input. Confirm image bytes are actually supplied to the image generator. If required identity image is unavailable, do not substitute a generic breed or unrelated character.",
+    "approval_rule": "Only user-approved artwork can replace canon or enter production. Repository presence alone is not approval."
+  },
+  "subjects": {
+    "rosie": {
+      "identity": "Rosie, the established Shiba Inu; exact markings/anatomy must be checked visually against the chosen approved master.",
+      "scope": "Rosie identity persists across section-specific costumes and visual styles.",
+      "variants": {
+        "general": {
+          "anchor": {
+            "path": "public/rosie-reaction-pleased.webp",
+            "purpose": "Candidate general-face identity reference",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending",
+            "note": "Do not inherit the specific expression unless requested."
+          },
+          "alternate": {
+            "path": "public/rosie-reaction-focused.webp",
+            "purpose": "Optional expression comparator",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending",
+            "note": "Not an extra default reference."
+          },
+          "status": "candidate_requires_visual_confirmation"
+        },
+        "captain_yacht": {
+          "anchor": {
+            "path": "public/captain-rosie.webp",
+            "purpose": "Candidate Captain Rosie identity/costume anchor",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending",
+            "note": "Use for Captain identity, not to lock boat pose or background."
+          },
+          "alternate": {
+            "path": "public/captain-rosie-deck.webp",
+            "purpose": "Optional boat/deck context comparator",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending"
+          },
+          "status": "candidate_requires_visual_confirmation"
+        },
+        "captain_cosmic": {
+          "anchor": {
+            "path": "public/cosmic-odyssey/assets/rosie-cruise.webp",
+            "purpose": "Candidate original movement sprite with suit and craft",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending",
+            "note": "Gameplay-size source; do not upscale into a poster master."
+          },
+          "alternate": {
+            "path": "public/cosmic-odyssey/assets/rosie-bank-left.webp",
+            "purpose": "Optional movement/action comparator",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending"
+          },
+          "status": "existing_game_sprite_candidate"
+        },
+        "meditation": {
+          "anchor": {
+            "path": "public/rosieverse/haiku/final/breathe-with-rosie.webp",
+            "purpose": "Candidate meditation-specific Rosie depiction",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending",
+            "note": "Scene contains pose/composition; identity only unless scene specifically requested."
+          },
+          "alternate": {
+            "path": "public/rosieverse/haiku/final/rosie-enlightened.webp",
+            "purpose": "Optional completed-meditation expression",
+            "verification": "repository_path_confirmed",
+            "visual_review": "pending"
+          },
+          "status": "existing_meditation_art_candidate"
+        }
+      }
+    },
+    "jett_scroundrel": {
+      "identity": "Raccoon rival with purple/gold jetpack, not a cat or dog.",
+      "anchor": {
+        "path": "public/cosmic-odyssey/assets/jett.webp",
+        "purpose": "Cosmic Odyssey Jett base sprite",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "alternate": {
+        "path": "public/cosmic-odyssey/assets/jett-attack.webp",
+        "purpose": "Use only for a requested action",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "status": "existing_game_sprite_candidate"
+    },
+    "kitty_xenovese": {
+      "identity": "Pink cat rival with a pink/black spacecraft, not a generic UFO or Shiba.",
+      "anchor": {
+        "path": "public/cosmic-odyssey/assets/kitty.webp",
+        "purpose": "Cosmic Odyssey Kitty base sprite",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "alternate": {
+        "path": "public/cosmic-odyssey/assets/kitty-attack.webp",
+        "purpose": "Use only for a requested action",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "status": "existing_game_sprite_candidate"
+    },
+    "chip_scurrio": {
+      "identity": "Squirrel rival with emerald/silver UFO.",
+      "anchor": {
+        "path": "public/cosmic-odyssey/assets/chip.webp",
+        "purpose": "Cosmic Odyssey Chip base sprite",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "alternate": {
+        "path": "public/cosmic-odyssey/assets/chip-turn.webp",
+        "purpose": "Use only for a requested action",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "status": "existing_game_sprite_candidate"
+    },
+    "kuroi": {
+      "identity": "Yacht Dash rival: black cat with goggles, intentionally rams Rosie; user-approved concept exists in conversation.",
+      "anchor": null,
+      "status": "BLOCKED_SOURCE_MASTER_NOT_LOCATED",
+      "note": "No Kuroi-named master found in GitHub's Yacht Dash asset listing or Dropbox filename search on 2026-11-23. Existing rival-yacht-front and rival-yacht-turn are NOT presumed to depict the approved Kuroi. Locate and visually approve the true master before further character generations."
+    }
+  },
+  "contexts": {
+    "home": {
+      "variation": "Select a relevant source for overall richness and materials; do not copy the featured subject's framing automatically.",
+      "style_candidates": [
+        {
+          "path": "public/rosieverse/hero.webp",
+          "purpose": "Landing scene palette and rendering",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/rosieverse/scenery/stage.webp",
+          "purpose": "Alternate stage/material treatment",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        }
+      ]
+    },
+    "yacht_dash": {
+      "variation": "Select ONE reference matching the specific chapter (storm, moonlight, emperor), not every chapter image at once. Yacht character and obstacle masters are separate.",
+      "style_candidates": [
+        {
+          "path": "public/yacht-dash/typhoon/01-approaching-squall.webp",
+          "purpose": "Typhoon chapter painting",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/yacht-dash/moonlight/03-shrine-bay.webp",
+          "purpose": "Moonlight chapter painting",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/yacht-dash/emperor/01-imperial-harbor.webp",
+          "purpose": "Emperor chapter painting",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        }
+      ],
+      "existing_art_manifest": "public/yacht-dash/asset-manifest.json"
+    },
+    "cosmic_odyssey": {
+      "variation": "Choose ONE background corresponding to the new level; style may change palette across levels while preserving game readability.",
+      "style_candidates": [
+        {
+          "path": "public/cosmic-odyssey/assets/scene-nebula.webp",
+          "purpose": "Nebula stage visual language",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/cosmic-odyssey/assets/scene-garden.webp",
+          "purpose": "Ringworld garden alternate",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/cosmic-odyssey/assets/scene-ruins.webp",
+          "purpose": "Ruins alternate",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        }
+      ],
+      "existing_art_audit": "public/cosmic-odyssey/ASSET_AUDIT.md"
+    },
+    "tunnel_drill": {
+      "variation": "Select environment style by actual level; vehicle body should remain separate from geology and scenery.",
+      "style_candidates": [
+        {
+          "path": "public/ember-drill/scenic-barkroot.webp",
+          "purpose": "Barkroot environment treatment",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/ember-drill/scenic-temple.webp",
+          "purpose": "Temple environment treatment",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        }
+      ],
+      "existing_vehicle_reference": {
+        "path": "public/ember-drill/drill-body.webp",
+        "purpose": "Existing player machine; object identity, not a universal style guide",
+        "verification": "repository_path_confirmed",
+        "visual_review": "pending"
+      },
+      "existing_art_audit": "docs/ember-asset-reconciliation.md"
+    },
+    "haiku_meditation": {
+      "variation": "Choose an appropriate mood; preserve soft, spacious composition without duplicating every prior character pose.",
+      "style_candidates": [
+        {
+          "path": "public/rosieverse/haiku/final/quiet-sit.webp",
+          "purpose": "Quiet meditation mood",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/rosieverse/haiku/final/evening-unwind.webp",
+          "purpose": "Evening alternative",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        }
+      ],
+      "existing_art_manifest": "docs/haiku-final-art-manifest.md"
+    },
+    "card_vault": {
+      "variation": "Intentionally broad and eclectic themes. No global card style lock. Only use the exact selected approved card or frame as a local format reference, not a style source for every card.",
+      "style_candidates": [],
+      "sample_format_candidates": [
+        {
+          "path": "public/card-vault/rc-078-rocket-scientist-rosie.webp",
+          "purpose": "Format example only",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        },
+        {
+          "path": "public/card-vault/rc-277-hostile-takeover-rosie.webp",
+          "purpose": "Alternate format example only",
+          "verification": "repository_path_confirmed",
+          "visual_review": "pending"
+        }
+      ]
+    }
+  },
+  "unresolved": [
+    "Locate and visually review a user-approved general Rosie identity master, ideally backed by owner photos.",
+    "Locate the user-approved Kuroi with goggles and collision/turn assets; keep old rival-yacht sprites separate.",
+    "Confirm which candidate files are authoritative at artwork level before marking any character image canon.",
+    "Visual inspection and generator attachment remain separate mandatory steps."
+  ]
+}
