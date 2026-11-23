@@ -4,6 +4,8 @@ const art = (chapter, file) => "/yacht-dash/" + chapter + "/" + file + ".webp";
 const SCENE_SECONDS = 15;
 export const YACHT_RUN_SECONDS = 75;
 export const YACHT_EXTRA_TREAT_MS = 8500; // One additional treat about every 8.5s in expanded levels.
+export const YACHT_CLEAN_PASS_POINTS = 25;
+export const YACHT_CLEAN_PASS_TURBO = 8;
 
 // Playtest mode: all chapters are immediately selectable, without progression locks.
 export const YACHT_PLAYTEST_ALL_LEVELS = true;
@@ -292,6 +294,7 @@ export function yachtThreatForecast(items) {
   return {
     kind: imminent.kind,
     blocked,
+    urgent: imminent.y >= 54,
     open: [0, 1, 2].filter(lane => !blocked.includes(lane))
   };
 }
