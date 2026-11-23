@@ -1,0 +1,32 @@
+name: Layout Studio desktop regression (system Chrome)
+on:
+  push:
+    branches: [fix/layout-studio-reliable-direct-drag-20261123, main]
+    paths:
+      - 'src/SecretLayoutStudio.jsx'
+      - 'src/SecretLayoutStudio.css'
+      - 'scripts/verify-layout-studio-desktop.mjs'
+      - 'scripts/verify-layout-studio-v2.mjs'
+      - '.github/workflows/layout-studio-fast-desktop-qa.yml'
+permissions:
+  contents: read
+jobs:
+  desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Test desktop and touch gestures using runner system Chrome
+        env:
+          BASE_URL: http://127.0.0.1:5173
+          ROSIE_SYSTEM_CHROME: '1'
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/rosie-layout-vite.log 2>&1 &
+          sleep 4
+          node scripts/verify-layout-studio-desktop.mjs
+          node scripts/verify-layout-studio-v2.mjs

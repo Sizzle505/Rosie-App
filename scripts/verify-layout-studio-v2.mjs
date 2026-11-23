@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true,...(process.env.ROSIE_SYSTEM_CHROME ? {channel:'chrome'} : {})});
 const data=new Map();
 const base=process.env.BASE_URL||'http://127.0.0.1:5173';
 try{
