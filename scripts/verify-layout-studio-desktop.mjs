@@ -54,6 +54,8 @@ try {
  const undoY=await lantern.evaluate(el=>el.style.translate);
  assert.ok(!undoY.includes('10px'),'Ctrl+Z must undo the last keyboard move');
  await page.getByRole('button',{name:'Minimize Layout Studio'}).click();
+ await lantern.scrollIntoViewIfNeeded();
+ await page.waitForTimeout(150);
  const lanternBeforeDrag=await lantern.boundingBox();
  const lanternFrame=await page.locator('.rle-outline[data-target-id="zen-lantern"]').boundingBox();
  const mx=lanternFrame.x+Math.min(25,lanternFrame.width/3);
