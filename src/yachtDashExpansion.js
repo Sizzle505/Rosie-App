@@ -3,7 +3,7 @@ import { CAPTAIN_LEVELS } from "./captainLevels.js";
 const art = (chapter, file) => "/yacht-dash/" + chapter + "/" + file + ".webp";
 const SCENE_SECONDS = 15;
 export const YACHT_RUN_SECONDS = 75;
-export const YACHT_EXTRA_TREAT_MS = 8500; // One additional treat about every 8.5s in expanded levels.
+export const YACHT_EXTRA_TREAT_MS = Math.round(8500 / 1.20); // 20% more frequent bonus treats, with obstacle cadence unchanged.
 export const YACHT_CLEAN_PASS_POINTS = 25;
 export const YACHT_CLEAN_PASS_TURBO = 8;
 
@@ -291,7 +291,7 @@ export function yachtSakuraDelivery(sequence, randomIndex) {
   if (step % 9 === 0) return { kind: "cheese", lane };
   if (step % 3 === 0) return { kind: "treat", lane };
   const roll = randomIndex(100);
-  return { kind: roll < 58 ? "ball" : roll < 91 ? "treat" : "cheese", lane };
+  return { kind: roll < 44 ? "ball" : roll < 91 ? "treat" : "cheese", lane }; // ~20% more Sakura treats without increasing buoy spawns.
 }
 
 /**
