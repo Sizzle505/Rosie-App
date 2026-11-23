@@ -649,7 +649,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         undo();
         return;
       }
-      if(mod&&!typing&&event.key.toLowerCase()==='s'){
+      if(mod&&event.key.toLowerCase()==='s'){
         event.preventDefault();
         saveAll();
         return;
