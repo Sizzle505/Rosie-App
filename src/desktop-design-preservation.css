@@ -40,7 +40,9 @@
   }
   .app-shell.page-haiku .haiku-shell {
     display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.12fr);
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    position:relative;
+    min-height:calc(clamp(140px,18dvh,190px) + clamp(310px,49dvh,530px) + 230px);
     width:min(100%,1700px);
     max-width:1700px;
     column-gap:clamp(24px,2.6vw,50px);
@@ -81,14 +83,15 @@
   }
   .app-shell.page-haiku .haiku-scene-stage .haiku-scene-selector {
     width:min(100%,360px);max-width:100%;margin:14px auto 0;transform:none;gap:12px;
+    height:96px;align-items:center;
   }
-  .app-shell.page-haiku .haiku-scene-selector button { min-height:0;padding:0; }
+  .app-shell.page-haiku .haiku-scene-selector button { min-height:0;height:96px;padding:0; }
   .app-shell.page-haiku .haiku-scene-selector button img { width:clamp(70px,5.3vw,96px);height:clamp(70px,5.3vw,96px); }
   .app-shell.page-haiku .haiku-scroll-display { width:100%;display:flex;justify-content:center; }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] {
-    width:min(100%,calc(clamp(340px,54dvh,560px) * .8));margin:0 auto;
+    width:min(100%,calc(clamp(340px,49dvh,530px) * .8));margin:0 auto;
   }
-  .app-shell.page-haiku .haiku-scroll[data-scroll-style="imperial"] { width:min(100%,calc(clamp(340px,54dvh,560px) * .9586)); }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style="imperial"] { width:min(100%,calc(clamp(340px,49dvh,530px) * .9586)); }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style="grand"] { width:100%; }
   .app-shell.page-haiku .haiku-status { margin:6px auto 0 !important;font-size:14px !important;min-height:19px; }
   .app-shell.page-haiku .haiku-verse-actions { width:min(100%,300px);gap:14px;margin:0 auto !important; }
@@ -104,8 +107,38 @@
   .app-shell.page-haiku .haiku-panel p { font-size:14px;line-height:1.6; }
   .app-shell.page-haiku .haiku-date { margin:18px 0; }
   .app-shell.page-haiku .haiku-shell > .haiku-scene-quote {
-    grid-column:1 / -1;grid-row:3;transform:none;margin:8px auto 0;padding:4px 12px 12px;
+    position:absolute;
+    top:calc(clamp(140px,18dvh,190px) + clamp(310px,49dvh,530px) + 130px);
+    left:50%;right:auto;bottom:auto;
+    width:min(480px,31%);max-width:480px;
+    transform:translateX(-50%);translate:none !important;
+    margin:0;padding:4px 12px 12px;
   }
+
+  .app-shell.page-haiku .haiku-shell > .haiku-scene-quote strong { font-size:24px;line-height:1.15; }
+  .app-shell.page-haiku .haiku-shell > .haiku-scene-quote small { font-size:14px; }
+  /* Switch controls bracket the artwork instead of covering its ornament. */
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-cycle {
+    top:50% !important;bottom:auto !important;
+    left:-38px !important;right:-38px !important;
+    height:34px !important;transform:translateY(-50%);
+  }
+  .app-shell.page-haiku .haiku-portrait-outfit-arrows {
+    top:50% !important;bottom:auto !important;left:2% !important;right:2% !important;
+    width:auto !important;height:34px !important;
+    transform:translateY(-50%) !important;translate:none !important;
+    display:flex;justify-content:space-between;
+  }
+  /* Daily retains its approved height; longer activities begin beside the masthead. */
+  .app-shell.page-haiku .haiku-page:not([data-haiku-mode="daily"]) .haiku-workbench {
+    margin-top:-140px;
+  }
+  .app-shell.page-haiku .haiku-page:not([data-haiku-mode="daily"]) .haiku-workbench-body {
+    max-height:calc(100dvh - 300px);
+    overflow-y:auto;overscroll-behavior:contain;
+    scrollbar-width:thin;scrollbar-color:#b99a76 transparent;
+  }
+
 }
 
 /*
