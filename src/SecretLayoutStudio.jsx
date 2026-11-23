@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { STUDIO_PAGES, TARGETS } from './layoutTargets.js';
 import { screenSignature, normalizeOffset, normalizedLayouts, PUBLISHED_PREFIX, DRAFT_PREFIX } from './layoutStudioScope.js';
 import { alignmentSnap, boxFromPoints, clamp, distribute, edgeSpeed, filterNestedSelection, pickMarquee, unionRects } from './layoutStudioGeometry.js';
+import { automaticTargets } from './layoutStudioAutoTargets.js';
 import './SecretLayoutStudio.css';
 
 const baseline = new WeakMap();
@@ -62,9 +63,14 @@ function applyPage(page, layouts) {
       });
     } else positionNode(node, pageValues[id]);
   }
+  if (Object.keys(pageValues).some(id => id.startsWith('auto-'))) {
+    for (const item of automaticTargets()) {
+      if (pageValues[item.id]) positionNode(item.node,pageValues[item.id]);
+    }
+  }
 }
-function elementsFor(page, scrollMode = 'linked') {
-  return (TARGETS[page] || []).map(([id, label, selector, group]) => {
+function elementsFor(page, scrollMode = 'linked', includeAuto = false) {
+  const items = (TARGETS[page] || []).map(([id, label, selector, group]) => {
     let node = document.querySelector(selector);
     if (page === 'haiku') {
       if (id === 'scroll' && scrollMode === 'individual') node = null;
@@ -72,6 +78,7 @@ function elementsFor(page, scrollMode = 'linked') {
     }
     return {id, label, selector, group, node};
   });
+  return includeAuto ? [...items,...automaticTargets()] : items;
 }
 function normalizedScreenLayouts(raw) { return normalizedLayouts(raw, TARGETS); }
 function api(body) {
@@ -94,6 +101,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
   const [open, setOpen] = useState(false);
   const [panelPos, setPanelPos] = useState(null);
   const [lasso, setLasso] = useState(false);
+  const [pickAny, setPickAny] = useState(false);
   const [showGuides, setShowGuides] = useState(true);
   const [snapOn, setSnapOn] = useState(true);
   const [scrollMode, setScrollMode] = useState('linked');
@@ -284,6 +292,17 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1500);
   }
+  function setPosition(axis,value) {
+    if (!selected.length || !Number.isFinite(Number(value))) return;
+    snapshot();
+    const next=clean(workingRef.current);
+    next[page]={...(next[page]||{})};
+    selected.forEach(id => {
+      const v=normalizeOffset(next[page][id]);
+      next[page][id]={...v,[axis]:clamp(Math.round(Number(value)),-2500,2500)};
+    });
+    stage(next);
+  }
   function setScale(value) {
     if (!selected.length) return;
     snapshot();
@@ -404,7 +423,14 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     }
     root.appendChild(guideField);
     let drag=null,paintFrame=0,autoFrame=0;
-    const getParts=()=>elementsFor(page,scrollMode);
+    let autoIndex=null;
+    const getParts=()=>{
+      const hasAuto = pickAny || selectedRef.current.some(id=>id.startsWith('auto-')) ||
+        Object.keys(workingRef.current[page]||{}).some(id=>id.startsWith('auto-'));
+      if(!hasAuto)return elementsFor(page,scrollMode);
+      if(!autoIndex)autoIndex=automaticTargets();
+      return [...elementsFor(page,scrollMode),...autoIndex];
+    };
     const eligible=()=>getParts().filter(item=>selectedRef.current.includes(item.id)&&item.node);
     const clearSnap=()=>{
       snapV.style.display='none';
@@ -428,7 +454,9 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
           box.addEventListener('pointerdown',event=>{
             if(event.target.closest('.rle-resize,.rle-spin'))return;
             event.preventDefault();event.stopPropagation();
-            startDrag(event,item.id,'move');
+            if((event.ctrlKey || event.metaKey) && event.pointerType !== 'touch'){
+              setSelected(current=>current.includes(item.id) ? current.filter(key=>key!==item.id) : [...current,item.id]);
+            }else startDrag(event,item.id,'move');
           });
           const caption=document.createElement('span');
           caption.className='rle-outline-label';
@@ -475,6 +503,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       const box=rects.find(item=>item.id===id)?.rect;
       const center=box?{x:(box.left+box.right)/2,y:(box.top+box.bottom)/2}:null;
       if(kind==='move'||kind==='resize'||kind==='rotate')snapshot();
+      try { event.target?.setPointerCapture?.(event.pointerId); } catch { /* The page can replace a target during rendering. */ }
       drag={kind,pointerId:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,
         startScrollY:window.scrollY,startScrollX:window.scrollX,width:width||160,moving,valid,
         rects,bounds:unionRects(rects.map(item=>item.rect)),center,
@@ -495,13 +524,22 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     function onDown(event) {
       if(event.button!==0&&event.pointerType!=='touch')return;
       if(event.target.closest?.('.rle-ui'))return;
-      if(lasso){beginMarquee(event);return;}
+      // Desktop: Shift-drag selects a rectangle without changing toolbar modes.
+      if(lasso || (event.shiftKey && !event.ctrlKey && !event.metaKey)){
+        beginMarquee(event);return;
+      }
       const hits=getParts().filter(item=>item.node&&item.node.contains(event.target));
       if(!hits.length)return;
       hits.sort((x,y)=>x.node.contains(y.node)?1:y.node.contains(x.node)?-1:0);
-      const picked=hits.find(item=>selectedRef.current.includes(item.id))||hits[0];
+      const picked=hits.find(item=>selectedRef.current.includes(item.id)) ||
+        (pickAny ? hits.find(item=>item.id.startsWith('auto-')) : null) || hits[0];
       const id=picked.id;
       event.preventDefault();event.stopImmediatePropagation();
+      // Ctrl/Cmd-click toggles exactly one object for mouse-and-keyboard editing.
+      if((event.ctrlKey || event.metaKey) && event.pointerType !== 'touch'){
+        setSelected(current=>current.includes(id) ? current.filter(key=>key!==id) : [...current,id]);
+        return;
+      }
       if(multi&&!selectedRef.current.includes(id)){
         choose(id);return;
       }
@@ -602,17 +640,52 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       }
     }
     function onKeys(event){
-      if(event.key==='Escape'){setEditing(false);return;}
-      if(event.target?.matches?.('input,textarea,select,[contenteditable]'))return;
-      if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)||!selectedRef.current.length)return;
-      event.preventDefault();snapshot();
+      const input=event.target?.closest?.('input,textarea,select,[contenteditable="true"]');
+      const typing=Boolean(input && !(input.matches('input[type="checkbox"]')));
+      const mod=event.ctrlKey||event.metaKey;
+      if(mod&&!typing&&event.key.toLowerCase()==='z'&&!event.shiftKey){
+        event.preventDefault();
+        undo();
+        return;
+      }
+      if(mod&&!typing&&event.key.toLowerCase()==='s'){
+        event.preventDefault();
+        saveAll();
+        return;
+      }
+      if(event.key==='Escape'&&!typing){
+        event.preventDefault();
+        if(lasso)setLasso(false);
+        else if(pickAny)setPickAny(false);
+        else setSelected([]);
+        return;
+      }
+      if(typing || !selectedRef.current.length) return;
+      const ids=[...selectedRef.current];
+      if(event.key==='Delete'||event.key==='Backspace'){
+        event.preventDefault();
+        snapshot();
+        const next=clean(workingRef.current);
+        next[page]={...(next[page]||{})};
+        ids.forEach(id=>delete next[page][id]);
+        stage(next);
+        setStatus('Selected adjustments reset. Objects remain on the page.');
+        return;
+      }
+      const arrow=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key);
+      const rotating=event.key==='['||event.key===']';
+      if(!arrow&&!rotating)return;
+      event.preventDefault();
+      snapshot();
       const size=event.shiftKey?10:1;
       const dx=(event.key==='ArrowLeft'?-size:event.key==='ArrowRight'?size:0);
       const dy=(event.key==='ArrowUp'?-size:event.key==='ArrowDown'?size:0);
+      const degrees=(event.key==='['?-size:event.key===']'?size:0);
       const next=clean(workingRef.current);next[page]={...(next[page]||{})};
-      selectedRef.current.forEach(id=>{
+      ids.forEach(id=>{
         const v=normalizeOffset(next[page][id]);
-        next[page][id]={...v,x:clamp(v.x+dx,-2500,2500),y:clamp(v.y+dy,-2500,2500)};
+        next[page][id]={...v,x:clamp(v.x+dx,-2500,2500),
+          y:clamp(v.y+dy,-2500,2500),rotate:clamp(v.rotate+degrees,-360,360)};
       });
       stage(next);
     }
@@ -627,7 +700,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       }
       autoFrame=requestAnimationFrame(autoScroll);
     }
-    const observer=new MutationObserver(redraw);
+    const observer=new MutationObserver(()=>{autoIndex=null;redraw();});
     const app=document.querySelector('.app-shell');
     if(app)observer.observe(app,{childList:true,subtree:true});
     document.addEventListener('pointerdown',onDown,true);
@@ -654,7 +727,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       if(paintFrame)cancelAnimationFrame(paintFrame);
       root.remove();overlayRef.current=null;
     };
-  },[page,screenKey,active,editing,unlocked,multi,lasso,snapOn,showGuides,scrollMode]);
+  },[page,screenKey,active,editing,unlocked,multi,lasso,pickAny,snapOn,showGuides,scrollMode]);
 
   useEffect(()=>{
     overlayRef.current?.dispatchEvent(new Event('rle-refresh'));
@@ -665,6 +738,11 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     (label + ' ' + (group || '')).toLowerCase().includes(filter.toLowerCase()));
   const chosenScale = selected.length === 1 ? normalizeOffset(working[page]?.[selected[0]]).scale : 1;
   const chosenRotation = selected.length === 1 ? normalizeOffset(working[page]?.[selected[0]]).rotate : 0;
+  const selectedAutos=selected.some(id=>id.startsWith('auto-'))
+    ? automaticTargets().filter(item=>selected.includes(item.id)).map(item=>[item.id,item.label])
+    : [];
+  const listTargets=[...visibleTargets,...selectedAutos];
+  const chosenXY=selected.length===1?normalizeOffset(working[page]?.[selected[0]]):null;
   const editedPages = Object.keys(working).filter(key => Object.keys(working[key] || {}).length).length;
   if (!unlocked) return null;
   return <>
@@ -692,6 +770,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       <div className='rle-row rle-tools'>
         <button type='button' className={multi ? 'rle-on' : ''} onClick={() => setMulti(v => !v)}>{multi ? 'Group ON' : 'Group select'}</button>
         <button type='button' className={lasso ? 'rle-on' : ''} aria-pressed={lasso} onClick={() => {setLasso(v=>!v);setActive(true);setEditing(true)}}>{lasso ? 'Marquee ON' : 'Marquee select'}</button>
+        <button type='button' className={pickAny ? 'rle-on' : ''} aria-pressed={pickAny} onClick={() => {setPickAny(v=>!v);setActive(true);setEditing(true)}}>{pickAny ? 'Pick any ON' : 'Pick any'}</button>
         <button type='button' className={snapOn ? 'rle-on' : ''} aria-pressed={snapOn} onClick={() => setSnapOn(v=>!v)}>Snap {snapOn?'on':'off'}</button>
         <button type='button' className={showGuides ? 'rle-on' : ''} aria-pressed={showGuides} onClick={() => setShowGuides(v=>!v)}>Guides {showGuides?'on':'off'}</button>
       </div>
@@ -711,10 +790,16 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       </div>}
       {showElements && <div className='rle-elements'>
         <input aria-label='Find elements' value={filter} onChange={event => setFilter(event.target.value)} placeholder='Find an element...' />
-        {visibleTargets.map(([id,label]) => <label key={id} className='rle-element'>
+        {listTargets.map(([id,label]) => <label key={id} className='rle-element'>
           <input type='checkbox' checked={selected.includes(id)} onChange={() => {if(page==='haiku'&&id==='scroll')setScrollMode('linked');if(page==='haiku'&&id.startsWith('scroll-'))setScrollMode('individual');choose(id)}}/>
           <span>{label}</span>
         </label>)}
+      </div>}
+      {selected.length === 1 && <div className='rle-coordinates'>
+        <label>X (px) <input type='number' step='1' aria-label='Horizontal position X' value={chosenXY.x}
+          onChange={event => {if(event.target.value!=='')setPosition('x',event.target.value)}} /></label>
+        <label>Y (px) <input type='number' step='1' aria-label='Vertical position Y' value={chosenXY.y}
+          onChange={event => {if(event.target.value!=='')setPosition('y',event.target.value)}} /></label>
       </div>}
       {selected.length > 0 && <div className='rle-range-grid'>
         <label>Size <b>{Math.round(chosenScale * 100)}%</b>
@@ -746,7 +831,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         <button type='button' onClick={exportDraft}>Export</button>
         <button type='button' className='rle-save' onClick={saveAll} disabled={saving}>{saving ? 'Saving...' : 'Save all pages'}</button>
       </div>
-      <small className='rle-help'>Drag the header to move the controls. Drag ↘ to resize or ⟳ to rotate; marquee-select multiple objects, then drag them together. With Group ON, tap any selected item to remove only that item. Drag near the screen edge to scroll. Snap and guides are optional. Save once for all pages.</small>
+      <small className='rle-help'>Desktop: click an object, Ctrl/Cmd-click to add or remove it, Shift-drag to marquee-select, arrow keys to nudge 1px (Shift = 10px), [ / ] to rotate, Delete to reset, Ctrl/Cmd+Z to undo, Ctrl/Cmd+S to save. Enable Pick any to select images, search fields and other unlisted elements. Drag the header to move the controls. Touch: marquee, group, ↘ resize and ⟳ rotate remain available. Save once for all pages.</small>
       <div className='rle-last-row'>
         <span>{dirty ? 'Unpublished edits' : 'Saved view'} · {editedPages} customized page{editedPages === 1 ? '' : 's'}</span>
         <button type='button' onClick={hideEditor}>Hide secret button</button>
