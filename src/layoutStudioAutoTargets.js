@@ -8,7 +8,7 @@ export const AUTO_SELECTOR = [
 ].join(',');
 
 const stableClass = node => Array.from(node.classList || []).find(name =>
-  !/^(?:is-|has-|active$|current$|selected$|open$|visible$|loading$)/.test(name)
+  !/^(?:rle-|is-|has-|active$|current$|selected$|open$|visible$|loading$)/.test(name)
 ) || '';
 
 export function stableDomPath(element, root) {
