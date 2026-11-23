@@ -166,6 +166,18 @@ try {
   assert.ok(geometry.controlsBottom <= geometry.viewportHeight + 20,
     "Steering buttons must remain reachable without scrolling");
 
+  // Steering from the compact radar must act as a real control, not merely a legend.
+  const quickLanes = frame.locator(".yacht-lane-forecast button");
+  assert.equal(await quickLanes.count(),3,"All three direct lane buttons should render");
+  await quickLanes.nth(0).click();
+  await frame.locator(".captain-yacht.lane-0").waitFor({timeout:1500});
+  await quickLanes.nth(2).click();
+  await frame.locator(".captain-yacht.lane-2").waitFor({timeout:1500});
+  assert.equal(await quickLanes.nth(2).getAttribute("aria-pressed"),"true");
+  assert.match(await quickLanes.nth(2).getAttribute("aria-label"),/starboard lane/);
+  await quickLanes.nth(1).click();
+  await frame.locator(".captain-yacht.lane-1").waitFor({timeout:1500});
+
   const object = frame.locator(".sea-pickup.yacht-upstream-object").first();
   await object.waitFor({ state:"visible", timeout:9500 });
   const position = () => object.evaluate(el => {
@@ -263,6 +275,10 @@ try {
   // player can steer immediately without an extra click into the course.
   await deskPage.waitForFunction(() =>
     document.activeElement?.classList?.contains("yacht-course"),null,{timeout:1500});
+  await deskPage.keyboard.press("3");
+  await deskFrame.locator(".captain-yacht.lane-2").waitFor({timeout:1500});
+  await deskPage.keyboard.press("2");
+  await deskFrame.locator(".captain-yacht.lane-1").waitFor({timeout:1500});
   await deskPage.keyboard.press("ArrowLeft");
   await deskFrame.locator(".captain-yacht.lane-0").waitFor({timeout:1500});
   // Held arrows should never skip both lanes from repeated OS key events.

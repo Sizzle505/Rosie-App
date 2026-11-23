@@ -1234,3 +1234,97 @@
     overflow:hidden!important;
   }
 }
+
+
+/* Interactive lane radar and depth-matched warning lights.
+   Reuse the existing steering row without taking height from the iPhone sea. */
+.captain-game-page .yacht-steering-options .yacht-lane-forecast button {
+  appearance:none;
+  -webkit-appearance:none;
+  display:grid;
+  place-items:center;
+  box-sizing:border-box;
+  width:28px;
+  height:26px;
+  min-width:0;
+  min-height:0;
+  margin:0;
+  padding:0;
+  border:1px solid rgba(174,209,211,.48);
+  border-radius:7px;
+  background:rgba(20,67,72,.74);
+  color:#e1f0ee;
+  font:800 11px/1 ui-sans-serif,system-ui,sans-serif;
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.captain-game-page .yacht-steering-options .yacht-lane-forecast button.is-blocked{
+  background:rgba(139,45,40,.95);
+  border-color:#f6a58a;
+  color:#fff0dc;
+}
+.captain-game-page .yacht-steering-options .yacht-lane-forecast.has-threat button:not(.is-blocked){
+  background:rgba(26,102,82,.9);
+  border-color:#89dcac;
+  color:#e4fff0;
+}
+.captain-game-page .yacht-steering-options .yacht-lane-forecast button.is-current{
+  outline:2px solid #ffe6a1;
+  outline-offset:1px;
+}
+.captain-game-page .yacht-steering-options .yacht-lane-forecast button:focus-visible{
+  outline:3px solid #ffe6a1;
+  outline-offset:1px;
+}
+.captain-game-page .yacht-steering-options .yacht-lane-forecast button:disabled{
+  cursor:default;
+  opacity:.75;
+}
+.captain-game-page .yacht-course-lane-cues{
+  position:absolute;
+  z-index:14;
+  top:70%;
+  left:0;
+  right:0;
+  height:12px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:center;
+  pointer-events:none!important;
+  user-select:none;
+  opacity:.86;
+}
+.captain-game-page .yacht-course-lane-cues span{
+  display:block;
+  box-sizing:border-box;
+  justify-self:center;
+  width:min(46%,100px);
+  height:5px;
+  border-radius:999px;
+  background:rgba(132,240,192,.78);
+  box-shadow:0 0 11px rgba(106,241,176,.52);
+}
+.captain-game-page .yacht-course-lane-cues span.is-blocked{
+  height:7px;
+  background:rgba(255,117,96,.95);
+  box-shadow:0 0 12px rgba(255,88,75,.77),0 0 3px rgba(80,15,15,.9);
+  animation:yacht-danger-lane-pulse .55s ease-in-out infinite alternate;
+}
+@keyframes yacht-danger-lane-pulse{
+  from{opacity:.55;transform:scaleX(.88)}
+  to{opacity:1;transform:scaleX(1)}
+}
+@media(max-width:380px){
+  .captain-game-page .yacht-steering-options .yacht-lane-forecast button {
+    width:25px;
+    height:25px;
+    font-size:10px;
+  }
+  .captain-game-page .yacht-course-lane-cues span{width:40%;}
+}
+@media(prefers-reduced-motion:reduce){
+  .captain-game-page .yacht-course-lane-cues span.is-blocked{animation:none;}
+}
