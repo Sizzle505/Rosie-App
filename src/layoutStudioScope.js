@@ -43,7 +43,7 @@ export function normalizedLayouts(raw, targetMap) {
     const permitted = new Set(targets.map(item => item[0]));
     const pageResult = {};
     for (const [id, value] of Object.entries(values)) {
-      if (!permitted.has(id)) continue;
+      if (!permitted.has(id) && !/^auto-[a-z0-9]{7}$/.test(id)) continue;
       const normalized = normalizeOffset(value);
       if (normalized.x || normalized.y || normalized.scale !== 1 || normalized.rotate) pageResult[id] = normalized;
     }

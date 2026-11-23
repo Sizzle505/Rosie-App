@@ -101,6 +101,10 @@ export const TARGETS = {
     ["crest", "Header crest", ".recipes-crest"],
     ["index", "Recipe index", ".recipes-index"],
     ["filters", "Meal filters", ".recipes-meal-filters"],
+    ["search-desktop", "Desktop recipe search panel", ".recipes-desktop-controls .recipes-inline-search"],
+    ["search-mobile", "Recipe collection search panel", ".recipes-index .recipes-inline-search"],
+    ["search-desktop-field", "Desktop recipe search input", ".recipes-desktop-controls .recipes-inline-search input"],
+    ["search-mobile-field", "Recipe collection search input", ".recipes-index .recipes-inline-search input"],
     ["grid", "Recipe cards", ".recipes-grid"]
   ],
   timekeeper: [
@@ -125,7 +129,12 @@ export const TARGETS = {
     ["header", "Review header", ".reviews-hero"],
     ["content", "Review workspace", ".reviews-content"],
     ["rail", "Review filters", ".reviews-rail"],
-    ["grid", "Movie grid", ".reviews-film-grid"]
+    ["grid", "Movie grid", ".reviews-film-grid"],
+    ["search-desktop", "Desktop movie search panel", ".reviews-desktop-discovery .reviews-search"],
+    ["search-content", "Movie workspace search panel", ".reviews-content > .reviews-search"],
+    ["search-desktop-field", "Desktop movie search input", ".reviews-desktop-discovery .reviews-search input"],
+    ["search-content-field", "Movie workspace search input", ".reviews-content > .reviews-search input"],
+    ["discovery-sidebar", "Movie discovery sidebar", ".reviews-desktop-discovery"]
   ],
   randomizers: [
     ["page", "Randomizers scene", "[data-layout-target='randomizers-page']"],
@@ -142,7 +151,10 @@ export const TARGETS = {
     ["page", "Home scene", "[data-layout-target='home-page']"],
     ["header", "Home banner", "[data-layout-target='home-banner']"],
     ["hero", "Rosie landscape", "[data-layout-target='home-hero']"],
-    ["destinations", "World buttons", "[data-layout-target='home-worlds']"]
+    ["destinations", "World buttons", "[data-layout-target='home-worlds']"],
+    ["zen-lantern", "Zen garden lantern", "[data-layout-target='home-zen-lantern']"],
+    ["zen-lantern-art", "Zen lantern artwork", "[data-layout-target='home-zen-lantern'] img"],
+    ["tools", "Home tools dock", "nav[aria-label=\"Rosie\'s tools\"]"]
   ],
   captain: [
     ["hero", "Captain heading", ".captain-hero"],
