@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
 test("Four independent chapters each have five paintings and 75-second runs",()=>{
  assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
@@ -163,19 +163,30 @@ test("Forecast shows the nearest imminent hazard and accounts for rival drift", 
   assert.equal(yachtThreatForecast(null), null);
   assert.equal(yachtThreatForecast([{kind:"buoy",lane:0,y:5}]), null);
   assert.deepEqual(yachtThreatForecast([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:62}]),
-    {kind:"obstacle",blocked:[0,1],open:[2]});
+    {kind:"obstacle",blocked:[0,1],urgent:true,open:[2]});
   assert.deepEqual(yachtThreatForecast([{kind:"obstacle",lane:1,blockedLanes:[0,2],y:60}]),
-    {kind:"obstacle",blocked:[0,2],open:[1]});
+    {kind:"obstacle",blocked:[0,2],urgent:true,open:[1]});
   assert.deepEqual(yachtThreatForecast([{kind:"rival",lane:0,driftTo:1,drifted:false,y:38}]),
-    {kind:"rival",blocked:[1],open:[0,2]});
+    {kind:"rival",blocked:[1],urgent:false,open:[0,2]});
   assert.deepEqual(yachtThreatForecast([{kind:"rival",lane:1,driftTo:2,drifted:true,y:54}]),
-    {kind:"rival",blocked:[1],open:[0,2]});
+    {kind:"rival",blocked:[1],urgent:true,open:[0,2]});
   assert.deepEqual(yachtThreatForecast([
     {kind:"buoy",lane:0,y:35},{kind:"obstacle",lane:2,y:74},
     {kind:"ball",lane:1,y:88}
-  ]),{kind:"obstacle",blocked:[2],open:[0,1]});
+  ]),{kind:"obstacle",blocked:[2],urgent:true,open:[0,1]});
 });
 
+test("Clean passes earn a useful but bounded score and Turbo recharge", () => {
+  assert.ok(YACHT_CLEAN_PASS_POINTS >= 20 && YACHT_CLEAN_PASS_POINTS <= 35);
+  assert.ok(YACHT_CLEAN_PASS_TURBO >= 5 && YACHT_CLEAN_PASS_TURBO <= 12);
+  assert.equal(Math.min(100, 96 + YACHT_CLEAN_PASS_TURBO), 100);
+});
+test("Threat forecast becomes urgent only close to the yacht", () => {
+  const before = yachtThreatForecast([{kind:"buoy",lane:2,y:53}]);
+  const after = yachtThreatForecast([{kind:"buoy",lane:2,y:54}]);
+  assert.equal(before.urgent, false);
+  assert.equal(after.urgent, true);
+});
 test("Steering lane changes are synchronous, bounded and accept repeated taps",()=>{
  assert.equal(yachtClampLane(1,-1),0);
  assert.equal(yachtClampLane(1,1),2);
