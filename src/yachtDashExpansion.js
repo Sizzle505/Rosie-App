@@ -487,7 +487,7 @@ export function yachtPacedWaveFor(chapterId, sequence, randomIndex, lives = 3) {
   const emergencyRespite = Number(lives) <= 1 &&
     encounter.kind === "obstacle" && !encounter.footprint && sequence % 2 === 1;
   if (!redundant && !emergencyRespite) return wave;
-  return [collection(sequence % 9 === 1 ? "cheese" : "treat", randomIndex(3))];
+  return [collection(sequence % 11 === 7 ? "cheese" : "treat", randomIndex(3))];
 }
 
 /** After a hazard, place the next regular reward on the safest natural route.
