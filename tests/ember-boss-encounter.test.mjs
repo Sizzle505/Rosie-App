@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import {getBossCombatCue} from "../src/emberBossCombatCue.js";
 import {test} from "node:test";
 import {createBossEncounter,getBossConfig,advanceBossEncounter,
   bossCanTakeHit,hitBossDuringRecovery,bossPresentation} from "../src/emberBossEncounter.js";
@@ -81,4 +82,21 @@ test("large frame ticks cannot skip all telegraphs, NaN dt never changes state",
  advanceBossEncounter(s,100);
  assert.equal(s.phase,"active");
  assert.equal(s.cycle,0);
+});
+
+
+test("Tunnel guardian cues match attack geometry and strike timing",()=>{
+  assert.deepEqual(getBossCombatCue(null),null);
+  const boss={kind:"copperjack",attack:"gear-sweep",phase:"warning",hitThisRecovery:false,defeated:false};
+  assert.match(getBossCombatCue(boss).detail,/above the floor/i);
+  boss.attack="earth-burst";
+  assert.match(getBossCombatCue(boss).detail,/below the falling rocks/i);
+  boss.phase="active";
+  assert.equal(getBossCombatCue(boss).title,"DODGE NOW");
+  boss.phase="recovery";
+  assert.equal(getBossCombatCue(boss).title,"TURBO STRIKE NOW");
+  boss.hitThisRecovery=true;
+  assert.equal(getBossCombatCue(boss).title,"DIRECT HIT");
+  boss.defeated=true;
+  assert.equal(getBossCombatCue(boss).tone,"victory");
 });
