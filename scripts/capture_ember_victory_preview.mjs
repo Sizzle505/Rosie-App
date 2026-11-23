@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 await mkdir("artifacts/ember-victory",{recursive:true});
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({channel:"chrome",headless:true});
 try{
   for(const device of [
     {name:"iphone",viewport:{width:390,height:844},mobile:true,dpr:2},
