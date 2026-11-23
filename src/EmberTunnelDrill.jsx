@@ -8,6 +8,8 @@ import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITI
 import "./ember-tunnel-drill.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
+import EmberVictoryScreen from "./EmberVictoryScreen.jsx";
+import { sampleVictoryHud } from "./emberVictoryPresentation.js";
 
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
@@ -222,6 +224,15 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   const [mode,setMode]=useState("idle");
   const [notice,setNotice]=useState(null);
   const [selectedWorld,setSelectedWorld]=useState(0);
+  // Isolated PR review route. Sample data never touches actual score or saved stars.
+  const [victoryReviewWorld,setVictoryReviewWorld]=useState(()=>{
+    if(typeof window==="undefined")return null;
+    const value=new URLSearchParams(window.location.search).get("tunnelVictoryReview");
+    if(value===null)return null;
+    const stage=Number(value);
+    return Number.isInteger(stage)&&stage>=0&&stage<EXPEDITION_STAGES.length?stage:0;
+  });
+  const [victoryReviewStars,setVictoryReviewStars]=useState(3);
   useEffect(()=>{
     if(mode==="idle")return;
     const state=mode==="running"?"playing":mode==="paused"?"paused":"ended";
@@ -562,6 +573,9 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   };
   const passageProgress=world?(hud.result==="complete"?100:Math.min(100,hud.time/hud.duration*100)):
     Math.min(100, ((hud.time-PASSAGES[hud.passage].start)/(PASSAGES[hud.passage].end-PASSAGES[hud.passage].start))*100);
+  const showWorldVictory=mode==="ended"&&world&&hud.result==="complete";
+  const reviewHud=victoryReviewWorld!==null
+    ?sampleVictoryHud(victoryReviewWorld,victoryReviewStars):null;
   return (
     <section className="ember-suite" data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
@@ -585,6 +599,17 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           <em>{world?(hud.worldObjective?"COMPLETE":"IN PROGRESS"):(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
         </div>
       </div>
+      {victoryReviewWorld!==null&&<div className="ember-victory-review-nav" aria-label="Victory design review controls">
+        <span>DESIGN PREVIEW ONLY - SAMPLE RESULTS, NO SCORES SAVED</span>
+        <div>
+          {EXPEDITION_STAGES.map((w,i)=><button type="button" key={w.id}
+            aria-pressed={i===victoryReviewWorld}
+            onClick={()=>setVictoryReviewWorld(i)}>{i+1}. {w.name}</button>)}
+          {[1,2,3].map(n=><button type="button" key={n}
+            aria-pressed={n===victoryReviewStars}
+            onClick={()=>setVictoryReviewStars(n)}>{n} STAR{n!==1?"S":""}</button>)}
+        </div>
+      </div>}
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} data-world-warnings={hud.worldWarnings} data-boss-phase={hud.boss?.phase||"none"} data-stage-duration={hud.duration}
           data-hazard-art-loaded={world&&hud.stageIndex>=2
             ?(artRef.current["exp:"+({2:"gear-crusher",3:"lava-geyser",4:"royal-earth-burst"}[hud.stageIndex])]?.naturalWidth>0?"true":"false")
@@ -616,7 +641,17 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           <button type="button" onClick={togglePause}>RESUME DIG</button>
           <button type="button" className="ember-return-levels" onClick={returnToLevelMenu}>RETURN TO LEVEL MENU</button>
         </div>}
-        {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
+        {showWorldVictory&&victoryReviewWorld===null&&
+          <EmberVictoryScreen stageIndex={hud.stageIndex} hud={hud}
+            onNext={()=>start(hud.stageIndex+1)}
+            onReplay={()=>start(hud.stageIndex)}
+            onLevels={returnToLevelMenu} />}
+        {victoryReviewWorld!==null&&
+          <EmberVictoryScreen review stageIndex={victoryReviewWorld} hud={reviewHud}
+            onNext={()=>setVictoryReviewWorld(current=>Math.min(EXPEDITION_STAGES.length-1,current+1))}
+            onReplay={()=>{const index=victoryReviewWorld;setVictoryReviewWorld(null);start(index)}}
+            onLevels={()=>{setVictoryReviewWorld(null);returnToLevelMenu()}} />}
+        {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&!showWorldVictory&&victoryReviewWorld===null&&
           <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>
             <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
             <h3>{title}</h3>
