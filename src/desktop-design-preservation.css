@@ -54,6 +54,7 @@
   .app-shell.page-haiku .haiku-header {
     grid-column:1 / -1;
     grid-row:1;
+    pointer-events:none;
     height:clamp(140px,18dvh,190px);
     min-height:0;
     --haiku-banner-width:clamp(440px,30vw,570px);
