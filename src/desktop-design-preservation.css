@@ -229,14 +229,14 @@
      Long topic text wraps in its own row rather than colliding with the poem. */
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] { --haiku-verse-base:clamp(25px,1.85vw,34px); }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-inner {
-    display:grid !important;grid-template-rows:minmax(0,1fr) auto auto;
+    display:grid !important;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto;
     align-items:center;justify-items:center;gap:8px;
     overflow:hidden;padding:2px 0 !important;
   }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-caption,
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-ornament { display:none !important; }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-verse {
-    grid-row:1;align-self:stretch;min-height:0;height:100%;
+    grid-row:1;align-self:stretch;min-width:0;min-height:0;height:100%;
     display:flex;flex-direction:column;justify-content:center;
     transform:none !important;translate:none !important;scale:none !important;
     margin:0 !important;
@@ -250,7 +250,7 @@
   }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-verse p:last-child { margin-bottom:0 !important; }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-meta {
-    grid-row:2;position:static !important;inset:auto !important;
+    grid-row:2;min-width:0;position:static !important;inset:auto !important;
     transform:none !important;translate:none !important;scale:none !important;
     margin:0 !important;gap:3px !important;
   }
@@ -260,7 +260,7 @@
     translate:none !important;scale:none !important;
   }
   .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-dedication {
-    grid-row:3;position:static !important;inset:auto !important;
+    grid-row:3;min-width:0;position:static !important;inset:auto !important;
     width:100%;max-width:100% !important;
     margin:0 !important;padding:0;
     white-space:normal !important;text-wrap:pretty !important;
