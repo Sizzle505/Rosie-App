@@ -28,7 +28,7 @@
     margin-inline: auto !important;
   }
 
- }
+}
 
 /* Desktop Zen Garden: keep artwork and controls in the same layout flow.
    Fixed playground translations separated the scene buttons from Rosie and
@@ -65,6 +65,8 @@
   .app-shell.page-haiku .haiku-workbench { grid-column:3;grid-row:2;margin:0;width:100%;min-width:0; }
   .app-shell.page-haiku .haiku-header,
   .app-shell.page-haiku .haiku-scene-image,
+  .app-shell.page-haiku .haiku-scene-rosie,
+  .app-shell.page-haiku .haiku-scene-selector,
   .app-shell.page-haiku .haiku-scroll,
   .app-shell.page-haiku .haiku-verse-actions,
   .app-shell.page-haiku .haiku-verse-actions button,
