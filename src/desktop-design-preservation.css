@@ -206,3 +206,134 @@
     left: 58px !important;
   }
 }
+
+/* Desktop meditation and literary scroll refinement. Phone/tablet art direction
+   remains in its existing stylesheets. Font is requested only by desktop text. */
+@font-face {
+  font-family:"Rosie Cormorant";
+  font-style:italic;
+  font-weight:500;
+  font-display:swap;
+  src:url("https://fonts.gstatic.com/s/cormorantgaramond/v21/co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDDOjw.ttf") format("truetype");
+}
+@media screen and (min-width:1200px) and (hover:hover) and (pointer:fine) {
+  .app-shell.page-home [data-layout-target="home-hero"] > img {
+    width:100% !important;height:100% !important;
+    object-fit:cover !important;object-position:50% 48% !important;
+  }
+  .app-shell.page-home [data-layout-target="home-zen-lantern"] {
+    top:12px !important;right:12px !important;bottom:auto !important;left:auto !important;
+    translate:none !important;transform:none;z-index:6;
+  }
+  /* The verse owns a flexible row; signature and dedication own real rows.
+     Long topic text wraps in its own row rather than colliding with the poem. */
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] { --haiku-verse-base:clamp(25px,1.85vw,34px); }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-inner {
+    display:grid !important;grid-template-rows:minmax(0,1fr) auto auto;
+    align-items:center;justify-items:center;gap:8px;
+    overflow:hidden;padding:2px 0 !important;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-caption,
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-ornament { display:none !important; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-verse {
+    grid-row:1;align-self:stretch;min-height:0;height:100%;
+    display:flex;flex-direction:column;justify-content:center;
+    transform:none !important;translate:none !important;scale:none !important;
+    margin:0 !important;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-verse p {
+    font-family:"Rosie Cormorant","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif !important;
+    font-style:italic !important;font-weight:500 !important;
+    line-height:1.2 !important;letter-spacing:.008em !important;
+    margin:0 0 7px !important;color:#62403c;
+    translate:none !important;scale:none !important;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-verse p:last-child { margin-bottom:0 !important; }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-meta {
+    grid-row:2;position:static !important;inset:auto !important;
+    transform:none !important;translate:none !important;scale:none !important;
+    margin:0 !important;gap:3px !important;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-scroll-signature {
+    font-family:"Rosie Cormorant","Palatino Linotype",Georgia,serif !important;
+    font-style:italic !important;font-weight:500 !important;font-size:23px !important;
+    translate:none !important;scale:none !important;
+  }
+  .app-shell.page-haiku .haiku-scroll[data-scroll-style] .haiku-dedication {
+    grid-row:3;position:static !important;inset:auto !important;
+    width:100%;max-width:100% !important;
+    margin:0 !important;padding:0;
+    white-space:normal !important;text-wrap:pretty !important;
+    overflow-wrap:anywhere;overflow:visible;text-overflow:clip;
+    font:italic 12px/1.25 "Palatino Linotype",Palatino,Georgia,serif !important;
+    transform:none !important;translate:none !important;
+  }
+
+  /* Running meditation: a single centered portrait with its cue below. */
+  .zen-immersive .zen-immersive-dialog {
+    box-sizing:border-box;width:min(1040px,100%);max-height:calc(100dvh - 48px);
+    padding:22px 32px;overflow-y:auto;
+  }
+  .zen-immersive .zen-session-frame { min-width:0; }
+  .zen-immersive .zen-immersive-body {
+    display:flex !important;flex-direction:column !important;
+    align-items:center !important;gap:5px !important;min-height:0 !important;
+    padding-top:12px;
+  }
+  .zen-immersive .zen-breath-portrait {
+    width:min(100%,640px);margin:0 auto !important;padding:0;
+    min-height:0;flex:none;align-items:center;justify-content:center;
+  }
+  .zen-immersive .zen-breath-portrait > img {
+    width:auto !important;height:clamp(240px,calc(100dvh - 350px),520px) !important;
+    max-height:clamp(240px,calc(100dvh - 350px),520px) !important;
+    max-width:82% !important;object-fit:contain;object-position:center bottom;
+  }
+  .zen-immersive .zen-breath-portrait > p { margin:6px 0 0;font-size:15px;line-height:1.3; }
+  .zen-immersive .zen-breath-halo { width:min(78%,440px);top:6%;left:50%;translate:-50% 0; }
+  .zen-immersive .zen-guidance {
+    width:min(100%,620px);box-sizing:border-box;
+    margin:0 auto !important;padding:7px 12px 0 !important;
+  }
+  .zen-immersive .zen-breath-cue {
+    display:grid;grid-template-columns:60px minmax(0,1fr) 32px;
+    align-items:center;gap:16px;min-height:78px;margin:0;text-align:center;
+  }
+  .zen-immersive .zen-breath-orb { width:56px;height:56px; }
+  .zen-immersive .zen-breath-cue strong { font-size:25px;line-height:1.2; }
+  .zen-immersive .zen-breath-cue small { margin-top:5px; }
+  .zen-immersive .zen-breath-count { margin:0;text-align:center; }
+  .zen-immersive .zen-guidance-copy { min-height:65px;justify-content:center;text-align:center; }
+  .zen-immersive .zen-guidance-copy p { font-size:23px;line-height:1.35; }
+  /* Completion keeps the complete illustration beside its caption, with
+     secondary awards confined to the illustration's own stage. */
+  .zen-immersive[data-zen-status="complete"] .zen-complete {
+    display:grid !important;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+    align-items:center !important;gap:28px !important;
+    width:100%;padding:12px 0 2px !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage {
+    width:100%;height:clamp(320px,55dvh,540px);min-height:0;
+    margin:0;display:grid;place-items:center;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage > .zen-victory-rosie {
+    width:auto !important;height:90% !important;max-height:100% !important;
+    max-width:88% !important;object-fit:contain;object-position:center;
+    margin:0 !important;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage img.zen-enlightenment-seal {
+    width:clamp(78px,7vw,110px) !important;max-width:24% !important;
+    right:0;top:5%;bottom:auto;left:auto;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-stage img.zen-sensei-bowing {
+    width:clamp(70px,6vw,95px) !important;max-width:22% !important;
+    left:0;bottom:8%;top:auto;right:auto;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy {
+    width:100%;box-sizing:border-box;min-width:0;margin:0 !important;
+    padding:25px 22px;align-self:center;
+  }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy h3 { font-size:39px !important; }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-copy > p { font-size:16px !important;line-height:1.5 !important; }
+  .zen-immersive[data-zen-status="complete"] .zen-complete-dismiss .zen-close-label { display:none !important; }
+}
