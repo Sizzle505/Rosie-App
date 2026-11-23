@@ -522,3 +522,41 @@
  margin-top:11px;background:linear-gradient(180deg,#194b64,#0c2c43);
  color:#ffe2ad;border-color:rgba(251,205,139,.8);
 }
+
+
+/* Successful world completions reuse the actual playable Tunnel artwork.
+   Never paint over the original Rosie or substitute AI poster character art. */
+.ember-canonical-victory{
+  position:absolute;inset:0;z-index:5;overflow:hidden;pointer-events:none;
+  background-color:#221b20;background-size:cover;background-position:center;
+}
+.ember-canonical-victory:after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(8,16,23,.12),transparent 54%,rgba(7,14,23,.32));
+}
+.ember-canonical-victory-drill{
+  position:absolute;z-index:2;left:2%;bottom:13%;
+  display:block;width:48%;max-height:47%;object-fit:contain;object-position:left bottom;
+  filter:drop-shadow(0 12px 10px rgba(3,6,9,.68));
+  animation:ember-victory-drill-float 4.8s ease-in-out infinite;
+}
+.ember-start-overlay.is-ended.has-canonical-victory{
+  background:linear-gradient(180deg,rgba(8,22,32,.93),rgba(20,21,30,.97));
+}
+@keyframes ember-victory-drill-float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+@media(max-width:620px){
+  .ember-canonical-victory{background-position:center;}
+  .ember-canonical-victory-drill{
+    top:5%;bottom:auto;left:14%;width:72%;height:26%;max-height:none;
+    object-position:center center;
+  }
+  .ember-start-overlay.is-ended.has-canonical-victory{
+    bottom:1%;max-height:67%;overflow-y:auto;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .ember-canonical-victory-drill{animation:none}
+}
