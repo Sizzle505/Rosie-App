@@ -7,6 +7,10 @@ export const ROSIE_MUSIC = Object.freeze({
   "haiku-garden":{title:"Quiet Garden",original:"静かな庭.wav",loop:true,loopStartSeconds:5},
   "ember-tunnel":{title:"Deep Gear Discovery",original:"Deep Gear Discovery.wav",loop:true,loopStartSeconds:5},
   "yacht-voyage":{title:"Sea Adventure",original:"海の冒険.wav",loop:true,loopStartSeconds:5},
+  "yacht-sakura":{title:"Island of Bright Winds",original:"Island of Bright Winds.wav",loop:true,loopStartSeconds:5,fallback:"yacht-voyage"},
+  "yacht-typhoon":{title:"Storm\'s Edge",original:"Storm\'s Edge.wav",loop:true,loopStartSeconds:5,fallback:"yacht-voyage"},
+  "yacht-moonlight":{title:"Moonlit Rivalry",original:"Moonlit Rivalry.wav",loop:true,loopStartSeconds:5,fallback:"yacht-voyage"},
+  "yacht-emperor":{title:"Imperial Championship",original:"Imperial Championship.wav",loop:true,loopStartSeconds:5,fallback:"yacht-voyage"},
   "whimsical-journey":{title:"Whimsical Journey",original:"Whimsical Journey.wav",loop:true,loopStartSeconds:5},
   "victory-fanfare":{title:"Triumphal Flourish",original:"Triumphal Flourish.wav",loop:false},
   "oracle-secret":{title:"Oracle's Secret",original:"Oracle's Secret.wav",loop:true,loopStartSeconds:5},
@@ -34,7 +38,10 @@ export const pageMusicTrack=page=>({
   reviews:"whimsical-journey"
 })[page]||"whimsical-journey";
 export function sceneMusicTrack(scene,state,details={}){
-  if(scene==="yacht")return "yacht-voyage";
+  if(scene==="yacht"){
+    const chapter=Math.max(0,Math.min(3,Math.floor(Number(details.chapter)||0)));
+    return ["yacht-sakura","yacht-typhoon","yacht-moonlight","yacht-emperor"][chapter];
+  }
   if(scene==="tunnel")return "ember-tunnel";
   if(scene==="cosmic"){
     if(state==="start"||state==="menu")return "galactic-march";
