@@ -390,7 +390,8 @@
   .app-shell.page-haiku .zen-panel .zen-voice { order:6; }
   .app-shell.page-haiku .zen-panel .zen-art-options { order:7;margin:4px 0 0; }
   .app-shell.page-haiku .haiku-page[data-haiku-mode="meditate"] .haiku-workbench-body {
-    height:calc(100dvh - 275px);max-height:calc(100dvh - 275px);
+    box-sizing:border-box;height:calc(clamp(310px,49dvh,530px) + 196px) !important;
+    max-height:calc(clamp(310px,49dvh,530px) + 196px) !important;
   }
 
   /* The two title lines occupy the open niche between the enlarged desk legs. */
