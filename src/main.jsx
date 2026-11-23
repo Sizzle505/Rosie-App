@@ -38,7 +38,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, yachtRivalAttackLane, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1880,7 +1880,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
-  const threatForecast = yachtThreatForecast(items);
+  const threatForecast = yachtThreatForecast(items, laneRef.current);
   const rank = captainRank(score);
 
   function audioContext() {
@@ -2202,8 +2202,17 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         const phaseSpeed = (phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75) + chapter.pace;
         const next = itemsRef.current.map((item) => {
           const moved = { ...item, y: item.y + (item.speed + phaseSpeed) * movementScale };
-          // Signal the lane change far before the 77% collision zone.
-          if (moved.driftTo !== undefined && !moved.drifted && moved.y >= 43) {
+          // Kuroi aims at Rosie's current lane as his attack begins. An
+          // aligned rival keeps charging straight; otherwise he commits to
+          // one adjacent lane, then holds that course so a dodge is possible.
+          if (moved.kind === "rival" && !moved.drifted && moved.y >= 43) {
+            const targetLane = yachtRivalAttackLane(moved.lane, laneRef.current);
+            moved.driftFrom = moved.lane;
+            moved.driftTo = targetLane;
+            moved.turned = targetLane !== moved.lane;
+            moved.lane = targetLane;
+            moved.drifted = true;
+          } else if (moved.driftTo !== undefined && !moved.drifted && moved.y >= 43) {
             moved.lane = moved.driftTo;
             moved.drifted = true;
           }
@@ -2227,24 +2236,29 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             // legible challenges followed by an intentionally safe reward.
             const wave = yachtPacedWaveFor(
               chapter.id, sequence, secureIndex, livesRef.current);
+            // Launch Kuroi within a single-lane lunge of Rosie. He can never
+            // teleport across two lanes in the attack animation.
+            const stagedWave = wave.map(entry =>
+              entry.kind === "rival" && Math.abs(entry.lane - laneRef.current) === 2
+                ? { ...entry, lane: 1 } : entry);
             const followUpLane = yachtFollowUpRewardLane(
               lastWaveRef.current, laneRef.current);
             // The replacement torii uses its open architecture to communicate
             // the passage. Do not obscure the channel with instructional text.
-            wave.forEach((entry) => {
+            stagedWave.forEach((entry) => {
               const standard = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === entry.kind);
               // A regular cargo wave must also avoid a fresh bonus treat or
               // an obstacle currently entering the same release corridor.
               const preferredLane = followUpLane ?? entry.lane;
               const openLane = isYachtHazard(entry.kind)
-                ? -1 : yachtBonusTreatLane(next, preferredLane);
+                ? -1 : yachtBonusTreatLane(next, preferredLane, laneRef.current);
               next.push({ ...(standard || { label: entry.label, points: 0, turbo: 0 }),
                 ...entry, id: itemIdRef.current += 1, y: -12,
                 lane: openLane >= 0 ? openLane : entry.lane,
                 speed: yachtObjectSpeed(chapter.id, entry.kind, secureIndex),
                 drifted: false, scoredPass: false });
             });
-            lastWaveRef.current = wave;
+            lastWaveRef.current = stagedWave;
           }
         }
 
@@ -2254,7 +2268,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           bonusTreatClockRef.current += tickMs;
           if (bonusTreatClockRef.current >= YACHT_EXTRA_TREAT_MS) {
             // Favor Rosie's current route; move only if the water is occupied.
-            const safeLane = yachtBonusTreatLane(next, laneRef.current);
+            const safeLane = yachtBonusTreatLane(next, laneRef.current, laneRef.current);
             if (safeLane >= 0) {
               bonusTreatClockRef.current -= YACHT_EXTRA_TREAT_MS;
               const treat = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === "treat");
@@ -2667,6 +2681,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 ? yachtPickupApproachAt(item.y) : yachtApproachAt(item.y))
               : null;
             const artScale = yachtAssetScale(item.asset);
+            const incomingAttackLane = item.kind === "rival" && !item.drifted
+              ? yachtRivalAttackLane(item.lane, laneRef.current) : item.driftTo;
             const center = item.footprint === "arch" ? 50 :
               item.footprint === "wide" ? (item.lane + 1) * 33.333 :
                 16.666 + item.lane * 33.333;
@@ -2690,14 +2706,15 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                   (approaching ? " yacht-upstream-object" : "")}
                 key={item.id}
                 style={renderedStyle}
+                data-yacht-art={item.asset?.split("/").pop()?.replace(".webp", "")}
                 aria-label={item.label}
               >
                 {item.kind === "cheese" ? <GoldenCheeseIcon /> : item.asset
                   ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
                  {item.kind === "cheese" && <small>GOLDEN</small>}
                 {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
-                {item.driftTo !== undefined && !item.drifted &&
-                  <span className="yacht-drift-warning" aria-hidden="true">{item.driftTo > item.lane ? "→" : "←"}</span>}
+                {incomingAttackLane !== undefined && incomingAttackLane !== item.lane && !item.drifted &&
+                  <span className="yacht-drift-warning" aria-hidden="true">{incomingAttackLane > item.lane ? "→" : "←"}</span>}
               </div>
             );
           })}
