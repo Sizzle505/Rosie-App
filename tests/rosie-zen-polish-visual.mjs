@@ -54,14 +54,14 @@ try {
       assert.equal(await controls.locator("img[src$='-circle.svg']").count(),2,
         label+" must render two standalone circular vector assets");
       assert.match(await controls.first().locator("img").getAttribute("src"),
-        /meditation-pause-circle\\.svg$/);
+        /meditation-pause-circle\.svg$/);
       assert.match(await controls.last().locator("img").getAttribute("src"),
-        /meditation-end-circle\\.svg$/);
+        /meditation-end-circle\.svg$/);
       assert.ok(await controls.first().getAttribute("aria-label")==="Pause meditation");
       await controls.first().click();
       assert.equal(await controls.first().getAttribute("aria-label"),"Resume meditation");
       assert.match(await controls.first().locator("img").getAttribute("src"),
-        /meditation-resume-circle\\.svg$/);
+        /meditation-resume-circle\.svg$/);
       await controls.first().click();
       assert.equal(await controls.first().getAttribute("aria-label"),"Pause meditation");
       for(let i=0;i<8;i++){
