@@ -359,6 +359,14 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       document.querySelector('.haiku-scroll-cycle button:nth-child('+ (direction>0?2:1) +')')?.click();
     } finally { previewClickRef.current=false; }
   }
+  function startSelectedDrag(event) {
+    if(!selectedRef.current.length)return;
+    event.preventDefault();
+    event.stopPropagation();
+    overlayRef.current?.dispatchEvent(new CustomEvent('rle-start-selected-drag',{
+      detail:{pointer:event.nativeEvent,id:selectedRef.current[0]}
+    }));
+  }
   function changeRotation(value) {
     if (!selected.length) return;
     snapshot();
@@ -500,16 +508,19 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       const parts=getParts();
       const nodes=parts.filter(item=>moving.includes(item.id)&&item.node);
       const valid=filterNestedSelection(nodes,nodes.map(item=>item.id));
+      if(!valid.length)return;
       const rects=nodes.filter(item=>valid.includes(item.id)).map(item=>({...item,rect:item.node.getBoundingClientRect()}));
       const box=rects.find(item=>item.id===id)?.rect;
       const center=box?{x:(box.left+box.right)/2,y:(box.top+box.bottom)/2}:null;
       if(kind==='move'||kind==='resize'||kind==='rotate')snapshot();
-      try { event.target?.setPointerCapture?.(event.pointerId); } catch { /* The page can replace a target during rendering. */ }
-      drag={kind,pointerId:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,
-        startScrollY:window.scrollY,startScrollX:window.scrollX,width:width||160,moving,valid,
+      // A stable capture element prevents losing the drag when React replaces
+      // the clicked artwork, controls re-render or the cursor leaves its bounds.
+      try { root.setPointerCapture(event.pointerId); } catch { /* window capture handlers still work */ }
+      drag={kind,originId:id,pointerId:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,
+        startScrollY:window.scrollY,startScrollX:window.scrollX,width:width||160,moving:valid,valid,
         rects,bounds:unionRects(rects.map(item=>item.rect)),center,
         anchorAngle:center?Math.atan2(event.clientY-center.y,event.clientX-center.x)*180/Math.PI:0,
-        starts:Object.fromEntries(moving.map(key=>[key,normalizeOffset(workingRef.current[page]?.[key])])),
+        starts:Object.fromEntries(valid.map(key=>[key,normalizeOffset(workingRef.current[page]?.[key])])),
         moved:false};
       clearSnap();
     }
@@ -526,10 +537,17 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       if(event.button!==0&&event.pointerType!=='touch')return;
       if(event.target.closest?.('.rle-ui'))return;
       // Desktop: Shift-drag selects a rectangle without changing toolbar modes.
-      if(lasso || (event.shiftKey && !event.ctrlKey && !event.metaKey)){
-        beginMarquee(event);return;
-      }
+      const isMarquee=lasso || (event.shiftKey && !event.ctrlKey && !event.metaKey);
       const hits=getParts().filter(item=>item.node&&item.node.contains(event.target));
+      // Selecting with a marquee must not disable dragging that selection.
+      // A press on an already-selected object always begins a move.
+      const selectedHit=hits.find(item=>selectedRef.current.includes(item.id));
+      if(isMarquee && !selectedHit){beginMarquee(event);return;}
+      if(isMarquee && selectedHit){
+        event.preventDefault();event.stopImmediatePropagation();
+        startDrag(event,selectedHit.id,'move');
+        return;
+      }
       if(!hits.length)return;
       hits.sort((x,y)=>x.node.contains(y.node)?1:y.node.contains(x.node)?-1:0);
       const picked=hits.find(item=>selectedRef.current.includes(item.id)) ||
@@ -622,14 +640,15 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         }
       } else if(drag.moved){
         stage(workingRef.current);
+        setStatus('Moved '+drag.moving.length+' element'+(drag.moving.length===1?'':'s')+'. Save all pages to publish.');
       } else {
         history.current.pop();
         if(multi || selectedRef.current.length>1){
-          const id=drag.moving.find(id=>id===event.target.closest?.('[data-target-id]')?.dataset.targetId)||
-            drag.rects.find(item=>item.node.contains(event.target))?.id||drag.moving[0];
+          const id=drag.originId;
           setSelected(current=>current.includes(id)?current.filter(value=>value!==id):[...current,id]);
         }
       }
+      try { if(root.hasPointerCapture(event.pointerId)) root.releasePointerCapture(event.pointerId); } catch {}
       drag=null;
       clearSnap();redraw();
     }
@@ -701,6 +720,10 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       }
       autoFrame=requestAnimationFrame(autoScroll);
     }
+    const startSelectedFromControl=event=>{
+      const {pointer,id}=event.detail||{};
+      if(pointer && id && selectedRef.current.includes(id))startDrag(pointer,id,'move');
+    };
     const observer=new MutationObserver(()=>{autoIndex=null;redraw();});
     const app=document.querySelector('.app-shell');
     if(app)observer.observe(app,{childList:true,subtree:true});
@@ -713,6 +736,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
     window.addEventListener('scroll',redraw,true);
     window.addEventListener('resize',redraw);
     root.addEventListener('rle-refresh',redraw);
+    root.addEventListener('rle-start-selected-drag',startSelectedFromControl);
     draw();autoFrame=requestAnimationFrame(autoScroll);
     return ()=>{
       observer.disconnect();
@@ -726,6 +750,7 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
       window.removeEventListener('resize',redraw);
       cancelAnimationFrame(autoFrame);
       if(paintFrame)cancelAnimationFrame(paintFrame);
+      root.removeEventListener('rle-start-selected-drag',startSelectedFromControl);
       root.remove();overlayRef.current=null;
     };
   },[page,screenKey,active,editing,unlocked,multi,lasso,pickAny,snapOn,showGuides,scrollMode]);
@@ -778,6 +803,13 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
         <button type='button' className={snapOn ? 'rle-on' : ''} aria-pressed={snapOn} onClick={() => setSnapOn(v=>!v)}>Snap {snapOn?'on':'off'}</button>
         <button type='button' className={showGuides ? 'rle-on' : ''} aria-pressed={showGuides} onClick={() => setShowGuides(v=>!v)}>Guides {showGuides?'on':'off'}</button>
       </div>
+      {active && editing && selected.length>0 && <div className='rle-drag-toolbar'>
+        <button type='button' className='rle-drag-selection' onPointerDown={startSelectedDrag}
+          aria-label='Drag selected elements' title='Hold and drag to move the selected artwork'>
+          ⠿ DRAG SELECTED ({selected.length})
+        </button>
+        <span>Hold and drag this handle or drag the outlined artwork directly.</span>
+      </div>}
       <div className='rle-row'>
         <button type='button' onClick={() => setShowElements(state => !state)}>{showElements ? 'Hide elements' : 'Choose elements'} ({selected.length})</button>
         <button type='button' onClick={() => setSelected([])} disabled={!selected.length}>Clear selection</button>
