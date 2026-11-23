@@ -8,7 +8,7 @@
     "build": "npm run test:ai && node scripts/generate-rosieverse-icons.mjs && node scripts/build-santa-email-previews.mjs && vite build",
     "preview": "vite preview",
     "icons:generate": "node scripts/generate-rosieverse-icons.mjs",
-    "test:ai": "node --test tests/rosie-ai.test.mjs"
+    "test:ai": "node --test tests/rosie-ai.test.mjs src/emberVictoryPresentation.test.js"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.4",
