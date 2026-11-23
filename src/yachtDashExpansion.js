@@ -342,10 +342,11 @@ export function yachtAssetScale(asset) {
     "regatta-beacon.webp": 3.312,
     "barrel-raft.webp": 0.585, // Barrel -25%
     "taiko-barge.webp": 0.64, // Drum -20% (latest requested adjustment)
-    "kuroi-charge.webp": 2.2275, // Kuroi +65%; keep turn frames identical
-    "kuroi-turn-port.webp": 2.2275,
-    "kuroi-turn-starboard.webp": 2.2275,
+    "kuroi-charge.webp": 2.673, // Additional 20%; keep all turn frames consistent
+    "kuroi-turn-port.webp": 2.673,
+    "kuroi-turn-starboard.webp": 2.673,
     "cargo-crate.webp": 1.50, // Supplies +25%
+    "lantern-raft.webp": 0.65, // Lantern raft -35%
     "drift-net.webp": 1.65, // Net +65%
     "torii-passage.webp": 1.16, // Taller underpass; width is tuned separately
     "driftwood.webp": 1.08
