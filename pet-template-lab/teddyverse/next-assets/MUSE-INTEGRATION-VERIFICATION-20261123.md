@@ -10,7 +10,7 @@ The newer Dropbox package README and export-manifest (`/Rosie App/TeddyVerse-Nex
 - Signed-off master manifest: [muse-export-manifest.json](muse-export-manifest.json), committed to the isolated branch without binary files or secrets
 - Verified immutable QA master library: `https://teddyverse-muse-art-qa.vercel.app/masters/TV001.png` etc., **SSO/automation-bypass protected**
 - Muse library deployment: `dpl_FH57mfViBm1cyrvB7NuzgF91LxNx`; protected gallery project `teddyverse-muse-art-qa` (`prj_yWtHMbSBH3JJahPmpT5TZQ53ezWu`)
-- Current Muse-enhanced QA app preview: look up the latest deployment of `teddyverse-rebuilt-staging` from [build-muse-qa.mjs](build-muse-qa.mjs). Do not confuse its public preview URL with the short production URL.
+- Current Muse-enhanced QA app preview: **https://teddyverse-muse-preview.vercel.app**, pointing to immutable preview deployment `dpl_cSpCyrN4AZppgkUXNzN2itcdXPom`. The original short production URL remains `https://teddyverse26.vercel.app`, pointing to `dpl_2u7z6LZvaKNq26XCeS9jxPGLfvTq` (verified November 23). The preview is publicly viewable for QA only.
 
 ## What was physically verified
 
@@ -34,4 +34,4 @@ The newer Dropbox package README and export-manifest (`/Rosie App/TeddyVerse-Nex
 - Don't claim comprehensive visual approval from successful hashes alone. Hashes prove byte identity and provenance, not artistic suitability.
 
 ## Next decision
-This job has **implemented and verified all 107 asset replacements in a QA preview**. Before assigning the public `teddyverse26.vercel.app` alias, inspect the Captain gameplay and Haiku meditation interactions, check any pet-specific art still found among the visual-review candidates, and ensure release gates have actual evidence. The user should be able to see Captain and Haiku in preview while public TeddyVerse stays stable.
+This job has **implemented and verified all 107 asset replacements in a QA preview**. Before assigning the public `teddyverse26.vercel.app` alias, inspect the Captain gameplay and Haiku meditation interactions, check any pet-specific art still found among the visual-review candidates, and ensure release gates have actual evidence. The user can inspect Captain and Haiku at https://teddyverse-muse-preview.vercel.app while production remains stable. The latest preview deployment is READY, all 179 source masters verified, no build errors. The recipe text was adjusted to 'Teddy Sunrise Hash' while the original 'shiba-sunrise-hash.webp' image path remains intact. The previous QA preview passed iPhone/desktop/Tesla browser smoke checks; the final corrected build compiled successfully but was not independently retested in a fresh browser after the recipe-label-only correction. Do not overstate that final browser retest.
