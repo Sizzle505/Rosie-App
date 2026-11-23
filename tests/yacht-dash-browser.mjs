@@ -212,7 +212,14 @@ try {
   console.log("Upstream approach", JSON.stringify({ before, after }));
   assert.ok(before.topFraction > .22, "First obstacle/pickup should appear on the water, not from the sky");
   assert.ok(after.topFraction > before.topFraction, "Object should travel toward the yacht");
-  assert.ok(after.scale > before.scale, "Object should grow as it approaches");
+  const isTreat = await object.evaluate(el =>
+    ["ball","treat","cheese"].some(kind=>el.classList.contains("sea-pickup-"+kind)));
+  if (isTreat) {
+    assert.equal(before.scale,1,"Expanded-chapter treats must start at full size");
+    assert.equal(after.scale,1,"Expanded-chapter treats must stay the same size");
+  } else {
+    assert.ok(after.scale > before.scale,"Obstacles should still grow as they approach");
+  }
 
   // Switching steering layout must not place the toggle on top of the stick.
   await toggle.click();
