@@ -147,6 +147,12 @@ try {
   assert.equal(await frame.locator(".sea-pickup-buoy, .sea-pickup-obstacle, .sea-pickup-rival").count(),0,
     "The opening reward must appear before the first hazard");
   console.log("Opening cargo delivery", await openingCargo.getAttribute("aria-label"));
+  // The encounter director now makes wave one a treat rather than stacking a
+  // small obstacle directly ahead of the first wide obstruction.
+  const secondCargo = frame.locator(".sea-pickup-treat").first();
+  await secondCargo.waitFor({state:"visible",timeout:6500});
+  assert.equal(await frame.locator(".sea-pickup-buoy, .sea-pickup-obstacle, .sea-pickup-rival").count(),0,
+    "First two voyage beats must be rewards before the first large obstacle");
   console.log("Mode toggle visible after launch", await toggle.isVisible());
   console.log("Toggle layout", await toggle.evaluate(el => {
     const st=getComputedStyle(el),p=getComputedStyle(el.parentElement);

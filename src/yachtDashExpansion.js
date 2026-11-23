@@ -442,3 +442,64 @@ export function yachtWaveFor(chapterId, sequence, randomIndex) {
   // One reward per wave, with breathing room between large obstacles.
   return [collection(cargo, sequence % 4 === 0 ? safeLane : lane)];
 }
+
+/**
+ * The authored sequence defines WHAT can appear; the encounter director
+ * decides when adjacent hazards are too punishing. Priority preserves the
+ * torii, rival yacht and large set pieces, replacing only redundant hazards
+ * with a reward beat. The plan is deterministic for a full 75-second run.
+ */
+const DIRECTOR_WAVES = 100;
+const encounterPlans = new Map();
+const yachtHazardPriority = (item) =>
+  item?.footprint === "arch" ? 5 :
+  item?.kind === "rival" ? 4 :
+  item?.footprint === "wide" ? 3 :
+  isYachtHazard(item?.kind) ? 1 : 0;
+
+function yachtEncounterPlan(chapterId) {
+  if (encounterPlans.has(chapterId)) return encounterPlans.get(chapterId);
+  const candidates = Array.from({ length: DIRECTOR_WAVES }, (_, index) =>
+    yachtWaveFor(chapterId, index, () => 1)[0]);
+  const kept = new Set();
+  for (let index = 0; index < candidates.length; index++) {
+    const item = candidates[index];
+    if (!isYachtHazard(item?.kind)) continue;
+    if (!kept.has(index - 1)) {
+      kept.add(index);
+    } else if (yachtHazardPriority(item) > yachtHazardPriority(candidates[index - 1])) {
+      // Upgrade the encounter rather than stacking two obstacles.
+      kept.delete(index - 1);
+      kept.add(index);
+    }
+  }
+  encounterPlans.set(chapterId, kept);
+  return kept;
+}
+
+/** A single readable obstacle at most every other wave. Running low on hull
+ * suppresses occasional minor debris, never a torii or rival encounter. */
+export function yachtPacedWaveFor(chapterId, sequence, randomIndex, lives = 3) {
+  const wave = yachtWaveFor(chapterId, sequence, randomIndex);
+  const encounter = wave[0];
+  if (!isYachtHazard(encounter?.kind)) return wave;
+  const redundant = !yachtEncounterPlan(chapterId).has(sequence);
+  const emergencyRespite = Number(lives) <= 1 &&
+    encounter.kind === "obstacle" && !encounter.footprint && sequence % 2 === 1;
+  if (!redundant && !emergencyRespite) return wave;
+  return [collection(sequence % 11 === 7 ? "cheese" : "treat", randomIndex(3))];
+}
+
+/** After a hazard, place the next regular reward on the safest natural route.
+ * For a moving rival, forecast the lane it will occupy when passing Rosie. */
+export function yachtFollowUpRewardLane(previousWave, captainLane = 1) {
+  if (!Array.isArray(previousWave)) return null;
+  const obstacle = previousWave.find(item => isYachtHazard(item?.kind));
+  if (!obstacle) return null;
+  const blocked = obstacle.driftTo !== undefined
+    ? [obstacle.driftTo] : yachtOccupiedLanes(obstacle);
+  const preferred = Math.max(0, Math.min(2, Number(captainLane) || 0));
+  const open = [0, 1, 2].filter(lane => !blocked.includes(lane));
+  if (!open.length) return null;
+  return open.sort((a, b) => Math.abs(a - preferred) - Math.abs(b - preferred))[0];
+}
