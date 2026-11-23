@@ -30,12 +30,12 @@ export default function RosieMusicPlayer({page}){
     // iOS explicitly requires play() to occur within a user gesture.
     document.addEventListener("pointerdown",unlock,true);
     document.addEventListener("keydown",unlock,true);
-    const handleScene=({scene,state,level})=>{
+    const handleScene=({scene,state,level,chapter})=>{
       if(pageRef.current!=="captain"||!["yacht","tunnel","cosmic"].includes(scene))return;
       if(state==="playing"||state==="start"||state==="menu"){
         sceneRef.current=scene;engine.setDuck(false);
         engine.setContextGain(state==="playing"?1:0.72);
-        const song=sceneMusicTrack(scene,state,{level});
+        const song=sceneMusicTrack(scene,state,{level,chapter});
         if(song)engine.setDesired(song);
       }else if(sceneRef.current===scene){
         if(state==="paused"){engine.setDuck(true);}

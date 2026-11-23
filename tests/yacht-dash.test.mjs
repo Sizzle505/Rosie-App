@@ -8,8 +8,11 @@ import {
   yachtThreatForecast,
   yachtWaveFor,
   yachtCatchStart,
-  yachtFollowUpRewardLane
+  yachtFollowUpRewardLane,
+  yachtSakuraDelivery,
+  YACHT_EXTRA_TREAT_MS
 } from "../src/yachtDashExpansion.js";
+import { ROSIE_MUSIC, sceneMusicTrack } from "../src/rosieMusicCatalog.js";
 
 const asset = (name) => `/yacht-dash/obstacles/${name}.webp`;
 
@@ -138,4 +141,50 @@ test("Driftwood master is present and is a valid RIFF WebP image", () => {
   assert.equal(bytes.toString("ascii", 0, 4), "RIFF");
   assert.equal(bytes.toString("ascii", 8, 12), "WEBP");
   assert.ok(bytes.length > 10000);
+});
+
+test("Expanded Yacht chapters release bonus treats 20 percent more frequently", () => {
+  assert.equal(YACHT_EXTRA_TREAT_MS, Math.round(8500 / 1.2));
+  assert.ok(8500 / YACHT_EXTRA_TREAT_MS > 1.199);
+  assert.ok(8500 / YACHT_EXTRA_TREAT_MS < 1.201);
+});
+
+test("Sakura's treat probability rises about 20 percent without accelerating obstacles", () => {
+  const n = 70;
+  const oldExpected = Array.from({length:n}, (_,step) => {
+    if(step < 3) return step === 1 ? 1 : 0;
+    if(step % 10 === 7 || step % 9 === 0) return 0;
+    if(step % 3 === 0) return 1;
+    return .33;
+  }).reduce((a,b)=>a+b,0);
+  let currentExpected = 0;
+  for(let step=0;step<n;step++){
+    for(let roll=0;roll<100;roll++){
+      const delivery=yachtSakuraDelivery(step, count => count===100 ? roll : 0);
+      if(delivery.kind==="treat") currentExpected+=.01;
+    }
+  }
+  assert.ok(currentExpected/oldExpected>1.19);
+  assert.ok(currentExpected/oldExpected<1.22);
+});
+
+test("Four Yacht chapter recordings are mapped by chapter index", () => {
+  const trackIds=["yacht-sakura","yacht-typhoon","yacht-moonlight","yacht-emperor"];
+  const titles=["Island of Bright Winds","Storm's Edge","Moonlit Rivalry","Imperial Championship"];
+  trackIds.forEach((id, chapter)=>{
+    assert.equal(sceneMusicTrack("yacht","playing",{chapter}),id);
+    assert.equal(ROSIE_MUSIC[id].title,titles[chapter]);
+    assert.equal(ROSIE_MUSIC[id].fallback,"yacht-voyage");
+    assert.equal(ROSIE_MUSIC[id].loopStartSeconds,5);
+  });
+  assert.equal(sceneMusicTrack("tunnel","playing",{}),"ember-tunnel");
+});
+
+test("Yacht Dash uses only an unframed sparkling cheese wedge", () => {
+  const game=readFileSync(new URL("../src/main.jsx", import.meta.url),"utf8");
+  const css=readFileSync(new URL("../src/yachtDashExpansion.css",import.meta.url),"utf8");
+  assert.match(game,/function YachtGoldenCheeseIcon/);
+  assert.match(game,/item.kind === "cheese" \? <YachtGoldenCheeseIcon \/>/);
+  assert.doesNotMatch(game,/item.kind === "cheese" && <small>GOLDEN<\/small>/);
+  assert.match(css,/\.captain-game-page \.sea-pickup-cheese[\s\S]*?background:transparent!important/);
 });

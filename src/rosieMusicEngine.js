@@ -19,6 +19,19 @@ export class RosieMusicEngine {
       !/Chrome|Chromium|CriOS|Edg|FxiOS/i.test(navigator.userAgent);
   }
   _notify(){this.onStatus({id:this.activeId||this.desired,unlocked:this.unlocked,enabled:this.enabled,error:this.error});}
+  _failedToLoad(id){
+    if(this.activeId!==id)return;
+    // Newly added chapter recordings fall back to the verified existing
+    // yacht track until their MP3s have been published to /rosie-music/.
+    const fallback=ROSIE_MUSIC[id]?.fallback;
+    if(fallback&&fallback!==id&&ROSIE_MUSIC[fallback]){
+      this.error=null;
+      this.setDesired(fallback);
+    }else{
+      this.error="Media error";
+      this._notify();
+    }
+  }
   _cancelFade(){++this.generation;if(this.fadeHandle)this.cancelFrame(this.fadeHandle);this.fadeHandle=0;}
   _gain(){return this.volume*this.contextGain*(this.ducked ? 0.2 : 1)*(this.fanfare ? 0.3 : 1);}
   setContextGain(value){
@@ -76,7 +89,7 @@ export class RosieMusicEngine {
       if(changed||!song.src.endsWith(musicUrl(id)))song.src=musicUrl(id);
       song.volume=changed?0:Math.max(0,Math.min(1,this._gain()));
       song.onended=()=>this._finishTrack(song,id,0);
-      song.onerror=()=>{if(this.activeId===id){this.error="Media error";this._notify();}};
+      song.onerror=()=>this._failedToLoad(id);
       const playback=song.play();
       // A single onFulfilled/onRejected avoids WebKit's AbortError
       // escaping as an unhandled promise during rapid route changes.
@@ -116,6 +129,7 @@ export class RosieMusicEngine {
     next.load?.();
     this.active=nextIndex;this.activeId=id;this.error=null;
     next.onended=()=>this._finishTrack(next,id,nextIndex);
+    next.onerror=()=>this._failedToLoad(id);
     // Call play synchronously while the originating click/touch is active.
     const play=next.play();
     play?.catch?.(e=>{
