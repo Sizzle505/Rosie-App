@@ -253,13 +253,17 @@ export function yachtPickupApproachAt(y) {
  * an approaching obstacle, or either a rival's current/future drift lane.
  * Later hazards are already separated in depth and need not block a delivery.
  */
-export function yachtBonusTreatLane(items, preferred) {
+export function yachtBonusTreatLane(items, preferred, captainLane = preferred) {
   const occupied = new Set();
   for (const item of items || []) {
     if (!Number.isFinite(item?.y) || item.y < -12 || item.y > 32) continue;
     if (isYachtHazard(item.kind)) {
       for (const lane of yachtOccupiedLanes(item)) occupied.add(lane);
-      if (item.driftTo !== undefined && !item.drifted) occupied.add(item.driftTo);
+      if (item.kind === "rival" && !item.drifted) {
+        occupied.add(yachtRivalAttackLane(item.lane, captainLane));
+      } else if (item.driftTo !== undefined && !item.drifted) {
+        occupied.add(item.driftTo);
+      }
     } else if (["ball", "treat", "cheese", "supply"].includes(item.kind)) {
       occupied.add(item.lane);
     }
@@ -325,13 +329,25 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
   return Math.round(base * factor + margin + swing);
 }
 
-/** Selective art scaling for props whose transparent masters read too small. */
+/**
+ * Per-art perspective adjustments. Keep the obstacle's logical footprint
+ * separate from its visual size so resizing never silently changes hit tests.
+ */
 export function yachtAssetScale(asset) {
   if (typeof asset !== "string") return 1;
-  if (asset.endsWith("/fishing-skiff.webp")) return 1.48 * 1.4;
-  if (asset.endsWith("/moonlight-race-buoy.webp") ||
-      asset.endsWith("/regatta-beacon.webp")) return 1.38 * 1.6;
-  return 1;
+  const scaleByAsset = {
+    "fishing-skiff.webp": 2.7, // Rowboat: larger than the previous 2.072x
+    "fan-raft.webp": 1.27,
+    "moonlight-race-buoy.webp": 2.76, // Crescent moon pillars
+    "regatta-beacon.webp": 2.76,
+    "barrel-raft.webp": 0.78,
+    "taiko-barge.webp": 0.80,
+    "kuroi-charge.webp": 1.35,
+    "cargo-crate.webp": 1.20,
+    "driftwood.webp": 1.08
+  };
+  const name = asset.slice(asset.lastIndexOf("/") + 1);
+  return scaleByAsset[name] ?? 1;
 }
 
 /** Make course gestures intentional: a long horizontal flick crosses two lanes,
@@ -346,14 +362,26 @@ export function yachtSwipeSteps(deltaX, deltaY, courseWidth) {
 
 /** Read the leading approaching hazard rather than flashing warnings for
  * distant obstacles. A rival's signaled drift is its upcoming occupied lane. */
-export function yachtThreatForecast(items) {
+/**
+ * Kuroi can turn one lane toward Rosie's CURRENT lane. When already lined up,
+ * he stays on course rather than inexplicably turning away.
+ */
+export function yachtRivalAttackLane(from, captainLane) {
+  const origin = Math.max(0, Math.min(2, Math.round(Number(from) || 0)));
+  const target = Math.max(0, Math.min(2, Math.round(Number(captainLane) || 0)));
+  return origin + Math.sign(target - origin);
+}
+
+export function yachtThreatForecast(items, captainLane = 1) {
   if (!Array.isArray(items)) return null;
   const imminent = items.filter(item => isYachtHazard(item?.kind) &&
     Number.isFinite(item.y) && item.y >= 18 && item.y <= 91)
     .sort((a, b) => b.y - a.y)[0];
   if (!imminent) return null;
-  const occupied = imminent.driftTo !== undefined && !imminent.drifted
-    ? [imminent.driftTo] : yachtOccupiedLanes(imminent);
+  const occupied = imminent.kind === "rival" && !imminent.drifted
+    ? [yachtRivalAttackLane(imminent.lane, captainLane)]
+    : imminent.driftTo !== undefined && !imminent.drifted
+      ? [imminent.driftTo] : yachtOccupiedLanes(imminent);
   const blocked = [0, 1, 2].filter(lane => occupied.includes(lane));
   return {
     kind: imminent.kind,
@@ -378,7 +406,8 @@ export function yachtCanTakeHit(graceRemainingMs, alreadyHitThisTick = false) {
 
 export function yachtCatchStart(item) {
   return item.footprint === "arch" ? 60 :
-    item.footprint === "wide" ? 65 : 77;
+    item.footprint === "wide" ? 65 :
+    item.kind === "rival" ? 74 : 77;
 }
 
 export function yachtOccupiedLanes(item) {
@@ -423,7 +452,7 @@ export function yachtWaveFor(chapterId, sequence, randomIndex) {
   if ((chapterId === "moonlight" && sequence % 9 === 4) ||
       (chapterId === "emperor" && sequence % 10 === 4)) {
     return [{
-      kind: "rival", lane, driftFrom: lane, driftTo: (lane + 1) % 3,
+      kind: "rival", lane,
       label: "Kuroi - rival yacht ramming attack",
       asset: art("kuroi", "kuroi-charge")
     }];
@@ -496,8 +525,10 @@ export function yachtFollowUpRewardLane(previousWave, captainLane = 1) {
   if (!Array.isArray(previousWave)) return null;
   const obstacle = previousWave.find(item => isYachtHazard(item?.kind));
   if (!obstacle) return null;
-  const blocked = obstacle.driftTo !== undefined
-    ? [obstacle.driftTo] : yachtOccupiedLanes(obstacle);
+  const blocked = obstacle.kind === "rival"
+    ? [yachtRivalAttackLane(obstacle.lane, captainLane)]
+    : obstacle.driftTo !== undefined
+      ? [obstacle.driftTo] : yachtOccupiedLanes(obstacle);
   const preferred = Math.max(0, Math.min(2, Number(captainLane) || 0));
   const open = [0, 1, 2].filter(lane => !blocked.includes(lane));
   if (!open.length) return null;
@@ -509,7 +540,7 @@ export function yachtFollowUpRewardLane(previousWave, captainLane = 1) {
  * Flip direction by the actual committed lane change, not animation timing. */
 export function yachtRivalSpriteFor(item) {
   if (item?.kind !== "rival") return item?.asset;
-  if (!item.drifted) return art("kuroi", "kuroi-charge");
+  if (!item.drifted || !item.turned) return art("kuroi", "kuroi-charge");
   const from = Number.isInteger(item.driftFrom) ? item.driftFrom : item.lane;
   return art("kuroi", item.driftTo < from ? "kuroi-turn-port" : "kuroi-turn-starboard");
 }
