@@ -312,3 +312,47 @@
     transition:none !important;
   }
 }
+
+
+/* Icon-only Zen controls: illustrated circular enamel medallions.
+   Preserve the existing 41px tap targets, pause/resume semantics and focus
+   outline while removing square button chrome underneath the SVG assets. */
+.zen-immersive .zen-session-controls .zen-icon-control,
+.zen-immersive .zen-session-controls .zen-end-control {
+  box-sizing:border-box !important;
+  width:41px !important;
+  height:41px !important;
+  min-width:41px !important;
+  min-height:41px !important;
+  flex:0 0 41px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:50% !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:inherit !important;
+  overflow:visible;
+  filter:drop-shadow(0 2px 4px rgba(15,9,27,.45));
+}
+.zen-immersive .zen-session-controls .zen-icon-control > img {
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100%;
+  object-fit:contain;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.zen-immersive .zen-session-controls .zen-icon-control:is(:hover,:focus-visible) {
+  background:transparent !important;
+  border:0 !important;
+  filter:drop-shadow(0 0 7px rgba(255,220,147,.72));
+}
+.zen-immersive .zen-session-controls .zen-icon-control:focus-visible {
+  outline:2px solid #ffe9b2 !important;
+  outline-offset:3px !important;
+}
+@media (prefers-reduced-motion:reduce) {
+  .zen-immersive .zen-session-controls .zen-icon-control {transition:none!important;}
+}

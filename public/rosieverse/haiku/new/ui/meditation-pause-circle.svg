@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+<title id="title">Pause meditation</title><defs>
+<radialGradient id="disc" cx="38%" cy="27%" r="88%">
+  <stop stop-color="#5e304b"/><stop offset=".32" stop-color="#461931"/><stop offset=".75" stop-color="#2b0e2e"/><stop offset="1" stop-color="#1d0d23"/>
+</radialGradient>
+<linearGradient id="gold" x1="0" y1="0" x2=".86" y2="1">
+  <stop stop-color="#a56514"/><stop offset=".16" stop-color="#fff0b6"/>
+  <stop offset=".32" stop-color="#d08a29"/><stop offset=".52" stop-color="#fff2bc"/>
+  <stop offset=".72" stop-color="#e6a63c"/><stop offset=".86" stop-color="#9e590f"/>
+  <stop offset="1" stop-color="#ffdf81"/>
+</linearGradient>
+<linearGradient id="symbol" x1=".2" y1=".1" x2=".9" y2="1">
+  <stop stop-color="#fff9de"/><stop offset=".20" stop-color="#ffe6a4"/>
+  <stop offset=".48" stop-color="#d99635"/><stop offset=".70" stop-color="#ffdb86"/>
+  <stop offset="1" stop-color="#a46a15"/>
+</linearGradient>
+<filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="blur"/>
+  <feOffset dy="5" in="blur" result="off"/>
+  <feComponentTransfer in="off" result="fade"><feFuncA type="linear" slope=".48"/></feComponentTransfer>
+  <feMerge><feMergeNode in="fade"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+</defs>
+<circle cx="256" cy="259" r="229" fill="#060911" opacity=".32"/>
+<circle cx="256" cy="248" r="229" fill="url(#gold)" filter="url(#shadow)"/>
+<circle cx="256" cy="248" r="217" fill="#431f35" stroke="#fff2bf" stroke-width="4"/>
+<circle cx="256" cy="248" r="204" fill="url(#disc)" stroke="#a66722" stroke-width="7"/>
+<circle cx="256" cy="248" r="194" fill="none" stroke="#f1b859" stroke-width="3" opacity=".91"/>
+<circle cx="256" cy="248" r="178" fill="none" stroke="#8e5323" stroke-width="2"/>
+<path d="M87 160 A181 181 0 0 1 226 71" fill="none" stroke="#fff4c9" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+<path d="M287 421 A181 181 0 0 0 426 327" fill="none" stroke="#ffe3a0" stroke-width="7" stroke-linecap="round" opacity=".7"/>
+<g fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".87">
+  <path d="M180 411 Q204 402 229 412 Q256 422 283 412 Q308 402 332 411"/>
+  <path d="M256 417 C244 393 242 379 256 364 C270 379 268 393 256 417Z"/>
+  <path d="M251 414 C224 410 212 401 209 383 C232 381 246 392 251 414Z"/>
+  <path d="M261 414 C288 410 300 401 303 383 C280 381 266 392 261 414Z"/>
+  </g>
+<g fill="url(#symbol)" stroke="#fff0bd" stroke-width="2" filter="url(#shadow)">
+  <rect x="186" y="157" width="56" height="186" rx="26"/>
+  <rect x="270" y="157" width="56" height="186" rx="26"/>
+</g><path d="M205 177 V316 M289 177 V316" stroke="#fff8d1" stroke-width="9" stroke-linecap="round" opacity=".5"/>
+</svg>
