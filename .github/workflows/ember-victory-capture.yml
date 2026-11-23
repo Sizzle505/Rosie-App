@@ -1,0 +1,40 @@
+name: Tunnel five-world victory screenshot review
+on:
+  push:
+    branches:
+      - work/ember-canonical-victory-preview-20261123
+    paths:
+      - src/EmberTunnelDrill.jsx
+      - src/emberCanonicalVictory.js
+      - src/ember-tunnel-drill.css
+      - scripts/capture_ember_victory_preview.mjs
+      - .github/workflows/ember-victory-capture.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Capture actual victory screens on iPhone and desktop
+        run: |
+          npm run preview -- --host 127.0.0.1 >/tmp/ember-victory.log 2>&1 &
+          sleep 4
+          node scripts/capture_ember_victory_preview.mjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tunnel-five-world-victory-captures
+          path: artifacts/ember-victory/
+          if-no-files-found: error
