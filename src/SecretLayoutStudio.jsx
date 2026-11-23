@@ -103,7 +103,8 @@ export default function SecretLayoutStudio({ page, unlocked, onNavigate, onHide 
   const [lasso, setLasso] = useState(false);
   const [pickAny, setPickAny] = useState(false);
   const [showGuides, setShowGuides] = useState(true);
-  const [snapOn, setSnapOn] = useState(true);
+  // Desktop drag should be pixel-precise by default; touch keeps magnetic snapping.
+  const [snapOn, setSnapOn] = useState(() => window.matchMedia('(pointer: coarse)').matches);
   const [scrollMode, setScrollMode] = useState('linked');
   const [spacingGap, setSpacingGap] = useState(14);
   const [spacingAxis, setSpacingAxis] = useState('x');
