@@ -38,7 +38,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtAssetScale, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -2280,7 +2280,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           if (isYachtHazard(item.kind) && !item.scoredPass && item.y >= 94) {
             item.scoredPass = true;
             if (yachtNearMiss(item, laneRef.current)) {
-              bonusPoints += 15;
+              bonusPoints += YACHT_CLEAN_PASS_POINTS;
               closePasses++;
             }
             if (item.kind === "rival") {
@@ -2346,11 +2346,23 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
       if (bonusPoints) {
         setScore((current) => current + bonusPoints);
-        if (closePasses) setNearMisses((current) => current + closePasses);
+        if (closePasses) {
+          setNearMisses((current) => current + closePasses);
+          // Clean sailing helps recharge the next boost. Active boosts cannot
+          // be refilled until they finish, preserving their six-second cap.
+          if (!boostRef.current) setTurbo((current) =>
+            Math.min(100, current + closePasses * YACHT_CLEAN_PASS_TURBO));
+        }
         if (rivalPasses) setRivalsPassed((current) => current + rivalPasses);
-        if (!scoreDelta && !lifeLoss) setMessage(rivalPasses
-          ? "Rival yacht overtaken. The regatta trophy is in sight."
-          : "Clean near miss. Excellent seamanship earns bonus points.");
+        if (!scoreDelta && !lifeLoss) {
+          setMessage(rivalPasses
+            ? "Rival yacht overtaken. Rosie's regatta lead grows."
+            : `CLEAN PASS: +${closePasses * YACHT_CLEAN_PASS_POINTS} points, +${closePasses * YACHT_CLEAN_PASS_TURBO} Turbo.`);
+          if (closePasses) {
+            pulse("ball");
+            captainTone("ball");
+          }
+        }
       }
 
       if (lifeLoss) {
@@ -2399,6 +2411,13 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           event.preventDefault();
           toggleYachtPause();
         }
+        return;
+      }
+      // Direct lane keys give desktop and Tesla keyboard players the same
+      // exact targeting as the clickable three-lane radar.
+      if (running && /^[123]$/.test(event.key)) {
+        event.preventDefault();
+        if (!event.repeat) steerTo(Number(event.key) - 1);
         return;
       }
       if (event.key === "ArrowLeft" && running) {
@@ -2511,16 +2530,21 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         <div className="yacht-steering-options" role="group" aria-label="Yacht Dash steering and upcoming hazards">
           <span>STEERING</span>
           <div className={"yacht-lane-forecast" + (threatForecast ? " has-threat" : "")}
-            role="img"
-            aria-label={threatForecast
-              ? "Hazard ahead. Open lanes: " + threatForecast.open.map(index => ["port", "center", "starboard"][index]).join(", ")
-              : "No immediate hazards ahead"}>
+            role="group" aria-label="Select lane. Red indicates a coming hazard.">
             <small>{threatForecast ? "OPEN" : "LANES"}</small>
-            {[0, 1, 2].map(index =>
-              <i key={index} className={(threatForecast?.blocked.includes(index) ? " is-blocked" : "") +
-                (lane === index ? " is-current" : "")} aria-hidden="true">
-                {["P", "C", "S"][index]}
-              </i>)}
+            {[0, 1, 2].map(index => {
+              const blocked = Boolean(threatForecast?.blocked.includes(index));
+              const name = ["port", "center", "starboard"][index];
+              return <button key={index} type="button"
+                className={(blocked ? " is-blocked" : "") +
+                  (lane === index ? " is-current" : "")}
+                aria-label={`Steer to ${name} lane${blocked ? " - hazard ahead" : ""}`}
+                aria-pressed={lane === index}
+                disabled={!running || paused}
+                onClick={() => steerTo(index)}>
+                  {["P", "C", "S"][index]}
+                </button>;
+            })}
           </div>
           <button type="button" className="captain-steering-toggle"
             aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
@@ -2556,6 +2580,13 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           <CaptainLevelScenery scene={scenery} underway={running && !paused} boost={boost} />
           <CaptainLotusGust underway={running && !paused} />
           <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />
+          {running && threatForecast?.urgent && !paused && (
+            <div className="yacht-course-lane-cues" aria-hidden="true">
+              {[0, 1, 2].map(index =>
+                <span key={index}
+                  className={threatForecast.blocked.includes(index) ? " is-blocked" : " is-open"} />)}
+            </div>
+          )}
           <div className="captain-yacht-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
             <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
               aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
