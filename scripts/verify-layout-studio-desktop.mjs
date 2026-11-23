@@ -43,7 +43,7 @@ try {
  await lantern.waitFor({state:'attached'});
  await page.getByRole('button',{name:/Choose elements/}).click();
  await find('Zen garden lantern').check();
- assert.equal(await page.locator('.rle-outline[data-target-id="zen-lantern"]').count(),1);
+ await page.locator('.rle-outline[data-target-id="zen-lantern"]').waitFor({state:'visible',timeout:10000});
  await page.keyboard.press('ArrowRight');
  const firstX=await lantern.evaluate(el=>el.style.translate);
  assert.match(firstX,/1px/,'Arrow key should nudge despite checkbox having focus');
@@ -53,6 +53,18 @@ try {
  await page.keyboard.press('Control+z');
  const undoY=await lantern.evaluate(el=>el.style.translate);
  assert.ok(!undoY.includes('10px'),'Ctrl+Z must undo the last keyboard move');
+ await page.getByRole('button',{name:'Minimize Layout Studio'}).click();
+ const lanternBeforeDrag=await lantern.boundingBox();
+ const lanternFrame=await page.locator('.rle-outline[data-target-id="zen-lantern"]').boundingBox();
+ const mx=lanternFrame.x+Math.min(25,lanternFrame.width/3);
+ const my=lanternFrame.y+Math.min(30,lanternFrame.height/3);
+ await page.mouse.move(mx,my);await page.mouse.down();
+ await page.mouse.move(mx+16,my+9,{steps:5});await page.mouse.up();
+ const lanternAfterDrag=await lantern.boundingBox();
+ assert.ok(Math.abs(lanternAfterDrag.x-lanternBeforeDrag.x-16)<3,'Desktop mouse drag must move the lantern');
+ await page.getByRole('button',{name:'Open full Layout Studio'}).click();
+ console.log('PASS: precision mouse drag of selected landing lantern');
+
  await page.getByRole('spinbutton',{name:'Horizontal position X'}).fill('28');
  const numberX=await lantern.evaluate(el=>el.style.translate);
  assert.match(numberX,/28px/,'Exact X/Y controls apply to selected lantern');
