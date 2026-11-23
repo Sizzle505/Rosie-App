@@ -296,8 +296,8 @@ export function yachtSakuraDelivery(sequence, randomIndex) {
  */
 export function yachtObjectSpeed(chapterId, kind, randomIndex) {
   const isDanger = isYachtHazard(kind);
-  const base = isDanger ? 1.98 : chapterId === "sakura" ? 2.04 : 2.08;
-  return base + Math.max(0, Math.min(4, randomIndex(5))) * .035;
+  const base = isDanger ? 1.93 : chapterId === "sakura" ? 2.09 : 2.13;
+  return base + Math.max(0, Math.min(4, randomIndex(5))) * .025;
 }
 
 /**
