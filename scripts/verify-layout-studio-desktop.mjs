@@ -67,6 +67,38 @@ try {
  await page.getByRole('button',{name:'Open full Layout Studio'}).click();
  console.log('PASS: precision mouse drag of selected landing lantern');
 
+ // Core promise: the artwork itself drags while still in marquee-selection mode.
+ await page.getByRole('button',{name:'Marquee select'}).click();
+ await page.getByRole('button',{name:'Minimize Layout Studio'}).click();
+ const outlined=page.locator('.rle-outline[data-target-id="zen-lantern"]');
+ await outlined.evaluate(el=>{el.style.pointerEvents='none'});
+ const naturalStart=await lantern.boundingBox();
+ const fx=naturalStart.x+naturalStart.width*.45,fy=naturalStart.y+naturalStart.height*.52;
+ await page.mouse.move(fx,fy);
+ await page.mouse.down();
+ await page.mouse.move(fx+24,fy+14,{steps:8});
+ await page.mouse.up();
+ const naturalEnd=await lantern.boundingBox();
+ assert.ok(Math.abs(naturalEnd.x-naturalStart.x-24)<4,'Drag on actual selected artwork must work even while marquee mode is enabled');
+ assert.ok(Math.abs(naturalEnd.y-naturalStart.y-14)<4,'Selected artwork should follow the mouse vertically');
+ await page.getByRole('button',{name:'Open full Layout Studio'}).click();
+ await page.getByRole('button',{name:'Marquee ON'}).click();
+ console.log('PASS: drag selected artwork directly despite marquee mode and disabled outline');
+
+ // An explicit drag handle in the open editor is an alternate direct gesture.
+ const pad=page.getByRole('button',{name:'Drag selected elements'});
+ await pad.waitFor({state:'visible'});
+ const padBox=await pad.boundingBox();
+ const padStart=await lantern.boundingBox();
+ const px=padBox.x+Math.min(50,padBox.width/3),py=padBox.y+padBox.height/2;
+ await page.mouse.move(px,py);await page.mouse.down();
+ await page.mouse.move(px+35,py+18,{steps:7});await page.mouse.up();
+ const padEnd=await lantern.boundingBox();
+ assert.ok(Math.abs(padEnd.x-padStart.x-35)<4,'Dragging selected-group grip must move the selected artwork');
+ assert.ok(Math.abs(padEnd.y-padStart.y-18)<4,'Dragging the grip must preserve vertical motion');
+ console.log('PASS: editor drag-selected handle moves actual artwork while panel is open');
+
+
  await page.getByRole('spinbutton',{name:'Horizontal position X'}).fill('28');
  const numberX=await lantern.evaluate(el=>el.style.translate);
  assert.match(numberX,/28px/,'Exact X/Y controls apply to selected lantern');
