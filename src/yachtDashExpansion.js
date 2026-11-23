@@ -291,7 +291,7 @@ export function yachtSakuraDelivery(sequence, randomIndex) {
   if (step % 9 === 0) return { kind: "cheese", lane };
   if (step % 3 === 0) return { kind: "treat", lane };
   const roll = randomIndex(100);
-  return { kind: roll < 44 ? "ball" : roll < 91 ? "treat" : "cheese", lane }; // ~20% more Sakura treats without increasing buoy spawns.
+  return { kind: roll < 43 ? "ball" : roll < 91 ? "treat" : "cheese", lane }; // ~20% more Sakura treats without increasing buoy spawns.
 }
 
 /**
