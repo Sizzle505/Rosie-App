@@ -165,7 +165,7 @@
   if(!desktop)return {cols:11,rows:15};
   // Large desktops use an Art Deco command console beside the full-height maze.
   // The 17×11 field fits the resulting tall play area without wasted space.
-  if(innerWidth>=1500&&innerHeight>=740)return {cols:17,rows:11};
+  if(innerWidth>=1100&&innerHeight>=650&&matchMedia('(hover:hover) and (pointer:fine)').matches)return {cols:17,rows:11};
   // Laptops retain the wide, compact masthead format.
   return {cols:innerWidth>=1450?27:innerWidth>=1120?23:17,rows:11};
  }
@@ -290,7 +290,7 @@
    if(!root||!label||!bar||!e)continue;
    const down=!!e.killed||e.health<=0;
    root.classList.toggle('eliminated',down);
-   root.setAttribute('aria-label',e.name+': '+(down?'defeated':Math.max(0,e.health)+' of '+e.hp+' health')); 
+   root.setAttribute('aria-label',e.name+': '+(down?'defeated':Math.max(0,e.health)+' of '+e.hp+' health'));
    root.classList.toggle('damaged',!down&&e.health<e.hp);
    const hp=Math.max(0,e.health);
    label.textContent=down?'DEFEATED':hp+' / '+e.hp+' HP';
@@ -1151,7 +1151,7 @@
   $('rocket').addEventListener('click',()=>fire('rocket'));
   $('boost').addEventListener('click',activateBoost);
   // Move the original controls, keeping a single set of event handlers and IDs.
-  const desktopConsole=matchMedia('(min-width:1500px) and (min-height:740px) and (orientation:landscape)');
+  const desktopConsole=matchMedia('(min-width:1100px) and (min-height:650px) and (orientation:landscape) and (hover:hover) and (pointer:fine)');
   function placeMissionActions(){
    const destination=desktopConsole.matches?$('desktop-mission-actions'):document.querySelector('.cosmic-banner-top');
    destination.append($('pause-top'),$('retry-top'));
