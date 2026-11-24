@@ -143,7 +143,7 @@ function cinderclaw(c,t){
 export function expeditionBossFrame(b,p=bossPresentation(b)){
  if(b.kind==="cinderclaw"){
    if(p.phase==="defeated")return 11;
-   if(p.phase==="recovery")return 11;
+   if(p.phase==="recovery")return b.hitFlash>0?11:0;
    if(p.attack==="burrow")return p.phase==="warning"?8:9;
    if(p.phase==="warning")return 5;
    if(p.phase==="active")return 6;
@@ -151,14 +151,14 @@ export function expeditionBossFrame(b,p=bossPresentation(b)){
  }
  if(b.kind==="copperjack"){
    if(p.phase==="defeated")return 11;
-   if(p.phase==="recovery")return b.hitThisRecovery?9:8;
+   if(p.phase==="recovery")return b.hitFlash>0?9:0;
    if(p.phase==="warning")return p.attack==="spark-bolt"?4:5;
    if(p.phase==="active")return p.attack==="spark-bolt"?7:6;
    return Math.floor(b.elapsed*4)%2;
  }
  if(b.kind==="mole-king"){
    if(p.phase==="defeated")return 10;
-   if(p.phase==="recovery")return b.hitThisRecovery?9:8;
+   if(p.phase==="recovery")return b.hitFlash>0?8:0;
    if(p.phase==="warning")return p.attack==="earth-burst"?6:4;
    if(p.phase==="active")return p.attack==="earth-burst"?7:5;
    return Math.floor(b.elapsed*3)%3;
