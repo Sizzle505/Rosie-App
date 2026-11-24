@@ -3,9 +3,11 @@
 // Time labels are estimated elapsed ranges; indicated advance prep and chilling are explicit.
 // Original identities and yields retained; ingredient ratios and methods selectively corrected.
 // Benchmark references and change rationale: docs/recipe-validation-2026-11-24.md.
+import { NEW_RECIPES } from "./rosieRecipesExpansion.js";
+export { PROVISIONAL_RECIPES } from "./rosieRecipesExpansion.js";
 export const COOKBOOK = {
   "collectionTitle": "Rosie’s Recipes",
-  "subtitle": "The Founding Cookbook - 25 Recipes for Rosie’s Favorite Humans",
+  "subtitle": "The Royal Cookbook - 34 Recipes for Rosie’s Favorite Humans",
   "humanOnly": "These recipes are for humans, not for sharing with Rosie.",
   "labels": {
     "Breakfast": "Rise & Wag",
@@ -534,9 +536,10 @@ const rows = [
 ];
 const normalizeIngredients = (source) => source.split(/[,;]/g).map(value => value.trim()).filter(Boolean);
 const normalizeSteps = (source) => Array.isArray(source) ? source.map(step => step.trim()).filter(Boolean) : source.split(/\.\s+(?=[A-ZÀ-Ÿ])/u).map(step => step.trim()).filter(Boolean);
-export const RECIPE_CATALOG = rows.map(([category,title,subtitle,description,difficulty,totalMinutes,servings,servingsLabel,ingredientsText,methodText,note,timeLabel]) => ({
+const foundingRecipes = rows.map(([category,title,subtitle,description,difficulty,totalMinutes,servings,servingsLabel,ingredientsText,methodText,note,timeLabel]) => ({
  id:title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
  category, title, subtitle, description, difficulty, totalMinutes, timeLabel: timeLabel || `${totalMinutes} min`,
  servings, servingsLabel, ingredientsText, methodText: Array.isArray(methodText) ? methodText.join(" ") : methodText, note, ingredients: normalizeIngredients(ingredientsText), steps: normalizeSteps(methodText)
 }));
+export const RECIPE_CATALOG = [...foundingRecipes, ...NEW_RECIPES];
 export const RECIPE_CATEGORIES = ["All","Breakfast","Small Bites","Main Courses","Desserts","Favorites"];

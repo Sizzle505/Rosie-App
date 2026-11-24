@@ -6,6 +6,10 @@ import "./RosieRecipesAssetLayout.css";
 const ROOT = "/rosieverse/recipes/";
 const FAVORITES_KEY = "rosie-recipes-favorites-v1";
 const recipeArt = (recipe) => `${ROOT}dishes/${recipe.id}.webp`;
+function RecipeArtwork({ recipe, detail = false }) {
+  if (recipe.artPending) return <span className="recipes-art-pending"><span>{detail ? "Rosie’s Royal Cookbook" : "From Rosie’s Kitchen"}</span><strong>{recipe.subtitle}</strong></span>;
+  return <img src={recipeArt(recipe)} alt="" loading={detail ? undefined : "lazy"} draggable="false" />;
+}
 function shuffleRecipes(recipes) {
   const shuffled = [...recipes];
   for (let i = shuffled.length - 1; i > 0; i -= 1) {
@@ -28,7 +32,7 @@ function RecipeCard({ recipe, favorite, onOpen, onFavorite }) {
     <button type="button" className={`recipes-card recipes-card--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} onClick={() => onOpen(recipe.id)}
       aria-label={`View ${recipe.title}`}>
       <span className={`recipes-card-image recipes-card-image--${recipe.category.toLowerCase().replace(/[^a-z]+/g,"-")}`} aria-hidden="true">
-        <img src={recipeArt(recipe)} alt="" loading="lazy" draggable="false" />
+        <RecipeArtwork recipe={recipe} />
       </span>
       <span className="recipes-card-copy">
         <strong>{recipe.title}</strong>
@@ -56,7 +60,7 @@ function RecipeDetail({ recipe, favorite, onBack, onFavorite }) {
         aria-pressed={favorite}>{favorite ? "♥ Saved" : "♡ Save"}</button>
     </div>
     <section className="recipes-detail-cover" aria-label={`${recipe.title} overview`}>
-      <div className="recipes-detail-photo"><img src={recipeArt(recipe)} alt="" /></div>
+      <div className="recipes-detail-photo"><RecipeArtwork recipe={recipe} detail /></div>
       <div className="recipes-detail-intro">
         <p className="recipes-detail-category">{COOKBOOK.labels[recipe.category] || recipe.category}</p>
         <h2>{recipe.title}</h2>
