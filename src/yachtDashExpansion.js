@@ -1,8 +1,16 @@
 import { CAPTAIN_LEVELS } from "./captainLevels.js";
 
 const art = (chapter, file) => "/yacht-dash/" + chapter + "/" + file + ".webp";
-const SCENE_SECONDS = 15;
 export const YACHT_RUN_SECONDS = 75;
+export function yachtRunSeconds(chapterIndex) {
+  return Number(chapterIndex) === 3 ? YACHT_RUN_SECONDS : YACHT_RUN_SECONDS * .9;
+}
+export function yachtSceneSeconds(chapterIndex) {
+  return yachtRunSeconds(chapterIndex) / 5;
+}
+export function yachtSceneIndex(chapterIndex, elapsed) {
+  return Math.min(4, Math.max(0, Math.floor(Math.max(0, elapsed) / yachtSceneSeconds(chapterIndex))));
+}
 export const YACHT_EXTRA_TREAT_MS = Math.round(8500 / 1.20); // 20% more frequent bonus treats, with obstacle cadence unchanged.
 export const YACHT_CLEAN_PASS_POINTS = 25;
 export const YACHT_CLEAN_PASS_TURBO = 8;
@@ -71,7 +79,7 @@ export const YACHT_CHAPTERS = Object.freeze([
 
 export function yachtSceneFor(chapterIndex, elapsed, originalSceneOrder = [0,1,2,3,4]) {
   const chapter = YACHT_CHAPTERS[Math.max(0, Math.min(YACHT_CHAPTERS.length - 1, chapterIndex))];
-  const index = Math.min(4, Math.max(0, Math.floor(Math.max(0,elapsed) / SCENE_SECONDS)));
+  const index = yachtSceneIndex(chapterIndex, elapsed);
   const fallback = CAPTAIN_LEVELS[originalSceneOrder[index] ?? index];
   if (chapter.id === "sakura") {
     return { ...fallback, chapterId: "sakura" };
@@ -204,9 +212,9 @@ const SMALL_HAZARDS = Object.freeze({
   emperor: ["storm-buoy", "regatta-beacon", "fallen-stone-lantern"]
 });
 const WIDE_HAZARDS = Object.freeze({
-  typhoon: ["reef-rocks", "driftwood"],
-  moonlight: ["lantern-raft", "taiko-barge"],
-  emperor: ["reef-rocks", "driftwood", "barrel-raft"]
+  typhoon: ["reef-rocks", "driftwood", "driftwood"],
+  moonlight: ["lantern-raft", "taiko-barge", "driftwood"],
+  emperor: ["reef-rocks", "driftwood", "barrel-raft", "driftwood"]
 });
 const collection = (kind, lane) => ({ kind, lane });
 const obstacle = (asset, lane, options = {}) => ({
@@ -242,10 +250,16 @@ export function yachtApproachAt(y) {
   };
 }
 
-/** In the three expanded chapters, collectibles retain a fixed visual size.
- * Their vertical position still communicates travel; hazards retain depth scaling. */
+/** Pickups now approach along the surface of the water like obstacles, with
+ * a restrained perspective change so small treats remain readable. */
 export function yachtPickupApproachAt(y) {
-  return { ...yachtApproachAt(y), scale: 1, opacity: 1 };
+  const perspective = yachtApproachAt(y);
+  const t = Math.max(0, Math.min(1, (Number(y) + 12) / 120));
+  return { ...perspective, scale: .70 + .30 * t, opacity: .87 + .13 * t };
+}
+export function yachtMovementMultiplier(kind) {
+  return kind === "supply" ? 1.25 :
+    ["ball", "treat", "cheese"].includes(kind) ? 1.10 : 1;
 }
 
 /**
@@ -287,7 +301,7 @@ export function yachtSakuraDelivery(sequence, randomIndex) {
     kind: ["ball", "treat", "cheese"][step], lane: 1
   };
   const lane = randomIndex(3);
-  if (step % 10 === 7) return { kind: "buoy", lane };
+  if (step % 10 === 7 || (step % 40 === 19 && step % 3 !== 0 && step % 9 !== 0)) return { kind: "buoy", lane };
   if (step % 9 === 0) return { kind: "cheese", lane };
   if (step % 3 === 0) return { kind: "treat", lane };
   const roll = randomIndex(100);
@@ -315,7 +329,7 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
   if (chapterId === "sakura") {
     const base = phaseKey === "harbor" ? 1160 :
       phaseKey === "riviera" ? 1050 : 950;
-    return base + swing;
+    return Math.round((base + swing) * .95);
   }
   const stage = YACHT_CHAPTERS.find(chapter => chapter.id === chapterId);
   const base = stage?.cadence ?? 2200;
@@ -326,7 +340,7 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
     encounter?.footprint === "wide" ? 280 :
     encounter?.kind === "rival" ? 190 :
     isYachtHazard(encounter?.kind) ? 100 : -95;
-  return Math.round(base * factor + margin + swing);
+  return Math.round((base * factor + margin + swing) * .94);
 }
 
 /**
@@ -340,7 +354,7 @@ export function yachtAssetScale(asset) {
     "fan-raft.webp": 1.778, // Fan +40%
     "moonlight-race-buoy.webp": 3.312, // Crescent pillars +20%
     "regatta-beacon.webp": 3.312,
-    "barrel-raft.webp": 0.585, // Barrel -25%
+    "barrel-raft.webp": 0.5265, // Barrel another 10% smaller
     "taiko-barge.webp": 0.64, // Drum -20% (latest requested adjustment)
     "kuroi-charge.webp": 2.673, // Additional 20%; keep all turn frames consistent
     "kuroi-turn-port.webp": 2.673,
@@ -473,6 +487,12 @@ export function yachtWaveFor(chapterId, sequence, randomIndex) {
     return [obstacle(choices[Math.floor(sequence / 7) % choices.length], lane)];
   }
 
+  // A few extra low-priority debris encounters; the director still protects
+  // the gap between hazards and prioritizes gates and Kuroi.
+  if (sequence % 13 === 9) {
+    const choices = SMALL_HAZARDS[chapterId];
+    return [obstacle(choices[Math.floor(sequence / 13) % choices.length], lane)];
+  }
   // One reward per wave, with breathing room between large obstacles.
   return [collection(cargo, sequence % 4 === 0 ? safeLane : lane)];
 }
