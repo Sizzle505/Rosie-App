@@ -1,7 +1,8 @@
 // Rosie’s Recipes — source transcription of all 25 original recipes supplied by the user.
 // Times are total/advertised durations, not unverified prep vs cook estimates.
 // The final two desserts separately require chilling after active preparation.
-// Ingredient quantities and recipe prose preserved as supplied.
+// Original ingredient quantities, titles, notes and yields preserved; methods edited for reproducible preparation.
+// Cooking times within steps are estimates; use doneness cues and safe internal temperatures.
 export const COOKBOOK = {
   "collectionTitle": "Rosie’s Recipes",
   "subtitle": "The Founding Cookbook - 25 Recipes for Rosie’s Favorite Humans",
@@ -24,7 +25,13 @@ const rows = [
     2,
     "2 servings",
     "2 brioche buns, 4 slices thick-cut bacon, 2 eggs, 2 slices sharp cheddar, 1 tbsp mayonnaise, 1 tsp Dijon mustard, 1 handful arugula, 1 tsp butter, salt and pepper",
-    "Cook bacon until crisp. Mix mayonnaise with Dijon. Split and toast buns. Fry eggs in butter until whites are set, adding cheddar at the end to melt. Spread Dijon mayo on buns and assemble with bacon, eggs, and arugula. Serve immediately.",
+    [
+      "Cook the bacon. Place the 4 slices in a cold skillet in a single layer. Set over medium heat and cook for 8–12 minutes, turning occasionally, until crisp. Transfer to a paper-towel-lined plate; pour off excess fat, leaving a thin film if using it to toast the buns.",
+      "Make the sauce. Stir the mayonnaise and Dijon together in a small bowl. Set aside.",
+      "Toast the buns. Split both brioche buns and toast cut-side down in the skillet over medium heat for 1–2 minutes until golden. Transfer to plates.",
+      "Fry the eggs. Lower the heat to medium-low and melt the butter in the skillet. Crack in both eggs, season with salt and pepper, and cook for 3–5 minutes; flip if needed to set both whites and yolks. Place a cheddar slice on each egg for the last minute and cover to melt.",
+      "Assemble. Divide the Dijon mayo among the cut sides of the buns. Layer each bottom bun with 2 bacon slices, 1 cheese-topped egg and half the arugula. Close the sandwiches and serve immediately."
+    ],
     "Toast the buns cut-side down in a little bacon fat for restaurant-quality flavor."
   ],
   [
@@ -37,7 +44,13 @@ const rows = [
     4,
     "4 servings",
     "8 thick brioche slices, 3 eggs, ¾ cup whole milk, 1 tsp vanilla, zest of 1 orange, 1 tbsp sugar, 2 tbsp butter, 1½ cups mixed berries, 1 tbsp honey, 2 tbsp orange juice",
-    "Whisk eggs, milk, vanilla, orange zest, and sugar. Briefly soak brioche on both sides. Cook in a buttered skillet over medium heat, approximately 3 minutes per side, until golden and cooked through. Separately simmer berries, honey, and orange juice for 4-5 minutes. Spoon over toast.",
+    [
+      "Make the berry topping. Combine the berries, honey and orange juice in a small saucepan over medium heat. Bring to a gentle simmer, then cook for 4–5 minutes, stirring occasionally, until the berries soften and release their juices. Keep warm on low heat.",
+      "Prepare the custard. In a shallow dish, whisk the eggs, milk, vanilla, orange zest and sugar until evenly combined and no streaks of egg remain.",
+      "Heat the skillet. Set a large nonstick skillet or griddle over medium heat. Melt a portion of the 2 tablespoons of butter; reserve the rest for subsequent batches.",
+      "Dip and cook. Dip each brioche slice in the custard for about 5–10 seconds per side, until moistened but not falling apart. Let excess drip off. Cook in a single layer for about 3 minutes per side, until golden and the center is set with no wet custard. Reduce the heat if the outside browns too quickly.",
+      "Repeat with the remaining brioche and butter. Serve 2 slices per person with the warm berry mixture and its juices spooned over the top."
+    ],
     "Slightly stale brioche absorbs custard without falling apart."
   ],
   [
@@ -50,7 +63,14 @@ const rows = [
     4,
     "4 servings",
     "1 lb Yukon Gold potatoes, 1 red bell pepper, ½ yellow onion, 2 cups baby spinach, 4 eggs, 2 tbsp olive oil, 1 tsp smoked paprika, salt, pepper, chopped scallions",
-    "Dice potatoes into ½-inch pieces and boil for 6-7 minutes; drain thoroughly. Sauté potatoes in olive oil until crisp, about 10 minutes. Add diced pepper, onion, paprika, salt, and pepper; cook until tender. Wilt in spinach. Make four wells, crack an egg into each, cover and cook until egg whites set. Garnish with scallions.",
+    [
+      "Prepare the vegetables. Cut the potatoes into ½-inch cubes, dice the bell pepper and onion, and chop the scallions.",
+      "Parboil the potatoes. Place them in a saucepan, cover with cold salted water, bring to a boil and cook for 6–7 minutes, until the edges soften but the centers still offer slight resistance. Drain thoroughly and let steam-dry for 2 minutes.",
+      "Crisp the potatoes. Heat the olive oil in a wide skillet over medium-high heat. Add the potatoes in a single layer and cook for about 10 minutes, turning every few minutes, until golden on several sides.",
+      "Add the pepper, onion, smoked paprika, salt and pepper. Reduce to medium heat and cook for 5–7 minutes, stirring occasionally, until the vegetables soften. Stir in the spinach and cook 1–2 minutes, until wilted.",
+      "Make four wells in the hash and crack one egg into each. Reduce to medium-low, cover and cook for 5–8 minutes, or longer if needed, until the whites and yolks are firm.",
+      "Remove from the heat, scatter with scallions and serve directly from the skillet."
+    ],
     "Don’t overcrowd the pan - potatoes need contact with the skillet to develop a proper golden crust."
   ],
   [
@@ -63,7 +83,14 @@ const rows = [
     4,
     "4 servings",
     "1 cup all-purpose flour, 1 tsp baking powder, ½ tsp baking soda, 2 tbsp sugar, ¼ tsp salt, 1 egg, ¾ cup milk, ½ cup whole-milk ricotta, zest and 1 tbsp juice of 1 lemon, ¾ cup blueberries, butter for cooking",
-    "Mix dry ingredients in one bowl and wet ingredients in another. Combine gently, then fold in blueberries. Cook ¼-cup portions on a lightly buttered skillet over medium-low heat, flipping when edges set and bubbles form. Serve with maple syrup.",
+    [
+      "Combine the dry ingredients. Whisk the flour, baking powder, baking soda, sugar and salt in a medium bowl.",
+      "Combine the wet ingredients. In a second bowl, whisk the egg, milk, ricotta, lemon zest and 1 tablespoon lemon juice until mostly smooth.",
+      "Make the batter. Pour the wet mixture into the dry ingredients and stir just until no dry flour remains. Leave small lumps; gently fold in the blueberries. Do not beat the batter smooth.",
+      "Heat a skillet or griddle over medium-low heat and lightly coat with butter. Test with a small drop of batter: it should sizzle gently without browning immediately.",
+      "Cook in batches. Pour ¼ cup batter per pancake, leaving room between them. Cook for 2–3 minutes, until the edges look set and bubbles form on the surface. Flip once and cook for another 1–2 minutes, until golden and cooked through. Lower the heat if the outside browns before the middle sets.",
+      "Repeat with the remaining batter, adding a little butter between batches as needed. Serve warm with maple syrup, if desired."
+    ],
     "A slightly lumpy batter gives fluffier pancakes than one beaten completely smooth."
   ],
   [
@@ -76,7 +103,13 @@ const rows = [
     4,
     "4 servings",
     "4 eggs, 1 can (28 oz) crushed tomatoes, 1 red bell pepper, 1 small onion, 3 garlic cloves, 2 tbsp olive oil, 1 tsp cumin, 1 tsp smoked paprika, ¼ tsp red pepper flakes, ⅓ cup crumbled feta, parsley, salt, crusty bread",
-    "Sauté diced onion and pepper in oil until softened. Add minced garlic and spices; cook 30 seconds. Stir in tomatoes and simmer 12-15 minutes until thickened. Make four wells, add eggs, cover, and gently simmer 5-8 minutes or until eggs reach preferred doneness. Finish with feta and parsley. Serve with crusty bread.",
+    [
+      "Prepare the vegetables. Dice the onion and bell pepper into small pieces and mince the garlic.",
+      "Build the sauce. Heat the olive oil in a wide skillet with a lid over medium heat. Add the onion and pepper and cook for 6–8 minutes, stirring occasionally, until softened. Add the garlic, cumin, paprika and pepper flakes; stir for 30 seconds until fragrant.",
+      "Simmer. Add the crushed tomatoes and a pinch of salt. Bring to a gentle simmer, reduce to medium-low and cook uncovered for 12–15 minutes, stirring occasionally, until thick enough to hold a shallow well.",
+      "Cook the eggs. Make four wells in the sauce with the back of a spoon and crack an egg into each. Cover and simmer gently for 5–8 minutes, checking toward the end; continue until the whites and yolks are firm. Keep the sauce at a gentle bubble so the eggs cook evenly.",
+      "Finish. Remove from the heat, scatter with the feta and chopped parsley, and serve with crusty bread for dipping."
+    ],
     "A wide skillet prevents the eggs from crowding each other and makes the dish beautiful enough to serve straight from the stove."
   ],
   [
@@ -89,7 +122,13 @@ const rows = [
     6,
     "6 servings",
     "8 oz feta, ½ cup plain Greek yogurt, 1 tbsp lemon juice, 1 tbsp olive oil, 2 tbsp honey, ¼ tsp chili flakes, 2 tbsp chopped pistachios, warm pita",
-    "Blend feta, yogurt, lemon juice, and olive oil until smooth and fluffy. Warm honey with chili flakes for 30 seconds. Spread feta in a shallow bowl, drizzle with honey, and scatter pistachios over the top. Serve with warm pita.",
+    [
+      "Drain the feta well and break it into small pieces. Add it to a food processor or blender with the Greek yogurt, lemon juice and olive oil.",
+      "Blend for 1–2 minutes, stopping once or twice to scrape down the bowl, until smooth and fluffy. If the mixture is too thick to blend, pause and scrape it down rather than adding more oil.",
+      "Make the hot honey. Combine the honey and chili flakes in a microwave-safe bowl. Warm in short 10-second bursts, up to about 30 seconds total, just until fluid; stir and let the chili steep briefly.",
+      "Spread the whipped feta in a shallow serving bowl, making swirls with the back of a spoon. Drizzle over the warm honey and scatter with the chopped pistachios.",
+      "Warm the pita briefly in a dry skillet or oven and serve alongside the dip."
+    ],
     "Use block feta packed in brine rather than pre-crumbled feta for a creamier texture."
   ],
   [
@@ -102,7 +141,14 @@ const rows = [
     4,
     "4 servings",
     "1 can (28 oz) whole peeled tomatoes, 1 small onion, 3 garlic cloves, 1 cup vegetable stock, ¼ cup heavy cream, ¼ cup fresh basil, 2 tbsp olive oil, 4 slices sourdough, 2 slices cheddar, butter, salt and pepper",
-    "Sauté chopped onion in olive oil until soft. Add garlic, tomatoes, and stock; simmer 20 minutes. Blend until smooth, stir in cream and basil, and season. Meanwhile, make two grilled cheese sandwiches, toast until golden, and cut into bite-sized cubes. Float on the soup just before serving.",
+    [
+      "Chop the onion and garlic. Heat the olive oil in a medium saucepan over medium heat; add the onion and cook for 5–7 minutes until soft and translucent. Add the garlic and stir for 30 seconds.",
+      "Add the canned tomatoes with their juices and the vegetable stock. Break up the tomatoes with a spoon, bring to a simmer and cook uncovered for 20 minutes over medium-low heat.",
+      "Blend the soup off the heat with an immersion blender until smooth. If using a countertop blender, let the soup cool slightly, work in batches and vent the lid carefully to release steam.",
+      "Return the soup to low heat. Stir in the heavy cream and chopped basil; season with salt and pepper and warm gently without boiling.",
+      "Make the croutons while the soup simmers. Put 1 cheddar slice between each pair of sourdough slices and butter the outsides. Cook in a skillet over medium-low heat for 3–4 minutes per side until golden and the cheese melts.",
+      "Cut each sandwich into roughly 1-inch cubes. Ladle the hot soup into four bowls and add the grilled-cheese croutons just before serving."
+    ],
     "A pinch of sugar can balance unusually acidic canned tomatoes."
   ],
   [
@@ -115,7 +161,13 @@ const rows = [
     8,
     "8 servings",
     "10 oz frozen spinach (thawed and squeezed dry), 1 can (14 oz) artichoke hearts (drained and chopped), 4 oz softened cream cheese, ½ cup sour cream, ½ cup shredded mozzarella, ⅓ cup grated Parmesan, 1 minced garlic clove, salt and pepper",
-    "Heat oven to 375°F. Mix all ingredients thoroughly, reserving a little mozzarella for the top. Spread into a small baking dish, sprinkle with reserved cheese, and bake for 20-25 minutes until bubbling and lightly golden. Serve with pita chips or toasted bread.",
+    [
+      "Preheat the oven to 375°F (190°C). Set out a small oven-safe baking dish, approximately 8 inches square or a similar capacity.",
+      "Thaw the spinach completely. Squeeze it firmly in a clean towel or several layers of paper towel until no more liquid comes out. Drain and roughly chop the artichoke hearts; mince the garlic.",
+      "In a mixing bowl, stir the softened cream cheese and sour cream until smooth. Fold in the spinach, artichokes, garlic, Parmesan and most of the mozzarella, reserving about 2 tablespoons of mozzarella for the top. Season with salt and pepper.",
+      "Spread the mixture evenly in the baking dish and sprinkle the reserved mozzarella over it.",
+      "Bake uncovered on the middle rack for 20–25 minutes, until bubbling around the edges and lightly golden on top. Let stand 5 minutes before serving with pita chips or toasted bread, if desired."
+    ],
     "Squeezing the spinach completely dry is the secret to thick, creamy dip instead of a watery one."
   ],
   [
@@ -128,7 +180,12 @@ const rows = [
     6,
     "6 servings",
     "1 wheel (8 oz) Brie, 3 tbsp fig jam, ¼ cup chopped walnuts, 1 tsp finely chopped fresh rosemary, 1 tsp honey, crackers or baguette slices",
-    "Preheat oven to 350°F. Place Brie in a small oven-safe dish. Spread fig jam on top, then add walnuts and rosemary. Bake 12-15 minutes until the center softens. Drizzle with honey and serve warm.",
+    [
+      "Preheat the oven to 350°F (175°C). Set the Brie in a small oven-safe dish with enough space to catch any melted cheese. Leave the edible rind intact.",
+      "Spread the fig jam evenly over the top of the Brie. Chop the walnuts and rosemary if not already prepared.",
+      "Scatter the walnuts and rosemary over the jam. Bake on the middle rack for 12–15 minutes, until the center yields gently when pressed and the nuts smell toasted; avoid baking until the rind bursts.",
+      "Remove from the oven and drizzle with the honey. Let stand for 2–3 minutes, then serve warm with crackers or sliced baguette."
+    ],
     "The Brie rind is edible and helps the cheese hold its shape while warming."
   ],
   [
@@ -141,7 +198,14 @@ const rows = [
     4,
     "4 servings",
     "1½ lb baby potatoes, 2 tbsp olive oil, ⅓ cup finely grated Parmesan, 1 tsp garlic powder, ½ tsp smoked paprika, salt, pepper, chopped parsley",
-    "Boil potatoes in salted water for 15-20 minutes until fork-tender. Drain and let steam-dry. Place on an oiled baking tray and gently flatten with the bottom of a glass. Brush with oil, season, and scatter Parmesan over each potato. Roast at 425°F for 20-25 minutes until deeply crisp. Garnish with parsley.",
+    [
+      "Preheat the oven to 425°F (220°C). Place the baby potatoes in a large saucepan and cover with cold salted water.",
+      "Bring to a boil and cook for 15–20 minutes, until a fork slides easily through the largest potato. Drain and let steam-dry for 3–5 minutes.",
+      "Lightly oil a large baking sheet using part of the olive oil. Arrange the potatoes with space between them and press each with the bottom of a glass to about ½ inch thick, keeping the potato mostly intact.",
+      "Brush or drizzle with the remaining oil. Season with garlic powder, smoked paprika, salt and pepper, then distribute the Parmesan over the potatoes.",
+      "Roast on the middle rack for 20–25 minutes, until the edges are deep golden and crisp. If needed, give them a few more minutes, checking frequently so the cheese does not burn.",
+      "Transfer to a serving plate, scatter with chopped parsley and serve hot."
+    ],
     "The rougher the smashed edges, the more deliciously crunchy they become."
   ],
   [
@@ -154,7 +218,13 @@ const rows = [
     4,
     "4 servings",
     "1½ lb thin chicken cutlets, ⅓ cup flour, 2 tbsp olive oil, 2 tbsp butter, ½ cup chicken broth, ¼ cup fresh lemon juice, 2 tbsp capers, 2 tbsp chopped parsley, salt and pepper",
-    "Season chicken and lightly coat with flour. Heat oil in a skillet and cook chicken approximately 3-4 minutes per side until golden and cooked to 165°F. Remove. Add broth, lemon juice, and capers to the pan, scraping up browned bits. Simmer 2 minutes, swirl in butter, and return chicken to coat in sauce. Finish with parsley.",
+    [
+      "Prepare the chicken. Pat the cutlets dry; if they vary in thickness, gently pound them to about ¼–½ inch. Season both sides with salt and pepper. Put the flour on a plate and dredge each cutlet, shaking off the excess.",
+      "Heat the olive oil in a large skillet over medium-high heat until shimmering. Add the chicken in a single layer, working in batches if needed. Cook approximately 3–4 minutes per side until golden and the thickest part reaches 165°F (74°C). Transfer to a clean plate.",
+      "Make the sauce. Reduce to medium heat. Add the chicken broth, lemon juice and drained capers; scrape up the browned bits with a wooden spoon. Simmer for 2–3 minutes until slightly reduced.",
+      "Turn the heat to low and swirl in the butter until melted and the sauce looks glossy. Return the chicken and any accumulated juices to the skillet; spoon the sauce over the cutlets for 30–60 seconds.",
+      "Scatter with parsley and serve immediately, spooning the lemon-caper sauce over each portion."
+    ],
     "Serve over angel hair pasta or mashed potatoes so none of the sauce goes to waste."
   ],
   [
@@ -167,7 +237,13 @@ const rows = [
     4,
     "4 servings",
     "4 salmon fillets (5-6 oz each), 2 tbsp white miso paste, 1 tbsp honey, 1 tbsp soy sauce, 2 tsp rice vinegar (divided), 1 tsp sesame oil, 1 cucumber, 2 tsp sesame seeds, 2 cups cooked jasmine rice, sliced scallions",
-    "Heat oven to 400°F. Mix miso, honey, soy sauce, and 1 tsp vinegar. Brush over salmon and bake 12-15 minutes, depending on thickness, until salmon reaches 145°F. Dice cucumber and toss with sesame oil, remaining vinegar, and sesame seeds. Serve salmon over rice topped with cucumber and scallions.",
+    [
+      "Preheat the oven to 400°F (205°C). Line a rimmed baking sheet with parchment or lightly grease it. Pat the salmon dry and arrange skin-side down if it has skin.",
+      "Whisk the miso, honey, soy sauce and 1 teaspoon of the rice vinegar in a small bowl until smooth. Spread the glaze evenly over the top of each fillet.",
+      "Bake on the middle rack for 12–15 minutes, checking earlier for thin fillets. The thickest part must reach 145°F (63°C) on an instant-read thermometer; add time if necessary. If you want a darker glaze, broil briefly at the end on a broiler-safe pan, watching continuously.",
+      "While the salmon bakes, dice the cucumber into small pieces and toss with the sesame oil, remaining 1 teaspoon rice vinegar and sesame seeds. Slice the scallions and warm the cooked rice if needed.",
+      "Divide the warm rice among four bowls. Add a salmon fillet to each and finish with the cucumber mixture and scallions."
+    ],
     "Briefly broil at the end for caramelized edges, watching closely so the honey doesn’t burn."
   ],
   [
@@ -180,7 +256,14 @@ const rows = [
     4,
     "4 servings",
     "12 oz rigatoni, 1 shallot, 2 tbsp butter, ¼ cup tomato paste, ¼ cup vodka, ¾ cup heavy cream, ½ tsp red pepper flakes, ½ cup grated Parmesan, salt, reserved pasta water",
-    "Boil pasta in salted water until al dente. Meanwhile, soften finely chopped shallot in butter, add tomato paste and pepper flakes, and cook until brick-red, about 3 minutes. Add vodka and simmer 2-3 minutes. Stir in cream, then cooked pasta, Parmesan, and splashes of pasta water until glossy and creamy.",
+    [
+      "Bring a large pot of salted water to a boil. Add the rigatoni and cook according to the package directions until al dente. Before draining, reserve about 1 cup of the pasta water.",
+      "While the pasta cooks, finely chop the shallot. Melt the butter in a large skillet over medium heat and cook the shallot for 3–4 minutes, stirring, until soft but not browned.",
+      "Add the tomato paste and pepper flakes. Cook for about 3 minutes, stirring constantly, until the paste turns brick-red and starts to stick lightly to the pan.",
+      "Remove the skillet briefly from the heat before adding the vodka, especially on a gas stove. Return to medium heat and simmer for 2–3 minutes, stirring to loosen the paste, until the liquid has mostly reduced.",
+      "Reduce to medium-low and stir in the cream. Simmer gently for 2–3 minutes until smooth; do not boil vigorously.",
+      "Add the drained rigatoni and Parmesan. Toss over low heat, adding reserved pasta water 1–2 tablespoons at a time until the sauce coats the pasta in a glossy layer. Taste, adjust salt and serve immediately."
+    ],
     "The secret is cooking the tomato paste until it darkens. That develops a much deeper flavor than simply stirring it into cream."
   ],
   [
@@ -193,7 +276,14 @@ const rows = [
     4,
     "4 servings",
     "1 lb ground beef, ½ lb ground pork, ½ cup breadcrumbs, 1 egg, ¼ cup milk, ⅓ cup Parmesan, 2 minced garlic cloves, 24 oz marinara sauce, fresh basil, salt, pepper, olive oil",
-    "Preheat oven to 425°F. Mix breadcrumbs with milk, then gently combine with meats, egg, Parmesan, garlic, salt, and pepper. Shape into 12-16 meatballs. Place on an oiled baking sheet and roast about 15 minutes. Transfer to simmering marinara for another 10 minutes or until centers reach 160°F. Garnish with basil.",
+    [
+      "Preheat the oven to 425°F (220°C). Lightly oil a rimmed baking sheet. In a large bowl, combine the breadcrumbs and milk; let stand for 3–5 minutes to absorb the liquid.",
+      "Add the ground beef, pork, egg, Parmesan, minced garlic, salt and pepper. Mix gently with clean hands just until evenly combined; do not knead or compact the meat.",
+      "Divide the mixture into 12–16 equal portions and gently roll into balls of roughly 1½–2 inches. Arrange on the sheet with space between them.",
+      "Roast for about 15 minutes, until the meatballs begin to brown and hold their shape. While they roast, bring the marinara to a gentle simmer in a wide saucepan.",
+      "Transfer the meatballs into the sauce using tongs or a slotted spoon. Simmer gently for about 10 minutes, turning occasionally, until the center of the largest meatball reaches 160°F (71°C). Add more simmering time if needed.",
+      "Finish with fresh basil and serve hot with the sauce."
+    ],
     "Mix gently and stop when combined. Overworking ground meat produces dense, rubbery meatballs."
   ],
   [
@@ -206,7 +296,14 @@ const rows = [
     4,
     "4 servings",
     "1½ lb 80/20 ground beef, 4 potato buns, 8 slices American cheese, 2 tbsp mayonnaise, 1 tbsp ketchup, 1 tsp yellow mustard, 8 dill pickle chips, ½ cup finely diced onion, shredded lettuce, salt and pepper",
-    "Mix mayonnaise, ketchup, and mustard. Divide meat into eight loose balls. Heat a cast-iron skillet until very hot. Place balls on skillet and smash thin with a sturdy spatula. Season, cook until a deep crust forms, flip, and add cheese. Cook until patties reach 160°F. Stack two per toasted bun with sauce, onion, pickles, and lettuce.",
+    [
+      "Make the sauce by mixing the mayonnaise, ketchup and mustard. Finely dice the onion, prepare the lettuce and pickles, and split the potato buns. Toast the buns cut-side down in a dry skillet for 1–2 minutes; set aside.",
+      "Divide the beef into 8 equal loose balls, approximately 3 ounces each. Handle lightly and do not pack tightly. Keep chilled until cooking.",
+      "Heat a cast-iron skillet or flat griddle over medium-high to high heat until very hot. Work in batches so the patties have room to spread.",
+      "Place a beef ball on the hot surface and immediately press with a sturdy spatula to about ¼ inch thick. Season the top with salt and pepper. Cook undisturbed for about 2–3 minutes, until a deep brown crust forms around the edges.",
+      "Scrape firmly beneath each patty and flip once. Add 1 cheese slice per patty and cook for another 1–2 minutes, or until the center reaches 160°F (71°C) when measured from the side. Repeat with the remaining beef and cheese.",
+      "Spread sauce on the toasted buns. Stack 2 patties on each bottom bun and add onion, 2 pickle chips and shredded lettuce. Close and serve immediately."
+    ],
     "Don’t compress the meat before it hits the skillet. Smash only once, immediately upon contact, for maximum crust."
   ],
   [
@@ -219,7 +316,14 @@ const rows = [
     4,
     "4 servings",
     "8 oz noodles, 14 oz extra-firm tofu, 2 tbsp peanut butter, 2 tbsp soy sauce, 1 tbsp rice vinegar, 1 tsp chili crisp, 2 tsp honey, 1 tsp sesame oil, 1 tbsp cornstarch, 2 tbsp neutral oil, 1 cucumber, 2 scallions",
-    "Pat tofu dry, cube, and toss with cornstarch. Pan-fry in oil until crisp on all sides. Cook noodles according to package instructions. Whisk peanut butter, soy sauce, vinegar, chili crisp, honey, and sesame oil with a few tablespoons hot noodle water. Toss noodles in sauce and top with tofu, sliced cucumber, and scallions.",
+    [
+      "Drain the tofu and pat it thoroughly dry with paper towels. Cut into ¾–1-inch cubes and toss gently with the cornstarch until lightly coated.",
+      "Heat the neutral oil in a large nonstick skillet over medium-high heat. Add the tofu in a single layer and cook for 10–15 minutes, turning every few minutes, until crisp and golden on several sides. Transfer to a plate.",
+      "While the tofu cooks, bring water to a boil and cook the noodles according to the package directions. Reserve about ½ cup of the hot noodle water before draining.",
+      "In a large bowl, whisk the peanut butter, soy sauce, rice vinegar, chili crisp, honey and sesame oil. Whisk in hot noodle water 1 tablespoon at a time until the sauce is smooth and pourable.",
+      "Slice the cucumber and scallions. Add the warm drained noodles to the sauce and toss until evenly coated, adding more reserved water as needed.",
+      "Divide among four bowls and top with the crispy tofu, cucumber and scallions. Serve immediately."
+    ],
     "Adjust the sauce with warm water until it coats the noodles like a silky glaze rather than thick peanut butter."
   ],
   [
@@ -232,7 +336,14 @@ const rows = [
     4,
     "4 servings",
     "2 lb boneless chicken thighs, 1 lb sweet potatoes, 1 red onion, 2 tbsp olive oil, 2 tbsp honey, 1 tbsp tomato paste, 1 tbsp apple cider vinegar, 1 tsp smoked paprika, 1 tsp garlic powder, ½ tsp chili powder, salt and pepper",
-    "Preheat oven to 425°F. Cut sweet potatoes into ¾-inch cubes and onion into wedges. Toss vegetables with olive oil, salt, and pepper; arrange on a large sheet pan with seasoned chicken. Roast 15 minutes. Mix honey, tomato paste, vinegar, paprika, garlic powder, and chili powder. Brush over chicken and roast another 10-15 minutes until chicken reaches at least 165°F and potatoes are tender.",
+    [
+      "Preheat the oven to 425°F (220°C). Set out a large rimmed baking sheet, or two if needed to avoid crowding.",
+      "Cut the sweet potatoes into ¾-inch cubes and the onion into wedges. Toss with the olive oil, salt and pepper, then spread over the sheet pan. Pat the chicken dry, season with salt and pepper and arrange beside the vegetables in a single layer.",
+      "Roast on the middle rack for 15 minutes. Meanwhile, whisk the honey, tomato paste, apple cider vinegar, smoked paprika, garlic powder and chili powder in a small bowl.",
+      "Remove the pan and turn the vegetables with a spatula. Brush the glaze over the chicken. Do not reuse glaze or the brush for serving after contact with partially cooked chicken.",
+      "Return to the oven for 10–15 minutes, or until the chicken reaches at least 165°F (74°C) in the thickest part and the sweet potatoes are fork-tender. If the glaze darkens too quickly, loosely shield the chicken with foil.",
+      "Rest the chicken for 3–5 minutes, then divide it and the roasted vegetables among four plates."
+    ],
     "Use two sheet pans if necessary. Crowded ingredients steam instead of roasting."
   ],
   [
@@ -245,7 +356,14 @@ const rows = [
     6,
     "6 servings",
     "1¼ lb ground beef, 2 lb potatoes, 1 onion, 2 carrots, 1 cup frozen peas, 2 tbsp tomato paste, 1 tbsp Worcestershire sauce, 1 cup beef broth, 2 tbsp flour, 3 tbsp butter, ⅓ cup milk, 1 tsp fresh thyme, salt and pepper",
-    "Boil peeled potatoes until tender; mash with butter, milk, salt, and pepper. Brown beef with diced onion and carrots. Stir in flour and tomato paste, cook 1 minute, then add broth, Worcestershire, thyme, and peas. Simmer until thickened. Transfer filling to a baking dish, spread mashed potatoes over top, and roughen with a fork. Bake at 400°F for 20-25 minutes until golden and bubbling.",
+    [
+      "Preheat the oven to 400°F (205°C). Peel the potatoes and cut into roughly 1½-inch chunks. Cover with cold salted water, bring to a boil and cook for 15–20 minutes until easily pierced with a fork.",
+      "Drain well and return the potatoes to the warm pot for 1 minute to release excess steam. Mash with the butter and milk; season with salt and pepper. Set aside.",
+      "While the potatoes cook, dice the onion and carrots into small pieces. In a large skillet over medium-high heat, cook the beef, onion and carrots for 8–10 minutes, breaking the beef into small pieces and stirring until browned and the vegetables soften. Drain excess fat if necessary. Cook beef to 160°F (71°C).",
+      "Stir in the flour and tomato paste and cook for 1 minute. Gradually pour in the broth while stirring, then add Worcestershire sauce, thyme and peas. Simmer for 5–8 minutes until thick enough that a spoon dragged across the pan leaves a brief trail. Season to taste.",
+      "Transfer the filling to an approximately 2-quart oven-safe dish. Spoon the mashed potatoes over the filling, spread to the edges and roughen the surface with a fork.",
+      "Bake for 20–25 minutes, until the filling bubbles around the edges and the potato peaks turn golden. Rest for 5–10 minutes before serving so the filling settles."
+    ],
     "Fork-made ridges in the mashed potatoes create the beautifully crisp, browned peaks."
   ],
   [
@@ -258,7 +376,14 @@ const rows = [
     4,
     "4 servings",
     "1½ lb boneless chicken thighs, ½ cup plain yogurt, 1 tbsp garam masala, 1 tsp cumin, 1 tsp paprika, 1 onion, 3 garlic cloves, 1 tbsp grated ginger, 1 cup tomato purée, ¾ cup heavy cream, 2 tbsp neutral oil, 1 tsp salt, cilantro, cooked basmati rice",
-    "Dice chicken and coat in yogurt, paprika, and half the garam masala. Let stand 15 minutes while preparing vegetables. Sear chicken in an oiled skillet, turning until lightly browned, then remove. Sauté diced onion, garlic, and ginger; add remaining spices and tomato purée. Simmer 10 minutes. Add cream and chicken, simmering another 10-12 minutes or until chicken reaches 165°F. Serve with rice and cilantro.",
+    [
+      "Cut the chicken into roughly 1-inch pieces. In a bowl, combine the yogurt, paprika and half the garam masala. Toss the chicken in the mixture and refrigerate for 15 minutes while preparing the sauce ingredients.",
+      "Finely dice the onion, mince the garlic and grate the ginger. Heat about half the neutral oil in a large skillet over medium-high heat.",
+      "Lift the chicken from the marinade, letting excess drip off, and sear in batches for 4–6 minutes total, turning to brown several sides. Transfer to a plate; it need not be fully cooked yet. Discard any unused raw marinade.",
+      "Reduce the heat to medium and add the remaining oil. Cook the onion for 5–6 minutes until soft, then add the garlic and ginger for 30 seconds. Stir in the remaining garam masala, cumin and salt for another 30 seconds.",
+      "Add the tomato purée and simmer gently for 10 minutes, stirring occasionally. Reduce the heat, stir in the cream, and return the chicken and its juices to the pan.",
+      "Simmer gently for 10–12 minutes, or until the largest chicken piece reaches 165°F (74°C). Avoid a vigorous boil. Serve over cooked basmati rice and garnish with cilantro."
+    ],
     "Chicken thighs stay tender and forgiving, even if you simmer the sauce a few minutes longer than planned."
   ],
   [
@@ -271,7 +396,14 @@ const rows = [
     4,
     "4 servings",
     "1½ cups Arborio rice, 8 oz cremini mushrooms, 1 shallot, 2 tbsp butter, 2 tbsp olive oil, 4-5 cups warm vegetable broth, ½ cup grated Parmesan, 1 tsp fresh thyme leaves, salt and pepper",
-    "Sauté sliced mushrooms in olive oil until deeply golden; set aside. In the same pan, soften diced shallot with butter, then stir in rice for 2 minutes. Add warm broth ½ cup at a time, stirring frequently and allowing most liquid to absorb before each addition. Continue 18-25 minutes until rice is tender with a slight bite. Stir in mushrooms, Parmesan, thyme, and seasoning.",
+    [
+      "Warm 4–5 cups vegetable broth in a saucepan and keep it at a gentle simmer. Slice the mushrooms, finely dice the shallot and prepare the Parmesan and thyme.",
+      "Heat the olive oil in a wide skillet over medium-high heat. Add the mushrooms and cook for 6–8 minutes, stirring occasionally, until their moisture evaporates and they are deeply golden. Transfer to a plate.",
+      "Reduce the heat to medium. Melt the butter in the same skillet and cook the shallot for 2–3 minutes, until translucent. Add the Arborio rice and stir for 2 minutes to coat and lightly toast the grains.",
+      "Add ½ cup warm broth and stir frequently until most is absorbed. Continue adding broth ½ cup at a time, allowing each addition to mostly absorb before the next. Maintain a gentle simmer, not a rapid boil.",
+      "After about 18 minutes of broth additions, begin tasting the rice. Continue up to approximately 25 minutes, or until creamy and tender with a slight bite. Use only as much of the broth as necessary.",
+      "Remove from the heat and fold in the mushrooms, Parmesan and thyme. Season with salt and pepper. Add a splash of warm broth if needed so the risotto gently spreads on the plate. Serve immediately."
+    ],
     "Proper risotto should gently spread across a plate, not stand in a rigid mound. Loosen with a little extra warm broth before serving."
   ],
   [
@@ -284,7 +416,14 @@ const rows = [
     9,
     "9 brownies",
     "½ cup butter, 1 cup sugar, 2 eggs, 1 tsp vanilla, ⅓ cup unsweetened cocoa powder, ½ cup flour, ¼ tsp salt, ½ cup dark chocolate chunks",
-    "Heat oven to 350°F. Line an 8-inch square pan with parchment. Melt butter and whisk vigorously with sugar. Add eggs and vanilla, whisking until glossy. Fold in cocoa, flour, salt, and chocolate chunks. Bake 22-28 minutes until edges are set and a toothpick shows moist crumbs, not wet batter. Cool before slicing.",
+    [
+      "Preheat the oven to 350°F (175°C). Line an 8-inch square baking pan with parchment, leaving an overhang on two sides for lifting.",
+      "Melt the butter in a microwave-safe bowl or small saucepan. Transfer to a mixing bowl, whisk in the sugar vigorously for about 1 minute, and allow the mixture to cool slightly so it will not scramble the eggs.",
+      "Add the eggs and vanilla and whisk for 1–2 minutes until glossy and well combined.",
+      "Add the cocoa powder, flour and salt. Fold with a spatula just until no dry streaks remain, then fold in the chocolate chunks. Avoid overmixing.",
+      "Spread the batter evenly in the pan and bake on the middle rack for 22–28 minutes. Begin checking at 22 minutes: the edges should be set and a toothpick inserted in the center should come out with moist crumbs, not liquid batter.",
+      "Cool in the pan on a rack until set, at least 30 minutes and preferably until room temperature. Lift out using the parchment and cut into 9 squares. Refrigerate for a firmer texture, if desired."
+    ],
     "Refrigerating cooled brownies for an hour gives them an especially dense, truffle-like texture."
   ],
   [
@@ -297,7 +436,14 @@ const rows = [
     16,
     "16 cookies",
     "½ cup unsalted butter, ¾ cup brown sugar, ¼ cup white sugar, 1 egg, 1 tsp vanilla, 1¼ cups flour, ½ tsp baking soda, ½ tsp fine salt, ¾ cup chocolate chunks, flaky sea salt",
-    "Brown butter in a saucepan over medium heat until golden and nutty-smelling; cool 10 minutes. Mix with both sugars, egg, and vanilla. Stir in flour, baking soda, fine salt, and chocolate. Chill dough 15 minutes. Scoop onto parchment-lined baking sheets and bake at 350°F for 10-12 minutes until edges are golden. Sprinkle with flaky salt and cool on the baking sheet for 5 minutes.",
+    [
+      "Brown the butter in a light-colored saucepan over medium heat, stirring or swirling frequently. It will foam, then develop golden-brown milk solids and a nutty aroma after roughly 5–8 minutes. Immediately pour into a mixing bowl, including the browned bits; cool for 10 minutes.",
+      "While the butter cools, whisk the flour, baking soda and fine salt together in a separate bowl. Preheat the oven to 350°F (175°C) and line baking sheets with parchment.",
+      "Whisk the cooled brown butter with both sugars until combined, then whisk in the egg and vanilla. Stir in the dry ingredients just until no flour streaks remain; fold in the chocolate chunks.",
+      "Refrigerate the dough for 15 minutes. Divide into 16 equal portions, about 2 tablespoons each, and place on the prepared sheets at least 2 inches apart.",
+      "Bake one sheet at a time on the middle rack for 10–12 minutes, until the edges are golden and centers look soft but no longer wet. Keep the remaining dough chilled while the first batch bakes.",
+      "Sprinkle the warm cookies with flaky sea salt. Let set on the baking sheet for 5 minutes before transferring to a wire rack."
+    ],
     "Pull cookies out when their centers still look slightly underdone. They’ll finish setting as they cool."
   ],
   [
@@ -310,7 +456,14 @@ const rows = [
     6,
     "6 servings",
     "6 medium apples, 2 tbsp lemon juice, ⅓ cup brown sugar for filling, 1 tsp cinnamon, 1 tbsp cornstarch; topping: ¾ cup rolled oats, ½ cup flour, ⅓ cup brown sugar, 6 tbsp cold butter, pinch of salt",
-    "Heat oven to 375°F. Peel and slice apples, then toss with lemon juice, sugar, cinnamon, and cornstarch. Spread in an 8-inch square baking dish. Mix oats, flour, brown sugar, and salt, then work in cubed cold butter until crumbly. Scatter over apples. Bake 35-45 minutes until fruit bubbles and topping is golden.",
+    [
+      "Preheat the oven to 375°F (190°C). Set out an 8-inch square baking dish. Peel and core the apples, then slice them about ¼ inch thick.",
+      "Make the filling. In a large bowl, toss the apples with lemon juice, the ⅓ cup brown sugar for the filling, cinnamon and cornstarch until evenly coated. Spread in the baking dish.",
+      "Make the topping. Combine the oats, flour, remaining ⅓ cup brown sugar and pinch of salt. Cut the cold butter into small cubes and rub it into the dry mixture with your fingertips until coarse crumbs and pea-sized clumps form.",
+      "Scatter the topping evenly over the apples without packing it down.",
+      "Bake on the middle rack for 35–45 minutes, until the topping is golden, the fruit juices bubble around the edges and a knife slides easily through the apples. If the topping browns before the apples soften, loosely cover with foil.",
+      "Let rest for 10–15 minutes so the juices thicken. Serve warm, with vanilla ice cream if desired."
+    ],
     "Combine tart Granny Smith and sweet Honeycrisp apples for better flavor and texture. Serve warm with vanilla ice cream."
   ],
   [
@@ -323,7 +476,14 @@ const rows = [
     6,
     "6 servings",
     "1 cup graham cracker crumbs, 3 tbsp melted butter, 8 oz softened cream cheese, ⅓ cup powdered sugar, 1 tsp vanilla, 1 cup cold heavy whipping cream, 1 cup sliced strawberries, 1 tbsp sugar",
-    "Mix graham crumbs with melted butter. Toss strawberries with 1 tbsp sugar. Beat cream cheese with powdered sugar and vanilla until smooth. Separately whip heavy cream to firm peaks, then fold gently into cream cheese. Divide crumbs among six small glasses, spoon in cheesecake filling, and top with strawberries. Refrigerate at least 1 hour.",
+    [
+      "Prepare six small serving glasses. Melt the butter and mix it with the graham cracker crumbs until the mixture resembles damp sand.",
+      "Slice the strawberries and toss with the 1 tablespoon granulated sugar. Let stand for 10 minutes while making the filling, so the berries release a little juice.",
+      "Beat the softened cream cheese with the powdered sugar and vanilla for 1–2 minutes until completely smooth; scrape down the bowl.",
+      "In a separate chilled bowl, whip the cold heavy cream to firm peaks that hold their shape. Fold one-third into the cream cheese to lighten it, then gently fold in the remaining cream until no streaks remain.",
+      "Divide the crumb mixture among the six glasses and press lightly into even layers. Spoon equal portions of cheesecake filling on top and smooth gently. Divide the strawberries and their juices among the glasses.",
+      "Cover and refrigerate for at least 1 hour to chill and set. Keep refrigerated until ready to serve."
+    ],
     "Clear glasses show off the layers and make these feel like miniature restaurant desserts.",
     "20 min active + 1 hour chilling"
   ],
@@ -337,16 +497,23 @@ const rows = [
     6,
     "6 servings",
     "8 oz mascarpone, 1 cup heavy whipping cream, ⅓ cup powdered sugar, 1 tsp vanilla, 1 cup strong cooled espresso or coffee, 18-24 crisp ladyfinger biscuits, 1 tbsp unsweetened cocoa powder",
-    "Whip cold cream with powdered sugar and vanilla until soft peaks form. Gently fold in mascarpone until smooth. Briefly dip ladyfingers in cooled espresso and arrange in six dessert glasses, breaking to fit. Alternate layers of coffee-dipped biscuits and mascarpone cream. Refrigerate at least 4 hours. Dust with cocoa before serving.",
+    [
+      "Brew the espresso or strong coffee and let it cool completely. Pour it into a shallow bowl. Set out six dessert glasses.",
+      "In a chilled mixing bowl, whip the cold heavy cream, powdered sugar and vanilla until soft peaks form. In a separate bowl, gently stir the mascarpone just until smooth.",
+      "Fold about one-third of the whipped cream into the mascarpone to loosen it, then gently fold in the rest until smooth and fluffy. Avoid overworking the mascarpone, which can become grainy.",
+      "Break the ladyfingers as needed to fit the glasses. Dip each piece into the cooled coffee for about 1 second per side, then place a layer in the bottom of each glass. Do not soak them until soggy.",
+      "Spoon a layer of mascarpone cream over the biscuits. Repeat with another layer of briefly dipped ladyfingers and finish with the remaining cream, dividing the ingredients evenly among the six glasses.",
+      "Cover and refrigerate for at least 4 hours so the layers set and the biscuits soften. Just before serving, dust the tops evenly with cocoa using a fine-mesh sieve."
+    ],
     "Dip ladyfingers for barely a second per side. They should absorb coffee while retaining enough structure to create distinct layers.",
     "20 min active + 4 hours chilling"
   ]
 ];
 const normalizeIngredients = (source) => source.split(/[,;]/g).map(value => value.trim()).filter(Boolean);
-const normalizeSteps = (source) => source.split(/\.\s+(?=[A-ZÀ-Ÿ])/u).map(step => step.trim()).filter(Boolean);
+const normalizeSteps = (source) => Array.isArray(source) ? source.map(step => step.trim()).filter(Boolean) : source.split(/\.\s+(?=[A-ZÀ-Ÿ])/u).map(step => step.trim()).filter(Boolean);
 export const RECIPE_CATALOG = rows.map(([category,title,subtitle,description,difficulty,totalMinutes,servings,servingsLabel,ingredientsText,methodText,note,timeLabel]) => ({
  id:title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
  category, title, subtitle, description, difficulty, totalMinutes, timeLabel: timeLabel || `${totalMinutes} min`,
- servings, servingsLabel, ingredientsText, methodText, note, ingredients: normalizeIngredients(ingredientsText), steps: normalizeSteps(methodText)
+ servings, servingsLabel, ingredientsText, methodText: Array.isArray(methodText) ? methodText.join(" ") : methodText, note, ingredients: normalizeIngredients(ingredientsText), steps: normalizeSteps(methodText)
 }));
 export const RECIPE_CATEGORIES = ["All","Breakfast","Small Bites","Main Courses","Desserts","Favorites"];
