@@ -290,6 +290,7 @@
    if(!root||!label||!bar||!e)continue;
    const down=!!e.killed||e.health<=0;
    root.classList.toggle('eliminated',down);
+   root.setAttribute('aria-label',e.name+': '+(down?'defeated':Math.max(0,e.health)+' of '+e.hp+' health')); 
    root.classList.toggle('damaged',!down&&e.health<e.hp);
    const hp=Math.max(0,e.health);
    label.textContent=down?'DEFEATED':hp+' / '+e.hp+' HP';
@@ -1149,6 +1150,14 @@
   $('laser').addEventListener('click',()=>fire('laser'));
   $('rocket').addEventListener('click',()=>fire('rocket'));
   $('boost').addEventListener('click',activateBoost);
+  // Move the original controls, keeping a single set of event handlers and IDs.
+  const desktopConsole=matchMedia('(min-width:1500px) and (min-height:740px) and (orientation:landscape)');
+  function placeMissionActions(){
+   const destination=desktopConsole.matches?$('desktop-mission-actions'):document.querySelector('.cosmic-banner-top');
+   destination.append($('pause-top'),$('retry-top'));
+  }
+  placeMissionActions();
+  desktopConsole.addEventListener('change',placeMissionActions);
   $('pause-top').addEventListener('click',pause);
   $('retry-top').addEventListener('click',()=>{
     if(!window.confirm('Retry this sector from the beginning?'))return;

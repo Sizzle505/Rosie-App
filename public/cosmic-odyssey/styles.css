@@ -1829,3 +1829,102 @@
 .cosmic-app .music-toggle:hover,.cosmic-app .music-toggle:focus-visible{border-color:#ffe5a2;background:rgba(42,58,92,.9)}
 .cosmic-app .music-toggle[aria-pressed="false"]{opacity:.68}
 @media(max-width:560px){.cosmic-app .music-toggle{min-height:24px;padding:3px 6px;font-size:9px}}
+
+/* Desktop command console: approved dossier portraits, live defeat marks,
+   and reachable mission actions. Phone controls retain their original layout. */
+.fiend-headshot,.desktop-action-label,.desktop-mission-actions{display:none}
+@media(min-width:760px) and (orientation:landscape){
+ .cosmic-bottom .dpad,.cosmic-bottom .joystick,
+ .cosmic-bottom .aim-joystick,.cosmic-bottom .control-mode-toggle,
+ .cosmic-bottom .step-mode-toggle,.cosmic-bottom .controls-note{display:none!important}
+}
+@media(min-width:1500px) and (min-height:740px) and (orientation:landscape){
+ .cosmic-bottom{
+  gap:clamp(6px,1vh,12px)!important;padding:10px!important;
+  justify-content:flex-start!important;
+ }
+ .cosmic-bottom .status-line{
+  flex:0 0 auto!important;min-height:22px!important;
+  padding:0 3px!important;border:0!important;background:none!important;
+ }
+ .cosmic-bottom .status-line #message{
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  font:12px/1.5 Arial,sans-serif!important;
+ }
+ .cosmic-bottom #aim-indicator,.cosmic-bottom #scene-description,
+ .cosmic-bottom #level,.cosmic-bottom .music-toggle{display:none!important}
+ .cosmic-bottom .command-bar{
+  flex:0 0 auto!important;min-height:98px!important;height:auto!important;
+  padding:8px 6px 12px!important;flex-direction:row!important;
+ }
+ .cosmic-bottom .weapons{gap:18px!important;justify-content:space-evenly!important}
+ .cosmic-bottom .weapon{width:76px!important;height:79px!important}
+ .cosmic-bottom .weapon img,.cosmic-bottom .boost-icon{
+  width:72px!important;height:72px!important;
+ }
+ .cosmic-bottom .weapon small{font-size:11px!important;bottom:-2px!important}
+ .cosmic-bottom .weapon:focus-visible{outline:2px solid #a6f4ff;outline-offset:4px;border-radius:50%}
+ .cosmic-bottom .sector-art{
+  display:block!important;flex:1 1 0!important;min-height:0!important;
+  height:auto!important;max-height:none!important;padding:10px!important;
+  border:1px solid #d7ad6770!important;
+  background:radial-gradient(ellipse at 15% 0%,#59407a35,transparent 70%),#080e27bd!important;
+ }
+ .cosmic-bottom .sector-art-preview{display:none!important}
+ .cosmic-bottom .fiend-tracker{
+  height:100%;display:grid!important;grid-template-rows:24px repeat(3,minmax(0,1fr));
+  gap:8px!important;
+ }
+ .cosmic-bottom .fiend-tracker-heading{font:700 11px/1.2 Arial,sans-serif;letter-spacing:1px}
+ .cosmic-bottom .fiend-tracker-heading span{font:700 10px Arial,sans-serif;color:#99d9f4}
+ .cosmic-bottom .fiend-track{
+  --contact-color:#b78aff;
+  position:relative;isolation:isolate;display:flex;align-items:center;
+  min-height:0!important;gap:12px;padding:6px!important;
+  border:1px solid color-mix(in srgb,var(--contact-color) 50%,transparent);
+  border-radius:10px;background:linear-gradient(110deg,#25315388,#101329cc);
+ }
+ #fiend-track-chip{--contact-color:#6ce8ad}
+ #fiend-track-kitty{--contact-color:#ff86d5}
+ .cosmic-bottom .fiend-miniature{display:none!important}
+ .cosmic-bottom .fiend-headshot{
+  display:block;position:relative;flex:0 0 auto;
+  width:clamp(62px,9.8vh,110px);height:100%;max-height:110px;
+  aspect-ratio:1;align-self:stretch;border:1px solid var(--contact-color);
+  border-radius:8px;background-repeat:no-repeat;background-size:160% auto;
+  box-shadow:0 0 14px color-mix(in srgb,var(--contact-color) 15%,transparent);
+ }
+ .fiend-headshot-jett{background-image:url('cards/jett-front.webp');background-position:50% 27%}
+ .fiend-headshot-chip{background-image:url('cards/chip-front.webp');background-position:65% 30%}
+ .fiend-headshot-kitty{background-image:url('cards/kitty-front.webp');background-position:50% 25%}
+ .cosmic-bottom .fiend-track-detail{gap:8px!important}
+ .cosmic-bottom .fiend-track-detail strong{
+  font:700 12px/1.3 Arial,sans-serif!important;letter-spacing:.5px!important;white-space:normal!important;
+ }
+ .cosmic-bottom .fiend-track-detail small{font:700 11px/1.2 Arial,sans-serif!important;color:#bed3e8}
+ .cosmic-bottom .fiend-health{height:5px;background:#3d4661}
+ .cosmic-bottom .fiend-health span{background:var(--contact-color)}
+ .cosmic-bottom .fiend-track.eliminated{opacity:1!important;filter:none!important;border-color:#9b5969}
+ .cosmic-bottom .fiend-track.eliminated .fiend-headshot{filter:saturate(.25) brightness(.65)}
+ .cosmic-bottom .fiend-track.eliminated .fiend-headshot::after{
+  content:'×';position:absolute;inset:0;display:grid;place-items:center;
+  color:#ff554f;font:700 clamp(70px,11vh,124px)/.7 Arial,sans-serif;
+  text-shadow:0 2px 3px #160311,0 0 5px #ff241f;filter:brightness(1.8) saturate(4);
+ }
+ .cosmic-bottom .fiend-track.eliminated .fiend-track-detail small{color:#ff9a91}
+ .desktop-mission-actions{display:flex;flex:0 0 48px;gap:10px;width:100%}
+ .desktop-mission-actions #pause-top,.desktop-mission-actions #retry-top{
+  position:static!important;inset:auto!important;transform:none!important;
+  display:flex!important;align-items:center;justify-content:center;gap:9px;
+  flex:1;min-width:0;width:auto!important;height:48px!important;padding:8px 12px!important;
+  border:1px solid #f4cf88!important;border-radius:9px;
+  color:#ffedbd;background:linear-gradient(135deg,#4d355d,#243352)!important;
+  box-shadow:inset 0 1px #fff0bb33,0 3px 12px #0006;
+ }
+ .desktop-mission-actions #retry-top{background:linear-gradient(135deg,#713746,#432b46)!important}
+ .desktop-mission-actions #pause-top img{width:28px;height:28px;object-fit:contain}
+ .desktop-mission-actions #retry-top>span:first-child{font:28px/1 Georgia,serif}
+ .desktop-mission-actions .desktop-action-label{display:inline;font:700 13px/1 Arial,sans-serif;letter-spacing:1.3px}
+ .desktop-mission-actions button:hover{filter:brightness(1.2)}
+ .desktop-mission-actions button:focus-visible{outline:2px solid #a6f4ff;outline-offset:3px}
+}
