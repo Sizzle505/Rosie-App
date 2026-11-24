@@ -3,7 +3,8 @@
   "git": {
     "deploymentEnabled": {
       "design/iphone-captain-polish-20261120": false,
-      "work/royal-navigation-assets-20261124": false
+      "work/royal-navigation-assets-20261124": false,
+      "release/recipes-35-20261124": false
     }
   }
 }
