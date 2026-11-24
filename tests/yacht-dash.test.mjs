@@ -10,6 +10,15 @@ import {
   yachtCatchStart,
   yachtFollowUpRewardLane,
   yachtSakuraDelivery,
+  yachtPacedWaveFor,
+  yachtRunSeconds,
+  yachtSceneSeconds,
+  yachtSceneIndex,
+  yachtPickupApproachAt,
+  yachtApproachAt,
+  yachtMovementMultiplier,
+  yachtSpawnInterval,
+  isYachtHazard,
   YACHT_EXTRA_TREAT_MS
 } from "../src/yachtDashExpansion.js";
 import { ROSIE_MUSIC, sceneMusicTrack } from "../src/rosieMusicCatalog.js";
@@ -67,7 +76,7 @@ test("Latest Yacht Dash sizing changes are exact relative to the previous releas
   const multiplier = {
     "fishing-skiff": 1.30, "fan-raft": 1.40,
     "moonlight-race-buoy": 1.20, "regatta-beacon": 1.20,
-    "barrel-raft": 0.75, "taiko-barge": 0.80,
+    "barrel-raft": 0.75 * .9, "taiko-barge": 0.80,
     "cargo-crate": 1.25, "drift-net": 1.65
   };
   for (const [name, scale] of Object.entries(previous)) {
@@ -126,14 +135,14 @@ test("The red phantom obstacle bar is removed without losing helm threat forecas
   assert.match(game, /threatForecast\?\.blocked\.includes\(index\)/);
 });
 
-test("Torii maintains 4:3 proportions and fades above Rosie rather than popping forward", () => {
+test("Torii uses one 4:3 sprite with compositor-only course travel", () => {
   const game = readFileSync(new URL("../src/main.jsx", import.meta.url), "utf8");
   const css = readFileSync(new URL("../src/yachtDashExpansion.css", import.meta.url), "utf8");
-  assert.match(game, /item\.footprint === "arch" && item\.y >= 54 && item\.y < 108/);
-  assert.match(game, /foregroundOpacity = Math\.min\(1, Math\.max\(0, \(item\.y - 54\) \/ 19\)\)/);
-  assert.match(game, /yacht-torii-foreground/);
-  assert.match(css, /aspect-ratio:4 \/ 3/);
-  assert.match(css, /\.yacht-footprint-arch\.yacht-torii-foreground\s*\{\s*z-index:24;/);
+  assert.doesNotMatch(game, /torii-front-|foregroundOpacity/);
+  assert.match(game, /arch \? " yacht-smooth-arch"/);
+  assert.match(game, /className="yacht-arch-art"/);
+  assert.match(css, /translate3d\(-50%,var\(--approach-top,47%\),0\)/);
+  assert.match(css, /\.yacht-smooth-arch \.yacht-arch-art\s*\{[\s\S]*?aspect-ratio:4\/3;/);
 });
 
 test("Driftwood master is present and is a valid RIFF WebP image", () => {
@@ -153,7 +162,7 @@ test("Sakura's treat probability rises about 20 percent without accelerating obs
   const n = 70;
   const oldExpected = Array.from({length:n}, (_,step) => {
     if(step < 3) return step === 1 ? 1 : 0;
-    if(step % 10 === 7 || step % 9 === 0) return 0;
+    if(step % 10 === 7 || (step % 40 === 19 && step % 3 !== 0 && step % 9 !== 0) || step % 9 === 0) return 0;
     if(step % 3 === 0) return 1;
     return .33;
   }).reduce((a,b)=>a+b,0);
@@ -185,6 +194,39 @@ test("Yacht Dash uses only an unframed sparkling cheese wedge", () => {
   const css=readFileSync(new URL("../src/yachtDashExpansion.css",import.meta.url),"utf8");
   assert.match(game,/function YachtGoldenCheeseIcon/);
   assert.match(game,/item.kind === "cheese" \? <YachtGoldenCheeseIcon \/>/);
+  assert.match(game,/src="\/yacht-dash\/pickups\/sakura-golden-cheese\.png"/);
   assert.doesNotMatch(game,/item.kind === "cheese" && <small>GOLDEN<\/small>/);
   assert.match(css,/\.captain-game-page \.sea-pickup-cheese[\s\S]*?background:transparent!important/);
+});
+
+test("The first three chapters are 10 percent shorter; finale stays 75 seconds", () => {
+  for(let i=0;i<4;i++){
+    const duration=i===3?75:67.5;
+    assert.equal(yachtRunSeconds(i),duration);
+    assert.equal(yachtSceneSeconds(i),duration/5);
+    for(let scene=0;scene<5;scene++)assert.equal(yachtSceneIndex(i,scene*duration/5),scene);
+    assert.equal(yachtSceneIndex(i,duration),4);
+  }
+});
+test("Treats approach on the same water track and grow subtly", () => {
+  for(const y of [-12,30,77,108]){
+    const pickup=yachtPickupApproachAt(y);
+    assert.equal(pickup.top,yachtApproachAt(y).top);
+    assert.ok(pickup.scale>=.7&&pickup.scale<=1);
+  }
+  assert.ok(yachtPickupApproachAt(80).scale>yachtPickupApproachAt(0).scale);
+});
+test("Collectible travel speed is 10% faster, supplies 25%, hazards unchanged", () => {
+  for(const kind of ["ball","treat","cheese"])assert.equal(yachtMovementMultiplier(kind),1.1);
+  assert.equal(yachtMovementMultiplier("supply"),1.25);
+  for(const kind of ["obstacle","rival","buoy"])assert.equal(yachtMovementMultiplier(kind),1);
+});
+test("Additional logs and hazards retain a safe reward wave between encounters", () => {
+  for(const id of ["typhoon","moonlight","emperor"]){
+    const plan=Array.from({length:35},(_,i)=>yachtPacedWaveFor(id,i,()=>1,3)[0]);
+    assert.ok(plan.some(x=>x.asset?.endsWith("/driftwood.webp")),id+" has driftwood");
+    assert.ok(plan.filter(x=>isYachtHazard(x.kind)).length>=8,id+" has enough hazards");
+    for(let i=1;i<plan.length;i++)assert.ok(!(isYachtHazard(plan[i-1].kind)&&isYachtHazard(plan[i].kind)));
+    assert.equal(plan.filter(x=>x.kind==="supply").length,1);
+  }
 });
