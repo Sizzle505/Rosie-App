@@ -215,6 +215,7 @@ function playBossAudio(context,kind){
 const TUNNEL_OPENING_VIDEO="/ember-drill/rosie-tunnel-opening.mp4";
 const TUNNEL_OPENING_SEEN="rosieTunnelOpeningSeen20261123V2";
 export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, exitGameFullscreen }) {
+  const gamepadRoot=useRef(null),gamepadHandler=useRef(null),gamepadPitch=useRef(0);
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
   const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
@@ -394,7 +395,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     }));
     exitGameFullscreen?.();
   }
-  function resetHold(){pressed.current.up=false;pressed.current.down=false}
+  function resetHold(){pressed.current.up=false;pressed.current.down=false;gamepadPitch.current=0}
   useEffect(()=>()=>window.clearTimeout(bossVictoryTimer.current),[]);
   useEffect(()=>{
     const img=new Image();img.src="/captain-rosie-illustrated.webp";portrait.current=img;
@@ -439,7 +440,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         const events=[];
         const steps=Math.max(1,Math.ceil(delta/.045));
         for(let i=0;i<steps&&s.running;i++){
-          updateRun(s,delta/steps,pressed.current.up,pressed.current.down);
+          updateRun(s,delta/steps,pressed.current.up||gamepadPitch.current<0,pressed.current.down||gamepadPitch.current>0);
           events.push(...s.events);
         }
         for(const event of events){
@@ -636,8 +637,40 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   };
   const passageProgress=world?(hud.result==="complete"?100:Math.min(100,hud.time/hud.duration*100)):
     Math.min(100, ((hud.time-PASSAGES[hud.passage].start)/(PASSAGES[hud.passage].end-PASSAGES[hud.passage].start))*100);
+  gamepadHandler.current=({pressed,x,y,previous})=>{
+    const step=x&&x!==previous?.x?x:y&&y!==previous?.y?y:0;
+    if(introOpen){
+      gamepadPitch.current=0;
+      if(pressed.b){finishOpening();return;}
+      if(pressed.a||pressed.start){if(introPhase==="ready"&&!introError)playOpening();else if(introPhase==="finished"||introError)finishOpening();}
+      return;
+    }
+    const current=modeRef.current;
+    if(current==="running"){
+      if(pressed.start||pressed.x){togglePause();return;}
+      gamepadPitch.current=y;
+      if(pressed.a||pressed.rt)turbo();
+      return;
+    }
+    gamepadPitch.current=0;
+    if(current==="paused"){
+      if(pressed.start||pressed.a)togglePause();
+      else if(pressed.x)start(frame.current.stageIndex);
+      else if(pressed.b)returnToLevelMenu();
+      return;
+    }
+    if(current==="victory-hold")return;
+    if(step)setSelectedWorld(i=>Math.max(0,Math.min(EXPEDITION_STAGES.length-1,i+step)));
+    if(pressed.y){openOpening();return;}
+    if(pressed.x&&current==="ended"){start(frame.current.stageIndex);return;}
+    if(pressed.a||pressed.start){
+      if(current==="ended"&&world&&hud.result==="complete"&&hud.stageIndex<EXPEDITION_STAGES.length-1)start(hud.stageIndex+1);
+      else start(selectedWorld);
+    }
+  };
+  useEffect(()=>window.RosieGamepad?.subscribe(gamepadRoot.current,frame=>gamepadHandler.current?.(frame),()=>{gamepadPitch.current=0;}),[]);
   return (
-    <section className={"ember-suite"+(introOpen?" ember-cinematic-active":"")} data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
+    <section ref={gamepadRoot} className={"ember-suite"+(introOpen?" ember-cinematic-active":"")} data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
       <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
         <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
@@ -779,6 +812,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           </div>
         </div>}
       </div>
+      <div className="gamepad-hint">LEFT STICK / D-PAD STEER · A TURBO · START PAUSE · X RETRY WHILE PAUSED</div>
       <div className="ember-controls"
         onContextMenu={(event) => event.preventDefault()}
         onSelectStart={(event) => event.preventDefault()}
