@@ -25,6 +25,7 @@ export function drillTipPosition(run) {
 }
 export const RUN_DURATION = 75;
 export const TURBO_DURATION = 4.8;
+export const BOSS_TURBO_DURATION = 0.72;
 
 export function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 export function tunnelCenter(x) {
@@ -123,7 +124,7 @@ export function triggerTurbo(s) {
   // In boss arenas each press is a deliberate strike. The classic 4.8s
   // excavation shield would otherwise auto-hit several later recovery phases
   // from a single Turbo press.
-  s.boostTime = s.boss ? 0.72 : TURBO_DURATION; s.charge = 0;
+  s.boostTime = s.boss ? BOSS_TURBO_DURATION : TURBO_DURATION; s.charge = 0;
   s.hull = Math.min(5, s.hull + 1);
   s.boosts++;
   s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y, repaired });
