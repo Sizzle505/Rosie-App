@@ -18,3 +18,10 @@ test("recipes retain explicit food safety temperatures and dessert chilling time
   assert.match(RECIPE_CATALOG.find(r=>r.title==="Rosie’s Strawberry Pawfait").methodText,/at least 1 hour/);
   assert.match(RECIPE_CATALOG.find(r=>r.title==="Paws for Tiramisu").methodText,/at least 4 hours/);
 });
+
+test("revised recipes expose elapsed estimates and stable yields",()=>{
+  for(const r of RECIPE_CATALOG){assert.ok(r.totalMinutes>=10,r.title);assert.ok(r.timeLabel.includes("min")||r.timeLabel.includes("hour"),r.title);}
+  assert.match(RECIPE_CATALOG.find(r=>r.title==="Best in Show Brownies").timeLabel,/cooling/);
+  assert.match(RECIPE_CATALOG.find(r=>r.title==="Puppy Love Cookies").methodText,/at least 30 minutes/);
+  assert.match(RECIPE_CATALOG.find(r=>r.title==="Paws for Tiramisu").timeLabel,/4 hours chilling/);
+});
