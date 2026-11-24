@@ -1779,6 +1779,7 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
 }
 
 function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequence = 0 }) {
+  const gamepadRoot=useRef(null),gamepadHandler=useRef(null),gamepadLane=useRef({value:0,next:0});
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("yachtSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
   const [running, setRunning] = useState(false);
@@ -2522,8 +2523,41 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     try { localStorage.setItem("captainRosieBest", String(best)); } catch {}
   }, [best]);
 
+  gamepadHandler.current=({pressed,x,y,previous,now})=>{
+    const step=x&&x!==previous?.x?x:y&&y!==previous?.y?y:0;
+    if(showVictoryArt){
+      if(pressed.b)setShowVictoryArt(false);
+      else if(pressed.a||pressed.start){
+        if(ended&&completed&&chapterIndex+1<=yachtPlayableLimit(unlockedChapter))startGame(chapterIndex+1);
+        else setShowVictoryArt(false);
+      }
+      return;
+    }
+    if(running){
+      if(restartConfirm){if(pressed.a)startGame();else if(pressed.b||pressed.start)toggleYachtPause();return;}
+      if(pressed.start||(paused&&pressed.a)){toggleYachtPause();return;}
+      if(pressed.x){requestYachtRestart();return;}
+      if(paused)return;
+      const step=window.RosieGamepad.repeatAxis(gamepadLane.current,x,now);
+      if(step)moveCaptain(step);
+      if(pressed.a||pressed.rt)engageBoost();
+      return;
+    }
+    if(ended){
+      if(pressed.b){setEnded(false);setCompleted(false);setShowVictoryArt(false);return;}
+      if(pressed.y&&completed){setShowVictoryArt(true);return;}
+      if(pressed.a||pressed.start){if(completed&&chapterIndex+1<=yachtPlayableLimit(unlockedChapter))startGame(chapterIndex+1);else startGame();}
+      else if(pressed.x)startGame();
+      return;
+    }
+    if(step)setChapterIndex(index=>Math.max(0,Math.min(yachtPlayableLimit(unlockedChapter),index+step)));
+    if(pressed.a||pressed.start)startGame();
+  };
+  useEffect(()=>window.RosieGamepad?.subscribe(gamepadRoot.current,frame=>gamepadHandler.current?.(frame),
+    ()=>{gamepadLane.current={value:0,next:0};}),[]);
+
   return (
-    <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
+    <main ref={gamepadRoot} className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
       <section className="captain-hero">
         <div className="captain-hero-banner" role="img" aria-label="Captain Rosie at the helm of an ornate Japanese sailing ship at sunset, with islands, torii gates and waterfalls" />
         <div className="captain-title">
@@ -2846,6 +2880,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             ? document.fullscreenElement : document.body
         )}
 
+        <div className="gamepad-hint">LEFT STICK / D-PAD STEER · A BOOST · START PAUSE · X RETRY</div>
         <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
           onContextMenu={(event) => event.preventDefault()}
           onSelectStart={(event) => event.preventDefault()}
@@ -3027,7 +3062,7 @@ function CosmicOdysseyArcade(){
         <FullscreenGameFrame label="Cosmic Odyssey" variant="cosmic">
           <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
             <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
-              loading="lazy" allowFullScreen />
+              loading="lazy" allow="gamepad; fullscreen" allowFullScreen />
           </div>
         </FullscreenGameFrame>
       )}
