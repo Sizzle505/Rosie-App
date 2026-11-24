@@ -3856,18 +3856,8 @@ function App() {
           <RosieRandomizers />
         )}
 
-        {page !== "home" && <>
+        {page !== "home" && <div className="royal-nav-shell" data-nav-family={navFamily}>
           <button type="button" className="bottom-side-seal bottom-side-seal--home" aria-label="RosieVerse Home" title="RosieVerse Home" onClick={() => navigateTo("home")}><RoyalNavArt name="home" className="royal-seal-art" /></button>
-          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" title="Rosie’s Resources" onClick={() => navigateTo("resources")}><RoyalNavArt name="resources" className="royal-seal-art" /></button>
-          <button className={"nav-family-toggle" + (navFamily === "resources" ? " on-resources" : "")}
-            type="button"
-            aria-label={navFamily === "resources" ? "Switch navigation to RosieVerse games" : "Switch navigation to tools"}
-            title={navFamily === "resources" ? "Show RosieVerse games" : "Show Tools"}
-            onClick={() => setNavFamily(family => family === "resources" ? "salon" : "resources")}>
-            <RoyalNavArt name={navFamily === "resources" ? "gamepad" : "tools"} className="royal-mode-icon" />
-            <RoyalNavArt name="switch-arrows" className="royal-mode-arrows" />
-            <span>{navFamily === "resources" ? "Games" : "Tools"}</span>
-          </button>
           {navFamily === "resources" ?
           <nav className="bottom-nav resources-bottom-nav" aria-label="Rosie’s Resources">
             <button type="button" aria-label="Open Rosie’s Reminders" className={page === "reminders" ? "active" : ""} aria-current={page === "reminders" ? "page" : undefined} onClick={() => navigateTo("reminders")}><span className="nav-icon-wrap"><ResourceNavIcon type="reminders" /></span><small>Reminders</small></button>
@@ -3884,7 +3874,17 @@ function App() {
             <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" aria-current={page === "vault" ? "page" : undefined} onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
             <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} aria-current={page === "randomizers" ? "page" : undefined} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
           </nav>}
-        </>}
+          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" title="Rosie’s Resources" onClick={() => navigateTo("resources")}><RoyalNavArt name="resources" className="royal-seal-art" /></button>
+          <button className={"nav-family-toggle" + (navFamily === "resources" ? " on-resources" : "")}
+            type="button"
+            aria-label={navFamily === "resources" ? "Switch navigation to RosieVerse games" : "Switch navigation to tools"}
+            title={navFamily === "resources" ? "Show RosieVerse games" : "Show Tools"}
+            onClick={() => setNavFamily(family => family === "resources" ? "salon" : "resources")}>
+            <RoyalNavArt name={navFamily === "resources" ? "gamepad" : "tools"} className="royal-mode-icon" />
+            <RoyalNavArt name="switch-arrows" className="royal-mode-arrows" />
+            <span>{navFamily === "resources" ? "Games" : "Tools"}</span>
+          </button>
+        </div>}
         <AccountPortal />
       </div>
 

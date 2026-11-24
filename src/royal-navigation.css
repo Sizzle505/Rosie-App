@@ -1,82 +1,115 @@
-/* Royal navigation: actual app buttons, not a flattened banner.
-   Keep the existing fixed header/dock anchors and all event handlers. */
-.app-shell:not(.page-home) .bottom-nav {
-  border:1px solid #d7a94f!important;
-  background:radial-gradient(ellipse at 50% 0%,#592274 0%,transparent 76%),linear-gradient(180deg,#39134f,#210a33)!important;
-  box-shadow:0 4px 13px #0009,inset 0 0 0 1px #fff0b14a,inset 0 0 5px #0009!important;
-  padding:2px;box-sizing:border-box;
+/* Positioning-only shell. No enclosing frame, texture or visible panel. */
+.app-shell:not(.page-home) .royal-nav-shell{
+  --royal-seal:54px;--royal-bar:52px;--royal-toggle:64px;
+  position:fixed;z-index:1201;left:50%;top:9px;bottom:auto;
+  width:min(846px,calc(100% - 128px));transform:translateX(-50%);
+  display:grid;grid-template-columns:var(--royal-seal) minmax(0,1fr) var(--royal-seal) var(--royal-toggle);
+  grid-template-areas:"home tabs resources toggle";align-items:center;gap:9px;
+  background:none;border:0;box-shadow:none;padding:0 10px 0 0;
+  pointer-events:none;box-sizing:border-box;
 }
-.app-shell:not(.page-home) .bottom-nav > button {
-  isolation:isolate; color:#f2d798!important; border-radius:9px;
-  background:transparent!important; gap:1px; align-content:center;
-  min-width:0; min-height:0; height:100%; padding:1px 1px!important;
-  transition:background .16s,box-shadow .16s,filter .16s;
+.app-shell:not(.page-home) .royal-nav-shell > :is(.bottom-nav,.bottom-side-seal,.nav-family-toggle){
+  position:relative!important;inset:auto!important;transform:none!important;margin:0!important;
+  max-width:none!important;min-width:0!important;pointer-events:auto;box-sizing:border-box;
 }
-.app-shell:not(.page-home) .bottom-nav > button+button {border-left:1px solid #d6a65b35;}
-.app-shell:not(.page-home) .bottom-nav > button::before {
-  content:"";position:absolute;inset:1px!important;width:auto!important;height:auto!important;
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav{
+  grid-area:tabs;display:grid;width:100%!important;min-height:0!important;height:var(--royal-bar)!important;
+  padding:2px;overflow:visible;border:1px solid #d8a447!important;border-radius:12px;
+  background:linear-gradient(180deg,#492057 0%,#351042 24%,#260a36 76%,#190724 100%)!important;
+  box-shadow:0 3px 9px #10041db0,inset 0 0 0 1px #efce8159,inset 0 2px 3px #e9adf13b!important;
+  backdrop-filter:none;
+}
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav > button{
+  position:relative;isolation:isolate;display:flex!important;flex-direction:column;
+  justify-content:center;align-items:center;gap:1px;width:100%;min-width:0;
+  min-height:0!important;height:100%!important;padding:1px 0!important;
+  border:0!important;border-radius:8px;color:#ffe1a0!important;
+  background:none!important;overflow:visible!important;cursor:pointer;
+  transition:filter .16s ease;
+}
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav > button+button{border-left:1px solid #d9ae6650!important;}
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav > button::before{
+  content:"";position:absolute;inset:0 1px!important;width:auto!important;height:auto!important;
   border:1px solid transparent;border-radius:8px;background:none;pointer-events:none;z-index:-1;
+  transition:background .16s,border-color .16s,box-shadow .16s;
 }
-.app-shell:not(.page-home) .bottom-nav > button.active::before {
-  background:radial-gradient(ellipse at 50% 0%,#8b4ca0,#48185f 65%,#290c3e);
-  border-color:#ffe3a0;box-shadow:inset 0 0 0 1px #aa7028,inset 0 0 8px #e5b55d65,0 0 6px #efbd6370;
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav > button.active::before{
+  inset:-2px -1px!important;border:1.5px solid #f9d384;
+  background:radial-gradient(ellipse at 50% 0%,#9350a9 0%,#552061 47%,#30113e 100%);
+  box-shadow:inset 0 0 0 1px #b57b2c,inset 0 1px 0 #fff2a9,0 0 7px #dca94b88,0 2px 5px #16051b80;
 }
-.app-shell:not(.page-home) .bottom-nav > button.active::after {content:none;}
-.app-shell:not(.page-home) .bottom-nav > button .nav-icon-wrap,
-.app-shell:not(.page-home) .bottom-nav > button small {position:relative;top:0!important;}
-.app-shell:not(.page-home) .bottom-nav .nav-icon-wrap {width:25px;height:25px;filter:none;}
-.app-shell:not(.page-home) .bottom-nav .rosie-nav-icon {display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 1px 2px #10051b);}
-.app-shell:not(.page-home) .bottom-nav button small {
-  font:700 clamp(8px,2.15vw,11px)/1.08 Georgia,serif!important;
-  letter-spacing:0!important;margin-top:0!important;color:inherit;white-space:nowrap;text-shadow:0 1px 2px #13051e;
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav > button.active::after{content:none;}
+.app-shell:not(.page-home) .royal-nav-shell .bottom-nav .nav-icon-wrap{
+  display:grid!important;place-items:center;position:relative;top:0!important;
+  flex:0 0 auto;width:34px!important;height:34px!important;margin:0!important;filter:none;
 }
-.app-shell:not(.page-home) .bottom-nav > button.active {color:#fff0b9!important;}
-.app-shell:not(.page-home) .bottom-side-seal {
+.app-shell:not(.page-home) .royal-nav-shell .bottom-nav .rosie-nav-icon{
+  display:block;width:100%!important;height:100%!important;object-fit:contain;
+  filter:drop-shadow(0 1px 1px #180618);pointer-events:none;user-select:none;transform:none;
+}
+.app-shell:not(.page-home) .royal-nav-shell .bottom-nav button small{
+  position:relative;top:0!important;display:block!important;margin:0!important;
+  font:700 11px/1 Georgia,"Times New Roman",serif!important;letter-spacing:0!important;
+  color:inherit;white-space:nowrap;text-shadow:0 1px 2px #14041c;
+}
+.app-shell:not(.page-home) .royal-nav-shell .bottom-nav button.active{color:#fff2bf!important;}
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal{
+  width:var(--royal-seal)!important;height:var(--royal-seal)!important;min-height:0!important;
   padding:0!important;border:0!important;background:none!important;box-shadow:none!important;
-  overflow:visible!important;width:36px!important;height:36px!important;
-  transition:filter .16s;filter:drop-shadow(0 2px 3px #14091b99);
+  display:grid;place-items:center;overflow:visible!important;filter:drop-shadow(0 2px 3px #10051b90);
+  transition:filter .16s;
 }
-.royal-seal-art {display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;}
-.app-shell:not(.page-home) .nav-family-toggle {
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;min-width:0;width:62px;height:33px;min-height:0;box-sizing:border-box;
-  padding:1px 7px 1px 2px!important;border:1px solid #e0b456;border-radius:10px;
-  background:linear-gradient(180deg,#642a80,#351246 55%,#210b34)!important;
-  color:#ffe7ac;font:700 10px/1 Georgia,serif;overflow:visible!important;
-  box-shadow:inset 0 0 0 1px #ffd98e42,0 2px 5px #0007;
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal--home{grid-area:home;}
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal--tools{grid-area:resources;}
+.royal-seal-art{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;}
+.app-shell:not(.page-home) .royal-nav-shell > .nav-family-toggle{
+  grid-area:toggle;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;width:var(--royal-toggle)!important;height:41px!important;min-height:0!important;
+  padding:1px 7px 1px 0!important;border:1px solid #e2b25c!important;border-radius:11px!important;
+  background:linear-gradient(180deg,#74338a 0%,#421951 27%,#290c39 75%,#20092d 100%)!important;
+  color:#ffe6a4!important;font:700 11px/1 Georgia,serif!important;overflow:visible!important;
+  box-shadow:inset 0 0 0 1px #ffdb8359,inset 0 1px 2px #edb3fa50,0 2px 6px #0008!important;
 }
-.app-shell .nav-family-toggle .royal-mode-icon {display:block;width:16px;height:16px;object-fit:contain;pointer-events:none;}
-.app-shell .nav-family-toggle .royal-mode-arrows {position:absolute;right:-10px;top:50%;width:22px;height:22px;object-fit:contain;pointer-events:none;transform:translateY(-50%) scaleX(-1);transition:transform .2s;}
-.app-shell .nav-family-toggle.on-resources .royal-mode-arrows {transform:translateY(-50%) scaleX(1);}
-@media(hover:hover) {
- .app-shell:not(.page-home) .bottom-nav > button:not(.active):hover::before,
- .app-shell:not(.page-home) .bottom-nav > button:not(.active):focus-visible::before {background:radial-gradient(ellipse at 50% 0%,#784294,#39134f);border-color:#dbb366;box-shadow:inset 0 0 6px #f7d98245;}
- .app-shell:not(.page-home) .bottom-side-seal:hover,
- .app-shell:not(.page-home) .nav-family-toggle:hover {filter:brightness(1.16) drop-shadow(0 0 4px #f2c26980);}
+.app-shell .royal-nav-shell .nav-family-toggle .royal-mode-icon{
+  display:block;width:25px;height:23px;object-fit:contain;pointer-events:none;
 }
-.app-shell:not(.page-home) .bottom-nav > button:active .rosie-nav-icon,
-.app-shell:not(.page-home) .bottom-side-seal:active .royal-seal-art,
-.app-shell:not(.page-home) .nav-family-toggle:active .royal-mode-icon {scale:.94;}
-.app-shell:not(.page-home) .bottom-side-seal:focus-visible,
-.app-shell:not(.page-home) .nav-family-toggle:focus-visible {outline:2px solid #fff0b0;outline-offset:2px;}
-@media(max-width:1023px) {
- /* Independent compact seals and pendant sit beneath the original touch-first bar. */
- .app-shell:not(.page-home) .bottom-nav {bottom:calc(max(6px,env(safe-area-inset-bottom)) + 38px)!important;}
- .app-shell:not(.page-home) .bottom-side-seal,
- .app-shell:not(.page-home) .nav-family-toggle {bottom:calc(max(6px,env(safe-area-inset-bottom)) + 1px)!important;transform:none!important;top:auto!important;}
- .app-shell:not(.page-home) .nav-family-toggle {transform:translateX(-50%)!important;}
- .app-shell:not(.page-home) .bottom-side-seal--home {left:calc(50% - 150px)!important;}
- .app-shell:not(.page-home) .bottom-side-seal--tools {left:calc(50% + 114px)!important;}
- .app-shell:not(.page-home) .bottom-nav {height:58px;}
- .app-shell:not(.page-home) .bottom-nav button small {font-size:clamp(8px,2.2vw,11px)!important;}
+.app-shell .royal-nav-shell .nav-family-toggle .royal-mode-arrows{
+  position:absolute;right:-12px;top:50%;width:28px;height:28px;object-fit:contain;pointer-events:none;
+  transform:translateY(-50%) scaleX(-1);transition:transform .2s;
 }
-@media(min-width:1024px) {
- .app-shell:not(.page-home) .bottom-nav {height:44px;min-height:44px;}
- .app-shell:not(.page-home) .bottom-nav .nav-icon-wrap {width:25px;height:25px;}
- .app-shell:not(.page-home) .bottom-nav button small {font-size:9px!important;}
- .app-shell:not(.page-home) .bottom-side-seal {top:16px!important;width:40px!important;height:40px!important;}
- .app-shell:not(.page-home) .nav-family-toggle {top:18px;left:calc(50% + 340px);height:36px;width:62px;transform:none;bottom:auto;}
+.app-shell .royal-nav-shell .nav-family-toggle.on-resources .royal-mode-arrows{transform:translateY(-50%) scaleX(1);}
+@media(hover:hover){
+ .app-shell:not(.page-home) .royal-nav-shell .bottom-nav > button:not(.active):hover::before,
+ .app-shell:not(.page-home) .royal-nav-shell .bottom-nav > button:not(.active):focus-visible::before{
+   background:linear-gradient(#69347e,#3b174c);border-color:#cda45e;box-shadow:inset 0 0 6px #f7d98245;
+ }
+ .app-shell:not(.page-home) .royal-nav-shell > :is(.bottom-side-seal,.nav-family-toggle):hover{filter:brightness(1.14) drop-shadow(0 0 4px #f2c26970);}
 }
-@media(prefers-reduced-motion:reduce) {
- .app-shell .bottom-nav > button,.app-shell .bottom-nav .rosie-nav-icon,.app-shell .bottom-side-seal,.app-shell .nav-family-toggle,.app-shell .nav-family-toggle .royal-mode-arrows {transition:none!important;}
+.app-shell .royal-nav-shell button:focus-visible{outline:2px solid #fff0b0;outline-offset:2px;}
+.app-shell .royal-nav-shell button:active .rosie-nav-icon,
+.app-shell .royal-nav-shell button:active .royal-seal-art,
+.app-shell .royal-nav-shell button:active .royal-mode-icon{scale:.94;}
+/* iPhone/iPad retain a touch-first bottom dock, with no additional page-height demand. */
+@media(max-width:1023px){
+ .app-shell:not(.page-home) .royal-nav-shell{
+   --royal-seal:34px;--royal-bar:54px;--royal-toggle:62px;
+   top:auto;bottom:max(4px,env(safe-area-inset-bottom));width:min(620px,calc(100% - 12px));
+   grid-template-columns:1fr var(--royal-seal) minmax(90px,132px) var(--royal-seal) 1fr;
+   grid-template-areas:"tabs tabs tabs tabs tabs" ". home toggle resources .";
+   gap:2px 8px;padding:0;
+ }
+ .app-shell:not(.page-home) .royal-nav-shell > .nav-family-toggle{justify-self:center;height:30px!important;font-size:9px!important;}
+ .app-shell .royal-nav-shell .nav-family-toggle .royal-mode-icon{width:18px;height:17px;}
+ .app-shell .royal-nav-shell .nav-family-toggle .royal-mode-arrows{width:23px;height:23px;right:-10px;}
+ .app-shell:not(.page-home) .royal-nav-shell .bottom-nav .nav-icon-wrap{width:31px!important;height:31px!important;}
+ .app-shell:not(.page-home) .royal-nav-shell .bottom-nav button small{font-size:clamp(7.6px,2.22vw,11px)!important;}
 }
+@media(max-width:360px){
+ .app-shell:not(.page-home) .royal-nav-shell .bottom-nav button small{font-size:7.3px!important;}
+}
+@media(min-width:721px) and (max-width:1199px) and (pointer:coarse){
+ .app-shell:not(.page-home) .royal-nav-shell .bottom-nav button small{font-size:10px!important;}
+}
+@media print{.app-shell .royal-nav-shell{display:none!important;}}
+:root:has(:fullscreen) .royal-nav-shell,body.captain-fullscreen-fallback-active .royal-nav-shell{display:none!important;}
+@media(prefers-reduced-motion:reduce){.royal-nav-shell,.royal-nav-shell *{transition:none!important;}}

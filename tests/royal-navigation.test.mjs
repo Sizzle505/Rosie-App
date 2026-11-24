@@ -48,3 +48,12 @@ test("persistent buttons use the new art without replacing their handlers",()=>{
   assert.ok(paw.includes("/royal-nav/paw.webp")&&paw.includes("setOpen(true)")&&paw.includes("styles.signed"));
   assert.ok(music.includes("/royal-nav/music.webp")&&music.includes("setOpen(value=>!value)"));
 });
+
+test("navigation uses one invisible positioning grid and real controls",()=>{
+ const s=readFileSync(new URL("src/main.jsx",root),"utf8");
+ const css=readFileSync(new URL("src/royal-navigation.css",root),"utf8");
+ assert.ok(s.includes('className="royal-nav-shell" data-nav-family={navFamily}'));
+ assert.match(css,/grid-template-areas:"home tabs resources toggle"/);
+ assert.match(css,/grid-template-areas:"tabs tabs tabs tabs tabs"/);
+ assert.match(css,/position:relative!important;inset:auto!important;transform:none!important/);
+});
