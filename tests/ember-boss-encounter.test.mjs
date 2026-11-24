@@ -82,3 +82,20 @@ test("large frame ticks cannot skip all telegraphs, NaN dt never changes state",
  assert.equal(s.phase,"active");
  assert.equal(s.cycle,0);
 });
+
+
+test("Copperjack has three health bars and pain timing is triggered only by successful strikes",()=>{
+ const b=createBossEncounter("copperjack");
+ assert.equal(b.health,3);
+ assert.equal(b.maxHealth,3);
+ assert.equal(b.hitFlash,0);
+ advanceTo(b,"recovery");
+ assert.equal(b.hitFlash,0);
+ assert.equal(hitBossDuringRecovery(b,{turbo:false,inRange:true}),false);
+ assert.equal(b.hitFlash,0);
+ assert.equal(hitBossDuringRecovery(b,{turbo:true,inRange:true}),true);
+ assert.equal(b.hitFlash,.65);
+ advanceBossEncounter(b,.7);
+ assert.equal(b.hitFlash,0);
+ assert.equal(b.hitThisRecovery,true);
+});
