@@ -106,7 +106,7 @@ if (params.has("rosieTeslaInternal")) {
       host.style.cssText = "position:fixed;inset:0;overflow:hidden;z-index:2147483000;background:#151025;";
       frame = document.createElement("iframe");
       frame.title = "RosieVerse full desktop layout";
-      frame.allow = "camera; microphone; clipboard-read; clipboard-write; fullscreen";
+      frame.allow = "camera; microphone; clipboard-read; clipboard-write; gamepad; fullscreen";
       frame.setAttribute("allowfullscreen", "");
       frame.style.cssText =
         "position:absolute;top:0;left:0;width:1920px;height:1080px;border:0;transform-origin:top left;background:#151025;";
