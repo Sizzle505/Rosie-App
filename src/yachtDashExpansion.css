@@ -1566,3 +1566,104 @@
 @media(max-width:720px) {
   .captain-game-page .sea-pickup-cheese {width:58px;height:58px;}
 }
+
+
+/* Keep the gate in one stable compositor layer. Its full-height outer
+   carrier translates relative to the course without repainting layout.
+   The centered 4:3 painting scales independently inside that carrier.
+   A single sprite above the transparent sailing channel eliminates
+   the two-copy fade which could stutter or double on iPhone. */
+.captain-game-page .sea-pickup.yacht-upstream-object.yacht-smooth-arch {
+  top:0!important;
+  width:96%;
+  height:100%!important;
+  aspect-ratio:auto!important;
+  margin:0!important;
+  z-index:24;
+  display:block;
+  overflow:visible;
+  filter:none!important;
+  transform:translate3d(-50%,var(--approach-top,47%),0)!important;
+  transform-origin:top center;
+  transition:transform 90ms linear,opacity 90ms linear!important;
+  will-change:transform,opacity;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
+.captain-game-page .yacht-smooth-arch .yacht-arch-art {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  aspect-ratio:4/3;
+  transform:translate3d(0,-50%,0) scale(var(--approach-scale,1));
+  transform-origin:center 58%;
+  transition:transform 90ms linear;
+  will-change:transform;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  pointer-events:none;
+}
+.captain-game-page .yacht-smooth-arch .yacht-arch-art .yacht-hazard-art {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain!important;
+  filter:none!important;
+}
+.captain-game-page .sea-pickup.yacht-floating-pickup {
+  overflow:visible;
+  isolation:isolate;
+  animation:none!important;
+  margin-top:0!important;
+  border:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+.captain-game-page .sea-pickup.yacht-floating-pickup:not(.yacht-upstream-object) {
+  transform:translate(-50%,-50%)!important;
+  transition:top 90ms linear;
+}
+.captain-game-page .sea-pickup.yacht-floating-pickup.yacht-upstream-object {
+  transition:top 90ms linear,transform 90ms linear,opacity 90ms linear;
+}
+.captain-game-page .sea-pickup.yacht-floating-pickup::before {
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:1%;
+  width:84%;
+  height:20%;
+  z-index:0;
+  border-radius:50%;
+  border:1px solid rgba(225,250,245,.44);
+  background:radial-gradient(ellipse,rgba(200,246,242,.32),rgba(154,225,232,.13) 56%,transparent 76%);
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.captain-game-page .sea-pickup.yacht-floating-pickup .pickup-art,
+.captain-game-page .sea-pickup.yacht-floating-pickup .yacht-golden-cheese-art {
+  position:relative;
+  z-index:1;
+  animation:yachtCargoWaterBob 2.6s ease-in-out infinite;
+  transform-origin:center 80%;
+}
+.captain-game-page .sea-pickup.yacht-floating-pickup:nth-child(3n) .pickup-art,
+.captain-game-page .sea-pickup.yacht-floating-pickup:nth-child(3n) .yacht-golden-cheese-art {animation-delay:-.87s;}
+.captain-game-page .sea-pickup.yacht-floating-pickup:nth-child(3n + 1) .pickup-art,
+.captain-game-page .sea-pickup.yacht-floating-pickup:nth-child(3n + 1) .yacht-golden-cheese-art {animation-delay:-1.74s;}
+@keyframes yachtCargoWaterBob {
+  0%,100% {transform:translate3d(0,0,0) rotate(-1deg);}
+  50% {transform:translate3d(0,2px,0) rotate(1deg);}
+}
+.captain-game-page .sea-pickup-cheese .yacht-golden-cheese-art {
+  object-fit:contain;
+  filter:none;
+}
+@media(prefers-reduced-motion:reduce) {
+  .captain-game-page .sea-pickup.yacht-upstream-object.yacht-smooth-arch,
+  .captain-game-page .yacht-smooth-arch .yacht-arch-art,
+  .captain-game-page .sea-pickup.yacht-floating-pickup {transition:none!important;}
+  .captain-game-page .sea-pickup.yacht-floating-pickup .pickup-art,
+  .captain-game-page .sea-pickup.yacht-floating-pickup .yacht-golden-cheese-art {animation:none!important;}
+}

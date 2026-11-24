@@ -38,7 +38,7 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, yachtRivalAttackLane, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtRunSeconds, yachtSceneSeconds, yachtSceneIndex, yachtMovementMultiplier, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, yachtRivalAttackLane, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -1538,51 +1538,8 @@ function GoldenCheeseIcon({ compact = false }) {
 }
 
 function YachtGoldenCheeseIcon() {
-  // Yacht Dash-only collectible: a glossy Swiss cheese wedge, not a medal,
-  // emblem or framed icon. Three restrained glints signal Turbo power.
-  return (
-    <svg className="yacht-golden-cheese-art" viewBox="0 0 100 100" aria-hidden="true"
-      focusable="false" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="yacht-cheese-top" x1="0" y1="0" x2=".9" y2="1">
-          <stop offset="0" stopColor="#fff6a8" />
-          <stop offset=".35" stopColor="#ffdd4e" />
-          <stop offset="1" stopColor="#f49b16" />
-        </linearGradient>
-        <linearGradient id="yacht-cheese-side" x1="0" y1="0" x2=".85" y2="1">
-          <stop offset="0" stopColor="#ffc62e" />
-          <stop offset=".6" stopColor="#ef8a13" />
-          <stop offset="1" stopColor="#b75a0b" />
-        </linearGradient>
-        <radialGradient id="yacht-cheese-hole">
-          <stop offset="0" stopColor="#a95209" />
-          <stop offset=".64" stopColor="#d67a0d" />
-          <stop offset="1" stopColor="#f4ae20" />
-        </radialGradient>
-      </defs>
-      <path d="M12 55 65 20q4-3 8 1l17 29-43 35-35-17z"
-        fill="url(#yacht-cheese-top)" stroke="#c77913" strokeWidth="2.4" strokeLinejoin="round" />
-      <path d="M12 55 47 85v11L12 69Z"
-        fill="#e28b0d" stroke="#ab580c" strokeWidth="2" strokeLinejoin="round" />
-      <path d="M47 85 90 50v14L47 96Z"
-        fill="url(#yacht-cheese-side)" stroke="#a95f0d" strokeWidth="2.4" strokeLinejoin="round" />
-      <path d="M18 55 66 23 83 48" fill="none" stroke="#fff7b6"
-        strokeWidth="3" strokeLinecap="round" opacity=".9" />
-      <ellipse cx="59" cy="40" rx="8.5" ry="5.7" transform="rotate(-27 59 40)"
-        fill="url(#yacht-cheese-hole)" stroke="#ee9d1b" strokeWidth="1.3" />
-      <ellipse cx="39" cy="58" rx="5.9" ry="4.5" transform="rotate(-18 39 58)"
-        fill="url(#yacht-cheese-hole)" stroke="#eda22b" strokeWidth="1" />
-      <ellipse cx="67" cy="63" rx="6.8" ry="5" transform="rotate(-35 67 63)"
-        fill="url(#yacht-cheese-hole)" stroke="#eda22b" strokeWidth="1" />
-      <ellipse cx="32" cy="79" rx="4.2" ry="3.5" fill="#b86a09" opacity=".74" />
-      <ellipse cx="72" cy="80" rx="5.2" ry="4.2" transform="rotate(-30 72 80)"
-        fill="#ae560b" opacity=".84" />
-      <path d="M19 48v-8m-4 4h8M88 29v-8m-4 4h8M84 89v-7m-3.5 3.5h7"
-        fill="none" stroke="#fff5bc" strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="21" cy="29" r="1.7" fill="#ffdf7b"/>
-      <circle cx="95" cy="74" r="1.4" fill="#fff7ca"/>
-    </svg>
-  );
+  return <img className="yacht-golden-cheese-art" src="/yacht-dash/pickups/sakura-golden-cheese.png"
+    alt="" aria-hidden="true" draggable="false" />;
 }
 
 function CaptainPickupIcon({ kind }) {
@@ -1829,7 +1786,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const [restartConfirm, setRestartConfirm] = useState(false);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(75);
+  const [timeLeft, setTimeLeft] = useState(() => yachtRunSeconds(0));
   const [levelOrder, setLevelOrder] = useState(shuffleCaptainLevelOrder);
   const [chapterIndex, setChapterIndex] = useState(0);
   const [unlockedChapter, setUnlockedChapter] = useState(() => {
@@ -1911,16 +1868,17 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const audioRef = useRef(null);
   const lastPhaseRef = useRef("harbor");
 
-  const phaseKey = timeLeft > 50 ? "harbor" : timeLeft > 25 ? "riviera" : "sunset";
-  const elapsed = 75 - timeLeft;
+  const runSeconds = yachtRunSeconds(chapterIndex);
+  const elapsed = Math.max(0, runSeconds - timeLeft);
+  const phaseKey = timeLeft > runSeconds * 2 / 3 ? "harbor" : timeLeft > runSeconds / 3 ? "riviera" : "sunset";
   const chapter = YACHT_CHAPTERS[chapterIndex];
   const phase = YACHT_CHAPTER_PHASES[chapter.id]?.[phaseKey] || CAPTAIN_PHASES[phaseKey];
-  const levelNumber = Math.min(4, Math.floor(elapsed / 15));
+  const levelNumber = yachtSceneIndex(chapterIndex, elapsed);
   const level = yachtSceneFor(chapterIndex, elapsed, levelOrder);
   const scenery = useCaptainSceneryTransition(level, true, !running && !ended);
   // Fetch only the NEXT painting in advance; no mounting or accumulating five layers.
   const nextLevel = levelNumber < 4
-    ? yachtSceneFor(chapterIndex, (levelNumber + 1) * 15, levelOrder) : null;
+    ? yachtSceneFor(chapterIndex, (levelNumber + 1) * yachtSceneSeconds(chapterIndex), levelOrder) : null;
   useEffect(() => {
     if (!nextLevel) return undefined;
     const image = new Image();
@@ -1928,7 +1886,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     image.src = nextLevel.background;
     return () => { image.onload = null; };
   }, [nextLevel?.background]);
-  const routeProgress = Math.min(100, Math.round(elapsed / 75 * 100));
+  const routeProgress = Math.min(100, Math.round(elapsed / runSeconds * 100));
   const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
@@ -2061,7 +2019,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setCatches({ ball: 0, treat: 0, cheese: 0 });
     setScore(0);
     setLives(3);
-    setTimeLeft(75);
+    setTimeLeft(yachtRunSeconds(chosen));
     setStreak(0);
     setBestStreak(0);
     setCombo(1);
@@ -2177,14 +2135,14 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     // A single timeout avoids firing React state updates from another state
     // updater, and pauses cleanly when an iPhone is interrupted.
     const timer = window.setTimeout(() => {
-      if (timeLeft <= 1) {
+      if (timeLeft <= .5) {
         setTimeLeft(0);
         finishGame(YACHT_CHAPTERS[chapterIndex].name +
           " conquered. Captain Rosie has entered the voyage in the official treat ledger.", true);
       } else {
-        setTimeLeft(timeLeft - 1);
+        setTimeLeft(Math.max(0, timeLeft - .5));
       }
-    }, 1000);
+    }, 500);
     return () => window.clearTimeout(timer);
   }, [running, paused, chapterIndex, timeLeft]);
 
@@ -2253,7 +2211,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         spawnClockRef.current += tickMs;
         const phaseSpeed = (phaseKey === "harbor" ? 0 : phaseKey === "riviera" ? .35 : .75) + chapter.pace;
         const next = itemsRef.current.map((item) => {
-          const moved = { ...item, y: item.y + (item.speed + phaseSpeed) * movementScale };
+          const moved = { ...item, y: item.y + (item.speed + phaseSpeed) * yachtMovementMultiplier(item.kind) * movementScale };
           // Kuroi aims at Rosie's current lane as his attack begins. An
           // aligned rival keeps charging straight; otherwise he commits to
           // one adjacent lane, then holds that course so a dodge is possible.
@@ -2603,7 +2561,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
       <section className="captain-hud" aria-label="Yacht game status">
         <div><span>SCORE</span><strong>{score}</strong></div>
-        <div><span>TIME</span><strong>{timeLeft}s</strong></div>
+        <div><span>TIME</span><strong>{Math.ceil(timeLeft)}s</strong></div>
         <div><span>HULL</span><strong className="captain-lives">{Array.from({ length: 3 }, (_, index) => index < lives ? "●" : "○").join(" ")}</strong></div>
         <div><span>CARGO CAUGHT</span><strong>{collectedTotal}</strong></div>
         <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><span>MULTIPLIER</span><strong>x{combo}{boost ? " ×2" : ""}</strong></div>
@@ -2723,9 +2681,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
            {items.map((item) => {
             const approaching = chapter.id !== "sakura";
+            const floatingPickup = ["ball", "treat", "cheese", "supply"].includes(item.kind);
+            const arch = approaching && item.footprint === "arch";
             const perspective = approaching
-              ? (item.kind === "ball" || item.kind === "treat" || item.kind === "cheese"
-                ? yachtPickupApproachAt(item.y) : yachtApproachAt(item.y))
+              ? (floatingPickup ? yachtPickupApproachAt(item.y) : yachtApproachAt(item.y))
               : null;
             const artScale = yachtAssetScale(item.asset);
             // Raster at the final displayed pixel size, not at the small
@@ -2741,7 +2700,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 16.666 + item.lane * 33.333;
             const renderedStyle = approaching ? {
               left: center + "%",
-              top: perspective.top + "%",
+              top: arch ? "0%" : perspective.top + "%",
+              "--approach-top": perspective.top + "%",
               ...(item.footprint === "arch" ? { width: "96%" } :
                 item.footprint === "wide" ? { width: "66.666%" } : {}),
               "--yacht-asset-multiplier": artScale,
@@ -2751,19 +2711,22 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               "--approach-scale-x": perspective.scale * visualScale *
                 (item.footprint === "wide" ? 0.89 : item.footprint === "arch" ? 0.97 : 1),
               "--approach-opacity": perspective.opacity
-            } : { left: "calc(" + center + "% - 23px)", top: item.y + "%" };
+            } : { left: floatingPickup ? center + "%" : "calc(" + center + "% - 23px)", top: item.y + "%" };
             return (
               <div
                 className={"sea-pickup sea-pickup-" + item.kind +
                   (item.footprint ? " yacht-footprint-" + item.footprint : "") +
                   (approaching ? " yacht-upstream-object" : "") +
+                  (arch ? " yacht-smooth-arch" : "") +
+                  (floatingPickup ? " yacht-floating-pickup" : "") +
                   (nativeResArt ? " yacht-native-resolution" : "")}
                 key={item.id}
                 style={renderedStyle}
                 data-yacht-art={item.asset?.split("/").pop()?.replace(".webp", "")}
                 aria-label={item.label}
               >
-                {item.kind === "cheese" ? <YachtGoldenCheeseIcon /> : item.asset
+                {arch ? <div className="yacht-arch-art"><YachtHazardArt item={item} /></div> :
+                  item.kind === "cheese" ? <YachtGoldenCheeseIcon /> : item.asset
                   ? <YachtHazardArt item={item} /> : <CaptainPickupIcon kind={item.kind} />}
                 {item.kind === "supply" && <small className="yacht-supply-caption">SUPPLIES</small>}
                 {incomingAttackLane !== undefined && incomingAttackLane !== item.lane && !item.drifted &&
@@ -2783,28 +2746,6 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             (ramImpact ? " yacht-kuroi-rammed" : "")}>
             <CaptainYachtArt boost={boost} />
           </div>
-          {/* Draw the original torii behind Rosie, then gradually fade in
-              the same transparent art in front as she sails under the beam. */}
-          {chapter.id !== "sakura" && items
-            .filter(item => item.footprint === "arch" && item.y >= 54 && item.y < 108)
-            .map(item => {
-              const perspective = yachtApproachAt(item.y);
-              const scale = perspective.scale * yachtAssetScale(item.asset) * 0.97;
-              const foregroundOpacity = Math.min(1, Math.max(0, (item.y - 54) / 19));
-              return (
-                <div key={"torii-front-" + item.id}
-                  className="sea-pickup sea-pickup-obstacle yacht-footprint-arch yacht-upstream-object yacht-torii-foreground"
-                  style={{
-                    left:"50%",top:perspective.top + "%",width:"96%",
-                    "--approach-scale":scale,
-                    "--approach-scale-x":scale,
-                    "--approach-opacity":perspective.opacity * foregroundOpacity
-                  }}
-                  aria-hidden="true">
-                  <YachtHazardArt item={item} />
-                </div>
-              );
-            })}
           {ramImpact && (
             <div className={"yacht-kuroi-collision yacht-kuroi-collision-lane-" + ramImpact.lane}
               key={ramImpact.id} aria-hidden="true">
