@@ -616,3 +616,9 @@ body.captain-fullscreen-fallback-active .nav-family-toggle{
     right:48px!important;
   }
 }
+
+/* Follow the artwork's own gold bezel; trim only the exterior spill. */
+.cosmic-odyssey-main-entry > .cosmic-odyssey-entry-banner{
+  clip-path:inset(.55% .45% round 8% / 24%)!important;
+  border:0!important;box-shadow:none!important;
+}
