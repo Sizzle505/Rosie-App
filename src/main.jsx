@@ -27,6 +27,7 @@ import "./cheese-sprint.css";
 import "./ipad-polish.css";
 import "./desktop-nov18.css";
 import "./yachtDashExpansion.css";
+import "./yacht-console.css";
 import "./ipad-composition.css";
 import "./ipad-fortune-cheese.css";
 import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadline } from "./cheeseSprint.js";
@@ -2485,7 +2486,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   }, [best]);
 
   return (
-    <main className={"captain-game-page captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
+    <main className={"captain-game-page yacht-console-upgrade captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
       <section className="captain-hero">
         <div className="captain-hero-banner" role="img" aria-label="Captain Rosie at the helm of an ornate Japanese sailing ship at sunset, with islands, torii gates and waterfalls" />
         <div className="captain-title">
@@ -2499,7 +2500,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               </div>
               <span className="marquee-burgee">R</span>
             </div>
-            <small>Command the ROSIE I through a luminous coastal passage - collect prized cargo, secure the Golden Cheese and bring the captain home in style.</small>
+            <small>Command The Ikigai through a luminous coastal passage - collect prized cargo, secure the Golden Cheese and bring the captain home in style.</small>
           </div>
         </div>
         <div className="captain-best">
@@ -2522,12 +2523,50 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       </section>
 
       <section className="captain-hud" aria-label="Yacht game status">
-        <div><span>SCORE</span><strong>{score}</strong></div>
-        <div><span>TIME</span><strong>{Math.ceil(timeLeft)}s</strong></div>
-        <div><span>HULL</span><strong className="captain-lives">{Array.from({ length: 3 }, (_, index) => index < lives ? "●" : "○").join(" ")}</strong></div>
-        <div><span>CARGO CAUGHT</span><strong>{collectedTotal}</strong></div>
-        <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><span>MULTIPLIER</span><strong>x{combo}{boost ? " ×2" : ""}</strong></div>
+        <div><img className="yacht-instrument" src="/yacht-console-v1/score.webp" alt=""/><span>SCORE</span><strong>{score.toLocaleString()}</strong></div>
+        <div><img className="yacht-instrument" src="/yacht-console-v1/time.webp" alt=""/><span>TIME</span><strong>{Math.ceil(timeLeft)}<small>s</small></strong></div>
+        <div><img className="yacht-instrument" src="/yacht-console-v1/hull.webp" alt=""/><span>HULL</span><strong className="captain-lives" aria-label={`${lives} of 3 hull remaining`}>{lives}<small>/3</small><i className="yacht-hull-meter" aria-hidden="true">{[0,1,2].map(n=><b key={n} className={n<lives?"intact":""}/>)}</i></strong></div>
+        <div><img className="yacht-instrument" src="/yacht-console-v1/cargo.webp" alt=""/><span>CARGO</span><strong>{collectedTotal}</strong></div>
+        <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><img className="yacht-instrument" src="/yacht-console-v1/multiplier.svg" alt=""/><span>MULTIPLIER</span><strong>×{combo}{boost ? " ×2" : ""}</strong></div>
       </section>
+
+          <div className="yacht-console-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
+            <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
+              aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
+              title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}><img src="/yacht-console-v1/pause.webp" alt=""/><span>{paused ? "RESUME" : "PAUSE"}</span></button>
+            <button className="ember-icon-action" type="button" onClick={requestYachtRestart}
+              aria-label="Restart Yacht Dash" title="Restart Yacht Dash"><img src="/yacht-console-v1/retry.webp" alt=""/><span>RETRY</span></button>
+          </div>
+
+        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
+          onContextMenu={(event) => event.preventDefault()}
+          onSelectStart={(event) => event.preventDefault()}
+          onDragStart={(event) => event.preventDefault()}>
+          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" repeatDelayMs={320} /> :
+          <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
+            <img src="/yacht-console-v1/steer.webp" alt=""/><small>PORT</small>
+          </button>}
+
+          <button
+            type="button"
+            className={"boost-control" + (turbo >= 100 ? " boost-ready" : "") + (boost ? " boost-active" : "")}
+            style={{ "--turbo-fill": turbo + "%" }}
+            onClick={engageBoost}
+            disabled={!running || turbo < 100 || boost}
+            aria-label={"Treat Turbo boost " + turbo + " percent charged"}
+          >
+            <span className="yacht-turbo-emblem"><img src="/yacht-console-v1/turbo.svg" alt=""/><b>{Math.round(turbo)}%</b></span>
+            <span className="boost-copy">
+              <strong>TREAT TURBO</strong>
+              <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
+            </span>
+          </button>
+
+          {steerMode==="buttons" && <button type="button" className="helm-button"
+            onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
+            <img className="yacht-steer-right" src="/yacht-console-v1/steer.webp" alt=""/><small>STARBOARD</small>
+          </button>}
+        </div>
 
       <section className="yacht-game-shell">
         <div className="yacht-game-sign">
@@ -2536,22 +2575,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
-          <b>ROSIE I</b>
-        </div>
-        <div className="yacht-voyage-progress" role="progressbar"
-          aria-label={chapter.name + " voyage progress"}
-          aria-valuemin={0} aria-valuemax={100} aria-valuenow={routeProgress}>
-          <div className="yacht-voyage-progress-track">
-            <div className="yacht-voyage-progress-fill" style={{ width: routeProgress + "%" }} />
-            <div className="yacht-voyage-progress-marks" aria-hidden="true"><i /><i /><i /><i /></div>
-          </div>
-          <small>SCENE {levelNumber + 1}/5</small>
-        </div>
         <div className="yacht-steering-options" role="group" aria-label="Yacht Dash steering and upcoming hazards">
-          <span>STEERING</span>
           <div className={"yacht-lane-forecast" + (threatForecast ? " has-threat" : "")}
             role="group" aria-label="Select lane. Red indicates a coming hazard.">
-            <small>{threatForecast ? "OPEN" : "LANES"}</small>
             {[0, 1, 2].map(index => {
               const blocked = Boolean(threatForecast?.blocked.includes(index));
               const name = ["port", "center", "starboard"][index];
@@ -2571,6 +2597,17 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
             onClick={toggleSteerMode}>{steerMode === "joystick" ? "D-PAD" : "JOYSTICK"}</button>
         </div>
+        </div>
+        <div className="yacht-voyage-progress" role="progressbar"
+          aria-label={chapter.name + " voyage progress"}
+          aria-valuemin={0} aria-valuemax={100} aria-valuenow={routeProgress}>
+          <div className="yacht-voyage-progress-track">
+            <div className="yacht-voyage-progress-fill" style={{ width: routeProgress + "%" }} />
+            <div className="yacht-voyage-progress-marks" aria-hidden="true"><i /><i /><i /><i /></div>
+          </div>
+          <small>SCENE {levelNumber + 1}/5</small>
+        </div>
+
 
         <div
           ref={courseFocusRef}
@@ -2602,13 +2639,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />
           {/* Obstacle warnings remain in the helm's lane forecast above.
               The old in-water red bars mimicked invisible hazards. */}
-          <div className="captain-yacht-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
-            <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
-              aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
-              title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}>{paused ? "▶" : "❚❚"}</button>
-            <button className="ember-icon-action" type="button" onClick={requestYachtRestart}
-              aria-label="Restart Yacht Dash" title="Restart Yacht Dash">↻</button>
-          </div>
+
           {paused && (
             <div className="captain-yacht-pause-overlay" role="status">
               <div>
@@ -2808,37 +2839,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             ? document.fullscreenElement : document.body
         )}
 
-        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
-          onContextMenu={(event) => event.preventDefault()}
-          onSelectStart={(event) => event.preventDefault()}
-          onDragStart={(event) => event.preventDefault()}>
-          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" repeatDelayMs={320} /> :
-          <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
-            <span>◀</span><small>PORT</small>
-          </button>}
 
-          <button
-            type="button"
-            className={"boost-control" + (turbo >= 100 ? " boost-ready" : "") + (boost ? " boost-active" : "")}
-            style={{ "--turbo-fill": turbo + "%" }}
-            onClick={engageBoost}
-            disabled={!running || turbo < 100 || boost}
-            aria-label={"Treat Turbo boost " + turbo + " percent charged"}
-          >
-            <span className="boost-ring" style={{ "--boost": turbo + "%" }}>
-              {(boost || turbo >= 100) ? <svg className="boost-bolt" viewBox="0 0 48 48" aria-hidden="true"><path d="M28.5 3 9.5 27.4h12.6L19.4 45l19.1-25.4H25.9L28.5 3Z"/></svg> : <b>{turbo}</b>}
-            </span>
-            <span className="boost-copy">
-              <strong>TREAT TURBO</strong>
-              <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
-            </span>
-          </button>
-
-          {steerMode==="buttons" && <button type="button" className="helm-button"
-            onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
-            <span>▶</span><small>STARBOARD</small>
-          </button>}
-        </div>
 
         <div className="captain-cargo-key">
           <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>
@@ -2900,6 +2901,16 @@ function FullscreenGameFrame({ children, label, variant }) {
     };
   }, [fallbackFullscreen, variant]);
 
+  useEffect(() => {
+    const preventGameScroll = event => {
+      if (event.code !== "Space" && event.key !== " ") return;
+      if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
+      if (expanded || frameRef.current?.contains(event.target)) event.preventDefault();
+    };
+    window.addEventListener("keydown", preventGameScroll, true);
+    return () => window.removeEventListener("keydown", preventGameScroll, true);
+  }, [expanded]);
+
   const enterGameFullscreen = () => {
     if (expanded) return;
     const element = frameRef.current;
@@ -2958,7 +2969,7 @@ function FullscreenGameFrame({ children, label, variant }) {
           onClick={expanded ? exitGameFullscreen : enterGameFullscreen}
           aria-label={expanded ? "Exit fullscreen game" : "Expand game to fullscreen"}
           title={expanded ? "Exit fullscreen game" : "Play fullscreen"}>
-          <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>
+          {variant === "cosmic" ? <img className="cosmic-fullscreen-art" src={`/cosmic-odyssey/assets/console-v2/${expanded ? "exit-fullscreen" : "fullscreen"}.webp`} alt="" /> : <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>}
           <b>{expanded ? "Exit game" : "Fullscreen"}</b>
         </button>
       )}

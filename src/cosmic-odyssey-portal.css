@@ -616,3 +616,19 @@ body.captain-fullscreen-fallback-active .nav-family-toggle{
     right:48px!important;
   }
 }
+
+/* Cosmic enamel fullscreen controls retain the shared fullscreen behavior. */
+.captain-fs-cosmic > .captain-fullscreen-toggle{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:12px}
+.captain-fs-cosmic > .captain-fullscreen-toggle .cosmic-fullscreen-art{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.captain-fs-cosmic > .captain-fullscreen-toggle b{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+/* Keep game exits clear of the account/music dock in the full app. */
+.captain-fullscreen-frame.captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle,
+.captain-fullscreen-frame.captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{right:max(64px,calc(env(safe-area-inset-right) + 58px))!important}
+.captain-fullscreen-frame.captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;background:transparent!important}
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-cosmic:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{right:auto!important;left:max(8px,env(safe-area-inset-left))!important;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;padding:0!important}
+}
+
+/* Trim exterior art to the original gold bezel. */
+.cosmic-odyssey-main-entry > .cosmic-odyssey-entry-banner{clip-path:inset(.55% .45% round 8% / 24%)!important;border:0!important;box-shadow:none!important}

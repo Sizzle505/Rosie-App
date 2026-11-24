@@ -28,9 +28,13 @@
     const {width,height}=gallery.getBoundingClientRect();
     if(width<=0||height<=0)return;
     const gap=parseFloat(getComputedStyle(gallery).columnGap)||0;
-    const byWidth=(width-gap*(cards.length-1)-2)/cards.length;
-    const byHeight=(height-2)*2/3;
-    gallery.style.setProperty('--card-fit-width',Math.max(1,Math.floor(Math.min(byWidth,byHeight)))+'px');
+    const candidates=[cards.length,2,1].filter((v,i,a)=>a.indexOf(v)===i).map(columns=>{
+      const rows=Math.ceil(cards.length/columns);
+      return {columns,size:Math.min((width-gap*(columns-1)-4)/columns,(height-gap*(rows-1)-4)/rows*2/3)};
+    });
+    const best=candidates.reduce((a,b)=>b.size>a.size?b:a);
+    gallery.style.setProperty('--gallery-columns',best.columns);
+    gallery.style.setProperty('--card-fit-width',Math.max(1,Math.floor(best.size))+'px');
   }
   function placeGallery(){
     if(handset.matches){

@@ -1976,3 +1976,51 @@
   text-shadow:0 2px 3px #180000,0 0 4px #ff0000!important;
  }
 }
+
+/* UNDEPLOYED console polish: matched enamel controls and emblem-backed HUD. */
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){
+ .cosmic-app{height:100dvh!important;max-height:100dvh!important;grid-template-rows:auto auto minmax(0,1fr)!important;padding-bottom:16px!important}
+ .cosmic-hud{
+  height:clamp(118px,15vh,145px)!important;
+  grid-template-rows:repeat(3,minmax(0,1fr))!important;
+  background:linear-gradient(#11152b35,#19132f50),url('assets/console-v2/navy-enamel.webp') center/cover!important;
+ }
+ .cosmic-hud .hud-stat{display:flex;flex-direction:column;justify-content:center;padding:2px!important}
+ .cosmic-hud .hud-stat small{display:flex;align-items:center;justify-content:center;gap:5px;font-size:10px!important}
+ .cosmic-hud .hud-stat small::before{content:'';width:17px;height:17px;background:center/contain no-repeat;flex:none}
+ .cosmic-hud .hud-stat:nth-child(1) small::before{background-image:url('assets/console-v2/hud-score.webp')}
+ .cosmic-hud .hud-stat:nth-child(2) small::before{background-image:url('assets/console-v2/hud-charge.webp')}
+ .cosmic-hud .hud-stat:nth-child(3) small::before{background-image:url('assets/console-v2/hud-lives.webp')}
+ .cosmic-hud .hud-stat:nth-child(4) small::before{background-image:url('assets/console-v2/hud-stage.webp')}
+ .cosmic-hud .hud-stat:nth-child(5) small::before{background-image:url('assets/console-v2/hud-fiends.webp')}
+ .cosmic-hud .hud-stat:nth-child(6) small::before{background-image:url('assets/console-v2/hud-biscuits.webp')}
+ .cosmic-bottom{
+  display:grid!important;grid-template-rows:auto minmax(0,1fr) 48px!important;
+  overflow:hidden!important;min-height:0!important;height:auto!important;
+  background:linear-gradient(#11152b30,#19132f40),url('assets/console-v2/navy-enamel.webp') center/cover!important;
+ }
+ .cosmic-bottom .command-bar{grid-row:1;min-height:92px!important;background:#080e2760!important;padding:5px 6px 10px!important}
+ .cosmic-bottom .sector-art{grid-row:2;min-height:0!important;overflow:hidden!important}
+ .cosmic-bottom .fiend-tracker,.cosmic-bottom .fiend-track{min-height:0!important}
+ .desktop-mission-actions{grid-row:3;align-self:end;min-height:48px;height:48px;overflow:visible}
+ .cosmic-bottom .boost-icon{background:url('assets/console-v2/boost.webp') center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%}
+ .cosmic-bottom .boost-icon svg{visibility:hidden}
+ .cosmic-bottom .weapon{filter:drop-shadow(0 0 4px #b7855050)}
+ .cosmic-bottom .weapon:disabled{opacity:.55;filter:saturate(.4)}
+ .cosmic-bottom .weapon:not(:disabled):hover{filter:brightness(1.12) drop-shadow(0 0 6px #ffd88680)}
+ .cosmic-bottom .boost-weapon.active{filter:brightness(1.15) drop-shadow(0 0 8px #67e4ff)}
+}
+
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){.cosmic-hud .hud-stat small::before{width:25px;height:25px}.cosmic-hud,.cosmic-bottom{background-blend-mode:normal}}
+
+/* Larger aligned HUD emblems beside values. */
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){.cosmic-hud{height:180px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,minmax(0,1fr))!important;padding:8px 12px!important;gap:5px 12px!important}.cosmic-hud .hud-stat{display:grid!important;grid-template-columns:46px minmax(0,1fr)!important;grid-template-rows:17px 30px!important;column-gap:10px!important;align-content:center!important;text-align:left!important;padding:3px 6px!important;border-bottom:1px solid #f5cb6328}.cosmic-hud .hud-stat small{grid-column:2;grid-row:1;justify-content:flex-start!important;font:700 10px/17px Arial,sans-serif!important;letter-spacing:.7px!important;white-space:nowrap}.cosmic-hud .hud-stat small::before{display:none!important}.cosmic-hud .hud-stat b{grid-column:2;grid-row:2;display:flex!important;align-items:center;justify-content:flex-start!important;gap:4px!important;font:700 23px/30px Arial,sans-serif!important;white-space:nowrap}.cosmic-hud .hud-stat::before{content:'';grid-column:1;grid-row:1 / 3;width:46px;height:46px;align-self:center;background-position:center;background-repeat:no-repeat;background-size:145%;filter:drop-shadow(0 2px 3px #0008)}.cosmic-hud .hud-stat:nth-child(1)::before{background-image:url('assets/console-v2/hud-score.webp')}.cosmic-hud .hud-stat:nth-child(2)::before{background-image:url('assets/console-v2/hud-charge.webp')}.cosmic-hud .hud-stat:nth-child(3)::before{background-image:url('assets/console-v2/hud-lives.webp')}.cosmic-hud .hud-stat:nth-child(4)::before{background-image:url('assets/console-v2/hud-stage.webp')}.cosmic-hud .hud-stat:nth-child(5)::before{background-image:url('assets/console-v2/hud-fiends.webp')}.cosmic-hud .hud-stat:nth-child(6)::before{background-image:url('assets/console-v2/hud-biscuits.webp')}}
+
+/* Final HUD alignment and unclipped charge emblem. */
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){
+.cosmic-hud .hud-stat{grid-template-columns:46px 104px!important;justify-content:center!important;column-gap:8px!important}
+.cosmic-hud .hud-stat:nth-child(2)::before{background-size:contain!important;overflow:visible!important}
+}
+
+/* Trim exterior art to the original gold bezel. */
+.cosmic-banner-top .cosmic-banner-art{clip-path:inset(.55% .45% round 8% / 24%)!important;border:0!important;box-shadow:none!important}

@@ -1178,3 +1178,8 @@
  }
  controls();init();enter('start','Explore ten distinct cosmic environments. Collect biscuits to power lasers (1 treat) and rockets (2 treats), defeat three Fiends, and reach the portal. Choose any stage below to playtest it directly.','LAUNCH MISSION');loopId=requestAnimationFrame(tick);
 })();
+
+// Space is a game key even while the launch screen is visible.
+document.addEventListener('keydown',event=>{
+ if((event.code==='Space'||event.key===' ')&&!event.target?.closest?.('input,textarea,select,[contenteditable="true"]'))event.preventDefault();
+},true);

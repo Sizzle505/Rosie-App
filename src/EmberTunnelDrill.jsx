@@ -6,6 +6,7 @@ import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
 import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExpeditionStars} from "./emberExpeditionStages.js";
 import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT} from "./emberExpansionCatalog.js";
 import "./ember-tunnel-drill.css";
+import "./ember-console.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
 
@@ -637,19 +638,20 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   const passageProgress=world?(hud.result==="complete"?100:Math.min(100,hud.time/hud.duration*100)):
     Math.min(100, ((hud.time-PASSAGES[hud.passage].start)/(PASSAGES[hud.passage].end-PASSAGES[hud.passage].start))*100);
   return (
-    <section className={"ember-suite"+(introOpen?" ember-cinematic-active":"")} data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
+    <section className={"ember-suite ember-console-upgrade"+(introOpen?" ember-cinematic-active":"")} data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
       <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
       <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
         <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
              alt="Captain Rosie - Ember Tunnel Drill" draggable="false" />
       </header>
       <div className="ember-stats" aria-live="off">
-        <div><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
-        <div><small>TIME</small><strong>{formatTime(hud.time,hud.duration)}</strong></div>
-        <div><small>HULL</small><strong className="ember-hull">{Array.from({length:5},(_,n)=><i key={n} className={n<hud.hull?"intact":""}>●</i>)}</strong></div>
-        <div><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
+        <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/score.webp" alt=""/><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
+        <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/time.webp" alt=""/><small>TIME</small><strong>{formatTime(hud.time,hud.duration)}</strong></div>
+        <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/hull.webp" alt=""/><small>HULL</small><strong className="ember-hull" aria-label={`${hud.hull} of 5 hull remaining`}>{hud.hull}<small className="ember-hull-total">/5</small><span className="ember-hull-segments" aria-hidden="true">{Array.from({length:5},(_,n)=><i key={n} className={n<hud.hull?"intact":""}/>)}</span></strong></div>
+        <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/treasure.webp" alt=""/><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
       <div className={"ember-expedition"+(world?" is-world-route":"")} aria-label={`Excavation route: passage ${hud.passage+1} of ${route.length}`}>
+        <div className="ember-console-route-art" aria-hidden="true" style={{backgroundImage:`url(${world ? (hud.stageIndex>=2 ? EXPANSION_ROOT+Object.values(EMBER_EXPANSION_TRANSITIONS)[hud.stageIndex-2] : "/ember-drill/"+world.art) : "/ember-drill/temple-organic-passage.webp"})`}} />
         <span className="ember-route-label">{world?"WORLD PROGRESS":"EXCAVATION ROUTE"}</span>
         <div className="ember-route-track"><i style={{width:`${world?passageProgress:((hud.passage + passageProgress / 100) / route.length) * 100}%`}} /></div>
         {world?<span className="current">{hud.passage+1}. {world.name}</span>:
@@ -789,25 +791,25 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("up",true,e)} onPointerUp={e=>hold("up",false,e)}
           onPointerCancel={e=>hold("up",false,e)} onLostPointerCapture={e=>hold("up",false,e)}
-          aria-label="Angle the drill upward"><span>▲</span></button>}
+          aria-label="Angle the drill upward"><img src="/ember-drill/console-v1/steer-up.webp" alt=""/></button>}
         <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
           disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
-          <span className="ember-boost-symbol">✦</span>
+          <img className="ember-turbo-art" src="/ember-drill/console-v1/turbo.webp" alt=""/>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
             <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
             <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
-        {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">▲▼</button> :
+        {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">ARROWS</button> :
         <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}
           onPointerCancel={e=>hold("down",false,e)} onLostPointerCapture={e=>hold("down",false,e)}
-          aria-label="Angle the drill downward"><span>▼</span></button>}
-        {steerMode==="buttons"&&<button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use joystick" title="Joystick">◉</button>}
+          aria-label="Angle the drill downward"><img className="ember-down-art" src="/ember-drill/console-v1/steer-up.webp" alt=""/></button>}
+        {steerMode==="buttons"&&<button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use joystick" title="Joystick">JOYSTICK</button>}
       </div>
-      {active&&<div className="ember-run-actions">
-        <button className="ember-icon-action" type="button" onClick={togglePause} aria-label="Pause run" title="Pause run">❚❚</button>
-        <button className="ember-icon-action" type="button" onClick={()=>start(frame.current.stageIndex)} aria-label="Replay run" title="Replay run">↻</button>
+      {<div className="ember-run-actions">
+        <button className="ember-icon-action" type="button" disabled={!active&&!paused} onClick={togglePause} aria-label={paused?"Resume run":"Pause run"} title={paused?"Resume run":"Pause run"}><img src="/ember-drill/console-v1/pause.webp" alt=""/><span>{paused?"RESUME":"PAUSE"}</span></button>
+        <button className="ember-icon-action" type="button" disabled={!active&&!paused&&mode!=="ended"} onClick={()=>start(frame.current.stageIndex)} aria-label="Replay run" title="Replay run"><img src="/ember-drill/console-v1/retry.webp" alt=""/><span>RETRY</span></button>
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}

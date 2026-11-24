@@ -1,0 +1,118 @@
+/* Yacht instruments: naval brass and lacquer, with live text kept separate from art. */
+.captain-game-page.yacht-console-upgrade{box-sizing:border-box;padding:12px;border:1px solid #c09c59;border-radius:18px;background:linear-gradient(#061c2933,#061c2955),url('/yacht-console-v1/texture.webp') center/cover!important;box-shadow:inset 0 0 0 3px #d8b46716,0 15px 40px #0006}
+.yacht-console-upgrade .captain-hud{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.yacht-console-upgrade .captain-hud>div{display:grid!important;grid-template-columns:48px minmax(0,1fr);grid-template-rows:16px 34px;align-content:center;column-gap:8px;text-align:left;min-width:0;height:76px;padding:8px;border:1px solid #ccac68a0;border-radius:10px;background:linear-gradient(130deg,#0c3041b3,#061d2bba)!important;box-shadow:inset 0 1px #fff1c62b;overflow:hidden}
+.yacht-console-upgrade .captain-hud>div::after{display:none}
+.yacht-console-upgrade .yacht-instrument{grid-column:1;grid-row:1/3;width:48px;height:48px;align-self:center;object-fit:contain;filter:drop-shadow(0 2px 3px #0007)}
+.yacht-console-upgrade .captain-hud>div>span{grid-column:2;grid-row:1;font:700 10px/16px Arial,sans-serif;letter-spacing:.7px;color:#e7d5aa}
+.yacht-console-upgrade .captain-hud strong{grid-column:2;grid-row:2;display:flex;align-items:baseline;gap:3px;font:700 clamp(21px,1.8vw,27px)/32px Georgia,serif;color:#fff0ce;white-space:nowrap;font-variant-numeric:tabular-nums}
+.yacht-console-upgrade .captain-hud strong small{font:700 13px/1 Georgia,serif;color:#d9c797}
+.yacht-console-upgrade .captain-lives{position:relative;padding-bottom:4px}
+.yacht-hull-meter{position:absolute;bottom:0;left:0;width:70px;display:flex;gap:4px}
+.yacht-hull-meter b{height:4px;flex:1;background:#23414d;border-radius:3px;box-shadow:inset 0 0 0 1px #c7a56255}
+.yacht-hull-meter b.intact{background:linear-gradient(#fff2bb,#d5a44e)}
+.yacht-console-upgrade .yacht-console-actions{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0}
+.yacht-console-upgrade .yacht-console-actions button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;width:112px;height:62px;min-height:44px;padding:0;border:0;border-radius:12px;background:transparent;box-shadow:none}
+.yacht-console-actions img{width:100%;height:46px;object-fit:contain;pointer-events:none}
+.yacht-console-actions span{font:700 10px/12px Arial,sans-serif;letter-spacing:1px;color:#ead4a4}
+.yacht-console-actions button:disabled{opacity:.48}
+.yacht-console-upgrade button:focus-visible{outline:2px solid #ffe5a0;outline-offset:3px}
+.yacht-console-upgrade .captain-command-deck{grid-template-columns:64px minmax(0,1fr) 64px!important;gap:8px!important;padding:8px!important;background:#05213199!important;border:1px solid #ba965e80;border-radius:12px;margin-top:8px}
+.yacht-console-upgrade .helm-button{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;min-height:62px;height:auto;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.yacht-console-upgrade .helm-button img{width:52px;height:52px;object-fit:contain;pointer-events:none}
+.yacht-steer-right{transform:rotate(180deg)}
+.yacht-console-upgrade .helm-button small{font:700 9px/12px Arial,sans-serif;color:#e8d0a3;letter-spacing:.5px}
+.yacht-console-upgrade .boost-control{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0;padding:3px!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.yacht-turbo-emblem{position:relative;flex:0 0 64px;width:64px;height:64px}
+.yacht-turbo-emblem img{width:100%;height:100%;object-fit:contain}
+.yacht-turbo-emblem b{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);padding:2px 5px;border:1px solid #d1a961;border-radius:9px;background:#062232;color:#ffebbc;font:700 10px/1 Arial,sans-serif}
+.yacht-console-upgrade .boost-copy{min-width:0;text-align:left}
+.yacht-console-upgrade .boost-copy strong{font:700 12px/1.3 Arial,sans-serif;letter-spacing:.5px;white-space:normal}
+.yacht-console-upgrade .boost-copy small{font:700 9px/1.3 Arial,sans-serif;white-space:normal;letter-spacing:.2px}
+.yacht-console-upgrade .boost-ready .yacht-turbo-emblem{filter:drop-shadow(0 0 7px #f1bd51)}
+.yacht-console-upgrade .captain-command-deck.has-axis-joystick{grid-template-columns:76px minmax(0,1fr)!important}
+.yacht-console-upgrade .captain-cargo-key{gap:5px;padding:7px 4px;flex-wrap:wrap}
+.yacht-console-upgrade .captain-cargo-key>span{font-size:10px}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .captain-game-page.yacht-console-upgrade,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page.yacht-console-upgrade{display:grid!important;grid-template-columns:clamp(310px,24vw,354px) minmax(0,1fr)!important;grid-template-rows:minmax(175px,1fr) 40px 242px 66px!important;gap:8px 12px!important;align-items:stretch!important;width:calc(100% - 24px)!important;max-width:1600px!important;height:calc(100dvh - 24px)!important;min-height:0!important;margin:12px auto!important;padding:12px!important;overflow:hidden!important}
+ .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page.yacht-console-upgrade{width:100%!important;max-width:none!important;height:100dvh!important;margin:0!important;padding:44px 12px 12px!important}
+ .yacht-console-upgrade .captain-hero,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-console-upgrade .captain-hero{grid-column:1!important;grid-row:1!important;height:100%!important;min-height:0!important;margin:0!important;border-radius:12px;overflow:hidden}
+ .yacht-console-upgrade .captain-hero-banner{background-position:34% center!important}
+ .yacht-console-upgrade .captain-title{position:absolute!important;inset:auto 0 0!important;width:100%!important;max-width:none!important;padding:0!important;transform:none!important}
+ .yacht-console-upgrade .captain-title-plaque{padding:10px!important;min-height:0!important;background:linear-gradient(#072334ee,#071e2af5)!important;border:0!important;border-top:1px solid #d1aa66!important;border-radius:0!important;text-align:center}
+ .yacht-console-upgrade .captain-title h1{font-size:23px!important;line-height:1.15!important;margin:0!important}
+ .yacht-console-upgrade .captain-title p{font-size:18px!important;line-height:1.2!important;margin:3px 0 0!important}
+ .yacht-console-upgrade .captain-kicker,.yacht-console-upgrade .captain-title small,.yacht-console-upgrade .captain-best,.yacht-console-upgrade .captain-hero-compass,.yacht-console-upgrade .marquee-crest,.yacht-console-upgrade .marquee-burgee{display:none!important}
+ .yacht-console-upgrade .captain-marquee{display:block!important}
+ .yacht-console-upgrade .captain-route-strip,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-console-upgrade .captain-route-strip{grid-column:1!important;grid-row:2!important;margin:0!important;padding:5px!important;min-width:0}
+ .yacht-console-upgrade .route-port{font-size:8px;max-width:100px}
+ .yacht-console-upgrade .captain-hud,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-console-upgrade .captain-hud{grid-column:1!important;grid-row:3!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(3,1fr)!important;gap:6px!important;margin:0!important;align-content:stretch!important}
+ .yacht-console-upgrade .captain-hud>div{height:auto}
+ .yacht-console-upgrade .captain-hud .combo-cell{grid-column:span 2;grid-template-columns:48px minmax(0,1fr) auto!important;grid-template-rows:1fr!important;align-items:center;column-gap:10px;padding:8px 14px}
+ .yacht-console-upgrade .combo-cell .yacht-instrument{grid-row:1}
+ .yacht-console-upgrade .captain-hud .combo-cell>span{grid-row:1}
+ .yacht-console-upgrade .captain-hud .combo-cell>strong{grid-column:3;grid-row:1}
+ .yacht-console-upgrade .yacht-console-actions{grid-column:1;grid-row:4;margin:0!important;align-self:center}
+ .yacht-console-upgrade .yacht-game-shell,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-console-upgrade .yacht-game-shell{grid-column:2!important;grid-row:1/-1!important;display:flex!important;flex-direction:column;align-self:stretch!important;justify-self:stretch!important;gap:4px!important;width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;margin:0!important;padding:8px!important;background:#06233588!important;border:1px solid #c49f60!important;border-radius:14px}
+ .yacht-console-upgrade .yacht-game-sign{flex:0 0 auto;min-height:36px;padding:5px 8px!important}
+ .yacht-console-upgrade .yacht-game-sign strong{font-size:11px!important}.yacht-console-upgrade .yacht-game-sign small{font-size:10px!important}
+ .yacht-console-upgrade .yacht-voyage-progress{flex:0 0 18px;margin:0!important}
+ .yacht-console-upgrade .yacht-steering-options{flex:0 0 auto;min-height:32px;padding:3px 8px!important}
+ .yacht-console-upgrade .yacht-course,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-console-upgrade .yacht-course{flex:1 1 0!important;min-height:0!important;height:auto!important;max-height:none!important;width:100%!important;aspect-ratio:auto!important;margin:0!important}
+ .yacht-console-upgrade .captain-command-deck{flex:0 0 85px;margin:0!important;padding:5px 12px!important}
+ .yacht-console-upgrade .captain-cargo-key{flex:0 0 auto;margin:0!important;padding:4px!important;gap:4px 12px!important}
+}
+@media(max-width:700px){
+ .captain-game-page.yacht-console-upgrade{padding:7px;border-radius:13px}
+ .yacht-console-upgrade .captain-hud{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px;margin:7px 0!important}
+ .yacht-console-upgrade .captain-hud>div{height:66px;grid-template-columns:44px minmax(0,1fr);grid-template-rows:15px 31px;padding:6px 8px;column-gap:7px}
+ .yacht-console-upgrade .yacht-instrument{width:44px;height:44px}
+ .yacht-console-upgrade .captain-hud strong{font-size:23px;line-height:29px}
+ .yacht-console-upgrade .captain-hud .combo-cell{grid-column:span 2;height:58px;grid-template-columns:44px minmax(0,1fr) auto;grid-template-rows:1fr;align-items:center}
+ .yacht-console-upgrade .combo-cell .yacht-instrument,.yacht-console-upgrade .captain-hud .combo-cell>span{grid-row:1}
+ .yacht-console-upgrade .captain-hud .combo-cell>strong{grid-column:3;grid-row:1}
+ .yacht-console-upgrade .captain-command-deck{grid-template-columns:48px minmax(0,1fr) 48px!important;gap:4px!important}
+ .yacht-console-upgrade .helm-button img{width:44px;height:44px}
+ .yacht-console-upgrade .helm-button small{font-size:8px;letter-spacing:0}
+ .yacht-console-upgrade .yacht-turbo-emblem{flex-basis:54px;width:54px;height:54px}
+ .yacht-console-upgrade .boost-copy strong{font-size:11px}.yacht-console-upgrade .boost-copy small{font-size:8px}
+}
+.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{right:max(64px,calc(env(safe-area-inset-right) + 58px))!important}
+@media(max-width:759px) and (orientation:portrait){.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle{right:auto!important;left:max(8px,env(safe-area-inset-left))!important;width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;padding:0!important}}
+.yacht-console-upgrade .helm-button img{transform:rotate(-90deg)}
+.yacht-console-upgrade .helm-button img.yacht-steer-right{transform:rotate(90deg)}
+.yacht-console-upgrade .captain-command-deck .axis-stick-track{border:0;background:url('/yacht-console-v1/joystick-base.webp') center/contain no-repeat;box-shadow:none}
+.yacht-console-upgrade .captain-command-deck .axis-stick-rail{display:none}
+.yacht-console-upgrade .captain-command-deck .axis-stick-knob{width:36px;height:36px;border:0;background:url('/yacht-console-v1/joystick-knob.webp') center/contain no-repeat;box-shadow:none}
+/* Yacht-specific wave-inlaid lacquer and the compact helm arrangement. */
+.captain-game-page.yacht-console-upgrade{background:linear-gradient(#031c291a,#031c2933),url('/yacht-console-v1/nautical-texture.svg') center/768px 768px!important}
+.yacht-console-upgrade .yacht-game-sign{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.yacht-console-upgrade .yacht-game-sign>div:first-of-type{flex:1;min-width:120px}
+.yacht-console-upgrade .yacht-game-sign>.yacht-steering-options{display:flex!important;align-items:center;justify-content:flex-end;gap:8px;flex:0 1 auto!important;border:0!important;background:none!important;margin:0!important;padding:0!important}
+.yacht-console-upgrade .yacht-game-sign .yacht-lane-forecast{gap:3px}
+.yacht-console-upgrade .yacht-game-sign .yacht-lane-forecast button{width:30px;min-width:30px;height:30px;min-height:30px;padding:0}
+.yacht-console-upgrade .yacht-game-sign .captain-steering-toggle{position:static!important;min-width:65px!important;width:auto!important;height:30px!important;min-height:30px!important;padding:4px 7px!important;font-size:10px!important}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .captain-game-page.yacht-console-upgrade,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page.yacht-console-upgrade{grid-template-rows:minmax(120px,1fr) 32px 222px 104px 64px!important}
+ .yacht-console-upgrade>.captain-command-deck{grid-column:1;grid-row:4;width:100%!important;min-width:0;margin:0!important;padding:6px!important}
+ .yacht-console-upgrade>.yacht-console-actions{grid-row:5}
+ .yacht-console-upgrade .captain-command-deck{grid-template-columns:48px minmax(0,1fr) 48px!important}
+ .yacht-console-upgrade .captain-command-deck .helm-button img{width:44px;height:44px}
+ .yacht-console-upgrade .captain-command-deck .boost-control{flex-direction:column;gap:5px}
+ .yacht-console-upgrade .captain-command-deck .boost-copy{text-align:center}
+ .yacht-console-upgrade .captain-command-deck .boost-copy small{font-size:8px}
+ .yacht-console-upgrade .yacht-turbo-emblem{width:54px;height:54px;flex-basis:54px}
+}
+@media(max-width:700px){.yacht-console-upgrade .yacht-game-sign{gap:5px}.yacht-console-upgrade .yacht-game-sign>div:first-of-type{min-width:140px}.yacht-console-upgrade .yacht-game-sign>.yacht-steering-options{margin-left:auto!important}}
+.yacht-console-upgrade .yacht-game-sign>.yacht-steering-options{width:auto!important;flex:0 0 auto!important;flex-wrap:nowrap!important}
+.yacht-console-upgrade .captain-command-deck .helm-button small{display:none}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){.yacht-console-upgrade .yacht-game-sign{flex-wrap:nowrap!important}.yacht-console-upgrade .yacht-course{padding-bottom:0!important}}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){.yacht-console-upgrade .captain-command-deck .boost-control{height:90px!important;min-height:90px!important}.yacht-console-upgrade .yacht-game-sign{padding-right:54px!important}}
+@media(max-width:1099px),(max-height:649px){
+ .captain-game-page.yacht-console-upgrade,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page.yacht-console-upgrade{display:flex!important;flex-direction:column!important;height:auto!important;max-height:none!important;overflow:visible!important;gap:7px!important}
+ .yacht-console-upgrade>.captain-hero,.yacht-console-upgrade>.captain-hud,.yacht-console-upgrade>.captain-command-deck,.yacht-console-upgrade>.yacht-console-actions{flex:none!important;margin:0!important}
+ .yacht-console-upgrade>.yacht-game-shell{display:flex!important;flex-direction:column!important;flex:none!important;height:auto!important;max-height:none!important;width:100%!important;margin:0!important}
+ .yacht-console-upgrade .yacht-course,.captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .yacht-console-upgrade .yacht-course{display:block!important;flex:none!important;width:100%!important;height:clamp(420px,112vw,650px)!important;min-height:420px!important;max-height:none!important;aspect-ratio:auto!important}
+ .yacht-console-upgrade .captain-command-deck{height:80px!important;min-height:80px!important}
+ .yacht-console-upgrade .yacht-console-actions{height:62px!important}
+}

@@ -1,0 +1,86 @@
+/* Approved cosmic console refinements; presentation only. */
+#scene-toggle,#stage-kicker{display:none!important}
+.cosmic-banner-top{background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+.cosmic-banner-top .cosmic-banner-art{object-fit:contain!important;object-position:center!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.cosmic-hud #ammo i{font-size:.66em!important;line-height:1!important;font-style:normal!important;font-weight:600!important;align-self:center;opacity:.85;white-space:nowrap}
+#pause-top,#retry-top,.desktop-mission-actions #pause-top,.desktop-mission-actions #retry-top{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;border-radius:14px;overflow:visible!important}
+#pause-top .mission-action-art,#retry-top .mission-action-art,.desktop-mission-actions #pause-top .mission-action-art,.desktop-mission-actions #retry-top .mission-action-art{display:block;width:100%!important;height:100%!important;object-fit:contain;pointer-events:none}
+#pause-top:active,#retry-top:active{filter:brightness(1.25)}
+#pause-top:focus-visible,#retry-top:focus-visible{outline:2px solid #ffe4ac;outline-offset:3px}
+.cosmic-banner-top #pause-top,.cosmic-banner-top #retry-top{width:58px!important;height:34px!important;top:4px!important;transform:none!important}
+.cosmic-banner-top #pause-top{right:66px!important}.cosmic-banner-top #retry-top{right:4px!important}
+.desktop-mission-actions{gap:12px!important;justify-content:center}
+.desktop-mission-actions #pause-top,.desktop-mission-actions #retry-top{flex:0 1 160px!important;min-width:0!important;height:48px!important}
+/* Same art and touch targets for steering and independent aim. */
+.dpad button{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;touch-action:none}
+.dpad button img{width:100%!important;height:100%!important;object-fit:contain;pointer-events:none}
+.dpad .d-right img{transform:rotate(90deg)}.dpad .d-down img{transform:rotate(180deg)}.dpad .d-left img{transform:rotate(-90deg)}
+.dpad button:active{filter:brightness(1.28)}
+.joystick-track{border:0!important;background:url('assets/console-v2/joystick-base.webp') center/contain no-repeat!important;box-shadow:none!important}
+.joystick-track::before,.joystick-knob::before,.joystick-axis{display:none!important}
+.joystick-knob{border:0!important;background:url('assets/console-v2/joystick-knob.webp') center/contain no-repeat!important;box-shadow:0 3px 7px #0008!important}
+/* Use all available gallery space and keep the 2:3 art undistorted. */
+.veil .fiend-card-gallery{display:grid!important;grid-template-columns:repeat(var(--gallery-columns,4),var(--card-fit-width,22%));grid-auto-rows:auto;align-content:center;justify-content:center;align-items:center;justify-items:center;gap:var(--gallery-gap,10px);inset:8px 10px 78px!important}
+.veil .fiend-flip-card{width:var(--card-fit-width,100%)!important;height:auto!important;aspect-ratio:2/3;max-width:100%;max-height:100%}
+.veil:has(.fiend-card-gallery),.card-detail-modal,.mobile-card-deck{background:linear-gradient(#070b2520,#070b2540),url('assets/console-v2/card-cosmos.webp') center/cover!important}
+.card-detail-modal .card-detail-display{top:calc(50% - 16px);width:min(calc((100dvh - 150px)*.66667),calc(100vw - 110px));max-height:calc(100dvh - 150px);height:auto;aspect-ratio:2/3}
+.card-detail-modal .card-detail-launch{bottom:max(54px,calc(env(safe-area-inset-bottom) + 46px))}
+.card-detail-navigation .card-detail-position{bottom:23px}
+.card-detail-hint{bottom:7px}
+.card-detail-navigation #card-detail-prev{left:max(8px,calc(50% - min(calc((100dvh - 150px)*.33333),calc((100vw - 110px)/2)) - 47px))}
+.card-detail-navigation #card-detail-next{right:max(8px,calc(50% - min(calc((100dvh - 150px)*.33333),calc((100vw - 110px)/2)) - 47px))}
+.card-detail-close{min-width:44px;min-height:44px}
+.cosmic-local-fullscreen{position:fixed;top:max(7px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:100;width:44px;height:44px;padding:0;border:0;background:transparent;cursor:pointer}
+.cosmic-local-fullscreen img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+.cosmic-local-fullscreen:focus-visible{outline:2px solid #ffe4a4;outline-offset:3px}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-banner-top .cosmic-banner-art{padding-right:0!important}
+ .mobile-card-deck .fiend-card-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:center}
+ .mobile-card-deck .fiend-flip-card{width:100%!important;max-width:290px!important}
+ .card-detail-modal .card-detail-display{width:min(calc((100dvh - 170px)*.66667),calc(100vw - 24px));max-height:calc(100dvh - 170px);top:calc(50% - 24px)}
+ .card-detail-navigation .card-detail-cycle{top:auto;bottom:25px;transform:none}
+ .card-detail-navigation #card-detail-prev{left:14px}.card-detail-navigation #card-detail-next{right:14px}
+ .cosmic-local-fullscreen{width:38px;height:38px;top:44px}
+}
+@media(max-height:520px) and (orientation:landscape){
+ .card-detail-modal .card-detail-display{width:min(calc((100dvh - 34px)*.66667),calc(100vw - 240px));max-height:calc(100dvh - 34px);top:50%}
+ .card-detail-modal .card-detail-launch{right:12px;left:auto;bottom:12px;transform:none}
+ .card-detail-navigation .card-detail-position{bottom:8px}
+ .card-detail-hint{display:none}
+}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-top.cosmic-banner-top{padding-top:32px!important;height:auto!important;max-height:none!important}
+ .cosmic-banner-top #pause-top,.cosmic-banner-top #retry-top{top:0!important;height:30px!important;width:70px!important}
+ .cosmic-banner-top #pause-top{right:80px!important}.cosmic-banner-top #retry-top{right:6px!important}
+ .cosmic-bottom .dpad{grid-template-columns:repeat(3,32px)!important;grid-template-rows:repeat(3,27px)!important;gap:0!important}
+ .cosmic-bottom .dpad button{width:32px!important;height:30px!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-top.cosmic-banner-top{aspect-ratio:auto!important}
+ .cosmic-banner-top .cosmic-banner-art{aspect-ratio:auto!important;height:auto!important;max-height:none!important}
+}
+
+/* Restore original approved header; only clip material outside its own frame. */
+.cosmic-banner-top .cosmic-banner-art{clip-path:inset(.35% .3% round 8% / 22%);object-fit:contain!important;object-position:center!important}
+/* Keep each HUD group inside its own half of the console. */
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){
+.cosmic-hud{overflow:hidden!important;min-width:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:8px!important;column-gap:6px!important}
+.cosmic-hud .hud-stat{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;width:100%!important;grid-template-columns:36px minmax(0,1fr)!important;column-gap:6px!important;padding:2px!important;justify-content:stretch!important;overflow:hidden!important}
+.cosmic-hud .hud-stat::before{width:36px!important;height:42px!important;max-width:100%!important}
+.cosmic-hud .hud-stat small{min-width:0!important;max-width:100%!important;font-size:9px!important;letter-spacing:.3px!important;white-space:nowrap!important}
+.cosmic-hud .hud-stat b{min-width:0!important;max-width:100%!important;font-size:20px!important;line-height:30px!important;gap:3px!important}
+.cosmic-hud .hud-stat .life-icon{width:21px!important;height:21px!important;flex:0 0 21px!important}
+.desktop-mission-actions{gap:7.2px!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+.cosmic-banner-top #pause-top{right:76px!important}
+}
+
+html.cosmic-fallback-fullscreen,html.cosmic-fallback-fullscreen body{position:fixed;inset:0;width:100vw;height:100dvh;margin:0;overflow:hidden!important}
+html.cosmic-fallback-fullscreen #cosmic-app{height:100dvh!important;max-height:100dvh!important}
+html.cosmic-fallback-fullscreen .mobile-card-deck{display:none!important}
+/* Leave the app's account dock clear in the embedded phone masthead. */
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-embedded .cosmic-banner-top #pause-top{right:144px!important}
+ .cosmic-embedded .cosmic-banner-top #retry-top{right:68px!important}
+}

@@ -1,0 +1,152 @@
+/* Brass and mineral-enamel expedition console. All control handlers are original. */
+.ember-suite.ember-console-upgrade{--console-brass:#e6b766;--console-cream:#fff0c7;--console-ink:#09252d;padding:12px;border:1px solid #b48744;border-radius:18px;background:linear-gradient(#061b2399,#071d28bb),url('/ember-drill/console-v1/console-texture.webp') center/cover;box-shadow:inset 0 0 0 3px #e2ad5820,0 18px 50px #0008}
+.ember-console-upgrade .ember-header{background:transparent;border:0;box-shadow:none;border-radius:12px}
+.ember-console-upgrade .ember-header::before,.ember-console-upgrade .ember-header::after{display:none}
+.ember-console-upgrade .ember-stats{gap:7px}
+.ember-console-upgrade .ember-stats>div{display:grid;grid-template-columns:33px minmax(0,1fr);grid-template-rows:16px 32px;align-content:center;column-gap:8px;text-align:left;height:68px;padding:7px 10px;overflow:hidden;border:1px solid #c7974b88;border-radius:10px;background:linear-gradient(140deg,#193a3acc,#071c26dd);box-shadow:inset 0 1px #fff0bc24}
+.ember-console-upgrade .ember-instrument-icon{grid-column:1;grid-row:1 / 3;align-self:center;display:grid;place-items:center;width:33px;height:37px;object-fit:contain;font:34px/1 Georgia,serif;color:#edc16d;text-shadow:0 1px #7c4c23,0 0 8px #f7b34030}
+.ember-console-upgrade .ember-instrument-icon svg{width:30px;height:30px;fill:#17333a;stroke:#f0cb83;stroke-width:2.3;stroke-linejoin:round;stroke-linecap:round}
+.ember-console-upgrade .ember-stats small{grid-column:2;grid-row:1;font:700 10px/16px Arial,sans-serif;letter-spacing:1px;color:#dccaa6;min-width:0}
+.ember-console-upgrade .ember-stats strong{grid-column:2;grid-row:2;display:flex;align-items:center;gap:3px;margin:0;font:700 24px/32px Georgia,serif;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:0;color:var(--console-cream)}
+.ember-console-upgrade .ember-hull i{font-size:13px;line-height:1}
+.ember-console-upgrade .ember-expedition{margin:0;padding:12px;border:1px solid #c7974b88;border-radius:10px;background:#071d27bd;color:#d2c4a7}
+.ember-console-upgrade .ember-route-label{font:700 10px/1.4 Arial,sans-serif;letter-spacing:1.2px}
+.ember-console-upgrade .ember-passage-mission{gap:6px;padding:8px 2px 0}
+.ember-console-upgrade .ember-passage-mission strong{line-height:1.4}
+.ember-console-upgrade .ember-stage{border:2px solid #c19850;border-radius:14px;box-shadow:0 0 0 1px #ffe0a730,0 10px 30px #0006}
+.ember-console-upgrade .ember-controls{padding:11px 10px 8px;margin:8px 0 0;gap:10px;grid-template-columns:54px minmax(0,1fr) 54px;border:1px solid #c7974b88;border-radius:12px;background:#071d27a8;min-width:0;overflow:visible}
+.ember-console-upgrade .ember-angle{height:54px!important;width:54px;min-width:44px;min-height:44px;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;border-radius:10px!important}
+.ember-console-upgrade .ember-angle img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.ember-console-upgrade .ember-down-art{transform:rotate(180deg)}
+.ember-console-upgrade .ember-boost{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;min-height:86px;height:auto!important;padding:8px!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:12px}
+.ember-console-upgrade .ember-turbo-art{width:76px;height:76px;flex:0 0 76px;object-fit:contain;pointer-events:none}
+.ember-console-upgrade .ember-boost>span{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;text-align:left}
+.ember-console-upgrade .ember-boost b{font:700 13px/1.25 Arial,sans-serif;letter-spacing:.5px;color:#ffe4ad;white-space:normal}
+.ember-console-upgrade .ember-boost small{font:700 9px/1.3 Arial,sans-serif;letter-spacing:.4px;color:#d0c4a8;white-space:normal}
+.ember-console-upgrade .ember-charge{width:100%;height:8px;border:1px solid #b1874e88;background:#041219;border-radius:9px;overflow:hidden}
+.ember-console-upgrade .ember-charge>i{height:100%;background:linear-gradient(90deg,#ba622a,#e8b55c,#fff1b3)}
+.ember-console-upgrade .ember-boost.is-ready .ember-turbo-art{filter:drop-shadow(0 0 8px #ffb24b)}
+.ember-console-upgrade .ember-boost.is-boosting .ember-turbo-art{filter:brightness(1.2) drop-shadow(0 0 10px #ffd576)}
+.ember-console-upgrade .ember-controls button:disabled{opacity:.5;filter:saturate(.65)}
+.ember-console-upgrade button:focus-visible{outline:2px solid #ffe3a4;outline-offset:4px}
+.ember-console-upgrade .ember-angle:not(:disabled):active,.ember-console-upgrade .ember-boost:not(:disabled):active{filter:brightness(1.18);transform:translateY(1px)}
+.ember-console-upgrade .ember-controls:has(.axis-stick){grid-template-columns:74px minmax(0,1fr) 40px}
+.ember-console-upgrade .axis-stick-track{border:0;background:url('/ember-drill/console-v1/joystick-base.webp') center/contain no-repeat;box-shadow:none;border-radius:50%}
+.ember-console-upgrade .axis-stick-rail{display:none}
+.ember-console-upgrade .axis-stick-knob{width:37px;height:37px;border:0;background:url('/ember-drill/console-v1/joystick-knob.webp') center/contain no-repeat;box-shadow:none}
+.ember-console-upgrade .ember-stick-toggle{height:36px!important;min-height:36px!important;min-width:36px;right:4px;top:4px;border:1px solid #ad844b!important;border-radius:8px!important;background:#0b2a33!important;color:#f3d396}
+.ember-console-upgrade .ember-controls:not(:has(.axis-stick)) .ember-stick-toggle{top:-41px;right:1px}
+.ember-console-upgrade .ember-run-actions{display:flex;justify-content:center;align-items:center;gap:10px;margin:8px 0 0;padding:0;flex-wrap:wrap}
+.ember-console-upgrade .ember-run-actions .ember-icon-action{position:relative;display:block;flex:0 1 126px;width:126px;height:58px;min-height:44px;border:0;border-radius:12px;padding:0;background:none;box-shadow:none;overflow:visible}
+.ember-console-upgrade .ember-icon-action img{display:block;width:100%;height:44px;object-fit:contain;pointer-events:none}
+.ember-console-upgrade .ember-icon-action span{position:absolute;left:0;right:0;bottom:0;text-align:center;font:700 9px/12px Arial,sans-serif;letter-spacing:1.4px;color:#e7cf9f}
+.ember-console-upgrade .ember-icon-action:disabled{opacity:.45;cursor:default}
+.ember-console-upgrade .ember-run-actions>span{width:100%;text-align:center;font:10px/1.4 Arial,sans-serif;color:#bdb5a0}
+.ember-console-upgrade .ember-caption{gap:6px;padding:8px 2px 0;font:10px/1.4 Arial,sans-serif;color:#d7c6a1}
+.ember-console-upgrade .ember-caption span{font-size:10px;letter-spacing:.2px}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .ember-suite.ember-console-upgrade{display:grid!important;grid-template-columns:300px minmax(0,1fr);grid-template-rows:86px 151px minmax(115px,1fr) 130px 80px 58px;gap:10px;width:calc(100% - 24px)!important;max-width:1600px!important;height:calc(100dvh - 24px)!important;min-height:650px;max-height:1000px;margin:12px auto!important;padding:12px!important}
+ .ember-console-upgrade .ember-section-divider{display:none!important}
+ .ember-console-upgrade .ember-header{grid-column:1;grid-row:1;height:86px!important;min-height:0!important;aspect-ratio:auto!important}
+ .ember-console-upgrade .ember-header-full-art{width:100%;height:100%!important;object-fit:contain!important}
+ .ember-console-upgrade .ember-stats{grid-column:1;grid-row:2;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:7px;margin:0;min-width:0}
+ .ember-console-upgrade .ember-stats>div{height:auto;padding:6px;column-gap:6px;grid-template-columns:28px minmax(0,1fr)}
+ .ember-console-upgrade .ember-instrument-icon{width:28px;height:32px;font-size:30px}
+ .ember-console-upgrade .ember-stats strong{font-size:22px}
+ .ember-console-upgrade .ember-stats .ember-hull{gap:2px}
+ .ember-console-upgrade .ember-expedition{grid-column:1;grid-row:3;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:9px;min-height:0;overflow:auto}
+ .ember-console-upgrade .ember-route-track{flex:none!important;height:6px!important;min-height:6px!important;min-width:100%!important;order:0!important}
+ .ember-console-upgrade .ember-expedition>span:not(.ember-route-label){max-width:100%!important;font:11px/1.3 Georgia,serif}
+ .ember-console-upgrade .ember-passage-mission{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;order:2!important}
+ .ember-console-upgrade .ember-controls{grid-column:1;grid-row:4;margin:0;padding:12px 7px 5px;grid-template-columns:44px minmax(0,1fr) 44px;gap:5px;align-content:center}
+ .ember-console-upgrade .ember-angle{width:44px;height:48px!important}
+ .ember-console-upgrade .ember-controls:has(.axis-stick){grid-template-columns:64px minmax(0,1fr) 30px;gap:4px}
+ .ember-console-upgrade .ember-controls .axis-stick{width:64px}.ember-console-upgrade .axis-stick-track{width:64px;height:76px}
+ .ember-console-upgrade .ember-boost{flex-direction:column;gap:3px;min-height:0;padding:0!important}
+ .ember-console-upgrade .ember-turbo-art{width:61px;height:61px;flex-basis:61px}
+ .ember-console-upgrade .ember-boost>span{gap:4px;width:100%;text-align:center}
+ .ember-console-upgrade .ember-boost b{font-size:11px}.ember-console-upgrade .ember-boost small{font-size:8px}
+ .ember-console-upgrade .ember-run-actions{grid-column:1;grid-row:5;align-content:center;margin:0;gap:7px}
+ .ember-console-upgrade .ember-run-actions>span{font-size:9px}
+ .ember-console-upgrade .ember-caption{grid-column:1;grid-row:6;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:4px 10px;margin:0;padding:2px;text-align:center;overflow:hidden}
+ .ember-console-upgrade .ember-caption span{font-size:9px}
+ .ember-console-upgrade .ember-stage{grid-column:2;grid-row:1 / -1;height:100%!important;min-height:0!important;width:100%!important;aspect-ratio:auto!important}
+}
+@media(max-width:620px){
+ .ember-suite.ember-console-upgrade{padding:7px;margin-top:10px;border-radius:13px}
+ .ember-console-upgrade .ember-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:7px 0}
+ .ember-console-upgrade .ember-stats>div{height:55px;grid-template-columns:26px minmax(0,1fr);column-gap:7px;padding:5px 8px;grid-template-rows:14px 27px}
+ .ember-console-upgrade .ember-instrument-icon{width:26px;height:31px;font-size:28px}.ember-console-upgrade .ember-instrument-icon svg{width:25px;height:25px}
+ .ember-console-upgrade .ember-stats small{font-size:9px;line-height:14px}.ember-console-upgrade .ember-stats strong{font-size:22px;line-height:27px}
+ .ember-console-upgrade .ember-expedition{padding:7px;margin-bottom:7px}
+ .ember-console-upgrade .ember-controls{grid-template-columns:44px minmax(0,1fr) 44px;gap:5px;padding:8px 5px}
+ .ember-console-upgrade .ember-angle{width:44px;height:48px!important}
+ .ember-console-upgrade .ember-controls:has(.axis-stick){grid-template-columns:67px minmax(0,1fr) 36px}
+ .ember-console-upgrade .ember-turbo-art{width:60px;height:60px;flex-basis:60px}
+ .ember-console-upgrade .ember-boost{gap:7px;min-height:75px;padding:3px!important}
+ .ember-console-upgrade .ember-boost b{font-size:11px}.ember-console-upgrade .ember-boost small{font-size:8px}
+ .ember-console-upgrade .ember-stick-toggle{right:1px;min-width:34px;width:34px;min-height:34px!important;height:34px!important;font-size:9px!important}
+}
+.ember-suite.ember-console-upgrade{box-sizing:border-box}
+.ember-console-route-art{display:none}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .ember-console-upgrade .ember-expedition{justify-content:flex-start;gap:8px}
+ .ember-console-route-art{display:block;flex:1 1 110px;min-height:68px;max-height:180px;border:1px solid #bc914f70;border-radius:7px;background-size:cover;background-position:center;box-shadow:inset 0 0 20px #02161a80}
+}
+/* Keep steering-mode choice in its own panel, clearly labeled. */
+.ember-console-upgrade .ember-controls .ember-stick-toggle{top:4px!important;right:5px!important;width:63px!important;height:24px!important;min-height:24px!important;min-width:0;font:700 8px/1 Arial,sans-serif!important;letter-spacing:.4px}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .ember-suite.ember-console-upgrade{grid-template-rows:clamp(60px,9vh,86px) clamp(120px,16vh,151px) minmax(70px,1fr) clamp(110px,14vh,140px) 60px 44px;min-height:0}
+}
+@media(max-width:620px){.ember-console-upgrade .ember-controls{padding-top:30px}}
+/* Integration with the app's shared fullscreen frame; override its older grid. */
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.ember-suite.ember-console-upgrade{display:grid!important;grid-template-columns:300px minmax(0,1fr)!important;grid-template-rows:clamp(60px,9vh,86px) clamp(118px,16vh,151px) minmax(60px,1fr) clamp(110px,14vh,132px) 58px 32px!important;gap:8px!important;align-items:stretch!important;width:100%!important;max-width:none!important;height:100dvh!important;min-height:0!important;max-height:none!important;margin:0!important;padding:44px 12px 12px!important;overflow:hidden!important}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-header{grid-column:1!important;grid-row:1!important;height:100%!important}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-stage{grid-column:2!important;grid-row:1 / -1!important;align-self:stretch!important;justify-self:stretch!important;width:100%!important;max-width:none!important;height:100%!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-canvas{width:100%!important;height:100%!important;aspect-ratio:auto!important}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-controls{grid-column:1!important;grid-row:4!important;align-self:stretch!important}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-run-actions{grid-column:1!important;grid-row:5!important;align-self:stretch!important}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-caption{grid-column:1!important;grid-row:6!important;display:flex!important;align-self:stretch!important;margin:0!important;padding:0!important}
+}
+
+/* Illustrated instruments and the approved mineral console surface. */
+.ember-suite.ember-console-upgrade[data-arcade-backdrop]{background-image:linear-gradient(#05191e26,#05191e40),url('/ember-drill/console-v1/console-texture.webp')!important;background-size:cover!important}
+.ember-console-upgrade .ember-stats>div{grid-template-columns:48px minmax(0,1fr);grid-template-rows:16px 34px;column-gap:9px;height:74px;padding:7px 9px;background:linear-gradient(125deg,#0d292c99,#041a21bb)}
+.ember-console-upgrade .ember-instrument-icon{display:block;width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 2px 3px #0007)}
+.ember-console-upgrade .ember-stats strong{font-size:clamp(20px,1.8vw,27px);line-height:32px}
+.ember-console-upgrade .ember-stats .ember-hull{position:relative;align-items:baseline;gap:3px;padding-bottom:5px}
+.ember-console-upgrade .ember-stats .ember-hull-total{font:700 13px/1 Georgia,serif;letter-spacing:0;color:#d6c59f}
+.ember-console-upgrade .ember-hull-segments{position:absolute;left:0;bottom:0;display:flex;gap:3px;width:100%;max-width:75px}
+.ember-console-upgrade .ember-hull-segments i{height:4px;flex:1;background:#223b3e;border-radius:2px;box-shadow:inset 0 0 0 1px #bea36144}
+.ember-console-upgrade .ember-hull-segments i.intact{background:linear-gradient(#fff0ae,#c18d3c)}
+.ember-console-upgrade .ember-caption{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;text-align:center}
+.ember-console-upgrade .ember-caption span{padding:4px 2px;background:#041b2580;border-radius:4px;white-space:nowrap;font:700 10px/1.3 Arial,sans-serif;letter-spacing:0}
+.ember-console-upgrade .ember-caption .ember-best:last-child{grid-column:span 3}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
+ .ember-suite.ember-console-upgrade,.captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen)>.ember-suite.ember-console-upgrade{grid-template-columns:clamp(310px,24vw,354px) minmax(0,1fr)!important;grid-template-rows:clamp(60px,9vh,86px) 154px minmax(100px,1fr) 122px 76px 74px!important;gap:8px!important}
+ .ember-console-upgrade .ember-stats>div{height:auto;grid-template-columns:48px minmax(0,1fr);padding:6px 8px;column-gap:7px}
+ .ember-console-upgrade .ember-instrument-icon{width:48px;height:48px}
+ .ember-console-upgrade .ember-expedition{gap:6px;padding:9px}
+ .ember-console-route-art{flex:1 1 60px;min-height:40px;max-height:130px}
+ .ember-console-upgrade .ember-run-actions{gap:2px 8px;align-content:center}
+ .ember-console-upgrade .ember-run-actions .ember-icon-action{flex:0 1 116px;width:116px;height:53px}
+ .captain-fs-tunnel:is(:fullscreen,.is-fallback-fullscreen) .ember-console-upgrade .ember-caption{display:grid!important;align-content:center!important;gap:4px!important}
+}
+@media(max-width:620px){
+ .ember-console-upgrade .ember-stats>div{height:66px;grid-template-columns:44px minmax(0,1fr);grid-template-rows:15px 31px;gap:0 7px;padding:6px 8px}
+ .ember-console-upgrade .ember-instrument-icon{width:44px;height:44px}
+ .ember-console-upgrade .ember-stats strong{font-size:23px;line-height:29px}
+ .ember-console-upgrade .ember-stats small{font-size:10px}
+}
+.ember-console-upgrade .ember-section-divider{display:none!important}
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){.ember-console-route-art{max-height:none;flex:1 1 90px}}
+@media(max-width:620px){
+ .ember-console-upgrade .ember-expedition{display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center;padding:8px}
+ .ember-console-upgrade .ember-route-label{font-size:10px;width:100%}
+ .ember-console-upgrade .ember-expedition>span:not(.ember-route-label){font-size:11px;line-height:1.3}
+ .ember-console-upgrade .ember-route-track{width:100%;min-width:100%;height:5px;flex:none}
+ .ember-console-upgrade .ember-passage-mission{display:flex;flex-wrap:wrap;gap:3px 6px;padding:5px 0 0;width:100%}
+ .ember-console-upgrade .ember-passage-mission span,.ember-console-upgrade .ember-passage-mission em{font-size:9px;line-height:1.3}
+ .ember-console-upgrade .ember-passage-mission strong{font-size:11px;line-height:1.3}
+}
