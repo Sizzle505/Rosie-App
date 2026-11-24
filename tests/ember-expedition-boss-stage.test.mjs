@@ -89,7 +89,7 @@ test("all six attacks spill rewards in a separate safe area",()=>{
   }
 });
 test("collecting spilled treasure charges Turbo, then all three guardians are beatable",()=>{
-  for(const [index,hits,reward] of [[2,2,1400],[3,3,1750],[4,4,2600]]){
+  for(const [index,hits,reward] of [[2,3,1400],[3,3,1750],[4,4,2600]]){
     const s=intoBoss(index);
     const initial=s.score;
     playBoss(s);
