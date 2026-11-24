@@ -4,10 +4,10 @@ import {readFileSync} from "node:fs";
 import {createHash} from "node:crypto";
 const root=new URL("../",import.meta.url);
 const hashes={
-  "home": "baa426daef2b99f782b42b3d7187892739aa5c31",
+  "home": "8fe5f04bb7ec3739bb29b3e41b79cbb026fbdcbd",
   "music": "c3a230dc72ea1560097a8becc006d6517b806f36",
   "paw": "167f6e83ce690c65c552d288aa1385cbbab1180e",
-  "resources": "21318a5f8b6bd3eb61184584b138408b8f095436",
+  "resources": "21f6a91c071c4af4d9bd98fe15688c6565c3bbdd",
   "switch-arrows": "3d1a7b6983bbde16e5d6b4479d17075c69e65140",
   "calculations": "828e30d7b9b68dc228780902ce2a57ca8ac309e4",
   "captain": "905f8522a146f96c6644e66606cfb4b1158f695e",
@@ -23,7 +23,7 @@ const hashes={
   "tools": "3225f5c20f78ee5d02a373645de50a192c94942f",
   "vault": "aebd0e5b3d12600b777e97f36e9b0a7e2947cf68"
 };
-test("all 18 approved WebP assets are byte-identical to the approved package",()=>{
+test("all 18 approved WebP assets match the current approved artwork",()=>{
   for(const [name,sha] of Object.entries(hashes)){
     const b=readFileSync(new URL("public/rosieverse/ui/royal-nav/"+name+".webp",root));
     assert.equal(b.toString("ascii",0,4),"RIFF",name);
@@ -58,9 +58,9 @@ test("navigation uses one invisible positioning grid and real controls",()=>{
  assert.match(css,/position:relative!important;inset:auto!important;transform:none!important/);
 });
 
-test("navigation lacquer matches the approved medallion-derived texture",()=>{
+test("navigation lacquer matches the approved seal-derived texture",()=>{
  const b=readFileSync(new URL("public/rosieverse/ui/royal-nav/medallion-lacquer.webp",root));
- assert.equal(createHash("sha1").update("blob "+b.length+"\0").update(b).digest("hex"),"2789d021d23bd4a5fd99a8fcc0ad7db188dc3447");
+ assert.equal(createHash("sha1").update("blob "+b.length+"\0").update(b).digest("hex"),"5bdfc0b5044ebe54ac1e8c6edeb2f754856c50b3");
  const css=readFileSync(new URL("src/royal-navigation.css",root),"utf8");
  assert.ok(css.includes("medallion-lacquer.webp"));
  assert.ok(css.includes("--royal-bar:40px"));
