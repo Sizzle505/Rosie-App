@@ -1,0 +1,48 @@
+name: Import Yacht Dash soundtrack assets (one time)
+on:
+  push:
+    branches:
+      - feat/yacht-chapter-mp3-assets-20261123
+    paths:
+      - .github/workflows/yacht-soundtrack-transfer-once.yml
+permissions:
+  contents: write
+jobs:
+  install-music:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Import and verify user-supplied MP3s
+        env:
+          TRANSFER_B64: "aHR0cHM6Ly91Yzk3Y2NkZDBkYWMyODQzZDU0YmJlOWEyNDQyLmRsLmRyb3Bib3h1c2VyY29udGVudC5jb20vY2QvMC9nZXQvRE1odjR5UDZ3NjZWSHptZWo4ak9UalNvenNkd3BBLWxkZ3U1V0pXMkw1ckJyZkdXZExyZHJoZVM5Zi1lOGF6ZFNKY0hSdjRXcV9Db1dYeTVDTzNUUlN3UVk3NEJzUkk2NTNqU2RnVUpMaWFuWlY0RjFEckxkMEhCZENCeEVCZU5zYjY3QTUycXVsU0NkanJyb3V0Y2c0aWVQYmVPcTNtR0pfWlVUR2hadGRXX2l3L2ZpbGU/Y19sdWlkPTY2N2RlZDFk"
+        run: |
+          set -euo pipefail
+          transfer_url="$(printf '%s' "$TRANSFER_B64" | base64 --decode)"
+          curl --fail --location --retry 1 --connect-timeout 20 --max-time 180 "$transfer_url" --output /tmp/yacht-soundtracks.zip
+          echo "c1e2dacdeadf2ec4a941388d49a2878274db376ab4ecde25cdc455b6ad8cc8c7  /tmp/yacht-soundtracks.zip" | sha256sum -c -
+          unzip -qq /tmp/yacht-soundtracks.zip 'public/rosie-music/yacht-*.mp3' -d .
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          expected = {
+              "sakura": ("2272479ae8bce965912a950a3fcee6218cf201e9d640d82ba4a986673cd486d9", 2764606),
+              "typhoon": ("0fd21217a02362dc53081b1876e70b6d17b63ca701dbd64ff318d55fe302dbe2", 2531792),
+              "moonlight": ("beff55677f127234a86dc901e9e7071f1af2e568b0ef76d57f0f076098f9ec3d", 3018718),
+              "emperor": ("8f269036cecbdfb46aa941aac23d8b22a8023d80e2c56242d02f457eb74b846b", 2257202),
+          }
+          for chapter, (digest, expected_bytes) in expected.items():
+              path = Path(f"public/rosie-music/yacht-{chapter}.mp3")
+              body = path.read_bytes()
+              assert len(body) == expected_bytes
+              assert hashlib.sha256(body).hexdigest() == digest
+              assert body.startswith(b"ID3")
+              print("Verified", path, len(body))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/rosie-music/yacht-sakura.mp3 public/rosie-music/yacht-typhoon.mp3 public/rosie-music/yacht-moonlight.mp3 public/rosie-music/yacht-emperor.mp3
+          git commit -m "Install all four verified Yacht Dash chapter soundtrack MP3s"
+          git push origin HEAD:feat/yacht-chapter-mp3-assets-20261123
