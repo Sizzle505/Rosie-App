@@ -1,6 +1,6 @@
 // Optional five-world playtest using the original cave physics and approved art.
 // Stages 3-5 use reviewed procedural placeholders; Molten and Treasury now\n// include playable boss encounters, not yet the final sprite art.
-export const EXPEDITION_STAGE_SECONDS=15;
+export const EXPEDITION_STAGE_SECONDS=30;
 export const EXPEDITION_STAGES=Object.freeze([
   Object.freeze({id:"barkroot",name:"Barkroot Passage",startX:0,theme:"barkroot",objective:"Break an earth wall",art:"new-assets/background/bg01.webp"}),
   Object.freeze({id:"ruby",name:"Ruby Temple",startX:5450,theme:"ruby",objective:"Evade or shatter the crystal trap",art:"new-assets/background/bg07.webp"}),
