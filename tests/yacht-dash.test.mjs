@@ -230,3 +230,12 @@ test("Additional logs and hazards retain a safe reward wave between encounters",
     assert.equal(plan.filter(x=>x.kind==="supply").length,1);
   }
 });
+
+test("Approved Sakura cheese PNG has a real alpha channel and mobile-ready dimensions", () => {
+  const bytes = readFileSync(new URL("../public/yacht-dash/pickups/sakura-golden-cheese.png", import.meta.url));
+  assert.equal(bytes.subarray(0,8).toString("hex"),"89504e470d0a1a0a");
+  assert.equal(bytes.readUInt32BE(16),512);
+  assert.equal(bytes.readUInt32BE(20),512);
+  assert.equal(bytes[25],6);
+  assert.ok(bytes.length < 300000);
+});
