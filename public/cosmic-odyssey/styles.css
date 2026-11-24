@@ -1935,3 +1935,44 @@
  .cosmic-bottom .weapon{height:69px!important}
  .cosmic-bottom .weapon img,.cosmic-bottom .boost-icon{width:62px!important;height:62px!important}
 }
+
+/* Art-led desktop roster: fill the console with portraits, not empty rows. */
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){
+ .cosmic-bottom .status-line{display:none!important}
+ .cosmic-bottom .sector-art{padding:8px!important}
+ .cosmic-bottom .fiend-tracker{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:22px minmax(0,1fr)!important;
+  gap:6px!important;
+ }
+ .cosmic-bottom .fiend-tracker-heading{grid-column:1 / -1;font-size:10px;letter-spacing:.65px}
+ .cosmic-bottom .fiend-track{
+  display:flex!important;flex-direction:column;align-items:stretch!important;
+  gap:7px!important;padding:5px!important;overflow:hidden;
+ }
+ .cosmic-bottom .fiend-headshot{
+  flex:1 1 0!important;align-self:stretch!important;
+  width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+  aspect-ratio:auto!important;background-size:auto 155%!important;
+  border-radius:6px;
+ }
+ .cosmic-bottom .fiend-headshot-jett{background-position:50% 25%!important}
+ .cosmic-bottom .fiend-headshot-chip{background-position:62% 29%!important}
+ .cosmic-bottom .fiend-headshot-kitty{background-position:50% 24%!important}
+ .cosmic-bottom .fiend-track-detail{
+  flex:0 0 auto!important;display:flex!important;gap:5px!important;text-align:center;
+ }
+ .cosmic-bottom .fiend-track-detail strong{
+  min-height:29px;font-size:10px!important;line-height:1.35!important;letter-spacing:.1px!important;
+ }
+ .cosmic-bottom .fiend-health{width:100%;height:6px}
+ .cosmic-bottom .fiend-track-detail small{font-size:10px!important}
+ .cosmic-bottom .fiend-track.eliminated .fiend-headshot{
+  filter:none!important;background-color:#303047;background-blend-mode:luminosity;
+ }
+ .cosmic-bottom .fiend-track.eliminated .fiend-headshot::after{
+  color:#ff2828!important;filter:none!important;
+  font-size:clamp(80px,8.5vw,140px)!important;
+  text-shadow:0 2px 3px #180000,0 0 4px #ff0000!important;
+ }
+}
