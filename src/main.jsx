@@ -71,7 +71,7 @@ const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calc
 
 const NAV_ART = "/rosieverse/ui/royal-nav/";
 function RoyalNavArt({ name, className = "rosie-nav-icon" }) {
-  return <img className={className} src={NAV_ART + name + ".webp"} alt="" aria-hidden="true" draggable="false" decoding="async" />;
+  return <img className={className} src={NAV_ART + name + (name === "zen" ? ".svg" : ".webp")} alt="" aria-hidden="true" draggable="false" decoding="async" />;
 }
 function ResourceNavIcon({ type }) {
   const name = ({ "qr-atelier": "qr", timekeeper: "timekeepers" })[type] || type;
@@ -3871,6 +3871,7 @@ function App() {
             <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} aria-current={page === "fortune" ? "page" : undefined} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
             <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} aria-current={page === "cheese" ? "page" : undefined} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
             <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} aria-current={page === "captain" ? "page" : undefined} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
+            <button type="button" aria-label="Open Rosie’s Zen Garden" className={page === "haiku" ? "active" : ""} aria-current={page === "haiku" ? "page" : undefined} onClick={() => navigateTo("haiku")}><span className="nav-icon-wrap"><RosieNavIcon type="zen" /></span><small>Zen</small></button>
             <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" aria-current={page === "vault" ? "page" : undefined} onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
             <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} aria-current={page === "randomizers" ? "page" : undefined} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
           </nav>}

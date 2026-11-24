@@ -33,7 +33,7 @@ test("all 18 approved WebP assets match the current approved artwork",()=>{
 });
 test("both navigation families retain live labels and routes",()=>{
   const s=readFileSync(new URL("src/main.jsx",root),"utf8");
-  for(const [id,label] of Object.entries({fortune:"Fortune",cheese:"Cheese",captain:"Captain",vault:"Vault",randomizers:"Random",reminders:"Reminders","qr-atelier":"QR",calculations:"Calculations",recipes:"Recipes",reviews:"Reviews",timekeeper:"Timekeepers"})){
+  for(const [id,label] of Object.entries({fortune:"Fortune",cheese:"Cheese",captain:"Captain",haiku:"Zen",vault:"Vault",randomizers:"Random",reminders:"Reminders","qr-atelier":"QR",calculations:"Calculations",recipes:"Recipes",reviews:"Reviews",timekeeper:"Timekeepers"})){
     assert.ok(s.includes('onClick={() => navigateTo("'+id+'")}'),id);
     assert.ok(s.includes("<small>"+label+"</small>"),label);
   }
@@ -64,4 +64,18 @@ test("navigation lacquer matches the approved seal-derived texture",()=>{
  const css=readFileSync(new URL("src/royal-navigation.css",root),"utf8");
  assert.ok(css.includes("medallion-lacquer.webp"));
  assert.ok(css.includes("--royal-bar:40px"));
+});
+
+test("Zen is a gold lotus between Captain and Vault, linking to the existing Haiku Garden",()=>{
+ const s=readFileSync(new URL("src/main.jsx",root),"utf8");
+ const css=readFileSync(new URL("src/royal-navigation.css",root),"utf8");
+ const icon=readFileSync(new URL("public/rosieverse/ui/royal-nav/zen.svg",root),"utf8");
+ const start=s.indexOf('<nav className="bottom-nav" aria-label="RosieVerse destinations">');
+ const nav=s.slice(start,s.indexOf("</nav>",start));
+ assert.deepEqual([...nav.matchAll(/<small>([^<]+)<\/small>/g)].map(m=>m[1]),["Fortune","Cheese","Captain","Zen","Vault","Random"]);
+ assert.ok(nav.includes('onClick={() => navigateTo("haiku")}'));
+ assert.ok(nav.includes('aria-current={page === "haiku" ? "page" : undefined}'));
+ assert.ok(s.includes('name === "zen" ? ".svg" : ".webp"'));
+ assert.ok(icon.includes('<svg')&&icon.includes('id="gold"'));
+ assert.match(css,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)!important/);
 });

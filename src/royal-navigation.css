@@ -118,3 +118,6 @@
 @media print{.app-shell .royal-nav-shell{display:none!important;}}
 :root:has(:fullscreen) .royal-nav-shell,body.captain-fullscreen-fallback-active .royal-nav-shell{display:none!important;}
 @media(prefers-reduced-motion:reduce){.royal-nav-shell,.royal-nav-shell *{transition:none!important;}}
+
+/* Both families now have six destinations; override legacy five-column rules. */
+.app-shell:not(.page-home) .royal-nav-shell > .bottom-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-rows:minmax(0,1fr)!important;}

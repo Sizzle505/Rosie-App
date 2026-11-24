@@ -13,3 +13,6 @@ The shared navigation and switch background now uses a 640×96 WebP extracted fr
 
 ## Final matched seals and richer lacquer
 Approved replacement Home and Resources seals normalized to the same 512×512 transparent canvas with equal optical bounds. Home remains text-free; Resources uses the crowned R without a small baked label. New 768×96 lacquer texture is sampled from the approved Home artwork, mirrored into a continuous wide strip and toned down for legibility. The small switch and active tab crop the same material instead of squeezing it horizontally. Paw, music, remaining icons, layout dimensions and route handlers are unchanged. Preview branch only.
+
+## Zen navigation
+The Games family now contains Fortune, Cheese, Captain, Zen, Vault and Random. Zen uses a transparent gold-relief lotus SVG, with an active state and the existing #haiku destination. Both menus use six equal-width columns inside the approved compact width. Other art, layout and behavior remain unchanged.
