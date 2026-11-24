@@ -6,27 +6,27 @@ const BOSS_CONFIG = Object.freeze({
   copperjack:Object.freeze({
     id:"copperjack",maxHealth:2,reward:1400,
     attacks:Object.freeze([
-      Object.freeze({id:"gear-sweep",warning:1.1,active:0.55,recovery:1.4,
+      Object.freeze({id:"gear-sweep",warning:1.1,active:0.55,recovery:2.8,
         hazard:"floor",warningText:"GEAR SWEEP - RISE ABOVE THE MECHANISM"}),
-      Object.freeze({id:"spark-bolt",warning:1.2,active:0.65,recovery:1.4,
+      Object.freeze({id:"spark-bolt",warning:1.2,active:0.65,recovery:2.8,
         hazard:"projectile",warningText:"SPARK BOLT - LEAVE THE CENTER"})
     ])
   }),
   cinderclaw:Object.freeze({
     id:"cinderclaw",maxHealth:3,reward:1750,
     attacks:Object.freeze([
-      Object.freeze({id:"fireball",warning:1.15,active:0.55,recovery:1.30,
+      Object.freeze({id:"fireball",warning:1.15,active:0.55,recovery:2.8,
         hazard:"projectile",warningText:"FIREBALL - DODGE THE FLAME"}),
-      Object.freeze({id:"burrow",warning:1.35,active:0.70,recovery:1.45,
+      Object.freeze({id:"burrow",warning:1.35,active:0.70,recovery:2.8,
         hazard:"ground",warningText:"BURROWING - WATCH THE FLOOR"})
     ])
   }),
   "mole-king":Object.freeze({
     id:"mole-king",maxHealth:4,reward:2600,
     attacks:Object.freeze([
-      Object.freeze({id:"quake",warning:1.40,active:0.65,recovery:1.55,
+      Object.freeze({id:"quake",warning:1.40,active:0.65,recovery:2.8,
         hazard:"floor",warningText:"ROYAL QUAKE - CLIMB AWAY"}),
-      Object.freeze({id:"earth-burst",warning:1.30,active:0.65,recovery:1.45,
+      Object.freeze({id:"earth-burst",warning:1.30,active:0.65,recovery:2.8,
         hazard:"projectile",warningText:"EARTH BURST - DODGE THE ROCKS"})
     ])
   })
