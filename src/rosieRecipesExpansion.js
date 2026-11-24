@@ -1,4 +1,4 @@
-// Original editorial recipes; not independently kitchen-tested. Artwork intentionally deferred.
+// Ten approved editorial recipes with food-only artwork; not independently kitchen-tested.
 export const NEW_RECIPES = [
   {
     "id": "the-bark-side-of-the-moon",
@@ -34,7 +34,7 @@ export const NEW_RECIPES = [
     "methodText": "Heat the oven to 375°F (190°C). Butter four 6-ounce oven-safe ramekins, dust with cocoa and tap out excess. Set on a rimmed baking sheet. Chop the 4 ounces of batter chocolate and melt it with the butter in a heatproof bowl above barely simmering water. Stir until smooth and cool to lukewarm. Whisk eggs, yolks, granulated sugar and salt for 2–3 minutes until foamy. Whisk in the chocolate mixture, then fold in the flour just until combined. Divide half the batter among the ramekins. Divide the remaining 2 ounces of chocolate into four equal pieces, put one in each center and cover with the remaining batter; do not fill beyond three-quarters. Bake 15–20 minutes, checking at 15 minutes, until tops and edges are set and a skewer inserted away from the chocolate center shows moist crumbs, not raw batter. The chocolate insert supplies the molten center; do not deliberately underbake. Rest 3–5 minutes. Loosen the edges with a thin knife and carefully invert onto plates, or serve in the ramekins. Dust with powdered sugar and serve warm.",
     "note": "Hide the chocolate completely in the batter. The delicious eclipse happens when you cut into the cake.",
     "timeLabel": "45–55 min",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "pawberry-fields-forever",
@@ -71,7 +71,7 @@ export const NEW_RECIPES = [
     "methodText": "Hull and slice strawberries. Toss with the 3 tablespoons sugar and refrigerate for 20–30 minutes while the biscuits bake. Heat oven to 425°F (220°C). Line a sheet pan with parchment. Whisk flour, baking powder, salt and 2 tablespoons sugar. Cube cold butter and work it into the flour until pea-sized pieces remain. Add ¾ cup cream and stir just until a shaggy dough forms; add a teaspoon more cream if needed. Pat dough into a rectangle on a lightly floured surface, fold in thirds once and pat to ¾ inch thick. Cut six equal portions, pressing straight down. Arrange on the sheet and brush tops with cream. Bake 15–19 minutes until risen, golden and cooked through. Cool on a rack for 10 minutes while whipping topping. Whip the 1 cup cold cream with powdered sugar and vanilla to medium peaks. Split each biscuit and layer with berries, their juices and whipped cream. Serve promptly.",
     "note": "Never twist the biscuit cutter. A straight cut lets those buttery layers rise to their full paw-tential.",
     "timeLabel": "55–65 min",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "barklava",
@@ -105,7 +105,7 @@ export const NEW_RECIPES = [
     "methodText": "Make syrup first. Combine sugar, water and lemon juice in a saucepan. Bring to a boil and simmer 8–10 minutes. Remove from heat, stir in honey and cool to room temperature. Heat oven to 325°F (165°C). Butter a 9-by-13-inch metal pan. Finely chop pistachios, reserve 2 tablespoons for garnish and mix the remainder with cinnamon. Unroll thawed phyllo and trim to fit. Cover unused sheets with a dry towel topped by a slightly damp towel. Divide sheets roughly into thirds for base, middle and top. Layer the base one sheet at a time, brushing each with butter. Spread one-third of nuts over the base. Add a few buttered middle sheets, another third of nuts, more middle sheets and remaining nuts. Finish with the buttered top sheets. Cut through all layers into 24 squares or diamonds. Bake 45–60 minutes until deeply golden and crisp throughout. Rotate pan if browning unevenly. Immediately spoon cooled syrup evenly over hot pastry and into cuts. Cool uncovered at least 4 hours to absorb syrup. Garnish with reserved pistachios and recut before serving.",
     "note": "Cool syrup over hot pastry helps preserve crispness. The hardest part is the four-hour stay command.",
     "timeLabel": "90–105 min + 4 hr cooling",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "the-shibab",
@@ -144,7 +144,7 @@ export const NEW_RECIPES = [
     "methodText": "Cut chicken into 1½-inch pieces. Mix yogurt, olive oil, lemon juice, garlic, cumin, paprika, oregano, salt and pepper in a nonreactive bowl. Toss chicken in marinade, cover and refrigerate 30–60 minutes. Cut pepper and onion into similar-sized pieces. Soak bamboo skewers in water for 30 minutes if using. Preheat grill or grill pan to medium-high (about 400–450°F on a covered grill). Lightly oil the cooking surface with a suitable grill brush. Lift chicken from marinade and let excess drip off. Thread chicken onto four to six skewers without crowding. Thread vegetables separately. Discard used marinade. Grill chicken 12–16 minutes, turning every 3–4 minutes, until browned and thickest pieces reach at least 165°F (74°C). Grill vegetables 8–12 minutes until tender and charred. Transfer to a clean plate, rest chicken 3–5 minutes and serve with lemon wedges.",
     "note": "Separate vegetable skewers let you remove everything at the right moment. Never use raw marinade as a finishing sauce.",
     "timeLabel": "75–115 min incl. marinating",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "ruff-around-the-edges",
@@ -181,7 +181,7 @@ export const NEW_RECIPES = [
     "methodText": "Heat oven to 350°F (175°C). Lightly butter an 8-inch oven-safe cast-iron skillet or use an 8-inch round metal cake pan. Beat softened butter and both sugars for 2–3 minutes until creamy. Beat in egg and vanilla until combined. Whisk flour, baking soda and fine salt separately. Stir into butter mixture just until no flour streaks remain. Fold in most chocolate chips. Spread dough evenly in the skillet with a spatula and scatter remaining chips over the top. Bake 23–30 minutes until the edges are golden and center is set but soft. A toothpick inserted away from chocolate should show moist crumbs, not wet dough. Sprinkle with flaky salt, rest 10–15 minutes and serve in wedges with ice cream if desired. Use oven mitts for the hot skillet.",
     "note": "Give the cookie ten minutes to settle. Even the softest hearts need a little time to collect themselves.",
     "timeLabel": "45–55 min",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "the-woofle",
@@ -217,7 +217,7 @@ export const NEW_RECIPES = [
     "methodText": "Preheat the Belgian-style waffle iron according to its instructions. Set a wire rack over a sheet pan in a 200°F (95°C) oven to hold finished waffles. Whisk flour, baking powder, sugar and salt. In a second bowl whisk eggs, milk, cooled melted butter and vanilla. Fold wet ingredients into dry until no flour streaks remain. Small lumps are fine. Let batter stand 5 minutes. Lightly grease the iron if its manufacturer recommends it. Add the recommended amount of batter (often ½–¾ cup). Close and cook 4–6 minutes until golden and steam subsides. Remove with a nonmetal utensil and hold on the warm rack. Repeat with remaining batter; expect about 5–7 waffles depending on iron size. Divide among four plates, top with strawberries and maple syrup, and serve immediately.",
     "note": "Never stack finished woofles. Trapped steam is the natural enemy of a good crunch.",
     "timeLabel": "30–40 min",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "fettuccine-al-fur-do",
@@ -248,7 +248,7 @@ export const NEW_RECIPES = [
     "methodText": "Bring a large pot of moderately salted water to a boil. Finely grate Parmesan with a Microplane or small grater holes; avoid pre-shredded cheese. Cook fettuccine until 1 minute short of al dente according to package. Reserve at least 1½ cups starchy cooking water before draining. Place butter and ½ cup hot pasta water in a large skillet over low heat. Swirl until butter melts and the liquid looks creamy. Add drained pasta and toss over low heat about 1 minute until al dente. Turn off heat and allow the pan to cool briefly. Add Parmesan gradually, tossing constantly and adding hot pasta water a tablespoon or two at a time until the sauce coats the ribbons smoothly. Warm gently if needed; do not boil. Season with freshly ground pepper and taste before adding salt. Divide among four warm bowls and serve immediately.",
     "note": "A spoonful of hot pasta water is better than turning up the heat if the sauce tightens.",
     "timeLabel": "20–25 min",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "the-great-dan-ish",
@@ -284,7 +284,7 @@ export const NEW_RECIPES = [
     "methodText": "Thaw pastry in refrigerator according to package. Heat oven to 400°F (205°C) and line two sheet pans with parchment. Mix cream cheese, granulated sugar, vanilla and lemon zest until smooth. Whisk egg and water separately for egg wash. Unfold cold pastry on a lightly floured surface. Roll each sheet to roughly a 10-inch square if needed, then cut each into four squares. Place squares on sheets. Score a ½-inch border without cutting through and prick centers with a fork. Spread about 1½ tablespoons cheese filling and 2 teaspoons jam inside each border. Brush borders with egg wash. Chill 10 minutes if pastry has softened. Bake 17–22 minutes until borders are puffed and deep golden and bottoms are cooked; rotate sheets as needed. Cool at least 10 minutes. Stir powdered sugar with milk a little at a time for a thick drizzle and spoon over pastries. Refrigerate leftovers promptly.",
     "note": "Keep the puff pastry cold until baking. A properly risen border is the mark of a very Great Dan-ish.",
     "timeLabel": "45–60 min (pastry thawed)",
-    "artPending": true
+    "artPending": false
   },
   {
     "id": "pup-tart",
@@ -318,43 +318,44 @@ export const NEW_RECIPES = [
     "methodText": "Heat oven to 375°F (190°C). Line a sheet pan with parchment. Roll each crust into a roughly 9-by-12-inch rectangle, gathering and rerolling scraps once if needed. Cut sixteen equal rectangles about 3 by 4 inches. Whisk egg with water. Place eight rectangles on the sheet and brush edges lightly with egg wash. Place 1 tablespoon thick jam in each center, leaving a ½-inch border. Cover with another rectangle, gently press out air and seal edges firmly with fork tines. Prick tops two or three times to vent steam. Brush lightly with egg wash and chill assembled pastries 15 minutes to help prevent leakage. Bake 20–25 minutes until tops and edges are golden and bottoms are cooked through. Cool completely on a rack before frosting. Mix powdered sugar, vanilla and just enough milk for a thick icing. Spread over cooled pastries, add sprinkles and let set 10 minutes. Do not put iced pastries in a slot toaster.",
     "note": "A thick jam, clean border and good fork seal keep the berry surprise safely inside.",
     "timeLabel": "75–85 min",
-    "artPending": true
-  }
-];
-// Not approved: retain as a complete draft, not in the public catalog.
-export const PROVISIONAL_RECIPES = [
+    "artPending": false
+  },
   {
-    "id": "pawlovas",
+    "id": "chew-churros",
     "category": "Desserts",
-    "title": "Pawlovas",
-    "subtitle": "Mini Vanilla Meringue Nests with Whipped Cream & Berries",
-    "description": "A dessert named for a dancer with a delightful echo of the dog who made dinner bells famous. Rosie salivates at the mention of dessert.",
+    "title": "Chew Churros",
+    "subtitle": "Cinnamon-Sugar Churros with Silky Chocolate Dip",
+    "description": "A little crunch, a little chew, and absolutely no chance of leftovers. Rosie respectfully requests that all humans practice their very best table manners.",
     "difficulty": "Intermediate",
-    "totalMinutes": 190,
+    "totalMinutes": 60,
     "servings": 6,
-    "servingsLabel": "6 mini pavlovas",
+    "servingsLabel": "6 servings (about 18–20 churros)",
     "ingredients": [
-      "3 large egg whites (about 90 g) at room temperature",
-      "¾ cup (150 g) superfine sugar",
-      "1 tsp cornstarch",
-      "1 tsp white vinegar",
-      "½ tsp vanilla",
-      "1 cup cold heavy cream",
-      "1 tbsp powdered sugar",
-      "1½ cups mixed berries"
+      "1 cup (240 ml) water",
+      "4 tbsp (57 g) unsalted butter",
+      "1 tbsp (13 g) granulated sugar for dough",
+      "¼ tsp fine salt",
+      "1 cup (120 g) all-purpose flour",
+      "2 large eggs",
+      "½ tsp vanilla extract",
+      "neutral frying oil, enough for 1½ inches in a deep pot",
+      "½ cup (100 g) granulated sugar for coating",
+      "1½ tsp ground cinnamon",
+      "4 oz (113 g) semisweet chocolate finely chopped",
+      "½ cup (120 ml) heavy cream"
     ],
-    "ingredientsText": "3 large egg whites (about 90 g) at room temperature, ¾ cup (150 g) superfine sugar, 1 tsp cornstarch, 1 tsp white vinegar, ½ tsp vanilla, 1 cup cold heavy cream, 1 tbsp powdered sugar, 1½ cups mixed berries",
+    "ingredientsText": "1 cup (240 ml) water, 4 tbsp (57 g) unsalted butter, 1 tbsp (13 g) granulated sugar for dough, ¼ tsp fine salt, 1 cup (120 g) all-purpose flour, 2 large eggs, ½ tsp vanilla extract, neutral frying oil, enough for 1½ inches in a deep pot, ½ cup (100 g) granulated sugar for coating, 1½ tsp ground cinnamon, 4 oz (113 g) semisweet chocolate finely chopped, ½ cup (120 ml) heavy cream",
     "steps": [
-      "Heat oven to 250°F (120°C). Line a sheet pan with parchment and mark six 3-inch circles on the reverse side. Use a clean dry bowl and whisk.",
-      "Whip egg whites on medium until soft peaks form. Add superfine sugar gradually, one tablespoon at a time, allowing each addition to dissolve.",
-      "Whip until glossy stiff peaks form and mixture feels smooth between fingers. Sift in cornstarch and gently fold in vinegar and vanilla.",
-      "Divide into six equal mounds using circles as a guide. Shape shallow wells with a spoon, keeping bases thick enough for toppings.",
-      "Bake 65–80 minutes until dry and firm outside. Turn off oven and leave meringues inside with door closed at least 1 hour, then cool fully.",
-      "Whip cream with powdered sugar to medium peaks. Fill cooled nests with cream and berries just before serving."
+      "Combine coating sugar and cinnamon in a shallow dish. Line a baking sheet with paper towels and fit a sturdy piping bag with a ½-inch closed-star tip; do not use a plain round tip.",
+      "Bring water, butter, dough sugar and salt to a boil in a saucepan. Reduce heat, add all the flour and stir vigorously for 1–2 minutes until the mixture pulls away from the sides and forms a smooth ball. Transfer to a bowl and cool 5–10 minutes.",
+      "Beat in vanilla and the eggs one at a time, fully incorporating the first before adding the second. The finished dough should be smooth, thick and pipeable. Spoon into the prepared bag and pipe 4–5-inch lengths onto parchment on a tray.",
+      "Heat 1½ inches of neutral oil in a deep heavy pot to 350°F (175°C), using a frying thermometer; never fill the pot more than halfway. With dry tongs or a slotted spatula, carefully lower a few dough lengths into the oil, away from yourself. Fry 2–3 minutes per side, adjusting heat to maintain temperature, until golden and cooked through. Cut open the first churro to check for any raw dough; cook longer if needed.",
+      "Drain each batch briefly on paper towels and roll in cinnamon sugar while still warm. Return the oil to 350°F before the next batch. Keep water away from hot oil and never leave the pot unattended.",
+      "Place chopped chocolate in a heatproof bowl. Heat cream until steaming but not boiling, pour it over the chocolate and wait 2 minutes, then stir until smooth. Serve warm churros with chocolate dipping sauce for humans only."
     ],
-    "methodText": "Heat oven to 250°F (120°C). Line a sheet pan with parchment and mark six 3-inch circles on the reverse side. Use a clean dry bowl and whisk. Whip egg whites on medium until soft peaks form. Add superfine sugar gradually, one tablespoon at a time, allowing each addition to dissolve. Whip until glossy stiff peaks form and mixture feels smooth between fingers. Sift in cornstarch and gently fold in vinegar and vanilla. Divide into six equal mounds using circles as a guide. Shape shallow wells with a spoon, keeping bases thick enough for toppings. Bake 65–80 minutes until dry and firm outside. Turn off oven and leave meringues inside with door closed at least 1 hour, then cool fully. Whip cream with powdered sugar to medium peaks. Fill cooled nests with cream and berries just before serving.",
-    "note": "A spotless bowl and gradual sugar additions matter more than speed. Keep the meringues dry until serving.",
-    "timeLabel": "2½–3 hr incl. cooling",
-    "artPending": true
+    "methodText": "Combine coating sugar and cinnamon in a shallow dish. Line a baking sheet with paper towels and fit a sturdy piping bag with a ½-inch closed-star tip; do not use a plain round tip. Bring water, butter, dough sugar and salt to a boil in a saucepan. Reduce heat, add all the flour and stir vigorously for 1–2 minutes until the mixture pulls away from the sides and forms a smooth ball. Transfer to a bowl and cool 5–10 minutes. Beat in vanilla and the eggs one at a time, fully incorporating the first before adding the second. The finished dough should be smooth, thick and pipeable. Spoon into the prepared bag and pipe 4–5-inch lengths onto parchment on a tray. Heat 1½ inches of neutral oil in a deep heavy pot to 350°F (175°C), using a frying thermometer; never fill the pot more than halfway. With dry tongs or a slotted spatula, carefully lower a few dough lengths into the oil, away from yourself. Fry 2–3 minutes per side, adjusting heat to maintain temperature, until golden and cooked through. Cut open the first churro to check for any raw dough; cook longer if needed. Drain each batch briefly on paper towels and roll in cinnamon sugar while still warm. Return the oil to 350°F before the next batch. Keep water away from hot oil and never leave the pot unattended. Place chopped chocolate in a heatproof bowl. Heat cream until steaming but not boiling, pour it over the chocolate and wait 2 minutes, then stir until smooth. Serve warm churros with chocolate dipping sauce for humans only.",
+    "note": "The star tip is essential for those signature ridges. Coat each batch while warm, and remember that chocolate is strictly for the humans.",
+    "timeLabel": "50–60 min",
+    "artPending": false
   }
 ];

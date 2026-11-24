@@ -1,6 +1,6 @@
 # New recipe cards — November 24, 2026
 
-Nine titles explicitly approved; Pawlovas is the tenth complete candidate, not visible in the active cookbook. These are original editorial variants of established dishes, not independently kitchen-tested. Comparable methods are listed below; the links are references rather than exact source formulas. No images generated or assigned. The UI displays typography in the art area pending approval. Existing 25 recipe identities and artwork are unchanged.
+Ten titles approved, with Chew Churros replacing Pawlovas. These are original editorial variants of established dishes, not independently kitchen-tested. Comparable methods are listed below; the links are references rather than exact source formulas. All ten approved food-only images have been integrated as 960 × 720 WebP files; no dog illustrations are used. Existing 25 recipe identities and artwork are unchanged.
 
 | Name | Yield | Time | Comparable method |
 |---|---|---|---|
@@ -13,7 +13,7 @@ Nine titles explicitly approved; Pawlovas is the tenth complete candidate, not v
 | Fettuccine Al-fur-do | 4 servings | 20–25 min | [Reference](https://www.punchfork.com/recipe/Roman-Style-Fettuccine-with-Alfredo-Sauce-Serious-Eats) |
 | The Great Dan-ish | 8 pastries | 45–60 min (pastry thawed) | [Reference](https://brokenovenbaking.com/easy-raspberry-cream-cheese-danish-recipe/) |
 | Pup Tart | 8 pastries | 75–85 min | Jam-filled hand-pie method; no verified primary reference for exact variant |
-| Pawlovas (provisional) | 6 mini pavlovas | 2½–3 hr incl. cooling | [Reference](https://www.recipetineats.com/mini-pavlovas/) |
+| Chew Churros | 6 servings (about 18–20 churros) | 50–60 min | [King Arthur Baking: Churros](https://www.kingarthurbaking.com/recipes/churros-recipe); [Once Upon a Chef: Churros](https://www.onceuponachef.com/recipes/churros.html) |
 
-## Artwork handoff
-For each approved dish save artwork at public/rosieverse/recipes/dishes/<id>.webp, then change that recipe's artPending flag to false in src/rosieRecipesExpansion.js. IDs are defined in that file. Dish only; no Rosie character illustration. No production or preview deployment authorized.
+## Artwork integration
+All ten filenames correspond to their recipe IDs under public/rosieverse/recipes/dishes/. The approved 4:3 food-only images are optimized to 960 × 720 WebP; the Git blob hashes were verified against local files. No production or preview deployment authorized.

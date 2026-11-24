@@ -4,10 +4,9 @@
 // Original identities and yields retained; ingredient ratios and methods selectively corrected.
 // Benchmark references and change rationale: docs/recipe-validation-2026-11-24.md.
 import { NEW_RECIPES } from "./rosieRecipesExpansion.js";
-export { PROVISIONAL_RECIPES } from "./rosieRecipesExpansion.js";
 export const COOKBOOK = {
   "collectionTitle": "Rosie’s Recipes",
-  "subtitle": "The Royal Cookbook - 34 Recipes for Rosie’s Favorite Humans",
+  "subtitle": "The Royal Cookbook - 35 Recipes for Rosie’s Favorite Humans",
   "humanOnly": "These recipes are for humans, not for sharing with Rosie.",
   "labels": {
     "Breakfast": "Rise & Wag",
