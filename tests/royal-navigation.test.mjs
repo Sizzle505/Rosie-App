@@ -1,0 +1,50 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+import {createHash} from "node:crypto";
+const root=new URL("../",import.meta.url);
+const hashes={
+  "home": "baa426daef2b99f782b42b3d7187892739aa5c31",
+  "music": "c3a230dc72ea1560097a8becc006d6517b806f36",
+  "paw": "167f6e83ce690c65c552d288aa1385cbbab1180e",
+  "resources": "21318a5f8b6bd3eb61184584b138408b8f095436",
+  "switch-arrows": "3d1a7b6983bbde16e5d6b4479d17075c69e65140",
+  "calculations": "828e30d7b9b68dc228780902ce2a57ca8ac309e4",
+  "captain": "905f8522a146f96c6644e66606cfb4b1158f695e",
+  "cheese": "3511dc6ffd4c2746bb19348bd9f7c7533a9b470e",
+  "fortune": "4c8b3c56af62324d325af849a32b65d9640945ca",
+  "gamepad": "bf30c5fbf558b22f024a95ced660f3fab1cde876",
+  "qr": "e80ae57790d28ec1830772d57a0cfcbe96323538",
+  "random": "3f4a136a96384511ee248915d015b39377cde8ca",
+  "recipes": "4a260222958363e19e87ccaf35735fa2118be87d",
+  "reminders": "d8411fe912e3a9625a7d51561e55acaadbd44634",
+  "reviews": "1a80986b93f40c7bec6b4cfad2bd89b98b2d69e3",
+  "timekeepers": "324bf4c3d1316c486340614a681332dba2d0a20b",
+  "tools": "3225f5c20f78ee5d02a373645de50a192c94942f",
+  "vault": "aebd0e5b3d12600b777e97f36e9b0a7e2947cf68"
+};
+test("all 18 approved WebP assets are byte-identical to the approved package",()=>{
+  for(const [name,sha] of Object.entries(hashes)){
+    const b=readFileSync(new URL("public/rosieverse/ui/royal-nav/"+name+".webp",root));
+    assert.equal(b.toString("ascii",0,4),"RIFF",name);
+    assert.equal(b.toString("ascii",8,12),"WEBP",name);
+    assert.equal(createHash("sha1").update("blob "+b.length+"\0").update(b).digest("hex"),sha,name);
+  }
+});
+test("both navigation families retain live labels and routes",()=>{
+  const s=readFileSync(new URL("src/main.jsx",root),"utf8");
+  for(const [id,label] of Object.entries({fortune:"Fortune",cheese:"Cheese",captain:"Captain",vault:"Vault",randomizers:"Random",reminders:"Reminders","qr-atelier":"QR",calculations:"Calculations",recipes:"Recipes",reviews:"Reviews",timekeeper:"Timekeepers"})){
+    assert.ok(s.includes('onClick={() => navigateTo("'+id+'")}'),id);
+    assert.ok(s.includes("<small>"+label+"</small>"),label);
+  }
+  assert.ok(s.includes('navFamily === "resources" ? "Games" : "Tools"'));
+  assert.ok(s.includes('name="switch-arrows"'));
+  assert.ok(s.includes('name="home" className="royal-seal-art"'));
+  assert.ok(s.includes('name="resources" className="royal-seal-art"'));
+});
+test("persistent buttons use the new art without replacing their handlers",()=>{
+  const paw=readFileSync(new URL("src/private/AccountPortal.jsx",root),"utf8");
+  const music=readFileSync(new URL("src/RosieMusicPlayer.jsx",root),"utf8");
+  assert.ok(paw.includes("/royal-nav/paw.webp")&&paw.includes("setOpen(true)")&&paw.includes("styles.signed"));
+  assert.ok(music.includes("/royal-nav/music.webp")&&music.includes("setOpen(value=>!value)"));
+});

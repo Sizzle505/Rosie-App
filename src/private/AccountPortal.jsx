@@ -90,7 +90,7 @@ export default function AccountPortal() {
       onClick={() => { setMode("create"); setError(""); setOpen(true); }}
       aria-label={user ? "Open your RosieVerse account" : "Open RosieVerse account"}
       title={user ? "Account" : "Account"}>
-      <img src="/rosieverse/account/rosie-account-entry.svg" width="44" height="44" alt="" aria-hidden="true" draggable="false" />
+      <img src="/rosieverse/ui/royal-nav/paw.webp" width="44" height="44" alt="" aria-hidden="true" draggable="false" />
       {user && <span className={styles.signed} aria-hidden="true" />}
     </button>
     {open && <div className={styles.backdrop} onPointerDown={(e) => { if (e.target === e.currentTarget) close(); }}>

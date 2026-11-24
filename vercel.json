@@ -2,7 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "git": {
     "deploymentEnabled": {
-      "design/iphone-captain-polish-20261120": false
+      "design/iphone-captain-polish-20261120": false,
+      "work/royal-navigation-assets-20261124": false
     }
   }
 }

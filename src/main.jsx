@@ -62,61 +62,23 @@ import captainWindSprite from "./captainWindSprite.js";
 // Load last to preserve approved desktop compositions across monitor ratios.
 import "./desktop-design-preservation.css";
 import "./fortune-verse-scroll.css";
+import "./royal-navigation.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
 // The utility pages and their landing hub share the Resources navigation family.
 const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calculations", "recipes", "timekeeper", "reviews"]);
 
-function ResourceNavIcon({ type }) {
-  const common = { viewBox: "0 0 32 32", fill: "none", stroke: "currentColor",
-    strokeWidth: 1.7, strokeLinecap: "round", strokeLinejoin: "round",
-    className: "rosie-nav-icon", "aria-hidden": true };
-  if (type === "reminders") return <svg {...common}>
-    <rect x="8" y="5" width="16" height="23" rx="2"/><path d="M12 4v3M20 4v3M12 13h8M12 18h8M12 23h4"/>
-  </svg>;
-  if (type === "qr-atelier") return <svg {...common}><rect x="5" y="5" width="8" height="8"/><rect x="19" y="5" width="8" height="8"/><rect x="5" y="19" width="8" height="8"/><path d="M19 19h3v3h-3zM25 19v3M19 25h3M25 25h2"/></svg>;
-  if (type === "recipes") return <svg {...common}><path d="M5 8c4-2 8-2 11 0 3-2 7-2 11 0v19c-4-2-8-2-11 0-3-2-7-2-11 0z"/><path d="M16 8v19M8 12h5M8 16h5M19 12h5M19 16h5"/></svg>;
-  if (type === "timekeeper") return <svg {...common}>
-    <circle cx="16" cy="17" r="10"/><path d="M16 10v7l4 2M12 3h8M16 3v4"/>
-  </svg>;
-  if (type === "reviews") return <svg {...common}>
-    <circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="2"/><circle cx="11" cy="10" r="2"/><circle cx="21" cy="10" r="2"/><circle cx="11" cy="22" r="2"/><circle cx="21" cy="22" r="2"/>
-  </svg>;
-  return <svg {...common}>
-    <rect x="7" y="4" width="18" height="24" rx="3"/>
-    <rect x="11" y="8" width="10" height="5" rx="1"/>
-    <path d="M11 18h2M17 18h2M11 23h2M17 23h2"/>
-  </svg>;
+const NAV_ART = "/rosieverse/ui/royal-nav/";
+function RoyalNavArt({ name, className = "rosie-nav-icon" }) {
+  return <img className={className} src={NAV_ART + name + ".webp"} alt="" aria-hidden="true" draggable="false" decoding="async" />;
 }
-
+function ResourceNavIcon({ type }) {
+  const name = ({ "qr-atelier": "qr", timekeeper: "timekeepers" })[type] || type;
+  return <RoyalNavArt name={name} />;
+}
 function RosieNavIcon({ type }) {
-  const common = {
-    className: "rosie-nav-icon",
-    viewBox: "0 0 32 32",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.7,
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": true
-  };
-
-  if (type === "fortune") return <svg {...common}>
-    <circle cx="16" cy="13.5" r="8"/><path d="M11 22h10l2 4H9l2-4Z"/><path d="m16 8 .8 2.1 2.2.8-2.2.8-.8 2.1-.8-2.1-2.2-.8 2.2-.8L16 8Z"/>
-  </svg>;
-  if (type === "cheese") return <svg {...common}>
-    <path d="M5.5 23.5 9 11.7l16.8 3.8v8H5.5Z"/><path d="m9 11.7 8-4.2 8.8 8"/><circle cx="12" cy="18" r="1.6"/><circle cx="20" cy="20.5" r="1.3"/>
-  </svg>;
-  if (type === "captain") return <svg {...common}>
-    <circle cx="16" cy="7" r="2.5"/><path d="M16 9.5v16M9 14h14M7 20c1.7 4 4.7 6 9 6s7.3-2 9-6M7 20l4 1M25 20l-4 1"/>
-  </svg>;
-  if (type === "vault") return <svg {...common}>
-    <rect x="7" y="5.5" width="18" height="21" rx="2.5"/><rect x="10.5" y="9" width="11" height="14" rx="1.5"/><circle cx="16" cy="16" r="3.3"/><path d="M16 12.7v6.6M12.7 16h6.6"/>
-  </svg>;
-  return <svg {...common}>
-    <rect x="6" y="6" width="20" height="20" rx="5"/><circle cx="11" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="21" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1" fill="currentColor" stroke="none"/><circle cx="11" cy="21" r="1" fill="currentColor" stroke="none"/><circle cx="21" cy="21" r="1" fill="currentColor" stroke="none"/>
-  </svg>;
+  return <RoyalNavArt name={type} />;
 }
 
 const RESPONSES = {
@@ -3895,17 +3857,15 @@ function App() {
         )}
 
         {page !== "home" && <>
-          <button type="button" className="bottom-side-seal bottom-side-seal--home" aria-label="RosieVerse Home" title="RosieVerse Home" onClick={() => navigateTo("home")}>⌂</button>
-          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" title="Rosie’s Resources" onClick={() => navigateTo("resources")}>R</button>
+          <button type="button" className="bottom-side-seal bottom-side-seal--home" aria-label="RosieVerse Home" title="RosieVerse Home" onClick={() => navigateTo("home")}><RoyalNavArt name="home" className="royal-seal-art" /></button>
+          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" title="Rosie’s Resources" onClick={() => navigateTo("resources")}><RoyalNavArt name="resources" className="royal-seal-art" /></button>
           <button className={"nav-family-toggle" + (navFamily === "resources" ? " on-resources" : "")}
             type="button"
-            aria-label={navFamily === "resources" ? "Switch bottom buttons to RosieVerse games" : "Switch bottom buttons to Rosie’s Resources"}
-            title={navFamily === "resources" ? "Show RosieVerse games" : "Show Rosie’s Resources"}
+            aria-label={navFamily === "resources" ? "Switch navigation to RosieVerse games" : "Switch navigation to tools"}
+            title={navFamily === "resources" ? "Show RosieVerse games" : "Show Tools"}
             onClick={() => setNavFamily(family => family === "resources" ? "salon" : "resources")}>
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-              strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M5 7h14m0 0-3-3m3 3-3 3M19 17H5m0 0 3-3m-3 3 3 3"/>
-            </svg>
+            <RoyalNavArt name={navFamily === "resources" ? "gamepad" : "tools"} className="royal-mode-icon" />
+            <RoyalNavArt name="switch-arrows" className="royal-mode-arrows" />
             <span>{navFamily === "resources" ? "Games" : "Tools"}</span>
           </button>
           {navFamily === "resources" ?
@@ -3918,11 +3878,11 @@ function App() {
             <button type="button" aria-label="Open Rosie’s Timekeepers" className={page === "timekeeper" ? "active" : ""} aria-current={page === "timekeeper" ? "page" : undefined} onClick={() => navigateTo("timekeeper")}><span className="nav-icon-wrap"><ResourceNavIcon type="timekeeper" /></span><small>Timekeepers</small></button>
           </nav> :
           <nav className="bottom-nav" aria-label="RosieVerse destinations">
-            <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
-            <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
-            <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
-            <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
-            <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
+            <button type="button" aria-label="Open Fortune Teller" className={page === "fortune" ? "active" : ""} aria-current={page === "fortune" ? "page" : undefined} onClick={() => navigateTo("fortune")}><span className="nav-icon-wrap"><RosieNavIcon type="fortune" /></span><small>Fortune</small></button>
+            <button type="button" aria-label="Open Cheese Board Exam" className={page === "cheese" ? "active" : ""} aria-current={page === "cheese" ? "page" : undefined} onClick={() => navigateTo("cheese")}><span className="nav-icon-wrap"><RosieNavIcon type="cheese" /></span><small>Cheese</small></button>
+            <button type="button" aria-label="Open Captain Rosie" className={page === "captain" ? "active" : ""} aria-current={page === "captain" ? "page" : undefined} onClick={() => navigateTo("captain")}><span className="nav-icon-wrap"><RosieNavIcon type="captain" /></span><small>Captain</small></button>
+            <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" aria-current={page === "vault" ? "page" : undefined} onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
+            <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} aria-current={page === "randomizers" ? "page" : undefined} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
           </nav>}
         </>}
         <AccountPortal />

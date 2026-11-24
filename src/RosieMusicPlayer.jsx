@@ -113,7 +113,7 @@ export default function RosieMusicPlayer({page}){
       aria-label="Open RosieVerse soundtrack settings"
       aria-controls="rosie-music-panel" aria-expanded={open}
       onClick={()=>setOpen(value=>!value)}>
-      <img src="/rosieverse/ui/rosie-music-medallion.webp" width="58" height="58" alt="" aria-hidden="true" draggable="false" />
+      <img src="/rosieverse/ui/royal-nav/music.webp" width="58" height="58" alt="" aria-hidden="true" draggable="false" />
 
     </button>
     {open&&<div id="rosie-music-panel" className="rosie-music-panel" role="group" aria-label="Soundtrack settings">
