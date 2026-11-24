@@ -2,7 +2,7 @@
 // sprite atlases will replace this file after the separate asset import is QA'd.
 // This paints the danger lanes used by emberExpeditionBossStage.js, not a
 // misleading decorative collision area.
-import {BOSS_SCREEN_X,bossDangerLane} from "./emberExpeditionBossStage.js";
+import {BOSS_SCREEN_X} from "./emberExpeditionBossStage.js";
 import {bossPresentation} from "./emberBossEncounter.js";
 import {drawExpansionFrame} from "./emberExpansionCatalog.js";
 import {paintBossAttackVfx} from "./emberBossAttackVfx.js";
@@ -137,32 +137,6 @@ function cinderclaw(c,t){
  ellipse(c,-54,30,14,10,"#ffbd66");
  c.restore();
 }
-function telegraph(c,s,W,H,attack,phase){
- if(phase!=="warning"&&phase!=="active")return;
- const active=phase==="active";
- const lane=bossDangerLane(attack,s.bossY);
- if(!lane)return;
- const a=Math.max(0,Math.min(H,lane.top)),b=Math.max(0,Math.min(H,lane.bottom));
- if(b<=a)return;
- c.save();
- c.fillStyle=active?"rgba(232,87,37,.19)":"rgba(255,180,70,.10)";
- c.fillRect(0,a,W,b-a);
- c.strokeStyle=active?"#ff793a":"#e5c474";c.lineWidth=3;c.setLineDash(active?[]:[13,10]);
- c.strokeRect(6,a+3,W-12,Math.max(4,b-a-6));
- c.setLineDash([]);
- if(active){
-   const g=c.createLinearGradient(0,0,W,0);
-   g.addColorStop(0,"rgba(255,172,77,0)");
-   g.addColorStop(.65,"rgba(255,161,74,.26)");
-   g.addColorStop(1,"rgba(246,71,26,.6)");
-   c.fillStyle=g;c.fillRect(0,a,W,b-a);
- }
- c.textAlign="left";c.font="bold 14px Georgia";
- c.shadowColor="#1e1117";c.shadowBlur=7;
- c.fillStyle=active?"#fff0c6":"#f0d6a6";
- c.fillText(active?"DANGER - MOVE AWAY":"WARNING - STEER CLEAR",18,Math.max(22,a+21));
- c.restore();
-}
 // Attack-state art is registered frame-by-frame to the current boss cycle.
 // Every image is optional until loaded. Silhouettes retain the original
 // engine collision and attack-zone geometry, not image alpha hitboxes.
@@ -195,7 +169,6 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
  const boss=s.boss;
  if(!boss)return;
  const p=bossPresentation(boss);
- telegraph(c,s,W,H,p.attack,p.phase);
  // Place light-touch environmental attacks behind the existing approved boss art.
  // All visuals are clipped to the same lane used by the engine to cause damage.
  paintBossAttackVfx(c,s,W,H,p);
@@ -206,11 +179,6 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
  aura.addColorStop(0,p.vulnerable?"rgba(252,212,100,.37)":"rgba(245,115,61,.18)");
  aura.addColorStop(1,"rgba(0,0,0,0)");
  ellipse(c,0,0,118,123,aura);
- if(p.vulnerable){
-   c.strokeStyle="#ffe0a1";c.lineWidth=4;
-   c.setLineDash([12,7]);c.beginPath();c.ellipse(0,0,101,95,0,0,2*PI);c.stroke();
-   c.setLineDash([]);
- }
  const atlas=assets?.["exp:"+boss.kind];
  const frame=expeditionBossFrame(boss,p);
  const isCinder=boss.kind==="cinderclaw";
@@ -241,11 +209,6 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
    c.fillStyle=i<boss.health?"#ebae5f":"#54474b";
    c.strokeStyle="#f1d8ab";c.lineWidth=1.5;
    c.fillRect(x-10,151,20,15);c.strokeRect(x-10,151,20,15);
- }
- if(p.vulnerable){
-  c.textAlign="center";c.font="bold 15px Georgia,serif";
-  c.fillStyle="#ffe7a7";
-  c.fillText("VULNERABLE - TURBO STRIKE",x,s.bossY-135);
  }
  c.restore();
 }
