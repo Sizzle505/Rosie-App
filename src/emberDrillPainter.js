@@ -165,7 +165,7 @@ function paintExpeditionTransition(c,s,assets){
   const t=clamp(s.time/3.4,0,1);
   const eased=t*t*(3-2*t);
   c.save();
-  c.globalAlpha=.62;
+  c.globalAlpha=s.stageIndex===4?1:.62;
   c.drawImage(img,span*eased,0,cropWidth,img.naturalHeight,0,0,W,H);
   c.restore();
   return true;
@@ -184,20 +184,27 @@ function scenery(c,s,assets={}) {
   const nextAt=CAVERN_SCENES[current+1]?.at??75;
   const duration=Math.max(1,nextAt-scene.at);
   const local=clamp((sceneTime-scene.at)/duration,0,1);
-  if(current>0){
+  // Royal Treasury uses a single opaque destination panorama. Its architecture
+  // must not be superimposed on the earlier temple or accent plates.
+  const singleTreasury=s.stageIndex===4&&paintExpeditionTransition(c,s,assets);
+  if(!singleTreasury&&current>0){
     const prev=CAVERN_SCENES[current-1];
     const fade=clamp((sceneTime-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
     const eased=fade*fade*(3-2*fade);
     panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,eased);
-    atmosphericAccent(c,assets[prev.accent],1,1-eased);
-    atmosphericAccent(c,assets[scene.accent],local,eased);
-  }else{
+    if(s.stageIndex!==4){
+      atmosphericAccent(c,assets[prev.accent],1,1-eased);
+      atmosphericAccent(c,assets[scene.accent],local,eased);
+    }
+  }else if(!singleTreasury){
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
-    atmosphericAccent(c,assets[scene.accent],local,1);
+    if(s.stageIndex!==4)atmosphericAccent(c,assets[scene.accent],local,1);
   }
-  paintNewBackgroundParallax(c,s,assets,W,H);
-  paintExpeditionTransition(c,s,assets);
+  if(s.stageIndex!==4){
+    paintNewBackgroundParallax(c,s,assets,W,H);
+    paintExpeditionTransition(c,s,assets);
+  }
   // Modest lighting grade distinguishes the later-world route prototypes
   // without presenting unapproved generated backgrounds as finished.
   if(s.stageIndex!==null&&s.stageIndex>=2){
