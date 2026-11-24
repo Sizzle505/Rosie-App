@@ -57,3 +57,11 @@ test("navigation uses one invisible positioning grid and real controls",()=>{
  assert.match(css,/grid-template-areas:"tabs tabs tabs tabs tabs"/);
  assert.match(css,/position:relative!important;inset:auto!important;transform:none!important/);
 });
+
+test("navigation lacquer matches the approved medallion-derived texture",()=>{
+ const b=readFileSync(new URL("public/rosieverse/ui/royal-nav/medallion-lacquer.webp",root));
+ assert.equal(createHash("sha1").update("blob "+b.length+"\0").update(b).digest("hex"),"2789d021d23bd4a5fd99a8fcc0ad7db188dc3447");
+ const css=readFileSync(new URL("src/royal-navigation.css",root),"utf8");
+ assert.ok(css.includes("medallion-lacquer.webp"));
+ assert.ok(css.includes("--royal-bar:40px"));
+});

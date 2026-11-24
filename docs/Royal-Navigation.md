@@ -7,3 +7,6 @@ Use one invisible responsive positioning grid to remove independent fixed offset
 
 ## Compact lacquer revision
 Desktop shell reduced from 846px to 650px maximum; bar 40px high; both seals 40px; icon canvas 23px, labels 9px. Toggle 54×34px with 23px arrow medallion. Violet and beveled-gold treatments match the approved persistent medallions; selected state remains inset with no enlarged tab. Mobile bar reduced to 50px and icon canvas 25px; account and music sizes/positions unchanged. Retains exact approved WebP bytes and independent click targets. No production deployment.
+
+## Matched lacquer
+The shared navigation and switch background now uses a 640×96 WebP extracted from the symbol-free purple regions of the exact approved music medallion (source git blob c3a230dc72ea1560097a8becc006d6517b806f36), resampled and blended into an elongated strip with localized reflections. Original medallions and icons are unchanged. Compact dimensions retained. The texture is a separate asset, not a flattened menu.
