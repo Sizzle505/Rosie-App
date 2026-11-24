@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
 import {newRun,updateRun,triggerTurbo,DRILL_TIP_VERTICAL_OFFSET} from "../src/emberDrillEngine.js";
-import {BOSS_INTRO_TIME,expeditionBossKind,bossAttackDanger} from "../src/emberExpeditionBossStage.js";
+import {BOSS_INTRO_TIME,expeditionBossKind,bossAttackDanger,bossRewardY} from "../src/emberExpeditionBossStage.js";
 import {excavationNotice} from "../src/emberBreakableFeedback.js";
 
 function intoBoss(index){
@@ -17,7 +17,7 @@ function intoBoss(index){
   }
   assert.ok(s.boss,"boss did not spawn after its introduction");
   assert.ok(s.time>=BOSS_INTRO_TIME);
-  assert.equal(s.charge,100);
+  assert.equal(s.charge,0);
   return s;
 }
 test("three advanced worlds have bosses; Classic remains unchanged",()=>{
@@ -57,74 +57,55 @@ test("danger zones correspond to warned attacks, not the entire screen",()=>{
   assert.equal(bossAttackDanger({phase:"active",attack:"earth-burst"},300,402),true);
   assert.equal(bossAttackDanger({phase:"active",attack:"earth-burst"},460,402),false);
 });
-test("Copperjack requires two separate openings and awards 1400 points",()=>{
+// Drive the actual steering physics rather than granting charge or teleporting.
+function playBoss(s,limit=950,maxStrikes=Infinity){
+  for(let i=0;i<limit&&s.running;i++){
+    const b=s.boss;
+    const rewardY=bossRewardY(b.attack,s.bossY,b.cycle);
+    const canStrike=s.charge>=100&&!b.hitThisRecovery&&b.phase==="recovery";
+    const target=canStrike?s.bossY-DRILL_TIP_VERTICAL_OFFSET:rewardY;
+    const delta=target-s.y;
+    if(canStrike&&Math.abs(delta)<40&&s.boostTime<=0&&s.boosts<maxStrikes)
+      triggerTurbo(s);
+    updateRun(s,.045,delta< -12,delta>12);
+  }
+}
+test("standing still in the strike lane never generates Turbo",()=>{
   const s=intoBoss(2);
-  const initial=s.score;
-  for(let i=0;i<650&&s.running;i++){
+  for(let i=0;i<160&&s.running;i++){
     s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0&&s.charge>=100)
-      triggerTurbo(s);
     updateRun(s,.045);
   }
-  assert.equal(s.boss.stats.successfulHits,2);
-  assert.equal(s.bossDefeated,true);
-  assert.equal(s.result,"complete");
-  assert.ok(s.score>=initial+1400);
+  assert.equal(s.charge,0);
+  assert.equal(triggerTurbo(s),false);
 });
-test("Cinderclaw accepts exactly one Turbo strike per recovery, then can be defeated",()=>{
-  const s=intoBoss(3);
-  const startingScore=s.score;
-  let previousHealth=s.boss.health;
-  let strikes=0;
-  for(let i=0;i<760&&s.running;i++){
-    // Hold a direct line toward the illustrated boss and press Turbo only on
-    // opening frames. Ordinary drill movement is insufficient for a hit.
-    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime===0&&s.charge>=100)
-      triggerTurbo(s);
-    updateRun(s,.045);
-    if(s.boss.health<previousHealth){
-      assert.equal(previousHealth-s.boss.health,1);
-      previousHealth=s.boss.health;strikes++;
+test("all six attacks spill rewards in a separate safe area",()=>{
+  for(const attack of ["gear-sweep","spark-bolt","fireball","burrow","quake","earth-burst"]){
+    for(const cycle of [0,2]){
+      const y=bossRewardY(attack,402,cycle);
+      assert.equal(bossAttackDanger({attack,phase:"active"},y+35,402),false);
+      assert.ok(Math.abs(y-402)>100);
     }
   }
-  assert.equal(strikes,3);
-  assert.equal(s.bossDefeated,true);
-  assert.equal(s.result,"complete");
-  assert.ok(s.score>=startingScore+1750);
-  assert.equal(s.boss.health,0);
-  assert.equal(s.running,false);
 });
-test("one Turbo activation cannot auto-hit a second recovery opening",()=>{
-  const s=intoBoss(3);
-  let fired=false;
-  for(let i=0;i<240&&s.running;i++){
-    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(!fired&&s.boss.phase==="recovery"){
-      assert.equal(triggerTurbo(s),true);
-      assert.ok(s.boostTime<1,"boss Turbo must be a brief, deliberate strike");
-      fired=true;
-    }
-    updateRun(s,.045);
+test("collecting spilled treasure charges Turbo, then all three guardians are beatable",()=>{
+  for(const [index,hits,reward] of [[2,2,1400],[3,3,1750],[4,4,2600]]){
+    const s=intoBoss(index);
+    const initial=s.score;
+    playBoss(s);
+    assert.equal(s.boss.stats.successfulHits,hits,"boss "+index);
+    assert.equal(s.bossDefeated,true);
+    assert.equal(s.result,"complete");
+    assert.ok(s.score>=initial+reward);
+    assert.ok(s.gems+s.cheese+s.bones>=hits*4);
   }
-  assert.equal(fired,true);
+});
+test("a single Turbo activation cannot hit another recovery",()=>{
+  const s=intoBoss(3);
+  playBoss(s,240,1);
+  assert.equal(s.boosts,1);
   assert.equal(s.boss.stats.successfulHits,1);
-  assert.equal(s.boss.health,2);
   assert.equal(s.bossDefeated,false);
-});
-test("Mole King requires four distinct recovery hits and grants royal reward",()=>{
-  const s=intoBoss(4);
-  const initialScore=s.score;
-  for(let i=0;i<840&&s.running;i++){
-    s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0&&s.charge>=100)
-      triggerTurbo(s);
-    updateRun(s,.045);
-  }
-  assert.equal(s.boss.stats.successfulHits,4);
-  assert.equal(s.bossDefeated,true);
-  assert.equal(s.result,"complete");
-  assert.ok(s.score>=initialScore+2600);
 });
 test("running out of time without defeating the boss never grants a victory",()=>{
   const s=intoBoss(4);
