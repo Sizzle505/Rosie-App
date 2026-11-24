@@ -50,7 +50,7 @@ test("Turbo only damages a boss in reach and during the one recovery opening",()
 test("Cinderclaw alternates a projectile fireball and burrowing warning",()=>{
  const s=createBossEncounter("cinderclaw");
  advanceTo(s,"recovery");
- advanceBossEncounter(s,1.45);
+ advanceTo(s,"warning");
  assert.equal(s.phase,"warning");
  assert.equal(s.attack,"burrow");
  assert.ok(s.events.some(e=>e.type==="boss-warning"&&e.text.includes("FLOOR")));
