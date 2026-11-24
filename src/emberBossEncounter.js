@@ -4,7 +4,7 @@
 // and one-time, clearly telegraphed damage opportunities.
 const BOSS_CONFIG = Object.freeze({
   copperjack:Object.freeze({
-    id:"copperjack",maxHealth:2,reward:1400,
+    id:"copperjack",maxHealth:3,reward:1400,
     attacks:Object.freeze([
       Object.freeze({id:"gear-sweep",warning:1.1,active:0.55,recovery:2.8,
         hazard:"floor",warningText:"GEAR SWEEP - RISE ABOVE THE MECHANISM"}),
@@ -39,7 +39,7 @@ export function createBossEncounter(kind){
   const first=config.attacks[0];
   return {
     kind,health:config.maxHealth,maxHealth:config.maxHealth,phase:"warning",
-    cycle:0,elapsed:0,attack:first.id,defeated:false,hitThisRecovery:false,
+    cycle:0,elapsed:0,attack:first.id,defeated:false,hitThisRecovery:false,hitFlash:0,
     events:[{type:"boss-spawn",boss:kind},{type:"boss-warning",boss:kind,attack:first.id,text:first.warningText}],
     stats:{successfulHits:0,attackCycles:0}
   };
@@ -70,6 +70,7 @@ export function advanceBossEncounter(b,dt){
   const remainingTime=Number.isFinite(dt)?Math.max(0,Math.min(1.5,dt)):0;
   b.events=[];
   if(b.defeated||remainingTime===0)return b;
+  b.hitFlash=Math.max(0,(b.hitFlash||0)-remainingTime);
   let remaining=remainingTime;
   for(let i=0;i<16&&remaining>0.000001;i++){
     const duration=phaseDuration(b),step=Math.min(remaining,Math.max(0,duration-b.elapsed));
@@ -86,6 +87,7 @@ export function bossCanTakeHit(b,{turbo=false,inRange=false}={}){
 export function hitBossDuringRecovery(b,contact={}){
   if(!bossCanTakeHit(b,contact))return false;
   b.hitThisRecovery=true;
+  b.hitFlash=.65;
   b.health=Math.max(0,b.health-1);
   b.stats.successfulHits++;
   b.events.push({type:"boss-hit",boss:b.kind,health:b.health});
