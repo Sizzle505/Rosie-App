@@ -25,7 +25,7 @@ test('lane repeats at controlled rate, releases and reverses immediately',()=>{
 
 test('only selected cabinet receives inputs; held actions must release after switching or disconnecting',()=>{
  const listeners={},events={},pending=new Map();let next=0,pads=[];
- const doc={hidden:false,hasFocus:()=>true,body:{},documentElement:{},addEventListener:(n,fn)=>listeners[n]=fn,removeEventListener:n=>delete listeners[n]};
+ const doc={hidden:false,hasFocus:()=>true,body:{closest:()=>null},documentElement:{closest:()=>null},addEventListener:(n,fn)=>listeners[n]=fn,removeEventListener:n=>delete listeners[n]};
  doc.activeElement=doc.body;
  const root=()=>({isConnected:true,contains(el){return el===this;},closest:()=>null,getClientRects:()=>[1],getBoundingClientRect:()=>({left:0,top:0,right:100,bottom:100}),setAttribute(n,v){this[n]=v;},removeAttribute(n){delete this[n];}});
  const context=vm.createContext({document:doc,navigator:{getGamepads:()=>pads},innerWidth:100,innerHeight:100,requestAnimationFrame:fn=>{pending.set(++next,fn);return next;},cancelAnimationFrame:id=>pending.delete(id),addEventListener:(n,fn)=>events[n]=fn,removeEventListener:n=>delete events[n]});
