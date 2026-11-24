@@ -4,3 +4,6 @@
 
 ## Revised composition
 Use one invisible responsive positioning grid to remove independent fixed offsets; 54px equal desktop seals, 52px tab strip, 34px icon canvases and 11px labels. Mobile retains the lower two-row footprint. Account and soundtrack medallions remain untouched. Actual browser visual QA remains necessary.
+
+## Compact lacquer revision
+Desktop shell reduced from 846px to 650px maximum; bar 40px high; both seals 40px; icon canvas 23px, labels 9px. Toggle 54×34px with 23px arrow medallion. Violet and beveled-gold treatments match the approved persistent medallions; selected state remains inset with no enlarged tab. Mobile bar reduced to 50px and icon canvas 25px; account and music sizes/positions unchanged. Retains exact approved WebP bytes and independent click targets. No production deployment.
