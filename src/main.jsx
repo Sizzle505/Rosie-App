@@ -1742,6 +1742,12 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
 }
 
 function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequence = 0 }) {
+  const [wideConsole,setWideConsole] = useState(()=>window.matchMedia("(min-width:1100px) and (min-height:650px) and (orientation:landscape)").matches);
+  useEffect(()=>{
+    const media=window.matchMedia("(min-width:1100px) and (min-height:650px) and (orientation:landscape)");
+    const sync=()=>setWideConsole(media.matches);
+    media.addEventListener("change",sync);return()=>media.removeEventListener("change",sync);
+  },[]);
   const gamepadRoot=useRef(null),gamepadHandler=useRef(null),gamepadLane=useRef({value:0,next:0});
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("yachtSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("yachtSteeringMode",next)}catch{}return next});
@@ -2519,6 +2525,71 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   useEffect(()=>window.RosieGamepad?.subscribe(gamepadRoot.current,frame=>gamepadHandler.current?.(frame),
     ()=>{gamepadLane.current={value:0,next:0};}),[]);
 
+  const yachtActions = (<div className="yacht-console-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
+            <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
+              aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
+              title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}><img src="/yacht-console-v1/pause.webp" alt=""/><span>{paused ? "RESUME" : "PAUSE"}</span></button>
+            <button className="ember-icon-action" type="button" onClick={requestYachtRestart}
+              aria-label="Restart Yacht Dash" title="Restart Yacht Dash"><img src="/yacht-console-v1/retry.webp" alt=""/><span>RETRY</span></button>
+          </div>);
+  const mobileYachtActions = (<div className="captain-yacht-actions yacht-mobile-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
+            <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
+              aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
+              title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}><img src="/yacht-console-v1/pause.webp" alt=""/><span>{paused ? "RESUME" : "PAUSE"}</span></button>
+            <button className="ember-icon-action" type="button" onClick={requestYachtRestart}
+              aria-label="Restart Yacht Dash" title="Restart Yacht Dash"><img src="/yacht-console-v1/retry.webp" alt=""/><span>RETRY</span></button>
+          </div>);
+  const helmControls = (<div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
+          onContextMenu={(event) => event.preventDefault()}
+          onSelectStart={(event) => event.preventDefault()}
+          onDragStart={(event) => event.preventDefault()}>
+          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" repeatDelayMs={320} /> :
+          <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
+            <img src="/yacht-console-v1/steer.webp" alt=""/><small>PORT</small>
+          </button>}
+
+          <button
+            type="button"
+            className={"boost-control" + (turbo >= 100 ? " boost-ready" : "") + (boost ? " boost-active" : "")}
+            style={{ "--turbo-fill": turbo + "%" }}
+            onClick={engageBoost}
+            disabled={!running || turbo < 100 || boost}
+            aria-label={"Treat Turbo boost " + turbo + " percent charged"}
+          >
+            <span className="yacht-turbo-emblem"><img src="/yacht-console-v1/turbo.svg" alt=""/><b>{Math.round(turbo)}%</b></span>
+            <span className="boost-copy">
+              <strong>TREAT TURBO</strong>
+              <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
+            </span>
+          </button>
+
+          {steerMode==="buttons" && <button type="button" className="helm-button"
+            onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
+            <img className="yacht-steer-right" src="/yacht-console-v1/steer.webp" alt=""/><small>STARBOARD</small>
+          </button>}
+        </div>);
+  const steeringOptions = (<div className="yacht-steering-options" role="group" aria-label="Yacht Dash steering and upcoming hazards">
+          <div className={"yacht-lane-forecast" + (threatForecast ? " has-threat" : "")}
+            role="group" aria-label="Select lane. Red indicates a coming hazard.">
+            {[0, 1, 2].map(index => {
+              const blocked = Boolean(threatForecast?.blocked.includes(index));
+              const name = ["port", "center", "starboard"][index];
+              return <button key={index} type="button"
+                className={(blocked ? " is-blocked" : "") +
+                  (lane === index ? " is-current" : "")}
+                aria-label={`Steer to ${name} lane${blocked ? " - hazard ahead" : ""}`}
+                aria-pressed={lane === index}
+                disabled={!running || paused}
+                onClick={() => steerTo(index)}>
+                  {["P", "C", "S"][index]}
+                </button>;
+            })}
+          </div>
+          <button type="button" className="captain-steering-toggle"
+            aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
+            title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
+            onClick={toggleSteerMode}>{steerMode === "joystick" ? "D-PAD" : "JOYSTICK"}</button>
+        </div>);
   return (
     <main ref={gamepadRoot} className={"captain-game-page yacht-console-upgrade captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
       <section className="captain-hero">
@@ -2564,44 +2635,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><img className="yacht-instrument" src="/yacht-console-v1/multiplier.svg" alt=""/><span>MULTIPLIER</span><strong>×{combo}{boost ? " ×2" : ""}</strong></div>
       </section>
 
-          <div className="yacht-console-actions" onPointerDown={event => event.stopPropagation()} onPointerUp={event => event.stopPropagation()}>
-            <button className="ember-icon-action" type="button" onClick={toggleYachtPause} disabled={!running}
-              aria-label={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"} aria-pressed={paused}
-              title={paused ? "Resume Yacht Dash" : "Pause Yacht Dash"}><img src="/yacht-console-v1/pause.webp" alt=""/><span>{paused ? "RESUME" : "PAUSE"}</span></button>
-            <button className="ember-icon-action" type="button" onClick={requestYachtRestart}
-              aria-label="Restart Yacht Dash" title="Restart Yacht Dash"><img src="/yacht-console-v1/retry.webp" alt=""/><span>RETRY</span></button>
-          </div>
+      {wideConsole && yachtActions}
 
         <div className="gamepad-hint">LEFT STICK / D-PAD STEER · A BOOST · START PAUSE · X RETRY</div>
-        <div className={"captain-command-deck"+(steerMode==="joystick"?" has-axis-joystick":"")}
-          onContextMenu={(event) => event.preventDefault()}
-          onSelectStart={(event) => event.preventDefault()}
-          onDragStart={(event) => event.preventDefault()}>
-          {steerMode==="joystick" ? <AxisJoystick axis="horizontal" onDirection={moveCaptain} disabled={!running||paused} label="Yacht helm" repeatDelayMs={320} /> :
-          <button type="button" className="helm-button" onClick={() => moveCaptain(-1)} disabled={!running||paused} aria-label="Steer port">
-            <img src="/yacht-console-v1/steer.webp" alt=""/><small>PORT</small>
-          </button>}
-
-          <button
-            type="button"
-            className={"boost-control" + (turbo >= 100 ? " boost-ready" : "") + (boost ? " boost-active" : "")}
-            style={{ "--turbo-fill": turbo + "%" }}
-            onClick={engageBoost}
-            disabled={!running || turbo < 100 || boost}
-            aria-label={"Treat Turbo boost " + turbo + " percent charged"}
-          >
-            <span className="yacht-turbo-emblem"><img src="/yacht-console-v1/turbo.svg" alt=""/><b>{Math.round(turbo)}%</b></span>
-            <span className="boost-copy">
-              <strong>TREAT TURBO</strong>
-              <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
-            </span>
-          </button>
-
-          {steerMode==="buttons" && <button type="button" className="helm-button"
-            onClick={() => moveCaptain(1)} disabled={!running||paused} aria-label="Steer starboard">
-            <img className="yacht-steer-right" src="/yacht-console-v1/steer.webp" alt=""/><small>STARBOARD</small>
-          </button>}
-        </div>
+      {wideConsole && helmControls}
 
       <section className="yacht-game-shell">
         <div className="yacht-game-sign">
@@ -2610,28 +2647,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
-        <div className="yacht-steering-options" role="group" aria-label="Yacht Dash steering and upcoming hazards">
-          <div className={"yacht-lane-forecast" + (threatForecast ? " has-threat" : "")}
-            role="group" aria-label="Select lane. Red indicates a coming hazard.">
-            {[0, 1, 2].map(index => {
-              const blocked = Boolean(threatForecast?.blocked.includes(index));
-              const name = ["port", "center", "starboard"][index];
-              return <button key={index} type="button"
-                className={(blocked ? " is-blocked" : "") +
-                  (lane === index ? " is-current" : "")}
-                aria-label={`Steer to ${name} lane${blocked ? " - hazard ahead" : ""}`}
-                aria-pressed={lane === index}
-                disabled={!running || paused}
-                onClick={() => steerTo(index)}>
-                  {["P", "C", "S"][index]}
-                </button>;
-            })}
-          </div>
-          <button type="button" className="captain-steering-toggle"
-            aria-label={steerMode === "joystick" ? "Switch to D-pad steering" : "Switch to joystick steering"}
-            title={steerMode === "joystick" ? "Use D-pad" : "Use joystick"}
-            onClick={toggleSteerMode}>{steerMode === "joystick" ? "D-PAD" : "JOYSTICK"}</button>
-        </div>
+          {wideConsole && steeringOptions}
         </div>
         <div className="yacht-voyage-progress" role="progressbar"
           aria-label={chapter.name + " voyage progress"}
@@ -2643,6 +2659,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           <small>SCENE {levelNumber + 1}/5</small>
         </div>
 
+        {!wideConsole && steeringOptions}
 
         <div
           ref={courseFocusRef}
@@ -2675,6 +2692,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           {/* Obstacle warnings remain in the helm's lane forecast above.
               The old in-water red bars mimicked invisible hazards. */}
 
+          {!wideConsole && mobileYachtActions}
           {paused && (
             <div className="captain-yacht-pause-overlay" role="status">
               <div>
@@ -2875,6 +2893,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         )}
 
 
+
+        {!wideConsole && helmControls}
 
         <div className="captain-cargo-key">
           <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>

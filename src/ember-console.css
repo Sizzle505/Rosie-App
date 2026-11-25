@@ -1,3 +1,4 @@
+@media(min-width:1100px) and (min-height:650px) and (orientation:landscape){
 /* Brass and mineral-enamel expedition console. All control handlers are original. */
 .ember-suite.ember-console-upgrade{--console-brass:#e6b766;--console-cream:#fff0c7;--console-ink:#09252d;padding:12px;border:1px solid #b48744;border-radius:18px;background:linear-gradient(#061b2399,#071d28bb),url('/ember-drill/console-v1/console-texture.webp') center/cover;box-shadow:inset 0 0 0 3px #e2ad5820,0 18px 50px #0008}
 .ember-console-upgrade .ember-header{background:transparent;border:0;box-shadow:none;border-radius:12px}
@@ -149,4 +150,19 @@
  .ember-console-upgrade .ember-passage-mission{display:flex;flex-wrap:wrap;gap:3px 6px;padding:5px 0 0;width:100%}
  .ember-console-upgrade .ember-passage-mission span,.ember-console-upgrade .ember-passage-mission em{font-size:9px;line-height:1.3}
  .ember-console-upgrade .ember-passage-mission strong{font-size:11px;line-height:1.3}
+}
+
+}
+@media(max-width:1099px),(max-height:649px),(orientation:portrait){
+ .ember-console-upgrade .ember-console-route-art{display:none}
+ .ember-console-upgrade .ember-stats>div{position:relative}
+ .ember-console-upgrade .ember-instrument-icon{position:absolute;width:23px;height:23px;object-fit:contain;left:5px;bottom:7px}
+ .ember-console-upgrade .ember-stats strong{padding-left:22px}
+ .ember-console-upgrade .ember-hull-total{font-size:10px}
+ .ember-console-upgrade .ember-hull-segments{display:none}
+ .ember-console-upgrade .ember-turbo-art{width:36px;height:36px;object-fit:contain;flex:none}
+ .ember-console-upgrade .ember-angle>img{width:38px;height:38px;object-fit:contain}
+ .ember-console-upgrade .ember-down-art{transform:rotate(180deg)}
+ .ember-console-upgrade .ember-icon-action>img{width:100%;height:100%;object-fit:contain}
+ .ember-console-upgrade .ember-icon-action>span{display:none}
 }
