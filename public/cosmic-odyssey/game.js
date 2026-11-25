@@ -125,6 +125,7 @@
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0,aimPreview=null;
  let aimFacing='right',independentAim=false,oneStepStick=false;
  const pressedKeys=new Map(),STEP_MS=190;
+ let gamepadDir=null;
  const key=(x,y)=>`${x},${y}`;const inside=(x,y)=>x>=0&&y>=0&&x<cols&&y<rows;
  const open=(x,y)=>inside(x,y)&&grid[y][x]===0;
  const rand=(seed)=>()=>{seed=(Math.imul(seed,1664525)+1013904223)|0;return ((seed>>>0)/4294967296)};
@@ -546,7 +547,7 @@
  }
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
-  phase=status;running=false;heldDir=null;pressedKeys.clear();pendingStep=false;
+  phase=status;running=false;heldDir=null;gamepadDir=null;pressedKeys.clear();pendingStep=false;
    veil.dataset.phase=status;
    if(status==='start'){
      document.querySelectorAll('.fiend-flip-card').forEach(card=>{
@@ -993,8 +994,8 @@
  function tick(now){
   loopId=requestAnimationFrame(tick);if(phase!=='playing')return;lastTick=now;
   if(pendingStep&&now>pendingUntil)pendingStep=false;
-  if(now>=nextMoveAt&&(pendingStep||heldDir)){
-    const dir=pendingStep?wantFacing:heldDir;
+  if(now>=nextMoveAt&&(pendingStep||heldDir||gamepadDir)){
+    const dir=pendingStep?wantFacing:(heldDir||gamepadDir);
     if(advance(now,dir))pendingStep=false;
   }
   for(const e of entities)moveFiend(e,now);
@@ -1005,6 +1006,39 @@
  }
  // A single continuous requestAnimationFrame loop rather than per-enemy timers.
  function controls(){
+  window.RosieGamepad?.subscribe($('cosmic-app'),({pressed,move,aim,x,y,previous})=>{
+    const dialog=$('card-detail-modal');
+    if(dialog?.open){
+      if(pressed.b)$('card-detail-close').click();
+      else if(pressed.a)$('card-detail-display').click();
+      else if(pressed.start)$('card-detail-launch').click();
+      else if(x&&x!==previous?.x)$(x<0?'card-detail-prev':'card-detail-next').click();
+      return;
+    }
+    if(phase==='playing'){
+      if(pressed.start||pressed.x){pause();return;}
+      if(move!==gamepadDir){gamepadDir=move;if(move)requestMove(move);}
+      if(aim){aimFacing=aim;independentAim=true;position(player);updateAimPreview();}
+      if(pressed.rt||pressed.rb)fire('laser');
+      if(pressed.lt||pressed.lb)fire('rocket');
+      if(pressed.a||pressed.y)activateBoost();
+      return;
+    }
+    gamepadDir=null;
+    if(phase==='paused'){
+      if(pressed.start||pressed.a)pause();
+      else if(pressed.x){const select=$('stage-select');if(select)select.value=String(level);phase='start';start();}
+      return;
+    }
+    if(phase==='level-clear'||phase==='win'){
+      if(x&&x!==previous?.x)selectVictoryScene(victorySceneIndex+x);
+      if(pressed.a||pressed.start)start();
+      return;
+    }
+    const step=x&&x!==previous?.x?x:y&&y!==previous?.y?y:0,select=$('stage-select');
+    if(step&&select){select.value=String(Math.max(1,Math.min(LEVELS.length,Number(select.value||1)+step)));}
+    if(pressed.a||pressed.start)start();
+  },()=>{gamepadDir=null;});
   const dirForKey=k=>({arrowup:'up',arrowright:'right',arrowdown:'down',arrowleft:'left',w:'up',a:'left',s:'down',d:'right'})[k.toLowerCase()];
   document.addEventListener('keydown',e=>{
     const dir=dirForKey(e.key);

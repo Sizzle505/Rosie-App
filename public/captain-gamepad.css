@@ -1,0 +1,9 @@
+.gamepad-hint{display:none;font-size:.72rem;letter-spacing:.02em;color:inherit;text-align:center;padding:.3em .5em}
+[data-gamepad="connected"] .gamepad-hint{display:block}
+[data-gamepad="connected"] .gamepad-hint::before{content:"CONTROLLER CONNECTED · ";font-weight:700}
+@media(hover:hover) and (pointer:fine){
+.captain-game-page[data-gamepad="connected"] .captain-command-deck .axis-stick,.captain-game-page[data-gamepad="connected"] .captain-command-deck .helm-button,.captain-game-page[data-gamepad="connected"] .captain-steering-toggle,
+.ember-suite[data-gamepad="connected"] .ember-controls .axis-stick,.ember-suite[data-gamepad="connected"] .ember-angle,.ember-suite[data-gamepad="connected"] .ember-stick-toggle,
+#cosmic-app[data-gamepad="connected"] .dpad,#cosmic-app[data-gamepad="connected"] .joystick,#cosmic-app[data-gamepad="connected"] #control-mode-toggle,#cosmic-app[data-gamepad="connected"] #step-mode-toggle,#cosmic-app[data-gamepad="connected"] .controls-note{display:none!important}
+.captain-game-page[data-gamepad="connected"] .captain-command-deck,.ember-suite[data-gamepad="connected"] .ember-controls{display:flex!important;justify-content:center}
+}
