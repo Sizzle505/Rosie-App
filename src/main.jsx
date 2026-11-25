@@ -3024,7 +3024,7 @@ function FullscreenGameFrame({ children, label, variant }) {
           onClick={expanded ? exitGameFullscreen : enterGameFullscreen}
           aria-label={expanded ? "Exit fullscreen game" : "Expand game to fullscreen"}
           title={expanded ? "Exit fullscreen game" : "Play fullscreen"}>
-          {variant === "cosmic" ? <img className="cosmic-fullscreen-art" src={`/cosmic-odyssey/assets/console-v2/${expanded ? "exit-fullscreen" : "fullscreen"}.webp`} alt="" /> : <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>}
+          {["cosmic","yacht","tunnel"].includes(variant) ? <img className="cosmic-fullscreen-art" src={`/cosmic-odyssey/assets/console-v2/${expanded ? "exit-fullscreen" : "fullscreen"}.webp`} alt="" /> : <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>}
           <b>{expanded ? "Exit game" : "Fullscreen"}</b>
         </button>
       )}

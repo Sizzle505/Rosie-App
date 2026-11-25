@@ -632,3 +632,11 @@ body.captain-fullscreen-fallback-active .nav-family-toggle{
 
 /* Trim exterior art to the original gold bezel. */
 .cosmic-odyssey-main-entry > .cosmic-odyssey-entry-banner{clip-path:inset(.55% .45% round 8% / 24%)!important;border:0!important;box-shadow:none!important}
+/* Shared painted fullscreen controls, with independent reachable touch areas. */
+.captain-fullscreen-frame>.captain-fullscreen-toggle:has(.cosmic-fullscreen-art){width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;z-index:120}
+.captain-fullscreen-toggle .cosmic-fullscreen-art{display:block;width:100%!important;height:100%!important;object-fit:contain;pointer-events:none}
+.captain-fullscreen-toggle:has(.cosmic-fullscreen-art)>b{display:none!important}
+@media(max-width:759px){
+ .captain-fullscreen-frame:not(.is-expanded)>.captain-fullscreen-toggle{position:sticky!important;top:auto!important;bottom:140px!important;left:calc(100% - 54px)!important;right:auto!important;margin:-48px 10px 4px auto!important;display:flex!important}
+ .captain-fullscreen-frame.is-expanded>.captain-fullscreen-toggle{position:absolute!important;top:max(6px,env(safe-area-inset-top))!important;left:8px!important;right:auto!important}
+}

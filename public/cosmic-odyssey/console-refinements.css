@@ -84,3 +84,15 @@ html.cosmic-fallback-fullscreen .mobile-card-deck{display:none!important}
  .cosmic-embedded .cosmic-banner-top #pause-top{right:144px!important}
  .cosmic-embedded .cosmic-banner-top #retry-top{right:68px!important}
 }
+/* Launch controls belong in the visible middle of the game, not its lower edge. */
+#veil:not(.hidden) #mission-launcher{position:fixed!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;margin:0!important;z-index:40!important;width:min(90vw,440px)!important;max-height:80dvh!important;overflow:auto!important;box-sizing:border-box}
+#mission-launcher .mission-launcher-controls{display:flex!important;gap:10px!important;align-items:center;justify-content:center;flex-wrap:wrap}
+#mission-launcher .mission-level-picker{min-width:0;flex:1 1 180px}
+#mission-launcher #stage-select{width:100%;min-height:44px;font-size:13px!important}
+#mission-launcher #start{min-height:44px;flex:1 1 140px;font-size:13px!important}
+@media(max-width:759px){
+ .cosmic-banner-top #pause-top,.cosmic-banner-top #retry-top{width:62px!important;height:42px!important;top:3px!important}
+ .cosmic-embedded .cosmic-banner-top #pause-top{right:140px!important}
+ .cosmic-embedded .cosmic-banner-top #retry-top{right:70px!important}
+ .cosmic-top.cosmic-banner-top{padding-top:48px!important}
+}

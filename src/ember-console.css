@@ -166,3 +166,11 @@
  .ember-console-upgrade .ember-icon-action>img{width:100%;height:100%;object-fit:contain}
  .ember-console-upgrade .ember-icon-action>span{display:none}
 }
+.ember-console-upgrade .ember-angle{position:relative;overflow:hidden;padding:0!important}
+.ember-console-upgrade .ember-angle>img{position:absolute;inset:0;display:block;width:100%!important;height:100%!important;object-fit:fill;pointer-events:none}
+@media(max-width:720px){
+ .ember-console-upgrade .ember-run-actions{display:flex!important;justify-content:center;align-items:center;gap:12px!important;min-height:48px}
+ .ember-console-upgrade .ember-icon-action{position:relative;width:90px!important;height:44px!important;padding:0!important;background:transparent!important;border:0!important}
+ .ember-console-upgrade .ember-icon-action>img{width:100%;height:100%;object-fit:contain}
+}
+.ember-suite.ember-console-upgrade[data-arcade-backdrop]{background-image:linear-gradient(#061e2688,#061e26aa),url('/ember-drill/console-v1/console-texture.webp')!important;background-size:cover!important}
