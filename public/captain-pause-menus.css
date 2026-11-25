@@ -1,5 +1,5 @@
 /* Illustrated pause panels shared by the React games and the Cosmic iframe. */
-.captain-pause-menu[hidden]{display:none!important}
+:is(#root,#cosmic-app) .captain-pause-menu[hidden]{display:none!important}
 :is(#root,#cosmic-app) .captain-pause-menu{
  position:relative!important;display:block!important;flex:none!important;
  width:min(92cqw,72cqh,360px)!important;height:auto!important;aspect-ratio:4/5!important;
