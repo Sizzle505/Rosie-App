@@ -77,3 +77,43 @@
  .cosmic-hud .hud-stat:nth-child(5) b::before{background-image:url('assets/console-v2/hud-fiends.webp')}
  .cosmic-hud .hud-stat:nth-child(6) b::before{background-image:url('assets/console-v2/hud-biscuits.webp')}
 }
+/* Use the approved weapon medallions at a useful size, in their own slots. */
+@media(max-width:759px) and (orientation:portrait){
+ #cosmic-app.cosmic-app{grid-template-rows:calc(44px + clamp(86px,25vw,110px)) 44px minmax(0,1fr) 108px!important;gap:3px!important}
+ #cosmic-app>.cosmic-hud{height:44px!important}
+ #cosmic-app>.cosmic-bottom{height:108px!important;max-height:108px!important;grid-template-rows:26px 80px!important;padding:0 3px!important}
+ .cosmic-bottom .status-line{height:26px!important;min-height:26px!important}
+ .cosmic-bottom .control-mode-toggle,.cosmic-bottom .step-mode-toggle{height:24px!important;min-height:24px!important}
+ .cosmic-bottom .command-bar{height:80px!important;grid-template-columns:72px minmax(0,1fr) 64px!important;gap:3px!important}
+ .cosmic-bottom #joystick:not([hidden]){width:72px!important;height:76px!important}
+ .cosmic-bottom #joystick .joystick-track{width:68px!important;height:68px!important}
+ .cosmic-bottom .weapons{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:center!important;gap:4px!important;height:80px!important}
+ .cosmic-bottom .weapon{width:100%!important;height:76px!important;max-width:68px!important;min-width:0!important;margin:0!important;filter:none!important;opacity:1}
+ .cosmic-bottom .weapon picture{display:block;width:100%;height:60px}
+ .cosmic-bottom .weapon img,.cosmic-bottom .boost-icon{width:100%!important;height:60px!important;object-fit:contain!important;filter:drop-shadow(0 2px 3px #0008)}
+ .cosmic-bottom .weapon small{bottom:0!important;background:#07102b!important;border-color:#ba944c88!important;font:700 9px/14px Arial,sans-serif!important;border-radius:4px!important}
+ .cosmic-bottom .weapon:disabled{opacity:.72!important;filter:brightness(.83)!important}
+ .cosmic-bottom .weapon:not(:disabled){filter:drop-shadow(0 0 4px #ffda7599)!important}
+ .cosmic-bottom .weapon:not(:disabled):active{transform:scale(.94)}
+ .cosmic-bottom #aim-joystick{width:64px!important;height:76px!important}
+ .cosmic-bottom #aim-joystick .joystick-track{width:60px!important;height:60px!important}
+ /* Arrow mode uses the wider movement footprint, without reserving it for
+    joystick mode or squeezing the medallions into the old 45px buttons. */
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])){grid-template-columns:104px minmax(0,1fr) 60px!important}
+ .cosmic-bottom .dpad:not([hidden]){width:104px!important;height:78px!important}
+ .cosmic-bottom .dpad :is(.d-up,.d-down,.d-left,.d-right){width:40px!important;height:39px!important}
+ .cosmic-bottom .dpad .d-up{left:32px!important;top:0!important}
+ .cosmic-bottom .dpad .d-down{left:32px!important;top:39px!important}
+ .cosmic-bottom .dpad .d-left{left:0!important;top:19px!important;width:32px!important}
+ .cosmic-bottom .dpad .d-right{left:72px!important;top:19px!important;width:32px!important}
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])) .weapon picture,
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])) .weapon img,
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])) .boost-icon{height:54px!important}
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])) .weapon{height:70px!important}
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])) #aim-joystick{width:60px!important}
+ .cosmic-bottom .command-bar:has(.dpad:not([hidden])) #aim-joystick .joystick-track{width:56px!important;height:56px!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ #cosmic-app .cosmic-bottom .weapons .weapon{width:100%!important;max-width:none!important;justify-self:stretch!important;align-self:center!important;display:block!important}
+ #cosmic-app .cosmic-bottom .weapons .weapon:disabled{opacity:.8!important;filter:none!important}
+}

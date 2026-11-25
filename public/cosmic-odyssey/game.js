@@ -163,7 +163,10 @@
  function nearestOpen(preferred){if(open(preferred.x,preferred.y))return preferred;for(let r=1;r<Math.max(cols,rows);r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++)if(Math.abs(dx)+Math.abs(dy)===r&&open(preferred.x+dx,preferred.y+dy))return{x:preferred.x+dx,y:preferred.y+dy};return{x:1,y:1};}
  function desiredMazeLayout(){
   const desktop=innerWidth>=760&&innerWidth>innerHeight;
-  if(!desktop)return {cols:11,rows:15};
+  if(!desktop){
+   const stage=document.querySelector('.cosmic-stage')?.getBoundingClientRect();
+   return window.CosmicMazeLayout.phone(stage?.width||innerWidth,stage?.height||innerHeight*.6);
+  }
   // Large desktops use an Art Deco command console beside the full-height maze.
   // The 17×11 field fits the resulting tall play area without wasted space.
   if(innerWidth>=1100&&innerHeight>=650&&matchMedia('(hover:hover) and (pointer:fine)').matches)return {cols:17,rows:11};
@@ -634,6 +637,16 @@
   veil.classList.add('hidden');positionShield();dismissLaunchPads();
   say(`${LEVELS[level-1].name}! Collect biscuits, defeat the Fiends, and escape.`);
   sound(carry?880:670,.17);ui();
+  // The parent's iPhone fullscreen state commits after this click handler.
+  // Reconcile the fresh board once the final playfield dimensions are known.
+  const launchSession=sessionId;
+  requestAnimationFrame(()=>{
+   if(sessionId!==launchSession||phase!=='playing'||got!==0)return;
+   const layout=desiredMazeLayout();
+   if(layout.cols===cols&&layout.rows===rows){resize();return;}
+   init(carry);phase='playing';running=true;protectedUntil=performance.now()+2200;
+   veil.classList.add('hidden');positionShield();dismissLaunchPads();ui();
+  });
  }
  function pause(){if(phase==='playing')enter('paused','Your mission is safely paused. Resume whenever ready.','RESUME MISSION');else if(phase==='paused')start();}
  function pick(){
