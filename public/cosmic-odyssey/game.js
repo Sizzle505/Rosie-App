@@ -175,19 +175,15 @@
   if(!player){cols=wanted.cols;rows=wanted.rows;}
   const stage=document.querySelector('.cosmic-stage');
   const bounds=stage?.getBoundingClientRect();
-  // Phone portrait is width-first. The maze must use the complete playable
-  // width, even when an embedded page has less height than the board needs.
-  // Height-constrained sizing left large dead margins around the 11x15 maze.
+  // Fit both dimensions of the allocated playfield; the control dock owns
+  // its own height and must never be pushed below the phone viewport.
+  const availableW=Math.max(1,(bounds?.width||innerWidth)-10);
+  const availableH=Math.max(1,(bounds?.height||innerHeight*.7)-10);
   const portraitPhone=innerWidth<760&&innerHeight>=innerWidth;
-  const availableW=Math.max(150,(bounds?.width||innerWidth)-(portraitPhone?8:10));
-  const availableH=Math.max(140,(bounds?.height||innerHeight*.7)-10);
   tile=portraitPhone
-    ? Math.max(9,Math.round(availableW/cols*100)/100)
+    ? Math.max(1,Math.floor(Math.min(availableW/cols,availableH/rows)*100)/100)
     : Math.max(9,Math.floor(Math.min(availableW/cols,availableH/rows)));
   const boardW=cols*tile,boardH=rows*tile;
-  // Reserve actual document height for the portrait board rather than letting
-  // flex shrink the game as the control dock takes up space.
-  if(stage)stage.style.height=portraitPhone?Math.ceil(boardH+8)+'px':'';
   frame.style.width=(boardW+6)+'px';
   frame.style.height=(boardH+6)+'px';
   board.style.gridTemplateColumns=`repeat(${cols}, 1fr)`;

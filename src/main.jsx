@@ -64,6 +64,7 @@ import captainWindSprite from "./captainWindSprite.js";
 import "./desktop-design-preservation.css";
 import "./fortune-verse-scroll.css";
 import "./royal-navigation.css";
+import "./captain-phone-layout.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -2635,7 +2636,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><img className="yacht-instrument" src="/yacht-console-v1/multiplier.svg" alt=""/><span>MULTIPLIER</span><strong>×{combo}{boost ? " ×2" : ""}</strong></div>
       </section>
 
-      {wideConsole && yachtActions}
+      {wideConsole ? yachtActions : mobileYachtActions}
 
         <div className="gamepad-hint">LEFT STICK / D-PAD STEER · A BOOST · START PAUSE · X RETRY</div>
       {wideConsole && helmControls}
@@ -2692,7 +2693,6 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           {/* Obstacle warnings remain in the helm's lane forecast above.
               The old in-water red bars mimicked invisible hazards. */}
 
-          {!wideConsole && mobileYachtActions}
           {paused && (
             <div className="captain-yacht-pause-overlay" role="status">
               <div>
@@ -2916,6 +2916,22 @@ function FullscreenGameFrame({ children, label, variant }) {
   const [fallbackFullscreen, setFallbackFullscreen] = useState(false);
   const [fullscreenExitSequence, setFullscreenExitSequence] = useState(0);
   const expanded = nativeFullscreen || fallbackFullscreen;
+
+  useEffect(() => {
+    if (variant !== "cosmic") return undefined;
+    const iframe = frameRef.current?.querySelector("iframe");
+    if (!iframe) return undefined;
+    const sync = () => {
+      try { iframe.contentDocument?.documentElement.classList.toggle("cosmic-parent-expanded", expanded); }
+      catch { /* Same-origin arcade may still be loading. */ }
+    };
+    sync();
+    iframe.addEventListener("load", sync);
+    return () => {
+      iframe.removeEventListener("load", sync);
+      try { iframe.contentDocument?.documentElement.classList.remove("cosmic-parent-expanded"); } catch {}
+    };
+  }, [expanded, variant]);
 
   useEffect(() => {
     const syncFullscreen = () => {

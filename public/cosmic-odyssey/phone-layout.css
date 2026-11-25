@@ -1,0 +1,79 @@
+/* Allocate the dock before sizing the maze. Keep every phone control on screen. */
+@media(max-width:759px) and (orientation:portrait){
+ html,body{height:100%!important;min-height:0!important;overflow:hidden!important}
+ #cosmic-app.cosmic-app{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:calc(44px + clamp(74px,11dvh,104px)) 48px minmax(0,1fr) 118px!important;
+  width:100%!important;height:100%!important;max-height:100%!important;min-height:0!important;
+  padding:calc(env(safe-area-inset-top) + 4px) 4px calc(env(safe-area-inset-bottom) + 4px)!important;
+  gap:4px!important;overflow:hidden!important;align-items:stretch!important;
+ }
+ .cosmic-embedded #cosmic-app.cosmic-app{padding:0!important}
+ #cosmic-app>.cosmic-top.cosmic-banner-top{
+  grid-column:1!important;grid-row:1!important;position:relative!important;display:flex!important;
+  align-items:flex-end!important;width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;
+  padding:44px 0 0!important;margin:0!important;aspect-ratio:auto!important;overflow:hidden!important;
+ }
+ .cosmic-top.cosmic-banner-top .cosmic-banner-art{width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;object-fit:contain!important;padding:0!important;aspect-ratio:auto!important}
+ .cosmic-top.cosmic-banner-top #pause-top,.cosmic-top.cosmic-banner-top #retry-top{
+  position:absolute!important;top:0!important;bottom:auto!important;width:64px!important;height:44px!important;min-height:44px!important;transform:none!important;
+ }
+ .cosmic-top.cosmic-banner-top #pause-top{left:calc(50% - 68px)!important;right:auto!important}
+ .cosmic-top.cosmic-banner-top #retry-top{left:calc(50% + 4px)!important;right:auto!important}
+ #cosmic-app>.cosmic-hud{grid-row:2!important;grid-column:1!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;align-items:center!important;height:48px!important;min-height:0!important;width:100%!important;margin:0!important;padding:2px!important;gap:0!important}
+ .cosmic-hud .hud-stat{display:block!important;min-width:0!important;width:auto!important;padding:0 2px!important;overflow:hidden!important}
+ .cosmic-hud .hud-stat small{font:700 8px/14px Arial,sans-serif!important;letter-spacing:0!important;white-space:nowrap}
+ .cosmic-hud .hud-stat b{font:700 16px/24px Arial,sans-serif!important;gap:2px!important}
+ .cosmic-hud #ammo i{font-size:10px!important;vertical-align:baseline!important}
+ .cosmic-hud .life-icon{width:17px!important;height:20px!important;object-fit:contain!important}
+ #cosmic-app>.cosmic-stage{grid-column:1!important;grid-row:3!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important}
+ #cosmic-app>.cosmic-bottom{grid-row:4!important;grid-column:1!important;display:grid!important;grid-template-rows:28px 86px!important;grid-template-columns:minmax(0,1fr)!important;height:118px!important;min-height:0!important;max-height:118px!important;width:100%!important;margin:0!important;padding:0 3px!important;gap:0!important;overflow:hidden!important}
+ .cosmic-bottom .status-line{grid-row:1!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;width:100%!important;height:28px!important;min-height:28px!important;margin:0!important;padding:1px!important;gap:5px!important}
+ .cosmic-bottom .status-line #message{flex:1!important;font-size:9px!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+ .cosmic-bottom .aim-indicator{display:none!important}
+ .cosmic-bottom .control-mode-toggle,.cosmic-bottom .step-mode-toggle{height:26px!important;min-height:26px!important;font-size:9px!important;flex:none!important}
+ .cosmic-bottom .command-bar{grid-row:2!important;display:grid!important;grid-template-columns:80px minmax(0,1fr) 58px!important;align-items:center!important;justify-items:center!important;gap:3px!important;height:86px!important;min-height:0!important;width:100%!important;padding:0!important;margin:0!important;overflow:hidden!important}
+ .cosmic-bottom .dpad:not([hidden]){grid-column:1!important;grid-row:1!important;position:relative!important;display:grid!important;grid-template-columns:repeat(3,26px)!important;grid-template-rows:repeat(3,26px)!important;gap:0!important;width:78px!important;min-width:0!important;height:78px!important;min-height:0!important;padding:0!important;margin:0!important}
+ .cosmic-bottom .dpad button{position:static!important;inset:auto!important;width:26px!important;height:26px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+ .cosmic-bottom .dpad .d-up{grid-area:1 / 2!important}.cosmic-bottom .dpad .d-down{grid-area:3 / 2!important}.cosmic-bottom .dpad .d-left{grid-area:2 / 1!important}.cosmic-bottom .dpad .d-right{grid-area:2 / 3!important}
+ .cosmic-bottom #joystick:not([hidden]){grid-column:1!important;grid-row:1!important;width:78px!important;min-width:0!important;height:78px!important;min-height:0!important;margin:0!important}
+ .cosmic-bottom #joystick .joystick-track{width:72px!important;height:72px!important}
+ .cosmic-bottom .weapons{grid-column:2!important;grid-row:1!important;display:flex!important;align-items:center!important;justify-content:space-evenly!important;gap:2px!important;width:100%!important;min-width:0!important;margin:0!important;padding:0!important}
+ .cosmic-bottom .weapon{position:relative!important;flex:0 1 48px!important;width:48px!important;min-width:0!important;height:64px!important;min-height:0!important;padding:0!important;margin:0!important}
+ .cosmic-bottom .weapon img,.cosmic-bottom .boost-icon{display:block!important;width:100%!important;height:48px!important;object-fit:contain!important;margin:0!important}
+ .cosmic-bottom .boost-icon{background:url('assets/console-v2/boost.webp') center/contain no-repeat!important;border:0!important;box-shadow:none!important}
+ .cosmic-bottom .boost-icon svg{visibility:hidden!important}
+ .cosmic-bottom .weapon small{position:absolute!important;bottom:0!important;left:0!important;right:0!important;min-height:14px!important;font:700 9px/13px Arial,sans-serif!important}
+ .cosmic-bottom #aim-joystick{grid-column:3!important;grid-row:1!important;display:grid!important;width:58px!important;min-width:0!important;height:78px!important;min-height:0!important;position:relative!important;inset:auto!important;margin:0!important;align-content:center!important}
+ .cosmic-bottom #aim-joystick .joystick-track{width:56px!important;height:56px!important}
+ .cosmic-bottom #aim-joystick .joystick-knob{width:30px!important;height:30px!important}
+ .cosmic-bottom .aim-stick-caption{position:static!important;font-size:8px!important;line-height:14px!important;text-align:center}
+ .cosmic-bottom .controls-note,.cosmic-bottom .sector-art,.cosmic-bottom .desktop-mission-actions{display:none!important}
+ .cosmic-local-fullscreen{top:calc(env(safe-area-inset-top) + 4px)!important;left:8px!important;right:auto!important;width:44px!important;height:44px!important}
+ #veil:not(.hidden) #mission-launcher{position:absolute!important;left:50%!important;top:50%!important;width:94%!important;max-height:95%!important;transform:translate(-50%,-50%)!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ html.cosmic-parent-expanded,html.cosmic-parent-expanded body{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;overflow:clip!important;overscroll-behavior:none!important}
+ .cosmic-parent-expanded .mobile-card-deck{display:none!important}
+ .cosmic-parent-expanded #cosmic-app{overflow:clip!important}
+ .cosmic-parent-expanded .cosmic-bottom{overflow:clip!important}
+ #cosmic-app.cosmic-app{grid-template-rows:calc(44px + (100vw - 12px)/3) 48px minmax(0,1fr) 118px!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-bottom .command-bar{grid-template-columns:126px minmax(0,1fr) 58px!important}
+ .cosmic-bottom .dpad:not([hidden]){display:block!important;width:126px!important;height:84px!important}
+ .cosmic-bottom .dpad :is(.d-up,.d-down,.d-left,.d-right){position:absolute!important;width:42px!important;height:42px!important;transform:none!important;grid-area:auto!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important}
+ .cosmic-bottom .dpad .d-up{left:42px!important;top:0!important;right:auto!important;bottom:auto!important}
+ .cosmic-bottom .dpad .d-down{left:42px!important;top:42px!important;right:auto!important;bottom:auto!important}
+ .cosmic-bottom .dpad .d-left{left:0!important;top:21px!important;right:auto!important;bottom:auto!important}
+ .cosmic-bottom .dpad .d-right{left:84px!important;top:21px!important;right:auto!important;bottom:auto!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ .cosmic-hud .hud-stat b{display:flex!important;align-items:center!important;justify-content:center!important;font-size:14px!important;gap:2px!important}
+ .cosmic-hud .hud-stat:not(:nth-child(3)) b::before{content:'';display:block;flex:0 0 16px;width:16px;height:20px;background-position:center;background-repeat:no-repeat;background-size:contain}
+ .cosmic-hud .hud-stat:nth-child(1) b::before{background-image:url('assets/console-v2/hud-score.webp')}
+ .cosmic-hud .hud-stat:nth-child(2) b::before{background-image:url('assets/console-v2/hud-charge.webp')}
+ .cosmic-hud .hud-stat:nth-child(4) b::before{background-image:url('assets/console-v2/hud-stage.webp')}
+ .cosmic-hud .hud-stat:nth-child(5) b::before{background-image:url('assets/console-v2/hud-fiends.webp')}
+ .cosmic-hud .hud-stat:nth-child(6) b::before{background-image:url('assets/console-v2/hud-biscuits.webp')}
+}
