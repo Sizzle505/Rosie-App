@@ -693,6 +693,9 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           <strong>{route[hud.passage].mission}</strong>
           <em>{world?(hud.worldObjective?"COMPLETE":"IN PROGRESS"):(hud.passage===0?hud.objectives.barkroot:hud.objectives.ruby)?"COMPLETE":"IN PROGRESS"}</em>
         </div>
+        <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode}
+          aria-label={steerMode==="joystick"?"Use arrow controls":"Use joystick"}
+          title={steerMode==="joystick"?"Arrow controls":"Joystick"}>{steerMode==="joystick"?"ARROWS":"JOYSTICK"}</button>
       </div>
       <div ref={stage} className={"ember-stage"+(active?" is-active":"")} data-world-warnings={hud.worldWarnings} data-boss-phase={hud.boss?.phase||"none"} data-stage-duration={hud.duration}
           data-hazard-art-loaded={world&&hud.stageIndex>=2
@@ -834,12 +837,10 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
             <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
-        {steerMode==="joystick" ? <button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use arrow controls" title="Arrow controls">ARROWS</button> :
-        <button className="ember-angle" type="button" disabled={!active}
+        {steerMode!=="joystick" && <button className="ember-angle" type="button" disabled={!active}
           onPointerDown={e=>hold("down",true,e)} onPointerUp={e=>hold("down",false,e)}
           onPointerCancel={e=>hold("down",false,e)} onLostPointerCapture={e=>hold("down",false,e)}
           aria-label="Angle the drill downward"><img className="ember-down-art" src="/ember-drill/console-v1/steer-up.webp" alt=""/></button>}
-        {steerMode==="buttons"&&<button className="ember-stick-toggle" type="button" onClick={toggleSteerMode} aria-label="Use joystick" title="Joystick">JOYSTICK</button>}
       </div>
       {<div className="ember-run-actions">
         <button className="ember-icon-action" type="button" disabled={!active&&!paused} onClick={togglePause} aria-label={paused?"Resume run":"Pause run"} title={paused?"Resume run":"Pause run"}><img src="/ember-drill/console-v1/pause.webp" alt=""/><span>{paused?"RESUME":"PAUSE"}</span></button>

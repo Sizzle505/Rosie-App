@@ -65,6 +65,7 @@ import "./desktop-design-preservation.css";
 import "./fortune-verse-scroll.css";
 import "./royal-navigation.css";
 import "./captain-phone-layout.css";
+import "./captain-control-surfaces.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -2557,9 +2558,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             disabled={!running || turbo < 100 || boost}
             aria-label={"Treat Turbo boost " + turbo + " percent charged"}
           >
-            <span className="yacht-turbo-emblem"><img src="/yacht-console-v1/turbo.svg" alt=""/><b>{Math.round(turbo)}%</b></span>
+            <img className="yacht-turbo-button-art" src="/yacht-console-v2/treat-turbo.webp" alt=""/>
             <span className="boost-copy">
               <strong>TREAT TURBO</strong>
+              <b className="yacht-turbo-charge">{Math.round(turbo)}%</b>
               <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
             </span>
           </button>

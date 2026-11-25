@@ -1195,12 +1195,17 @@
   $('boost').addEventListener('click',activateBoost);
   // Move the original controls, keeping a single set of event handlers and IDs.
   const desktopConsole=matchMedia('(min-width:1100px) and (min-height:650px) and (orientation:landscape) and (hover:hover) and (pointer:fine)');
+  const phoneConsole=matchMedia('(max-width:759px) and (orientation:portrait)');
   function placeMissionActions(){
-   const destination=desktopConsole.matches?$('desktop-mission-actions'):document.querySelector('.cosmic-banner-top');
+   const header=document.querySelector('.cosmic-banner-top');
+   const destination=desktopConsole.matches?$('desktop-mission-actions'):header;
    destination.append($('pause-top'),$('retry-top'));
+   const modeDestination=phoneConsole.matches?header:document.querySelector('.status-line');
+   modeDestination.append($('control-mode-toggle'),$('step-mode-toggle'));
   }
   placeMissionActions();
   desktopConsole.addEventListener('change',placeMissionActions);
+  phoneConsole.addEventListener('change',placeMissionActions);
   $('pause-top').addEventListener('click',pause);
   $('retry-top').addEventListener('click',()=>{
     if(!window.confirm('Retry this sector from the beginning?'))return;
