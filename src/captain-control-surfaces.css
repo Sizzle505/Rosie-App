@@ -22,32 +22,32 @@
 .ember-expedition .ember-stick-toggle{position:static;flex:none;align-self:center;justify-self:end;width:auto;min-width:64px;height:28px;min-height:28px;padding:2px 7px;border:1px solid #cfb474;border-radius:7px;background:#0b2c36;color:#f4dda7;font:700 10px/1 Arial,sans-serif;cursor:pointer}
 @media(max-width:759px) and (orientation:portrait){
  .captain-fullscreen-frame.is-expanded:is(.captain-fs-yacht,.captain-fs-tunnel,.captain-fs-cosmic){padding:env(safe-area-inset-top) 5px env(safe-area-inset-bottom)!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded{background:linear-gradient(#031b251a,#031b251a),url('/yacht-console-v2/nautical-lacquer.webp') center/640px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console){background:linear-gradient(#031b251a,#031b251a),url('/yacht-console-v2/nautical-lacquer.webp') center/640px!important}
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded{background:linear-gradient(#041b241a,#041b241a),url('/ember-drill/console-v1/console-texture.webp') center/640px!important}
  .captain-fullscreen-frame.captain-fs-cosmic.is-expanded{background:url('/cosmic-odyssey/assets/console-v2/navy-enamel.webp') center/640px!important}
  .captain-fullscreen-frame.is-expanded>.captain-fullscreen-toggle:has(.cosmic-fullscreen-art){top:env(safe-area-inset-top)!important}
  body:has(.captain-fullscreen-frame.is-expanded) .rosie-music-dock{top:env(safe-area-inset-top)!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded>.captain-game-page.yacht-console-upgrade,
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console)>.captain-game-page.yacht-console-upgrade,
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded>.ember-suite.ember-console-upgrade{gap:3px!important;border:0!important;border-radius:0!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded>.captain-game-page.yacht-console-upgrade{grid-template-rows:44px clamp(74px,10dvh,96px) 48px minmax(0,1fr)!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-hud{height:48px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console)>.captain-game-page.yacht-console-upgrade{grid-template-rows:44px clamp(74px,10dvh,96px) 48px minmax(0,1fr)!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-hud{height:48px!important}
  /* Lane forecast and steering switch share the progress strip. */
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-game-shell{grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:30px minmax(0,1fr) 68px!important;gap:2px 5px!important;padding:3px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-voyage-progress{grid-row:1!important;grid-column:1!important;align-self:center!important;width:100%!important;height:18px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-voyage-progress>small{display:none!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-steering-options{grid-row:1!important;grid-column:2!important;width:auto!important;height:30px!important;min-height:0!important;gap:4px!important;border:0!important;background:transparent!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-lane-forecast{gap:2px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-lane-forecast button{width:26px!important;min-width:26px!important;height:28px!important;min-height:28px!important;padding:0!important;font-size:10px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-steering-toggle{width:64px!important;min-width:64px!important;height:28px!important;min-height:28px!important;padding:2px 5px!important;font-size:9px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-course{grid-row:2!important;grid-column:1 / -1!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-command-deck{grid-row:3!important;grid-column:1 / -1!important;grid-template-columns:68px minmax(0,1fr) 68px!important;height:68px!important;gap:4px!important;padding:0!important;border:0!important;border-radius:0!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-command-deck.has-axis-joystick{grid-template-columns:100px minmax(0,1fr)!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .helm-button{height:68px!important;width:68px!important;overflow:visible!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .helm-button>img{height:100%!important;width:100%!important;object-fit:fill!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .boost-control{height:68px!important;padding:0!important;border-radius:0!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .boost-control .boost-copy{margin-left:37%!important;width:59%!important;gap:3px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .boost-control .boost-copy strong{font-size:12px!important;letter-spacing:.3px!important}
- .captain-fullscreen-frame.captain-fs-yacht.is-expanded .boost-control .yacht-turbo-charge{font-size:10px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-game-shell{grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:30px minmax(0,1fr) 68px!important;gap:2px 5px!important;padding:3px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-voyage-progress{grid-row:1!important;grid-column:1!important;align-self:center!important;width:100%!important;height:18px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-voyage-progress>small{display:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-steering-options{grid-row:1!important;grid-column:2!important;width:auto!important;height:30px!important;min-height:0!important;gap:4px!important;border:0!important;background:transparent!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-lane-forecast{gap:2px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-lane-forecast button{width:26px!important;min-width:26px!important;height:28px!important;min-height:28px!important;padding:0!important;font-size:10px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-steering-toggle{width:64px!important;min-width:64px!important;height:28px!important;min-height:28px!important;padding:2px 5px!important;font-size:9px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-course{grid-row:2!important;grid-column:1 / -1!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-command-deck{grid-row:3!important;grid-column:1 / -1!important;grid-template-columns:68px minmax(0,1fr) 68px!important;height:68px!important;gap:4px!important;padding:0!important;border:0!important;border-radius:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-command-deck.has-axis-joystick{grid-template-columns:100px minmax(0,1fr)!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .helm-button{height:68px!important;width:68px!important;overflow:visible!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .helm-button>img{height:100%!important;width:100%!important;object-fit:fill!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .boost-control{height:68px!important;padding:0!important;border-radius:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .boost-control .boost-copy{margin-left:37%!important;width:59%!important;gap:3px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .boost-control .boost-copy strong{font-size:12px!important;letter-spacing:.3px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .boost-control .yacht-turbo-charge{font-size:10px!important}
  /* A single thin route strip, then stage. No objective text below it. */
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded>.ember-suite.ember-console-upgrade{grid-template-rows:44px calc((100vw - 10px)/3.657) 48px 30px minmax(0,1fr) 68px!important}
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-stats{height:48px!important}
@@ -69,4 +69,60 @@
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-charge{height:5px!important;margin-top:5px!important}
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-angle>img{width:100%!important;height:100%!important;object-fit:fill!important}
  .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-controls .axis-stick-track{height:64px!important;min-height:0!important}
+}
+/* Gold is the charge indicator, not just a tiny percentage label. */
+.yacht-turbo-meter{display:block;width:94%;height:8px;min-height:8px;overflow:hidden;border:1px solid #bf9b4f;border-radius:5px;background:#152321;box-shadow:inset 0 1px 3px #000c}
+.yacht-turbo-meter>i{display:block;width:var(--turbo-fill,0%);height:100%;border-radius:4px;background:linear-gradient(180deg,#fff5b3,#ffd65b 35%,#e9ad23 75%,#bb7315);box-shadow:0 0 7px #ffd25599;transition:width .2s linear}
+.yacht-console-upgrade .boost-control.boost-ready,.yacht-console-upgrade .boost-control.boost-active{opacity:1!important;animation:captain-turbo-ready 1s ease-in-out infinite alternate!important}
+.yacht-console-upgrade .boost-control.boost-ready .yacht-turbo-meter>i,.yacht-console-upgrade .boost-control.boost-active .yacht-turbo-meter>i{box-shadow:0 0 8px 3px #ffe792;background:linear-gradient(#fffbdc,#ffe16b,#ffc12e)}
+.ember-console-upgrade .ember-charge{height:8px!important;border-color:#cdaa57!important;background:#12231f!important;box-shadow:inset 0 1px 3px #000c!important}
+.ember-console-upgrade .ember-charge>i{height:100%!important;background:linear-gradient(180deg,#fff5b3,#ffd65b 35%,#e9ad23 75%,#bb7315)!important;box-shadow:0 0 7px #ffd25599!important;transition:width .2s linear}
+.ember-console-upgrade .ember-boost:is(.is-ready,.is-boosting){opacity:1!important;animation:captain-turbo-ready 1s ease-in-out infinite alternate!important}
+.ember-console-upgrade .ember-boost:is(.is-ready,.is-boosting) .ember-charge>i{box-shadow:0 0 8px 3px #ffe792!important;background:linear-gradient(#fffbdc,#ffe16b,#ffc12e)!important}
+@keyframes captain-turbo-ready{from{filter:drop-shadow(0 0 4px #ffc537aa) brightness(1.08)}to{filter:drop-shadow(0 0 10px #ffe69c) brightness(1.3)}}
+@media(prefers-reduced-motion:reduce){.yacht-console-upgrade .boost-control:is(.boost-ready,.boost-active),.ember-console-upgrade .ember-boost:is(.is-ready,.is-boosting){animation:none!important;filter:drop-shadow(0 0 8px #ffe69c) brightness(1.15)!important}}
+.ember-opening-play{border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;width:68px!important;height:68px!important;min-width:68px!important;min-height:68px!important}
+.ember-opening-play>img{display:block;width:100%;height:100%;object-fit:contain;transform:rotate(90deg);pointer-events:none;filter:drop-shadow(0 3px 7px #000b)}
+@media(max-width:759px) and (orientation:portrait){
+ /* Regular mobile preview uses the same contained console, without locking
+    page scrolling or sharing the old, oversized shell heights. */
+ .captain-fullscreen-frame.captain-fs-yacht.is-preview-console{box-sizing:border-box!important;height:clamp(620px,calc(100svh - 90px),850px)!important;min-height:620px!important;max-height:none!important;padding:5px!important;overflow:hidden!important;position:relative!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-preview-console>.captain-fullscreen-toggle:has(.cosmic-fullscreen-art){position:absolute!important;top:5px!important;left:9px!important;bottom:auto!important;right:auto!important;width:44px!important;height:44px!important;margin:0!important;z-index:150!important}
+ /* Two action rails flank the title. Reclaim the former 44px top row. */
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded>.captain-game-page.yacht-console-upgrade{grid-template-rows:88px 48px minmax(0,1fr)!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-hero{grid-row:1!important;grid-column:1!important;justify-self:center!important;width:calc(100% - 108px)!important;height:88px!important;margin:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-marquee h1{font-size:14px!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-marquee p{font-size:11px!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-title-plaque{padding:5px!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-hud{grid-row:2!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-game-shell{grid-row:3!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-mobile-actions{position:absolute!important;inset:0 0 auto!important;width:100%!important;height:88px!important;padding:0!important;display:block!important;pointer-events:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-mobile-actions button{position:absolute!important;top:44px!important;width:52px!important;min-width:52px!important;height:44px!important;pointer-events:auto!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-mobile-actions button:first-child{left:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .yacht-mobile-actions button:last-child{right:0!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded>.ember-suite.ember-console-upgrade{grid-template-rows:88px 48px 30px minmax(0,1fr) 68px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-header{grid-row:1!important;grid-column:1!important;justify-self:center!important;width:calc(100% - 108px)!important;height:88px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-stats{grid-row:2!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-expedition{grid-row:3!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-stage{grid-row:4!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-controls{grid-row:5!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-run-actions{position:absolute!important;inset:0 0 auto!important;width:100%!important;height:88px!important;padding:0!important;display:block!important;pointer-events:none!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-run-actions .ember-icon-action{position:absolute!important;top:44px!important;width:52px!important;min-width:52px!important;height:44px!important;pointer-events:auto!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-run-actions .ember-icon-action:first-child{left:0!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-run-actions .ember-icon-action:nth-child(2){right:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .boost-control .boost-copy{gap:2px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-turbo-meter{height:7px!important;min-height:7px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel.is-expanded .ember-charge{height:8px!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded)>.captain-fullscreen-toggle:has(.cosmic-fullscreen-art){position:absolute!important;top:5px!important;right:8px!important;left:auto!important;bottom:auto!important;width:44px!important;height:44px!important;margin:0!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded) .ember-section-divider{min-height:44px!important;padding:8px 50px 0 6px!important}
+}
+.yacht-console-upgrade .boost-control:is(.boost-ready,.boost-active),.ember-console-upgrade .ember-boost:is(.is-ready,.is-boosting){filter:drop-shadow(0 0 10px #ffe69c) brightness(1.2)!important}
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-yacht.is-preview-console{height:clamp(460px,calc(100svh - 104px),850px)!important;min-height:460px!important;padding:calc(env(safe-area-inset-top) + 5px) 5px 5px!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-preview-console>.captain-fullscreen-toggle:has(.cosmic-fullscreen-art){top:calc(env(safe-area-inset-top) + 5px)!important}
+ body:has(.captain-fs-yacht.is-preview-console):not(:has(.captain-fullscreen-frame.is-expanded)) .rosie-music-dock{top:calc(env(safe-area-inset-top) + 5px)!important;right:58px!important;left:auto!important;bottom:auto!important;width:44px!important;height:44px!important}
+ body:has(.captain-fs-yacht.is-preview-console):not(:has(.captain-fullscreen-frame.is-expanded)) .rosie-music-launch,
+ body:has(.captain-fs-yacht.is-preview-console):not(:has(.captain-fullscreen-frame.is-expanded)) .rosie-music-launch img{width:44px!important;height:44px!important;min-width:44px!important;padding:0!important}
 }

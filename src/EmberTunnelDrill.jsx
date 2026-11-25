@@ -809,7 +809,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             </button>}
             {introError&&<p className="ember-opening-error" role="status">The film is unavailable. Skip to enter Barkroot Passage.</p>}
             {introPhase==="ready"&&!introError&&<button type="button" className="ember-opening-play"
-              onClick={playOpening} aria-label="Play the opening film from the beginning" title="Play opening">▶</button>}
+              onClick={playOpening} aria-label="Play the opening film from the beginning" title="Play opening"><img src="/ember-drill/console-v1/opening-play.webp" alt=""/></button>}
             {introPhase!=="leaving"&&introPhase!=="finished"&&<button type="button"
               className="ember-opening-skip" onClick={finishOpening} aria-label="Skip opening and begin the first level">
               SKIP

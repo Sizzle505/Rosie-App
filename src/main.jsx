@@ -2562,6 +2562,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <span className="boost-copy">
               <strong>TREAT TURBO</strong>
               <b className="yacht-turbo-charge">{Math.round(turbo)}%</b>
+              <span className="yacht-turbo-meter" aria-hidden="true"><i /></span>
               <small>{boost ? "DOUBLE SCORE ACTIVE" : turbo >= 100 ? "TAP FOR DOUBLE POINTS" : "COLLECT TREATS TO CHARGE"}</small>
             </span>
           </button>
@@ -3030,7 +3031,7 @@ function FullscreenGameFrame({ children, label, variant }) {
   return (
     <section
       ref={frameRef}
-      className={`captain-fullscreen-frame captain-fs-${variant}${expanded ? " is-expanded" : ""}${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
+      className={`captain-fullscreen-frame captain-fs-${variant}${expanded ? " is-expanded" : variant === "yacht" ? " is-preview-console" : ""}${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
       aria-label={`${label} game`}
     >
       {["yacht", "tunnel", "captain2"].includes(variant) && React.isValidElement(children)

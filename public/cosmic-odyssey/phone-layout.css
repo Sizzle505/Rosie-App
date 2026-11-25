@@ -135,3 +135,29 @@
 @media(max-width:759px) and (orientation:portrait){
  .cosmic-top.cosmic-banner-top #step-mode-toggle{left:calc(50% + 58px)!important;right:auto!important}
 }
+/* Compact header rails and uniform control faces at every phone width. */
+@media(max-width:759px) and (orientation:portrait){
+ #cosmic-app.cosmic-app{grid-template-rows:112px 44px minmax(0,1fr) 82px!important}
+ #cosmic-app>.cosmic-top.cosmic-banner-top{padding:0 54px!important;align-items:center!important}
+ .cosmic-top.cosmic-banner-top .cosmic-banner-art{height:auto!important;max-height:104px!important;width:100%!important;object-fit:contain!important}
+ .cosmic-top.cosmic-banner-top #pause-top,.cosmic-top.cosmic-banner-top #retry-top{top:42px!important;width:52px!important;height:44px!important}
+ .cosmic-top.cosmic-banner-top #pause-top{left:0!important;right:auto!important}
+ .cosmic-top.cosmic-banner-top #retry-top{right:0!important;left:auto!important}
+ .cosmic-top.cosmic-banner-top #control-mode-toggle{top:86px!important;left:0!important;right:auto!important;width:52px!important;min-width:52px!important;height:26px!important;min-height:26px!important;font-size:8px!important}
+ .cosmic-top.cosmic-banner-top #step-mode-toggle{top:86px!important;right:0!important;left:auto!important;width:52px!important;min-width:52px!important;height:26px!important;min-height:26px!important}
+ #cosmic-app .cosmic-bottom .command-bar{--weapon-size:min(64px,calc((100vw - 160px)/3));grid-template-columns:72px minmax(0,1fr) 64px!important}
+ #cosmic-app .cosmic-bottom .command-bar:has(.dpad:not([hidden])){--weapon-size:min(60px,calc((100vw - 200px)/3));grid-template-columns:120px minmax(0,1fr) 60px!important}
+ #cosmic-app .cosmic-bottom .dpad:not([hidden]){width:120px!important;height:80px!important}
+ #cosmic-app .cosmic-bottom .dpad :is(.d-up,.d-down,.d-left,.d-right){width:40px!important;height:40px!important;transform:none!important}
+ #cosmic-app .cosmic-bottom .dpad .d-up{left:40px!important;top:0!important}
+ #cosmic-app .cosmic-bottom .dpad .d-down{left:40px!important;top:40px!important}
+ #cosmic-app .cosmic-bottom .dpad .d-left{left:0!important;top:20px!important}
+ #cosmic-app .cosmic-bottom .dpad .d-right{left:80px!important;top:20px!important}
+ #cosmic-app .cosmic-bottom .weapons{grid-template-columns:repeat(3,minmax(0,1fr))!important;justify-items:center!important;gap:4px!important;padding:0!important}
+ #cosmic-app .cosmic-bottom .weapons .weapon{width:var(--weapon-size)!important;height:calc(var(--weapon-size) + 16px)!important;max-width:none!important;justify-self:center!important;align-self:center!important;margin:0!important;padding:0!important}
+ #cosmic-app .cosmic-bottom .weapons .weapon :is(picture,img,.boost-icon){display:block!important;width:var(--weapon-size)!important;height:var(--weapon-size)!important;max-width:none!important;object-fit:contain!important;margin:0!important;padding:0!important}
+ #cosmic-app .cosmic-bottom .weapons .weapon small{height:14px!important;min-height:14px!important;line-height:13px!important;padding:0!important;left:0!important;right:0!important;bottom:0!important}
+}
+@media(max-width:759px) and (orientation:portrait){
+ #cosmic-app .cosmic-bottom .weapons .weapon{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important}
+}
