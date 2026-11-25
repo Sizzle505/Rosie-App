@@ -6,5 +6,11 @@
       "work/royal-navigation-assets-20261124": false,
       "release/recipes-35-20261124": false
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/tesla",
+      "destination": "/tesla.html"
+    }
+  ]
 }
