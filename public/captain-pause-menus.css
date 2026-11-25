@@ -1,0 +1,48 @@
+/* Illustrated pause panels shared by the React games and the Cosmic iframe. */
+.captain-pause-menu[hidden]{display:none!important}
+:is(#root,#cosmic-app) .captain-pause-menu{
+ position:relative!important;display:block!important;flex:none!important;
+ width:min(92cqw,72cqh,360px)!important;height:auto!important;aspect-ratio:4/5!important;
+ max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ color:#ffedba!important;text-align:center!important;overflow:visible!important;
+}
+.pause-menu-art{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;filter:drop-shadow(0 6px 14px #0009)}
+:is(#root,#cosmic-app) .captain-pause-menu .pause-menu-content{
+ position:absolute!important;inset:32% 11% 22%!important;display:flex!important;flex-direction:column!important;
+ justify-content:center!important;align-items:stretch!important;gap:6px!important;
+ width:auto!important;height:auto!important;margin:0!important;padding:0!important;border:0!important;background:none!important;
+}
+:is(#root,#cosmic-app) .captain-pause-menu .pause-game-name{display:block!important;color:#e6bf7b!important;font:700 9px/1.1 Georgia,serif!important;letter-spacing:1.1px!important;text-shadow:0 1px 2px #000!important}
+:is(#root,#cosmic-app) .captain-pause-menu h2{margin:0!important;padding:0!important;color:#fff0bc!important;font:700 clamp(16px,5cqw,24px)/1.08 Georgia,serif!important;letter-spacing:.3px!important;text-shadow:0 2px 4px #000!important}
+.pause-menu-actions{display:grid;grid-template-rows:repeat(3,minmax(34px,1fr));gap:6px;flex:1;min-height:0;margin-top:3px}
+:is(#root,#cosmic-app) .captain-pause-menu .pause-menu-action{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:100%!important;min-width:0!important;height:100%!important;min-height:34px!important;
+ box-sizing:border-box!important;margin:0!important;padding:5px 8px!important;
+ border:1px solid #d8b56d!important;border-radius:9px!important;background:linear-gradient(135deg,#123d49ee,#06212eee)!important;
+ color:#ffedb5!important;font:700 12px/1 Georgia,serif!important;letter-spacing:.9px!important;
+ box-shadow:inset 0 1px #fff2b63b,0 2px 5px #0007!important;cursor:pointer;touch-action:manipulation;
+}
+:is(#root,#cosmic-app) .pause-theme-tunnel .pause-menu-action{background:linear-gradient(135deg,#174033ee,#08271fee)!important}
+:is(#root,#cosmic-app) .pause-theme-cosmic .pause-menu-action{background:linear-gradient(135deg,#41235fee,#12182fee)!important}
+:is(#root,#cosmic-app) .captain-pause-menu .pause-action-play{color:#442715!important;background:linear-gradient(#fff1b1,#efc766 40%,#b97b26)!important;box-shadow:inset 0 1px #fff9dc,0 2px 7px #edba4955!important}
+:is(#root,#cosmic-app) .pause-menu-action:hover{filter:brightness(1.15)}
+:is(#root,#cosmic-app) .pause-menu-action:active{transform:scale(.98)}
+:is(#root,#cosmic-app) .pause-menu-action:focus-visible{outline:2px solid #fff0b1;outline-offset:2px}
+#root .captain-yacht-pause-overlay,#root .ember-pause-overlay,#veil.has-pause-menu{
+ position:absolute!important;inset:0!important;display:grid!important;place-items:center!important;
+ container-type:size!important;padding:3px!important;gap:0!important;overflow:hidden!important;
+ background:#020b1999!important;backdrop-filter:blur(2px)!important;-webkit-backdrop-filter:blur(2px)!important;
+}
+#veil.has-pause-menu>#mission-launcher,#veil.has-pause-menu>.fiend-card-gallery{display:none!important}
+#veil.selecting-sector>.fiend-card-gallery{display:none!important}
+#veil.has-pause-menu .captain-pause-menu{z-index:3}
+@supports not(width:1cqh){:is(#root,#cosmic-app) .captain-pause-menu{width:min(86%,300px)!important;max-height:94%!important}}
+@media(max-height:420px) and (orientation:landscape){
+ :is(#root,#cosmic-app) .captain-pause-menu{width:min(72cqh,260px)!important}
+ :is(#root,#cosmic-app) .captain-pause-menu .pause-menu-content{inset:29% 11% 13%!important;gap:3px!important}
+ .pause-menu-actions{gap:3px;grid-template-rows:repeat(3,minmax(26px,1fr))}
+ :is(#root,#cosmic-app) .captain-pause-menu .pause-menu-action{min-height:26px!important;font-size:10px!important;padding:2px!important}
+ :is(#root,#cosmic-app) .captain-pause-menu h2{font-size:14px!important}
+}

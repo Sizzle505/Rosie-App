@@ -8,6 +8,7 @@ import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITI
 import "./ember-tunnel-drill.css";
 import "./ember-console.css";
 import AxisJoystick from "./AxisJoystick.jsx";
+import CaptainPauseMenu from "./CaptainPauseMenu.jsx";
 import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
 
 // Art loads only for the selected challenge, keeping the original Classic
@@ -381,7 +382,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     setMode(next);
     if (next === "paused") playSound(audio(), "hit");
   }
-  function returnToLevelMenu() {
+  function returnToLevelMenu(keepFullscreen = false) {
     window.clearTimeout(bossVictoryTimer.current);
     bossVictoryTimer.current=null;
     resetHold();
@@ -394,7 +395,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
       detail:{scene:"tunnel",state:"ended",world:worldIndex}
     }));
-    exitGameFullscreen?.();
+    if (keepFullscreen !== true) exitGameFullscreen?.();
   }
   function resetHold(){pressed.current.up=false;pressed.current.down=false;gamepadPitch.current=0}
   useEffect(()=>()=>window.clearTimeout(bossVictoryTimer.current),[]);
@@ -724,9 +725,10 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
            <span><strong>{notice.title}</strong><small>{notice.detail}</small></span>
          </div>}
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
-        {paused&&<div className="ember-pause-overlay"><span>THE DRILL IS IDLING</span><strong>EXCAVATION PAUSED</strong><p>Your route, treasure, and hull are safely held.</p>
-          <button type="button" onClick={togglePause}>RESUME DIG</button>
-          <button type="button" className="ember-return-levels" onClick={returnToLevelMenu}>RETURN TO LEVEL MENU</button>
+        {paused&&<div className="ember-pause-overlay">
+          <CaptainPauseMenu theme="tunnel" game="TUNNEL DRILL" title="EXCAVATION PAUSED"
+            onPlay={togglePause} onRetry={() => start(frame.current.stageIndex)}
+            onLevels={() => returnToLevelMenu(true)} />
         </div>}
         {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
           <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>

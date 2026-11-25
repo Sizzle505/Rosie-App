@@ -126,3 +126,20 @@
  body:has(.captain-fs-yacht.is-preview-console):not(:has(.captain-fullscreen-frame.is-expanded)) .rosie-music-launch,
  body:has(.captain-fs-yacht.is-preview-console):not(:has(.captain-fullscreen-frame.is-expanded)) .rosie-music-launch img{width:44px!important;height:44px!important;min-width:44px!important;padding:0!important}
 }
+/* The Captain page retains its scenic backdrop. The illustrated console
+   material belongs to the expanded Yacht console only. */
+.captain-fullscreen-frame.captain-fs-yacht:not(.is-expanded),
+.captain-fullscreen-frame.captain-fs-yacht:not(.is-expanded)>.captain-game-page.yacht-console-upgrade{background:transparent!important;background-image:none!important}
+.captain-fullscreen-frame.captain-fs-yacht:not(.is-expanded) .yacht-console-upgrade :is(.captain-hud>div,.yacht-game-shell,.captain-command-deck){background:rgba(4,28,40,.52)!important;background-image:none!important}
+/* Anchor live text and charge fill inside the generated button's painted rim. */
+.captain-fullscreen-frame.captain-fs-yacht .yacht-console-upgrade .boost-control .boost-copy{
+ position:absolute!important;inset:15% 10% 15% 39%!important;margin:0!important;
+ width:auto!important;max-width:none!important;min-width:0!important;height:auto!important;
+ box-sizing:border-box!important;overflow:hidden!important;gap:2px!important;
+}
+.captain-fullscreen-frame.captain-fs-yacht .yacht-console-upgrade .boost-control .yacht-turbo-meter{
+ position:relative!important;display:block!important;box-sizing:border-box!important;
+ width:100%!important;max-width:100%!important;min-width:0!important;flex:none!important;
+ overflow:hidden!important;margin:0!important;
+}
+.yacht-turbo-meter>i{max-width:100%!important;box-sizing:border-box}

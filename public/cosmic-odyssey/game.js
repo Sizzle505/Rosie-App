@@ -548,6 +548,9 @@
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;gamepadDir=null;pressedKeys.clear();pendingStep=false;
    veil.dataset.phase=status;
+   veil.classList.toggle('has-pause-menu',status==='paused');
+   veil.classList.remove('selecting-sector');
+   if($('cosmic-pause-menu'))$('cosmic-pause-menu').hidden=status!=='paused';
    if(status==='start'){
      document.querySelectorAll('.fiend-flip-card').forEach(card=>{
        card.classList.remove('is-flipped');
@@ -571,6 +574,7 @@
     `✦ STAGE ${level+1} UNLOCKED · ${LEVELS[level]?.name||'ODYSSEY'} ✦`:
     `✦ LEVEL ${level} / ${LEVELS.length} · ${LEVELS[level-1].tagline} ✦`;
   $('veil-msg').textContent=text;$('start').textContent=buttonText;
+  if(status==='paused')requestAnimationFrame(()=>$('pause-play').focus({preventScroll:true}));
   const select=$('stage-select'),picker=document.querySelector('.mission-level-picker');
   if(select&&status==='level-clear')select.value=String(Math.min(level+1,LEVELS.length));
   else if(select&&status==='lose')select.value=String(level);
@@ -620,6 +624,8 @@
     }
   }catch(_){}
   if(victoryOverlay)victoryOverlay.hidden=true;
+  veil.classList.remove('has-pause-menu','selecting-sector');
+  if($('cosmic-pause-menu'))$('cosmic-pause-menu').hidden=true;
   if(phase==='paused'){
     const delta=performance.now()-pausedAt;protectedUntil+=delta;slowUntil+=delta;if(boostUntil>pausedAt)boostUntil+=delta;
     for(const e of entities){e.next+=delta;if(e.nextAttack)e.nextAttack+=delta;}for(const shot of enemyShots)shot.stepAt+=delta;
@@ -1211,6 +1217,17 @@
     if(!window.confirm('Retry this sector from the beginning?'))return;
     const select=$('stage-select');if(select)select.value=String(level);
     phase='start';start();
+  });
+  $('pause-play').addEventListener('click',start);
+  $('pause-retry').addEventListener('click',()=>{
+    $('stage-select').value=String(level);
+    phase='start';start();
+  });
+  $('pause-levels').addEventListener('click',()=>{
+    $('stage-select').value=String(level);
+    enter('start','Choose a sector to launch.','LAUNCH MISSION');
+    veil.classList.add('selecting-sector');
+    $('stage-select').focus({preventScroll:true});
   });
   $('start').addEventListener('click',start);
   $('victory-continue').addEventListener('click',start);

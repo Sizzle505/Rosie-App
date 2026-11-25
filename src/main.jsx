@@ -34,6 +34,7 @@ import { CHEESE_PREVIEW_MS, CHEESE_SPRINT_MS, secondsUntilDeadline, beforeDeadli
 import Captain2Game from "./captain2.jsx";
 import AxisJoystick from "./AxisJoystick.jsx";
 import EmberTunnelDrill from "./EmberTunnelDrill.jsx";
+import CaptainPauseMenu from "./CaptainPauseMenu.jsx";
 import CaptainCinematicEnvironment from "./CaptainCinematicEnvironment.jsx";
 import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
@@ -2059,6 +2060,21 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setPaused(current => !current);
   }
 
+  function returnYachtToLevels() {
+    finishedRef.current = true;
+    boostRef.current = false;
+    boostRemainingRef.current = 0;
+    window.clearInterval(boostDrainTimerRef.current);
+    setBoost(false);
+    setRunning(false);
+    setPaused(false);
+    setRestartConfirm(false);
+    setEnded(false);
+    setCompleted(false);
+    setShowVictoryArt(false);
+    setPhaseNotice("");
+  }
+
   function requestYachtRestart() {
     if (!running || ended) {
       startGame();
@@ -2697,20 +2713,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               The old in-water red bars mimicked invisible hazards. */}
 
           {paused && (
-            <div className="captain-yacht-pause-overlay" role="status">
-              <div>
-                <span>CAPTAIN'S ORDERS</span>
-                <strong>{restartConfirm ? "RESTART VOYAGE?" : "VOYAGE PAUSED"}</strong>
-                <p>{restartConfirm
-                  ? "Restarting clears this run's score and cargo."
-                  : "Your time, treats, and boost charge are preserved."}</p>
-                {restartConfirm ? (
-                  <div className="yacht-restart-actions">
-                    <button type="button" onClick={toggleYachtPause}>KEEP SAILING</button>
-                    <button type="button" onClick={() => startGame()}>RESTART</button>
-                  </div>
-                ) : <button type="button" onClick={toggleYachtPause}>RESUME VOYAGE</button>}
-              </div>
+            <div className="captain-yacht-pause-overlay">
+              <CaptainPauseMenu theme="yacht" game="YACHT DASH"
+                title={restartConfirm ? "RETRY VOYAGE?" : "VOYAGE PAUSED"}
+                onPlay={toggleYachtPause} onRetry={() => startGame()}
+                onLevels={returnYachtToLevels} />
             </div>
           )}
           <div className="sun-glint" aria-hidden="true" />
