@@ -1,0 +1,9 @@
+# TeddyVerse Card Vault release — 2026-11-26
+
+Public alias `teddyverse26.vercel.app` moved to ready deployment `dpl_8zjuqSBVmfH1SNY9tQ8hJgdRFgQp` after isolated preview QA. Previous deployment `dpl_2u7z6LZvaKNq26XCeS9jxPGLfvTq` remains available for alias rollback. Source build script commit: `73ddd89655f34a5c00a5125c9410a906c13a9cbd`.
+
+- 41 distinct user-approved fronts; original archive SHA-256 `b894cb86c7d5b7968e94edac53c3942fa3a1e691fcb1ccee8560180c9e7a50eb`; each master verified against archive manifest. All 41 optimized WebP routes returned HTTP 200 and image/webp.
+- 72 base assets verified; Captain/Haiku remain disabled as on the public baseline. Legacy Rosie card catalog and images excluded from the new vault. Generic tile retained; title and nav art generated as Teddy-only gold plaques.
+- Independent Chromium smoke tests 393x852 and 1440x900: vault rendered, card detail opened/closed, 1024x1536 decoded, no horizontal overflow, broken loaded images, page errors, failed requests, or RosieVerse/Supabase cross-requests observed. Home-to-vault navigation passed. Broader route regression sweep interrupted by Chromium process exit; not claimed complete. Existing vault is a front-art lightbox, not a front/back flip UI. Actual device testing and full feature regression remain unverified.
+- Public alias readback confirmed the new READY deployment; live proof endpoint `/teddy-card-vault-qa.json` returned 200 and 41 IDs. Exact tested preview was assigned to the public alias; no RosieVerse main changes or unrelated feature-gate changes.
+- The immutable preview build uses a temporary encrypted archive URL. Rebuild requires a fresh authorized archive URL; no private artwork or credentials are committed. Original archive is stored in Dropbox at `/Rosie App/TeddyVerse-Next-Assets/TeddyVerse Card Vault - 41 Cards.zip`.
