@@ -77,17 +77,33 @@
 @keyframes fortuneStarTwinkle { 0%,18%,75%,100% { opacity:.06; transform:scale(.35) rotate(0deg); } 36% { opacity:1; transform:scale(1.45) rotate(12deg); } 48% { opacity:.72; transform:scale(.9) rotate(0deg); } }
 @keyframes fortuneLanternFlicker { 0% { opacity:.55; transform:translate(-50%,-50%) scale(.91); } 55% { opacity:1; transform:translate(-50%,-50%) scale(1.08); } 100% { opacity:.72; transform:translate(-50%,-50%) scale(.97); } }
 @media (max-width:720px) {
-  .app-shell.page-fortune .fortune-page { background:linear-gradient(180deg,rgba(10,4,18,.18),rgba(18,4,21,.36)),url('/fortune-layers/mobile-atmosphere.webp') center top / 100% auto repeat-y #100719 !important; }
-  .page-fortune .fortune-console { background:linear-gradient(180deg,rgba(15,8,25,.36),rgba(39,12,30,.32)),url('/fortune-layers/panel-oracle.webp') center top / cover !important; }
+  .app-shell.page-fortune { background:#100719 url('/fortune-layers/mobile-atmosphere.webp') center top / 100% auto repeat-y !important; }
+  .app-shell.page-fortune .fortune-page { background:linear-gradient(180deg,rgba(10,4,18,.08),rgba(18,4,21,.2)),url('/fortune-layers/mobile-atmosphere.webp') center top / 100% auto repeat-y #100719 !important; }
+  .page-fortune .fortune-console { background:transparent !important; }
+  .page-fortune .fortune-console::before,
+  .page-fortune .fortune-console::after { content:none !important; display:none !important; }
+  .page-fortune .machine .sign {
+    top:8px; width:86%; height:74px; box-sizing:border-box;
+    padding:17px 18px 6px; border:0; border-radius:0;
+    background:url('/fortune-layers/madame-sign.webp') center / 100% 100% no-repeat !important;
+    box-shadow:0 7px 14px rgba(0,0,0,.38);
+  }
+  .page-fortune .machine .sign::before,
+  .page-fortune .machine .sign::after,
+  .page-fortune .machine .sign-paw,
+  .page-fortune .machine .sign-glint { display:none !important; }
+  .page-fortune .machine .sign h1 { font-size:clamp(24px,7.2vw,31px); line-height:1; letter-spacing:.012em; }
+  .page-fortune .machine .sign p { margin-top:2px; font-size:6px; letter-spacing:.1em; }
   .page-fortune .question-card {
     background:linear-gradient(120deg,rgba(25,10,27,.22),rgba(31,9,28,.3)),url('/fortune-layers/panel-petition.webp') center / 100% 100% !important;
     border-color:#b79358; box-shadow:inset 0 1px 0 rgba(255,224,160,.24),inset 0 0 32px rgba(114,36,67,.25),0 18px 32px rgba(5,2,12,.44) !important;
   }
+  .page-fortune .question-card::after { content:none !important; display:none !important; }
   .page-fortune .bottom-omens,
   .page-fortune .fortune-waiting-card { background:linear-gradient(180deg,rgba(22,8,27,.2),rgba(28,7,27,.3)),url('/fortune-layers/panel-omens.webp') center / 100% 100% !important; }
   .page-fortune .machine .booth { background-image:linear-gradient(145deg,rgba(76,17,42,.82),rgba(35,9,34,.9)),url('/fortune-layers/panel-oracle.webp') !important; }
   .page-fortune .machine .cabinet-lights { display:none !important; }
-  .fortune-page .fortune-scene-rosie { width:98.9%; bottom:3%; }
+  .fortune-page .fortune-scene-rosie { width:98.9%; bottom:-8%; }
   .fortune-page .fortune-scene-ball { width:55%; bottom:-1%; }
 }
 @media (max-width:410px) {
