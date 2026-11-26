@@ -421,7 +421,7 @@ const FORTUNE_STARS = [
   [15, 53, 2.85], [85, 58, 4.55], [32, 68, .95], [69, 72, 3.95],
 ];
 
-function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, orbView, poseIndex }) {
+function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, poseIndex }) {
   const manifesting = revealStage === "manifesting";
   const stageRef = useRef(null);
   const ballRef = useRef(null);
@@ -537,7 +537,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             </div>
           )}
 
-          <div className={`crystal-chamber ${orbView === "expand" && answer && !answerDismissed ? "oracle-expanded" : ""}`}>
+          <div className={`crystal-chamber ${answer && !answerDismissed ? "oracle-expanded" : ""}`}>
             <CrystalEnergy consulting={consulting} answer={answer} revealStage={revealStage} />
             <FortuneLens
               consulting={consulting}
@@ -3155,7 +3155,7 @@ function App() {
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
-  const [orbView, setOrbView] = useState("flow");
+  const [hasAskedFortune, setHasAskedFortune] = useState(false);
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
   const [flipped, setFlipped] = useState(false);
@@ -3171,6 +3171,7 @@ function App() {
     return Number.isFinite(value) ? value : 0;
   });
   const inputRef = useRef(null);
+  const fortuneTicketRef = useRef(null);
   const audioRef = useRef(null);
   const whistleAudioRef = useRef(null);
   const whistleUrlRef = useRef(null);
@@ -3181,6 +3182,8 @@ function App() {
   const revealFinishTimerRef = useRef(null);
   const dismissTimerRef = useRef(null);
   const dictationTimerRef = useRef(null);
+  const fortuneRequestRef = useRef(0);
+  const previousPageRef = useRef(page);
   const landingSwipeRef = useRef(null);
 
   const speechSupported = useMemo(
@@ -3223,6 +3226,31 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const previousPage = previousPageRef.current;
+    previousPageRef.current = page;
+    if (previousPage !== "fortune" || page === "fortune") return;
+    fortuneRequestRef.current += 1;
+    [flipTimerRef, turnEndTimerRef, revealTimerRef, revealFinishTimerRef, dismissTimerRef, dictationTimerRef]
+      .forEach((timer) => window.clearTimeout(timer.current));
+    recognitionRef.current?.abort?.();
+    setQuestion("");
+    setSubmittedQuestion("");
+    setAnswer(null);
+    setHasAskedFortune(false);
+    setConsulting(false);
+    setAnswerDismissed(false);
+    setRevealStage("idle");
+    setListening(false);
+    setDictationStatus("idle");
+    setFlipped(false);
+    setPoseIndex(0);
+    setTurning(false);
+    setFlipBurst(0);
+    setConsultations(0);
+    sessionStorage.removeItem("rosieConsultations");
+  }, [page]);
+
   // The oracle starts with an intentional safe-area stage and only becomes
   // pinned after the visitor scrolls it into the top of the viewport.
   useLayoutEffect(() => {
@@ -3257,6 +3285,20 @@ function App() {
     updateOraclePosition();
     return () => window.removeEventListener("scroll", updateOraclePosition);
   }, [page]);
+
+  useEffect(() => {
+    if (page !== "fortune" || !answer || revealStage !== "revealed" || window.innerWidth > 720) return;
+    const frame = window.requestAnimationFrame(() => {
+      const card = fortuneTicketRef.current?.querySelector(".ticket-paper");
+      if (!card) return;
+      const bounds = card.getBoundingClientRect();
+      const navTop = document.querySelector(".bottom-nav")?.getBoundingClientRect().top ?? window.innerHeight - 86;
+      const needed = Math.max(0, bounds.bottom - navTop + 18);
+      const room = Math.max(0, bounds.top - 126);
+      if (needed > 0) window.scrollBy({ top: Math.min(needed, room), behavior: "smooth" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [page, answer, revealStage]);
 
   function navigateTo(nextPage) {
     if (!validPages.includes(nextPage)) return;
@@ -3600,6 +3642,8 @@ function App() {
       return;
     }
     const askedQuestion = question.trim();
+    const requestId = ++fortuneRequestRef.current;
+    setHasAskedFortune(true);
 
     primeAudio();
     window.clearTimeout(revealTimerRef.current);
@@ -3628,6 +3672,7 @@ function App() {
     } catch {
       // The crystal ball still works even if Venice is unavailable.
     }
+    if (requestId !== fortuneRequestRef.current) return;
     const delay = Math.max(0, 1350 + secureIndex(650) - (Date.now() - started));
 
     revealTimerRef.current = window.setTimeout(() => {
@@ -3743,22 +3788,13 @@ function App() {
               flipped={flipped}
               turning={turning}
               flipBurst={flipBurst}
-              orbView={orbView}
               poseIndex={poseIndex}
             />
 
             <div className="console-caption">
               <span>FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</span>
             </div>
-            {answer && !answerDismissed && revealStage === "revealed" && (
-              <div className="oracle-glass-choices" role="group" aria-label="Choose how the crystal ball presents longer fortunes">
-                <span>THE GLASS</span>
-                <button type="button" className={orbView === "flow" ? "is-selected" : ""} aria-pressed={orbView === "flow"} onClick={() => setOrbView("flow")}>Flow</button>
-                <button type="button" className={orbView === "expand" ? "is-selected" : ""} aria-pressed={orbView === "expand"} onClick={() => setOrbView("expand")}>Expand</button>
-              </div>
-            )}
-
-            <form className="question-card" onSubmit={askRosie}>
+            <form className={`question-card ${hasAskedFortune ? "has-consultation" : ""}`} onSubmit={askRosie}>
               <div className="console-rivets" aria-hidden="true"><i /><i /><i /><i /></div>
               <div className="question-heading">
                 <span className="question-kicker">PETITION THE ORACLE</span>
@@ -3825,7 +3861,7 @@ function App() {
                 </div>
               )}
 
-              <div className="quick-row">
+              {!hasAskedFortune && <div className="quick-row">
                 <p className="fortune-sample-heading">ROSIE’S SAMPLE QUESTIONS <span>Tap to choose · Or press Ask for a surprise</span></p>
                 <div className="quick-prompts">
                   {quickQuestions.map((prompt) => (
@@ -3834,19 +3870,19 @@ function App() {
                     </button>
                   ))}
                 </div>
-              </div>
-              <div className="console-foot">
+              </div>}
+              {!hasAskedFortune && <div className="console-foot">
                 <button type="button" className="footer-shuffle" onClick={reshufflePrompts} aria-label="Show different sample questions" title="Different questions">
                   <span aria-hidden="true">↻</span>
                   Different questions
                 </button>
                 <strong>{consultations} question{consultations === 1 ? "" : "s"} asked tonight</strong>
-              </div>
-              <div className="fortune-mobile-caption">FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</div>
+              </div>}
+              {!hasAskedFortune && <div className="fortune-mobile-caption">FORTUNES · ADVICE · HIGHLY QUALIFIED OPINIONS</div>}
             </form>
           </div>
 
-          <section className={`fortune-ticket ${answer && (revealStage === "revealed" || revealStage === "dismissing") ? "fortune-ticket-visible" : ""}`} aria-live="polite">
+          {hasAskedFortune && <section ref={fortuneTicketRef} className={`fortune-ticket ${answer && (revealStage === "revealed" || revealStage === "dismissing") ? "fortune-ticket-visible" : ""}`} aria-live="polite">
             {(!answer || revealStage === "manifesting") && (
               <div className={`fortune-waiting-card ${consulting || revealStage === "manifesting" ? "is-awake" : ""}`}>
                 <span aria-hidden="true">✦</span>
@@ -3878,13 +3914,13 @@ function App() {
                 <div className="ticket-stamp"><span aria-hidden="true">🐾</span> THE PAW HAS SPOKEN</div>
 
                 <div className="answer-actions">
-                  <button onClick={askAnother}>ASK ANOTHER</button>
-                  <button className="secondary" onClick={saveFortune}>SAVE</button>
-                  <button className="secondary" onClick={shareFortune}>SHARE</button>
+                  <button type="button" onClick={askAnother}>ASK ANOTHER</button>
+                  <button type="button" className="secondary" onClick={saveFortune}>SAVE</button>
+                  <button type="button" className="secondary" onClick={shareFortune}>SHARE</button>
                 </div>
               </div>
             )}
-          </section>
+          </section>}
 
           <section className="omen-rail bottom-omens" aria-label="Today's omens">
             <div className="omen-title">
