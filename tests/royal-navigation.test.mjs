@@ -39,8 +39,12 @@ test("both navigation families retain live labels and routes",()=>{
   }
   assert.ok(s.includes('navFamily === "resources" ? "Games" : "Tools"'));
   assert.ok(s.includes('name="switch-arrows"'));
-  assert.ok(s.includes('name="home" className="royal-seal-art"'));
-  assert.ok(s.includes('name="resources" className="royal-seal-art"'));
+  assert.ok(s.includes('name="home-simple" className="royal-seal-art"'));
+  assert.ok(s.includes('name="resources-simple" className="royal-seal-art"'));
+  for(const name of ["home-simple","resources-simple"]){
+    const icon=readFileSync(new URL(`public/rosieverse/ui/royal-nav/${name}.svg`,root),"utf8");
+    assert.ok(icon.includes("<svg") && icon.includes("</svg>"),name);
+  }
 });
 test("persistent buttons use the new art without replacing their handlers",()=>{
   const paw=readFileSync(new URL("src/private/AccountPortal.jsx",root),"utf8");
@@ -56,6 +60,7 @@ test("navigation uses one invisible positioning grid and real controls",()=>{
  assert.match(css,/grid-template-areas:"home tabs resources toggle"/);
  assert.match(css,/grid-template-areas:"tabs tabs tabs tabs tabs"/);
  assert.match(css,/position:relative!important;inset:auto!important;transform:none!important/);
+ assert.match(css,/background:var\(--royal-enamel\),var\(--royal-rim\)!important/);
 });
 
 test("navigation lacquer matches the approved seal-derived texture",()=>{
@@ -75,7 +80,7 @@ test("Zen is a gold lotus between Captain and Vault, linking to the existing Hai
  assert.deepEqual([...nav.matchAll(/<small>([^<]+)<\/small>/g)].map(m=>m[1]),["Fortune","Cheese","Captain","Zen","Vault","Random"]);
  assert.ok(nav.includes('onClick={() => navigateTo("haiku")}'));
  assert.ok(nav.includes('aria-current={page === "haiku" ? "page" : undefined}'));
- assert.ok(s.includes('name === "zen" ? ".svg" : ".webp"'));
+ assert.ok(s.includes('["zen", "home-simple", "resources-simple"].includes(name) ? ".svg" : ".webp"'));
  assert.ok(icon.includes('<svg')&&icon.includes('id="gold"'));
  assert.match(css,/grid-template-columns:repeat\(6,minmax\(0,1fr\)\)!important/);
 });
