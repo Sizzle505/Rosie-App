@@ -68,6 +68,7 @@ import "./royal-navigation.css";
 import "./captain-phone-layout.css";
 import "./captain-control-surfaces.css";
 import "./iphone-finish.css";
+import "./fortune-layered.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -402,57 +403,38 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
   );
 }
 
-function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, orbView }) {
+function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, orbView, poseIndex }) {
   const manifesting = revealStage === "manifesting";
   const stageRef = useRef(null);
-  const stageArtRef = useRef(null);
+  const ballRef = useRef(null);
 
-  // Register the magic to the glass in the actual painting rather than to
-  // the width of the cabinet. The illustration is cropped with object-fit,
-  // so percentage-based circle offsets drift on narrow screens.
+  // Register the answer to the separate glass layer at any viewport size.
   useEffect(() => {
     const stage = stageRef.current;
-    const art = stageArtRef.current;
-    if (!stage || !art) return undefined;
-
+    const ball = ballRef.current;
+    if (!stage || !ball) return undefined;
     function registerBall() {
-      if (!art.naturalWidth || !art.naturalHeight) return;
       const stageBox = stage.getBoundingClientRect();
-      const artBox = art.getBoundingClientRect();
-      if (!stageBox.width || !stageBox.height) return;
-
-      const scale = Math.max(artBox.width / art.naturalWidth, artBox.height / art.naturalHeight);
-      const paintedWidth = art.naturalWidth * scale;
-      const paintedHeight = art.naturalHeight * scale;
-      const position = window.getComputedStyle(art).objectPosition.split(/\s+/);
-      const percent = (value, fallback) => {
-        const parsed = Number.parseFloat(value);
-        return Number.isFinite(parsed) && value?.includes("%") ? parsed / 100 : fallback;
-      };
-      const posX = percent(position[0], 0.5);
-      const posY = percent(position[1], 0.5);
-      const imageX = artBox.left - stageBox.left + (artBox.width - paintedWidth) * posX;
-      const imageY = artBox.top - stageBox.top + (artBox.height - paintedHeight) * posY;
-
-      // Measured fractions of /rosie-fortune-stage.webp's glass, not the
-      // decorative stand: center (.502, .754), diameter (.386, .324).
-      stage.style.setProperty("--oracle-ball-x", `${imageX + art.naturalWidth * .502 * scale}px`);
-      stage.style.setProperty("--oracle-ball-y", `${imageY + art.naturalHeight * .754 * scale}px`);
-      stage.style.setProperty("--oracle-ball-w", `${art.naturalWidth * .386 * scale}px`);
-      stage.style.setProperty("--oracle-ball-h", `${art.naturalHeight * .324 * scale}px`);
-      stage.style.setProperty("--oracle-ball-rx", `${art.naturalWidth * .386 * scale * .498}px`);
-      stage.style.setProperty("--oracle-ball-ry", `${art.naturalHeight * .324 * scale * .498}px`);
+      const box = ball.getBoundingClientRect();
+      if (!stageBox.width || !box.width) return;
+      const glassWidth = box.width * .79;
+      const glassHeight = box.height * .73;
+      stage.style.setProperty("--oracle-ball-x", `${box.left - stageBox.left + box.width * .5}px`);
+      stage.style.setProperty("--oracle-ball-y", `${box.top - stageBox.top + box.height * .42}px`);
+      stage.style.setProperty("--oracle-ball-w", `${glassWidth}px`);
+      stage.style.setProperty("--oracle-ball-h", `${glassHeight}px`);
+      stage.style.setProperty("--oracle-ball-rx", `${glassWidth * .5}px`);
+      stage.style.setProperty("--oracle-ball-ry", `${glassHeight * .5}px`);
     }
-
     const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(registerBall) : null;
     observer?.observe(stage);
-    observer?.observe(art);
-    art.addEventListener("load", registerBall);
+    observer?.observe(ball);
+    ball.addEventListener("load", registerBall);
     window.addEventListener("resize", registerBall);
     registerBall();
     return () => {
       observer?.disconnect();
-      art.removeEventListener("load", registerBall);
+      ball.removeEventListener("load", registerBall);
       window.removeEventListener("resize", registerBall);
     };
   }, []);
@@ -476,23 +458,18 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
         </div>
 
         <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
-          <img
-            ref={stageArtRef}
-            className={`stage-art ${consulting ? "stage-art-consulting" : ""}`}
-            src="/rosie-fortune-stage.webp"
-            alt="Rosie dressed as a jeweled fortune teller at her crystal ball"
-          />
-
-          <div className={`turn-seam-haze ${flipped ? "is-flipped" : ""}`} aria-hidden="true" />
-
-          {/* A Rosie-only portrait layer.  The stage image never moves; the layer is
-              revealed only under the whistle's smoke, then pivots in place. */}
-          <img
-            className={`rosie-turn-layer ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            src="/rosie-fortune-turn-side.webp"
-            alt=""
-            aria-hidden="true"
-          />
+          <div className="fortune-layer-scene" aria-label="Rosie dressed as a jeweled fortune teller at her crystal ball">
+            <img className="fortune-scene-back" src="/fortune-layers/stage.webp" alt="" />
+            <span className="fortune-scene-stars" aria-hidden="true" />
+            <span className="fortune-scene-lanterns" aria-hidden="true" />
+            <img
+              className={`fortune-scene-rosie ${consulting ? "is-consulting" : ""} ${poseIndex === 2 ? "faces-right" : ""} ${turning ? "is-turning" : ""}`}
+              src={`/fortune-layers/${poseIndex === 1 || poseIndex === 2 ? "rosie-mysterious" : poseIndex === 3 ? "rosie-wise" : "rosie-oracle"}.webp`}
+              alt=""
+            />
+            <img ref={ballRef} className="fortune-scene-ball" src="/fortune-layers/crystal-ball.webp" alt="" />
+            <img className="fortune-scene-curtains" src="/fortune-layers/curtains.webp" alt="" />
+          </div>
 
           <div className="stage-twinkles" aria-hidden="true">
             <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
@@ -505,25 +482,11 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <i><span>CHEESE &amp; DESTINY</span></i>
           </div>
 
-          <div
-            className={`rosie-turn-backdrop ${flipped ? "is-flipped" : ""} ${turning ? "is-turning" : ""}`}
-            aria-hidden="true"
-          />
-
-          <img
-            className={`crystal-ball-shield ${flipped ? "is-visible" : ""}`}
-            src="/rosie-fortune-stage.webp"
-            alt=""
-            aria-hidden="true"
-          />
-
           <div className="lantern-life" aria-hidden="true">
             <span className="lantern-glow lantern-glow-left"><i /></span>
             <span className="lantern-glow lantern-glow-right"><i /></span>
           </div>
 
-          {/* The stage is deliberately one immutable painting. The whistle effect is
-              additive magic only - no mirrored/cropped duplicate of Rosie or the set. */}
 
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
@@ -3176,6 +3139,7 @@ function App() {
   const [consulting, setConsulting] = useState(false);
   const [toast, setToast] = useState("");
   const [flipped, setFlipped] = useState(false);
+  const [poseIndex, setPoseIndex] = useState(0);
   const [turning, setTurning] = useState(false);
   const [flipBurst, setFlipBurst] = useState(0);
   const [revealStage, setRevealStage] = useState("idle");
@@ -3552,6 +3516,7 @@ function App() {
     // The visual swap happens only once the smoke is fully opaque.
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
+      setPoseIndex((value) => (value + 1) % 4);
       window.navigator.vibrate?.([8, 20, 8]);
     }, 390);
 
@@ -3759,6 +3724,7 @@ function App() {
               turning={turning}
               flipBurst={flipBurst}
               orbView={orbView}
+              poseIndex={poseIndex}
             />
 
             <div className="console-caption">
@@ -3779,9 +3745,8 @@ function App() {
                 <button
                   type="button"
                   className="fortune-whistle-button"
-                  aria-label={flipped ? "Whistle for Rosie to turn back" : "Whistle for Rosie"}
-                  aria-pressed={flipped}
-                  title="Whistle for Rosie"
+                  aria-label="Whistle for another Madame Rosie pose"
+                  title="Whistle for another Madame Rosie pose"
                   onClick={whistleForRosie}
                   disabled={turning}
                 >

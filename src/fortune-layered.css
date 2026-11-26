@@ -1,0 +1,63 @@
+/* Madame Rosie study: independent scenery, character, curtains, and glass. */
+.fortune-page .machine .stage .fortune-layer-scene {
+  position:absolute; inset:0; z-index:2; overflow:hidden; pointer-events:none; isolation:isolate;
+}
+.fortune-layer-scene > img { position:absolute; display:block; pointer-events:none; }
+.fortune-page .fortune-scene-back {
+  inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:0;
+}
+.fortune-page .fortune-scene-rosie {
+  z-index:2; left:50%; bottom:10%; width:82%; height:auto; max-height:92%;
+  object-fit:contain; object-position:center bottom; transform:translateX(-50%);
+  transform-origin:50% 68%; filter:drop-shadow(0 12px 18px rgba(0,0,0,.43));
+  animation:fortuneRosieBreath 5.4s ease-in-out infinite;
+}
+.fortune-page .fortune-scene-rosie.faces-right {
+  transform:translateX(-50%) scaleX(-1);
+  animation:fortuneRosieBreathRight 5.4s ease-in-out infinite;
+}
+.fortune-page .fortune-scene-rosie.is-consulting { filter:brightness(.9) drop-shadow(0 10px 25px rgba(0,0,0,.5)); }
+.fortune-page .fortune-scene-rosie.is-turning { animation:fortuneRosieTurn .76s ease-in-out both; }
+.fortune-page .fortune-scene-rosie.faces-right.is-turning { animation:fortuneRosieTurnRight .76s ease-in-out both; }
+.fortune-page .fortune-scene-ball {
+  z-index:4; left:50%; bottom:-1%; width:53%; height:auto; transform:translateX(-50%);
+  filter:drop-shadow(0 0 16px rgba(187,104,252,.32));
+  animation:fortuneBallShimmer 7s ease-in-out infinite;
+}
+.fortune-page .fortune-scene-curtains {
+  z-index:5; inset:0; width:100%; height:100%; transform-origin:top center;
+  animation:fortuneCurtainSway 7.8s ease-in-out infinite;
+}
+.fortune-scene-stars,.fortune-scene-lanterns { position:absolute; inset:0; z-index:1; pointer-events:none; }
+.fortune-scene-stars {
+  background-image:radial-gradient(circle,#ffe9ae 0 1px,transparent 3px),radial-gradient(circle,#fff3cf 0 1.5px,transparent 4px),radial-gradient(circle,#e7b7ff 0 1px,transparent 3px);
+  background-position:19% 16%,67% 22%,43% 39%; background-size:31% 36%,43% 47%,37% 31%;
+  background-repeat:repeat; mix-blend-mode:screen; animation:fortuneStarTwinkle 4.9s ease-in-out infinite alternate;
+}
+.fortune-scene-lanterns {
+  background:radial-gradient(ellipse 11% 22% at 21% 30%,rgba(255,177,63,.2),transparent),radial-gradient(ellipse 11% 22% at 79% 30%,rgba(255,177,63,.2),transparent);
+  animation:fortuneLanternFlicker 3.5s ease-in-out infinite alternate;
+}
+.fortune-page .machine .fortune-books { display:none; }
+.fortune-page .machine .stage-art,.fortune-page .machine .rosie-turn-layer,.fortune-page .machine .crystal-ball-shield { display:none !important; }
+.fortune-page .machine .crystal-chamber { z-index:18; }
+@keyframes fortuneRosieBreath { 50% { transform:translateX(-50%) translateY(-2px) scale(1.004); } }
+@keyframes fortuneRosieBreathRight { 50% { transform:translateX(-50%) translateY(-2px) scaleX(-1) scale(1.004); } }
+@keyframes fortuneRosieTurn { 0% { transform:translateX(-50%); opacity:1; } 50% { transform:translateX(-50%) rotate(-5deg) scale(.94); opacity:.75; } 100% { transform:translateX(-50%); opacity:1; } }
+@keyframes fortuneRosieTurnRight { 0% { transform:translateX(-50%) scaleX(-1); opacity:1; } 50% { transform:translateX(-50%) scaleX(-1) rotate(-5deg) scale(.94); opacity:.75; } 100% { transform:translateX(-50%) scaleX(-1); opacity:1; } }
+@keyframes fortuneBallShimmer { 50% { filter:drop-shadow(0 0 23px rgba(206,143,255,.57)) brightness(1.04); } }
+@keyframes fortuneCurtainSway { 50% { transform:scaleX(1.008) translateY(2px); } }
+@keyframes fortuneStarTwinkle { 0% { opacity:.22; } 50% { opacity:.6; } 100% { opacity:.3; } }
+@keyframes fortuneLanternFlicker { 0% { opacity:.5; } 100% { opacity:1; } }
+@media (max-width:720px) {
+  .app-shell.page-fortune .fortune-page { background:#100719 url('/fortune-layers/panel-velvet.webp') center top / 100% auto repeat-y !important; }
+  .page-fortune .fortune-console { background:linear-gradient(180deg,rgba(15,8,25,.65),rgba(39,12,30,.35)) !important; }
+  .page-fortune .question-card {
+    background:linear-gradient(120deg,rgba(25,10,27,.83),rgba(31,9,28,.89)),url('/fortune-layers/panel-velvet.webp') center 45% / cover !important;
+    border-color:#b79358; box-shadow:inset 0 1px 0 rgba(255,224,160,.24),inset 0 0 32px rgba(114,36,67,.25),0 18px 32px rgba(5,2,12,.44) !important;
+  }
+  .page-fortune .machine .booth { background-image:linear-gradient(145deg,rgba(76,17,42,.9),rgba(35,9,34,.98)),url('/fortune-layers/panel-velvet.webp') !important; }
+  .fortune-page .fortune-scene-rosie { width:86%; bottom:11%; }
+  .fortune-page .fortune-scene-ball { width:55%; bottom:-1%; }
+}
+@media (prefers-reduced-motion:reduce) { .fortune-page .fortune-layer-scene * { animation:none !important; transition:none !important; } }
