@@ -1,0 +1,51 @@
+/* Phone-specific finish: the illustrated layers stay behind live controls. */
+@media screen and (max-width: 700px) {
+  /* Six 3:1 plaques must clear the fixed navigation and iOS safe areas. */
+  .app-shell.page-resources .rr-hub-header {
+    height: clamp(90px, 12svh, 118px) !important;
+  }
+  .app-shell.page-resources .rr-hub-buttons {
+    width: min(78vw, 336px, calc(50svh - 160px)) !important;
+    gap: clamp(5px, .75svh, 8px) !important;
+    margin-top: 4px !important;
+  }
+  .app-shell.page-resources > main.rr-hub-page {
+    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Keep the QR workshop continuous beneath the panel and bottom dock.
+     Finish selection belongs to the QR frame, not the entire page. */
+  .app-shell.page-qr-atelier {
+    background: #04160f url('/qr-atelier/workshop.webp') center top / 100% auto no-repeat !important;
+  }
+  .app-shell.page-qr-atelier > main.qa-page {
+    min-height: 100dvh;
+    background: transparent;
+  }
+  .app-shell.page-qr-atelier .qa-page .qa-scene {
+    background: #04160f !important;
+  }
+  .app-shell.page-qr-atelier .qa-scene::before {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+  .app-shell.page-qr-atelier .qa-collection {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Recompose the academy for portrait screens; leave desktop untouched. */
+  .app-shell.page-cheese {
+    background: #211319 url('/rosieverse/cheese/iphone-academy.webp') center top / cover no-repeat !important;
+  }
+  .app-shell.page-cheese .cheese-game-page::before { opacity: 0 !important; }
+  .app-shell.page-cheese .cheese-game-frame {
+    padding: clamp(17px, 4.5vw, 23px) clamp(10px, 2.8vw, 15px) clamp(16px, 4vw, 21px) !important;
+    border: 1px solid #be9455 !important;
+    border-radius: 16px;
+    background: #390c13 url('/rosieverse/cheese/iphone-board.webp') center / 100% 100% no-repeat !important;
+    box-shadow: 0 13px 31px rgba(0,0,0,.42), inset 0 0 0 2px rgba(255,214,136,.15) !important;
+  }
+  .app-shell.page-cheese .cheese-game-frame::after { display: none !important; }
+}

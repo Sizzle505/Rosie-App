@@ -67,6 +67,7 @@ import "./fortune-verse-scroll.css";
 import "./royal-navigation.css";
 import "./captain-phone-layout.css";
 import "./captain-control-surfaces.css";
+import "./iphone-finish.css";
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -75,7 +76,7 @@ const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calc
 
 const NAV_ART = "/rosieverse/ui/royal-nav/";
 function RoyalNavArt({ name, className = "rosie-nav-icon" }) {
-  return <img className={className} src={NAV_ART + name + (["zen", "home-simple", "resources-simple"].includes(name) ? ".svg" : ".webp")} alt="" aria-hidden="true" draggable="false" decoding="async" />;
+  return <img className={className} src={NAV_ART + name + (name === "zen" ? ".svg" : ".webp")} alt="" aria-hidden="true" draggable="false" decoding="async" />;
 }
 function ResourceNavIcon({ type }) {
   const name = ({ "qr-atelier": "qr", timekeeper: "timekeepers" })[type] || type;

@@ -60,16 +60,14 @@
 .app-shell:not(.page-home) .royal-nav-shell .bottom-nav button.active{color:#fff2bf!important;}
 .app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal{
   width:var(--royal-seal)!important;height:var(--royal-seal)!important;min-height:0!important;
-  padding:5px!important;border:2px solid transparent!important;border-radius:10px!important;
-  background:var(--royal-enamel),var(--royal-rim)!important;
-  box-shadow:0 2px 5px #10041daa,inset 0 0 0 1px #c68a3a66,inset 0 1px 1px #13001680!important;
-  display:grid;place-items:center;overflow:visible!important;filter:none;
+  padding:0!important;border:0!important;background:none!important;box-shadow:none!important;
+  display:grid;place-items:center;overflow:visible!important;filter:drop-shadow(0 2px 3px #10051b90);
   transition:filter .16s;
 }
 .app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal--home{grid-area:home;}
 .app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal--tools{grid-area:resources;}
 .app-shell:not(.page-home) .royal-nav-shell > .bottom-side-seal[aria-current="page"]{
-  box-shadow:0 2px 5px #10041daa,inset 0 0 0 1px #ffe1a1,inset 0 0 8px #e5b85888!important;
+  filter:drop-shadow(0 0 5px #e5b85888);
 }
 .royal-seal-art{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;}
 .app-shell:not(.page-home) .royal-nav-shell > .nav-family-toggle{
