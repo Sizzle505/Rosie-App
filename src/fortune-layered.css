@@ -7,7 +7,7 @@
   inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:0;
 }
 .fortune-page .fortune-scene-rosie {
-  z-index:2; left:50%; bottom:10%; width:82%; height:auto; max-height:92%;
+  z-index:2; left:50%; bottom:3%; width:94.3%; height:auto; max-height:108%;
   object-fit:contain; object-position:center bottom; transform:translateX(-50%);
   transform-origin:50% 68%; filter:drop-shadow(0 12px 18px rgba(0,0,0,.43));
   animation:fortuneRosieBreath 4.8s ease-in-out infinite;
@@ -28,23 +28,31 @@
   z-index:5; inset:0; width:100%; height:100%;
 }
 .fortune-page .fortune-curtain-left {
-  clip-path:inset(0 50% 0 0); transform-origin:13% 0;
+  clip-path:inset(0 50% 0 0); transform-origin:0 0;
   animation:fortuneCurtainLeft 8.7s ease-in-out infinite;
 }
 .fortune-page .fortune-curtain-right {
-  clip-path:inset(0 0 0 50%); transform-origin:87% 0;
+  clip-path:inset(0 0 0 50%); transform-origin:100% 0;
   animation:fortuneCurtainRight 9.4s ease-in-out -2.3s infinite;
+}
+.fortune-page .fortune-scene-side-rails {
+  z-index:6; inset:0; width:100%; height:100%; object-fit:fill;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.65));
 }
 .fortune-scene-stars,.fortune-scene-lanterns { position:absolute; inset:0; z-index:1; pointer-events:none; }
 .fortune-scene-stars i {
-  position:absolute; left:var(--star-x); top:var(--star-y); width:3px; height:3px;
-  border-radius:50%; background:#fff0bc; box-shadow:0 0 5px 2px rgba(255,216,135,.75),0 0 16px 4px rgba(255,194,103,.33);
-  animation:fortuneStarTwinkle 5.2s ease-in-out var(--star-delay) infinite;
+  position:absolute; left:var(--star-x); top:var(--star-y); width:5px; height:5px;
+  border-radius:50%; background:#fff6d8;
+  box-shadow:0 0 3px 2px #fff2bf,0 0 11px 5px rgba(255,209,112,.65),0 0 25px 9px rgba(219,147,251,.34);
+  animation:fortuneStarTwinkle 3.8s ease-in-out var(--star-delay) infinite;
 }
 .fortune-scene-stars i::after {
-  content:""; position:absolute; inset:-8px; opacity:.6;
-  background:linear-gradient(transparent 46%,rgba(255,230,171,.5) 49% 51%,transparent 54%),linear-gradient(90deg,transparent 46%,rgba(255,230,171,.5) 49% 51%,transparent 54%);
+  content:""; position:absolute; inset:-15px; opacity:.9;
+  background:linear-gradient(transparent 47%,rgba(255,235,177,.8) 49% 51%,transparent 53%),linear-gradient(90deg,transparent 47%,rgba(255,235,177,.8) 49% 51%,transparent 53%);
+  mask-image:radial-gradient(circle,#000 12%,transparent 70%);
 }
+.fortune-scene-stars i:nth-child(3n) { width:3px; height:3px; animation-duration:5.6s; }
+.fortune-scene-stars i:nth-child(4n) { animation-duration:4.9s; animation-delay:calc(var(--star-delay) - 1.3s); }
 .fortune-scene-lanterns {
   z-index:3; mix-blend-mode:screen;
 }
@@ -64,20 +72,28 @@
 @keyframes fortuneRosieTurn { 0% { transform:translateX(-50%); opacity:1; } 50% { transform:translateX(-50%) rotate(-5deg) scale(.94); opacity:.75; } 100% { transform:translateX(-50%); opacity:1; } }
 @keyframes fortuneRosieTurnRight { 0% { transform:translateX(-50%) scaleX(-1); opacity:1; } 50% { transform:translateX(-50%) scaleX(-1) rotate(-5deg) scale(.94); opacity:.75; } 100% { transform:translateX(-50%) scaleX(-1); opacity:1; } }
 @keyframes fortuneBallShimmer { 50% { filter:drop-shadow(0 0 23px rgba(206,143,255,.57)) brightness(1.04); } }
-@keyframes fortuneCurtainLeft { 50% { transform:rotate(1.4deg) translateX(2px); } }
-@keyframes fortuneCurtainRight { 50% { transform:rotate(-1.3deg) translateX(-2px); } }
-@keyframes fortuneStarTwinkle { 0%,100% { opacity:.08; transform:scale(.55); } 40% { opacity:.95; transform:scale(1.3); } 55% { opacity:.35; transform:scale(.8); } }
+@keyframes fortuneCurtainLeft { 0%,100% { transform:scaleX(.77); } 50% { transform:scaleX(.79) rotate(1.2deg); } }
+@keyframes fortuneCurtainRight { 0%,100% { transform:scaleX(.77); } 50% { transform:scaleX(.79) rotate(-1.15deg); } }
+@keyframes fortuneStarTwinkle { 0%,18%,75%,100% { opacity:.06; transform:scale(.35) rotate(0deg); } 36% { opacity:1; transform:scale(1.45) rotate(12deg); } 48% { opacity:.72; transform:scale(.9) rotate(0deg); } }
 @keyframes fortuneLanternFlicker { 0% { opacity:.55; transform:translate(-50%,-50%) scale(.91); } 55% { opacity:1; transform:translate(-50%,-50%) scale(1.08); } 100% { opacity:.72; transform:translate(-50%,-50%) scale(.97); } }
 @media (max-width:720px) {
   .app-shell.page-fortune .fortune-page { background:linear-gradient(180deg,rgba(10,4,18,.18),rgba(18,4,21,.36)),url('/fortune-layers/mobile-atmosphere.webp') center top / 100% auto repeat-y #100719 !important; }
-  .page-fortune .fortune-console { background:linear-gradient(180deg,rgba(15,8,25,.35),rgba(39,12,30,.35)),url('/fortune-layers/panel-oracle.webp') center top / cover !important; }
+  .page-fortune .fortune-console { background:linear-gradient(180deg,rgba(15,8,25,.36),rgba(39,12,30,.32)),url('/fortune-layers/panel-oracle.webp') center top / cover !important; }
   .page-fortune .question-card {
-    background:linear-gradient(120deg,rgba(25,10,27,.72),rgba(31,9,28,.78)),url('/fortune-layers/panel-oracle.webp') center 45% / cover !important;
+    background:linear-gradient(120deg,rgba(25,10,27,.22),rgba(31,9,28,.3)),url('/fortune-layers/panel-petition.webp') center / 100% 100% !important;
     border-color:#b79358; box-shadow:inset 0 1px 0 rgba(255,224,160,.24),inset 0 0 32px rgba(114,36,67,.25),0 18px 32px rgba(5,2,12,.44) !important;
   }
-  .page-fortune .bottom-omens { background:linear-gradient(180deg,rgba(22,8,27,.72),rgba(28,7,27,.82)),url('/fortune-layers/panel-oracle.webp') center / cover !important; }
+  .page-fortune .bottom-omens,
+  .page-fortune .fortune-waiting-card { background:linear-gradient(180deg,rgba(22,8,27,.2),rgba(28,7,27,.3)),url('/fortune-layers/panel-omens.webp') center / 100% 100% !important; }
   .page-fortune .machine .booth { background-image:linear-gradient(145deg,rgba(76,17,42,.82),rgba(35,9,34,.9)),url('/fortune-layers/panel-oracle.webp') !important; }
-  .fortune-page .fortune-scene-rosie { width:86%; bottom:11%; }
+  .page-fortune .machine .cabinet-lights { display:none !important; }
+  .fortune-page .fortune-scene-rosie { width:98.9%; bottom:3%; }
   .fortune-page .fortune-scene-ball { width:55%; bottom:-1%; }
+}
+@media (max-width:410px) {
+  .page-fortune .machine .booth { height:calc(clamp(396px,54dvh,442px) + 38px); }
+}
+@media (min-width:411px) and (max-width:720px) {
+  .page-fortune .machine .booth { height:calc(clamp(420px,55dvh,478px) + 38px); }
 }
 @media (prefers-reduced-motion:reduce) { .fortune-page .fortune-layer-scene * { animation:none !important; transition:none !important; } }

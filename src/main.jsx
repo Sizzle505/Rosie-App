@@ -417,6 +417,8 @@ const FORTUNE_STARS = [
   [19, 14, 0], [35, 8, 1.7], [68, 16, 3.2], [84, 9, .8],
   [13, 37, 2.6], [38, 33, 4.2], [87, 39, 1.3], [67, 45, 3.6],
   [10, 65, 4.9], [89, 68, 2.1], [24, 76, .6], [78, 80, 3.8],
+  [47, 12, 2.2], [57, 29, .35], [29, 49, 1.15], [74, 55, 3.1],
+  [15, 53, 2.85], [85, 58, 4.55], [32, 68, .95], [69, 72, 3.95],
 ];
 
 function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, orbView, poseIndex }) {
@@ -470,8 +472,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
       aria-label="Madame Rosie fortune teller"
     >
       <div className="booth">
-        <div className="cabinet-lights cabinet-lights-left" />
-        <div className="cabinet-lights cabinet-lights-right" />
 
         <div className="sign">
           <div className="sign-paw">🐾</div>
@@ -498,6 +498,7 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <img ref={ballRef} className="fortune-scene-ball" src="/fortune-layers/crystal-ball.webp" alt="" />
             <img className="fortune-scene-curtains fortune-curtain-left" src="/fortune-layers/curtains.webp" alt="" />
             <img className="fortune-scene-curtains fortune-curtain-right" src="/fortune-layers/curtains.webp" alt="" />
+            <img className="fortune-scene-side-rails" src="/fortune-layers/side-rails.webp" alt="" />
           </div>
 
           <div className="fortune-books" aria-hidden="true">
