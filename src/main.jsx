@@ -403,10 +403,36 @@ function CrystalEnergy({ consulting, answer, revealStage }) {
   );
 }
 
+const FORTUNE_POSES = [
+  { image: "rosie-oracle", facing: "left" },
+  { image: "rosie-mysterious", facing: "left" },
+  { image: "rosie-mysterious", facing: "right" },
+  { image: "rosie-wise", facing: "left" },
+  { image: "rosie-curious", facing: "left" },
+  { image: "rosie-knowing", facing: "left" },
+  { image: "rosie-revelation", facing: "left" },
+];
+
+const FORTUNE_STARS = [
+  [19, 14, 0], [35, 8, 1.7], [68, 16, 3.2], [84, 9, .8],
+  [13, 37, 2.6], [38, 33, 4.2], [87, 39, 1.3], [67, 45, 3.6],
+  [10, 65, 4.9], [89, 68, 2.1], [24, 76, .6], [78, 80, 3.8],
+];
+
 function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDismissAnswer, flipped, turning, flipBurst, orbView, poseIndex }) {
   const manifesting = revealStage === "manifesting";
   const stageRef = useRef(null);
   const ballRef = useRef(null);
+  const pose = FORTUNE_POSES[poseIndex] || FORTUNE_POSES[0];
+
+  useEffect(() => {
+    const images = [...new Set(FORTUNE_POSES.map(({ image }) => image))].map((name) => {
+      const image = new Image();
+      image.src = `/fortune-layers/${name}.webp`;
+      return image;
+    });
+    return () => { images.length = 0; };
+  }, []);
 
   // Register the answer to the separate glass layer at any viewport size.
   useEffect(() => {
@@ -446,8 +472,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
       <div className="booth">
         <div className="cabinet-lights cabinet-lights-left" />
         <div className="cabinet-lights cabinet-lights-right" />
-        <div className="curtain curtain-left" />
-        <div className="curtain curtain-right" />
 
         <div className="sign">
           <div className="sign-paw">🐾</div>
@@ -460,19 +484,20 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
         <div ref={stageRef} className={`stage ${flipped ? "stage-flipped" : ""} ${turning ? "stage-turning" : ""} ${manifesting ? "stage-manifesting" : ""}`}>
           <div className="fortune-layer-scene" aria-label="Rosie dressed as a jeweled fortune teller at her crystal ball">
             <img className="fortune-scene-back" src="/fortune-layers/stage.webp" alt="" />
-            <span className="fortune-scene-stars" aria-hidden="true" />
-            <span className="fortune-scene-lanterns" aria-hidden="true" />
+            <span className="fortune-scene-stars" aria-hidden="true">
+              {FORTUNE_STARS.map(([x, y, delay], index) => (
+                <i key={index} style={{ "--star-x": `${x}%`, "--star-y": `${y}%`, "--star-delay": `${delay}s` }} />
+              ))}
+            </span>
+            <span className="fortune-scene-lanterns" aria-hidden="true"><i /><i /></span>
             <img
-              className={`fortune-scene-rosie ${consulting ? "is-consulting" : ""} ${poseIndex === 2 ? "faces-right" : ""} ${turning ? "is-turning" : ""}`}
-              src={`/fortune-layers/${poseIndex === 1 || poseIndex === 2 ? "rosie-mysterious" : poseIndex === 3 ? "rosie-wise" : "rosie-oracle"}.webp`}
+              className={`fortune-scene-rosie ${consulting ? "is-consulting" : ""} ${pose.facing === "right" ? "faces-right" : ""} ${turning ? "is-turning" : ""}`}
+              src={`/fortune-layers/${pose.image}.webp`}
               alt=""
             />
             <img ref={ballRef} className="fortune-scene-ball" src="/fortune-layers/crystal-ball.webp" alt="" />
-            <img className="fortune-scene-curtains" src="/fortune-layers/curtains.webp" alt="" />
-          </div>
-
-          <div className="stage-twinkles" aria-hidden="true">
-            <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+            <img className="fortune-scene-curtains fortune-curtain-left" src="/fortune-layers/curtains.webp" alt="" />
+            <img className="fortune-scene-curtains fortune-curtain-right" src="/fortune-layers/curtains.webp" alt="" />
           </div>
 
           <div className="fortune-books" aria-hidden="true">
@@ -481,12 +506,6 @@ function FortuneMachine({ consulting, answer, revealStage, answerDismissed, onDi
             <i><span>CANINE ARCANA</span></i>
             <i><span>CHEESE &amp; DESTINY</span></i>
           </div>
-
-          <div className="lantern-life" aria-hidden="true">
-            <span className="lantern-glow lantern-glow-left"><i /></span>
-            <span className="lantern-glow lantern-glow-right"><i /></span>
-          </div>
-
 
           <div className={`stage-glow ${answer ? `tone-${answer.tone}` : ""}`} aria-hidden="true" />
           <div className="star-dust" aria-hidden="true">
@@ -3516,7 +3535,7 @@ function App() {
     // The visual swap happens only once the smoke is fully opaque.
     flipTimerRef.current = window.setTimeout(() => {
       setFlipped((value) => !value);
-      setPoseIndex((value) => (value + 1) % 4);
+      setPoseIndex((value) => (value + 1) % FORTUNE_POSES.length);
       window.navigator.vibrate?.([8, 20, 8]);
     }, 390);
 
