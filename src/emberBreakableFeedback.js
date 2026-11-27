@@ -4,7 +4,7 @@ export function excavationNotice(event) {
   if(!event)return null;
   if(event.type==="boss-spawn")return {
     kind:"tip",title:event.boss==="mole-king"?"THE MOLE KING AWAKENS":event.boss==="copperjack"?"COPPERJACK ACTIVATED":"CINDERCLAW EMERGES",
-    detail:"Dodge attacks. Strike with Turbo when the guardian recovers.",duration:2.4
+    detail:"Dodge attacks, collect spilled treasure, and strike with Turbo.",duration:2.4
   };
   if(event.type==="boss-warning")return {
     kind:"tip",title:"BOSS ATTACK INCOMING",
@@ -12,7 +12,7 @@ export function excavationNotice(event) {
   };
   if(event.type==="boss-vulnerable")return {
     kind:"success",title:"BOSS VULNERABLE",
-    detail:"Turbo is recharged - align the auger and strike!",duration:1.0
+    detail:"Collect treasure to charge Turbo, then align the auger and strike!",duration:1.0
   };
   if(event.type==="boss-hit")return {
     kind:"success",title:"DIRECT HIT",

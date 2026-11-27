@@ -50,7 +50,7 @@ test("Turbo only damages a boss in reach and during the one recovery opening",()
 test("Cinderclaw alternates a projectile fireball and burrowing warning",()=>{
  const s=createBossEncounter("cinderclaw");
  advanceTo(s,"recovery");
- advanceBossEncounter(s,1.45);
+ advanceTo(s,"warning");
  assert.equal(s.phase,"warning");
  assert.equal(s.attack,"burrow");
  assert.ok(s.events.some(e=>e.type==="boss-warning"&&e.text.includes("FLOOR")));
@@ -81,4 +81,21 @@ test("large frame ticks cannot skip all telegraphs, NaN dt never changes state",
  advanceBossEncounter(s,100);
  assert.equal(s.phase,"active");
  assert.equal(s.cycle,0);
+});
+
+
+test("Copperjack has three health bars and pain timing is triggered only by successful strikes",()=>{
+ const b=createBossEncounter("copperjack");
+ assert.equal(b.health,3);
+ assert.equal(b.maxHealth,3);
+ assert.equal(b.hitFlash,0);
+ advanceTo(b,"recovery");
+ assert.equal(b.hitFlash,0);
+ assert.equal(hitBossDuringRecovery(b,{turbo:false,inRange:true}),false);
+ assert.equal(b.hitFlash,0);
+ assert.equal(hitBossDuringRecovery(b,{turbo:true,inRange:true}),true);
+ assert.equal(b.hitFlash,.65);
+ advanceBossEncounter(b,.7);
+ assert.equal(b.hitFlash,0);
+ assert.equal(b.hitThisRecovery,true);
 });

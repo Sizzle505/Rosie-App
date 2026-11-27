@@ -19,7 +19,9 @@ export function startExpeditionBoss(s,center){
   s.bossAttackHitCycle=-1;
   // A regular excavation boost must not auto-hit the boss during recovery.
   s.boostTime=0;
-  s.charge=100; // Each timed strike must be explicitly initiated.
+  s.charge=0; // Boss Turbo is earned only by collecting spilled treasure.
+  s.bossRewards=[];
+  s.bossRewardAge=0;
   s.events.push(...s.boss.events);
   return true;
 }
@@ -43,15 +45,53 @@ export function bossAttackDanger(boss,tipY,bossY){
   const lane=bossDangerLane(boss.attack,bossY);
   return !!lane&&tipY>lane.top&&tipY<lane.bottom;
 }
+// A compact reward cluster, safely separated from the current attack lane.
+export const BOSS_REWARD_CHARGE=25;
+export function bossRewardY(attack,bossY,cycle=0){
+  const lane=bossDangerLane(attack,bossY);
+  if(!lane)return null;
+  const upper=lane.bottom===Infinity ||
+    (Number.isFinite(lane.top)&&Number.isFinite(lane.bottom)&&Math.floor(cycle/2)%2===1);
+  return Math.max(105,Math.min(710,bossY+(upper?-160:135)));
+}
+function spillBossRewards(s){
+  const b=s.boss, y=bossRewardY(b.attack,s.bossY,b.cycle);
+  if(y===null)return;
+  s.bossRewardAge=0;
+  s.bossRewards=Array.from({length:4},(_,i)=>({
+    id:100000+b.cycle*4+i,kind:b.kind==="copperjack"?(i%2?"gem":"cheese"):b.kind==="cinderclaw"?"gem":(i%2?"bone":"gem"),
+    x:BOSS_SCREEN_X-54,y:y+(i-1.5)*12,targetX:180+i*20,
+    targetY:y+(i%2===0?-18:18),taken:false
+  }));
+}
+function moveAndCollectBossRewards(s,dt){
+  if(!s.bossRewards?.length)return;
+  s.bossRewardAge+=dt;
+  for(let i=0;i<s.bossRewards.length;i++){
+    const o=s.bossRewards[i];
+    if(o.taken)continue;
+    const p=Math.max(0,Math.min(1,(s.bossRewardAge-i*.065)/.62));
+    const eased=1-(1-p)**2;
+    o.x=BOSS_SCREEN_X-54+(o.targetX-(BOSS_SCREEN_X-54))*eased;
+    o.y=o.targetY-Math.sin(p*Math.PI)*(22+i*4);
+    if(Math.hypot(o.x-210,o.y-s.y)>53)continue;
+    o.taken=true;
+    s.charge=Math.min(100,s.charge+BOSS_REWARD_CHARGE);
+    s.score+=60;
+    if(o.kind==="gem")s.gems++;
+    else if(o.kind==="bone")s.bones++;
+    else s.cheese++;
+    s.events.push({type:"pickup",kind:o.kind,x:o.x,y:o.y,bossReward:true,charge:s.charge});
+  }
+}
 export function updateExpeditionBoss(s,dt,{tipX,tipY,boosted,onHit}){
   const b=s.boss;
   if(!b||b.defeated)return;
   advanceBossEncounter(b,dt);
   for(const event of b.events){
     s.events.push({...event});
-    // Charge only once at the start of each recovery; there is no need to
-    // farm ordinary pickups while the scroll is stopped at the boss arena.
-    if(event.type==="boss-vulnerable")s.charge=Math.max(s.charge,100);
+    if(event.type==="boss-attack")spillBossRewards(s);
+    if(event.type==="boss-warning")s.bossRewards=[];
   }
   // Apply at most one damaging strike per attack cycle.
   if(b.phase==="active"&&!boosted&&s.bossAttackHitCycle!==b.cycle
@@ -60,6 +100,7 @@ export function updateExpeditionBoss(s,dt,{tipX,tipY,boosted,onHit}){
     if(s.hitCooldown<=0)onHit(s);
     s.events.push({type:"boss-attack-contact",boss:b.kind,attack:b.attack});
   }
+  moveAndCollectBossRewards(s,dt);
   // Pitching downward shifts the auger tip rearward in screen space. Turbo's
   // 200px reach prevents a visually aligned downward strike from missing on
   // a horizontal-only technicality; vertical aiming still matters.

@@ -95,8 +95,26 @@ export function paintBossAttackVfx(c,s,W,H,p){
  const b=bossVfxBounds(p.attack,s.bossY,H);
  if(!b||W<=0)return false;
  c.save();c.beginPath();c.rect(0,b.top,W,b.bottom-b.top);c.clip();
- c.globalAlpha=p.phase==="active"?.92:.55;
+ c.globalAlpha=p.phase==="active"?.98:.85;
  const t=Number.isFinite(s.time)?s.time:0;
+ // A localized, irregular field of material effects makes the entire impact
+ // area readable without flat tinted rectangles, outlines, arrows or text.
+ const active=p.phase==="active",h=b.bottom-b.top;
+ const isElectric=p.attack==="spark-bolt",isFire=p.attack==="fireball";
+ const color=isElectric?"rgba(120,220,211,.62)":isFire?"rgba(255,151,65,.72)":"rgba(216,153,91,.65)";
+ const edge=isElectric?"rgba(64,169,170,.15)":"rgba(183,108,57,.15)";
+ const reach=Math.min(W-25,BOSS_SCREEN_X-38);
+ for(let i=0;i<(active?34:22);i++){
+   const x=25+(i*83%Math.max(1,reach-25));
+   const y=b.top+((i*47%97+1)/99)*h;
+   const pulse=.7+.3*Math.sin(t*10+i*2.1);
+   const radius=(active?28:11)+(i%5)*(active?7:3);
+   if(isFire||isElectric)glow(c,x,y,radius,color,edge);
+   else {
+     glow(c,x,y,radius,active?"rgba(184,122,70,.36)":"rgba(184,122,70,.14)",edge);
+     pebble(c,x,y+(active?Math.sin(t*16+i)*8:0),(active?7:3)+(i%4)*pulse,color,t+i);
+   }
+ }
  switch(p.attack){
   case "spark-bolt":electricity(c,b,W,p,t);break;
   case "fireball":fireball(c,b,W,p,t);break;

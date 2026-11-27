@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
+import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, BOSS_TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
 import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
@@ -446,7 +446,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           events.push(...s.events);
         }
         for(const event of events){
-           const cue=excavationNotice(event);
+           const cue=s.boss?null:excavationNotice(event);
            if(cue){
              const activeNotice={...cue,until:s.time+cue.duration};
              noticeRef.current=activeNotice;setNotice(activeNotice);
@@ -720,7 +720,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           {hud.boss.phase==="recovery"?" vulnerable to Turbo":hud.boss.phase==="warning"?" attack incoming":hud.boss.phase==="active"?" attacking":" defeated"}
         </span>}
          {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">GUIDE THE AUGER INTO WEAK EARTH · TURBO BREAKS CRYSTAL</div>}
-         {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
+         {active&&!hud.boss&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
            {notice.kind==="relic"&&<img src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="" />}
            <span><strong>{notice.title}</strong><small>{notice.detail}</small></span>
          </div>}
@@ -836,7 +836,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <img className="ember-turbo-art" src="/ember-drill/console-v1/turbo.webp" alt=""/>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
-            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/TURBO_DURATION*100):hud.charge)+"%"}} /></i>
+            <i className="ember-charge"><i style={{width:(hud.boost>0?Math.min(100,hud.boost/(hud.boss?BOSS_TURBO_DURATION:TURBO_DURATION)*100):hud.charge)+"%"}} /></i>
             <small>{hud.boost>0?hud.boost.toFixed(1)+"s INVULNERABLE":hud.charge>=100?"INVULNERABLE · RESTORES 1 HULL":"COLLECT TREASURE TO CHARGE"}</small></span>
         </button>
         {steerMode!=="joystick" && <button className="ember-angle" type="button" disabled={!active}
