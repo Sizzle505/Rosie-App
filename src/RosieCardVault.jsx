@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import rosieCards from './rosieCards.js';
+import { cardFrameInsets } from './rosieCardFrameInsets.js';
 import styles from './RosieCardVault.module.css';
 import revealStyles from './RosieCardVaultReveal.module.css';
 import './RosieCardVaultCollector.css';
@@ -251,6 +252,15 @@ function defaultCardsPerRow() {
 }
 
 function CardImage({ card, eager = false, enlarged = false }) {
+  const [left, top, right, bottom] = cardFrameInsets[card.id] || [0, 0, 0, 0];
+  const scaleX = 1024 / (1024 - left - right);
+  const scaleY = 1536 / (1536 - top - bottom);
+  // Scale the painted frame into the existing 2:3 card viewport. Keeping the
+  // source image intact also preserves every title and ornament in the lightbox.
+  const frameStyle = left || top || right || bottom ? {
+    transformOrigin: 'top left',
+    transform: `translate(${-100 * scaleX * left / 1024}%, ${-100 * scaleY * top / 1536}%) scale(${scaleX}, ${scaleY})`,
+  } : undefined;
   return <img
     src={card.image}
     alt={card.alt || `${card.name} collectible card`}
@@ -261,6 +271,7 @@ function CardImage({ card, eager = false, enlarged = false }) {
        original source's intrinsic dimensions and complete artwork. */
     width={enlarged ? undefined : 1024}
     height={enlarged ? undefined : 1536}
+    style={frameStyle}
     className={enlarged ? styles.enlargedImage : styles.cardImage}
   />;
 }
