@@ -107,7 +107,7 @@
 .fortune-page .ticket-stamp { margin:20px auto; color:#edc982; border-color:rgba(231,192,115,.45); background:rgba(33,10,29,.45); }
 @media (min-width:721px) {
   .page-fortune .machine .sign {
-    box-sizing:border-box; width:min(92%,720px); height:clamp(105px,11vw,150px);
+    box-sizing:border-box; width:min(92%,720px); height:clamp(100px,8.5vw,120px);
     padding:0; border:0; border-radius:0;
     background:url('/fortune-layers/madame-header-finished.webp') center / 100% 100% no-repeat !important;
     box-shadow:none;
@@ -129,6 +129,7 @@
   .page-fortune .bottom-omens,.page-fortune .fortune-waiting-card {
     background:linear-gradient(180deg,rgba(22,8,27,.2),rgba(28,7,27,.3)),url('/fortune-layers/panel-omens.webp') center / 100% 100% !important;
   }
+  .fortune-page .fortune-scene-rosie {width:90%;}
   .page-fortune .machine .booth {
     background:linear-gradient(145deg,rgba(40,7,26,.2),rgba(24,5,25,.28)),url('/fortune-layers/panel-velvet.webp') center / 100% 100% !important;
   }

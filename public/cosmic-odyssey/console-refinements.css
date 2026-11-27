@@ -111,7 +111,7 @@ html.cosmic-fallback-fullscreen .mobile-card-deck{display:none!important}
 /* Desktop mission board sits beneath the character gallery. */
 @media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){
  #veil:not(.hidden) .fiend-card-gallery{inset:8px 10px 170px!important;align-content:center!important}
- #veil:not(.hidden) #mission-launcher{top:auto!important;bottom:8px!important;left:50%!important;transform:translateX(-50%)!important;width:min(86vw,850px)!important;max-height:158px!important;overflow:auto!important}
+ #veil:not(.hidden) #mission-launcher{top:auto!important;bottom:8px!important;left:auto!important;right:12px!important;transform:none!important;width:min(calc(100% - 334px),960px)!important;max-height:158px!important;overflow:auto!important}
  #mission-launcher .mission-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
  #mission-launcher .mission-grid button{font-size:9px;min-height:31px;padding:5px}
  #mission-launcher #start{min-height:31px!important}
