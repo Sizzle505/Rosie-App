@@ -18,5 +18,5 @@ export default async function handler(req, res) {
       method: "POST", body: { owner_id: owner, title: title || "Untitled note", body }
     });
     return respond(res, 201, { note: notes[0] });
-  } catch (error) { return handleError(res, error); }
+  } catch (error) { return handleError(res, error, req); }
 }

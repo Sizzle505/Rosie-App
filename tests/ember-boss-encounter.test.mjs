@@ -22,14 +22,14 @@ test("both world bosses have deterministic warning-first scripted encounters",()
 });
 test("the Cinderclaw fireball has a visible warning, attack and recovery",()=>{
  const s=createBossEncounter("cinderclaw");
- advanceBossEncounter(s,1.14);
+ advanceBossEncounter(s,1.39);
  assert.equal(s.phase,"warning");
- assert.equal(s.health,3);
+ assert.equal(s.health,4);
  advanceBossEncounter(s,.02);
  assert.equal(s.phase,"active");
  assert.equal(s.events.filter(e=>e.type==="boss-attack").length,1);
  assert.equal(bossPresentation(s).activeHazard,"projectile");
- advanceBossEncounter(s,.55);
+ advanceBossEncounter(s,.65);
  assert.equal(s.phase,"recovery");
  assert.equal(bossPresentation(s).vulnerable,true);
  assert.ok(s.events.some(e=>e.type==="boss-vulnerable"));
@@ -50,20 +50,20 @@ test("Turbo only damages a boss in reach and during the one recovery opening",()
 test("Cinderclaw alternates a projectile fireball and burrowing warning",()=>{
  const s=createBossEncounter("cinderclaw");
  advanceTo(s,"recovery");
- advanceBossEncounter(s,1.45);
+ advanceTo(s,"warning");
  assert.equal(s.phase,"warning");
  assert.equal(s.attack,"burrow");
- assert.ok(s.events.some(e=>e.type==="boss-warning"&&e.text.includes("FLOOR")));
+ assert.ok(s.events.some(e=>e.type==="boss-warning"&&e.text==="BURROWING"));
  advanceTo(s,"active");
  assert.equal(bossPresentation(s).activeHazard,"ground");
 });
 test("successful exposed hits eventually defeat a boss exactly once",()=>{
  const s=createBossEncounter("cinderclaw");
- for(let i=0;i<3;i++){
+ for(let i=0;i<4;i++){
    advanceTo(s,"recovery");
    assert.equal(hitBossDuringRecovery(s,{turbo:true,inRange:true}),true);
-   assert.equal(s.health,2-i);
-   if(i<2){
+   assert.equal(s.health,3-i);
+   if(i<3){
      advanceTo(s,"warning");
      advanceTo(s,"active");
    }

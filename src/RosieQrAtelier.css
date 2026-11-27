@@ -1353,7 +1353,13 @@
     left:54.42%;
     width:38.16%;
     margin:0;
+    /* The strip's own box sits over the workbench panel while its palettes
+       are translated up beside the frame; the empty box must not swallow
+       clicks meant for the form fields beneath it (Mitchell, 2026-11-26:
+       the QR panel would not accept typing on desktop). */
+    pointer-events:none;
   }
+  .app-shell.page-qr-atelier .qa-finish-strip .qa-palettes {pointer-events:auto;}
 }
 
 /* The left workshop stays in its original viewport as the right form grows.
@@ -1445,5 +1451,18 @@
   }
   .app-shell.page-qr-atelier .qa-preview-actions button {
     pointer-events:auto!important;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  /* iPhone: the selected finish tint must not pool below the panel
+     (Mitchell, 2026-11-25). Stretch the workshop illustration over the
+     whole scene so the flat themed gradient never shows as a colour
+     field under the panel; the finish still recolours the ring, the
+     selected type and the panel itself. */
+  .app-shell.page-qr-atelier .qa-scene::before {
+    height:100%;aspect-ratio:auto;
+    background-size:cover;background-position:top center;
+    -webkit-mask-image:none;mask-image:none;
   }
 }

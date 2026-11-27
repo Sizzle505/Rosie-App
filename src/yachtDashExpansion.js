@@ -2,8 +2,23 @@ import { CAPTAIN_LEVELS } from "./captainLevels.js";
 
 const art = (chapter, file) => "/yacht-dash/" + chapter + "/" + file + ".webp";
 export const YACHT_RUN_SECONDS = 75;
+/* Mitchell (2026-11-25): the first three voyages quicken to a 60-second
+   pace WITHOUT losing content — the same waves, treats and set pieces,
+   flown faster. Chapters 1-3 compress their former 67.5s of content into
+   60s: spawn intervals scale by 60/67.5 and travel speeds by 67.5/60, so
+   the wave count per run and the on-screen density are unchanged. The
+   Emperor's Finale (75s) and the boss arena (90s) keep their pace. */
+export const YACHT_QUICKENED_SECONDS = 60;
+const YACHT_LEGACY_SECONDS = YACHT_RUN_SECONDS * .9; // 67.5
+export function yachtCompression(chapterId) {
+  return chapterId === "sakura" || chapterId === "typhoon" || chapterId === "moonlight"
+    ? YACHT_QUICKENED_SECONDS / YACHT_LEGACY_SECONDS : 1;
+}
 export function yachtRunSeconds(chapterIndex) {
-  return Number(chapterIndex) === 3 ? YACHT_RUN_SECONDS : YACHT_RUN_SECONDS * .9;
+  const index = Number(chapterIndex);
+  if (index === 3) return YACHT_RUN_SECONDS;
+  if (index === 4) return 90;
+  return YACHT_QUICKENED_SECONDS;
 }
 export function yachtSceneSeconds(chapterIndex) {
   return yachtRunSeconds(chapterIndex) / 5;
@@ -12,6 +27,11 @@ export function yachtSceneIndex(chapterIndex, elapsed) {
   return Math.min(4, Math.max(0, Math.floor(Math.max(0, elapsed) / yachtSceneSeconds(chapterIndex))));
 }
 export const YACHT_EXTRA_TREAT_MS = Math.round(8500 / 1.20); // 20% more frequent bonus treats, with obstacle cadence unchanged.
+export function yachtExtraTreatMs(chapterId) {
+  // Bonus treats follow the same compression as the wave schedule, so a
+  // quickened chapter keeps the same number of bonus treats per run.
+  return Math.round(YACHT_EXTRA_TREAT_MS * yachtCompression(chapterId));
+}
 export const YACHT_CLEAN_PASS_POINTS = 25;
 export const YACHT_CLEAN_PASS_TURBO = 8;
 
@@ -74,6 +94,19 @@ export const YACHT_CHAPTERS = Object.freeze([
       art("emperor", "03-gilded-sunset-bay"), art("emperor", "04-twilight-palace-marina"),
       art("emperor", "05-palace-final-approach")
     ]
+  },
+  {
+    id: "kuroi-finale", name: "Kuroi's Last Charge", destination: "FIREWORKS QUAY",
+    description: "The grand finale — an arena duel in the Emperor's harbor. Sail freely, dash clear of Kuroi's charges, and wreck him on the harbor furniture through three phases. The last charge ends at the fireworks barge.",
+    climate: "moonlit", cadence: 2000, pace: .15, unlockedBy: "emperor", mode: "boss",
+    victory: "/yacht-dash/kuroi-arena/victory-kuroi-finale.webp",
+    sceneTitles: ["Fireworks Quay", "The Black Cat Circles", "Lanterns at Dusk",
+      "The Final Charge", "Gold and Red Sky"],
+    scenes: [
+      art("emperor", "01-imperial-harbor"), art("emperor", "02-ceremonial-waterway"),
+      art("emperor", "03-gilded-sunset-bay"), art("emperor", "04-twilight-palace-marina"),
+      art("emperor", "05-palace-final-approach")
+    ]
   }
 ]);
 
@@ -93,11 +126,11 @@ export function yachtSceneFor(chapterIndex, elapsed, originalSceneOrder = [0,1,2
 
 export function yachtUnlockedLevel(stored) {
   const parsed = Number(stored);
-  return Number.isFinite(parsed) ? Math.max(0, Math.min(3, Math.floor(parsed))) : 0;
+  return Number.isFinite(parsed) ? Math.max(0, Math.min(4, Math.floor(parsed))) : 0;
 }
 
 export function yachtNextUnlocked(current, completedChapter) {
-  return Math.min(3, Math.max(yachtUnlockedLevel(current), completedChapter + 1));
+  return Math.min(4, Math.max(yachtUnlockedLevel(current), completedChapter + 1));
 }
 
 /** Stage medal targets reward performance, but do not restrict playtesting access. */
@@ -118,6 +151,11 @@ export const YACHT_CHAPTER_PHASES = Object.freeze({
     harbor: { name: "Imperial Waters", copy: "The imperial course opens. Expect the unexpected." },
     riviera: { name: "The Emperor's Trial", copy: "Storm debris and rivals now share the royal channel." },
     sunset: { name: "Royal Finish", copy: "One final passage to the imperial podium." }
+  },
+  "kuroi-finale": {
+    harbor: { name: "Kuroi Circles", copy: "The black cat circles the arena. Watch the charge line — dash clear and let him wreck himself." },
+    riviera: { name: "Kuroi Presses", copy: "Now he fires: water-bombs and rockets join the charges. Keep moving." },
+    sunset: { name: "The Final Charge", copy: "He fires WHILE he charges. Two more wrecks bring the fireworks barge in." }
   }
 });
 
@@ -133,7 +171,10 @@ export const YACHT_CHAPTER_GOALS = Object.freeze({
     description: "Outrace the regatta fleet. Two yacht passes earn the highest honor." },
   emperor: { score: 850, expert: 1450, nearMisses: 2, rivals: 2,
     preview: "Master every hazard and earn imperial honors.",
-    description: "Earn the imperial medal: survive, pass rivals, and sail with precision." }
+    description: "Earn the imperial medal: survive, pass rivals, and sail with precision." },
+  "kuroi-finale": { score: 600, expert: 1200, nearMisses: 2, rivals: 0,
+    preview: "An arena duel: dash clear of nine charges across three phases.",
+    description: "Defeat Kuroi in the arena: three crashes a phase, the last into the fireworks barge. Each crash restores one hull." }
 });
 
 export function yachtMedalsFor(chapterId, stats) {
@@ -315,7 +356,10 @@ export function yachtSakuraDelivery(sequence, randomIndex) {
 export function yachtObjectSpeed(chapterId, kind, randomIndex) {
   const isDanger = isYachtHazard(kind);
   const base = isDanger ? 1.93 : chapterId === "sakura" ? 2.09 : 2.13;
-  return base + Math.max(0, Math.min(4, randomIndex(5))) * .025;
+  const speed = base + Math.max(0, Math.min(4, randomIndex(5))) * .025;
+  // Quickened chapters fly proportionally faster so the compressed spawn
+  // schedule keeps the same on-screen density (see yachtCompression).
+  return speed / yachtCompression(chapterId);
 }
 
 /**
@@ -329,7 +373,7 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
   if (chapterId === "sakura") {
     const base = phaseKey === "harbor" ? 1160 :
       phaseKey === "riviera" ? 1050 : 950;
-    return Math.round((base + swing) * .95);
+    return Math.round((base + swing) * .95 * yachtCompression(chapterId));
   }
   const stage = YACHT_CHAPTERS.find(chapter => chapter.id === chapterId);
   const base = stage?.cadence ?? 2200;
@@ -340,7 +384,7 @@ export function yachtSpawnInterval(chapterId, phaseKey, sequence) {
     encounter?.footprint === "wide" ? 280 :
     encounter?.kind === "rival" ? 190 :
     isYachtHazard(encounter?.kind) ? 100 : -95;
-  return Math.round((base * factor + margin + swing) * .94);
+  return Math.round((base * factor + margin + swing) * .94 * yachtCompression(chapterId));
 }
 
 /**
@@ -356,6 +400,7 @@ export function yachtAssetScale(asset) {
     "regatta-beacon.webp": 3.312,
     "barrel-raft.webp": 0.5265, // Barrel another 10% smaller
     "taiko-barge.webp": 0.64, // Drum -20% (latest requested adjustment)
+    "fireworks-barge.webp": 1.15, // Fireworks barge — the finale crash target
     "kuroi-charge.webp": 2.673, // Additional 20%; keep all turn frames consistent
     "kuroi-turn-port.webp": 2.673,
     "kuroi-turn-starboard.webp": 2.673,
@@ -398,7 +443,10 @@ export function yachtThreatForecast(items, captainLane = 1) {
     .sort((a, b) => b.y - a.y)[0];
   if (!imminent) return null;
   const occupied = imminent.kind === "rival" && !imminent.drifted
-    ? [yachtRivalAttackLane(imminent.lane, captainLane)]
+    // A boss Kuroi charges down a fixed, telegraphed lane: forecast that lane,
+    // not the live attack lane (which would move if Rosie steers mid-charge).
+    ? imminent.boss && imminent.driftTo !== undefined
+      ? [imminent.driftTo] : [yachtRivalAttackLane(imminent.lane, captainLane)]
     : imminent.driftTo !== undefined && !imminent.drifted
       ? [imminent.driftTo] : yachtOccupiedLanes(imminent);
   const blocked = [0, 1, 2].filter(lane => occupied.includes(lane));
@@ -569,3 +617,7 @@ export function yachtRivalSpriteFor(item) {
   const from = Number.isInteger(item.driftFrom) ? item.driftFrom : item.lane;
   return art("kuroi", item.driftTo < from ? "kuroi-turn-port" : "kuroi-turn-starboard");
 }
+
+/* The Kuroi boss finale's rules live in src/yachtArenaBoss.js — the epic
+ * arena machine that replaced the lane finale's kuroiBossStep in the same
+ * picker slot (chapter index 4, mode "boss"). */

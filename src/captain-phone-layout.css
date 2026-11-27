@@ -171,3 +171,30 @@
  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .axis-stick-knob{border:0!important;background:url('/yacht-console-v1/joystick-knob.webp') center/contain no-repeat!important;box-shadow:none!important}
  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .axis-stick-rail{display:none!important}
 }
+
+@media (max-width:759px) and (orientation:portrait) {
+  /* iPhone round (Mitchell, 2026-11-25): the voyage picker takes its own
+     grid row above the game shell instead of auto-placing below it; the
+     six-cell boss HUD wraps to a clean 3x2 instead of colliding with the
+     helm bar; the arena shell drops the empty command-deck row so no
+     dead space sits under the painting, in the page or in fullscreen. */
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console)>.captain-game-page.yacht-console-upgrade {
+    grid-template-rows:44px clamp(74px,11dvh,104px) 52px auto minmax(0,1fr)!important;
+  }
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-level-select {
+    grid-row:4!important;grid-column:1!important;margin:0!important;
+  }
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-game-shell {grid-row:5!important}
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console)>.captain-game-page.captain-arena-chapter {
+    grid-template-rows:44px clamp(74px,11dvh,104px) auto auto minmax(0,1fr)!important;
+  }
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .captain-hud {
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;height:auto!important;
+  }
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .yacht-game-shell {
+    grid-template-rows:18px 32px minmax(0,1fr)!important;
+  }
+  .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .yacht-arena-controls .yacht-arena-hint {
+    font-size:9px!important;letter-spacing:.02em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  }
+}

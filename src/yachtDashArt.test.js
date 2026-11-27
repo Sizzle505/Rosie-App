@@ -9,11 +9,13 @@ import { CAPTAIN_LEVELS } from "./captainLevels.js";
 const root = path.resolve("public");
 const manifestPath = path.join(root,"yacht-dash","asset-manifest.json");
 
-test("Exactly 39 approved Yacht Dash images exist with valid checksums and WebP headers",()=>{
+test("Exactly 66 approved Yacht Dash images exist with valid checksums and WebP headers",()=>{
   assert.ok(fs.existsSync(manifestPath),"Approved asset manifest missing");
   const manifest=JSON.parse(fs.readFileSync(manifestPath,"utf-8"));
-  assert.equal(manifest.assets.length,39);
-  assert.equal(new Set(manifest.assets.map(asset=>asset.file)).size,39);
+  // 63 approved art assets + 3 generated arena UI assets from the
+  // touch-tuning round (dash plaque, joystick base, joystick knob).
+  assert.equal(manifest.assets.length,66);
+  assert.equal(new Set(manifest.assets.map(asset=>asset.file)).size,66);
   for(const asset of manifest.assets){
     assert.ok(/^\/yacht-dash\/[a-z0-9/-]+\.webp$/.test(asset.file),"Unsafe asset path: "+asset.file);
     const filename=path.join(root,asset.file.slice(1));

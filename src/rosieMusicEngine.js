@@ -11,6 +11,11 @@ export class RosieMusicEngine {
     this.onStatus=onStatus;
     this.decks=[null,null];this.active=-1;this.activeId=null;this.desired="whimsical-journey";
     this.volume=.26;this.contextGain=1;this.enabled=true;this.unlocked=false;this.hidden=false;this.ducked=false;
+    // Round 10 single-owner rule: while a cinematic with its own audio
+    // (Tunnel opening film, Kuroi finale video) is playing, the
+    // soundtrack is fully PAUSED — the old "duck to 20%" left the game
+    // song audible under the film's audio, i.e. two songs at once.
+    this.cinematicMuted=false;
     this.fadeHandle=0;this.generation=0;this.fanfare=null;this.error=null;
     // Reuse one user-activated HTMLAudioElement on Safari; its second
     // alternating deck can stall after several rapid page transitions.
@@ -35,7 +40,7 @@ export class RosieMusicEngine {
   _cancelFade(){++this.generation;if(this.fadeHandle)this.cancelFrame(this.fadeHandle);this.fadeHandle=0;}
   _gain(){return this.volume*this.contextGain*(this.ducked ? 0.2 : 1)*(this.fanfare ? 0.3 : 1);}
   setContextGain(value){
-    this.contextGain=Math.min(1,Math.max(0.15,Number(value)||0.7));
+    this.contextGain=Number.isFinite(Number(value))?Math.min(1,Math.max(0,Number(value))):0.7;
     this._applyGain();
   }
   _finishTrack(song,id,index){
@@ -55,7 +60,7 @@ export class RosieMusicEngine {
     this._notify();
   }
   setDesired(id){
-    if(!ROSIE_MUSIC[id]||id==="victory-fanfare")return;
+    if(!ROSIE_MUSIC[id]||!ROSIE_MUSIC[id].loop)return;
     this.desired=id;
     if(this.enabled&&this.unlocked&&!this.hidden)this._playDesired();
     else this._notify();
@@ -75,7 +80,7 @@ export class RosieMusicEngine {
     }else this._notify();
   }
   _playDesired(){
-    if(!this.enabled||!this.unlocked||this.hidden)return;
+    if(!this.enabled||!this.unlocked||this.hidden||this.cinematicMuted)return;
     const id=this.desired;
     if(!ROSIE_MUSIC[id])return;
     if(this.singleDeck){
@@ -170,6 +175,21 @@ export class RosieMusicEngine {
     else this._playDesired();
   }
   setDuck(ducked){this.ducked=Boolean(ducked);this._applyGain();}
+  setCinematicMuted(muted){
+    const next=Boolean(muted);
+    if(this.cinematicMuted===next)return;
+    this.cinematicMuted=next;
+    if(next){
+      // The cinematic owns the speakers: pause every deck and any
+      // fanfare outright (not a gain duck — nothing else may be heard).
+      this._cancelFade();
+      for(const song of this.decks)if(song)song.pause();
+      if(this.fanfare){this.fanfare.pause();this.fanfare=null;}
+    }else if(this.enabled&&this.unlocked&&!this.hidden){
+      this._playDesired();
+    }
+    this._notify();
+  }
   setHidden(hidden){
     this.hidden=Boolean(hidden);
     if(this.hidden){
@@ -178,14 +198,28 @@ export class RosieMusicEngine {
       this._cancelFade();
     }else if(this.enabled&&this.unlocked)this._playDesired();
   }
-  playFanfare(){
-    if(!this.enabled||!this.unlocked||this.hidden)return;
-    if(this.fanfare){this.fanfare.pause();this.fanfare=null;}
+  stopFanfare(){
+    if(this.fanfare){const cue=this.fanfare;this.fanfare=null;cue.pause();this._applyGain();}
+  }
+  playFanfare(id="victory-fanfare"){
+    if(!this.enabled||!this.unlocked||this.hidden||this.cinematicMuted)return;
+    if(!ROSIE_MUSIC[id]||ROSIE_MUSIC[id].loop)id="victory-fanfare";
+    this.stopFanfare();
+    // Round 10 single-owner rule: the fanfare is a song too. The main
+    // decks used to keep playing underneath it at 30% gain — two songs
+    // at once on every win. The decks now PAUSE for the fanfare and the
+    // desired track resumes when it ends.
+    this._cancelFade();
+    for(const song of this.decks)if(song)song.pause();
     const cue=this.audioFactory();
-    cue.src=musicUrl("victory-fanfare");cue.loop=false;cue.preload="auto";
+    cue.src=musicUrl(id);cue.loop=false;cue.preload="auto";
     cue.volume=Math.max(0,Math.min(1,this.volume*1.15));
     this.fanfare=cue;this._applyGain();
-    const restore=()=>{if(this.fanfare===cue){this.fanfare=null;this._applyGain();}};
+    const restore=()=>{
+      if(this.fanfare!==cue)return;
+      this.fanfare=null;this._applyGain();
+      if(this.enabled&&this.unlocked&&!this.hidden&&!this.cinematicMuted)this._playDesired();
+    };
     cue.onended=restore;cue.onerror=restore;
     const p=cue.play();p?.catch?.(restore);
   }

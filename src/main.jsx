@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import "./styles.css";
@@ -40,7 +40,11 @@ import CaptainLevelScenery from "./CaptainLevelScenery.jsx";
 import { CaptainScenicPainting, useCaptainSceneryTransition } from "./CaptainSceneryTransition.jsx";
 import CaptainLotusGust from "./CaptainLotusGust.jsx";
 import { CAPTAIN_LEVELS, shuffleCaptainLevelOrder } from "./captainLevels.js";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtRunSeconds, yachtSceneSeconds, yachtSceneIndex, yachtMovementMultiplier, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, yachtRivalAttackLane, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtRunSeconds, yachtSceneSeconds, yachtSceneIndex, yachtMovementMultiplier, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, yachtRivalAttackLane, YACHT_EXTRA_TREAT_MS, yachtExtraTreatMs, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { ARENA, ARENA_BACKGROUNDS, ARENA_SPRITES, ARENA_FURNITURE, arenaInitial, arenaFinaleStart, arenaStep, arenaFacing, arenaPhaseGoal, arenaBackgroundIndex, arenaSpriteNormStyle } from "./yachtArenaBoss.js";
+import { ArenaJoystickInput, arenaJoystickKnobOffset, arenaJoystickVector,
+  arenaJoystickZoneContains } from "./yachtArenaTouchInput.js";
+import KuroiFireworksCanvas from "./KuroiFireworksCanvas.jsx";
 import CaptainOuterAtmosphere from "./CaptainOuterAtmosphere.jsx";
 import RosieCardVault from "./RosieCardVault.jsx";
 import RosieRandomizers from "./RosieRandomizers.jsx";
@@ -67,8 +71,8 @@ import "./fortune-verse-scroll.css";
 import "./royal-navigation.css";
 import "./captain-phone-layout.css";
 import "./captain-control-surfaces.css";
-import "./iphone-finish.css";
 import "./fortune-layered.css";
+
 
 const capitalizeFirst = (value) => value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
@@ -77,7 +81,10 @@ const RESOURCE_PAGE_IDS = new Set(["resources", "reminders", "qr-atelier", "calc
 
 const NAV_ART = "/rosieverse/ui/royal-nav/";
 function RoyalNavArt({ name, className = "rosie-nav-icon" }) {
-  return <img className={className} src={NAV_ART + name + (name === "zen" ? ".svg" : ".webp")} alt="" aria-hidden="true" draggable="false" decoding="async" />;
+  // The version query keeps phones from serving a stale cached copy of the
+  // current nav art (Mitchell, 2026-11-26: the iPhone must use the newest
+  // Home and Resources buttons by the nav bar). Bump when the art changes. (Bumped 2026-11-26 r2: Mitchell still saw stale Home/Resources art on iPhone after the first bust.)
+  return <img className={className} src={NAV_ART + name + (name === "zen" ? ".svg" : ".webp") + "?v=20261126-2"} alt="" aria-hidden="true" draggable="false" decoding="async" />;
 }
 function ResourceNavIcon({ type }) {
   const name = ({ "qr-atelier": "qr", timekeeper: "timekeepers" })[type] || type;
@@ -892,7 +899,7 @@ const CHEESE_MATCH_REVEAL_MS = 360;
 const CHEESE_MISS_REVEAL_MS = 760;
 const CHEESE_GRADUATION_PAUSE_MS = 400;
 
-function CheeseMemoryGame() {
+function CheeseMemoryGame({ requestGameFullscreen } = {}) {
   const [deck, setDeck] = useState(() => shuffleCheeseDeck());
   const [openCards, setOpenCards] = useState([]);
   const [matched, setMatched] = useState([]);
@@ -1094,6 +1101,8 @@ function CheeseMemoryGame() {
   }
 
   function startOrResetSelectedBoard() {
+    // Mitchell's rule (2026-11-25): every game goes fullscreen when played.
+    requestGameFullscreen?.();
     if (gameMode === "sprint") {
       startSprint();
       return;
@@ -1728,6 +1737,133 @@ function CaptainCourseMotion({ phaseKey, underway, boost }) {
   );
 }
 
+/** Error boundary for the Captain yacht game (round 6). The app had NO
+ * error boundary anywhere: any throw in a render or effect unmounted
+ * the entire React root, leaving the near-black page background — the
+ * "cuts to black" Mitchell hit at the barge impact and the empty black
+ * pages the round-4 live check recorded. Whatever the trigger (a seam
+ * throw in a browser-only path, a renderer hiccup under the eruption's
+ * paint load), the failure is now contained: the rest of RosieVerse
+ * stays alive and the player gets a panel that remounts the game
+ * fresh, instead of a dead page that only a reload escapes. */
+class CaptainGameBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false, resets: 0, error: null, errorInfo: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { failed: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("Captain game error boundary caught:", error);
+    // Round 8 (Defect 1): the catch must REPORT ITSELF on screen. The
+    // live finale crash could not be diagnosed from outside — the
+    // browser operator has no DevTools access, so a console.error and
+    // a sessionStorage copy are both unreadable where it matters.
+    // The fallback panel therefore renders the error's name, message
+    // and first stack lines as visible small print (see render), and
+    // a copy is kept in sessionStorage for any session that can read
+    // it. Any future live catch now names itself on the player's own
+    // screen.
+    this.setState({ errorInfo });
+    try {
+      window.sessionStorage?.setItem("captainBoundaryError", JSON.stringify({
+        at: new Date().toISOString(),
+        name: error?.name || "Error",
+        message: error?.message || String(error),
+        stack: String(error?.stack || "").split("\n").slice(0, 8).join("\n"),
+        componentStack: String(errorInfo?.componentStack || "").split("\n").slice(0, 8).join("\n")
+      }));
+    } catch { /* storage is a bonus copy; the panel is the report */ }
+  }
+  render() {
+    if (this.state.failed) {
+      const error = this.state.error;
+      const stackLines = String(error?.stack || "").split("\n").slice(0, 6);
+      const componentLines = String(this.state.errorInfo?.componentStack || "")
+        .split("\n").map((line) => line.trim()).filter(Boolean).slice(0, 4);
+      return (
+        <div className="yacht-game-error-panel" role="alert">
+          <strong>THE GAME HIT A SNAG</strong>
+          <p>Something in the voyage broke mid-sail. The rest of RosieVerse
+            is untouched — restart this game to cast off again.</p>
+          <button type="button"
+            onClick={() => this.setState((state) => ({ failed: false, resets: state.resets + 1, error: null, errorInfo: null }))}>
+            RESTART THE GAME
+          </button>
+          {error && (
+            <pre className="captain-boundary-error" aria-label="Error details">
+              {`${error.name || "Error"}: ${error.message || String(error)}`}
+              {stackLines.length > 1 ? `\n${stackLines.slice(1).join("\n")}` : ""}
+              {componentLines.length ? `\n${componentLines.join("\n")}` : ""}
+            </pre>
+          )}
+        </div>
+      );
+    }
+    // The fullscreen frame clones THIS boundary with its game props; they
+    // must be forwarded to the game or auto-fullscreen and the fullscreen
+    // exit sequence never reach it.
+    const child = React.isValidElement(this.props.children)
+      ? React.cloneElement(this.props.children, {
+          requestGameFullscreen: this.props.requestGameFullscreen,
+          exitGameFullscreen: this.props.exitGameFullscreen,
+          fullscreenExitSequence: this.props.fullscreenExitSequence,
+        })
+      : this.props.children;
+    return <Fragment key={this.state.resets}>{child}</Fragment>;
+  }
+}
+
+// Exported for the boundary regression test (round 8): the fallback
+// panel must render the caught error's message + stack on screen.
+export { CaptainGameBoundary };
+
+/** Finale test hook: ?finale=1 in the page query (…/?finale=1#captain)
+ * or in the hash query (…/#captain?finale=1) starts the boss chapter in
+ * its finale-armed state. Once seen, the hook sticks for the tab
+ * session (sessionStorage): the round-4 live check lost it on reload
+ * and in fresh tabs and could not get the finale back, which is how a
+ * verification hook defeats its own purpose. It is only ever SET by
+ * the parameter itself — a session that never passes it is untouched,
+ * and normal play, scoring, records and the picker never read it. */
+function finaleHookRequested() {
+  try {
+    const fromPage = new URLSearchParams(window.location.search).get("finale") === "1";
+    const hash = window.location.hash || "";
+    const queryAt = hash.indexOf("?");
+    const fromHash = queryAt >= 0 &&
+      new URLSearchParams(hash.slice(queryAt + 1)).get("finale") === "1";
+    if (fromPage || fromHash) {
+      try { window.sessionStorage.setItem("rosieFinaleHook", "1"); } catch {}
+      return true;
+    }
+    try { return window.sessionStorage.getItem("rosieFinaleHook") === "1"; } catch {}
+  } catch {}
+  return false;
+}
+
+/** Offset variant of the finale hook (round 9): &offset=1 alongside
+ * finale=1 (same two places — page query or hash query) starts the
+ * hook state with Rosie pinned to the left wall at the barge's
+ * height, so the first finale charge misses her and runs into the
+ * barge with zero input. Live verification of the dodge → barge-
+ * impact path kept depending on operator steering, which two checker
+ * runs proved unreliable; this makes the path deterministic. Unlike
+ * the finale hook itself the offset is NOT sticky — it is read only
+ * from the live URL, so it can never leak into a later plain
+ * finale=1 run in the same tab. Inert for normal play. */
+function finaleOffsetRequested() {
+  try {
+    if (new URLSearchParams(window.location.search).get("offset") === "1") return true;
+    const hash = window.location.hash || "";
+    const queryAt = hash.indexOf("?");
+    if (queryAt >= 0 &&
+      new URLSearchParams(hash.slice(queryAt + 1)).get("offset") === "1") return true;
+  } catch {}
+  return false;
+}
+
 function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequence = 0 }) {
   const [wideConsole,setWideConsole] = useState(()=>window.matchMedia("(min-width:1100px) and (min-height:650px) and (orientation:landscape)").matches);
   useEffect(()=>{
@@ -1752,6 +1888,37 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   });
   const [completed, setCompleted] = useState(false);
   const [showVictoryArt, setShowVictoryArt] = useState(false);
+  // Kuroi finale cinematic (Mitchell, 2026-11-25): when the boss
+  // chapter is won, the full canvas fireworks eruption plays first
+  // (the arena machine's eruption state, ARENA.eruptionMs), and the
+  // moment the machine ends it this flag mounts the cohesive finale
+  // video — automatically, fullscreen — which hands off to the
+  // victory art when it finishes. No button anywhere: the video
+  // starts on its own after the fireworks, and the victory screen
+  // follows on its own after the video. Other chapters keep the
+  // direct victory-art path; a defeat never shows the video.
+  const [showFinaleVideo, setShowFinaleVideo] = useState(false);
+  const finaleVideoRef = useRef(null);
+  // Autoplay assurance: the win happens minutes after the player's
+  // last tap, so some browsers (iOS especially) may refuse unmuted
+  // autoplay. Try with sound first; if the browser refuses, play
+  // muted rather than sit on a frozen first frame — the cinematic
+  // must start on its own, with no tap required.
+  useEffect(() => {
+    if (!showFinaleVideo) return undefined;
+    const video = finaleVideoRef.current;
+    if (!video) return undefined;
+    let cancelled = false;
+    const attempt = async () => {
+      try { await video.play(); }
+      catch {
+        if (cancelled) return;
+        try { video.muted = true; await video.play(); } catch { /* onError/end handoff still guards */ }
+      }
+    };
+    attempt();
+    return () => { cancelled = true; };
+  }, [showFinaleVideo]);
   useEffect(() => {
     if (!showVictoryArt) return undefined;
     const closeOnEscape = (event) => {
@@ -1793,6 +1960,32 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const [ramImpact, setRamImpact] = useState(null);
   const [phaseNotice, setPhaseNotice] = useState("");
   const [ended, setEnded] = useState(false);
+  // Kuroi EPIC ARENA state. The machine itself lives in a ref (tick-driven);
+  // arenaView mirrors it for the HUD, the arena layer and the results.
+  const [arenaView, setArenaView] = useState(() => arenaInitial());
+  const [bossElapsed, setBossElapsed] = useState(0);
+  const [arenaCrashFx, setArenaCrashFx] = useState(null);
+  // Round 5: weapon bursts (bomb detonations, rocket landings) drawn
+  // from machine events — a short-lived list pruned on a clock, the
+  // same pattern as the crash splash.
+  const [arenaBoomFx, setArenaBoomFx] = useState([]);
+  // The ONE text overlay the arena keeps (Mitchell, round 3): a brief
+  // callout when the fireworks barge arrives. Everything else that used
+  // to shout over the fight — banner pill, phase notices, helm hint —
+  // is gone; the barge callout dismisses itself.
+  const [bargeCallout, setBargeCallout] = useState(null);
+  // Touch arena controls (Mitchell's spec): a FIXED virtual joystick
+  // in the arena's bottom-right, beside the DASH pill. The cluster
+  // renders only for touch players — this state turns true when the
+  // device reports a coarse pointer, or on the first touch inside the
+  // arena — so a mouse/keyboard player never sees it. React state
+  // only mounts the cluster; the knob's position is written to its
+  // DOM node directly from the animation-frame sampler (no render
+  // churn).
+  const [arenaTouchUi, setArenaTouchUi] = useState(() =>
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(pointer: coarse)").matches);
 
   // Game soundtrack state belongs to the single RosieVerse music player.
   // Existing yacht pickup/impact SFX remain entirely independent.
@@ -1824,11 +2017,52 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   const touchStartRef = useRef(null);
   const audioRef = useRef(null);
   const lastPhaseRef = useRef("harbor");
+  const arenaRef = useRef(arenaInitial());
+  const arenaKeysRef = useRef({});
+  const arenaDashRef = useRef(false);
+  const arenaPointerRef = useRef(null);
+  const arenaJoystickInputRef = useRef(null);
+  if (arenaJoystickInputRef.current === null) {
+    arenaJoystickInputRef.current = new ArenaJoystickInput();
+  }
+  const arenaTouchDashRef = useRef(null);
+  const arenaJoystickRef = useRef(null);
+  const arenaJoystickKnobRef = useRef(null);
+  const arenaStickVectorRef = useRef(null);
+  const arenaTouchElementRef = useRef(null);
+  const arenaTouchRafRef = useRef(null);
+  const arenaRunRef = useRef(0);
+
+  function stopArenaTouchSampling() {
+    if (arenaTouchRafRef.current !== null) {
+      window.cancelAnimationFrame(arenaTouchRafRef.current);
+      arenaTouchRafRef.current = null;
+    }
+  }
+
+  function resetArenaJoystickKnob() {
+    if (arenaJoystickKnobRef.current) {
+      arenaJoystickKnobRef.current.style.transform = "translate(-50%, -50%)";
+    }
+  }
+
+  function clearArenaTouchInput(clearPendingDash = true) {
+    arenaJoystickInputRef.current?.clear();
+    if (clearPendingDash) arenaTouchDashRef.current = null;
+    stopArenaTouchSampling();
+    arenaStickVectorRef.current = null;
+    resetArenaJoystickKnob();
+  }
 
   const runSeconds = yachtRunSeconds(chapterIndex);
-  const elapsed = Math.max(0, runSeconds - timeLeft);
-  const phaseKey = timeLeft > runSeconds * 2 / 3 ? "harbor" : timeLeft > runSeconds / 3 ? "riviera" : "sunset";
   const chapter = YACHT_CHAPTERS[chapterIndex];
+  const isBoss = chapter.mode === "boss";
+  // Boss mode has no countdown: TIME counts up from the run start, and the
+  // course phase follows the arena fight's phase (0/1/2), not the clock.
+  const elapsed = isBoss ? bossElapsed : Math.max(0, runSeconds - timeLeft);
+  const phaseKey = isBoss
+    ? ["harbor", "riviera", "sunset"][arenaView.phase]
+    : timeLeft > runSeconds * 2 / 3 ? "harbor" : timeLeft > runSeconds / 3 ? "riviera" : "sunset";
   const phase = YACHT_CHAPTER_PHASES[chapter.id]?.[phaseKey] || CAPTAIN_PHASES[phaseKey];
   const levelNumber = yachtSceneIndex(chapterIndex, elapsed);
   const level = yachtSceneFor(chapterIndex, elapsed, levelOrder);
@@ -1843,7 +2077,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     image.src = nextLevel.background;
     return () => { image.onload = null; };
   }, [nextLevel?.background]);
-  const routeProgress = Math.min(100, Math.round(elapsed / runSeconds * 100));
+  const routeProgress = isBoss
+    ? Math.round(arenaView.totalCrashes / ARENA.totalCrashes * 100)
+    : Math.min(100, Math.round(elapsed / runSeconds * 100));
   const missionProgress = Math.min(100, Math.round(score / YACHT_CHAPTER_GOALS[chapter.id].score * 100));
   const chapterMedals = yachtMedalsFor(chapter.id, { completed, score, lives, nearMisses, rivalsPassed });
   const collectedTotal = catches.ball + catches.treat + catches.cheese + suppliesCollected;
@@ -1905,6 +2141,24 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     return () => window.clearTimeout(timer);
   }, [ramImpact]);
 
+  useEffect(() => {
+    if (!arenaCrashFx) return undefined;
+    const timer = window.setTimeout(() => setArenaCrashFx(null), 1500);
+    return () => window.clearTimeout(timer);
+  }, [arenaCrashFx]);
+
+  useEffect(() => {
+    if (!arenaBoomFx.length) return undefined;
+    const timer = window.setTimeout(() => setArenaBoomFx([]), 520);
+    return () => window.clearTimeout(timer);
+  }, [arenaBoomFx]);
+
+  useEffect(() => {
+    if (!bargeCallout) return undefined;
+    const timer = window.setTimeout(() => setBargeCallout(null), 2400);
+    return () => window.clearTimeout(timer);
+  }, [bargeCallout]);
+
   function moveCaptain(direction) {
     if (!running || paused) return;
     // The collision loop reads laneRef synchronously. Waiting for React to
@@ -1924,7 +2178,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
   function finishGame(reason, success = false) {
     if (finishedRef.current) return;
     setCompleted(success);
-    setShowVictoryArt(success);
+    // Mitchell (2026-11-25): the victory screen is the reward for
+    // beating the level — it opens on its own the moment the run is
+    // won, no button press; and there is no way to view it without
+    // the win (the old VIEW VICTORY / VIEW VICTORY ART buttons are
+    // gone). Its own actions lead back to the captain's log.
     finishedRef.current = true;
     boostRef.current = false;
     boostRemainingRef.current = 0;
@@ -1937,14 +2195,72 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setRunning(false);
     window.clearTimeout(phaseNoticeTimerRef.current);
     setPhaseNotice("");
+    arenaKeysRef.current = {};
+    arenaPointerRef.current = null;
+    arenaDashRef.current = false;
+    clearArenaTouchInput();
     setEnded(true);
     setMessage(reason);
-    if (success) captainTone("finish"); // A failed voyage never gets victory fanfare.
+    if (success) {
+      captainTone("finish"); // A failed voyage never gets victory fanfare.
+      if (YACHT_CHAPTERS[chapterIndex]?.mode === "boss") {
+        // The eruption has just finished (the arena machine emits
+        // victory only after ARENA.eruptionMs of full fireworks):
+        // start the finale cinematic now, fullscreen, and let its
+        // end open the victory art (see finishFinaleVideo).
+        setShowVictoryArt(false);
+        setShowFinaleVideo(true);
+        requestGameFullscreen?.();
+      } else {
+        setShowVictoryArt(true);
+      }
+    }
+  }
+
+  // The finale video's handoff: whether it played through or could
+  // not play at all, the player lands on the victory art they won —
+  // automatically, exactly as every other chapter's win does.
+  function finishFinaleVideo() {
+    setShowFinaleVideo(false);
+    setShowVictoryArt(true);
+  }
+
+  // Choosing a level resets the run HUD to that chapter's fresh state.
+  // The picker used to only setChapterIndex, so the previous run's score,
+  // time, hull and cargo stayed on screen (and the route bar could even
+  // show phantom progress from the old run's remaining time).
+  function selectChapter(index) {
+    const chosen = Math.max(0, Math.min(YACHT_CHAPTERS.length - 1, index));
+    setChapterIndex(chosen);
+    setScore(0);
+    setLives(3);
+    setTimeLeft(yachtRunSeconds(chosen));
+    setCatches({ ball: 0, treat: 0, cheese: 0 });
+    setStreak(0);
+    setBestStreak(0);
+    setCombo(1);
+    setTurbo(0);
+    setBoost(false);
+    setCheeses(0);
+    setNearMisses(0);
+    setRivalsPassed(0);
+    setSuppliesCollected(0);
+    setCompleted(false);
+    setEnded(false);
+    setShowVictoryArt(false);
+    setShowFinaleVideo(false);
+    setMessage(YACHT_CHAPTERS[chosen].description);
+    arenaRef.current = arenaInitial();
+    setArenaView(arenaRef.current);
+    clearArenaTouchInput();
+    setBossElapsed(0);
+    setArenaCrashFx(null);
+    setArenaBoomFx([]);
+    setBargeCallout(null);
   }
 
   function startGame(targetChapter = chapterIndex) {
-    // Launch in fullscreen from the player's gesture on every device.
-    // iPhone uses the existing fixed-viewport fallback.
+    // Mitchell's rule (2026-11-25): every game goes fullscreen when played.
     requestGameFullscreen?.();
     audioContext();
     const chosen = typeof targetChapter === "number"
@@ -1969,6 +2285,30 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     hullGraceRemainingRef.current = 0;
     setHullRecovering(false);
     setRamImpact(null);
+    arenaRunRef.current += 1;
+    // Finale test hook: starting the boss chapter with ?finale=1 (in the
+    // page query or the hash query) begins the arena already in the
+    // finale-armed state — barge in, laser sequence ready — so the
+    // eruption → victory path can be verified live. Inert without the
+    // parameter and for every other chapter; it only changes this one
+    // run's starting state, never scoring, records or the picker.
+    const hookFinale = YACHT_CHAPTERS[chosen].mode === "boss" && finaleHookRequested();
+    // Round 9: &offset=1 with the hook pins Rosie to the left wall so
+    // the first finale charge deterministically misses her and hits
+    // the barge — the dodge path with no steering required.
+    const hookOffset = hookFinale && finaleOffsetRequested();
+    arenaRef.current = hookFinale
+      ? arenaFinaleStart(1467 + arenaRunRef.current * 7919, { offset: hookOffset })
+      : arenaInitial(1467 + arenaRunRef.current * 7919);
+    setArenaView(arenaRef.current);
+    arenaKeysRef.current = {};
+    arenaPointerRef.current = null;
+    arenaDashRef.current = false;
+    clearArenaTouchInput();
+    setBossElapsed(0);
+    setArenaCrashFx(null);
+    setArenaBoomFx([]);
+    setBargeCallout(null);
     lastPhaseRef.current = "harbor";
     setLane(1);
     itemsRef.current = [];
@@ -1988,20 +2328,50 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setSuppliesCollected(0);
     setCompleted(false);
     setShowVictoryArt(false);
+    setShowFinaleVideo(false);
     setEnded(false);
-    announcePhase("CAST OFF");
+    // Warm the finale video's cache during the boss fight so it can
+    // start the instant the eruption ends instead of buffering then.
+    if (YACHT_CHAPTERS[chosen].mode === "boss") {
+      try {
+        const warm = document.createElement("video");
+        warm.preload = "auto";
+        warm.src = "/yacht-dash/kuroi-arena/kuroi-finale-video.mp4";
+      } catch { /* preload is an optimization only */ }
+    }
+    // The boss arena runs without center-screen notices (round 3); the
+    // lane chapters keep their CAST OFF shout.
+    if (YACHT_CHAPTERS[chosen].mode !== "boss") announcePhase("CAST OFF");
     setMessage(YACHT_CHAPTERS[chosen].description);
+    if (hookFinale) {
+      // The hook constructs the armed state directly, so the machine
+      // never emits the "barge" event the callout hangs off in the tick
+      // handler — fire it here, exactly as the natural tow-in does
+      // (round 4: in the live hook check the callout never appeared).
+      setBargeCallout("THE FIREWORKS BARGE!");
+      setMessage("The fireworks barge is towed into the arena. Captain Rosie reaches for her laser pointer…");
+    }
     setRunning(true);
   }
 
   useEffect(() => {
     if (!running) return undefined;
     // The Cast Off button unmounts at launch, leaving document.body focused.
-    // Restore focus to this game so desktop arrow keys work immediately, yet
-    // do not summon a mobile keyboard or steal focus from other Captain games.
-    if (window.matchMedia?.("(pointer: coarse)").matches) return undefined;
-    const frame = window.requestAnimationFrame(() =>
-      courseFocusRef.current?.focus({ preventScroll: true }));
+    // Restore focus to this game so desktop arrow keys work immediately.
+    // (No coarse-pointer carve-out: touch-capable laptops need this too.)
+    const frame = window.requestAnimationFrame(() => {
+      // Desktop boss chapter: compose the playing view before focusing —
+      // sticky topbar, then the progress bar, then the arena filling the
+      // remaining viewport. The shell's scroll-margin-top (desktop arena
+      // CSS) lands its top edge fully below the topbar instead of sliding
+      // underneath it; the breakpoint matches that CSS query exactly, so
+      // phones and other chapters never scroll on launch.
+      if (isBoss && window.matchMedia("(min-width: 900px) and (min-height: 650px) and (orientation: landscape)").matches) {
+        courseFocusRef.current?.closest(".yacht-game-shell")
+          ?.scrollIntoView({ block: "start", behavior: "auto" });
+      }
+      courseFocusRef.current?.focus({ preventScroll: true });
+    });
     return () => window.cancelAnimationFrame(frame);
   }, [running]);
 
@@ -2057,6 +2427,10 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     setCompleted(false);
     setShowVictoryArt(false);
     setPhaseNotice("");
+    // Reset the HUD/run display state for the current chapter (score,
+    // hull, clocks, arena) so the start screen does not show the
+    // abandoned run's numbers.
+    selectChapter(chapterIndex);
   }
 
   function requestYachtRestart() {
@@ -2107,6 +2481,12 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     // A single timeout avoids firing React state updates from another state
     // updater, and pauses cleanly when an iPhone is interrupted.
     const timer = window.setTimeout(() => {
+      // The boss finale has no countdown: TIME counts up, and the fight ends
+      // on three crashes (fireworks timer) or a lost hull, never on the clock.
+      if (isBoss) {
+        setBossElapsed((current) => current + .5);
+        return;
+      }
       if (timeLeft <= .5) {
         setTimeLeft(0);
         finishGame(YACHT_CHAPTERS[chapterIndex].name +
@@ -2116,7 +2496,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       }
     }, 500);
     return () => window.clearTimeout(timer);
-  }, [running, paused, chapterIndex, timeLeft]);
+  }, [running, paused, chapterIndex, timeLeft, bossElapsed]);
 
   useEffect(() => {
     if (!running) return undefined;
@@ -2140,7 +2520,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     if (!running || paused) return;
     if (phaseKey === lastPhaseRef.current) return;
     lastPhaseRef.current = phaseKey;
-    announcePhase(phase.name.toUpperCase());
+    // The boss arena shows no center-screen phase notices (round 3);
+    // its phases read off the paintings and the HUD pips instead.
+    if (!isBoss) announcePhase(phase.name.toUpperCase());
     setMessage(phase.copy);
     captainTone(phaseKey === "sunset" ? "cheese" : "ball");
   }, [phaseKey, running]);
@@ -2157,6 +2539,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       // A timer victory or hull loss can finish just before an interval fires.
       // Never award post-finish cargo or apply another collision.
       if (finishedRef.current) return;
+      // The boss chapter is the Kuroi EPIC ARENA: its own tick effect
+      // drives the arena machine; the lane world stays out of it entirely.
+      if (isBoss) return;
       if (hullGraceRemainingRef.current > 0) {
         hullGraceRemainingRef.current = Math.max(0, hullGraceRemainingRef.current - tickMs);
         if (hullGraceRemainingRef.current === 0) setHullRecovering(false);
@@ -2202,7 +2587,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         });
 
         const spawnEvery = yachtSpawnInterval(chapter.id, phaseKey, spawnSequenceRef.current);
-        if (spawnClockRef.current >= spawnEvery) {
+        if (!isBoss && spawnClockRef.current >= spawnEvery) {
           // Keep fractional elapsed time: clearing the whole clock made phone
           // ticks accumulate measurable cadence drift across a 75-second run.
           spawnClockRef.current -= spawnEvery;
@@ -2248,11 +2633,11 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         // three lanes are occupied, hold it rather than dropping unfair cargo.
         if (chapter.id !== "sakura") {
           bonusTreatClockRef.current += tickMs;
-          if (bonusTreatClockRef.current >= YACHT_EXTRA_TREAT_MS) {
+          if (bonusTreatClockRef.current >= yachtExtraTreatMs(chapter.id)) {
             // Favor Rosie's current route; move only if the water is occupied.
             const safeLane = yachtBonusTreatLane(next, laneRef.current, laneRef.current);
             if (safeLane >= 0) {
-              bonusTreatClockRef.current -= YACHT_EXTRA_TREAT_MS;
+              bonusTreatClockRef.current -= yachtExtraTreatMs(chapter.id);
               const treat = CAPTAIN_PICKUPS.find((pickup) => pickup.kind === "treat");
               next.push({ ...treat, id: itemIdRef.current += 1,
                 lane: safeLane, y: -12,
@@ -2301,7 +2686,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               bonusPoints += YACHT_CLEAN_PASS_POINTS;
               closePasses++;
             }
-            if (item.kind === "rival") {
+            if (item.kind === "rival" && !item.boss) {
               bonusPoints += boostRef.current ? 120 : 70;
               rivalPasses++;
             }
@@ -2408,16 +2793,354 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
     return () => window.clearInterval(tick);
   }, [running, paused, phaseKey, chapter.id]);
 
+  // --- Kuroi EPIC ARENA: input, tick, and event application. ---
+  function readArenaInput() {
+    const keys = arenaKeysRef.current;
+    let x = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+    let y = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
+    const pointer = arenaPointerRef.current;
+    if (pointer) {
+      const dx = pointer.x - arenaRef.current.rosie.x;
+      const dy = pointer.y - arenaRef.current.rosie.y;
+      const d = Math.hypot(dx, dy);
+      if (d > 3) { x = dx / d; y = dy / d; } else { x = 0; y = 0; }
+    }
+    // Touch/pen arena input is the fixed joystick, sampled into a
+    // unit-space vector by the animation-frame sampler. While the
+    // stick is engaged it owns the movement vector (including its
+    // dead-zone zero); the mouse pointer path above is untouched
+    // when no stick is engaged.
+    const stick = arenaStickNow();
+    if (stick) {
+      x = stick.x;
+      y = stick.y;
+    }
+    let dash = arenaDashRef.current;
+    arenaDashRef.current = false;
+    // A touch dash carries its own direction for exactly one tick:
+    // the stick's current vector, or Rosie's heading when a second
+    // finger taps while the stick is centered / not engaged.
+    const touchDash = arenaTouchDashRef.current;
+    if (touchDash) {
+      x = touchDash.x;
+      y = touchDash.y;
+      dash = true;
+      arenaTouchDashRef.current = null;
+    }
+    return { x, y, dash };
+  }
+
+  function arenaPoint(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    return {
+      x: Math.max(0, Math.min(100, (event.clientX - rect.left) / rect.width * 100)),
+      y: Math.max(0, Math.min(100, (event.clientY - rect.top) / rect.height * 100))
+    };
+  }
+
+  function isArenaTouchPointer(event) {
+    return event.pointerType === "touch" || event.pointerType === "pen";
+  }
+
+  function queueArenaTouchDash(vector) {
+    if (vector) {
+      arenaTouchDashRef.current = { x: vector.x, y: vector.y };
+      return;
+    }
+    // A second finger dashing while keys are held keeps the keyboard's
+    // current direction, exactly like the DASH pill / Space path.
+    const keys = arenaKeysRef.current;
+    if (keys.left || keys.right || keys.up || keys.down) {
+      arenaDashRef.current = true;
+      return;
+    }
+    const headings = {
+      up: { x: 0, y: -1 }, down: { x: 0, y: 1 },
+      left: { x: -1, y: 0 }, right: { x: 1, y: 0 }
+    };
+    arenaTouchDashRef.current = headings[arenaRef.current.rosie.dir] || headings.down;
+  }
+
+  // Convert the stick's latest displacement into the unit-space input
+  // vector (aspect-corrected through the arena rect) and park it
+  // where the tick reads it; the knob is positioned imperatively so
+  // sampling never re-renders.
+  function sampleArenaStick() {
+    const displacement = arenaJoystickInputRef.current?.displacement();
+    const element = arenaTouchElementRef.current;
+    if (!displacement || !element) {
+      arenaStickVectorRef.current = null;
+      return;
+    }
+    const vector = arenaJoystickVector(displacement.dx, displacement.dy,
+      element.getBoundingClientRect());
+    arenaStickVectorRef.current = vector;
+    if (arenaJoystickKnobRef.current) {
+      const knob = arenaJoystickKnobOffset(displacement.dx, displacement.dy);
+      arenaJoystickKnobRef.current.style.transform =
+        `translate(-50%, -50%) translate(${knob.x}px, ${knob.y}px)`;
+    }
+  }
+
+  // Sample on animation frames, not only on pointermove delivery:
+  // pointermove can arrive coalesced or late on mobile browsers, while
+  // the stick's latest recorded displacement is already in the module —
+  // the rAF loop turns it into a fresh vector at display rate so the
+  // steering direction tracks the thumb between ticks.
+  function startArenaTouchSampling() {
+    stopArenaTouchSampling();
+    const loop = () => {
+      if (!arenaJoystickInputRef.current?.active) {
+        arenaTouchRafRef.current = null;
+        return;
+      }
+      sampleArenaStick();
+      arenaTouchRafRef.current = window.requestAnimationFrame(loop);
+    };
+    arenaTouchRafRef.current = window.requestAnimationFrame(loop);
+  }
+
+  // The current joystick input for Rosie, or null when the stick is
+  // not engaged. While engaged the vector is authoritative even at
+  // zero (the dead zone) — the stick owns steering until release.
+  function arenaStickNow() {
+    if (!arenaJoystickInputRef.current?.active) return null;
+    return arenaStickVectorRef.current || { x: 0, y: 0, magnitude: 0 };
+  }
+
+  function settleArenaStickEnd(result) {
+    if (result.type !== "stick-ended") return;
+    stopArenaTouchSampling();
+    arenaStickVectorRef.current = null;
+    resetArenaJoystickKnob();
+  }
+
+  function onArenaPointerDown(event) {
+    if (isArenaTouchPointer(event)) {
+      if (!running || paused) return;
+      event.stopPropagation();
+      // The first touch inside the arena reveals the touch controls
+      // (coarse-pointer devices render them from the start); a mouse
+      // player never triggers this branch and never sees them.
+      setArenaTouchUi(true);
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+      arenaTouchElementRef.current = event.currentTarget;
+      const base = arenaJoystickRef.current;
+      const inZone = arenaJoystickZoneContains(event.clientX, event.clientY,
+        base ? base.getBoundingClientRect() : null);
+      const result = arenaJoystickInputRef.current.pointerDown(
+        event.pointerId, event.clientX, event.clientY, inZone);
+      if (result.type === "stick") {
+        sampleArenaStick();
+        startArenaTouchSampling();
+      } else if (result.type === "dash") {
+        // A second finger dashes along the stick's current vector;
+        // centered (or no direction yet) it falls back to held keys /
+        // Rosie's heading, like the DASH pill.
+        sampleArenaStick();
+        const stick = arenaStickNow();
+        queueArenaTouchDash(stick && stick.magnitude > 0
+          ? { x: stick.x, y: stick.y } : null);
+      }
+      // "outside": a lone touch away from the stick does nothing —
+      // no steering, no dash. The fixed stick is the only steering
+      // surface under this model; the DASH pill is the tap dash.
+      return;
+    }
+    if (!running || paused) return;
+    event.stopPropagation();
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    arenaPointerRef.current = arenaPoint(event);
+  }
+
+  function onArenaPointerMove(event) {
+    if (isArenaTouchPointer(event)) {
+      const joystick = arenaJoystickInputRef.current;
+      if (!joystick?.active && !joystick?.dashPointerIds.has(event.pointerId)) return;
+      event.stopPropagation();
+      joystick.pointerMove(event.pointerId, event.clientX, event.clientY);
+      // The animation-frame sampler also refreshes the vector every
+      // frame; this immediate sample keeps the newest displacement
+      // from waiting on either it or the next tick.
+      sampleArenaStick();
+      return;
+    }
+    if (!arenaPointerRef.current) return;
+    event.stopPropagation();
+    arenaPointerRef.current = arenaPoint(event);
+  }
+
+  function onArenaPointerUp(event) {
+    if (isArenaTouchPointer(event)) {
+      event.stopPropagation();
+      const result = arenaJoystickInputRef.current.pointerEnd(event.pointerId);
+      settleArenaStickEnd(result);
+      return;
+    }
+    event.stopPropagation();
+    arenaPointerRef.current = null;
+  }
+
+  function onArenaPointerCancel(event) {
+    if (isArenaTouchPointer(event)) {
+      event.stopPropagation();
+      const result = arenaJoystickInputRef.current.pointerEnd(event.pointerId);
+      settleArenaStickEnd(result);
+      return;
+    }
+    onArenaPointerUp(event);
+  }
+
+  function onArenaLostPointerCapture(event) {
+    if (isArenaTouchPointer(event)) onArenaPointerCancel(event);
+  }
+
+  useEffect(() => {
+    if (!isBoss) return undefined;
+    const dirKeys = { arrowleft: "left", a: "left", arrowright: "right", d: "right",
+      arrowup: "up", w: "up", arrowdown: "down", s: "down" };
+    function onKeyUp(event) {
+      const dir = dirKeys[event.key.toLowerCase()];
+      if (dir) arenaKeysRef.current[dir] = false;
+    }
+    function onBlur() {
+      arenaKeysRef.current = {};
+      arenaPointerRef.current = null;
+      clearArenaTouchInput();
+    }
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, [isBoss]);
+
+  useEffect(() => {
+    if (!running || paused || !isBoss) return undefined;
+    // The arena machine is fully dt-based (arenaStep receives tickMs
+    // and every speed is units/sec), so the tick rate only sets how
+    // finely input is sampled and motion is stepped — never game
+    // speed. Mobile used to tick at 84ms, a legacy coarse-tick
+    // convention inherited from the lane loop, which sampled touch
+    // input at ~12Hz and made touch steering feel unresponsive.
+    // The arena is DOM sprites (the same loop desktop runs), so
+    // mobile now ticks at the desktop 50ms.
+    const tickMs = 50;
+    const timer = window.setInterval(() => {
+      if (finishedRef.current) return;
+      const { state, events } = arenaStep(arenaRef.current, tickMs, readArenaInput());
+      arenaRef.current = state;
+      setArenaView(state);
+      if (state.hull !== livesRef.current) {
+        livesRef.current = state.hull;
+        setLives(state.hull);
+      }
+      for (const event of events) {
+        if (event.type === "windup") {
+          // No banner, no shout (round 3): Kuroi's stopped, facing,
+          // revving hull at the arena edge is the whole tell now.
+          setMessage("Kuroi has stopped at the harbor's edge, turned on Rosie — watch his bow and MOVE!");
+        } else if (event.type === "crash") {
+          setScore((current) => current + (event.finale ? ARENA.finaleScore : ARENA.crashScore));
+          setArenaCrashFx({ x: event.x, y: event.y, finale: event.finale,
+            id: itemIdRef.current += 1 });
+          // Animation round: the impact beat is a code-drawn starburst
+          // at the wreck point (the round-5 boom system). The crash
+          // cluster itself carries only splash foam — never a second
+          // Kuroi figure: the dazed actor at the same point is the one
+          // Kuroi on screen (the two-Kurois fix; see the render).
+          setArenaBoomFx((current) => [...current.slice(-5), {
+            id: itemIdRef.current += 1,
+            x: event.x, y: event.y, kind: "crash"
+          }]);
+          pulse("cheese");
+          captainTone("cheese");
+          window.navigator.vibrate?.(event.finale ? [40, 40, 80] : 30);
+          if (!event.finale) {
+            const label = ARENA_FURNITURE.find((f) => f.kind === event.kind)?.label || "the harbor";
+            setMessage(`Kuroi smashed into the ${label.toLowerCase()}! ${event.totalCrashes} of ${ARENA.totalCrashes} — one hull patched.`);
+          }
+        } else if (event.type === "ram") {
+          pulse("buoy");
+          captainTone("buoy");
+          window.navigator.vibrate?.([55, 35, 55]);
+          setMessage("KUROI RAMMED ROSIE — no crash. He peels away, stunned. The charge is spent.");
+        } else if (event.type === "bomb-hit") {
+          pulse("buoy");
+          captainTone("buoy");
+          window.navigator.vibrate?.([55, 35, 55]);
+          setMessage("WATER-BOMB HIT! Kuroi's cannon found its mark — keep out of the rippling marks.");
+        } else if (event.type === "bomb-boom" || event.type === "rocket-boom") {
+          // Round 5: every weapon ends in a visible burst — the bomb
+          // at its mark (hit or miss), the rocket where it lands.
+          setArenaBoomFx((current) => [...current.slice(-5), {
+            id: itemIdRef.current += 1,
+            x: event.x, y: event.y,
+            kind: event.type === "bomb-boom" ? "bomb" : "rocket"
+          }]);
+        } else if (event.type === "rocket-hit") {
+          pulse("buoy");
+          captainTone("buoy");
+          window.navigator.vibrate?.([55, 35, 55]);
+          setMessage("ROCKET HIT! A stray regatta rocket clipped Rosie — cross the rocket trails early.");
+        } else if (event.type === "dash") {
+          // Animation round: a dash leaves a wake burst at its origin —
+          // an oriented foam streak from the round-5 boom system — so
+          // the surge reads as motion, not a teleport. The streak runs
+          // along Rosie's facing; the dash sprite's painted wake and
+          // the dash speed itself carry the rest of the read.
+          const dashAngle = { right: 0, down: 90, left: 180, up: 270 }[state.rosie.dir] ?? 0;
+          setArenaBoomFx((current) => [...current.slice(-5), {
+            id: itemIdRef.current += 1,
+            x: event.x, y: event.y, kind: "dash", angle: dashAngle
+          }]);
+        } else if (event.type === "near-miss") {
+          setScore((current) => current + ARENA.nearMissScore);
+          setNearMisses((current) => current + 1);
+        } else if (event.type === "barge") {
+          // The one text overlay the arena keeps: the barge's arrival
+          // gets a brief callout, then the screen is clear again.
+          setBargeCallout("THE FIREWORKS BARGE!");
+          setMessage("The fireworks barge is towed into the arena. Captain Rosie reaches for her laser pointer…");
+        } else if (event.type === "laser") {
+          setMessage("The laser dot dances on the barge — and Kuroi has seen it. He'll charge the dot: if you're in his path, DASH!");
+        } else if (event.type === "eruption") {
+          setMessage("Kuroi smashed into the fireworks barge — the sky is going up in gold and red!");
+        } else if (event.type === "victory") {
+          finishGame("Kuroi's fireworks barge went up in gold and red. The grand finale is won — Captain Rosie rules the regatta.", true);
+        } else if (event.type === "defeat") {
+          finishGame("The hull has had enough adventure. Captain Rosie is returning to port under protest.");
+        }
+      }
+    }, tickMs);
+    return () => window.clearInterval(timer);
+  }, [running, paused, isBoss, chapterIndex]);
+
   useEffect(() => {
     function onKeyDown(event) {
       const yachtFrame = document.querySelector(".captain-fs-yacht");
       // The Captain page also mounts Tunnel and Cosmic Odyssey. A global
-      // keyboard handler must never steal their arrows or Space/Turbo.
-      // Fullscreen by itself is not keyboard ownership: the player may have
-      // focused another Captain game or deliberately blurred this cabinet.
-      // Launch restores focus to the yacht course, so normal play still works.
-      if (!yachtFrame?.contains(event.target)) return;
+      // keyboard handler must never steal their arrows or Space/Turbo, but
+      // it must not go dead the moment focus drifts to the page body: CAST
+      // OFF unmounts its button, and a click outside the cabinet silently
+      // killed steering. So only step aside for another game or an editable
+      // control. Space/Enter still only starts a voyage from inside the
+      // Yacht frame, or scrolling the page would launch Yacht.
+      const otherGame = event.target?.closest?.(".captain-fs-tunnel, #cosmic-odyssey-arcade, .captain-fs-captain2");
+      if (otherGame) return;
       if (event.target?.closest?.("input, textarea, select, [contenteditable='true']")) return;
+      const inYachtFrame = yachtFrame?.contains(event.target);
+      // A click on Tunnel's canvas does not move focus into the Tunnel
+      // frame, so the target guard above cannot tell which game the player
+      // is using: focus stays on the page body. The arcade backdrop already
+      // tracks the game nearest the viewport middle — when the player has
+      // scrolled to Tunnel or Cosmic, Yacht's keys step aside entirely.
+      // Otherwise Space in Tunnel would resume a paused Yacht (or boost a
+      // running one) while the player is digging.
+      const focusedGame = document.querySelector(".captain-arcade-page-background")?.dataset?.focusedGame;
+      if (focusedGame === "tunnel" || focusedGame === "cosmic") return;
+      if (!running && !inYachtFrame) return;
       // Do not hijack native Enter / Space on selected chapter and result buttons.
       if (!running && (event.key === "Enter" || event.key === " ") &&
           event.target?.closest?.("button, a, [role='button']")) return;
@@ -2427,12 +3150,29 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         return;
       }
       if (paused) {
-        if ((event.key === " " || event.key === "Enter") &&
+        if ((event.key === " " || event.key === "Enter") && inYachtFrame &&
             !event.target?.closest?.("button, a, [role='button']")) {
           event.preventDefault();
           toggleYachtPause();
         }
         return;
+      }
+      // Kuroi EPIC ARENA: arrows/WASD are a free-sailing vector, not lanes,
+      // and Space is the dash — the core dodge verb.
+      if (isBoss && running) {
+        const dirKeys = { arrowleft: "left", a: "left", arrowright: "right", d: "right",
+          arrowup: "up", w: "up", arrowdown: "down", s: "down" };
+        const dir = dirKeys[event.key.toLowerCase()];
+        if (dir) {
+          event.preventDefault();
+          arenaKeysRef.current[dir] = true;
+          return;
+        }
+        if (event.key === " " || event.code === "Space") {
+          event.preventDefault();
+          if (!event.repeat) arenaDashRef.current = true;
+          return;
+        }
       }
       // Direct lane keys give desktop and Tesla keyboard players the same
       // exact targeting as the clickable three-lane radar.
@@ -2458,14 +3198,31 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
         startGame();
         return;
       }
-      if ((event.key === " " || event.code === "Space") && running) {
+      if ((event.key === " " || event.code === "Space") && running && inYachtFrame) {
         event.preventDefault();
         if (!event.repeat) engageBoost();
       }
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [running, paused, turbo]);
+  }, [running, paused, turbo, isBoss]);
+
+  useEffect(() => {
+    if (!paused) return undefined;
+    // A paused Yacht leaves focus on its RESUME VOYAGE button; Space would
+    // then natively click it even while the player is working in Tunnel.
+    // Drop that focus the moment the player presses anywhere outside the
+    // Yacht frame, so only a deliberate click inside it can resume.
+    function onPointerDown(event) {
+      const yachtFrame = document.querySelector(".captain-fs-yacht");
+      if (!yachtFrame) return;
+      if (event.target?.closest?.(".captain-fs-yacht")) return;
+      const active = document.activeElement;
+      if (active && yachtFrame.contains(active)) active.blur();
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [paused]);
 
   useEffect(() => {
     if (!ended || !completed) return;
@@ -2595,7 +3352,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             onClick={toggleSteerMode}>{steerMode === "joystick" ? "D-PAD" : "JOYSTICK"}</button>
         </div>);
   return (
-    <main ref={gamepadRoot} className={"captain-game-page yacht-console-upgrade captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "")}>
+    <main ref={gamepadRoot} className={"captain-game-page yacht-console-upgrade captain-phase-" + phaseKey + (boost ? " captain-boosting" : "") + (paused ? " is-paused" : "") + (isBoss ? " captain-arena-chapter" : "")}>
       <section className="captain-hero">
         <div className="captain-hero-banner" role="img" aria-label="Captain Rosie at the helm of an ornate Japanese sailing ship at sunset, with islands, torii gates and waterfalls" />
         <div className="captain-title">
@@ -2633,8 +3390,9 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
 
       <section className="captain-hud" aria-label="Yacht game status">
         <div><img className="yacht-instrument" src="/yacht-console-v1/score.webp" alt=""/><span>SCORE</span><strong>{score.toLocaleString()}</strong></div>
-        <div><img className="yacht-instrument" src="/yacht-console-v1/time.webp" alt=""/><span>TIME</span><strong>{Math.ceil(timeLeft)}<small>s</small></strong></div>
+        <div><img className="yacht-instrument" src="/yacht-console-v1/time.webp" alt=""/><span>TIME</span><strong>{isBoss ? Math.floor(bossElapsed) : Math.ceil(timeLeft)}<small>s</small></strong></div>
         <div><img className="yacht-instrument" src="/yacht-console-v1/hull.webp" alt=""/><span>HULL</span><strong className="captain-lives" aria-label={`${lives} of 3 hull remaining`}>{lives}<small>/3</small><i className="yacht-hull-meter" aria-hidden="true">{[0,1,2].map(n=><b key={n} className={n<lives?"intact":""}/>)}</i></strong></div>
+        {isBoss && <div><span>PHASE {arenaView.phase + 1} · KUROI</span><strong className="captain-lives">{Array.from({ length: arenaPhaseGoal(arenaView.phase) }, (_, index) => index < (arenaView.phase === 2 ? arenaView.crashesInPhase + (arenaView.status === "eruption" || arenaView.status === "won" ? 1 : 0) : arenaView.crashesInPhase) ? "●" : "○").join(" ")}</strong></div>}
         <div><img className="yacht-instrument" src="/yacht-console-v1/cargo.webp" alt=""/><span>CARGO</span><strong>{collectedTotal}</strong></div>
         <div className={"combo-cell" + (combo > 1 ? " is-hot" : "")}><img className="yacht-instrument" src="/yacht-console-v1/multiplier.svg" alt=""/><span>MULTIPLIER</span><strong>×{combo}{boost ? " ×2" : ""}</strong></div>
       </section>
@@ -2642,7 +3400,31 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
       {wideConsole ? yachtActions : mobileYachtActions}
 
         <div className="gamepad-hint">LEFT STICK / D-PAD STEER · A BOOST · START PAUSE · X RETRY</div>
-      {wideConsole && helmControls}
+      {wideConsole && !isBoss && helmControls}
+
+{!running && !ended && (
+        <section className="yacht-level-select" aria-label="Choose a Yacht Dash level">
+          <span>CHOOSE YOUR VOYAGE · {chapter.name}</span>
+          <div className="yacht-chapter-picker" role="group" aria-label="Select Yacht Dash level">
+            {YACHT_CHAPTERS.map((choice, index) => (
+              <button key={choice.id} type="button"
+                className={index === chapterIndex ? "is-selected" : ""}
+                aria-pressed={index === chapterIndex}
+                disabled={!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter}
+                onClick={() => selectChapter(index)}>
+                <b><span className="yc-num">{index + 1}</span><span className="yc-name">. {choice.name}</span></b>
+                {choice.mode === "boss" && <small className="yacht-boss-badge">★ BOSS FINALE</small>}
+                {!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter ? <small>LOCKED</small> :
+                  <small className="yacht-stage-record">
+                    {chapterRecords[choice.id]?.best
+                      ? "BEST " + chapterRecords[choice.id].best.toLocaleString() + " · " + "★".repeat(chapterRecords[choice.id].medals || 0)
+                      : "READY"}
+                  </small>}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="yacht-game-shell">
         <div className="yacht-game-sign">
@@ -2651,7 +3433,7 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <strong>{chapter.name.toUpperCase()} · {phase.name.toUpperCase()}</strong>
             <small>{message}</small>
           </div>
-          {wideConsole && steeringOptions}
+          {wideConsole && !isBoss && steeringOptions}
         </div>
         <div className="yacht-voyage-progress" role="progressbar"
           aria-label={chapter.name + " voyage progress"}
@@ -2660,10 +3442,16 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             <div className="yacht-voyage-progress-fill" style={{ width: routeProgress + "%" }} />
             <div className="yacht-voyage-progress-marks" aria-hidden="true"><i /><i /><i /><i /></div>
           </div>
-          <small>SCENE {levelNumber + 1}/5</small>
+          <small>{isBoss ? `CRASH ${arenaView.totalCrashes}/${ARENA.totalCrashes}` : `SCENE ${levelNumber + 1}/5`}</small>
         </div>
-
-        {!wideConsole && steeringOptions}
+        {isBoss ? (
+        <div className="yacht-steering-options yacht-arena-controls" role="group" aria-label="Arena controls">
+          <span>ARENA HELM</span>
+          <p className="yacht-arena-hint">STEER — ARROW KEYS · WASD · DRAG&nbsp;&nbsp;|&nbsp;&nbsp;DASH — SPACE</p>
+        </div>
+        ) : (
+          !wideConsole && steeringOptions
+        )}
 
         <div
           ref={courseFocusRef}
@@ -2680,8 +3468,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
           onPointerCancel={() => { touchStartRef.current = null; }}
           onLostPointerCapture={() => { touchStartRef.current = null; }}
         >
-          <CaptainScenicPainting scene={scenery} />
-          <CaptainCinematicEnvironment
+          {!isBoss && <CaptainScenicPainting scene={scenery} />}
+          {!isBoss && <CaptainCinematicEnvironment
             underway={running && !paused}
             boost={boost}
             streak={streak}
@@ -2689,10 +3477,226 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             ended={ended}
             eventPulse={eventPulse}
             eventKind={eventKind}
-          />
-          <CaptainLevelScenery scene={scenery} underway={running && !paused} boost={boost} />
-          <CaptainLotusGust underway={running && !paused} />
-          <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />
+          />}
+          {!isBoss && <CaptainLevelScenery scene={scenery} underway={running && !paused} boost={boost} />}
+          {!isBoss && <CaptainLotusGust underway={running && !paused} />}
+          {!isBoss && <CaptainCourseMotion phaseKey={phaseKey} underway={running && !paused} boost={boost} />}
+          {isBoss && (() => {
+            const view = arenaView;
+            const k = view.kuroi;
+            const r = view.rosie;
+            const winding = k.mode === "windup";
+            const locking = k.mode === "laserLock";
+            const charging = k.mode === "charge" || k.mode === "finaleCharge";
+            const showFurniture = (winding || charging) && k.furniture;
+            const laserOn = Boolean(view.laser) && (locking || k.mode === "finaleCharge");
+            const kuroiFacing = arenaFacing(Math.cos(k.heading), Math.sin(k.heading), "down");
+            const volleyRecent = view.elapsedMs - view.lastVolleyAtMs < 900;
+            let kuroiSprite = ARENA_SPRITES.kuroi.down;
+            let kuroiFlip = false;
+            if (k.mode === "dazed") kuroiSprite = ARENA_SPRITES.kuroi.dazed;
+            // The firing sprite belongs to the patrol only. Phase 3
+            // spawns its volley AS the windup begins, so letting it win
+            // during the windup masked his turned bow — the whole tell —
+            // for ~900 of the 945ms windup (round 4). While he winds up
+            // (and while he stares at the laser dot) the sprite chosen
+            // from his heading is what the player reads.
+            else if (volleyRecent && k.mode === "circle") kuroiSprite = ARENA_SPRITES.kuroi.firing;
+            else if (kuroiFacing === "up") kuroiSprite = ARENA_SPRITES.kuroi.up;
+            else if (kuroiFacing === "left") { kuroiSprite = ARENA_SPRITES.kuroi.side; kuroiFlip = true; }
+            else if (kuroiFacing === "right") kuroiSprite = ARENA_SPRITES.kuroi.side;
+            const rosieSprite = view.status === "won" ? ARENA_SPRITES.rosie.triumphant
+              : r.dashing ? ARENA_SPRITES.rosie.dash
+              : r.hitAtMs >= 0 && view.elapsedMs - r.hitAtMs < 900 ? ARENA_SPRITES.rosie.braced
+              : r.nearMissAtMs >= 0 && view.elapsedMs - r.nearMissAtMs < 900 ? ARENA_SPRITES.rosie.startled
+              : ARENA_SPRITES.rosie[r.dir] || ARENA_SPRITES.rosie.down;
+            const rosieInvuln = view.status === "fighting" && view.elapsedMs < r.invulnUntilMs;
+            return (
+              <div className={"yacht-arena" + (arenaTouchUi ? " has-touch-controls" : "")}
+                role="application"
+                aria-label="Kuroi arena. Steer Rosie with the arrow keys, WASD, or by dragging. Press Space to dash."
+                onPointerDown={onArenaPointerDown} onPointerMove={onArenaPointerMove}
+                onPointerUp={onArenaPointerUp} onPointerCancel={onArenaPointerCancel}
+                onLostPointerCapture={onArenaLostPointerCapture}>
+                <img className="yacht-arena-bg" src={ARENA_BACKGROUNDS[arenaBackgroundIndex(view)]}
+                  alt="" draggable="false" />
+                <svg className="yacht-arena-tells" viewBox="0 0 100 100"
+                  preserveAspectRatio="none" aria-hidden="true">
+                  {/* Round 3: no charge line is ever drawn — Kuroi's
+                      stopped, facing, revving hull is the tell. What
+                      remains in this layer is deliberately understated:
+                      a soft ripple where a water-bomb will fall and a
+                      faint dashed thread along a rocket's path. (The
+                      laser lives in its own layer above the barge —
+                      see below.) */}
+                  {view.weapons.map((w) => w.kind === "bomb" && w.state === "armed" ? (
+                    <circle key={w.id} cx={w.x} cy={w.y} r={ARENA.bombRadius}
+                      vectorEffect="non-scaling-stroke" className="arena-bomb-ripple" />
+                  ) : w.kind === "rocket" && w.state === "warn" ? (() => {
+                    // Round 5 (Mitchell): the rocket gets more warning
+                    // (1300ms in the machine) and its dashed thread
+                    // swells in presence over the final third of the
+                    // warning — still a whisper, but a growing one.
+                    const warnFrac = Math.max(0, Math.min(1,
+                      1 - (w.warnUntilMs - view.elapsedMs) / ARENA.rocketWarnMs));
+                    const presence = warnFrac < 2 / 3 ? 0.55
+                      : 0.55 + (warnFrac - 2 / 3) * 3 * 0.45;
+                    return (
+                      <line key={w.id} x1={w.x1} y1={w.y1} x2={w.x2} y2={w.y2}
+                        vectorEffect="non-scaling-stroke" className="arena-rocket-line"
+                        style={{ opacity: presence }} />
+                    );
+                  })() : null)}
+                </svg>
+                {view.barge && <img className="yacht-arena-barge" src={ARENA_SPRITES.barge}
+                  alt="The fireworks barge" draggable="false"
+                  style={{ left: view.barge.x + "%", top: view.barge.y + "%" }} />}
+                {view.barge && <img className="yacht-arena-left-audience" src={ARENA_BACKGROUNDS[arenaBackgroundIndex(view)]}
+                  alt="" aria-hidden="true" draggable="false" />}
+                {showFurniture && k.furniture.kind !== "barge" && (
+                  <img className="yacht-arena-furniture" src={k.furniture.asset}
+                    alt={k.furniture.label} draggable="false"
+                    style={{ left: k.furniture.x + "%", top: k.furniture.y + "%" }} />)}
+                {view.weapons.map((w) => w.kind === "bomb" ? (() => {
+                  // Round 5 (Mitchell): the bomb is LAUNCHED, not
+                  // conjured — a visible projectile arcs from Kuroi's
+                  // position at fire time to the mark across the fuse,
+                  // and the swelling shadow at the mark is its landing
+                  // read. The two agree: where the shadow completes,
+                  // the arc comes down.
+                  const fall = Math.max(0, Math.min(1,
+                    1 - (w.fuseAtMs - view.elapsedMs) / ARENA.bombFuseMs));
+                  const hasArc = w.state === "armed" && typeof w.fromX === "number";
+                  const arcX = hasArc ? w.fromX + (w.x - w.fromX) * fall : w.x;
+                  const arcY = hasArc ? w.fromY + (w.y - w.fromY) * fall -
+                    Math.sin(fall * Math.PI) * 11 : w.y;
+                  return (
+                    <Fragment key={w.id}>
+                      {w.state === "armed" && (
+                        <div className="yacht-arena-bomb-shadow" aria-hidden="true"
+                          style={{ left: w.x + "%", top: w.y + "%",
+                            transform: `translate(-50%, -50%) scale(${0.45 + fall * 0.6})`,
+                            opacity: 0.35 + fall * 0.65 }} />
+                      )}
+                      <img className={"yacht-arena-bomb" + (w.state === "boom" ? " is-boom" : "")}
+                        src={ARENA_SPRITES.waterbomb} alt="" draggable="false"
+                        style={{ left: arcX + "%", top: arcY + "%" }} />
+                    </Fragment>
+                  );
+                })() : w.kind === "rocket" && w.state === "fly" ? (
+                  <img key={w.id} className="yacht-arena-rocket" src={ARENA_SPRITES.rocket}
+                    alt="" draggable="false"
+                    style={{ left: (w.x1 + w.ux * w.progress) + "%",
+                      top: (w.y1 + w.uy * w.progress) + "%",
+                      transform: `translate(-50%, -50%) rotate(${Math.atan2(w.uy, w.ux) * 180 / Math.PI + 45}deg)` }} />
+                ) : null)}
+                {(winding || locking) && (
+                  <div className="yacht-arena-wake-cue" aria-hidden="true"
+                    style={{ left: k.x + "%", top: k.y + "%" }} />
+                )}
+                {/* Animation round: both actor imgs are keyed by their
+                    sprite, so a facing/pose swap remounts the img and
+                    replays the CSS turn settle — a swap reads as a
+                    small turn, not a cut. While Kuroi winds up, the
+                    --revx/--revy vars aim the rev keyframes' backward
+                    rock opposite his locked charge direction (the
+                    flipped set's translate is mirrored by its
+                    scaleX(-1), so the x var is pre-negated for it). */}
+                <img key={kuroiSprite} className={"yacht-arena-actor yacht-arena-kuroi" + (k.mode === "dazed" ? " is-dazed" : "") + ((winding || locking) ? " is-winding" + (kuroiFlip ? " is-flipped" : "") : "")}
+                  src={kuroiSprite} alt="Kuroi" draggable="false"
+                  style={{ left: k.x + "%", top: k.y + "%",
+                    ...arenaSpriteNormStyle(kuroiSprite),
+                    ...(winding ? {
+                      "--revx": `${(kuroiFlip ? 1 : -1) * (k.chargeDirX || 0) * 1.6}%`,
+                      "--revy": `${-(k.chargeDirY || 0) * 1.6}%`
+                    } : {}),
+                    transform: `translate(-50%, -50%)${kuroiFlip ? " scaleX(-1)" : ""}` }} />
+                <img key={rosieSprite} className={"yacht-arena-actor yacht-arena-rosie" +
+                    (rosieInvuln ? " is-invuln" : "") + (r.dashing ? " is-dashing" : "")}
+                  src={rosieSprite} alt="Captain Rosie" draggable="false"
+                  style={{ left: r.x + "%", top: r.y + "%",
+                    ...arenaSpriteNormStyle(rosieSprite) }} />
+                {/* The laser gets its own layer ABOVE the barge and the
+                    actors (round 4): the dot dances ON the barge, so in
+                    the old z-4 tells layer the barge's own hull (z-5)
+                    painted over it and the finale's centerpiece never
+                    read on screen. */}
+                {laserOn && (
+                  <svg className="yacht-arena-laser" viewBox="0 0 100 100"
+                    preserveAspectRatio="none" aria-hidden="true">
+                    <line x1={r.x} y1={r.y} x2={view.laser.x} y2={view.laser.y}
+                      vectorEffect="non-scaling-stroke" className="arena-laser-beam" />
+                    <circle cx={view.laser.x} cy={view.laser.y} r={3.4}
+                      className="arena-laser-dot-halo" />
+                    <circle cx={view.laser.x} cy={view.laser.y} r={1.3}
+                      vectorEffect="non-scaling-stroke" className="arena-laser-dot" />
+                  </svg>
+                )}
+                {arenaCrashFx && (
+                  <div className="yacht-arena-crashfx" key={arenaCrashFx.id} aria-hidden="true"
+                    style={{ left: arenaCrashFx.x + "%", top: arenaCrashFx.y + "%" }}>
+                    {/* SINGLE-RENDER GUARANTEE (animation round): this
+                        cluster is splash foam ONLY. It used to also
+                        carry the recoil painting — which is byte-
+                        identical to the actor's dazed sprite — while
+                        resolveCrash parks the dazed actor at this exact
+                        point, so every crash showed two Kurois. The
+                        actor is the only Kuroi figure in the arena,
+                        ever; the impact beat is the boom starburst the
+                        crash event fires alongside this foam. */}
+                    <img className="yacht-kuroi-impact-foam" src="/yacht-dash/kuroi/kuroi-collision-splash.webp" alt="" />
+                  </div>
+                )}
+                {/* Round 5: code-drawn weapon bursts — a flash, a
+                    shockwave ring and spray droplets where a bomb
+                    detonates or a rocket lands. Fed by machine events
+                    (bomb-boom / rocket-boom), pruned on a short clock. */}
+                {arenaBoomFx.map((fx) => (
+                  <div key={fx.id} className={"yacht-arena-boom is-" + fx.kind}
+                    aria-hidden="true"
+                    style={{ left: fx.x + "%", top: fx.y + "%",
+                      ...(typeof fx.angle === "number"
+                        ? { transform: `translate(-50%, -50%) rotate(${fx.angle}deg)` } : {}) }}>
+                    <span className="boom-flash" />
+                    <span className="boom-ring" />
+                    {Array.from({ length: 8 }, (_, i) => (
+                      <i key={i} style={{
+                        "--a": `${i * 45 + (fx.id % 3) * 13}deg`,
+                        "--d": `${30 + (i % 3) * 12}px`
+                      }} />
+                    ))}
+                  </div>
+                ))}
+                <KuroiFireworksCanvas active={view.status === "eruption"} durationMs={ARENA.eruptionMs} />
+                {bargeCallout && view.status === "fighting" &&
+                  <div className="yacht-arena-barge-callout" role="status">{bargeCallout}</div>}
+                {/* The bottom elements of the arena (round 3, touch
+                    rounds): the ONE dash control — a generated brass
+                    plaque asset (touch-tuning round; the word DASH is
+                    lettered in the artwork, with wake curls — no
+                    keyboard reference anywhere) — and, for touch
+                    players only, the fixed joystick in the bottom-right
+                    with the plaque raised directly above it. The
+                    helm-hint overlay text is gone; steering is learned
+                    from the start panel and play itself. Desktop still
+                    dashes on Space — that is input, not a button. */}
+                <button type="button" className="yacht-arena-dash-button yacht-arena-dash-overlay"
+                  disabled={!running || paused}
+                  onPointerDown={(event) => { event.preventDefault(); event.stopPropagation(); arenaDashRef.current = true; }}
+                  onPointerUp={(event) => event.stopPropagation()}
+                  aria-label="Dash">
+                  <img className="yacht-arena-dash-art"
+                    src="/yacht-dash/kuroi-arena/ui-dash-plaque.webp"
+                    alt="" draggable="false" />
+                </button>
+                {arenaTouchUi && (
+                  <div ref={arenaJoystickRef} className="yacht-arena-joystick" aria-hidden="true">
+                    <div ref={arenaJoystickKnobRef} className="yacht-arena-joystick-knob" />
+                  </div>
+                )}
+              </div>
+            );
+          })()}
           {/* Obstacle warnings remain in the helm's lane forecast above.
               The old in-water red bars mimicked invisible hazards. */}
 
@@ -2704,22 +3708,29 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 onLevels={returnYachtToLevels} />
             </div>
           )}
-          <div className="sun-glint" aria-hidden="true" />
-          <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>
-          <div className="wake-lines" aria-hidden="true" />
-          <div className="lane-line lane-line-a" aria-hidden="true" />
-          <div className="lane-line lane-line-b" aria-hidden="true" />
-          <div className="sea-sparkles" aria-hidden="true">
+          {!isBoss && <div className="sun-glint" aria-hidden="true" />}
+          {!isBoss && <div className="water-depth-bands" aria-hidden="true"><i /><i /><i /><i /></div>}
+          {!isBoss && <div className="wake-lines" aria-hidden="true" />}
+          {!isBoss && <div className="lane-line lane-line-a" aria-hidden="true" />}
+          {!isBoss && <div className="lane-line lane-line-b" aria-hidden="true" />}
+          {!isBoss && <div className="sea-sparkles" aria-hidden="true">
             <i /><i /><i /><i /><i /><i /><i /><i />
-          </div>
+          </div>}
 
+          {/* The course banner pill is lane-chapter furniture. The boss
+              arena carries NO text overlay during play (round 3): no
+              phase heading, no event line — the CRASH progress bar above
+              the arena and the HUD carry the state, and the single
+              exception is the barge callout inside the arena itself. */}
+          {!isBoss && (
           <div className="captain-course-banner">
             <span>SCENE {levelNumber + 1} OF 5 · {chapter.name.toUpperCase()}</span>
             <strong>{level.name}</strong>
           </div>
+          )}
 
           {phaseNotice && <div className="captain-phase-notice">{phaseNotice}</div>}
-           {items.map((item) => {
+           {!isBoss && items.map((item) => {
             const approaching = chapter.id !== "sakura";
             const floatingPickup = ["ball", "treat", "cheese", "supply"].includes(item.kind);
             const arch = approaching && item.footprint === "arch";
@@ -2734,7 +3745,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                 .some(name => item.asset?.endsWith("/" + name));
             const visualScale = nativeResArt ? 1 : artScale;
             const incomingAttackLane = item.kind === "rival" && !item.drifted
-              ? yachtRivalAttackLane(item.lane, laneRef.current) : item.driftTo;
+              ? item.boss && item.driftTo !== undefined
+                ? item.driftTo : yachtRivalAttackLane(item.lane, laneRef.current) : item.driftTo;
             const center = item.footprint === "arch" ? 50 :
               item.footprint === "wide" ? (item.lane + 1) * 33.333 :
                 16.666 + item.lane * 33.333;
@@ -2775,18 +3787,18 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             );
           })}
 
-          {eventPulse > 0 && (
+          {!isBoss && eventPulse > 0 && (
             <div className={"captain-burst burst-" + eventKind} key={eventPulse} aria-hidden="true">
               <i>✦</i><i>·</i><i>✦</i><i>·</i><i>✦</i><i>·</i>
             </div>
           )}
 
-          <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "") +
+          {!isBoss && <div className={"captain-yacht lane-" + lane + (boost ? " yacht-boost" : "") +
             (hullRecovering ? " yacht-hull-recovering" : "") +
             (ramImpact ? " yacht-kuroi-rammed" : "")}>
             <CaptainYachtArt boost={boost} />
-          </div>
-          {ramImpact && (
+          </div>}
+          {!isBoss && ramImpact && (
             <div className={"yacht-kuroi-collision yacht-kuroi-collision-lane-" + ramImpact.lane}
               key={ramImpact.id} aria-hidden="true">
               <img className="yacht-kuroi-hit-yacht" src="/yacht-dash/kuroi/kuroi-impact.webp" alt="" />
@@ -2794,7 +3806,6 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
               <img className="yacht-kuroi-recoil" src="/yacht-dash/kuroi/kuroi-recoil.webp" alt="" />
             </div>
           )}
-
           {!running && (
             <div className={"captain-start-panel" + (ended ? " captain-results-panel" : "")}>
               <CaptainRosieIllustration className="start-panel-rosie" idPrefix="startRosie" />
@@ -2819,15 +3830,15 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                     <span><b>{cheeses}</b> Golden Cheese</span>
                     <span><b>{nearMisses}</b> near misses</span>
                     <span><b>{rivalsPassed}</b> rival yachts passed</span>
-                    {chapter.id !== "sakura" && <span><b>{suppliesCollected}/1</b> supply chest</span>}
+                    {isBoss && <span><b>{arenaView.totalCrashes}/{ARENA.totalCrashes}</b> Kuroi crashes</span>}
+                    {chapter.id !== "sakura" && !isBoss && <span><b>{suppliesCollected}/1</b> supply chest</span>}
                   </div>
                   <div className="yacht-result-actions">
-                    {completed && <button type="button" onClick={() => setShowVictoryArt(true)}>VIEW VICTORY</button>}
                     {completed && chapterIndex < YACHT_CHAPTERS.length - 1 &&
                       (YACHT_PLAYTEST_ALL_LEVELS || unlockedChapter >= chapterIndex + 1) && <button type="button"
                         onClick={() => startGame(chapterIndex + 1)}>NEXT LEVEL</button>}
                     <button type="button" onClick={() => startGame()}>SAIL AGAIN</button>
-                    <button type="button" onClick={() => { setEnded(false); setCompleted(false); setShowVictoryArt(false); }}>CHOOSE LEVEL</button>
+                    <button type="button" onClick={() => { setShowVictoryArt(false); selectChapter(chapterIndex); }}>CHOOSE LEVEL</button>
                   </div>
                 </>
               ) : (
@@ -2836,27 +3847,8 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
                   <strong>{chapter.name}</strong>
                   <p>{chapter.description}</p>
                   <small className="yacht-chapter-goal">{YACHT_CHAPTER_GOALS[chapter.id].preview}</small>
-                  <div className="yacht-chapter-picker" role="group" aria-label="Select Yacht Dash level">
-                    {YACHT_CHAPTERS.map((choice, index) => (
-                      <button key={choice.id} type="button"
-                        className={index === chapterIndex ? "is-selected" : ""}
-                        aria-pressed={index === chapterIndex}
-                        disabled={!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter}
-                        onClick={() => setChapterIndex(index)}>
-                        <b>{index + 1}. {choice.name}</b>
-                        {!YACHT_PLAYTEST_ALL_LEVELS && index > unlockedChapter ? <small>LOCKED</small> :
-                          <small className="yacht-stage-record">
-                            {chapterRecords[choice.id]?.best
-                              ? "BEST " + chapterRecords[choice.id].best.toLocaleString() + " · " + "★".repeat(chapterRecords[choice.id].medals || 0)
-                              : YACHT_PLAYTEST_ALL_LEVELS ? "READY TO TEST" : "READY"}
-                          </small>}
-                      </button>
-                    ))}
-                  </div>
                   <div className="yacht-select-actions">
                     <button type="button" className="yacht-cast-off" onClick={() => startGame()}>CAST OFF</button>
-                    {YACHT_PLAYTEST_ALL_LEVELS && <button type="button" className="yacht-preview-victory"
-                      onClick={() => setShowVictoryArt(true)}>VIEW VICTORY ART</button>}
                   </div>
                 </>
               )}
@@ -2886,17 +3878,37 @@ function CaptainRosieGame({ soundOn, requestGameFullscreen, fullscreenExitSequen
             ? document.fullscreenElement : document.body
         )}
 
+        {/* Kuroi finale cinematic: mounted only by a boss win, after
+            the full fireworks eruption ends. Autoplays (muted inline
+            first-frame fallback is unnecessary — it carries sound and
+            the win gesture chain started the game fullscreen), fills
+            the screen, and its end (or any playback error) opens the
+            victory art. Portalled into the fullscreen yacht frame
+            when there is one, like the victory overlay. */}
+        {!running && showFinaleVideo && createPortal(
+          <div className="yacht-finale-video-overlay" role="dialog" aria-modal="true"
+            aria-label="Kuroi's Last Charge finale video">
+            <video className="yacht-finale-video" ref={finaleVideoRef}
+              src="/yacht-dash/kuroi-arena/kuroi-finale-video.mp4"
+              autoPlay playsInline preload="auto"
+              onEnded={finishFinaleVideo}
+              onError={finishFinaleVideo} />
+          </div>,
+          document.fullscreenElement?.classList?.contains("captain-fs-yacht")
+            ? document.fullscreenElement : document.body
+        )}
 
 
-        {!wideConsole && helmControls}
 
-        <div className="captain-cargo-key">
+        {!wideConsole && !isBoss && helmControls}
+
+        {!isBoss && <div className="captain-cargo-key">
           <span><b className="cargo-ball"><CaptainPickupIcon kind="ball" /></b><i>+10</i>Tennis <small>×{catches.ball}</small></span>
           <span><b className="cargo-treat"><CaptainPickupIcon kind="treat" /></b><i>+20</i>Treat <small>×{catches.treat}</small></span>
           <span><b className="cargo-cheese"><GoldenCheeseIcon compact /></b><i>+40</i>Cheese <small>×{catches.cheese}</small></span>
           <span><b className="cargo-buoy"><CaptainPickupIcon kind="buoy" /></b><i>-1</i>Buoy</span>
           <span className="mission-meter"><i style={{ width: missionProgress + "%" }} /><em>{missionProgress}% to {chapter.name} medal target</em></span>
-        </div>
+        </div>}
       </section>
     </main>
   );
@@ -2947,9 +3959,37 @@ function FullscreenGameFrame({ children, label, variant }) {
 
   useEffect(() => {
     if (!fallbackFullscreen) return undefined;
+    // iOS-proof scroll lock (Mitchell, 2026-11-26): body overflow:hidden
+    // alone does not stop iOS Safari from scrolling the page behind a
+    // fallback fullscreen frame — during a Tunnel victory the Captain page
+    // scrolled and Cosmic Odyssey rose into view, stranding the exit
+    // control. Pin the body at the current offset and swallow touch moves
+    // that do not belong to a genuinely scrollable in-game sheet.
+    const savedY = window.scrollY || 0;
     const previousOverflow = document.body.style.overflow;
+    const previousBodyPin = {
+      position: document.body.style.position, top: document.body.style.top,
+      left: document.body.style.left, right: document.body.style.right, width: document.body.style.width,
+    };
     document.body.classList.add("captain-fullscreen-fallback-active");
     document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${savedY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    const guardTouchMove = (event) => {
+      let node = event.target;
+      while (node && node !== document) {
+        if (node instanceof Element) {
+          const style = window.getComputedStyle(node);
+          if ((style.overflowY === "auto" || style.overflowY === "scroll") && node.scrollHeight > node.clientHeight) return;
+        }
+        node = node.parentNode;
+      }
+      event.preventDefault();
+    };
+    document.addEventListener("touchmove", guardTouchMove, { passive: false, capture: true });
     const escape = (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -2961,8 +4001,15 @@ function FullscreenGameFrame({ children, label, variant }) {
     document.addEventListener("keydown", escape, true);
     return () => {
       document.removeEventListener("keydown", escape, true);
+      document.removeEventListener("touchmove", guardTouchMove, true);
       document.body.style.overflow = previousOverflow;
+      document.body.style.position = previousBodyPin.position;
+      document.body.style.top = previousBodyPin.top;
+      document.body.style.left = previousBodyPin.left;
+      document.body.style.right = previousBodyPin.right;
+      document.body.style.width = previousBodyPin.width;
       document.body.classList.remove("captain-fullscreen-fallback-active");
+      window.scrollTo(0, savedY);
     };
   }, [fallbackFullscreen, variant]);
 
@@ -3008,67 +4055,94 @@ function FullscreenGameFrame({ children, label, variant }) {
     }
   };
 
-  // Cosmic Odyssey's LAUNCH click occurs inside a same-origin iframe.
-  // A synchronous parent event retains its user activation for fullscreen.
+  // Mitchell's rule (2026-11-25): every game goes fullscreen when played.
+  // React games call their requestGameFullscreen prop on start; the Cosmic
+  // iframe announces its LAUNCH with a rosieverse:captain-start event on the
+  // parent window (see public/cosmic-odyssey/game.js) — answer it here.
   useEffect(() => {
-    if (variant !== "cosmic") return undefined;
-    const launch = event => {
-      if (event.detail?.variant === "cosmic") enterGameFullscreen();
+    const onCaptainStart = (event) => {
+      if (event?.detail?.variant === variant) enterGameFullscreen();
     };
-    window.addEventListener("rosieverse:captain-start", launch);
-    return () => window.removeEventListener("rosieverse:captain-start", launch);
-  }, [variant, expanded]);
+    window.addEventListener("rosieverse:captain-start", onCaptainStart);
+    return () => window.removeEventListener("rosieverse:captain-start", onCaptainStart);
+  });
 
   return (
     <section
       ref={frameRef}
       className={`captain-fullscreen-frame captain-fs-${variant}${expanded ? " is-expanded" : variant === "yacht" ? " is-preview-console" : ""}${fallbackFullscreen ? " is-fallback-fullscreen" : ""}`}
       aria-label={`${label} game`}
+      onContextMenu={(event) => event.preventDefault()}
     >
-      {["yacht", "tunnel", "captain2"].includes(variant) && React.isValidElement(children)
+      {["yacht", "tunnel", "captain2", "cheese"].includes(variant) && React.isValidElement(children)
         ? React.cloneElement(children, { requestGameFullscreen: enterGameFullscreen,
             exitGameFullscreen, fullscreenExitSequence })
         : children}
-      {["yacht", "tunnel", "cosmic", "captain2"].includes(variant) && (
-        <button type="button" className="captain-fullscreen-toggle"
-          onClick={expanded ? exitGameFullscreen : enterGameFullscreen}
-          aria-label={expanded ? "Exit fullscreen game" : "Expand game to fullscreen"}
-          title={expanded ? "Exit fullscreen game" : "Play fullscreen"}>
-          {["cosmic","yacht","tunnel"].includes(variant) ? <img className="cosmic-fullscreen-art" src={`/cosmic-odyssey/assets/console-v2/${expanded ? "exit-fullscreen" : "fullscreen"}.webp`} alt="" /> : <span aria-hidden="true">{expanded ? "↙" : "⛶"}</span>}
-          <b>{expanded ? "Exit game" : "Fullscreen"}</b>
+      {/* Mitchell (2026-11-26, round 10): games auto-start fullscreen, so
+          there is NO start-fullscreen button — but an EXIT-fullscreen
+          button is restored, visible only while fullscreen is active,
+          for every Captain game frame (Yacht, Tunnel, Cosmic, Cheese,
+          Captain 2). It calls the same exitGameFullscreen the games
+          already receive as a prop, covering both the native and the
+          fallback fullscreen paths. */}
+      {expanded && (() => {
+        const exitButton = (
+          <button type="button" className="captain-fullscreen-toggle captain-exit-fullscreen-toggle"
+            onClick={exitGameFullscreen}
+            aria-label={`Exit fullscreen — ${label}`}>
+            <span aria-hidden="true">✕</span><b>EXIT FULLSCREEN</b>
+          </button>
+        );
+        // In fallback fullscreen the button is portaled to <body> so no
+        // in-frame overlay (victory screens included) or stacking context
+        // can ever cover it. In native fullscreen it must stay inside the
+        // fullscreen element, so it renders in place there.
+        return fallbackFullscreen ? createPortal(exitButton, document.body) : exitButton;
+      })()}
+    </section>
+  );
+}
+
+function CaptainArcadeHub(){
+  const jumpTo = (selector) => {
+    // Buttons, not hash anchors: the hash router would misread a # fragment
+    // as a page route. scrollIntoView keeps the user on #captain.
+    const el = document.querySelector(selector);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  return (
+    <section className="captain-arcade-hub" aria-label="Captain's arcade">
+      <h2>THE CAPTAIN'S ARCADE</h2>
+      <p>Three adventures aboard the ROSIE I. Yacht Dash is a three-lane cargo run through four voyages, Ember Tunnel Drill is a five-world excavation with boss guardians, and Cosmic Odyssey is a maze mission against the galaxy's most wanted.</p>
+      <nav className="captain-arcade-jump" aria-label="Jump to a game">
+        <span>JUMP TO</span>
+        <button type="button" onClick={() => jumpTo(".captain-fs-yacht")}>
+          <strong>Yacht Dash</strong><small>Three-lane cargo run · 4 voyages</small>
         </button>
-      )}
+        <button type="button" onClick={() => jumpTo(".captain-fs-tunnel")}>
+          <strong>Ember Tunnel Drill</strong><small>Five worlds · boss fights</small>
+        </button>
+        <button type="button" onClick={() => jumpTo("#cosmic-odyssey-arcade")}>
+          <strong>Cosmic Odyssey</strong><small>Maze mission · 10 sectors</small>
+        </button>
+      </nav>
     </section>
   );
 }
 
 function CosmicOdysseyArcade(){
-  // The arcade is intentionally visible by default; it previously looked absent
-  // because it was buried beneath two games and also collapsed.
-  const [isOpen,setIsOpen]=useState(true);
+  // Always open on the page: Mitchell asked for the CLOSE COSMIC ODYSSEY /
+  // OPEN IN NEW TAB bar to be removed (2026-11-25), so there is no toggle.
   return (
     <section id="cosmic-odyssey-arcade" className="cosmic-odyssey-portal cosmic-odyssey-main-entry" aria-label="Captain Rosie Cosmic Odyssey arcade">
       <img className="cosmic-odyssey-entry-banner" src="/cosmic-odyssey/assets/cosmic-banner.webp"
         alt="Captain Rosie: Cosmic Odyssey - original starship arcade banner" loading="lazy" />
-      <div className="cosmic-odyssey-entry-info">
-        <div className="cosmic-odyssey-entry-actions">
-          <button type="button" className="cosmic-odyssey-portal-button"
-            onClick={()=>setIsOpen(open=>!open)} aria-expanded={isOpen}
-            aria-controls="cosmic-odyssey-embedded-game">
-            {isOpen?'CLOSE COSMIC ODYSSEY':'PLAY COSMIC ODYSSEY'}
-          </button>
-          <a className="cosmic-odyssey-window-link" href="/cosmic-odyssey/index.html"
-            target="_blank" rel="noopener noreferrer">OPEN IN NEW TAB</a>
+      <FullscreenGameFrame label="Cosmic Odyssey" variant="cosmic">
+        <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
+          <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
+            loading="lazy" allow="gamepad; fullscreen" allowFullScreen />
         </div>
-      </div>
-      {isOpen && (
-        <FullscreenGameFrame label="Cosmic Odyssey" variant="cosmic">
-          <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
-            <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
-              loading="lazy" allow="gamepad; fullscreen" allowFullScreen />
-          </div>
-        </FullscreenGameFrame>
-      )}
+      </FullscreenGameFrame>
     </section>
   );
 }
@@ -3941,7 +5015,9 @@ function App() {
           <>
             <CaptainArcadeBackdrop />
             <FullscreenGameFrame label="Captain Rosie Yacht Adventure" variant="yacht">
-              <CaptainRosieGame soundOn={soundOn} />
+              <CaptainGameBoundary>
+                <CaptainRosieGame soundOn={soundOn} />
+              </CaptainGameBoundary>
             </FullscreenGameFrame>
             <FullscreenGameFrame label="Ember Tunnel Drill" variant="tunnel">
               <EmberTunnelDrill soundOn={soundOn} />
@@ -3971,7 +5047,7 @@ function App() {
         )}
 
         {page !== "home" && <div className="royal-nav-shell" data-nav-family={navFamily}>
-          <button type="button" className="bottom-side-seal bottom-side-seal--home" aria-label="RosieVerse Home" onClick={() => navigateTo("home")}><RoyalNavArt name="home-simple" className="royal-seal-art" /></button>
+          <button type="button" className="bottom-side-seal bottom-side-seal--home" aria-label="RosieVerse Home" title="RosieVerse Home" onClick={() => navigateTo("home")}><RoyalNavArt name="home-simple" className="royal-seal-art" /></button>
           {navFamily === "resources" ?
           <nav className="bottom-nav resources-bottom-nav" aria-label="Rosie’s Resources">
             <button type="button" aria-label="Open Rosie’s Reminders" className={page === "reminders" ? "active" : ""} aria-current={page === "reminders" ? "page" : undefined} onClick={() => navigateTo("reminders")}><span className="nav-icon-wrap"><ResourceNavIcon type="reminders" /></span><small>Reminders</small></button>
@@ -3989,7 +5065,7 @@ function App() {
             <button type="button" className={`vault-nav-button ${page === "vault" ? "active" : ""}`} aria-label="Open Card Vault" title="Card Vault" aria-current={page === "vault" ? "page" : undefined} onClick={() => navigateTo("vault")}><span className="nav-icon-wrap"><RosieNavIcon type="vault" /></span><small>Vault</small></button>
             <button type="button" aria-label="Open Rosie’s Randomizers" className={page === "randomizers" ? "active" : ""} aria-current={page === "randomizers" ? "page" : undefined} onClick={() => navigateTo("randomizers")}><span className="nav-icon-wrap"><RosieNavIcon type="random" /></span><small>Random</small></button>
           </nav>}
-          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" aria-current={page === "resources" ? "page" : undefined} onClick={() => navigateTo("resources")}><RoyalNavArt name="resources-simple" className="royal-seal-art" /></button>
+          <button type="button" className="bottom-side-seal bottom-side-seal--tools" aria-label="Rosie’s Resources hub" title="Rosie’s Resources" onClick={() => navigateTo("resources")}><RoyalNavArt name="resources-simple" className="royal-seal-art" /></button>
           <button className={"nav-family-toggle" + (navFamily === "resources" ? " on-resources" : "")}
             type="button"
             aria-label={navFamily === "resources" ? "Switch navigation to RosieVerse games" : "Switch navigation to tools"}

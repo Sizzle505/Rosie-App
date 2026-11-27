@@ -151,6 +151,9 @@ function checkExclusions(pairs, participants) {
 export default async function handler(req, res) {
   if (req.method !== "POST") return respond(res, 405, { error: "Method not allowed." }, { Allow: "POST" });
   if (!unsafeAllowed(req, res)) return;
+  // TeddyVerse reaches this same service through its own domain (rewrite
+  // proxy): brand its emails Teddy and point guest links at TeddyVerse.
+  const brand = /teddyverse/i.test(String(req.headers["x-forwarded-host"] || req.headers.host || "")) ? "teddy" : "rosie";
   try {
     const input = readBody(req);
     switch (input.action) {
@@ -218,7 +221,7 @@ export default async function handler(req, res) {
             bad("That email is already registered. Use your personal invitation to edit your wishlist.", 409);
           return [...row.participants, person];
         }, true);
-        const mail = await deliverNotifications(next, "registration", { guestIds: [person.id] });
+        const mail = await deliverNotifications(next, "registration", { guestIds: [person.id], brand });
         return respond(res, 201, { ...guestSummary(next, person), guestToken: inviteToken(next, person.id),
           exchangeId: next.id, mail });
       }
@@ -299,7 +302,7 @@ export default async function handler(req, res) {
         });
         if (!changed.length) bad("The guest list changed. Refresh the exchange before drawing.", 409);
         const next = await findRow(row.id);
-        const mail = await deliverNotifications(next, "draw");
+        const mail = await deliverNotifications(next, "draw", { brand });
         return respond(res, 200, { exchange: view(next), invitations: invites(next), mail, mailStatus: await mailOverview(next) });
       }
       case "mailStatus": {
@@ -312,7 +315,7 @@ export default async function handler(req, res) {
         if (input.action === "sendMatches" && row.status !== "drawn")
           bad("Draw the names before notifying matches.", 409);
         const kind = input.action === "sendMatches" ? "draw" : "registration";
-        const mail = await deliverNotifications(row, kind);
+        const mail = await deliverNotifications(row, kind, { brand });
         return respond(res, 200, { exchange: view(row), invitations: invites(row),
           mail, mailStatus: await mailOverview(row) });
       }
@@ -323,7 +326,7 @@ export default async function handler(req, res) {
           bad("Guest not found.", 404);
         const kind = row.status === "drawn" ? "draw" : "registration";
         const mail = await deliverNotifications(row, kind, {
-          guestIds: [input.guestId], force: true
+          guestIds: [input.guestId], force: true, brand
         });
         return respond(res, 200, { exchange: view(row), invitations: invites(row),
           mail, mailStatus: await mailOverview(row) });

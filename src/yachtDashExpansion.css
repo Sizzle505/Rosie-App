@@ -6,7 +6,34 @@
   margin:11px auto 3px;
   max-width:320px;
 }
-.captain-game-page .captain-start-panel .yacht-chapter-picker button {
+/* Surfaced level select: the picker now lives above the course (not buried
+   inside the start overlay), so it spans the page and shows all four
+   voyages in one row on desktop. The button styling below applies to it. */
+.captain-game-page .yacht-level-select {
+  margin:12px auto 4px;
+  padding:12px 14px 14px;
+  text-align:center;
+  border:1px solid rgba(238,196,105,.4);
+  border-radius:16px;
+  background:linear-gradient(160deg,rgba(16,40,51,.92),rgba(20,21,30,.94));
+}
+.captain-game-page .yacht-level-select>span {
+  display:block;
+  color:#dfba79;
+  font:700 10px Georgia,serif;
+  letter-spacing:.18em;
+}
+.captain-game-page .yacht-level-select .yacht-chapter-picker {
+  max-width:720px;
+  margin:10px auto 0;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+@media (max-width:720px){
+  .captain-game-page .yacht-level-select .yacht-chapter-picker {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+.captain-game-page .yacht-chapter-picker button {
   margin:0;
   padding:6px 4px;
   min-height:35px;
@@ -28,12 +55,12 @@
 }
 .captain-game-page .yacht-chapter-picker button b{font-weight:750;text-align:center;}
 .captain-game-page .yacht-chapter-picker button small{font-size:7px;letter-spacing:.11em;}
-.captain-game-page .captain-start-panel .yacht-chapter-picker button.is-selected {
+.captain-game-page .yacht-chapter-picker button.is-selected {
   border-color:#ffe1a1;
   background:linear-gradient(180deg,#3b5362,#142c42);
   box-shadow:0 0 10px rgba(249,199,105,.18),inset 0 0 0 1px rgba(255,219,154,.18);
 }
-.captain-game-page .captain-start-panel .yacht-chapter-picker button:disabled {
+.captain-game-page .yacht-chapter-picker button:disabled {
   opacity:.48;
   background:linear-gradient(180deg,#25333e,#17212a);
   filter:grayscale(.8);
@@ -1666,4 +1693,699 @@
   .captain-game-page .sea-pickup.yacht-floating-pickup {transition:none!important;}
   .captain-game-page .sea-pickup.yacht-floating-pickup .pickup-art,
   .captain-game-page .sea-pickup.yacht-floating-pickup .yacht-golden-cheese-art {animation:none!important;}
+}
+/* Kuroi EPIC ARENA: the boss chapter renders a free-sailing arena over the
+   phased harbor paintings. Telegraphs are SVG in arena coordinates (charge
+   lines, bomb splash circles with a draining fuse ring, rocket lines), so
+   every dodge is a read, not a guess. The eruption is a canvas show. */
+.captain-game-page .yacht-boss-badge{
+  color:#ff8a70 !important;font-weight:800;letter-spacing:.12em;
+}
+.captain-game-page .yacht-arena{
+  position:absolute;inset:0;z-index:6;overflow:hidden;touch-action:none;
+  background:#0d2038;
+}
+.captain-game-page .yacht-arena-bg{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center 30%;pointer-events:none;user-select:none;
+}
+/* Touch-only FIXED JOYSTICK (arena chapter, Mitchell's spec after
+   thumb-testing the floating stick and follow-the-finger): a circular
+   base fixed in the arena's bottom-right, with the DASH pill raised
+   directly above it (the .has-touch-controls rule below) — stick
+   under the thumb, dash just above it. The cluster renders only for
+   touch players (the arena carries .has-touch-controls then); a
+   mouse/keyboard player never sees it. The base is pointer-events:
+   none — touches land on the arena and its handlers run the stick —
+   and the knob's position is written imperatively by the sampler. */
+.captain-game-page .yacht-arena-joystick{
+  position:absolute;right:16px;bottom:16px;z-index:26;
+  width:112px;height:112px;border-radius:50%;
+  /* Touch-tuning round: the base is a generated medallion asset
+     (ship's-wheel / compass-rose, brass + teal enamel) layered over
+     the old gradient, which remains as the fallback if the image
+     ever fails to load. The asset carries its own rim, so the CSS
+     border is gone. */
+  background:url('/yacht-dash/kuroi-arena/ui-joystick-base.webp') center/contain no-repeat,
+    radial-gradient(circle at 50% 42%,rgba(255,225,150,.16),rgba(10,28,52,.42) 72%);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  pointer-events:none;user-select:none;touch-action:none;
+}
+.captain-game-page .yacht-arena-joystick-knob{
+  position:absolute;left:50%;top:50%;width:48px;height:48px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  /* The matching generated hub medallion (brass dome, teal ring,
+     gold paw) over the old pill gradient as fallback. */
+  background:url('/yacht-dash/kuroi-arena/ui-joystick-knob.webp') center/contain no-repeat,
+    linear-gradient(180deg,#ffd166,#f0a13c);
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+  pointer-events:none;user-select:none;
+}
+/* With touch controls live, the DASH overlay pill leaves its
+   desktop-only hiding and sits directly above the joystick base:
+   bottom = 16 (base offset) + 112 (base) + 10 (gap). Specificity
+   (0,4,0) outranks both the base display:none (0,2,0) and the desktop
+   block's reveal (0,3,0), and .has-touch-controls never appears for
+   mouse/keyboard players, so the desktop layout is untouched. */
+.captain-game-page .yacht-arena.has-touch-controls .yacht-arena-dash-overlay{
+  /* Mitchell (2026-11-25): DASH sits opposite the joystick — bottom-left,
+     level with the stick — instead of stacked above it. */
+  display:flex;position:absolute;left:16px;right:auto;bottom:44px;z-index:26;
+}
+.captain-game-page .yacht-arena-tells{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;
+}
+/* Round 4: the laser rides in its own layer above the barge (z-5) and
+   the actors (z-7/8) — the dot dances ON the barge, and in the tells
+   layer the barge's hull painted over it, so the gag never read. */
+.captain-game-page .yacht-arena-laser{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10;
+}
+/* Round 3 (Mitchell): the bold tells are gone — no charge line at all,
+   and the weapon marks are whispers. A water-bomb gets a soft ripple
+   ring at its true radius plus its falling shadow (in the DOM layer);
+   a rocket gets a faint thin dashed thread. Kuroi himself — stopped
+   at the edge, facing Rosie, revving — is the charge tell. */
+.captain-game-page .yacht-arena-tells .arena-rocket-line{
+  stroke:rgba(255,150,120,.38);stroke-width:1.3;stroke-dasharray:2 6;
+}
+.captain-game-page .yacht-arena-tells .arena-bomb-ripple{
+  fill:rgba(190,225,255,.05);stroke:rgba(225,245,255,.38);stroke-width:1.1;
+  animation:yachtArenaRipple 1.5s ease-in-out infinite alternate;
+}
+@keyframes yachtArenaRipple{
+  from{opacity:.55}to{opacity:1}
+}
+.captain-game-page .yacht-arena-laser .arena-laser-beam{
+  stroke:rgba(255,70,55,.75);stroke-width:1.3;
+}
+.captain-game-page .yacht-arena-laser .arena-laser-dot-halo{
+  fill:rgba(255,60,40,.5);
+  animation:yachtLaserPulse .7s ease-in-out infinite alternate;
+}
+.captain-game-page .yacht-arena-laser .arena-laser-dot{
+  fill:#ff3524;stroke:rgba(255,220,200,.95);stroke-width:.4;
+  filter:drop-shadow(0 0 4px rgba(255,60,40,.95)) drop-shadow(0 0 10px rgba(255,60,40,.55));
+}
+@keyframes yachtLaserPulse{
+  from{opacity:.45}to{opacity:1}
+}
+.captain-game-page .yacht-arena-bomb-shadow{
+  position:absolute;z-index:8;width:11%;aspect-ratio:2.2;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(2,10,20,.55),rgba(2,10,20,0) 70%);
+  pointer-events:none;user-select:none;
+}
+.captain-game-page .yacht-arena-wake-cue{
+  position:absolute;z-index:6;width:27%;aspect-ratio:1;border-radius:50%;
+  border:2px solid rgba(235,250,255,.55);
+  transform:translate(-50%,-50%);pointer-events:none;user-select:none;
+  animation:yachtArenaWakeCue .85s ease-out infinite;
+}
+/* Animation round: a second, faster inner ripple while he revs —
+   the water around his hull churns, not just pulses. */
+.captain-game-page .yacht-arena-wake-cue::after{
+  content:"";position:absolute;inset:17%;border-radius:50%;
+  border:2px solid rgba(235,250,255,.38);pointer-events:none;
+  animation:yachtArenaWakeCue .55s ease-out -.27s infinite;
+}
+@keyframes yachtArenaWakeCue{
+  from{scale:.62;opacity:.75}to{scale:1.12;opacity:0}
+}
+.captain-game-page .yacht-arena-actor{
+  position:absolute;z-index:8;pointer-events:none;user-select:none;
+  transform:translate(-50%,-50%);
+  transition:left .05s linear,top .05s linear;
+  filter:drop-shadow(0 6px 10px rgba(0,10,25,.45));
+}
+.captain-game-page .yacht-arena-rosie{width:17%;
+  /* Animation round: the boats float — a gentle sway in the
+     independent `rotate` property (composes with the sprite norm's
+     independent scale/translate and with every transform keyframe;
+     never touches the anchor transform), plus the one-shot turn
+     settle that replays on each sprite swap (the imgs are keyed by
+     sprite in the renderer). The settle is listed second: while it
+     runs it wins the property, then the sway resumes. The mode
+     rules below replace this list wholesale while they apply. */
+  animation:yachtArenaSwayRosie 2.9s ease-in-out -1.2s infinite alternate,yachtArenaTurn .18s ease-out;
+}
+.captain-game-page .yacht-arena-rosie.is-invuln{
+  animation:yachtArenaInvuln .28s ease-in-out infinite alternate;
+}
+.captain-game-page .yacht-arena-kuroi{width:20%;z-index:7;
+  animation:yachtArenaSwayKuroi 3.7s ease-in-out -2.4s infinite alternate,yachtArenaTurn .18s ease-out;
+}
+.captain-game-page .yacht-arena-kuroi.is-dazed{
+  /* One finite track, matched to the 2.2s daze: an impact jolt,
+     then a rocking SETTLE whose swings decay to rest — no more
+     metronome rocking for the whole stun (and through the 6.5s
+     eruption he sits still in the wreck, as he should). Shorter
+     dazes (ram 1.2s, finale 0.9s) simply cut the track after its
+     loudest beats, which are the ones that read. */
+  animation:yachtArenaDazed 2.2s ease-out both;
+}
+.captain-game-page .yacht-arena-kuroi.is-winding{
+  animation:yachtArenaRev .18s linear infinite alternate;
+}
+@keyframes yachtArenaRev{
+  from{transform:translate(-50%,-50%) translate(0%,0%) rotate(-1.6deg)}
+  to{transform:translate(-50%,-50%) translate(var(--revx,0%),var(--revy,0%)) rotate(1.6deg) translateY(.6%)}
+}
+.captain-game-page .yacht-arena-kuroi.is-winding.is-flipped{
+  animation-name:yachtArenaRevFlip;
+}
+@keyframes yachtArenaRevFlip{
+  from{transform:translate(-50%,-50%) scaleX(-1) translate(0%,0%) rotate(-1.6deg)}
+  to{transform:translate(-50%,-50%) scaleX(-1) translate(var(--revx,0%),var(--revy,0%)) rotate(1.6deg) translateY(.6%)}
+}
+@keyframes yachtArenaInvuln{
+  from{opacity:.45}to{opacity:.95}
+}
+/* The dazed settle: jolt, then decaying rocks to rest. Rotate and
+   anchor translate only — the round-9 size invariant forbids scale
+   in the actor keyframes, and the norm correction rides in the
+   independent properties, untouched by this track. */
+@keyframes yachtArenaDazed{
+  0%{transform:translate(-50%,-50%) rotate(0deg)}
+  6%{transform:translate(-50%,-50%) rotate(-9deg)}
+  13%{transform:translate(-50%,-50%) rotate(6deg)}
+  22%{transform:translate(-50%,-50%) rotate(-4.5deg)}
+  34%{transform:translate(-50%,-50%) rotate(3deg)}
+  48%{transform:translate(-50%,-50%) rotate(-2deg)}
+  64%{transform:translate(-50%,-50%) rotate(1.1deg)}
+  80%{transform:translate(-50%,-50%) rotate(-.5deg)}
+  100%{transform:translate(-50%,-50%) rotate(0deg)}
+}
+.captain-game-page .yacht-arena-furniture{
+  position:absolute;z-index:5;width:17%;pointer-events:none;user-select:none;
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(0 4px 8px rgba(0,10,25,.5));
+}
+/* Animation round: the sway and the turn settle, referenced by the
+   actor rules above. Both animate ONLY the independent `rotate`
+   property — deliberately outside `transform`, so they compose with
+   the sprite norm (independent scale/translate) and with the rev /
+   dazed transform keyframes instead of overriding them, and the
+   side sprite's mirror (an inline scaleX(-1) in `transform`) is
+   never dropped. Different periods and negative delays keep the two
+   boats out of sync — they float on the same water, not on a rail. */
+@keyframes yachtArenaSwayRosie{
+  from{rotate:-1.15deg}to{rotate:1.15deg}
+}
+@keyframes yachtArenaSwayKuroi{
+  from{rotate:.9deg}to{rotate:-.9deg}
+}
+@keyframes yachtArenaTurn{
+  from{rotate:3.5deg}to{rotate:0deg}
+}
+/* Round 5 (Mitchell): the barge belongs IN the water in front of the
+   temple, not in the air. The machine anchor (ARENA.bargeY) is now the
+   hull's waterline point, so the sprite hangs from its ~90% row (the
+   wide hull's bottom; the keel tip dips just below the line), and the
+   sprite is 25% wide (33.3 units tall at the desktop 4:3 box): hull on
+   the waterline zone, superstructure against the temple's base, top
+   edge inside the frame. On entry it is towed in along the water from
+   the left — the keyframes carry the full -90% composition, like the
+   rev shudders do, so the anchor survives the animation. */
+.captain-game-page .yacht-arena-barge{
+  position:absolute;z-index:5;width:25%;pointer-events:none;user-select:none;
+  transform:translate(-50%,-90%);
+  filter:drop-shadow(0 6px 12px rgba(0,10,25,.55));
+  animation:yachtBargeTowIn 1.5s ease-out both;
+}
+.captain-game-page .yacht-arena-left-audience{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 49.1%;
+  z-index:6;pointer-events:none;user-select:none;
+  clip-path:polygon(0 0,31% 0,31% 39%,27% 43%,25% 50%,0 55%);
+}
+@keyframes yachtBargeTowIn{
+  from{transform:translate(-320%,-90%)}
+  to{transform:translate(-50%,-90%)}
+}
+.captain-game-page .yacht-arena-bomb{
+  position:absolute;z-index:9;width:8.5%;pointer-events:none;user-select:none;
+  transform:translate(-50%,-50%);
+  transition:left .05s linear,top .05s linear;
+  animation:yachtArenaBombDrop .3s ease-out;
+}
+.captain-game-page .yacht-arena-bomb.is-boom{
+  animation:yachtArenaBombBoom .38s ease-out both;
+}
+@keyframes yachtArenaBombDrop{
+  from{scale:1.7;opacity:.4}to{scale:1;opacity:1}
+}
+@keyframes yachtArenaBombBoom{
+  0%{scale:1;opacity:1}
+  55%{scale:2.6;opacity:.95}
+  100%{scale:3.4;opacity:0}
+}
+.captain-game-page .yacht-arena-rocket{
+  position:absolute;z-index:9;width:11%;pointer-events:none;user-select:none;
+}
+.captain-game-page .yacht-arena-crashfx{
+  position:absolute;z-index:12;width:26%;pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+.captain-game-page .yacht-arena-crashfx img{
+  position:absolute;left:50%;top:50%;width:100%;
+  transform:translate(-50%,-50%);
+}
+.captain-game-page .yacht-arena-crashfx .yacht-kuroi-impact-foam{
+  animation:yachtKuroiSplash 1.5s ease-out both;
+}
+/* Animation round (the two-Kurois fix): the crash cluster's recoil
+   rule is GONE with its img — that painting is byte-identical to the
+   dazed actor sprite, and resolveCrash parks the dazed actor at
+   this cluster's exact anchor, so the pair read as two Kurois at
+   every crash. The lane chapters' collision overlay keeps its own
+   recoil (there is no actor element there to double). */
+/* Round 5: code-drawn weapon bursts (bomb detonations, rocket
+   landings) — a flash disc, an expanding shockwave ring and eight
+   spray droplets flown along per-droplet --a/--d custom properties.
+   No art: pure CSS on a short clock owned by the renderer's FX list. */
+.captain-game-page .yacht-arena-boom{
+  position:absolute;z-index:14;aspect-ratio:1;pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+.captain-game-page .yacht-arena-boom.is-bomb{width:24%;}
+.captain-game-page .yacht-arena-boom.is-rocket{width:14%;}
+/* Animation round: two more feeds into the same burst system — the
+   crash starburst (warm gold, at the wreck point, the impact beat
+   that replaces the removed recoil figure) and Rosie's dash wake
+   (a pale foam streak, stretched and rotated along her facing by
+   the renderer). */
+.captain-game-page .yacht-arena-boom.is-crash{width:30%;}
+.captain-game-page .yacht-arena-boom.is-crash .boom-ring{
+  border-color:rgba(255,214,140,.9);
+}
+.captain-game-page .yacht-arena-boom.is-crash i{background:#ffe1ae;}
+.captain-game-page .yacht-arena-boom.is-dash{width:23%;aspect-ratio:2.2;}
+.captain-game-page .yacht-arena-boom.is-dash .boom-ring{
+  border-color:rgba(215,242,255,.75);
+}
+.captain-game-page .yacht-arena-boom.is-dash .boom-flash{
+  background:radial-gradient(circle,rgba(240,252,255,.9),rgba(170,220,255,.45) 55%,rgba(170,220,255,0) 72%);
+}
+.captain-game-page .yacht-arena-boom .boom-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid rgba(205,238,255,.85);
+  animation:yachtBoomRing .45s ease-out both;
+}
+.captain-game-page .yacht-arena-boom.is-rocket .boom-ring{
+  border-color:rgba(255,205,150,.9);
+}
+.captain-game-page .yacht-arena-boom .boom-flash{
+  position:absolute;inset:16%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,244,205,.95),rgba(255,170,70,.55) 55%,rgba(255,170,70,0) 72%);
+  animation:yachtBoomFlash .3s ease-out both;
+}
+.captain-game-page .yacht-arena-boom i{
+  position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;
+  background:#dff2ff;
+  animation:yachtBoomSpray .45s ease-out both;
+}
+.captain-game-page .yacht-arena-boom.is-rocket i{background:#ffd9a8;}
+@keyframes yachtBoomRing{
+  from{transform:scale(.25);opacity:.95}
+  to{transform:scale(1.15);opacity:0}
+}
+@keyframes yachtBoomFlash{
+  from{opacity:1;transform:scale(.6)}
+  to{opacity:0;transform:scale(1.25)}
+}
+@keyframes yachtBoomSpray{
+  from{transform:rotate(var(--a)) translateX(0) scale(1);opacity:1}
+  to{transform:rotate(var(--a)) translateX(var(--d)) scale(.35);opacity:0}
+}
+.captain-game-page .yacht-arena-fireworks{
+  position:absolute;inset:0;width:100%;height:100%;z-index:30;pointer-events:none;
+}
+.captain-game-page .yacht-arena-barge-callout{
+  position:absolute;top:9%;left:50%;transform:translateX(-50%);z-index:31;
+  color:#ffe09b;font-size:clamp(20px,3.4vw,32px);font-weight:900;letter-spacing:.22em;
+  text-shadow:0 0 18px rgba(255,180,60,.95),0 2px 0 rgba(60,10,0,.8);
+  animation:yachtBargeCallout 2.4s ease-out both;pointer-events:none;
+  white-space:nowrap;
+}
+@keyframes yachtBargeCallout{
+  0%{opacity:0;transform:translateX(-50%) translateY(6px)}
+  12%{opacity:1;transform:translateX(-50%) translateY(0)}
+  78%{opacity:1}
+  100%{opacity:0;transform:translateX(-50%) translateY(0)}
+}
+/* Round 6: the Captain game error boundary's fallback. If anything in
+   the game ever throws, the player gets this panel — readable, on the
+   game's own palette, with a working restart — instead of the whole
+   app unmounting onto the near-black page background. */
+.captain-game-page .yacht-game-error-panel{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  margin:18px auto;padding:28px 22px;max-width:520px;text-align:center;
+  border:1px solid rgba(246,206,112,.65);border-radius:18px;
+  background:linear-gradient(180deg,rgba(15,63,83,.96),rgba(7,32,49,.98));
+  color:#ffe9bb;box-shadow:0 18px 44px rgba(0,0,0,.45);
+}
+.captain-game-page .yacht-game-error-panel strong{
+  font-size:19px;letter-spacing:.14em;color:#ffd166;
+}
+.captain-game-page .yacht-game-error-panel p{margin:0;font-size:14px;line-height:1.55;}
+.captain-game-page .yacht-game-error-panel button{
+  padding:11px 22px;border-radius:999px;cursor:pointer;
+  border:1px solid #fce0a0;color:#26313c;
+  background:linear-gradient(#fff1ac,#d99d3e 75%,#9d632b);
+  font-weight:800;letter-spacing:.1em;font-size:13px;
+}
+/* Round 8 (Defect 1): the boundary's self-report — the caught error's
+   name, message and first stack lines rendered as small print INSIDE
+   the panel, readable on the player's own screen with no DevTools.
+   Deliberately plain and selectable so it can be read off or copied. */
+.captain-game-page .yacht-game-error-panel .captain-boundary-error{
+  margin:4px 0 0;padding:10px 12px;max-width:100%;
+  overflow:auto;max-height:180px;text-align:left;white-space:pre-wrap;
+  word-break:break-word;user-select:text;cursor:text;
+  font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:10.5px;line-height:1.5;letter-spacing:0;
+  color:#ffd9a8;background:rgba(0,0,0,.38);
+  border:1px solid rgba(246,206,112,.35);border-radius:10px;
+}
+.captain-game-page .yacht-arena-hint{
+  margin:0;font-size:12px;font-weight:700;letter-spacing:.08em;color:#ffe09b;
+}
+.captain-game-page .yacht-arena-deck{
+  display:flex;align-items:center;justify-content:flex-end;gap:14px;
+}
+/* The ONE dash control (touch-tuning round): a generated brass
+   plaque asset — the word DASH lettered in the artwork with foam
+   wake curls, no keyboard reference. The button itself is a
+   transparent frame around the artwork; the deck DASH button that
+   duplicated it is removed, so this class now styles only the
+   in-arena overlay. */
+.captain-game-page .yacht-arena-dash-button{
+  display:flex;align-items:center;justify-content:center;
+  width:132px;padding:0;border:none;background:none;cursor:pointer;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.35));
+}
+.captain-game-page .yacht-arena-dash-button .yacht-arena-dash-art{
+  display:block;width:100%;height:auto;pointer-events:none;user-select:none;
+}
+.captain-game-page .yacht-arena-dash-button:disabled{opacity:.45;cursor:default;filter:none;}
+/* The desktop DASH overlay stays hidden until the desktop block at the
+   end of this file reveals it. (Round 3 removed the helm-hint overlay
+   and the banner message line outright — elements and rules alike.) */
+.captain-game-page .yacht-arena-dash-overlay{display:none;}
+@media(prefers-reduced-motion:reduce){
+  .captain-game-page .yacht-arena-tells .arena-bomb-ripple,
+  .captain-game-page .yacht-arena-laser .arena-laser-dot-halo,
+  .captain-game-page .yacht-arena-rosie.is-invuln,
+  .captain-game-page .yacht-arena-kuroi.is-dazed,
+  .captain-game-page .yacht-arena-kuroi.is-winding,
+  .captain-game-page .yacht-arena-rosie,
+  .captain-game-page .yacht-arena-kuroi,
+  .captain-game-page .yacht-arena-wake-cue,
+  .captain-game-page .yacht-arena-wake-cue::after,
+  .captain-game-page .yacht-arena-bomb,
+  .captain-game-page .yacht-arena-barge,
+  .captain-game-page .yacht-arena-boom .boom-ring,
+  .captain-game-page .yacht-arena-boom .boom-flash,
+  .captain-game-page .yacht-arena-boom i,
+  .captain-game-page .yacht-arena-barge-callout{animation:none!important;}
+  .captain-game-page .yacht-arena-actor{transition:none;}
+  .captain-game-page .yacht-arena-bomb{transition:none;}
+}
+
+/* Desktop arena presentation (Mitchell, 2026-11-24): on wide viewports the
+   boss chapter's shell becomes a viewport-tall stack — the voyage progress
+   bar (CRASH x/9) is the ONLY element above the arena, and the arena fills
+   the remaining viewport height under the app topbar (64px, as the shell
+   defines it in styles.css). The game sign, the ARENA HELM strip and the
+   command deck leave the flow; their content moves into the arena: the
+   event message joins the course banner pill, the helm instructions sit
+   bottom-left, and DASH sits bottom-right with the deck button's behavior.
+   Phone layout is untouched: every rule is inside this desktop query and
+   scoped to the boss chapter's page class.
+
+   Round 2 (same day, after Mitchell played round 1 and a live check):
+   - The three flow hides now carry !important. Round 1's plain
+     display:none on the ARENA HELM strip never applied: the strip also
+     carries the shared .yacht-steering-options class, whose base rule in
+     this file sets display:flex!important, and an !important declaration
+     beats a non-!important one regardless of specificity — so the strip
+     rendered in-flow above the arena next to its own overlay replacement.
+     The sign and deck hides are hardened the same way (the sign's display
+     is set by a dozen rules across six stylesheets; the banner pill is
+     the single source of the chapter status at this breakpoint).
+   - The course is aspect-capped at 3:4 and centered. Round 1 stretched
+     the portrait settings (941x1672, aspect 0.563) across a ~1.46-aspect
+     box, so cover showed only ~35% of the painting — first the scenery
+     (boats "in mid air"), then, at the 85% anchor, ~95% generic water:
+     a zoom problem, not just a position problem. At 3:4, cover shows
+     0.563/0.75 = ~75% of the painting's height, and the page's own
+     festival-harbor backdrop fills the side margins. The anchor moves
+     85% -> 80%: the visible band is image 20.0–95.0%, so the top ~37%
+     of the frame is the scenic band (palace base, pavilion, stands,
+     lantern ring — the arena reads as an arena) and the box center,
+     where Rosie starts and mostly plays, maps to image ~57.5%, open
+     water below the settings' ~48–52% waterline.
+   - Playing-view composition: the shell gets scroll-margin-top:64px so
+     a scroll into view stops with the shell's top edge fully below the
+     sticky topbar (never overlapped), and on fight start main.jsx
+     scrolls the shell into exactly that position — topbar, progress
+     bar, then the arena filling the rest of the viewport. The course
+     carries its own scroll-margin (topbar + shell padding + progress
+     row = 64 + 36) in case it is the scroll target instead.
+
+   Round 3 (same day, after Mitchell played round 2 and directed a
+   declutter): the banner pill is gone for the boss chapter (it was the
+   "single source of the chapter status" above — Mitchell removed the
+   status text itself, so the pill and its desktop message line are
+   deleted, elements and rules), the helm-hint overlay is deleted, and
+   the only in-arena bottom element is the DASH pill. The window also
+   changes shape at Mitchell's direction: 25% SHORTER for more width —
+   the course is now height:75% of the shell at aspect 1/1, centered in
+   the leftover space by auto margins (the progress bar stays pinned
+   above it). Cover at 1.0 shows 0.563/1.0 = ~56% of the painting's
+   height (was ~75% at 3:4): of the ~19 points of vertical loss,
+   Mitchell's split takes ~80% off the bottom and ~20% off the top —
+   the anchor moves 80% -> 54%, putting the visible band at image
+   23.6–79.9% (top loss 3.6 points, bottom loss 15.1). The scenic top
+   stays in frame and the box center maps to image ~51.7%, at the foot
+   of the settings' waterline band — open water for Rosie's play zone.
+   Sprite clearances were re-derived for the wider box in the machine
+   (ARENA.marginY 10.5 -> 14; see yachtArenaBoss.js).
+
+   Round 5 (same day, after Mitchell played round 3/4): "the whole
+   reason we limited height was to allow for more width — the game
+   view should not be smaller, simply wider." Round 3 misread that and
+   shrank the view (square at 75% height). The correction: the arena
+   keeps its ROUND-2 on-screen AREA (~658x875 = ~576k px^2 at 1080p)
+   at a wider 4:3 aspect — height 66% of the shell's content height
+   (656px at 1080p, 75% of round 2's height) by 875px wide (4/3 of
+   round 2's width). The shell itself is pulled in to hug the arena:
+   its width is the course width plus its own padding and border —
+   (100dvh - 86px) x 0.88 + 24px, since the course is 66% of the
+   shell's content height (100dvh - 64px shell, 22px of padding) at
+   4:3 — so the panel ends at the arena's edges instead of flanking
+   it with ~350px of dead teal on each side, and the progress bar
+   above spans exactly the arena's width. (Fullscreen keeps its own
+   width:100%!important shell rules; they win over this width.)
+   The background re-anchors for the wider box: cover at 4:3 shows
+   0.563/1.333 = ~42.2% of the painting's height; anchor 73% puts the
+   band at image 42.2–84.4% — the frame's top is the waterline zone
+   (temple base, lantern ring, festival boats at the very top edge),
+   the box center maps to image ~63.3% (open water), and Kuroi's top
+   patrol row now sits IN the water instead of levitating over the
+   temple (derivation in the machine: ARENA.marginY / ARENA.bargeY).
+
+   Round 7 (same day, Mitchell after seeing composed proofs of the
+   frame): the FINAL frame. His size rule, in his words: the
+   painting's full width is visible, the window's height fills the
+   window height like round 2, not zoomed in, and most of the missing
+   height comes off the bottom; shown bands at image 20-67% and
+   35-82%, he said "split the difference", then corrected the split
+   by 1.5 points: band = image 26-73%. So round 5's same-area
+   compromise is superseded: the course goes back to the ROUND-2
+   height rule (flex:1 1 auto — it fills the shell's available
+   height: shell content 100dvh - 88px, minus the 25px progress row
+   = 100dvh - 113px, ~875px at the desktop viewport measured in
+   rounds 2/5/6) and the painting renders at FULL WIDTH under cover:
+   the visible fraction is 47% of its height, so the box aspect is
+   the painting's 941/1672 divided by 0.47 = 941/786 (~1.197), and
+   object-position 49.1% (26/53) puts the band at image 26-73% —
+   the temple's base at the frame's top edge, the lantern ring at
+   box center (image ~49.5%), open water below. The shell hug is
+   re-derived for the taller course: width = course width + the
+   shell's own 24px of padding and border, course width =
+   (100dvh - 113px) x 941/786. Sprite clearances, the barge anchor
+   and the laser lift were re-derived from measured sprite ALPHA
+   BOUNDS at this aspect and band in the machine (ARENA.marginY
+   14 -> 20, ARENA.bargeY 31 -> 51, ARENA.laserDotLift 10 -> 9). */
+@media (min-width:900px) and (min-height:650px) and (orientation:landscape) {
+  .captain-game-page.captain-arena-chapter .yacht-game-shell{
+    box-sizing:border-box;
+    display:flex;flex-direction:column;
+    height:calc(100dvh - 64px);
+    width:min(calc((100dvh - 113px) * 1.1972 + 24px),100%);
+    margin-inline:auto;
+    scroll-margin-top:64px;
+  }
+  .captain-game-page.captain-arena-chapter .yacht-game-sign{display:none!important;}
+  .captain-game-page.captain-arena-chapter .yacht-arena-controls{display:none!important;}
+  .captain-game-page.captain-arena-chapter .yacht-voyage-progress{flex:0 0 auto;}
+  .captain-game-page.captain-arena-chapter .yacht-course{
+    flex:1 1 auto;height:auto;min-height:0;
+    aspect-ratio:941 / 786;align-self:center;max-width:100%;
+    scroll-margin-top:calc(64px + 36px);
+  }
+  .captain-game-page.captain-arena-chapter .yacht-arena-deck{display:none!important;}
+  .captain-game-page.captain-arena-chapter .yacht-arena-bg{
+    object-position:center 49.1%;
+  }
+  .captain-game-page.captain-arena-chapter .yacht-arena-dash-overlay{
+    display:flex;position:absolute;right:12px;bottom:12px;z-index:20;
+  }
+}
+
+/* Rounds 8-9 (Item A / Item 1): fullscreen keeps the PAGE VIEW's
+   arena frame — the course keeps the approved aspect 941/786 and
+   band (object-position 49.1%) via the same flex-height +
+   aspect-ratio mechanism as the page view, the shell shrink-wraps
+   the arena, and the page grid's first column — the side panel
+   carrying the hero, route strip and HUD — absorbs ALL the leftover
+   horizontal space, as Mitchell requested.
+
+   Round 10: rounds 8 AND 9 both still collapsed live to the same
+   ~62x724px strip, and the round-9 post-mortem ("definite width
+   formula") was wrong about why. Full cascade audit of the BUILT
+   CSS (11,328 rules): the fullscreen element is the frame section
+   (main.jsx requests fullscreen on it); the chain is frame >
+   .captain-game-page.captain-arena-chapter > .yacht-game-shell >
+   .yacht-course. Four accumulated layers set the arena chain's
+   fullscreen geometry, all !important at specificity (0,3,0) except
+   the rounds 8/9 rules: cosmic-odyssey-portal.css (grid + shell
+   capped at 630px + course stretched, aspect-ratio:auto), this
+   file's 2026-11-20 block (shell width:100%, height:100%,
+   padding:9px, justify-self:stretch), this file's fixed-inset
+   block (page height:100%), and the rounds 8/9 block ((0,4,0) page
+   columns, (0,5,0) shell/course). The rounds 8/9 declarations WON
+   their cascade — the grid columns really were
+   minmax(300px,1fr) auto (the checker's wide side panel proves it)
+   and justify-self:end really applied (the strip sat at the right
+   edge). The shell width defeated ITSELF: round 9's
+   min(calc(...),100%) contains a PERCENTAGE, and the shell is a
+   grid item in an `auto` track. A percentage width on a grid item
+   is cyclic against an auto track, so the track is sized by the
+   item's MAX-CONTENT contribution instead — ~62px, because the
+   course's only child (the arena) is absolutely positioned and
+   contributes no intrinsic width (round 8's width:auto collapsed
+   to the same max-content, hence the identical measurement). The
+   percentage then resolves against the collapsed 62px grid area:
+   min(~1181px, 62px) = 62px. Height came from the 2026-11-20
+   block's height:100% of the full-height grid area — a tall, thin
+   strip. The page view never hit this because there the shell is
+   not a grid item and 100% resolves against a definite content
+   box.
+
+   The fix below therefore wins BY CONSTRUCTION, not by another
+   patch layer: ONE block, scoped to the arena chapter, at
+   specificity (0,4,0)/(0,5,0) — strictly above every older
+   (0,3,0) layer — that re-declares EVERY property those layers
+   set on the page, the side-panel placement, the shell and the
+   course, so no contested property is left to an older rule; and
+   the shell width contains NO percentage at all: the page-view
+   formula capped by a viewport-width term (100vw - 354px =
+   page padding 36 + grid gap 18 + the side panel's 300px
+   minimum), which only binds on small landscape screens. Both
+   terms are viewport-derived and definite, so the auto track
+   sizes to the width exactly. Vertical budget matches the page
+   view to the pixel: page padding 50+14 and shell padding 11+11
+   (the older 9px is overridden) reproduce the shell's
+   calc(100dvh - 64px) height through the grid area, and the
+   course's 8px top margin offsets the fullscreen progress row's
+   pinned 19px (vs the page view's ~27px row) so the course box
+   is the same (100dvh - 113px) x 941/786 box as the page view. */
+@media (min-width:900px) and (min-height:650px) and (orientation:landscape) {
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen)>.captain-game-page.captain-arena-chapter{
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-columns:minmax(300px,1fr) auto!important;
+    grid-template-rows:auto auto minmax(0,1fr)!important;
+    gap:10px 18px!important;
+    width:100%!important;max-width:none!important;
+    height:100%!important;min-height:0!important;max-height:100%!important;
+    padding:50px 18px 14px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    align-content:stretch!important;align-items:start!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-game-page.captain-arena-chapter .captain-hero{
+    grid-column:1!important;grid-row:1!important;
+    width:100%!important;max-width:none!important;margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-game-page.captain-arena-chapter .captain-route-strip{
+    grid-column:1!important;grid-row:2!important;
+    width:100%!important;margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-game-page.captain-arena-chapter .captain-hud{
+    grid-column:1!important;grid-row:3!important;
+    width:100%!important;max-width:none!important;margin:0!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-game-page.captain-arena-chapter .yacht-game-shell{
+    box-sizing:border-box!important;
+    grid-column:2!important;grid-row:1/4!important;
+    display:flex!important;flex-direction:column!important;
+    justify-self:end!important;align-self:stretch!important;
+    width:min(calc((100dvh - 113px) * 1.1972 + 24px), calc(100vw - 354px))!important;
+    min-width:0!important;max-width:none!important;
+    height:calc(100dvh - 64px)!important;min-height:0!important;max-height:none!important;
+    margin:0!important;padding:11px!important;
+    overflow:hidden!important;
+  }
+  .captain-fs-yacht:is(:fullscreen,.is-fallback-fullscreen) .captain-game-page.captain-arena-chapter .yacht-course{
+    box-sizing:border-box!important;
+    flex:0 0 auto!important;
+    width:auto!important;height:calc(100dvh - 113px)!important;
+    min-height:0!important;max-height:none!important;
+    aspect-ratio:941 / 786!important;
+    align-self:center!important;
+    max-width:100%!important;
+    margin:8px 0 0!important;
+    overflow:hidden!important;
+  }
+}
+/* Phone fullscreen — MITCHELL'S RULE (2026-11-24, mobile-scope
+   round): the resizing that fits the tall vertical aspect into the
+   view (aspect caps, height limits, band cropping, viewport-derived
+   shell widths) is DESKTOP-only work, for this game and every game.
+   Mobile keeps its large vertically oriented aspect ratio. Round 8
+   broke that here: a phone-fullscreen rule forced the desktop
+   landscape aspect (941/786) on the arena course, overriding the
+   original iPhone cabinet above (max-width:720px, pointer:coarse),
+   where the course flexes to fill the cabinet's full height — a
+   tall portrait arena on a portrait phone. That rule is REMOVED;
+   phone fullscreen for the arena chapter is again governed by the
+   shared iPhone cabinet, exactly like every other Yacht chapter.
+   Do not re-add a phone-scoped arena aspect: the desktop frame
+   lives only inside the (min-width:900px) landscape query. */
+
+/* Kuroi finale cinematic (Mitchell, 2026-11-25): after the full
+   fireworks eruption, the cohesive finale video plays automatically
+   and fills the screen — the overlay is viewport-fixed at the same
+   top layer as the victory overlay, black behind the portrait film,
+   and the video itself is contained whole (never cropped). It is
+   non-interactive by design: no controls, no button to press; its
+   end hands off to the victory art. */
+.yacht-finale-video-overlay {
+  position:fixed!important;inset:0!important;
+  z-index:2147483646!important;
+  display:grid;place-items:center;
+  width:100vw!important;height:100dvh!important;
+  margin:0!important;padding:0!important;
+  background:#000;
+  overflow:hidden!important;
+  pointer-events:auto;
+}
+.yacht-finale-video {
+  display:block;
+  width:100%!important;height:100%!important;
+  max-width:100vw!important;max-height:100dvh!important;
+  object-fit:contain!important;
+  background:#000;
 }

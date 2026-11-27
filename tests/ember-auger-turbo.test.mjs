@@ -71,10 +71,10 @@ test("approved Rosie poses and exact mechanical source files stay registered",()
   "wall-turn-neutral.webp","wall-turn-up.webp","wall-turn-down.webp"
  ])assert.ok(jsx.includes(name),name);
  assert.ok(painter.includes("c.rect(-168,-125,236,252)"),"Only baked nose area may be excluded");
- assert.ok(painter.includes("c.translate(DRILL_ANCHOR,s.y);c.rotate(s.pitch)"));
+ assert.ok(painter.includes("c.translate(DRILL_ANCHOR,s.y);c.scale(horizontalCorrection,1);c.rotate(s.pitch)"));
  const excavation=readFileSync(new URL("../src/emberExcavationFX.js",import.meta.url),"utf8");
  assert.ok(excavation.includes("drillTipPosition(run)"),"Scraping/sparks use the exact shifted tip registration");
- assert.ok(jsx.includes('if(event.type==="shatter"&&s.boostTime>0)s.tipBurstAt=s.time'));
+ assert.ok(jsx.includes('if((event.type==="shatter"||event.type==="shutter-shatter")&&s.boostTime>0)s.tipBurstAt=s.time'));
  assert.ok(jsx.includes("s.tipBurstAt=s.time;"));
 });
 test("previous ten-frame atlas remains API compatible, but is not overlaid",()=>{

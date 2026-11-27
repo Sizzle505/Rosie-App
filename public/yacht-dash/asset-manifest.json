@@ -1,6 +1,6 @@
 {
   "name": "Yacht Dash Expansion - Approved Art",
-  "date": "2026-11-19",
+  "date": "2026-11-24",
   "assetBase": "/yacht-dash/",
   "stages": {
     "sakura": {
@@ -321,6 +321,14 @@
     },
     {
       "type": "obstacles",
+      "id": "fireworks-barge",
+      "file": "/yacht-dash/obstacles/fireworks-barge.webp",
+      "source": "fireworks-barge-v1.png (generated 2026-11-24, gpt-image-2.5-sunburst)",
+      "size": 190300,
+      "sha256": "9d08be54ffe015e043e5ab0929c11320afe49c826f7b3f8a002a4de8770782f5"
+    },
+    {
+      "type": "obstacles",
       "id": "fan-raft",
       "file": "/yacht-dash/obstacles/fan-raft.webp",
       "source": "moonlit_sakura_fan_raft.png",
@@ -350,6 +358,214 @@
       "source": "moonlight_regatta_golden_sakura_sprint.png",
       "size": 113406,
       "sha256": "fe55947cf60e536251684595898302b61407f1484f0730bbcff11bfe43034f12"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/kuroi-charge-down",
+      "file": "/yacht-dash/kuroi-arena/kuroi-charge-down.webp",
+      "source": "public/yacht-dash/kuroi/kuroi-charge.webp (copy)",
+      "size": 169366,
+      "sha256": "fe2c5085927181b4e6d04742d154b36e22b154ba49f8a06a54c3f997425315ef"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/kuroi-charge-side",
+      "file": "/yacht-dash/kuroi-arena/kuroi-charge-side.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/kuroi-charge-side.webp",
+      "size": 190056,
+      "sha256": "7a7e53509cfc2ab8a968c539374cb238c67416ca88578c0b10cea3b716c78030"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/kuroi-charge-up",
+      "file": "/yacht-dash/kuroi-arena/kuroi-charge-up.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/kuroi-charge-up.webp",
+      "size": 213210,
+      "sha256": "c1d87c177dc89c153ddc3dc16298226a84e2819eedefcff47cc73a805a494f13"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/kuroi-dazed",
+      "file": "/yacht-dash/kuroi-arena/kuroi-dazed.webp",
+      "source": "public/yacht-dash/kuroi/kuroi-recoil.webp (copy)",
+      "size": 209474,
+      "sha256": "240920162be100916bbaefe1224dd7df1a6cac8ce5bd71b4cff98490bca989d5"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/kuroi-firing",
+      "file": "/yacht-dash/kuroi-arena/kuroi-firing.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/kuroi-firing.webp",
+      "size": 162352,
+      "sha256": "032edc31b30d9d3c7880362832d22711759bc0cb59cc848dcc4a53936f1d93c2"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-braced",
+      "file": "/yacht-dash/kuroi-arena/rosie-braced.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-braced.webp",
+      "size": 185042,
+      "sha256": "f2db60f517e2eda0326c2b348efc93c4d51072e890a9aa34f31ced450c527203"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-dash",
+      "file": "/yacht-dash/kuroi-arena/rosie-dash.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-dash.webp",
+      "size": 198056,
+      "sha256": "5b4c8ffcf39c328c39e01d28c996750bb9c8249db65b647a01564dd738ab0989"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-ship-down",
+      "file": "/yacht-dash/kuroi-arena/rosie-ship-down.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-ship-down.webp",
+      "size": 171482,
+      "sha256": "9958a7deca2f42c320393a57b69f80946a7b02029314456b50ffe87a1b9b593d"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-ship-left",
+      "file": "/yacht-dash/kuroi-arena/rosie-ship-left.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-ship-left.webp",
+      "size": 184064,
+      "sha256": "eaa91e0ec6f68ad2fa436d9eea0ca7e73dbe326c7b52518e0469f68fc7d0e792"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-ship-right",
+      "file": "/yacht-dash/kuroi-arena/rosie-ship-right.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-ship-right.webp",
+      "size": 172206,
+      "sha256": "78c8e0421d9754b213f9e072225e725b50ddbca37fd4224260143cecd57d419c"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-ship-up",
+      "file": "/yacht-dash/kuroi-arena/rosie-ship-up.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-ship-up.webp",
+      "size": 144604,
+      "sha256": "873b3e0d6c891587a4487864bfe37ce3137b6cb1a0816c6b0026d79bc1d96f2b"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-startled",
+      "file": "/yacht-dash/kuroi-arena/rosie-startled.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-startled.webp",
+      "size": 183520,
+      "sha256": "e1fc0c5c117e39aea09da064f62afe127b936bdd1690de6da8c0f49b4936423e"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/rosie-triumphant",
+      "file": "/yacht-dash/kuroi-arena/rosie-triumphant.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/rosie-triumphant.webp",
+      "size": 176760,
+      "sha256": "c350a2c35635e89cf3b6ba3643c7dab26dc9ef7ce42c873e10778dc3d8bb44aa"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-01",
+      "file": "/yacht-dash/kuroi-arena/setting-01.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-01-festive.webp",
+      "size": 676118,
+      "sha256": "be4e5cfdd24b0439a86b44fdc2b7707f7ac7bce6087fb3da24b64ac8eb4ca0f9"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-02",
+      "file": "/yacht-dash/kuroi-arena/setting-02.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-02-first-clash.webp",
+      "size": 685432,
+      "sha256": "73d4cad27becf71ba971f66b053fab72fe25951ace42f84275ddbc21f91095fb"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-03",
+      "file": "/yacht-dash/kuroi-arena/setting-03.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-03-chaos-rising.webp",
+      "size": 682498,
+      "sha256": "bc85bab645ae478bad939e8986d65f0efb794628eb88728f43bb4156d178f2ef"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-04",
+      "file": "/yacht-dash/kuroi-arena/setting-04.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-04-fire-and-destruction.webp",
+      "size": 647554,
+      "sha256": "bcd4e7ee26bdd9ea601064c5a24831f05f733145cfb72e30cdf77e83cf07f539"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-05",
+      "file": "/yacht-dash/kuroi-arena/setting-05.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-05-harbor-burns.webp",
+      "size": 622144,
+      "sha256": "6a04b52a10a0bdf42d4c7a70cc762589b4a42475f21b3cdc534f01a3de235f76"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-06",
+      "file": "/yacht-dash/kuroi-arena/setting-06.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-06-the-brink.webp",
+      "size": 617496,
+      "sha256": "f3eee5373bece955167169356586c2c912aac61c1b007ee9ef0661088a2f761c"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/setting-07",
+      "file": "/yacht-dash/kuroi-arena/setting-07.webp",
+      "source": "kuroi-epic/art-batch-1/setting-arena-07-triumphant.webp",
+      "size": 699776,
+      "sha256": "f50b566921ae568b1f48fc84e1e257b294bee4e31eae42f81766a9feb3ce072f"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/victory-kuroi-finale",
+      "file": "/yacht-dash/kuroi-arena/victory-kuroi-finale.webp",
+      "source": "kuroi-epic/art-batch-1/victory-kuroi-finale-v2.webp",
+      "size": 668880,
+      "sha256": "01fd0a02e39af05e8875ffc74cb8af85fd079df0f12338472b2a708ea0bcb390"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/weapon-rocket",
+      "file": "/yacht-dash/kuroi-arena/weapon-rocket.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/weapon-rocket.webp",
+      "size": 80272,
+      "sha256": "7cb34d4d4522d036809b0cd31733649795846273c665fa2c70d4f52ed69cc837"
+    },
+    {
+      "type": "kuroi-arena",
+      "id": "kuroi-arena/weapon-waterbomb",
+      "file": "/yacht-dash/kuroi-arena/weapon-waterbomb.webp",
+      "source": "kuroi-epic/art-batch-2/redo-set/weapon-waterbomb.webp",
+      "size": 97676,
+      "sha256": "5291b92dfd5920731b7073c543ffe37242e3b767b5a907c8cae23c064aca2925"
+    },
+    {
+      "type": "kuroi-arena-ui",
+      "id": "kuroi-arena/ui-dash-plaque",
+      "file": "/yacht-dash/kuroi-arena/ui-dash-plaque.webp",
+      "source": "kuroi-epic/art-batch-ui/ui-dash-plaque.webp",
+      "size": 44344,
+      "sha256": "6f5afc0d5805309d2c6777b7c9aa060e0ac769298138c6cb8eedaa15d48b56b6"
+    },
+    {
+      "type": "kuroi-arena-ui",
+      "id": "kuroi-arena/ui-joystick-base",
+      "file": "/yacht-dash/kuroi-arena/ui-joystick-base.webp",
+      "source": "kuroi-epic/art-batch-ui/ui-joystick-base.webp",
+      "size": 22724,
+      "sha256": "39ca11020253219ba674afd146650cd30cf8078599b57156221d09c07c2897c5"
+    },
+    {
+      "type": "kuroi-arena-ui",
+      "id": "kuroi-arena/ui-joystick-knob",
+      "file": "/yacht-dash/kuroi-arena/ui-joystick-knob.webp",
+      "source": "kuroi-epic/art-batch-ui/ui-joystick-knob.webp",
+      "size": 14484,
+      "sha256": "b99337ab3d2b698fe55b01eb94603f613e7288c82d0da3061c8fa40f0f018b0b"
     }
   ],
   "packagingFix": "Recovered originally empty fishing-skiff.webp from its approved transparent PNG master"

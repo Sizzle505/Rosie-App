@@ -52,6 +52,17 @@ body:has(.captain-arcade-page-background) .captain-arcade-jump {
     background-size:cover,cover;
     background-position:center,center 30%;
   }
+  /* Phones get a portrait cut of the tunnel scene (drill rig, lantern and
+     crystals in frame). The landscape desktop art cover-cropped to a flat
+     burgundy smear around the drill console (Mitchell, 2026-11-26: the
+     drill section's background "seems off"). */
+  .captain-arcade-page-background[data-focused-game="tunnel"] {
+    background-image:
+      linear-gradient(180deg,rgba(5,7,21,.55),rgba(3,8,20,.78)),
+      url("/captain-arcade-backgrounds/tunnel-mobile-20261126.webp");
+    background-size:cover,cover;
+    background-position:center,center;
+  }
 }
 /* Tunnel backgrounds are behind the existing playable canvas and HUD only. */
 .ember-suite[data-arcade-backdrop="foundry"] {

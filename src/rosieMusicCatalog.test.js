@@ -3,9 +3,9 @@ import assert from "node:assert/strict";
 import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack,musicUrl} from "./rosieMusicCatalog.js";
 import {RosieMusicEngine} from "./rosieMusicEngine.js";
 
-test("all thirteen original Suno tracks have distinct browser paths",()=>{
-  assert.equal(Object.keys(ROSIE_MUSIC).length,13);
-  assert.equal(new Set(Object.values(ROSIE_MUSIC).map(s=>s.original)).size,13);
+test("all Suno tracks have distinct browser paths",()=>{
+  assert.equal(Object.keys(ROSIE_MUSIC).length,29);
+  assert.equal(new Set(Object.values(ROSIE_MUSIC).map(s=>s.original)).size,29);
   for(const [id,track] of Object.entries(ROSIE_MUSIC)){
     assert.equal(musicUrl(id),"/rosie-music/"+id+".mp3");
     assert.ok(track.title);assert.ok(track.original.endsWith(".wav"));
@@ -19,7 +19,10 @@ test("each real RosieVerse page resolves to available music",()=>{
   assert.equal(pageMusicTrack("timekeeper"),"clockwork-nostalgia");
 });
 test("game tracks switch without overlapping owners",()=>{
-  assert.equal(sceneMusicTrack("yacht","playing"),"yacht-voyage");
+  assert.equal(sceneMusicTrack("yacht","playing"),"yacht-sakura");
+  assert.equal(sceneMusicTrack("yacht","playing",{chapter:1}),"yacht-typhoon");
+  assert.equal(sceneMusicTrack("yacht","playing",{chapter:2}),"yacht-moonlight");
+  assert.equal(sceneMusicTrack("yacht","playing",{chapter:3}),"yacht-emperor");
   assert.equal(sceneMusicTrack("tunnel","playing"),"ember-tunnel");
   assert.equal(sceneMusicTrack("cosmic","start"),"galactic-march");
   assert.equal(sceneMusicTrack("cosmic","playing",{level:1}),"cosmic-arpeggio");

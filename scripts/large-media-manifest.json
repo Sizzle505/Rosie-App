@@ -1,0 +1,26 @@
+[
+  {
+    "output": "public/ember-drill/rosie-tunnel-opening.mp4",
+    "sha256": "bfeaf6b48ece51b27dbe106d337ba1b2678b31ce6d500dc4bce380e7c23b60d4",
+    "parts": [
+      "public/ember-drill/rosie-tunnel-opening.mp4.part00",
+      "public/ember-drill/rosie-tunnel-opening.mp4.part01",
+      "public/ember-drill/rosie-tunnel-opening.mp4.part02",
+      "public/ember-drill/rosie-tunnel-opening.mp4.part03",
+      "public/ember-drill/rosie-tunnel-opening.mp4.part04",
+      "public/ember-drill/rosie-tunnel-opening.mp4.part05"
+    ]
+  },
+  {
+    "output": "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4",
+    "sha256": "baf5acd126c1b1c81399ef5bd8a3ebdba8a781eaf6d06f032f715125c64cd8ed",
+    "parts": [
+      "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4.part00",
+      "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4.part01",
+      "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4.part02",
+      "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4.part03",
+      "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4.part04",
+      "public/yacht-dash/kuroi-arena/kuroi-finale-video.mp4.part05"
+    ]
+  }
+]

@@ -59,13 +59,16 @@ export default async function handler(req, res) {
     }
     input.question = body.question.trim();
   }
+  // TeddyVerse shares this service; its client tags requests so the answer
+  // is voiced by The Magnificent Teddy instead of Madame Rosie.
+  const pet = body.pet === "teddy" ? "teddy" : "rosie";
   if (!throttle(req)) return putJson(res, 429, { error: "too_many_requests" });
 
   const key = process.env.VENICE_API_KEY;
   if (!key || !key.trim()) return putJson(res, 503, { error: "ai_unavailable" });
 
   try {
-    const answer = await generateRosieAnswer({ feature, input, key });
+    const answer = await generateRosieAnswer({ feature, input, key, pet });
     if (feature === "haiku") {
       return putJson(res, 200, {
         feature, id: "ai-" + randomUUID(), lines: answer.lines, revised: answer.revised,

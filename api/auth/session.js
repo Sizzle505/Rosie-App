@@ -6,5 +6,5 @@ export default async function handler(req, res) {
     if (!current) return respond(res, 200, { user: null });
     if (current.refreshed) res.setHeader("Set-Cookie", sessionCookie(current.token));
     return respond(res, 200, { user: current.user });
-  } catch (error) { return handleError(res, error); }
+  } catch (error) { return handleError(res, error, req); }
 }

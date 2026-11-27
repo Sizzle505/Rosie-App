@@ -319,3 +319,15 @@
   .page-cheese .cheese-examiner-rail .rosie-reaction-portrait { height: 148px; }
   .page-cheese .cheese-examiner-rail .rosie-reaction .reaction-copy strong { font-size: 16px; }
 }
+
+/* Cheeseboard panel + iPhone page backdrop (Mitchell, 2026-11-25). */
+.page-cheese .cheese-game-frame{
+  background-image:url('/cheese-board-panel.webp')!important;
+  background-size:cover!important;background-position:center!important;
+}
+@media(max-width:759px){
+  .app-shell.is-cheese-page{
+    background:url('/cheese-page-bg.webp') center/cover fixed!important;
+  }
+  .page-cheese .cheese-game-page{background:transparent!important}
+}

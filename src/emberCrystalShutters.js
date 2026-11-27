@@ -1,6 +1,7 @@
 // Deterministic crystal shutters anchored to the existing tunnel roof/floor.
 // Their extension depends only on distance from the real auger tip: no clocks,
 // random physics or frame-rate-dependent collisions.
+import {openingGraceSeconds} from "./emberExpeditionStages.js";
 export const CRYSTAL_SHUTTER_LAYOUT=Object.freeze([
   {id:"barkroot-shutter",x:5300,side:-1,maxReach:148},
   {id:"ruby-shutter",x:13360,side:1,maxReach:160},
@@ -40,7 +41,8 @@ export function updateCrystalShutters(s,tipWorldX,tipY,boosted,onHit,center,radi
         s.shards++;s.score+=150;
         s.events.push({type:"shutter-shatter",id:h.id,x:screenX,y:tipY});
       }else{
-        if(s.hitCooldown<=0)onHit(s);
+        // Shutters share the opening grace: no damage in the settle-in.
+        if(s.hitCooldown<=0&&s.time>=openingGraceSeconds(s.stageIndex))onHit(s);
         s.events.push({type:"shutter-contact",id:h.id,x:screenX,y:tipY});
       }
     }

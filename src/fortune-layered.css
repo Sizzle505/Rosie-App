@@ -105,6 +105,34 @@
 .fortune-page .ticket-question { margin:22px auto 16px; color:#e2c6af; font-size:16px; line-height:1.35; }
 .fortune-page .ticket-answer { color:#fff2d8; font-size:clamp(20px,2.4vw,27px); line-height:1.28; font-weight:600; text-shadow:0 2px 5px #210b1c; }
 .fortune-page .ticket-stamp { margin:20px auto; color:#edc982; border-color:rgba(231,192,115,.45); background:rgba(33,10,29,.45); }
+@media (min-width:721px) {
+  .page-fortune .machine .sign {
+    box-sizing:border-box; width:min(92%,720px); height:clamp(105px,11vw,150px);
+    padding:0; border:0; border-radius:0;
+    background:url('/fortune-layers/madame-header-finished.webp') center / 100% 100% no-repeat !important;
+    box-shadow:none;
+  }
+  .page-fortune .machine .sign::before,
+  .page-fortune .machine .sign::after,
+  .page-fortune .machine .sign-paw,
+  .page-fortune .machine .sign-glint {display:none !important;}
+  .page-fortune .machine .sign h1,
+  .page-fortune .machine .sign p {
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+    overflow:hidden; clip-path:inset(50%); white-space:nowrap;
+  }
+  .page-fortune .question-card {
+    background:linear-gradient(120deg,rgba(25,10,27,.1),rgba(31,9,28,.16)),url('/fortune-layers/panel-petition-v2.webp') center / 100% 100% !important;
+    border-color:#b79358;
+  }
+  .page-fortune .question-card::after {display:none !important;}
+  .page-fortune .bottom-omens,.page-fortune .fortune-waiting-card {
+    background:linear-gradient(180deg,rgba(22,8,27,.2),rgba(28,7,27,.3)),url('/fortune-layers/panel-omens.webp') center / 100% 100% !important;
+  }
+  .page-fortune .machine .booth {
+    background:linear-gradient(145deg,rgba(40,7,26,.2),rgba(24,5,25,.28)),url('/fortune-layers/panel-velvet.webp') center / 100% 100% !important;
+  }
+}
 @media (max-width:720px) {
   .app-shell.page-fortune > main.fortune-page { margin-top:0 !important; top:-25px !important; padding-top:0 !important; }
   .app-shell.page-fortune { background:#100719 url('/fortune-layers/mobile-atmosphere.webp') center top / 100% auto repeat-y !important; }

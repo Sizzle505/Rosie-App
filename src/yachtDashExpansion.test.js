@@ -1,26 +1,29 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtAssetScale, yachtRivalSpriteFor, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
+import { YACHT_CHAPTERS, YACHT_CHAPTER_GOALS, YACHT_CHAPTER_PHASES, YACHT_PLAYTEST_ALL_LEVELS, yachtPlayableLimit, yachtSceneFor, yachtWaveFor, yachtPacedWaveFor, yachtFollowUpRewardLane, yachtUnlockedLevel, yachtNextUnlocked, yachtMedalsFor, yachtNextMedalHint, parseYachtRecords, updateYachtRecords, isYachtHazard, yachtOccupiedLanes, yachtTouchesHazard, yachtNearMiss, yachtCatchStart, yachtApproachAt, yachtPickupApproachAt, yachtBonusTreatLane, yachtSakuraDelivery, yachtSpawnInterval, yachtObjectSpeed, yachtRunSeconds, yachtCompression, yachtAssetScale, yachtRivalSpriteFor, YACHT_EXTRA_TREAT_MS, YACHT_CLEAN_PASS_POINTS, YACHT_CLEAN_PASS_TURBO, yachtClampLane, yachtSwipeSteps, yachtThreatForecast, yachtCanTakeHit, YACHT_IMPACT_GRACE_MS } from "./yachtDashExpansion.js";
 
-test("Four independent chapters each have five paintings and 75-second runs",()=>{
- assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor"]);
- for(let n=0;n<4;n++){
+test("Five chapters: four lane voyages with five paintings each, plus the Kuroi finale",()=>{
+ assert.deepEqual(YACHT_CHAPTERS.map(c=>c.id),["sakura","typhoon","moonlight","emperor","kuroi-finale"]);
+ for(let n=0;n<5;n++){
   const first=yachtSceneFor(n,0),last=yachtSceneFor(n,74);
   assert.notEqual(first.background,last.background);
   assert.equal(first.chapterId,YACHT_CHAPTERS[n].id);
   assert.equal(last.chapterId,YACHT_CHAPTERS[n].id);
-  assert.ok(YACHT_CHAPTERS[n].victory.includes(n===0?"sakura":YACHT_CHAPTERS[n].id));
+  assert.ok(YACHT_CHAPTERS[n].victory.includes(YACHT_CHAPTERS[n].id));
  }
+ // Sakura's paintings live in the scene lookup, not the chapter record.
+ for(let n=1;n<5;n++) assert.equal(YACHT_CHAPTERS[n].scenes.length,5);
  assert.equal(yachtSceneFor(1,15).background,YACHT_CHAPTERS[1].scenes[1]);
  assert.equal(yachtSceneFor(3,74).background,YACHT_CHAPTERS[3].scenes[4]);
 });
 test("Chapter unlocks only progress and are clamped",()=>{
  assert.equal(yachtUnlockedLevel("Infinity"),0);
  assert.equal(yachtUnlockedLevel("-1"),0);
- assert.equal(yachtUnlockedLevel("99"),3);
+ assert.equal(yachtUnlockedLevel("99"),4);
  assert.equal(yachtNextUnlocked(0,0),1);
  assert.equal(yachtNextUnlocked(2,1),2);
- assert.equal(yachtNextUnlocked(3,3),3);
+ assert.equal(yachtNextUnlocked(3,3),4);
+ assert.equal(yachtNextUnlocked(4,3),4);
 });
 test("Chapter hazards never occupy all lanes and drift within bounds",()=>{
  for(const chapter of ["typhoon","moonlight","emperor"]){
@@ -42,14 +45,14 @@ test("Chapter hazards never occupy all lanes and drift within bounds",()=>{
  assert.equal(isYachtHazard("ball"),false);
 });
 
-test("All four Yacht Dash chapters are selectable during playtesting",()=>{
+test("All five Yacht Dash chapters are selectable during playtesting",()=>{
  assert.equal(YACHT_PLAYTEST_ALL_LEVELS,true);
- assert.equal(yachtPlayableLimit(0),3);
- assert.equal(yachtPlayableLimit(2),3);
- assert.equal(yachtPlayableLimit(3),3);
+ assert.equal(yachtPlayableLimit(0),4);
+ assert.equal(yachtPlayableLimit(2),4);
+ assert.equal(yachtPlayableLimit(3),4);
 });
 test("Stage medals reward score, survival and optional clean passes",()=>{
- assert.deepEqual(Object.keys(YACHT_CHAPTER_GOALS),["sakura","typhoon","moonlight","emperor"]);
+ assert.deepEqual(Object.keys(YACHT_CHAPTER_GOALS),["sakura","typhoon","moonlight","emperor","kuroi-finale"]);
  assert.equal(yachtMedalsFor("sakura",{completed:false,score:50000,lives:3}),0);
  assert.equal(yachtMedalsFor("sakura",{completed:true,score:0,lives:1}),1);
  assert.equal(yachtMedalsFor("sakura",{completed:true,score:800,lives:1}),2);
@@ -206,12 +209,13 @@ test("A hit gives one pause-safe recovery window and no double damage",()=>{
  assert.equal(yachtCanTakeHit(0,true),false);
  assert.equal(yachtCanTakeHit(-1),true);
 });
-test("All three new stages have attainable medal scores after sparse hazards",()=>{
+test("All four post-Sakura stages have attainable medal scores after sparse hazards",()=>{
  const maximumWithNoBoost=(chapter)=>{
    let score=0,streak=0;
    for(let step=0;step<34;step++){
      const item=yachtWaveFor(chapter,step,()=>0)[0];
      if(item.kind==="rival")score+=70;
+     else if(isYachtHazard(item.kind))score+=YACHT_CLEAN_PASS_POINTS;
      else if(item.kind==="supply")score+=item.points;
      else if(["ball","treat","cheese"].includes(item.kind)){
        streak++;
@@ -230,9 +234,9 @@ test("All three new stages have attainable medal scores after sparse hazards",()
 });
 
 
-test("Every chapter has distinct scene names matching its five artworks",()=>{
+test("Every lane chapter has distinct scene names matching its five artworks",()=>{
  const used = new Set();
- for (const chapter of YACHT_CHAPTERS.filter(c=>c.id!=="sakura")) {
+ for (const chapter of YACHT_CHAPTERS.filter(c=>!["sakura","kuroi-finale"].includes(c.id))) {
    assert.equal(chapter.sceneTitles.length,5);
    assert.equal(new Set(chapter.sceneTitles).size,5);
    for(let index=0;index<5;index++){
@@ -264,8 +268,8 @@ test("New chapters use themed and distinct stage messages without changing Sakur
 
 test("Mobile chapter selection captions are short and distinct",()=>{
  const previews=YACHT_CHAPTERS.map(stage=>YACHT_CHAPTER_GOALS[stage.id].preview);
- assert.equal(new Set(previews).size,4);
- assert.ok(previews.every(copy=>copy.length>15 && copy.length<=54));
+ assert.equal(new Set(previews).size,5);
+ assert.ok(previews.every(copy=>copy.length>15 && copy.length<=66));
  assert.ok(previews.every(copy=>copy.endsWith(".")));
 });
 
@@ -301,8 +305,10 @@ test("Sakura begins with an approachable, rewarding cargo tutorial", () => {
 test("Wave rhythm eases the opening, accelerates the finale, and spaces major hazards", () => {
   const early=yachtSpawnInterval("sakura","harbor",0);
   const late=yachtSpawnInterval("sakura","sunset",0);
-  assert.ok(early>=1050 && early<=1300);
-  assert.ok(late>=880 && late<early);
+  // Sakura is a quickened chapter (Mitchell, 2026-11-25): its intervals
+  // carry the 60/67.5 compression, so the fair bounds scale with it.
+  assert.ok(early>=930 && early<=1150);
+  assert.ok(late>=760 && late<early);
   const sakuraSeconds=["harbor","riviera","sunset"]
     .reduce((sum,phase)=>sum+25,0);
   assert.equal(sakuraSeconds,75);
@@ -310,7 +316,11 @@ test("Wave rhythm eases the opening, accelerates the finale, and spaces major ha
     for(const phase of ["harbor","riviera","sunset"]){
       for(let seq=0;seq<40;seq++){
         const interval=yachtSpawnInterval(chapter,phase,seq);
-        assert.ok(interval>=1700 && interval<=3200,chapter+" cadence outside fair bounds");
+        // Quickened chapters compress every interval by 60/67.5, so their
+        // fair floor scales too (1650 * 0.889 ~ 1467); the Emperor's
+        // Finale keeps the original floor.
+        const floor = yachtCompression(chapter) < 1 ? 1450 : 1650;
+        assert.ok(interval>=floor && interval<=3200,chapter+" cadence outside fair bounds");
       }
       const gateSequence=chapter==="moonlight"?-1:6;
       if(gateSequence>=0){
@@ -331,11 +341,14 @@ test("Travel speed variation is tight and obstacles cannot run down fresh treats
     assert.ok(Math.max(...treats)-Math.min(...treats)<.15);
     assert.ok(Math.max(...hazards) < Math.min(...treats),
       "A new hazard must never catch a slower collectible on approach");
-    assert.ok(Math.min(...hazards)>=1.9 && Math.max(...treats)<=2.25);
+    // Quickened chapters (sakura/typhoon/moonlight) fly 1/0.889x faster;
+    // the Emperor's Finale keeps the original speed envelope.
+    const speedCap = yachtCompression(chapter) < 1 ? 2.55 : 2.25;
+    assert.ok(Math.min(...hazards)>=1.9 && Math.max(...treats)<=speedCap);
   }
 });
 test("Supplemental treat cadence is moderate and does not increase hazards",()=>{
- assert.ok(YACHT_EXTRA_TREAT_MS>=7500 && YACHT_EXTRA_TREAT_MS<=10000);
+ assert.ok(YACHT_EXTRA_TREAT_MS>=7000 && YACHT_EXTRA_TREAT_MS<=10000);
  const extra=Math.floor(75000 / YACHT_EXTRA_TREAT_MS);
  assert.ok(extra>=7 && extra<=10,"Extra treats should be occasional, not another rapid-fire wave");
  for(const id of ["typhoon","moonlight","emperor"]){
@@ -344,11 +357,15 @@ test("Supplemental treat cadence is moderate and does not increase hazards",()=>
    assert.ok(hazards.reduce((sum,n)=>sum+n,0)<=15);
  }
 });
-test("Expanded chapter treats remain full-size at every approach distance",()=>{
+test("Expanded chapter treats grow in as they approach the yacht",()=>{
  const positions=[-12,0,24,48,72,92,108];
  const samples=positions.map(y=>yachtPickupApproachAt(y));
- assert.ok(samples.every(p=>p.scale===1 && p.opacity===1));
  assert.ok(samples.every((p,i)=>i===0 || p.top>samples[i-1].top));
+ assert.ok(samples.every((p,i)=>i===0 || p.scale>samples[i-1].scale));
+ assert.ok(samples.every((p,i)=>i===0 || p.opacity>samples[i-1].opacity));
+ assert.ok(samples[0].scale>=.65 && samples[0].scale<1);
+ assert.equal(samples.at(-1).scale,1);
+ assert.equal(samples.at(-1).opacity,1);
  assert.equal(samples[0].top,yachtApproachAt(-12).top);
  assert.equal(samples.at(-1).top,yachtApproachAt(108).top);
 });
@@ -356,7 +373,10 @@ test("Extra treats choose a safe lane when new multi-lane or drifting hazards ar
  assert.equal(yachtBonusTreatLane([],1),1);
  assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:2}],0),2);
  assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:1,blockedLanes:[0,2],y:2}],0),1);
- assert.equal(yachtBonusTreatLane([{kind:"rival",lane:0,driftTo:1,y:3}],0),2);
+ // An undrifted rival reserves its own lane plus the lane it will attack
+ // (one step toward the captain); with the captain alongside, lane 1 is safe.
+ assert.equal(yachtBonusTreatLane([{kind:"rival",lane:0,driftTo:1,y:3}],0),1);
+ assert.equal(yachtBonusTreatLane([{kind:"rival",lane:0,driftTo:1,y:3}],0,2),2);
  assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:3},
    {kind:"rival",lane:2,y:5}],0),-1);
  assert.equal(yachtBonusTreatLane([{kind:"obstacle",lane:0,blockedLanes:[0,1],y:50}],0),0);
@@ -371,9 +391,9 @@ test("Extra treats choose a safe lane when new multi-lane or drifting hazards ar
    "A rival that already drifted must not reserve its former target lane");
 });
 test("Only the approved undersized skiff and crescent props receive selective scaling",()=>{
- assert.equal(yachtAssetScale("/yacht-dash/obstacles/fishing-skiff.webp"),1.48*1.4);
- assert.equal(yachtAssetScale("/yacht-dash/obstacles/moonlight-race-buoy.webp"),1.38*1.6);
- assert.equal(yachtAssetScale("/yacht-dash/obstacles/regatta-beacon.webp"),1.38*1.6);
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/fishing-skiff.webp"),3.51);
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/moonlight-race-buoy.webp"),3.312);
+ assert.equal(yachtAssetScale("/yacht-dash/obstacles/regatta-beacon.webp"),3.312);
  assert.equal(yachtAssetScale("/yacht-dash/obstacles/reef-rocks.webp"),1);
  assert.equal(yachtAssetScale(null),1);
 });
@@ -429,12 +449,18 @@ test("Rewards following a hazard guide Rosie along the open water",()=>{
   assert.equal(yachtFollowUpRewardLane([],1),null);
 });
 test("Simulated complete chapter keeps a reasonable challenge-to-reward ratio",()=>{
+  // Each chapter is simulated over its own run length: typhoon and
+  // moonlight are quickened to 60s (Mitchell, 2026-11-25) with the same
+  // content compressed in, so their wave counts should match the
+  // Emperor's 75s envelope.
+  const chapterIndex={typhoon:1,moonlight:2,emperor:3};
   for(const chapter of ["typhoon","moonlight","emperor"]){
+    const runMs=yachtRunSeconds(chapterIndex[chapter])*1000;
     let time=850, step=0, hazards=0, rewards=0, lastHazard=false;
-    while(time<75000 && step<70){
-      const phase=time<25000?"harbor":time<50000?"riviera":"sunset";
+    while(time<runMs && step<70){
+      const phase=time<runMs/3?"harbor":time<runMs*2/3?"riviera":"sunset";
       time+=yachtSpawnInterval(chapter,phase,step);
-      if(time>=75000)break;
+      if(time>=runMs)break;
       const item=yachtPacedWaveFor(chapter,step,n=>step%n)[0];
       if(isYachtHazard(item.kind)){
         assert.equal(lastHazard,false,chapter+" stacked obstacles in live run");
@@ -448,17 +474,18 @@ test("Simulated complete chapter keeps a reasonable challenge-to-reward ratio",(
   }
 });
 
-test("Approved Kuroi attack sprite changes with deliberate drift direction",()=>{
+test("Approved Kuroi attack sprite turns only once the drift completes",()=>{
  const front=yachtWaveFor("moonlight",4,()=>1)[0];
  assert.equal(front.kind,"rival");
  assert.equal(front.asset,"/yacht-dash/kuroi/kuroi-charge.webp");
- assert.equal(front.driftFrom,1);
  assert.equal(yachtRivalSpriteFor(front),"/yacht-dash/kuroi/kuroi-charge.webp");
+ // Drifting alone keeps the charge frame; the turn frames need the turn done.
  assert.equal(yachtRivalSpriteFor({...front,drifted:true}),
+   "/yacht-dash/kuroi/kuroi-charge.webp");
+ const charge="/yacht-dash/kuroi/kuroi-charge.webp";
+ assert.equal(yachtRivalSpriteFor({kind:"rival",asset:charge,lane:0,driftFrom:0,driftTo:2,drifted:true,turned:true}),
    "/yacht-dash/kuroi/kuroi-turn-starboard.webp");
- const port=yachtWaveFor("moonlight",4,()=>2)[0];
- assert.equal(port.driftTo,0);
- assert.equal(yachtRivalSpriteFor({...port,drifted:true}),
+ assert.equal(yachtRivalSpriteFor({kind:"rival",asset:charge,lane:2,driftFrom:2,driftTo:0,drifted:true,turned:true}),
    "/yacht-dash/kuroi/kuroi-turn-port.webp");
  assert.equal(yachtRivalSpriteFor({kind:"obstacle",asset:"/art.webp"}),"/art.webp");
 });

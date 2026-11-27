@@ -640,3 +640,11 @@ body.captain-fullscreen-fallback-active .nav-family-toggle{
  .captain-fullscreen-frame:not(.is-expanded)>.captain-fullscreen-toggle{position:sticky!important;top:auto!important;bottom:140px!important;left:calc(100% - 54px)!important;right:auto!important;margin:-48px 10px 4px auto!important;display:flex!important}
  .captain-fullscreen-frame.is-expanded>.captain-fullscreen-toggle{position:absolute!important;top:max(6px,env(safe-area-inset-top))!important;left:8px!important;right:auto!important}
 }
+
+/* Round 9 (2026-11-26): in the iPhone fallback fullscreen, size the
+   Cosmic frame to the LARGEST viewport height so it reaches the true
+   top and bottom of the screen (100dvh can fall short under the
+   status bar / home indicator in in-app web views). */
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-cosmic.is-fallback-fullscreen{height:100lvh!important}
+}

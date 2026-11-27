@@ -49,6 +49,10 @@ test("warning arrives before a moving shelf can hit, and is emitted once",()=>{
 test("unpowered contact costs just one hull and Turbo destroys the shelf safely",()=>{
  const a=newRun(),ha=a.crystalShutters[0];
  approach(a,ha);
+ // The contact is past the 3s Classic settle-in grace (shutters share
+ // the opening grace since round 5); the test pins the contact cost,
+ // not the opening.
+ a.time=3.1;
  updateRun(a,.016);
  assert.equal(ha.hit,true);
  assert.equal(a.hull,4);

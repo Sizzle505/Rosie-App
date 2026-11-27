@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {test} from "node:test";
 import {newRun,updateRun,triggerTurbo,DRILL_TIP_VERTICAL_OFFSET} from "../src/emberDrillEngine.js";
-import {BOSS_INTRO_TIME,expeditionBossKind,bossAttackDanger} from "../src/emberExpeditionBossStage.js";
+import {BOSS_INTRO_TIME,BOSS_TIME_SECONDS,expeditionBossKind,bossAttackDanger} from "../src/emberExpeditionBossStage.js";
 import {excavationNotice} from "../src/emberBreakableFeedback.js";
 
 function intoBoss(index){
@@ -11,13 +11,13 @@ function intoBoss(index){
   s.objects=[];s.breakables=[];s.crystalShutters=[];s.worldHazards=[];
   s.formationHits=[];
   s.hitCooldown=100;
-  for(let i=0;i<230&&s.running&&!s.boss;i++){
+  for(let i=0;i<720&&s.running&&!s.boss;i++){
     s.y=402;s.pitch=0;
     updateRun(s,.045);
   }
   assert.ok(s.boss,"boss did not spawn after its introduction");
   assert.ok(s.time>=BOSS_INTRO_TIME);
-  assert.equal(s.charge,100);
+  assert.equal(s.charge,0,"charge is earned from the treasure mechanism, not refilled at boss start");
   return s;
 }
 test("three advanced worlds have bosses; Classic remains unchanged",()=>{
@@ -57,16 +57,20 @@ test("danger zones correspond to warned attacks, not the entire screen",()=>{
   assert.equal(bossAttackDanger({phase:"active",attack:"earth-burst"},300,402),true);
   assert.equal(bossAttackDanger({phase:"active",attack:"earth-burst"},460,402),false);
 });
-test("Copperjack requires two separate openings and awards 1400 points",()=>{
+test("Copperjack requires four separate openings and awards 1400 points",()=>{
   const s=intoBoss(2);
   const initial=s.score;
   for(let i=0;i<650&&s.running;i++){
     s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0&&s.charge>=100)
+    // Earned precondition: the player filled Turbo from the four rewards;
+    // the earning itself is covered by ember-batch-d.test.mjs.
+    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0){
+      s.charge=100;
       triggerTurbo(s);
+    }
     updateRun(s,.045);
   }
-  assert.equal(s.boss.stats.successfulHits,2);
+  assert.equal(s.boss.stats.successfulHits,4);
   assert.equal(s.bossDefeated,true);
   assert.equal(s.result,"complete");
   assert.ok(s.score>=initial+1400);
@@ -79,16 +83,20 @@ test("Cinderclaw accepts exactly one Turbo strike per recovery, then can be defe
   for(let i=0;i<760&&s.running;i++){
     // Hold a direct line toward the illustrated boss and press Turbo only on
     // opening frames. Ordinary drill movement is insufficient for a hit.
+    // Earned precondition: the player filled Turbo from the four rewards;
+    // the earning itself is covered by ember-batch-d.test.mjs.
     s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime===0&&s.charge>=100)
+    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime===0){
+      s.charge=100;
       triggerTurbo(s);
+    }
     updateRun(s,.045);
     if(s.boss.health<previousHealth){
       assert.equal(previousHealth-s.boss.health,1);
       previousHealth=s.boss.health;strikes++;
     }
   }
-  assert.equal(strikes,3);
+  assert.equal(strikes,4);
   assert.equal(s.bossDefeated,true);
   assert.equal(s.result,"complete");
   assert.ok(s.score>=startingScore+1750);
@@ -101,6 +109,8 @@ test("one Turbo activation cannot auto-hit a second recovery opening",()=>{
   for(let i=0;i<240&&s.running;i++){
     s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
     if(!fired&&s.boss.phase==="recovery"){
+      // Earned precondition: the player filled Turbo from the four rewards.
+      s.charge=100;
       assert.equal(triggerTurbo(s),true);
       assert.ok(s.boostTime<1,"boss Turbo must be a brief, deliberate strike");
       fired=true;
@@ -109,7 +119,7 @@ test("one Turbo activation cannot auto-hit a second recovery opening",()=>{
   }
   assert.equal(fired,true);
   assert.equal(s.boss.stats.successfulHits,1);
-  assert.equal(s.boss.health,2);
+  assert.equal(s.boss.health,3);
   assert.equal(s.bossDefeated,false);
 });
 test("Mole King requires four distinct recovery hits and grants royal reward",()=>{
@@ -117,8 +127,12 @@ test("Mole King requires four distinct recovery hits and grants royal reward",()
   const initialScore=s.score;
   for(let i=0;i<840&&s.running;i++){
     s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
-    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0&&s.charge>=100)
+    // Earned precondition: the player filled Turbo from the four rewards;
+    // the earning itself is covered by ember-batch-d.test.mjs.
+    if(s.boss.phase==="recovery"&&!s.boss.hitThisRecovery&&s.boostTime<=0){
+      s.charge=100;
       triggerTurbo(s);
+    }
     updateRun(s,.045);
   }
   assert.equal(s.boss.stats.successfulHits,4);
@@ -129,7 +143,9 @@ test("Mole King requires four distinct recovery hits and grants royal reward",()
 test("running out of time without defeating the boss never grants a victory",()=>{
   const s=intoBoss(4);
   s.boostTime=0;s.charge=0;s.hitCooldown=100;
-  for(let i=0;i<1100&&s.running;i++){
+  // Run past the Mole King clock (round 4: 55s, was 45s) plus margin.
+  const steps=Math.ceil((BOSS_TIME_SECONDS["mole-king"]+5)/0.045);
+  for(let i=0;i<steps&&s.running;i++){
     s.y=s.bossY-DRILL_TIP_VERTICAL_OFFSET;s.pitch=0;
     updateRun(s,.045);
   }
@@ -137,8 +153,8 @@ test("running out of time without defeating the boss never grants a victory",()=
   assert.equal(s.bossDefeated,false);
   assert.equal(s.score<2600,true);
 });
-test("boss recovery text explains how to strike",()=>{
+test("boss recovery banner shows the charge; victory needs no banner",()=>{
  const n=excavationNotice({type:"boss-vulnerable"});
  assert.match(n.detail,/Turbo/i);
- assert.match(excavationNotice({type:"boss-victory",boss:"mole-king",points:2600}).detail,/2600/);
+ assert.equal(excavationNotice({type:"boss-victory",boss:"mole-king",points:2600}),null);
 });

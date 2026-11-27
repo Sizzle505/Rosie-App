@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { db, hashPin, sha256, respond, only, unsafeAllowed, readBody, sessionCookie, userView, displayName, handleError } from "../_lib/core.js";
+import { db, hashPin, sha256, respond, only, unsafeAllowed, readBody, sessionCookie, userView, displayName, handleError, brandPet } from "../_lib/core.js";
 
 export default async function handler(req, res) {
   if (!only(req, res, "POST") || !unsafeAllowed(req, res)) return;
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     const existing = await db("rosie_users?select=id&username=eq." + encodeURIComponent(username) + "&limit=1");
     if (existing.length) return respond(res, 409, { error: "That username is already taken." });
     const users = await db("rosie_users?select=id&limit=41");
-    if (users.length >= 40) return respond(res, 403, { error: "Rosie's guest book is full. Please ask the host for help." });
+    if (users.length >= 40) return respond(res, 403, { error: brandPet(req) + "'s guest book is full. Please ask the host for help." });
     const newUsers = await db("rosie_users?select=id,username,display_name", {
       method: "POST", body: { username, display_name: displayName(chosenName), pin_hash: await hashPin(String(pin)), pin_length: String(pin).length }
     });
@@ -31,5 +31,5 @@ export default async function handler(req, res) {
     });
     res.setHeader("Set-Cookie", sessionCookie(token));
     return respond(res, 201, { user: userView(user) });
-  } catch (error) { return handleError(res, error); }
+  } catch (error) { return handleError(res, error, req); }
 }

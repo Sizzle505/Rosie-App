@@ -448,7 +448,11 @@
   }
   .app-shell.page-qr-atelier .qa-panel {
     grid-column: 2 !important; grid-row: 2 / span 2 !important;
-    width: 100% !important; margin-top: 0 !important;
+    /* Overnight 2026-11-27: the centred .qa-title plaque is ~167px tall
+       from top:22px, so it spills ~70px past the 120px hero row and its
+       bottom flourish struck through the panel's "Choose Your Creation"
+       heading. Drop the panel clear of the plaque. */
+    width: 100% !important; margin-top: 48px !important;
   }
   .app-shell.page-qr-atelier .qa-finish-strip { grid-column: 2 !important; grid-row: 4 !important; width: 100% !important; }
   .app-shell.page-qr-atelier .qa-collection { grid-column: 1 !important; grid-row: 3 !important; width: 100% !important; }

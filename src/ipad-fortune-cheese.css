@@ -75,6 +75,13 @@
     margin: 0 auto !important; translate: none !important;
   }
   .app-shell.page-fortune .fortune-page .omen-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Overnight 2026-11-27: at iPad portrait widths the omens rail sits in the
+     narrow left column (~130px per chip), so the base nowrap+ellipsis cut
+     values off ("Squirrels with a\u2026"). Let omen values wrap instead. */
+  .app-shell.page-fortune .fortune-page .omen-grid strong {
+    white-space: normal !important; overflow: visible !important;
+    text-overflow: clip !important; line-height: 1.3;
+  }
 
   /* A compact university dossier makes the square board the primary surface.
      The examiner follows it in portrait and has its own rail in landscape. */
@@ -91,6 +98,12 @@
     max-width: 1200px !important;
     margin: 0 auto !important;
     padding: 18px 0 115px !important;
+  }
+  /* Overnight 2026-11-27: in landscape the royal nav floats along the top
+     edge and the dossier header's 18px top padding let the nav pills cover
+     the top of the "CHEESE BOARD EXAM" title. Clear the floating nav. */
+  @media (orientation: landscape) {
+    .app-shell.page-cheese .cheese-game-page { padding-top: 64px !important; }
   }
   .app-shell.page-cheese .cheese-desktop-layout {
     display: grid !important;

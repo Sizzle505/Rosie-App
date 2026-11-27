@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { db, hashPin, verifyPin, sha256, respond, only, unsafeAllowed, readBody, sessionCookie, userView, handleError } from "../_lib/core.js";
+import { db, hashPin, verifyPin, sha256, respond, only, unsafeAllowed, readBody, sessionCookie, userView, handleError, brandPet } from "../_lib/core.js";
 
 export default async function handler(req, res) {
   if (!only(req, res, "POST") || !unsafeAllowed(req, res)) return;
@@ -15,16 +15,16 @@ export default async function handler(req, res) {
 
     const rows = await db(`rosie_users?select=id,username,display_name,pin_hash,pin_length,failed_attempts,locked_until,is_active&username=eq.${encodeURIComponent(username)}&limit=1`);
     const user = rows[0];
-    if (!user || !user.is_active) return respond(res, 401, { error: "That PIN doesn’t pass Rosie’s inspection." });
+    if (!user || !user.is_active) return respond(res, 401, { error: "That PIN doesn’t pass " + brandPet(req) + "’s inspection." });
     const remaining = user.locked_until ? Math.ceil((new Date(user.locked_until).getTime() - Date.now()) / 1000) : 0;
-    if (remaining > 0) return respond(res, 423, { error: "Rosie’s ledger is locked for a short break.", retryAfter: remaining }, { "Retry-After": String(remaining) });
+    if (remaining > 0) return respond(res, 423, { error: brandPet(req) + "’s ledger is locked for a short break.", retryAfter: remaining }, { "Retry-After": String(remaining) });
 
     if (String(pin).length !== user.pin_length || !(await verifyPin(pin, user.pin_hash))) {
       const state = await db("rpc/rosie_pin_failure", { method: "POST", body: { p_user_id: user.id } });
       const until = state?.locked_until ? Math.ceil((new Date(state.locked_until).getTime() - Date.now()) / 1000) : 0;
       return until > 0
-        ? respond(res, 423, { error: "Five incorrect attempts. Rosie has locked the ledger for 15 minutes.", retryAfter: until }, { "Retry-After": String(until) })
-        : respond(res, 401, { error: "That PIN doesn’t pass Rosie’s inspection." });
+        ? respond(res, 423, { error: "Five incorrect attempts. " + brandPet(req) + " has locked the ledger for 15 minutes.", retryAfter: until }, { "Retry-After": String(until) })
+        : respond(res, 401, { error: "That PIN doesn’t pass " + brandPet(req) + "’s inspection." });
     }
     const confirmed = await db("rpc/rosie_pin_success", { method: "POST", body: { p_user_id: user.id } });
     if (!confirmed) return respond(res, 423, { error: "This account is locked. Try again after the cooldown." });
@@ -34,5 +34,5 @@ export default async function handler(req, res) {
       body: { user_id: user.id, token_hash: sha256(token), expires_at: new Date(Date.now() + 30 * 86400000).toISOString() } });
     res.setHeader("Set-Cookie", sessionCookie(token));
     return respond(res, 200, { user: userView(user), message: "Welcome back, " + user.display_name + "!" });
-  } catch (error) { return handleError(res, error); }
+  } catch (error) { return handleError(res, error, req); }
 }

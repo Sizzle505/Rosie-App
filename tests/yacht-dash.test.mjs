@@ -199,9 +199,9 @@ test("Yacht Dash uses only an unframed sparkling cheese wedge", () => {
   assert.match(css,/\.captain-game-page \.sea-pickup-cheese[\s\S]*?background:transparent!important/);
 });
 
-test("The first three chapters are 10 percent shorter; finale stays 75 seconds", () => {
+test("The first three chapters run a quickened 60 seconds; finale stays 75 seconds", () => {
   for(let i=0;i<4;i++){
-    const duration=i===3?75:67.5;
+    const duration=i===3?75:60;
     assert.equal(yachtRunSeconds(i),duration);
     assert.equal(yachtSceneSeconds(i),duration/5);
     for(let scene=0;scene<5;scene++)assert.equal(yachtSceneIndex(i,scene*duration/5),scene);

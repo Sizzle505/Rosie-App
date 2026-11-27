@@ -24,5 +24,5 @@ export default async function handler(req, res) {
       return respond(res, 400, { error: "Invalid note contents." });
     const updated = await db(`rosie_notes?${filter}&select=${columns}`, { method: "PATCH", body: patch });
     return updated.length ? respond(res, 200, { note: updated[0] }) : respond(res, 404, { error: "Note not found." });
-  } catch (error) { return handleError(res, error); }
+  } catch (error) { return handleError(res, error, req); }
 }

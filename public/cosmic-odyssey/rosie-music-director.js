@@ -18,7 +18,7 @@
         menu:{file:'galactic-march',loop:true},
         playing:{file:'cosmic-arpeggio',loop:true},
         alternate:{file:'cosmic-interlude',loop:true},
-        win:{file:'victory-fanfare',loop:false},
+        win:{file:'cosmic-victory',loop:false},
         'level-clear':{file:'victory-fanfare',loop:false}
       };
     }

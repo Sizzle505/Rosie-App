@@ -3,7 +3,7 @@
   --royal-seal:40px;--royal-bar:40px;--royal-toggle:54px;
   /* Textured lacquer sampled from the approved updated Home seal.
      Shared with the matching Resources seal, navigation families and toggle. */
-  --royal-lacquer:url("/rosieverse/ui/royal-nav/medallion-lacquer.webp");
+  --royal-lacquer:url("/rosieverse/ui/royal-nav/medallion-lacquer.webp?v=20261126");
   --royal-enamel:var(--royal-lacquer) center / 100% 100% no-repeat padding-box;
   --royal-rim:linear-gradient(180deg,#fff3b0 0%,#f8d37b 14%,#cc8014 34%,#8c4006 51%,#d89223 70%,#ffe09a 88%,#b66c0d 100%) border-box;
   position:fixed;z-index:1201;left:50%;top:14px;bottom:auto;
