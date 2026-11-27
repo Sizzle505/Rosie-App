@@ -1,11 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack,musicUrl} from "./rosieMusicCatalog.js";
+import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack,musicUrl,meditationMusicTrack,victoryMusicTrack} from "./rosieMusicCatalog.js";
 import {RosieMusicEngine} from "./rosieMusicEngine.js";
 
-test("all thirteen original Suno tracks have distinct browser paths",()=>{
-  assert.equal(Object.keys(ROSIE_MUSIC).length,13);
-  assert.equal(new Set(Object.values(ROSIE_MUSIC).map(s=>s.original)).size,13);
+test("all Suno tracks have distinct browser paths",()=>{
+  assert.equal(Object.keys(ROSIE_MUSIC).length,29);
+  assert.equal(new Set(Object.values(ROSIE_MUSIC).map(s=>s.original)).size,Object.keys(ROSIE_MUSIC).length);
   for(const [id,track] of Object.entries(ROSIE_MUSIC)){
     assert.equal(musicUrl(id),"/rosie-music/"+id+".mp3");
     assert.ok(track.title);assert.ok(track.original.endsWith(".wav"));
@@ -19,7 +19,7 @@ test("each real RosieVerse page resolves to available music",()=>{
   assert.equal(pageMusicTrack("timekeeper"),"clockwork-nostalgia");
 });
 test("game tracks switch without overlapping owners",()=>{
-  assert.equal(sceneMusicTrack("yacht","playing"),"yacht-voyage");
+  assert.equal(sceneMusicTrack("yacht","playing"),"yacht-sakura");
   assert.equal(sceneMusicTrack("tunnel","playing"),"ember-tunnel");
   assert.equal(sceneMusicTrack("cosmic","start"),"galactic-march");
   assert.equal(sceneMusicTrack("cosmic","playing",{level:1}),"cosmic-arpeggio");
@@ -179,4 +179,21 @@ test("subtle page music gain does not affect independent game sound effects",asy
   engine.setContextGain(1);
   assert.ok(engine.decks[engine.active].volume>0.2,"Active games retain musical presence");
   engine.dispose();
+});
+
+test("new tracks follow the page, world, boss and victory state",()=>{
+  assert.equal(pageMusicTrack("home"),"rosie-signature");
+  assert.equal(pageMusicTrack("vault"),"vault-treasure");
+  assert.equal(pageMusicTrack("randomizers"),"randomizers-monte-carlo");
+  for(const world of [0,1])assert.equal(sceneMusicTrack("tunnel","playing",{world}),"tunnel-depths");
+  for(const world of [2,3,4])assert.equal(sceneMusicTrack("tunnel","playing",{world}),"tunnel-caverns");
+  for(const world of [2,3])assert.equal(sceneMusicTrack("tunnel","boss",{world}),"tunnel-clockwork-boss");
+  assert.equal(sceneMusicTrack("tunnel","boss",{world:4}),"tunnel-tyrant");
+  assert.equal(victoryMusicTrack("tunnel","victory",{world:4}),"tunnel-crown-victory");
+  assert.equal(victoryMusicTrack("tunnel","victory",{world:3}),"victory-fanfare");
+  assert.equal(victoryMusicTrack("cosmic","win"),"cosmic-victory");
+  assert.equal(victoryMusicTrack("cosmic","level-clear"),"victory-fanfare");
+  assert.equal(victoryMusicTrack("yacht","win"),"yacht-victory");
+  assert.equal(meditationMusicTrack("sakura"),"zen-garden-dusk");
+  assert.equal(meditationMusicTrack("tea"),"zen-temple-rain");
 });

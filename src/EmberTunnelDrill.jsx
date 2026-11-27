@@ -300,9 +300,10 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   const [selectedWorld,setSelectedWorld]=useState(0);
   useEffect(()=>{
     if(mode==="idle")return;
-    const state=mode==="running"?"playing":mode==="paused"?"paused":"ended";
+    if(mode==="victory-hold")return;
+    const state=mode==="running"?(frame.current.boss&&!frame.current.bossDefeated?"boss":"playing"):mode==="paused"?"paused":"ended";
     window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
-      detail:{scene:"tunnel",state,world:selectedWorld}
+      detail:{scene:"tunnel",state,world:frame.current.stageIndex}
     }));
   },[mode,selectedWorld]);
   const [stageStars,setStageStars]=useState(()=>{
@@ -393,7 +394,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     noticeRef.current=null;
     setNotice(null);
     window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
-      detail:{scene:"tunnel",state:"ended",world:worldIndex}
+      detail:{scene:"tunnel",state:"menu",world:worldIndex}
     }));
     if (keepFullscreen !== true) exitGameFullscreen?.();
   }
@@ -440,10 +441,14 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
       const s=frame.current;
       if(modeRef.current==="running"&&!document.hidden){
         const events=[];
+        const hadBoss=Boolean(s.boss);
         const steps=Math.max(1,Math.ceil(delta/.045));
         for(let i=0;i<steps&&s.running;i++){
           updateRun(s,delta/steps,pressed.current.up||gamepadPitch.current<0,pressed.current.down||gamepadPitch.current>0);
           events.push(...s.events);
+        }
+        if(!hadBoss&&s.boss&&!s.ended){
+          window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{detail:{scene:"tunnel",state:"boss",world:s.stageIndex}}));
         }
         for(const event of events){
            const cue=excavationNotice(event);

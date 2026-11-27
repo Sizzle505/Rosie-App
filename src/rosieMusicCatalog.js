@@ -1,6 +1,18 @@
 /* Original Suno WAV masters are preserved in Dropbox. The site streams only
  * compact, loudness-matched MP3 derivatives, never 48 kHz WAV downloads. */
 export const ROSIE_MUSIC = Object.freeze({
+  "tunnel-tyrant":{"title":"The Tyrant's Coronation","original":"The Tyrant's Coronation.wav","loop":true,"loopStartSeconds":5,"fallback":"ember-tunnel"},
+  "tunnel-clockwork-boss":{"title":"Clockwork Confrontation","original":"Clockwork Confrontation.wav","loop":true,"loopStartSeconds":5,"fallback":"ember-tunnel"},
+  "tunnel-caverns":{"title":"Clockwork Caverns","original":"Clockwork Caverns.wav","loop":true,"loopStartSeconds":5,"fallback":"ember-tunnel"},
+  "tunnel-depths":{"title":"Clockwork Depths","original":"Clockwork Depths.wav","loop":true,"loopStartSeconds":5,"fallback":"ember-tunnel"},
+  "tunnel-crown-victory":{"title":"Triumph of the Crown","original":"Triumph of the Crown.wav","loop":false,"fallback":"victory-fanfare"},
+  "rosie-signature":{"title":"The Seven-note Journey","original":"The Seven-note Journey.wav","loop":true,"loopStartSeconds":5,"fallback":"whimsical-journey"},
+  "zen-garden-dusk":{"title":"Garden at Dusk","original":"Garden at Dusk.wav","loop":true,"loopStartSeconds":5,"fallback":"haiku-garden"},
+  "zen-temple-rain":{"title":"Temple Rain Meditation","original":"Temple Rain Meditation.wav","loop":true,"loopStartSeconds":5,"fallback":"haiku-garden"},
+  "cosmic-victory":{"title":"Brass Launch Beat","original":"Brass Launch Beat.wav","loop":false,"fallback":"victory-fanfare"},
+  "yacht-victory":{"title":"Imperial Victory Fanfare","original":"Imperial Victory Fanfare.wav","loop":false,"fallback":"victory-fanfare"},
+  "vault-treasure":{"title":"A Private Treasure","original":"A Private Treasure.wav","loop":true,"loopStartSeconds":5,"fallback":"whimsical-journey"},
+  "randomizers-monte-carlo":{"title":"Monte Carlo Midnight","original":"Monte Carlo Midnight.wav","loop":true,"loopStartSeconds":5,"fallback":"whimsical-journey"},
   "galactic-march":{title:"Galactic March",original:"Galactic March(2).wav",loop:true,loopStartSeconds:5},
   "cosmic-arpeggio":{title:"Cosmic Arpeggio",original:"Cosmic Arpeggio(2).wav",loop:true,loopStartSeconds:5},
   "cosmic-interlude":{title:"Cosmic Interlude",original:"Untitled(2).wav",loop:true,loopStartSeconds:5},
@@ -21,13 +33,13 @@ export const ROSIE_MUSIC = Object.freeze({
 });
 export const ROSIE_MUSIC_DIRECTORY="/rosie-music/";
 export const pageMusicTrack=page=>({
-  home:"whimsical-journey",
+  home:"rosie-signature",
   fortune:"oracle-secret",
   cheese:"cheese-heist",
   captain:"yacht-voyage",
   captain2:"cosmic-interlude",
-  vault:"whimsical-journey",
-  randomizers:"whimsical-journey",
+  vault:"vault-treasure",
+  randomizers:"randomizers-monte-carlo",
   haiku:"haiku-garden",
   timekeeper:"clockwork-nostalgia",
   calculations:"clockwork-nostalgia",
@@ -37,12 +49,25 @@ export const pageMusicTrack=page=>({
   reminders:"candlelit-library",
   reviews:"whimsical-journey"
 })[page]||"whimsical-journey";
+export function meditationMusicTrack(view){return ["tea","mist","moonlit"].includes(view)?"zen-temple-rain":"zen-garden-dusk";}
+export function victoryMusicTrack(scene,state,details={}){
+  if(scene==="cosmic"&&state==="win")return "cosmic-victory";
+  if(scene==="yacht")return "yacht-victory";
+  if(scene==="tunnel"&&details.world===4)return "tunnel-crown-victory";
+  return "victory-fanfare";
+}
 export function sceneMusicTrack(scene,state,details={}){
   if(scene==="yacht"){
     const chapter=Math.max(0,Math.min(3,Math.floor(Number(details.chapter)||0)));
     return ["yacht-sakura","yacht-typhoon","yacht-moonlight","yacht-emperor"][chapter];
   }
-  if(scene==="tunnel")return "ember-tunnel";
+  if(scene==="tunnel"){
+    const world=details.world;
+    if(state==="boss")return world===4?"tunnel-tyrant":"tunnel-clockwork-boss";
+    if(Number.isInteger(world)&&world>=2)return "tunnel-caverns";
+    if(Number.isInteger(world)&&world>=0)return "tunnel-depths";
+    return "ember-tunnel";
+  }
   if(scene==="cosmic"){
     if(state==="start"||state==="menu")return "galactic-march";
     const level=Number(details.level)||1;

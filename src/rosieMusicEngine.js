@@ -35,7 +35,7 @@ export class RosieMusicEngine {
   _cancelFade(){++this.generation;if(this.fadeHandle)this.cancelFrame(this.fadeHandle);this.fadeHandle=0;}
   _gain(){return this.volume*this.contextGain*(this.ducked ? 0.2 : 1)*(this.fanfare ? 0.3 : 1);}
   setContextGain(value){
-    this.contextGain=Math.min(1,Math.max(0.15,Number(value)||0.7));
+    this.contextGain=Number.isFinite(Number(value))?Math.min(1,Math.max(0,Number(value))):0.7;
     this._applyGain();
   }
   _finishTrack(song,id,index){
@@ -55,7 +55,7 @@ export class RosieMusicEngine {
     this._notify();
   }
   setDesired(id){
-    if(!ROSIE_MUSIC[id]||id==="victory-fanfare")return;
+    if(!ROSIE_MUSIC[id]||!ROSIE_MUSIC[id].loop)return;
     this.desired=id;
     if(this.enabled&&this.unlocked&&!this.hidden)this._playDesired();
     else this._notify();
@@ -178,15 +178,23 @@ export class RosieMusicEngine {
       this._cancelFade();
     }else if(this.enabled&&this.unlocked)this._playDesired();
   }
-  playFanfare(){
+  stopFanfare(){
+    if(this.fanfare){const cue=this.fanfare;this.fanfare=null;cue.pause();this._applyGain();}
+  }
+  playFanfare(id="victory-fanfare"){
     if(!this.enabled||!this.unlocked||this.hidden)return;
-    if(this.fanfare){this.fanfare.pause();this.fanfare=null;}
+    if(!ROSIE_MUSIC[id]||ROSIE_MUSIC[id].loop)id="victory-fanfare";
+    this.stopFanfare();
     const cue=this.audioFactory();
-    cue.src=musicUrl("victory-fanfare");cue.loop=false;cue.preload="auto";
+    cue.src=musicUrl(id);cue.loop=false;cue.preload="auto";
     cue.volume=Math.max(0,Math.min(1,this.volume*1.15));
     this.fanfare=cue;this._applyGain();
     const restore=()=>{if(this.fanfare===cue){this.fanfare=null;this._applyGain();}};
-    cue.onended=restore;cue.onerror=restore;
+    cue.onended=restore;cue.onerror=()=>{
+      if(this.fanfare!==cue)return;
+      restore();
+      if(id!=="victory-fanfare")this.playFanfare("victory-fanfare");
+    };
     const p=cue.play();p?.catch?.(restore);
   }
   dispose(){

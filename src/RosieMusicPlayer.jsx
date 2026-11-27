@@ -1,5 +1,5 @@
 import React,{useEffect,useRef,useState} from "react";
-import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack,musicContextGain} from "./rosieMusicCatalog.js";
+import {ROSIE_MUSIC,pageMusicTrack,sceneMusicTrack,musicContextGain,meditationMusicTrack,victoryMusicTrack} from "./rosieMusicCatalog.js";
 import {RosieMusicEngine} from "./rosieMusicEngine.js";
 import "./rosie-music.css";
 
@@ -30,17 +30,17 @@ export default function RosieMusicPlayer({page}){
     // iOS explicitly requires play() to occur within a user gesture.
     document.addEventListener("pointerdown",unlock,true);
     document.addEventListener("keydown",unlock,true);
-    const handleScene=({scene,state,level,chapter})=>{
+    const handleScene=({scene,state,level,chapter,world})=>{
       if(pageRef.current!=="captain"||!["yacht","tunnel","cosmic"].includes(scene))return;
-      if(state==="playing"||state==="start"||state==="menu"){
-        sceneRef.current=scene;engine.setDuck(false);
-        engine.setContextGain(state==="playing"?1:0.72);
-        const song=sceneMusicTrack(scene,state,{level,chapter});
+      if(state==="playing"||state==="boss"||state==="start"||state==="menu"){
+        sceneRef.current=scene;engine.stopFanfare();engine.setDuck(false);
+        engine.setContextGain(state==="playing"||state==="boss"?1:0.72);
+        const song=sceneMusicTrack(scene,state,{level,chapter,world});
         if(song)engine.setDesired(song);
       }else if(sceneRef.current===scene){
         if(state==="paused"){engine.setDuck(true);}
         else if(state==="win"||state==="level-clear"||state==="victory"){
-          engine.setDuck(true);engine.playFanfare();
+          engine.setDuck(true);engine.playFanfare(victoryMusicTrack(scene,state,{world,chapter,level}));
         }else if(state==="ended"||state==="lose"){
           engine.setDuck(true);
         }
@@ -57,7 +57,20 @@ export default function RosieMusicPlayer({page}){
       handleScene({scene:"cosmic",state:event.data.state,level:event.data.level});
     };
     const onMeditation=event=>{
-      if(pageRef.current==="haiku")engine.setDuck(Boolean(event.detail?.active));
+      if(pageRef.current!=="haiku")return;
+      const {active,sound,view,volume,paused,voice}=event.detail||{};
+      if(!active&&!paused){
+        engine.setDuck(false);engine.setContextGain(musicContextGain("haiku"));engine.setDesired(pageMusicTrack("haiku"));return;
+      }
+      if(paused||sound==="off"){
+        engine.setDuck(false);engine.setContextGain(0);return;
+      }
+      if(["music","temple-music"].includes(sound)){
+        const level=Number.isFinite(volume)?Math.max(0,Math.min(1,volume)):.33;
+        engine.setDuck(false);engine.setContextGain(level*(voice?.55:.85));
+        engine.setDesired(sound==="temple-music"?"zen-temple-rain":meditationMusicTrack(view));return;
+      }
+      engine.setContextGain(musicContextGain("haiku"));engine.setDuck(true);engine.setDesired(pageMusicTrack("haiku"));
     };
     const onCinematic=event=>{
       if(pageRef.current==="captain")engine.setDuck(Boolean(event.detail?.active));
@@ -87,7 +100,7 @@ export default function RosieMusicPlayer({page}){
     sceneRef.current=null;
     const engine=engineRef.current;
     if(engine){
-      engine.setDuck(false);
+      engine.stopFanfare();engine.setDuck(false);
       engine.setContextGain(musicContextGain(page));
       engine.setDesired(pageMusicTrack(page));
     }
