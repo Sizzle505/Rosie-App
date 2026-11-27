@@ -115,13 +115,22 @@ export async function getSession(req, { renew = false } = {}) {
   }
   return { user: userView(user), session, token, refreshed };
 }
+// TeddyVerse reaches these same endpoints through its own domain (rewrite
+// proxy), so user-facing strings brand by the host the request arrived on —
+// the same derivation api/secret-santa.js uses. Rosie is the default and its
+// strings stay byte-identical.
+export function requestBrand(req) {
+  return /teddyverse/i.test(String(req?.headers?.["x-forwarded-host"] || req?.headers?.host || "")) ? "teddy" : "rosie";
+}
+export function brandPet(req) { return requestBrand(req) === "teddy" ? "Teddy" : "Rosie"; }
+export function brandVerse(req) { return requestBrand(req) === "teddy" ? "TeddyVerse" : "RosieVerse"; }
 export async function requireUser(req, res) {
   const session = await getSession(req);
-  if (!session) respond(res, 401, { error: "Please enter RosieVerse to access your private notes." });
+  if (!session) respond(res, 401, { error: "Please enter " + brandVerse(req) + " to access your private notes." });
   return session;
 }
-export function handleError(res, error) {
+export function handleError(res, error, req) {
   if (error?.message === "Invalid request.") return respond(res, 400, { error: error.message });
   console.error("Rosie API error:", error?.message);
-  return respond(res, 503, { error: "Rosie cannot reach the note ledger just now. Please try again." });
+  return respond(res, 503, { error: brandPet(req) + " cannot reach the note ledger just now. Please try again." });
 }

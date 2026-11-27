@@ -1,4 +1,5 @@
 import { TURBO_DURATION, DRILL_TIP_OFFSET, DRILL_TIP_VERTICAL_OFFSET } from "./emberDrillEngine.js";
+import {drawExpansionFrame,batchDFrameAt} from "./emberExpansionCatalog.js";
 
 /**
  * Ember Tunnel's registered, source-derived mechanical animation.
@@ -108,7 +109,25 @@ export function turboFrameRect(remainingSeconds) {
 }
 
 export function paintOriginalBoostExhaust(c,s,assets) {
-  if(!(s.boostTime>0)||!ready(assets?.jetSheet))return;
+  if(!(s.boostTime>0))return;
+  // Batch-D turbo-exhaust atlas, behind the nozzle and oriented with the
+  // vehicle. The atlas cell's nozzle sits at normalized (0.76, 0.5); align
+  // it with the engine nozzle (-116, +4) so the tail extends left behind
+  // the vehicle. The procedural jet below is the fallback when the atlas
+  // is not loaded; the two are never stacked.
+  const atlasImg=assets?.["bd:turbo-exhaust"];
+  if(atlasImg?.complete&&atlasImg.naturalWidth>0){
+    const frame=batchDFrameAt("turbo-exhaust",s.time*1000);
+    const size=300;
+    c.save();
+    c.globalCompositeOperation="screen";
+    c.globalAlpha=.87;
+    drawExpansionFrame(c,atlasImg,"turbo-exhaust",frame,
+      -116-0.76*size,4-0.5*size,size,size);
+    c.restore();
+    return;
+  }
+  if(!ready(assets?.jetSheet))return;
   const img=assets.jetSheet,frame=jetFrameIndex(s.time);
   const col=frame%4,row=Math.floor(frame/4);
   // The already-optimized source is 1400x467, from original 2172x724.

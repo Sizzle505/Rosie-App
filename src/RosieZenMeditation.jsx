@@ -38,6 +38,7 @@ const PROGRAMS = [
   { id:"haiku", title:"Haiku Reflection", label:"THREE LINES · ONE QUIET MOMENT", description:"Slowly contemplate the poem on your scroll, one line at a time." }
 ];
 const SOUNDS = [
+  {id:"music",label:"Garden music"},{id:"temple-music",label:"Temple music"},
   {id:"off",label:"Silence"},{id:"wind",label:"Soft wind"},
   {id:"stream",label:"Stream"},{id:"rain",label:"Rain"}
 ];
@@ -107,7 +108,7 @@ function speechSay(text) {
 export default function RosieZenMeditation({scene="field",poem,outfitId="classic",onOutfitChange}) {
   const [kind,setKind] = useState("breathe");
   const [minutes,setMinutes] = useState(5);
-  const [ambience,setAmbience] = useState("wind");
+  const [ambience,setAmbience] = useState("music");
   const [volume,setVolume] = useState(.33);
   const [voice,setVoice] = useState(false);
   const [progress,setProgress] = useState(readProgress);
@@ -181,16 +182,15 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
     };
   },[]);
   useEffect(()=>{audio.current?.setVolume(volume)},[volume]);
-  // Wind, water and temple ambience already accompany active meditation.
-  // Keep the shared soundtrack gently underneath rather than layering
-  // two full-volume musical beds over the timed breathing session.
+  // The shared player owns music; synthesized nature sounds retain their own channel.
   useEffect(()=>{
-    const active=opened&&status==="running"&&ambience!=="off";
-    window.dispatchEvent(new CustomEvent("rosieverse:music:meditation",{detail:{active}}));
-    return ()=>{
-      if(active)window.dispatchEvent(new CustomEvent("rosieverse:music:meditation",{detail:{active:false}}));
-    };
-  },[opened,status,ambience]);
+    const active=opened&&status==="running";
+    const paused=opened&&status==="paused";
+    window.dispatchEvent(new CustomEvent("rosieverse:music:meditation",{
+      detail:{active,paused,sound:ambience,view:activeViewId,volume,voice}
+    }));
+  },[opened,status,ambience,activeViewId,volume,voice]);
+  useEffect(()=>()=>window.dispatchEvent(new CustomEvent("rosieverse:music:meditation",{detail:{active:false}})),[]);
   useEffect(()=>{try{window.localStorage.setItem("rosieZenBackdropV1",viewId)}catch{}},[viewId]);
   useEffect(() => {
     if (!opened) return undefined;
@@ -216,7 +216,8 @@ export default function RosieZenMeditation({scene="field",poem,outfitId="classic
   },[opened]);
   function startSound() {
     setAudioUnavailable(false);
-    audio.current?.start(ambience,volume)
+    if(["music","temple-music"].includes(ambience))audio.current?.stop();
+    else audio.current?.start(ambience,volume)
       .then(ok=>{if (!ok && ambience!=="off")setAudioUnavailable(true)})
       .catch(()=>setAudioUnavailable(true));
     const request = navigator.wakeLock?.request?.("screen");

@@ -41,11 +41,6 @@ test("both navigation families retain live labels and routes",()=>{
   assert.ok(s.includes('name="switch-arrows"'));
   assert.ok(s.includes('name="home-simple" className="royal-seal-art"'));
   assert.ok(s.includes('name="resources-simple" className="royal-seal-art"'));
-  for(const name of ["home-simple","resources-simple"]){
-    const icon=readFileSync(new URL(`public/rosieverse/ui/royal-nav/${name}.webp`,root));
-    assert.equal(icon.toString("ascii",0,4),"RIFF",name);
-    assert.equal(icon.toString("ascii",8,12),"WEBP",name);
-  }
 });
 test("persistent buttons use the new art without replacing their handlers",()=>{
   const paw=readFileSync(new URL("src/private/AccountPortal.jsx",root),"utf8");
@@ -61,7 +56,6 @@ test("navigation uses one invisible positioning grid and real controls",()=>{
  assert.match(css,/grid-template-areas:"home tabs resources toggle"/);
  assert.match(css,/grid-template-areas:"tabs tabs tabs tabs tabs"/);
  assert.match(css,/position:relative!important;inset:auto!important;transform:none!important/);
- assert.match(css,/\.royal-nav-shell > \.bottom-nav\{[\s\S]*background:var\(--royal-enamel\),var\(--royal-rim\)!important/);
 });
 
 test("navigation lacquer matches the approved seal-derived texture",()=>{

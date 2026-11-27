@@ -26,7 +26,7 @@ export async function mailOverview(row) {
   return { configured: mailConfigured(), sender: mailSender(), delivery };
 }
 
-async function reserve(row, guest, kind, force) {
+async function reserve(row, guest, kind, force, brand) {
   const filter = idFilter(row.id, guest.id, kind);
   const found = await db(TABLE + filter + "&select=" + FIELDS + "&limit=1");
   let current = found[0];
@@ -57,10 +57,10 @@ async function reserve(row, guest, kind, force) {
   if (!claimed.length) return null;
   return { exchangeId: row.id, guestId: guest.id, kind, claim, guest,
     mail: composeSecretSantaMail({
-      exchange: row, guest, kind, url: privateGuestUrl(row.id, guest.id,
+      exchange: row, guest, kind, brand, url: privateGuestUrl(row.id, guest.id,
         // This capability derivation matches the existing guest invitation process.
         (await import("node:crypto")).createHmac("sha256", Buffer.from(row.organizer_hash, "hex"))
-          .update(row.id + ":" + guest.id).digest("hex"))
+          .update(row.id + ":" + guest.id).digest("hex"), brand)
     }) };
 }
 async function finish(entry, ok, error) {
@@ -76,7 +76,7 @@ async function finish(entry, ok, error) {
   });
 }
 
-export async function deliverNotifications(row, kind, { guestIds = null, force = false } = {}) {
+export async function deliverNotifications(row, kind, { guestIds = null, force = false, brand = "rosie" } = {}) {
   const guests = row.participants.filter(p => (!guestIds || guestIds.includes(p.id)) && p.email);
   const summary = { configured: mailConfigured(), sender: mailSender(), eligible: guests.length,
     attempted: 0, sent: 0, failed: 0, skipped: 0 };
@@ -84,7 +84,7 @@ export async function deliverNotifications(row, kind, { guestIds = null, force =
   const claimed = [];
   for (const person of guests) {
     try {
-      const entry = await reserve(row, person, kind, force);
+      const entry = await reserve(row, person, kind, force, brand);
       if (entry) claimed.push(entry);
       else summary.skipped++;
     } catch (error) {

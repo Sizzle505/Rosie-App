@@ -9,7 +9,7 @@ import { paintBreakables } from "./emberBreakablePainter.js";
 import {paintCrystalShutters} from "./emberCrystalShuttersPainter.js";
 import {paintExpeditionHazards} from "./emberExpeditionHazardPainter.js";
 import {paintExpeditionBoss} from "./emberExpeditionBossPainter.js";
-import {drawExpansionFrame} from "./emberExpansionCatalog.js";
+import {drawExpansionFrame,EMBER_BATCH_D_ATLASES,EMBER_BATCH_D_GATES,batchDFrameAt} from "./emberExpansionCatalog.js";
 
 const TWO_PI = Math.PI * 2;
 
@@ -88,31 +88,36 @@ function panorama(c,img,progress,opacity=1){
 }
 // Three transitions are preserved from the original game. The seven newly
 // generated soft-focus plates are introduced at coherent story beats.
+// Classic's continuous 75s progression through the one connected cave.
 const CAVERN_SCENES=[
-  // The native painted cave is the continuous WORLD, not a background cutout.
-  // The newly imported 2:1 panoramas are additive, low-contrast atmosphere.
-  {at:0,key:"scenicBarkroot",accent:"bg01"},
-  {at:10,key:"barkroot",accent:"bg01"},
-  {at:21,key:"scenicLantern",accent:"bg03"},
-  {at:30,key:"scenicCrystal",accent:"bg04"},
-  {at:34,key:"rubyLoop",accent:"bg05"},
-  {at:39,key:"rubyOrganic",accent:"bg06"},
-  {at:47,key:"rubyOrganic",accent:"bg06"},
-  {at:54,key:"templeOrganic",accent:"bg08"},
-  {at:65,key:"scenicTemple",accent:"bg10"},
+  {at:0,key:"scenicBarkroot"},
+  {at:10,key:"barkroot"},
+  {at:15,key:"scenicBarkrootDeep"},
+  {at:21,key:"scenicLantern"},
+  {at:30,key:"scenicCrystal"},
+  {at:34,key:"rubyLoop"},
+  {at:39,key:"rubyOrganic"},
+  {at:43,key:"scenicRubyGallery"},
+  {at:47,key:"rubyOrganic"},
+  {at:54,key:"templeOrganic"},
+  {at:65,key:"scenicTemple"},
+];
+// 2026-11-25 feedback round: every world now travels ONLY through its
+// own paintings. The previous design windowed one shared timeline, so
+// the Royal Treasury opened on the root-passage painting, and a
+// screen-blended "accent" painting ghosted through every scene —
+// Barkroot visibly layered behind the other worlds. Accents and the
+// cross-world transition plates are gone: one scene, one painting,
+// full strength, crossfaded at the seams.
+const STAGE_SCENES=[
+  [{at:0,key:"scenicBarkroot"},{at:8,key:"barkroot"},{at:15,key:"scenicBarkrootDeep"},{at:22,key:"scenicLantern"}],
+  [{at:0,key:"rubyLoop"},{at:9,key:"rubyOrganic"},{at:17,key:"scenicRubyGallery"}],
+  [{at:0,key:"scenicClockwork"},{at:13,key:"scenicClockworkDeep"}],
+  [{at:0,key:"scenicMolten"},{at:13,key:"scenicMoltenDeep"}],
+  [{at:0,key:"scenicTreasury"},{at:13,key:"scenicTemple"}],
 ];
 // Fast, eased changes keep the run moving without a conspicuous panorama flash.
 const SCENE_CROSSFADE_SECONDS=.30;
-// Wide 2:1 studies contain artist-composed dark framing at top and bottom.
-// Never substitute them for our approved cave wall painting: those black
-// margins were responsible for the rectangular "photo pasted into tunnel"
-// reported on iPhone. SCREEN composite preserves only atmospheric highlights.
-function atmosphericAccent(c,img,progress,opacity){
- if(!artReady(img)||opacity<.003)return;
- c.save();c.globalCompositeOperation="screen";
- panorama(c,img,progress,opacity*.18);
- c.restore();
-}
 // These are world-anchored scenic set pieces, NOT collectible markers.
 // Actual cheese, gems, bones and treasure caches are drawn separately.
 const CAVERN_FEATURES=[
@@ -153,57 +158,32 @@ function scenicFeatures(c,s,assets){
     }
   }
 }
-// Use the imported wide transition art *inside* the selected later worlds.
-// A horizontal crop moves from the previous biome toward the destination,
-// preserving native proportions rather than stretching the panorama.
-function paintExpeditionTransition(c,s,assets){
-  const id={2:"ruby-clockwork",3:"clockwork-molten",4:"molten-treasury"}[s.stageIndex];
-  const img=assets?.["exp-transition:"+id];
-  if(!id||!artReady(img))return false;
-  const cropWidth=Math.min(img.naturalWidth,img.naturalHeight*W/H);
-  const span=Math.max(0,img.naturalWidth-cropWidth);
-  const t=clamp(s.time/3.4,0,1);
-  const eased=t*t*(3-2*t);
-  c.save();
-  c.globalAlpha=.62;
-  c.drawImage(img,span*eased,0,cropWidth,img.naturalHeight,0,0,W,H);
-  c.restore();
-  return true;
-}
 function scenery(c,s,assets={}) {
   c.fillStyle="#23151d";c.fillRect(0,0,W,H);
-  // The original 75s course uses its exact old scenic progression. A selected
-  // 15s stage opens near the corresponding illustrated passage instead.
-  const sceneTime=s.stageIndex===null?s.time:
-    [0,36,50,61,69][Math.max(0,Math.min(4,s.stageIndex))]+s.time*.24;
+  // A selected world uses its own scene progression on its own clock;
+  // Classic uses the continuous cave timeline. Either way the run is
+  // one place: no foreign paintings blended over the scene.
+  const scenes=s.stageIndex===null?CAVERN_SCENES
+    :STAGE_SCENES[Math.max(0,Math.min(4,s.stageIndex))];
+  const sceneTime=s.time;
   let current=0;
-  for(let i=1;i<CAVERN_SCENES.length;i++){
-    if(sceneTime>=CAVERN_SCENES[i].at)current=i;
+  for(let i=1;i<scenes.length;i++){
+    if(sceneTime>=scenes[i].at)current=i;
   }
-  const scene=CAVERN_SCENES[current];
-  const nextAt=CAVERN_SCENES[current+1]?.at??75;
+  const scene=scenes[current];
+  const nextAt=scenes[current+1]?.at??(s.stageIndex===null?75:(s.duration||30));
   const duration=Math.max(1,nextAt-scene.at);
   const local=clamp((sceneTime-scene.at)/duration,0,1);
   if(current>0){
-    const prev=CAVERN_SCENES[current-1];
+    const prev=scenes[current-1];
     const fade=clamp((sceneTime-scene.at)/SCENE_CROSSFADE_SECONDS,0,1);
     const eased=fade*fade*(3-2*fade);
     panorama(c,assets[prev.key]||assets.scenicBarkroot,1,1);
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,eased);
-    atmosphericAccent(c,assets[prev.accent],1,1-eased);
-    atmosphericAccent(c,assets[scene.accent],local,eased);
   }else{
     panorama(c,assets[scene.key]||assets.scenicBarkroot,local,1);
-    atmosphericAccent(c,assets[scene.accent],local,1);
   }
   paintNewBackgroundParallax(c,s,assets,W,H);
-  paintExpeditionTransition(c,s,assets);
-  // Modest lighting grade distinguishes the later-world route prototypes
-  // without presenting unapproved generated backgrounds as finished.
-  if(s.stageIndex!==null&&s.stageIndex>=2){
-    const hues=["rgba(30,80,124,.13)","rgba(177,53,25,.15)","rgba(189,130,45,.13)"];
-    c.fillStyle=hues[s.stageIndex-2]||"transparent";c.fillRect(0,0,W,H);
-  }
   // Keep architecture and crystals legible inside the playable corridor.
   const tint=c.createLinearGradient(0,0,0,H);
   tint.addColorStop(0,"rgba(17,10,18,.13)");
@@ -218,10 +198,83 @@ function scenery(c,s,assets={}) {
   }
 }
 
-// Continuous atmosphere outside the physical corridor; removes the visual
-// impression of two unrelated rectangular photo strips. The darkening is
-// clipped to the SAME curving physics wall as the structural rock ribbons.
-// Original richly-painted panorama texture remains visible underneath.
+// Boss arena: the matching opaque 1035x1230 scenic base, replacing the
+// route panorama, transition plate, parallax and route scenery while a boss
+// is active. Aspect matches the 690x820 canvas exactly (cover = exact fit).
+// A brief 0.4s fade at spawn is the clean transition; afterwards it is
+// fully opaque. The corridor shading (wallDepth) is kept so the playable
+// boundary stays readable.
+function paintBossArena(c,s,assets){
+  if(!s.boss)return false;
+  const arena=assets["bd:arena"];
+  if(!artReady(arena))return false;
+  const fade=s.bossSpawnedAt!=null?clamp((s.time-s.bossSpawnedAt)/0.4,0,1):1;
+  c.save();c.globalAlpha=fade;
+  c.drawImage(arena,0,0,W,H);
+  c.restore();
+  return true;
+}
+// Gates 46-55: scenic transition set pieces, world-anchored, behind the
+// vehicle and pickups, never solid barriers. The entrance frames the
+// drill at spawn and scrolls off with the world; the exit is anchored
+// by the engine in the last 1.6s of a world run. Opening atlases
+// play once from stage start and hold the last frame. No time is removed
+// from the playable route. Suppressed during a boss (the arena is the
+// finale) and in Classic, which has no batch-D gate.
+function drawGate(c,s,assets,gate,worldX,key,width=517,glowAlpha=0){
+  const x=worldX-s.scroll;
+  const w=width,h=Math.round(w*gate.height/gate.width);
+  if(x<-w||x>W+w)return;
+  const floorY=tunnelCenter(worldX)+tunnelRadius(worldX);
+  const dx=x-w/2,dy=floorY-h;
+  // Light spills from the opening so the gate reads as a doorway, not
+  // scenery: a warm glow centered in the arch, drawn before the art.
+  if(glowAlpha>0){
+    c.save();c.globalCompositeOperation="screen";
+    const g=c.createRadialGradient(x,floorY-h*.46,8,x,floorY-h*.46,w*.5);
+    g.addColorStop(0,"rgba(255,205,105,"+glowAlpha+")");
+    g.addColorStop(1,"rgba(255,175,59,0)");
+    c.fillStyle=g;c.beginPath();c.arc(x,floorY-h*.46,w*.5,0,TWO_PI);c.fill();
+    c.restore();
+  }
+  if(gate.kind==="atlas"){
+    const img=assets[key];
+    if(artReady(img)){
+      const frame=batchDFrameAt(gate.atlasId,s.time*1000);
+      drawExpansionFrame(c,img,gate.atlasId,frame,dx,dy,w,h);
+    }
+    return;
+  }
+  drawImageTrim(c,assets[key],dx,dy,w,h);
+}
+function paintGates(c,s,assets){
+  if(!Number.isInteger(s.stageIndex)||s.stageIndex<0||s.stageIndex>4||s.boss)return;
+  const gates=EMBER_BATCH_D_GATES[s.stageIndex];
+  if(!gates)return;
+  // Round 10b (Mitchell): the entrance and exit tunnels are LARGER
+  // and the drill meets them, never passes them. The entrance is
+  // centered on the drill anchor (720 wide — for the 768x512 sprite
+  // gates that is 480 tall, essentially the full corridor height) so
+  // the run visibly STARTS inside its opening and drives out of it;
+  // the exit (700 wide) is clamped by the engine at the same anchor,
+  // and the finish animation drives her into its opening. Stronger
+  // spill on the exit — daylight beyond the arch.
+  drawGate(c,s,assets,gates.entrance,(s.stageStartX||0)+DRILL_ANCHOR,"bd:gate-entrance",720,.35);
+  if(s.exitGateX!=null)drawGate(c,s,assets,gates.exit,s.exitGateX,"bd:gate-exit",700,.55);
+}
+// Boss rewards: the four earned-Turbo pickups, drawn with the kingdom's
+// pickup art at the suggested 55px, in front of the boss and mechanism.
+function paintBossRewards(c,s,assets){
+  if(!s.boss||!s.bossRewards||s.bossRewards.length===0)return;
+  const img=assets["bd:pickup"];
+  for(const r of s.bossRewards){
+    if(r.taken)continue;
+    const size=55;
+    glow(c,r.x,r.y,size*.8,"rgba(255,188,89,.20)");
+    if(artReady(img))drawImageTrim(c,img,r.x-size/2,r.y-size/2,size,size);
+    else if(artReady(assets.gem))drawImageTrim(c,assets.gem,r.x-size/2,r.y-size/2,size,size);
+  }
+}
 function wallDepth(c,s){
  const step=8;
  for(const side of [-1,1]){
@@ -248,6 +301,21 @@ function wallDepth(c,s){
  }
 }
 function pickup(c,o,s,assets={}){
+  // Batch-D kingdom pickup art is a visual mapping by kingdom only; the
+  // engine's pickup kind, score and counters are unchanged. Falls back to
+  // the batch-C kind-based atlas, then to the Classic art.
+  if(s.stageIndex!==null&&!o.taken&&["bone","cheese","gem"].includes(o.kind)){
+    const kingdom=assets["bd:pickup"];
+    if(artReady(kingdom)){
+      const x=o.x-s.scroll,y=o.y+Math.sin(s.time*5+o.id)*2;
+      if(x>=-70&&x<=W+70){
+        const size=55;
+        glow(c,x,y,size*.7,"rgba(255,188,89,.15)");
+        drawImageTrim(c,kingdom,x-size/2,y-size/2,size,size);
+        return;
+      }
+    }
+  }
   // Newly illustrated bonus icons are limited to the five optional worlds.
   // Classic collectibles retain their already-approved appearances.
   if(s.stageIndex!==null&&!o.taken&&["bone","cheese","gem"].includes(o.kind)){
@@ -291,18 +359,22 @@ function pickup(c,o,s,assets={}){
   c.restore();
 }
 function hazard(c,o,s,assets={}){
-  const img=assets[o.kind==='spike'?'spike':'rock'];
+  // Batch-D kingdom obstacle substitution is visual only: the existing
+  // position, reach and collision are untouched, and the draw size stays
+  // the original 92 (rock) / 188 (spike) so the visible silhouette still
+  // matches the real hitbox. The spike keeps rotating in Clockwork, so the
+  // gear preserves the wheel's anticipation.
+  const kingdomSub=s.stageIndex!==null
+    ?assets[o.kind==='spike'?'bd:spike':'bd:rock']:null;
+  const img=artReady(kingdomSub)?kingdomSub:
+    assets[o.kind==='spike'?'spike':'rock'];
   if(artReady(img)&&!o.taken){const x=o.x-s.scroll,y=o.y;if(x>=-120&&x<W+120){const sz=o.kind==='spike'?188:92;
     const debris=assets[o.kind==='spike'?'terrainDebrisRoots':'terrainDebrisCrystals'];
     if(artReady(debris))drawImageTrim(c,debris,x-128,y-54,150,75,.34);
-    // Three restrained amber cues grow out of the same wall as the hazard,
-    // signaling the obstruction without adding a separate floating marker.
-    const middle=tunnelCenter(o.x), side=o.y<middle?-1:1, edge=middle+side*(tunnelRadius(o.x)-16);
-    for(let cue=1;cue<=3;cue++){
-      const cueX=x-cue*27, cueY=edge+side*(7+cue*9);
-      glow(c,cueX,cueY,18,"rgba(255,181,75,.16)");
-      circle(c,cueX,cueY,2.2,"rgba(255,224,132,.68)");
-    }
+    // 2026-11-25 polish: the amber cue dots, the red glow disc and the
+    // pulsing ring were UI-style markers floating over the geology and
+    // made the obstacles read as placed icons. They are gone; the
+    // debris bed and (for the wheel) the wall fixture carry the read.
     if(o.kind==='spike'){
       // The ornate wheel is a temple mechanism, not a floating grey target.
       const middle=tunnelCenter(o.x),above=o.y<middle;
@@ -318,11 +390,7 @@ function hazard(c,o,s,assets={}){
     }else{
       glow(c,x,y,57,"rgba(246,123,77,.14)");
     }
-    glow(c,x,y,57,'rgba(245,77,57,.12)');
-    if(artReady(assets.hazardPulse)){
-      const pulse=.22+.14*Math.sin(s.time*9+o.id);
-      drawImageTrim(c,assets.hazardPulse,x-62,y-62,124,124,pulse);
-    }c.save();c.translate(x,y);if(o.kind==='spike')c.rotate(s.time*1.8);drawImageTrim(c,img,-sz/2,-sz/2,sz,sz);c.restore();return;}}
+    c.save();c.translate(x,y);if(o.kind==='spike')c.rotate(s.time*1.8);drawImageTrim(c,img,-sz/2,-sz/2,sz,sz);c.restore();return;}}
 
   const x=o.x-s.scroll,y=o.y;
   if(x<-85||x>W+90||o.taken)return;
@@ -343,9 +411,23 @@ function hazard(c,o,s,assets={}){
 }
 function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
   if(artReady(assets.body)){
+    // Round 10b entrance/exit presentation: at a run's start she
+    // EMERGES from the entrance gate (first ~1s: smaller, fainter,
+    // growing to full presence as the gate scrolls away behind her);
+    // at a world finish she drives INTO the exit gate (enterSlide /
+    // enterProgress from the engine: slides right into the opening
+    // while shrinking and fading). Both are visual only — collision
+    // and scoring use the un-slid anchor, and the entering phase runs
+    // no collisions at all.
+    const enterP=s.enterProgress||0;
+    const emergeRaw=s.time<1.05?clamp(s.time/1.05,0,1):1;
+    const emerge=emergeRaw*emergeRaw*(3-2*emergeRaw);
+    const visScale=(1-.16*enterP)*(.9+.1*emerge);
+    const visAlpha=(1-.78*enterP)*(.35+.65*emerge);
     // Correct the canvas aspect before rotation, so pitched poses keep their width.
-    c.save();c.translate(DRILL_ANCHOR,s.y);c.scale(horizontalCorrection,1);c.rotate(s.pitch);
-    if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha=.52;
+    c.save();c.translate(DRILL_ANCHOR+(s.enterSlide||0),s.y);c.scale(horizontalCorrection*visScale,visScale);c.rotate(s.pitch);
+    c.globalAlpha=visAlpha;
+    if(s.hitCooldown>0 && Math.floor(s.time*13)%2===0)c.globalAlpha*=.52;
     const boosted=s.boostTime>0;
     // Exhaust and travel streaks live behind the intact Rosie/engine sprite.
     paintOriginalBoostExhaust(c,s,assets);
@@ -353,6 +435,14 @@ function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
       const phase=Math.floor(s.time*22),radius=2+noise(i+phase)*5;
       circle(c,-145-noise(i*17+phase)*78,(noise(i+phase*11)-.5)*65,
         radius,i%2?"rgba(255,183,91,.46)":"rgba(138,94,58,.52)");
+    }
+    // Turbo-ready ring: only while charge is exactly full, and it clears
+    // the moment Turbo activates (boostTime>0). Drawn behind the poses.
+    const readyAtlas=assets["bd:turbo-ready"];
+    if(s.charge>=100&&s.boostTime<=0&&artReady(readyAtlas)){
+      const frame=batchDFrameAt("turbo-ready",s.time*1000);
+      const size=230;
+      drawExpansionFrame(c,readyAtlas,"turbo-ready",frame,-size/2,-size/2,size,size);
     }
     // Crossfade between separately illustrated Rosie-body steering poses.
     // Keep their registered bounds identical so the cockpit does not jump.
@@ -374,7 +464,7 @@ function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
     c.restore();return;
   }
 
-  const x=DRILL_ANCHOR,y=s.y;
+  const x=DRILL_ANCHOR+(s.enterSlide||0),y=s.y;
   c.save();c.translate(x,y);c.scale(horizontalCorrection,1);c.rotate(s.pitch);
   if(s.hitCooldown>0&&Math.floor(s.time*14)%2===1)c.globalAlpha=.42;
   glow(c,65,4,s.boostTime>0?180:102,s.boostTime>0?"rgba(255,212,71,.45)":"rgba(244,145,43,.20)");
@@ -429,13 +519,20 @@ function vehicle(c,s,portrait,assets={},horizontalCorrection=1) {
 }
 export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrection=1) {
   c.clearRect(0,0,W,H);
-  scenery(c,s,assets);
+  // During a boss the arena is the scenic base; otherwise the route scenery.
+  if(s.boss)paintBossArena(c,s,assets);
+  else scenery(c,s,assets);
   wallDepth(c,s);
   // Establish the continuous wall first. The sculptural obstacle pass must be
   // last within terrain painting; the old ordering drew a ribbon over every
   // transition core and left the course looking obstacle-free.
-  if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
-  paintSculpturalTunnel(c,s,assets);
+  // Ribbons and sculptural route scenery are suppressed during a boss: the
+  // arena is the scenery there, and they would double its walls.
+  if(!s.boss){
+    if (!paintTunnelRibbons(c,s,assets)) paintNaturalTunnel(c,s,assets);
+    paintSculpturalTunnel(c,s,assets);
+  }
+  paintGates(c,s,assets);
   // Boss combat freezes and disables the normal tunnel's objects. Do not
   // leave collectible gems or dangerous-looking inactive obstacles floating
   // in front of the guardian and misleading the player.
@@ -448,12 +545,39 @@ export function paintDrill(c,s,portrait,particles=[],assets={},horizontalCorrect
   }
   paintTurboWorldStreaks(c,s,W,H);
   paintExpeditionBoss(c,s,W,H,assets);
+  paintBossRewards(c,s,assets);
   paintExcavationUnderlay(c,s);
   vehicle(c,s,portrait,assets,horizontalCorrection);
   paintExcavationTip(c,s);
+  // Round 10b: as she enters the exit gate, the opening's darkness
+  // swallows the drill — a soft dark radial at the gate mouth, drawn
+  // over the vehicle and growing with enterProgress, on top of the
+  // shrink/fade the vehicle pass already applies.
+  if((s.enterProgress||0)>0&&s.exitGateX!=null){
+    const gx=s.exitGateX-s.scroll+30,gy=s.y;
+    c.save();
+    const g=c.createRadialGradient(gx,gy,6,gx,gy,125);
+    g.addColorStop(0,"rgba(8,4,10,"+(.6*s.enterProgress).toFixed(3)+")");
+    g.addColorStop(1,"rgba(8,4,10,0)");
+    c.fillStyle=g;c.beginPath();c.arc(gx,gy,125,0,TWO_PI);c.fill();
+    c.restore();
+  }
   for(const p of particles){
     c.save();c.globalAlpha=Math.max(0,p.life/p.max);
-    if((p.type==="break-v2"||p.type==="crack-v2")&&artReady(assets.breakShatterVfx)){
+    if(p.type?.startsWith("fx-")){
+      // Batch-D combat-effect atlas particle. life/max drives the frame;
+      // one-shot effects clamp at the last frame via batchDFrameAt.
+      const fxId=p.type.slice(3);
+      const fxImg=assets["bd:"+fxId];
+      const meta=EMBER_BATCH_D_ATLASES[fxId];
+      if(meta&&artReady(fxImg)){
+        const frame=batchDFrameAt(fxId,(1-p.life/p.max)*p.max*1000);
+        const size=meta.displaySize;
+        drawExpansionFrame(c,fxImg,fxId,frame,p.x-size/2,p.y-size/2,size,size);
+      }else{
+        circle(c,p.x,p.y,p.r,p.color);
+      }
+    } else if((p.type==="break-v2"||p.type==="crack-v2")&&artReady(assets.breakShatterVfx)){
       const src=assets.breakShatterVfx;
       const fraction=clamp(1-p.life/p.max,0,1);
       const count=p.type==="crack-v2"?4:10;

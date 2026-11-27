@@ -96,3 +96,23 @@ html.cosmic-fallback-fullscreen .mobile-card-deck{display:none!important}
  .cosmic-embedded .cosmic-banner-top #retry-top{right:70px!important}
  .cosmic-top.cosmic-banner-top{padding-top:48px!important}
 }
+
+/* Mission board: every mission in two columns, launch beneath
+   (Mitchell, 2026-11-25). The select stays as the state holder. */
+#mission-launcher .mission-launcher-controls{flex-direction:column!important;align-items:stretch!important;flex-wrap:nowrap!important}
+#mission-launcher .mission-level-picker{display:block!important;flex:0 0 auto!important;width:100%;margin:0 auto}
+#mission-launcher #stage-select{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;opacity:0!important;pointer-events:none!important}
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;width:100%}
+.mission-grid button{display:flex;align-items:center;gap:7px;padding:7px 8px;border:1px solid #b7883c88;border-radius:9px;background:linear-gradient(150deg,#1b1440,#0a1030);color:#ffe9b8;font:700 10.5px Arial,sans-serif;letter-spacing:.3px;text-align:left;cursor:pointer;min-height:34px}
+.mission-grid button b{flex:0 0 auto;display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#2c1a55;color:#ffd179;font-size:10px;border:1px solid #b7883c}
+.mission-grid button.selected{border-color:#ffd179;background:linear-gradient(150deg,#6d213c,#a42d35);color:#fff3cf;box-shadow:0 0 9px #ffaf6477}
+.mission-grid button.selected b{background:#ffd179;color:#5c1130}
+#mission-launcher #start{flex:0 0 auto!important;width:100%}
+/* Desktop mission board sits beneath the character gallery. */
+@media(min-width:1100px) and (min-height:650px) and (hover:hover) and (pointer:fine) and (orientation:landscape){
+ #veil:not(.hidden) .fiend-card-gallery{inset:8px 10px 170px!important;align-content:center!important}
+ #veil:not(.hidden) #mission-launcher{top:auto!important;bottom:8px!important;left:50%!important;transform:translateX(-50%)!important;width:min(86vw,850px)!important;max-height:158px!important;overflow:auto!important}
+ #mission-launcher .mission-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+ #mission-launcher .mission-grid button{font-size:9px;min-height:31px;padding:5px}
+ #mission-launcher #start{min-height:31px!important}
+}

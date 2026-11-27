@@ -73,11 +73,11 @@ async function complete({ key, feature, prompt, signal, temperature }) {
   return parseJson(data?.choices?.[0]?.message?.content);
 }
 
-export async function generateRosieAnswer({ feature, input, key }) {
+export async function generateRosieAnswer({ feature, input, key, pet = "rosie" }) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), feature === "haiku" ? 26000 : 17500);
   try {
-    const firstPrompt = makeRosiePrompt(feature, input);
+    const firstPrompt = makeRosiePrompt(feature, input, pet);
     if (feature === "oracle") {
       return validateOracleContent(await complete({ key, feature, prompt: firstPrompt, signal: controller.signal }));
     }
@@ -90,7 +90,7 @@ export async function generateRosieAnswer({ feature, input, key }) {
     for (let attempt = 0; attempt < 3; attempt++) {
       const prompt = attempt === 0
         ? firstPrompt
-        : makeHaikuRepairPrompt(input, best?.lines || [], best?.meter?.rows || [], best ? "metre" : "format");
+        : makeHaikuRepairPrompt(input, best?.lines || [], best?.meter?.rows || [], best ? "metre" : "format", pet);
       try {
         const output = await complete({
           key, feature, prompt, signal: controller.signal,

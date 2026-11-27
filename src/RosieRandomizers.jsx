@@ -245,8 +245,8 @@ export default function RosieRandomizers() {
           </div>
           <h2>A roll with standards.</h2>
           <div className={styles.diceScene} data-layout-target="randomizers-dice">
-            <img className={`${styles.decorativeDie} ${styles.decorativeDieLeft}`} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
-            <img className={`${styles.decorativeDie} ${styles.decorativeDieRight}`} src="/randomizers/rosie-decorative-die.webp" alt="" aria-hidden="true" />
+            <img className={`${styles.decorativeDie} ${styles.decorativeDieLeft}`} src="/randomizers/rosie-decorative-die-a.webp" alt="" aria-hidden="true" />
+            <img className={`${styles.decorativeDie} ${styles.decorativeDieRight}`} src="/randomizers/rosie-decorative-die-b.webp" alt="" aria-hidden="true" />
             <DiceFace value={dice} rolling={diceRoll} />
           </div>
           <div className={styles.readout} aria-live="polite">

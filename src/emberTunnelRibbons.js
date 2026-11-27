@@ -58,8 +58,12 @@ function arc(world, side) {
 }
 
 function paintRibbon(c, scroll, side, image) {
-  if (!lit(image)) return false;
-  const tile = image.naturalWidth;
+  // `image` may be an array of same-format strips (Barkroot's terrain
+  // variants): the strip then rotates by world arc length, one full
+  // tile per variant, so a long route keeps changing its geology.
+  const list=Array.isArray(image)?image.filter(lit):(lit(image)?[image]:[]);
+  if (!list.length) return false;
+  const tile = list[0].naturalWidth;
   const depth = EDGE_DEPTH;
   for (let x = -SAMPLES * 2; x < DRILL_WIDTH + SAMPLES * 2; x += SAMPLES) {
     const xNext = Math.min(DRILL_WIDTH + SAMPLES * 2, x + SAMPLES);
@@ -78,13 +82,15 @@ function paintRibbon(c, scroll, side, image) {
     c.transform(tx, ty, nx, ny, x, a.y);
     let drawn = 0;
     while (drawn < span - 0.0001) {
-      const u = ((u0 + drawn) % tile + tile) % tile;
+      const globalU = u0 + drawn;
+      const img = list[Math.floor(globalU / tile) % list.length];
+      const u = ((globalU % tile) + tile) % tile;
       const take = Math.min(span - drawn, tile - u);
       const at = seg * drawn / span;
       const width = seg * take / span;
       // Tiny coverage overlap avoids cracks between adjacent quads;
       // only into the previous solid rock, never into the flight lane.
-      c.drawImage(image, u, 0, take, image.naturalHeight,
+      c.drawImage(img, u, 0, take, img.naturalHeight,
         at, 0, width + 0.65, depth);
       drawn += take;
     }
@@ -97,10 +103,33 @@ function paintRibbon(c, scroll, side, image) {
 // painterly cave background. Its alpha rolls off naturally from about row 85,
 // reaching zero at row 120. Do not scale the source vertically or stack
 // duplicate bands: doing so causes the photographed 390px "stalactite bars".
+// Batch D: expedition stages 0-4 use their kingdom ribbon pair; Classic
+// (stageIndex null) keeps the existing Barkroot pair and the natural-cave
+// fallback. Stage 0 falls back to the existing pair if batch D is not loaded.
 export function paintTunnelRibbons(c, s, assets) {
-  const top = assets?.edgeBarkrootTop;
-  const floor = assets?.edgeBarkrootBottom;
-  if (!lit(top) || !lit(floor)) return false;
+  let top,floor;
+  if(Number.isInteger(s.stageIndex)&&s.stageIndex>=0&&s.stageIndex<=4){
+    top=assets?.["bd:ribbon-top"];
+    floor=assets?.["bd:ribbon-bottom"];
+    if((!lit(top)||!lit(floor))&&s.stageIndex===0){
+      top=assets?.edgeBarkrootTop;
+      floor=assets?.edgeBarkrootBottom;
+    }
+    // Barkroot's variant strips rotate along the route (2026-11-25
+    // remake): base strip first, then variants 02-05 by arc length.
+    if(s.stageIndex===0&&lit(top)&&lit(floor)){
+      const tops=[top],floors=[floor];
+      for(const n of [2,3,4,5]){
+        const t=assets?.["bd:ribbon-top-v"+n],f=assets?.["bd:ribbon-bottom-v"+n];
+        if(lit(t)&&lit(f)) { tops.push(t); floors.push(f); }
+      }
+      if(tops.length>1){ top=tops; floor=floors; }
+    }
+  }else{
+    top=assets?.edgeBarkrootTop;
+    floor=assets?.edgeBarkrootBottom;
+  }
+  if (!lit(Array.isArray(top)?top[0]:top) || !lit(Array.isArray(floor)?floor[0]:floor)) return false;
   // Natural original rock texture smoothly fades into the cave painting.
   // No stretched or pasted-on ceiling/floor mural rectangles.
   paintRibbon(c,s.scroll,-1,top);

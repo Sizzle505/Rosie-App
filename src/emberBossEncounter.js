@@ -4,30 +4,30 @@
 // and one-time, clearly telegraphed damage opportunities.
 const BOSS_CONFIG = Object.freeze({
   copperjack:Object.freeze({
-    id:"copperjack",maxHealth:2,reward:1400,
+    id:"copperjack",maxHealth:4,reward:1400,
     attacks:Object.freeze([
-      Object.freeze({id:"gear-sweep",warning:1.1,active:0.55,recovery:1.4,
-        hazard:"floor",warningText:"GEAR SWEEP - RISE ABOVE THE MECHANISM"}),
-      Object.freeze({id:"spark-bolt",warning:1.2,active:0.65,recovery:1.4,
-        hazard:"projectile",warningText:"SPARK BOLT - LEAVE THE CENTER"})
+      Object.freeze({id:"gear-sweep",warning:1.40,active:0.65,recovery:1.55,
+        hazard:"floor",warningText:"GEAR SWEEP"}),
+      Object.freeze({id:"spark-bolt",warning:1.30,active:0.65,recovery:1.45,
+        hazard:"projectile",warningText:"SPARK BOLT"})
     ])
   }),
   cinderclaw:Object.freeze({
-    id:"cinderclaw",maxHealth:3,reward:1750,
+    id:"cinderclaw",maxHealth:4,reward:1750,
     attacks:Object.freeze([
-      Object.freeze({id:"fireball",warning:1.15,active:0.55,recovery:1.30,
-        hazard:"projectile",warningText:"FIREBALL - DODGE THE FLAME"}),
-      Object.freeze({id:"burrow",warning:1.35,active:0.70,recovery:1.45,
-        hazard:"ground",warningText:"BURROWING - WATCH THE FLOOR"})
+      Object.freeze({id:"fireball",warning:1.40,active:0.65,recovery:1.55,
+        hazard:"projectile",warningText:"FIREBALL"}),
+      Object.freeze({id:"burrow",warning:1.30,active:0.65,recovery:1.45,
+        hazard:"ground",warningText:"BURROWING"})
     ])
   }),
   "mole-king":Object.freeze({
     id:"mole-king",maxHealth:4,reward:2600,
     attacks:Object.freeze([
       Object.freeze({id:"quake",warning:1.40,active:0.65,recovery:1.55,
-        hazard:"floor",warningText:"ROYAL QUAKE - CLIMB AWAY"}),
+        hazard:"floor",warningText:"ROYAL QUAKE"}),
       Object.freeze({id:"earth-burst",warning:1.30,active:0.65,recovery:1.45,
-        hazard:"projectile",warningText:"EARTH BURST - DODGE THE ROCKS"})
+        hazard:"projectile",warningText:"EARTH BURST"})
     ])
   })
 });
@@ -40,6 +40,10 @@ export function createBossEncounter(kind){
   return {
     kind,health:config.maxHealth,maxHealth:config.maxHealth,phase:"warning",
     cycle:0,elapsed:0,attack:first.id,defeated:false,hitThisRecovery:false,
+    // Monotonic boss clock (seconds since the encounter began) and the age
+    // of the last confirmed hit. The pain pose is gated on these, never on
+    // recovery alone: see expeditionBossFrame.
+    age:0,hitFlashAge:-1,
     events:[{type:"boss-spawn",boss:kind},{type:"boss-warning",boss:kind,attack:first.id,text:first.warningText}],
     stats:{successfulHits:0,attackCycles:0}
   };
@@ -70,6 +74,7 @@ export function advanceBossEncounter(b,dt){
   const remainingTime=Number.isFinite(dt)?Math.max(0,Math.min(1.5,dt)):0;
   b.events=[];
   if(b.defeated||remainingTime===0)return b;
+  b.age=(b.age||0)+remainingTime;
   let remaining=remainingTime;
   for(let i=0;i<16&&remaining>0.000001;i++){
     const duration=phaseDuration(b),step=Math.min(remaining,Math.max(0,duration-b.elapsed));
@@ -83,9 +88,24 @@ export function advanceBossEncounter(b,dt){
 export function bossCanTakeHit(b,{turbo=false,inRange=false}={}){
   return Boolean(!b.defeated&&b.phase==="recovery"&&!b.hitThisRecovery&&turbo&&inRange);
 }
+// Seconds until the next vulnerable (recovery) window opens: 0 while
+// vulnerable or while the current attack is still active, the rest of the
+// warning plus the full attack that follows it while warning, Infinity
+// once the guardian is defeated. A Turbo boost lasts 0.72s, so a strike
+// fired while this is above 0.72 cannot reach the window and must not be
+// spent — that silent waste is how a full Turbo vanished with no damage.
+export function bossSecondsUntilVulnerable(b){
+  if(!b||b.defeated)return Infinity;
+  const a=attackFor(b);
+  if(b.phase==="recovery")return 0;
+  if(b.phase==="active")return Math.max(0,a.active-b.elapsed);
+  return Math.max(0,a.warning-b.elapsed)+a.active;
+}
 export function hitBossDuringRecovery(b,contact={}){
   if(!bossCanTakeHit(b,contact))return false;
   b.hitThisRecovery=true;
+  // The pain pose may show only after a confirmed hit, for 0.65s.
+  b.hitFlashAge=b.age||0;
   b.health=Math.max(0,b.health-1);
   b.stats.successfulHits++;
   b.events.push({type:"boss-hit",boss:b.kind,health:b.health});

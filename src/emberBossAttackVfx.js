@@ -2,9 +2,40 @@
  * Engine-aligned, non-character Ember Tunnel attack overlays.
  * These paint under the approved boss atlases and never alter collision logic.
  * Unlike the rejected concept montages, no new character or gate art is used.
+ *
+ * Batch D: when the named attack atlas is loaded, ONLY the atlas frames are
+ * drawn (warning 0-2, active 3-5, recovery 6-7 for the first 0.35s); the old
+ * procedural VFX is the fallback when the atlas is absent, never stacked
+ * with the sprites. The existing telegraph lane fill / warning text in
+ * emberExpeditionBossPainter.js is the readability layer and is unchanged:
+ * the handoff's "do not add lines/rectangles/text/rings" is read as a ban
+ * on NEW additions, not on removing the anticipation the acceptance
+ * checklist requires.
  */
 import {bossDangerLane,BOSS_SCREEN_X} from "./emberExpeditionBossStage.js";
+import {getBossConfig} from "./emberBossEncounter.js";
+import {EMBER_BATCH_D_ATLASES,drawExpansionFrame} from "./emberExpansionCatalog.js";
 const TAU=Math.PI*2,clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+
+// Pure frame mapping, exported for tests. Returns -1 when nothing draws.
+export function attackVfxFrame(attack,phase,progress,recoverySeconds){
+  const atlas=EMBER_BATCH_D_ATLASES[attack];
+  if(!atlas||!atlas.phaseFrames)return -1;
+  const p=clamp(Number.isFinite(progress)?progress:0,0,1);
+  if(phase==="warning")return atlas.phaseFrames.warning[Math.min(2,Math.floor(p*3))];
+  if(phase==="active")return atlas.phaseFrames.active[Math.min(2,Math.floor(p*3))];
+  if(phase==="recovery"){
+    const elapsed=p*(Number.isFinite(recoverySeconds)?recoverySeconds:0);
+    if(elapsed>=atlas.recoveryVisualSeconds)return -1;
+    return atlas.phaseFrames.recovery[elapsed<atlas.recoveryVisualSeconds/2?0:1];
+  }
+  return -1;
+}
+function attackVfxKind(attack){
+  if(attack==="spark-bolt"||attack==="fireball")return "projectile";
+  if(attack==="earth-burst")return "ceiling";
+  return "floor";
+}
 
 export function bossVfxBounds(attack,y,height){
  if(!Number.isFinite(y)||!Number.isFinite(height)||height<=0)return null;
@@ -89,22 +120,63 @@ function ceilingBurst(c,b,W,p,t){
   pebble(c,x,y,4+i%3,active?"rgba(153,105,80,.88)":"rgba(181,150,111,.44)",t*.6+i*.8);
  }
 }
-/** Draw only while warning or active, clipped to EXACTLY the engine's hazard lane. */
-export function paintBossAttackVfx(c,s,W,H,p){
- if(!c||!s?.boss||!p||!(p.phase==="warning"||p.phase==="active"))return false;
+/** Draw only while warning or active (plus the first 0.35s of recovery for
+ * atlas frames), clipped to EXACTLY the engine's hazard lane. */
+export function paintBossAttackVfx(c,s,W,H,p,assets={}){
+ if(!c||!s?.boss||!p)return false;
+ const boss=s.boss;
+ const config=getBossConfig(boss.kind);
+ const attackCfg=config?.attacks.find(a=>a.id===p.attack);
+ const recoverySeconds=attackCfg?.recovery??0;
+ const frame=attackVfxFrame(p.attack,p.phase,p.progress,recoverySeconds);
+ const atlasImage=assets?.["bd:"+p.attack];
+ const atlasReady=atlasImage?.complete&&atlasImage.naturalWidth>0&&frame>=0;
+ if(!atlasReady){
+   // Procedural fallback only, and only in warning/active as before.
+   if(!(p.phase==="warning"||p.phase==="active"))return false;
+   const b=bossVfxBounds(p.attack,s.bossY,H);
+   if(!b||W<=0)return false;
+   c.save();c.beginPath();c.rect(0,b.top,W,b.bottom-b.top);c.clip();
+   c.globalAlpha=p.phase==="active"?.92:.55;
+   const t=Number.isFinite(s.time)?s.time:0;
+   switch(p.attack){
+    case "spark-bolt":electricity(c,b,W,p,t);break;
+    case "fireball":fireball(c,b,W,p,t);break;
+    case "gear-sweep":gears(c,b,W,p,t);break;
+    case "burrow":fissure(c,b,W,p,t,"burrow");break;
+    case "quake":fissure(c,b,W,p,t,"quake");break;
+    case "earth-burst":ceilingBurst(c,b,W,p,t);break;
+    default:c.restore();return false;
+   }
+   c.restore();return true;
+ }
  const b=bossVfxBounds(p.attack,s.bossY,H);
  if(!b||W<=0)return false;
+ const kind=attackVfxKind(p.attack);
+ const atlas=EMBER_BATCH_D_ATLASES[p.attack];
  c.save();c.beginPath();c.rect(0,b.top,W,b.bottom-b.top);c.clip();
- c.globalAlpha=p.phase==="active"?.92:.55;
- const t=Number.isFinite(s.time)?s.time:0;
- switch(p.attack){
-  case "spark-bolt":electricity(c,b,W,p,t);break;
-  case "fireball":fireball(c,b,W,p,t);break;
-  case "gear-sweep":gears(c,b,W,p,t);break;
-  case "burrow":fissure(c,b,W,p,t,"burrow");break;
-  case "quake":fissure(c,b,W,p,t,"quake");break;
-  case "earth-burst":ceilingBurst(c,b,W,p,t);break;
-  default:c.restore();return false;
+ c.globalAlpha=p.phase==="active"?.92:p.phase==="warning"?.55:.6;
+ if(kind==="projectile"){
+   const size=clamp(b.bottom-b.top,160,260);
+   const y=(b.top+b.bottom)/2-size/2;
+   const from=BOSS_SCREEN_X-40,to=60;
+   const x=p.phase==="warning"?from:p.phase==="active"?from-(from-to)*p.progress:to;
+   const cx=x-size/2;
+   if(atlas.flipX){
+     c.save();c.translate(cx+size/2,y+size/2);c.scale(-1,1);
+     drawExpansionFrame(c,atlasImage,p.attack,frame,-size/2,-size/2,size,size);
+     c.restore();
+   }else{
+     drawExpansionFrame(c,atlasImage,p.attack,frame,cx,y,size,size);
+   }
+ }else{
+   const size=140;
+   const xs=[W*.25,W*.5,W*.75];
+   for(const cx of xs){
+     const x=cx-size/2;
+     const y=kind==="ceiling"?b.top:b.bottom-size;
+     drawExpansionFrame(c,atlasImage,p.attack,frame,x,y,size,size);
+   }
  }
  c.restore();return true;
 }

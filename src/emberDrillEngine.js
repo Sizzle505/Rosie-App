@@ -1,10 +1,11 @@
 import { FORMATION_LAYOUT, formationClearance, nearFormation } from "./emberTunnelLayout.js";
 import {makeBreakables, drillBreakables} from "./emberBreakableTerrain.js";
 import {makeCrystalShutters,updateCrystalShutters} from "./emberCrystalShutters.js";
-import {getExpeditionStage,EXPEDITION_STAGE_SECONDS} from "./emberExpeditionStages.js";
+import {getExpeditionStage,EXPEDITION_STAGE_SECONDS,openingGraceSeconds} from "./emberExpeditionStages.js";
 import {makeExpeditionHazards,updateExpeditionHazards} from "./emberExpeditionHazards.js";
-import {BOSS_INTRO_TIME,expeditionBossKind,startExpeditionBoss,updateExpeditionBoss,
-  finishExpeditionBossStage} from "./emberExpeditionBossStage.js";
+import {BOSS_INTRO_TIME,BOSS_TURBO_SECONDS,expeditionBossKind,startExpeditionBoss,updateExpeditionBoss,
+  finishExpeditionBossStage,strikeBoss} from "./emberExpeditionBossStage.js";
+import {bossSecondsUntilVulnerable} from "./emberBossEncounter.js";
 // Deterministic, frame-rate-independent 75-second Ember Tunnel Drill course.
 // All collision and scoring logic stays independent of React and rendering.
 export const DRILL_WIDTH = 690;
@@ -19,12 +20,17 @@ export const DRILL_TIP_VERTICAL_OFFSET = 35;
 export function drillTipPosition(run) {
   const pitch = run.pitch || 0, co = Math.cos(pitch), si = Math.sin(pitch);
   return {
-    x: DRILL_ANCHOR + DRILL_TIP_OFFSET * co - DRILL_TIP_VERTICAL_OFFSET * si,
+    x: DRILL_ANCHOR + (run.enterSlide || 0) + DRILL_TIP_OFFSET * co - DRILL_TIP_VERTICAL_OFFSET * si,
     y: run.y + DRILL_TIP_OFFSET * si + DRILL_TIP_VERTICAL_OFFSET * co
   };
 }
 export const RUN_DURATION = 75;
 export const TURBO_DURATION = 4.8;
+// Round 10b: once the route timer ends at an anchored exit gate, the
+// run does not stop dead — she drives INTO the gate over this long
+// (world frozen, drill slides/shrinks/fades into the opening) before
+// the run is scored complete.
+export const EXIT_ENTER_SECONDS = 1.15;
 
 export function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 export function tunnelCenter(x) {
@@ -61,7 +67,9 @@ export function makeCourse(seed = 1467) {
   const objects = [];
   let id = 0;
   // Curved, spaced, hand-constrained pickup chains rather than impossible random hazards.
-  for (let x = 900; x < 30000; x += 610) {
+  // Course length extended to 33600 (2026-11-25): the 30s Treasury route
+  // now travels to ~31500, so the pickup field covers it with margin.
+  for (let x = 900; x < 33600; x += 610) {
     const motif = Math.floor(x / 610) % 6;
     const offset = motif === 2 ? -60 : motif === 4 ? 62 : motif === 5 ? -30 : 20;
     // Small seed-specific pickup drift preserves curated safety while making replay courses distinct.
@@ -114,19 +122,57 @@ export function newRun(seed = 1467, stageIndex = null) {
     crystalShutters:makeCrystalShutters(), hazardsDodged:0,
     worldHazards:makeExpeditionHazards(stageIndex),worldObjective:false,
     boss:null,bossY:null,bossDefeated:false,bossAttackHitCycle:-1,
+    bossSpawnedAt:null,bossRewards:[],
+    // World-anchored exit gate, set once in the last seconds of a world
+    // run. Null for Classic and for boss stages (the arena is the
+    // finale there). enterTime/enterProgress/enterSlide drive the
+    // round-10b drive-into-the-gate finish (see updateRun).
+    exitGateX:null, enterTime:null, enterProgress:0, enterSlide:0,
     objectives:{barkroot:false,ruby:false}, objectiveBonus:0,
     formationHits: [], events: [], result: null, distance: 0 };
 }
 export function triggerTurbo(s) {
   if (!s.running || s.charge < 100 || s.boostTime > 0) return false;
-  const repaired = s.hull < 5;
+  // Boss arenas: never silently waste a strike. A Turbo fired while the
+  // guardian is warning more than one boost-duration from the next
+  // recovery cannot reach the vulnerable window (the boost expires during
+  // the warning), so refuse it and keep the charge — the caller shows the
+  // "too early" notice. Firing during the attack or late warning still
+  // works: the boost carries into the recovery that follows. The boost
+  // is evaluated in ≤0.045s substeps, so a recovery that opens in the
+  // last fraction of the boost can lapse before the hit check runs
+  // (measured: a strike fired 0.70s before the recovery is allowed but
+  // misses; 0.66s lands). The 0.12s margin makes an allowed strike always
+  // overlap the recovery by a full substep.
+  if (s.boss && !s.boss.defeated && bossSecondsUntilVulnerable(s.boss) > BOSS_TURBO_SECONDS - 0.12) return false;
+  // One hit per recovery: a second press after a hit in the same recovery
+  // used to drain the charge with no hit and no notice. Refuse it and
+  // keep the charge — the caller says "already struck".
+  if (s.boss && !s.boss.defeated && s.boss.phase === "recovery" && s.boss.hitThisRecovery) return false;
   // In boss arenas each press is a deliberate strike. The classic 4.8s
   // excavation shield would otherwise auto-hit several later recovery phases
   // from a single Turbo press.
-  s.boostTime = s.boss ? 0.72 : TURBO_DURATION; s.charge = 0;
-  s.hull = Math.min(5, s.hull + 1);
+  const hullBefore = s.hull;
+  // A strike fired while the guardian is vulnerable and the auger is
+  // aligned lands at click time, not on a later frame: the 0.72s boost is
+  // evaluated in updateRun, and a strike fired in the last frame of
+  // recovery could otherwise lapse before the hit check runs. The boost
+  // visual still plays, and the boost-overlap path in updateExpeditionBoss
+  // covers strikes fired during the attack or late warning. One hit per
+  // recovery: strikeBoss refuses once hitThisRecovery is set.
+  // The hull restore lives in strikeBoss now: a LANDED hit heals one
+  // hull, a press that misses heals nothing. Classic (non-boss) Turbo
+  // keeps its shipped per-press restore below.
+  let struck = false;
+  if (s.boss && !s.boss.defeated) {
+    const tip = drillTipPosition(s);
+    struck = strikeBoss(s, { turbo: true, tipX: tip.x, tipY: tip.y });
+  } else if (s.hull < 5) {
+    s.hull++;
+  }
+  s.boostTime = s.boss ? BOSS_TURBO_SECONDS : TURBO_DURATION; s.charge = 0;
   s.boosts++;
-  s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y, repaired });
+  s.events.push({ type: "turbo", x: DRILL_ANCHOR, y: s.y, repaired: s.boss ? (struck && hullBefore < 5) : (hullBefore < 5) });
   return true;
 }
 export function intersectsSculpture(f, worldX, y) {
@@ -140,7 +186,37 @@ export function updateRun(s, dt, up = false, down = false) {
   if (!s.running) return s;
   dt = clamp(dt, 0, 0.045);
   s.events.length = 0;
-  const target = up && !down ? -0.72 : down && !up ? 0.72 : 0;
+  // Round 10b drive-into-the-exit finish: the world is frozen and the
+  // drill slides into the gate opening (the painter shrinks/fades it
+  // by enterProgress) before the run is scored. No collisions, no
+  // scroll, no timer — the gate waits at the drill anchor (clamped
+  // below) and she enters it.
+  if (s.enterTime != null) {
+    s.enterTime += dt;
+    const p = clamp(s.enterTime / EXIT_ENTER_SECONDS, 0, 1);
+    const eased = p * p * (3 - 2 * p);
+    s.enterProgress = p;
+    s.enterSlide = Math.round(88 * eased);
+    if (p >= 1) {
+      if (s.damageTaken === 0) {
+        s.cleanBonus = 500; s.score += s.cleanBonus;
+        s.events.push({ type: "clean-run", x: DRILL_ANCHOR, y: s.y });
+      }
+      s.running = false; s.ended = true;
+      s.result = "complete";
+      s.events.push({ type: "end", result: s.result });
+    }
+    return s;
+  }
+  // During a boss Turbo the auger auto-aims at the guardian: the 0.72s
+  // boost is too short to close a large vertical gap by hand, so a strike
+  // fired while roughly aligned still lands. The assist only engages within
+  // 300px of the guardian — a wildly misaligned strike still misses, and
+  // the player can always steer in first. Player steering resumes after.
+  const bossAim = s.boss && s.boostTime > 0 && Number.isFinite(s.bossY)
+    && Math.abs(s.y - s.bossY) <= 300
+    ? clamp((s.bossY - s.y) / 120, -0.72, 0.72) : null;
+  const target = bossAim !== null ? bossAim : up && !down ? -0.72 : down && !up ? 0.72 : 0;
   s.pitch += (target - s.pitch) * Math.min(1, dt * 6.5);
   s.y = clamp(s.y + Math.sin(s.pitch) * 330 * dt, 65, DRILL_HEIGHT - 65);
   const boosted = s.boostTime > 0;
@@ -154,6 +230,10 @@ export function updateRun(s, dt, up = false, down = false) {
     s.hitCooldown=Math.max(0,s.hitCooldown-dt);
     s.shock=Math.max(0,s.shock-dt);
     if(!s.boss)startExpeditionBoss(s,tunnelCenter);
+    // The boss fight runs on its own clock (bossTimeLeft), not the route
+    // timer: reaching the arena with hull left buys a full window to land
+    // the required strikes. s.time still advances (notice expiry uses it).
+    if(s.boss&&s.bossTimeLeft!=null)s.bossTimeLeft-=dt;
     const tip=drillTipPosition(s);
     updateExpeditionBoss(s,dt,{
       tipX:tip.x,tipY:tip.y,boosted:s.boostTime>0,onHit:takeHit
@@ -164,7 +244,7 @@ export function updateRun(s, dt, up = false, down = false) {
         s.events.push({type:"clean-run",x:DRILL_ANCHOR,y:s.y});
       }
       finishExpeditionBossStage(s);
-    }else if(s.hull<=0||s.time>=s.duration){
+    }else if(s.hull<=0||(s.bossTimeLeft!=null?s.bossTimeLeft<=0:s.time>=s.duration)){
       s.running=false;s.ended=true;
       s.result=s.hull<=0?"hull":"boss-timeout";
       s.time=Math.min(s.duration,s.time);
@@ -176,6 +256,19 @@ export function updateRun(s, dt, up = false, down = false) {
   s.scroll += speed * dt;
   s.distance = s.scroll-(s.stageStartX||0);
   s.time += dt;
+  // Anchor the exit gate once, in the last seconds of a world run,
+  // just inside the right edge of the canvas. It then scrolls left
+  // with the world toward the drill — but CLAMPED at the drill anchor:
+  // the gate arrives at her and waits there, it never scrolls past
+  // her (round 10b: the old anchor let the gate end half off-screen
+  // with the drill already past its center). It never removes time
+  // from the playable route. Boss worlds never anchor one: since the
+  // 30s tunnel remake their route timer runs past the old 2.5s window
+  // before the arena, and the arena is their finale — a gate would
+  // be a false ending.
+  if(s.stageIndex!==null&&!expeditionBossKind(s.stageIndex)&&!s.boss&&s.exitGateX==null
+    &&s.time>=s.duration-2.2)s.exitGateX=s.scroll+610;
+  if(s.exitGateX!=null)s.exitGateX=Math.max(s.exitGateX,s.scroll+DRILL_ANCHOR);
   s.boostTime = Math.max(0, s.boostTime - dt);
   s.hitCooldown = Math.max(0, s.hitCooldown - dt);
   s.shock = Math.max(0, s.shock - dt);
@@ -183,7 +276,9 @@ export function updateRun(s, dt, up = false, down = false) {
   const worldX = s.scroll + DRILL_ANCHOR;
   const routeMid = tunnelCenter(worldX);
   const outside = Math.abs(s.y - routeMid) > tunnelRadius(worldX) - 43;
-  if (outside && s.hitCooldown <= 0 && !boosted) takeHit(s);
+  // Settle-in grace: no wall damage in the opening (3s normally, 8s in
+  // boss worlds — see openingGraceSeconds), while the player orients.
+  if (outside && s.hitCooldown <= 0 && !boosted && s.time >= openingGraceSeconds(s.stageIndex)) takeHit(s);
   // Collision follows the SAME world-anchored illustrated overhangs/floor rises.
   // A smaller elliptical core, not the full rectangular transparent image,
   // creates fair dodges. Check toward the real drill nose, not the cockpit.
@@ -212,7 +307,12 @@ export function updateRun(s, dt, up = false, down = false) {
     if (boosted) {
       s.score += 125; s.shards++;
       s.events.push({type:"shatter",x:tip.x,y:tipY});
-    } else if (s.hitCooldown<=0) takeHit(s);
+    // Settle-in grace covers formations too, like walls: the boss worlds'
+    // first hard formations sit 26-186px ahead of the spawn tip (0.1-0.6s
+    // of reaction time), so without this the drill could lose 2 hull
+    // before the player has oriented. The formation is still consumed.
+    // Boss worlds use the 8s opening grace (see openingGraceSeconds).
+    } else if (s.hitCooldown<=0&&s.time>=openingGraceSeconds(s.stageIndex)) takeHit(s);
   }
   for (let i = 0; i < s.objects.length; i++) {
     const obj = s.objects[i];
@@ -229,7 +329,9 @@ export function updateRun(s, dt, up = false, down = false) {
       if (boosted) {
         s.score += 125; s.shards++;
         s.events.push({ type: "shatter", x: (rock ? tip.x : DRILL_ANCHOR) + deltaX, y: obj.y });
-      } else if (s.hitCooldown <= 0) takeHit(s);
+      // Course rocks/spikes share the opening grace: no damage in the
+      // settle-in, like walls, formations and hazards.
+      } else if (s.hitCooldown <= 0 && s.time >= openingGraceSeconds(s.stageIndex)) takeHit(s);
       continue;
     }
     if (s.time - s.lastCatch > 2.3) s.combo = 0;
@@ -244,14 +346,23 @@ export function updateRun(s, dt, up = false, down = false) {
     s.events.push({ type: "pickup", kind: obj.kind, x: DRILL_ANCHOR + deltaX, y: obj.y, combo: s.combo });
   }
   if (s.hull <= 0 || s.time >= (s.duration||RUN_DURATION)) {
-    if (s.hull > 0 && s.damageTaken === 0) {
-      s.cleanBonus = 500; s.score += s.cleanBonus;
-      s.events.push({ type: "clean-run", x: DRILL_ANCHOR, y: s.y });
+    // Round 10b: with an exit gate anchored and waiting at the drill,
+    // the timer ending starts the drive-into-the-gate finish instead
+    // of stopping dead (the entering branch at the top of updateRun
+    // advances it and scores the run). A hull loss still ends at once.
+    if (s.hull > 0 && s.exitGateX != null && s.enterTime == null) {
+      s.enterTime = 0; s.enterProgress = 0; s.enterSlide = 0;
+      s.events.push({ type: "exit-enter", x: DRILL_ANCHOR, y: s.y });
+    } else {
+      if (s.hull > 0 && s.damageTaken === 0) {
+        s.cleanBonus = 500; s.score += s.cleanBonus;
+        s.events.push({ type: "clean-run", x: DRILL_ANCHOR, y: s.y });
+      }
+      s.running = false; s.ended = true;
+      s.result = s.hull > 0 ? "complete" : "hull";
+      s.time = Math.min(s.duration||RUN_DURATION, s.time);
+      s.events.push({ type: "end", result: s.result });
     }
-    s.running = false; s.ended = true;
-    s.result = s.hull > 0 ? "complete" : "hull";
-    s.time = Math.min(s.duration||RUN_DURATION, s.time);
-    s.events.push({ type: "end", result: s.result });
   }
   return s;
 }

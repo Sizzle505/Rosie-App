@@ -116,7 +116,16 @@
 }
 @media(max-width:759px) and (orientation:portrait){
  .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded)>.captain-fullscreen-toggle:has(.cosmic-fullscreen-art){position:absolute!important;top:5px!important;right:8px!important;left:auto!important;bottom:auto!important;width:44px!important;height:44px!important;margin:0!important}
- .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded) .ember-section-divider{min-height:44px!important;padding:8px 50px 0 6px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded) .ember-suite{margin-top:4px!important}
+ /* Mitchell, 2026-11-26: on the main Captain page the Tunnel window
+    expands down so the treat turbo sits right above the nav bar. The
+    frame takes the same full-viewport-minus-nav height as the Yacht
+    console on phones, the suite fills it as a column, and the stage
+    flexes to absorb the height (the drill canvas re-renders at its
+    element's real size, so the picture never stretches). */
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded):not(.is-fallback-fullscreen){height:clamp(460px,calc(100svh - 100px - env(safe-area-inset-bottom)),850px)!important;scroll-margin-top:6px}
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded):not(.is-fallback-fullscreen)>.ember-suite{height:100%!important;display:flex!important;flex-direction:column!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded):not(.is-fallback-fullscreen) .ember-stage{flex:1 1 auto!important;min-height:0!important;height:auto!important}
 }
 .yacht-console-upgrade .boost-control:is(.boost-ready,.boost-active),.ember-console-upgrade .ember-boost:is(.is-ready,.is-boosting){filter:drop-shadow(0 0 10px #ffe69c) brightness(1.2)!important}
 @media(max-width:759px) and (orientation:portrait){
@@ -143,3 +152,465 @@
  overflow:hidden!important;margin:0!important;
 }
 .yacht-turbo-meter>i{max-width:100%!important;box-sizing:border-box}
+
+/* iPhone round 2 (Mitchell, 2026-11-25) — ONE authoritative phone layout
+   for the Yacht console. The earlier schemes in captain-phone-layout.css
+   and above fought each other: the voyage picker landed in the page grid's
+   1fr row and stretched into a tall dark panel, while the game shell was
+   pushed into an auto row whose course collapsed to a sliver — the start
+   panel (and CAST OFF) was clipped inside it, and on the boss chapter the
+   arena itself was squeezed into a thin strip. Here every grid child of
+   the page and the shell is placed explicitly, the picker sizes to its
+   content, the course always gets the remaining height, and the start
+   panel is a centered card over the painting with CAST OFF in the middle
+   — for every chapter, Kuroi's Last Charge included. Desktop untouched. */
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-yacht.is-preview-console>.captain-game-page.yacht-console-upgrade{
+  grid-template-rows:44px clamp(74px,11dvh,104px) auto auto minmax(0,1fr)!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded>.captain-game-page.yacht-console-upgrade{
+  grid-template-rows:88px auto auto minmax(0,1fr)!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-mobile-actions{grid-row:1!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-game-page .yacht-mobile-actions{grid-row:auto!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-hero{grid-row:2!important;grid-column:1!important}
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-game-page .captain-hero{grid-row:1!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-hud{
+  grid-row:3!important;grid-column:1!important;height:52px!important;min-height:52px!important;
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;margin:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-game-page .captain-hud{grid-row:2!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .captain-hud{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;height:auto!important;min-height:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .captain-hud>div{min-height:44px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-level-select{
+  grid-row:4!important;grid-column:1!important;align-self:start!important;height:auto!important;
+  width:100%!important;margin:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-game-page .yacht-level-select{grid-row:3!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-game-shell{
+  grid-row:5!important;grid-column:1!important;position:relative!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-rows:18px 24px minmax(0,1fr) 76px!important;gap:3px!important;
+  height:100%!important;min-height:0!important;margin:0!important;padding:4px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht.is-expanded .captain-game-page .yacht-game-shell{grid-row:4!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-voyage-progress{
+  grid-row:1!important;grid-column:1 / -1!important;align-self:center!important;height:14px!important;min-height:0!important;padding:0!important;margin:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-game-sign{
+  grid-row:2!important;grid-column:1!important;display:flex!important;align-items:center!important;gap:6px!important;
+  min-width:0!important;margin:0!important;padding:0 2px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-game-sign strong{
+  font-size:10px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-game-sign small{display:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-game-sign .captain-seal{display:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-steering-options{
+  grid-row:2!important;grid-column:2!important;display:flex!important;align-items:center!important;
+  height:24px!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-course{
+  grid-row:3!important;grid-column:1 / -1!important;position:relative!important;display:block!important;
+  width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;
+  aspect-ratio:auto!important;margin:0!important;padding:0!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-command-deck{
+  grid-row:4!important;grid-column:1 / -1!important;height:76px!important;min-height:0!important;margin:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-cargo-key{display:none!important}
+ /* Boss chapter: no sign, no deck — progress, helm hint, then the arena
+    fills the course. The arena is absolute inset-0 inside the course, so
+    a correctly-sized course is all it needs. */
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .yacht-game-shell{
+  grid-template-columns:minmax(0,1fr)!important;grid-template-rows:18px 24px minmax(0,1fr)!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .yacht-game-sign{display:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .yacht-arena-controls{
+  grid-row:2!important;grid-column:1!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  height:24px!important;min-height:0!important;margin:0!important;padding:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page.captain-arena-chapter .yacht-course{grid-row:3!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-arena{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-arena-bg{
+  object-fit:cover!important;object-position:center 30%!important;
+ }
+ /* The start / results panel: a centered card over the scene, CAST OFF in
+    the middle, for lane chapters and the boss alike. This replaces the
+    transparent floating-text treatment (requested-polish.css) on phones,
+    where the text vanished against the painting. */
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-start-panel{
+  position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;
+  z-index:60!important;width:min(calc(100% - 30px),356px)!important;max-height:calc(100% - 14px)!important;overflow-y:auto!important;
+  padding:17px 17px 15px!important;border:1px solid rgba(248,219,155,.68)!important;border-radius:20px!important;
+  background:linear-gradient(180deg,rgba(5,42,66,.95),rgba(3,24,40,.98))!important;
+  box-shadow:0 22px 50px rgba(0,30,50,.5)!important;backdrop-filter:blur(6px)!important;filter:none!important;text-align:center!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-start-panel>span{font-size:8px!important;color:#9fc3d4!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-start-panel>strong{font-size:26px!important;margin:5px 0 6px!important;color:#ffe2a0!important;text-shadow:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .captain-start-panel>p{font-size:10.5px!important;line-height:1.5!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-select-actions{
+  display:flex!important;justify-content:center!important;margin-top:12px!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-preview-console) .captain-game-page .yacht-cast-off{
+  min-width:204px!important;height:48px!important;margin:0 auto!important;transform:none!important;
+  font-size:13px!important;letter-spacing:.12em!important;
+ }
+}
+
+/* Main-page trims (Mitchell, 2026-11-25; selector fixed later the
+   same night): on the Captain page itself (the embedded console),
+   the CHOOSE YOUR VOYAGE panel shrinks, and the in-game level header
+   (the game-sign strip naming the chapter at the top of the shell)
+   goes — the voyage panel already names the chapter. Fullscreen
+   keeps both at full size.
+   ROUND-3 DEFECT, found from Mitchell's iPhone screenshot: the
+   original block selected `.captain-game-page.is-preview-console`,
+   but is-preview-console lives on the FRAME, never on the page — so
+   the panel never shrank at all, while other rounds' shell changes
+   shrank the game window instead. The selectors below are the
+   frame-based form every working yacht rule uses. The panel's grid
+   row is `auto`, so every pixel cut here goes straight to the game
+   shell's 1fr row — the window grows by exactly what the panel
+   loses. */
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-level-select{padding:6px 8px 7px!important;gap:4px}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-level-select>span{font-size:9px}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker{gap:4px;margin-top:5px!important}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker button{min-height:27px!important;padding:3px 4px!important;gap:1px!important}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker button b{font-size:9.5px}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker button small{font-size:7px}
+ .captain-fs-yacht.is-preview-console .captain-game-page:not(.captain-arena-chapter) .yacht-game-sign{display:none!important}
+}
+
+/* Tunnel main-page dead space (Mitchell, 2026-11-25, green-circled on
+   his screenshot): round 3 hid the run-actions strip and stats
+   caption in the embedded frame with a plain display:none in
+   ember-tunnel-drill.css — but ember-console.css (imported after it)
+   forces .ember-run-actions to display:flex!important on narrow
+   screens, so the strip stayed, and under it sat the suite's 82px
+   bottom margin: a tall band of nothing below the pause button.
+   Both close here, in the last-imported sheet, embedded view only —
+   fullscreen keeps the full console and its spacing. */
+.captain-fs-tunnel:not(.is-expanded):not(:fullscreen):not(.is-fallback-fullscreen) .ember-run-actions,
+.captain-fs-tunnel:not(.is-expanded):not(:fullscreen):not(.is-fallback-fullscreen) .ember-caption{display:none!important}
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fs-tunnel:not(.is-expanded) .ember-suite{margin-bottom:12px!important}
+}
+
+/* Round 5 (Mitchell, 2026-11-25, later): "the CHOOSE YOUR VOYAGE
+   panel should be at least 50% shorter, and the captain game screen
+   should be larger like the other game screens on the main page" —
+   and the level-select BUTTONS change to accommodate: on the main
+   page the picker becomes a single row of five numbered chips
+   (number + record line; the chapter's name moves into the panel
+   header next to CHOOSE YOUR VOYAGE, and the selected chip is lit).
+   Panel: ~123px -> ~58px. The frame also takes the full viewport
+   height like the other games' frames, so the course grows by the
+   panel's savings AND the frame's. Fullscreen keeps the full
+   labelled buttons and its own sizing. */
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fs-yacht.is-preview-console{height:calc(100dvh - 16px)!important}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-level-select{padding:4px 8px 5px!important}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-level-select>span{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px;margin-top:4px!important}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker button{min-height:32px!important;height:32px!important;padding:2px 1px!important;gap:0!important;border-radius:8px!important}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker button b{line-height:1.05}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker .yc-num{font-size:14px}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker .yc-name{display:none}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker button small{font-size:6.5px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;max-width:100%}
+ .captain-fs-yacht.is-preview-console .captain-game-page .yacht-chapter-picker .yacht-boss-badge{font-size:6px;color:#ff9d8a}
+ /* Kuroi final battle: both ships at least 30% larger on iPhone
+    (Mitchell, 2026-11-25) — Rosie 17% -> 22.1%, Kuroi 20% -> 26%
+    of the arena width. Actors are centre-anchored, so the growth
+    is symmetric; desktop keeps the tuned sizes. */
+ .captain-fs-yacht .captain-game-page .yacht-arena-rosie{width:22.1%!important}
+ .captain-fs-yacht .captain-game-page .yacht-arena-kuroi{width:26%!important}
+}
+
+/* Mitchell (2026-11-25, late): the iOS Copy/Translate callout kept
+   popping up mid-game on iPhone — "the most important thing is that
+   this never happens with any of our games." No text selection and
+   no touch callout anywhere inside any game frame, in the page or
+   in fullscreen; the frame also swallows contextmenu (long-press
+   menus) at the React level. Games contain no text fields, so
+   nothing legitimate is lost. */
+.captain-fullscreen-frame,.captain-fullscreen-frame *{
+ -webkit-touch-callout:none!important;
+ -webkit-user-select:none!important;
+ user-select:none!important;
+}
+
+/* Round 10 (Mitchell): in fullscreen the Cosmic header must reach the
+   very top of the screen. The round-9 in-iframe fix (negative safe-area
+   margin) could never get there: this file's expanded-frame rule pads
+   EVERY expanded frame by env(safe-area-inset-top), so the iframe
+   itself started below the notch and nothing inside it could climb
+   out. The Cosmic frame now takes NO safe-area padding when expanded —
+   the game handles the notch itself (its header grows over it). The
+   selector outranks the (0,3,0) expanded-frame padding rule above. */
+@media(max-width:759px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-cosmic.is-expanded:is(:fullscreen,.is-fallback-fullscreen){
+  padding:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-cosmic.is-expanded:is(:fullscreen,.is-fallback-fullscreen)>.cosmic-odyssey-embedded-shell{
+  padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+ }
+}
+
+/* Round 10 (Mitchell): the restored EXIT-fullscreen control. It renders
+   only while a Captain game frame is expanded, so these rules pin it to
+   the top-right of the fullscreen frame at a readable size for every
+   variant — outranking the older per-variant toggle rules that shrank
+   the (removed) start/fullscreen toggle to a 34px icon on phones. */
+.captain-fullscreen-frame.is-expanded:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle{
+ position:fixed!important;
+ top:max(8px,env(safe-area-inset-top))!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+ left:auto!important;bottom:auto!important;
+ width:auto!important;min-width:132px!important;height:40px!important;min-height:40px!important;
+ padding:8px 14px!important;margin:0!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+ z-index:2147483646!important;
+}
+.captain-fullscreen-frame.is-expanded>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle b{
+ display:inline!important;font:700 11px/1.2 Arial,sans-serif!important;letter-spacing:.4px!important;
+}
+.captain-fullscreen-frame.is-expanded>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle>span{font-size:16px!important;line-height:1!important}
+
+/* Portaled fallback exit control (2026-11-26): in fallback fullscreen the
+   EXIT button is portaled to <body>, outside the frame, so the child
+   selectors above cannot reach it. Restate the pin for the body-level
+   button so it is always at the viewport's top-right, above every
+   in-frame overlay including victory screens. */
+body.captain-fullscreen-fallback-active>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle{
+ position:fixed!important;
+ top:max(8px,env(safe-area-inset-top))!important;
+ right:max(10px,env(safe-area-inset-right))!important;
+ left:auto!important;bottom:auto!important;
+ width:auto!important;min-width:132px!important;height:40px!important;min-height:40px!important;
+ padding:8px 14px!important;margin:0!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+ z-index:2147483646!important;
+}
+body.captain-fullscreen-fallback-active>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle b{
+ display:inline!important;font:700 11px/1.2 Arial,sans-serif!important;letter-spacing:.4px!important;
+}
+body.captain-fullscreen-fallback-active>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle>span{font-size:16px!important;line-height:1!important}
+
+/* Round 10b (Mitchell's screenshot): in expanded COSMIC, the exit
+   toggle and the shared music medallion both floated over the game's
+   HUD (the ✕ over the FIENDS/BISCUITS divider, the medallion covering
+   the BISCUITS count). They now live in the game's under-panel strip:
+   music at the strip's left end, exit at its right end, pause/retry
+   centered between them (phone-layout.css reserves a 52px strip).
+   Scoped to the Cosmic frame on phone portrait; Yacht/Tunnel keep
+   their shared upper action row. These rules sit after every older
+   dock/toggle rule in this file (which loads last of the Captain
+   phone sheets), and the exit selector out-specifies the round-10
+   toggle rule above. */
+@media(max-width:759px) and (orientation:portrait){
+ body:has(.captain-fs-cosmic.is-expanded) .rosie-music-dock{
+  top:auto!important;bottom:max(6px,env(safe-area-inset-bottom))!important;
+  left:8px!important;right:auto!important;width:40px!important;height:40px!important;
+ }
+ body:has(.captain-fs-cosmic.is-expanded) .rosie-music-launch,
+ body:has(.captain-fs-cosmic.is-expanded) .rosie-music-launch img{
+  width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;padding:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-cosmic.is-expanded:is(:fullscreen,.is-fallback-fullscreen)>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle{
+  top:auto!important;bottom:max(6px,env(safe-area-inset-bottom))!important;
+  right:8px!important;left:auto!important;
+  width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;
+  padding:0!important;border-radius:50%!important;gap:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-cosmic.is-expanded>.captain-fullscreen-toggle.captain-exit-fullscreen-toggle b{display:none!important}
+}
+
+/* Overnight 2026-11-27 — tablet band (740–1199px): the desktop console
+   treatment starts at 1100px and the phone rules stop at 739px, which left
+   iPads with two stretched-phone defects on the Yacht start screen:
+   1. .captain-steering-toggle collapsed to the 28px icon stub from
+      captain-motion.css (its "JOYSTICK" label overflowed the box) because
+      the yacht-console override only exists inside the desktop console.
+   2. The start panel is transparent by design (requested-polish.css), but
+      at tablet widths it centres over the bright sunset sky instead of the
+      darker water, washing its text out. Give it the dark glass backdrop
+      in this band only. Fullscreen/expanded rules above carry higher
+      specificity and still win inside the expanded frame. */
+@media (min-width:740px) and (max-width:1199px){
+ .captain-game-page .yacht-steering-options .captain-steering-toggle{
+  position:static!important;min-width:78px!important;width:auto!important;
+  height:30px!important;min-height:30px!important;padding:3px 9px!important;
+  font-size:10px!important;white-space:nowrap!important;
+ }
+ .captain-game-page .captain-start-panel:not(.captain-results-panel){
+  width:min(calc(100% - 48px),430px);
+  padding:20px 22px 18px;
+  border:1px solid rgba(223,184,120,.45);
+  border-radius:18px;
+  background:rgba(4,22,36,.58);
+  box-shadow:0 18px 44px rgba(0,10,20,.45);
+  backdrop-filter:blur(3px);
+  filter:none;
+ }
+ .captain-game-page .captain-start-panel:not(.captain-results-panel)>span{font-size:9.5px}
+ .captain-game-page .captain-start-panel:not(.captain-results-panel)>p{font-size:11.5px;line-height:1.55}
+}
+
+/* Overnight 2026-11-27 — Tunnel stage on portrait tablets: the base rule
+   (height:clamp(470px,73vw,820px)) is the desktop treatment, so at 768px
+   the stage was 748x561 (wider than tall) and the portrait opening-film
+   cover shrank to a ~290px pillar between black bars. Portrait touch
+   tablets get the phone's tall stage formula instead. Landscape and
+   fullscreen/expanded states are governed by their own rules above. */
+@media (min-width:621px) and (max-width:1199px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-tunnel:not(.is-expanded):not(.is-fallback-fullscreen) .ember-stage{height:min(116vw,880px)!important}
+}
+
+/* Overnight 2026-11-27 — expanded (fullscreen) game frames on portrait
+   tablets. The compact expanded grid exists only in the phone block
+   (max-width:759px portrait) and the desktop console (min-width:1100px
+   landscape), so at 760-1199px portrait the expanded frame kept the
+   in-page column: Tunnel's stage ran to y=1230 on a 1024px viewport with
+   the steer/boost controls entirely off-screen, and the Yacht course was
+   cut off below the fold. This block mirrors the phone expanded grid
+   (same selectors and structure, tablet row sizes) for both games,
+   including the fallback-fullscreen state iPads actually use. */
+@media (min-width:760px) and (max-width:1199px) and (orientation:portrait){
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen)>.captain-game-page.yacht-console-upgrade,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen)>.ember-suite.ember-console-upgrade{
+  position:relative!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  height:100%!important;min-height:0!important;max-height:100%!important;width:100%!important;max-width:none!important;
+  box-sizing:border-box!important;margin:0!important;padding:0!important;gap:5px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen)>.captain-game-page.yacht-console-upgrade{
+  grid-template-rows:48px clamp(96px,12dvh,140px) 56px minmax(0,1fr)!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-mobile-actions,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-run-actions{
+  position:static!important;grid-column:1!important;grid-row:1!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+  width:100%!important;height:48px!important;min-height:48px!important;margin:0!important;padding:0 48px!important;z-index:100!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-mobile-actions button,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-run-actions .ember-icon-action{
+  flex:0 0 64px!important;width:64px!important;height:48px!important;min-height:48px!important;padding:0!important;
+  border:0!important;background:transparent!important;box-shadow:none!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-mobile-actions button img,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-icon-action img{display:block;width:100%!important;height:100%!important;object-fit:contain!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-mobile-actions button span,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-run-actions>span{display:none!important}
+ /* Yacht rows */
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hero{
+  grid-row:2!important;grid-column:1!important;display:flex!important;justify-content:flex-end!important;height:100%!important;min-height:0!important;
+  margin:0!important;border-radius:10px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hero-banner{inset:0!important;height:100%!important;background-size:cover!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-route-strip,
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen)>.captain-game-page>.gamepad-hint{display:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hud{
+  grid-row:3!important;grid-column:1!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:3px!important;margin:0!important;height:56px!important;min-height:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hud>div{
+  position:relative!important;display:grid!important;grid-template-columns:27px minmax(0,1fr)!important;grid-template-rows:16px 24px!important;
+  align-content:center!important;align-items:center!important;column-gap:3px!important;
+  padding:3px!important;height:100%!important;min-width:0!important;border-radius:8px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hud .combo-cell{display:grid!important;grid-column:auto!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-instrument{
+  position:static!important;grid-column:1!important;grid-row:2!important;
+  display:block!important;width:25px!important;height:25px!important;object-fit:contain!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hud>div>span{
+  grid-column:1 / -1!important;grid-row:1!important;font:700 9px/1 Arial,sans-serif!important;letter-spacing:0!important;white-space:nowrap!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hud strong{
+  grid-column:2!important;grid-row:2!important;padding:0!important;margin:0!important;display:flex!important;
+  justify-content:center!important;align-items:baseline!important;gap:2px!important;font:bold 17px/22px Georgia,serif!important;white-space:nowrap!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-hud strong small{font:700 10px/1 Georgia,serif!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-game-shell{
+  grid-row:4!important;grid-column:1!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:20px 36px minmax(0,1fr) 76px!important;gap:3px!important;
+  height:100%!important;min-height:0!important;max-height:100%!important;margin:0!important;padding:4px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-voyage-progress{grid-row:1!important;padding:0!important;min-height:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-steering-options{grid-row:2!important;display:flex!important;align-items:center!important;height:36px!important;margin:0!important;padding:0!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-lane-forecast button{height:34px!important;min-height:34px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-steering-toggle{position:static!important;min-height:30px!important;height:30px!important;width:auto!important;min-width:78px!important;max-width:none!important;flex:none!important;margin-left:auto!important;font-size:10px!important;padding:3px 9px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .yacht-course{
+  grid-row:3!important;grid-column:1!important;box-sizing:border-box!important;
+  width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;aspect-ratio:auto!important;margin:0!important;padding:0!important;overflow:clip!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-command-deck{
+  grid-row:4!important;grid-column:1!important;display:grid!important;grid-template-columns:60px minmax(0,1fr) 60px!important;align-items:stretch!important;
+  gap:5px!important;height:76px!important;min-height:0!important;padding:3px!important;margin:0!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-command-deck .helm-button{
+  position:relative!important;width:100%!important;height:100%!important;min-height:0!important;min-width:0!important;
+  border:0!important;border-radius:0!important;padding:0!important;background:transparent!important;box-shadow:none!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .helm-button img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .boost-copy strong{font-size:12px!important;letter-spacing:.6px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .boost-copy small{display:none!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .boost-control{padding:3px!important;min-height:0!important;height:100%!important;gap:5px!important}
+ .captain-fullscreen-frame.captain-fs-yacht:is(.is-expanded,.is-fallback-fullscreen) .captain-course-plaque{max-width:55%!important;font-size:10px!important}
+ /* Tunnel rows */
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen)>.ember-suite.ember-console-upgrade{
+  grid-template-rows:48px clamp(96px,12dvh,140px) 56px 46px minmax(0,1fr) 100px!important;
+ }
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-section-divider,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-caption,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .gamepad-hint{display:none!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-header{grid-row:2!important;grid-column:1!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-header-full-art{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stats{grid-row:3!important;grid-column:1!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:4px!important;height:56px!important;margin:0!important;padding:0!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stats>div{
+  position:relative!important;display:grid!important;grid-template-columns:27px minmax(0,1fr)!important;grid-template-rows:16px 24px!important;
+  align-content:center!important;align-items:center!important;column-gap:3px!important;
+  padding:3px!important;height:100%!important;min-width:0!important;border-radius:8px!important;overflow:hidden!important;
+ }
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-instrument-icon{
+  position:static!important;grid-column:1!important;grid-row:2!important;
+  display:block!important;width:25px!important;height:25px!important;object-fit:contain!important;
+ }
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stats>div>small{
+  grid-column:1 / -1!important;grid-row:1!important;font:700 9px/1 Arial,sans-serif!important;letter-spacing:0!important;white-space:nowrap!important;
+ }
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stats strong{
+  grid-column:2!important;grid-row:2!important;padding:0!important;margin:0!important;display:flex!important;
+  justify-content:center!important;align-items:baseline!important;gap:2px!important;font:bold 17px/22px Georgia,serif!important;white-space:nowrap!important;
+ }
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-hull-total{font:700 10px/1 Georgia,serif!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-expedition{grid-row:4!important;grid-column:1!important;display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;grid-template-rows:14px 18px!important;gap:2px 6px!important;height:46px!important;min-height:0!important;max-height:46px!important;padding:3px 6px!important;margin:0!important;overflow:hidden!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-route-label{grid-row:1!important;grid-column:1!important;width:auto!important;font-size:8px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-route-track{grid-row:1!important;grid-column:2!important;width:100%!important;min-width:0!important;height:5px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-expedition>span:not(.ember-route-label){display:none!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-passage-mission{grid-row:2!important;grid-column:1 / -1!important;display:flex!important;justify-content:center!important;gap:4px!important;border:0!important;margin:0!important;padding:0!important;white-space:nowrap!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-passage-mission span,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-passage-mission em{display:none!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-passage-mission strong{font-size:10px!important;line-height:16px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stage{grid-row:5!important;grid-column:1!important;align-self:stretch!important;width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;aspect-ratio:auto!important;margin:0!important;padding:0!important;overflow:hidden!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-canvas{display:block!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-controls{grid-row:6!important;grid-column:1!important;position:relative!important;display:grid!important;grid-template-columns:60px minmax(0,1fr) 60px!important;grid-template-rows:24px minmax(0,1fr)!important;gap:3px 5px!important;height:100px!important;min-height:0!important;margin:0!important;padding:3px!important;overflow:hidden!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stick-toggle{position:static!important;grid-row:1!important;grid-column:1 / -1!important;justify-self:end!important;width:auto!important;max-width:none!important;height:24px!important;min-height:24px!important;padding:2px 8px!important;font-size:10px!important;transform:none!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-controls>.ember-angle,
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-controls>.axis-stick{grid-row:2!important;grid-column:1!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-controls>.ember-angle:nth-of-type(3){grid-column:3!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-controls>.ember-boost{grid-row:2!important;grid-column:2 / 4!important;height:100%!important;min-height:0!important;padding:3px 5px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-controls:has(.ember-down-art)>.ember-boost{grid-column:2!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-boost b{font-size:12px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-boost small{font-size:7px!important;letter-spacing:0!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-course-plaque{top:5px!important;max-width:80%!important;padding:3px 9px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-course-plaque strong{font-size:14px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-course-plaque small{font-size:8px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-stage-marker{width:32px!important;height:32px!important}
+ .captain-fullscreen-frame.captain-fs-tunnel:is(.is-expanded,.is-fallback-fullscreen) .ember-dig-hint{left:5px!important;right:5px!important;bottom:8px!important;font-size:8px!important;white-space:normal!important;text-align:center}
+}

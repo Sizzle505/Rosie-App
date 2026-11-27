@@ -3,6 +3,7 @@
  */
 (() => {
  'use strict';
+document.addEventListener('contextmenu',e=>e.preventDefault());
  const $ = id => document.getElementById(id);
  const ARCADE_SCENE_ART={
   'scene-arcade-nebula':'../captain-arcade-backgrounds/06-Cosmic-Odyssey-Nebula-Traverse.webp',
@@ -66,6 +67,10 @@
  preloadArt(...EXTRA_ART,'jett','chip','kitty-hq','jett-attack','chip-attack',
    'shield','explosion','laser-bolt','rosie-projectile','life');
 
+ // Round 10 (Mitchell, corrected): BLACK HOLE OBSERVATORY is the finale
+ // (level 10). RINGWORLD GARDENS stays at level 8; ANCIENT ALIEN RUINS
+ // moves to level 9. Each level keeps its own seed/target/speed/scene,
+ // and its VICTORY_STAGES entry moved with it (entries 9 and 10 swapped).
  const LEVELS=[
   {name:'NEBULA PASSAGE',tagline:'GALACTIC ARCHWAYS',scene:'arcade-nebula',seed:6900,target:18,speed:1,accent:'nebula'},
   {name:'METEOR MISCHIEF',tagline:'THE ASTEROID GAUNTLET',scene:'meteor',seed:9810,target:19,speed:.97,accent:'meteor'},
@@ -75,8 +80,8 @@
   {name:'DERELICT STARSHIP',tagline:'GHOST SHIP CORRIDORS',scene:'arcade-starship',seed:24749,target:21,speed:.89,accent:'derelict'},
   {name:'COMET ICE CANYON',tagline:'FROSTBOUND FLIGHT',scene:'ice',seed:28112,target:22,speed:.87,accent:'ice'},
   {name:'RINGWORLD GARDENS',tagline:'THE ORBITAL SANCTUARY',scene:'garden',seed:32673,target:22,speed:.86,accent:'garden'},
-  {name:'BLACK HOLE OBSERVATORY',tagline:'EVENT HORIZON',scene:'arcade-blackhole',seed:35218,target:23,speed:.85,accent:'blackhole'},
-  {name:'ANCIENT ALIEN RUINS',tagline:'THE FINAL RELIC',scene:'ruins',seed:39101,target:23,speed:.84,accent:'ruins'}
+  {name:'ANCIENT ALIEN RUINS',tagline:'THE FINAL RELIC',scene:'ruins',seed:39101,target:23,speed:.84,accent:'ruins'},
+  {name:'BLACK HOLE OBSERVATORY',tagline:'EVENT HORIZON',scene:'arcade-blackhole',seed:35218,target:23,speed:.85,accent:'blackhole'}
  ];
  // Sixteen approved square triumph images, grouped by matching story sector.
  // Every approved file is used exactly once; the review-only extra is excluded.
@@ -89,8 +94,8 @@
   ['captain_rosie_s_victory_in_the_starship_graveyard','captain_rosie_s_ricochet_victory'],
   ['crystal_victory_in_cosmic_skies'],
   ['captain_rosie_s_crystal_sky_victory'],
-  ['captain_rosie_s_orbital_victory_custody','captain_rosie_s_cosmic_custody'],
-  ['captain_rosie_s_electrifying_escape']
+  ['captain_rosie_s_electrifying_escape'],
+  ['captain_rosie_s_orbital_victory_custody','captain_rosie_s_cosmic_custody']
  ];
  const SCENES=[
   {id:'nebula',name:'NEBULA PASSAGE'},
@@ -101,8 +106,8 @@
   {id:'derelict',name:'DERELICT STARSHIP'},
   {id:'ice',name:'COMET ICE CANYON'},
   {id:'garden',name:'RINGWORLD GARDENS'},
-  {id:'blackhole',name:'BLACK HOLE OBSERVATORY'},
   {id:'ruins',name:'ANCIENT ALIEN RUINS'},
+  {id:'blackhole',name:'BLACK HOLE OBSERVATORY'},
   {id:'nebula-alt',name:'NEBULA - ALT'},
   {id:'meteor-alt',name:'METEOR - ALT'},
   {id:'lunar-alt',name:'LUNAR - ALT A'},
@@ -118,8 +123,17 @@
   {id:'kitty',name:'Kitty Xenovese',hp:3,speed:410,kind:'chase',points:400}
  ];
  let cols=11,rows=15,tile=26,grid=[],itemAt=new Map(),cells=[],entities=[],player=null,exitPos=null,warpPoints=[],warpCooldown=0;
+ // Round 10: spike/energy barriers are destructible entities. Each barrier
+ // span has HP 2 — a laser deals 1, a missile deals 2 — so a barrier falls
+ // to exactly two laser hits or one missile hit. Fiend weapon damage is
+ // a separate path (hit()) and is unchanged.
+ let barriers=[],barrierSeq=0;
+ let spikeWheels=new Map();
+ const BARRIER_MAX_HP=2,LASER_DAMAGE=1,MISSILE_DAMAGE=2;
  let scene='nebula',enemyShots=[],running=false,phase='start',score=0,ammo=0,lives=3,got=0,target=18,deadCount=0,protectedUntil=0,slowUntil=0,shakeUntil=0;
- let boostCharges=0,boostUntil=0;const BOOST_MAX=2,BOOST_DURATION_MS=2200,BOOST_STEP_MS=110;
+ let boostCharges=0,boostUntil=0;const BOOST_MAX=2,BOOST_DURATION_MS=5000,BOOST_STEP_MS=95;
+ let fiendGraceUntil={};
+ let levelStartedAt=0,lastCarry=false;
  let lastTick=0,loopId=0,nextMoveAt=0,lastFacing='right',wantFacing='right',level=1,touchStart=null;
  let victorySceneIndex=0;
  let heldDir=null,pendingStep=false,pendingUntil=0,pausedAt=0,sessionId=0,aimPreview=null;
@@ -165,6 +179,17 @@
   const desktop=innerWidth>=760&&innerWidth>innerHeight;
   if(!desktop){
    const stage=document.querySelector('.cosmic-stage')?.getBoundingClientRect();
+   // Round 10 (Mitchell): in fullscreen the board's gold outline fills
+   // the full WIDTH of the screen, expanding vertically in proportion.
+   // Rows are therefore chosen width-first: the largest odd row count
+   // whose square cells, sized by the stage width, still fit the stage
+   // height (bounded by the designed 15–19 row range).
+   if(document.documentElement.classList.contains('cosmic-parent-expanded')&&stage?.width&&stage?.height){
+    const tileW=stage.width/11;
+    let fitRows=Math.floor(stage.height/Math.max(1,tileW));
+    if(fitRows%2===0)fitRows-=1;
+    return {cols:11,rows:Math.max(15,Math.min(19,fitRows))};
+   }
    return window.CosmicMazeLayout.phone(stage?.width||innerWidth,stage?.height||innerHeight*.6);
   }
   // Large desktops use an Art Deco command console beside the full-height maze.
@@ -180,8 +205,26 @@
   const bounds=stage?.getBoundingClientRect();
   // Fit both dimensions of the allocated playfield; the control dock owns
   // its own height and must never be pushed below the phone viewport.
-  const availableW=Math.max(1,(bounds?.width||innerWidth)-10);
-  const availableH=Math.max(1,(bounds?.height||innerHeight*.7)-10);
+  // In fullscreen the board frame may use the stage edge to edge (only
+  // its own 6px of border/bezel is deducted); elsewhere keep the 10px
+  // breathing room the page layout expects.
+  const expandedFs=document.documentElement.classList.contains('cosmic-parent-expanded');
+  // Round 10: fullscreen (and its cosmic-parent-expanded class) can land
+  // AFTER the launch-frame reconcile above \u2014 e.g. iOS fallback
+  // fullscreen committing a beat later. If the run is still fresh
+  // (nothing collected yet), rebuild once with the width-first expanded
+  // layout so the board's gold frame fills the screen width with
+  // proportional height, exactly as a launch from inside fullscreen
+  // would. Mid-run resizes never rebuild.
+  if(expandedFs&&player&&phase==='playing'&&got===0&&performance.now()-levelStartedAt<6000){
+   const wantedNow=desiredMazeLayout();
+   if(wantedNow.cols!==cols||wantedNow.rows!==rows){
+    init(lastCarry);phase='playing';running=true;veil.classList.add('hidden');
+    positionShield();dismissLaunchPads();ui();
+   }
+  }
+  const availableW=Math.max(1,(bounds?.width||innerWidth)-(expandedFs?6:10));
+  const availableH=Math.max(1,(bounds?.height||innerHeight*.7)-(expandedFs?6:10));
   const portraitPhone=innerWidth<760&&innerHeight>=innerWidth;
   tile=portraitPhone
     ? Math.max(1,Math.floor(Math.min(availableW/cols,availableH/rows)*100)/100)
@@ -333,6 +376,13 @@
     const p1=special[20],p2=special[21];
     if(p1&&p2){warpPoints=[p1,p2];addPickup(p1.x,p1.y,'wormhole');addPickup(p2.x,p2.y,'wormhole');}
   }
+  if(level>=2){
+   const wheelCells=special.slice(24).filter(p=>!itemAt.has(key(p.x,p.y))&&dist(p,player)>3).slice(0,Math.min(3,1+Math.floor(level/4)));
+   for(const p of wheelCells){
+    const el=document.createElement('img');el.className='cosmic-spike-wheel';el.src='/ember-drill/hazard-spike.webp';el.alt='';el.draggable=false;
+    cells[p.y][p.x].append(el);spikeWheels.set(key(p.x,p.y),{...p,health:2,el});
+   }
+  }
  }
  const PARTITION_MATERIAL={
    nebula:'deco',meteor:'foundry',lunar:'lunar',crystal:'crystal',foundry:'foundry',
@@ -391,6 +441,7 @@
  function barrierSpans(sceneId){
   const old=Array.from(board.children).filter(el=>el.classList?.contains('barrier-span'));
   old.forEach(el=>el.remove());
+  barriers=[];
   if(board.dataset.wallArt!=='continuous')return;
   const candidates=[];
   function offer(axis,x,y,len){
@@ -439,8 +490,55 @@
     el.dataset.kind=kind;
     el.style.backgroundPosition=`${kind*25}% 50%`;
     board.append(el);selected++;
+    // Register the span as a destructible spike barrier (HP 2).
+    const barrierCells=keys.map(k=>{const[cx,cy]=k.split(',').map(Number);return{x:cx,y:cy};});
+    const barrier={id:++barrierSeq,cells:barrierCells,hp:BARRIER_MAX_HP,maxHp:BARRIER_MAX_HP,el};
+    el.dataset.barrierId=String(barrier.id);el.dataset.hp=String(barrier.hp);
+    barriers.push(barrier);
   }
   positionBarrierSpans();
+ }
+ function barrierAt(x,y){
+  return barriers.find(b=>b.hp>0&&b.cells.some(c=>c.x===x&&c.y===y))||null;
+ }
+ // Round 10: spike barrier damage. Laser = 1, missile = 2, HP = 2, so the
+ // barrier falls to exactly 2 laser hits or 1 missile hit. The first laser
+ // hit leaves a visible cracked state; destruction opens the wall cells
+ // the span covered, so the barrier is a real obstacle, not decoration.
+ function damageBarrier(barrier,power,at){
+  if(!barrier||barrier.hp<=0)return false;
+  barrier.hp=Math.max(0,barrier.hp-power);
+  barrier.el.dataset.hp=String(barrier.hp);
+  const hitPos=at||barrier.cells[0];
+  effect('spark',hitPos,1.6);sound(power>=2?150:420,power>=2?.18:.09,'sawtooth');
+  for(const c of barrier.cells){
+    const wall=cells[c.y]?.[c.x];
+    if(wall){wall.classList.add('barrier-struck');setTimeout(()=>wall.classList.remove('barrier-struck'),310);}
+  }
+  if(barrier.hp<=0){
+    effect('explosion',hitPos,2.6);
+    for(const c of barrier.cells){
+      grid[c.y][c.x]=0;
+      const cell=cells[c.y]?.[c.x];
+      if(cell){
+        cell.classList.remove('wall','partition-wall','continuous-wall','barrier-struck');
+        cell.classList.add('floor');
+        cell.querySelector('.connected-wall-art')?.remove();
+        cell.querySelector('.environment-prop')?.remove();
+      }
+    }
+    barrier.el.classList.add('barrier-destroyed');
+    setTimeout(()=>barrier.el?.remove(),240);
+    barriers=barriers.filter(b=>b!==barrier);
+    popup('BARRIER DOWN!',hitPos);
+    say('Spike barrier destroyed — the way is open!');
+    score+=40;ui();
+  }else{
+    barrier.el.classList.add('barrier-damaged');
+    popup('BARRIER CRACKED',hitPos);
+    say('Spike barrier cracked — one more laser hit, or a missile, will destroy it.');
+  }
+  return true;
  }
  function positionBarrierSpans(){
   for(const el of Array.from(board.children).filter(e=>e.classList?.contains('barrier-span'))){
@@ -544,6 +642,7 @@
   selectVictoryScene(0);
   $('victory-continue').focus({preventScroll:true});
  }
+ function syncMissionGrid(){const g=$('mission-grid'),s=$('stage-select');if(!g||!s)return;const v=String(s.value||'1');g.querySelectorAll('button').forEach(b=>b.classList.toggle('selected',b.dataset.level===v));}
  function enter(status,text,buttonText){
   if(status==='paused')pausedAt=performance.now();
   phase=status;running=false;heldDir=null;gamepadDir=null;pressedKeys.clear();pendingStep=false;
@@ -580,6 +679,7 @@
   else if(select&&status==='lose')select.value=String(level);
   else if(select&&status==='win')select.value='1';
   if(picker)picker.style.display=(status==='paused'||status==='level-clear')?'none':'flex';
+  syncMissionGrid();
   if(victorious)presentVictory(status,buttonText);
   if(status!=='start')musicPlay(status);
   ui();
@@ -589,9 +689,26 @@
   preloadArt('scene-'+LEVELS[level-1].scene, ...(LEVELS[level]?['scene-'+LEVELS[level].scene]:[]));
   // Prime only the primary approved victory illustration for the current sector.
   if(VICTORY_STAGES[level-1]?.[0])preloadArt('victories/'+VICTORY_STAGES[level-1][0]);
-  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';aimFacing='right';independentAim=false;protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
+  target=LEVELS[level-1].target;got=0;deadCount=0;enemyShots=[];spikeWheels=new Map();warpPoints=[];warpCooldown=0;aimPreview=null;lastFacing='right';wantFacing='right';aimFacing='right';independentAim=false;protectedUntil=0;slowUntil=0;lastTick=0;nextMoveAt=0;heldDir=null;pendingStep=false;pendingUntil=0;pressedKeys.clear();sessionId++;entities=[];player=null;
   maze(LEVELS[level-1].seed+level*19+cols);const cy=rows-2,cx=(Math.floor(cols/2)|1);const spawn=nearestOpen({x:cx,y:cy});exitPos=nearestOpen({x:cx,y:1});
   const spots=[{x:1,y:1},{x:cols-2,y:1},{x:cols-2,y:rows-4}].map(nearestOpen);
+  // Mitchell (2026-11-26): a little more breathing room at the start — no
+  // Fiend begins close to Rosie's launch pad, Kitty least of all. A spot
+  // that lands too near is moved to the closest open cell that keeps the
+  // minimum distance, preferring its own corner of the maze.
+  const FIEND_MIN_DIST=[6,6,9];
+  for(let i=0;i<spots.length;i++){
+   if(dist(spots[i],spawn)>=FIEND_MIN_DIST[i])continue;
+   let best=null,bestScore=Infinity;
+   for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++){
+    if(!open(x,y))continue;
+    const dP=dist({x,y},spawn);if(dP<FIEND_MIN_DIST[i])continue;
+    if(spots.some((s,j)=>j!==i&&s.x===x&&s.y===y))continue;
+    const score=dist({x,y},spots[i])-dP*.01;
+    if(score<bestScore){bestScore=score;best={x,y};}
+   }
+   if(best)spots[i]=best;
+  }
   player={x:spawn.x,y:spawn.y,spawn,straightSteps:0,actionUntil:0,attackToken:0,lastMoveAt:0};entities=ENEMY_INFO.map((a,i)=>({...a,speed:Math.round(a.speed*LEVELS[level-1].speed),spawn:spots[i],x:spots[i].x,y:spots[i].y,health:a.hp,next:0,until:0,patrolIndex:0,hits:0,killed:false,el:null}));
   createBoard();
   // Reuse the existing decorative circuitry to identify launch and Fiend hangars.
@@ -636,7 +753,11 @@
   const carry=phase==='level-clear'&&level<LEVELS.length;
   const chosen=Number($('stage-select')?.value||1);
   level=carry?level+1:Math.max(1,Math.min(LEVELS.length,Number.isFinite(chosen)?chosen:1));
+  lastCarry=carry;levelStartedAt=performance.now();
   init(carry);
+  // Opening grace: Fiends hold their hangars briefly after launch so the
+  // player gets a clean first move — Kitty, the chaser, waits longest.
+  fiendGraceUntil={jett:performance.now()+800,chip:performance.now()+800,kitty:performance.now()+1700};
   phase='playing';running=true;
   musicPlay('playing');
    protectedUntil=performance.now()+2200;
@@ -717,7 +838,8 @@
   nextMoveAt=now+(now<boostUntil?BOOST_STEP_MS:STEP_MS);lastFacing=dir;
   if(!independentAim)aimFacing=dir;
   player.x=nx;player.y=ny;player.lastMoveAt=now;
-  player.el.style.setProperty('--step-ms',now<boostUntil?'105ms':'165ms');
+  if(spikeWheels.has(key(nx,ny)))damage({name:'a spike wheel'});
+  player.el.style.setProperty('--step-ms',now<boostUntil?'92ms':'165ms');
   playerPose(dir,changedDirection,now);
   position(player);positionShield();pick();collide();checkPlayerShots(performance.now());updateAimPreview();
   if(player.x===exitPos.x&&player.y===exitPos.y){
@@ -780,14 +902,27 @@
  function forwardRay(origin,facing){
   // Strict cardinal corridor: no diagonal snapping, wall penetration or corner shots.
   const [dx,dy]=DIRS[facing]||DIRS.right;
-  let x=origin.x,y=origin.y;const tiles=[];
+  let x=origin.x,y=origin.y;const tiles=[];let wallHit=null;
   for(let i=0;i<Math.max(cols,rows);i++){
     x+=dx;y+=dy;
-    if(!open(x,y))break;
+    if(!open(x,y)){if(inside(x,y))wallHit={x,y};break;}
     tiles.push({x,y});
   }
-  const enemy=tiles.map(p=>entities.find(e=>!e.killed&&e.health>0&&e.x===p.x&&e.y===p.y)).find(Boolean)||null;
-  return {tiles,enemy,impact:enemy?{x:enemy.x,y:enemy.y}:tiles.at(-1)||{x:origin.x,y:origin.y}};
+  const firstTarget=tiles.map(p=>({enemy:entities.find(e=>!e.killed&&e.health>0&&e.x===p.x&&e.y===p.y),wheel:spikeWheels.get(key(p.x,p.y))})).find(p=>p.enemy||p.wheel);
+  const enemy=firstTarget?.enemy||null,wheel=firstTarget?.wheel||null;
+  // A spike barrier on the first wall in the lane is a valid target when
+  // no Fiend stands in front of it.
+  const barrier=!firstTarget&&wallHit?barrierAt(wallHit.x,wallHit.y):null;
+  return {tiles,enemy,wheel,wallHit,barrier,impact:enemy?{x:enemy.x,y:enemy.y}:wheel?{x:wheel.x,y:wheel.y}:barrier?{...wallHit}:tiles.at(-1)||{x:origin.x,y:origin.y}};
+ }
+ function damageWheel(wheel,power){
+  if(!wheel||!spikeWheels.has(key(wheel.x,wheel.y)))return;
+  wheel.health-=power;wheel.el.classList.add('is-hit');
+  setTimeout(()=>wheel.el?.classList.remove('is-hit'),240);
+  if(wheel.health>0)return;
+  spikeWheels.delete(key(wheel.x,wheel.y));wheel.el.classList.add('is-broken');
+  effect('explosion',wheel,1.5);popup('+75 WHEEL',wheel);score+=75;ui();
+  setTimeout(()=>wheel.el?.remove(),450);
  }
  function acquireDirectionalTarget(origin,facing){return forwardRay(origin,facing).enemy;}
  function updateAimPreview(){
@@ -825,6 +960,13 @@
   if(!shot.tiles.length){
     const [dx,dy]=DIRS[aimFacing],wx=origin.x+dx,wy=origin.y+dy;
     if(inside(wx,wy)&&grid[wy][wx]===1){
+      // Point-blank spike barrier: the shot lands on the barrier itself.
+      if(shot.barrier){
+        ammo-=cost;ui();playAttackPose(type);
+        effect('muzzle',player,1.15);
+        damageBarrier(shot.barrier,type==='rocket'?MISSILE_DAMAGE:LASER_DAMAGE,{x:wx,y:wy});
+        updateAimPreview();return;
+      }
       const wall=cells[wy]?.[wx];if(wall){
         wall.classList.add('barrier-struck');
         setTimeout(()=>wall.classList.remove('barrier-struck'),310);
@@ -835,7 +977,7 @@
     sound(180,.045);updateAimPreview();return;
   }
   ammo-=cost;ui();playAttackPose(type);
-  const {enemy:victim,impact}=shot;
+  const {enemy:victim,wheel,impact}=shot;
   const fireAngle=aimFacing==='left'?180:aimFacing==='up'?-90:aimFacing==='down'?90:0;
   const travelTiles=dist(origin,impact);
   const [dx,dy]=DIRS[aimFacing];
@@ -844,6 +986,7 @@
   const nozzleX=(muzzle.x+.5)*tile,nozzleY=(muzzle.y+.5)*tile;
   const travelPx=Math.max(tile*.18,(travelTiles-muzzleOffset)*tile);
   if(victim)say(`${type==='laser'?'Laser':'Rocket'} locked: ${victim.name}`);
+  else if(shot.barrier)say(`${type==='laser'?'Laser':'Rocket'} fired ${aimFacing} — spike barrier in the lane.`);
   else say(`${type==='laser'?'Laser':'Rocket'} fired ${aimFacing}. No Fiend in the firing lane.`);
   if(victim){
     const shotSession=sessionId;
@@ -873,7 +1016,10 @@
     beam.style.transformOrigin='0 50%';
     beam.style.transform=`rotate(${fireAngle}deg)`;
     sound(680,.13,'sawtooth');
-    if(victim)hit(victim,1);else effect('spark',impact,1.2);
+    if(victim)hit(victim,1);
+    else if(wheel)damageWheel(wheel,LASER_DAMAGE);
+    else if(shot.barrier)damageBarrier(shot.barrier,LASER_DAMAGE,impact);
+    else effect('spark',impact,1.2);
   }else{
     sound(320,.18,'sawtooth');
     const rocket=document.createElement('span');rocket.className='rocket-projectile';
@@ -893,7 +1039,12 @@
       rocket.remove();if(phase!=='playing'||firedSession!==sessionId)return;
       effect('explosion',impact,3.7);effect('spark',impact,2);
       const targets=entities.filter(e=>!e.killed&&e.health>0&&dist(e,impact)<=1);
-      targets.forEach(e=>hit(e,2));if(!targets.length)popup('BOOM!',impact);
+      targets.forEach(e=>hit(e,2));
+      if(wheel)damageWheel(wheel,MISSILE_DAMAGE);
+      // A missile deals 2 to a spike barrier: one missile destroys it.
+      const struckBarrier=shot.barrier||barrierAt(impact.x,impact.y);
+      if(struckBarrier)damageBarrier(struckBarrier,MISSILE_DAMAGE,impact);
+      if(!targets.length&&!struckBarrier)popup('BOOM!',impact);
       sound(130,.21,'sawtooth');
     },ms+45);
   }
@@ -980,7 +1131,7 @@
   removeEnemyShot(shot);
  }
 }
- function moveFiend(e,now){if(e.killed)return;if(now<e.next)return;let interval=e.speed;if(now<slowUntil)interval*=2.1;if(e.id==='chip'&&Math.floor(now/2600)%2===0)interval*=.62;e.next=now+interval;
+ function moveFiend(e,now){if(e.killed)return;if(now<(fiendGraceUntil[e.id]||0))return;if(now<e.next)return;let interval=e.speed;if(now<slowUntil)interval*=2.1;if(e.id==='chip'&&Math.floor(now/2600)%2===0)interval*=.62;e.next=now+interval;
   let goal=null;if(e.kind==='chase')goal=player;
   else{let patrol=e.patrol||[];goal=patrol[e.patrolIndex%patrol.length]||player;if(goal.x===e.x&&goal.y===e.y){e.patrolIndex++;goal=patrol[e.patrolIndex%patrol.length]||player;}
    // Patrol enemies occasionally break their loops to defend nearby treats.
@@ -1195,6 +1346,13 @@
   const stageSelect=$('stage-select');if(stageSelect){
     stageSelect.innerHTML=LEVELS.map((s,i)=>`<option value="${i+1}">${i+1}. ${s.name}</option>`).join('');
     stageSelect.value='1';
+    const missionGrid=$('mission-grid');
+    if(missionGrid){
+      missionGrid.innerHTML=LEVELS.map((s,i)=>`<button type="button" data-level="${i+1}" aria-label="Mission ${i+1}: ${s.name}"><b>${i+1}</b><span>${s.name}</span></button>`).join('');
+      missionGrid.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{stageSelect.value=b.dataset.level;syncMissionGrid();}));
+      stageSelect.addEventListener('change',syncMissionGrid);
+      syncMissionGrid();
+    }
   }
   $('laser').addEventListener('click',()=>fire('laser'));
   $('rocket').addEventListener('click',()=>fire('rocket'));

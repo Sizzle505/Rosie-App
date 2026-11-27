@@ -102,6 +102,85 @@ function paintIllustratedHazard(c,h,reach,assets){
  }
  return drawExpansionFrame(c,img,atlasId,frame,-w/2,-reach-28,w,height);
 }
+// Sprite hazards (2026-11-25 remake): the batch-D steam vent, hanging
+// mine and lava vent were finished art that never shipped. They draw in
+// the same wall-anchored local space as the illustrated hazards: base
+// seated at the tunnel edge, extension reaching exactly h.reach into
+// the corridor, so what you see is what collides. Steam is two crops of
+// one sprite — the brass vent body at a fixed size on the floor, and
+// its wisp stretched into the rising steam column — so the vent itself
+// never grows, only the steam does. The mine is drawn with a negative
+// height so its chain stays at the ceiling and the spiked ball hangs
+// at the end of the reach (the painter's side flip then hangs it into
+// the corridor correctly).
+function paintSpriteHazard(c,h,reach,assets,time=0){
+ const key=h.kind==="steam"?"bd:hazard-steam":h.kind==="mine"?"bd:hazard-mine":
+   h.kind==="lava"?"bd:hazard-lava":h.kind==="crystal"?"bd:hazard-crystal":null;
+ if(!key)return false;
+ const img=assets?.[key];
+ if(!img||!img.complete||!img.naturalWidth)return false;
+ if(h.kind==="crystal"){
+   // Round 10 (Mitchell): the Ruby crystal trap is a real artwork asset
+   // now \u2014 the batch-D ruby crystal spikes \u2014 not the procedural
+   // purple polygon it used to be. It stays a functioning dynamic
+   // obstacle: the engine's reach (which also governs collision) drives
+   // how far the cluster grows out of the wall as Rosie approaches, a
+   // breathing inner glow makes it shimmer while armed, a contact hit
+   // makes it shudder, and a Turbo shatter removes it via the engine's
+   // shattered state (this painter skips shattered hazards) plus the
+   // break particles the JSX spawns from the shatter event.
+   const height=reach+44,w=height*(img.naturalWidth/Math.max(1,img.naturalHeight));
+   const shimmer=.20+.08*Math.sin(time*4.2+h.x*.02);
+   const halo=c.createRadialGradient(0,-reach*.45,2,0,-reach*.45,w*.62);
+   halo.addColorStop(0,"rgba(255,92,168,"+shimmer+")");halo.addColorStop(1,"rgba(255,92,168,0)");
+   oval(c,0,-reach*.45,w*.62,w*.5,halo);
+   c.save();
+   if(h.hit&&!h.resolved)c.translate(Math.sin(time*42)*2.2,0);
+   const pulse=1+.025*Math.sin(time*3.4+h.x*.03);
+   c.drawImage(img,-w*pulse/2,16-height,w*pulse,height);
+   if(h.warned&&!h.resolved){
+     c.globalAlpha=.28+.14*Math.sin(time*6+h.x);
+     c.drawImage(img,-w*pulse/2,16-height,w*pulse,height);
+     c.globalAlpha=1;
+   }
+   c.restore();
+   return true;
+ }
+ if(h.kind==="mine"){
+   const len=reach+36,w=len*.6;
+   // The mine sways gently on its chain instead of hanging frozen.
+   c.save();c.translate(0,10);c.rotate(Math.sin(time*1.4+h.x*.01)*.035);
+   c.drawImage(img,-w/2,0,w,-len);
+   c.restore();
+   return true;
+ }
+ if(h.kind==="lava"){
+   const height=reach+64,w=height*.74;
+   const breathe=.24+.09*Math.sin(time*5+h.x*.02);
+   const halo=c.createRadialGradient(0,0,2,0,0,w*.75);
+   halo.addColorStop(0,"rgba(255,110,32,"+breathe+")");halo.addColorStop(1,"rgba(255,110,32,0)");
+   oval(c,0,-reach*.35,w*.75,w*.62,halo);
+   c.drawImage(img,-w/2,10-height,w,height);
+   return true;
+ }
+ // steam
+ const bodyW=96,bodyH=66;
+ c.drawImage(img,0,115,256,141,-bodyW/2,10-bodyH,bodyW,bodyH);
+ if(reach>26){
+   // The column billows: two overlapping wisp layers with
+   // phase-shifted alpha and a slow height breathing, so the steam
+   // flows instead of standing as a frozen stretched crop.
+   const colW=58+reach*.12;
+   const breathe=Math.sin(time*3.1+h.x*.03)*4;
+   c.save();
+   c.globalAlpha=.62+.16*Math.sin(time*4.3+h.x*.05);
+   c.drawImage(img,60,0,136,118,-colW/2,-reach-16,colW,reach+30+breathe);
+   c.globalAlpha=.45+.15*Math.sin(time*4.3+h.x*.05+2.1);
+   c.drawImage(img,60,0,136,118,-colW*.34,-reach-26,colW*.68,reach+44-breathe);
+   c.restore();
+ }
+ return true;
+}
 export function paintExpeditionHazards(c,s,width,assets={}){
  for(const h of s.worldHazards||[]){
   if(h.shattered)continue;
@@ -112,18 +191,17 @@ export function paintExpeditionHazards(c,s,width,assets={}){
   const r=Math.max(18,h.reach||18);
   const warning=h.warned&&!h.resolved;
   c.save();c.translate(x,edge);c.scale(1,h.side);
-  // Early tell is a surface glow embedded in the wall, before any extension.
+  // Early tell is a surface glow embedded in the wall, breathing
+  // slowly — no dashed outline (it read as debug UI over the art).
   if(warning){
-   const pulse=.65+.2*Math.sin(s.time*12+h.x);
+   const pulse=.55+.15*Math.sin(s.time*6+h.x);
    const halo=c.createRadialGradient(0,-12,1,0,-10,90);
-   halo.addColorStop(0,h.kind==="geyser"?"rgba(255,124,48,"+pulse+")":"rgba(252,196,112,"+pulse+")");
+   halo.addColorStop(0,(h.kind==="geyser"||h.kind==="lava")?"rgba(255,124,48,"+pulse+")":"rgba(252,196,112,"+pulse+")");
    halo.addColorStop(1,"rgba(242,165,79,0)");
    oval(c,0,-12,90,65,halo);
-   c.strokeStyle="#f3d295";c.lineWidth=2;c.setLineDash([7,7]);
-   c.beginPath();c.ellipse(0,-10,65,22,0,Math.PI,Math.PI*2);c.stroke();c.setLineDash([]);
   }
   const illustrated=paintIllustratedHazard(c,h,r,assets);
-  if(!illustrated){
+  if(!illustrated&&!paintSpriteHazard(c,h,r,assets,s.time)){
     if(h.kind==="piston")piston(c,r);
     else if(h.kind==="geyser")geyser(c,r,s.time);
     else if(h.kind==="quake")quake(c,r,s.time);

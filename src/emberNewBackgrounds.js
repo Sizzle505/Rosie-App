@@ -41,7 +41,22 @@ function clipNearFace(c,s,W,H,side,reach){
  c.closePath();c.clip();
 }
 export function paintNewBackgroundParallax(c,s,assets,W,H){
- for(const layer of layers){
+ // 2026-11-25 feedback round: in world play each stage gets ONLY its
+ // own world's overlay (Barkroot's hanging roots, Ruby's crystal
+ // strips, the Treasury's golden shafts) for the whole run — the old
+ // shared timeline windows dragged other worlds' layers across every
+ // stage. Classic keeps the original progression.
+ const STAGE_LAYERS=[
+  [{key:"bg02",start:0,speed:.15,alpha:.56,side:-1}],
+  [{key:"bg07",start:0,speed:.11,alpha:.45,side:1}],
+  [],
+  [],
+  [{key:"bg09",start:0,speed:.06,alpha:.25,side:0}],
+ ];
+ const activeLayers=s.stageIndex===null||s.stageIndex===undefined
+  ? layers
+  : (STAGE_LAYERS[s.stageIndex]||[]).map(l=>({...l,end:s.duration||30}));
+ for(const layer of activeLayers){
   if(s.time<layer.start||s.time>layer.end)continue;
   const im=assets?.[layer.key];if(!ready(im))continue;
   const sw=Math.min(im.naturalWidth,im.naturalHeight*W/H);

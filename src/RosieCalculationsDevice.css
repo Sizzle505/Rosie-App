@@ -1753,3 +1753,24 @@
     box-shadow:inset 0 0 0 2px rgba(255,229,164,.10),0 20px 42px rgba(9,1,5,.37);
   }
 }
+
+/* iPhone toolkit backdrop (Mitchell, 2026-11-26): the high-quality burgundy
+   satin (burgundy-satin.png, the same silk the open-tool state uses) backs
+   the whole toolkit page — the low-resolution salon texture SVG and the
+   flat #380c20 panels are retired on phones, including through the footer
+   at the bottom of the page. One continuous satin on the app shell; the
+   page and workspace layers go transparent so it never seams. */
+@media (max-width:739px) {
+  .app-shell.page-calculations {
+    background-color:#4a071b;
+    background-image:url("/rosieverse/calculations/burgundy-satin.png");
+    background-size:cover;
+    background-position:center top;
+    background-repeat:no-repeat;
+  }
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open),
+  .app-shell.page-calculations .rc-page:not(.rc-page--tool-open) .rc-workspace {
+    background-color:transparent !important;
+    background-image:none !important;
+  }
+}

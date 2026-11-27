@@ -2,9 +2,10 @@
 // sprite atlases will replace this file after the separate asset import is QA'd.
 // This paints the danger lanes used by emberExpeditionBossStage.js, not a
 // misleading decorative collision area.
-import {BOSS_SCREEN_X,bossDangerLane} from "./emberExpeditionBossStage.js";
+import {BOSS_SCREEN_X,bossDangerLane,bossMechanismState,bossSafeLane} from "./emberExpeditionBossStage.js";
+import {DRILL_ANCHOR} from "./emberDrillEngine.js";
 import {bossPresentation} from "./emberBossEncounter.js";
-import {drawExpansionFrame} from "./emberExpansionCatalog.js";
+import {drawExpansionFrame,EMBER_BATCH_D_MECHANISMS} from "./emberExpansionCatalog.js";
 import {paintBossAttackVfx} from "./emberBossAttackVfx.js";
 
 const PI=Math.PI;
@@ -145,7 +146,13 @@ function telegraph(c,s,W,H,attack,phase){
  const a=Math.max(0,Math.min(H,lane.top)),b=Math.max(0,Math.min(H,lane.bottom));
  if(b<=a)return;
  c.save();
- c.fillStyle=active?"rgba(232,87,37,.19)":"rgba(255,180,70,.10)";
+ // The fill IS the danger zone the damage test uses (bossDangerLane), so
+ // it must be readable, not a whisper: the old 10%/19% alphas vanished
+ // against the bright arenas, and the attack VFX itself occupies only a
+ // thin band of the lane (fissure at its top, atlas at its floor), so a
+ // player steering by the visible attack believed they were clear while
+ // standing inside the lane. The zone is now unmistakable at 24%/34%.
+ c.fillStyle=active?"rgba(232,87,37,.34)":"rgba(255,180,70,.24)";
  c.fillRect(0,a,W,b-a);
  c.strokeStyle=active?"#ff793a":"#e5c474";c.lineWidth=3;c.setLineDash(active?[]:[13,10]);
  c.strokeRect(6,a+3,W-12,Math.max(4,b-a-6));
@@ -163,28 +170,33 @@ function telegraph(c,s,W,H,attack,phase){
  c.fillText(active?"DANGER - MOVE AWAY":"WARNING - STEER CLEAR",18,Math.max(22,a+21));
  c.restore();
 }
-// Attack-state art is registered frame-by-frame to the current boss cycle.
-// Every image is optional until loaded. Silhouettes retain the original
-// engine collision and attack-zone geometry, not image alpha hitboxes.
+// A pain pose may show only after a confirmed hit (hitFlash), for 0.65s,
+// then returns to neutral. Recovery alone is not injury: without a hit the
+// boss shows its neutral recovery frame (or idle, for Cinderclaw, whose
+// atlas has no dedicated pain frame). The pose is checked before the
+// stance branches, so a hit landed late in recovery still shows the full
+// 0.65s instead of being cut off the instant the phase changes to warning.
+const hitFlash=b=>Number.isFinite(b.hitFlashAge)&&b.hitFlashAge>=0
+  &&(b.age||0)-b.hitFlashAge<=0.65;
+const PAIN_FRAME={cinderclaw:11,copperjack:9,"mole-king":9};
 export function expeditionBossFrame(b,p=bossPresentation(b)){
+ if(b.defeated)return b.kind==="mole-king"?10:11;
+ if(hitFlash(b))return PAIN_FRAME[b.kind]??0;
  if(b.kind==="cinderclaw"){
-   if(p.phase==="defeated")return 11;
-   if(p.phase==="recovery")return 11;
+   if(p.phase==="recovery")return Math.floor(b.elapsed*4)%4;
    if(p.attack==="burrow")return p.phase==="warning"?8:9;
    if(p.phase==="warning")return 5;
    if(p.phase==="active")return 6;
    return Math.floor(b.elapsed*4)%4;
  }
  if(b.kind==="copperjack"){
-   if(p.phase==="defeated")return 11;
-   if(p.phase==="recovery")return b.hitThisRecovery?9:8;
+   if(p.phase==="recovery")return 8;
    if(p.phase==="warning")return p.attack==="spark-bolt"?4:5;
    if(p.phase==="active")return p.attack==="spark-bolt"?7:6;
    return Math.floor(b.elapsed*4)%2;
  }
  if(b.kind==="mole-king"){
-   if(p.phase==="defeated")return 10;
-   if(p.phase==="recovery")return b.hitThisRecovery?9:8;
+   if(p.phase==="recovery")return 8;
    if(p.phase==="warning")return p.attack==="earth-burst"?6:4;
    if(p.phase==="active")return p.attack==="earth-burst"?7:5;
    return Math.floor(b.elapsed*3)%3;
@@ -198,7 +210,32 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
  telegraph(c,s,W,H,p.attack,p.phase);
  // Place light-touch environmental attacks behind the existing approved boss art.
  // All visuals are clipped to the same lane used by the engine to cause damage.
- paintBossAttackVfx(c,s,W,H,p);
+ paintBossAttackVfx(c,s,W,H,p,assets);
+ // Treasure mechanism: a non-colliding set piece in the safe lane, behind
+ // the boss sprite and behind the reward flight path. It sits at the safe
+ // lane's far edge from the boss so it does not hide the guardian.
+ const mechanism=EMBER_BATCH_D_MECHANISMS[boss.kind];
+ if(mechanism){
+   const mState=bossMechanismState(boss);
+   const lane=bossSafeLane(p.attack,s.bossY);
+   if(lane){
+     const w=mechanism.displayWidth,h=w;
+     const [ax,ay]=mechanism.anchor;
+     const above=lane.bottom<=s.bossY+35;
+     const anchorX=600,anchorY=above?lane.top+145:lane.bottom-5;
+     const dx=anchorX-w*ax/320,dy=anchorY-h*ay/320;
+     const closed=assets["bd:mechanism-closed"],release=assets["bd:mechanism-release"],
+           depleted=assets["bd:mechanism-depleted"];
+     const ready=i=>Boolean(i?.complete&&i.naturalWidth>0);
+     if(mState.state==="release"&&mState.frame!=null&&ready(release)){
+       drawExpansionFrame(c,release,mechanism.release,mState.frame,dx,dy,w,h);
+     }else if(mState.state==="depleted"&&ready(depleted)){
+       c.drawImage(depleted,dx,dy,w,h);
+     }else if(ready(closed)){
+       c.drawImage(closed,dx,dy,w,h);
+     }
+   }
+ }
  const x=BOSS_SCREEN_X,y=s.bossY;
  c.save();
  c.translate(x,y);
@@ -243,6 +280,17 @@ export function paintExpeditionBoss(c,s,W,H,assets={}){
    c.fillRect(x-10,151,20,15);c.strokeRect(x-10,151,20,15);
  }
  if(p.vulnerable){
+  // Aim guide: a dashed line at the guardian's height from the auger to the
+  // boss, showing exactly where a Turbo strike must land. The same guide
+  // draws for every guardian (no per-boss branch); the old 3px 55%-alpha
+  // line vanished against Clockwork's bright brass arena, so it now has a
+  // dark under-stroke and a brighter gold top line that reads on any arena.
+  c.save();
+  c.strokeStyle="rgba(20,12,8,.65)";c.lineWidth=6;c.setLineDash([14,8]);
+  c.beginPath();c.moveTo(DRILL_ANCHOR+40,s.bossY);c.lineTo(x-115,s.bossY);c.stroke();
+  c.strokeStyle="rgba(255,224,161,.9)";c.lineWidth=4;c.setLineDash([14,8]);
+  c.beginPath();c.moveTo(DRILL_ANCHOR+40,s.bossY);c.lineTo(x-115,s.bossY);c.stroke();
+  c.setLineDash([]);c.restore();
   c.textAlign="center";c.font="bold 15px Georgia,serif";
   c.fillStyle="#ffe7a7";
   c.fillText("VULNERABLE - TURBO STRIKE",x,s.bossY-135);

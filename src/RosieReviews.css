@@ -87,7 +87,7 @@
  .app-shell.page-reviews .reviews-desktop-discovery {
    display:block;position:fixed;z-index:4;
    top:calc(clamp(106px,13vh,144px) + min(22vw,380px) + 22px);
-   left:clamp(24px,3vw,60px);width:min(44vw,760px);
+   left:clamp(24px,3vw,60px);width:min(41vw,760px);
    max-height:calc(100dvh - clamp(106px,13vh,144px) - min(22vw,380px) - 35px);
    overflow-y:auto;padding:22px 25px 12px;
    border:2px solid #b78b55;border-radius:18px;
@@ -106,12 +106,12 @@
  .app-shell.page-reviews .reviews-hero.has-art {
    top:clamp(106px,13vh,144px)!important;
    left:clamp(24px,3vw,60px)!important;
-   width:min(44vw,760px)!important;
+   width:min(41vw,760px)!important;
    transform:none!important;
    background-position:31% center!important;
  }
  .app-shell.page-reviews .reviews-content {
-   width:calc(53vw - clamp(24px,3vw,60px))!important;
+   width:calc(50vw - clamp(24px,3vw,60px))!important;
    margin-right:clamp(24px,3vw,60px)!important;
    padding:clamp(22px,1.8vw,34px)!important;
  }

@@ -17,9 +17,9 @@ function pose(s,h,gap=48,atWall=true){
 }
 test("the classic game has no new world hazards, but the five-world routes do",()=>{
  assert.equal(newRun().worldHazards.length,0);
- assert.deepEqual([0,1,2,3,4].map(i=>newRun(1467,i).worldHazards.length),[0,1,2,3,2]);
- assert.equal(EXPEDITION_HAZARD_LAYOUT.length,8);
- assert.deepEqual(makeExpeditionHazards(3).map(h=>h.kind),["geyser","basalt","geyser"]);
+ assert.deepEqual([0,1,2,3,4].map(i=>newRun(1467,i).worldHazards.length),[0,1,4,5,4]);
+ assert.equal(EXPEDITION_HAZARD_LAYOUT.length,14);
+ assert.deepEqual(makeExpeditionHazards(3).map(h=>h.kind),["geyser","basalt","geyser","lava","geyser"]);
 });
 test("hazards occupy deliberately clear, reachable sides of the original cave",()=>{
  for(const h of EXPEDITION_HAZARD_LAYOUT){
@@ -50,6 +50,9 @@ test("Ruby trap shows a warning before arrival, then collision costs only one hu
  updateRun(s,.016);
  assert.ok(s.events.some(e=>e.type==="world-hazard-warning"));
  assert.equal(s.hull,5);
+ // The 3s opening grace (fix round 3) covers the trap's arrival: the
+ // collision must be exercised after the grace, not at run time 0.
+ s.time=3.5;
  pose(s,h,48,true);
  updateRun(s,.016);
  assert.equal(h.hit,true);
@@ -109,7 +112,7 @@ test("ceiling basalt warns before dropping, and safe center passage earns no rep
  assert.equal(s.objectiveBonus,bonus);
  const message=excavationNotice({type:"world-hazard-warning",kind:"basalt",side:-1});
  assert.match(message.title,/BASALT/);
- assert.match(message.detail,/ceiling/i);
+ assert.equal(message.detail,undefined);
 });
 test("passing a Royal burst from behind cannot award a phantom dodge",()=>{
  const s=newRun(1467,4),h=s.worldHazards[0];
@@ -120,10 +123,10 @@ test("passing a Royal burst from behind cannot award a phantom dodge",()=>{
  assert.equal(s.score,score);
  assert.equal(s.worldObjective,false);
 });
-test("warning and bonus notices identify different gameplay hazards",()=>{
+test("warning notices identify hazards; bonus outcomes pop nothing",()=>{
  const w=excavationNotice({type:"world-hazard-warning",kind:"geyser",side:1});
  assert.match(w.title,/GEYSER/);
  assert.equal(w.placement,"top");
- assert.match(excavationNotice({type:"world-hazard-shatter"}).detail,/175/);
- assert.match(excavationNotice({type:"world-objective-complete",points:500}).detail,/500/);
+ assert.equal(excavationNotice({type:"world-hazard-shatter"}),null);
+ assert.equal(excavationNotice({type:"world-objective-complete",points:500}),null);
 });

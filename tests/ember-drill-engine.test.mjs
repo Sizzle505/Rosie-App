@@ -47,6 +47,9 @@ test("hazards cost a hull point, with a collision grace period",()=>{
   const s=newRun();
   const x=s.scroll+DRILL_ANCHOR;
   s.objects=[{id:1,kind:"rock",x:x+DRILL_TIP_OFFSET+5,y:s.y,radius:40,taken:false},{id:2,kind:"spike",x:x+DRILL_TIP_OFFSET+9,y:s.y,radius:35,taken:false}];
+  // Past the 3s Classic settle-in grace (course rocks share the opening
+  // grace since round 5); the test pins the collision cost, not the opening.
+  s.time=3.1;
   updateRun(s,.016);
   assert.equal(s.hull,4);
   assert.ok(s.hitCooldown>0);
@@ -79,6 +82,8 @@ test("run ends in a win after 75 seconds if hull survives",()=>{
 });
 test("run fails when all five hull points are lost",()=>{
   const s=newRun();s.objects=[];
+  // Past the 3s settle-in grace, so wall damage applies from the first step.
+  s.time=5;
   for(let i=0;i<5;i++){
     s.hitCooldown=0;
     s.y=DRILL_HEIGHT-65;

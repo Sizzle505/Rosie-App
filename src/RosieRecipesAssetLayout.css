@@ -668,7 +668,7 @@
     right:auto!important;bottom:auto!important;
     transform:translateY(-50%)!important;
     display:block!important;
-    width:43vw!important;max-width:720px!important;
+    width:41vw!important;max-width:720px!important;
     height:auto!important;aspect-ratio:2 / 1!important;
     margin:0!important;overflow:hidden!important;
     background-image:url('/rosieverse/recipes/recipes-desktop-panorama-v3.webp')!important;
@@ -684,7 +684,7 @@
   .app-shell.page-recipes .recipes-body {
     position:relative!important;z-index:3!important;
     box-sizing:border-box!important;
-    width:calc(51vw - clamp(26px,3vw,58px))!important;
+    width:calc(50vw - clamp(26px,3vw,58px))!important;
     max-width:none!important;min-width:0!important;
     margin:0 clamp(22px,3vw,58px) 0 auto!important;padding:0!important;
   }
@@ -719,7 +719,7 @@
 }
 @media(min-width:1200px) and (max-height:620px){
   .app-shell.page-recipes .recipes-top-scene{
-    width:min(43vw,calc((100dvh - 120px)*2))!important;
+    width:min(41vw,calc((100dvh - 120px)*2))!important;
   }
 }
 
@@ -729,7 +729,7 @@
   .app-shell.page-recipes .recipes-desktop-discovery {
     display:block;position:fixed;z-index:4;
     top:66px;
-    left:clamp(22px,3vw,58px);width:min(44vw,760px);
+    left:clamp(22px,3vw,58px);width:min(41vw,760px);
     overflow:visible;
   }
   .app-shell.page-recipes .recipes-desktop-discovery .recipes-crest {
@@ -737,7 +737,7 @@
   }
   .app-shell.page-recipes .recipes-desktop-controls {
     position:fixed;top:calc(clamp(240px,26vh,260px) + min(22vw,380px) + 12px);
-    left:clamp(22px,3vw,58px);width:min(44vw,760px);
+    left:clamp(22px,3vw,58px);width:min(41vw,760px);
     max-height:calc(100dvh - clamp(240px,26vh,260px) - min(22vw,380px) - 24px);
     overflow-y:auto;scrollbar-width:thin;scrollbar-color:#a66a37 #f2d7aa;
     padding:18px 20px 14px;border:2px solid #b87939;border-radius:20px;
@@ -757,12 +757,12 @@
   .app-shell.page-recipes .recipes-top-scene {
     top:clamp(240px,26vh,260px)!important;
     transform:none!important;
-    width:min(44vw,760px)!important;
+    width:min(41vw,760px)!important;
     max-width:none!important;
     border-radius:22px!important;
   }
   .app-shell.page-recipes .recipes-body {
-    width:calc(53vw - clamp(24px,3vw,58px))!important;
+    width:calc(50vw - clamp(24px,3vw,58px))!important;
   }
   .app-shell.page-recipes .recipes-heading {
     min-height:clamp(125px,16vh,180px)!important;

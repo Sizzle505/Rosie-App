@@ -70,7 +70,9 @@ export function paintBreakables(c,s,assets,W) {
        }
      }
      c.restore();
-     if(isCrystal)hint(c,"TURBO",0,81,"#ffe19b");
+     // 2026-11-25 polish: the floating "TURBO" text label on crystal
+     // breakables was a UI sticker inside the world; the cracked-crystal
+     // art and the excavation notices carry the information now.
    }else{
      const opacity=Math.max(0,1-(s.scroll-b.x)/200);
      if(opacity>0){

@@ -8,5 +8,5 @@ export default async function handler(req, res) {
     });
     res.setHeader("Set-Cookie", sessionCookie("", 0));
     return respond(res, 200, { ok: true });
-  } catch (error) { return handleError(res, error); }
+  } catch (error) { return handleError(res, error, req); }
 }

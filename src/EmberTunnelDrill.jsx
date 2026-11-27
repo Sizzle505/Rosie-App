@@ -1,15 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { DRILL_WIDTH, DRILL_HEIGHT, RUN_DURATION, TURBO_DURATION, newRun, triggerTurbo, updateRun } from "./emberDrillEngine.js";
 import { paintDrill } from "./emberDrillPainter.js";
 import { primeMechanicalAtlases } from "./emberAugerFX.js";
-import { excavationNotice, excavationStars } from "./emberBreakableFeedback.js";
-import {EXPEDITION_STAGES,getExpeditionStage,expeditionStarCount,safeStoredExpeditionStars} from "./emberExpeditionStages.js";
-import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT} from "./emberExpansionCatalog.js";
+import { excavationNotice, excavationStars, bossPhaseNotice, bossStatusSuffix } from "./emberBreakableFeedback.js";
+import {EXPEDITION_STAGES,EXPEDITION_STAGE_SECONDS,getExpeditionStage,expeditionStarCount,safeStoredExpeditionStars} from "./emberExpeditionStages.js";
+import {EMBER_EXPANSION_ATLASES,EMBER_CHARACTER_ATLASES,EMBER_EXPANSION_TRANSITIONS,EXPANSION_ROOT,
+  BATCH_D_ROOT,EMBER_BATCH_D_ATLASES,EMBER_BATCH_D_ARENAS,EMBER_BATCH_D_RIBBONS,EMBER_BATCH_D_GATES,
+  EMBER_BATCH_D_MECHANISMS,EMBER_BATCH_D_PICKUP_BY_STAGE,EMBER_BATCH_D_ROCK_BY_STAGE,EMBER_BATCH_D_SPIKE_BY_STAGE} from "./emberExpansionCatalog.js";
+import {getBossConfig, bossSecondsUntilVulnerable} from "./emberBossEncounter.js";
+import {expeditionBossKind,bossDefeatReward} from "./emberExpeditionBossStage.js";
 import "./ember-tunnel-drill.css";
 import "./ember-console.css";
 import AxisJoystick from "./AxisJoystick.jsx";
 import CaptainPauseMenu from "./CaptainPauseMenu.jsx";
-import {BOSS_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory} from "./emberVictoryTiming.js";
+import {BOSS_VICTORY_REVEAL_DELAY_MS, WORLD_VICTORY_REVEAL_DELAY_MS, shouldHoldBossVictory, shouldHoldWorldVictory} from "./emberVictoryTiming.js";
 
 // Art loads only for the selected challenge, keeping the original Classic
 // course fast and unchanged. All source images are available for QA in PR #192.
@@ -40,6 +45,84 @@ function loadExpeditionArt(art,stageIndex){
     art[key]=image;
   }
 }
+// Batch-D loading: only the active kingdom's terrain, gates, pickups and
+// relevant boss effects, with the existing art as fallback if a file is
+// missing (the painters check artReady before drawing batch-D art).
+// The previous kingdom's decoded textures are released on world change;
+// the art bag is not reloaded on a retry of the same stage.
+function loadBatchDArt(art,stageIndex){
+  if(!Number.isInteger(stageIndex)||stageIndex<0||stageIndex>4)return;
+  if(art["bd:stage"]===stageIndex)return;
+  for(const key of Object.keys(art))if(key.startsWith("bd:"))delete art[key];
+  art["bd:stage"]=stageIndex;
+  const load=(key,relative)=>{
+    if(!relative||art[key])return;
+    const image=new Image();image.decoding="async";
+    image.src=BATCH_D_ROOT+relative;art[key]=image;
+  };
+  const loadAtlas=(id)=>{
+    if(!EMBER_BATCH_D_ATLASES[id])return;
+    load("bd:"+id,EMBER_BATCH_D_ATLASES[id].file);
+  };
+  // Combat effects shared by all five worlds.
+  for(const id of ["treasure-absorb","turbo-ready","turbo-exhaust","drill-impact"])loadAtlas(id);
+  // Kingdom terrain, gates and pickup.
+  const ribbons=EMBER_BATCH_D_RIBBONS[stageIndex];
+  load("bd:ribbon-top",ribbons.ceiling);
+  load("bd:ribbon-bottom",ribbons.floor);
+  // 2026-11-25 remake: Barkroot's eight finished terrain-variant strips
+  // rotate along the longer 30s route (loaded only for stage 0).
+  if(stageIndex===0){
+    for(const n of [2,3,4,5]){
+      load("bd:ribbon-top-v"+n,"terrain-variants/barkroot-ceiling-0"+n+".webp");
+      load("bd:ribbon-bottom-v"+n,"terrain-variants/barkroot-floor-0"+n+".webp");
+    }
+  }
+  // 2026-11-25 remake hazards: the previously unused batch-D obstacle
+  // sprites, wired to the new steam/mine/lava world hazards.
+  if(stageIndex===2){
+    load("bd:hazard-steam","gameplay/obstacles/steam-vent.webp");
+    load("bd:hazard-mine","gameplay/obstacles/hanging-mine.webp");
+  }
+  if(stageIndex===3)load("bd:hazard-lava","gameplay/obstacles/lava-vent.webp");
+  // Round 10: the Ruby crystal trap gets the batch-D ruby crystal spikes
+  // sprite (real artwork, already the Ruby route-rock art) instead of the
+  // procedural purple polygon \u2014 see emberExpeditionHazardPainter.
+  if(stageIndex===1)load("bd:hazard-crystal","gameplay/obstacles/ruby-crystal-spikes.webp");
+  const gates=EMBER_BATCH_D_GATES[stageIndex];
+  if(gates.entrance.kind==="atlas")loadAtlas(gates.entrance.atlasId);
+  else load("bd:gate-entrance",gates.entrance.file);
+  load("bd:gate-exit",gates.exit.file);
+  load("bd:pickup",EMBER_BATCH_D_PICKUP_BY_STAGE[stageIndex]);
+  load("bd:rock",EMBER_BATCH_D_ROCK_BY_STAGE[stageIndex]);
+  load("bd:spike",EMBER_BATCH_D_SPIKE_BY_STAGE[stageIndex]);
+  // Boss arenas, attacks, mechanism and defeat effect for the guardian.
+  const kind=expeditionBossKind(stageIndex);
+  if(kind){
+    load("bd:arena",EMBER_BATCH_D_ARENAS[kind].file);
+    for(const attack of getBossConfig(kind).attacks)loadAtlas(attack.id);
+    const defeatId=kind==="mole-king"?"defeat-moleking":"defeat-"+kind;
+    loadAtlas(defeatId);
+    const mechanism=EMBER_BATCH_D_MECHANISMS[kind];
+    loadAtlas(mechanism.release);
+    load("bd:mechanism-closed",mechanism.closed);
+    load("bd:mechanism-depleted",mechanism.depleted);
+  }
+}
+// Duration in seconds of a one-shot batch-D combat effect, from its atlas
+// metadata. Used to size the fx particle that carries the effect.
+const batchDEffectSeconds=(id)=>{
+  const a=EMBER_BATCH_D_ATLASES[id];
+  if(!a)return 0.5;
+  const ms=Array.isArray(a.frameDurationsMs)
+    ?a.frameDurationsMs.reduce((sum,n)=>sum+n,0)
+    :a.frames*(a.frameDurationMs||0);
+  return Math.max(0.05,ms/1000);
+};
+const batchDEffectReady=(art,id)=>{
+  const img=art["bd:"+id];
+  return Boolean(img?.complete&&img.naturalWidth>0);
+};
 const PASSAGES = [
   { label: "Barkroot Passage", start: 0, end: RUN_DURATION / 2, mission:"BREAK AN EARTH WALL" },
   { label: "Ruby Temple Galleries", start: RUN_DURATION / 2, end: RUN_DURATION, mission:"BEAT THE CRYSTAL SHUTTER" },
@@ -151,10 +234,17 @@ const DRILL_ART = {
   goldenBone:"golden-bone.webp",
   header:"drill-header.webp",
   scenicBarkroot:"scenic-barkroot.webp",
+  scenicBarkrootDeep:"scenic-barkroot-deep.webp",
+  scenicRubyGallery:"scenic-ruby-gallery.webp",
   scenicLantern:"scenic-lantern.webp",
   scenicRoots:"scenic-roots.webp",
   scenicCrystal:"scenic-crystal.webp",
   scenicTemple:"scenic-temple.webp",
+  scenicClockwork:"scenic-clockwork.webp",
+  scenicClockworkDeep:"scenic-clockwork-deep.webp",
+  scenicMolten:"scenic-molten.webp",
+  scenicMoltenDeep:"scenic-molten-deep.webp",
+  scenicTreasury:"scenic-treasury.webp",
   bone:"collect-bone.webp",
   cheese:"collect-cheese.webp",
   gem:"collect-gem.webp",
@@ -174,7 +264,9 @@ function snapshot(s) {
     worldObjective:s.worldObjective===true,worldHazardCount:s.worldHazards?.length||0,
     worldWarnings:(s.worldHazards||[]).filter(h=>h.warned).length,
     boss:s.boss?{kind:s.boss.kind,health:s.boss.health,maxHealth:s.boss.maxHealth,
-      phase:s.boss.phase,attack:s.boss.attack,defeated:s.boss.defeated}:null,
+      phase:s.boss.phase,attack:s.boss.attack,defeated:s.boss.defeated,
+      hitThisRecovery:!!s.boss.hitThisRecovery,
+      timeLeft:s.bossTimeLeft??null}:null,
     bossDefeated:s.bossDefeated===true,
     objectives:{barkroot:!!s.objectives?.barkroot,ruby:!!s.objectives?.ruby},
     passage:s.stageIndex===null?Math.min(PASSAGES.length-1, Math.floor(s.time / (RUN_DURATION / PASSAGES.length))):s.stageIndex, result:s.result };
@@ -218,12 +310,15 @@ const TUNNEL_OPENING_VIDEO="/ember-drill/rosie-tunnel-opening.mp4";
 const TUNNEL_OPENING_SEEN="rosieTunnelOpeningSeen20261123V2";
 export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, exitGameFullscreen }) {
   const gamepadRoot=useRef(null),gamepadHandler=useRef(null),gamepadPitch=useRef(0);
+  const [victoryTarget,setVictoryTarget]=useState(null);
+  useEffect(()=>{setVictoryTarget(gamepadRoot.current?.closest(".captain-fullscreen-frame")||document.body);},[]);
   const [steerMode,setSteerMode]=useState(()=>{try{return localStorage.getItem("emberSteeringMode")==="joystick"?"joystick":"buttons"}catch{return "buttons"}});
   const toggleSteerMode=()=>{resetHold();setSteerMode(current=>{const next=current==="joystick"?"buttons":"joystick";try{localStorage.setItem("emberSteeringMode",next)}catch{}return next})};
   const canvas=useRef(null),stage=useRef(null),frame=useRef(newRun()),pressed=useRef({up:false,down:false}),
         artRef=useRef({}),onscreen=useRef(false),
         modeRef=useRef("idle"),sound=useRef(null),lastSound=useRef(0),lastUi=useRef(0),portrait=useRef(null),
         particles=useRef([]),seed=useRef(1467),noticeRef=useRef(null),bossVictoryTimer=useRef(null);
+  const turboTapAt=useRef(0);
   const [mode,setMode]=useState("idle");
   const introVideoRef=useRef(null);
   const introExitTimer=useRef(null);
@@ -246,6 +341,9 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   }
   function openOpening(){
     if(modeRef.current!=="idle"&&modeRef.current!=="ended")return;
+    // Launching the film takes the game fullscreen, like starting a run
+    // (Mitchell, 2026-11-26).
+    requestGameFullscreen?.();
     setIntroError(false);setIntroFrameReady(false);
     setIntroPhase("ready");setIntroOpen(true);
   }
@@ -259,7 +357,6 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   function playOpening(){
     const video=introVideoRef.current;
     if(!video||introPhase!=="ready"||introError)return;
-    // Must occur synchronously inside the Play click for iPhone/native fullscreen.
     requestGameFullscreen?.();
     setIntroPhase("playing");
     setIntroFrameReady(true);
@@ -297,12 +394,14 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   },[introOpen,introPhase]);
 
   const [notice,setNotice]=useState(null);
+  const [victoryMore,setVictoryMore]=useState(false);
   const [selectedWorld,setSelectedWorld]=useState(0);
   useEffect(()=>{
     if(mode==="idle")return;
-    const state=mode==="running"?"playing":mode==="paused"?"paused":"ended";
+    if(mode==="victory-hold")return;
+    const state=mode==="running"?(frame.current.boss&&!frame.current.bossDefeated?"boss":"playing"):mode==="paused"?"paused":"ended";
     window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
-      detail:{scene:"tunnel",state,world:selectedWorld}
+      detail:{scene:"tunnel",state,world:frame.current.stageIndex}
     }));
   },[mode,selectedWorld]);
   const [stageStars,setStageStars]=useState(()=>{
@@ -318,6 +417,13 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     try {return Number(localStorage.getItem("rosieEmberDrillBest")||0)}catch(_){return 0}
   });
   const bestRef=useRef(best);
+  // Per-world bests: the old single expedition best showed another world's
+  // score on this world's report. Stored alongside the legacy key, which
+  // Classic runs still use.
+  const [bestByWorld,setBestByWorld]=useState(()=>{
+    try{return JSON.parse(localStorage.getItem("rosieEmberDrillBestByWorld")||"{}")||{}}catch{return {}}
+  });
+  const bestByWorldRef=useRef(bestByWorld);
   const [bestStars,setBestStars]=useState(()=>{
     try{return Math.min(3,Math.max(0,Number(localStorage.getItem("rosieEmberExpeditionStars")||0)))}catch(_){return 0}
   });
@@ -335,7 +441,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   }
   function start(requestedStage=undefined,options={}) {
     if(introOpen&&!options.preserveOpening)closeOpening();
-    // Synchronous launch: preserve the user gesture for native/iOS fullscreen.
+    // Mitchell's rule (2026-11-25): every game goes fullscreen when played.
     requestGameFullscreen?.();
     window.clearTimeout(bossVictoryTimer.current);
     bossVictoryTimer.current=null;
@@ -344,34 +450,67 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     const next=newRun(seed.current++,targetStage);
     if(Number.isInteger(targetStage))setSelectedWorld(targetStage);
     loadExpeditionArt(artRef.current,targetStage);
+    loadBatchDArt(artRef.current,targetStage);
     frame.current=next;particles.current=[];
-    noticeRef.current=null;setNotice(null);
+    noticeRef.current=null;setNotice(null);setVictoryMore(false);
     pressed.current.up=false;pressed.current.down=false;
     modeRef.current="running";setMode("running");setHud(snapshot(next));
     playSound(audio(),"start");
-    // React removes the launch card on this state change. Wait for that layout
-    // to settle, then position the stage itself - once and exactly - 500px
-    // from the viewport top. Native scrolling avoids a second smooth-scroll
-    // pass landing noticeably below the requested position on iOS.
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      // Fullscreen owns scroll positioning after the launch tap.
-      if(requestGameFullscreen)return;
-      const top=stage.current?.getBoundingClientRect().top;
-      if(typeof top!=="number")return;
-      const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
-      // Move 400px down from the prior position while retaining a deterministic
-      // page location after the launch card disappears.
-      // Keep another 130px of the page above the playfield visible on launch.
-      const target=Math.max(0,Math.min(max,window.scrollY+top-20));
-      window.scrollTo(0,target);
-    }));
+    // No window scroll on launch (Mitchell, 2026-11-26): games auto-start
+    // fullscreen, and the old scrollTo shoved the Captain page upward
+    // behind the fullscreen frame on iPhone, stranding the player.
   }
   function turbo() {
     const s=frame.current;
+    const bossHealthBefore=s.boss?.health;
+    const hullBefore=s.hull;
     if(triggerTurbo(s)){
       s.tipBurstAt=s.time; // Event-driven eight-frame ignition; cosmetic only.
       setHud(snapshot(s));playSound(audio(),"turbo");
       if(navigator.vibrate)navigator.vibrate(25);
+      // A click-time strike lands inside triggerTurbo, before the next
+      // updateRun — its boss-hit event would be wiped by updateRun's event
+      // reset, so the hit feedback is given here directly.
+      if(s.boss&&bossHealthBefore!=null&&s.boss.health<bossHealthBefore){
+        const kind=s.boss.defeated?"boss-victory":"boss-hit";
+        const cue=excavationNotice(s.boss.defeated
+          ?{type:"boss-victory",boss:s.boss.kind,points:bossDefeatReward(s.boss.kind)}
+          :{type:"boss-hit",boss:s.boss.kind,health:s.boss.health,healed:s.hull>hullBefore},s.charge);
+        if(cue){const active={...cue,until:s.time+cue.duration,eventType:kind,phase:s.boss?.phase};noticeRef.current=active;setNotice(active);}
+        playBossAudio(audio(),kind);
+        if(navigator.vibrate)navigator.vibrate(kind==="boss-victory"?[40,30,40,30,70]:[24,16,24]);
+      }
+    } else if(s.running){
+      // A refused Turbo press must ALWAYS say why, in a boss fight AND
+      // in Classic: the old code only announced boss refusals, and the
+      // TURBO button was disabled below 100 charge, so a mouse click on
+      // it during BOSS VULNERABLE with charge <100 fired no event at
+      // all — no hit, no TOO EARLY, charge kept (the round-4 dead
+      // click). Space bypassed the disabled button, so keyboard players
+      // got the refusal while mouse players got silence. The button is
+      // now enabled whenever the game is running, so every click reaches
+      // here and gets an answer.
+      let cueType;
+      if(s.boss&&!s.boss.defeated){
+        cueType="boss-strike-early";
+        if(s.boostTime>0)cueType="boss-turbo-active";
+        else if(s.boss.phase==="recovery"&&s.boss.hitThisRecovery)cueType="boss-struck";
+        else if(s.charge<100)cueType="boss-turbo-charging";
+      }else{
+        cueType=s.boostTime>0?"turbo-active":"turbo-charging";
+      }
+      const cue=excavationNotice({type:cueType},s.charge);
+      if(cue){
+        // TOO EARLY must not outlive the phase that caused it: cap its
+        // duration at the time until the next vulnerable window opens,
+        // so the banner flips to BOSS VULNERABLE the moment recovery
+        // starts instead of contradicting the status line.
+        const duration=cueType==="boss-strike-early"
+          ?Math.min(cue.duration,bossSecondsUntilVulnerable(s.boss))
+          :cue.duration;
+        const active={...cue,until:s.time+Math.max(0.5,duration),eventType:cueType,phase:s.boss?.phase};
+        noticeRef.current=active;setNotice(active);
+      }
     }
   }
   function togglePause() {
@@ -393,7 +532,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     noticeRef.current=null;
     setNotice(null);
     window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
-      detail:{scene:"tunnel",state:"ended",world:worldIndex}
+      detail:{scene:"tunnel",state:"menu",world:worldIndex}
     }));
     if (keepFullscreen !== true) exitGameFullscreen?.();
   }
@@ -414,11 +553,58 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     },{rootMargin:"150px"});
     if(canvas.current)observer.observe(canvas.current);
     const onKeys=e=>{
-      if(modeRef.current!=="running")return;
       const key=e.key.toLowerCase();
-      if(["arrowup","arrowdown","w","s"," "].includes(key))e.preventDefault();
-      if(key==="arrowup"||key==="w")pressed.current.up=e.type==="keydown";
-      if(key==="arrowdown"||key==="s")pressed.current.down=e.type==="keydown";
+      if(!["arrowup","arrowdown","w","s"," "].includes(key))return;
+      // Space/arrows must never scroll the page while the Tunnel game is
+      // the game on screen: the key target is inside the stage, or the
+      // page has Tunnel as the focused game and focus is on the page
+      // itself. Interactive elements keep their own keys, so a focused
+      // button still activates on Space. This covers running AND paused
+      // (Space resumes from pause); the old handler returned before
+      // preventDefault whenever the mode was not "running", so a Space
+      // press at the edge of a run scrolled the page to Cosmic Odyssey
+      // instead of igniting Turbo.
+      const target=e.target;
+      const interactive=target&&target.closest&&target.closest("button,input,select,textarea,a,[contenteditable]");
+      const editable=target&&target.closest&&target.closest("input,textarea,select,[contenteditable]");
+      if(editable)return;
+      const inStage=stage.current&&target&&stage.current.contains(target);
+      const focusedTunnel=document.querySelector(".captain-arcade-page-background")?.dataset.focusedGame==="tunnel";
+      const bodyTarget=!target||target===document.body||target===document.documentElement;
+      // Round 10 (Mitchell): Turbo must work WHILE steering. The old
+      // handler returned early whenever the event target was ANY
+      // interactive element \u2014 so after a tap/click on a steer, Turbo or
+      // pause button (which leaves focus on that button), holding an
+      // arrow key and pressing Space did nothing at all: direction and
+      // Turbo could never combine. Direction keys are now captured
+      // whenever Tunnel is the game in scope, regardless of which
+      // button holds focus; only Space defers to a focused button
+      // OUTSIDE the stage (that button's own activation \u2014 e.g. the
+      // TURBO button itself \u2014 is then the Turbo press anyway).
+      // Fullscreen is unambiguous: when THIS frame is the expanded one,
+      // Tunnel is the game in scope whatever the page backdrop's
+      // focused-game heuristic says (it can lag on "yacht" when several
+      // frames measure distance 0). Without this, auto-fullscreen +
+      // keyboard did nothing until the canvas was clicked.
+      const frameExpanded=Boolean(gamepadRoot.current?.closest(".captain-fullscreen-frame.is-expanded"));
+      if(!(inStage||frameExpanded||(focusedTunnel&&(bodyTarget||interactive))))return;
+      if(key==="arrowup"||key==="arrowdown"||key==="w"||key==="s"){
+        e.preventDefault();
+        if(modeRef.current!=="running")return;
+        if(key==="arrowup"||key==="w")pressed.current.up=e.type==="keydown";
+        if(key==="arrowdown"||key==="s")pressed.current.down=e.type==="keydown";
+        return;
+      }
+      // Space is also ours when one of the game's OWN control buttons
+      // holds focus (steer/boost/pause inside this suite): the player
+      // steers with one hand and fires Turbo with Space without the
+      // press being swallowed as that button's click. Buttons elsewhere
+      // on the page keep their own Space activation.
+      const inGameControls=gamepadRoot.current&&target&&gamepadRoot.current.contains(target);
+      if(interactive&&!inStage&&!inGameControls)return;
+      e.preventDefault();
+      if(modeRef.current==="paused"&&key===" "&&e.type==="keydown"&&!e.repeat){togglePause();return;}
+      if(modeRef.current!=="running")return;
       if(key===" "&&e.type==="keydown"&&!e.repeat)turbo();
     };
     const onBlur=()=>resetHold();
@@ -428,28 +614,46 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     let raf=0,last=0,lastIdleDraw=0,alive=true;
     const render=(ts)=>{
       if(!alive)return;
+      // Defense in depth (tidy round): a throw anywhere in a frame must
+      // never silently kill the loop — the Molten reload soft-lock was a
+      // painter TypeError skipping the only rAF reschedule. The finally
+      // below is the loop's single reschedule point; the error itself
+      // still propagates so it stays visible in the console.
+      try{
       const delta=last?Math.min((ts-last)/1000,.20):0;last=ts;
-      if(!onscreen.current||document.hidden){raf=requestAnimationFrame(render);return;}
+      if(!onscreen.current||document.hidden)return;
       // Pause screens do not need full-speed redraw. On low-frame-rate iPads
       // the simulation uses 45ms substeps to preserve collision/warning order,
       // but may advance up to 200ms of real time per actual rendered frame.
-      if(modeRef.current!=="running"&&ts-lastIdleDraw<65){
-        raf=requestAnimationFrame(render);return;
-      }
+      if(modeRef.current!=="running"&&ts-lastIdleDraw<65)return;
       lastIdleDraw=ts;
       const s=frame.current;
       if(modeRef.current==="running"&&!document.hidden){
         const events=[];
+        const hadBoss=Boolean(s.boss);
         const steps=Math.max(1,Math.ceil(delta/.045));
         for(let i=0;i<steps&&s.running;i++){
           updateRun(s,delta/steps,pressed.current.up||gamepadPitch.current<0,pressed.current.down||gamepadPitch.current>0);
           events.push(...s.events);
         }
+        if(!hadBoss&&s.boss&&!s.ended){
+          window.dispatchEvent(new CustomEvent("rosieverse:music:scene",{
+            detail:{scene:"tunnel",state:"boss",world:s.stageIndex}
+          }));
+        }
         for(const event of events){
-           const cue=excavationNotice(event);
+           const cue=excavationNotice(event,s.charge);
            if(cue){
-             const activeNotice={...cue,until:s.time+cue.duration};
-             noticeRef.current=activeNotice;setNotice(activeNotice);
+             // The spawn and first-warning cues arrive in the same batch;
+             // letting the warning replace the spawn notice hides the hull
+             // patch line before a single frame paints. Hold the spawn
+             // notice for its duration; later warnings show normally.
+             const spawnShowing=noticeRef.current?.eventType==="boss-spawn"
+               &&s.time<noticeRef.current.until;
+             if(!(event.type==="boss-warning"&&spawnShowing)){
+               const activeNotice={...cue,until:s.time+cue.duration,eventType:event.type,phase:s.boss?.phase};
+               noticeRef.current=activeNotice;setNotice(activeNotice);
+             }
            }
           if((event.type==="shatter"||event.type==="shutter-shatter")&&s.boostTime>0)s.tipBurstAt=s.time;
           if(event.type==="world-hazard-shatter"){
@@ -497,8 +701,26 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             particles.current.push({type:event.type==="hit"?"hit-burst":"break-v2",
               x:event.x,y:event.y,vx:0,vy:0,life:.54,max:.54,r:0,color:"#efbd75"});
           }
-          if(event.type==="pickup"||event.type==="shatter"){
-            const color=event.kind==="gem"?"#fb537a":event.kind==="cheese"?"#ffe68c":"#ffd182";
+          if(event.type==="pickup"||event.type==="boss-reward"){
+            // One visual per trigger: the treasure-absorb atlas when loaded,
+            // the small particle burst as fallback.
+            const absorbId="treasure-absorb";
+            if(batchDEffectReady(artRef.current,absorbId)){
+              const life=batchDEffectSeconds(absorbId);
+              particles.current.push({type:"fx-"+absorbId,x:event.x,y:event.y,vx:0,vy:0,
+                life,max:life,r:0,color:"#ffd182"});
+            }else{
+              const color=event.kind==="gem"?"#fb537a":event.kind==="cheese"?"#ffe68c":"#ffd182";
+              for(let i=0;i<11;i++){
+                const angle=(i/11)*Math.PI*2;
+                const v=60+Math.random()*130;
+                particles.current.push({x:event.x,y:event.y,vx:Math.cos(angle)*v,vy:Math.sin(angle)*v,
+                  life:.42+Math.random()*.24,max:.66,r:2+Math.random()*3,color});
+              }
+            }
+          }
+          if(event.type==="shatter"){
+            const color="#ffd182";
             for(let i=0;i<11;i++){
               const angle=(i/11)*Math.PI*2;
               const v=60+Math.random()*130;
@@ -507,14 +729,25 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             }
           }
           if(event.type==="boss-hit"||event.type==="boss-victory"){
-            const count=event.type==="boss-victory"?38:15;
-            for(let i=0;i<count;i++){
-              const angle=i/count*Math.PI*2,v=80+Math.random()*210;
-              particles.current.push({x:482,y:s.bossY||s.y,
-                vx:Math.cos(angle)*v,vy:Math.sin(angle)*v-60,
-                life:event.type==="boss-victory"?1.6+Math.random()*.9:.6+Math.random()*.35,
-                max:event.type==="boss-victory"?2.5:.95,r:2+Math.random()*3.5,
-                color:i%3===0?"#fff1b0":i%3===1?"#f3b35a":"#f0d794"});
+            // One visual per trigger: the drill-impact / defeat atlas when
+            // loaded, the gold particle burst as fallback.
+            const fxId=event.type==="boss-victory"
+              ?(s.boss?.kind==="mole-king"?"defeat-moleking":"defeat-"+(s.boss?.kind||"copperjack"))
+              :"drill-impact";
+            if(batchDEffectReady(artRef.current,fxId)){
+              const life=batchDEffectSeconds(fxId);
+              particles.current.push({type:"fx-"+fxId,x:482,y:s.bossY||s.y,vx:0,vy:0,
+                life,max:life,r:0,color:"#fff1b0"});
+            }else{
+              const count=event.type==="boss-victory"?38:15;
+              for(let i=0;i<count;i++){
+                const angle=i/count*Math.PI*2,v=80+Math.random()*210;
+                particles.current.push({x:482,y:s.bossY||s.y,
+                  vx:Math.cos(angle)*v,vy:Math.sin(angle)*v-60,
+                  life:event.type==="boss-victory"?1.6+Math.random()*.9:.6+Math.random()*.35,
+                  max:event.type==="boss-victory"?2.5:.95,r:2+Math.random()*3.5,
+                  color:i%3===0?"#fff1b0":i%3===1?"#f3b35a":"#f0d794"});
+              }
             }
             if(navigator.vibrate)navigator.vibrate(event.type==="boss-victory"?[40,30,40,30,70]:[24,16,24]);
           }
@@ -529,18 +762,59 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             playSound(sound.current,event.type==="hit"?"hit":
               (event.type==="break-wall"||event.type==="shutter-shatter"||event.type==="world-hazard-shatter")?"turbo":"pickup");lastSound.current=ts;
           }
+          // Boss fields (health/phase/charge) change only on boss events,
+          // so refresh the HUD snapshot on each one: the 115ms throttle
+          // below would otherwise leave the status line a whole tick
+          // behind the canvas bars after a hit (bars 0/3, status 1/3).
+          if(event.type.startsWith("boss-"))setHud(snapshot(s));
+        }
+        // Boss telegraph, single source of truth: the banner is derived
+        // from the LIVE boss phase every frame, like the status line.
+        // Event notices (spawn, hit, victory, refusals) are transients
+        // that override it while fresh; the phase banner re-asserts
+        // itself the moment they lapse, so the banner can never
+        // contradict the live phase. A transient is also capped to the
+        // phase it was stamped in (its `phase`, set where it was
+        // created): a 2.4s spawn notice used to block the phase banner
+        // through the whole first warning + active and into recovery,
+        // and a 1.5s refusal could outlive a 1.3s recovery into the
+        // next warning — the DOM pair lagging the live phase by a full
+        // phase, exactly the round-6 banner/status disagreement.
+        const bossPhase=bossPhaseNotice(s.boss,s.charge);
+        const currentNotice=noticeRef.current;
+        const transientTypes=["boss-spawn","boss-hit","boss-victory","boss-strike-early","boss-turbo-charging","boss-struck","boss-turbo-active","turbo-charging","turbo-active"];
+        const transientFresh=currentNotice&&transientTypes.includes(currentNotice.eventType)&&s.time<currentNotice.until
+          &&(currentNotice.phase===undefined||currentNotice.phase===s.boss?.phase);
+        if(bossPhase){
+          if(!transientFresh){
+            if(!currentNotice||currentNotice.eventType!=="boss-phase"||currentNotice.title!==bossPhase.title||currentNotice.detail!==bossPhase.detail){
+              const active={...bossPhase,until:s.time+0.5,eventType:"boss-phase"};
+              noticeRef.current=active;setNotice(active);
+            }else if(s.time+0.15>=currentNotice.until){
+              // Same phase banner: extend it with a NEW object so React
+              // commits the extension (the old in-place mutation never
+              // rendered). Throttled to the last 0.15s of its life, so
+              // this re-renders ~2x/s instead of 60x/s.
+              const extended={...currentNotice,until:s.time+0.5};
+              noticeRef.current=extended;setNotice(extended);
+            }
+          }
+        }else if(currentNotice&&currentNotice.eventType==="boss-phase"){
+          noticeRef.current=null;setNotice(null);setVictoryMore(false);
         }
         if(noticeRef.current&&s.time>=noticeRef.current.until){
-           noticeRef.current=null;setNotice(null);
+           noticeRef.current=null;setNotice(null);setVictoryMore(false);
          }
          if(ts-lastUi.current>115){
           lastUi.current=ts;setHud(snapshot(s));
         }
         if(s.ended){
-          // Keep the canvas and boss defeat particles visible for 2.5 seconds
-          // after victory; no results overlay until the animation has played.
+          // Keep the canvas visible briefly after a world completion —
+          // boss defeat sparks for 2.5s, the finished tunnel and exit
+          // gate for 1.4s — before the victory presentation mounts.
           const defeatedBoss=shouldHoldBossVictory(s);
-          if(defeatedBoss){
+          const worldVictory=!defeatedBoss&&shouldHoldWorldVictory(s);
+          if(defeatedBoss||worldVictory){
             modeRef.current="victory-hold";
             setMode("victory-hold");
             window.clearTimeout(bossVictoryTimer.current);
@@ -550,7 +824,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
                 setMode("ended");
               }
               bossVictoryTimer.current=null;
-            },BOSS_VICTORY_REVEAL_DELAY_MS);
+            },defeatedBoss?BOSS_VICTORY_REVEAL_DELAY_MS:WORLD_VICTORY_REVEAL_DELAY_MS);
           }else{
             modeRef.current="ended";
             setMode("ended");
@@ -577,12 +851,21 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             bestRef.current=s.score;setBest(s.score);
             try{localStorage.setItem("rosieEmberDrillBest",String(s.score))}catch(_){}
           }
+          if(stage&&s.score>(bestByWorldRef.current[stage.id]||0)){
+            const updated={...bestByWorldRef.current,[stage.id]:s.score};
+            bestByWorldRef.current=updated;setBestByWorld(updated);
+            try{localStorage.setItem("rosieEmberDrillBestByWorld",JSON.stringify(updated))}catch(_){}
+          }
           resetHold();
         }
       }
       particles.current=particles.current.filter(p=>p.life>0);
       for(const p of particles.current) {
-        p.x+=p.vx*delta;p.y+=p.vy*delta;p.vy+=110*delta;p.life-=delta;
+        p.x+=p.vx*delta;p.y+=p.vy*delta;
+        // Atlas-effect particles are stationary overlays; gravity applies
+        // only to the loose particle bursts.
+        if(!p.type?.startsWith("fx-"))p.vy+=110*delta;
+        p.life-=delta;
       }
       const el=canvas.current;
       if(el){
@@ -597,7 +880,9 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           paintDrill(context,s,portrait.current,particles.current,artRef.current,correction);
         }
       }
-      raf=requestAnimationFrame(render);
+      }finally{
+        if(alive)raf=requestAnimationFrame(render);
+      }
     };
     const resize=()=>{
       const el=canvas.current;if(!el)return;
@@ -623,14 +908,27 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
   const active=mode==="running";
   const paused=mode==="paused";
   const world=getExpeditionStage(hud.stageIndex);
+  // The report and caption show the best for THIS world, or the live score
+  // once it passes it — never another world's score.
+  const displayBest=world
+    ?Math.max(bestByWorld[world.id]||0,hud.score)
+    :Math.max(best,hud.score);
+  // Expedition total: the stored per-world stars summed (max 15). The report
+  // footer used to show this run's stars only, so a failed run read "0 of 3"
+  // despite stars earned in other worlds.
+  const expeditionTotalStars=EXPEDITION_STAGES.reduce((sum,w)=>sum+(stageStars[w.id]||0),0);
   const route=world?EXPEDITION_STAGES.map(w=>({label:w.name,mission:w.objective})):PASSAGES;
+  const isVictory=mode==="ended"&&Boolean(world)&&hud.result==="complete";
   const title=mode==="ended" ?
     (hud.result==="complete"?(world?world.name.toUpperCase()+" COMPLETE":"THE DIG IS DONE"):
-     hud.result==="boss-timeout"?"THE BOSS ESCAPED":"A VALIANT EXCAVATION") : "THE GREAT DIG";
+     hud.result==="boss-timeout"?"THE BOSS ESCAPED":
+     hud.result==="hull"?"THE DRILL IS DOWN":"A VALIANT EXCAVATION") : "THE GREAT DIG";
   const subtitle=mode==="ended" ?
     (hud.result==="complete"?
-      (hud.bossDefeated?"Rosie has conquered the depths and defeated the guardian.":"Rosie has excavated an entirely respectable amount of park.") :
-     hud.result==="boss-timeout"?"The guardian still holds the chamber. Return and time your Turbo strikes.":"Rosie maintains the rocks were poorly positioned.") :
+      (hud.bossDefeated?"Rosie has conquered the depths and defeated the guardian.":"Rosie has excavated an entirely respectable amount of treasure.") :
+     hud.result==="boss-timeout"?"The guardian still holds the chamber. Return and time your Turbo strikes.":
+     hud.result==="hull"?"The hull is gone — the drill took too many hits. Patch her up and dig again.":
+     "Rosie maintains the rocks were poorly positioned.") :
     "Because some dogs dig holes. Rosie digs civilizations.";
   const hold=(type,on,e)=>{
     if(e?.type==="pointerdown"){e.preventDefault();e.currentTarget.setPointerCapture?.(e.pointerId)}
@@ -671,16 +969,99 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
     }
   };
   useEffect(()=>window.RosieGamepad?.subscribe(gamepadRoot.current,frame=>gamepadHandler.current?.(frame),()=>{gamepadPitch.current=0;}),[]);
+  // In idle mode the header counts down the selected world's run, not the
+  // Classic 75s, so the header and the world's launch button agree.
+  const headerTime=mode==="idle"?0:hud.time;
+  const headerDuration=mode==="idle"
+    ?(EXPEDITION_STAGES[selectedWorld].duration||EXPEDITION_STAGE_SECONDS)
+    :hud.duration;
+  const victoryPresentation=(<>
+        {mode==="ended"&&world&&hud.result==="complete"&&
+          <img className="ember-victory-backdrop" src={`/ember-drill/victory/victory-${world.id}.webp`}
+            alt={`${world.name} complete — Rosie celebrates in ${world.name}`} draggable="false" />}
+        {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
+          <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")+(mode==="ended"&&world&&hud.result==="complete"?" is-victory":"")}>
+            {!isVictory&&<span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>}
+            <h3>{title}</h3>
+            {!isVictory&&<p>{subtitle}</p>}
+            {isVictory&&<div className="ember-victory-summary">
+              <span className="ember-victory-stars" aria-label={expeditionStarCount(hud)+" of 3 stars"}>
+                {[0,1,2].map(n=><i key={n} className={n<expeditionStarCount(hud)?"earned":""}>★</i>)}
+              </span>
+              <span className="ember-victory-line">{hud.score.toLocaleString()} POINTS · {hud.distance.toLocaleString()}m · {hud.gems} GEMS</span>
+            </div>}
+            {isVictory&&<div className="ember-victory-actions">
+              <button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY</button>
+              {hud.stageIndex<EXPEDITION_STAGES.length-1
+                ?<button type="button" className="ember-expedition-next" onClick={()=>start(hud.stageIndex+1)}>NEXT WORLD ▸</button>
+                :<button type="button" onClick={()=>start(null)}>CLASSIC DIG</button>}
+              <button type="button" className="ember-victory-more" onClick={()=>setVictoryMore(v=>!v)}>{victoryMore?"HIDE DETAILS":"DETAILS & WORLDS"}</button>
+            </div>}
+{mode==="ended"&&(!isVictory||victoryMore)&&<div className="ember-results">
+              <span><b>{hud.score.toLocaleString()}</b> POINTS</span>
+              <span><b>{hud.distance.toLocaleString()}m</b> EXCAVATED</span>
+              <span><b>{hud.gems}</b> GEMS</span>
+              <span><b>{hud.boosts}</b> TURBOS</span>
+              <span><b>{hud.shards+hud.wallsBroken}</b> ROCKS SHATTERED</span>
+              <span><b>{hud.secrets}</b> SECRET CHAMBERS</span>
+              <span><b>{hud.relics}</b> ROYAL RELICS</span>
+              <span><b>{Number(hud.objectives.barkroot)+Number(hud.objectives.ruby)}/2</b> MISSIONS</span>
+              <span><b>{hud.hazardsDodged}</b> CRYSTAL DODGES</span>
+               {world&&<span className="ember-result-wide"><b>{hud.worldObjective?"COMPLETE":"MISSED"}</b> WORLD MISSION</span>}
+              {hud.boss&&<span className="ember-result-wide"><b>{hud.bossDefeated?"DEFEATED":"UNDEFEATED"}</b> {hud.boss.kind==="mole-king"?"MOLE KING":hud.boss.kind==="copperjack"?"COPPERJACK":"CINDERCLAW"}</span>}
+              <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
+              {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
+              <span><b>{displayBest.toLocaleString()}</b> BEST</span>
+            </div>}
+             {mode==="ended"&&(!isVictory||victoryMore)&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 stars this run; "+expeditionTotalStars+" of 15 expedition stars earned"}>
+               <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
+               <small>{world?(hud.stageIndex>=2?"DEFEAT BOSS · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE"):"FINISH · 2 WALLS · ROYAL RELIC"}</small>
+               <small>EXPEDITION TOTAL: {expeditionTotalStars} OF 15 STARS</small>
+             </div>}
+             {mode==="ended"&&world&&!isVictory&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
+            {mode!=="ended"&&<button type="button" className="ember-watch-opening" onClick={openOpening}>WATCH OPENING FILM</button>}
+             {mode==="ended"&&world&&hud.result==="complete"&&!isVictory&&hud.stageIndex<EXPEDITION_STAGES.length-1&&
+               <button className="ember-expedition-next" type="button"
+                 onClick={()=>start(hud.stageIndex+1)}>
+                 CONTINUE TO {EXPEDITION_STAGES[hud.stageIndex+1].name.toUpperCase()}
+               </button>}
+            {mode==="ended"&&!hud.boss&&(!isVictory||victoryMore)&&(hud.relics>0||relicFound ?
+              <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
+              hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />)}
+                        {(!isVictory||victoryMore)&&<div className="ember-expedition-pick" aria-label="Choose a world to play">
+               <span className="ember-expedition-pick-heading">FIVE WORLD EXPEDITION · ALL LEVELS AVAILABLE</span>
+               <div className="ember-world-select">
+                 {EXPEDITION_STAGES.map((w,i)=><button type="button" key={w.id}
+                   className={"ember-world-choice"+(selectedWorld===i?" selected":"")}
+                   onClick={()=>setSelectedWorld(i)}
+                   aria-pressed={selectedWorld===i}
+                   style={{backgroundImage:`linear-gradient(180deg,rgba(16,16,25,.25),rgba(16,13,23,.92)),url(${i>=2?EXPANSION_ROOT+Object.values(EMBER_EXPANSION_TRANSITIONS)[i-2]:"/ember-drill/"+w.art})`}}>
+                   <strong>{i+1}. {w.name}</strong>
+                   <small aria-label={(stageStars[w.id]||0)+" out of 3 stars"}>
+                     {"★".repeat(stageStars[w.id]||0)}{"☆".repeat(3-(stageStars[w.id]||0))}
+                   </small>
+                 </button>)}
+               </div>
+               <button className="ember-expedition-launch" type="button" onClick={()=>start(selectedWorld)}>
+                 PLAY {EXPEDITION_STAGES[selectedWorld].name.toUpperCase()} · {EXPEDITION_STAGES[selectedWorld].duration||15}s
+               </button>
+               <small>Worlds feature distinct hazards; Clockwork, Molten and Treasury feature boss fights.</small>
+             </div>}
+             {!isVictory&&<button type="button" onClick={()=>start(null)}>{mode!=="ended"?"START CLASSIC DIG":world?"CLASSIC DIG · 75s":"DIG AGAIN"}</button>}
+            {!isVictory&&<small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>}
+          </div>}
+  </>);
   return (
     <section ref={gamepadRoot} className={"ember-suite ember-console-upgrade"+(introOpen?" ember-cinematic-active":"")} data-arcade-backdrop={arcadeBackdrops[arcadeBackdrop].id} aria-label="Captain Rosie Ember Tunnel Drill game">
-      <div className="ember-section-divider"><span>✦</span> ANOTHER CAPTAIN ROSIE ADVENTURE <span>✦</span></div>
       <header className="ember-header" aria-label="Captain Rosie - Ember Tunnel Drill">
         <img className="ember-header-full-art" src="/ember-drill/drill-header.webp"
              alt="Captain Rosie - Ember Tunnel Drill" draggable="false" />
       </header>
       <div className="ember-stats" aria-live="off">
         <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/score.webp" alt=""/><small>SCORE</small><strong>{hud.score.toLocaleString()}</strong></div>
-        <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/time.webp" alt=""/><small>TIME</small><strong>{formatTime(hud.time,hud.duration)}</strong></div>
+        {hud.boss&&hud.boss.timeLeft!=null&&!hud.bossDefeated
+          ?<div><img className="ember-instrument-icon" src="/ember-drill/console-v2/time.webp" alt=""/><small>BOSS TIME</small><strong>{Math.max(0,Math.ceil(hud.boss.timeLeft))+"s"}</strong></div>
+          :<div><img className="ember-instrument-icon" src="/ember-drill/console-v2/time.webp" alt=""/><small>TIME</small><strong>{formatTime(headerTime,headerDuration)}</strong></div>}
         <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/hull.webp" alt=""/><small>HULL</small><strong className="ember-hull" aria-label={`${hud.hull} of 5 hull remaining`}>{hud.hull}<small className="ember-hull-total">/5</small><span className="ember-hull-segments" aria-hidden="true">{Array.from({length:5},(_,n)=><i key={n} className={n<hud.hull?"intact":""}/>)}</span></strong></div>
         <div><img className="ember-instrument-icon" src="/ember-drill/console-v2/treasure.webp" alt=""/><small>TREASURE</small><strong>{hud.gems+hud.bones+hud.cheese}</strong></div>
       </div>
@@ -715,14 +1096,14 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         <canvas ref={canvas} className="ember-canvas" width="690" height="820"
           role="img" aria-label="Rosie pilots her continuously moving drill through curving earth tunnels, collecting cheese, bones and gems while avoiding obstacles. Use the angle controls to steer." />
         {hud.boost>0&&<span className="ember-turbo-banner">BURROW TURBO!</span>}
-        {hud.boss&&active&&<span className="ember-boss-accessible" role="status" aria-live="off">
+        {hud.boss&&(active||mode==="victory-hold")&&<span className="ember-boss-accessible" role="status" aria-live="off">
           {hud.boss.kind==="mole-king"?"Mole King":hud.boss.kind==="copperjack"?"Copperjack":"Cinderclaw"}: {hud.boss.health} of {hud.boss.maxHealth} health,
-          {hud.boss.phase==="recovery"?" vulnerable to Turbo":hud.boss.phase==="warning"?" attack incoming":hud.boss.phase==="active"?" attacking":" defeated"}
+          {bossStatusSuffix(hud.boss,hud.charge,notice)}
         </span>}
-         {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">GUIDE THE AUGER INTO WEAK EARTH · TURBO BREAKS CRYSTAL</div>}
-         {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
+         {active&&hud.time<4.5&&!notice&&<div className="ember-dig-hint">TURBO BREAKS CRYSTAL</div>}
+         {active&&notice&&<div className={"ember-dig-notice is-"+notice.kind+(notice.quiet?" is-quiet":"")+(notice.placement==="bottom"?" near-bottom":"")} role="status" aria-live="polite">
            {notice.kind==="relic"&&<img src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="" />}
-           <span><strong>{notice.title}</strong><small>{notice.detail}</small></span>
+           <span><strong>{notice.title}</strong>{notice.detail&&<small>{notice.detail}</small>}</span>
          </div>}
         {active&&hud.combo>=4&&<div className="ember-streak">DIG FRENZY ×{Math.ceil(hud.combo/3)}</div>}
         {paused&&<div className="ember-pause-overlay">
@@ -730,63 +1111,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
             onPlay={togglePause} onRetry={() => start(frame.current.stageIndex)}
             onLevels={() => returnToLevelMenu(true)} />
         </div>}
-        {mode!=="running"&&mode!=="paused"&&mode!=="victory-hold"&&
-          <div className={"ember-start-overlay"+(mode==="ended"?" is-ended":"")}>
-            <span className="ember-start-eyebrow">{mode==="ended"?"CAPTAIN'S EXCAVATION REPORT":"CAPTAIN ROSIE AWAITS HER ORDERS"}</span>
-            <h3>{title}</h3>
-            <p>{subtitle}</p>
-            <button type="button" className="ember-watch-opening" onClick={openOpening}>WATCH OPENING FILM</button>
-             {mode==="ended"&&world&&hud.result==="complete"&&hud.stageIndex<EXPEDITION_STAGES.length-1&&
-               <button className="ember-expedition-next" type="button"
-                 onClick={()=>start(hud.stageIndex+1)}>
-                 CONTINUE TO {EXPEDITION_STAGES[hud.stageIndex+1].name.toUpperCase()}
-               </button>}
-             {mode==="ended"&&<div className="ember-expedition-medals" aria-label={(world?expeditionStarCount(hud):excavationStars(hud))+" of 3 expedition stars earned"}>
-               <span aria-hidden="true">{[0,1,2].map(n=><i key={n} className={n<(world?expeditionStarCount(hud):excavationStars(hud))?"earned":""}>★</i>)}</span>
-               <small>{world?(hud.stageIndex>=2?"DEFEAT BOSS · ≤1 DAMAGE · WORLD OBJECTIVE":"FINISH · ≤1 DAMAGE · WORLD OBJECTIVE"):"FINISH · 2 WALLS · ROYAL RELIC"}</small>
-             </div>}
-            {mode==="ended"&&!hud.boss&&(hud.relics>0||relicFound ?
-              <img className="ember-relic-reveal" src="/ember-drill/breakables/v2/09-royal-bone-medallion.webp" alt="Rosie's Royal Bone Medallion, found in a secret chamber" /> :
-              hud.result==="complete"&&<img className="ember-relic-reveal" src="/ember-drill/golden-bone.webp" alt="Rosie's Golden Bone relic" />)}
-            {mode==="ended"&&<div className="ember-results">
-              <span><b>{hud.score.toLocaleString()}</b> POINTS</span>
-              <span><b>{hud.distance.toLocaleString()}m</b> EXCAVATED</span>
-              <span><b>{hud.gems}</b> GEMS</span>
-              <span><b>{hud.boosts}</b> TURBOS</span>
-              <span><b>{hud.shards+hud.wallsBroken}</b> ROCKS SHATTERED</span>
-              <span><b>{hud.secrets}</b> SECRET CHAMBERS</span>
-              <span><b>{hud.relics}</b> ROYAL RELICS</span>
-              <span><b>{Number(hud.objectives.barkroot)+Number(hud.objectives.ruby)}/2</b> MISSIONS</span>
-              <span><b>{hud.hazardsDodged}</b> CRYSTAL DODGES</span>
-               {world&&<span><b>{hud.worldObjective?"COMPLETE":"MISSED"}</b> WORLD MISSION</span>}
-              {hud.boss&&<span><b>{hud.bossDefeated?"DEFEATED":"UNDEFEATED"}</b> {hud.boss.kind==="mole-king"?"MOLE KING":hud.boss.kind==="copperjack"?"COPPERJACK":"CINDERCLAW"}</span>}
-              <span><b>{hud.damageTaken===0?"UNSCATHED":hud.hull+"/5"}</b> {hud.damageTaken===0?"EXCAVATOR":"HULL REMAINING"}</span>
-              {hud.cleanBonus>0&&<span><b>+{hud.cleanBonus}</b> CLEAN DIG</span>}
-              <span><b>{best.toLocaleString()}</b> BEST</span>
-            </div>}
-            <div className="ember-expedition-pick" aria-label="Choose a world to playtest">
-               <span className="ember-expedition-pick-heading">FIVE WORLD EXPEDITION · ALL LEVELS AVAILABLE FOR PLAYTESTING</span>
-               <div className="ember-world-select">
-                 {EXPEDITION_STAGES.map((w,i)=><button type="button" key={w.id}
-                   className={"ember-world-choice"+(selectedWorld===i?" selected":"")}
-                   onClick={()=>setSelectedWorld(i)}
-                   aria-pressed={selectedWorld===i}
-                   style={{backgroundImage:`linear-gradient(180deg,rgba(16,16,25,.25),rgba(16,13,23,.92)),url(${i>=2?EXPANSION_ROOT+Object.values(EMBER_EXPANSION_TRANSITIONS)[i-2]:"/ember-drill/"+w.art})`}}>
-                   <strong>{i+1}. {w.name}</strong>
-                   <small aria-label={(stageStars[w.id]||0)+" out of 3 stars"}>
-                     {"★".repeat(stageStars[w.id]||0)}{"☆".repeat(3-(stageStars[w.id]||0))}
-                   </small>
-                 </button>)}
-               </div>
-               <button className="ember-expedition-launch" type="button" onClick={()=>start(selectedWorld)}>
-                 PLAY {EXPEDITION_STAGES[selectedWorld].name.toUpperCase()} · {EXPEDITION_STAGES[selectedWorld].duration||15}s
-               </button>
-               <small>Worlds feature distinct hazards; Clockwork, Molten and Treasury feature boss fights; final character art remains in review.</small>
-             </div>
-             <button type="button" onClick={()=>start(null)}>{mode!=="ended"?"START DIGGING":world?"CLASSIC 75-SECOND DIG":"DIG AGAIN"}</button>
-             {mode==="ended"&&world&&<button type="button" onClick={()=>start(hud.stageIndex)}>REPLAY THIS WORLD</button>}
-            <small>Hold ▲ / ▼ to steer. Break earth with the drill; Turbo breaks crystal. Space ignites Turbo.</small>
-          </div>}
+        {isVictory&&victoryTarget?createPortal(<div className="ember-victory-fullscreen">{victoryPresentation}</div>,victoryTarget):victoryPresentation}
 
         {introOpen&&<div className={"ember-opening-cover is-"+introPhase} role="dialog" aria-modal="true" aria-label="Tunnel Drill opening film">
           <div className="ember-opening-media">
@@ -832,7 +1157,13 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
           onPointerCancel={e=>hold("up",false,e)} onLostPointerCapture={e=>hold("up",false,e)}
           aria-label="Angle the drill upward"><img src="/ember-drill/console-v1/steer-up.webp" alt=""/></button>}
         <button className={"ember-boost"+(hud.boost>0?" is-boosting":hud.charge>=100?" is-ready":"")} type="button"
-          disabled={!active||hud.charge<100||hud.boost>0} onClick={turbo}
+          disabled={!active}
+          onPointerDown={e=>{/* Round 10: fire Turbo on pointerdown, not click \u2014 while the
+            other finger holds a steer button (pointer-captured), a click can be
+            delayed or swallowed on touch; pointerdown is per-pointer and immediate.
+            The trailing click is suppressed in onClick. */
+            e.preventDefault();turboTapAt.current=Date.now();turbo();}}
+          onClick={()=>{if(Date.now()-turboTapAt.current<700)return;turbo();}}
           aria-label={hud.boost>0?"Burrow Turbo active":hud.charge>=100?"Activate Burrow Turbo":"Burrow Turbo charging"}>
           <img className="ember-turbo-art" src="/ember-drill/console-v1/turbo.webp" alt=""/>
           <span><b>{hud.boost>0?"TURBO ACTIVE":hud.charge>=100?"TAP FOR TURBO":"BURROW TURBO"}</b>
@@ -850,7 +1181,7 @@ export default function EmberTunnelDrill({ soundOn=true, requestGameFullscreen, 
         <span>Hold ▲ / ▼ to steer · Space for Turbo</span>
       </div>}
       <div className="ember-caption"><span>BONES {hud.bones}</span><span>CHEESE {hud.cheese}</span><span>GEMS {hud.gems}</span><span>WALLS {hud.wallsBroken}</span><span>SECRETS {hud.secrets}</span>{relicFound&&<span className="ember-best">ROYAL RELIC FOUND</span>}
-        <span className="ember-best">BEST {best.toLocaleString()}</span><span className="ember-best">EXPEDITION {"★".repeat(bestStars)}{"☆".repeat(3-bestStars)}</span></div>
+        <span className="ember-best">BEST {displayBest.toLocaleString()}</span><span className="ember-best">EXPEDITION {expeditionTotalStars}/15</span></div>
     </section>
   );
 }

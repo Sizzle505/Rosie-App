@@ -1,4 +1,4 @@
-.ember-suite{--ember-gold:#dfb46c;--ember-ivory:#fff0ca;--ember-ink:#0c2535;position:relative;width:min(100%,980px);margin:30px auto 92px;padding:9px;border:1px solid rgba(226,182,108,.64);border-radius:24px;background:linear-gradient(160deg,rgba(16,40,51,.98),rgba(31,20,27,.99) 56%,rgba(6,27,39,.98));box-shadow:0 15px 45px rgba(0,0,0,.45),inset 0 0 0 3px rgba(255,219,136,.05);color:var(--ember-ivory);isolation:isolate}.ember-suite *{box-sizing:border-box}.ember-section-divider{text-align:center;margin:2px 0 11px;color:#e7c585;font:700 10px/1.4 Georgia,serif;letter-spacing:.22em;text-shadow:0 1px 7px rgba(0,0,0,.9)}.ember-section-divider span{padding:0 8px;color:#a64332}.ember-header{height:205px;position:relative;display:flex;align-items:center;justify-content:space-between;overflow:hidden;border-radius:18px;border:1px solid rgba(255,223,151,.7);background:radial-gradient(circle at 20% 49%,rgba(228,142,59,.34),transparent 30%),linear-gradient(130deg,#42221e 0%,#1c202b 52%,#102f42);box-shadow:inset 0 0 0 4px rgba(248,215,155,.06)}.ember-header:before{content:"";position:absolute;inset:0;opacity:.48;pointer-events:none;background:repeating-linear-gradient(130deg,transparent 0 58px,rgba(255,195,101,.06) 59px 61px,transparent 62px 130px),radial-gradient(ellipse at 85% 72%,rgba(224,110,58,.45),transparent 47%)}.ember-header:after{content:"";position:absolute;inset:auto 0 0;height:17px;background:linear-gradient(90deg,transparent,#b98042,transparent);opacity:.7}.ember-header-portrait{position:relative;z-index:1;align-self:stretch;width:39%;max-width:310px;display:flex;justify-content:center;align-items:end;overflow:hidden;border-right:1px solid rgba(236,178,92,.25);background:radial-gradient(ellipse at 50% 62%,rgba(232,166,86,.48),transparent 60%)}.ember-header-portrait img{height:97%;max-width:115%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 6px 13px rgba(0,0,0,.48)) saturate(.94)}.ember-header-copy{position:relative;z-index:2;flex:1;min-width:0;padding:14px 35px 14px 12px;text-shadow:0 3px 9px rgba(0,0,0,.7)}.ember-header-copy>span{display:block;color:#dfba79;font:700 8px Georgia,serif;letter-spacing:.12em;white-space:normal}.ember-header-copy h2{margin:13px 0 1px;color:#fff1c7;font:700 clamp(25px,5vw,41px)/.99 Georgia,serif;letter-spacing:-.03em;white-space:nowrap}.ember-header-copy p{margin:8px 0 0;color:#ffdfaa;font:italic clamp(18px,3.5vw,30px)/1.1 Georgia,serif}.ember-header-seal{position:absolute;right:12px;bottom:14px;width:31px;height:31px;display:grid;place-items:center;color:#ecc77c;border:1px solid #b28240;border-radius:50%;background:#24242b;font:24px Georgia;box-shadow:0 0 14px rgba(231,180,79,.23)}.ember-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:9px 0}.ember-stats>div{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;height:64px;border:1px solid #9a7649;border-radius:12px;background:linear-gradient(160deg,#123c52,#081e2f 75%);box-shadow:inset 0 1px rgba(248,220,170,.15)}.ember-stats small{font:700 9px Georgia,serif;letter-spacing:.08em;color:#bfbbad}.ember-stats strong{font:700 25px/1.2 Georgia,serif;color:#ffe5a0;margin-top:3px;font-variant-numeric:tabular-nums}.ember-hull{display:flex;gap:5px}.ember-hull i{font-style:normal;color:#334554;font-size:17px}.ember-hull i.intact{color:#f5c45e;text-shadow:0 0 8px #e69f37}.ember-stage{height:clamp(470px,73vw,690px);position:relative;overflow:hidden;border-radius:16px 16px 3px 3px;border:2px solid #bf9857;background:#251b20;box-shadow:inset 0 0 35px rgba(0,0,0,.45)}.ember-canvas{display:block;width:100%;height:100%;touch-action:none}.ember-course-plaque{position:absolute;z-index:4;top:13px;left:50%;transform:translateX(-50%);padding:7px 25px 8px;min-width:210px;text-align:center;border:1px solid rgba(245,192,108,.85);border-radius:999px;background:linear-gradient(180deg,rgba(31,43,47,.96),rgba(15,30,40,.9));box-shadow:0 7px 15px rgba(0,0,0,.35)}.ember-course-plaque small{display:block;font:600 8px Georgia,serif;letter-spacing:.2em;color:#d9b273}.ember-course-plaque strong{font:italic 17px Georgia,serif;color:#f6e1b2}.ember-start-overlay{position:absolute;z-index:8;bottom:8%;left:50%;transform:translateX(-50%);width:min(89%,430px);padding:20px 19px 16px;text-align:center;border:1px solid rgba(245,196,121,.72);border-radius:24px;background:linear-gradient(180deg,rgba(8,22,32,.92),rgba(20,21,30,.94));box-shadow:0 18px 35px rgba(0,0,0,.55),inset 0 0 0 4px rgba(255,208,129,.06);backdrop-filter:blur(5px)}.ember-start-eyebrow{display:block;font:700 9px Georgia,serif;color:#d9b57d;letter-spacing:.14em}.ember-start-overlay h3{margin:8px 0 9px;font:italic 37px/.99 Georgia,serif;color:#fff0c3;text-shadow:0 2px 13px #27160d}.ember-start-overlay p{margin:0 auto 13px;max-width:295px;font:italic 13px/1.4 Georgia,serif;color:#eee2ce}.ember-start-overlay button{position:relative;z-index:1;width:min(100%,250px);height:48px;border:1px solid #fce0a0;border-radius:999px;background:linear-gradient(#fff1ac,#d99d3e 75%,#9d632b);box-shadow:0 5px 15px rgba(0,0,0,.5),inset 0 2px rgba(255,255,255,.4);color:#26313c;font:700 16px Georgia,serif;letter-spacing:.08em;cursor:pointer}.ember-start-overlay>small{display:block;margin-top:12px;color:#d9c7a7;font:10px/1.3 Georgia,serif;letter-spacing:.02em}.ember-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px 8px;max-width:330px;margin:13px auto}.ember-results span{min-width:0;font:8px/1.5 Georgia,serif;letter-spacing:.05em;color:#bea977}.ember-results b{display:block;font:700 17px Georgia,serif;color:#ffe4a7}.ember-turbo-banner,.ember-streak{position:absolute;z-index:5;left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap;color:#ffdb80;text-shadow:0 0 14px #e6982a,0 2px 6px #110c09;font:700 22px Georgia,serif;letter-spacing:.07em}.ember-turbo-banner{top:17%}.ember-streak{bottom:9%;font-size:17px;color:#fff0b1}.ember-controls{display:grid;grid-template-columns:minmax(90px,1fr) minmax(180px,2.5fr) minmax(90px,1fr);gap:7px;margin-top:8px}.ember-controls button{color:#f9dc9e;background:linear-gradient(145deg,#114058,#092437 75%);border:1px solid rgba(234,190,106,.65);box-shadow:inset 0 1px rgba(255,237,192,.17),0 5px 12px rgba(0,0,0,.21);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}.ember-angle{height:75px;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.ember-angle span{font-size:28px;text-shadow:0 1px 15px #d8a14b}.ember-angle small{font:700 10px Georgia,serif;letter-spacing:.08em;white-space:nowrap}.ember-angle:active:not(:disabled){background:#23576f;transform:translateY(1px)}.ember-boost{display:flex;align-items:center;justify-content:center;gap:12px;min-width:0;padding:8px 8px;border-radius:15px}.ember-boost-symbol{display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;border:1px solid #be8d49;border-radius:50%;font:27px Georgia,serif;color:#e6ba66}.ember-boost>span:last-child{flex:1;display:flex;min-width:0;flex-direction:column;gap:6px;align-items:center}.ember-boost b{font:700 15px Georgia,serif;letter-spacing:.1em;white-space:nowrap}.ember-boost small{font:7px Georgia,serif;letter-spacing:.1em;color:#dfc396}.ember-charge{width:100%;height:11px;display:block;border:1px solid #d0a75c;border-radius:999px;background:#0c1920;overflow:hidden}.ember-charge>i{display:block;height:100%;background:linear-gradient(90deg,#b87a2f,#f8d984,#fff2b1);box-shadow:0 0 15px rgba(255,211,112,.75);transition:width .15s linear}.ember-boost.is-ready{border-color:#fff0af;box-shadow:0 0 14px rgba(255,220,124,.26)}.ember-controls button:disabled{cursor:default;opacity:.56}.ember-caption{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:10px 2px 4px;color:#cdbd9c;font:700 9px Georgia,serif;letter-spacing:.12em}.ember-best{color:#f4d284}.ember-suite button:focus-visible{outline:2px solid #ffecab;outline-offset:3px}@media(max-width:620px){.ember-suite{margin:22px auto 82px;padding:6px;border-radius:18px}.ember-section-divider{font-size:8px;margin:3px 0 8px;letter-spacing:.1em}.ember-header{height:157px;border-radius:13px}.ember-header-portrait{width:39%}.ember-header-copy{padding:10px 9px 9px 8px}.ember-header-copy>span{font-size:5px}.ember-header-copy h2{font-size:clamp(21px,5.7vw,31px);margin:10px 0 4px}.ember-header-copy p{font-size:clamp(15px,4.3vw,21px)}.ember-header-seal{width:20px;height:20px;font-size:14px;right:5px;bottom:7px}.ember-stats{gap:5px;margin:6px 0}.ember-stats>div{height:51px;border-radius:9px}.ember-stats small{font-size:7px}.ember-stats strong{font-size:18px}.ember-hull i{font-size:13px}.ember-stage{height:min(116vw,550px);border-radius:13px 13px 3px 3px}.ember-course-plaque{top:9px;padding:4px 15px 6px;min-width:160px}.ember-course-plaque small{font-size:6px}.ember-course-plaque strong{font-size:13px}.ember-start-overlay{padding:14px 12px 11px;bottom:8%;width:87%}.ember-start-eyebrow{font-size:7px}.ember-start-overlay h3{font-size:clamp(27px,8vw,37px)}.ember-start-overlay p{font-size:12px}.ember-start-overlay button{height:40px;font-size:13px}.ember-start-overlay>small{font-size:9px}.ember-controls{grid-template-columns:78px minmax(0,1fr) 78px;gap:5px;margin-top:6px}.ember-angle{height:70px;border-radius:12px}.ember-angle small{font-size:8px}.ember-angle span{font-size:23px}.ember-boost{gap:5px;padding:5px}.ember-boost-symbol{width:26px;height:26px;font-size:18px}.ember-boost b{font-size:clamp(10px,2.6vw,14px);letter-spacing:.02em}.ember-boost small{font-size:6px;letter-spacing:0}.ember-caption{font-size:8px;gap:8px}}@media(max-width:360px){.ember-header{height:135px}.ember-controls{grid-template-columns:65px minmax(0,1fr) 65px}.ember-angle small{font-size:7px}.ember-boost-symbol{display:none}.ember-start-overlay{bottom:7%}}@media(prefers-reduced-motion:reduce){.ember-suite *{animation:none!important;transition:none!important}}
+.ember-suite{--ember-gold:#dfb46c;--ember-ivory:#fff0ca;--ember-ink:#0c2535;position:relative;width:min(100%,980px);margin:30px auto 92px;padding:9px;border:1px solid rgba(226,182,108,.64);border-radius:24px;background:linear-gradient(160deg,rgba(16,40,51,.98),rgba(31,20,27,.99) 56%,rgba(6,27,39,.98));box-shadow:0 15px 45px rgba(0,0,0,.45),inset 0 0 0 3px rgba(255,219,136,.05);color:var(--ember-ivory);isolation:isolate}.ember-suite *{box-sizing:border-box}.ember-section-divider{text-align:center;margin:2px 0 11px;color:#e7c585;font:700 10px/1.4 Georgia,serif;letter-spacing:.22em;text-shadow:0 1px 7px rgba(0,0,0,.9)}.ember-section-divider span{padding:0 8px;color:#a64332}.ember-header{height:205px;position:relative;display:flex;align-items:center;justify-content:space-between;overflow:hidden;border-radius:18px;border:1px solid rgba(255,223,151,.7);background:radial-gradient(circle at 20% 49%,rgba(228,142,59,.34),transparent 30%),linear-gradient(130deg,#42221e 0%,#1c202b 52%,#102f42);box-shadow:inset 0 0 0 4px rgba(248,215,155,.06)}.ember-header:before{content:"";position:absolute;inset:0;opacity:.48;pointer-events:none;background:repeating-linear-gradient(130deg,transparent 0 58px,rgba(255,195,101,.06) 59px 61px,transparent 62px 130px),radial-gradient(ellipse at 85% 72%,rgba(224,110,58,.45),transparent 47%)}.ember-header:after{content:"";position:absolute;inset:auto 0 0;height:17px;background:linear-gradient(90deg,transparent,#b98042,transparent);opacity:.7}.ember-header-portrait{position:relative;z-index:1;align-self:stretch;width:39%;max-width:310px;display:flex;justify-content:center;align-items:end;overflow:hidden;border-right:1px solid rgba(236,178,92,.25);background:radial-gradient(ellipse at 50% 62%,rgba(232,166,86,.48),transparent 60%)}.ember-header-portrait img{height:97%;max-width:115%;object-fit:contain;object-position:bottom;filter:drop-shadow(0 6px 13px rgba(0,0,0,.48)) saturate(.94)}.ember-header-copy{position:relative;z-index:2;flex:1;min-width:0;padding:14px 35px 14px 12px;text-shadow:0 3px 9px rgba(0,0,0,.7)}.ember-header-copy>span{display:block;color:#dfba79;font:700 8px Georgia,serif;letter-spacing:.12em;white-space:normal}.ember-header-copy h2{margin:13px 0 1px;color:#fff1c7;font:700 clamp(25px,5vw,41px)/.99 Georgia,serif;letter-spacing:-.03em;white-space:nowrap}.ember-header-copy p{margin:8px 0 0;color:#ffdfaa;font:italic clamp(18px,3.5vw,30px)/1.1 Georgia,serif}.ember-header-seal{position:absolute;right:12px;bottom:14px;width:31px;height:31px;display:grid;place-items:center;color:#ecc77c;border:1px solid #b28240;border-radius:50%;background:#24242b;font:24px Georgia;box-shadow:0 0 14px rgba(231,180,79,.23)}.ember-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:9px 0}.ember-stats>div{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;height:64px;border:1px solid #9a7649;border-radius:12px;background:linear-gradient(160deg,#123c52,#081e2f 75%);box-shadow:inset 0 1px rgba(248,220,170,.15)}.ember-stats small{font:700 9px Georgia,serif;letter-spacing:.08em;color:#bfbbad}.ember-stats strong{font:700 25px/1.2 Georgia,serif;color:#ffe5a0;margin-top:3px;font-variant-numeric:tabular-nums}.ember-hull{display:flex;gap:5px}.ember-hull i{font-style:normal;color:#334554;font-size:17px}.ember-hull i.intact{color:#f5c45e;text-shadow:0 0 8px #e69f37}.ember-stage{height:clamp(470px,73vw,820px);position:relative;overflow:hidden;border-radius:16px 16px 3px 3px;border:2px solid #bf9857;background:#251b20;box-shadow:inset 0 0 35px rgba(0,0,0,.45)}.ember-canvas{display:block;width:100%;height:100%;touch-action:none}.ember-course-plaque{position:absolute;z-index:4;top:13px;left:50%;transform:translateX(-50%);padding:7px 25px 8px;min-width:210px;text-align:center;border:1px solid rgba(245,192,108,.85);border-radius:999px;background:linear-gradient(180deg,rgba(31,43,47,.96),rgba(15,30,40,.9));box-shadow:0 7px 15px rgba(0,0,0,.35)}.ember-course-plaque small{display:block;font:600 8px Georgia,serif;letter-spacing:.2em;color:#d9b273}.ember-course-plaque strong{font:italic 17px Georgia,serif;color:#f6e1b2}.ember-start-overlay{position:absolute;z-index:8;bottom:8%;left:50%;transform:translateX(-50%);width:min(89%,430px);padding:20px 19px 16px;text-align:center;border:1px solid rgba(245,196,121,.72);border-radius:24px;background:linear-gradient(180deg,rgba(8,22,32,.92),rgba(20,21,30,.94));box-shadow:0 18px 35px rgba(0,0,0,.55),inset 0 0 0 4px rgba(255,208,129,.06);backdrop-filter:blur(5px)}.ember-start-eyebrow{display:block;font:700 9px Georgia,serif;color:#d9b57d;letter-spacing:.14em}.ember-start-overlay h3{margin:8px 0 9px;font:italic 37px/.99 Georgia,serif;color:#fff0c3;text-shadow:0 2px 13px #27160d}.ember-start-overlay p{margin:0 auto 13px;max-width:295px;font:italic 13px/1.4 Georgia,serif;color:#eee2ce}.ember-start-overlay button{position:relative;z-index:1;width:min(100%,250px);height:48px;border:1px solid #fce0a0;border-radius:999px;background:linear-gradient(#fff1ac,#d99d3e 75%,#9d632b);box-shadow:0 5px 15px rgba(0,0,0,.5),inset 0 2px rgba(255,255,255,.4);color:#26313c;font:700 16px Georgia,serif;letter-spacing:.08em;cursor:pointer}.ember-start-overlay>small{display:block;margin-top:12px;color:#d9c7a7;font:10px/1.3 Georgia,serif;letter-spacing:.02em}.ember-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px 8px;max-width:330px;margin:13px auto}.ember-results span{min-width:0;font:8px/1.5 Georgia,serif;letter-spacing:.05em;color:#bea977}.ember-results b{display:block;font:700 17px Georgia,serif;color:#ffe4a7}.ember-turbo-banner,.ember-streak{position:absolute;z-index:5;left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap;color:#ffdb80;text-shadow:0 0 14px #e6982a,0 2px 6px #110c09;font:700 22px Georgia,serif;letter-spacing:.07em}.ember-turbo-banner{top:17%}.ember-streak{bottom:9%;font-size:17px;color:#fff0b1}.ember-controls{display:grid;grid-template-columns:minmax(90px,1fr) minmax(180px,2.5fr) minmax(90px,1fr);gap:7px;margin-top:8px}.ember-controls button{color:#f9dc9e;background:linear-gradient(145deg,#114058,#092437 75%);border:1px solid rgba(234,190,106,.65);box-shadow:inset 0 1px rgba(255,237,192,.17),0 5px 12px rgba(0,0,0,.21);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}.ember-angle{height:75px;border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.ember-angle span{font-size:28px;text-shadow:0 1px 15px #d8a14b}.ember-angle small{font:700 10px Georgia,serif;letter-spacing:.08em;white-space:nowrap}.ember-angle:active:not(:disabled){background:#23576f;transform:translateY(1px)}.ember-boost{display:flex;align-items:center;justify-content:center;gap:12px;min-width:0;padding:8px 8px;border-radius:15px}.ember-boost-symbol{display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;border:1px solid #be8d49;border-radius:50%;font:27px Georgia,serif;color:#e6ba66}.ember-boost>span:last-child{flex:1;display:flex;min-width:0;flex-direction:column;gap:6px;align-items:center}.ember-boost b{font:700 15px Georgia,serif;letter-spacing:.1em;white-space:nowrap}.ember-boost small{font:7px Georgia,serif;letter-spacing:.1em;color:#dfc396}.ember-charge{width:100%;height:11px;display:block;border:1px solid #d0a75c;border-radius:999px;background:#0c1920;overflow:hidden}.ember-charge>i{display:block;height:100%;background:linear-gradient(90deg,#b87a2f,#f8d984,#fff2b1);box-shadow:0 0 15px rgba(255,211,112,.75);transition:width .15s linear}.ember-boost.is-ready{border-color:#fff0af;box-shadow:0 0 14px rgba(255,220,124,.26)}.ember-controls button:disabled{cursor:default;opacity:.56}.ember-caption{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:10px 2px 4px;color:#cdbd9c;font:700 9px Georgia,serif;letter-spacing:.12em}.ember-best{color:#f4d284}.ember-suite button:focus-visible{outline:2px solid #ffecab;outline-offset:3px}@media(max-width:620px){.ember-suite{margin:22px auto 82px;padding:6px;border-radius:18px}.ember-section-divider{font-size:8px;margin:3px 0 8px;letter-spacing:.1em}.ember-header{height:157px;border-radius:13px}.ember-header-portrait{width:39%}.ember-header-copy{padding:10px 9px 9px 8px}.ember-header-copy>span{font-size:5px}.ember-header-copy h2{font-size:clamp(21px,5.7vw,31px);margin:10px 0 4px}.ember-header-copy p{font-size:clamp(15px,4.3vw,21px)}.ember-header-seal{width:20px;height:20px;font-size:14px;right:5px;bottom:7px}.ember-stats{gap:5px;margin:6px 0}.ember-stats>div{height:51px;border-radius:9px}.ember-stats small{font-size:7px}.ember-stats strong{font-size:18px}.ember-hull i{font-size:13px}.ember-stage{height:min(116vw,550px);border-radius:13px 13px 3px 3px}.ember-course-plaque{top:9px;padding:4px 15px 6px;min-width:160px}.ember-course-plaque small{font-size:6px}.ember-course-plaque strong{font-size:13px}.ember-start-overlay{padding:14px 12px 11px;bottom:8%;width:87%}.ember-start-eyebrow{font-size:7px}.ember-start-overlay h3{font-size:clamp(27px,8vw,37px)}.ember-start-overlay p{font-size:12px}.ember-start-overlay button{height:40px;font-size:13px}.ember-start-overlay>small{font-size:9px}.ember-controls{grid-template-columns:78px minmax(0,1fr) 78px;gap:5px;margin-top:6px}.ember-angle{height:70px;border-radius:12px}.ember-angle small{font-size:8px}.ember-angle span{font-size:23px}.ember-boost{gap:5px;padding:5px}.ember-boost-symbol{width:26px;height:26px;font-size:18px}.ember-boost b{font-size:clamp(10px,2.6vw,14px);letter-spacing:.02em}.ember-boost small{font-size:6px;letter-spacing:0}.ember-caption{font-size:8px;gap:8px}}@media(max-width:360px){.ember-header{height:135px}.ember-controls{grid-template-columns:65px minmax(0,1fr) 65px}.ember-angle small{font-size:7px}.ember-boost-symbol{display:none}.ember-start-overlay{bottom:7%}}@media(prefers-reduced-motion:reduce){.ember-suite *{animation:none!important;transition:none!important}}
 
 /* Approved illustrated header replaces provisional flat portrait/title construction. */
 .ember-suite .ember-header{
@@ -110,6 +110,15 @@
  width:clamp(70px,19vw,98px);height:clamp(70px,19vw,98px);
  object-fit:contain;margin:-2px auto 7px;
  filter:drop-shadow(0 0 12px rgba(252,195,94,.40));
+}
+
+/* Per-world victory art on the completion report. Portrait 9:16, capped so
+   the report still fits the stage; the overlay scrolls if needed. */
+.ember-victory-art{
+ display:block;
+ width:auto;max-width:100%;max-height:280px;
+ margin:2px auto 10px;border-radius:12px;
+ box-shadow:0 8px 22px rgba(0,0,0,.5);
 }
 
 /* Keep the finished artwork's dog and vehicle visible instead of darkening
@@ -364,23 +373,27 @@
 @media(max-width:620px){.ember-controls:has(.axis-stick){grid-template-columns:72px minmax(0,1fr) 40px}}
 
 /* The new excavation report includes secrets and the Royal Bone Medallion.
-   Compress only the result state on narrow screens; the gameplay viewport is unchanged. */
-@media (max-width:620px) {
-  .ember-start-overlay.is-ended{
-    bottom:3%;width:92%;padding:9px 10px 10px;
-    max-height:95%;overflow-y:auto;
-    scrollbar-width:thin;
-  }
-  .ember-start-overlay.is-ended h3{font-size:clamp(23px,6vw,29px);margin:5px 0}
-  .ember-start-overlay.is-ended p{font-size:10px;margin-bottom:5px}
-  .ember-start-overlay.is-ended .ember-relic-reveal{
-    width:64px;height:64px;margin:0 auto 3px;
-  }
-  .ember-start-overlay.is-ended .ember-results{gap:4px 5px;margin:6px auto}
-  .ember-start-overlay.is-ended .ember-results span{font-size:7px}
-  .ember-start-overlay.is-ended .ember-results b{font-size:15px}
-  .ember-start-overlay.is-ended>small{font-size:8px;margin-top:5px}
+   The ended report is compacted at every width, not only narrow screens:
+   the stage is 820px on desktop but the report content is ~800px, so
+   without this the medals and REPLAY sit below the fold. The width keeps
+   its 430px cap (the old 92% was written for a ~400px phone stage). */
+.ember-start-overlay.is-ended{
+  bottom:3%;width:min(92%,430px);padding:9px 10px 10px;
+  overflow-y:auto;scrollbar-width:thin;
 }
+.ember-start-overlay.is-ended h3{font-size:clamp(23px,6vw,29px);margin:5px 0}
+.ember-start-overlay.is-ended p{font-size:10px;margin-bottom:5px}
+.ember-start-overlay.is-ended .ember-relic-reveal{
+  width:64px;height:64px;margin:0 auto 3px;
+}
+.ember-start-overlay.is-ended .ember-victory-art{max-height:140px;margin-bottom:6px}
+.ember-start-overlay.is-ended .ember-results{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px 5px;margin:6px auto}
+.ember-start-overlay.is-ended .ember-results span{font-size:7px}
+.ember-start-overlay.is-ended .ember-results b{font-size:15px}
+.ember-start-overlay.is-ended .ember-results .ember-result-wide{grid-column:span 2}
+.ember-start-overlay.is-ended>button{height:40px;font-size:13px}
+.ember-start-overlay.is-ended .ember-expedition-pick>small{display:none}
+.ember-start-overlay.is-ended>small{font-size:8px;margin-top:5px}
 
 /* Excavation feedback stays off the flight controls and never catches taps. */
 .ember-dig-notice{
@@ -537,7 +550,7 @@
 .ember-opening-heading{text-align:center;display:flex;flex-direction:column;gap:4px;}
 .ember-opening-heading small{font-size:clamp(9px,1.6vw,12px);letter-spacing:.15em;}
 .ember-opening-heading strong{font-size:clamp(17px,2.2vw,24px);line-height:1.15;letter-spacing:.035em;}
-.ember-opening-film{display:block;width:auto;max-width:100%;max-height:min(63vh,520px);
+.ember-opening-film{display:block;width:auto;max-width:100%;max-height:min(50vh,420px);
   aspect-ratio:9/16;object-fit:contain;min-height:0;border:1px solid #a8844d;
   border-radius:7px;background:#090a10;}
 .ember-opening-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;}
@@ -635,4 +648,146 @@
 }
 @media(prefers-reduced-motion:reduce){
   .ember-stage .ember-opening-cover.is-leaving{transition:opacity .65s ease!important;}
+}
+
+/* 2026-11-25 remake — the victory presentation is part of the world,
+   not a report form floating over it. A completed world's victory
+   painting fills the whole stage (fading in over the finished tunnel
+   after the victory hold), and the excavation report becomes a glass
+   sheet across its lower portion. The painting is portrait like the
+   stage, so cover-cropping keeps Rosie and the celebration legible. */
+.ember-victory-backdrop{
+ position:absolute;inset:0;z-index:6;width:100%;height:100%;
+ object-fit:cover;object-position:center 30%;
+ animation:emberVictoryIn 1s ease both;
+}
+@keyframes emberVictoryIn{
+ from{opacity:0;transform:scale(1.045)}
+ to{opacity:1;transform:scale(1)}
+}
+.ember-start-overlay.is-victory{
+ background:linear-gradient(180deg,rgba(8,22,32,.52),rgba(20,21,30,.88) 42%);
+}
+.ember-start-overlay.is-victory h3{
+ text-shadow:0 2px 16px rgba(0,0,0,.85);
+}
+
+/* 2026-11-25 feedback round — notices shrink to quiet pills. Warnings
+   are a single short title; refusal notes (Turbo charge, too early)
+   are smaller still and sit near the top edge, out of the action. */
+.ember-dig-notice{
+  min-height:0;padding:7px 14px;border-radius:999px;
+  background:linear-gradient(140deg,rgba(11,29,40,.88),rgba(39,24,29,.90));
+  box-shadow:0 6px 16px rgba(0,0,0,.32),inset 0 1px rgba(255,229,167,.13);
+}
+.ember-dig-notice strong{font-size:clamp(11px,1.9vw,14px)}
+.ember-dig-notice.is-quiet{
+  top:13%;padding:4px 11px;border-color:rgba(242,194,115,.45);
+  background:rgba(11,29,40,.78);box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+.ember-dig-notice.is-quiet strong{font-size:11px;color:#f6e4c3;letter-spacing:.08em}
+
+/* 2026-11-25 feedback round — the victory sheet. Mitchell: the victory
+   painting matters more than the run's stats, which the stars already
+   summarize. On victory the report collapses to a compact sheet
+   (title, big stars, one summary line, two rows of buttons) so the
+   painting fills the stage — on iPhone the old full report covered
+   it entirely. Stats, medals, relic and the world picker live one
+   tap away under DETAILS & WORLDS. */
+.ember-start-overlay.is-victory{padding:13px 15px 11px}
+.ember-victory-summary{
+  display:flex;flex-direction:column;align-items:center;gap:2px;margin:1px 0 9px;
+}
+.ember-victory-stars{display:flex;gap:7px}
+.ember-victory-stars i{
+  font:normal 31px/1 Georgia,serif;color:#4a5260;text-shadow:0 1px 2px #151923;
+}
+.ember-victory-stars i.earned{color:#f7ce75;text-shadow:0 0 13px rgba(245,196,92,.6)}
+.ember-victory-line{
+  font:700 11px/1.3 Georgia,serif;letter-spacing:.07em;color:#f6e4c3;
+  text-shadow:0 1px 5px rgba(0,0,0,.85);
+}
+.ember-victory-actions{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%;
+}
+.ember-victory-actions .ember-victory-more{grid-column:1/-1}
+.ember-start-overlay.is-victory .ember-results{margin-top:9px}
+
+/* 2026-11-25 round 2 (Mitchell): the score sheet was covering the victory
+   painting. On victory the painting now owns the stage — the sheet
+   collapses to a slim glass bar across the bottom (title, stars and the
+   points line on one row, the three actions on the next), so Rosie's
+   celebration stays in full view. DETAILS & WORLDS still opens the full
+   report card, unchanged, when he asks for it. */
+.ember-start-overlay.is-victory:not(:has(.ember-results)){
+ left:10px;right:10px;bottom:10px;width:auto;transform:none;
+ padding:9px 12px 10px;border-radius:16px;
+ background:linear-gradient(180deg,rgba(8,22,32,.55),rgba(20,21,30,.85));
+}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) h3{
+ font-size:clamp(15px,4.4vw,19px);margin:0 0 3px;white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis;
+}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) .ember-victory-summary{
+ flex-direction:row;justify-content:center;align-items:center;gap:10px;margin:0 0 7px;
+}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) .ember-victory-stars i{font-size:21px}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) .ember-victory-line{font-size:10.5px}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) .ember-victory-actions{
+ grid-template-columns:1fr 1fr 1fr;gap:6px;
+}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) .ember-victory-actions .ember-victory-more{grid-column:auto}
+.ember-start-overlay.is-victory:not(:has(.ember-results)) .ember-victory-actions button{
+ width:100%;height:35px;font-size:11px;letter-spacing:.04em;padding:0 4px;
+}
+
+/* Main-page display redesign (Mitchell, 2026-11-25, from his iPhone
+   screenshot of the Captain page): in the embedded frame, everything
+   below the turbo button goes — the pause/retry strip with its hint
+   line, and the bones/cheese/gems stats caption. The embedded display
+   is a selection screen, not a console; starting a run goes
+   fullscreen, where the full console remains. */
+.captain-fs-tunnel:not(.is-expanded) .ember-run-actions,
+.captain-fs-tunnel:not(.is-expanded) .ember-caption{display:none}
+
+/* Selection screen, less busy (Mitchell, 2026-11-25): smaller title,
+   tighter panel, and the two explanatory text blocks (the hazard note
+   under the world picker and the steering instructions at the bottom)
+   removed — the worlds and controls speak for themselves. */
+@media(max-width:759px) and (orientation:portrait){
+ .ember-start-overlay{padding:11px 10px 10px}
+ .ember-start-overlay h3{font-size:24px;margin:5px 0 4px}
+ .ember-start-overlay p{font-size:11px;margin:0 auto 7px}
+ .ember-start-overlay>small{display:none}
+ .ember-expedition-pick{margin:5px 0 6px;padding:6px;gap:5px}
+ .ember-expedition-pick>small{display:none}
+ .ember-start-overlay .ember-world-choice{height:52px}
+ .ember-start-overlay button{height:38px}
+ .ember-watch-opening{margin:4px auto 6px}
+}
+
+/* Mitchell (2026-11-25, late): Tunnel victory screens open FULL
+   SCREEN automatically, score underneath at the bottom. The whole
+   victory presentation (painting + sheet) is portaled into the
+   fullscreen frame, so the painting owns the entire screen and the
+   existing bottom-bar sheet — title, stars, score line, actions —
+   sits at the screen's bottom edge, safe-area aware. DETAILS &
+   WORLDS still expands the full report inside the same screen. */
+.ember-victory-fullscreen{position:fixed;inset:0;z-index:2600;background:#050b14;overflow:hidden}
+.ember-victory-fullscreen .ember-victory-backdrop{position:absolute;inset:0}
+.ember-victory-fullscreen .ember-start-overlay.is-victory:not(:has(.ember-results)){
+ bottom:max(10px,env(safe-area-inset-bottom))!important;
+}
+.ember-victory-fullscreen .ember-start-overlay.is-victory:has(.ember-results){
+ /* Round 10: this rule set inset:0 but inherited the base overlay's
+    left:50% + transform:translateX(-50%) + capped width, so the expanded
+    DETAILS & WORLDS sheet was shifted half its width off the left edge
+    of the screen on iPhone. Pin it inside the screen on every side,
+    clear the centering transform, and scroll internally. */
+ position:absolute;
+ top:max(8px,env(safe-area-inset-top));right:8px;
+ bottom:max(8px,env(safe-area-inset-bottom));left:8px;
+ width:auto;max-width:none;max-height:none;transform:none;
+ overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+ padding-bottom:max(14px,env(safe-area-inset-bottom));
 }

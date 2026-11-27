@@ -5,14 +5,43 @@ const FROM = "RosieVerse750@gmail.com";
 const SERVER = "smtp.gmail.com";
 const PORT = 465;
 const PUBLIC_ORIGIN = "https://rosie-app-git.vercel.app";
+// TeddyVerse piggybacks on this same Gmail service (Mitchell, 2026-11-26):
+// same sender account, Teddy-branded copy, art and guest links. The brand is
+// derived from the host the request arrived on (see api/secret-santa.js).
+const BRANDS = {
+  rosie: {
+    origin: PUBLIC_ORIGIN, pet: "Rosie", possessive: "Rosie's",
+    banner: "rosie-holiday-banner.jpg",
+    bannerAlt: "Rosie in her festive Secret Santa tuxedo and Santa hat",
+    crestAlt: "Rosie's holiday seal",
+    envelopeAlt: "Rosie's golden sealed envelope",
+    giftsAlt: "Rosie's festive collection of beautifully wrapped Christmas presents",
+    expressionLine: "Rosie will maintain a perfectly inscrutable expression.",
+    wagLine: "Warm wishes and a very discreet wag,",
+    fromName: "Rosie's Secret Santa"
+  },
+  teddy: {
+    origin: "https://teddyverse26.vercel.app", pet: "Teddy", possessive: "Teddy's",
+    banner: "teddy-holiday-banner.jpg",
+    bannerAlt: "Teddy in his festive Secret Santa tuxedo and Santa hat",
+    crestAlt: "Teddy's holiday seal",
+    envelopeAlt: "Teddy's golden sealed envelope",
+    giftsAlt: "Teddy's festive collection of beautifully wrapped Christmas presents",
+    expressionLine: "Teddy will be grinning far too hard to give anything away \u2014 the secret is still safe.",
+    wagLine: "Warm wishes and a very joyful tail-wave,",
+    fromName: "Teddy's Secret Santa"
+  }
+};
+export function santaBrand(value) { return value === "teddy" ? "teddy" : "rosie"; }
+function brandOf(value) { return BRANDS[santaBrand(value)]; }
 
 export function mailConfigured() {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(process.env.ROSIE_GMAIL_ADDRESS || "") &&
     Boolean((process.env.ROSIE_GMAIL_APP_PASSWORD || "").replace(/\s/g, ""));
 }
 export function mailSender() { return process.env.ROSIE_GMAIL_ADDRESS || FROM; }
-export function privateGuestUrl(exchangeId, guestId, token) {
-  return PUBLIC_ORIGIN + "/#randomizers?guest=" + exchangeId + "." + guestId + "." + token;
+export function privateGuestUrl(exchangeId, guestId, token, brand) {
+  return brandOf(brand).origin + "/#randomizers?guest=" + exchangeId + "." + guestId + "." + token;
 }
 function safeHtml(value) {
   return String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -21,10 +50,8 @@ function wrapped64(value) {
   return Buffer.from(value, "utf8").toString("base64").match(/.{1,76}/g).join("\r\n");
 }
 function mimeHeader(value) { return "=?UTF-8?B?" + Buffer.from(String(value), "utf8").toString("base64") + "?="; }
-const ART = PUBLIC_ORIGIN + "/randomizers/secret-santa/email/";
-
-function emailArt(file, alt, width, extraStyle = "") {
-  return '<img src="' + ART + file + '" width="' + width + '" alt="' + safeHtml(alt) +
+function emailArt(file, alt, width, extraStyle = "", base = PUBLIC_ORIGIN + "/randomizers/secret-santa/email/") {
+  return '<img src="' + base + file + '" width="' + width + '" alt="' + safeHtml(alt) +
     '" border="0" style="display:block;width:100%;max-width:' + width +
     'px;height:auto;border:0;outline:none;text-decoration:none;' + extraStyle + '">';
 }
@@ -33,33 +60,35 @@ function emailArt(file, alt, width, extraStyle = "") {
  * Plain-text and hosted-image HTML renditions share exactly the same guest
  * capability. This renderer intentionally NEVER includes assignment names.
  */
-export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
+export function renderSecretSantaEmail({ exchange, guest, kind, url, brand }) {
+  const B = brandOf(brand);
+  const ART = B.origin + "/randomizers/secret-santa/email/";
   if (!["registration", "draw"].includes(kind)) throw new Error("Unknown mail type.");
   if (typeof guest.email !== "string" || !/^[^\s<>@\r\n]+@[^\s<>@\r\n]+\.[^\s<>@\r\n]+$/.test(guest.email))
     throw new Error("Invalid recipient email.");
-  if (typeof url !== "string" || !url.startsWith(PUBLIC_ORIGIN + "/#randomizers?guest="))
+  if (typeof url !== "string" || !url.startsWith(B.origin + "/#randomizers?guest="))
     throw new Error("A private guest invitation link is required.");
 
   const name = String(guest.name || "friend").trim().slice(0, 60);
-  const exchangeName = String(exchange.title || "Rosie's Secret Santa").slice(0, 100);
+  const exchangeName = String(exchange.title || B.possessive + " Secret Santa").slice(0, 100);
   const registration = kind === "registration";
   const subject = registration
-    ? "Rosie has a holiday secret. You're on the list."
-    : "The names are drawn. Rosie isn't telling.";
+    ? B.pet + " has a holiday secret. You're on the list."
+    : "The names are drawn. " + B.pet + " isn't telling.";
   const preheader = registration
     ? "Your place is reserved. Your private Secret Santa envelope is inside."
     : "One sealed envelope. One very important secret. Open yours inside.";
   const eyebrow = registration ? "AN OFFICIAL HOLIDAY WELCOME" : "A VERY PRIVATE HOLIDAY DISPATCH";
   const headline = registration ? "You're on the list." : "The names are drawn.";
   const italicLine = registration
-    ? "Rosie checked it twice. The paperwork was mostly ceremonial."
-    : "Rosie knows. Rosie isn't telling.";
+    ? B.pet + " checked it twice. The paperwork was mostly ceremonial."
+    : B.pet + " knows. " + B.pet + " isn't telling.";
   const intro = registration
-    ? "Your place in " + exchangeName + " is officially reserved. The stockings are under surveillance, and Rosie has set aside a private envelope with your name on it."
-    : "The draw for " + exchangeName + " is complete. One very special name is waiting inside your sealed envelope. Rosie has been entrusted with the secret and is taking the responsibility rather seriously.";
+    ? "Your place in " + exchangeName + " is officially reserved. The stockings are under surveillance, and " + B.pet + " has set aside a private envelope with your name on it."
+    : "The draw for " + exchangeName + " is complete. One very special name is waiting inside your sealed envelope. " + B.pet + " has been entrusted with the secret and is taking the responsibility rather seriously.";
   const next = registration
     ? "Your envelope keeps your wishlist safe and lets you change your gift ideas whenever inspiration strikes. After the drawing, return to the same link to learn whose holiday you'll brighten."
-    : "Open your envelope to discover who you're shopping for, along with their personal wishlist and product links. Rosie will maintain a perfectly inscrutable expression.";
+    : "Open your envelope to discover who you're shopping for, along with their personal wishlist and product links. " + B.expressionLine;
   const noteHeading = registration ? "A NOTE FROM THE NORTH PAW" : "YOUR MISSION, SHOULD YOU ACCEPT IT";
   const note = registration
     ? "The names have not been drawn yet. Your private link is yours to keep, and it will be ready for the big reveal."
@@ -73,24 +102,24 @@ export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
     : "Discretion is the greatest gift. After the actual gift, of course.";
 
   const text = [
-    "ROSIE'S SECRET SANTA", "",
+    B.pet.toUpperCase() + "'S SECRET SANTA", "",
     "Hello " + name + ",", "",
     headline, italicLine, "", intro, "", next, "",
     noteHeading, note, "", button + ":", url, "",
-    small, "", signoff, "", "Warm wishes and a very discreet wag,", "Rosie"
+    small, "", signoff, "", B.wagLine, B.pet
   ].join("\n");
 
   // Layout is a narrow, single-column table with inline styles. Every essential
   // message remains readable when mail clients block external images.
   const mainArt = emailArt(
     registration ? "invitation-scroll.png" : "sealed-envelope.png",
-    registration ? "An elegant holiday invitation scroll" : "Rosie's golden sealed envelope",
-    registration ? 374 : 440
+    registration ? "An elegant holiday invitation scroll" : B.envelopeAlt,
+    registration ? 374 : 440, "", ART
   );
   const giftsArt = emailArt(
     "holiday-gifts.png",
-    "Rosie's festive collection of beautifully wrapped Christmas presents",
-    405
+    B.giftsAlt,
+    405, "", ART
   );
   const html = '<!doctype html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -102,10 +131,10 @@ export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
     '<td align="center" style="padding:8px 7px 28px">' +
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="680" style="width:100%;max-width:680px;border-collapse:separate;border:1px solid #b99257;background-color:#fff7e9">' +
     '<tr><td align="center" bgcolor="#2e1729" style="background-color:#2e1729;line-height:0;padding:0;">' +
-    emailArt("rosie-holiday-banner.jpg", "Rosie in her festive Secret Santa tuxedo and Santa hat", 680) +
+    emailArt(B.banner, B.bannerAlt, 680, "", ART) +
     '</td></tr>' +
     '<tr><td bgcolor="#2e1729" align="center" style="background-color:#2e1729;padding:7px 12px 8px;border-bottom:2px solid #c4a164">' +
-    '<span style="font:700 11px/1.6 Arial,Helvetica,sans-serif;letter-spacing:2.4px;color:#f5d9a3">ROSIE&#39;S SECRET SANTA &nbsp; &#10022; &nbsp; 2026</span>' +
+    '<span style="font:700 11px/1.6 Arial,Helvetica,sans-serif;letter-spacing:2.4px;color:#f5d9a3">' + B.pet.toUpperCase() + '&#39;S SECRET SANTA &nbsp; &#10022; &nbsp; 2026</span>' +
     '</td></tr>' +
     '<tr><td align="center" bgcolor="#fff7e9" style="background-color:#fff7e9;padding:17px 20px 1px">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse"><tr><td align="center">' +
@@ -142,9 +171,9 @@ export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
     '</td></tr>' +
     '<tr><td bgcolor="#291624" align="center" style="background-color:#291624;border-top:3px solid #bc925b;padding:22px 26px 25px">' +
     '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center">' +
-    emailArt("rosie-crest.png", "Rosie's holiday seal", 84) + '</td></tr></table>' +
+    emailArt("rosie-crest.png", B.crestAlt, 84, "", ART) + '</td></tr></table>' +
     '<p style="color:#f1d6a2;font:italic 16px/1.5 Georgia,\'Times New Roman\',serif;margin:12px 0 7px">' + safeHtml(signoff) + '</p>' +
-    '<p style="font:12px/1.6 Georgia,\'Times New Roman\',serif;color:#e9d2be;margin:0">Warm wishes and a very discreet wag,<br><strong style="font:italic 19px Georgia,\'Times New Roman\',serif;color:#f8e6bf">Rosie</strong></p>' +
+    '<p style="font:12px/1.6 Georgia,\'Times New Roman\',serif;color:#e9d2be;margin:0">' + safeHtml(B.wagLine) + '<br><strong style="font:italic 19px Georgia,\'Times New Roman\',serif;color:#f8e6bf">' + B.pet + '</strong></p>' +
     '</td></tr></table>' +
     '<p style="color:#c9b7bd;font:11px/1.5 Arial,Helvetica,sans-serif;text-align:center;padding:16px 7px 0;max-width:570px;margin:0">' +
     'This message was sent to you because you joined a private gift exchange. ' +
@@ -152,12 +181,13 @@ export function renderSecretSantaEmail({ exchange, guest, kind, url }) {
     '</td></tr></table></body></html>';
   return { subject, preheader, text, html };
 }
-export function composeSecretSantaMail({ exchange, guest, kind, url }) {
-  const { subject, text, html } = renderSecretSantaEmail({ exchange, guest, kind, url });
-  const boundary = "rosie_" + randomBytes(12).toString("hex");
+export function composeSecretSantaMail({ exchange, guest, kind, url, brand }) {
+  const B = brandOf(brand);
+  const { subject, text, html } = renderSecretSantaEmail({ exchange, guest, kind, url, brand });
+  const boundary = santaBrand(brand) + "_" + randomBytes(12).toString("hex");
   const sender = mailSender();
   const message = [
-    "From: " + mimeHeader("Rosie's Secret Santa") + " <" + sender + ">",
+    "From: " + mimeHeader(B.fromName) + " <" + sender + ">",
     "To: <" + guest.email + ">",
     "Subject: " + mimeHeader(subject),
     "Date: " + new Date().toUTCString(),

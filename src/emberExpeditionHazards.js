@@ -2,6 +2,7 @@
 // The original classic course does not instantiate this module's obstacles.
 // Geometry is distance-driven and mirrors the painter; nothing falls in from
 // arbitrary screen coordinates or produces a hidden collision.
+import {openingGraceSeconds} from "./emberExpeditionStages.js";
 export const EXPEDITION_HAZARD_LAYOUT=Object.freeze([
   Object.freeze({id:"ruby-trap",stageIndex:1,kind:"crystal",x:7330,side:-1,maxReach:163}),
   Object.freeze({id:"clockwork-piston",stageIndex:2,kind:"piston",x:12180,side:1,maxReach:180}),
@@ -13,7 +14,18 @@ export const EXPEDITION_HAZARD_LAYOUT=Object.freeze([
   // Repositioned on the open floor so eruption and rockfall never overlap.
   Object.freeze({id:"molten-second-geyser",stageIndex:3,kind:"geyser",x:18600,side:1,maxReach:157}),
   Object.freeze({id:"royal-earth-burst",stageIndex:4,kind:"quake",x:23720,side:-1,maxReach:166}),
-  Object.freeze({id:"royal-second-burst",stageIndex:4,kind:"quake",x:24230,side:1,maxReach:169})
+  Object.freeze({id:"royal-second-burst",stageIndex:4,kind:"quake",x:24230,side:1,maxReach:169}),
+  // 2026-11-25 overnight remake: the boss tunnels are ~30s now (was
+  // ~8.5s), so each boss world gains two more hazards spread across the
+  // longer route, including the previously unused batch-D vent/mine
+  // sprites (steam vent and hanging mine in Clockwork, lava vent in
+  // Molten). All sit on the ceiling/floor they belong to.
+  Object.freeze({id:"clockwork-steam-vent",stageIndex:2,kind:"steam",x:16800,side:1,maxReach:150}),
+  Object.freeze({id:"clockwork-hanging-mine",stageIndex:2,kind:"mine",x:16040,side:-1,maxReach:160}),
+  Object.freeze({id:"molten-lava-vent",stageIndex:3,kind:"lava",x:20100,side:1,maxReach:155}),
+  Object.freeze({id:"molten-third-geyser",stageIndex:3,kind:"geyser",x:24400,side:1,maxReach:165}),
+  Object.freeze({id:"royal-third-burst",stageIndex:4,kind:"quake",x:26800,side:-1,maxReach:166}),
+  Object.freeze({id:"royal-fourth-burst",stageIndex:4,kind:"quake",x:29700,side:1,maxReach:169})
 ]);
 const clamp01=n=>Math.max(0,Math.min(1,n));
 const smooth=n=>{const t=clamp01(n);return t*t*(3-2*t)};
@@ -49,7 +61,10 @@ export function updateExpeditionHazards(s,tipWorldX,tipY,boosted,onHit,center,ra
         s.score+=175;s.shards++;
         s.events.push({type:"world-hazard-shatter",id:h.id,kind:h.kind,x:screenX,y:tipY});
       }else{
-        if(s.hitCooldown<=0)onHit(s);
+        // Boss-world opening grace (5s, not 3s): hazards in the opening
+        // stretch cannot hit before the player has oriented. The hazard
+        // is still marked hit so it cannot strike later.
+        if(s.hitCooldown<=0&&s.time>=openingGraceSeconds(s.stageIndex))onHit(s);
         s.events.push({type:"world-hazard-contact",id:h.id,kind:h.kind,x:screenX,y:tipY});
       }
     }

@@ -174,3 +174,7 @@
  .ember-console-upgrade .ember-icon-action>img{width:100%;height:100%;object-fit:contain}
 }
 .ember-suite.ember-console-upgrade[data-arcade-backdrop]{background-image:linear-gradient(#061e2688,#061e26aa),url('/ember-drill/console-v1/console-texture.webp')!important;background-size:cover!important}
+
+/* Page view: the console texture must not cover the Captain page's drill
+   background (Mitchell, 2026-11-25). Fullscreen keeps the texture. */
+.captain-fs-tunnel:not(:fullscreen):not(.is-fallback-fullscreen):not(.is-expanded)>.ember-suite.ember-console-upgrade[data-arcade-backdrop]{background-image:none!important}
