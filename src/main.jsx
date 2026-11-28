@@ -4130,6 +4130,60 @@ function CaptainArcadeHub(){
   );
 }
 
+function CosmicMobileCharacterCards(){
+  const profiles = [
+    ["rosie", "Captain Rosie"], ["jett", "Jett Scroundrel"],
+    ["kitty", "Kitty Xenovese"], ["chip", "Chip Scurrio"],
+  ];
+  const [index, setIndex] = useState(0);
+  const [back, setBack] = useState(false);
+  const dialog = useRef(null);
+  const [id, name] = profiles[index];
+  const art = (key, reverse = false) => "/cosmic-odyssey/cards/" + key + (reverse ? "-back.webp" : "-front.webp");
+  const open = (i) => {
+    setIndex(i); setBack(false);
+    if (dialog.current && !dialog.current.open) dialog.current.showModal();
+  };
+  const cycle = (delta) => { setIndex(i => (i + delta + profiles.length) % profiles.length); setBack(false); };
+  return <section className="cosmic-phone-profiles" aria-label="Cosmic Odyssey character cards">
+    <style>{`
+      .cosmic-phone-profiles{display:none}
+      @media (max-width:759px), (max-width:1024px) and (max-height:560px) and (pointer:coarse){
+        .cosmic-phone-profiles{display:block!important;box-sizing:border-box;width:100%;margin:8px 0 12px;padding:12px 10px;background:linear-gradient(#070b2540,#070b2560),url('/cosmic-odyssey/assets/console-v2/card-cosmos.webp') center/cover;border:1px solid #c39b62;border-radius:14px;text-align:center;color:#ffe6af}
+        .cosmic-phone-profiles h2{font:600 19px/1.15 Georgia,serif;margin:0 0 4px;color:#ffe1a0}
+        .cosmic-phone-profiles p{font:12px/1.4 Arial,sans-serif;margin:0 0 10px;color:#e7d4b4}
+        .cosmic-phone-profiles-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+        .cosmic-phone-profiles-grid button{display:block;width:100%;min-width:0;border:0;padding:0;background:none;cursor:pointer;touch-action:manipulation;line-height:0}
+        .cosmic-phone-profiles-grid button img,.cosmic-phone-profile-viewer .cosmic-phone-profile-art{display:block!important;width:100%!important;height:auto!important;max-height:none!important;max-width:none!important;aspect-ratio:2/3;object-fit:contain!important;filter:none!important;border-radius:8px}
+        .cosmic-phone-profile-viewer{box-sizing:border-box;position:fixed;inset:0;margin:auto;width:min(100%,560px);max-width:100vw;height:100dvh;max-height:100dvh;border:0;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));background:#090d25;color:#ffe5b0;overflow:auto}
+        .cosmic-phone-profile-viewer::backdrop{background:#050819e8}
+        .cosmic-phone-profile-viewer[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+        .cosmic-phone-profile-viewer button{color:#ffe6b3;background:#201635;border:1px solid #c39b62;border-radius:9px;min-height:44px;padding:7px 12px;cursor:pointer;touch-action:manipulation}
+        .cosmic-phone-profile-viewer .cosmic-phone-profile-close{align-self:flex-end;min-width:44px}
+        .cosmic-phone-profile-viewer .cosmic-phone-profile-flip{min-height:0;width:min(100%,calc((100dvh - 170px)*.666667));padding:0;border:0;background:none;line-height:0}
+        .cosmic-phone-profile-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;width:min(100%,390px);font:12px/1.3 Arial,sans-serif}
+        .cosmic-phone-profile-viewer p{margin:0}
+      }
+      @media (max-width:1024px) and (max-height:560px) and (pointer:coarse){.cosmic-phone-profiles-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+    `}</style>
+    <h2>Captain Rosie &amp; the Fiends</h2>
+    <p>Tap any card to enlarge and flip it.</p>
+    <div className="cosmic-phone-profiles-grid">
+      {profiles.map(([key, label], i) => <button key={key} type="button" aria-label={"View " + label + " character card"} onClick={() => open(i)}><img src={art(key)} alt={label} decoding="async" /></button>)}
+    </div>
+    <dialog ref={dialog} className="cosmic-phone-profile-viewer" aria-label={name + " character card"} onClose={() => setBack(false)}>
+      <button type="button" className="cosmic-phone-profile-close" aria-label="Close character card" onClick={() => dialog.current.close()}>✕</button>
+      <button type="button" className="cosmic-phone-profile-flip" aria-label={back ? "Show front" : "Show reverse"} onClick={() => setBack(v => !v)}><img className="cosmic-phone-profile-art" src={art(id, back)} alt={name + (back ? " dossier" : " portrait")} /></button>
+      <p>{back ? "Tap card to see front" : "Tap card to read dossier"}</p>
+      <div className="cosmic-phone-profile-nav">
+        <button type="button" aria-label="Previous character" onClick={() => cycle(-1)}>‹</button>
+        <span>{name} · {index + 1} / {profiles.length}</span>
+        <button type="button" aria-label="Next character" onClick={() => cycle(1)}>›</button>
+      </div>
+    </dialog>
+  </section>;
+}
+
 function CosmicOdysseyArcade(){
   // Always open on the page: Mitchell asked for the CLOSE COSMIC ODYSSEY /
   // OPEN IN NEW TAB bar to be removed (2026-11-25), so there is no toggle.
@@ -4137,6 +4191,7 @@ function CosmicOdysseyArcade(){
     <section id="cosmic-odyssey-arcade" className="cosmic-odyssey-portal cosmic-odyssey-main-entry" aria-label="Captain Rosie Cosmic Odyssey arcade">
       <img className="cosmic-odyssey-entry-banner" src="/cosmic-odyssey/assets/cosmic-banner.webp"
         alt="Captain Rosie: Cosmic Odyssey - original starship arcade banner" loading="lazy" />
+      <CosmicMobileCharacterCards />
       <FullscreenGameFrame label="Cosmic Odyssey" variant="cosmic">
         <div className="cosmic-odyssey-embedded-shell" id="cosmic-odyssey-embedded-game">
           <iframe title="Captain Rosie Cosmic Odyssey playable arcade" src="/cosmic-odyssey/index.html"
